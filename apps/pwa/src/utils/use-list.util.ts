@@ -7,6 +7,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import { isPlural } from "./string.utils";
 import { EventEntity, EventType } from "@/modules/events/event-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 
 export interface UseListFetchReponse<T = any> {
   data: T[];
@@ -81,6 +82,7 @@ export const useList = <T = any>(args: UseListArgs<T>): UseList<T> => {
   const router = useRouter();
   const pathname = usePathname();
   const controller = useRef(new AbortController());
+  const workspace = useWorkspace();
 
   const isReadyToFetch = typeof args.isSkip === 'boolean' ? args.isSkip : true;
   const listKey = args.id ? args.id.replace(/-/g, '') : undefined;
@@ -207,7 +209,7 @@ export const useList = <T = any>(args: UseListArgs<T>): UseList<T> => {
     if (autoFetch && isReadyToFetch) {
       fetch(true, { isSilient: true });
     }
-  }, [JSON.stringify(query), autoFetch, listKey, isReadyToFetch])
+  }, [JSON.stringify(query), autoFetch, listKey, isReadyToFetch, workspace.userMember?.workspaceId])
 
   // Auto fetch when server reconnected
   onReconnected(() => {
