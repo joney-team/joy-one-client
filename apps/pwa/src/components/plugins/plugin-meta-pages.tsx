@@ -1,0 +1,89 @@
+import { useColor } from "@/modules/theme/use-color";
+import { onArchive } from "@/utils/actions";
+import { t } from "@/modules/lang/lang-service";
+import { disconnectPluginMetaPage } from "@/modules/plugins/meta-pages/meta-pages-service";
+import { usePlugins } from "@/modules/plugins/plugins-context";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onError } from "@/utils/exceptions.utils";
+import { capitalize } from "@/utils/string.utils";
+import { Anchor, Card, Center, Group, SimpleGrid, Skeleton, Stack, Text, ThemeIcon, Title, em } from "@mantine/core";
+import { IconCirclesRelation, IconLinkPlus, IconPuzzle } from "@tabler/icons-react";
+import { FC } from "react";
+import { Avatar } from "../avatar";
+import { Button } from "../buttons/button";
+import { Image } from "../image";
+
+export const PluginMetaPages: FC = () => {
+  const workspace = useWorkspace();
+  const plugins = usePlugins();
+
+  const color = useColor();
+
+  if (!plugins.isInitialized) return <Skeleton height={150} />;
+
+  if (plugins.metaPages.length === 0)
+    return (
+      <Stack align="center" py={20}>
+        <Group gap={30} mb={20}>
+          <Avatar workspace={workspace.userMember.workspace} size={55} />
+          <ThemeIcon variant="transparent" size="lg" color="dark">
+            <IconCirclesRelation size={50} />
+          </ThemeIcon>
+          <Image w={55} src="/images/plugins-meta-pages.svg" />
+        </Group>
+
+        <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
+          {t("connect")} <strong>Fanpage Facebook</strong>
+        </Title>
+
+        <Text ta="center">{t("meta_pages_desc")}</Text>
+
+        <Button mt={10} action onClick={plugins.onConnectMetaPages} leftIcon={IconLinkPlus}>
+          {t("connect")}
+        </Button>
+      </Stack>
+    );
+
+  return (
+    <Stack gap={30}>
+      <SimpleGrid cols={{ md: 2 }}>
+        {plugins.metaPages.map((page) => {
+          return (
+            <Card key={page._id} shadow="none" withBorder>
+              <Group justify="space-between">
+                <Group>
+                  <Avatar pluginMetaPage={page} />
+                  <Stack gap={0}>
+                    <Text>{page.name}</Text>
+                    <Text fz={12}>#{page.id}</Text>
+                  </Stack>
+                </Group>
+
+                <Anchor
+                  c="gray"
+                  fw={500}
+                  fz={em(12)}
+                  onClick={() =>
+                    onArchive({
+                      icon: IconPuzzle,
+                      title: capitalize(`${t("disconnect")} ${page.name}`),
+                      process: () => disconnectPluginMetaPage(page._id).catch(onError),
+                    })
+                  }
+                >
+                  {t("disconect")}
+                </Anchor>
+              </Group>
+            </Card>
+          );
+        })}
+
+        <Center>
+          <Button type="submit" onClick={plugins.onConnectMetaPages} rightSection={<IconLinkPlus strokeWidth={1.5} />}>
+            {t("connect_more")}
+          </Button>
+        </Center>
+      </SimpleGrid>
+    </Stack>
+  );
+};

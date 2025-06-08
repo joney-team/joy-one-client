@@ -1,0 +1,11 @@
+{
+  "name": "@joy-one-client/config",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "private": true,
+  "packageManager": "pnpm@10.11.0",
+  "dependencies": {
+    "@joy-one-client/apis": "workspace:*"
+  }
+}

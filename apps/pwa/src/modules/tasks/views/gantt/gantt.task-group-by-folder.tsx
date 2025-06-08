@@ -1,0 +1,304 @@
+import { useColor } from "@/modules/theme/use-color";
+import { Hovered } from "@/components/hovered";
+import { useLayout } from "@/layout/layout-context";
+import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { OnModalTagForm } from "@/modules/tags/modal-tag-form";
+import { num, t } from "@/modules/lang/lang-service";
+import { useTags } from "@/modules/tags/tags-context";
+import { TagEntity } from "@/modules/tags/tags-types";
+import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
+import { getTaskEntites, getTaskProgress } from "@/modules/tasks/tasks-service";
+import { StringUtils } from "@/utils/string.utils";
+import { ActionIcon, alpha, Box, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import { useForceUpdate } from "@mantine/hooks";
+import { IconFolder, IconFolderOpen, IconHourglassHigh, IconPencil, IconPlus } from "@tabler/icons-react";
+import dayjs from "dayjs";
+import { FC } from "react";
+import { useTaskDrop } from "../../tasks-dnd-provider";
+import { ganttConfig } from "./gantt.config";
+import { SidebarRowSticky } from "./gantt.layout";
+import { useGantt } from "./gantt.context";
+import { GanttTaskRowSidebar } from "./gantt.task-row-sidebar";
+import { GanttTaskRowBody } from "./gantt.task-row-body";
+import { getRangeOfTasks } from "./gantt.utils";
+import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
+import { formatDuration } from "@/components/inputs/estimate-time-input";
+
+interface GanttTaskGroupByFoldersProps {
+  position: "sidebar" | "body";
+}
+
+export const GanttTaskGroupByFolders: FC<GanttTaskGroupByFoldersProps> = (props) => {
+  const tasks = useGantt();
+
+  if (tasks.activatedTagFolder) {
+    return <GanttTaskGroupByFolder {...props} index={0} tagFolder={tasks.activatedTagFolder} />;
+  }
+
+  if (tasks.tagFolders.length === 0) {
+    return <GanttTaskGroupByFolder {...props} index={0} pure />;
+  }
+
+  return (
+    <>
+      <GanttTaskGroupByFolder {...props} index={0} />
+
+      {tasks.tagFolders.map((tagFolder, index) => (
+        <GanttTaskGroupByFolder key={tagFolder._id} {...props} tagFolder={tagFolder} index={index + 1} />
+      ))}
+    </>
+  );
+};
+
+interface GanttTaskGroupByFolderProps extends GanttTaskGroupByFoldersProps {
+  tagFolder?: TagEntity;
+  pure?: boolean;
+  index?: number;
+}
+
+export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) => {
+  const gantt = useGantt();
+  const layout = useLayout();
+  const forceUpdate = useForceUpdate();
+
+  const { tagFolder } = props;
+  const color = useColor();
+
+  const folderId = tagFolder?._id || "root";
+  const folderState = gantt.foldersState[folderId];
+  const folderName = tagFolder?.name || t("general_tasks");
+  const folderColor = tagFolder?.color || color("primary");
+
+  const isCollapsed = !!folderState?.isCollapsed;
+
+  const folderTasks = gantt.tasks
+    .filter((t) => (t.tagFolderId || "root") === folderId)
+    .sort((a, b) => a.order - b.order);
+
+  const allFolderTasks = getTaskEntites()
+    .filter((t) => (t.tagFolderId || "root") === folderId)
+    .sort((a, b) => a.order - b.order);
+
+  const folderRootTasks = folderTasks.filter((v) => !v.parentId);
+
+  onTasksUpdated(
+    (updatedTasks) => {
+      const relatedTasks = updatedTasks
+        .filter((t) => (t.tagFolderId || "root") === folderId)
+        .sort((a, b) => a.order - b.order);
+
+      if (relatedTasks.length > 0) {
+        forceUpdate();
+      }
+    },
+    [folderId]
+  );
+
+  if (props.position === "sidebar") {
+    return (
+      <>
+        {/* Folder Infos */}
+        {!props.pure && (
+          <Hovered>
+            {(hover) => {
+              return (
+                <Group
+                  ref={hover.ref}
+                  px={10}
+                  gap={8}
+                  style={{
+                    borderBottom: layout.border,
+                    position: "relative",
+                    minHeight: ganttConfig.rowHeight,
+                    maxHeight: ganttConfig.rowHeight,
+                  }}
+                  miw={gantt.sidebarContentWidth}
+                >
+                  <ActionIcon
+                    color={folderColor}
+                    variant="light"
+                    size="sm"
+                    onClick={() => {
+                      gantt.setFolderState(folderId, {
+                        ...folderState,
+                        isCollapsed: !isCollapsed,
+                      });
+                    }}
+                  >
+                    {isCollapsed ? <IconFolder size={16} /> : <IconFolderOpen size={16} />}
+                  </ActionIcon>
+
+                  <Text flex={1} fz={em(14)} fw={600}>
+                    {folderName}
+                  </Text>
+
+                  <SidebarRowSticky>
+                    {!!props.tagFolder && (
+                      <Tooltip label={t("update_information")}>
+                        <ActionIcon
+                          size="sm"
+                          variant="subtle"
+                          color="gray"
+                          opacity={hover.hovered ? 1 : 0}
+                          onClick={() => OnModalTagForm({ tag: props.tagFolder!, type: props.tagFolder!.type })}
+                        >
+                          <IconPencil size={13} />
+                        </ActionIcon>
+                      </Tooltip>
+                    )}
+
+                    <Tooltip label={StringUtils.capitalizeFirstLetter(`${t("add")} ${t("tasks")}`)}>
+                      <QuickCreateTaskInput tagFolderId={props.tagFolder?._id}>
+                        <ActionIcon size="sm" variant="subtle" color="gray" opacity={hover.hovered ? 1 : 0}>
+                          <IconPlus size={16} />
+                        </ActionIcon>
+                      </QuickCreateTaskInput>
+                    </Tooltip>
+                  </SidebarRowSticky>
+                </Group>
+              );
+            }}
+          </Hovered>
+        )}
+
+        <ChangeTagFolderDrop tagFolderId={props.tagFolder?._id} visible={allFolderTasks.length === 0} />
+
+        {/* Tasks */}
+        {!isCollapsed &&
+          folderRootTasks.map((task, index) => {
+            return (
+              <GanttTaskRowSidebar
+                key={task._id}
+                id={task._id}
+                indexType={index === folderRootTasks.length - 1 ? "last" : index === 0 ? "first" : undefined}
+                nextId={folderRootTasks[index + 1]?._id}
+                prevId={folderRootTasks[index - 1]?._id}
+              />
+            );
+          })}
+      </>
+    );
+  }
+
+  const rangeDate = getRangeOfTasks(allFolderTasks);
+  const tasksProgress = getTaskProgress(allFolderTasks, gantt.statuses);
+  const totalEstimatedTime = allFolderTasks.reduce((acc, task) => acc + (task.estimatedTime || 0), 0);
+
+  return (
+    <>
+      {!props.pure && (
+        <Group
+          w="100%"
+          miw="100%"
+          style={{
+            position: "relative",
+            minHeight: ganttConfig.rowHeight,
+            maxHeight: ganttConfig.rowHeight,
+          }}
+        >
+          {(function () {
+            if (rangeDate.dueDate && rangeDate.startDate && folderTasks.length > 0) {
+              const startIndex = gantt.dates.findIndex((v) => dayjs(v).isSame(rangeDate.startDate, "day"));
+              const endIndex = gantt.dates.findIndex((v) => dayjs(v).isSame(rangeDate.dueDate, "day"));
+              const left = startIndex * gantt.state.columnSize;
+
+              const _width =
+                startIndex === endIndex ? gantt.state.columnSize : (endIndex - startIndex + 1) * gantt.state.columnSize;
+
+              const isStartToday = dayjs(rangeDate.startDate).isSame(dayjs(), "day") && props.index === 0;
+
+              return (
+                <Box
+                  w={_width}
+                  bg={alpha(color(folderColor), 0.5)}
+                  h="10px"
+                  style={{
+                    position: "absolute",
+                    borderRadius: 20,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    left,
+                  }}
+                >
+                  <Text
+                    fz={em(8)}
+                    fw={700}
+                    style={{
+                      position: "absolute",
+                      top: "-13px",
+                      left: isStartToday ? 55 : 5,
+                    }}
+                    c={color(folderColor)}
+                    w="max-content"
+                  >
+                    {`${num(tasksProgress.percent, { roundPrecision: 2 })}%`} {folderName}
+                  </Text>
+
+                  <Box
+                    style={{
+                      position: "relative",
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: 100,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Box
+                      w={`${tasksProgress.percent}%`}
+                      h="100%"
+                      style={{ position: "absolute", top: 0, left: 0 }}
+                      bg={color(folderColor)}
+                    />
+                  </Box>
+                </Box>
+              );
+            }
+          })()}
+
+          <Group px={8} pos="sticky" top={0} left={0}>
+            {totalEstimatedTime > 0 && !gantt.state.isHideEstimateTime && (
+              <Group gap={0} bg={alpha(color(folderColor), 0.1)} px={3} style={{ borderRadius: 100 }}>
+                <ThemeIcon variant="transparent" color="gray" size="xs">
+                  <IconHourglassHigh size={11} />
+                </ThemeIcon>
+
+                <Text fz={11} c="gray" pr={5}>
+                  {formatDuration(totalEstimatedTime)}
+                </Text>
+              </Group>
+            )}
+          </Group>
+        </Group>
+      )}
+
+      {!isCollapsed &&
+        folderRootTasks.map((task) => {
+          return <GanttTaskRowBody key={task._id} id={task._id} />;
+        })}
+    </>
+  );
+};
+
+export const ChangeTagFolderDrop: FC<{ tagFolderId?: string; visible?: boolean }> = (props) => {
+  const tags = useTags();
+  const color = useColor();
+  const tagFolder = tags.list.find((v) => v._id === props.tagFolderId);
+
+  const droppable = useTaskDrop(`${props.tagFolderId}-tag-folder`, {
+    tagFolderId: props.tagFolderId || "root",
+  });
+
+  if (!props.visible) return null;
+
+  return (
+    <Box
+      ref={droppable.setNodeRef}
+      bg={alpha(tagFolder?.color || color("primary"), 0.2)}
+      w="100%"
+      h={droppable.isOver ? ganttConfig.rowHeight : 10}
+      mt={droppable.isOver ? 0 : -10}
+      opacity={droppable.isOver ? 0.5 : 0}
+      style={{ transition: "height 0.2s" }}
+    />
+  );
+};

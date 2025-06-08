@@ -1,0 +1,14 @@
+.git
+.gitignore
+.gitlab
+
+node_modules
+.next
+
+next-env.d.ts
+yarn-error.log
+
+*.DS_Store
+
+Jenkinsfile*
+Dockerfile*

@@ -1,0 +1,8 @@
+import { getTaskMetadata } from "@/modules/tasks/tasks-service";
+import { combineMetadata } from "@/utils/metadata.utils";
+
+export const generateMetadata = combineMetadata({
+  fetch: async ({ params }) => getTaskMetadata(params.code as string),
+});
+
+export default () => <></>;

@@ -1,0 +1,365 @@
+import { Button } from "@/components/buttons/button";
+import { Hovered } from "@/components/hovered";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
+import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
+import { OnModalDatePicker } from "@/modals/modal-date-picker";
+import { useRouter } from "@/hooks/use-router";
+import { Period } from "@/types";
+import { useEventsListener } from "@/modules/events/event-service";
+import { EventType } from "@/modules/events/event-types";
+import { renderDate, t } from "@/modules/lang/lang-service";
+import { ReportEntity } from "@/modules/reports/reports-entity";
+import { exportPeriodReport } from "@/modules/reports/reports-services";
+import { RangeReport, ReportType } from "@/modules/reports/reports-types";
+import { useWorkspaceBranches } from "@/modules/workspace-branches/hooks/use-workspace-branches";
+import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
+import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { ObjectUtils } from "@/utils/object.utils";
+import { useList } from "@/utils/use-list.util";
+import { Group, Loader, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import {
+  IconBuildingSkyscraper,
+  IconCalendar,
+  IconCalendarEvent,
+  IconCalendarMonth,
+  IconClock,
+  IconMinus,
+  IconPlus,
+  IconUsers,
+  IconX,
+} from "@tabler/icons-react";
+import { FC } from "react";
+import { Widgets } from "..";
+import { Avatar } from "../../components/avatar";
+import { ButtonSelect } from "../../components/buttons/button-select";
+import { Errored } from "../../components/errored";
+import { Renderer } from "../../components/renderer";
+import { reportWidgetModules } from "./modules";
+import { ReportWidgetsContext } from "./types";
+
+export const ReportWidgets: FC = () => {
+  const workspace = useWorkspace();
+  const router = useRouter();
+
+  const getQuery = (query: any, prev?: boolean) => {
+    let _query = { ...query };
+
+    const targetPeriod = _query.period || Period.MONTH;
+
+    const period: Period =
+      targetPeriod === Period.YEAR ? Period.MONTH : targetPeriod === Period.MONTH ? Period.DATE : targetPeriod;
+
+    const date = _query.date ? new Date(+_query.date * 1000) : new Date();
+    const range = DateTimeUtils.getRange(date, targetPeriod);
+
+    let fromTime = DateTimeUtils.timeToSeconds(range.start);
+    let toTime = DateTimeUtils.timeToSeconds(range.end > Date.now() ? Date.now() : range.end);
+
+    if (prev) {
+      const distance = toTime - fromTime;
+      fromTime -= distance;
+      toTime -= distance;
+    }
+
+    return {
+      fromTime,
+      toTime,
+      date,
+      period,
+      userId: query.userId,
+      workspaceBranchIds: (query.workspaceBranchIds || "").toString().split(",").filter(Boolean),
+    };
+  };
+
+  const report = useList<ReportEntity<RangeReport>>({
+    id: "reports",
+    fetch: (q) => {
+      const _query = getQuery(q);
+      return exportPeriodReport(
+        ObjectUtils.cleanObj({
+          fromTime: _query.fromTime,
+          toTime: _query.toTime,
+          period: _query.period,
+          userId: _query.userId,
+          workspaceBranchIds: _query.workspaceBranchIds.length > 0 ? _query.workspaceBranchIds : undefined,
+        }) as any
+      );
+    },
+  });
+
+  useEventsListener(
+    [EventType.REPORT_RANGE_SYNCED],
+    (e) => {
+      const _report = e.data as ReportEntity<RangeReport>;
+      if (_report.type === ReportType.RANGE && report.data.some((v) => v._id === _report._id)) {
+        report.setData(report.data.map((v) => (v._id === _report._id ? _report : v)));
+      }
+    },
+    [report.data]
+  );
+
+  const query = getQuery(report.query);
+  const period = report.query.period || Period.MONTH;
+
+  const [userMemberInfos, isUserMemberInfosReady, setUerMemberInfo] = useWorkspaceMembers(
+    [query.userId].filter(Boolean)
+  );
+  const [workspaceBranches, isWorkspaceBranchesReady] = useWorkspaceBranches(query.workspaceBranchIds);
+
+  const ctx: ReportWidgetsContext = {
+    isInitialized: report.isInitialized,
+    isFetching: report.isFetching,
+    router,
+    rangeReports: report.data.map((v) => v.data),
+    fromTime: query.fromTime,
+    toTime: query.toTime,
+    period,
+    workspace,
+  };
+
+  return (
+    <Stack p={16}>
+      <Group gap={10}>
+        <ButtonSelect
+          icon={IconClock}
+          value={period}
+          options={[
+            {
+              label: t("date"),
+              icon: IconCalendar,
+              value: Period.DATE,
+            },
+            {
+              label: t("month"),
+              icon: IconCalendarMonth,
+              value: Period.MONTH,
+            },
+            {
+              label: t("year"),
+              icon: IconCalendarEvent,
+              value: Period.YEAR,
+            },
+          ]}
+          onChange={(value) => {
+            report.setQuery("period", value, { isSilient: false });
+          }}
+          onClear={Object.keys(report.query) ? undefined : () => report.removeQuery("period", { isSilient: false })}
+        />
+
+        <ButtonSelect
+          icon={IconClock}
+          label={(function () {
+            const date = report.query.date ? new Date(+report.query.date * 1000) : new Date();
+            if (period === Period.MONTH) return `${date.getMonth() + 1}/${date.getFullYear()}`;
+            if (period === Period.YEAR) return `${date.getFullYear()}`;
+            if (period === Period.DATE) return renderDate(date);
+          })()}
+          isActive
+          onClear={() => report.removeQuery("date", { isSilient: false })}
+          onClick={() =>
+            OnModalDatePicker({
+              period,
+              date: report.query.date ? new Date(+report.query.date * 1000) : new Date(),
+              onSelected:
+                period === Period.DATE
+                  ? (date) => {
+                      report.setQuery("date", DateTimeUtils.timeToSeconds(date));
+                    }
+                  : undefined,
+              onRangeSelected:
+                period !== Period.DATE
+                  ? (range) => {
+                      if (range) {
+                        report.setQuery("date", DateTimeUtils.timeToSeconds(range[0]));
+                      }
+                    }
+                  : undefined,
+            })
+          }
+        />
+
+        <Renderer visible={workspace.hasPermission(WorkspacePermission.REPORTS_VIEW)}>
+          <WorkspaceMemberSelector
+            onSelect={(user) => {
+              setUerMemberInfo(user);
+              report.setQuery("userId", user.userId);
+            }}
+            optionRightSection={(user) => {
+              const isSelected = query.userId === user.userId;
+
+              return (
+                <Group>
+                  <ThemeIcon radius={100} variant="transparent" color="var(--mantine-color-dimmed)" size="sm">
+                    {isSelected ? <IconMinus size={16} /> : <IconPlus size={16} />}
+                  </ThemeIcon>
+                </Group>
+              );
+            }}
+            render={(ctx) => {
+              return (
+                <Hovered>
+                  {(hover) => {
+                    const selectedUser = userMemberInfos.find((v) => v.userId === query.userId);
+
+                    return (
+                      <Group justify="space-between" style={{ position: "relative" }} ref={hover.ref}>
+                        <Button
+                          onClick={ctx.toggle}
+                          size="compact-md"
+                          h={32}
+                          color={query.userId ? "primary" : "var(--mantine-color-dimmed)"}
+                          variant="outline"
+                          radius={100}
+                          fz={12}
+                          leftIcon={IconUsers}
+                          iconSize={18}
+                        >
+                          <Group gap={5}>
+                            <Text fz={12} fw={500}>
+                              {t("members")}
+                            </Text>
+
+                            {!isUserMemberInfosReady ? (
+                              <Loader size={13} type="dots" color="var(--mantine-color-dimmed)" />
+                            ) : (
+                              selectedUser && (
+                                <Group gap={5} mr={0}>
+                                  <Group>
+                                    <Tooltip label={selectedUser.name}>
+                                      <Avatar withBorder user={selectedUser} size={22} />
+                                    </Tooltip>
+                                  </Group>
+                                </Group>
+                              )
+                            )}
+                          </Group>
+                        </Button>
+
+                        {selectedUser && hover.hovered && (
+                          <ThemeIcon
+                            color="dark.2"
+                            radius={100}
+                            size={16}
+                            style={{
+                              position: "absolute",
+                              right: -5,
+                              top: -5,
+                              border: `1px solid white`,
+                              cursor: "pointer",
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              report.removeQuery("userId");
+                            }}
+                          >
+                            <IconX size={7} strokeWidth={4} />
+                          </ThemeIcon>
+                        )}
+                      </Group>
+                    );
+                  }}
+                </Hovered>
+              );
+            }}
+          />
+        </Renderer>
+
+        {workspace.isShouldEnableBranches && (
+          <WorkspaceBranchSelector
+            onSelect={(branch) => {
+              if (!branch) return;
+              report.setQuery("workspaceBranchIds", branch._id);
+            }}
+            renderTarget={(ctx) => {
+              return (
+                <Hovered>
+                  {(hover) => {
+                    const workspaceBranch = workspaceBranches.find((v) => query.workspaceBranchIds.includes(v._id));
+
+                    return (
+                      <Group justify="space-between" style={{ position: "relative" }} ref={hover.ref}>
+                        <Button
+                          onClick={ctx.toggle}
+                          size="compact-md"
+                          h={32}
+                          color={query.userId ? "primary" : "var(--mantine-color-dimmed)"}
+                          variant="outline"
+                          radius={100}
+                          fz={12}
+                          leftIcon={IconBuildingSkyscraper}
+                          iconSize={18}
+                        >
+                          <Group gap={5}>
+                            <Text fz={12} fw={500}>
+                              {t("branch")}
+                            </Text>
+
+                            {!isWorkspaceBranchesReady ? (
+                              <Loader size={13} type="dots" color="var(--mantine-color-dimmed)" />
+                            ) : (
+                              workspaceBranch && (
+                                <Group gap={5} mr={0}>
+                                  <Text fz={12} fw={700}>
+                                    {workspaceBranch.name}
+                                  </Text>
+                                </Group>
+                              )
+                            )}
+                          </Group>
+                        </Button>
+
+                        {workspaceBranch && hover.hovered && (
+                          <ThemeIcon
+                            color="dark.2"
+                            radius={100}
+                            size={16}
+                            style={{
+                              position: "absolute",
+                              right: -5,
+                              top: -5,
+                              border: `1px solid white`,
+                              cursor: "pointer",
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              report.removeQuery("workspaceBranchIds");
+                            }}
+                          >
+                            <IconX size={7} strokeWidth={4} />
+                          </ThemeIcon>
+                        )}
+                      </Group>
+                    );
+                  }}
+                </Hovered>
+              );
+            }}
+          />
+        )}
+      </Group>
+
+      <Errored error={report.error} visible={report.isHasError} />
+
+      <Widgets
+        id="reports"
+        key={JSON.stringify(report.query)}
+        readonly={!workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}
+        widgets={workspace.view.reportWidgets}
+        defaultWidgets={getDefaultWorkspaceView(workspace.type).reportWidgets}
+        modules={reportWidgetModules}
+        context={ctx}
+        onChange={(widgets) =>
+          workspace.setView({
+            ...workspace.view,
+            reportWidgets: widgets,
+          })
+        }
+      />
+    </Stack>
+  );
+};

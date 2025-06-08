@@ -1,0 +1,275 @@
+import { useColor } from "@/modules/theme/use-color";
+import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
+import { useLayout } from "@/layout/layout-context";
+import { OnModalTagForm } from "@/modules/tags/modal-tag-form";
+import { getLocaleClient, t } from "@/modules/lang/lang-service";
+import { Locale } from "@/modules/lang/lang-types";
+import { TagType } from "@/modules/tags/tags-types";
+import { ActionIcon, em, getThemeColor, Group, rgba, Stack, Text, Tooltip, useMantineTheme } from "@mantine/core";
+import { useForceUpdate } from "@mantine/hooks";
+import {
+  IconCalendarDown,
+  IconDroplet,
+  IconDropletFilled,
+  IconFolderPlus,
+  IconHourglassHigh,
+  IconHourglassOff,
+  IconPlus,
+} from "@tabler/icons-react";
+import dayjs from "dayjs";
+import { FC, PropsWithChildren, useEffect } from "react";
+import { ganttConfig } from "./gantt.config";
+import { useGantt } from "./gantt.context";
+import { getWeeksFromRange } from "./gantt.utils";
+
+export const SidebarHead: FC = () => {
+  const forceUpdate = useForceUpdate();
+  const gantt = useGantt();
+  const layout = useLayout();
+
+  useEffect(() => {
+    setTimeout(forceUpdate, 100);
+  }, [gantt.state.dividerPosition]);
+
+  return (
+    <Group
+      px={8}
+      justify="space-between"
+      bg="var(--mantine-color-body)"
+      h="100%"
+      style={{
+        position: "sticky",
+        top: 0,
+        left: 0,
+        zIndex: 10,
+        maxWidth: gantt.sidebarRef.current?.getBoundingClientRect().width,
+        transition: "max-width 0.3s ease-in-out",
+        minHeight: ganttConfig.headHeight,
+        maxHeight: ganttConfig.headHeight,
+        borderBottom: layout.border,
+      }}
+    >
+      <Text fz={em(13)}>{t("name")}</Text>
+
+      <Group gap={5}>
+        <Tooltip label={t(gantt.state.isHideEstimateTime ? "show_estimate_time" : "hide_estimate_time")}>
+          <ActionIcon
+            variant="subtle"
+            size="sm"
+            color={gantt.state.isHideEstimateTime ? "gray" : "gray"}
+            onClick={() => {
+              gantt.setState({
+                ...gantt.state,
+                isHideEstimateTime: !gantt.state.isHideEstimateTime,
+              });
+            }}
+          >
+            {gantt.state.isHideEstimateTime ? <IconHourglassOff size={16} /> : <IconHourglassHigh size={16} />}
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip label={t("task_status_color_visible")}>
+          <ActionIcon
+            variant="subtle"
+            size="sm"
+            color={gantt.state.displayTaskStatusColor ? "primary" : "gray"}
+            onClick={() => {
+              gantt.toggleSisplayTaskStatusColor();
+            }}
+          >
+            {gantt.state.displayTaskStatusColor ? <IconDropletFilled size={16} /> : <IconDroplet size={16} />}
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip label={t("scroll_today")}>
+          <ActionIcon
+            variant="subtle"
+            size="sm"
+            color="gray"
+            onClick={() => {
+              gantt.scrollToDate({ date: new Date(), behavior: "smooth" });
+            }}
+          >
+            <IconCalendarDown size={16} />
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip label={t("create_folder")}>
+          <ActionIcon
+            variant="subtle"
+            size="sm"
+            color="gray"
+            onClick={() => OnModalTagForm({ type: TagType.TASK_FOLDER })}
+          >
+            <IconFolderPlus size={16} />
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip label={t("create_task")}>
+          <QuickCreateTaskInput>
+            <ActionIcon component="div" variant="subtle" size="sm" color="gray">
+              <IconPlus size={16} />
+            </ActionIcon>
+          </QuickCreateTaskInput>
+        </Tooltip>
+      </Group>
+    </Group>
+  );
+};
+
+export const BodyHead: FC = () => {
+  const gantt = useGantt();
+  const layout = useLayout();
+  const weeks = getWeeksFromRange(gantt.state.fromDate, gantt.state.toDate, getLocaleClient() === Locale.VI);
+
+  return (
+    <Stack
+      w="max-content"
+      bg="var(--mantine-color-body)"
+      gap={0}
+      style={{
+        gap: 0,
+        position: "sticky",
+        top: 0,
+        left: 0,
+        zIndex: 10,
+        minHeight: ganttConfig.headHeight,
+        maxHeight: ganttConfig.headHeight,
+        borderBottom: layout.border,
+      }}
+    >
+      <Group flex={1} gap={0} w="max-content" wrap="nowrap" style={{ borderBottom: layout.border }}>
+        {weeks.map((week, index) => {
+          const first = index === 0;
+
+          return (
+            <Group
+              key={index}
+              w={`${gantt.state.columnSize * week.dates.length}px`}
+              maw={`${gantt.state.columnSize * week.dates.length}px`}
+              style={{ borderLeft: first ? undefined : layout.border }}
+              h="100%"
+              justify="center"
+              px={10}
+              gap={5}
+              wrap="nowrap"
+            >
+              {week.dates.length > 4 && (
+                <Text tt="capitalize" ta="center" fz={em(9)} fw={700}>
+                  {(function () {
+                    const isSameMonth = dayjs(week.from).isSame(week.to, "month");
+                    if (isSameMonth) {
+                      return `${dayjs(week.from).format("D")} - ${dayjs(week.to).format("D")} ${dayjs(week.from).format(
+                        "MMMM"
+                      )}`;
+                    }
+
+                    return `${dayjs(week.from).format("MMM D")} - ${dayjs(week.to).format("MMM D")}`;
+                  })()}
+                </Text>
+              )}
+
+              <Text tt="capitalize" ta="center" fz={em(10)} fw={700}>
+                {dayjs(week.from).format("YYYY")}
+              </Text>
+            </Group>
+          );
+        })}
+      </Group>
+
+      <Group flex={1} gap={0} w="max-content" wrap="nowrap">
+        {gantt.dates.map((date, index) => {
+          const first = index === 0;
+
+          return (
+            <Group
+              key={index}
+              w={gantt.state.columnSize}
+              style={{ borderLeft: first ? undefined : layout.border }}
+              h="100%"
+              justify="center"
+            >
+              <Text ta="center" fz={em(10)}>
+                {dayjs(date).format("dd D/M")}
+              </Text>
+            </Group>
+          );
+        })}
+      </Group>
+    </Stack>
+  );
+};
+
+export const GridColumns: FC = () => {
+  const gantt = useGantt();
+  const layout = useLayout();
+  const theme = useMantineTheme();
+  const color = useColor();
+
+  return (
+    <Group
+      className="GanttBodyGridColumns"
+      w="max-content"
+      h="100%"
+      gap={0}
+      style={{
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      }}
+    >
+      {gantt.dates.map((date, index) => {
+        const id = `column-${new Date(date).getTime()}`;
+        const first = index === 0;
+        const isToday = dayjs(date).isSame(dayjs(), "day");
+        const isWeekend = dayjs(date).day() === 0 || dayjs(date).day() === 6;
+
+        return (
+          <Stack
+            id={id}
+            key={index}
+            style={{
+              width: gantt.state.columnSize,
+              borderLeft: first
+                ? undefined
+                : `${isToday ? 2 : 1}px solid ${
+                    isToday ? getThemeColor(color("primary.3"), theme) : layout.borderColor
+                  }`,
+              position: "relative",
+            }}
+            h="100%"
+            justify="start"
+            bg={isWeekend ? "var(--mantine-color-default-hover)" : undefined}
+          />
+        );
+      })}
+    </Group>
+  );
+};
+
+export const SidebarRowSticky: FC<PropsWithChildren & { visible?: boolean }> = (props) => {
+  return (
+    <Group
+      gap={3}
+      pr={8}
+      pl={35}
+      opacity={typeof props.visible === "boolean" ? (props.visible ? 1 : 0) : 1}
+      style={{
+        position: "sticky",
+        top: 0,
+        right: 0,
+        background: `linear-gradient(to right, ${rgba("var(--mantine-color-body)", 0)}, ${rgba(
+          "var(--mantine-color-body)",
+          1
+        )}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba(
+          "var(--mantine-color-body)",
+          1
+        )}, ${rgba("var(--mantine-color-body)", 1)})`,
+      }}
+    >
+      {props.children}
+    </Group>
+  );
+};

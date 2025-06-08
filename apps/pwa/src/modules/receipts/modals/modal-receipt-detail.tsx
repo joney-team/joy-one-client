@@ -1,0 +1,43 @@
+import { ReceiptDetail } from "@/modules/receipts/receipt-detail";
+import { ModalTitle } from "@/components/modal-title";
+import { t } from "@/modules/lang/lang-service";
+import { modals } from "@mantine/modals";
+import { IconCashRegister, IconExternalLink } from "@tabler/icons-react";
+import { FC } from "react";
+import { ActionIcon, Group } from "@mantine/core";
+
+interface ModalPromptProps {
+  id: string;
+}
+
+export const ReceiptDetailModal: FC<ModalPromptProps> = (props) => {
+  return <ReceiptDetail id={props.id} />;
+};
+
+export const OnReceiptDetailModal = (props: ModalPromptProps) => {
+  return modals.open({
+    modalId: "ReceiptDetailModal",
+    title: (
+      <ModalTitle
+        title={t("receipt")}
+        icon={IconCashRegister}
+        rightSection={
+          <Group>
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              size="sm"
+              component="a"
+              href={`/receipts/${props.id}`}
+              target="_blank"
+            >
+              <IconExternalLink size={15} />
+            </ActionIcon>
+          </Group>
+        }
+      />
+    ),
+    children: <ReceiptDetailModal {...props} />,
+    size: "lg",
+  });
+};

@@ -1,0 +1,49 @@
+{
+	// Place your joy-one-client workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	"next-page": {
+		"scope": "typescriptreact,javascriptreact",
+		"prefix": "np",
+		"body": [
+			"'use client';",
+			"",
+			"export default function Page() {",
+			"  return (",
+			"    ${1:component}",
+			"  )",
+			"}",
+		],
+		"description": "Next.js page component"
+	},
+  "react-component": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "rcc",
+    "body": [
+      "import { type FC } from 'react';",
+      "",
+      "export const ${TM_FILENAME_BASE}: FC = () => {",
+      "  return (",
+      "    ${2}",
+      "  )",
+      "}",
+    ],
+  },
+  "render-page": {
+    "scope": "typescriptreact",
+    "prefix": "rp",
+    "body": [
+      "\"use client\";",
+      "",
+      "import { Layout, renderPage } from \"@/layout/LayoutPage\";",
+      "",
+      "const Content = renderPage(() => import(\"${1:component}\").then((mod) => mod.${2:component}));",
+      "export default () => <Layout component={Content} />;",
+      "",
+    ],
+  },
+}

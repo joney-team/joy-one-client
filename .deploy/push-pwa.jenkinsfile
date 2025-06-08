@@ -1,0 +1,101 @@
+pipeline {
+  agent any
+
+  options {
+    disableConcurrentBuilds(abortPrevious: true)
+  }
+
+  stages {
+    stage('Setup') {
+      steps {
+        script {
+          checkout scm
+          setup()
+          sendNotification("start")
+        }
+      }
+    }
+
+    stage("Build") {
+      steps {
+        script {
+          sh "docker build -t ${IMAGE_TAG} -f ${DOCKER_FILE} ."
+          sh "docker push ${IMAGE_TAG}"
+        }
+      }
+    }
+
+    stage("Release") {
+      agent { label "${RELEASE_VPS}" }
+      steps {
+        script {
+          sh "docker pull ${IMAGE_TAG}"
+          SERVICES.split('\\|').each { service ->
+            sh "docker service update ${service} --image ${IMAGE_TAG}"
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      cleanWs()
+    }
+
+    success {
+      script {
+        sendNotification("success")
+      }
+    }
+
+    failure {
+      script {
+        sendNotification("failure")
+      }
+    }
+
+    aborted {
+      script {
+        sendNotification("aborted")
+      }
+    }
+  }
+}
+
+def setup() {
+  env.DOCKER_USERNAME = 'huuthongdev'
+  env.NOTIFIER_URL = "https://jenkins-notifier.joyone.vn/build-notify"
+  env.DOCKER_FILE = ".deploy/push-pwa.dockerfile"
+  env.IMAGE_TAG = "${DOCKER_USERNAME}/${env.JOB_NAME}:${env.BUILD_ID}"
+  env.GIT_COMMIT_COMMENT = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+  env.GIT_COMMIT_BY = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
+  env.GIT_BRANCH_NAME = env.GIT_BRANCH.replaceAll('origin/', '')
+  env.RELEASE_VPS = "vonic-${env.GIT_BRANCH_NAME}"
+  env.SERVICES = "joy-one_jo-client-pwa"
+
+  // Replace file packages/config/index.ts with env.GIT_BRANCH and remove origin 
+  sh "sed -i 's/ENV = \"development\"/ENV = \"${env.GIT_BRANCH_NAME}\"/g' packages/config/index.ts"
+
+}
+
+def sendNotification(status) {
+  sh """
+    curl --silent --show-error --location '${env.NOTIFIER_URL}' \\
+      --header 'Content-Type: application/json' \\
+      --data '{
+        "post": "${status}",
+        "envs": {
+          "GIT_URL": "${env.GIT_URL}",
+          "GIT_BRANCH": "${env.GIT_BRANCH}",
+          "GIT_COMMIT": "${env.GIT_COMMIT}",
+          "GIT_COMMIT_COMMENT": "${env.GIT_COMMIT_COMMENT}",
+          "GIT_COMMIT_BY": "${env.GIT_COMMIT_BY}",
+
+          "RUN_DISPLAY_URL": "${env.RUN_DISPLAY_URL}",
+          "JOB_NAME": "${env.JOB_NAME}",
+          "BUILD_TAG": "${env.BUILD_TAG}"
+        }
+      }'
+  """
+}

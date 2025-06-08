@@ -1,0 +1,191 @@
+"use client";
+
+import { Avatar } from "@/components/avatar";
+import { FlexSize } from "@/components/flex-size";
+import { TechIllustration } from "@/components/illustrations/tech";
+import { useLayout } from "@/layout/layout-context";
+import { OnModalBooking } from "@/modules/bookings/modals/modal-booking";
+import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
+import { OnModalOrderTable } from "@/modules/orders/order-table/order-table-modal";
+import { getCustomer } from "@/modules/customers/customer-service";
+import { CustomerEntity } from "@/modules/customers/customer-types";
+import { t } from "@/modules/lang/lang-service";
+import { setCustomerToMessageBox } from "@/modules/message-boxes/message-boxes-service";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
+import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
+import { useFetch } from "@/utils/use-fetch.util";
+import { Accordion, ActionIcon, Group, ScrollArea, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
+import { IconLinkOff, IconLinkPlus, IconMail, IconPhoneCall, IconPlus } from "@tabler/icons-react";
+import Link from "next/link";
+import { FC } from "react";
+import { Button } from "@/components/buttons/button";
+import { CustomerInput } from "@/modules/customers/customer-input";
+import { useMessageBoxes } from "../message-boxes-context";
+import { MessageBoxMetadataBookings } from "./message-box-metadata-bookings";
+import { MessageBoxMetadataLoans } from "./message-box-metadata-loans";
+import { MessageBoxMetadataOrders } from "./message-box-metadata-orders";
+import { AccordionItem } from "./message-box-metadata-types";
+
+const accordionItems: AccordionItem[] = [
+  {
+    moduleId: "loans",
+    component: MessageBoxMetadataLoans,
+    onCreate: (customer) => OnModalCreateLoan({ customer }),
+    workspaceTypes: [WorkspaceType.CREDIT],
+  },
+  {
+    moduleId: "bookings",
+    component: MessageBoxMetadataBookings,
+    onCreate: (customer) => OnModalBooking({ customer }),
+  },
+  {
+    moduleId: "orders",
+    component: MessageBoxMetadataOrders,
+    onCreate: (customer) => OnModalOrderTable({ customer }),
+  },
+];
+
+export const MetadataMessageBox: FC = () => {
+  const messageBoxes = useMessageBoxes();
+  const workspace = useWorkspace();
+  const layout = useLayout();
+  const { messageBox } = messageBoxes;
+
+  const customer = useFetch<CustomerEntity | null>({
+    id: `${messageBox?._id}-${messageBox?.customerId}`,
+    fetch: async () => (messageBox?.customerId ? getCustomer(messageBox.customerId) : null),
+  });
+
+  if (!messageBox) return null;
+
+  if (customer.isFetching)
+    return (
+      <Stack flex={1} p={16} align="center" justify="center">
+        <Skeleton flex={1} />
+      </Stack>
+    );
+
+  if (customer.data)
+    return (
+      <Stack flex={1} gap={0}>
+        <Group
+          p={12}
+          gap={5}
+          justify="space-between"
+          style={{
+            borderBottom: layout.border,
+          }}
+        >
+          <Group gap={8}>
+            <Avatar radius={8} customer={customer.data} />
+            <Stack gap={0}>
+              <Text fz={12} c="gray">
+                #{customer.data.code}
+              </Text>
+              <Text fw={500}>{customer.data.name}</Text>
+            </Stack>
+          </Group>
+
+          <Group gap={8}>
+            {customer.data.email && (
+              <ActionIcon variant="light" component={Link} href={`mailto:${customer.data.email}`}>
+                <IconMail size={16} />
+              </ActionIcon>
+            )}
+
+            {customer.data.phone && (
+              <ActionIcon variant="light" component={Link} href={`tel:${customer.data.phone}`}>
+                <IconPhoneCall size={16} />
+              </ActionIcon>
+            )}
+
+            <Tooltip label={t("unlink")}>
+              <ActionIcon variant="light" color="gray" onClick={() => setCustomerToMessageBox(messageBox._id, null)}>
+                <IconLinkOff size={16} />
+              </ActionIcon>
+            </Tooltip>
+          </Group>
+        </Group>
+
+        <FlexSize>
+          {(size) => {
+            return (
+              <ScrollArea h={size.height} w="100%">
+                <Accordion>
+                  {accordionItems
+                    .filter((item) => {
+                      if (item.workspaceTypes) {
+                        return item.workspaceTypes.includes(workspace.type);
+                      }
+
+                      return true;
+                    })
+                    .map((item) => {
+                      const mod = workspace.availableModules.find((m) => m.id === item.moduleId);
+                      const isInView = (workspace.view.menu ?? getDefaultWorkspaceView(workspace.type).menu ?? []).some(
+                        (v) => v.moduleId === item.moduleId
+                      );
+
+                      if (!mod || !isInView) return null;
+                      return (
+                        <Accordion.Item key={mod.id} value={mod.id}>
+                          <Accordion.Control>
+                            <Group gap={8}>
+                              <ActionIcon variant="subtle" color="dark" component="div">
+                                <mod.icon size={18} />
+                              </ActionIcon>
+                              <Text>{t(mod.name)}</Text>
+
+                              {item.onCreate && (
+                                <ActionIcon
+                                  variant="light"
+                                  color="gray"
+                                  size="sm"
+                                  component="div"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    item.onCreate!(customer.data!);
+                                  }}
+                                >
+                                  <IconPlus size={14} />
+                                </ActionIcon>
+                              )}
+                            </Group>
+                          </Accordion.Control>
+
+                          <Accordion.Panel>
+                            <item.component customer={customer.data!} />
+                          </Accordion.Panel>
+                        </Accordion.Item>
+                      );
+                    })}
+                </Accordion>
+              </ScrollArea>
+            );
+          }}
+        </FlexSize>
+      </Stack>
+    );
+
+  return (
+    <Stack p={16} align="center" flex={1} justify="center">
+      <TechIllustration width={200} />
+
+      <CustomerInput
+        onSelect={(customer) => {
+          if (!customer) return;
+          return setCustomerToMessageBox(messageBox._id, customer._id);
+        }}
+        renderValue={(ctx) => {
+          return (
+            <Button leftIcon={IconLinkPlus} variant="outline" radius={100} onClick={ctx.toggle}>
+              {t("msg_box_link_customer")}
+            </Button>
+          );
+        }}
+      />
+    </Stack>
+  );
+};

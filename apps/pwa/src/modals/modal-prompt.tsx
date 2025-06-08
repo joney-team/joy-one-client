@@ -1,0 +1,93 @@
+import { Button } from "@/components/buttons/button";
+import { ModalTitle } from "@/components/modal-title";
+import { t } from "@/modules/lang/lang-service";
+import { onError } from "@/utils/exceptions.utils";
+import { em, Group, Stack, Textarea } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { modals } from "@mantine/modals";
+import { Icon, IconCheck } from "@tabler/icons-react";
+import { FC, useState } from "react";
+
+interface ModalPromptProps {
+  title: string;
+  icon: Icon;
+  color?: string;
+  message: string;
+  onSubmit: (content: string) => Promise<void>;
+  suggestions?: string[];
+}
+
+export const ModalPrompt: FC<ModalPromptProps> = (props) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm({
+    initialValues: {
+      content: "",
+    },
+    validate: {
+      content: (value: string) => {
+        if (!value) return t("must_be_provided");
+      },
+    },
+  });
+
+  const onSubmit = form.onSubmit(async (values) => {
+    setIsSubmitting(true);
+
+    await props
+      .onSubmit(values.content)
+      .then(() => {
+        modals.close("ModalPrompt");
+      })
+      .catch(onError);
+
+    setIsSubmitting(false);
+  });
+
+  return (
+    <Stack>
+      <Textarea withAsterisk label={props.message} {...form.getInputProps("content")} color={props.color} />
+
+      {props.suggestions && props.suggestions.length > 0 && (
+        <>
+          <Group gap={10}>
+            {props.suggestions.map((s) => {
+              return (
+                <Button
+                  size="compact-xs"
+                  color="gray"
+                  variant="outline"
+                  fz={em(15)}
+                  fw={400}
+                  onClick={() => form.setFieldValue("content", s)}
+                >
+                  {s}
+                </Button>
+              );
+            })}
+          </Group>
+        </>
+      )}
+
+      <Button
+        mt={10}
+        loading={isSubmitting}
+        onClick={onSubmit}
+        leftSection={<IconCheck strokeWidth={1.2} />}
+        disabled={!form.isDirty()}
+        type="submit"
+        color={props.color}
+      >
+        {t("complete")}
+      </Button>
+    </Stack>
+  );
+};
+
+export const OnModalPrompt = (props: ModalPromptProps) => {
+  return modals.open({
+    modalId: "ModalPrompt",
+    title: <ModalTitle title={props.title} icon={props.icon} color={props.color} />,
+    children: <ModalPrompt {...props} />,
+  });
+};
