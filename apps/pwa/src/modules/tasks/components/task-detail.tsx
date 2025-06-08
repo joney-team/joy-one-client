@@ -120,14 +120,16 @@ export const TaskDetail: FC = () => {
                     <Container pt={10} pb={16} px={32}>
                       <TaskCodeButton key={task._id + "code"} task={task} />
 
-                      <TaskForm
-                        key={task._id + "form"}
-                        task={task}
-                        customer={task.relatedCustomer}
-                        tagFolderId={task!.tagFolderId}
-                      />
+                      <Stack gap={30}>
+                        <TaskForm
+                          key={task._id + "form"}
+                          task={task}
+                          customer={task.relatedCustomer}
+                          tagFolderId={task!.tagFolderId}
+                        />
 
-                      <DetailFooter task={task} onClose={onClose} />
+                        <DetailFooter task={task} onClose={onClose} />
+                      </Stack>
                     </Container>
                   </ScrollArea.Autosize>
                 </Stack>

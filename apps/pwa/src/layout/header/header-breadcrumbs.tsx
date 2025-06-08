@@ -52,15 +52,16 @@ export const WorkspaceHeaderBreadcrumbs: FC = () => {
     return null;
 
   return (
-    <Group gap={0} align="center" ml={-3}>
-      {parentModules.map((mo) => {
-        return (
-          <Fragment key={mo.id}>
-            <BreadcrumbItem m={mo} />
-            <BreadcrumbDivider enabled={!!activatedModule} />
-          </Fragment>
-        );
-      })}
+    <Group gap={0} align="center">
+      {parentModules.length > 0 &&
+        parentModules.map((mo) => {
+          return (
+            <Fragment key={mo.id}>
+              <BreadcrumbItem m={mo} />
+              <BreadcrumbDivider enabled={!!activatedModule} />
+            </Fragment>
+          );
+        })}
 
       {!!activatedModule && <BreadcrumbItem m={activatedModule} />}
 

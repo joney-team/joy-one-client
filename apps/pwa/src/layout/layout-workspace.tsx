@@ -65,9 +65,10 @@ export const LayoutWorkspace: FC = () => {
             : {
                 position: "fixed",
                 top: 0,
-                right: 0,
-                width: workspaceLayout.headerWidth,
+                left: 0,
+                width: "100dvw",
                 height: workspaceLayout.headerHeight,
+                paddingLeft: workspaceLayout.navigationWidth,
                 zIndex: 10,
                 borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
                 transition: workspaceLayout.transition("width"),
