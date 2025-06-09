@@ -1,8 +1,8 @@
 import { List } from "@/components/list";
-import { NumberColumn } from "@/components/list/columns/NumberColumn";
+import { NumberColumn } from "@/components/list/columns/number-column";
 import { ProductCard } from "@/modules/products/product-card";
 import { useLayout } from "@/layout/layout-context";
-import { OnProductModal } from "@/modules/products/modal-product";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { EventType } from "@/modules/events/event-types";
 import { num, t, tMulti } from "@/modules/lang/lang-service";
 import { getProducts } from "@/modules/products/products-service";

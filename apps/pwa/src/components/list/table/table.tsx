@@ -4,7 +4,7 @@ import { ActionIcon, Checkbox, Group, Loader, Menu, Table } from "@mantine/core"
 import { IconDotsVertical } from "@tabler/icons-react";
 import { ListContext } from "../types";
 import { getIn, getListDataId, getValuePath } from "../utils";
-import { ListTableHead } from "./ListTableHead";
+import { ListTableHead } from "./table-head";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { t } from "@/modules/lang/lang-service";
 

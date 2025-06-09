@@ -5,7 +5,7 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { WorkspaceNavigationTaskFolders } from "@/layout/navigation/navigation-task-folders";
 import { num, t } from "@/modules/lang/lang-service";
-import { OnModalTagForm } from "@/modules/tags/modal-tag-form";
+import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagType } from "@/modules/tags/tags-types";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";

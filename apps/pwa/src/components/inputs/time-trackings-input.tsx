@@ -1,9 +1,9 @@
 import { TextInput } from "@/components/inputs/text-input";
 import { useLang } from "@/modules/lang/lang-context";
-import { t } from "@/modules/lang/lang-service";
+import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { TaskTimeTracking } from "@/modules/tasks/tasks-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils, parseTimeInput, setHoursMinutes, timeInputValue } from "@/utils/dateTime.utils";
 import { StringUtils } from "@/utils/string.utils";
 import {
@@ -288,7 +288,7 @@ export const TimeTrackingGroupByUser: FC<{
 
                             <Text fz={14}>
                               {StringUtils.capitalizeFirstLetter(
-                                dayjs(t.startAt * 1000).format(`dd ${lang.config.dateFormat}`)
+                                dayjs(t.startAt * 1000).format(`dd ${getDateFormat()}`)
                               )}
                             </Text>
 
@@ -423,7 +423,7 @@ export const TimeTrackingForm: FC<{
             <InputWrapper label={t("time")}>
               <Group gap={10} wrap="nowrap">
                 <DateInput
-                  valueFormat={lang.config.dateFormat}
+                  valueFormat={getDateFormat()}
                   value={DateTimeUtils.secondsToTime(form.values.startAt)}
                   onChange={(v) => {
                     if (!v) return;

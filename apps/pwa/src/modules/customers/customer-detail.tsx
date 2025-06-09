@@ -28,7 +28,7 @@ import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
 import { CustomerKyc } from "@/modules/customers/customer-kyc-list";
 import { t } from "@/modules/lang/lang-service";
-import { OnModalPrescriptionForm } from "@/modules/prescriptions/modal-prescription-form";
+import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 

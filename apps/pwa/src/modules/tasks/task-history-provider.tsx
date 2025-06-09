@@ -1,3 +1,5 @@
+"use client";
+
 import { configs } from "@/configs/layout.config";
 import { num, t } from "@/modules/lang/lang-service";
 import { tasksEmitter, updateTasks } from "@/modules/tasks/tasks-service";

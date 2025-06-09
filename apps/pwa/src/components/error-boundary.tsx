@@ -1,14 +1,12 @@
-import { JOYONE_COLOR } from "@/configs/colors.config";
 import { configs } from "@/configs/layout.config";
-import { useLang } from "@/modules/lang/lang-context";
 import LangProvider from "@/modules/lang/lang-provider";
 import { t } from "@/modules/lang/lang-service";
+import { primaryColors } from "@joy-one-client/config/colors";
 import { Button, Container, createTheme, Group, MantineProvider, Modal, Stack, Text, Title } from "@mantine/core";
 import { IconHome, IconLifebuoy, IconRefresh } from "@tabler/icons-react";
 import Link from "next/link";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { IconErrored } from "./icons";
-import OverlayLoading from "./overlay-loading";
 
 interface ErrorBoundaryProps {
   error: any;
@@ -16,24 +14,22 @@ interface ErrorBoundaryProps {
 }
 
 const Content: FC<ErrorBoundaryProps> = (props) => {
-  const lang = useLang();
   const isHome = window?.location?.pathname === "/";
 
-  useEffect(() => {
-    if (lang.isReady) {
-      // if (config.SENTRY_DSN) {
-      //   Sentry.init({
-      //     dsn: config.SENTRY_DSN,
-      //     integrations: [],
-      //   });
-      //   Sentry.captureException(props.error);
-      // }
-    }
-  }, [lang.isReady]);
+  // useEffect(() => {
+  //   if (lang.isReady) {
+  //     // if (config.SENTRY_DSN) {
+  //     //   Sentry.init({
+  //     //     dsn: config.SENTRY_DSN,
+  //     //     integrations: [],
+  //     //   });
+  //     //   Sentry.captureException(props.error);
+  //     // }
+  //   }
+  // }, [lang.isReady]);
 
   return (
     <Container size="sm">
-      <OverlayLoading enabled={!lang.isReady} />
       <Stack align="center" justify="center" mih="100dvh">
         <IconErrored width={300} />
         <Title fz={22} ta="center">
@@ -76,7 +72,7 @@ const Content: FC<ErrorBoundaryProps> = (props) => {
 export const ErrorBoundary: FC<ErrorBoundaryProps> = (props) => {
   return (
     <LangProvider>
-      <MantineProvider theme={createTheme({ colors: { primary: JOYONE_COLOR } })}>
+      <MantineProvider theme={createTheme({ colors: { primary: primaryColors } })}>
         <Modal
           opened
           onClose={() => {}}

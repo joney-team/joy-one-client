@@ -1,8 +1,8 @@
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/CodeColumn";
-import { DateTimeColumn } from "@/components/list/columns/DateTimeColumn";
-import { NumberColumn } from "@/components/list/columns/NumberColumn";
-import { StatusColumn } from "@/components/list/columns/StatusColumn";
+import { CodeColumn } from "@/components/list/columns/code-column";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { NumberColumn } from "@/components/list/columns/number-column";
+import { StatusColumn } from "@/components/list/columns/status-column";
 import { CustomerColumn } from "@/modules/customers/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";

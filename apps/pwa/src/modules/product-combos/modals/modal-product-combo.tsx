@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
@@ -19,7 +21,7 @@ import { ActionIcon, Anchor, Badge, Group, Modal, Skeleton, Stack, Table, Text }
 import { useDisclosure } from "@mantine/hooks";
 import { IconPackage, IconPlus, IconTrash } from "@tabler/icons-react";
 import { FC, useRef } from "react";
-import { OnModalProductComboUsing } from "@/modules/product-combos/modal-product-combo-using";
+import { OnModalProductComboUsing } from "@/modules/product-combos/modals/modal-product-combo-using";
 
 export interface ProductComboModalProps {
   id: string;

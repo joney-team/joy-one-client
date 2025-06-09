@@ -1,3 +1,5 @@
+"use client";
+
 import { TextInput } from "@/components/inputs/text-input";
 import { t } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";

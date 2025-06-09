@@ -1,6 +1,6 @@
 import { AppEntity } from "@/types";
 import { Button } from "@/components/buttons/button";
-import { OnModalTagForm } from "@/modules/tags/modal-tag-form";
+import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { getTags, interactTag } from "@/modules/tags/tags-service";

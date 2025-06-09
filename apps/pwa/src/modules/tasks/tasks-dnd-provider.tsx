@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import { getTaskEntity, getTaskEntites, updateTasks } from "@/modules/tasks/tasks-service";
 import { addItemToIndex } from "@/utils/array.utils";

@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { useRouter } from "@/hooks/use-router";
 import { Avatar } from "@/components/avatar";
@@ -48,7 +50,12 @@ export const AppNavigation: FC = () => {
     );
 
     return (
-      <Group justify="space-around" wrap="nowrap" style={{ width: "100%", height: layout.navigationHeight }} gap={0}>
+      <Group
+        justify="space-around"
+        wrap="nowrap"
+        style={{ width: "100%", height: workspaceLayout.navigationHeight }}
+        gap={0}
+      >
         {mainCpns.map((v) => {
           const mo = workspace.modules.find((m) => m.id === v.moduleId);
           if (!mo) return null;

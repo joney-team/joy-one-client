@@ -1,5 +1,5 @@
 import { t } from "@/modules/lang/lang-service";
-import { OnModalTagForm } from "@/modules/tags/modal-tag-form";
+import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";

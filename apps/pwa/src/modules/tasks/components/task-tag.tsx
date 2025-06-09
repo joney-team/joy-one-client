@@ -1,3 +1,5 @@
+"use client";
+
 import { useTags } from "@/modules/tags/tags-context";
 import { IconMinus } from "@tabler/icons-react";
 import { ActionIcon } from "@mantine/core";
@@ -8,7 +10,7 @@ import { useHover } from "@mantine/hooks";
 import { IconPencil } from "@tabler/icons-react";
 import { FC } from "react";
 import { Renderer } from "../../../components/renderer";
-import { OnModalTagForm } from "@/modules/tags/modal-tag-form";
+import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 
 interface TaskTagProps {
   id: string;

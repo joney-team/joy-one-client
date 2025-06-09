@@ -1,4 +1,4 @@
-import { OnModalFileGallery } from '@/modules/files/modal-file-gallery';
+import { OnModalFileGallery } from '@/modules/files/modals/modal-file-gallery';
 import Image from '@tiptap/extension-image';
 
 export const ImageResize = Image.extend({

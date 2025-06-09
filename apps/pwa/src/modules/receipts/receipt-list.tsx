@@ -1,12 +1,12 @@
 "use client";
 
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/CodeColumn";
+import { CodeColumn } from "@/components/list/columns/code-column";
 import { CustomerColumn } from "@/modules/customers/customer-column";
-import { DateTimeColumn } from "@/components/list/columns/DateTimeColumn";
-import { EnumColumn } from "@/components/list/columns/EnumColumn";
-import { NumberColumn } from "@/components/list/columns/NumberColumn";
-import { StatusColumn } from "@/components/list/columns/StatusColumn";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { EnumColumn } from "@/components/list/columns/enum-column";
+import { NumberColumn } from "@/components/list/columns/number-column";
+import { StatusColumn } from "@/components/list/columns/status-column";
 import { UserColumn } from "@/modules/users/user-column";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { OnModalPrinter } from "@/modals/modal-printer";

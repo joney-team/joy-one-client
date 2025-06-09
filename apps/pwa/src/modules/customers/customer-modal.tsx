@@ -5,7 +5,7 @@ import { modals } from "@mantine/modals";
 import { IconUser, IconUserPlus } from "@tabler/icons-react";
 
 import { CustomerForm, CustomerFormProps } from "@/modules/customers/customer-form";
-import { getView } from "@/layout/layout-provider";
+import { getView } from "@/layout/layout-service";
 import { t } from "@/modules/lang/lang-service";
 
 export const OnCustomerModal = (props?: CustomerFormProps) =>

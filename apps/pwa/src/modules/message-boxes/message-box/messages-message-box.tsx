@@ -1,4 +1,4 @@
-import { OnModalUserInformation } from "@/modules/users/modal-user-information";
+import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { eventsEmitter, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { detectFileType } from "@/modules/files/file-service";

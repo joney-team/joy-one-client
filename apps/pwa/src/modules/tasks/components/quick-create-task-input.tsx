@@ -1,3 +1,5 @@
+"use client";
+
 import { TextInput } from "@/components/inputs/text-input";
 import { t, tMulti } from "@/modules/lang/lang-service";
 import { createTask } from "@/modules/tasks/tasks-service";

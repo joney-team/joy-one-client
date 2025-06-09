@@ -2,7 +2,7 @@ import { Container } from "@/components/container";
 import { Button } from "@/components/buttons/button";
 import { ComboIllustration } from "@/components/illustrations/combo";
 import { useLayout } from "@/layout/layout-context";
-import { OnProductModal } from "@/modules/products/modal-product";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { t, tMulti } from "@/modules/lang/lang-service";
 import { ProductType } from "@/modules/products/products-types";
 import { Card, Center, Stack, Title } from "@mantine/core";

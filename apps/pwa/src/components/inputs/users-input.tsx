@@ -1,5 +1,5 @@
 import { useColor } from "@/modules/theme/use-color";
-import { OnModalUserInformation } from "@/modules/users/modal-user-information";
+import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { ActionIcon, em, Group, InputWrapperProps, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconFlagFilled, IconUserPlus } from "@tabler/icons-react";

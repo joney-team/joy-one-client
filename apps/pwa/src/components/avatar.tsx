@@ -1,4 +1,3 @@
-import { JOYONE_COLOR } from "@/configs/colors.config";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { renderLink } from "@/modules/files/files-utils";
 import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
@@ -10,6 +9,7 @@ import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceEntity } from "@/modules/workspaces/workspaces-types";
 import { getAvatarInitials } from "@/utils/string.utils";
+import { primaryColors } from "@joy-one-client/config/colors";
 import { Indicator, IndicatorProps, Avatar as MantineAvatar, AvatarProps as MantineAvatarProps } from "@mantine/core";
 import { Icon, IconUserSquareRounded } from "@tabler/icons-react";
 import { FC } from "react";
@@ -57,7 +57,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
   const getColor = () => {
     if (props.color) return props.color;
     if (props.workspace) {
-      if (!props.workspace.appColor || props.workspace.appColor === "primary") return JOYONE_COLOR[6];
+      if (!props.workspace.appColor || props.workspace.appColor === "primary") return primaryColors[6];
       return props.workspace.appColor;
     }
     if (props.pluginMetaPage) return "primary";

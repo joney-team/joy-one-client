@@ -2,6 +2,7 @@
 
 import { CommentsIllustration } from "@/components/illustrations/comments";
 import { useRouter } from "@/hooks/use-router";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -26,6 +27,7 @@ const Page: FC<PropsWithChildren> = (props) => {
   const [version, _forceUpdate] = useState(0);
   const forceUpdate = () => _forceUpdate((v) => v + 1);
   const workspace = useWorkspace();
+  const workspaceLayout = useWorkspaceLayout();
   const cacheKey = `message_box_ids_${workspace.userMember._id}_v1`;
 
   const layout = useLayout();
@@ -188,7 +190,7 @@ const Page: FC<PropsWithChildren> = (props) => {
               <Stack
                 id="mobile-message-box"
                 style={{
-                  height: layout.height - layout.navigationHeight - layout.headHeight - layout.navPaddingBottom,
+                  height: workspaceLayout.bodyHeight,
                 }}
               >
                 <MessageBox />
@@ -202,8 +204,8 @@ const Page: FC<PropsWithChildren> = (props) => {
           );
         }
 
-        const contentHeight = layout.bodySize.height - 16 * 2;
-        const contentWidth = layout.bodySize.width - 16 * 2;
+        const contentHeight = workspaceLayout.bodyHeight - 16 * 2;
+        const contentWidth = workspaceLayout.bodyWidth - 16 * 2;
 
         return (
           <Stack p={16}>
@@ -224,7 +226,7 @@ const Page: FC<PropsWithChildren> = (props) => {
                       <MessageBoxTabs />
 
                       <Stack flex={1} w="100%" gap={0}>
-                        <Group style={{ borderBottom: layout.border }} w="100%">
+                        <Group style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }} w="100%">
                           {messageBox && <MessageBoxHead key={messageBox._id} />}
                         </Group>
 

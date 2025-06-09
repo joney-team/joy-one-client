@@ -1,3 +1,5 @@
+"use client";
+
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { searchWithoutAccents } from "@/utils/string.utils";
 import { FC, PropsWithChildren, useEffect, useState } from "react";

@@ -2,7 +2,7 @@
 
 import { useRouter } from "@/hooks/use-router";
 import { onActionLoad } from "@/utils/actions";
-import { OnModalFileGallery } from "@/modules/files/modal-file-gallery";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { approveCustomerKyc, rejectCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
 import { type CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";

@@ -2,7 +2,7 @@ import { type FC } from "react";
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { ProductCard } from "@/modules/products/product-card";
-import { OnProductModal } from "@/modules/products/modal-product";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { EventType } from "@/modules/events/event-types";
 import { num } from "@/modules/lang/lang-service";
 import { getProducts } from "@/modules/products/products-service";

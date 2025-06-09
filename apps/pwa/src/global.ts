@@ -1,18 +1,19 @@
 import type { Dictionary, LangState, LocaleConfig } from "@/modules/lang/lang-types";
 import type { WorkspaceSettingEntity } from "./modules/workspace-settings/workspace-settings-types";
-import type { AppConfig, AppMetadata } from "./types";
+import type { AppConfig, AppMetadata, ViewportType } from "./types";
 
 export interface Global extends Window {
-  appConfig: AppConfig;
-  langState: LangState;
-  _metadata: AppMetadata;
-  sessionId: string;
-  dictionary: Dictionary;
-  localeConfig: LocaleConfig;
   FB: any;
   FBInitialized: boolean;
   electron: any;
-  workspaceSettings: WorkspaceSettingEntity;
+  _appConfig: AppConfig;
+  _langState: LangState;
+  _metadata: AppMetadata;
+  _sessionId: string;
+  _dictionary: Dictionary;
+  _localeConfig: LocaleConfig;
+  _workspaceSettings: WorkspaceSettingEntity;
+  _view: ViewportType;
 }
 
 let serverGlobal = {} as Global;

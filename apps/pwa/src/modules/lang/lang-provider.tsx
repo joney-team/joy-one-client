@@ -1,3 +1,5 @@
+"use client";
+
 import { onReconnected } from "@/modules/events/event-service";
 import { MainRequest } from "@/modules/requests/main.request";
 import { deleteCookie, setCookie } from "cookies-next/client";
@@ -21,7 +23,6 @@ dayjs.extend(customParseFormat);
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
 
-import { defaultDateFormats } from "@/configs/lang.config";
 import { configs } from "@/configs/layout.config";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
@@ -33,9 +34,8 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
   const [locale, setLocale] = useState(getLocaleClient());
   const [_config, setConfig] = useState<LocaleConfig>({} as LocaleConfig);
   const [state, setState] = useState<LangState>({} as LangState);
-  const [isReady, setIsReady] = useState(false);
   const global = getGlobal();
-  global.langState = state;
+  global._langState = state;
 
   const weekStart = state.isStartOfWeekSunday ? 0 : 1;
 
@@ -53,8 +53,8 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
     setConfig(config);
 
     const global = getGlobal();
-    global.dictionary = dictionary;
-    global.localeConfig = config;
+    global._dictionary = dictionary;
+    global._localeConfig = config;
   };
 
   const initialize = async (_locale: Locale, silent = false) => {
@@ -64,7 +64,6 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
       console.error(error);
     } finally {
       setLocale(_locale);
-      setIsReady(true);
     }
   };
 
@@ -76,13 +75,6 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
 
     await wait(100);
     window.location.reload();
-  };
-
-  const getDateFormat = () => {
-    if (!state.dateFormat || !configs.dateFormats.includes(state.dateFormat) || state.dateFormat === "auto")
-      return defaultDateFormats[locale];
-
-    return state.dateFormat;
   };
 
   // Sync week start for all locales
@@ -102,12 +94,10 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
       value={{
         locale,
         config: _config,
-        isReady,
         setLocale: _setLocale,
         state,
         setState,
         weekStart,
-        dateFormat: getDateFormat(),
       }}
     >
       {props.children}

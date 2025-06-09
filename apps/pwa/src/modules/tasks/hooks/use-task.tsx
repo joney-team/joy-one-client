@@ -1,3 +1,5 @@
+"use client";
+
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { useList } from "@/utils/use-list.util";

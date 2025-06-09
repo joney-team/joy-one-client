@@ -13,7 +13,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 
-import { OnModalUserInformation } from "@/modules/users/modal-user-information";
+import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { eventVariantColors, eventVariantIcons } from "@/modules/events/event-config";
 import { t } from "@/modules/lang/lang-service";
 import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";

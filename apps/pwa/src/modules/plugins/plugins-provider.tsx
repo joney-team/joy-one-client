@@ -1,3 +1,5 @@
+"use client";
+
 import { OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { useRouter } from "@/hooks/use-router";
@@ -9,7 +11,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onErrorLog } from "@/utils/exceptions.utils";
 import { parseThemeColor, useMantineTheme } from "@mantine/core";
 import { IconMessage } from "@tabler/icons-react";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { type FC, type PropsWithChildren, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { getPluginAiAssistants } from "./ai-assistants/ai-assistants-service";
 import { PluginAiAssistantEntity } from "./ai-assistants/ai-assistants-types";

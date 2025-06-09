@@ -1,3 +1,5 @@
+"use client";
+
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
@@ -17,7 +19,7 @@ import { Card, Center, Group, Skeleton, Stack, Table, Text } from "@mantine/core
 import { openConfirmModal } from "@mantine/modals";
 import { IconBrandSpeedtest, IconCircleDashedCheck, IconPlus, IconRefresh } from "@tabler/icons-react";
 import { FC } from "react";
-import { LoanRowInfo } from "./loang-row-info";
+import { LoanRowInfo } from "./loan-row-info";
 import { LoanReceiptCard } from "./loan-receipt-card";
 import { useColor } from "@/modules/theme/use-color";
 

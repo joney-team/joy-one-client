@@ -23,19 +23,7 @@ export interface LayoutContext {
   isResizing: boolean;
   view: ViewportType;
   isBrowerCollapsed: boolean;
-  spacing: number;
 
-  headHeight: number,
-  navigationHeight: number,
-  sidebarWidth: number,
-  navPaddingBottom: number,
-  bodySize: {
-    height: number,
-    width: number,
-  },
-
-  border: string,
-  borderColor: string,
   config: LayoutConfig;
   setConfig: Dispatch<SetStateAction<LayoutConfig>>,
 

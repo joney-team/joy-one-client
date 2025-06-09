@@ -23,8 +23,8 @@ import { useList } from "@/utils/use-list.util";
 import { useEventsListener } from "@/modules/events/event-service";
 import { num, t } from "@/modules/lang/lang-service";
 import { BulkActions } from "./components/bulk-actions";
-import ListTable from "./table/ListTable";
-import { Sort } from "./sort/ListSort";
+import ListTable from "./table/table";
+import { Sort } from "./sort/sort";
 
 export function List<T = any>(props: ListProps<T>) {
   const forceUpdate = useForceUpdate();

@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import { List } from "@/components/list";
-import { DateTimeColumn } from "@/components/list/columns/DateTimeColumn";
-import { NumberColumn } from "@/components/list/columns/NumberColumn";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { NumberColumn } from "@/components/list/columns/number-column";
 import { ProductColumn } from "@/modules/products/product-column";
 import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
 import { EventType } from "@/modules/events/event-types";

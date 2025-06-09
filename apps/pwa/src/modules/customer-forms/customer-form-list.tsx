@@ -1,6 +1,6 @@
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
-import { StatusColumn } from "@/components/list/columns/StatusColumn";
+import { StatusColumn } from "@/components/list/columns/status-column";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { renderLocation } from "@/modules/locations/locations-service";

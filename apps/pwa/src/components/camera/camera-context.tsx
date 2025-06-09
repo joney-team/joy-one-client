@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import { Box, Group, Text } from "@mantine/core";
 import { FC, PropsWithChildren, createContext, useContext, useRef, useState } from "react";

@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 import { dayjsLocalizer, type CalendarProps } from "react-big-calendar";
-import { getView } from "@/layout/layout-provider";
+import { getView } from "@/layout/layout-service";
 import { LangState } from "@/modules/lang/lang-types";
 import { getGlobal } from "@/global";
 
@@ -69,7 +69,7 @@ export const calendarProps: CalendarProps<CalendarEvent> = {
   formats: {
     timeGutterFormat: (date, culture) => {
       const global = getGlobal();
-      const langState = global.langState as LangState | undefined;
+      const langState = global._langState as LangState | undefined;
       if (langState?.isTwelveHour) return calendarDayJsLocalizer.format(date, "hh:mm A", culture);
       return calendarDayJsLocalizer.format(date, "HH:mm", culture);
     },
@@ -79,7 +79,7 @@ export const calendarProps: CalendarProps<CalendarEvent> = {
     },
     eventTimeRangeFormat: (date, culture) => {
       const global = getGlobal();
-      const langState = global.langState as LangState | undefined;
+      const langState = global._langState as LangState | undefined;
       const format = langState?.isTwelveHour ? "hh:mm A" : "HH:mm";
 
       return (

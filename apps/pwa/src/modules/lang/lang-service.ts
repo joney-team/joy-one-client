@@ -37,7 +37,7 @@ export const getLocaleClient = () => {
 export const getLocaleConfig = () => {
   if (isServer()) return {} as LocaleConfig;
   const global = getGlobal();
-  return global.localeConfig || {} as LocaleConfig;
+  return global._localeConfig || {} as LocaleConfig;
 }
 
 export const t = (key: string, params?: any): string => {
@@ -45,7 +45,7 @@ export const t = (key: string, params?: any): string => {
   if (!key || typeof key !== 'string') return '';
 
   const global = getGlobal();
-  const dictionary: Dictionary = global.dictionary || {};
+  const dictionary: Dictionary = global._dictionary || {};
   let sentence: string = dictionary[key] || key;
 
   if (params && typeof params === 'object') {
@@ -75,8 +75,8 @@ export const hours = (seconds: number) => {
 export const numCurrencyRound = (value: number) => {
   try {
     const global = getGlobal();
-    const settings = global.workspaceSettings as WorkspaceSettingEntity;
-    const currency = global.appConfig.currencies.find(c => c.code === settings?.currencyCode);
+    const settings = global._workspaceSettings as WorkspaceSettingEntity;
+    const currency = global._appConfig.currencies.find(c => c.code === settings?.currencyCode);
     if (currency) return round(value, currency.roundPrecision);
     return value;
   } catch (error) {
@@ -91,8 +91,8 @@ export const num = (value: any, args?: { roundPrecision?: number, type?: 'money'
   if (_args.type === 'money' && !_args.suffix) {
     try {
       const global = getGlobal();
-      const settings = global.workspaceSettings as WorkspaceSettingEntity;
-      const currency = global.appConfig.currencies.find(c => c.code === settings?.currencyCode);
+      const settings = global._workspaceSettings as WorkspaceSettingEntity;
+      const currency = global._appConfig.currencies.find(c => c.code === settings?.currencyCode);
       if (currency) {
         _args.suffix = `${currency.symbol}`;
         roundPrecision = currency.roundPrecision;
@@ -145,7 +145,7 @@ export const translateNotification = (key: string, params?: any): string => {
   if (isServer()) return key;
   if (!key || typeof key !== 'string') return '';
   const global = getGlobal();
-  const dictionary: Dictionary = global.dictionary || {};
+  const dictionary: Dictionary = global._dictionary || {};
 
   let message = dictionary[key] || key;
 
@@ -174,7 +174,7 @@ export const translateNotification = (key: string, params?: any): string => {
 export const getLangState = () => {
   if (isServer()) throw new Error('Lang state is not available on server');
   const global = getGlobal();
-  return global.langState as LangState;
+  return global._langState as LangState;
 }
 
 export const forceTime = (date: Date | number) => {

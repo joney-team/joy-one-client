@@ -1,3 +1,5 @@
+"use client";
+
 import {
   HrmTimekeepingEntity,
   HrmTimekeepingMethod,
@@ -17,7 +19,7 @@ import {
 } from "@tabler/icons-react";
 import { FC } from "react";
 
-import { OnModalFileGallery } from "@/modules/files/modal-file-gallery";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { getFiles } from "@/modules/files/file-service";
 import { FileEntity } from "@/modules/files/file-types";
 import {

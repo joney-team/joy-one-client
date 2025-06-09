@@ -1,33 +1,48 @@
-import { ComboboxItem, createTheme, em, OptionsFilter } from "@mantine/core";
-import { IconX } from "@tabler/icons-react";
-import { getColorShape, JOYONE_COLOR } from "../../configs/colors.config";
-import { LayoutContext } from "../../layout/layout-context";
-import { getLocaleConfig } from "../lang/lang-service";
-import { StringUtils } from "../../utils/string.utils";
 import { type AppMetadata } from "@/types";
+import { primaryColors } from "@joy-one-client/config/colors";
+import { ComboboxItem, createTheme, em, InputWrapper, Notification, OptionsFilter } from "@mantine/core";
+import { LayoutContext } from "../../layout/layout-context";
+import { StringUtils } from "../../utils/string.utils";
+import { getLocaleConfig } from "../lang/lang-service";
 
-export const generateTheme = (metadata: AppMetadata, layout: LayoutContext) => {
+export const getColorShape = (shape?: number) => {
+  if (typeof shape === "number" && shape >= 0 && shape <= 9) {
+    return shape;
+  }
+
+  return 6;
+};
+
+export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
   return createTheme({
     colors: {
-      primary: JOYONE_COLOR,
+      primary: [
+        primaryColors[0],
+        primaryColors[1],
+        primaryColors[2],
+        primaryColors[3],
+        primaryColors[4],
+        primaryColors[5],
+        primaryColors[6],
+        primaryColors[7],
+        primaryColors[8],
+        primaryColors[9],
+      ],
     },
     primaryColor: metadata.appColor || "primary",
     primaryShade: {
       light: getColorShape(metadata.appColorShape) as any,
       dark: (getColorShape(metadata.appColorShape) - 2) as any,
     },
-    defaultRadius: 8,
+    defaultRadius: "md",
     components: {
-      InputWrapper: {
+      InputWrapper: InputWrapper.extend({
         styles: {
           label: {
             fontSize: 12,
           },
-          description: {
-            fontSize: 11,
-          },
         },
-      },
+      }),
       Switch: {
         styles: {
           label: {
@@ -43,22 +58,6 @@ export const generateTheme = (metadata: AppMetadata, layout: LayoutContext) => {
           },
         },
       },
-      Modal: {
-        defaultProps: {
-          styles: {
-            header: {
-              height: 50,
-              paddingTop: 10,
-              paddingBottom: 10,
-              paddingLeft: 12,
-              minHeight: 50,
-            },
-          },
-          closeButtonProps: {
-            icon: <IconX strokeWidth={1.5} size={20} />,
-          },
-        },
-      },
       Tooltip: {
         styles: {
           tooltip: {
@@ -66,7 +65,7 @@ export const generateTheme = (metadata: AppMetadata, layout: LayoutContext) => {
           },
         },
       },
-      Notification: {
+      Notification: Notification.extend({
         styles: {
           root: {
             alignItems: "start",
@@ -76,7 +75,7 @@ export const generateTheme = (metadata: AppMetadata, layout: LayoutContext) => {
             marginTop: em(5),
           },
         },
-      },
+      }),
       Menu: {
         styles: {
           dropdown: {
@@ -114,13 +113,6 @@ export const generateTheme = (metadata: AppMetadata, layout: LayoutContext) => {
           },
         },
       },
-    },
-    spacing: {
-      lg: `${16}px`,
-      xl: `${16}px`,
-      md: `${16}px`,
-      sm: `${16}px`,
-      xs: `${16}px`,
     },
   });
 };

@@ -1,16 +1,18 @@
+"use client";
+
 import { FlexSize } from "@/components/flex-size";
-import { LayoutSplit } from "@/components/layout-split";
 import { CommentsIllustration } from "@/components/illustrations/comments";
-import { useLayout } from "@/layout/layout-context";
+import { LayoutSplit } from "@/components/layout-split";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { t } from "@/modules/lang/lang-service";
 import { Stack, Text } from "@mantine/core";
 import { FC, useState } from "react";
 import { MessageBox } from ".";
-import { useMessageBoxes } from "../message-boxes-context";
 import { MetadataMessageBox } from "../message-box-metadata";
+import { useMessageBoxes } from "../message-boxes-context";
 
 export const ContainerMessageBox: FC = () => {
-  const layout = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
   const messageBoxes = useMessageBoxes();
   const { messageBox } = messageBoxes;
   const [layoutSplit, setLayoutSplit] = useState(0.6);
@@ -23,7 +25,7 @@ export const ContainerMessageBox: FC = () => {
             <LayoutSplit value={layoutSplit} onChange={setLayoutSplit}>
               <Stack
                 style={{
-                  borderRight: layout.border,
+                  borderRight: `1px solid ${workspaceLayout.dividerColor}`,
                   height: rootSize.height,
                   overflow: "hidden",
                   width: `${layoutSplit * 100}%`,

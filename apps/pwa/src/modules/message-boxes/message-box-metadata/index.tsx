@@ -1,26 +1,26 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { Button } from "@/components/buttons/button";
 import { FlexSize } from "@/components/flex-size";
 import { TechIllustration } from "@/components/illustrations/tech";
-import { useLayout } from "@/layout/layout-context";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { OnModalBooking } from "@/modules/bookings/modals/modal-booking";
-import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
-import { OnModalOrderTable } from "@/modules/orders/order-table/order-table-modal";
+import { CustomerInput } from "@/modules/customers/customer-input";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { t } from "@/modules/lang/lang-service";
+import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { setCustomerToMessageBox } from "@/modules/message-boxes/message-boxes-service";
+import { OnModalOrderTable } from "@/modules/orders/order-table/order-table-modal";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
+import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Accordion, ActionIcon, Group, ScrollArea, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
 import { IconLinkOff, IconLinkPlus, IconMail, IconPhoneCall, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
-import { Button } from "@/components/buttons/button";
-import { CustomerInput } from "@/modules/customers/customer-input";
 import { useMessageBoxes } from "../message-boxes-context";
 import { MessageBoxMetadataBookings } from "./message-box-metadata-bookings";
 import { MessageBoxMetadataLoans } from "./message-box-metadata-loans";
@@ -49,7 +49,7 @@ const accordionItems: AccordionItem[] = [
 export const MetadataMessageBox: FC = () => {
   const messageBoxes = useMessageBoxes();
   const workspace = useWorkspace();
-  const layout = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
   const { messageBox } = messageBoxes;
 
   const customer = useFetch<CustomerEntity | null>({
@@ -74,7 +74,7 @@ export const MetadataMessageBox: FC = () => {
           gap={5}
           justify="space-between"
           style={{
-            borderBottom: layout.border,
+            borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
           }}
         >
           <Group gap={8}>

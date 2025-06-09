@@ -1,7 +1,7 @@
 import { Avatar } from "@/components/avatar";
 import { List } from "@/components/list";
 import { PartnerCard } from "@/modules/partners/partner-card";
-import { OnModalParnterForm } from "@/modules/partners/modal-partner-form";
+import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { EventType } from "@/modules/events/event-types";
 import { getPartners } from "@/modules/partners/partners-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";

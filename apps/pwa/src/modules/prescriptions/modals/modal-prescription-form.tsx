@@ -6,7 +6,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { PrescriptionSelector } from "@/components/selector/prescription-selector";
 import { ProductSelector } from "@/components/selector/product-selector";
-import { getView } from "@/layout/layout-provider";
+import { getView } from "@/layout/layout-service";
 import { CustomerInput } from "@/modules/customers/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { t } from "@/modules/lang/lang-service";
@@ -40,7 +40,7 @@ import { useListState } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconArchive, IconArrowDown, IconMinus, IconPill, IconPlus, IconSearch } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { PrintButton } from "../../modals/modal-printer";
+import { PrintButton } from "@/modals/modal-printer";
 
 interface ModalPrescriptionFormProps {
   prescription?: PrescriptionEntity;

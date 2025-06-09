@@ -1,10 +1,12 @@
+"use client";
+
 import { useApp } from "@/app.context";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { TextInput } from "@/components/inputs/text-input";
 import { Renderer } from "@/components/renderer";
-import { getColorShape } from "@/configs/colors.config";
+import { getColorShape } from "@/modules/theme/generator";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";

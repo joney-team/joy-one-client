@@ -1,4 +1,4 @@
-import { OnModalFileGallery } from "@/modules/files/modal-file-gallery";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { detectFileType, getFiles, onUploadFile, removeFile } from "@/modules/files/file-service";

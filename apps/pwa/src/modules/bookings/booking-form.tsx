@@ -10,7 +10,7 @@ import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { CustomerInput } from "@/modules/customers/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { t } from "@/modules/lang/lang-service";
+import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
@@ -146,7 +146,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                 <Stack gap={5}>
                   <Stack gap={0}>
                     <Text tt="capitalize" fw={600} td="line-through" fz={14}>
-                      {dayjs(reschedule.startTime * 1000).format(`dddd, ${lang.dateFormat}`)}
+                      {dayjs(reschedule.startTime * 1000).format(`dddd, ${getDateFormat()}`)}
                     </Text>
                     <Group gap={8}>
                       <Text td="line-through" fz={12}>
@@ -179,7 +179,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                 <DateInput
                   flex={1}
                   defaultValue={form.values.startTime}
-                  valueFormat={lang.dateFormat}
+                  valueFormat={getDateFormat()}
                   onChange={(value) => {
                     const currentStartTime = dayjs(form.values.startTime);
                     const currentEndTime = dayjs(form.values.endTime);

@@ -1,9 +1,9 @@
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/CodeColumn";
+import { CodeColumn } from "@/components/list/columns/code-column";
 import { CustomerColumn } from "@/modules/customers/customer-column";
-import { DateTimeColumn } from "@/components/list/columns/DateTimeColumn";
-import { NumberColumn } from "@/components/list/columns/NumberColumn";
-import { StatusColumn } from "@/components/list/columns/StatusColumn";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { NumberColumn } from "@/components/list/columns/number-column";
+import { StatusColumn } from "@/components/list/columns/status-column";
 import { UserColumn } from "@/modules/users/user-column";
 import { OrderCard } from "@/modules/orders/order-card";
 import { EventType } from "@/modules/events/event-types";

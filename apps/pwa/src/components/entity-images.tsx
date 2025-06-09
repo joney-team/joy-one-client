@@ -1,5 +1,5 @@
 import { useLayout } from "@/layout/layout-context";
-import { OnModalFileGallery } from "@/modules/files/modal-file-gallery";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { FileType } from "@/modules/files/file-types";
 import { t } from "@/modules/lang/lang-service";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";

@@ -1,9 +1,12 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
 import { TagSelector } from "@/components/selector/tag-selector";
 import { TaskPrioritySelector } from "@/components/selector/task-priority-selector";
 import { TaskStatusSelector } from "@/components/selector/task-status-selector";
 import { TaskTagFolderSelector } from "@/components/selector/task-tag-folder-selector";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { num, t } from "@/modules/lang/lang-service";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -30,6 +33,7 @@ import { FC } from "react";
 export const BulkTasksActions: FC = () => {
   const tasks = useTasks();
   const layout = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
 
   const removeAll = () => {
     const selectedTasks = tasks.selectedTaskIds.map((id) => getTaskEntity(id)!).filter((task) => !!task);
@@ -86,7 +90,7 @@ export const BulkTasksActions: FC = () => {
     <Group
       style={{
         position: "fixed",
-        bottom: layout.navigationHeight + 16 * 1.5 + layout.navPaddingBottom,
+        bottom: workspaceLayout.navigationHeight + 16 * 1.5,
         left: "50%",
         transform: "translateX(-50%)",
         zIndex: 100,

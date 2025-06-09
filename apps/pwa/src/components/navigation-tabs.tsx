@@ -1,13 +1,15 @@
+"use client";
+
 import { useRouter } from "@/hooks/use-router";
-import { useLayout } from "@/layout/layout-context";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { t } from "@/modules/lang/lang-service";
-import { ButtonProps, Group, ScrollArea } from "@mantine/core";
-import { Icon } from "@tabler/icons-react";
-import { FC } from "react";
-import { Button } from "./buttons/button";
-import Link from "next/link";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { ButtonProps, Group, ScrollArea } from "@mantine/core";
+import { Icon } from "@tabler/icons-react";
+import Link from "next/link";
+import { FC } from "react";
+import { Button } from "./buttons/button";
 
 export const NavigationTabsConfig = {
   height: 44,
@@ -36,10 +38,10 @@ const buttonProps: ButtonProps = {
 };
 
 export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
-  const layout = useLayout();
   const router = useRouter();
   const color = useColor();
   const colorScheme = useColorScheme();
+  const workspaceLayout = useWorkspaceLayout();
 
   return (
     <>
@@ -48,7 +50,7 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
         scrollbars="x"
         h={NavigationTabsConfig.height}
         style={{
-          borderBottom: layout.border,
+          borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
           background: "var(--mantine-color-body)",
           width: "100%",
           overflowX: "auto",

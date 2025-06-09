@@ -1,4 +1,4 @@
-import { OnModalFileGallery } from "@/modules/files/modal-file-gallery";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { renderLink } from "@/modules/files/files-utils";
 import { FileType } from "@/modules/files/file-types";
 import { t } from "@/modules/lang/lang-service";

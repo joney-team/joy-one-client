@@ -1,7 +1,7 @@
 import { useColor } from "@/modules/theme/use-color";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalTagForm } from "@/modules/tags/modal-tag-form";
+import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { getLocaleClient, t } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
 import { TagType } from "@/modules/tags/tags-types";
@@ -21,11 +21,13 @@ import { FC, PropsWithChildren, useEffect } from "react";
 import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
 import { getWeeksFromRange } from "./gantt.utils";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 
 export const SidebarHead: FC = () => {
   const forceUpdate = useForceUpdate();
   const gantt = useGantt();
   const layout = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
 
   useEffect(() => {
     setTimeout(forceUpdate, 100);
@@ -46,7 +48,7 @@ export const SidebarHead: FC = () => {
         transition: "max-width 0.3s ease-in-out",
         minHeight: ganttConfig.headHeight,
         maxHeight: ganttConfig.headHeight,
-        borderBottom: layout.border,
+        borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
       }}
     >
       <Text fz={em(13)}>{t("name")}</Text>
@@ -120,6 +122,7 @@ export const SidebarHead: FC = () => {
 export const BodyHead: FC = () => {
   const gantt = useGantt();
   const layout = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
   const weeks = getWeeksFromRange(gantt.state.fromDate, gantt.state.toDate, getLocaleClient() === Locale.VI);
 
   return (
@@ -135,10 +138,16 @@ export const BodyHead: FC = () => {
         zIndex: 10,
         minHeight: ganttConfig.headHeight,
         maxHeight: ganttConfig.headHeight,
-        borderBottom: layout.border,
+        borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
       }}
     >
-      <Group flex={1} gap={0} w="max-content" wrap="nowrap" style={{ borderBottom: layout.border }}>
+      <Group
+        flex={1}
+        gap={0}
+        w="max-content"
+        wrap="nowrap"
+        style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+      >
         {weeks.map((week, index) => {
           const first = index === 0;
 
@@ -147,7 +156,7 @@ export const BodyHead: FC = () => {
               key={index}
               w={`${gantt.state.columnSize * week.dates.length}px`}
               maw={`${gantt.state.columnSize * week.dates.length}px`}
-              style={{ borderLeft: first ? undefined : layout.border }}
+              style={{ borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}` }}
               h="100%"
               justify="center"
               px={10}
@@ -185,7 +194,7 @@ export const BodyHead: FC = () => {
             <Group
               key={index}
               w={gantt.state.columnSize}
-              style={{ borderLeft: first ? undefined : layout.border }}
+              style={{ borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}` }}
               h="100%"
               justify="center"
             >
@@ -204,6 +213,7 @@ export const GridColumns: FC = () => {
   const gantt = useGantt();
   const layout = useLayout();
   const theme = useMantineTheme();
+  const workspaceLayout = useWorkspaceLayout();
   const color = useColor();
 
   return (
@@ -235,7 +245,7 @@ export const GridColumns: FC = () => {
               borderLeft: first
                 ? undefined
                 : `${isToday ? 2 : 1}px solid ${
-                    isToday ? getThemeColor(color("primary.3"), theme) : layout.borderColor
+                    isToday ? getThemeColor(color("primary.3"), theme) : workspaceLayout.dividerColor
                   }`,
               position: "relative",
             }}

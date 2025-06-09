@@ -1,13 +1,16 @@
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { Hovered } from "@/components/hovered";
-import { useLayout } from "@/layout/layout-context";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { OnModalTagForm } from "@/modules/tags/modal-tag-form";
+import { formatDuration } from "@/components/inputs/estimate-time-input";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { num, t } from "@/modules/lang/lang-service";
+import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity } from "@/modules/tags/tags-types";
+import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { getTaskEntites, getTaskProgress } from "@/modules/tasks/tasks-service";
+import { useColor } from "@/modules/theme/use-color";
 import { StringUtils } from "@/utils/string.utils";
 import { ActionIcon, alpha, Box, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
@@ -16,13 +19,11 @@ import dayjs from "dayjs";
 import { FC } from "react";
 import { useTaskDrop } from "../../tasks-dnd-provider";
 import { ganttConfig } from "./gantt.config";
-import { SidebarRowSticky } from "./gantt.layout";
 import { useGantt } from "./gantt.context";
-import { GanttTaskRowSidebar } from "./gantt.task-row-sidebar";
+import { SidebarRowSticky } from "./gantt.layout";
 import { GanttTaskRowBody } from "./gantt.task-row-body";
+import { GanttTaskRowSidebar } from "./gantt.task-row-sidebar";
 import { getRangeOfTasks } from "./gantt.utils";
-import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
-import { formatDuration } from "@/components/inputs/estimate-time-input";
 
 interface GanttTaskGroupByFoldersProps {
   position: "sidebar" | "body";
@@ -58,8 +59,8 @@ interface GanttTaskGroupByFolderProps extends GanttTaskGroupByFoldersProps {
 
 export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) => {
   const gantt = useGantt();
-  const layout = useLayout();
   const forceUpdate = useForceUpdate();
+  const workspaceLayout = useWorkspaceLayout();
 
   const { tagFolder } = props;
   const color = useColor();
@@ -107,7 +108,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
                   px={10}
                   gap={8}
                   style={{
-                    borderBottom: layout.border,
+                    borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
                     position: "relative",
                     minHeight: ganttConfig.rowHeight,
                     maxHeight: ganttConfig.rowHeight,

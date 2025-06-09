@@ -1,6 +1,8 @@
+"use client";
+
 import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
-import { OnModalPrescriptionForm } from "@/modules/prescriptions/modal-prescription-form";
+import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { num, t } from "@/modules/lang/lang-service";

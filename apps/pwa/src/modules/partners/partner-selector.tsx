@@ -1,7 +1,7 @@
 import { AppEntity } from "@/types";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { OnModalParnterForm } from "@/modules/partners/modal-partner-form";
+import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { t } from "@/modules/lang/lang-service";
 import { getPartners } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";

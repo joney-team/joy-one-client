@@ -1,9 +1,11 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { LoanAssetDataInput } from "@/components/inputs/loan-asset-data-inputs";
 import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
-import { OnModalFileGallery } from "@/modules/files/modal-file-gallery";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { FileType } from "@/modules/files/file-types";
 import { num, t } from "@/modules/lang/lang-service";
@@ -43,7 +45,7 @@ import {
   IconNotes,
 } from "@tabler/icons-react";
 import { FC } from "react";
-import { LoanRowInfo } from "./loang-row-info";
+import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanDocumentsProps {
   loan: LoanEntity;

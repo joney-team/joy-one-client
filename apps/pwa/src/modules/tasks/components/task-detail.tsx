@@ -18,6 +18,7 @@ import { useParams } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { DetailFooter } from "./detail-footer";
 import { TaskDetailHead } from "./detail-head";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 
 export const TaskDetail: FC = () => {
   const router = useRouter();
@@ -25,6 +26,7 @@ export const TaskDetail: FC = () => {
   const viewport = useLayout();
   const taskCode = params.code as string;
   const layout = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
 
   const [taskId, setTaskId] = useState<string | null>(null);
   const [opened, { open, close }] = useDisclosure(false);
@@ -89,11 +91,17 @@ export const TaskDetail: FC = () => {
         <>
           <Renderer views={["mobile", "tablet"]}>
             <Stack>
-              <Stack h={headerHeight} w="100%" style={{ borderBottom: layout.border }} py={8} px={8}>
+              <Stack
+                h={headerHeight}
+                w="100%"
+                style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+                py={8}
+                px={8}
+              >
                 <TaskDetailHead key={task._id + "head"} task={task} close={onClose} />
               </Stack>
 
-              <Stack px={viewport.spacing} pb={viewport.spacing}>
+              <Stack px={16} pb={16}>
                 <TaskCodeButton key={task._id + "code"} task={task} />
 
                 <TaskForm
@@ -110,7 +118,14 @@ export const TaskDetail: FC = () => {
 
           <Renderer views={["desktop"]}>
             <Stack h={height} gap={0}>
-              <Stack h={headerHeight} w="100%" style={{ borderBottom: layout.border }} py={8} pl={16} pr={8}>
+              <Stack
+                h={headerHeight}
+                w="100%"
+                style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+                py={8}
+                pl={16}
+                pr={8}
+              >
                 <TaskDetailHead key={task._id + "head"} task={task} close={onClose} />
               </Stack>
 
@@ -134,7 +149,12 @@ export const TaskDetail: FC = () => {
                   </ScrollArea.Autosize>
                 </Stack>
 
-                <Stack w={450} h={contentHeight} style={{ borderLeft: layout.border }} gap={0}>
+                <Stack
+                  w={450}
+                  h={contentHeight}
+                  style={{ borderLeft: `1px solid ${workspaceLayout.dividerColor}` }}
+                  gap={0}
+                >
                   <CommentBox key={task._id} ref={task._id + "comment"} />
                 </Stack>
               </Group>

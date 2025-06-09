@@ -1,18 +1,19 @@
-import { JOYONE_COLOR } from "@/configs/colors.config";
-import { useColor } from "@/modules/theme/use-color";
-import { useRouter } from "@/hooks/use-router";
+import { useCloseAppLoading } from "@/components/app-loading";
 import { Button } from "@/components/buttons/button";
 import { IconErrored } from "@/components/icons";
 import { Image } from "@/components/image";
+import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { renderLink } from "@/modules/files/files-utils";
 import { t } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceInviteInformation } from "@/modules/workspaces/workspaces-service";
 import { WorkspaceInviteInformation } from "@/modules/workspaces/workspaces-types";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { primaryColors } from "@joy-one-client/config/colors";
 import {
   Anchor,
   Avatar,
@@ -32,7 +33,6 @@ import { IconHeartHandshake } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, useEffect } from "react";
 import { Pattern } from "../../components/pattern";
-import { useCloseAppLoading } from "@/components/app-loading";
 
 export interface WorkspaceInvitationProps {
   inviteCode: string;
@@ -51,7 +51,7 @@ const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
   return (
     <MantineProvider
       theme={createTheme({
-        colors: { primary: JOYONE_COLOR },
+        colors: { primary: primaryColors },
         primaryColor: (inviteInformation.data?.appColor || "primary") as any,
         primaryShade: (inviteInformation.data?.appColorShape || 6) as any,
       })}

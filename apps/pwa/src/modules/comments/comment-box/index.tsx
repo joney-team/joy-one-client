@@ -1,5 +1,9 @@
+"use client";
+
 import { CommentsIllustration } from "@/components/illustrations/comments";
-import { useLayout } from "@/layout/layout-context";
+import { Renderer } from "@/components/renderer";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
+import { Comment } from "@/modules/comments/comment-box/components/comment";
 import { createComment, getComments } from "@/modules/comments/comment-service";
 import { CommentEntity } from "@/modules/comments/comment-types";
 import { useEventsListener } from "@/modules/events/event-service";
@@ -11,17 +15,15 @@ import { useElementSize } from "@mantine/hooks";
 import { IconMessages } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, useEffect, useRef } from "react";
-import { Renderer } from "@/components/renderer";
-import { Comment } from "@/modules/comments/comment-box/components/comment";
-import { CommentBoxProps, UseCommentBox } from "./types";
 import { CommentInput } from "./components/comment-input";
+import { CommentBoxProps, UseCommentBox } from "./types";
 
 export const CommentBox: FC<CommentBoxProps> = (props) => {
   const headerHeight = 48;
   const rootSize = useElementSize();
   const inputsSize = useElementSize();
   const commentsViewport = useRef<HTMLDivElement>(null);
-  const layout = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
 
   const comments = useList({
     autoFetch: false,
@@ -79,16 +81,17 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
     scrollToBottom,
   };
 
-  const focusTextInput = () => {
-    const textInput = document.getElementById("comment-box-text-input");
-    textInput?.focus();
-  };
-
   const _comments = [...comments.data.sort((a, b) => a.createdAt - b.createdAt)].reverse();
 
   return (
     <Stack w="100%" h="100%" gap={0} ref={rootSize.ref} bg="var(--mantine-color-default-hover)">
-      <Group px={10} h={headerHeight} style={{ borderBottom: layout.border }} bg="var(--mantine-color-body)" gap={8}>
+      <Group
+        px={10}
+        h={headerHeight}
+        style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+        bg="var(--mantine-color-body)"
+        gap={8}
+      >
         <ThemeIcon variant="transparent" color="dark">
           <IconMessages size={20} strokeWidth={1.5} />
         </ThemeIcon>

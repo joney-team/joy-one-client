@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "@/hooks/use-router";
 import { renderDateTime, num, t } from "@/modules/lang/lang-service";
 import { loanStatusColors } from "@/modules/loans/loans-service";

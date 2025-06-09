@@ -1,8 +1,8 @@
 import { Avatar } from "@/components/avatar";
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/CodeColumn";
-import { DateTimeColumn } from "@/components/list/columns/DateTimeColumn";
-import { EnumColumn } from "@/components/list/columns/EnumColumn";
+import { CodeColumn } from "@/components/list/columns/code-column";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { EnumColumn } from "@/components/list/columns/enum-column";
 import { CustomerCard } from "@/modules/customers/customer-card";
 import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { EventType } from "@/modules/events/event-types";

@@ -1,3 +1,5 @@
+"use client";
+
 import { useQuery } from "@/modules/apis/use-query";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { ResponseList } from "@/types";

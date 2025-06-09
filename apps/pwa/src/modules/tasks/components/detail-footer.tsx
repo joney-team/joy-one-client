@@ -1,3 +1,5 @@
+"use client";
+
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { EventList } from "@/components/event-list";
 import { t } from "@/modules/lang/lang-service";

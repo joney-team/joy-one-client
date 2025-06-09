@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "@/hooks/use-router";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";

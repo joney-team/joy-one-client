@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarProps } from "@/components/avatar";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalUserInformation } from "@/modules/users/modal-user-information";
+import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { getUserMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { ActionIcon, Card, Group, Stack, Text, em, useMantineTheme } from "@mantine/core";

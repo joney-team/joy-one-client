@@ -146,10 +146,10 @@ export const BookingList: FC = () => {
     if ([CalendarView.WEEK, CalendarView.MONTH].includes(query.view)) {
       const start = dayjs(query.date).startOf(query.view);
       const end = dayjs(query.date).endOf(query.view);
-      return `${start.format(`ddd ${lang.dateFormat}`)} - ${end.format(`ddd ${lang.dateFormat}`)}`;
+      return `${start.format(`ddd ${getDateFormat()}`)} - ${end.format(`ddd ${getDateFormat()}`)}`;
     }
 
-    return dayjs(query.date).format(`dddd ${lang.dateFormat}`);
+    return dayjs(query.date).format(`dddd ${getDateFormat()}`);
   };
 
   const toggleAssigneeUser = (member: WorkspaceMember) => {

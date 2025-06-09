@@ -1,9 +1,11 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Checkout } from "@/components/checkout";
 import { Errored } from "@/components/errored";
 import { Loading } from "@/components/loading";
 import { ModalTitle } from "@/components/modal-title";
-import { getView } from "@/layout/layout-provider";
+import { getView } from "@/layout/layout-service";
 import { createBankTransaction, getBankTransaction } from "@/modules/bank-transactions/bank-transaction-service";
 import {
   BankTransactionEntity,

@@ -1,3 +1,5 @@
+"use client";
+
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { CustomerInput } from "@/modules/customers/customer-input";
@@ -35,6 +37,7 @@ import {
 import { FC, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag } from "../../tasks-dnd-provider";
 import { ListTaskRowDropper } from "./list.task-row-dropper";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 
 export const ListTaskRow: FC<{
   id: string;
@@ -59,6 +62,7 @@ export const ListTaskRow: FC<{
   const hovered = hover.hovered || forceHover;
 
   const layout = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
 
   const dndTasks = useDndTasks();
   const { draggingTaskId } = dndTasks;
@@ -145,7 +149,7 @@ export const ListTaskRow: FC<{
         opacity={isSelfDragging ? 0.5 : 1}
         style={{
           position: "relative",
-          borderBottom: layout.border,
+          borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
           borderBottomWidth: props.showDivider ? 0.5 : 0,
           borderRadius: 5,
           boxShadow: props.overlay ? `0 0 10px ${rgba("var(--mantine-color-text)", 0.1)}` : undefined,

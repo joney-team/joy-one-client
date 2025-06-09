@@ -5,7 +5,7 @@ import { CopyText } from "@/components/copy-text";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { Timer } from "@/components/timer";
-import { getView } from "@/layout/layout-provider";
+import { getView } from "@/layout/layout-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
 import { FilesBox } from "@/modules/files/files-box";

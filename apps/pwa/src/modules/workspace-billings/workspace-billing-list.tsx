@@ -6,7 +6,7 @@ import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalWorkspaceBillingDeposit } from "@/modules/workspace-billings/modal-workspace-billing-deposit";
+import { OnModalWorkspaceBillingDeposit } from "@/modules/workspace-billings/modals/modal-workspace-billing-deposit";
 import { OnModalWorkspaceSubscription } from "@/modules/workspace-subscriptions/modal-workspace-subscriptions";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";

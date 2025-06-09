@@ -1,4 +1,6 @@
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+"use client";
+
+import { type FC, PropsWithChildren, useEffect, useState } from "react";
 import { Context } from "./loans-context";
 import { getLoanAssetEstimations, setLoanAssetEstimations } from "./loans-service";
 import { LoanAssetEstimation, LoanAssetEstimations } from "./loans-types";

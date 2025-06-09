@@ -1,3 +1,5 @@
+"use client";
+
 import { LayoutSplit } from "@/components/layout-split";
 import { configs } from "@/configs/layout.config";
 import { useLayout } from "@/layout/layout-context";
@@ -13,12 +15,14 @@ import { BodyHead, GridColumns, SidebarHead } from "./gantt.layout";
 import { GanttProvider } from "./gantt.provider";
 import { GanttTaskGroupByFolders } from "./gantt.task-group-by-folder";
 import { TasksDndProvider } from "../../tasks-dnd-provider";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 
 const Content: FC = () => {
   const layout = useLayout();
   const gantt = useGantt();
   const container = useElementSize();
   const colorScheme = useColorScheme();
+  const workspaceLayout = useWorkspaceLayout();
 
   const getMaxHeight = () => {
     if (!container.ref.current) return 0;
@@ -60,7 +64,7 @@ const Content: FC = () => {
                 type="never"
                 h="100%"
                 style={{
-                  borderRight: layout.border,
+                  borderRight: `1px solid ${workspaceLayout.dividerColor}`,
                   overflow: "auto",
                   position: "relative",
                   width: `${gantt.dividerPosition * 100}%`,
@@ -115,7 +119,7 @@ const Content: FC = () => {
               position: "absolute",
               top: ganttConfig.headHeight + 16,
               right: 16,
-              border: layout.border,
+              border: `1px solid ${workspaceLayout.dividerColor}`,
             }}
           >
             <Stack gap={0}>

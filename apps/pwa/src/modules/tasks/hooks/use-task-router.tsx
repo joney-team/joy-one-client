@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "@/hooks/use-router";
 import { TaskView } from "../views/types";
 import { usePathname } from "next/navigation";

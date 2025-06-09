@@ -1,8 +1,8 @@
 import { Circle } from "@/components/circle";
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/CodeColumn";
+import { CodeColumn } from "@/components/list/columns/code-column";
 import { CustomerColumn } from "@/modules/customers/customer-column";
-import { DateTimeColumn } from "@/components/list/columns/DateTimeColumn";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { LoanCard } from "@/modules/loans/components/loan-card";
 import { Renderer } from "@/components/renderer";

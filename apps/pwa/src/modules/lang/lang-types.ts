@@ -9,15 +9,13 @@ export type Dictionary = {
   [key: string]: string;
 }
 
-export interface UseLang {
+export interface LangContext {
   locale: Locale;
   config: LocaleConfig;
   state: LangState;
-  isReady: boolean;
   setLocale: (locale?: Locale, saveUserLocale?: boolean) => Promise<void>;
   setState: Dispatch<SetStateAction<LangState>>;
   weekStart: number;
-  dateFormat: string;
 }
 
 export interface LocaleConfig {

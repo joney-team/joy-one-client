@@ -4,7 +4,7 @@ import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-custom
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/modal-customer-relationship-contacts";
 import { OnCustomerModal } from "@/modules/customers/customer-modal";
-import { OnModalTagForm } from "@/modules/tags/modal-tag-form";
+import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
 import { assignCustomer, renderGener, renderGenerIcon, updateCustomer } from "./customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";

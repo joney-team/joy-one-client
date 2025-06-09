@@ -4,7 +4,7 @@ import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
 import { ListQty } from "@/components/list-qty";
 import { ProductCard } from "@/modules/products/product-card";
-import { OnProductModal } from "@/modules/products/modal-product";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { getProducts } from "@/modules/products/products-service";

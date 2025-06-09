@@ -11,7 +11,7 @@ export const api = new ApiInstance({
   retrieveToken: async () => retrieveAccessToken(),
   getWorkspaceId: () => readLocalStorageValue({ key: StorageKey.WORKSPACE_ID }),
   getDeviceId: () => readLocalStorageValue({ key: StorageKey.DEVICE_ID }),
-  getSessionId: () => getGlobal().sessionId,
+  getSessionId: () => getGlobal()._sessionId,
 });
 
 export const socket = io(config.API_CLIENT_SIDE_URL.replace("http", "ws"));

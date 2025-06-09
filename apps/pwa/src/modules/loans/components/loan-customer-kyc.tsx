@@ -13,7 +13,7 @@ import { useFetch } from "@/utils/use-fetch.util";
 import { Anchor, Card, Divider, em, Grid, Group, Loader, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAddressBook, IconShieldCheck } from "@tabler/icons-react";
 import { FC } from "react";
-import { LoanRowInfo } from "./loang-row-info";
+import { LoanRowInfo } from "./loan-row-info";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 

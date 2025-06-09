@@ -14,7 +14,7 @@ import { modals } from "@mantine/modals";
 import { IconBrandSpeedtest } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { OnModalPayReceipt } from "../../receipts/modals/modal-pay-receipt";
-import { LoanRowInfo } from "@/modules/loans/components/loang-row-info";
+import { LoanRowInfo } from "@/modules/loans/components/loan-row-info";
 
 export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
   const [isSubmitting, setIsSubmitting] = useState(false);

@@ -33,7 +33,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
         try {
           const global = getGlobal();
           const config = await getAppConfig();
-          global.appConfig = config;
+          global._appConfig = config;
           setConfig(config);
           resolve(config);
         } catch (error) {
@@ -79,7 +79,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   useEffect(() => {
     const onEventNew = (event: EventEntity) => {
       const global = getGlobal();
-      const clientSessionId = global.sessionId as string;
+      const clientSessionId = global._sessionId as string;
       if (event.sessionId && event.sessionId !== clientSessionId) return;
       eventsEmitter.emit(event.type, event);
     };

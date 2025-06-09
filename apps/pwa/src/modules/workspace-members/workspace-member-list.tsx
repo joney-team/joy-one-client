@@ -6,7 +6,7 @@ import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
-import { OnModalUserInformation } from "@/modules/users/modal-user-information";
+import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceBranchByIds, getWorkspaceBranches } from "@/modules/workspace-branches/workspace-branches-service";
 import {
@@ -22,7 +22,7 @@ import { IconAccessible, IconBuilding, IconLock, IconMail, IconPhone } from "@ta
 import { FC } from "react";
 import { Clickable } from "../../components/clickable";
 import { List } from "../../components/list";
-import { DateTimeColumn } from "../../components/list/columns/DateTimeColumn";
+import { DateTimeColumn } from "../../components/list/columns/date-time-column";
 import { WorkspaceBranchesInput } from "../workspace-branches/workspace-branches-input";
 import { WorkspaceRolesInput } from "../workspace-roles/workspace-roles-input";
 

@@ -1,9 +1,10 @@
 import { calendarProps } from "@/configs/calendar.config";
-import { useColor } from "@/modules/theme/use-color";
-import { CalendarView } from "@/types";
 import { useLayout } from "@/layout/layout-context";
 import { useLang } from "@/modules/lang/lang-context";
+import { getDateFormat } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
 import { isInWorkSlot, useWorkDaySlots } from "@/modules/workspace-settings/workspace-settings-service";
+import { CalendarView } from "@/types";
 import { parseToTime } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { classNames } from "@/utils/ui.utils";
@@ -77,10 +78,10 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
     if ([CalendarView.WEEK].includes(view)) {
       const start = dayjs(date).startOf(view);
       const end = dayjs(date).endOf(view);
-      return `${start.format(`ddd ${lang.dateFormat}`)} - ${end.format(`ddd ${lang.dateFormat}`)}`;
+      return `${start.format(`ddd ${getDateFormat()}`)} - ${end.format(`ddd ${getDateFormat()}`)}`;
     }
 
-    return dayjs(date).format(`dddd ${lang.dateFormat}`);
+    return dayjs(date).format(`dddd ${getDateFormat()}`);
   };
 
   const nextRange = () => {

@@ -13,14 +13,14 @@ import { FormSession } from "@/components/form-session";
 import { CustomerInput } from "@/modules/customers/customer-input";
 import { UsersInput } from "@/components/inputs/users-input";
 import { WorkSlotCreateEventDto, WorkSlotsInput } from "@/components/inputs/work-slots-input";
-import { getView } from "@/layout/layout-provider";
+import { getView } from "@/layout/layout-service";
 import { useColor } from "@/modules/theme/use-color";
 import { createBooking, getBookings, rescheduleBooking, updateBooking } from "@/modules/bookings/booking-service";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { t } from "@/modules/lang/lang-service";
+import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
@@ -231,7 +231,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
                       <Stack gap={5}>
                         <Stack gap={0}>
                           <Text fw={600} td="line-through">
-                            {dayjs(props.reschedule.startTime * 1000).format(`dddd, ${lang.dateFormat}`)}
+                            {dayjs(props.reschedule.startTime * 1000).format(`dddd, ${getDateFormat()}`)}
                           </Text>
                           <Text td="line-through">
                             {`${dayjs(props.reschedule.startTime * 1000).format("HH:mm")} - ${dayjs(
@@ -263,7 +263,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
 
                   <Stack gap={5}>
                     <Stack gap={0}>
-                      <Text fw={600}>{dayjs(creatingData!.start).format(`dddd, ${lang.dateFormat}`)}</Text>
+                      <Text fw={600}>{dayjs(creatingData!.start).format(`dddd, ${getDateFormat()}`)}</Text>
                       <Text>
                         {`${dayjs(creatingData!.start).format("HH:mm")} - ${dayjs(creatingData!.end).format("HH:mm")}`}
                       </Text>

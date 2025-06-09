@@ -1,4 +1,5 @@
 import { useLang } from "@/modules/lang/lang-context";
+import { getDateFormat } from "@/modules/lang/lang-service";
 import { DateTimeUtils, forceDate } from "@/utils/dateTime.utils";
 import { DateInput as MantineDateInput, DateInputProps as MantineDateInputProps } from "@mantine/dates";
 import { FC } from "react";
@@ -15,8 +16,8 @@ export const DateInput: FC<DateInputProps> = (props) => {
     <MantineDateInput
       {...props}
       value={forceDate(props.value)}
-      valueFormat={lang.config.dateFormat}
-      placeholder={lang.config.dateFormat}
+      valueFormat={getDateFormat()}
+      placeholder={getDateFormat()}
       onChange={(e) => {
         props.onChange?.(e ? DateTimeUtils.timeToSeconds(e) : null);
       }}

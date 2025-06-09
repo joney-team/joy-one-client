@@ -22,7 +22,7 @@ import { IconPhoto, IconUpload } from "@tabler/icons-react";
 import { Extensions, useEditor } from "@tiptap/react";
 import { ClipboardEventHandler, FC, useState } from "react";
 import { ImageResize } from "./image-resize";
-import { OnFileModal } from "@/modules/files/modal-files";
+import { OnFileModal } from "@/modules/files/modals/modal-files";
 
 interface EditorProps {
   value?: string;

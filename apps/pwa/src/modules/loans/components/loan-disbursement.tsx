@@ -26,7 +26,7 @@ import { useFetch } from "@/utils/use-fetch.util";
 import { Blockquote, Card, Center, Divider, em, Group, InputWrapper, Loader, Stack, Text } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import { FC, useState } from "react";
-import { LoanRowInfo } from "./loang-row-info";
+import { LoanRowInfo } from "./loan-row-info";
 import { useColor } from "@/modules/theme/use-color";
 
 interface LoanDisburesementProps {

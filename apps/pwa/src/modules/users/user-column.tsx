@@ -13,7 +13,7 @@ import {
   getWorkspaceMemberList,
 } from "../workspace-members/workspace-members-service";
 import { WorkspaceMemberInfo } from "../workspace-members/workspace-members-types";
-import { OnModalUserInformation } from "./modal-user-information";
+import { OnModalUserInformation } from "./modals/modal-user-information";
 
 export interface UserColumnArgs extends Omit<Column, "render"> {
   optionalValuePath?: string;

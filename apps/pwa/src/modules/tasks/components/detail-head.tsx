@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
 import { TaskTagFolderSelector } from "@/components/selector/task-tag-folder-selector";

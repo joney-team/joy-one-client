@@ -18,6 +18,7 @@ import { IconPencil, IconPlusMinus, IconRefresh, IconTrash } from "@tabler/icons
 import { useMemo, useState } from "react";
 import GridLayout, { Layout } from "react-grid-layout";
 import { ManageWidgets } from "./components/manage-widgets";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 
 const gridLayoutConfig = {
   storageVersion: "1.0",
@@ -68,6 +69,7 @@ const setWidgetStorage = (id: string, func: (storage: WidgetStorage) => WidgetSt
 export function Widgets<ContextType = object, WidgetType = string>(props: WidgetsProps<ContextType, WidgetType>) {
   const { id } = props;
   const layout = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
   const readonly = props.readonly || !props.onChange;
 
   const color = useColor();
@@ -198,7 +200,8 @@ export function Widgets<ContextType = object, WidgetType = string>(props: Widget
     updateState,
   };
 
-  const width = layout.view === "mobile" ? layout.width - 16 * 2 : layout.width - layout.sidebarWidth - 16 * 2;
+  const width =
+    layout.view === "mobile" ? layout.width - 16 * 2 : layout.width - workspaceLayout.navigationWidth - 16 * 2;
 
   return (
     <>

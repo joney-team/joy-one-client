@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { SpeedIllustration } from "@/components/illustrations/speed";
 import { Renderer } from "@/components/renderer";
@@ -6,7 +8,7 @@ import { t } from "@/modules/lang/lang-service";
 import { loanStatusColors } from "@/modules/loans/loans-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
 import { PartnerEntity } from "@/modules/partners/partners-types";
-import { OnModalPrescriptionForm } from "@/modules/prescriptions/modal-prescription-form";
+import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity } from "@/modules/products/products-types";
@@ -14,7 +16,7 @@ import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { search, searchArray } from "@/modules/search/search-service";
 import { SearchCustomer, SearchEntityResult, SearchLoan, SearchResult } from "@/modules/search/search-types";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
-import { OnModalUserInformation } from "@/modules/users/modal-user-information";
+import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { AppEntity } from "@/types";

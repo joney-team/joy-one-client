@@ -1,5 +1,5 @@
-import { JOYONE_COLOR } from "@/configs/colors.config";
 import { useColor } from "@/modules/theme/use-color";
+import { primaryColors } from "@joy-one-client/config/colors";
 import { alpha } from "@mantine/core";
 import { FC } from "react";
 
@@ -10,7 +10,7 @@ interface AppLoaderProps {
 
 export const AppLoader: FC<AppLoaderProps> = (props) => {
   const _color = useColor();
-  const color = props.color ? _color(props.color) : JOYONE_COLOR[6];
+  const color = props.color ? _color(props.color) : primaryColors[6];
   const subColor = alpha(color, 0.5);
 
   const size = props.size || 50;

@@ -1,8 +1,7 @@
 import { Renderer } from "@/components/renderer";
-import { OnModalFileGallery } from "@/modules/files/modal-file-gallery";
-import { OnFileModal } from "@/modules/files/modal-files";
 import { detectFileType, getFileSizeFromUrl } from "@/modules/files/file-service";
 import { FileType } from "@/modules/files/file-types";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { t } from "@/modules/lang/lang-service";
 import { formatBytes, getFileName } from "@/utils/file.utils";
 import { ActionIcon, Avatar, Card, Group, Stack, Text } from "@mantine/core";

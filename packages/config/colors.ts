@@ -1,15 +1,26 @@
-export const primaryColors = [
-  "#e5f3ff",
-  "#cde2ff",
-  "#9ac2ff",
-  "#64a0ff",
-  "#3884fe",
-  "#1d72fe",
-  "#0063ff",
-  "#0058e4",
-  "#004ecd",
-  "#0043b5"
-]
+export const primaryColors: [
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+] = [
+    "#e5f3ff",
+    "#cde2ff",
+    "#9ac2ff",
+    "#64a0ff",
+    "#3884fe",
+    "#1d72fe",
+    "#0063ff",
+    "#0058e4",
+    "#004ecd",
+    "#0043b5"
+  ]
 
 export const backgroundColors = {
   light: '#f3f3f3',

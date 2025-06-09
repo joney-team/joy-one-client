@@ -4,7 +4,7 @@ import { useRouter } from "@/hooks/use-router";
 import { EventType } from "@/modules/events/event-types";
 import { num, t } from "@/modules/lang/lang-service";
 import { ProductCard } from "@/modules/products/product-card";
-import { OnProductModal } from "@/modules/products/modal-product";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { getProducts } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";

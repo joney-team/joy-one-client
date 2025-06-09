@@ -1,5 +1,5 @@
 import { useRouter } from "@/hooks/use-router";
-import { OnProductModal } from "@/modules/products/modal-product";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { num, t } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";

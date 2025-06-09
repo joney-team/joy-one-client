@@ -1,3 +1,6 @@
+"use client";
+
+import { type FC } from "react";
 import { useColor } from "@/modules/theme/use-color";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
@@ -37,7 +40,6 @@ import {
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
-import { FC } from "react";
 
 export const TaskMenuActions: FC = () => {
   const workspace = useWorkspace();

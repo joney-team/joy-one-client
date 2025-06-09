@@ -1,7 +1,9 @@
+"use client";
+
 import { WorkSlot } from "@/types";
 import { WorkSlotsSettingsInput } from "@/components/inputs/work-slot-settings-input";
 import { ModalTitle } from "@/components/modal-title";
-import { getView } from "@/layout/layout-provider";
+import { getView } from "@/layout/layout-service";
 import { t } from "@/modules/lang/lang-service";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";

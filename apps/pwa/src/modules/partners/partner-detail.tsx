@@ -1,7 +1,7 @@
 import { Avatar } from "@/components/avatar";
 import { Errored } from "@/components/errored";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalParnterForm } from "@/modules/partners/modal-partner-form";
+import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { EventType } from "@/modules/events/event-types";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { getPartner, updatePartner } from "@/modules/partners/partners-service";

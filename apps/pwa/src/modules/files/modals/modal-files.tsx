@@ -5,7 +5,7 @@ import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Circle } from "@/components/circle";
 import { ModalTitle } from "@/components/modal-title";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalFileGallery } from "@/modules/files/modal-file-gallery";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { useList } from "@/utils/use-list.util";
 import { Box, Card, em, Group, Modal, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -13,9 +13,9 @@ import { Dropzone } from "@mantine/dropzone";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconPhotoSquareRounded, IconUpload } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
-import { num, t } from "../lang/lang-service";
-import { getFiles, getMineTypeAccept, onUploadFile } from "./file-service";
-import { useColorScheme } from "../theme/use-color-scheme";
+import { getFiles, getMineTypeAccept, onUploadFile } from "../file-service";
+import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { num, t } from "@/modules/lang/lang-service";
 
 interface ModalFilesState {
   fileTypes?: FileType[];

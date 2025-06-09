@@ -1,3 +1,5 @@
+"use client";
+
 import { useApp } from "@/app.context";
 import { Fullscreen } from "@/components/fullscreen";
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
@@ -66,7 +68,7 @@ import { getDefaultWorkspaceView } from "./workspace-view";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
-  global.workspaceSettings = settings;
+  global._workspaceSettings = settings;
 };
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
