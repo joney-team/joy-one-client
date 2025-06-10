@@ -10,9 +10,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.rulers": [
-      120
+      100
     ],
-    "prettier.printWidth": 120,
+    "prettier.printWidth": 100,
   },
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
