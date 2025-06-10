@@ -16,7 +16,7 @@ import { FC, Fragment } from "react";
 import { Renderer } from "../../components/renderer";
 import { WorkspaceNavigationMenu } from "./navigation-menu";
 import { WorkspaceNavigationDrawer } from "./navigation-drawer";
-import { useWorkspaceLayout } from "../hooks/use-workspace-layout";
+import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 
 export const AppNavigation: FC = () => {
   const layout = useLayout();
@@ -55,6 +55,7 @@ export const AppNavigation: FC = () => {
         wrap="nowrap"
         style={{ width: "100%", height: workspaceLayout.navigationHeight }}
         gap={0}
+        align="start"
       >
         {mainCpns.map((v) => {
           const mo = workspace.modules.find((m) => m.id === v.moduleId);
@@ -73,7 +74,13 @@ export const AppNavigation: FC = () => {
 
         <Renderer visible={navigationGroup.length > 0}>
           <Group justify="center" align="center" pr={16} onClick={mobileDrawer[1].open}>
-            <ActionIcon variant="transparent" color="dark" radius={100} id="nav-other-routes">
+            <ActionIcon
+              h={workspaceLayoutConfig.mobileNavigationHeight}
+              variant="transparent"
+              color="dark"
+              radius={100}
+              id="nav-other-routes"
+            >
               <IconDotsVertical strokeWidth={1.2} />
             </ActionIcon>
           </Group>

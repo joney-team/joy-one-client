@@ -30,7 +30,7 @@ import { Icon, IconChevronDown, IconChevronUp, IconFolderPlus, IconPlus } from "
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC, useState } from "react";
-import { useWorkspaceLayout } from "../hooks/use-workspace-layout";
+import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 
 export const WorkspaceNavigationMenu: FC<{
   icon: Icon;
@@ -79,6 +79,7 @@ export const WorkspaceNavigationMenu: FC<{
         onClick={() => router.push(getRoute())}
         style={{ cursor: "pointer", userSelect: "none", height: "100%" }}
         flex={1}
+        h={workspaceLayoutConfig.mobileNavigationHeight}
       >
         <Indicator
           size="lg"

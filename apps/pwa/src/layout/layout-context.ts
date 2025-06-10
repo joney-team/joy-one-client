@@ -1,10 +1,17 @@
 "use client";
 
 import { ViewportType } from "@/types";
-import { createContext, Dispatch, SetStateAction, useContext } from "react";
+import { createContext, useContext } from "react";
 
-export interface LayoutConfig {
-  isNavbarCollapsed?: boolean;
+export interface LayoutState {
+  width: number;
+  height: number;
+  isInitialized: boolean;
+  isIpad: boolean;
+  isStandalone: boolean;
+  isAndroid: boolean;
+  view: ViewportType;
+  isBrowerCollapsed: boolean;
 }
 
 export interface LayoutComponents {
@@ -13,20 +20,8 @@ export interface LayoutComponents {
   navigation?: React.ReactNode,
 }
 
-export interface LayoutContext {
-  width: number;
-  height: number;
-  isInitialized: boolean;
-  isIpad: boolean;
-  isStandalone: boolean;
-  isAndroid: boolean;
+export interface LayoutContext extends LayoutState {
   isResizing: boolean;
-  view: ViewportType;
-  isBrowerCollapsed: boolean;
-
-  config: LayoutConfig;
-  setConfig: Dispatch<SetStateAction<LayoutConfig>>,
-
   components: LayoutComponents,
   setComponents: (args: LayoutComponents) => void;
   resetComponents: () => void;

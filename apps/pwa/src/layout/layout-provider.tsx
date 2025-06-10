@@ -1,22 +1,19 @@
 "use client";
 
 import { getGlobal } from "@/global";
-import { tryParseJson } from "@/utils/object.utils";
-import { useDebouncedCallback } from "@mantine/hooks";
+import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { Context, LayoutComponents, LayoutConfig, LayoutContext } from "./layout-context";
+import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
+import { Context, LayoutComponents, LayoutContext, LayoutState } from "./layout-context";
 import { getViewSize, getViewType } from "./layout-service";
 
 const LayoutProvider: FC<PropsWithChildren> = (props) => {
   const pathname = usePathname();
+  const forceUpdate = useForceUpdate();
 
-  const [isBrowerCollapsed, setIsBrowserCollapsed] = useState(false);
-  const [config, setConfig] = useState<LayoutConfig>({});
-  const [isResizing, setIsResizing] = useState(false);
   const [components, setComponents] = useState<LayoutComponents>({});
-
-  const [state, setState] = useState({
+  const [isResizing, setIsResizing] = useState(false);
+  const state = useRef<LayoutState>({
     width: 0,
     height: 0,
     isInitialized: false,
@@ -24,32 +21,30 @@ const LayoutProvider: FC<PropsWithChildren> = (props) => {
     isIpad: false,
     isAndroid: false,
     view: getViewType(0),
+    isBrowerCollapsed: false,
   });
 
-  getGlobal()._view = state.view;
+  const setState = (update: Partial<LayoutState>) => {
+    const _state = { ...state.current, ...update };
+    const isDiff = JSON.stringify(_state) !== JSON.stringify(state.current);
+    state.current = _state;
+    if (isDiff) forceUpdate();
+  };
 
   const initialize = () => {
-    setConfig(tryParseJson(localStorage.getItem("layout-config")));
     setState({ isInitialized: true, ...getViewSize() });
   };
 
   const onResized = useDebouncedCallback(() => {
-    setState((s) => ({ ...s, ...getViewSize() }));
+    setState({ ...getViewSize() });
     setIsResizing(false);
   }, 300);
-
-  const onCollapsed = useDebouncedCallback(() => {
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.clientHeight;
-    setIsBrowserCollapsed(windowHeight !== documentHeight);
-  }, 100);
 
   useEffect(() => {
     initialize();
 
     const onResize = () => {
       setIsResizing(true);
-      onCollapsed();
       onResized();
     };
 
@@ -68,16 +63,25 @@ const LayoutProvider: FC<PropsWithChildren> = (props) => {
   }, [pathname]);
 
   useEffect(() => {
-    if (state.isInitialized) {
-      localStorage.setItem("layout-config", JSON.stringify(config));
+    if (state.current.view === "mobile") {
+      const windowHeight = window.innerHeight;
+
+      const onScroll = () => {
+        const documentHeight = document.documentElement.clientHeight;
+        const isCollapsed = windowHeight !== documentHeight;
+        setState({ isBrowerCollapsed: isCollapsed });
+      };
+
+      window.addEventListener("scroll", onScroll);
+
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+      };
     }
-  }, [state.isInitialized, config]);
+  }, [state.current.view]);
 
   const context: LayoutContext = {
-    ...state,
-    isBrowerCollapsed,
-    config,
-    setConfig,
+    ...state.current,
     isResizing,
     components,
     setComponents: (args, delay = 100) => {
@@ -87,6 +91,7 @@ const LayoutProvider: FC<PropsWithChildren> = (props) => {
     },
     resetComponents: () => setComponents({}),
   };
+  getGlobal()._view = context.view;
 
   return <Context.Provider value={context}>{props.children}</Context.Provider>;
 };

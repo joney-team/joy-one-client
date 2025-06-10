@@ -13,7 +13,7 @@ import { ActionIcon, Card, Center, Divider, Group, Kbd, Text, ThemeIcon, rem, rg
 import { spotlight } from "@mantine/spotlight";
 import { IconChevronLeft, IconLayoutSidebarLeftExpand, IconSearch } from "@tabler/icons-react";
 import { FC, memo } from "react";
-import { defaultWorkspaceLayoutConfig, useWorkspaceLayout } from "../hooks/use-workspace-layout";
+import { workspaceLayoutConfig, useWorkspaceLayout } from "../hooks/use-workspace-layout";
 import { WorkspaceHeaderAccount } from "./header-account";
 import { WorkspaceHeaderBreadcrumbs } from "./header-breadcrumbs";
 import { WorkspaceHeaderShortcuts } from "./header-shortcuts";
@@ -90,9 +90,7 @@ export const WorkspaceHeader: FC = memo(() => {
             <ActionIcon
               variant="subtle"
               color="gray.6"
-              onClick={() =>
-                workspaceLayout.setNavigationWidth(defaultWorkspaceLayoutConfig.defaultNavigationExpandedWidth)
-              }
+              onClick={() => workspaceLayout.setNavigationWidth(workspaceLayoutConfig.defaultNavigationExpandedWidth)}
             >
               <IconLayoutSidebarLeftExpand strokeWidth={1.5} size={20} />
             </ActionIcon>

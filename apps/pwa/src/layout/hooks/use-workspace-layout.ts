@@ -20,9 +20,11 @@ interface WorkspaceLayoutState {
   transition: (property?: string) => string;
 }
 
-export const defaultWorkspaceLayoutConfig = {
+export const workspaceLayoutConfig = {
   defaultNavigationExpandedWidth: 200,
   defaultNavigationCollapsedWidth: 60,
+  mobileNavigationHeight: 55,
+  standaloneNavigationHeight: 75,
 };
 
 export const useWorkspaceLayout = (): WorkspaceLayoutState => {
@@ -32,18 +34,24 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
   const [navigationWidthStorage, setNavigationWidthStorage] = useLocalStorage({ key: StorageKey.LAYOUT_NAVIGATION_WIDTH });
 
   const state = useMemo(() => {
+    const headerHeight = layout.view === "mobile" ? 48 : 48;
+
     const navigationWidth = navigationWidthStorage
       ? +navigationWidthStorage
-      : defaultWorkspaceLayoutConfig.defaultNavigationExpandedWidth;
+      : workspaceLayoutConfig.defaultNavigationExpandedWidth;
 
-    const headerHeight = layout.isBrowerCollapsed ? 0 : 48;
+    const navigationHeight = layout.isStandalone
+      ? workspaceLayoutConfig.standaloneNavigationHeight
+      : layout.view === "mobile"
+        ? workspaceLayoutConfig.mobileNavigationHeight
+        : layout.height;
 
     return {
       navigationWidth,
-      navigationHeight: layout.view === "mobile" ? headerHeight : layout.height,
+      navigationHeight,
       headerHeight,
       headerWidth: layout.width - navigationWidth,
-      isNavbarCollapsed: navigationWidth <= defaultWorkspaceLayoutConfig.defaultNavigationCollapsedWidth * 2,
+      isNavbarCollapsed: navigationWidth <= workspaceLayoutConfig.defaultNavigationCollapsedWidth * 2,
       bodyWidth: layout.width - navigationWidth,
       bodyHeight: layout.height - headerHeight,
     };

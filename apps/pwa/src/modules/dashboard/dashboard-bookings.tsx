@@ -1,3 +1,5 @@
+"use client";
+
 import { Period } from "@/types";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingStatus } from "@/modules/bookings/booking-types";
@@ -34,12 +36,17 @@ export const DashboardBookings: FC = () => {
       }).then((r) =>
         r.data
           .filter((b) => {
-            if (query.assigneeUserIds.length > 0) return query.assigneeUserIds.includes(b.assigneeUserIds?.[0] || "");
+            if (query.assigneeUserIds.length > 0)
+              return query.assigneeUserIds.includes(b.assigneeUserIds?.[0] || "");
             return true;
           })
           .filter((b) => {
             if (query.status === "in_progress")
-              return [BookingStatus.IN_PROGRESS, BookingStatus.CHECK_IN, BookingStatus.JUST_CREATED].includes(b.status);
+              return [
+                BookingStatus.IN_PROGRESS,
+                BookingStatus.CHECK_IN,
+                BookingStatus.JUST_CREATED,
+              ].includes(b.status);
             return true;
           })
       );

@@ -35,7 +35,7 @@ import {
 import Link from "next/link";
 import { FC } from "react";
 import { Avatar } from "../../components/avatar";
-import { defaultWorkspaceLayoutConfig, useWorkspaceLayout } from "../hooks/use-workspace-layout";
+import { workspaceLayoutConfig, useWorkspaceLayout } from "../hooks/use-workspace-layout";
 import { isExtendedApp } from "@/service";
 
 interface WorkspaceNavigationDrawerProps {
@@ -123,7 +123,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              workspaceLayout.setNavigationWidth(defaultWorkspaceLayoutConfig.defaultNavigationCollapsedWidth);
+              workspaceLayout.setNavigationWidth(workspaceLayoutConfig.defaultNavigationCollapsedWidth);
             }}
           >
             <IconLayoutSidebarLeftCollapse strokeWidth={1.6} size={20} />
