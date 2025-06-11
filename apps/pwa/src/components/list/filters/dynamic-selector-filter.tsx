@@ -1,3 +1,5 @@
+"use client";
+
 import { ActionIcon, Checkbox, Combobox, ComboboxDropdownProps } from "@mantine/core";
 
 import { Renderer } from "@/components/renderer";
@@ -36,7 +38,9 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
   useEffect(() => {
     config
       .getInitialOptions()
-      .then((v) => setOptions((s) => [...s.filter((sv) => !v.find((v2) => v2.value === sv.value)), ...v]))
+      .then((v) =>
+        setOptions((s) => [...s.filter((sv) => !v.find((v2) => v2.value === sv.value)), ...v])
+      )
       .catch(console.error);
   }, [config]);
 
@@ -46,7 +50,9 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
     if (missingIds.length > 0) {
       config
         .getOptions(missingIds)
-        .then((v) => setOptions((s) => [...s.filter((sv) => !v.find((v2) => v2.value === sv.value)), ...v]))
+        .then((v) =>
+          setOptions((s) => [...s.filter((sv) => !v.find((v2) => v2.value === sv.value)), ...v])
+        )
         .catch(console.error);
     }
   }, [list.query[colKey]]);
@@ -80,7 +86,13 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
                 </Group>
               </Renderer>
 
-              <ActionIcon component="div" variant="subtle" color="gray.5" size="compact-xs" onClick={ctx.toggle}>
+              <ActionIcon
+                component="div"
+                variant="subtle"
+                color="gray.5"
+                size="compact-xs"
+                onClick={ctx.toggle}
+              >
                 <IconChevronDown size={16} />
               </ActionIcon>
             </Group>
@@ -103,7 +115,10 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
               )}
 
               {Render ? (
-                <Render data={item.data} isSelected={selectedOptions.some((v) => v.value === item.value)} />
+                <Render
+                  data={item.data}
+                  isSelected={selectedOptions.some((v) => v.value === item.value)}
+                />
               ) : (
                 <Text fz={14}>{item.label}</Text>
               )}

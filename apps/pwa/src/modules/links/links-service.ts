@@ -1,10 +1,10 @@
-import { MainRequest } from "../requests/main.request";
+import { api } from "../apis";
 import { LinkDto, LinkEntity } from "./links-types";
 
 export async function createLink(dto: LinkDto) {
-  return MainRequest.post<LinkEntity>(`/links`, dto)
+  return api.post<LinkEntity>(`/links`, dto)
 }
 
 export async function getLink(slug: string) {
-  return MainRequest.get<LinkEntity>(`/links/${slug}`);
+  return api.get<LinkEntity>(`/links/${slug}`);
 }

@@ -1,10 +1,10 @@
 import { ResponseList } from "@/types";
-import { MainRequest } from "../requests/main.request";
-import { BillingBankAccount, WorkspaceBalance, WorkspaceBillingDepositDto, WorkspaceBillingEntity, WorkspaceBillingStatus, WorkspaceBillingType } from "./workspace-billings-types";
+import { api } from "../apis";
 import { t } from "../lang/lang-service";
+import { BillingBankAccount, WorkspaceBalance, WorkspaceBillingDepositDto, WorkspaceBillingEntity, WorkspaceBillingStatus, WorkspaceBillingType } from "./workspace-billings-types";
 
 export async function getWorkspaceBalance() {
-  return MainRequest.get<WorkspaceBalance>("/workspace-billings/balance");
+  return api.get<WorkspaceBalance>("/workspace-billings/balance");
 }
 
 export function getWorkspaceBillingTypeLabel(type: WorkspaceBillingType) {
@@ -45,17 +45,17 @@ export function getWorkspaceBillingTypeColor(type: WorkspaceBillingType) {
 }
 
 export async function adminGetWorkspaceBalance(workspaceId: string) {
-  return MainRequest.get<WorkspaceBalance>(`/workspace-billings/admin/${workspaceId}/balance`);
+  return api.get<WorkspaceBalance>(`/workspace-billings/admin/${workspaceId}/balance`);
 }
 
 export async function adminDepositWorkspaceBalance(workspaceId: string, dto: WorkspaceBillingDepositDto) {
-  return MainRequest.post(`/workspace-billings/admin/${workspaceId}/deposit`, dto);
+  return api.post(`/workspace-billings/admin/${workspaceId}/deposit`, dto);
 }
 
 export async function getWorkspaceBillings(query?: any) {
-  return MainRequest.get<ResponseList<WorkspaceBillingEntity>>(`/workspace-billings`, query);
+  return api.get<ResponseList<WorkspaceBillingEntity>>(`/workspace-billings`, { params: query });
 }
 
 export async function getBillingBankAccount() {
-  return MainRequest.get<BillingBankAccount>(`/workspace-billings/bank-account`);
+  return api.get<BillingBankAccount>(`/workspace-billings/bank-account`);
 }

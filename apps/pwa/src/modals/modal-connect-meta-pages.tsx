@@ -1,21 +1,27 @@
-import { useColor } from "@/modules/theme/use-color";
-import { useRouter } from "@/hooks/use-router";
-import { StorageKey } from "@/types";
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
-import { useLayout } from "@/layout/layout-context";
+import { useRouter } from "@/hooks/use-router";
+import { api } from "@/modules/apis";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
 import { t } from "@/modules/lang/lang-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
 import { PluginMetaPageInfo } from "@/modules/plugins/meta-pages/meta-pages-types";
-import { MainRequest } from "@/modules/requests/main.request";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { Anchor, Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconCirclesRelation, IconMessageCircle, IconRefresh, IconStack } from "@tabler/icons-react";
+import {
+  IconCirclesRelation,
+  IconMessageCircle,
+  IconRefresh,
+  IconStack,
+} from "@tabler/icons-react";
 import { FC, useState } from "react";
 
 interface OnConnectMetaPagesDto {
@@ -28,7 +34,6 @@ export let OnConnectMetaPagesModal: (dto: OnConnectMetaPagesDto) => void = () =>
 export const ConnectMetaPagesModal: FC = () => {
   const workspace = useWorkspace();
   const router = useRouter();
-  const layout = useLayout();
 
   const [opened, { open, close }] = useDisclosure(false);
   const [dto, setDto] = useState<OnConnectMetaPagesDto>({ pages: [], accessToken: "" });
@@ -37,7 +42,7 @@ export const ConnectMetaPagesModal: FC = () => {
 
   const onConnect = async (dto: OnConnectMetaPagesDto) => {
     try {
-      await MainRequest.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
+      await api.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
       localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
       setStatus("CONNECTED");
     } catch (error) {
@@ -170,7 +175,13 @@ export const ConnectMetaPagesModal: FC = () => {
                   </Group>
                 </Stack>
 
-                <Button onClick={onOpenMessages} mt={20} leftIcon={IconMessageCircle} size="md" radius={200}>
+                <Button
+                  onClick={onOpenMessages}
+                  mt={20}
+                  leftIcon={IconMessageCircle}
+                  size="md"
+                  radius={200}
+                >
                   {`${t("open")} ${t("messages")}`}
                 </Button>
 

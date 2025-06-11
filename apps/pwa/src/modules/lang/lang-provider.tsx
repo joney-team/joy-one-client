@@ -1,7 +1,6 @@
 "use client";
 
 import { onReconnected } from "@/modules/events/event-service";
-import { MainRequest } from "@/modules/requests/main.request";
 import { deleteCookie, setCookie } from "cookies-next/client";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { getLocaleClient } from "./lang-service";
@@ -27,6 +26,7 @@ import { configs } from "@/configs/layout.config";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { getGlobal } from "../../global";
+import { api } from "../apis";
 import { setUserLocale } from "../users/users-service";
 import { Context } from "./lang-context";
 
@@ -43,7 +43,8 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
     const { config, dictionary } = await new Promise<{ config: LocaleConfig; dictionary: any }>(
       (resolve) => {
         const action = () => {
-          MainRequest.get(`/lang/${_locale}`)
+          api
+            .get(`/lang/${_locale}`)
             .then((res) => resolve(res))
             .catch(() => setTimeout(action, 3000));
         };

@@ -1,27 +1,26 @@
+"use client";
+
 import { List } from "@/components/list";
 import { NumberColumn } from "@/components/list/columns/number-column";
-import { ProductCard } from "@/modules/products/product-card";
-import { useLayout } from "@/layout/layout-context";
-import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { EventType } from "@/modules/events/event-types";
 import { num, t, tMulti } from "@/modules/lang/lang-service";
-import { getProducts } from "@/modules/products/products-service";
-import { ProductType } from "@/modules/products/products-types";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
+import { ProductCard } from "@/modules/products/product-card";
+import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Badge, em, Group, Stack, Text } from "@mantine/core";
 import { IconEditCircle, IconSettings } from "@tabler/icons-react";
 import { type FC } from "react";
 
 export const ProductComboSetup: FC = () => {
-  const layout = useLayout();
-
   return (
     <Stack p={16}>
-      <List
+      <List<ProductEntity>
         id="cbsetup"
         icon={IconSettings}
         name={tMulti(["list"], ["combos"])}
-        fetch={(p) => getProducts({ ...p, type: ProductType.COMBO })}
+        route="/products"
+        params={{ type: ProductType.COMBO }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.COMBO }),
           permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,

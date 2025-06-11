@@ -1,46 +1,46 @@
 import { ResponseList } from "@/types";
 import { Icon, IconArrowDownLeft, IconArrowUpRight, IconCash, IconCashBanknote, IconDeviceMobileDollar } from "@tabler/icons-react";
-import { MainRequest } from "../requests/main.request";
+import { api } from "../apis";
 import { CreateReceiptDto, DisbursementReceiptDto, PartialPaymentDto, PayReceiptDto, ReceiptEntity, ReceiptPaymentMethod, ReceiptStatus, ReceiptType, UpdateReceiptDto } from "./receipts-types";
 
 export async function createReceipt(dto: CreateReceiptDto) {
-  return MainRequest.post<ReceiptEntity>('/receipts', dto);
+  return api.post<ReceiptEntity>('/receipts', dto);
 }
 
 export async function payReceipt(id: string, dto: PayReceiptDto) {
-  return MainRequest.post<ReceiptEntity>(`/receipts/${id}/pay`, dto);
+  return api.post<ReceiptEntity>(`/receipts/${id}/pay`, dto);
 }
 
 export async function disburseReceipt(id: string, dto: DisbursementReceiptDto) {
-  return MainRequest.post<ReceiptEntity>(`/receipts/${id}/disbruse`, dto);
+  return api.post<ReceiptEntity>(`/receipts/${id}/disbruse`, dto);
 }
 
 export async function getReceipts<T = any>(query?: any, controller?: AbortController) {
-  return MainRequest.get<ResponseList<ReceiptEntity<T>>>('/receipts', query, controller)
+  return api.get<ResponseList<ReceiptEntity<T>>>('/receipts', { params: query, signal: controller?.signal })
 }
 
 export async function getReceipt(id: string) {
-  return MainRequest.get<ReceiptEntity>(`/receipts/${id}`)
+  return api.get<ReceiptEntity>(`/receipts/${id}`)
 }
 
 export async function getReceiptRef(ref: string) {
-  return MainRequest.get<ReceiptEntity>(`/receipts/refs/${ref}`)
+  return api.get<ReceiptEntity>(`/receipts/refs/${ref}`)
 }
 
 export async function archiveReceipt(id: string) {
-  return MainRequest.delete<ReceiptEntity>(`/receipts/${id}`)
+  return api.delete<ReceiptEntity>(`/receipts/${id}`)
 }
 
 export async function partialPaymentReceipt(id: string, dto: PartialPaymentDto) {
-  return MainRequest.post<{ receipts: ReceiptEntity[] }>(`/receipts/${id}/partial-payment`, dto)
+  return api.post<{ receipts: ReceiptEntity[] }>(`/receipts/${id}/partial-payment`, dto)
 }
 
 export async function updateReceiptPaidAt(id: string, paidAt: number) {
-  return MainRequest.put<ReceiptEntity>(`/receipts/${id}/paid-at`, { paidAt })
+  return api.put<ReceiptEntity>(`/receipts/${id}/paid-at`, { paidAt })
 }
 
 export async function updateReceipt(id: string, dto: UpdateReceiptDto) {
-  return MainRequest.put<ReceiptEntity>(`/receipts/${id}`, dto)
+  return api.put<ReceiptEntity>(`/receipts/${id}`, dto)
 }
 
 export const PaymentMethodIcon: {

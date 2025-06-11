@@ -1,12 +1,12 @@
-import { AppPageMetadata } from '@/types';
+import { apiServerSide } from '@/modules/apis/server';
 import { translateServer } from '@/modules/lang/lang-server-service';
-import { MainServerRequest } from '@/modules/requests/main.server-request';
+import { AppPageMetadata } from '@/types';
 import { combineMetadata } from '@/utils/metadata.utils';
 
 export const tasksMetadata = combineMetadata({
   fetch: async ({ params, locale }) => {
     if (params.code) {
-      return MainServerRequest.get<AppPageMetadata>(`/tasks/metadata/${params.code}`);
+      return apiServerSide.get<AppPageMetadata>(`/tasks/metadata/${params.code}`);
     }
 
     if (!params.slug || params.slug === 'd') {
@@ -17,6 +17,6 @@ export const tasksMetadata = combineMetadata({
       }
     }
 
-    return MainServerRequest.get<AppPageMetadata>(`/tags/metadata/${params.slug}`);
+    return apiServerSide.get<AppPageMetadata>(`/tags/metadata/${params.slug}`);
   }
 });

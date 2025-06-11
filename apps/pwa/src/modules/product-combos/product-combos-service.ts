@@ -1,26 +1,26 @@
 import { ResponseList } from "@/types";
-import { ProductComboStatus, UseProductComboDto } from "./product-combos-types";
-import { MainRequest } from "../requests/main.request";
+import { api } from "../apis";
 import { ProductComboEntity } from "./product-combos-entity";
+import { ProductComboStatus, UseProductComboDto } from "./product-combos-types";
 
 export async function getProductCombos(query?: any) {
-  return MainRequest.get<ResponseList<ProductComboEntity>>(`/product-combos`, query)
+  return api.get<ResponseList<ProductComboEntity>>(`/product-combos`, { params: query })
 }
 
 export async function getProductCombo(id: string) {
-  return MainRequest.get<ProductComboEntity>(`/ProductCombos/${id}`)
+  return api.get<ProductComboEntity>(`/ProductCombos/${id}`)
 }
 
 export async function getProductCombosByCustomer(customerId: string) {
-  return MainRequest.get<ProductComboEntity[]>(`/ProductCombos/customers/${customerId}`)
+  return api.get<ProductComboEntity[]>(`/ProductCombos/customers/${customerId}`)
 }
 
 export async function useProductCombo(id: string, dto: UseProductComboDto) {
-  return MainRequest.post<ProductComboEntity>(`/ProductCombos/${id}/use`, dto)
+  return api.post<ProductComboEntity>(`/ProductCombos/${id}/use`, dto)
 }
 
 export async function revertProductComboHistory(historyId: string) {
-  return MainRequest.delete(`/ProductCombos/history/${historyId}`)
+  return api.delete(`/ProductCombos/history/${historyId}`)
 }
 
 export const productComboStatusOptions: {

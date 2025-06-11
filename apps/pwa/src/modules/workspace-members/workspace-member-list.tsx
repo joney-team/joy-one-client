@@ -7,15 +7,20 @@ import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getWorkspaceBranchByIds, getWorkspaceBranches } from "@/modules/workspace-branches/workspace-branches-service";
+import {
+  getWorkspaceBranchByIds,
+  getWorkspaceBranches,
+} from "@/modules/workspace-branches/workspace-branches-service";
 import {
   getUserMemberRoleLabel,
-  getWorkspaceMemberList,
   updateWorkspaceMember,
 } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
-import { WorkspacePermission, WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
+import {
+  WorkspacePermission,
+  WorkspaceSpecialRoleId,
+} from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { Badge, Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconBuilding, IconLock, IconMail, IconPhone } from "@tabler/icons-react";
@@ -39,14 +44,19 @@ export const WorkspaceMemberList: FC = () => {
 
   return (
     <Stack p={16}>
-      <List
-        fetch={(p) => getWorkspaceMemberList(p)}
+      <List<WorkspaceMember>
+        route="/workspace-members"
         id="workspace-members"
         name="members"
         columns={{
           name: {
             render: ({ data }) => (
-              <Group gap={5} py={5} className="clickable" onClick={() => OnModalUserInformation(data.userId)}>
+              <Group
+                gap={5}
+                py={5}
+                className="clickable"
+                onClick={() => OnModalUserInformation(data.userId)}
+              >
                 <Avatar user={data} size={30} />
                 <Clickable>
                   <Text>{data.name || t("unamed")}</Text>
@@ -96,7 +106,9 @@ export const WorkspaceMemberList: FC = () => {
             icon: IconAccessible,
             render: ({ data }) => {
               const isOwner = data.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER);
-              const isHasPermission = workspace.hasPermission(WorkspacePermission.WORKSPACE_ROLES_MANAGER);
+              const isHasPermission = workspace.hasPermission(
+                WorkspacePermission.WORKSPACE_ROLES_MANAGER
+              );
 
               if (isOwner) {
                 return (
@@ -118,7 +130,10 @@ export const WorkspaceMemberList: FC = () => {
                   value={data.roles}
                   onChange={(roles) => {
                     if (!data.memberId) return;
-                    return updateWorkspaceMember(data.memberId, { ...data, roleIds: roles.map((v) => v._id) });
+                    return updateWorkspaceMember(data.memberId, {
+                      ...data,
+                      roleIds: roles.map((v) => v._id),
+                    });
                   }}
                 />
               );
@@ -161,16 +176,24 @@ export const WorkspaceMemberList: FC = () => {
                 ? {
                     dynamicSelector: {
                       getOptions: async (ids) => {
-                        const options = await getWorkspaceBranchByIds(ids.filter((v) => v !== "root"));
-                        return bindOptions(options.map((v) => ({ label: v.name, value: v._id, data: v })));
+                        const options = await getWorkspaceBranchByIds(
+                          ids.filter((v) => v !== "root")
+                        );
+                        return bindOptions(
+                          options.map((v) => ({ label: v.name, value: v._id, data: v }))
+                        );
                       },
                       search: async (q) => {
                         const options = await searchEntity(AppEntity.WORKSPACE_BRANCHES, q);
-                        return bindOptions(options.map((v) => ({ label: v.name, value: v._id, data: v })));
+                        return bindOptions(
+                          options.map((v) => ({ label: v.name, value: v._id, data: v }))
+                        );
                       },
                       getInitialOptions: async () => {
                         const options = await getWorkspaceBranches({ limit: 5 });
-                        return bindOptions(options.data.map((v) => ({ label: v.name, value: v._id, data: v })));
+                        return bindOptions(
+                          options.data.map((v) => ({ label: v.name, value: v._id, data: v }))
+                        );
                       },
                     },
                   }

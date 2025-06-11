@@ -1,3 +1,5 @@
+"use client";
+
 import { defaultRouteRule, routeRules } from "@/configs/routes.config";
 import { AppRouterInstance, NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter as useNextRouter, usePathname } from "next/navigation";

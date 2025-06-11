@@ -1,30 +1,35 @@
 "use client";
 
+import { type FC } from "react";
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
-import { CustomerColumn } from "@/modules/customers/customer-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { EnumColumn } from "@/components/list/columns/enum-column";
 import { NumberColumn } from "@/components/list/columns/number-column";
 import { StatusColumn } from "@/components/list/columns/status-column";
-import { UserColumn } from "@/modules/users/user-column";
-import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { OnModalPrinter } from "@/modals/modal-printer";
-import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
-import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
+import { CustomerColumn } from "@/modules/customers/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
+import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
+import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
+import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import {
-  getReceipts,
   receiptPaymentMethodOptions,
   receiptStatusOptions,
   receiptTypeOptions,
 } from "@/modules/receipts/receipts-service";
-import { ReceiptPaymentMethod, ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
+import {
+  ReceiptEntity,
+  ReceiptPaymentMethod,
+  ReceiptStatus,
+  ReceiptType,
+} from "@/modules/receipts/receipts-types";
+import { UserColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Stack } from "@mantine/core";
 import {
   IconArrowsDoubleSwNe,
@@ -33,7 +38,6 @@ import {
   IconCreditCard,
   IconPrinter,
 } from "@tabler/icons-react";
-import { type FC } from "react";
 
 export const ReceiptList: FC = () => {
   const workspace = useWorkspace();
@@ -43,18 +47,24 @@ export const ReceiptList: FC = () => {
 
   return (
     <Stack p={16}>
-      <List
+      <List<ReceiptEntity>
         id="rps"
         name="receipts"
         limit={18}
         icon={IconCashRegister}
-        fetch={(p, controller) => getReceipts(p, controller)}
+        route="/receipts"
         columns={{
           code: CodeColumn({
             onClick: (_, data) => OnReceiptDetailModal({ id: data.id }),
           }),
           createdAt: DateTimeColumn({ name: "createdAt", isSortable: true, isHasFilter: true }),
-          paidAt: DateTimeColumn({ name: "paidAt", isSortable: true, isDefaultHide: true, isHasFilter: true, w: 200 }),
+          paidAt: DateTimeColumn({
+            name: "paidAt",
+            isSortable: true,
+            isDefaultHide: true,
+            isHasFilter: true,
+            w: 200,
+          }),
           expireAt: DateTimeColumn({
             name: "receipt_expireAt",
             isSortable: true,

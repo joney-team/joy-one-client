@@ -1,30 +1,26 @@
-import { useRouter } from "@/hooks/use-router";
-import { Container } from "@/components/container";
 import { ButtonArchive } from "@/components/buttons/button-archive";
+import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
 import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { EnumColumn } from "@/components/list/columns/enum-column";
 import { NumberColumn } from "@/components/list/columns/number-column";
-import { ProductColumn } from "@/modules/products/product-column";
-import { UserColumn } from "@/modules/users/user-column";
-import { ProductCard } from "@/modules/products/product-card";
-import { onArchive } from "@/utils/actions";
+import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
-import { OnModalProductStockOut } from "@/modules/product-stocks/modals/modal-product-stock-out";
 import { EventType } from "@/modules/events/event-types";
 import { num, t, tMulti } from "@/modules/lang/lang-service";
 import { getOrderById } from "@/modules/orders/orders-service";
-import {
-  getProductStockRecords,
-  getProductStocks,
-  productStockRecordTypeOptions,
-} from "@/modules/product-stocks/product-stocks-service";
+import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
+import { OnModalProductStockOut } from "@/modules/product-stocks/modals/modal-product-stock-out";
+import { productStockRecordTypeOptions } from "@/modules/product-stocks/product-stocks-service";
 import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
+import { ProductCard } from "@/modules/products/product-card";
+import { ProductColumn } from "@/modules/products/product-column";
 import { archiveProduct, getProduct } from "@/modules/products/products-service";
+import { UserColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onArchive } from "@/utils/actions";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Anchor, Skeleton, Stack, Text } from "@mantine/core";
 import {
@@ -37,6 +33,10 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { type FC, useEffect } from "react";
+import {
+  ProductStockEntity,
+  ProductStockRecordEntity,
+} from "../product-stocks/product-stocks-entity";
 
 const events = [
   EventType.PRODUCT_NEW,
@@ -87,17 +87,12 @@ export const ProductDetail: FC = () => {
 
             {product.data.isStockCheck && (
               <>
-                <List
+                <List<ProductStockEntity>
                   id={`product-stocks-${productId}`}
                   icon={IconBuildingWarehouse}
                   name="product_stocks"
-                  fetch={(p) =>
-                    getProductStocks({
-                      ...p,
-                      productId,
-                      sortExpireAt: 1,
-                    })
-                  }
+                  route="/product-stocks"
+                  params={{ productId, sortExpireAt: 1 }}
                   columns={{
                     createdAt: DateTimeColumn({ isSortable: true, name: "time" }),
                     code: { name: "product_stock_code", filter: { text: true } },
@@ -115,7 +110,12 @@ export const ProductDetail: FC = () => {
                         );
                       },
                     },
-                    expireAt: DateTimeColumn({ name: "expire_at", emptyText: "--", hideTime: true, isFromNow: true }),
+                    expireAt: DateTimeColumn({
+                      name: "expire_at",
+                      emptyText: "--",
+                      hideTime: true,
+                      isFromNow: true,
+                    }),
                     costPrice: NumberColumn({ name: "costPrice", type: "money" }),
                     note: { isDefaultHide: true },
                   }}
@@ -135,11 +135,12 @@ export const ProductDetail: FC = () => {
                   ]}
                 />
 
-                <List
+                <List<ProductStockRecordEntity>
                   id={`product-stock-records-${productId}`}
                   icon={IconArrowLeftRight}
                   name="history"
-                  fetch={(p) => getProductStockRecords({ ...p, productId })}
+                  route="/product-stock-records"
+                  params={{ productId }}
                   columns={{
                     createdAt: DateTimeColumn(),
                     type: EnumColumn({
@@ -175,7 +176,9 @@ export const ProductDetail: FC = () => {
                     },
                     relatedProductId: ProductColumn({
                       valuePath: "relatedProduct",
-                      name: t("entity_related", { entity: tMulti(["products"], ["/"], ["services"]) }),
+                      name: t("entity_related", {
+                        entity: tMulti(["products"], ["/"], ["services"]),
+                      }),
                     }),
                     quantity: NumberColumn({ name: "quantity" }),
                     note: { isDefaultHide: true },

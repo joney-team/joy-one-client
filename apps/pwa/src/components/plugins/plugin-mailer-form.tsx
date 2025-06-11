@@ -1,11 +1,22 @@
 import { Button } from "@/components/buttons/button";
 import { TextInput } from "@/components/inputs/text-input";
+import { api } from "@/modules/apis";
 import { t } from "@/modules/lang/lang-service";
-import { MainRequest } from "@/modules/requests/main.request";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
-import { Anchor, Card, Group, PasswordInput, Stack, Stepper, Text, ThemeIcon, Title, em } from "@mantine/core";
+import {
+  Anchor,
+  Card,
+  Group,
+  PasswordInput,
+  Stack,
+  Stepper,
+  Text,
+  ThemeIcon,
+  Title,
+  em,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconArrowLeft, IconCircleCheck, IconSend } from "@tabler/icons-react";
 import { FC, useState } from "react";
@@ -45,7 +56,7 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
       else {
         setIsSubmitting(true);
         try {
-          await MainRequest.post("/plugins/mailer/workspace/test", {
+          await api.post("/plugins/mailer/workspace/test", {
             to: payload.testEmail,
             accountUser: payload.user,
             accountPass: payload.pass,
@@ -96,7 +107,8 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
 
             {isSubmitting && (
               <Text ta="center" fw={300} fz={em(14)}>
-                Bạn vui lòng kiên nhẫn chờ đợi <br /> có thể mất khoảng 1 - 2 phút để hệ thống gửi thử mail.
+                Bạn vui lòng kiên nhẫn chờ đợi <br /> có thể mất khoảng 1 - 2 phút để hệ thống gửi
+                thử mail.
               </Text>
             )}
 
@@ -137,8 +149,8 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
             </Title>
 
             <Text ta="center">
-              Sau khi xác nhận hệ thống sẽ dùng địa chỉ email <strong>{form.values.user}</strong> để gửi Mail cho khách
-              hàng <br /> hoặc các thông báo hệ thống cho thành viên.
+              Sau khi xác nhận hệ thống sẽ dùng địa chỉ email <strong>{form.values.user}</strong> để
+              gửi Mail cho khách hàng <br /> hoặc các thông báo hệ thống cho thành viên.
             </Text>
 
             <Button mt={10} type="submit" loading={isSubmitting} onClick={onSubmit}>

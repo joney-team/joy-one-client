@@ -1,17 +1,19 @@
 import { ResponseList } from "@/types";
-import { MainRequest } from "@/modules/requests/main.request";
 import { PluginMetaPageEntity, PluginMetaPageInfo } from "./meta-pages-types";
+import { api } from "@/modules/apis";
 
 export async function getPluginMetaPages() {
-  return MainRequest.get<ResponseList<PluginMetaPageEntity>>(`/plugins/meta-pages`);
+  return api.get<ResponseList<PluginMetaPageEntity>>(`/plugins/meta-pages`);
 }
 
 export async function disconnectPluginMetaPage(id: string) {
-  return MainRequest.delete(`/plugins/meta-pages/${id}/disconnect`);
+  return api.delete(`/plugins/meta-pages/${id}/disconnect`);
 }
 
 export async function getPluginMetaPagesInfo(accessToken: string) {
-  return MainRequest.get<{ pages: PluginMetaPageInfo[] }>(`/plugins/meta-pages/info`, {
-    access_token: accessToken
+  return api.get<{ pages: PluginMetaPageInfo[] }>(`/plugins/meta-pages/info`, {
+    params: {
+      access_token: accessToken
+    }
   });
 }

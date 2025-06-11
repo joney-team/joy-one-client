@@ -3,20 +3,21 @@ import { StorageKey } from "@/types";
 import { decryptData, encryptData } from "@/utils/crypto.utils";
 import { getGlobal } from "../../global";
 import { t } from "../lang/lang-service";
-import { MainRequest } from "../requests/main.request";
 import { AuthRenewPasswordByCodeDto, AuthRequestRenewUserPasswordDto, AuthTokenResult, AuthVerifyRenewPasswordCodeDto } from "./auth-types";
 import config from "@joy-one-client/config";
+import { api } from "../apis";
+import { apiServerSide } from "../apis/server";
 
 export async function requestRenewPassword(dto: AuthRequestRenewUserPasswordDto) {
-  return MainRequest.post(`/auth/renew-password/request`, dto)
+  return api.post(`/auth/renew-password/request`, dto)
 }
 
 export async function verifyRenewPasswordCode(dto: AuthVerifyRenewPasswordCodeDto) {
-  return MainRequest.post(`/auth/renew-password/verify`, dto)
+  return api.post(`/auth/renew-password/verify`, dto)
 }
 
 export async function renewPassword(dto: AuthRenewPasswordByCodeDto) {
-  return MainRequest.post(`/auth/renew-password`, dto)
+  return api.post(`/auth/renew-password`, dto)
 }
 
 export const saveTokens = async (tokens: { accessToken: string, refreshToken: string }) => {
@@ -69,7 +70,7 @@ export const getAccessToken = async () => {
     const decryptedToken = await decryptData(`${config.SECRET_KEY}_access_token`, encryptedToken, encryptedTokenIv);
     return decryptedToken;
   } catch (error) {
-    return null;
+    return localStorage.getItem(StorageKey.ACCESS_TOKEN);
   }
 }
 
@@ -85,11 +86,11 @@ export const getRefreshToken = async () => {
   }
 }
 
-export const retrieveAccessToken = async () => {
+export const retrieveAccessToken = async (): Promise<string> => {
   const refreshToken = await getRefreshToken();
   if (!refreshToken) throw new Error(t('SESSION_EXPIRED'));
 
-  const result = await MainRequest.post<AuthTokenResult>('/auth/refresh-token', { refreshToken })
+  const result = await api.post<AuthTokenResult>('/auth/refresh-token', { refreshToken })
   await Promise.all([
     saveAccessToken(result.accessToken),
     saveRefrehToken(result.refreshToken)

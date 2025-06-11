@@ -1,9 +1,12 @@
 import { Button } from "@/components/buttons/button";
 import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
+import { api } from "@/modules/apis";
 import { t } from "@/modules/lang/lang-service";
-import { PluginZaloOaZNSTemplateId, ZnsTemplateConfig } from "@/modules/plugins/zalo-oas/zalo-oas-types";
-import { MainRequest } from "@/modules/requests/main.request";
+import {
+  PluginZaloOaZNSTemplateId,
+  ZnsTemplateConfig,
+} from "@/modules/plugins/zalo-oas/zalo-oas-types";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { isPhoneNumber } from "@/utils/phone.utils";
@@ -46,7 +49,7 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
     try {
-      await MainRequest.post(`/plugins/zalo-oas/zns`, {
+      await api.post(`/plugins/zalo-oas/zns`, {
         data: props.config.fields.reduce((acc, item) => {
           acc[item.fieldName] = values[item.fieldName];
           return acc;

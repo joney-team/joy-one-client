@@ -10,14 +10,15 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { IconBuildingSkyscraper, IconLink } from "@tabler/icons-react";
 import { type FC } from "react";
 import { OnCustomerFormModal } from "../customers/customer-form-modal";
-import { customerFormStatusConfigs, getCustomerForms, multiArchiveCustomerForm } from "./customer-form-service";
+import { CustomerFormEntity } from "./customer-form-entity";
+import { customerFormStatusConfigs, multiArchiveCustomerForm } from "./customer-form-service";
 import { OnModalCustomerForm } from "./modal-customer-form";
 
 export const CustomerFormList: FC = () => {
   return (
-    <List
+    <List<CustomerFormEntity>
       id="cfms"
-      fetch={(q) => getCustomerForms(q)}
+      route="/customer-forms"
       creatable={{
         onCreate: () => OnModalCustomerForm(),
         label: t("link_form"),
@@ -60,7 +61,11 @@ export const CustomerFormList: FC = () => {
           })),
         }),
       }}
-      events={[EventType.CUSTOMER_FORM_NEW, EventType.CUSTOMER_FORM_UPDATED, EventType.CUSTOMER_FORM_ARCHIVED]}
+      events={[
+        EventType.CUSTOMER_FORM_NEW,
+        EventType.CUSTOMER_FORM_UPDATED,
+        EventType.CUSTOMER_FORM_ARCHIVED,
+      ]}
       multipleSelectActions={[
         {
           label: "move_workspace_branch",

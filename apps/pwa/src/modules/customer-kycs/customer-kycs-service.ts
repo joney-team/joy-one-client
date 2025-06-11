@@ -1,27 +1,27 @@
 import { Gender, ResponseList } from "@/types";
-import { MainRequest } from "../requests/main.request";
-import { CustomerKycDto, CustomerKycEntity, RejectCustomerKycDto } from "./customer-kycs-types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { api } from "../apis";
 import { detectEntityLocation } from "../locations/locations-service";
+import { CustomerKycDto, CustomerKycEntity, RejectCustomerKycDto } from "./customer-kycs-types";
 
 export async function getCustomerKycs(query?: any) {
-  return MainRequest.get<ResponseList<CustomerKycEntity>>('/customer-kycs', query);
+  return api.get<ResponseList<CustomerKycEntity>>('/customer-kycs', { params: query });
 }
 
 export async function getCustomerKyc(customerId: string) {
-  return MainRequest.get<CustomerKycEntity>(`/customer-kycs/${customerId}`);
+  return api.get<CustomerKycEntity>(`/customer-kycs/${customerId}`);
 }
 
 export async function registerCustomerKyc(customerId: string, dto: CustomerKycDto) {
-  return MainRequest.post<CustomerKycEntity>(`/customer-kycs/${customerId}`, dto);
+  return api.post<CustomerKycEntity>(`/customer-kycs/${customerId}`, dto);
 }
 
 export async function approveCustomerKyc(customerId: string) {
-  return MainRequest.post<CustomerKycEntity>(`/customer-kycs/${customerId}/approve`);
+  return api.post<CustomerKycEntity>(`/customer-kycs/${customerId}/approve`);
 }
 
 export async function rejectCustomerKyc(customerId: string, dto: RejectCustomerKycDto) {
-  return MainRequest.post(`/customer-kycs/${customerId}/reject`, dto);
+  return api.post(`/customer-kycs/${customerId}/reject`, dto);
 }
 
 export const parseCidDate = (d: string) => {

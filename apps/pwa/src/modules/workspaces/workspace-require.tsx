@@ -10,7 +10,6 @@ import { useLang } from "@/modules/lang/lang-context";
 import { t } from "@/modules/lang/lang-service";
 import { renderLocation } from "@/modules/locations/locations-service";
 import { LocationEntity } from "@/modules/locations/locations-types";
-import { MainRequest } from "@/modules/requests/main.request";
 import { WorkspaceTypeItem } from "@/modules/workspaces/components/workpsace-type-item";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceTypeIcon } from "@/modules/workspaces/workspaces-service";
@@ -45,6 +44,7 @@ import {
 } from "@tabler/icons-react";
 import { ChangeEventHandler, FC, useEffect, useState } from "react";
 import { useApp } from "../../app.context";
+import { api } from "../apis";
 import { getUserMemberRoleLabel } from "../workspace-members/workspace-members-service";
 
 export const RequireWorkspace: FC<{ workspace: WorkspaceContext }> = (props) => {
@@ -280,7 +280,8 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
   const onAutoFillCode = useDebouncedCallback((name: string) => {
     if (name.length === 0) return;
 
-    MainRequest.post(`/workspaces/random-code`, { name })
+    api
+      .post(`/workspaces/random-code`, { name })
       .then((res) => form.setFieldValue("code", res.result))
       .catch(() => false);
   }, 300);

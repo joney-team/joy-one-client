@@ -4,6 +4,8 @@ import { AxiosError } from "axios";
 import { api } from ".";
 import { useEventsListener } from "../events/event-service";
 import { EventEntity, EventType } from "../events/event-types";
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import { StorageKey } from "@/types";
 
 export interface UseQueryArgs<T> {
   params?: Record<string, any>,
@@ -22,9 +24,10 @@ export const useQuery = <T = any>(query: string | (UseQueryArgs<T> & { route: st
   const route = typeof query === 'string' ? query : query.route;
   const params = typeof query === 'string' ? null : query.params;
   const networkMode = typeof args.networkMode === 'string' ? args.networkMode as NetworkMode : 'offlineFirst';
+  const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
   const stack = useQueryTanstack<T, AxiosError>({
-    queryKey: [route, params],
+    queryKey: [route, params, workspaceId || 'general'],
     queryFn: ({ signal }) => {
       if (args.method === 'post') {
         return api.post<T>(route, args.params, { signal });

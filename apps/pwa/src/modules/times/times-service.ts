@@ -1,6 +1,6 @@
-import { MainRequest } from "../requests/main.request";
+import { api } from "../apis";
 import { TimeZone } from "./times-types";
 
 export async function getTimeZones() {
-  return MainRequest.get<TimeZone[]>(`/times/timezones`)
+  return api.get<TimeZone[]>(`/times/timezones`)
 }

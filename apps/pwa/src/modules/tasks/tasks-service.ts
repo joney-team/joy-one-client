@@ -1,3 +1,4 @@
+import { t } from "@/modules/lang/lang-service";
 import { ResponseList } from "@/types";
 import {
   Icon, IconApiApp, IconAssembly, IconBulb, IconCheck, IconCircleFilled, IconCodeCircle,
@@ -5,8 +6,7 @@ import {
 } from "@tabler/icons-react";
 import EventEmitter from "events";
 import { v4 as uuid } from 'uuid';
-import { t } from "@/modules/lang/lang-service";
-import { MainRequest } from "@/modules/requests/main.request";
+import { api } from "../apis";
 import { DefaultTaskStatusId, TaskDto, TaskEntity, TaskHistory, TaskPriority, TaskStatus } from "./tasks-types";
 
 export const tasksEmitter = new EventEmitter();
@@ -21,30 +21,30 @@ export const getTaskEntityByCode = (code?: string | undefined | null) => Object.
 export const getTaskEntites = () => Object.values(taskEntities).sort((a, b) => a.order - b.order);
 
 export async function createTask(payload: TaskDto) {
-  const task = await MainRequest.post<TaskEntity>('/tasks', payload);
+  const task = await api.post<TaskEntity>('/tasks', payload);
   taskEntities[task._id] = task;
   tasksEmitter.emit('update', [task]);
   return task;
 }
 
 export async function getTask(_id: string) {
-  const response = await MainRequest.get<TaskEntity>(`/tasks/${_id}`);
+  const response = await api.get<TaskEntity>(`/tasks/${_id}`);
   taskEntities[_id] = response;
   return response;
 }
 
 export async function getTaskByCode(code: string) {
-  const response = await MainRequest.get<TaskEntity>(`/tasks/codes/${code}`);
+  const response = await api.get<TaskEntity>(`/tasks/codes/${code}`);
   taskEntities[response._id] = response;
   return response;
 }
 
 export async function getTaskMetadata(code: string) {
-  return MainRequest.get(`/tasks/metadata/${code}`);
+  return api.get(`/tasks/metadata/${code}`);
 }
 
 export async function getTasks(query: any) {
-  const response = await MainRequest.get<ResponseList<TaskEntity>>('/tasks', query);
+  const response = await api.get<ResponseList<TaskEntity>>('/tasks', { params: query });
   response.data.map(v => taskEntities[v._id] = v);
   return response;
 }
@@ -127,7 +127,7 @@ export const updateTasks = async (tasks: TaskEntity[], addToHistory = true) => {
 
   tasksEmitter.emit('update', tasks);
 
-  const response = await MainRequest.put<{
+  const response = await api.put<{
     updatedTasks: TaskEntity[],
     prevTasks: TaskEntity[],
   }>('/tasks', { items: tasks });

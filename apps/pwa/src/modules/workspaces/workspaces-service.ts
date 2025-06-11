@@ -1,22 +1,13 @@
+import { getLocalStorage } from "@/hooks/use-local-storage";
 import { AppPageMetadata, StorageKey } from "@/types";
-import { Icon, IconBuilding, IconBuildingHospital, IconCode, IconCreditCardPay, IconDental, IconPlant2, IconSparkles, IconStethoscope } from "@tabler/icons-react";
-import { MainRequest } from "../requests/main.request";
-import { WorkspaceEntity, WorkspaceInviteInformation, WorkspaceType } from "./workspaces-types";
 import { isServer } from "@/utils/common.utils";
+import { Icon, IconBuilding, IconBuildingHospital, IconCode, IconCreditCardPay, IconDental, IconPlant2, IconSparkles, IconStethoscope } from "@tabler/icons-react";
+import { api } from "../apis";
+import { WorkspaceEntity, WorkspaceInviteInformation, WorkspaceType } from "./workspaces-types";
 
 export const getWorkspaceId = () => {
   if (isServer()) return;
-  return localStorage.getItem(StorageKey.WORKSPACE_ID);
-}
-
-export const removeWorkspaceId = () => {
-  if (isServer()) return;
-  localStorage.removeItem(StorageKey.WORKSPACE_ID);
-}
-
-export const setWorkspaceId = (workspaceId: string) => {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(StorageKey.WORKSPACE_ID, workspaceId);
+  return getLocalStorage(StorageKey.WORKSPACE_ID);
 }
 
 export function getWorkspaceTypeIcon(type: WorkspaceType) {
@@ -35,21 +26,21 @@ export function getWorkspaceTypeIcon(type: WorkspaceType) {
 }
 
 export async function workspaceInitialize() {
-  return MainRequest.get('/workspace-initialize');
+  return api.get('/workspace-initialize');
 }
 
 export async function getWorkspaceByInviteCode(inviteCode: string) {
-  return MainRequest.get<AppPageMetadata>(`/workspaces/invite/${inviteCode}/metadata`);
+  return api.get<AppPageMetadata>(`/workspaces/invite/${inviteCode}/metadata`);
 }
 
 export async function getWorkspaceInviteInformation(inviteCode: string) {
-  return MainRequest.get<WorkspaceInviteInformation>(`/workspaces/invite/${inviteCode}`);
+  return api.get<WorkspaceInviteInformation>(`/workspaces/invite/${inviteCode}`);
 }
 
 export async function regenerateWorkspaceInviteCode() {
-  return MainRequest.post<WorkspaceEntity>('/workspaces/regenerate-invite-code');
+  return api.post<WorkspaceEntity>('/workspaces/regenerate-invite-code');
 }
 
 export async function getWorkspaceById(id: string) {
-  return MainRequest.get<WorkspaceEntity>(`/workspaces/ids/${id}`);
+  return api.get<WorkspaceEntity>(`/workspaces/ids/${id}`);
 }

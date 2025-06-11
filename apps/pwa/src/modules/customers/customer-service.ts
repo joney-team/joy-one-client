@@ -1,43 +1,43 @@
 import { AppPageMetadata, Gender, ResponseList } from "@/types";
 import { Icon, IconGenderBigender, IconGenderFemale, IconGenderMale } from "@tabler/icons-react";
+import { api } from "../apis";
+import { apiServerSide } from "../apis/server";
 import { t } from "../lang/lang-service";
 import { getReceipts } from "../receipts/receipts-service";
 import { ReceiptStatus } from "../receipts/receipts-types";
-import { MainRequest } from "../requests/main.request";
-import { AssignCustomerDto, CustomerDto, CustomerEntity } from "./customer-types"
-import { MainServerRequest } from "../requests/main.server-request";
+import { AssignCustomerDto, CustomerDto, CustomerEntity } from "./customer-types";
 
 export async function createCustomer(dto: CustomerDto) {
-  return MainRequest.post<CustomerEntity>('/customers', dto)
+  return api.post<CustomerEntity>('/customers', dto)
 }
 
 export async function isCustomerPhoneExisted(phone: string) {
-  return MainRequest.get<boolean>(`/customers/phone/${phone}/exists`)
+  return api.get<boolean>(`/customers/phone/${phone}/exists`)
 }
 
 export async function getCustomers(query?: any, controller?: AbortController) {
-  return MainRequest.get<ResponseList<CustomerEntity>>('/customers', query, controller)
+  return api.get<ResponseList<CustomerEntity>>('/customers', { params: query, signal: controller?.signal })
 }
 
 export async function getCustomerByIds(ids: string[]) {
-  return MainRequest.get<CustomerEntity[]>(`/customers/ids`, { ids })
+  return api.get<CustomerEntity[]>(`/customers/ids`, { params: { ids } })
 }
 
 export async function updateCustomer(_id: string, dto: CustomerDto) {
-  return MainRequest.put<CustomerEntity>(`/customers/${_id}`, dto)
+  return api.put<CustomerEntity>(`/customers/${_id}`, dto)
 }
 
 export async function assignCustomer(_id: string, dto: AssignCustomerDto) {
-  return MainRequest.post(`/customers/${_id}/assign`, dto)
+  return api.post(`/customers/${_id}/assign`, dto)
 }
 
 export async function getCustomerMetadata(code: string) {
-  return MainServerRequest.get<AppPageMetadata>(`/customers/metadata/${code}`)
+  return apiServerSide.get<AppPageMetadata>(`/customers/metadata/${code}`)
 }
 
 export async function customerInteraction(_id: string) {
   try {
-    await MainRequest.post(`/customers/${_id}/interaction`)
+    await api.post(`/customers/${_id}/interaction`)
   } catch (error) {
     console.error(error)
   }
@@ -53,7 +53,7 @@ export async function archiveCustomer(_id: string) {
     throw new Error(t('CUSTOMER_HAS_PENDING_RECEIPTS'))
   }
 
-  return MainRequest.delete(`/customers/${_id}`)
+  return api.delete(`/customers/${_id}`)
 }
 
 export function renderGener(gender?: Gender) {
@@ -70,11 +70,11 @@ export function renderGenerIcon(gender?: Gender) {
 }
 
 export async function getCustomer(id: string): Promise<CustomerEntity> {
-  return MainRequest.get(`/customers/${id}`)
+  return api.get(`/customers/${id}`)
 }
 
 export async function getCustomerByCode(code: string): Promise<CustomerEntity> {
-  return MainRequest.get(`/customers/codes/${code}`)
+  return api.get(`/customers/codes/${code}`)
 }
 
 export const customerGenderOptions: {

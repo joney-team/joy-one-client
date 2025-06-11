@@ -1,26 +1,26 @@
-import { type FC } from "react";
 import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { NumberColumn } from "@/components/list/columns/number-column";
-import { ProductColumn } from "@/modules/products/product-column";
-import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
 import { EventType } from "@/modules/events/event-types";
 import { num, t } from "@/modules/lang/lang-service";
-import { getProductStocks } from "@/modules/product-stocks/product-stocks-service";
+import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
 import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
+import { ProductColumn } from "@/modules/products/product-column";
 import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Stack, Text } from "@mantine/core";
 import { IconBuildingWarehouse } from "@tabler/icons-react";
+import { type FC } from "react";
+import { ProductStockEntity } from "./product-stocks-entity";
 
 export const ProductStockList: FC = () => {
   return (
     <Stack p={16}>
-      <List
+      <List<ProductStockEntity>
         id="psks"
         icon={IconBuildingWarehouse}
         name="product_stocks"
-        fetch={(p) => getProductStocks(p)}
+        route="/product-stocks"
         columns={{
           createdAt: DateTimeColumn({ isSortable: true, name: "time" }),
           productId: ProductColumn({

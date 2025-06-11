@@ -2,13 +2,13 @@ import { ResponseList } from "@/types";
 import { uploadFile } from "../files/file-service";
 import { t } from "../lang/lang-service";
 import { ReceiptEntity } from "../receipts/receipts-types";
-import { MainRequest } from "../requests/main.request";
 import {
   LoanAssetEstimations,
   LoanEntity, LoanLiquidationCalculated, LoanPackageType,
   LoanPaymentPlanResult, LoanStatus,
 } from "./loans-types";
 
+import { api } from "../apis";
 import {
   CreateLoanDto, FulfillLoanDto, GetPaymentPlanDto,
   ImportLoanDto,
@@ -17,69 +17,69 @@ import {
 } from "./loan-dtos";
 
 export async function getLoans(query?: any, controller?: AbortController) {
-  return MainRequest.get<ResponseList<LoanEntity>>('/loans', query, controller);
+  return api.get<ResponseList<LoanEntity>>('/loans', { params: query, signal: controller?.signal });
 }
 
 export async function getLoan(id: string) {
-  return MainRequest.get<LoanEntity>(`/loans/${id}`);
+  return api.get<LoanEntity>(`/loans/${id}`);
 }
 
 export async function getLoanByCode(code: string) {
-  return MainRequest.get<LoanEntity>(`/loans/codes/${code}`);
+  return api.get<LoanEntity>(`/loans/codes/${code}`);
 }
 
 export async function createLoan(dto: CreateLoanDto) {
   const assetData = await prepareLoanAssetData(dto.assetData);
-  return MainRequest.post<LoanEntity>(`/loans`, { ...dto, assetData });
+  return api.post<LoanEntity>(`/loans`, { ...dto, assetData });
 }
 
 export async function signLoan(id: string, dto: SignLoanDto) {
-  return MainRequest.post(`/loans/${id}/sign`, dto);
+  return api.post(`/loans/${id}/sign`, dto);
 }
 
 export async function importLoan(dto: ImportLoanDto) {
-  return MainRequest.post(`/loans/import`, dto);
+  return api.post(`/loans/import`, dto);
 }
 
 export async function updateLoanAmount(id: string, dto: UpdateLoanAmountDto) {
-  return MainRequest.put(`/loans/${id}/amount`, dto);
+  return api.put(`/loans/${id}/amount`, dto);
 }
 
 export async function updateLoanAssetData(id: string, dto: UpdateLoanAssetDataDto) {
   const assetData = await prepareLoanAssetData(dto.assetData);
-  return MainRequest.put(`/loans/${id}/asset-data`, { ...dto, assetData });
+  return api.put(`/loans/${id}/asset-data`, { ...dto, assetData });
 }
 
 export async function updateLoanPackage(id: string, dto: UpdateLoanPackageDto) {
-  return MainRequest.put(`/loans/${id}/package`, dto);
+  return api.put(`/loans/${id}/package`, dto);
 }
 
 export async function updateLoanWorkspaceBranch(dto: UpdateLoanWorkspaceBranchDto) {
-  return MainRequest.put(`/loans/workspace-branch`, dto);
+  return api.put(`/loans/workspace-branch`, dto);
 }
 
 export async function approveLoan(id: string) {
-  return MainRequest.post(`/loans/${id}/approve`);
+  return api.post(`/loans/${id}/approve`);
 }
 
 export async function rejectLoan(id: string, dto: RejectLoanDto) {
-  return MainRequest.post(`/loans/${id}/reject`, dto);
+  return api.post(`/loans/${id}/reject`, dto);
 }
 
 export async function fulfillLoan(id: string, dto: FulfillLoanDto) {
-  return MainRequest.post(`/loans/${id}/fulfill`, dto);
+  return api.post(`/loans/${id}/fulfill`, dto);
 }
 
 export async function completeLoan(id: string) {
-  return MainRequest.post(`/loans/${id}/complete`);
+  return api.post(`/loans/${id}/complete`);
 }
 
 export async function archiveLoan(id: string) {
-  return MainRequest.delete(`/loans/${id}`);
+  return api.delete(`/loans/${id}`);
 }
 
 export async function archiveLoans(loanIds: string[]) {
-  return MainRequest.delete(`/loans/archive`, { loanIds });
+  return api.delete(`/loans/archive`, { loanIds });
 }
 
 export async function prepareLoanAssetData(data: any) {
@@ -120,15 +120,15 @@ export async function prepareLoanAssetData(data: any) {
 }
 
 export async function loanLiquidation(id: string) {
-  return MainRequest.post<ReceiptEntity>(`/loans/${id}/liquidation`);
+  return api.post<ReceiptEntity>(`/loans/${id}/liquidation`);
 }
 
 export async function revertLiquidationLoan(id: string) {
-  return MainRequest.post(`/loans/${id}/revert-liquidation`);
+  return api.post(`/loans/${id}/revert-liquidation`);
 }
 
 export async function getLoanPaymentPlan(dto: GetPaymentPlanDto) {
-  return MainRequest.post<LoanPaymentPlanResult>(`/loans/payment-plan`, dto);
+  return api.post<LoanPaymentPlanResult>(`/loans/payment-plan`, dto);
 }
 
 export const loanStatusColors: {
@@ -152,7 +152,7 @@ export const defaultLoanAssetEstimations: LoanAssetEstimations = {
 
 export async function getLoanAssetEstimations(): Promise<LoanAssetEstimations> {
   try {
-    let data = await MainRequest.get(`/loans/asset-estimations`);
+    let data = await api.get(`/loans/asset-estimations`);
 
     Object.keys(defaultLoanAssetEstimations).forEach(key => {
       if (typeof data[key] === 'undefined') {
@@ -167,11 +167,11 @@ export async function getLoanAssetEstimations(): Promise<LoanAssetEstimations> {
 }
 
 export async function setLoanAssetEstimations(data: LoanAssetEstimations) {
-  await MainRequest.post(`/loans/asset-estimations`, data);
+  await api.post(`/loans/asset-estimations`, data);
 }
 
 export async function healthCheckLoan(loanId: string) {
-  return MainRequest.post<LoanEntity>(`/loans/${loanId}/health-check`);
+  return api.post<LoanEntity>(`/loans/${loanId}/health-check`);
 }
 
 export const loanPackageTypeColors: {
@@ -192,5 +192,5 @@ export function renderLoanPeriod(days: number) {
 }
 
 export async function loanLiquidationCalculate(id: string) {
-  return MainRequest.post<LoanLiquidationCalculated>(`/loans/${id}/liquidation/calculate`);
+  return api.post<LoanLiquidationCalculated>(`/loans/${id}/liquidation/calculate`);
 }

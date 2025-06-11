@@ -1,16 +1,16 @@
-import { WorkSlot } from "@/types";
 import { useLang } from "@/modules/lang/lang-context";
-import { MainRequest } from "@/modules/requests/main.request";
 import { SetWorkspaceSettingsDto, WorkspaceSettingEntity } from "@/modules/workspace-settings/workspace-settings-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { WorkSlot } from "@/types";
 import dayjs from "dayjs";
+import { api } from "../apis";
 
 export async function getWorkspaceSettings() {
-  return MainRequest.get<WorkspaceSettingEntity>(`/workspace-settings`)
+  return api.get<WorkspaceSettingEntity>(`/workspace-settings`)
 }
 
 export async function setWorkspaceSettings(dto: SetWorkspaceSettingsDto) {
-  return MainRequest.put<WorkspaceSettingEntity>(`/workspace-settings`, dto)
+  return api.put<WorkspaceSettingEntity>(`/workspace-settings`, dto)
 }
 
 export interface WorkDaySlot {

@@ -1,15 +1,15 @@
+import { api } from "@/modules/apis";
 import { ResponseList } from "@/types";
-import { BankAccount, BankInformation, BankQrCode } from "./banks.types";
-import { MainRequest } from "@/modules/requests/main.request";
-import { useEffect } from "react";
 import { useForceUpdate } from "@mantine/hooks";
+import { useEffect } from "react";
+import { BankAccount, BankInformation, BankQrCode } from "./banks.types";
 
 let banks: BankInformation[] = [];
 
-export async function getBanks(): Promise<ResponseList<BankInformation>> {
+export async function getBanks() {
   if (banks.length) return { data: banks, count: banks.length };
   try {
-    const data = await MainRequest.get(`/plugins/banks`)
+    const data = await api.get<ResponseList<BankInformation>>(`/plugins/banks`);
     banks = data.data;
     return data;
   } catch (error) {

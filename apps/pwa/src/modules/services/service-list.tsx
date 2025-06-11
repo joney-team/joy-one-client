@@ -1,12 +1,13 @@
+"use client";
+
 import { type FC } from "react";
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
-import { ProductCard } from "@/modules/products/product-card";
-import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { EventType } from "@/modules/events/event-types";
 import { num } from "@/modules/lang/lang-service";
-import { getProducts } from "@/modules/products/products-service";
-import { ProductType } from "@/modules/products/products-types";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
+import { ProductCard } from "@/modules/products/product-card";
+import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Stack, Text } from "@mantine/core";
 import { IconCategory2, IconEdit } from "@tabler/icons-react";
@@ -17,11 +18,12 @@ export const ServiceList: FC = () => {
 
   return (
     <Stack p={16}>
-      <List
+      <List<ProductEntity>
         id="sers"
         name="services"
         icon={IconCategory2}
-        fetch={(p) => getProducts({ ...p, type: ProductType.SERVICE })}
+        route="/products"
+        params={{ type: ProductType.SERVICE }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.SERVICE }),
           permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,

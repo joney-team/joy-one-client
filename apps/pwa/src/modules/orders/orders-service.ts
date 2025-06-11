@@ -1,50 +1,50 @@
-import { ResponseList } from "@/types";
-import { ReceiptEntity } from "../receipts/receipts-types";
-import { MainRequest } from "../requests/main.request";
-import { OrderCalculateDto, OrderDto } from "./orders-dtos";
-import { OrderEntity } from "./order-entity";
-import { OrderCalculated, OrderPaymentStatus, PayOrderDto } from "./orders-types";
 import { OnModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
+import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
+import { api } from "../apis";
+import { ReceiptEntity } from "../receipts/receipts-types";
+import { OrderEntity } from "./order-entity";
+import { OrderCalculateDto, OrderDto } from "./orders-dtos";
+import { OrderCalculated, OrderPaymentStatus, PayOrderDto } from "./orders-types";
 
 export async function getOrderByCode(code: string) {
-  return MainRequest.get<OrderEntity>(`/orders/codes/${code}`);
+  return api.get<OrderEntity>(`/orders/codes/${code}`);
 }
 
 export async function getOrderById(id: string) {
-  return MainRequest.get<OrderEntity>(`/orders/ids/${id}`);
+  return api.get<OrderEntity>(`/orders/ids/${id}`);
 }
 
 export async function getOrderList(query?: any) {
-  return MainRequest.get<ResponseList<OrderEntity>>('/orders', query);
+  return api.get<ResponseList<OrderEntity>>('/orders', { params: query });
 }
 
 export async function createOrder(dto: OrderDto) {
-  return MainRequest.post<OrderEntity>('/orders', dto);
+  return api.post<OrderEntity>('/orders', dto);
 }
 
 export async function updateOrder(id: string, dto: OrderDto) {
-  return MainRequest.put<OrderEntity>(`/orders/${id}`, dto);
+  return api.put<OrderEntity>(`/orders/${id}`, dto);
 }
 
 export async function calculateOrder(dto: OrderCalculateDto) {
-  return MainRequest.post<OrderCalculated>('/orders/calculate', dto);
+  return api.post<OrderCalculated>('/orders/calculate', dto);
 }
 
 export async function payOrder(id: string, dto: PayOrderDto) {
-  return MainRequest.post<ReceiptEntity>(`/orders/${id}/pay`, dto);
+  return api.post<ReceiptEntity>(`/orders/${id}/pay`, dto);
 }
 
 export async function archiveOrder(id: string) {
-  return MainRequest.delete(`/orders/${id}`);
+  return api.delete(`/orders/${id}`);
 }
 
 export async function getOrders(query?: any) {
-  return MainRequest.get<ResponseList<OrderEntity>>('/orders', query);
+  return api.get<ResponseList<OrderEntity>>('/orders', { params: query });
 }
 
 export async function syncOrder(id: string) {
-  return MainRequest.post(`/orders/${id}/sync`);
+  return api.post(`/orders/${id}/sync`);
 }
 
 export const orderPaymentStatusOptions: {

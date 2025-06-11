@@ -1,17 +1,17 @@
 import { AppEntity } from "@/types";
-import { MainRequest } from "../requests/main.request";
+import { api } from "../apis";
 import { SearchEntityResult, SearchResult } from "./search-types";
 
 export async function search(q: string) {
-  return MainRequest.get<SearchResult>('/search', { q });
+  return api.get<SearchResult>('/search', { params: { q } });
 }
 
 export async function searchGetAvailableEntities() {
-  return MainRequest.get<AppEntity[]>('/search/available-entities');
+  return api.get<AppEntity[]>('/search/available-entities');
 }
 
 export async function searchEntity<T = SearchEntityResult>(entity: AppEntity, q: string, filter?: any) {
-  return MainRequest.get<T[]>(`/search/entities/${entity}`, { q, ...filter });
+  return api.get<T[]>(`/search/entities/${entity}`, { params: { q, ...filter } });
 }
 
 export function removeAccents(str: string): string {

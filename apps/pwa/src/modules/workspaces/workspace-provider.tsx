@@ -4,6 +4,7 @@ import { useApp } from "@/app.context";
 import { Fullscreen } from "@/components/fullscreen";
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
 import { getGlobal } from "@/global";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useRouter } from "@/hooks/use-router";
 import { ConnectMetaPagesModal, OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
 import { useAuth } from "@/modules/auth/auth-context";
@@ -13,16 +14,6 @@ import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { useLocations } from "@/modules/locations/locations-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
-import { MainRequest } from "@/modules/requests/main.request";
-import { WorkspaceArchived } from "@/modules/workspaces/components/workspace-archived";
-import { WorkspaceRequireBranches } from "@/modules/workspaces/components/workspace-require-branches";
-import {
-  getWorkspaceId,
-  removeWorkspaceId,
-  setWorkspaceId,
-  workspaceInitialize,
-} from "@/modules/workspaces/workspaces-service";
-import WorkspaceInvitation from "@/modules/workspaces/workspace-invitation";
 import { getWorkspaceBalance } from "@/modules/workspace-billings/workspace-billings-service";
 import { WorkspaceBalance } from "@/modules/workspace-billings/workspace-billings-types";
 import {
@@ -49,6 +40,10 @@ import {
 } from "@/modules/workspace-settings/workspace-settings-types";
 import { getWorkspaceSubscription } from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
 import { WorkspaceSubscriptionEntity } from "@/modules/workspace-subscriptions/workspace-subscriptions-types";
+import { WorkspaceArchived } from "@/modules/workspaces/components/workspace-archived";
+import { WorkspaceRequireBranches } from "@/modules/workspaces/components/workspace-require-branches";
+import WorkspaceInvitation from "@/modules/workspaces/workspace-invitation";
+import { getWorkspaceId, workspaceInitialize } from "@/modules/workspaces/workspaces-service";
 import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
@@ -57,6 +52,11 @@ import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
 import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
+import { api } from "../apis";
+import { Context } from "./workspace-context";
+import { getWorkspaceModuleName, WorkspaceModuleId, workspaceModules } from "./workspace-modules";
+import { RequireWorkspace } from "./workspace-require";
+import { getDefaultWorkspaceView } from "./workspace-view";
 import {
   WorkspaceContext,
   WorkspaceDto,
@@ -64,11 +64,6 @@ import {
   WorkspaceMemberInvitationState,
   WorkspaceType,
 } from "./workspaces-types";
-import { Context } from "./workspace-context";
-import { getWorkspaceModuleName, WorkspaceModuleId, workspaceModules } from "./workspace-modules";
-import { RequireWorkspace } from "./workspace-require";
-import { getDefaultWorkspaceView } from "./workspace-view";
-import { api } from "../apis";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
@@ -88,6 +83,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const [isInitialized, _setIsInitialized] = useState(false);
   const [isCreateNew, setIsCreateNew] = useState(false);
   const [invitationState, _setInvitationState] = useState<WorkspaceMemberInvitationState>();
+  const [_, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
   const state = useRef<{
     activatedWorkspaceId?: string;
@@ -161,7 +157,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const create = async (dto: WorkspaceDto) => {
-    const workspace = await MainRequest.post<WorkspaceEntity>("/workspaces", dto);
+    const workspace = await api.post<WorkspaceEntity>("/workspaces", dto);
     const userWorkspaces = await fetchUserMembers();
     const userWorkspace = userWorkspaces.find(
       (userWorkspace) => userWorkspace.workspaceId === workspace._id
@@ -176,13 +172,13 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const leave = () => {
-    removeWorkspaceId();
+    localStorage.removeItem(StorageKey.WORKSPACE_ID);
     state.current.activatedWorkspaceId = undefined;
     router.replace(`/`);
   };
 
   const archive = async () => {
-    await MainRequest.delete(`/workspaces`);
+    await api.delete(`/workspaces`);
     await fetchUserMembers();
     leave();
   };
@@ -440,7 +436,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     if (isInitialized && !auth.user?._id) {
       state.current.userMembers = [];
       state.current.activatedWorkspaceId = undefined;
-      removeWorkspaceId();
+      localStorage.removeItem(StorageKey.WORKSPACE_ID);
     }
   }, [auth.user?._id, isInitialized]);
 

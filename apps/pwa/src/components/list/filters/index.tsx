@@ -1,3 +1,5 @@
+"use client";
+
 import { Group } from "@mantine/core";
 import { IconFilter, IconFilterFilled, IconRefresh } from "@tabler/icons-react";
 import { FC, MouseEventHandler } from "react";
@@ -24,7 +26,14 @@ export const FilterItem: FC<
     list.removeQuery(colKey);
   };
 
-  const Wrapper: FilterWrapperProps = ({ children, onClick, quantity, quantityColor, onClear, active }) => {
+  const Wrapper: FilterWrapperProps = ({
+    children,
+    onClick,
+    quantity,
+    quantityColor,
+    onClear,
+    active,
+  }) => {
     const isHasValue = !!list.query[colKey] || onClear;
     return (
       <ActionButton
@@ -122,7 +131,9 @@ export const Filter: FC<ListContext> = (ctx) => {
       icon={IconFilter}
       activeIcon={IconFilterFilled}
       label={layout.view !== "mobile" ? t("filter") : ""}
-      onClick={() => ctx.setViewState({ ...ctx.viewState, isFilterVisible: !ctx.viewState.isFilterVisible })}
+      onClick={() =>
+        ctx.setViewState({ ...ctx.viewState, isFilterVisible: !ctx.viewState.isFilterVisible })
+      }
       active={ctx.viewState.isFilterVisible}
       quantity={filterCount}
     />

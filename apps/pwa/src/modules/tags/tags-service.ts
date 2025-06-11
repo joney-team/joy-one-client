@@ -2,38 +2,38 @@ import { AppPageMetadata, ResponseList } from "@/types";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { IconFolder } from "@tabler/icons-react";
+import { api } from "../apis";
 import { t } from "../lang/lang-service";
-import { MainRequest } from "../requests/main.request";
 import { getTasks } from "../tasks/tasks-service";
 import { ReorderTagsDto, TagDto, TagEntity } from "./tags-types";
 
 export async function createTag(dto: TagDto) {
-  return MainRequest.post(`/tags`, dto);
+  return api.post(`/tags`, dto);
 }
 
 export async function getTags(query?: any) {
-  return MainRequest.get<ResponseList<TagEntity>>(`/tags`, query);
+  return api.get<ResponseList<TagEntity>>(`/tags`, { params: query });
 }
 
 export async function updateTag(_id: string, dto: TagDto) {
-  return MainRequest.put(`/tags/${_id}`, dto);
+  return api.put(`/tags/${_id}`, dto);
 }
 
 export async function removeTag(_id: string) {
-  return MainRequest.delete(`/tags/${_id}`);
+  return api.delete(`/tags/${_id}`);
 }
 
 export async function reorderTags(dto: ReorderTagsDto) {
-  return MainRequest.put(`/tags/reorder`, dto);
+  return api.put(`/tags/reorder`, dto);
 }
 
 export async function getTagMetadata(slug: string): Promise<AppPageMetadata> {
-  return MainRequest.get(`/tags/metadata/${slug}`);
+  return api.get(`/tags/metadata/${slug}`);
 }
 
 export async function interactTag(tagId: string) {
   try {
-    await MainRequest.post(`/tags/${tagId}/interact`);
+    await api.post(`/tags/${tagId}/interact`);
   } catch (error) {}
 }
 

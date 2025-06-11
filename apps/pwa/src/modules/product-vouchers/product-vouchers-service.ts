@@ -1,9 +1,9 @@
 import { ResponseList } from "@/types";
-import { MainRequest } from "../requests/main.request";
+import { api } from "../apis";
 import { ProductVoucherEntity, ProductVoucherStatus } from "./product-vouchers-types";
 
 export async function getProductVouchers(query?: any) {
-  return MainRequest.get<ResponseList<ProductVoucherEntity>>(`/product-vouchers`, query)
+  return api.get<ResponseList<ProductVoucherEntity>>(`/product-vouchers`, { params: query })
 }
 
 export const productVoucherStatusColor: { [key in ProductVoucherStatus]: string } = {

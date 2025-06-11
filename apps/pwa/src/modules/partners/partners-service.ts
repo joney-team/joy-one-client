@@ -1,23 +1,23 @@
 import { ResponseList } from "@/types";
-import { MainRequest } from "../requests/main.request";
 import { PartnerDto, PartnerEntity } from "./partners-types";
+import { api } from "../apis";
 
 export async function createPartner(dto: PartnerDto) {
-  return MainRequest.post<PartnerEntity>('/partners', dto)
+  return api.post<PartnerEntity>('/partners', dto)
 }
 
 export async function getPartners(query: any) {
-  return MainRequest.get<ResponseList<PartnerEntity>>('/partners', query)
+  return api.get<ResponseList<PartnerEntity>>('/partners', { params: query })
 }
 
 export async function updatePartner(_id: string, dto: PartnerDto) {
-  return MainRequest.put<PartnerEntity>(`/partners/${_id}`, dto)
+  return api.put<PartnerEntity>(`/partners/${_id}`, dto)
 }
 
 export async function archivePartner(_id: string) {
-  return MainRequest.delete<PartnerEntity>(`/partners/${_id}/archive`)
+  return api.delete<PartnerEntity>(`/partners/${_id}/archive`)
 }
 
 export async function getPartner(_id: string) {
-  return MainRequest.get<PartnerEntity>(`/partners/${_id}`)
+  return api.get<PartnerEntity>(`/partners/${_id}`)
 }

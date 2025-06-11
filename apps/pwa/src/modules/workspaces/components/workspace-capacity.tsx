@@ -1,6 +1,5 @@
-import { useLayout } from "@/layout/layout-context";
+import { api } from "@/modules/apis";
 import { FileCapacity } from "@/modules/files/file-types";
-import { MainRequest } from "@/modules/requests/main.request";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { formatBytes } from "@/utils/file.utils";
 import { round } from "@/utils/number.utils";
@@ -8,15 +7,17 @@ import { Group, Stack, Text, em } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useState } from "react";
 
-const PieChart = dynamic(() => import("@mantine/charts").then((mod) => mod.PieChart), { ssr: false });
+const PieChart = dynamic(() => import("@mantine/charts").then((mod) => mod.PieChart), {
+  ssr: false,
+});
 
 export const WorkspaceCapacity: FC = () => {
   const [capacity, setCapacity] = useState<FileCapacity>();
   const workspace = useWorkspace();
-  const layout = useLayout();
 
   const fetchCapacity = async () => {
-    await MainRequest.get(`/files/capacity/workspace`)
+    await api
+      .get(`/files/capacity/workspace`)
       .then((res) => setCapacity(res))
       .catch(console.error);
   };

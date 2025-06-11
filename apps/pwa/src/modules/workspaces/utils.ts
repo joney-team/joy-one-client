@@ -1,9 +1,9 @@
-import type { WorkSlot, AppMetadata } from "@/types";
+import type { AppMetadata, WorkSlot } from "@/types";
 
 import { defaultMetadata } from "@/configs/metadata.config";
 import dayjs from "dayjs";
+import { apiServerSide } from "../apis/server";
 import { renderLink } from "../files/files-utils";
-import { MainServerRequest } from "../requests/main.server-request";
 import type { WorkspaceEntity } from "./workspaces-types";
 
 export function isInWorkSlots(slots?: WorkSlot[], date?: Date) {
@@ -78,7 +78,7 @@ export async function getWorkspaceMetadata(args: {
   const url = args.workspaceId ? `/workspaces/ids/${args.workspaceId}`
     : `/workspaces/domains/${args.host}`;
 
-  const workspace = await MainServerRequest.get<WorkspaceEntity>(url)
+  const workspace = await apiServerSide.get<WorkspaceEntity>(url)
     .catch((error) => {
       console.error(`[${new Date().toLocaleTimeString('vi')}] getWorkspaceMetadata error`, error.message);
       return null;

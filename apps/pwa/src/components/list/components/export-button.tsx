@@ -2,10 +2,15 @@ import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
 import { renderLink } from "@/modules/files/files-utils";
-import { getDateTimeFormat, numCurrencyRound, renderDateTime, t } from "@/modules/lang/lang-service";
+import {
+  getDateTimeFormat,
+  numCurrencyRound,
+  renderDateTime,
+  t,
+} from "@/modules/lang/lang-service";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ResponseList } from "@joy-one-client/apis/types/general";
-import { WorkspacePermission } from "@joy-one-client/apis/types/workspace-roles";
+import { ResponseList } from "@/types";
 import { downloadJSON } from "@joy-one-client/utils/files";
 import { Center, Modal, parseThemeColor, Select, Stack, useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -50,17 +55,18 @@ export const ExportButton: FC<ListContext> = (props) => {
           ? () => props.fetch({ ...props.list.query, getAll: true }).then((res) => res.data)
           : () =>
               api
-                .get<ResponseList<any>>(props.route, { params: { ...props.list.query, getAll: true } })
+                .get<ResponseList<any>>(props.route, {
+                  params: { ...props.list.query, getAll: true },
+                })
                 .then((res) => res.data);
 
       const data = await queryFn();
 
       if (data.length === 0) throw new Error(t("NO_DATA_TO_EXPORT"));
 
-      const filename = `[${workspace.userMember.workspace.code}] ${t(props.name || "data")} ${dayjs()
-        .format(getDateTimeFormat())
-        .replace(/:/g, "-")
-        .replace(/\//g, "-")}`;
+      const filename = `[${workspace.userMember.workspace.code}] ${t(
+        props.name || "data"
+      )} ${dayjs().format(getDateTimeFormat()).replace(/:/g, "-").replace(/\//g, "-")}`;
 
       if (exportType === ExportType.JSON) {
         return downloadJSON(data, `${filename}.json`);
@@ -90,7 +96,7 @@ export const ExportButton: FC<ListContext> = (props) => {
           headers.push({ value: t(column.name || col.id) });
         }
 
-        const rows: Row[] = data.map((item) => {
+        const rows: Row[] = data.map((item: any) => {
           const cols = new Array(headers.length).fill(null) as Row;
 
           for (const columnSetting of props.columnSettings) {
@@ -112,7 +118,9 @@ export const ExportButton: FC<ListContext> = (props) => {
                   }
                 });
               } else {
-                const indexOfCol = headers.findIndex((v) => v?.value === t(column.name || columnSetting.id));
+                const indexOfCol = headers.findIndex(
+                  (v) => v?.value === t(column.name || columnSetting.id)
+                );
                 cols[indexOfCol] = renderExportItem(tempExport);
               }
 
@@ -120,7 +128,9 @@ export const ExportButton: FC<ListContext> = (props) => {
             }
 
             // Automation
-            const indexOfCol = headers.findIndex((v) => v?.value === t(column.name || columnSetting.id));
+            const indexOfCol = headers.findIndex(
+              (v) => v?.value === t(column.name || columnSetting.id)
+            );
             cols[indexOfCol] = { value };
           }
 
@@ -185,7 +195,11 @@ export const ExportButton: FC<ListContext> = (props) => {
     <>
       <ActionButton icon={IconFileExport} tooltip="export-data" onClick={open} />
 
-      <Modal opened={opened} onClose={close} title={<ModalTitle title="export-data" icon={IconFileExport} />}>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title={<ModalTitle title="export-data" icon={IconFileExport} />}
+      >
         <Stack>
           <Select
             label={t("export-type")}

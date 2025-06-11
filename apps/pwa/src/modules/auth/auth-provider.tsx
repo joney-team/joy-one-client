@@ -5,7 +5,11 @@ import { Fullscreen } from "@/components/fullscreen";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
 import { defaultMetadata, setMetadata } from "@/configs/metadata.config";
 import { useRouter } from "@/hooks/use-router";
-import { initializeDevice, setDeviceLocale, setDeviceNotificationToken } from "@/modules/devices/devices-service";
+import {
+  initializeDevice,
+  setDeviceLocale,
+  setDeviceNotificationToken,
+} from "@/modules/devices/devices-service";
 import { type DeviceEntity } from "@/modules/devices/devices-types";
 import {
   addEventsListener,
@@ -20,11 +24,9 @@ import { getLocaleClient, t } from "@/modules/lang/lang-service";
 import { LangState } from "@/modules/lang/lang-types";
 import { showInAppNotification } from "@/modules/notifications/notification-service";
 import { NotificationEntity } from "@/modules/notifications/notification-types";
-import { MainRequest } from "@/modules/requests/main.request";
 import { getTimeZones } from "@/modules/times/times-service";
 import { setUserLocale, signOut } from "@/modules/users/users-service";
 import { UpdateUserProfileDto, UserEntity } from "@/modules/users/users-types";
-import { removeWorkspaceId } from "@/modules/workspaces/workspaces-service";
 import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
@@ -54,6 +56,7 @@ import type {
   AuthTokenResult,
   UserAuthResult,
 } from "./auth-types";
+import { api } from "../apis";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
@@ -86,7 +89,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
           await wait(1000);
           action();
         } else {
-          FB.init({ appId: app.config?.metaAppId, version: app.config?.metaAppVersion, xfbml: true });
+          FB.init({
+            appId: app.config?.metaAppId,
+            version: app.config?.metaAppVersion,
+            xfbml: true,
+          });
           resolve(true);
         }
       };
@@ -112,7 +119,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       // User information
       const accessToken = await getAccessToken();
       if (accessToken) {
-        _user = await MainRequest.get(`/auth`);
+        _user = await api.get(`/auth`);
         setUser(_user);
       }
 
@@ -130,7 +137,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   const onSignOut = () => {
     clearTokens();
-    removeWorkspaceId();
+    localStorage.removeItem(StorageKey.WORKSPACE_ID);
     setUser(undefined);
     router.replace("/");
   };
@@ -145,7 +152,10 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const _signInWithFirebase = async (idToken: string, username?: string) => {
-    const tokens = await MainRequest.post<AuthTokenResult>(`/auth/sign-in/firebase`, { idToken, username });
+    const tokens = await api.post<AuthTokenResult>(`/auth/sign-in/firebase`, {
+      idToken,
+      username,
+    });
     await saveTokens(tokens);
     await initialize("auth");
   };
@@ -166,7 +176,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const signInWithFacebook = async () => {
     try {
       const authResponse = await onFacebookLogin();
-      const tokens = await MainRequest.post<AuthTokenResult>(`/auth/sign-in/facebook`, {
+      const tokens = await api.post<AuthTokenResult>(`/auth/sign-in/facebook`, {
         accessToken: authResponse.accessToken,
       });
       await saveTokens(tokens);
@@ -192,19 +202,19 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const signInWithEmailAndPassword = async (dto: AuthSignInWithEmailPasswordDto) => {
-    const tokens = await MainRequest.post<AuthTokenResult>("/auth/sign-in/email-password", dto);
+    const tokens = await api.post<AuthTokenResult>("/auth/sign-in/email-password", dto);
     await saveTokens(tokens);
     await initialize("auth");
   };
 
   const registerWithEmailAndPassword = async (dto: AuthSignUpWithEmailPasswordDto) => {
-    const tokens = await MainRequest.post<AuthTokenResult>("/auth/sign-up/email-password", dto);
+    const tokens = await api.post<AuthTokenResult>("/auth/sign-up/email-password", dto);
     await saveTokens(tokens);
     await initialize("auth");
   };
 
   const updateProfile = async (values: UpdateUserProfileDto) => {
-    return MainRequest.put(`/users/profile`, values).then((res) => setUser(res));
+    return api.put(`/users/profile`, values).then((res) => setUser(res));
   };
 
   const registerNotification = async () => {
@@ -279,7 +289,12 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       lang.setLocale(user.settings.locale, false);
     }
 
-    const keys: (keyof LangState)[] = ["isStartOfWeekSunday", "timezone", "isTwelveHour", "dateFormat"];
+    const keys: (keyof LangState)[] = [
+      "isStartOfWeekSunday",
+      "timezone",
+      "isTwelveHour",
+      "dateFormat",
+    ];
 
     const diff = isDiff(objSelect(user.settings, keys), objSelect(lang.state, keys));
     if (diff) lang.setState(objSelect(user.settings, keys));

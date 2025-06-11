@@ -1,6 +1,5 @@
-import axios, { AxiosRequestConfig, type AxiosInstance } from "axios";
-import type { AppConfig } from "./types/general";
 import environment from "@joy-one-client/config";
+import axios, { AxiosRequestConfig, type AxiosInstance } from "axios";
 
 type RetrieveToken = () => string | null | Promise<string | null>;
 type RefreshToken = () => string | null | Promise<string | null>;
@@ -26,12 +25,13 @@ export class ApiInstance {
       ? environment.API_SERVER_SIDE_URL
       : environment.API_CLIENT_SIDE_URL;
 
-    this.instance = axios.create({
+    // Setup axios instance
+    const instance = axios.create({
       baseURL: this.baseURL,
       timeout: 1000 * 60 * 30,
     });
 
-    this.instance.interceptors.request.use((res) => res, async (error) => {
+    instance.interceptors.response.use((res) => res, async (error) => {
       let originalRequest = error.config;
       const isRequestRefreshToken = originalRequest.url.includes('refresh-token');
       const currentAccessToken = await this.options.getToken?.();
@@ -56,10 +56,8 @@ export class ApiInstance {
 
       return Promise.reject(error);
     });
-  }
 
-  async config() {
-    return this.instance.get<AppConfig>('/config');
+    this.instance = instance;
   }
 
   async bindConfig(config: AxiosRequestConfig) {
@@ -83,7 +81,7 @@ export class ApiInstance {
     };
   }
 
-  async get<T>(url: string, config?: AxiosRequestConfig) {
+  async get<T = any>(url: string, config?: AxiosRequestConfig) {
     return this.instance.get<T>(url, await this.bindConfig(config ?? {}))
       .then((res) => res.data);
   }
@@ -103,8 +101,11 @@ export class ApiInstance {
       .then((res) => res.data);
   }
 
-  async delete<Response = any>(url: string, config?: AxiosRequestConfig) {
-    return this.instance.delete<Response>(url, await this.bindConfig(config ?? {}))
+  async delete<Response = any, Payload = any>(url: string, payload?: Payload, config?: AxiosRequestConfig) {
+    return this.instance.delete<Response>(url, {
+      ...(await this.bindConfig(config ?? {})),
+      data: payload,
+    })
       .then((res) => res.data);
   }
 

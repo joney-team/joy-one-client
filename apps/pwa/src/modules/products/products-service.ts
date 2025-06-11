@@ -1,34 +1,34 @@
 import { ResponseList } from "@/types";
 import { Icon, IconBox, IconCategory2, IconGiftCard, IconPackage } from "@tabler/icons-react";
-import { MainRequest } from "../requests/main.request";
+import { api } from "../apis";
 import { ProductDto, ProductEntity, ProductType, ProductsQuery } from "./products-types";
 
 export async function getProducts(query?: ProductsQuery): Promise<ResponseList<ProductEntity>> {
-  return MainRequest.get<ResponseList<ProductEntity>>(`/products`, query)
+  return api.get<ResponseList<ProductEntity>>(`/products`, { params: query })
 }
 
 export async function getProductByIds(ids: string[]): Promise<ProductEntity[]> {
-  return MainRequest.get<ProductEntity[]>(`/products/ids`, { ids })
+  return api.get<ProductEntity[]>(`/products/ids`, { params: { ids } })
 }
 
 export async function createProduct(dto: ProductDto): Promise<ProductEntity> {
-  return MainRequest.post<ProductEntity>(`/products`, dto)
+  return api.post<ProductEntity>(`/products`, dto)
 }
 
 export async function updateProduct(_id: string, dto: ProductDto) {
-  return MainRequest.put<ProductEntity>(`/products/${_id}`, dto)
+  return api.put<ProductEntity>(`/products/${_id}`, dto)
 }
 
 export async function getProduct(_id: string): Promise<ProductEntity> {
-  return MainRequest.get<ProductEntity>(`/products/${_id}`)
+  return api.get<ProductEntity>(`/products/${_id}`)
 }
 
 export async function archiveProduct(_id: string) {
-  return MainRequest.delete(`/products/${_id}/archive`)
+  return api.delete(`/products/${_id}/archive`)
 }
 
 export async function interactProduct(_id: string) {
-  return MainRequest.patch(`/products/${_id}/interact`)
+  return api.patch(`/products/${_id}/interact`)
     .catch(() => false)
 }
 

@@ -9,29 +9,29 @@ import {
   IconMoodCry,
   IconSquareRoundedCheck,
 } from "@tabler/icons-react";
-import { MainRequest } from "../requests/main.request";
-import { NotificationEntity, NotificationIcon, NotificationType } from "./notification-types";
-import { t, translateNotification } from "../lang/lang-service";
+import { api } from "../apis";
+import { translateNotification } from "../lang/lang-service";
 import { getColor } from "../theme/use-color";
+import { NotificationEntity, NotificationIcon, NotificationType } from "./notification-types";
 
 export async function getNotifications(q?: any) {
-  return MainRequest.get("/notifications", q);
+  return api.get("/notifications", { params: q });
 }
 
 export async function onReaded(notificationId: string) {
-  return MainRequest.post(`/notifications/${notificationId}/readed`);
+  return api.post(`/notifications/${notificationId}/readed`);
 }
 
 export async function getNotificationStat() {
-  return MainRequest.get("/notifications/stat");
+  return api.get("/notifications/stat");
 }
 
 export async function onListViewed() {
-  return MainRequest.post("/notifications/list-viewed");
+  return api.post("/notifications/list-viewed");
 }
 
 export async function cleanNotifications() {
-  return MainRequest.delete("/notifications/clean");
+  return api.delete("/notifications/clean");
 }
 
 export const notificationIcons: { [key in NotificationIcon]: Icon } = {
@@ -65,7 +65,11 @@ export function renderNotificationColor(noti: NotificationEntity, theme?: Mantin
   return getColor(theme, notificationTypeColors[noti.type]);
 }
 
-export function showInAppNotification(notification: NotificationEntity, router: AppRouter, theme?: MantineTheme) {
+export function showInAppNotification(
+  notification: NotificationEntity,
+  router: AppRouter,
+  theme?: MantineTheme
+) {
   const Icon = renderNotificationIcon(notification);
   const color = renderNotificationColor(notification, theme);
 

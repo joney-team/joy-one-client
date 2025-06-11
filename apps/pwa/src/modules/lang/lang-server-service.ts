@@ -1,8 +1,8 @@
-import { getCookie } from "cookies-next/server";
-import { Locale } from "./lang-types";
 import { StorageKey } from "@/types";
+import { getCookie } from "cookies-next/server";
 import { cookies, headers } from "next/headers";
-import { MainRequest } from "../requests/main.request";
+import { api } from "../apis";
+import { Locale } from "./lang-types";
 
 export const getLocaleServer = async () => {
   let locale: Locale | undefined = undefined;
@@ -27,7 +27,7 @@ export const getLocaleServer = async () => {
 export const translateServer = async (key: string, options?: { locale?: Locale, params?: any }): Promise<string> => {
   try {
     const locale = options?.locale || getLocaleServer();
-    let sentence = (await MainRequest.get(`/lang/${locale}/${key}`)) || key;
+    let sentence = (await api.get(`/lang/${locale}/${key}`)) || key;
 
     if (options?.params && typeof options.params === 'object') {
       Object.entries(options.params).map((item: any) => {

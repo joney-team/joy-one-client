@@ -1,22 +1,22 @@
-import { MainRequest } from "../requests/main.request";
+import { api } from "../apis";
 import { TransferOwnerDto, WorkspaceRoleDto, WorkspaceRoleEntity } from "./workspace-roles-types";
 
 export async function createWorkspaceRole(dto: WorkspaceRoleDto) {
-  return MainRequest.post<WorkspaceRoleEntity>('/WorkspaceRoles', dto);
+  return api.post<WorkspaceRoleEntity>('/WorkspaceRoles', dto);
 }
 
 export async function updateWorkspaceRole(id: string, dto: WorkspaceRoleDto) {
-  return MainRequest.put<WorkspaceRoleEntity>(`/WorkspaceRoles/${id}`, dto);
+  return api.put<WorkspaceRoleEntity>(`/WorkspaceRoles/${id}`, dto);
 }
 
 export async function getWorkspaceRoles() {
-  return MainRequest.get<WorkspaceRoleEntity[]>('/WorkspaceRoles');
+  return api.get<WorkspaceRoleEntity[]>('/WorkspaceRoles');
 }
 
 export async function removeWorkspaceRole(roleId: string) {
-  return MainRequest.delete(`/WorkspaceRoles/${roleId}`);
+  return api.delete(`/WorkspaceRoles/${roleId}`);
 }
 
 export async function transferOwner(dto: TransferOwnerDto) {
-  return MainRequest.post(`/workspace-members/transfer-owner`, dto);
+  return api.post(`/workspace-members/transfer-owner`, dto);
 }

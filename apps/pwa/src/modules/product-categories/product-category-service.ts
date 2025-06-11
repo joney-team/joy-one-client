@@ -1,24 +1,24 @@
 import { ResponseList } from "@/types";
 import { useEffect, useState } from "react";
+import { api } from "../apis";
 import { useEventsListener } from "../events/event-service";
 import { EventType } from "../events/event-types";
-import { MainRequest } from "../requests/main.request";
 import { ProductCategoryDto, ProductCategoryEntity } from "./product-category-types";
 
 export async function createProductCategory(dto: ProductCategoryDto) {
-  return MainRequest.post<ProductCategoryEntity>(`/product-categories`, dto);
+  return api.post<ProductCategoryEntity>(`/product-categories`, dto);
 }
 
 export async function updateProductCategory(id: string, dto: ProductCategoryDto) {
-  return MainRequest.put<ProductCategoryEntity>(`/product-categories/${id}`, dto);
+  return api.put<ProductCategoryEntity>(`/product-categories/${id}`, dto);
 }
 
 export async function removeProductCategory(id: string) {
-  return MainRequest.delete(`/product-categories/${id}`);
+  return api.delete(`/product-categories/${id}`);
 }
 
 export async function getProductCategories(query?: any) {
-  return MainRequest.get<ResponseList<ProductCategoryEntity>>(`/product-categories`, query);
+  return api.get<ResponseList<ProductCategoryEntity>>(`/product-categories`, { params: query });
 }
 
 let cached: ProductCategoryEntity[] = [];

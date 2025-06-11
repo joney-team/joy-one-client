@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react"
-import { LocationEntity, Location } from "./locations-types";
-import { MainRequest } from "../requests/main.request";
+import { isDevelopment } from "@/service";
 import { Coordinates } from "@/types";
+import { isServer } from "@/utils/common.utils";
+import { useEffect, useState } from "react";
+import { api } from "../apis";
 import { CheckInLocation } from "../hrm-timekeepings/hrm-timekeepings-types";
 import { t } from "../lang/lang-service";
-import config from "@joy-one-client/config";
-import { isServer } from "@/utils/common.utils";
-import { isDevelopment } from "@/service";
+import { Location, LocationEntity } from "./locations-types";
 
 let cachedLocations: Location[] = [];
 
@@ -16,7 +15,7 @@ export const useLocations = () => {
   const fetchLocations = async (retryTime: number): Promise<any> => {
     if (retryTime && retryTime > 10) return false;
 
-    return MainRequest.get('/locations')
+    return api.get('/locations')
       .then((res) => {
         setLocations(res.data);
         cachedLocations = res.data;

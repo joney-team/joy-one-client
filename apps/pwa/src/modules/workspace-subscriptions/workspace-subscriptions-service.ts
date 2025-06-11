@@ -1,17 +1,17 @@
+import { api } from "../apis";
 import { getLocaleClient } from "../lang/lang-service";
-import { MainRequest } from "../requests/main.request";
 import { CalculateWorkspaceSubscriptionBillingResponse, CalculateWorkspaceSubscriptionBillingsDto, SelectWorkspaceSubscriptionDto, WorkspaceSubscriptionEntity } from "./workspace-subscriptions-types";
 
 export async function getWorkspaceSubscription() {
-  return MainRequest.get<WorkspaceSubscriptionEntity>(`/workspace-subscriptions`);
+  return api.get<WorkspaceSubscriptionEntity>(`/workspace-subscriptions`);
 }
 
 export async function selectWorkspaceSubscription(dto: SelectWorkspaceSubscriptionDto) {
-  return MainRequest.post<WorkspaceSubscriptionEntity>(`/workspace-subscriptions/select`, dto);
+  return api.post<WorkspaceSubscriptionEntity>(`/workspace-subscriptions/select`, dto);
 }
 
 export async function calculateWorkspaceSubscriptionBillings(dto: CalculateWorkspaceSubscriptionBillingsDto) {
-  return MainRequest.post<CalculateWorkspaceSubscriptionBillingResponse>("/workspace-subscriptions/calculate-billings", dto);
+  return api.post<CalculateWorkspaceSubscriptionBillingResponse>("/workspace-subscriptions/calculate-billings", dto);
 }
 
 export const renderSubscriptionNum = (num: number, format?: (value: any) => string) => {

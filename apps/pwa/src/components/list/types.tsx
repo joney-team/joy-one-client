@@ -4,10 +4,10 @@ import type { DynamicSelectorFilterConfig } from "./filters/dynamic-selector-fil
 import type { StaticSelectorFilterConfig } from "./filters/static-selector-filter";
 import type { TextFilterConfig } from "./filters/text-filter";
 import type { TimeRangeFilterConfig } from "./filters/time-range-filter";
-import { EventType } from "@joy-one-client/apis/types/events";
-import { WorkspacePermission } from "@joy-one-client/apis/types/workspace-roles";
-import { ResponseList } from "@joy-one-client/apis/types/general";
 import { UseList } from "@/utils/use-list.util";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { ResponseList } from "@/types";
+import { EventType } from "@/modules/events/event-types";
 
 export type ListSort = {
   label: string;
@@ -88,7 +88,10 @@ export type ListFetch<Data = any> = (
   controller?: AbortController
 ) => Promise<ResponseList<Data & { id?: string; _id?: string }>>;
 
-export type ListProps<Data = any> = ({ fetch: ListFetch<Data> } | { route: string; params?: Record<string, any> }) & {
+export type ListProps<Data = any> = (
+  | { fetch: ListFetch<Data> }
+  | { route: string; params?: Record<string, any> }
+) & {
   id: string;
   name?: string;
   icon?: Icon;

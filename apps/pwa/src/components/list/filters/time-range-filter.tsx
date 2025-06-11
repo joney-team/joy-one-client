@@ -1,6 +1,10 @@
+"use client";
+
 import { Menu, MenuDropdown, Text } from "@mantine/core";
 
-import { Period } from "@joy-one-client/apis/types/general";
+import { OnModalDatePicker } from "@/modals/modal-date-picker";
+import { renderDate, t } from "@/modules/lang/lang-service";
+import { Period } from "@/types";
 import { timeToSeconds } from "@joy-one-client/utils/date-time";
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
 import { Group } from "@mantine/core";
@@ -8,12 +12,14 @@ import { IconCalendar, IconCalendarEvent, IconCalendarMonth } from "@tabler/icon
 import dayjs from "dayjs";
 import { FC } from "react";
 import { FilterProps } from "./types";
-import { renderDate, t } from "@/modules/lang/lang-service";
-import { OnModalDatePicker } from "@/modals/modal-date-picker";
 
 export interface TimeRangeFilterConfig {}
 
-export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({ colKey, list, Wrapper }) => {
+export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
+  colKey,
+  list,
+  Wrapper,
+}) => {
   const filterKey = `timeRange${capitalizeFirstLetter(colKey)}`;
   const filterValue = list.query[filterKey] || "";
   const [period, date] = filterValue.split("-");
@@ -63,13 +69,17 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({ colKey
     <Menu>
       <Menu.Target>
         <Group>
-          <Wrapper onClear={filterValue ? () => list.removeQuery(filterKey) : undefined} active={!!filterValue}>
+          <Wrapper
+            onClear={filterValue ? () => list.removeQuery(filterKey) : undefined}
+            active={!!filterValue}
+          >
             {filterValue && (
               <>
                 <Text fz={12} fw={700}>
                   {(function () {
                     if (period === Period.DATE) return renderDate(+date * 1000);
-                    if (period === Period.MONTH) return capitalizeFirstLetter(dayjs(+date * 1000).format(`MMMM YYYY`));
+                    if (period === Period.MONTH)
+                      return capitalizeFirstLetter(dayjs(+date * 1000).format(`MMMM YYYY`));
                     if (period === Period.YEAR) return dayjs(+date * 1000).format(`YYYY`);
                   })()}
                 </Text>
@@ -81,7 +91,11 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({ colKey
 
       <MenuDropdown>
         {options.map((option) => (
-          <Menu.Item key={option.value} leftSection={<option.icon size={16} />} onClick={option.onClick}>
+          <Menu.Item
+            key={option.value}
+            leftSection={<option.icon size={16} />}
+            onClick={option.onClick}
+          >
             {option.label}
           </Menu.Item>
         ))}

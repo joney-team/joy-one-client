@@ -1,8 +1,9 @@
+import { getLocalStorage } from "@/hooks/use-local-storage";
+import { getLocaleClient } from "@/modules/lang/lang-service";
 import { ResponseList, StorageKey } from "@/types";
 import { isServer } from "@/utils/common.utils";
 import { AxiosError } from "axios";
-import { getLocaleClient } from "@/modules/lang/lang-service";
-import { MainRequest } from "@/modules/requests/main.request";
+import { api } from "../apis";
 import type { DeviceEntity, RegisterDeviceDto, SetDeviceLocaleDto, SetDeviceNotificationTokenDto } from "./devices-types";
 
 export async function registerDevice(): Promise<DeviceEntity> {
@@ -11,11 +12,11 @@ export async function registerDevice(): Promise<DeviceEntity> {
     userAgent,
     locale: getLocaleClient(),
   }
-  return MainRequest.post('/devices/register', dto);
+  return api.post('/devices/register', dto);
 }
 
 export async function getUserDevices(): Promise<ResponseList<DeviceEntity>> {
-  return MainRequest.get('/devices');
+  return api.get('/devices');
 }
 
 export async function getDevice(): Promise<DeviceEntity | undefined> {
@@ -24,7 +25,7 @@ export async function getDevice(): Promise<DeviceEntity | undefined> {
 
   return new Promise((resolve) => {
     const action = () => {
-      MainRequest.get(`/devices/${deviceId}`)
+      api.get(`/devices/${deviceId}`)
         .then((res) => resolve(res))
         .catch((err) => {
           if (err instanceof AxiosError) {
@@ -41,7 +42,7 @@ export async function getDevice(): Promise<DeviceEntity | undefined> {
   })
 }
 
-export const getDeviceId = () => localStorage.getItem(StorageKey.DEVICE_ID) as string;
+export const getDeviceId = () => getLocalStorage(StorageKey.DEVICE_ID) as string;
 export const setDeviceId = (deviceId: string) => localStorage.setItem(StorageKey.DEVICE_ID, deviceId);
 export const removeDeviceId = () => localStorage.removeItem(StorageKey.DEVICE_ID);
 
@@ -55,11 +56,11 @@ export async function initializeDevice() {
 }
 
 export async function setDeviceNotificationToken(dto: SetDeviceNotificationTokenDto): Promise<DeviceEntity> {
-  return MainRequest.post(`/devices/notification-token`, dto);
+  return api.post(`/devices/notification-token`, dto);
 }
 
 export async function setDeviceLocale(dto: SetDeviceLocaleDto): Promise<DeviceEntity> {
-  return MainRequest.post(`/devices/locale`, dto);
+  return api.post(`/devices/locale`, dto);
 }
 
 export function isNotificationAvailable() {

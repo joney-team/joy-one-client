@@ -1,24 +1,24 @@
 import { ResponseList } from "@/types";
-import { MainRequest } from "../requests/main.request";
-import { IWorkspaceApiApp } from "./workspace-api-apps-entity";
+import { api } from "../apis";
 import { WorkspaceApiAppDto } from "./workspace-api-apps-dtos";
+import { IWorkspaceApiApp } from "./workspace-api-apps-entity";
 
 export async function getWorkspaceApiApps(query?: any) {
-  return MainRequest.get<ResponseList<IWorkspaceApiApp>>('/workspace-api-apps', { query });
+  return api.get<ResponseList<IWorkspaceApiApp>>('/workspace-api-apps', { params: query });
 }
 
 export async function createWorkspaceApiApp(data: WorkspaceApiAppDto) {
-  return MainRequest.post<IWorkspaceApiApp>('/workspace-api-apps', data);
+  return api.post<IWorkspaceApiApp>('/workspace-api-apps', data);
 }
 
 export async function updateWorkspaceApiApp(id: string, data: WorkspaceApiAppDto) {
-  return MainRequest.put<IWorkspaceApiApp>(`/workspace-api-apps/${id}`, data);
+  return api.put<IWorkspaceApiApp>(`/workspace-api-apps/${id}`, data);
 }
 
 export async function archiveWorkspaceApiApp(id: string) {
-  return MainRequest.delete<IWorkspaceApiApp>(`/workspace-api-apps/${id}`);
+  return api.delete<IWorkspaceApiApp>(`/workspace-api-apps/${id}`);
 }
 
 export async function resetWorkspaceApiAppSecretKey(id: string) {
-  return MainRequest.post<IWorkspaceApiApp>(`/workspace-api-apps/${id}/reset-secret-key`);
+  return api.post<IWorkspaceApiApp>(`/workspace-api-apps/${id}/reset-secret-key`);
 }

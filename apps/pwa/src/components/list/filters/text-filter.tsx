@@ -1,3 +1,5 @@
+"use client";
+
 import { TextInput } from "@/components/inputs/text-input";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
@@ -12,13 +14,20 @@ export type TextFilterConfig =
       placeholder?: string;
     };
 
-export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({ colKey, list, Wrapper, config }) => {
+export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
+  colKey,
+  list,
+  Wrapper,
+  config,
+}) => {
   const [opened, setOpened] = useState(false);
   const value = list.query[colKey] || "";
   const color = useColor();
 
   const placeholder =
-    typeof config === "object" && config.placeholder ? config.placeholder : "type-content-placeholder";
+    typeof config === "object" && config.placeholder
+      ? config.placeholder
+      : "type-content-placeholder";
 
   return (
     <Popover opened={opened} onClose={() => setOpened(false)} onDismiss={() => setOpened(false)}>
@@ -31,7 +40,12 @@ export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({ colKey, list, Wr
               </Text>
             )}
             {!value && (
-              <ActionIcon component="div" variant="subtle" color="var(--mantine-color-dimmed)" size="xs">
+              <ActionIcon
+                component="div"
+                variant="subtle"
+                color="var(--mantine-color-dimmed)"
+                size="xs"
+              >
                 <IconPlus size={14} />
               </ActionIcon>
             )}

@@ -1,9 +1,9 @@
-import { MainRequest } from "@/modules/requests/main.request";
-import { AppConfig } from "./types";
 import config from "@joy-one-client/config";
+import { api } from "./modules/apis";
+import { AppConfig } from "./types";
 
 export function getAppConfig() {
-  return MainRequest.get<AppConfig>(`/config`);
+  return api.get<AppConfig>(`/config`);
 }
 
 export function isExtendedApp() {

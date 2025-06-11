@@ -1,3 +1,5 @@
+"use client";
+
 import { onError } from "@/utils/exceptions.utils";
 import type { UseFormReturnType } from "@mantine/form";
 import { AxiosError } from "axios";

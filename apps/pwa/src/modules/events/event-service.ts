@@ -1,8 +1,7 @@
 import { ResponseList } from "@/types";
 import EventEmitter from "events";
 import { DependencyList, useEffect } from "react";
-import { socket } from "../apis";
-import { MainRequest } from "../requests/main.request";
+import { api, socket } from "../apis";
 import { EventEntity, EventType, QueryEvents, UserEventDto } from "./event-types";
 
 export const eventsEmitter = new EventEmitter();
@@ -57,7 +56,7 @@ export const useUserEventsListner = (listener: (event: UserEventDto) => void, de
 }
 
 export function getEvents(query?: QueryEvents): Promise<ResponseList<EventEntity>> {
-  return MainRequest.get(`/events`, query)
+  return api.get(`/events`, { params: query })
 }
 
 export const onReconnected = (listener: () => void, deps?: DependencyList) => {

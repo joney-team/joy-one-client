@@ -1,38 +1,38 @@
 import { ResponseList } from "@/types";
-import { MainRequest } from "../requests/main.request";
+import { api } from "../apis";
 import { CustomerFormDto, UpdateCustomerFormWorkspaceBranchDto } from "./customer-form-dtos";
 import { CustomerFormEntity } from "./customer-form-entity";
 import { CustomerFormStatus } from "./customer-form-types";
 
 export async function createCustomerForm(dto: CustomerFormDto) {
-  return MainRequest.post<CustomerFormEntity>(`/customer-forms`, dto);
+  return api.post<CustomerFormEntity>(`/customer-forms`, dto);
 }
 
 export async function updateCustomerForm(id: string, dto: CustomerFormDto) {
-  return MainRequest.put<CustomerFormEntity>(`/customer-forms/${id}`, dto);
+  return api.put<CustomerFormEntity>(`/customer-forms/${id}`, dto);
 }
 
 export async function getCustomerForms(query?: any) {
-  return MainRequest.get<ResponseList<CustomerFormEntity>>(`/customer-forms`, query);
+  return api.get<ResponseList<CustomerFormEntity>>(`/customer-forms`, { params: query });
 }
 
 export async function getCustomerForm(id: string) {
-  return MainRequest.get<CustomerFormEntity>(`/customer-forms/${id}`);
+  return api.get<CustomerFormEntity>(`/customer-forms/${id}`);
 }
 
 export async function updateCustomerFormWorkspaceBranch(dto: UpdateCustomerFormWorkspaceBranchDto) {
-  return MainRequest.put<CustomerFormEntity[]>(`/customer-forms/workspace-branch`, dto);
+  return api.put<CustomerFormEntity[]>(`/customer-forms/workspace-branch`, dto);
 }
 
 export async function multiArchiveCustomerForm(ids: string[]) {
-  return MainRequest.delete<CustomerFormEntity[]>(`/customer-forms`, { ids });
+  return api.delete<CustomerFormEntity[]>(`/customer-forms`, { ids });
 }
 
 export const customerFormStatusConfigs: {
   [key in CustomerFormStatus]: {
     label: string,
     color: string,
-  } 
+  }
 } = {
   [CustomerFormStatus.PENDING]: {
     label: 'status_pending',

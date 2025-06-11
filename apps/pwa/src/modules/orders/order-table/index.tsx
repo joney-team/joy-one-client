@@ -6,6 +6,9 @@ import { OrderTableHead } from "./components/order-table-head";
 import { OrderTableProducts } from "./components/order-table-products";
 import { OrderTableTrackOrders } from "./components/order-table-track-orders";
 import { OrderForm } from "./form/order-form";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
+import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { backgroundColors } from "@/layout/layout-workspace";
 
 export interface OrderTableProps {
   size: {
@@ -20,6 +23,8 @@ export const OrderTable: FC<OrderTableProps> = (props) => {
   const layout = useLayout();
   const leftSideSize = useElementSize();
   const mobileFormSize = useElementSize();
+  const colorScheme = useColorScheme();
+  const backgroundColor = backgroundColors[colorScheme];
 
   if (layout.view === "mobile") {
     return (
@@ -36,7 +41,14 @@ export const OrderTable: FC<OrderTableProps> = (props) => {
   }
 
   return (
-    <Group flex={1} gap={0} align="start" style={{ position: "relative", overflow: "hidden" }} {...props.size}>
+    <Group
+      bg={backgroundColor}
+      flex={1}
+      gap={0}
+      align="start"
+      style={{ position: "relative", overflow: "hidden" }}
+      {...props.size}
+    >
       <ScrollArea
         flex={1}
         h={props.size.h}

@@ -1,7 +1,8 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { SessionTitle } from "@/components/session-title";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { MainRequest } from "@/modules/requests/main.request";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Card, Group, Stack, Textarea } from "@mantine/core";
 import {
@@ -16,6 +17,7 @@ import {
 import { TechIllustration } from "@/components/illustrations/tech";
 import { onError } from "@/utils/exceptions.utils";
 import { type FC } from "react";
+import { api } from "../apis";
 
 export const AdminTools: FC = () => {
   const workspace = useWorkspace();
@@ -25,13 +27,15 @@ export const AdminTools: FC = () => {
       <SessionTitle name="Admin Tools" icon={IconTools} />
       <Card shadow="xs">
         <Group>
-          <Button onClick={() => MainRequest.post("/helpers/reset-redis")}>Reset Redis Cache</Button>
+          <Button onClick={() => api.post("/helpers/reset-redis")}>Reset Redis Cache</Button>
 
-          <Button onClick={() => MainRequest.patch(`/loans/sync-all`)}>Sync All Loans</Button>
+          <Button onClick={() => api.patch(`/loans/sync-all`)}>Sync All Loans</Button>
 
-          <Button onClick={() => MainRequest.patch(`/orders/sync-all`)}>Sync All Orders</Button>
+          <Button onClick={() => api.patch(`/orders/sync-all`)}>Sync All Orders</Button>
 
-          <Button onClick={() => Promise.all(new Array(100).fill(0).map(() => MainRequest.get(`/receipts`)))}>
+          <Button
+            onClick={() => Promise.all(new Array(100).fill(0).map(() => api.get(`/receipts`)))}
+          >
             Test Rate Limit
           </Button>
         </Group>
@@ -52,7 +56,7 @@ export const AdminTools: FC = () => {
                   if (url) urls.push(url);
                 }
 
-                return MainRequest.post(`/plugins/meta-pages/webhook/runtime`, { urls });
+                return api.post(`/plugins/meta-pages/webhook/runtime`, { urls });
               }}
             >
               Set
@@ -68,7 +72,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              MainRequest.post(`/scheduling/execWorkspaceHealthCheckLoans`, {
+              api.post(`/scheduling/execWorkspaceHealthCheckLoans`, {
                 workspaceId: workspace.userMember.workspaceId,
               })
             }
@@ -79,7 +83,9 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              MainRequest.post(`/scheduling/execSendReportToAdmin`, { workspaceId: workspace.userMember.workspaceId })
+              api.post(`/scheduling/execSendReportToAdmin`, {
+                workspaceId: workspace.userMember.workspaceId,
+              })
             }
           >
             execSendReportToAdmin
@@ -90,7 +96,7 @@ export const AdminTools: FC = () => {
       <SessionTitle name="Search Index" icon={IconSearch} />
       <Card shadow="xs">
         <Group>
-          <Button color="teal" onClick={() => MainRequest.patch("/search/sys/index-all")}>
+          <Button color="teal" onClick={() => api.patch("/search/sys/index-all")}>
             Re-Index All
           </Button>
         </Group>
@@ -99,13 +105,15 @@ export const AdminTools: FC = () => {
       <SessionTitle name="Migrations" icon={IconSettings2} />
       <Card shadow="xs">
         <Group>
-          <Button onClick={() => MainRequest.post(`/receipts/migrate-loan-receipts`)}>
+          <Button onClick={() => api.post(`/receipts/migrate-loan-receipts`)}>
             Fix Loan Receipts - Invalid type EXPENSE
           </Button>
 
-          <Button onClick={() => MainRequest.post(`/files/migrate/receipts`)}>File Receipts</Button>
+          <Button onClick={() => api.post(`/files/migrate/receipts`)}>File Receipts</Button>
 
-          <Button onClick={() => MainRequest.patch(`/ProductCombos/migrate/history`)}>Product combo history</Button>
+          <Button onClick={() => api.patch(`/ProductCombos/migrate/history`)}>
+            Product combo history
+          </Button>
         </Group>
       </Card>
 
@@ -114,7 +122,7 @@ export const AdminTools: FC = () => {
         <Group>
           <Button
             onClick={() => {
-              MainRequest.patch(`/reports/sync-all`).catch(onError);
+              api.patch(`/reports/sync-all`).catch(onError);
             }}
           >
             Sync Reports - Current Workspace
@@ -123,13 +131,17 @@ export const AdminTools: FC = () => {
           <Button
             color="orange"
             onClick={() => {
-              MainRequest.patch(`/reports/sync-all-workspace-reports`).catch(onError);
+              api.patch(`/reports/sync-all-workspace-reports`).catch(onError);
             }}
           >
             Sync Reports - All Workspaces
           </Button>
 
-          <Button color="red" variant="outline" onClick={() => MainRequest.delete(`/reports/purge`).catch(onError)}>
+          <Button
+            color="red"
+            variant="outline"
+            onClick={() => api.delete(`/reports/purge`).catch(onError)}
+          >
             Purge Reports
           </Button>
         </Group>

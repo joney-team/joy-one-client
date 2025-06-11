@@ -1,3 +1,5 @@
+"use client";
+
 import { ActionIcon, Checkbox, Combobox, ComboboxDropdownProps } from "@mantine/core";
 
 import { Renderer } from "@/components/renderer";
@@ -52,7 +54,13 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
                 </Group>
               </Renderer>
 
-              <ActionIcon component="div" variant="subtle" color="gray.5" size="compact-xs" onClick={ctx.toggle}>
+              <ActionIcon
+                component="div"
+                variant="subtle"
+                color="gray.5"
+                size="compact-xs"
+                onClick={ctx.toggle}
+              >
                 <IconChevronDown size={16} />
               </ActionIcon>
             </Group>
