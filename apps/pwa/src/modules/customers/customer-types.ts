@@ -65,6 +65,7 @@ export interface AssignCustomerDto {
 
 export interface CustomersReport {
   total: number;
+  newIds: string[];
 }
 
 export interface CustomerRealtimeReport {

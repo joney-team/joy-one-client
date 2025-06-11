@@ -84,11 +84,15 @@ export const AuthRequire: FC = () => {
         <Stack mih={layout.height} w={layout.width} p={16}>
           <Group justify="space-between" wrap="nowrap">
             <Group align="center" wrap="nowrap">
-              <Animate src="/animate/symbol-idle.json" style={{ width: 45, height: 45 }} />
+              {app.metadata.appIcon ? (
+                <Image src={app.metadata.appIcon} h={45} w={45} />
+              ) : (
+                <Animate src="/animate/symbol-idle.json" style={{ width: 45, height: 45 }} />
+              )}
 
               <Stack gap={0}>
                 <Title fz={28} fw={800} c={color("primary")}>
-                  Joy One
+                  {app.metadata.appName || "Joy One"}
                 </Title>
                 <Text fz={14} c="gray">
                   Enjoy Work in One Place

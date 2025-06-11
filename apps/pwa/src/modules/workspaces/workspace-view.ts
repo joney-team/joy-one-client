@@ -124,7 +124,10 @@ const workspaceDefaultViews: { [key in WorkspaceType]?: WorkspaceView } = {
     reportWidgets: [
       { id: '', type: ReportWidgetType.REVENUE },
       { id: '', type: ReportWidgetType.NEW_CUSTOMERS },
+      { id: '', type: ReportWidgetType.LOANS_NEW_CUSTOMERS_AND_FULFILLED },
+      { id: '', type: ReportWidgetType.REVENUE_AVERAGE },
       { id: '', type: ReportWidgetType.LOANS_FULFILLED },
+      { id: '', type: ReportWidgetType.LOANS_FULFILLED_NEW },
 
       { id: '', type: ReportWidgetType.LOANS_EXPENSE },
       { id: '', type: ReportWidgetType.LOANS_CAPITAL },

@@ -39,6 +39,22 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
       }
     })
   },
+  [ReportWidgetType.REVENUE_AVERAGE]: {
+    config: {
+      name: 'revenue_average',
+      icon: IconCashRegister,
+      layout: numberWidgetlayoutConfig,
+    },
+    component: numberWidget({
+      type: 'money',
+      isLoading: (ctx) => ctx.isFetching,
+      renderValue: (ctx) => ctx.rangeReports.reduce((acc, v) => acc + v.receipts.revenue, 0) / ctx.rangeReports.length,
+      boxColor: (ctx) => {
+        const averageRevenue = ctx.rangeReports.reduce((acc, v) => acc + v.receipts.revenue, 0) / ctx.rangeReports.length;
+        return averageRevenue >= 0 ? 'primary' : 'red';
+      }
+    }),
+  },
   [ReportWidgetType.REVENUE_CHART]: {
     config: {
       name: 'revenue_chart',
@@ -260,6 +276,36 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
       isLoading: (ctx) => ctx.isFetching,
       type: 'money',
       renderValue: (ctx) => -ctx.rangeReports.reduce((acc, v) => acc + (v.receipts.loanExpense ?? 0), 0),
+    })
+  },
+  [ReportWidgetType.LOANS_NEW_CUSTOMERS_AND_FULFILLED]: {
+    config: {
+      workspaceTypes: [WorkspaceType.CREDIT],
+      name: 'Số khách mới đã giải ngân',
+      icon: IconUsersPlus,
+      layout: numberWidgetlayoutConfig,
+    },
+    component: numberWidget({
+      isLoading: (ctx) => ctx.isFetching,
+      renderValue: (ctx) => ctx.rangeReports.reduce((acc, v) => {
+        const newCustomers = v.customers.newIds.filter(id => v.loans.fulfilledLoans.some(loan => loan.customerId === id));
+        return acc + newCustomers.length;
+      }, 0),
+    })
+  },
+  [ReportWidgetType.LOANS_FULFILLED_NEW]: {
+    config: {
+      workspaceTypes: [WorkspaceType.CREDIT],
+      name: 'Số hồ sơ vay giải ngân là KH mới',
+      icon: IconUsersPlus,
+      layout: numberWidgetlayoutConfig,
+    },
+    component: numberWidget({
+      isLoading: (ctx) => ctx.isFetching,
+      renderValue: (ctx) => ctx.rangeReports.reduce((acc, v) => {
+        const newLoans = v.loans.fulfilledLoans.filter(loan => v.customers.newIds.includes(loan.customerId));
+        return acc + newLoans.length;
+      }, 0),
     })
   },
 }

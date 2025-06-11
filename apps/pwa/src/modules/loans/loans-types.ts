@@ -139,9 +139,6 @@ export interface LoanEntity<T extends LoanAssetType = any> extends BasePostgresE
   source?: LoanSource;
 }
 
-
-
-
 // ======================= Loan Asset Estimation =======================
 export interface LoanAssetEstimationBrand {
   assetType: LoanAssetType;
@@ -231,6 +228,8 @@ export interface LoansRealtimeReport {
 }
 
 export interface LoansRangReport {
+  newLoans: Pick<LoanEntity, 'id' | 'amount' | 'customerId'>[];
+  fulfilledLoans: Pick<LoanEntity, 'id' | 'amount' | 'customerId'>[];
   contracts: {
     new: number;
     fulfilled: number;

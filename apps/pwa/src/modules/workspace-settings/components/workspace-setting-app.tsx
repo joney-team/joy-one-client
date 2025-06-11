@@ -67,7 +67,7 @@ export const WorkspaceAppSettings: FC = () => {
       }
 
       await workspace.update({
-        ...workspace.userMember,
+        ...workspace.userMember.workspace,
         appIcon,
         appDomain: values.appDomain?.trim(),
         appName: values.appName,
@@ -144,7 +144,9 @@ export const WorkspaceAppSettings: FC = () => {
                         radius={5}
                         size={40}
                       >
-                        {form.values.appColor === color && <IconCheck strokeWidth={1.8} size={18} color="white" />}
+                        {form.values.appColor === color && (
+                          <IconCheck strokeWidth={1.8} size={18} color="white" />
+                        )}
                       </ColorSwatch>
                     );
                   })}
@@ -190,7 +192,8 @@ export const WorkspaceAppSettings: FC = () => {
               <Card withBorder shadow="none">
                 <Stack gap={3}>
                   <Text fz={16}>
-                    {t("register_dns_domain")} <strong>{getMainDomain(form.values.appDomain)}</strong>
+                    {t("register_dns_domain")}{" "}
+                    <strong>{getMainDomain(form.values.appDomain)}</strong>
                   </Text>
                   <Group>
                     <Text fz={16}>Type:</Text>
