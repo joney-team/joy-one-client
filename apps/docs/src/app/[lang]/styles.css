@@ -1,1 +1,24 @@
-@import 'nextra-theme-docs/style.css';
+@import "nextra-theme-docs/style.css";
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+
+    .name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .slogan {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--nextra-color-foreground-secondary);
+    }
+  }
+}

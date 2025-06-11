@@ -5,7 +5,7 @@ export default {
   backToTop: 'Cuộn lên trên',
   lastUpdated: 'Cập nhật gần nhất',
   logo: {
-    title: 'React Hooks for Data Fetching'
+    title: 'Công cụ quản lý công việc - Công cụ quản lý doanh nghiệp - Công cụ chăm sóc khách hàng'
   },
   // notFound: 'This page could not be found',
   poweredBy: 'Cung cấp bởi',
@@ -20,6 +20,6 @@ export default {
   renderingStrategies: 'SSR / SSG Ready',
   typescript: 'TypeScript Ready',
   remoteLocal: 'Remote + Local',
-  editPage: 'Edit this page on GitHub',
+  editPage: 'Chỉnh sửa trang này trên GitHub',
   by: 'by'
 }
