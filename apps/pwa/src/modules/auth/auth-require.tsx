@@ -24,7 +24,6 @@ import {
   Text,
   Title,
   em,
-  useMantineColorScheme,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -33,6 +32,7 @@ import { FC, useEffect, useState } from "react";
 import { useApp } from "../../app.context";
 import { t } from "../lang/lang-service";
 import { renewPassword, requestRenewPassword, verifyRenewPasswordCode } from "./auth-service";
+import { Animate } from "@/components/animate/animate";
 
 export const AuthRequire: FC = () => {
   useCloseAppLoading();
@@ -40,7 +40,6 @@ export const AuthRequire: FC = () => {
   const app = useApp();
   const layout = useLayout();
   const auth = useAuth();
-  const { colorScheme } = useMantineColorScheme();
 
   const [authType, setAuthType] = useState<"register" | "signin" | "forgot-password">("signin");
   const color = useColor();
@@ -83,16 +82,18 @@ export const AuthRequire: FC = () => {
       <ScrollArea.Autosize w={layout.width} mah={layout.height} scrollbars="y">
         <Stack mih={layout.height} w={layout.width} p={16}>
           <Group justify="space-between" wrap="nowrap">
-            <Avatar
-              w={60}
-              workspace={{
-                name: app.metadata.appName || app.metadata.title,
-                logo: app.metadata.isExtended ? app.metadata.appIcon ?? "" : "/brandname.png",
-                appName: app.metadata.appName ?? "",
-                appColor: app.metadata.appColor ?? "",
-              }}
-              radius={10}
-            />
+            <Group align="center" wrap="nowrap">
+              <Animate src="/animate/symbol-idle.json" style={{ width: 45, height: 45 }} />
+
+              <Stack gap={0}>
+                <Title fz={28} fw={800} c={color("primary")}>
+                  Joy One
+                </Title>
+                <Text fz={14} c="gray">
+                  Enjoy Work in One Place
+                </Text>
+              </Stack>
+            </Group>
 
             <Group justify="end" gap={8}>
               {(function () {
@@ -156,7 +157,12 @@ export const AuthRequire: FC = () => {
               radius={16}
             >
               <Stack align="stretch" p={layout.view === "desktop" ? 15 : 10}>
-                <Title fz={em(layout.view === "mobile" ? 22 : 28)} ta="center" fw="700" c="var(--mantine-color-bright)">
+                <Title
+                  fz={em(layout.view === "mobile" ? 22 : 28)}
+                  ta="center"
+                  fw="700"
+                  c="var(--mantine-color-bright)"
+                >
                   {(function () {
                     if (authType === "forgot-password") return `${t("forgot_password")}?`;
                     if (authType === "signin") return t("hello");
@@ -165,7 +171,8 @@ export const AuthRequire: FC = () => {
                 </Title>
 
                 {(function () {
-                  if (authType === "forgot-password") return <ForgotPassword onFinish={() => setAuthType("signin")} />;
+                  if (authType === "forgot-password")
+                    return <ForgotPassword onFinish={() => setAuthType("signin")} />;
 
                   return (
                     <>

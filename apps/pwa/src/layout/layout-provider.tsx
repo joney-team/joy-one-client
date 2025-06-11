@@ -3,7 +3,7 @@
 import { getGlobal } from "@/global";
 import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
-import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
+import { FC, PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
 import { Context, LayoutComponents, LayoutContext, LayoutState } from "./layout-context";
 import { getViewSize, getViewType } from "./layout-service";
 
@@ -35,6 +35,13 @@ const LayoutProvider: FC<PropsWithChildren> = (props) => {
     setState({ isInitialized: true, ...getViewSize() });
   };
 
+  useEffect(() => {
+    setComponents((s) => {
+      if (s && s.pathname === pathname) return s;
+      return {};
+    });
+  }, [pathname]);
+
   const onResized = useDebouncedCallback(() => {
     setState({ ...getViewSize() });
     setIsResizing(false);
@@ -56,17 +63,12 @@ const LayoutProvider: FC<PropsWithChildren> = (props) => {
   }, []);
 
   useEffect(() => {
-    setComponents((s) => {
-      if (s && s.pathname === pathname) return s;
-      return {};
-    });
-  }, [pathname]);
-
-  useEffect(() => {
     if (state.current.view === "mobile") {
       const windowHeight = window.innerHeight;
+      const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
 
       const onScroll = () => {
+        if (isStandalone) return;
         const documentHeight = document.documentElement.clientHeight;
         const isCollapsed = windowHeight !== documentHeight;
         setState({ isBrowerCollapsed: isCollapsed });

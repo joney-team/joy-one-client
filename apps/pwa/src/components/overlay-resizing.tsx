@@ -25,7 +25,13 @@ const OverlayResizing: FC = () => {
         background: "var(--mantine-color-body)",
       }}
     >
-      <ThemeIcon size="xl" variant="light" color={color("primary")} className="animPulse" radius={100}>
+      <ThemeIcon
+        size="xl"
+        variant="light"
+        color={color("primary")}
+        className="animPulse"
+        radius={100}
+      >
         <IconResize />
       </ThemeIcon>
 

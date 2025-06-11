@@ -62,9 +62,9 @@ export const Button: FC<ButtonProps> = (props) => {
   const radius = props.radius;
 
   const defaultIconSpacings = {
-    xs: -10,
-    "compact-xs": -14,
-    "compact-sm": -10,
+    xs: -3,
+    "compact-xs": -10,
+    "compact-sm": -5,
     default: -7,
   };
 
@@ -118,14 +118,22 @@ export const Button: FC<ButtonProps> = (props) => {
       href={props.href}
       leftSection={
         props.leftIcon ? (
-          <props.leftIcon size={iconSize} strokeWidth={iconStrokeWidth} style={{ marginRight: iconSpacing }} />
+          <props.leftIcon
+            size={iconSize}
+            strokeWidth={iconStrokeWidth}
+            style={{ marginRight: iconSpacing }}
+          />
         ) : (
           props.leftSection
         )
       }
       rightSection={
         props.rightIcon ? (
-          <props.rightIcon size={iconSize} strokeWidth={iconStrokeWidth} style={{ marginLeft: iconSpacing }} />
+          <props.rightIcon
+            size={iconSize}
+            strokeWidth={iconStrokeWidth}
+            style={{ marginLeft: iconSpacing }}
+          />
         ) : (
           props.rightSection
         )

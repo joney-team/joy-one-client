@@ -8,7 +8,7 @@ import { Anchor, Stack, Text, Title } from "@mantine/core";
 import { FC } from "react";
 import { GoWorkIllustration } from "../../../components/illustrations/go-work";
 
-export const WorkspaceWaitingForAssignBranches: FC<{ workspace: WorkspaceContext }> = (props) => {
+export const WorkspaceRequireBranches: FC<{ workspace: WorkspaceContext }> = (props) => {
   useCloseAppLoading();
 
   const { workspace } = props;

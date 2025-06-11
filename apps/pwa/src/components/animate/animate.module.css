@@ -1,0 +1,12 @@
+.Animate {
+  max-width: 100%;
+  max-height: 100%;
+
+  & svg {
+    >g {
+      >g:last-child {
+        opacity: 0;
+      }
+    }
+  }
+}

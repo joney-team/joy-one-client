@@ -35,7 +35,14 @@ import {
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { IconCheck, IconInfoCircle, IconLocation, IconPlus, IconUpload, IconUser } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconInfoCircle,
+  IconLocation,
+  IconPlus,
+  IconUpload,
+  IconUser,
+} from "@tabler/icons-react";
 import { ChangeEventHandler, FC, useEffect, useState } from "react";
 import { useApp } from "../../app.context";
 import { getUserMemberRoleLabel } from "../workspace-members/workspace-members-service";
@@ -50,7 +57,9 @@ export const RequireWorkspace: FC<{ workspace: WorkspaceContext }> = (props) => 
 
   useEffect(() => {
     if (app.metadata.isExtended) {
-      const relatedMember = workspace.userMembers.find((m) => m.workspaceId === app.metadata.workspaceId);
+      const relatedMember = workspace.userMembers.find(
+        (m) => m.workspaceId === app.metadata.workspaceId
+      );
       if (relatedMember?.workspaceId) workspace.select(relatedMember.workspaceId);
     }
   }, [app.metadata]);
@@ -104,7 +113,9 @@ export const RequireWorkspace: FC<{ workspace: WorkspaceContext }> = (props) => 
     );
   }
 
-  const availabelUserMembers = workspace.userMembers.filter((m) => m.workspace?.isArchived !== true);
+  const availabelUserMembers = workspace.userMembers.filter(
+    (m) => m.workspace?.isArchived !== true
+  );
 
   if (availabelUserMembers.length === 0)
     return (
@@ -325,7 +336,10 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
             {...form.getInputProps("code")}
             value={form.values.code.toUpperCase()}
             onChange={(e) =>
-              form.setFieldValue("code", StringUtils.toSlug(e.currentTarget.value).split("-")[0].toUpperCase())
+              form.setFieldValue(
+                "code",
+                StringUtils.toSlug(e.currentTarget.value).split("-")[0].toUpperCase()
+              )
             }
           />
         </Group>
@@ -341,7 +355,11 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
             style={{ cursor: "pointer" }}
           >
             <Group style={{ position: "relative" }} pt={3} gap={8}>
-              <Avatar src={logo ? URL.createObjectURL(logo) : form.values.logo} size={60} radius={10}>
+              <Avatar
+                src={logo ? URL.createObjectURL(logo) : form.values.logo}
+                size={60}
+                radius={10}
+              >
                 {form.values?.name?.slice(0, 2) || "W"}
               </Avatar>
 

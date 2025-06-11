@@ -1,13 +1,11 @@
-import { useApp } from "@/app.context";
 import { FC } from "react";
-import { AppLoader } from "./app-loader";
+import { Animate } from "./animate/animate";
 
 interface OverlayLoadingProps {
   enabled?: boolean;
 }
 
 const OverlayLoading: FC<OverlayLoadingProps> = (props) => {
-  const app = useApp();
   const loading = props.enabled;
 
   return (
@@ -34,7 +32,7 @@ const OverlayLoading: FC<OverlayLoadingProps> = (props) => {
           padding: 30,
         }}
       >
-        <AppLoader color={app.metadata.appColor} />
+        <Animate src="/animate/symbol.json" style={{ width: 80 }} />
       </div>
     </div>
   );

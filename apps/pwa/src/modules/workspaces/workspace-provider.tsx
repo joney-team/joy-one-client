@@ -15,7 +15,7 @@ import { useLocations } from "@/modules/locations/locations-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
 import { MainRequest } from "@/modules/requests/main.request";
 import { WorkspaceArchived } from "@/modules/workspaces/components/workspace-archived";
-import { WorkspaceWaitingForAssignBranches } from "@/modules/workspaces/components/workspace-waiting-for-assign-branches";
+import { WorkspaceRequireBranches } from "@/modules/workspaces/components/workspace-require-branches";
 import {
   getWorkspaceId,
   removeWorkspaceId,
@@ -38,7 +38,10 @@ import {
   WorkspaceRoleEntity,
   WorkspaceSpecialRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
-import { getWorkspaceSettings, setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
+import {
+  getWorkspaceSettings,
+  setWorkspaceSettings,
+} from "@/modules/workspace-settings/workspace-settings-service";
 import {
   SetWorkspaceSettingsDto,
   WorkspaceSettingEntity,
@@ -100,7 +103,11 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const onlineStatus = useFetch({
     skip: !state.current.activatedWorkspaceId,
     fetch: () => getWorkspaceMemberOnlineStatus(),
-    events: [EventType.SYNC_CLIENTS, EventType.WORKSPACE_MEMBER_LEAVED, EventType.WORKSPACE_MEMBER_JOINED],
+    events: [
+      EventType.SYNC_CLIENTS,
+      EventType.WORKSPACE_MEMBER_LEAVED,
+      EventType.WORKSPACE_MEMBER_JOINED,
+    ],
   });
 
   const fetchUserMembers = async () => {
@@ -155,7 +162,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const create = async (dto: WorkspaceDto) => {
     const workspace = await MainRequest.post<WorkspaceEntity>("/workspaces", dto);
     const userWorkspaces = await fetchUserMembers();
-    const userWorkspace = userWorkspaces.find((userWorkspace) => userWorkspace.workspaceId === workspace._id);
+    const userWorkspace = userWorkspaces.find(
+      (userWorkspace) => userWorkspace.workspaceId === workspace._id
+    );
     if (userWorkspace && userWorkspace.workspaceId) select(userWorkspace.workspaceId);
   };
 
@@ -239,7 +248,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       const userWorkspaces = await fetchUserMembers();
       await verifyInvitation();
 
-      const userWorkspace = userWorkspaces.find((userWorkspace) => userWorkspace.workspaceId === getWorkspaceId());
+      const userWorkspace = userWorkspaces.find(
+        (userWorkspace) => userWorkspace.workspaceId === getWorkspaceId()
+      );
       if (userWorkspace && userWorkspace.workspaceId) {
         await fetchRelatedData();
         onSetWorkspaceId(userWorkspace.workspaceId);
@@ -260,7 +271,10 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   }, 500);
 
   const setSettings = async (dto: SetWorkspaceSettingsDto, exec?: boolean) => {
-    state.current.settings = { ...state.current.settings, ...(dto as any) } as WorkspaceSettingEntity;
+    state.current.settings = {
+      ...state.current.settings,
+      ...(dto as any),
+    } as WorkspaceSettingEntity;
     syncSettings(state.current.settings);
     forceUpdate();
     if (exec) await setWorkspaceSettings(dto);
@@ -278,7 +292,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     return { ...output };
   };
 
-  const userMember = state.current.userMembers.find((w) => w.workspaceId === state.current.activatedWorkspaceId);
+  const userMember = state.current.userMembers.find(
+    (w) => w.workspaceId === state.current.activatedWorkspaceId
+  );
   const workspaceView: WorkspaceView = state.current.settings?.view || {};
 
   const modules = Object.entries(workspaceModules).map(([id, mo]) => ({
@@ -297,7 +313,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         .every((p) => _permissions.includes(p as WorkspacePermission));
 
     const isAvailableType =
-      !mo.workspaceTypes || mo.workspaceTypes.includes(userMember?.workspace?.type || WorkspaceType.BUSINESS);
+      !mo.workspaceTypes ||
+      mo.workspaceTypes.includes(userMember?.workspace?.type || WorkspaceType.BUSINESS);
     return ableToAccess && isAvailableType;
   });
 
@@ -329,7 +346,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     try {
       const { pages } = await getPluginMetaPagesInfo(accessToken);
       const canConnectPages = pages.filter((v) => v.status !== "CONNECTED");
-      if (canConnectPages.length > 0) OnConnectMetaPagesModal({ pages: canConnectPages, accessToken });
+      if (canConnectPages.length > 0)
+        OnConnectMetaPagesModal({ pages: canConnectPages, accessToken });
       else localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
     } catch (error) {
       if (error instanceof AxiosError && error.status === 400) {
@@ -455,7 +473,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     },
   ];
 
-  const isRequireAssignBranches =
+  const isRequireBranches =
     userMember &&
     userMember?.workspace.branches > 0 &&
     !userMember.workspaceBranches.length &&
@@ -467,7 +485,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     type: userMember?.workspace?.type!,
     updateSettings,
     permissions: userMember?.permissions!,
-    hasPermission: (permission: WorkspacePermission) => userMember?.permissions.includes(permission) || false,
+    hasPermission: (permission: WorkspacePermission) =>
+      userMember?.permissions.includes(permission) || false,
     roles: [...state.current.roles, ...defaultWorkspaceRoles],
     isInitialized,
     settings: state.current.settings!,
@@ -519,12 +538,12 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const Component = useMemo(() => {
-    if (!isInitialized) return null;
+    if (!isInitialized || !auth.user) return null;
     if (inviteCode) return <WorkspaceInvitation inviteCode={inviteCode} />;
     if (!userMember) return <RequireWorkspace workspace={contextValue} />;
-    if (isRequireAssignBranches) return <WorkspaceWaitingForAssignBranches workspace={contextValue} />;
+    if (isRequireBranches) return <WorkspaceRequireBranches workspace={contextValue} />;
     if (userMember.workspace.isArchived) return <WorkspaceArchived workspace={contextValue} />;
-  }, [isInitialized, inviteCode, userMember, isRequireAssignBranches]);
+  }, [isInitialized, inviteCode, userMember, isRequireBranches]);
 
   return (
     <Context.Provider value={contextValue}>

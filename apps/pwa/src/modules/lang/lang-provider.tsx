@@ -40,24 +40,26 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
   const weekStart = state.isStartOfWeekSunday ? 0 : 1;
 
   const fetch = async (_locale: string) => {
-    const { config, dictionary } = await new Promise<{ config: LocaleConfig; dictionary: any }>((resolve) => {
-      const action = () => {
-        MainRequest.get(`/lang/${_locale}`)
-          .then((res) => resolve(res))
-          .catch(() => setTimeout(action, 3000));
-      };
+    const { config, dictionary } = await new Promise<{ config: LocaleConfig; dictionary: any }>(
+      (resolve) => {
+        const action = () => {
+          MainRequest.get(`/lang/${_locale}`)
+            .then((res) => resolve(res))
+            .catch(() => setTimeout(action, 3000));
+        };
 
-      action();
-    });
-
-    setConfig(config);
+        action();
+      }
+    );
 
     const global = getGlobal();
     global._dictionary = dictionary;
     global._localeConfig = config;
+
+    setConfig(config);
   };
 
-  const initialize = async (_locale: Locale, silent = false) => {
+  const initialize = async (_locale: Locale) => {
     try {
       await fetch(_locale);
     } catch (error) {
@@ -82,7 +84,7 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
   Object.values(Locale).forEach((v) => dayjs.updateLocale(v, { weekStart }));
 
   // Reinitialize when reconnected
-  onReconnected(() => initialize(getLocaleClient(), true), [locale]);
+  onReconnected(() => initialize(getLocaleClient()), [locale]);
 
   // Initialize when component is mounted
   useEffect(() => {

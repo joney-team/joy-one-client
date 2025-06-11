@@ -6,19 +6,30 @@ import { configs } from "@/configs/layout.config";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
-import { Card, Center, em, Group, NumberInput, Select, Stack, TagsInput, Text } from "@mantine/core";
+import {
+  Card,
+  Center,
+  em,
+  Group,
+  NumberInput,
+  Select,
+  Stack,
+  TagsInput,
+  Text,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCake, IconCheck, IconClipboardHeart, IconMail, IconPhone } from "@tabler/icons-react";
 import { FC, useEffect } from "react";
 import { createCustomer, updateCustomer } from "./customer-service";
 
+import { Form } from "@/components/form";
 import { DateInput } from "@/components/inputs/date-input";
 import { UsersInput } from "@/components/inputs/users-input";
 import { medicalHistoryOptions } from "@/configs/medical.config";
 import { useRouter } from "@/hooks/use-router";
 import { getLocaleClient, t } from "@/modules/lang/lang-service";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Gender } from "@/types";
 import { LocationForm } from "../../components/location-form";
 import { Renderer } from "../../components/renderer";
@@ -64,7 +75,9 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
     delete payload.assigneeUsers;
     delete payload.presenterCustomer;
 
-    const action = props.customer ? () => updateCustomer(props.customer!._id, payload) : () => createCustomer(payload);
+    const action = props.customer
+      ? () => updateCustomer(props.customer!._id, payload)
+      : () => createCustomer(payload);
 
     await action()
       .then(async (res) => {
@@ -89,7 +102,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
   }, [props.customer]);
 
   return (
-    <form onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit}>
       <Stack>
         <TextInput autoFocus withAsterisk label={t("name")} {...form.getInputProps("name")} />
         <TextInput
@@ -106,7 +119,11 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
         />
 
         <Renderer visible={workspace.type === WorkspaceType.CREDIT}>
-          <NumberInput label={t("salary_amount")} {...form.getInputProps("salaryAmount")} hideControls />
+          <NumberInput
+            label={t("salary_amount")}
+            {...form.getInputProps("salaryAmount")}
+            hideControls
+          />
         </Renderer>
 
         <Group align="start">
@@ -156,7 +173,9 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
         </Renderer>
 
         <Renderer
-          visible={[WorkspaceType.HOSPITAL, WorkspaceType.CLINIC, WorkspaceType.DENTAL].includes(workspace.type)}
+          visible={[WorkspaceType.HOSPITAL, WorkspaceType.CLINIC, WorkspaceType.DENTAL].includes(
+            workspace.type
+          )}
         >
           <TagsInput
             label={t("medical_history")}
@@ -171,14 +190,23 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
           <CustomerRelationshipContactInput {...form.getInputProps("relationshipContacts")} />
         </Renderer>
 
-        <UsersInput label={t("assignee")} style={{ flex: 1 }} {...form.getInputProps("assigneeUsers")} />
+        <UsersInput
+          label={t("assignee")}
+          style={{ flex: 1 }}
+          {...form.getInputProps("assigneeUsers")}
+        />
 
         <Center mt={10}>
-          <Button type="submit" loading={form.submitting} leftIcon={IconCheck} disabled={!form.isDirty()}>
+          <Button
+            type="submit"
+            loading={form.submitting}
+            leftIcon={IconCheck}
+            disabled={!form.isDirty()}
+          >
             {t("complete")}
           </Button>
         </Center>
       </Stack>
-    </form>
+    </Form>
   );
 };
