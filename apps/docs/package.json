@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack -p 3100",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -19,6 +20,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "pagefind": "^1.3.0",
     "typescript": "^5"
   }
 }
