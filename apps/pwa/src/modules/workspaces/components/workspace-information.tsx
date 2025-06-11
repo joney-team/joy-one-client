@@ -9,7 +9,17 @@ import { getWorkspaceTypeIcon } from "@/modules/workspaces/workspaces-service";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { onError } from "@/utils/exceptions.utils";
-import { Anchor, Group, InputWrapper, LoadingOverlay, Select, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
+import {
+  Anchor,
+  Group,
+  InputWrapper,
+  LoadingOverlay,
+  Select,
+  SimpleGrid,
+  Stack,
+  Text,
+  ThemeIcon,
+} from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { IconUpload } from "@tabler/icons-react";
@@ -45,7 +55,10 @@ export const WorkspaceInformation: FC = () => {
     try {
       const currentAvatar = workspace.userMember?.workspace?.logo;
       const _file = await onUploadFile({ file, maxWidthOrHeight: 300 });
-      await workspace.update({ ...workspace.userMember, logo: _file.relativePath } as any);
+      await workspace.update({
+        ...workspace.userMember.workspace,
+        logo: _file.relativePath,
+      } as any);
       if (currentAvatar) await removeFileFromRelativePath(currentAvatar).catch(() => false);
     } catch (error) {
       onError(error);
@@ -90,7 +103,9 @@ export const WorkspaceInformation: FC = () => {
           label={t("province")}
           {...form.getInputProps("location.provinceId")}
           searchable
-          data={locations.filter((l) => l.type === "province").map((l) => ({ value: l.id, label: l.name }))}
+          data={locations
+            .filter((l) => l.type === "province")
+            .map((l) => ({ value: l.id, label: l.name }))}
           onChange={(e) => {
             form.setFieldValue("location.provinceId", e!);
             form.setFieldValue("location.districtId", "");
@@ -105,7 +120,9 @@ export const WorkspaceInformation: FC = () => {
             {...form.getInputProps("location.districtId")}
             searchable
             data={locations
-              .filter((l) => l.type === "district" && l.parentId === form.values.location?.provinceId)
+              .filter(
+                (l) => l.type === "district" && l.parentId === form.values.location?.provinceId
+              )
               .map((l) => ({ value: l.id, label: l.fullName }))}
             onChange={(e) => {
               form.setFieldValue("location.districtId", e!);

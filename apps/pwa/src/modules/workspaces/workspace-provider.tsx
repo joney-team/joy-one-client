@@ -68,6 +68,7 @@ import { Context } from "./workspace-context";
 import { getWorkspaceModuleName, WorkspaceModuleId, workspaceModules } from "./workspace-modules";
 import { RequireWorkspace } from "./workspace-require";
 import { getDefaultWorkspaceView } from "./workspace-view";
+import { api } from "../apis";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
@@ -169,7 +170,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const update = async (dto: WorkspaceDto) => {
-    const workspace = await MainRequest.put(`/workspaces`, dto);
+    const workspace = await api.put(`/workspaces`, dto);
     await fetchUserMembers();
     return workspace;
   };
