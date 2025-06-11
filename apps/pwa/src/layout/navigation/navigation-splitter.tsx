@@ -1,7 +1,9 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { Stack } from "@mantine/core";
 import { useMouse } from "@mantine/hooks";
-import { FC, LegacyRef, useEffect, useRef, useState } from "react";
+import { FC, Fragment, LegacyRef, useEffect, useRef, useState } from "react";
 import { useWorkspaceLayout } from "../hooks/use-workspace-layout";
 import { useLayout } from "../layout-context";
 
@@ -23,8 +25,16 @@ const SplitPointer: FC<{ ref: LegacyRef<HTMLDivElement> | undefined }> = (props)
       : mouse.x;
 
   return (
-    <>
-      <Stack pos="fixed" top={0} left={0} right={0} bottom={0} bg="transparent" style={{ zIndex: 100 }} />
+    <Fragment>
+      <Stack
+        pos="fixed"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        bg="transparent"
+        style={{ zIndex: 100 }}
+      />
       <Stack
         ref={props.ref}
         pos="fixed"
@@ -41,7 +51,7 @@ const SplitPointer: FC<{ ref: LegacyRef<HTMLDivElement> | undefined }> = (props)
           cursor: "col-resize",
         }}
       />
-    </>
+    </Fragment>
   );
 };
 
@@ -74,7 +84,7 @@ export const WorkspaceNavigationSplitter: FC = () => {
   if (layout.view !== "desktop") return null;
 
   return (
-    <>
+    <Fragment>
       {isResizing && <SplitPointer ref={pointerRef} />}
 
       <Stack
@@ -104,6 +114,6 @@ export const WorkspaceNavigationSplitter: FC = () => {
       >
         <Stack bg={color("primary.2")} pos="relative" h="100%" w={5} />
       </Stack>
-    </>
+    </Fragment>
   );
 };

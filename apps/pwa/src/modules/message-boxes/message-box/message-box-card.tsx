@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -7,7 +9,11 @@ import {
   messageBoxPlatformImages,
   messageBoxStatusColors,
 } from "@/modules/message-boxes/message-boxes-service";
-import { MessageAttachmentType, MessageBoxEntity, MessageBoxStatus } from "@/modules/message-boxes/message-boxes-types";
+import {
+  MessageAttachmentType,
+  MessageBoxEntity,
+  MessageBoxStatus,
+} from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { forceDate } from "@/utils/dateTime.utils";
 import { StringUtils } from "@/utils/string.utils";
@@ -52,7 +58,14 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
   const statusColor = color(messageBoxStatusColors[box.status || MessageBoxStatus.CLOSED]);
 
   return (
-    <Card p={10} shadow="none" radius="md" withBorder className="clickable" onClick={() => messageBoxes.open(box)}>
+    <Card
+      p={10}
+      shadow="none"
+      radius="md"
+      withBorder
+      className="clickable"
+      onClick={() => messageBoxes.open(box)}
+    >
       <Group w="100%" align="start" gap={12} wrap="nowrap">
         <Indicator
           label={<Image src={messageBoxPlatformImages[box.platformType]} w={16} h={16} />}
@@ -70,7 +83,12 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
             },
           }}
         >
-          <Avatar messageBox={box} src={box.senderAvatar || box.customer?.avatar} size={42} radius={8} />
+          <Avatar
+            messageBox={box}
+            src={box.senderAvatar || box.customer?.avatar}
+            size={42}
+            radius={8}
+          />
         </Indicator>
 
         <Stack gap={5} flex={1} mt={-3}>
@@ -80,16 +98,14 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
             </TextOverflow>
 
             {latestMessage && (
-              <>
-                <Text fz={12} c="gray">
-                  {(function () {
-                    const isToday = dayjs(forceDate(latestMessage.createdAt)).isSame(dayjs(), "day");
-                    if (isToday) return renderTime(latestMessage.createdAt);
+              <Text fz={12} c="gray">
+                {(function () {
+                  const isToday = dayjs(forceDate(latestMessage.createdAt)).isSame(dayjs(), "day");
+                  if (isToday) return renderTime(latestMessage.createdAt);
 
-                    return renderDateTime(latestMessage.createdAt);
-                  })()}
-                </Text>
-              </>
+                  return renderDateTime(latestMessage.createdAt);
+                })()}
+              </Text>
             )}
           </Group>
 

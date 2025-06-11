@@ -14,7 +14,7 @@ import { capitalize, StringUtils } from "@/utils/string.utils";
 import config from "@joy-one-client/config";
 import { ActionIcon, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconChevronDown, IconChevronUp, IconShare2, IconStack2, IconX } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
 interface TaskDetailHeadProps {
   task: TaskEntity;
@@ -108,7 +108,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
           />
 
           {!!parentTask && (
-            <>
+            <Fragment>
               <Text c="var(--mantine-color-dimmed)">/</Text>
 
               <Button
@@ -123,7 +123,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
               >
                 {StringUtils.limitCharacters(parentTask.name, viewport.view === "mobile" ? 15 : 30)}
               </Button>
-            </>
+            </Fragment>
           )}
         </Group>
       </Group>

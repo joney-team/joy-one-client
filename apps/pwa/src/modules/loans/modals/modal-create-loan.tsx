@@ -51,7 +51,7 @@ import {
   IconUser,
   IconUserScan,
 } from "@tabler/icons-react";
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, Fragment, PropsWithChildren, useState } from "react";
 import { OnModalRegisterCustomerKyc } from "@/modules/customer-kycs/modal-register-customer-kyc";
 
 interface ModalCreateLoanProps {
@@ -217,7 +217,7 @@ export const ModalCreateLoan: FC = () => {
           if (!isInitialized) return <Skeleton height={150} />;
 
           return (
-            <>
+            <Fragment>
               <Renderer visible={workspace.isShouldEnableBranches}>
                 <Session name={t("branch")} icon={IconBuildingSkyscraper}>
                   <WorkspaceBranchInput
@@ -272,7 +272,12 @@ export const ModalCreateLoan: FC = () => {
               <Session name="KYC" icon={IconUserScan}>
                 {(function () {
                   if (!customer)
-                    return <Empty hideBorder message={`${t("need")} ${t("customer_information").toLowerCase()}`} />;
+                    return (
+                      <Empty
+                        hideBorder
+                        message={`${t("need")} ${t("customer_information").toLowerCase()}`}
+                      />
+                    );
                   if (isFetchingCustomerKyc) return <Skeleton height={50} />;
                   if (customerKyc)
                     return (
@@ -306,19 +311,30 @@ export const ModalCreateLoan: FC = () => {
               <Session name={t("loan_information")} icon={IconCreditCardPay}>
                 {(function () {
                   if (!customer || !customerKyc)
-                    return <Empty hideBorder message={`${t("need")} ${t("customer_information")} ${t("and")} KYC`} />;
+                    return (
+                      <Empty
+                        hideBorder
+                        message={`${t("need")} ${t("customer_information")} ${t("and")} KYC`}
+                      />
+                    );
                   return (
                     <Stack>
                       <SimpleGrid cols={{ md: 3 }}>
                         <Select
                           label={t("asset_type")}
-                          data={assetTypeOptions.map((type) => ({ value: type, label: t(`loan_asset_type_${type}`) }))}
+                          data={assetTypeOptions.map((type) => ({
+                            value: type,
+                            label: t(`loan_asset_type_${type}`),
+                          }))}
                           {...form.getInputProps("assetType")}
                         />
 
                         <Select
                           label={t("loan_period")}
-                          data={packageDaysOptions.map((d) => ({ value: d.toString(), label: renderLoanPeriod(d) }))}
+                          data={packageDaysOptions.map((d) => ({
+                            value: d.toString(),
+                            label: renderLoanPeriod(d),
+                          }))}
                           {...form.getInputProps("packageDays")}
                           value={form.values.packageDays?.toString()}
                           onChange={(value) => form.setFieldValue("packageDays", +value!)}
@@ -336,7 +352,11 @@ export const ModalCreateLoan: FC = () => {
                         />
                       </SimpleGrid>
 
-                      <NumberInput label={t("loan_amount")} hideControls {...form.getInputProps("amount")} />
+                      <NumberInput
+                        label={t("loan_amount")}
+                        hideControls
+                        {...form.getInputProps("amount")}
+                      />
 
                       <InputWrapper label={t("loan_payment_account")}>
                         <Card withBorder p={8}>
@@ -352,7 +372,9 @@ export const ModalCreateLoan: FC = () => {
                               }))}
                               {...form.getInputProps("payment_accountBankId")}
                               value={form.values.payment_accountBankId?.toString()}
-                              onChange={(value) => form.setFieldValue("payment_accountBankId", +value!)}
+                              onChange={(value) =>
+                                form.setFieldValue("payment_accountBankId", +value!)
+                              }
                               renderOption={renderBankSelectOption}
                             />
 
@@ -374,23 +396,27 @@ export const ModalCreateLoan: FC = () => {
               </Session>
 
               {form.values.assetType && !!customerKyc && (
-                <>
-                  <Session name={t("loan_asset_data")} icon={IconFileDots}>
-                    <LoanAssetDataInput
-                      assetType={form.values.assetType}
-                      value={form.values.assetData}
-                      onChange={(value) => form.setFieldValue("assetData", value)}
-                    />
-                  </Session>
-                </>
+                <Session name={t("loan_asset_data")} icon={IconFileDots}>
+                  <LoanAssetDataInput
+                    assetType={form.values.assetType}
+                    value={form.values.assetData}
+                    onChange={(value) => form.setFieldValue("assetData", value)}
+                  />
+                </Session>
               )}
 
               <Group mt={10} justify="center">
-                <Button onClick={submit.handle} type="submit" miw={300} maw="100%" leftIcon={IconCheck}>
+                <Button
+                  onClick={submit.handle}
+                  type="submit"
+                  miw={300}
+                  maw="100%"
+                  leftIcon={IconCheck}
+                >
                   {t("complete")}
                 </Button>
               </Group>
-            </>
+            </Fragment>
           );
         })()}
       </Stack>

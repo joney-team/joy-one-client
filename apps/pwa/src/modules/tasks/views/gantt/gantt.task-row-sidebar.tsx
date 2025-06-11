@@ -1,20 +1,22 @@
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Hovered } from "@/components/hovered";
 import { formatDuration, QuickEstimateTimeInput } from "@/components/inputs/estimate-time-input";
-import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { Renderer } from "@/components/renderer";
 import { TagSelector } from "@/components/selector/tag-selector";
-import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
-import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useLayout } from "@/layout/layout-context";
 import { num, t } from "@/modules/lang/lang-service";
 import { TagType } from "@/modules/tags/tags-types";
+import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
+import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
+import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskEntity } from "@/modules/tasks/tasks-service";
 import { ReorderTaskPotision } from "@/modules/tasks/tasks-types";
-import { ActionIcon, Box, Button, em, Group, rgba, ThemeIcon, Title, Tooltip, useMantineTheme } from "@mantine/core";
+import { useColor } from "@/modules/theme/use-color";
+import { ActionIcon, Box, Button, em, Group, rgba, ThemeIcon, Title, Tooltip } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
   IconArrowRight,
@@ -28,13 +30,13 @@ import {
   IconSubtask,
   IconTagPlus,
 } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag } from "../../tasks-dnd-provider";
 import { ListTaskRowDropper } from "../list/list.task-row-dropper";
 import { ganttConfig } from "./gantt.config";
+import { useGantt } from "./gantt.context";
 import { useGanttTaskState } from "./gantt.hooks";
 import { SidebarRowSticky } from "./gantt.layout";
-import { useGantt } from "./gantt.context";
 export interface GanttTaskRowSidebarProps {
   id: string;
   generation?: number;
@@ -84,32 +86,38 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
   const isSelfDragging = draggingTaskId === props.id;
   const isDraggingAsParent = draggingTaskId === task.parentId;
   const isDraggingAsRootAndHasChild = draggingTask && draggingTask.childCount > 0;
-  const isDraggingAsRootHasChild_thisAsChild = draggingTask && draggingTask.childCount > 0 && !!task.parentId;
+  const isDraggingAsRootHasChild_thisAsChild =
+    draggingTask && draggingTask.childCount > 0 && !!task.parentId;
   const isAbleToDrop = draggingTask && !props.overlay && !isSelfDragging && !isDraggingAsParent;
 
   const DragDrop: FC = () => {
     if (props.overlay)
       return (
-        <>
-          <ActionIcon variant="transparent" color="gray" style={{ cursor: "move", outline: "none" }}>
-            <IconGripVertical size={16} strokeWidth={1.2} />
-          </ActionIcon>
-        </>
+        <ActionIcon variant="transparent" color="gray" style={{ cursor: "move", outline: "none" }}>
+          <IconGripVertical size={16} strokeWidth={1.2} />
+        </ActionIcon>
       );
 
     const draggable = useTaskDrag(task._id, "gantt");
 
     return (
-      <>
+      <Fragment>
         <ListTaskRowDropper
-          visible={isAbleToDrop && props.prevId !== draggingTaskId && !isDraggingAsRootHasChild_thisAsChild}
+          visible={
+            isAbleToDrop && props.prevId !== draggingTaskId && !isDraggingAsRootHasChild_thisAsChild
+          }
           indexSpacing={indexSpacing * 3}
           targetTask={task}
           position={ReorderTaskPotision.BEFORE}
         />
 
         <ListTaskRowDropper
-          visible={isAbleToDrop && props.indexType === "last" && !isHasChild && !isDraggingAsRootHasChild_thisAsChild}
+          visible={
+            isAbleToDrop &&
+            props.indexType === "last" &&
+            !isHasChild &&
+            !isDraggingAsRootHasChild_thisAsChild
+          }
           indexSpacing={indexSpacing * 3}
           targetTask={task}
           position={ReorderTaskPotision.AFTER}
@@ -126,12 +134,12 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
         >
           <IconGripVertical size={16} strokeWidth={1.2} />
         </ActionIcon>
-      </>
+      </Fragment>
     );
   };
 
   return (
-    <>
+    <Fragment>
       <Hovered>
         {(hover) => {
           return (
@@ -144,7 +152,9 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
               style={{
                 position: "relative",
                 borderRadius: 5,
-                boxShadow: props.overlay ? `0 0 10px ${rgba("var(--mantine-color-text)", 0.1)}` : undefined,
+                boxShadow: props.overlay
+                  ? `0 0 10px ${rgba("var(--mantine-color-text)", 0.1)}`
+                  : undefined,
                 minHeight: ganttConfig.rowHeight,
                 maxHeight: ganttConfig.rowHeight,
               }}
@@ -155,7 +165,12 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
               <ActionIcon
                 color={ctx.isSelected ? color("primary") : "gray"}
                 variant="subtle"
-                opacity={(hover.hovered || ctx.isSelected || layout.view !== "desktop") && ctx.isAbleToSelect ? 1 : 0}
+                opacity={
+                  (hover.hovered || ctx.isSelected || layout.view !== "desktop") &&
+                  ctx.isAbleToSelect
+                    ? 1
+                    : 0
+                }
                 style={{ visibility: ctx.isAbleToSelect ? "visible" : "hidden" }}
                 onClick={(e) => ctx.toggleSelect(e.shiftKey)}
                 disabled={!ctx.isAbleToSelect}
@@ -178,14 +193,24 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
                 }}
               />
 
-              <Group wrap="nowrap" flex={1} justify="space-between" py={5} pl={indexSpacing} gap={0}>
+              <Group
+                wrap="nowrap"
+                flex={1}
+                justify="space-between"
+                py={5}
+                pl={indexSpacing}
+                gap={0}
+              >
                 <Renderer visible={!!task.parentId}>
                   <ThemeIcon size="xs" color="gray" variant="transparent">
                     <IconCornerDownRight strokeWidth={1.5} />
                   </ThemeIcon>
                 </Renderer>
 
-                <TaskStatusOptions task={task} onSelect={(s) => ctx.onUpdate({ ...task, status: s })} />
+                <TaskStatusOptions
+                  task={task}
+                  onSelect={(s) => ctx.onUpdate({ ...task, status: s })}
+                />
 
                 <Group
                   flex={1}
@@ -207,7 +232,10 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
                           id={tag._id}
                           h={26}
                           onRemove={() => {
-                            ctx.onUpdate({ ...task, tagIds: task.tagIds?.filter((v) => v !== tag._id) });
+                            ctx.onUpdate({
+                              ...task,
+                              tagIds: task.tagIds?.filter((v) => v !== tag._id),
+                            });
                           }}
                         />
                       ))}
@@ -262,7 +290,9 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
                 indexSpacing={childIndexSpacing * 2}
                 targetTask={task}
                 position={ReorderTaskPotision.AFTER}
-                visible={isAbleToDrop && !task.parentId && !isHasChild && !isDraggingAsRootAndHasChild}
+                visible={
+                  isAbleToDrop && !task.parentId && !isHasChild && !isDraggingAsRootAndHasChild
+                }
               />
 
               {taskParent && (
@@ -278,7 +308,12 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
                   <Tooltip label={t("create_sub_task")}>
                     <Group>
                       <QuickCreateTaskInput parentId={task._id} tagFolderId={task.tagFolderId}>
-                        <ActionIcon size="sm" variant="subtle" color="gray" opacity={hover.hovered ? 1 : 0}>
+                        <ActionIcon
+                          size="sm"
+                          variant="subtle"
+                          color="gray"
+                          opacity={hover.hovered ? 1 : 0}
+                        >
                           <IconPlus size={16} />
                         </ActionIcon>
                       </QuickCreateTaskInput>
@@ -315,7 +350,12 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
                 >
                   <Group>
                     <QuickEstimateTimeInput task={task}>
-                      <ActionIcon variant="subtle" color="gray.6" size="sm" opacity={hover.hovered ? 1 : 0}>
+                      <ActionIcon
+                        variant="subtle"
+                        color="gray.6"
+                        size="sm"
+                        opacity={hover.hovered ? 1 : 0}
+                      >
                         <IconHourglassHigh size={16} />
                       </ActionIcon>
                     </QuickEstimateTimeInput>
@@ -362,7 +402,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
       </Hovered>
 
       {state.isShowSubTasks && ctx.subTasks.length > 0 && !props.overlay && (
-        <>
+        <Fragment>
           {ctx.subTasks
             .sort((a, b) => a.order - b.order)
             .map((task, index) => {
@@ -371,14 +411,16 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
                   key={task._id}
                   id={task._id}
                   generation={generation + 1}
-                  indexType={index === ctx.subTasks.length - 1 ? "last" : index === 0 ? "first" : undefined}
+                  indexType={
+                    index === ctx.subTasks.length - 1 ? "last" : index === 0 ? "first" : undefined
+                  }
                   nextId={ctx.subTasks[index + 1]?._id}
                   prevId={ctx.subTasks[index - 1]?._id}
                 />
               );
             })}
-        </>
+        </Fragment>
       )}
-    </>
+    </Fragment>
   );
 };

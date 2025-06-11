@@ -1,3 +1,6 @@
+"use client";
+
+import { Fragment, useRef, useState } from "react";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { t } from "@/modules/lang/lang-service";
@@ -23,7 +26,6 @@ import {
 } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconBackground, IconPlus } from "@tabler/icons-react";
-import { useRef, useState } from "react";
 
 type WithGroup = { _group?: string };
 type WithDisabled = { disabled?: boolean };
@@ -39,7 +41,9 @@ export interface SelectorContext<T extends SelectOption> {
   theme: MantineTheme;
 }
 
-export type SelectorRenderValue<T extends SelectOption> = (ctx: SelectorContext<T>) => React.ReactNode;
+export type SelectorRenderValue<T extends SelectOption> = (
+  ctx: SelectorContext<T>
+) => React.ReactNode;
 
 export type SelectorRenderOption<T extends SelectOption> = (item: T) => React.ReactNode;
 
@@ -71,7 +75,9 @@ export interface SelectorBaseProps<T extends SelectOption>
   excludeIds?: string[];
 }
 
-export interface SelectorProps<T extends SelectOption = any> extends SelectorCommonProps<T>, SelectorBaseProps<T> {}
+export interface SelectorProps<T extends SelectOption = any>
+  extends SelectorCommonProps<T>,
+    SelectorBaseProps<T> {}
 
 export const getId = (item: SelectOption): string => ("id" in item ? item.id : item._id);
 
@@ -121,9 +127,9 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
 
   const _initOptions = propsInitOptions || initOptions;
 
-  let options = (selectOptions.length > 0 || !_initOptions || search.length > 0 ? selectOptions : _initOptions).filter(
-    (item) => (props.value ? getId(props.value) !== getId(item) : true)
-  );
+  let options = (
+    selectOptions.length > 0 || !_initOptions || search.length > 0 ? selectOptions : _initOptions
+  ).filter((item) => (props.value ? getId(props.value) !== getId(item) : true));
 
   if (props.excludeIds) {
     options = options.filter((item) => !props.excludeIds?.includes(getId(item)));
@@ -267,14 +273,18 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
           <Combobox.Options>
             <ScrollArea.Autosize w="100%" type="scroll" mah={Math.min(400, viewport.height * 0.4)}>
               {options.length > 0 ? (
-                <>
+                <Fragment>
                   {options
                     .filter((v) => !getGroup(v))
                     .map((item) => {
                       if (props.renderOption) return props.renderOption(item);
                       if (props.renderOptionChild)
                         return (
-                          <Combobox.Option value={getId(item)} key={getId(item)} disabled={item.disabled}>
+                          <Combobox.Option
+                            value={getId(item)}
+                            key={getId(item)}
+                            disabled={item.disabled}
+                          >
                             {props.renderOptionChild(item)}
                           </Combobox.Option>
                         );
@@ -282,12 +292,20 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
 
                   {Object.keys(groupOptions).map((group, i) => {
                     return (
-                      <Combobox.Group label={group} key={group + i} styles={{ groupLabel: { fontSize: 12 } }}>
+                      <Combobox.Group
+                        label={group}
+                        key={group + i}
+                        styles={{ groupLabel: { fontSize: 12 } }}
+                      >
                         {groupOptions[group].map((item) => {
                           if (props.renderOption) return props.renderOption(item);
                           if (props.renderOptionChild)
                             return (
-                              <Combobox.Option value={getId(item)} key={getId(item)} disabled={item.disabled}>
+                              <Combobox.Option
+                                value={getId(item)}
+                                key={getId(item)}
+                                disabled={item.disabled}
+                              >
                                 {props.renderOptionChild(item)}
                               </Combobox.Option>
                             );
@@ -295,9 +313,9 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                       </Combobox.Group>
                     );
                   })}
-                </>
+                </Fragment>
               ) : (
-                <>
+                <Fragment>
                   {!searching && (
                     <Combobox.Empty>
                       <Group gap={0} justify="center" flex={1}>
@@ -310,11 +328,11 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                       </Group>
                     </Combobox.Empty>
                   )}
-                </>
+                </Fragment>
               )}
 
               {!!props.onCreate && (
-                <>
+                <Fragment>
                   <Divider my={5} opacity={0.5} />
                   <Combobox.Option value="$create">
                     <Group gap={0} justify="center">
@@ -327,7 +345,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                       </Text>
                     </Group>
                   </Combobox.Option>
-                </>
+                </Fragment>
               )}
             </ScrollArea.Autosize>
           </Combobox.Options>

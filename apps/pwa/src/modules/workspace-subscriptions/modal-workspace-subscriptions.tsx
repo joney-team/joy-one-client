@@ -6,7 +6,10 @@ import { Errored } from "@/components/errored";
 import { Loading } from "@/components/loading";
 import { ModalTitle } from "@/components/modal-title";
 import { getView } from "@/layout/layout-service";
-import { createBankTransaction, getBankTransaction } from "@/modules/bank-transactions/bank-transaction-service";
+import {
+  createBankTransaction,
+  getBankTransaction,
+} from "@/modules/bank-transactions/bank-transaction-service";
 import {
   BankTransactionEntity,
   BankTransactionPaymentGateway,
@@ -29,10 +32,22 @@ import { onError } from "@/utils/exceptions.utils";
 import { formatBytes } from "@/utils/file.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { useList } from "@/utils/use-list.util";
-import { Anchor, Badge, Card, em, Group, SimpleGrid, Skeleton, Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import {
+  Anchor,
+  Badge,
+  Card,
+  em,
+  Group,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  Text,
+  ThemeIcon,
+  Title,
+} from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconArrowRight, IconBox, IconConfetti } from "@tabler/icons-react";
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 
 export const ModalWorkspaceSubscription: FC = () => {
   const workspace = useWorkspace();
@@ -54,7 +69,8 @@ export const ModalWorkspaceSubscription: FC = () => {
 
   const totalAmount = calculated?.totalPrice || 0;
   const totalPrice = calculated
-    ? calculated.selectedSubscription.pricePerMember * (workspace.workspaceSubscription?.stat.totalMembers ?? 0)
+    ? calculated.selectedSubscription.pricePerMember *
+      (workspace.workspaceSubscription?.stat.totalMembers ?? 0)
     : 0;
 
   const onCalculate = async (_selectedSubscriptionId: string) => {
@@ -143,7 +159,8 @@ export const ModalWorkspaceSubscription: FC = () => {
   return (
     <Stack p={16}>
       {(function () {
-        if (subscriptions.isFetching || billingBankAccount.isFetching) return <Skeleton height={300} />;
+        if (subscriptions.isFetching || billingBankAccount.isFetching)
+          return <Skeleton height={300} />;
         if (subscriptions.error || billingBankAccount.error || !billingBankAccount.data)
           return <Errored error={subscriptions.error || billingBankAccount.error} />;
 
@@ -221,7 +238,11 @@ export const ModalWorkspaceSubscription: FC = () => {
                         <Badge
                           color={workspace.workspaceSubscription?.subscription.color}
                           size="xl"
-                          variant={workspace.workspaceSubscription?.subscription.isDefault ? "outline" : "filled"}
+                          variant={
+                            workspace.workspaceSubscription?.subscription.isDefault
+                              ? "outline"
+                              : "filled"
+                          }
                         >
                           {workspace.workspaceSubscription?.subscription.name}
                         </Badge>
@@ -232,7 +253,11 @@ export const ModalWorkspaceSubscription: FC = () => {
                           color={calculated.selectedSubscription.color}
                           size="xl"
                           variant={calculated.selectedSubscription.isDefault ? "outline" : "filled"}
-                          leftSection={isUpgraded ? <IconConfetti size={18} style={{ marginRight: 5 }} /> : undefined}
+                          leftSection={
+                            isUpgraded ? (
+                              <IconConfetti size={18} style={{ marginRight: 5 }} />
+                            ) : undefined
+                          }
                         >
                           {calculated.selectedSubscription.name}
                         </Badge>
@@ -244,7 +269,9 @@ export const ModalWorkspaceSubscription: FC = () => {
                         <Text fz={em(13)}>Chi phí mỗi tháng</Text>
 
                         <Group justify="space-between">
-                          <Text fw={500}>x{num(workspace.workspaceSubscription?.stat.totalMembers)} Thành viên</Text>
+                          <Text fw={500}>
+                            x{num(workspace.workspaceSubscription?.stat.totalMembers)} Thành viên
+                          </Text>
                           <Stack gap={0}>
                             {calculated.selectedSubscription.pricePerMemberNotSale && (
                               <Text ta="right" td="line-through" fz={em(12)} c="gray">
@@ -299,7 +326,14 @@ export const ModalWorkspaceSubscription: FC = () => {
                 <SubscriptionCard subscription={calculated.selectedSubscription} />
               </SimpleGrid>
 
-              <Anchor mt={10} onClick={() => setCalculated(undefined)} c="gray" ta="center" fz={em(12)} fw={500}>
+              <Anchor
+                mt={10}
+                onClick={() => setCalculated(undefined)}
+                c="gray"
+                ta="center"
+                fz={em(12)}
+                fw={500}
+              >
                 Chọn gói khác
               </Anchor>
             </Stack>
@@ -316,7 +350,8 @@ export const ModalWorkspaceSubscription: FC = () => {
                 );
                 const index = subscriptions.data.findIndex((v) => v._id === subscription._id);
                 const isUpgrade = index > activatedIndex;
-                const isActivated = workspace.workspaceSubscription?.subscriptionId === subscription._id;
+                const isActivated =
+                  workspace.workspaceSubscription?.subscriptionId === subscription._id;
 
                 return (
                   <SubscriptionCard
@@ -396,9 +431,15 @@ export const SubscriptionCard: FC<{
         </Stack>
 
         {!!props.onSelect && (
-          <>
+          <Fragment>
             {props.isActivated ? (
-              <Button mt={30} color={subscription.color} type="submit" variant="outline" radius={100}>
+              <Button
+                mt={30}
+                color={subscription.color}
+                type="submit"
+                variant="outline"
+                radius={100}
+              >
                 {t("using_this_subscription")}
               </Button>
             ) : (
@@ -412,7 +453,7 @@ export const SubscriptionCard: FC<{
                 {props.isUpgrade ? t("upgrade") : t("select_this_subscription")}
               </Button>
             )}
-          </>
+          </Fragment>
         )}
       </Stack>
     </Card>

@@ -1,10 +1,12 @@
+"use client";
+
 import { useLang } from "@/modules/lang/lang-context";
 import { localeNames, t } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
 import { Anchor, Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLanguage, IconWorld } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { Image } from "../image";
 import { useColor } from "@/modules/theme/use-color";
 
@@ -19,7 +21,7 @@ export const ButtonLanguage: FC = () => {
   };
 
   return (
-    <>
+    <Fragment>
       <Anchor fz={em(13)} ta="center" c="gray" onClick={open}>
         <Group align="center" gap={0}>
           <ThemeIcon variant="transparent" color="gray">
@@ -43,7 +45,13 @@ export const ButtonLanguage: FC = () => {
 
           {Object.values(Locale).map((locale) => {
             return (
-              <Card withBorder key={locale} p={10} style={{ cursor: "pointer" }} onClick={() => onSelect(locale)}>
+              <Card
+                withBorder
+                key={locale}
+                p={10}
+                style={{ cursor: "pointer" }}
+                onClick={() => onSelect(locale)}
+              >
                 <Group gap={10}>
                   <Image src={`/lang/${locale}.png`} w={30} />
                   <Text fz={em(15)} fw={500}>
@@ -66,6 +74,6 @@ export const ButtonLanguage: FC = () => {
           </Card>
         </Stack>
       </Modal>
-    </>
+    </Fragment>
   );
 };

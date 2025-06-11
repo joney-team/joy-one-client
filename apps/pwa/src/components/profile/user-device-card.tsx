@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
 import { useAuth } from "@/modules/auth/auth-context";
@@ -5,9 +7,14 @@ import { DeviceEntity } from "@/modules/devices/devices-types";
 import { renderDate, t } from "@/modules/lang/lang-service";
 import { signOutOtherDevices } from "@/modules/users/users-service";
 import { Badge, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
-import { IconDeviceDesktop, IconDeviceMobile, IconDeviceTablet, IconDeviceUnknown } from "@tabler/icons-react";
+import {
+  IconDeviceDesktop,
+  IconDeviceMobile,
+  IconDeviceTablet,
+  IconDeviceUnknown,
+} from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
 interface UserDeviceCardProps {
   device: DeviceEntity;
@@ -54,16 +61,24 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
           )}
           {!!ua.browser.name && (
             <Text fz={em(12)} c="gray">
-              {ua.browser.name} {!!ua.browser.version && <>({ua.browser.version})</>}
+              {ua.browser.name}{" "}
+              {!!ua.browser.version && <Fragment>({ua.browser.version})</Fragment>}
             </Text>
           )}
 
           <Text fz={em(12)} c="gray">
-            {t("active_at")} {dayjs(device.lastActiveAt * 1000).fromNow()} ({renderDate(device.lastActiveAt * 1000)})
+            {t("active_at")} {dayjs(device.lastActiveAt * 1000).fromNow()} (
+            {renderDate(device.lastActiveAt * 1000)})
           </Text>
 
           <Group mt={10}>
-            <Button size="compact-xs" variant="light" color="gray" fz={em(13)} onClick={() => signOutOtherDevices()}>
+            <Button
+              size="compact-xs"
+              variant="light"
+              color="gray"
+              fz={em(13)}
+              onClick={() => signOutOtherDevices()}
+            >
               {t("sign_out")}
             </Button>
           </Group>

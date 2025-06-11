@@ -1,3 +1,5 @@
+"use client";
+
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
 import { EventType } from "@/modules/events/event-types";
@@ -6,7 +8,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Center, Skeleton, Stack, Text } from "@mantine/core";
 import { IconArchive } from "@tabler/icons-react";
-import { FC, useEffect } from "react";
+import { FC, Fragment, useEffect } from "react";
 
 import { useRouter } from "@/hooks/use-router";
 import { Button } from "@/components/buttons/button";
@@ -43,7 +45,7 @@ export const ServiceDetail: FC = () => {
       {!product.isInitialized && <Skeleton height={200} />}
       {!!product.error && <Errored error={product.error} />}
       {product.data && (
-        <>
+        <Fragment>
           <ProductCard product={product.data} />
           <EventList ref={serviceId} />
 
@@ -53,7 +55,9 @@ export const ServiceDetail: FC = () => {
                 h={25}
                 variant="subtle"
                 color="gray"
-                leftSection={<IconArchive strokeWidth={1.3} size={16} style={{ marginRight: -5 }} />}
+                leftSection={
+                  <IconArchive strokeWidth={1.3} size={16} style={{ marginRight: -5 }} />
+                }
                 onClick={() =>
                   onArchive({
                     name: "Dịch vụ",
@@ -68,7 +72,7 @@ export const ServiceDetail: FC = () => {
               </Button>
             </Center>
           )}
-        </>
+        </Fragment>
       )}
     </Stack>
   );

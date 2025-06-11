@@ -13,7 +13,12 @@ import { createTask } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils, findNearestTimeSlot, setHoursMinutes, timeInputValue } from "@/utils/dateTime.utils";
+import {
+  DateTimeUtils,
+  findNearestTimeSlot,
+  setHoursMinutes,
+  timeInputValue,
+} from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { StringUtils } from "@/utils/string.utils";
 import {
@@ -50,7 +55,9 @@ export interface TaskTimeTrackingModalProps {
   onSubmit?: (task: TaskEntity) => any;
 }
 
-const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () => void }> = (props) => {
+const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () => void }> = (
+  props
+) => {
   const workspace = useWorkspace();
   const lang = useLang();
   const tasks = useTasks();
@@ -82,8 +89,14 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
 
   const onSubmit = async () => {
     try {
-      if (!name) throw new Error(StringUtils.capitalizeFirstLetter(`${t("please")} ${t("enter_task_name")}`));
-      if (!slot) throw new Error(StringUtils.capitalizeFirstLetter(`${t("please")} ${t("select")} ${t("time")}`));
+      if (!name)
+        throw new Error(
+          StringUtils.capitalizeFirstLetter(`${t("please")} ${t("enter_task_name")}`)
+        );
+      if (!slot)
+        throw new Error(
+          StringUtils.capitalizeFirstLetter(`${t("please")} ${t("select")} ${t("time")}`)
+        );
 
       const time = new Date(date);
       const startAt = time.setHours(
@@ -138,26 +151,24 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
   return (
     <Stack>
       {tasks.tagFolder && (
-        <>
-          <Group gap={2} align="center" wrap="nowrap" ml={-8}>
-            <Button
-              size="compact-sm"
-              variant="subtle"
-              color={color(tasks.tagFolder.color || "gray")}
-              fz={16}
-              fw={500}
-              leftIcon={IconFolder}
-            >
-              {tasks.tagFolder.name}
-            </Button>
+        <Group gap={2} align="center" wrap="nowrap" ml={-8}>
+          <Button
+            size="compact-sm"
+            variant="subtle"
+            color={color(tasks.tagFolder.color || "gray")}
+            fz={16}
+            fw={500}
+            leftIcon={IconFolder}
+          >
+            {tasks.tagFolder.name}
+          </Button>
 
-            <Text>/</Text>
+          <Text>/</Text>
 
-            <Text px={8} fz={em(14)} fw={300}>
-              {t("new_task")}
-            </Text>
-          </Group>
-        </>
+          <Text px={8} fz={em(14)} fw={300}>
+            {t("new_task")}
+          </Text>
+        </Group>
       )}
 
       <ContentEditable
@@ -193,7 +204,9 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
                             <Group gap={3} ml={-3}>
                               <IconStopwatch size={16} strokeWidth={1.5} />
                               <Text fz={13} fw={500}>
-                                {DateTimeUtils.toHHMM((slot.endAt * 1000 - slot.startAt * 1000) / 1000)}
+                                {DateTimeUtils.toHHMM(
+                                  (slot.endAt * 1000 - slot.startAt * 1000) / 1000
+                                )}
                               </Text>
                             </Group>
                           ),
@@ -215,10 +228,10 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
                     return DateTimeUtils.toHHMM((end.getTime() - start.getTime()) / 1000);
                   },
                   eventTimeRangeFormat: ({ start, end }) => {
-                    return `${calendarDayJsLocalizer.format(start, "HH:mm")} - ${calendarDayJsLocalizer.format(
-                      end,
+                    return `${calendarDayJsLocalizer.format(
+                      start,
                       "HH:mm"
-                    )}`;
+                    )} - ${calendarDayJsLocalizer.format(end, "HH:mm")}`;
                   },
                 }}
                 slotPropGetter={(slot) => {
@@ -244,7 +257,11 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
 
       <InputWrapper label={t("time")}>
         <Group gap={10} wrap="nowrap">
-          <DateInput valueFormat={lang.config.dateFormat} value={date} onChange={(v) => setDate(new Date(v!))} />
+          <DateInput
+            valueFormat={lang.config.dateFormat}
+            value={date}
+            onChange={(v) => setDate(new Date(v!))}
+          />
 
           <Group gap={5} wrap="nowrap">
             <TimeInput
@@ -270,7 +287,11 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
                 scrollToSlot(new Date(startAt * 1000));
               }}
               rightSection={
-                <ActionIcon variant="subtle" color="gray" onClick={() => startAtRef.current?.showPicker()}>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  onClick={() => startAtRef.current?.showPicker()}
+                >
                   <IconClock size={16} stroke={1.5} />
                 </ActionIcon>
               }
@@ -297,7 +318,11 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
               }}
               onClick={() => endAtRef.current?.showPicker()}
               rightSection={
-                <ActionIcon variant="subtle" color="gray" onClick={() => endAtRef.current?.showPicker()}>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  onClick={() => endAtRef.current?.showPicker()}
+                >
                   <IconClock size={16} stroke={1.5} />
                 </ActionIcon>
               }
@@ -331,7 +356,13 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         />
       </Group>
 
-      <Button leftIcon={IconPlus} onClick={onSubmit} action mt={10} color={color(tasks.tagFolder?.color || "primary")}>
+      <Button
+        leftIcon={IconPlus}
+        onClick={onSubmit}
+        action
+        mt={10}
+        color={color(tasks.tagFolder?.color || "primary")}
+      >
         {t("add")}
       </Button>
     </Stack>

@@ -1,9 +1,11 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { num, t } from "@/modules/lang/lang-service";
 import { Badge, Card, Group, Modal, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Icon, IconCheck, IconPackage } from "@tabler/icons-react";
-import { FC, ReactNode } from "react";
+import { FC, Fragment, ReactNode } from "react";
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
@@ -18,10 +20,11 @@ export const OrderFormCombosVouchers: FC = () => {
   const totalLength = orderForm.combos.length + orderForm.vouchers.length;
   const activeLength =
     orderForm.combos.filter((c) => orderForm.values.combos.some((c2) => c2.id === c.id)).length +
-    orderForm.vouchers.filter((v) => orderForm.values.vouchers.some((v2) => v2._id === v._id)).length;
+    orderForm.vouchers.filter((v) => orderForm.values.vouchers.some((v2) => v2._id === v._id))
+      .length;
 
   return (
-    <>
+    <Fragment>
       <Button
         flex={1}
         variant="outline"
@@ -90,7 +93,7 @@ export const OrderFormCombosVouchers: FC = () => {
           <Empty visible={totalLength === 0} />
         </Stack>
       </Modal>
-    </>
+    </Fragment>
   );
 };
 

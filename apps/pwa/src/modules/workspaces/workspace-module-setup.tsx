@@ -10,11 +10,34 @@ import { WorkspaceViewComponent } from "@/modules/workspace-settings/workspace-s
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ActionIcon, Badge, Card, Container, Divider, Group, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  Container,
+  Divider,
+  Group,
+  Stack,
+  Text,
+  ThemeIcon,
+  Tooltip,
+} from "@mantine/core";
 import { useDebouncedValue, useListState, UseListStateHandlers } from "@mantine/hooks";
-import { IconLayout, IconLibraryPlus, IconMinus, IconPlus, IconRefresh, IconSeparator } from "@tabler/icons-react";
+import {
+  IconLayout,
+  IconLibraryPlus,
+  IconMinus,
+  IconPlus,
+  IconRefresh,
+  IconSeparator,
+} from "@tabler/icons-react";
 import { v4 as uuid } from "uuid";
 
 export const WorkspaceModuleSetup: FC = () => {
@@ -69,75 +92,85 @@ export const WorkspaceModuleSetup: FC = () => {
   };
 
   return (
-    <>
-      <Container size={600} p={16}>
-        <Stack gap={10}>
-          <Group justify="space-between">
-            <Group gap={10} flex={1}>
-              <ThemeIcon variant="light">
-                <IconLayout size={20} />
-              </ThemeIcon>
+    <Container size={600} p={16}>
+      <Stack gap={10}>
+        <Group justify="space-between">
+          <Group gap={10} flex={1}>
+            <ThemeIcon variant="light">
+              <IconLayout size={20} />
+            </ThemeIcon>
 
-              <Text fw={600}>{t("navigator")}</Text>
-            </Group>
-
-            <Group gap={3}>
-              <Tooltip label={t("reset_default")}>
-                <ActionIcon variant="subtle" color="dark" onClick={onReset}>
-                  <IconRefresh strokeWidth={1.5} size={18} />
-                </ActionIcon>
-              </Tooltip>
-
-              <Tooltip label={`${t("add")} ${t("divider")}`}>
-                <ActionIcon variant="subtle" color="dark" onClick={onAddDivier}>
-                  <IconPlus strokeWidth={1.5} size={18} />
-                </ActionIcon>
-              </Tooltip>
-
-              <WorkspaceModuleSelector
-                excludeIds={components.filter((v) => v.type === "MODULE" && !!v.moduleId).map((v) => v.moduleId!!)}
-                onSelect={(mo) => {
-                  handleComponents.append({ id: uuid(), moduleId: mo.id as any, type: "MODULE" });
-                }}
-                renderTrigger={(ctx) => {
-                  return (
-                    <Tooltip label={`${t("add")} ${t("modules")}`}>
-                      <ActionIcon variant="subtle" color="dark" onClick={ctx.toggle}>
-                        <IconLibraryPlus strokeWidth={1.5} size={18} />
-                      </ActionIcon>
-                    </Tooltip>
-                  );
-                }}
-              />
-            </Group>
+            <Text fw={600}>{t("navigator")}</Text>
           </Group>
 
-          <Card withBorder p={10}>
-            <DndContext
-              sensors={sensors}
-              onDragEnd={(e) => {
-                const { active, over } = e;
-                if (!over || active.id === over?.id) return;
-                let items = [...components];
+          <Group gap={3}>
+            <Tooltip label={t("reset_default")}>
+              <ActionIcon variant="subtle" color="dark" onClick={onReset}>
+                <IconRefresh strokeWidth={1.5} size={18} />
+              </ActionIcon>
+            </Tooltip>
 
-                const oldIndex = items.findIndex((v) => v.id === active.id.toString());
-                const newIndex = items.findIndex((v) => v.id === over?.id.toString());
-                items = arrayMove(items, oldIndex, newIndex);
-                handleComponents.setState(items);
+            <Tooltip label={`${t("add")} ${t("divider")}`}>
+              <ActionIcon variant="subtle" color="dark" onClick={onAddDivier}>
+                <IconPlus strokeWidth={1.5} size={18} />
+              </ActionIcon>
+            </Tooltip>
+
+            <WorkspaceModuleSelector
+              excludeIds={components
+                .filter((v) => v.type === "MODULE" && !!v.moduleId)
+                .map((v) => v.moduleId!!)}
+              onSelect={(mo) => {
+                handleComponents.append({ id: uuid(), moduleId: mo.id as any, type: "MODULE" });
               }}
-            >
-              <Stack gap={5}>
-                <SortableContext items={components.map((v) => v.id)} strategy={verticalListSortingStrategy}>
-                  {components.map((cpn) => {
-                    return <ComponentItem key={cpn.id} cpn={cpn} components={components} handler={handleComponents} />;
-                  })}
-                </SortableContext>
-              </Stack>
-            </DndContext>
-          </Card>
-        </Stack>
-      </Container>
-    </>
+              renderTrigger={(ctx) => {
+                return (
+                  <Tooltip label={`${t("add")} ${t("modules")}`}>
+                    <ActionIcon variant="subtle" color="dark" onClick={ctx.toggle}>
+                      <IconLibraryPlus strokeWidth={1.5} size={18} />
+                    </ActionIcon>
+                  </Tooltip>
+                );
+              }}
+            />
+          </Group>
+        </Group>
+
+        <Card withBorder p={10}>
+          <DndContext
+            sensors={sensors}
+            onDragEnd={(e) => {
+              const { active, over } = e;
+              if (!over || active.id === over?.id) return;
+              let items = [...components];
+
+              const oldIndex = items.findIndex((v) => v.id === active.id.toString());
+              const newIndex = items.findIndex((v) => v.id === over?.id.toString());
+              items = arrayMove(items, oldIndex, newIndex);
+              handleComponents.setState(items);
+            }}
+          >
+            <Stack gap={5}>
+              <SortableContext
+                items={components.map((v) => v.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                {components.map((cpn) => {
+                  return (
+                    <ComponentItem
+                      key={cpn.id}
+                      cpn={cpn}
+                      components={components}
+                      handler={handleComponents}
+                    />
+                  );
+                })}
+              </SortableContext>
+            </Stack>
+          </DndContext>
+        </Card>
+      </Stack>
+    </Container>
   );
 };
 
@@ -195,9 +228,13 @@ const ComponentItem: FC<{
             </Renderer>
           </Group>
         ) : (
-          <>
-            <Divider w="100%" label={t(cpn.dividerName!)} labelPosition="left" tt="capitalize" py={10} />
-          </>
+          <Divider
+            w="100%"
+            label={t(cpn.dividerName!)}
+            labelPosition="left"
+            tt="capitalize"
+            py={10}
+          />
         )}
       </Group>
 

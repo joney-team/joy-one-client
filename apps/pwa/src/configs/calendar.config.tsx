@@ -1,9 +1,12 @@
+"use client";
+
 import dayjs from "dayjs";
 
 import { dayjsLocalizer, type CalendarProps } from "react-big-calendar";
 import { getView } from "@/layout/layout-service";
 import { LangState } from "@/modules/lang/lang-types";
 import { getGlobal } from "@/global";
+import { Fragment } from "react";
 
 export interface CalendarEvent {
   title?: string;
@@ -26,17 +29,17 @@ function Event(props: { event: CalendarEvent }) {
   return (
     <span style={{ fontSize: 12 }}>
       {event.doctor && (
-        <>
+        <Fragment>
           <strong>{event.doctor}</strong>
           <br />
-        </>
+        </Fragment>
       )}
 
       {event.customerName && (
-        <>
+        <Fragment>
           <strong>{event.customerName}</strong>
           <br />
-        </>
+        </Fragment>
       )}
 
       <strong>{event.title}</strong>

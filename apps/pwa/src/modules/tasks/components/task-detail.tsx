@@ -11,11 +11,22 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskByCode, getTaskEntity, getTaskEntityByCode } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { onError } from "@/utils/exceptions.utils";
-import { Card, Container, CopyButton, Group, Modal, ScrollArea, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
+import {
+  Card,
+  Container,
+  CopyButton,
+  Group,
+  Modal,
+  ScrollArea,
+  Skeleton,
+  Stack,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import { useDisclosure, useHover } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { DetailFooter } from "./detail-footer";
 import { TaskDetailHead } from "./detail-head";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
@@ -88,7 +99,7 @@ export const TaskDetail: FC = () => {
       }}
     >
       {!!task ? (
-        <>
+        <Fragment>
           <Renderer views={["mobile", "tablet"]}>
             <Stack>
               <Stack
@@ -160,11 +171,9 @@ export const TaskDetail: FC = () => {
               </Group>
             </Stack>
           </Renderer>
-        </>
+        </Fragment>
       ) : (
-        <>
-          <Skeleton h={300} w="100%" />
-        </>
+        <Skeleton h={300} w="100%" />
       )}
     </Modal>
   );
@@ -181,7 +190,15 @@ const TaskCodeButton: FC<{ task: TaskEntity }> = (props) => {
         {({ copied, copy }) => (
           <Tooltip label={t("copy_code")}>
             <Group>
-              <Card withBorder h={26} py={0} px={8} onClick={copy} style={{ cursor: "pointer" }} ref={hover.ref}>
+              <Card
+                withBorder
+                h={26}
+                py={0}
+                px={8}
+                onClick={copy}
+                style={{ cursor: "pointer" }}
+                ref={hover.ref}
+              >
                 <Group h="100%" align="center" gap={5}>
                   <Text fz={13} c="var(--mantine-color-dimmed)" fw={500}>
                     {task.code}

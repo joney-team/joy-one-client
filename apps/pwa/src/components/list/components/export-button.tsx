@@ -16,7 +16,7 @@ import { Center, Modal, parseThemeColor, Select, Stack, useMantineTheme } from "
 import { useDisclosure } from "@mantine/hooks";
 import { IconDownload, IconFileExport } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import writeXlsxFile, { Row } from "write-excel-file";
 import { ExportToExcelItem, ListContext } from "../types";
 import { getIn, getValuePath } from "../utils";
@@ -192,7 +192,7 @@ export const ExportButton: FC<ListContext> = (props) => {
   if (!workspace.hasPermission(WorkspacePermission.EXPORT_DATA)) return null;
 
   return (
-    <>
+    <Fragment>
       <ActionButton icon={IconFileExport} tooltip="export-data" onClick={open} />
 
       <Modal
@@ -216,6 +216,6 @@ export const ExportButton: FC<ListContext> = (props) => {
           </Center>
         </Stack>
       </Modal>
-    </>
+    </Fragment>
   );
 };

@@ -70,7 +70,12 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
   return (
     <form onSubmit={onSubmit}>
       <Stack>
-        <TextInput withAsterisk ref={inputNameRef} label={t("name")} {...form.getInputProps("name")} />
+        <TextInput
+          withAsterisk
+          ref={inputNameRef}
+          label={t("name")}
+          {...form.getInputProps("name")}
+        />
 
         <ColorInput
           label={t("color")}
@@ -79,11 +84,14 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
           swatches={configs.swatches}
           rightSection={
             form.values.color && (
-              <>
-                <ActionIcon variant="subtle" size="sm" color="gray" onClick={() => form.setFieldValue("color", "")}>
-                  <IconX strokeWidth={1.5} size={18} />
-                </ActionIcon>
-              </>
+              <ActionIcon
+                variant="subtle"
+                size="sm"
+                color="gray"
+                onClick={() => form.setFieldValue("color", "")}
+              >
+                <IconX strokeWidth={1.5} size={18} />
+              </ActionIcon>
             )
           }
         />

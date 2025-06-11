@@ -1,20 +1,32 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { Errored } from "@/components/errored";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { EventType } from "@/modules/events/event-types";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
+import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { getPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { ActionIcon, Anchor, Button, Card, Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
+import {
+  ActionIcon,
+  Anchor,
+  Button,
+  Card,
+  Group,
+  Skeleton,
+  Stack,
+  Text,
+  ThemeIcon,
+} from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { IconMail, IconPencil, IconPhone, IconUpload } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
-import { FC, useEffect } from "react";
+import { FC, Fragment, useEffect } from "react";
 
 export const PartnerDetail: FC = () => {
   const params = useParams();
@@ -34,7 +46,7 @@ export const PartnerDetail: FC = () => {
   useEffect(() => {
     layout.setComponents({
       navigation: data.data && (
-        <>
+        <Fragment>
           <Anchor href={`tel:${data.data.phone}`}>
             <Button leftSection={<IconPhone size={18} strokeWidth={1.5} />}>Gọi ngay</Button>
           </Anchor>
@@ -46,7 +58,7 @@ export const PartnerDetail: FC = () => {
               </Button>
             </Anchor>
           )}
-        </>
+        </Fragment>
       ),
     });
   }, [data.data]);
@@ -114,7 +126,11 @@ export const PartnerDetail: FC = () => {
 
                 <Group>
                   {partner.phone && (
-                    <Anchor href={`tel:${partner.phone}`} c="dark" onClick={(e) => e.stopPropagation()}>
+                    <Anchor
+                      href={`tel:${partner.phone}`}
+                      c="dark"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <Group gap={1}>
                         <ThemeIcon color="dark" variant="transparent">
                           <IconPhone strokeWidth={1.5} size={18} />
@@ -125,7 +141,11 @@ export const PartnerDetail: FC = () => {
                   )}
 
                   {partner.email && (
-                    <Anchor href={`mailto:${partner.email}`} c="dark" onClick={(e) => e.stopPropagation()}>
+                    <Anchor
+                      href={`mailto:${partner.email}`}
+                      c="dark"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <Group gap={1}>
                         <ThemeIcon color="dark" variant="transparent">
                           <IconMail strokeWidth={1.5} size={18} />

@@ -1,3 +1,5 @@
+"use client";
+
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
@@ -32,7 +34,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { type FC, useEffect } from "react";
+import { type FC, Fragment, useEffect } from "react";
 import {
   ProductStockEntity,
   ProductStockRecordEntity,
@@ -82,11 +84,11 @@ export const ProductDetail: FC = () => {
         {!product.isInitialized && <Skeleton height={200} />}
         {!!product.error && <Errored error={product.error} />}
         {product.data && (
-          <>
+          <Fragment>
             <ProductCard product={product.data} preventLink imageSize={120} />
 
             {product.data.isStockCheck && (
-              <>
+              <Fragment>
                 <List<ProductStockEntity>
                   id={`product-stocks-${productId}`}
                   icon={IconBuildingWarehouse}
@@ -185,7 +187,7 @@ export const ProductDetail: FC = () => {
                   }}
                   events={events}
                 />
-              </>
+              </Fragment>
             )}
 
             <ButtonArchive
@@ -197,7 +199,7 @@ export const ProductDetail: FC = () => {
                 })
               }
             />
-          </>
+          </Fragment>
         )}
       </Stack>
     </Container>

@@ -6,7 +6,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { shiftSelect } from "@joy-one-client/utils/array";
 import { Badge, Card, Center, Group, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Empty } from "../empty";
 import { Errored } from "../errored";
 import { Renderer } from "../renderer";
@@ -66,7 +66,10 @@ export function List<T = any>(props: ListProps<T>) {
         return props.fetch(params, controller);
       }
 
-      return api.get(props.route, { params: { ...props.params, ...params }, signal: controller?.signal });
+      return api.get(props.route, {
+        params: { ...props.params, ...params },
+        signal: controller?.signal,
+      });
     },
   });
 
@@ -83,7 +86,8 @@ export function List<T = any>(props: ListProps<T>) {
   };
 
   const spacing = 10;
-  const isViewStateChanged = JSON.stringify(initialViewState.current) !== JSON.stringify(viewStateRef.current);
+  const isViewStateChanged =
+    JSON.stringify(initialViewState.current) !== JSON.stringify(viewStateRef.current);
 
   const onSaveViewState = () => {
     if (!isViewStateChanged) return;
@@ -120,13 +124,16 @@ export function List<T = any>(props: ListProps<T>) {
 
   const selectedIds = useMemo(() => {
     if (isSelectAll) return list.data.map((v) => getListDataId(v));
-    return list.data.filter((v) => _selectedIds.includes(getListDataId(v))).map((v) => getListDataId(v));
+    return list.data
+      .filter((v) => _selectedIds.includes(getListDataId(v)))
+      .map((v) => getListDataId(v));
   }, [_selectedIds, list.data, isSelectAll]);
 
   const availableMultipleSelectActions = useMemo(() => {
     return (props.multipleSelectActions || []).filter(
       (v) =>
-        (!v.available || v.available(list.data.filter((i) => selectedIds.includes(getListDataId(i))))) &&
+        (!v.available ||
+          v.available(list.data.filter((i) => selectedIds.includes(getListDataId(i))))) &&
         (!v.permission || workspace.hasPermission(v.permission))
     );
   }, [props.multipleSelectActions, list.data, selectedIds, workspace.hasPermission]);
@@ -211,7 +218,9 @@ export function List<T = any>(props: ListProps<T>) {
                 w={layout.view === "mobile" ? "100%" : "unset"}
               >
                 <Group gap={spacing * 0.8} align="center">
-                  {props.icon && <props.icon size={22} color="var(--mantine-color-bright)" strokeWidth={1.5} />}
+                  {props.icon && (
+                    <props.icon size={22} color="var(--mantine-color-bright)" strokeWidth={1.5} />
+                  )}
                   <Text fw={500} fz={14} c="var(--mantine-color-bright)">
                     {t(props.name || "list")}
                   </Text>
@@ -270,7 +279,7 @@ export function List<T = any>(props: ListProps<T>) {
       </Card>
 
       {viewStateRef.current.view === "grid" && ListCard && (
-        <>
+        <Fragment>
           <SimpleGrid cols={{ md: 3 }}>
             {list.data.map((item) => {
               return <ListCard key={getListDataId(item)} data={item} />;
@@ -288,10 +297,14 @@ export function List<T = any>(props: ListProps<T>) {
               <Errored error={list.error} />
             </Center>
           )}
-        </>
+        </Fragment>
       )}
 
-      <WayPoint enabled={list.isAbleToLoadMore} offset={300} onReached={() => list.fetch(false, {})} />
+      <WayPoint
+        enabled={list.isAbleToLoadMore}
+        offset={300}
+        onReached={() => list.fetch(false, {})}
+      />
 
       <BulkActions {...ctx} />
     </Stack>

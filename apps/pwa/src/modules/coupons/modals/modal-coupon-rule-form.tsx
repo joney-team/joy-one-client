@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Editor } from "@/components/editor";
 import { TextInput } from "@/components/inputs/text-input";
@@ -37,7 +39,7 @@ import {
 import { useForm } from "@mantine/form";
 import { useDisclosure, useListState } from "@mantine/hooks";
 import { IconNotes, IconPlus, IconX } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 
 interface ModalCouponRuleFormProps {
   rule?: CouponRuleEntity;
@@ -112,7 +114,9 @@ export const ModalCouponRuleForm: FC = () => {
     <Modal
       title={
         <ModalTitle
-          title={StringUtils.capitalizeFirstLetter(`${t(props?.rule ? "update" : "create")} ${t("coupon_rules")}`)}
+          title={StringUtils.capitalizeFirstLetter(
+            `${t(props?.rule ? "update" : "create")} ${t("coupon_rules")}`
+          )}
           icon={IconNotes}
         />
       }
@@ -208,7 +212,10 @@ const RuleBenfitForm: FC<{
     <Stack>
       <Select
         label={t("type")}
-        data={Object.values(CouponRuleBenefitType).map((v) => ({ value: v, label: t(`crbt_${v}`) }))}
+        data={Object.values(CouponRuleBenefitType).map((v) => ({
+          value: v,
+          label: t(`crbt_${v}`),
+        }))}
         value={benefit.type}
         onChange={(v) => onChange({ ...benefit, type: v as CouponRuleBenefitType })}
       />
@@ -218,23 +225,23 @@ const RuleBenfitForm: FC<{
           const data = (benefit.data || {}) as DiscountOnTotalData;
 
           return (
-            <>
-              <SimpleGrid cols={{ md: 2 }}>
-                <Select
-                  label={t("type")}
-                  data={Object.values(DiscountType).map((v) => ({ value: v, label: t(`cdt_${v}`) }))}
-                  value={data.type}
-                  onChange={(v) => onChange({ ...benefit, data: { ...data, type: v as DiscountType, value: null } })}
-                />
+            <SimpleGrid cols={{ md: 2 }}>
+              <Select
+                label={t("type")}
+                data={Object.values(DiscountType).map((v) => ({ value: v, label: t(`cdt_${v}`) }))}
+                value={data.type}
+                onChange={(v) =>
+                  onChange({ ...benefit, data: { ...data, type: v as DiscountType, value: null } })
+                }
+              />
 
-                <NumberInput
-                  label={t("value")}
-                  hideControls
-                  value={data.value}
-                  onChange={(v) => onChange({ ...benefit, data: { ...data, value: v } })}
-                />
-              </SimpleGrid>
-            </>
+              <NumberInput
+                label={t("value")}
+                hideControls
+                value={data.value}
+                onChange={(v) => onChange({ ...benefit, data: { ...data, value: v } })}
+              />
+            </SimpleGrid>
           );
         }
 
@@ -242,10 +249,12 @@ const RuleBenfitForm: FC<{
           const data = (benefit.data || {}) as DiscountOnProductData;
 
           return (
-            <>
+            <Fragment>
               <ProductSelector
                 type={[ProductType.PRODUCT, ProductType.SERVICE]}
-                onSelect={(product) => onChange({ ...benefit, data: { ...data, product, productId: product._id } })}
+                onSelect={(product) =>
+                  onChange({ ...benefit, data: { ...data, product, productId: product._id } })
+                }
                 renderTrigger={(ctx) => {
                   return (
                     <TextInput
@@ -263,9 +272,17 @@ const RuleBenfitForm: FC<{
               <SimpleGrid cols={{ md: 2 }}>
                 <Select
                   label={t("type")}
-                  data={Object.values(DiscountType).map((v) => ({ value: v, label: t(`cdt_${v}`) }))}
+                  data={Object.values(DiscountType).map((v) => ({
+                    value: v,
+                    label: t(`cdt_${v}`),
+                  }))}
                   value={data.type}
-                  onChange={(v) => onChange({ ...benefit, data: { ...data, type: v as DiscountType, value: null } })}
+                  onChange={(v) =>
+                    onChange({
+                      ...benefit,
+                      data: { ...data, type: v as DiscountType, value: null },
+                    })
+                  }
                 />
 
                 <NumberInput
@@ -275,7 +292,7 @@ const RuleBenfitForm: FC<{
                   onChange={(v) => onChange({ ...benefit, data: { ...data, value: v } })}
                 />
               </SimpleGrid>
-            </>
+            </Fragment>
           );
         }
 
@@ -283,10 +300,12 @@ const RuleBenfitForm: FC<{
           const data = (benefit.data || {}) as FreeOnProductData;
 
           return (
-            <>
+            <Fragment>
               <ProductSelector
                 type={[ProductType.PRODUCT, ProductType.SERVICE]}
-                onSelect={(product) => onChange({ ...benefit, data: { ...data, product, productId: product._id } })}
+                onSelect={(product) =>
+                  onChange({ ...benefit, data: { ...data, product, productId: product._id } })
+                }
                 renderTrigger={(ctx) => {
                   return (
                     <TextInput
@@ -308,7 +327,7 @@ const RuleBenfitForm: FC<{
                 value={data.quantity}
                 onChange={(v) => onChange({ ...benefit, data: { ...data, quantity: v } })}
               />
-            </>
+            </Fragment>
           );
         }
       })()}

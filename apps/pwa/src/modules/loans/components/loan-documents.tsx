@@ -55,7 +55,9 @@ interface LoanDocumentsProps {
 export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
   const { loan } = props;
   const workspace = useWorkspace();
-  const ableToUpdate = loan.status === LoanStatus.PENDING && workspace.hasPermission(WorkspacePermission.LOANS_CREATOR);
+  const ableToUpdate =
+    loan.status === LoanStatus.PENDING &&
+    workspace.hasPermission(WorkspacePermission.LOANS_CREATOR);
 
   const onUpdateAmount = useDebouncedCallback(async (value: any) => {
     onActionLoad({
@@ -67,7 +69,10 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
   const onUpdatePackagePeriodDays = useDebouncedCallback(async (v: any) => {
     onActionLoad({
       name: t("update_loan_payment_period"),
-      process: () => updateLoanPackage(loan.id, { packagePeriodDays: +v, packageId: loan.package.id }).catch(onError),
+      process: () =>
+        updateLoanPackage(loan.id, { packagePeriodDays: +v, packageId: loan.package.id }).catch(
+          onError
+        ),
     });
   }, 300);
 
@@ -100,7 +105,10 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
         <Stack>
           <LoanRowInfo label={t("loan_package")} value={loan.package.id} />
 
-          <LoanRowInfo label={t("loan_asset_type")} value={t(`loan_asset_type_${loan.assetType}`)} />
+          <LoanRowInfo
+            label={t("loan_asset_type")}
+            value={t(`loan_asset_type_${loan.assetType}`)}
+          />
 
           <LoanRowInfo label={t("loan_period")} value={renderLoanPeriod(loan.package.days)} />
 
@@ -108,9 +116,11 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
             label={t("loan_amount")}
             value={
               ableToUpdate ? (
-                <>
-                  <NumberInput hideControls defaultValue={loan.amount} onChange={(v) => onUpdateAmount(+v)} />
-                </>
+                <NumberInput
+                  hideControls
+                  defaultValue={loan.amount}
+                  onChange={(v) => onUpdateAmount(+v)}
+                />
               ) : (
                 num(loan.amount, { type: "money" })
               )
@@ -121,16 +131,14 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
             label={t("loan_payment_periods")}
             value={
               ableToUpdate ? (
-                <>
-                  <Select
-                    data={loan.package.periodDaysOptions.map((value) => ({
-                      value: value.toString(),
-                      label: renderLoanPeriod(value),
-                    }))}
-                    value={loan.packagePeriodDays.toString()}
-                    onChange={(v) => onUpdatePackagePeriodDays(v)}
-                  />
-                </>
+                <Select
+                  data={loan.package.periodDaysOptions.map((value) => ({
+                    value: value.toString(),
+                    label: renderLoanPeriod(value),
+                  }))}
+                  value={loan.packagePeriodDays.toString()}
+                  onChange={(v) => onUpdatePackagePeriodDays(v)}
+                />
               ) : (
                 num(loan.packagePeriodDays)
               )
@@ -144,11 +152,9 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
             description={t("loan_coord_desc")}
             value={
               loan.coord ? (
-                <>
-                  <Anchor href={getGoogleMapLinkCoord(loan.coord)} target="_blank">
-                    {t("view_on_google_map")}
-                  </Anchor>
-                </>
+                <Anchor href={getGoogleMapLinkCoord(loan.coord)} target="_blank">
+                  {t("view_on_google_map")}
+                </Anchor>
               ) : (
                 "--"
               )
@@ -176,7 +182,10 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
       </Card>
 
       <Renderer
-        visible={loan.status === LoanStatus.PENDING && workspace.hasPermission(WorkspacePermission.LOANS_APPROVE)}
+        visible={
+          loan.status === LoanStatus.PENDING &&
+          workspace.hasPermission(WorkspacePermission.LOANS_APPROVE)
+        }
       >
         <Group justify="center">
           <Button onClick={onApprove} leftIcon={IconCheck}>

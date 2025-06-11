@@ -1,8 +1,5 @@
-import { OnModalBookingDetail } from "@/modules/bookings/modals/modal-booking-detail";
-import { OnModalCancelBooking } from "@/modules/bookings/modals/modal-cancel-booking";
-import { OnModalRescheduleBooking } from "./modals/modal-reschedule-booking";
-import { OnModalUpdateBooking } from "@/modules/bookings/modals/modal-update-booking";
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import {
   checkinBooking,
   completeBooking,
@@ -10,9 +7,12 @@ import {
   inProgressBooking,
   triggerRemindBooking,
 } from "@/modules/bookings/booking-service";
-import { BookingEntity, BookingStatus } from "./booking-types";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
+import { OnModalBookingDetail } from "@/modules/bookings/modals/modal-booking-detail";
+import { OnModalCancelBooking } from "@/modules/bookings/modals/modal-cancel-booking";
+import { OnModalUpdateBooking } from "@/modules/bookings/modals/modal-update-booking";
 import { renderFromNow, renderTime, t } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { capitalize } from "@/utils/string.utils";
 import {
@@ -45,8 +45,10 @@ import {
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, useEffect, useState } from "react";
-import { CustomerInput } from "../customers/customer-input";
 import { UsersInput } from "../../components/inputs/users-input";
+import { CustomerInput } from "../customers/customer-input";
+import { BookingEntity, BookingStatus } from "./booking-types";
+import { OnModalRescheduleBooking } from "./modals/modal-reschedule-booking";
 
 interface BookingCardProps extends CardProps {
   booking: BookingEntity;
@@ -58,7 +60,14 @@ interface BookingCardProps extends CardProps {
 }
 
 export const BookingCard: FC<BookingCardProps> = (props) => {
-  const { booking, hideCustomerInfo = false, hideCtas = false, memberCollapsed = true, refresh, ...rest } = props;
+  const {
+    booking,
+    hideCustomerInfo = false,
+    hideCtas = false,
+    memberCollapsed = true,
+    refresh,
+    ...rest
+  } = props;
 
   const color = useColor();
 
@@ -150,11 +159,19 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                     </ActionIcon>
                   </Popover.Target>
 
-                  <Popover.Dropdown ref={ref} onClick={(e) => e.stopPropagation()} style={{ zIndex: 500 }}>
+                  <Popover.Dropdown
+                    ref={ref}
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ zIndex: 500 }}
+                  >
                     <Stack>
                       <Divider label={t("actions")} labelPosition="left" />
                       {booking.customer && (
-                        <Anchor href={`tel:${booking.customer.phone}`} c="dark" onClick={(e) => e.stopPropagation()}>
+                        <Anchor
+                          href={`tel:${booking.customer.phone}`}
+                          c="dark"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <Group gap={10} style={{ cursor: "pointer", userSelect: "none" }}>
                             <ThemeIcon size="sm" radius={100} color="primary">
                               <IconPhone color="white" size={12} />
@@ -319,15 +336,18 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
 
           <Group>
             {booking.customer && !hideCustomerInfo && (
-              <>
-                <Group flex={1}>
-                  <CustomerInput label={t("customer")} value={booking.customer} disabled />
-                </Group>
-              </>
+              <Group flex={1}>
+                <CustomerInput label={t("customer")} value={booking.customer} disabled />
+              </Group>
             )}
 
             <Group flex={1}>
-              <UsersInput label={t("attendees")} value={booking.assigneeUsers} collapsed={memberCollapsed} disabled />
+              <UsersInput
+                label={t("attendees")}
+                value={booking.assigneeUsers}
+                collapsed={memberCollapsed}
+                disabled
+              />
             </Group>
           </Group>
 

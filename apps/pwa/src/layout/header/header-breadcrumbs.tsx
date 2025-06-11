@@ -1,7 +1,9 @@
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { t } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceModule } from "@/modules/workspaces/workspace-modules";
 import { Card, Group, Text, ThemeIcon } from "@mantine/core";
@@ -66,7 +68,7 @@ export const WorkspaceHeaderBreadcrumbs: FC = () => {
       {!!activatedModule && <BreadcrumbItem m={activatedModule} />}
 
       {layout.components.head && (
-        <>
+        <Fragment>
           <BreadcrumbDivider enabled={!!activatedModule || !!parentActivatedModule} />
 
           {typeof layout.components.head === "string" ? (
@@ -76,7 +78,7 @@ export const WorkspaceHeaderBreadcrumbs: FC = () => {
           ) : (
             layout.components.head
           )}
-        </>
+        </Fragment>
       )}
     </Group>
   );

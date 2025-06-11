@@ -17,8 +17,13 @@ import { onActionLoad } from "@/utils/actions";
 import { useFetch, UseFetch } from "@/utils/use-fetch.util";
 import { Card, Center, Group, Skeleton, Stack, Table, Text } from "@mantine/core";
 import { openConfirmModal } from "@mantine/modals";
-import { IconBrandSpeedtest, IconCircleDashedCheck, IconPlus, IconRefresh } from "@tabler/icons-react";
-import { FC } from "react";
+import {
+  IconBrandSpeedtest,
+  IconCircleDashedCheck,
+  IconPlus,
+  IconRefresh,
+} from "@tabler/icons-react";
+import { FC, Fragment } from "react";
 import { LoanRowInfo } from "./loan-row-info";
 import { LoanReceiptCard } from "./loan-receipt-card";
 import { useColor } from "@/modules/theme/use-color";
@@ -52,11 +57,14 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
     ],
   });
 
-  const liquidationReceipt = (receipts.data || []).find((v) => v.type === ReceiptType.INCOME && v.data?.liquidation);
+  const liquidationReceipt = (receipts.data || []).find(
+    (v) => v.type === ReceiptType.INCOME && v.data?.liquidation
+  );
   const isAbleToLiquidation =
     loan?.status !== LoanStatus.COMPLETED &&
-    (receipts.data || []).filter((v) => v.type === ReceiptType.INCOME && v.status === ReceiptStatus.PENDING).length >=
-      2;
+    (receipts.data || []).filter(
+      (v) => v.type === ReceiptType.INCOME && v.status === ReceiptStatus.PENDING
+    ).length >= 2;
 
   const onRevertLiquidation = async () => {
     if (!loan) return;
@@ -78,7 +86,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
 
   const CTAs: FC = () => {
     return (
-      <>
+      <Fragment>
         <Renderer visible={!!isAbleToLiquidation}>
           <Button
             color="orange"
@@ -98,21 +106,29 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           </Button>
         </Renderer>
 
-        <Button color="gray" variant="subtle" leftIcon={IconCircleDashedCheck} onClick={() => healthCheckLoan(loan.id)}>
+        <Button
+          color="gray"
+          variant="subtle"
+          leftIcon={IconCircleDashedCheck}
+          onClick={() => healthCheckLoan(loan.id)}
+        >
           {t("check")}
         </Button>
-      </>
+      </Fragment>
     );
   };
 
   return (
-    <>
+    <Fragment>
       <Renderer views={["desktop", "tablet"]}>
         <Card shadow="xs" p={0}>
           <Stack>
             <Table
               striped
-              style={{ borderBottom: "calc(0.0625rem* var(--mantine-scale)) solid var(--table-border-color)" }}
+              style={{
+                borderBottom:
+                  "calc(0.0625rem* var(--mantine-scale)) solid var(--table-border-color)",
+              }}
               withColumnBorders
             >
               <Table.Thead>
@@ -139,7 +155,9 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
 
                   return (
                     <Table.Tr key={i}>
-                      <Table.Td ta="center">{paymentPeriod.period > 0 ? paymentPeriod.period : "--"}</Table.Td>
+                      <Table.Td ta="center">
+                        {paymentPeriod.period > 0 ? paymentPeriod.period : "--"}
+                      </Table.Td>
 
                       <Table.Td>
                         <Stack gap={8}>
@@ -153,7 +171,9 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                       </Table.Td>
 
                       <Table.Td>
-                        <NumberCurrencyFormatter value={paymentPeriod.totalAmount - paymentPeriod.capitalAmount} />
+                        <NumberCurrencyFormatter
+                          value={paymentPeriod.totalAmount - paymentPeriod.capitalAmount}
+                        />
                       </Table.Td>
 
                       <Table.Td>
@@ -293,14 +313,19 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                     <LoanRowInfo
                       label="Thu lãi"
                       value={
-                        <NumberCurrencyFormatter value={paymentPeriod.totalAmount - paymentPeriod.capitalAmount} />
+                        <NumberCurrencyFormatter
+                          value={paymentPeriod.totalAmount - paymentPeriod.capitalAmount}
+                        />
                       }
                     />
                     <LoanRowInfo
                       label="Thu gốc"
                       value={<NumberCurrencyFormatter value={paymentPeriod.capitalAmount} />}
                     />
-                    <LoanRowInfo label="Tổng" value={<NumberCurrencyFormatter value={paymentPeriod.totalAmount} />} />
+                    <LoanRowInfo
+                      label="Tổng"
+                      value={<NumberCurrencyFormatter value={paymentPeriod.totalAmount} />}
+                    />
 
                     <Stack py={10}>
                       {relatedReceipts.map((receipt) => {
@@ -366,6 +391,6 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           </Center>
         </Stack>
       </Renderer>
-    </>
+    </Fragment>
   );
 };

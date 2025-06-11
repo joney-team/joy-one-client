@@ -1,5 +1,7 @@
+"use client";
+
+import { Animate } from "@/components/animate/animate";
 import { useCloseAppLoading } from "@/components/app-loading";
-import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ButtonLanguage } from "@/components/buttons/button-language";
 import { ColorSchemes } from "@/components/color-schemes";
@@ -28,11 +30,10 @@ import {
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconLock, IconMail, IconUser } from "@tabler/icons-react";
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { useApp } from "../../app.context";
 import { t } from "../lang/lang-service";
 import { renewPassword, requestRenewPassword, verifyRenewPasswordCode } from "./auth-service";
-import { Animate } from "@/components/animate/animate";
 
 export const AuthRequire: FC = () => {
   useCloseAppLoading();
@@ -175,7 +176,7 @@ export const AuthRequire: FC = () => {
                     return <ForgotPassword onFinish={() => setAuthType("signin")} />;
 
                   return (
-                    <>
+                    <Fragment>
                       {authType === "signin" ? (
                         <SignIn onForgotPassword={() => setAuthType("forgot-password")} />
                       ) : (
@@ -202,7 +203,7 @@ export const AuthRequire: FC = () => {
                           </Button>
                         );
                       })}
-                    </>
+                    </Fragment>
                   );
                 })()}
               </Stack>
@@ -432,7 +433,7 @@ const ForgotPassword: FC<{ onFinish: () => void }> = (props) => {
         {(function () {
           if (isVerified) {
             return (
-              <>
+              <Fragment>
                 <Text ta="center">{t("enter_new_password")}</Text>
 
                 <PasswordInput
@@ -445,13 +446,13 @@ const ForgotPassword: FC<{ onFinish: () => void }> = (props) => {
                 <Button mt={16} loading={isSubmitting} type="submit" h={42}>
                   {t("change_password")}
                 </Button>
-              </>
+              </Fragment>
             );
           }
 
           if (isSent)
             return (
-              <>
+              <Fragment>
                 <Text ta="center">{t("forgot_password_msg")}</Text>
 
                 <Center>
@@ -461,11 +462,11 @@ const ForgotPassword: FC<{ onFinish: () => void }> = (props) => {
                 <Anchor ta="center" onClick={() => onSubmit()} mt={16} fz={em(14)}>
                   {t("resend_verification_code")}
                 </Anchor>
-              </>
+              </Fragment>
             );
 
           return (
-            <>
+            <Fragment>
               <TextInput
                 label="Email"
                 placeholder={t("enter_your_email") as string}
@@ -477,7 +478,7 @@ const ForgotPassword: FC<{ onFinish: () => void }> = (props) => {
               <Button mt={16} loading={isSubmitting} type="submit">
                 {t("next")}
               </Button>
-            </>
+            </Fragment>
           );
         })()}
       </Stack>

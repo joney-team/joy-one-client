@@ -1,10 +1,15 @@
+"use client";
+
 import { OnModalRoleForm } from "@/modules/workspace-roles/modals/modal-workspace-role-form";
 import { t } from "@/modules/lang/lang-service";
-import { WorkspacePermission, WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
+import {
+  WorkspacePermission,
+  WorkspaceSpecialRoleId,
+} from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconPencil } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
 interface WorkspaceRoleCardProps {
   id: any;
@@ -12,13 +17,19 @@ interface WorkspaceRoleCardProps {
 
 export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
   const workspace = useWorkspace();
-  const isAbleToEdit = ![WorkspaceSpecialRoleId.OWNER, WorkspaceSpecialRoleId.ADMIN].includes(props.id);
+  const isAbleToEdit = ![WorkspaceSpecialRoleId.OWNER, WorkspaceSpecialRoleId.ADMIN].includes(
+    props.id
+  );
 
   const role = workspace.roles.find((role) => role._id === props.id);
   const roleName = t(role?.name || `role_${props.id}`);
   const permissions =
-    (props.id === WorkspaceSpecialRoleId.MEMBER ? workspace.settings.memberPermissions : role?.permissions) || [];
-  const permissionCounts = Object.values(WorkspacePermission).filter((key) => permissions.includes(key)).length;
+    (props.id === WorkspaceSpecialRoleId.MEMBER
+      ? workspace.settings.memberPermissions
+      : role?.permissions) || [];
+  const permissionCounts = Object.values(WorkspacePermission).filter((key) =>
+    permissions.includes(key)
+  ).length;
 
   return (
     <Card
@@ -43,47 +54,48 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
           {(function () {
             if (props.id === WorkspaceSpecialRoleId.OWNER) {
               return (
-                <>
+                <Fragment>
                   <Text fz={em(12)} c="gray">
                     • {t("role_access_all")}
                   </Text>
                   <Text fz={em(12)} c="gray">
                     • {t("role_owner_desc")}
                   </Text>
-                </>
+                </Fragment>
               );
             }
 
             if (props.id === WorkspaceSpecialRoleId.ADMIN) {
               return (
-                <>
+                <Fragment>
                   <Text fz={em(12)} c="gray">
                     • {t("role_access_all")}
                   </Text>
                   <Text fz={em(12)} c="gray">
                     • {t("role_admin_desc")}
                   </Text>
-                </>
+                </Fragment>
               );
             }
 
             if (props.id === WorkspaceSpecialRoleId.MEMBER) {
               return (
-                <>
+                <Fragment>
                   <Text fz={em(12)} c="gray">
                     • {t("role_default")}
                   </Text>
 
                   <Text fz={em(12)} c="gray">
-                    • {t("grant_permissions")} {permissionCounts}/{Object.keys(WorkspacePermission).length}
+                    • {t("grant_permissions")} {permissionCounts}/
+                    {Object.keys(WorkspacePermission).length}
                   </Text>
-                </>
+                </Fragment>
               );
             }
 
             if (role) {
               return (
-                <>
+                <Fragment>
                   {role.description && (
                     <Text fz={em(12)} c="gray">
                       • {role.description}
@@ -91,9 +103,10 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
                   )}
 
                   <Text fz={em(12)} c="gray">
-                    • {t("grant_permissions")} {permissionCounts}/{Object.keys(WorkspacePermission).length}
+                    • {t("grant_permissions")} {permissionCounts}/
+                    {Object.keys(WorkspacePermission).length}
                   </Text>
-                </>
+                </Fragment>
               );
             }
           })()}

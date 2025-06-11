@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { ChillIllustration } from "@/components/illustrations/chill";
 import { useLayout } from "@/layout/layout-context";
@@ -11,7 +13,10 @@ import {
   getNotifications,
   onListViewed,
 } from "@/modules/notifications/notification-service";
-import { NotificationEntity, UserNotificationStat } from "@/modules/notifications/notification-types";
+import {
+  NotificationEntity,
+  UserNotificationStat,
+} from "@/modules/notifications/notification-types";
 import { onError } from "@/utils/exceptions.utils";
 import { classNames } from "@/utils/ui.utils";
 import { useList } from "@/utils/use-list.util";
@@ -19,7 +24,7 @@ import { ActionIcon, Drawer, Group, Indicator, Stack, Text, ThemeIcon, em } from
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconBell, IconBrush } from "@tabler/icons-react";
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { Button } from "../../components/buttons/button";
 import { ButtonViewMore } from "../../components/buttons/button-view-more";
 import { Errored } from "../../components/errored";
@@ -76,7 +81,13 @@ export const UserNotifications: FC = () => {
   const onClean = () => {
     modals.openConfirmModal({
       modalId: "ModalCleanNotification",
-      title: <ModalTitle color="primary" title={`${t("clean")} ${t("notifications")}`} icon={IconBrush} />,
+      title: (
+        <ModalTitle
+          color="primary"
+          title={`${t("clean")} ${t("notifications")}`}
+          icon={IconBrush}
+        />
+      ),
       children: t("clean_notification_msg"),
       color: color("primary"),
       onConfirm: async () => cleanNotifications().then(close).catch(onError),
@@ -100,7 +111,7 @@ export const UserNotifications: FC = () => {
   );
 
   return (
-    <>
+    <Fragment>
       <ActionIcon
         id="user-notifications"
         variant="subtle"
@@ -172,9 +183,12 @@ export const UserNotifications: FC = () => {
 
           <EmptyNotification visible={notifications.isEmpty} />
           <Errored error={notifications.error} visible={notifications.isHasError} />
-          <ButtonViewMore visible={notifications.isAbleToLoadMore} onClick={() => notifications.fetch()} />
+          <ButtonViewMore
+            visible={notifications.isAbleToLoadMore}
+            onClick={() => notifications.fetch()}
+          />
         </Stack>
       </Drawer>
-    </>
+    </Fragment>
   );
 };

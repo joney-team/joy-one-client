@@ -2,7 +2,7 @@
 
 import { Anchor, Modal, Stack, ThemeIcon, Title, em } from "@mantine/core";
 import { IconCalendar, IconEye, IconUser, IconUserScreen } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 
 import { useColor } from "@/modules/theme/use-color";
 import { useRouter } from "@/hooks/use-router";
@@ -61,10 +61,15 @@ export const ModalBookingDetail: FC = () => {
             </Stack>
 
             {props?.booking.customer && (
-              <>
+              <Fragment>
                 <SessionTitle mb={-10} name={t("customer")} icon={IconUser} />
-                <CustomerCard customer={props?.booking.customer} withBorder shadow="none" onClick={() => {}} />
-              </>
+                <CustomerCard
+                  customer={props?.booking.customer}
+                  withBorder
+                  shadow="none"
+                  onClick={() => {}}
+                />
+              </Fragment>
             )}
 
             <SessionTitle mb={-10} name={t("booking")} icon={IconCalendar} />

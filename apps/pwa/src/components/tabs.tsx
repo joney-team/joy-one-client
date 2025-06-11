@@ -1,9 +1,11 @@
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
 import { Box, Group, MantineStyleProp, Text, alpha, em } from "@mantine/core";
 import { useResizeObserver } from "@mantine/hooks";
 import { Icon } from "@tabler/icons-react";
-import { CSSProperties, FC, useEffect, useState } from "react";
+import { CSSProperties, FC, Fragment, useEffect, useState } from "react";
 
 export interface AppTabItem {
   id: string;
@@ -56,7 +58,7 @@ export const Tabs: FC<TabsProps> = (props) => {
   const availableTabs = tabs.filter((tab) => !tab.component);
 
   return (
-    <>
+    <Fragment>
       <Box
         style={{
           maxWidth: "100%",
@@ -102,7 +104,9 @@ export const Tabs: FC<TabsProps> = (props) => {
           >
             <div
               style={{
-                background: color(props.tabs.find((tab) => tab.id === props.active)?.activeColor || "primary"),
+                background: color(
+                  props.tabs.find((tab) => tab.id === props.active)?.activeColor || "primary"
+                ),
                 boxShadow: "0px 1px 1px #00000010",
                 width: "100%",
                 height: "100%",
@@ -150,7 +154,7 @@ export const Tabs: FC<TabsProps> = (props) => {
             </Box>
           );
         })}
-    </>
+    </Fragment>
   );
 };
 

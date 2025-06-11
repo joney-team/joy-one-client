@@ -1,8 +1,11 @@
 "use client";
 
-import { type FC, useEffect, useState } from "react";
+import { Avatar } from "@/components/avatar";
+import { Button } from "@/components/buttons/button";
+import { ModalTitle } from "@/components/modal-title";
 import { useAuth } from "@/modules/auth/auth-context";
 import { BookingEntity } from "@/modules/bookings/booking-types";
+import { CommentCard } from "@/modules/comments/comment-card";
 import { createComment, getComments } from "@/modules/comments/comment-service";
 import { CommentEntity } from "@/modules/comments/comment-types";
 import { CustomerEntity } from "@/modules/customers/customer-types";
@@ -30,10 +33,7 @@ import { IconMessage, IconPin, IconSend } from "@tabler/icons-react";
 import Placeholder from "@tiptap/extension-placeholder";
 import { BubbleMenu, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Avatar } from "@/components/avatar";
-import { Button } from "@/components/buttons/button";
-import { CommentCard } from "@/modules/comments/comment-card";
-import { ModalTitle } from "@/components/modal-title";
+import { type FC, Fragment, useEffect, useState } from "react";
 
 interface CommentsProps {
   customer?: CustomerEntity;
@@ -109,7 +109,7 @@ export const Comments: FC<CommentsProps> = (props) => {
   if (!props.booking && !props.customer) return null;
 
   return (
-    <>
+    <Fragment>
       <Group onClick={open}>
         {!!pinnedComment && (
           <Group
@@ -129,7 +129,11 @@ export const Comments: FC<CommentsProps> = (props) => {
               <IconPin strokeWidth={1.5} size={18} />
             </ThemeIcon>
             <TypographyStylesProvider>
-              <div dangerouslySetInnerHTML={{ __html: pinnedComment.text || (pinnedComment as any).content || "" }} />
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: pinnedComment.text || (pinnedComment as any).content || "",
+                }}
+              />
             </TypographyStylesProvider>
           </Group>
         )}
@@ -181,44 +185,44 @@ export const Comments: FC<CommentsProps> = (props) => {
           )}
 
           {!!editor && (
-            <>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  onSend();
-                }}
-              >
-                <Stack gap={10}>
-                  <Group gap={10} align="start">
-                    <Avatar src={auth.user?.avatar}>{auth.user?.name?.slice(0, 2).toUpperCase()}</Avatar>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                onSend();
+              }}
+            >
+              <Stack gap={10}>
+                <Group gap={10} align="start">
+                  <Avatar src={auth.user?.avatar}>
+                    {auth.user?.name?.slice(0, 2).toUpperCase()}
+                  </Avatar>
 
-                    <RichTextEditor editor={editor} flex={1}>
-                      <BubbleMenu editor={editor}>
-                        <RichTextEditor.ControlsGroup>
-                          <RichTextEditor.Bold />
-                          <RichTextEditor.Italic />
-                          <RichTextEditor.Link />
-                        </RichTextEditor.ControlsGroup>
-                      </BubbleMenu>
+                  <RichTextEditor editor={editor} flex={1}>
+                    <BubbleMenu editor={editor}>
+                      <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.Bold />
+                        <RichTextEditor.Italic />
+                        <RichTextEditor.Link />
+                      </RichTextEditor.ControlsGroup>
+                    </BubbleMenu>
 
-                      <RichTextEditor.Content />
-                    </RichTextEditor>
-                  </Group>
+                    <RichTextEditor.Content />
+                  </RichTextEditor>
+                </Group>
 
-                  <Group justify="end">
-                    <Button
-                      h={32}
-                      size="sm"
-                      rightSection={<IconSend strokeWidth={1.5} size={18} />}
-                      type="submit"
-                      loading={isSending}
-                    >
-                      Gửi
-                    </Button>
-                  </Group>
-                </Stack>
-              </form>
-            </>
+                <Group justify="end">
+                  <Button
+                    h={32}
+                    size="sm"
+                    rightSection={<IconSend strokeWidth={1.5} size={18} />}
+                    type="submit"
+                    loading={isSending}
+                  >
+                    Gửi
+                  </Button>
+                </Group>
+              </Stack>
+            </form>
           )}
 
           {comments.data.length > 0 &&
@@ -227,16 +231,12 @@ export const Comments: FC<CommentsProps> = (props) => {
                 <Box key={comment._id}>
                   <CommentCard comment={comment} />
 
-                  {index !== comments.data.length - 1 && (
-                    <>
-                      <Divider color={alpha("#000000", 0.05)} />
-                    </>
-                  )}
+                  {index !== comments.data.length - 1 && <Divider color={alpha("#000000", 0.05)} />}
                 </Box>
               );
             })}
         </Stack>
       </Modal>
-    </>
+    </Fragment>
   );
 };

@@ -83,49 +83,47 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
               </Card>
 
               {tagFolders.tagFolder && (
-                <>
-                  <Menu>
-                    <Menu.Target>
-                      <ActionIcon variant="subtle" color="dark">
-                        <IconDots strokeWidth={1.5} size={16} />
-                      </ActionIcon>
-                    </Menu.Target>
+                <Menu>
+                  <Menu.Target>
+                    <ActionIcon variant="subtle" color="dark">
+                      <IconDots strokeWidth={1.5} size={16} />
+                    </ActionIcon>
+                  </Menu.Target>
 
-                    <Menu.Dropdown>
-                      <Menu.Item
-                        leftSection={<IconLogout2 strokeWidth={2} size={18} />}
-                        onClick={(e) => {
-                          e.stopPropagation();
+                  <Menu.Dropdown>
+                    <Menu.Item
+                      leftSection={<IconLogout2 strokeWidth={2} size={18} />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        tagFolders.exitFolder();
+                      }}
+                    >
+                      <Text fz={14}>{t("exit")}</Text>
+                    </Menu.Item>
+
+                    <Menu.Item
+                      leftSection={<IconPencil strokeWidth={2} size={18} />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        OnModalTagForm({ tag: tagFolders.tagFolder!, type: TagType.TASK_FOLDER });
+                      }}
+                    >
+                      <Text fz={14}>{t("edit")}</Text>
+                    </Menu.Item>
+
+                    <Menu.Item
+                      leftSection={<IconTrash strokeWidth={2} size={18} />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRemoveTaskTagFolder(tagFolders.tagFolder!, () => {
                           tagFolders.exitFolder();
-                        }}
-                      >
-                        <Text fz={14}>{t("exit")}</Text>
-                      </Menu.Item>
-
-                      <Menu.Item
-                        leftSection={<IconPencil strokeWidth={2} size={18} />}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          OnModalTagForm({ tag: tagFolders.tagFolder!, type: TagType.TASK_FOLDER });
-                        }}
-                      >
-                        <Text fz={14}>{t("edit")}</Text>
-                      </Menu.Item>
-
-                      <Menu.Item
-                        leftSection={<IconTrash strokeWidth={2} size={18} />}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onRemoveTaskTagFolder(tagFolders.tagFolder!, () => {
-                            tagFolders.exitFolder();
-                          });
-                        }}
-                      >
-                        <Text fz={14}>{t("remove")}</Text>
-                      </Menu.Item>
-                    </Menu.Dropdown>
-                  </Menu>
-                </>
+                        });
+                      }}
+                    >
+                      <Text fz={14}>{t("remove")}</Text>
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
               )}
             </Group>
           );

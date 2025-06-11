@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { t } from "@/modules/lang/lang-service";
@@ -46,27 +48,30 @@ export const ModalPrompt: FC<ModalPromptProps> = (props) => {
 
   return (
     <Stack>
-      <Textarea withAsterisk label={props.message} {...form.getInputProps("content")} color={props.color} />
+      <Textarea
+        withAsterisk
+        label={props.message}
+        {...form.getInputProps("content")}
+        color={props.color}
+      />
 
       {props.suggestions && props.suggestions.length > 0 && (
-        <>
-          <Group gap={10}>
-            {props.suggestions.map((s) => {
-              return (
-                <Button
-                  size="compact-xs"
-                  color="gray"
-                  variant="outline"
-                  fz={em(15)}
-                  fw={400}
-                  onClick={() => form.setFieldValue("content", s)}
-                >
-                  {s}
-                </Button>
-              );
-            })}
-          </Group>
-        </>
+        <Group gap={10}>
+          {props.suggestions.map((s) => {
+            return (
+              <Button
+                size="compact-xs"
+                color="gray"
+                variant="outline"
+                fz={em(15)}
+                fw={400}
+                onClick={() => form.setFieldValue("content", s)}
+              >
+                {s}
+              </Button>
+            );
+          })}
+        </Group>
       )}
 
       <Button

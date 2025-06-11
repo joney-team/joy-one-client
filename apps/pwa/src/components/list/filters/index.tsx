@@ -1,18 +1,18 @@
 "use client";
 
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
+import { useLayout } from "@/layout/layout-context";
+import { t } from "@/modules/lang/lang-service";
 import { Group } from "@mantine/core";
 import { IconFilter, IconFilterFilled, IconRefresh } from "@tabler/icons-react";
 import { FC, MouseEventHandler } from "react";
 import { ActionButton } from "../components/action-button";
-import { ListContext, Column } from "../types";
+import { Column, ListContext } from "../types";
 import { DynamicSelectorFilter } from "./dynamic-selector-filter";
 import { StaticSelectorFilter } from "./static-selector-filter";
 import { TextFilter } from "./text-filter";
 import { TimeRangeFilter } from "./time-range-filter";
 import { FilterProps, FilterWrapperProps } from "./types";
-import { t } from "@/modules/lang/lang-service";
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { useLayout } from "@/layout/layout-context";
 
 export const FilterItem: FC<
   ListContext & {
@@ -86,31 +86,29 @@ export const FilterBar: FC<ListContext> = (ctx) => {
   if (!ctx.viewState.isFilterVisible || !isHasFilter) return null;
 
   return (
-    <>
-      <Group
-        gap={ctx.spacing}
-        p={ctx.spacing}
-        style={{ borderTop: `1px solid ${workspaceLayout.dividerColor}` }}
-        align="start"
-      >
-        <Group gap={ctx.spacing} flex={1}>
-          {ctx.columnSettings.map(({ id: colKey }) => {
-            const column = ctx.columns[colKey];
-            if (!column || !column.filter) return null;
+    <Group
+      gap={ctx.spacing}
+      p={ctx.spacing}
+      style={{ borderTop: `1px solid ${workspaceLayout.dividerColor}` }}
+      align="start"
+    >
+      <Group gap={ctx.spacing} flex={1}>
+        {ctx.columnSettings.map(({ id: colKey }) => {
+          const column = ctx.columns[colKey];
+          if (!column || !column.filter) return null;
 
-            return <FilterItem key={colKey} {...ctx} colKey={colKey} column={column} />;
-          })}
-        </Group>
-
-        <ActionButton
-          icon={IconRefresh}
-          label={t("reset")}
-          onClick={onReset}
-          borderStyle="dashed"
-          disabled={!isHasFilter}
-        />
+          return <FilterItem key={colKey} {...ctx} colKey={colKey} column={column} />;
+        })}
       </Group>
-    </>
+
+      <ActionButton
+        icon={IconRefresh}
+        label={t("reset")}
+        onClick={onReset}
+        borderStyle="dashed"
+        disabled={!isHasFilter}
+      />
+    </Group>
   );
 };
 

@@ -1,9 +1,10 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { UserInput } from "@/components/inputs/user-input";
 import { Renderer } from "@/components/renderer";
-import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CustomerSelector } from "@/modules/customers/customer-selector";
 import { num, t } from "@/modules/lang/lang-service";
@@ -11,7 +12,17 @@ import { OrderPaymentStatus } from "@/modules/orders/orders-types";
 import { useColor } from "@/modules/theme/use-color";
 import { UserRole } from "@/modules/users/users-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, Card, Divider, Group, ScrollArea, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  Divider,
+  Group,
+  ScrollArea,
+  Skeleton,
+  Stack,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import {
   IconArchive,
   IconChevronDown,
@@ -44,7 +55,13 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
       <Card shadow="xs" flex={1} w={500} maw="100%" p={0}>
         <Stack gap={0} h="100%">
           {orderTable.order && (
-            <Group bg={color("primary")} pl={16} pr={16 * 0.5} py={16 * 0.5} justify="space-between">
+            <Group
+              bg={color("primary")}
+              pl={16}
+              pr={16 * 0.5}
+              py={16 * 0.5}
+              justify="space-between"
+            >
               <Text fw={700} fz={14} flex={1} c="white" ta="left">
                 #{orderTable.order.code}
               </Text>
@@ -82,7 +99,11 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
               render={(ctx) => {
                 return (
                   <Group onClick={ctx.toggle} gap={10} style={{ cursor: "pointer" }}>
-                    <Avatar icon={IconUserSquareRounded} customer={orderTable.values.relatedCustomer} size={30} />
+                    <Avatar
+                      icon={IconUserSquareRounded}
+                      customer={orderTable.values.relatedCustomer}
+                      size={30}
+                    />
 
                     <Stack gap={0}>
                       <Text fz={14}>
@@ -174,13 +195,13 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
             {orderTable.order &&
               orderTable.order.paymentStatus === OrderPaymentStatus.PROCESSING &&
               orderTable.order.paidAmount > 0 && (
-                <>
+                <Fragment>
                   <Divider variant="dashed" />
                   <Group justify="space-between">
                     <Text>{t("paid")}</Text>
                     <Text>{num(orderTable.order.paidAmount, { type: "money" })}</Text>
                   </Group>
-                </>
+                </Fragment>
               )}
 
             <Divider variant="dashed" />
@@ -192,7 +213,9 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
               {orderTable.isCalculating ? (
                 <Skeleton h={20} w={80} visible={orderTable.isCalculating} />
               ) : (
-                <Text fw={700}>{num((orderTable.totalAmount || 0) + orderTable.tipAmount, { type: "money" })}</Text>
+                <Text fw={700}>
+                  {num((orderTable.totalAmount || 0) + orderTable.tipAmount, { type: "money" })}
+                </Text>
               )}
             </Group>
 

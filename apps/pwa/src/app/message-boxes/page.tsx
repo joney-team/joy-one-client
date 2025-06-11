@@ -1,3 +1,4 @@
 "use client";
 
-export default () => <></>;
+import { Fragment } from "react";
+export default () => <Fragment />;

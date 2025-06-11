@@ -1,13 +1,16 @@
+"use client";
+
+import { type FC, Fragment, memo } from "react";
+import { type AppRouter, useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
-import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { OnCustomerModal } from "@/modules/customers/customer-modal";
+import { t } from "@/modules/lang/lang-service";
+import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { OnModalLoanCalculator } from "@/modules/loans/modals/modal-loan-calculator";
 import { OnModalOrderTable } from "@/modules/orders/order-table/order-table-modal";
+import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useColor } from "@/modules/theme/use-color";
-import { AppRouter, useRouter } from "@/hooks/use-router";
-import { t } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
@@ -24,7 +27,6 @@ import {
   IconStackPush,
   IconUserPlus,
 } from "@tabler/icons-react";
-import { FC, memo } from "react";
 import { Button } from "../../components/buttons/button";
 
 const shortcuts: {
@@ -78,7 +80,9 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
   const availableShortcuts = shortcuts.filter((shortcut) => {
     const isHasPermission = !shortcut.permission || workspace.hasPermission(shortcut.permission);
     const isModuleActive = shortcut.moduleId ? workspace.isModuleActive(shortcut.moduleId) : true;
-    const isMatchWorkspaceType = shortcut.workspaceType ? workspace.type === shortcut.workspaceType : true;
+    const isMatchWorkspaceType = shortcut.workspaceType
+      ? workspace.type === shortcut.workspaceType
+      : true;
     return isHasPermission && isModuleActive && isMatchWorkspaceType;
   });
 
@@ -113,7 +117,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
   }
 
   return (
-    <>
+    <Fragment>
       {workspace.type === WorkspaceType.CREDIT && (
         <Button
           id="create-credit"
@@ -154,6 +158,6 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
           </Menu.Dropdown>
         </Menu>
       )}
-    </>
+    </Fragment>
   );
 });

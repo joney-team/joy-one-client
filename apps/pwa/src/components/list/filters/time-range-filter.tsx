@@ -74,16 +74,14 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
             active={!!filterValue}
           >
             {filterValue && (
-              <>
-                <Text fz={12} fw={700}>
-                  {(function () {
-                    if (period === Period.DATE) return renderDate(+date * 1000);
-                    if (period === Period.MONTH)
-                      return capitalizeFirstLetter(dayjs(+date * 1000).format(`MMMM YYYY`));
-                    if (period === Period.YEAR) return dayjs(+date * 1000).format(`YYYY`);
-                  })()}
-                </Text>
-              </>
+              <Text fz={12} fw={700}>
+                {(function () {
+                  if (period === Period.DATE) return renderDate(+date * 1000);
+                  if (period === Period.MONTH)
+                    return capitalizeFirstLetter(dayjs(+date * 1000).format(`MMMM YYYY`));
+                  if (period === Period.YEAR) return dayjs(+date * 1000).format(`YYYY`);
+                })()}
+              </Text>
             )}
           </Wrapper>
         </Group>

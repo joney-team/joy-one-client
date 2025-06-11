@@ -1,15 +1,35 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { DueDateInput } from "@/components/inputs/due-date-input";
 import { UsersInput } from "@/components/inputs/users-input";
+import { TagSelector } from "@/components/selector/tag-selector";
+import { TaskPrioritySelector } from "@/components/selector/task-priority-selector";
+import { num, renderDateTime, t } from "@/modules/lang/lang-service";
+import { TagType } from "@/modules/tags/tags-types";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { renderDateTime, num, t } from "@/modules/lang/lang-service";
+import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useTask } from "@/modules/tasks/hooks/use-task";
+import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
-import { ReorderTaskPotision, TaskEntity, TaskPriority } from "@/modules/tasks/tasks-types";
+import { ReorderTaskPotision, TaskEntity } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
 import { renderEntityCode } from "@/modules/workspaces/utils";
-import { ActionIcon, Badge, Card, em, Group, Menu, Progress, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import { capitalize } from "@/utils/string.utils";
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  em,
+  Group,
+  Menu,
+  Progress,
+  Stack,
+  Text,
+  ThemeIcon,
+  Tooltip,
+} from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import {
   Icon,
@@ -25,15 +45,8 @@ import {
   IconUser,
   IconX,
 } from "@tabler/icons-react";
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, Fragment, PropsWithChildren, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag, useTaskDrop } from "../../tasks-dnd-provider";
-import { Renderer } from "@/components/renderer";
-import { TaskTag } from "@/modules/tasks/components/task-tag";
-import { TaskPrioritySelector } from "@/components/selector/task-priority-selector";
-import { TagSelector } from "@/components/selector/tag-selector";
-import { TagType } from "@/modules/tags/tags-types";
-import { capitalize } from "@/utils/string.utils";
-import { useColor } from "@/modules/theme/use-color";
 
 interface BoardTaskCardProps {
   id: string;
@@ -68,29 +81,27 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
   const render = (overlay: boolean) => {
     if (overlay)
       return (_props: PropsWithChildren) => (
-        <>
-          <Stack gap={5}>
-            <Card
-              shadow="xs"
-              p={10}
-              flex={1}
-              style={{
-                transform: `rotate(-2deg)`,
-              }}
-              role="dialog"
-              tabIndex={-1}
-            >
-              {_props.children}
-            </Card>
-          </Stack>
-        </>
+        <Stack gap={5}>
+          <Card
+            shadow="xs"
+            p={10}
+            flex={1}
+            style={{
+              transform: `rotate(-2deg)`,
+            }}
+            role="dialog"
+            tabIndex={-1}
+          >
+            {_props.children}
+          </Card>
+        </Stack>
       );
 
     return (_props: PropsWithChildren) => {
       const taskDrag = useTaskDrag(task._id, "card");
 
       return (
-        <>
+        <Fragment>
           <BoardCardDroppable
             visible={!isSelfDragging && !isParentDragging && props.prevId !== draggingTaskId}
             targetTask={task}
@@ -98,7 +109,11 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
             status={task.status}
           />
 
-          <Stack opacity={taskDrag.isDragging ? 0.5 : 1} gap={5} style={{ position: "relative", zIndex: 1 }}>
+          <Stack
+            opacity={taskDrag.isDragging ? 0.5 : 1}
+            gap={5}
+            style={{ position: "relative", zIndex: 1 }}
+          >
             <Card
               shadow="xs"
               p={10}
@@ -114,13 +129,15 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
           </Stack>
 
           <BoardCardDroppable
-            visible={!isSelfDragging && !isParentDragging && props.indexType === "last" && !isHasChild}
+            visible={
+              !isSelfDragging && !isParentDragging && props.indexType === "last" && !isHasChild
+            }
             targetTask={task}
             position={ReorderTaskPotision.AFTER}
             status={task.status}
             isSubTask
           />
-        </>
+        </Fragment>
       );
     };
   };
@@ -139,7 +156,12 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                 </Badge>
 
                 {ctx.tagFolder && !tasks.tagFolder && (
-                  <Badge fz={em(10)} color={ctx.tagFolder.color || "gray"} size="xs" variant="outline">
+                  <Badge
+                    fz={em(10)}
+                    color={ctx.tagFolder.color || "gray"}
+                    size="xs"
+                    variant="outline"
+                  >
                     {ctx.tagFolder.name}
                   </Badge>
                 )}
@@ -208,7 +230,12 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                       task={task}
                       target={
                         <Group gap={5}>
-                          <Button color={taskStatusStyle.color} variant="subtle" size="compact-sm" fz={em(14)}>
+                          <Button
+                            color={taskStatusStyle.color}
+                            variant="subtle"
+                            size="compact-sm"
+                            fz={em(14)}
+                          >
                             {taskStatusStyle.name}
                           </Button>
                         </Group>
@@ -243,7 +270,12 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                 render={(selector) => {
                   return (
                     <CtaSection icon={IconTags} label={t("tags")} onClick={selector.toggle}>
-                      <Group gap={3} flex={1} style={{ cursor: "pointer" }} className="unselectable">
+                      <Group
+                        gap={3}
+                        flex={1}
+                        style={{ cursor: "pointer" }}
+                        className="unselectable"
+                      >
                         {ctx.tags.length ? (
                           ctx.tags.map((tag) => <TaskTag key={tag._id} id={tag._id} h={26} />)
                         ) : (
@@ -369,7 +401,12 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
               </CtaSection>
 
               {ctx.subTasks.length > 0 && (
-                <CtaSection icon={IconSubtask} label={t("subtasks")} applyCollapse isCollapsed={isShowSubTasks}>
+                <CtaSection
+                  icon={IconSubtask}
+                  label={t("subtasks")}
+                  applyCollapse
+                  isCollapsed={isShowSubTasks}
+                >
                   <Group justify="space-between" gap={5} flex={1}>
                     <Button
                       fz={em(14)}
@@ -382,7 +419,11 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                     </Button>
                     <Group flex={1} justify="end" gap={5}>
                       <Text fz={em(10)}>{num(ctx.progress.percent, { roundPrecision: 0 })}%</Text>
-                      <Progress value={ctx.progress.percent} w={60} color={ctx.progress.status.color || "dark"} />
+                      <Progress
+                        value={ctx.progress.percent}
+                        w={60}
+                        color={ctx.progress.status.color || "dark"}
+                      />
                     </Group>
                   </Group>
                 </CtaSection>
@@ -399,7 +440,9 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
               key={subTask._id}
               id={subTask._id}
               showStatus
-              indexType={index === ctx.subTasks.length - 1 ? "last" : index === 0 ? "first" : undefined}
+              indexType={
+                index === ctx.subTasks.length - 1 ? "last" : index === 0 ? "first" : undefined
+              }
               nextId={ctx.subTasks[index + 1]?._id}
               prevId={ctx.subTasks[index - 1]?._id}
             />
@@ -431,8 +474,10 @@ const CtaSection: FC<
         <Group gap={5}>
           <ThemeIcon variant="transparent" color={color(props.iconColor || "gray")} size="sm">
             {(function () {
-              if (props.applyCollapse && props.isCollapsed) return <IconCaretDownFilled size={16} />;
-              if (props.applyCollapse && !props.isCollapsed && hover.hovered) return <IconCaretRightFilled size={16} />;
+              if (props.applyCollapse && props.isCollapsed)
+                return <IconCaretDownFilled size={16} />;
+              if (props.applyCollapse && !props.isCollapsed && hover.hovered)
+                return <IconCaretRightFilled size={16} />;
               return <props.icon strokeWidth={1.5} />;
             })()}
           </ThemeIcon>
@@ -472,10 +517,13 @@ export const BoardCardDroppable: FC<{
 }> = (props) => {
   const dndTasks = useDndTasks();
 
-  const droppable = useTaskDrop(`${props.targetTask._id}-${props.position}-card-${props.isSubTask ? "sub" : "main"}`, {
-    ...props,
-    taskId: props.targetTask._id,
-  });
+  const droppable = useTaskDrop(
+    `${props.targetTask._id}-${props.position}-card-${props.isSubTask ? "sub" : "main"}`,
+    {
+      ...props,
+      taskId: props.targetTask._id,
+    }
+  );
 
   if (!props.visible || !dndTasks.draggingTaskId) return null;
 

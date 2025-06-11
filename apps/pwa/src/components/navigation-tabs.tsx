@@ -8,7 +8,7 @@ import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { ButtonProps, Group, ScrollArea } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { Button } from "./buttons/button";
 
 export const NavigationTabsConfig = {
@@ -44,7 +44,7 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
   const workspaceLayout = useWorkspaceLayout();
 
   return (
-    <>
+    <Fragment>
       <ScrollArea
         type="never"
         scrollbars="x"
@@ -73,12 +73,20 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
                 h="100%"
                 style={{
                   borderBottom: `3px solid ${
-                    isActive ? (colorScheme === "dark" ? color("dark.3") : color("dark")) : "transparent"
+                    isActive
+                      ? colorScheme === "dark"
+                        ? color("dark.3")
+                        : color("dark")
+                      : "transparent"
                   }`,
                 }}
               >
                 {!!props.onChange ? (
-                  <Button {...buttonProps} leftIcon={tab.icon} onClick={() => props.onChange?.(tab.id!)}>
+                  <Button
+                    {...buttonProps}
+                    leftIcon={tab.icon}
+                    onClick={() => props.onChange?.(tab.id!)}
+                  >
                     {t(tab.name)}
                     {tab.rightSection}
                   </Button>
@@ -95,6 +103,6 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
           })}
         </Group>
       </ScrollArea>
-    </>
+    </Fragment>
   );
 };

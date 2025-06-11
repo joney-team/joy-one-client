@@ -31,7 +31,7 @@ import {
 } from "@mantine/core";
 import { IconHeartHandshake } from "@tabler/icons-react";
 import Link from "next/link";
-import { FC, useEffect } from "react";
+import { FC, Fragment, useEffect } from "react";
 import { Pattern } from "../../components/pattern";
 
 export interface WorkspaceInvitationProps {
@@ -91,10 +91,10 @@ const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
         )}
 
         {inviteInformation.data && (
-          <>
+          <Fragment>
             <Pattern color={color(inviteInformation.data?.appColor || "primary")} />
             <Content invite={inviteInformation.data} {...props} />
-          </>
+          </Fragment>
         )}
       </Stack>
     </MantineProvider>

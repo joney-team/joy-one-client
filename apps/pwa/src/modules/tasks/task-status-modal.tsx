@@ -13,13 +13,36 @@ import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-set
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ActionIcon, Card, Divider, em, Group, Menu, Space, Stack, Text, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  Divider,
+  em,
+  Group,
+  Menu,
+  Space,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
-import { IconCheck, IconGripVertical, IconPlus, IconSettings, IconTrash, IconX } from "@tabler/icons-react";
-import { FC, PropsWithChildren, useState } from "react";
+import {
+  IconCheck,
+  IconGripVertical,
+  IconPlus,
+  IconSettings,
+  IconTrash,
+  IconX,
+} from "@tabler/icons-react";
+import { FC, Fragment, PropsWithChildren, useState } from "react";
 import { v4 as uuid } from "uuid";
 
 export interface TaskSatusesModalProps {
@@ -75,7 +98,10 @@ export const TaskSatusesModal: FC<TaskSatusesModalProps> = (props) => {
 
       <Divider label={t("completed_statuses_group")} labelPosition="left" />
 
-      <StatusCard status={workspace.settings.taskStatuses[workspace.settings.taskStatuses.length - 1]} disabledOrder />
+      <StatusCard
+        status={workspace.settings.taskStatuses[workspace.settings.taskStatuses.length - 1]}
+        disabledOrder
+      />
     </Stack>
   );
 };
@@ -143,7 +169,7 @@ export const CreateStatusForm: FC = () => {
         )}
 
         {isActivated && (
-          <>
+          <Fragment>
             {!!name && (
               <Button
                 h={28}
@@ -166,7 +192,7 @@ export const CreateStatusForm: FC = () => {
             >
               <IconX size={16} strokeWidth={1.5} />
             </ActionIcon>
-          </>
+          </Fragment>
         )}
       </Group>
     </Card>
@@ -193,7 +219,10 @@ export const StatusCard: FC<{
   const onRemove = async () => {
     const taskStatuses = workspace.settings.taskStatuses.filter((v) => v.id !== props.status.id);
     const relatedTasks = await getTasks({ status: props.status.id }).then((res) => res.data);
-    const statusStyle = renderTaskStatusStyle(DefaultTaskStatusId.TODO, workspace.settings.taskStatuses);
+    const statusStyle = renderTaskStatusStyle(
+      DefaultTaskStatusId.TODO,
+      workspace.settings.taskStatuses
+    );
 
     onArchive({
       name: t("task_status"),
@@ -223,7 +252,9 @@ export const StatusCard: FC<{
   };
 
   const onChangeColor = async (color?: string) => {
-    const taskStatuses = workspace.settings.taskStatuses.map((v) => (v.id === props.status.id ? { ...v, color } : v));
+    const taskStatuses = workspace.settings.taskStatuses.map((v) =>
+      v.id === props.status.id ? { ...v, color } : v
+    );
     await setWorkspaceSettings({ ...workspace.settings, taskStatuses });
   };
 

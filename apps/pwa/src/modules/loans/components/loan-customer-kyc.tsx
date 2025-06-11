@@ -10,9 +10,20 @@ import { num, renderDate } from "@/modules/lang/lang-service";
 import { getGoogleMapLink, renderLocation } from "@/modules/locations/locations-service";
 import { formatPhoneNumber } from "@/utils/phone.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { Anchor, Card, Divider, em, Grid, Group, Loader, Stack, Text, ThemeIcon } from "@mantine/core";
+import {
+  Anchor,
+  Card,
+  Divider,
+  em,
+  Grid,
+  Group,
+  Loader,
+  Stack,
+  Text,
+  ThemeIcon,
+} from "@mantine/core";
 import { IconAddressBook, IconShieldCheck } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { LoanRowInfo } from "./loan-row-info";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -41,7 +52,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
         <Card shadow="xs">
           <Stack>
             {props.kyc && kyc && (
-              <>
+              <Fragment>
                 <Divider label="Căn Cước Công Dân" labelPosition="left" />
 
                 <LoanRowInfo
@@ -65,7 +76,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                     </Group>
                   }
                 />
-              </>
+              </Fragment>
             )}
 
             <Divider label="Thông tin cá nhân" labelPosition="left" />
@@ -73,7 +84,10 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
             <LoanRowInfo
               label="Địa chỉ hiện tại"
               value={
-                <Anchor href={customer.location && getGoogleMapLink(customer.location)} target="_blank">
+                <Anchor
+                  href={customer.location && getGoogleMapLink(customer.location)}
+                  target="_blank"
+                >
                   {renderLocation(customer.location) || "--"}
                 </Anchor>
               }
@@ -91,36 +105,43 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
               }
             />
 
-            <LoanRowInfo label="Mức lương hiện tại" value={num(customer.salaryAmount, { type: "money" })} />
+            <LoanRowInfo
+              label="Mức lương hiện tại"
+              value={num(customer.salaryAmount, { type: "money" })}
+            />
 
             {workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
-              <>
+              <Fragment>
                 <Divider label="Liên hệ" labelPosition="left" />
 
                 <LoanRowInfo
                   label="Số điện thoại"
-                  value={<Anchor href={`tel:${customer.phone}`}>{formatPhoneNumber(customer.phone)}</Anchor>}
+                  value={
+                    <Anchor href={`tel:${customer.phone}`}>
+                      {formatPhoneNumber(customer.phone)}
+                    </Anchor>
+                  }
                 />
 
                 <LoanRowInfo
                   label="SĐT Người thân"
                   value={
                     customer.relationshipContacts && customer.relationshipContacts.length > 0 ? (
-                      <>
-                        <Stack>
-                          {customer.relationshipContacts.map((contact, index) => (
-                            <Card withBorder shadow="none" p={10} key={index}>
-                              <Group key={index} justify="space-between">
-                                <Stack gap={0}>
-                                  <Text fw={500}>{contact.name}</Text>
-                                  <Text fz={em(12)}>{contact.type}</Text>
-                                </Stack>
-                                <Anchor href={`tel:${contact.phone}`}>{formatPhoneNumber(contact.phone)}</Anchor>
-                              </Group>
-                            </Card>
-                          ))}
-                        </Stack>
-                      </>
+                      <Stack>
+                        {customer.relationshipContacts.map((contact, index) => (
+                          <Card withBorder shadow="none" p={10} key={index}>
+                            <Group key={index} justify="space-between">
+                              <Stack gap={0}>
+                                <Text fw={500}>{contact.name}</Text>
+                                <Text fz={em(12)}>{contact.type}</Text>
+                              </Stack>
+                              <Anchor href={`tel:${contact.phone}`}>
+                                {formatPhoneNumber(contact.phone)}
+                              </Anchor>
+                            </Group>
+                          </Card>
+                        ))}
+                      </Stack>
                     ) : (
                       "--"
                     )
@@ -133,28 +154,26 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                     contacts.isFetching ? (
                       <Loader size="xs" />
                     ) : contacts.data ? (
-                      <>
-                        <Anchor
-                          c="dark"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            OnModalCustomerContacts({ contacts: contacts.data! });
-                          }}
-                        >
-                          <Group gap={1} wrap="nowrap">
-                            <ThemeIcon color="dark" variant="transparent" ml={-5}>
-                              <IconAddressBook strokeWidth={1.5} size={18} />
-                            </ThemeIcon>
-                            <Text fz={em(15)}>{num(contacts.data.contacts.length)}</Text>
-                          </Group>
-                        </Anchor>
-                      </>
+                      <Anchor
+                        c="dark"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          OnModalCustomerContacts({ contacts: contacts.data! });
+                        }}
+                      >
+                        <Group gap={1} wrap="nowrap">
+                          <ThemeIcon color="dark" variant="transparent" ml={-5}>
+                            <IconAddressBook strokeWidth={1.5} size={18} />
+                          </ThemeIcon>
+                          <Text fz={em(15)}>{num(contacts.data.contacts.length)}</Text>
+                        </Group>
+                      </Anchor>
                     ) : (
                       "--"
                     )
                   }
                 />
-              </>
+              </Fragment>
             )}
           </Stack>
         </Card>

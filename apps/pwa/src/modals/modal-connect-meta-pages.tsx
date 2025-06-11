@@ -22,7 +22,7 @@ import {
   IconRefresh,
   IconStack,
 } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { type FC, Fragment, useState } from "react";
 
 interface OnConnectMetaPagesDto {
   pages: PluginMetaPageInfo[];
@@ -105,7 +105,7 @@ export const ConnectMetaPagesModal: FC = () => {
 
               if (status === "FAILED") {
                 return (
-                  <>
+                  <Fragment>
                     <Stack gap={8}>
                       <Title ta="center" c={color("dark")} fz={em(25)}>
                         {t("connect_meta_failed")}
@@ -122,7 +122,7 @@ export const ConnectMetaPagesModal: FC = () => {
                     <Anchor c="gray" fz={em(12)} onClick={close}>
                       {t("skip_for_now")}
                     </Anchor>
-                  </>
+                  </Fragment>
                 );
               }
 
@@ -151,7 +151,7 @@ export const ConnectMetaPagesModal: FC = () => {
             )}
 
             {status === "CONNECTED" && (
-              <>
+              <Fragment>
                 <Stack align="center" gap={5}>
                   <Group>
                     {dto.pages.map((page) => {
@@ -188,7 +188,7 @@ export const ConnectMetaPagesModal: FC = () => {
                 <Anchor c="gray" fz={em(12)} onClick={close}>
                   {t("skip_for_now")}
                 </Anchor>
-              </>
+              </Fragment>
             )}
           </Renderer>
 

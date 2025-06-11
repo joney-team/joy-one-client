@@ -33,7 +33,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { Avatar } from "../../components/avatar";
 import { workspaceLayoutConfig, useWorkspaceLayout } from "../hooks/use-workspace-layout";
 import { isExtendedApp } from "@/service";
@@ -98,7 +98,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
   };
 
   return (
-    <>
+    <Fragment>
       <Group
         px={10}
         gap={10}
@@ -108,7 +108,12 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
         style={{ ...props.targetProps?.style, cursor: "pointer", userSelect: "none" }}
         onClick={open}
       >
-        <Avatar workspace={workspace.userMember.workspace} size={30} bg="var(--mantine-color-body)" radius={5} />
+        <Avatar
+          workspace={workspace.userMember.workspace}
+          size={30}
+          bg="var(--mantine-color-body)"
+          radius={5}
+        />
 
         <Renderer visible={!workspaceLayout.isNavbarCollapsed}>
           <Stack gap={0} flex={1} ref={contentSize.ref}>
@@ -123,7 +128,9 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              workspaceLayout.setNavigationWidth(workspaceLayoutConfig.defaultNavigationCollapsedWidth);
+              workspaceLayout.setNavigationWidth(
+                workspaceLayoutConfig.defaultNavigationCollapsedWidth
+              );
             }}
           >
             <IconLayoutSidebarLeftCollapse strokeWidth={1.6} size={20} />
@@ -226,7 +233,9 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
             </Renderer>
           </Renderer>
 
-          <Renderer visible={!workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER)}>
+          <Renderer
+            visible={!workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER)}
+          >
             <NavigationItem
               href={`/members`}
               leftSection={
@@ -238,7 +247,9 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
             />
           </Renderer>
 
-          <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER)}>
+          <Renderer
+            visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER)}
+          >
             <Divider my={16} opacity={0.5} />
 
             <Label>{t("members")}</Label>
@@ -303,7 +314,12 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                     key={userMember.workspaceId}
                     leftSection={
                       <ThemeIcon variant="subtle" color="dark">
-                        <Avatar workspace={userMember.workspace} size={25} radius={5} bg="var(--mantine-color-body)" />
+                        <Avatar
+                          workspace={userMember.workspace}
+                          size={25}
+                          radius={5}
+                          bg="var(--mantine-color-body)"
+                        />
                       </ThemeIcon>
                     }
                     onClick={() => workspace.select(userMember.workspaceId!)}
@@ -327,7 +343,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
           </Renderer>
         </Stack>
       </Drawer>
-    </>
+    </Fragment>
   );
 };
 

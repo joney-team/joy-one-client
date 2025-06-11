@@ -7,7 +7,7 @@ import { updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconTimelineEvent } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
 interface DetailFooterProps {
   task: TaskEntity;
@@ -17,7 +17,7 @@ interface DetailFooterProps {
 export const DetailFooter: FC<DetailFooterProps> = (props) => {
   const { task, onClose } = props;
   return (
-    <>
+    <Fragment>
       <Stack>
         <Group gap={8}>
           <ThemeIcon variant="light" color="dark">
@@ -40,6 +40,6 @@ export const DetailFooter: FC<DetailFooterProps> = (props) => {
           onClose();
         }}
       />
-    </>
+    </Fragment>
   );
 };

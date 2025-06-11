@@ -23,9 +23,20 @@ import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { StringUtils } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { Blockquote, Card, Center, Divider, em, Group, InputWrapper, Loader, Stack, Text } from "@mantine/core";
+import {
+  Blockquote,
+  Card,
+  Center,
+  Divider,
+  em,
+  Group,
+  InputWrapper,
+  Loader,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { LoanRowInfo } from "./loan-row-info";
 import { useColor } from "@/modules/theme/use-color";
 
@@ -41,7 +52,9 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
   const banks = useBanks();
 
   const { loan } = props;
-  const [paymentMethod, setPaymentMethod] = useState<ReceiptPaymentMethod>(ReceiptPaymentMethod.BANK_TRANSFER);
+  const [paymentMethod, setPaymentMethod] = useState<ReceiptPaymentMethod>(
+    ReceiptPaymentMethod.BANK_TRANSFER
+  );
   const [files, setFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -147,13 +160,20 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
 
           <Card withBorder shadow="none" p={16}>
             <Stack>
-              <LoanRowInfo label={t("loan_amount")} value={num(loan.amount, { type: "money" })} copy />
+              <LoanRowInfo
+                label={t("loan_amount")}
+                value={num(loan.amount, { type: "money" })}
+                copy
+              />
 
               {(function () {
                 const payment = loan.payment;
                 const bank = banks.find((bank) => bank.id === +(payment?.accountBankId || "-1"));
 
-                if (paymentMethod === ReceiptPaymentMethod.BANK_TRANSFER && !payment?.accountNumber) {
+                if (
+                  paymentMethod === ReceiptPaymentMethod.BANK_TRANSFER &&
+                  !payment?.accountNumber
+                ) {
                   return (
                     <Blockquote color="orange" p={10}>
                       Hồ sơ vay không có thông tin tài khoản ngân hàng
@@ -161,7 +181,12 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                   );
                 }
 
-                if (!bank || !payment || !payment.accountNumber || paymentMethod !== ReceiptPaymentMethod.BANK_TRANSFER)
+                if (
+                  !bank ||
+                  !payment ||
+                  !payment.accountNumber ||
+                  paymentMethod !== ReceiptPaymentMethod.BANK_TRANSFER
+                )
                   return null;
 
                 const bankAccount: BankAccount = {
@@ -171,9 +196,10 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 };
 
                 const kyc = props.kyc.versions[props.kyc.versions.length - 1];
-                const description = `${StringUtils.removeAccents(kyc.cidFullName).replace(/ /g, "")} ${
-                  kyc.cidNumber
-                } ${renderEntityCode(loan.code)}`;
+                const description = `${StringUtils.removeAccents(kyc.cidFullName).replace(
+                  / /g,
+                  ""
+                )} ${kyc.cidNumber} ${renderEntityCode(loan.code)}`;
 
                 const qrCode = getStaticQrCode(bank, bankAccount, {
                   amount: loan.amount,
@@ -181,19 +207,27 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 });
 
                 return (
-                  <>
-                    <LoanRowInfo label={t("bank_account_name")} value={loan.payment.accountName} copy />
-                    <LoanRowInfo label={t("bank_account_number")} value={loan.payment.accountNumber} copy />
+                  <Fragment>
+                    <LoanRowInfo
+                      label={t("bank_account_name")}
+                      value={loan.payment.accountName}
+                      copy
+                    />
+                    <LoanRowInfo
+                      label={t("bank_account_number")}
+                      value={loan.payment.accountNumber}
+                      copy
+                    />
                     <LoanRowInfo label={t("bank_name")} value={bank.shortName} copy />
                     <LoanRowInfo label={t("bank_transaction_content")} value={description} copy />
 
                     {loan.status === LoanStatus.APPROVED && !!qrCode && (
-                      <>
+                      <Fragment>
                         <Divider />
                         <Image showLoading src={qrCode.url} w={250} maw="100%" my={16} />
-                      </>
+                      </Fragment>
                     )}
-                  </>
+                  </Fragment>
                 );
               })()}
 

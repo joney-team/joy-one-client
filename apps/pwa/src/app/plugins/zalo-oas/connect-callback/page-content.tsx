@@ -1,6 +1,5 @@
 "use client";
 
-import config from "@joy-one-client/config";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
@@ -8,13 +7,17 @@ import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
 import { useLayout } from "@/layout/layout-context";
 import { num } from "@/modules/lang/lang-service";
-import { connectCallbackPluginZalo, connectPluginZalo } from "@/modules/plugins/zalo-oas/zalo-oas-service";
+import {
+  connectCallbackPluginZalo,
+  connectPluginZalo,
+} from "@/modules/plugins/zalo-oas/zalo-oas-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
+import config from "@joy-one-client/config";
 import { Anchor, Center, Group, Stack, Text, ThemeIcon, Title, em } from "@mantine/core";
 import { IconCirclesRelation } from "@tabler/icons-react";
 import { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 let interval: NodeJS.Timeout;
 
@@ -78,7 +81,7 @@ const Page: NextPage = () => {
         if (connect.isFetching) return <Loading message="Đang kết nối ..." />;
         if (connect.error)
           return (
-            <>
+            <Fragment>
               <Errored error={connect.error} />
               <Center>
                 <Button onClick={() => connectPluginZalo()}>Thử lại</Button>
@@ -92,11 +95,11 @@ const Page: NextPage = () => {
               >
                 Thoát
               </Anchor>
-            </>
+            </Fragment>
           );
 
         return (
-          <>
+          <Fragment>
             <Title ta="center" order={2} fw={300}>
               Kết nối thành công
             </Title>
@@ -105,7 +108,7 @@ const Page: NextPage = () => {
             <Center>
               <Button onClick={onDone}>Trở về</Button>
             </Center>
-          </>
+          </Fragment>
         );
       })()}
     </Stack>

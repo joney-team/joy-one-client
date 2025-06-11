@@ -227,26 +227,24 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
 
               <Card style={{ height: contentHeight }} shadow="xs" flex={1} p={0}>
                 {messageBoxIds.current.length > 0 ? (
-                  <>
-                    <Stack
-                      gap={0}
-                      style={{ height: contentHeight, overflow: "hidden" }}
-                      align="stretch"
-                    >
-                      <MessageBoxTabs />
+                  <Stack
+                    gap={0}
+                    style={{ height: contentHeight, overflow: "hidden" }}
+                    align="stretch"
+                  >
+                    <MessageBoxTabs />
 
-                      <Stack flex={1} w="100%" gap={0}>
-                        <Group
-                          style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
-                          w="100%"
-                        >
-                          {messageBox && <MessageBoxHead key={messageBox._id} />}
-                        </Group>
+                    <Stack flex={1} w="100%" gap={0}>
+                      <Group
+                        style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+                        w="100%"
+                      >
+                        {messageBox && <MessageBoxHead key={messageBox._id} />}
+                      </Group>
 
-                        <ContainerMessageBox />
-                      </Stack>
+                      <ContainerMessageBox />
                     </Stack>
-                  </>
+                  </Stack>
                 ) : (
                   <Stack
                     style={{ height: contentHeight, overflow: "hidden" }}

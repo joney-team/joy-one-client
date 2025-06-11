@@ -1,13 +1,11 @@
-import { Group } from "@mantine/core";
 import { TextInput } from "@/components/inputs/text-input";
+import { Group } from "@mantine/core";
+import { Fragment, memo, type FC } from "react";
 
-import { memo } from "react";
-
-import { optionsFilter } from "@/modules/theme/generator";
 import { t } from "@/modules/lang/lang-service";
 import { useLocations } from "@/modules/locations/locations-service";
+import { optionsFilter } from "@/modules/theme/generator";
 import { Select } from "@mantine/core";
-import { FC } from "react";
 
 export const LocationForm: FC<{
   form: any;
@@ -19,12 +17,14 @@ export const LocationForm: FC<{
   const path = props.path || "location";
 
   return (
-    <>
+    <Fragment>
       <Select
         label={t("province")}
         {...form.getInputProps(`${path}.provinceId`)}
         searchable
-        data={locations.filter((l) => l.type === "province").map((l) => ({ value: l.id, label: l.name }))}
+        data={locations
+          .filter((l) => l.type === "province")
+          .map((l) => ({ value: l.id, label: l.name }))}
         onChange={(e) => {
           form.setFieldValue(`${path}.provinceId`, e!);
           form.setFieldValue(`${path}.districtId`, "");
@@ -64,7 +64,11 @@ export const LocationForm: FC<{
         />
       </Group>
 
-      <TextInput label={t("address")} {...form.getInputProps(`${path}.address`)} withAsterisk={props.required} />
-    </>
+      <TextInput
+        label={t("address")}
+        {...form.getInputProps(`${path}.address`)}
+        withAsterisk={props.required}
+      />
+    </Fragment>
   );
 });

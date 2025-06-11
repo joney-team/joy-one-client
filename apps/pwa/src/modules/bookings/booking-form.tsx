@@ -5,20 +5,37 @@ import { FormSessionIcon } from "@/components/form-session";
 import { TextInput } from "@/components/inputs/text-input";
 import { TimeInput } from "@/components/inputs/time-input";
 import { UsersInput } from "@/components/inputs/users-input";
-import { createBooking, rescheduleBooking, updateBooking } from "@/modules/bookings/booking-service";
+import {
+  createBooking,
+  rescheduleBooking,
+  updateBooking,
+} from "@/modules/bookings/booking-service";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { CustomerInput } from "@/modules/customers/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { useLang } from "@/modules/lang/lang-context";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
-import { isInWorkSlot, useWorkDaySlots } from "@/modules/workspace-settings/workspace-settings-service";
+import {
+  isInWorkSlot,
+  useWorkDaySlots,
+} from "@/modules/workspace-settings/workspace-settings-service";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onFormError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
-import { Blockquote, Card, Center, Group, Indicator, Stack, Text, Textarea, ThemeIcon, Tooltip } from "@mantine/core";
+import {
+  Blockquote,
+  Card,
+  Center,
+  Group,
+  Indicator,
+  Stack,
+  Text,
+  Textarea,
+  ThemeIcon,
+  Tooltip,
+} from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import {
@@ -31,7 +48,7 @@ import {
   IconUserSquareRounded,
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC, useEffect, useMemo } from "react";
+import { FC, Fragment, useEffect, useMemo } from "react";
 import { BookingEntity, BookingStatus, CreateBookingDto } from "./booking-types";
 
 export interface BookingFormProps {
@@ -49,7 +66,6 @@ export interface BookingFormProps {
 export const BookingForm: FC<BookingFormProps> = (props) => {
   const { reschedule } = props;
   const color = useColor();
-  const lang = useLang();
   const workDaySlots = useWorkDaySlots();
   const workspace = useWorkspace();
   const type = props.booking ? "UPDATE" : props.reschedule ? "RESCHEDULE" : "CREATE";
@@ -62,8 +78,12 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       assigneeUsers: props.booking?.assigneeUsers ??
         props.reschedule?.assigneeUsers ??
         props.assigneeUsers ?? [workspace.userMember],
-      startTime: props.booking?.startTime ? dayjs(props.booking.startTime * 1000).toDate() : props.startTime,
-      endTime: props.booking?.endTime ? dayjs(props.booking.endTime * 1000).toDate() : props.endTime,
+      startTime: props.booking?.startTime
+        ? dayjs(props.booking.startTime * 1000).toDate()
+        : props.startTime,
+      endTime: props.booking?.endTime
+        ? dayjs(props.booking.endTime * 1000).toDate()
+        : props.endTime,
     };
   }, [props.customer, props.assigneeUsers, props.startTime, props.endTime, props.booking, type]);
 
@@ -109,7 +129,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       )
     : false;
 
-  const isPassed = form.values.startTime && dayjs(form.values.startTime).isBefore(dayjs().subtract(1, "day"));
+  const isPassed =
+    form.values.startTime && dayjs(form.values.startTime).isBefore(dayjs().subtract(1, "day"));
 
   useEffect(() => {
     form.setInitialValues(initialValues);
@@ -127,16 +148,29 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       </FormSessionIcon>
 
       <FormSessionIcon icon={IconUserSquareRounded} description="customer">
-        <CustomerInput {...form.getInputProps("customer")} clearable flex={1} disabled={type === "RESCHEDULE"} />
+        <CustomerInput
+          {...form.getInputProps("customer")}
+          clearable
+          flex={1}
+          disabled={type === "RESCHEDULE"}
+        />
       </FormSessionIcon>
 
       <FormSessionIcon icon={IconUsers} description="attendees">
-        <UsersInput {...form.getInputProps("assigneeUsers")} flex={1} disabled={type === "RESCHEDULE"} />
+        <UsersInput
+          {...form.getInputProps("assigneeUsers")}
+          flex={1}
+          disabled={type === "RESCHEDULE"}
+        />
       </FormSessionIcon>
 
-      <FormSessionIcon icon={IconCalendar} description="dateTime" visible={type === "CREATE" || type === "RESCHEDULE"}>
+      <FormSessionIcon
+        icon={IconCalendar}
+        description="dateTime"
+        visible={type === "CREATE" || type === "RESCHEDULE"}
+      >
         {reschedule && (
-          <>
+          <Fragment>
             <Card withBorder shadow="none" p={10}>
               <Group align="start" gap={10}>
                 <ThemeIcon color="gray" size="lg" mt={3}>
@@ -169,7 +203,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                 <IconArrowDown strokeWidth={1.3} />
               </ThemeIcon>
             </Center>
-          </>
+          </Fragment>
         )}
 
         <Stack>
@@ -219,7 +253,10 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                   onChange={(value) => {
                     form.setValues({
                       ...form.values,
-                      startTime: dayjs(form.values.startTime).set("hour", value[0]).set("minute", value[1]).toDate(),
+                      startTime: dayjs(form.values.startTime)
+                        .set("hour", value[0])
+                        .set("minute", value[1])
+                        .toDate(),
                     });
                   }}
                 />
@@ -233,7 +270,10 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                   onChange={(value) => {
                     form.setValues({
                       ...form.values,
-                      endTime: dayjs(form.values.endTime).set("hour", value[0]).set("minute", value[1]).toDate(),
+                      endTime: dayjs(form.values.endTime)
+                        .set("hour", value[0])
+                        .set("minute", value[1])
+                        .toDate(),
                     });
                   }}
                 />
@@ -248,7 +288,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
             {[15, 30, 45, 60].map((v) => {
               const isSelected =
-                form.values.endTime && dayjs(form.values.endTime).diff(form.values.startTime, "minute") === v;
+                form.values.endTime &&
+                dayjs(form.values.endTime).diff(form.values.startTime, "minute") === v;
               return (
                 <Button
                   key={v}
@@ -258,9 +299,14 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                   radius="xl"
                   fw={400}
                   fz={12}
-                  style={{ borderColor: isSelected ? undefined : "var(--mantine-color-default-border)" }}
+                  style={{
+                    borderColor: isSelected ? undefined : "var(--mantine-color-default-border)",
+                  }}
                   onClick={() => {
-                    form.setFieldValue("endTime", dayjs(form.values.startTime).add(v, "minute").toDate());
+                    form.setFieldValue(
+                      "endTime",
+                      dayjs(form.values.startTime).add(v, "minute").toDate()
+                    );
                   }}
                 >
                   {v === 60 ? t("one_hour") : t("minutes", { count: v })}
@@ -284,29 +330,23 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       {(type === "CREATE" || type === "RESCHEDULE") && (
         <Stack gap={8}>
           {form.values.startTime && !isInWorkspaceWorkSlots && (
-            <>
-              <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
-                {t("out_of_work_slots")}
-              </Blockquote>
-            </>
+            <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
+              {t("out_of_work_slots")}
+            </Blockquote>
           )}
 
           {form.values.startTime && isPassed && (
-            <>
-              <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
-                {t("booking_time_passed")}
-              </Blockquote>
-            </>
+            <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
+              {t("booking_time_passed")}
+            </Blockquote>
           )}
 
           {form.values.startTime &&
             form.values.endTime &&
             dayjs(form.values.endTime).isBefore(dayjs(form.values.startTime)) && (
-              <>
-                <Blockquote color="red" p={8} fz={14} fw={500} mt={5}>
-                  {t("end_time_before_start_time")}
-                </Blockquote>
-              </>
+              <Blockquote color="red" p={8} fz={14} fw={500} mt={5}>
+                {t("end_time_before_start_time")}
+              </Blockquote>
             )}
         </Stack>
       )}

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { TextInput } from "@/components/inputs/text-input";
 import { t } from "@/modules/lang/lang-service";
@@ -47,7 +49,7 @@ import {
   IconStackFront,
   IconTemplate,
 } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { Avatar } from "../avatar";
 import { Image } from "../image";
 
@@ -181,25 +183,37 @@ export const PluginZaloOAs: FC = () => {
         })}
 
         <Center>
-          <Button type="submit" onClick={() => connectPluginZalo()} rightSection={<IconLinkPlus strokeWidth={1.5} />}>
+          <Button
+            type="submit"
+            onClick={() => connectPluginZalo()}
+            rightSection={<IconLinkPlus strokeWidth={1.5} />}
+          >
             {t("connect")}
           </Button>
         </Center>
       </SimpleGrid>
 
       {defaultZaloOa && (
-        <>
+        <Fragment>
           <Divider mb={-15} label="ZNS | Templates" labelPosition="left" />
           <SimpleGrid cols={{ md: 2 }}>
             {Object.keys(plugins.znsTemplateConfigs).map((key) => {
               const config = (plugins.znsTemplateConfigs as any)[key] as ZnsTemplateConfig;
-              const isvalid = !config.workspaceTypes || config.workspaceTypes.includes(workspace.type);
+              const isvalid =
+                !config.workspaceTypes || config.workspaceTypes.includes(workspace.type);
               if (!isvalid) return null;
 
-              return <ZNSTemplateConfig key={key} config={config} oa={defaultZaloOa} templateId={key as any} />;
+              return (
+                <ZNSTemplateConfig
+                  key={key}
+                  config={config}
+                  oa={defaultZaloOa}
+                  templateId={key as any}
+                />
+              );
             })}
           </SimpleGrid>
-        </>
+        </Fragment>
       )}
     </Stack>
   );

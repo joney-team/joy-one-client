@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins";
@@ -11,7 +13,7 @@ import { ActionIcon, Card, Group, Stack, Switch, Text, Tooltip } from "@mantine/
 import { useElementSize } from "@mantine/hooks";
 import { IconClock, IconMessage, IconPlus } from "@tabler/icons-react";
 import { Handle, Position, ReactFlow } from "@xyflow/react";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { Avatar } from "@/components/avatar";
 import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows";
 import { Image } from "@/components/image";
@@ -36,7 +38,7 @@ const RootNode = () => {
   const color = useColor();
 
   return (
-    <>
+    <Fragment>
       <Handle type="target" position={Position.Left} />
       <Card
         withBorder
@@ -47,7 +49,14 @@ const RootNode = () => {
           borderColor: color("primary"),
         }}
       >
-        <Group gap={10} px={16} py={10} w={cardRootSize.width} h={cardRootSize.height} wrap="nowrap">
+        <Group
+          gap={10}
+          px={16}
+          py={10}
+          w={cardRootSize.width}
+          h={cardRootSize.height}
+          wrap="nowrap"
+        >
           <Avatar workspace={workspace.userMember.workspace} radius={8} size={70} />
           <Stack gap={0}>
             <Text fz={25} fw={500} truncate="end">
@@ -60,7 +69,7 @@ const RootNode = () => {
         </Group>
       </Card>
       <Handle type="target" position={Position.Right} />
-    </>
+    </Fragment>
   );
 };
 
@@ -69,7 +78,7 @@ const AiIntegrationNode = () => {
   const aiPlugin = plugins.aiAssistants[0];
 
   return (
-    <>
+    <Fragment>
       <Handle type="source" position={Position.Left} />
 
       <Card
@@ -95,7 +104,7 @@ const AiIntegrationNode = () => {
 
             <Stack gap={0} flex={1}>
               {aiPlugin ? (
-                <>
+                <Fragment>
                   <Tooltip label={aiPlugin.providerName}>
                     <Text fz={16} fw={500} truncate="end">
                       {StringUtils.limitCharacters(aiPlugin.providerName, 20)}
@@ -104,13 +113,15 @@ const AiIntegrationNode = () => {
                   <Text fz={10} c="gray.6" truncate="end">
                     {t("ai_assistant")}
                   </Text>
-                </>
+                </Fragment>
               ) : (
                 <Group wrap="nowrap" gap={0}>
                   <ActionIcon variant="transparent" color="dark">
                     <IconPlus size={16} />
                   </ActionIcon>
-                  <Text fz={14} fw={500} truncate="end">{`${t("connect")} ${t("ai-assistants")}`}</Text>
+                  <Text fz={14} fw={500} truncate="end">{`${t("connect")} ${t(
+                    "ai-assistants"
+                  )}`}</Text>
                 </Group>
               )}
             </Stack>
@@ -132,7 +143,7 @@ const AiIntegrationNode = () => {
           )}
         </Group>
       </Card>
-    </>
+    </Fragment>
   );
 };
 
@@ -143,15 +154,24 @@ const PluginNode = (props: any) => {
     {
       metaPages: () => <Avatar color="primary" pluginMetaPage={plugin} size={30} />,
       zalaOAs: () => <Avatar color="primary" pluginZaloOa={plugin} size={30} />,
-      messageHubs: () => <Avatar icon={IconMessage} src="/images/plugins-message-hubs.png" size={30} />,
+      messageHubs: () => (
+        <Avatar icon={IconMessage} src="/images/plugins-message-hubs.png" size={30} />
+      ),
     } as any
   )[type];
 
   return (
-    <>
+    <Fragment>
       <Handle type="source" position={Position.Right} />
 
-      <Card withBorder shadow="none" w={cardSize.width} h={cardSize.height} p={0} style={{ cursor: "default" }}>
+      <Card
+        withBorder
+        shadow="none"
+        w={cardSize.width}
+        h={cardSize.height}
+        p={0}
+        style={{ cursor: "default" }}
+      >
         <Group gap={10} align="center" w={cardSize.width} h={cardSize.height} p={16} wrap="nowrap">
           <PluginAvatar />
           <Stack gap={0}>
@@ -159,23 +179,28 @@ const PluginNode = (props: any) => {
               {name || t("plugin")}
             </Text>
             {!!plugin.lastInteractionAt && (
-              <Tooltip label={capitalize(`${t("last_interaction_at")}: ${renderDateTime(plugin.lastInteractionAt)}`)}>
+              <Tooltip
+                label={capitalize(
+                  `${t("last_interaction_at")}: ${renderDateTime(plugin.lastInteractionAt)}`
+                )}
+              >
                 <Text fz={10} fw={500} c="gray" truncate="end">
-                  <IconClock size={12} style={{ marginBottom: -2.5 }} /> {renderFromNow(plugin.lastInteractionAt)}
+                  <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "}
+                  {renderFromNow(plugin.lastInteractionAt)}
                 </Text>
               </Tooltip>
             )}
           </Stack>
         </Group>
       </Card>
-    </>
+    </Fragment>
   );
 };
 
 const PlusPluginNode = (props: any) => {
   const { isHasPlugin } = props.data;
   return (
-    <>
+    <Fragment>
       <Handle type="source" position={Position.Right} />
 
       <Card
@@ -204,7 +229,7 @@ const PlusPluginNode = (props: any) => {
           </Text>
         </Group>
       </Card>
-    </>
+    </Fragment>
   );
 };
 
@@ -287,7 +312,12 @@ export const WorkspaceSettingMessageBoxesIntegrations: FC = () => {
   // Edges
   const edges = [
     // Plugin -> Root
-    ...pluginsGroup.childNodes.map((p) => ({ id: `${p.id}-root`, source: p.id, target: "root", animated: true })),
+    ...pluginsGroup.childNodes.map((p) => ({
+      id: `${p.id}-root`,
+      source: p.id,
+      target: "root",
+      animated: true,
+    })),
     // Ai -> Root
     { id: "ai-root", source: "ai", target: "root", animated: !aiPlugin || aiPlugin.enabled },
   ];

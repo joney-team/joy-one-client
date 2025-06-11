@@ -26,7 +26,7 @@ import {
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCoins, IconPlus, IconX } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 
 interface ModalLoanPackageFormProps {
   loanPackage?: LoanPackage;
@@ -125,7 +125,10 @@ export const ModalLoanPackageForm: FC = () => {
             label="Loại"
             placeholder="Chọn loại"
             value={form.values.type}
-            data={Object.values(LoanPackageType).map((type) => ({ value: type, label: t(`loan_package_${type}`) }))}
+            data={Object.values(LoanPackageType).map((type) => ({
+              value: type,
+              label: t(`loan_package_${type}`),
+            }))}
             {...form.getInputProps("type")}
           />
 
@@ -157,7 +160,10 @@ export const ModalLoanPackageForm: FC = () => {
           label="Loại tài sản"
           placeholder="Chọn loại tài sản"
           value={form.values.assetTypes}
-          data={Object.values(LoanAssetType).map((type) => ({ value: type, label: t(`loan_asset_type_${type}`) }))}
+          data={Object.values(LoanAssetType).map((type) => ({
+            value: type,
+            label: t(`loan_asset_type_${type}`),
+          }))}
           {...form.getInputProps("assetTypes")}
         />
 
@@ -179,65 +185,68 @@ export const ModalLoanPackageForm: FC = () => {
           }
         />
 
-        {form.values.type === LoanPackageType.UNFIXED_CAPITAL && form.values.periodDaysOptions.length > 0 && (
-          <>
-            {form.values.periodDaysOptions.map((days, i) => {
-              const totalPeriod = Math.ceil(form.values.days / days);
+        {form.values.type === LoanPackageType.UNFIXED_CAPITAL &&
+          form.values.periodDaysOptions.length > 0 && (
+            <Fragment>
+              {form.values.periodDaysOptions.map((days, i) => {
+                const totalPeriod = Math.ceil(form.values.days / days);
 
-              const capitalRates = new Array(totalPeriod).fill(0).map((_, k) => {
-                if (!form.values.unFixedCapitalRates[i]) return 0;
-                return form.values.unFixedCapitalRates[i][k] || 0;
-              });
+                const capitalRates = new Array(totalPeriod).fill(0).map((_, k) => {
+                  if (!form.values.unFixedCapitalRates[i]) return 0;
+                  return form.values.unFixedCapitalRates[i][k] || 0;
+                });
 
-              const totalPercent = capitalRates.reduce((a, b) => a + b, 0);
-              const error =
-                totalPercent > 0 && totalPercent !== 100 ? "Tổng tỷ lệ trả gốc phải bằng 100% hoặc 0%" : undefined;
+                const totalPercent = capitalRates.reduce((a, b) => a + b, 0);
+                const error =
+                  totalPercent > 0 && totalPercent !== 100
+                    ? "Tổng tỷ lệ trả gốc phải bằng 100% hoặc 0%"
+                    : undefined;
 
-              return (
-                <InputWrapper
-                  key={i}
-                  label={`Tỷ lệ trả gốc ở mỗi kỳ ${days} ngày`}
-                  description="Để trống nếu tỷ lệ trả gốc ở mỗi kỳ giống nhau"
-                  error={error}
-                >
-                  <Group mt={8} mb={error ? 5 : 0}>
-                    {capitalRates.map((v, j) => {
-                      const onChange = (e: number) => {
-                        let _unFixedCapitalRates = new Array(form.values.periodDaysOptions.length)
-                          .fill([])
-                          .map((_, k) => form.values.unFixedCapitalRates[k] || []);
+                return (
+                  <InputWrapper
+                    key={i}
+                    label={`Tỷ lệ trả gốc ở mỗi kỳ ${days} ngày`}
+                    description="Để trống nếu tỷ lệ trả gốc ở mỗi kỳ giống nhau"
+                    error={error}
+                  >
+                    <Group mt={8} mb={error ? 5 : 0}>
+                      {capitalRates.map((v, j) => {
+                        const onChange = (e: number) => {
+                          let _unFixedCapitalRates = new Array(form.values.periodDaysOptions.length)
+                            .fill([])
+                            .map((_, k) => form.values.unFixedCapitalRates[k] || []);
 
-                        _unFixedCapitalRates[i][j] = e;
-                        form.setFieldValue("unFixedCapitalRates", _unFixedCapitalRates);
-                      };
+                          _unFixedCapitalRates[i][j] = e;
+                          form.setFieldValue("unFixedCapitalRates", _unFixedCapitalRates);
+                        };
 
-                      return (
-                        <Card key={j} p={5} withBorder>
-                          <Group gap={3} justify="stretch" maw={120} wrap="nowrap">
-                            <Text w={40} fz={em(12)} pl={3}>
-                              Kỳ {j + 1}
-                            </Text>
-                            <NumberInput
-                              key={i}
-                              flex={1}
-                              hideControls
-                              min={0}
-                              max={100}
-                              styles={{ input: { textAlign: "right" } }}
-                              rightSection={<Text>%</Text>}
-                              value={v}
-                              onChange={(e) => onChange(+e)}
-                            />
-                          </Group>
-                        </Card>
-                      );
-                    })}
-                  </Group>
-                </InputWrapper>
-              );
-            })}
-          </>
-        )}
+                        return (
+                          <Card key={j} p={5} withBorder>
+                            <Group gap={3} justify="stretch" maw={120} wrap="nowrap">
+                              <Text w={40} fz={em(12)} pl={3}>
+                                Kỳ {j + 1}
+                              </Text>
+                              <NumberInput
+                                key={i}
+                                flex={1}
+                                hideControls
+                                min={0}
+                                max={100}
+                                styles={{ input: { textAlign: "right" } }}
+                                rightSection={<Text>%</Text>}
+                                value={v}
+                                onChange={(e) => onChange(+e)}
+                              />
+                            </Group>
+                          </Card>
+                        );
+                      })}
+                    </Group>
+                  </InputWrapper>
+                );
+              })}
+            </Fragment>
+          )}
 
         <InputWrapper label="Phạt trả chậm">
           <Stack gap={10} mt={5}>

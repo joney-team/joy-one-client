@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { useRouter } from "@/hooks/use-router";
 import { Avatar } from "@/components/avatar";
@@ -14,7 +16,14 @@ import { usePlugins } from "@/modules/plugins/plugins-context";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { ActionIcon, Badge, Group, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconCheck, IconCircleCheck, IconRobot, IconTrash, IconUser, IconUserSquareRounded } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconCircleCheck,
+  IconRobot,
+  IconTrash,
+  IconUser,
+  IconUserSquareRounded,
+} from "@tabler/icons-react";
 import { FC } from "react";
 import { UserInput } from "@/components/inputs/user-input";
 import { ModalTitle } from "@/components/modal-title";
@@ -60,7 +69,12 @@ export const MessageBoxHead: FC = () => {
   return (
     <Group className="bg-content" py={8} px={12} w="100%">
       <Group flex={1} gap={10}>
-        <Avatar radius={8} icon={IconUserSquareRounded} src={box?.senderAvatar || box?.customer?.avatar} size={40} />
+        <Avatar
+          radius={8}
+          icon={IconUserSquareRounded}
+          src={box?.senderAvatar || box?.customer?.avatar}
+          size={40}
+        />
 
         <Stack gap={3}>
           <Title fz={18}>{box?.senderName || box?.customer?.name}</Title>
@@ -94,13 +108,11 @@ export const MessageBoxHead: FC = () => {
 
           if (box.status === MessageBoxStatus.IN_PROGRESS)
             return (
-              <>
-                <Tooltip label={t("message_box_closed")}>
-                  <ActionIcon color="green" onClick={onClose}>
-                    <IconCheck size={20} />
-                  </ActionIcon>
-                </Tooltip>
-              </>
+              <Tooltip label={t("message_box_closed")}>
+                <ActionIcon color="green" onClick={onClose}>
+                  <IconCheck size={20} />
+                </ActionIcon>
+              </Tooltip>
             );
 
           const statusColor = messageBoxStatusColors[box.status];

@@ -12,9 +12,18 @@ import { FilesBox } from "@/modules/files/files-box";
 import { uploadFile } from "@/modules/files/file-service";
 import { num, t, tMulti } from "@/modules/lang/lang-service";
 import { getLoan } from "@/modules/loans/loans-service";
-import { getStaticQrCode, getTransactionInfo, useBanks } from "@/modules/plugins/banks/banks.services";
+import {
+  getStaticQrCode,
+  getTransactionInfo,
+  useBanks,
+} from "@/modules/plugins/banks/banks.services";
 import { getPaymentMethodIcon, getReceipt, payReceipt } from "@/modules/receipts/receipts-service";
-import { ReceiptEntity, ReceiptPaymentMethod, ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
+import {
+  ReceiptEntity,
+  ReceiptPaymentMethod,
+  ReceiptStatus,
+  ReceiptType,
+} from "@/modules/receipts/receipts-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
@@ -39,7 +48,7 @@ import {
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck, IconClipboardCheck, IconRefresh } from "@tabler/icons-react";
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { PrintButton } from "../../../modals/modal-printer";
 import { OnReceiptDetailModal } from "./modal-receipt-detail";
 
@@ -65,7 +74,9 @@ const ModalPayReceipt: FC<ModalPayReceiptProps> = (props) => {
   const paymentMethods = workspace.settings.receiptPaymentMethodDefault
     ? [
         workspace.settings.receiptPaymentMethodDefault,
-        ...Object.values(ReceiptPaymentMethod).filter((v) => v !== workspace.settings.receiptPaymentMethodDefault),
+        ...Object.values(ReceiptPaymentMethod).filter(
+          (v) => v !== workspace.settings.receiptPaymentMethodDefault
+        ),
       ]
     : Object.values(ReceiptPaymentMethod);
 
@@ -193,34 +204,32 @@ const ModalPayReceipt: FC<ModalPayReceiptProps> = (props) => {
 
         if (receipt.status === ReceiptStatus.PAID)
           return (
-            <>
-              <Stack gap={16}>
-                <Card
-                  withBorder
-                  style={{
-                    borderColor: theme.colors.primary[6],
-                    borderWidth: 1,
-                  }}
-                >
-                  <Stack align="center" gap={16} p={10}>
-                    <ThemeIcon size={55} radius={200}>
-                      <IconClipboardCheck strokeWidth={1.4} size={35} />
-                    </ThemeIcon>
-                    <Text c={color("primary")} ta="center" fz={em(22)} fw={600} tt="capitalize">
-                      {t("pay_successful")}
-                    </Text>
-                  </Stack>
-                </Card>
+            <Stack gap={16}>
+              <Card
+                withBorder
+                style={{
+                  borderColor: theme.colors.primary[6],
+                  borderWidth: 1,
+                }}
+              >
+                <Stack align="center" gap={16} p={10}>
+                  <ThemeIcon size={55} radius={200}>
+                    <IconClipboardCheck strokeWidth={1.4} size={35} />
+                  </ThemeIcon>
+                  <Text c={color("primary")} ta="center" fz={em(22)} fw={600} tt="capitalize">
+                    {t("pay_successful")}
+                  </Text>
+                </Stack>
+              </Card>
 
-                <Anchor ta="center" c="gray" fz={em(14)} onClick={onClose}>
-                  {t("exit")}
-                </Anchor>
-              </Stack>
-            </>
+              <Anchor ta="center" c="gray" fz={em(14)} onClick={onClose}>
+                {t("exit")}
+              </Anchor>
+            </Stack>
           );
 
         return (
-          <>
+          <Fragment>
             <Stack gap={0}>
               <Group justify="center" gap={5}>
                 <ThemeIcon variant="transparent" size="lg">
@@ -244,7 +253,8 @@ const ModalPayReceipt: FC<ModalPayReceiptProps> = (props) => {
                 {paymentMethods.map((method) => {
                   const Icon = getPaymentMethodIcon(method);
 
-                  if (method === ReceiptPaymentMethod.BANK_TRANSFER && (!bank || !bankAccount)) return null;
+                  if (method === ReceiptPaymentMethod.BANK_TRANSFER && (!bank || !bankAccount))
+                    return null;
 
                   return (
                     <Button
@@ -268,67 +278,67 @@ const ModalPayReceipt: FC<ModalPayReceiptProps> = (props) => {
                 {(function () {
                   if (paymentMethod === ReceiptPaymentMethod.BANK_TRANSFER && bank && bankAccount) {
                     return (
-                      <>
-                        <Stack gap={8}>
-                          <Center>
-                            <Image showLoading src={bankQrCode?.url} w={250} maw="100%" />
-                          </Center>
+                      <Stack gap={8}>
+                        <Center>
+                          <Image showLoading src={bankQrCode?.url} w={250} maw="100%" />
+                        </Center>
 
-                          <Timer />
+                        <Timer />
 
-                          <Stack>
-                            <Group justify="space-between">
-                              <Text>{t("money_amount")}: </Text>
-                              <CopyText fw={500} text={num(totalAmount, { type: "money" })} />
-                            </Group>
+                        <Stack>
+                          <Group justify="space-between">
+                            <Text>{t("money_amount")}: </Text>
+                            <CopyText fw={500} text={num(totalAmount, { type: "money" })} />
+                          </Group>
 
-                            <Group justify="space-between" wrap="nowrap" gap={8}>
-                              <Text>{t("content")}: </Text>
-                              <CopyText fw={500} text={transactionDesc}>
-                                <Group wrap="nowrap" gap={5}>
-                                  {transactionDesc !== receipt.code && (
-                                    <ActionIcon
-                                      variant="transparent"
-                                      size="xs"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        setTransactionDesc(receipt.code);
-                                      }}
-                                    >
-                                      <IconRefresh size={18} />
-                                    </ActionIcon>
-                                  )}
-
-                                  <TextInput
-                                    value={transactionDesc}
-                                    onChange={(e) => setTransactionDesc(getTransactionInfo(e.currentTarget.value))}
-                                    styles={{
-                                      input: {
-                                        textAlign: "right",
-                                      },
+                          <Group justify="space-between" wrap="nowrap" gap={8}>
+                            <Text>{t("content")}: </Text>
+                            <CopyText fw={500} text={transactionDesc}>
+                              <Group wrap="nowrap" gap={5}>
+                                {transactionDesc !== receipt.code && (
+                                  <ActionIcon
+                                    variant="transparent"
+                                    size="xs"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setTransactionDesc(receipt.code);
                                     }}
-                                  />
-                                </Group>
-                              </CopyText>
+                                  >
+                                    <IconRefresh size={18} />
+                                  </ActionIcon>
+                                )}
+
+                                <TextInput
+                                  value={transactionDesc}
+                                  onChange={(e) =>
+                                    setTransactionDesc(getTransactionInfo(e.currentTarget.value))
+                                  }
+                                  styles={{
+                                    input: {
+                                      textAlign: "right",
+                                    },
+                                  }}
+                                />
+                              </Group>
+                            </CopyText>
+                          </Group>
+
+                          {bankQrCode?.account.accountName && (
+                            <Group justify="space-between">
+                              <Text>{t("bank_account_name")}: </Text>
+                              <CopyText fw={500} text={bankQrCode.account.accountName} />
                             </Group>
+                          )}
 
-                            {bankQrCode?.account.accountName && (
-                              <Group justify="space-between">
-                                <Text>{t("bank_account_name")}: </Text>
-                                <CopyText fw={500} text={bankQrCode.account.accountName} />
-                              </Group>
-                            )}
-
-                            {bankQrCode?.account.accountNumber && (
-                              <Group justify="space-between">
-                                <Text>{t("bank_account_number")}: </Text>
-                                <CopyText fw={500} text={bankQrCode?.account.accountNumber} />
-                              </Group>
-                            )}
-                          </Stack>
+                          {bankQrCode?.account.accountNumber && (
+                            <Group justify="space-between">
+                              <Text>{t("bank_account_number")}: </Text>
+                              <CopyText fw={500} text={bankQrCode?.account.accountNumber} />
+                            </Group>
+                          )}
                         </Stack>
-                      </>
+                      </Stack>
                     );
                   }
 
@@ -368,12 +378,10 @@ const ModalPayReceipt: FC<ModalPayReceiptProps> = (props) => {
                   }
 
                   return (
-                    <>
-                      <Group justify="space-between">
-                        <Text>{t("money_amount")}: </Text>
-                        <CopyText fw={500} text={num(totalAmount)} />
-                      </Group>
-                    </>
+                    <Group justify="space-between">
+                      <Text>{t("money_amount")}: </Text>
+                      <CopyText fw={500} text={num(totalAmount)} />
+                    </Group>
                   );
                 })()}
               </Card>
@@ -415,7 +423,7 @@ const ModalPayReceipt: FC<ModalPayReceiptProps> = (props) => {
                 {t("exit")}
               </Anchor>
             </Stack>
-          </>
+          </Fragment>
         );
       })()}
     </Stack>

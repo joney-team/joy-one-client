@@ -10,7 +10,11 @@ import { OnModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loa
 import { useRouter } from "@/hooks/use-router";
 import { num, t } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
-import { LoanAssetEstimation, LoanAssetEstimations, LoanAssetType } from "@/modules/loans/loans-types";
+import {
+  LoanAssetEstimation,
+  LoanAssetEstimations,
+  LoanAssetType,
+} from "@/modules/loans/loans-types";
 import { convertExcelToJson } from "@/modules/tools/tools-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
@@ -61,17 +65,24 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
       const rawProductPrice = row["Giá thẩm định"];
       const rawProductName = row["Tên sản phẩm"];
       const assetType = (
-        { "XE MÁY": LoanAssetType.MOTOBIKE_REGISTRATION, "Ô TÔ": LoanAssetType.CAR_REGISTRATION } as any
+        {
+          "XE MÁY": LoanAssetType.MOTOBIKE_REGISTRATION,
+          "Ô TÔ": LoanAssetType.CAR_REGISTRATION,
+        } as any
       )[rawAssetType];
       if (!assetType) continue;
 
-      let brand = data.brands.find((brand) => brand.name === rawBrandName && brand.assetType === assetType);
+      let brand = data.brands.find(
+        (brand) => brand.name === rawBrandName && brand.assetType === assetType
+      );
       if (!brand) {
         brand = { id: data.brands.length.toString(), name: rawBrandName, assetType };
         data.brands.push(brand);
       }
 
-      let model = data.models.find((model) => model.name === rawModelName && model.brandId === brand!.id);
+      let model = data.models.find(
+        (model) => model.name === rawModelName && model.brandId === brand!.id
+      );
       if (!model) {
         model = { id: data.models.length.toString(), name: rawModelName, brandId: brand.id };
         data.models.push(model);
@@ -142,7 +153,8 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
           onDrop={(files) => {
             modals.openConfirmModal({
               title: <ModalTitle color="orange" title="Nhập dữ liệu" icon={IconFile} />,
-              children: "Dữ liệu hiện tại sẽ bị thay thế bởi dữ liệu mới. Bạn có chắc chắn muốn tiếp tục?",
+              children:
+                "Dữ liệu hiện tại sẽ bị thay thế bởi dữ liệu mới. Bạn có chắc chắn muốn tiếp tục?",
               color: "orange",
               onConfirm: () => importEstimations(files[0]),
               labels: { confirm: "Tiếp tục", cancel: "Hủy" },
@@ -162,10 +174,12 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
           label={t("asset_type")}
           iconStrokeWidth={1.8}
           value={searchs.get("assetType")}
-          options={[LoanAssetType.CAR_REGISTRATION, LoanAssetType.MOTOBIKE_REGISTRATION].map((v) => ({
-            label: t(`loan_asset_type_estimation_${v}`),
-            value: v,
-          }))}
+          options={[LoanAssetType.CAR_REGISTRATION, LoanAssetType.MOTOBIKE_REGISTRATION].map(
+            (v) => ({
+              label: t(`loan_asset_type_estimation_${v}`),
+              value: v,
+            })
+          )}
           onChange={(value) => {
             router.setQuery("assetType", value as string, true);
           }}
@@ -216,92 +230,101 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
         {loans.assetEstimations.estimations.length === 0 ? (
           <Empty message="Chưa có định giá" />
         ) : (
-          <>
-            <Card p={0} shadow="xs">
-              <Table>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>#</Table.Th>
-                    <Table.Th>Loại</Table.Th>
-                    <Table.Th>Nhãn hiệu</Table.Th>
-                    <Table.Th>Dòng/Mẫu</Table.Th>
-                    <Table.Th>Tên</Table.Th>
-                    <Table.Th>NSX</Table.Th>
-                    <Table.Th>Giá thẩm định</Table.Th>
-                    <Table.Th></Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
+          <Card p={0} shadow="xs">
+            <Table>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>#</Table.Th>
+                  <Table.Th>Loại</Table.Th>
+                  <Table.Th>Nhãn hiệu</Table.Th>
+                  <Table.Th>Dòng/Mẫu</Table.Th>
+                  <Table.Th>Tên</Table.Th>
+                  <Table.Th>NSX</Table.Th>
+                  <Table.Th>Giá thẩm định</Table.Th>
+                  <Table.Th></Table.Th>
+                </Table.Tr>
+              </Table.Thead>
 
-                <Table.Tbody>
-                  {list.map((estimation, index) => {
-                    return (
-                      <Table.Tr key={estimation.id}>
-                        <Table.Td>{index + 1}</Table.Td>
-                        <Table.Td>{t(`loan_asset_type_estimation_${estimation.assetType}`)}</Table.Td>
-                        <Table.Td>
-                          {loans.assetEstimations.brands.find((brand) => brand.id === estimation.brandId)?.name}
-                        </Table.Td>
-                        <Table.Td>
-                          {loans.assetEstimations.models.find((model) => model.id === estimation.modelId)?.name}
-                        </Table.Td>
-                        <Table.Td>{estimation.productName || "--"}</Table.Td>
-                        <Table.Td>
-                          {estimation.productManufacturingDate
-                            ? new Date(estimation.productManufacturingDate * 1000).getFullYear()
-                            : "--"}{" "}
-                        </Table.Td>
-                        <Table.Td>
-                          <Stack gap={5}>
-                            <ContentEditHover
-                              onEdit={() =>
-                                OnModalInput({
-                                  title: "Nhập giá thẩm định",
-                                  type: InputModalType.NUMBER,
-                                  onDone: (value) => loans.updateEstimation({ ...estimation, estimatePrice: value }),
-                                  value: estimation.estimatePrice,
-                                })
-                              }
-                            >
-                              {num(estimation.estimatePrice, { type: "money" })}
-                            </ContentEditHover>
+              <Table.Tbody>
+                {list.map((estimation, index) => {
+                  return (
+                    <Table.Tr key={estimation.id}>
+                      <Table.Td>{index + 1}</Table.Td>
+                      <Table.Td>{t(`loan_asset_type_estimation_${estimation.assetType}`)}</Table.Td>
+                      <Table.Td>
+                        {
+                          loans.assetEstimations.brands.find(
+                            (brand) => brand.id === estimation.brandId
+                          )?.name
+                        }
+                      </Table.Td>
+                      <Table.Td>
+                        {
+                          loans.assetEstimations.models.find(
+                            (model) => model.id === estimation.modelId
+                          )?.name
+                        }
+                      </Table.Td>
+                      <Table.Td>{estimation.productName || "--"}</Table.Td>
+                      <Table.Td>
+                        {estimation.productManufacturingDate
+                          ? new Date(estimation.productManufacturingDate * 1000).getFullYear()
+                          : "--"}{" "}
+                      </Table.Td>
+                      <Table.Td>
+                        <Stack gap={5}>
+                          <ContentEditHover
+                            onEdit={() =>
+                              OnModalInput({
+                                title: "Nhập giá thẩm định",
+                                type: InputModalType.NUMBER,
+                                onDone: (value) =>
+                                  loans.updateEstimation({ ...estimation, estimatePrice: value }),
+                                value: estimation.estimatePrice,
+                              })
+                            }
+                          >
+                            {num(estimation.estimatePrice, { type: "money" })}
+                          </ContentEditHover>
 
-                            {assetEstimationPriceSpreadRate > 0 && (
-                              <Tooltip label="Giá hiển thị cho người dùng">
-                                <Text fz={em(13)} c="gray">
-                                  {num(estimation.estimatePrice * assetEstimationPriceSpreadRate, { type: "money" })} (
-                                  {assetEstimationPriceSpreadRate * 100}%)
-                                </Text>
-                              </Tooltip>
-                            )}
-                          </Stack>
-                        </Table.Td>
+                          {assetEstimationPriceSpreadRate > 0 && (
+                            <Tooltip label="Giá hiển thị cho người dùng">
+                              <Text fz={em(13)} c="gray">
+                                {num(estimation.estimatePrice * assetEstimationPriceSpreadRate, {
+                                  type: "money",
+                                })}{" "}
+                                ({assetEstimationPriceSpreadRate * 100}%)
+                              </Text>
+                            </Tooltip>
+                          )}
+                        </Stack>
+                      </Table.Td>
 
-                        <Table.Td w={90}>
-                          <Group gap={5}>
-                            <ActionIcon
-                              variant="subtle"
-                              color="gray"
-                              onClick={() => OnModalLoanAssetEstimationForm({ estimation })}
-                            >
-                              <IconPencil size={18} />
-                            </ActionIcon>
+                      <Table.Td w={90}>
+                        <Group gap={5}>
+                          <ActionIcon
+                            variant="subtle"
+                            color="gray"
+                            onClick={() => OnModalLoanAssetEstimationForm({ estimation })}
+                          >
+                            <IconPencil size={18} />
+                          </ActionIcon>
 
-                            <ActionIcon
-                              variant="subtle"
-                              color="red"
-                              onClick={() => loans.removeEstimation(estimation.id)}
-                            >
-                              <IconX size={18} />
-                            </ActionIcon>
-                          </Group>
-                        </Table.Td>
-                      </Table.Tr>
-                    );
-                  })}
-                </Table.Tbody>
-              </Table>
-            </Card>
-          </>
+                          <ActionIcon
+                            variant="subtle"
+                            color="red"
+                            onClick={() => loans.removeEstimation(estimation.id)}
+                          >
+                            <IconX size={18} />
+                          </ActionIcon>
+                        </Group>
+                      </Table.Td>
+                    </Table.Tr>
+                  );
+                })}
+              </Table.Tbody>
+            </Table>
+          </Card>
         )}
       </InfiniteScroll>
     </Stack>

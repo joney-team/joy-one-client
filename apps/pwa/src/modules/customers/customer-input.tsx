@@ -1,12 +1,12 @@
+import { Avatar } from "@/components/avatar";
+import { Renderer } from "@/components/renderer";
+import { SelectorRenderValue } from "@/components/selector/selector";
+import { CustomerSelector } from "@/modules/customers/customer-selector";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { ActionIcon, Card, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconUserPlus, IconX } from "@tabler/icons-react";
 import { FC } from "react";
-import { Avatar } from "@/components/avatar";
-import { Renderer } from "@/components/renderer";
-import { SelectorRenderValue } from "@/components/selector/selector";
-import { CustomerSelector } from "@/modules/customers/customer-selector";
 
 interface CustomerInputProps extends Omit<InputWrapperProps, "value" | "onSelect" | "onChange"> {
   value?: CustomerShortInfo;
@@ -61,7 +61,7 @@ export const CustomerInput: FC<CustomerInputProps> = (props) => {
                   </ActionIcon>
                 );
 
-              if (!value) return <></>;
+              if (!value) return null;
 
               return (
                 <Card

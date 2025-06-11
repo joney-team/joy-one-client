@@ -7,7 +7,7 @@ import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { ActionIcon, Card, Divider, Group, ScrollArea, Stack } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
-import { FC, PropsWithChildren, useEffect } from "react";
+import { FC, Fragment, PropsWithChildren, useEffect } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
 import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
@@ -39,14 +39,21 @@ const Content: FC = () => {
   }, []);
 
   return (
-    <>
+    <Fragment>
       <Group p={16}>
         <TaskMenuActions />
       </Group>
 
       <Stack px={16}>
         <Stack gap={0} style={{ position: "relative" }} ref={container.ref} className="Gantt">
-          <Card h={maxHeight} style={{ overflow: "hidden" }} p={0} withBorder shadow="none" w="100%">
+          <Card
+            h={maxHeight}
+            style={{ overflow: "hidden" }}
+            p={0}
+            withBorder
+            shadow="none"
+            w="100%"
+          >
             <LayoutSplit
               h={maxHeight}
               value={gantt.dividerPosition}
@@ -148,7 +155,7 @@ const Content: FC = () => {
           </Card>
         </Stack>
       </Stack>
-    </>
+    </Fragment>
   );
 };
 

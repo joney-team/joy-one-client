@@ -19,7 +19,18 @@ import { useTask } from "@/modules/tasks/hooks/use-task";
 import { getTaskEntity, getTaskPriorityColor } from "@/modules/tasks/tasks-service";
 import { ReorderTaskPotision, TaskPriority } from "@/modules/tasks/tasks-types";
 import { capitalize, StringUtils } from "@/utils/string.utils";
-import { ActionIcon, Button, em, Group, Progress, rgba, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  em,
+  Group,
+  Progress,
+  rgba,
+  Stack,
+  Text,
+  ThemeIcon,
+  Tooltip,
+} from "@mantine/core";
 import { useDebouncedCallback, useHover } from "@mantine/hooks";
 import {
   IconCalendar,
@@ -34,7 +45,7 @@ import {
   IconSubtask,
   IconTagPlus,
 } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag } from "../../tasks-dnd-provider";
 import { ListTaskRowDropper } from "./list.task-row-dropper";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
@@ -93,32 +104,43 @@ export const ListTaskRow: FC<{
   const isSelfDragging = draggingTaskId === props.id;
   const isDraggingAsParent = draggingTaskId === task.parentId;
   const isDraggingAsRootAndHasChild = draggingTask && draggingTask.childCount > 0;
-  const isDraggingAsRootHasChild_thisAsChild = draggingTask && draggingTask.childCount > 0 && !!task.parentId;
+  const isDraggingAsRootHasChild_thisAsChild =
+    draggingTask && draggingTask.childCount > 0 && !!task.parentId;
   const isAbleToDrop = draggingTask && !props.overlay && !isSelfDragging && !isDraggingAsParent;
 
   const DragDrop: FC = () => {
     if (props.overlay)
       return (
-        <>
-          <ActionIcon variant="transparent" color="gray" style={{ cursor: "move", outline: "none" }} mr={-5}>
-            <IconGripVertical size={16} strokeWidth={1.2} />
-          </ActionIcon>
-        </>
+        <ActionIcon
+          variant="transparent"
+          color="gray"
+          style={{ cursor: "move", outline: "none" }}
+          mr={-5}
+        >
+          <IconGripVertical size={16} strokeWidth={1.2} />
+        </ActionIcon>
       );
 
     const draggable = useTaskDrag(task._id, "row");
 
     return (
-      <>
+      <Fragment>
         <ListTaskRowDropper
-          visible={isAbleToDrop && props.prevId !== draggingTaskId && !isDraggingAsRootHasChild_thisAsChild}
+          visible={
+            isAbleToDrop && props.prevId !== draggingTaskId && !isDraggingAsRootHasChild_thisAsChild
+          }
           indexSpacing={indexSpacing * 3}
           targetTask={task}
           position={ReorderTaskPotision.BEFORE}
         />
 
         <ListTaskRowDropper
-          visible={isAbleToDrop && props.indexType === "last" && !isHasChild && !isDraggingAsRootHasChild_thisAsChild}
+          visible={
+            isAbleToDrop &&
+            props.indexType === "last" &&
+            !isHasChild &&
+            !isDraggingAsRootHasChild_thisAsChild
+          }
           indexSpacing={indexSpacing * 3}
           targetTask={task}
           position={ReorderTaskPotision.AFTER}
@@ -135,7 +157,7 @@ export const ListTaskRow: FC<{
         >
           <IconGripVertical size={16} strokeWidth={1.2} />
         </ActionIcon>
-      </>
+      </Fragment>
     );
   };
 
@@ -152,7 +174,9 @@ export const ListTaskRow: FC<{
           borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
           borderBottomWidth: props.showDivider ? 0.5 : 0,
           borderRadius: 5,
-          boxShadow: props.overlay ? `0 0 10px ${rgba("var(--mantine-color-text)", 0.1)}` : undefined,
+          boxShadow: props.overlay
+            ? `0 0 10px ${rgba("var(--mantine-color-text)", 0.1)}`
+            : undefined,
         }}
         bg="var(--mantine-color-body)"
       >
@@ -161,12 +185,18 @@ export const ListTaskRow: FC<{
         <ActionIcon
           color={ctx.isSelected ? color("primary") : "gray"}
           variant="subtle"
-          opacity={(hovered || ctx.isSelected || layout.view !== "desktop") && ctx.isAbleToSelect ? 1 : 0}
+          opacity={
+            (hovered || ctx.isSelected || layout.view !== "desktop") && ctx.isAbleToSelect ? 1 : 0
+          }
           style={{ visibility: ctx.isAbleToSelect ? "visible" : "hidden" }}
           onClick={(e) => ctx.toggleSelect(e.shiftKey)}
           disabled={!ctx.isAbleToSelect}
         >
-          {ctx.isSelected ? <IconSquareCheckFilled size={18} /> : <IconSquareDashed strokeWidth={1.5} size={18} />}
+          {ctx.isSelected ? (
+            <IconSquareCheckFilled size={18} />
+          ) : (
+            <IconSquareDashed strokeWidth={1.5} size={18} />
+          )}
         </ActionIcon>
 
         <Group pl={indexSpacing} flex={1} py={5} gap={5} wrap="nowrap">
@@ -200,7 +230,10 @@ export const ListTaskRow: FC<{
                       id={tag._id}
                       h={26}
                       onRemove={() => {
-                        ctx.onUpdate({ ...task, tagIds: task.tagIds?.filter((v) => v !== tag._id) });
+                        ctx.onUpdate({
+                          ...task,
+                          tagIds: task.tagIds?.filter((v) => v !== tag._id),
+                        });
                       }}
                     />
                   ))}
@@ -218,7 +251,13 @@ export const ListTaskRow: FC<{
                   onBlur={() => setIsEditName(false)}
                 />
               ) : (
-                <Text fz={16} fw={500} c={hover.hovered ? color("primary") : undefined} truncate="end" maw={650}>
+                <Text
+                  fz={16}
+                  fw={500}
+                  c={hover.hovered ? color("primary") : undefined}
+                  truncate="end"
+                  maw={650}
+                >
                   {StringUtils.limitCharacters(task.name, props.limitName || 100)}
                 </Text>
               )}
@@ -242,7 +281,11 @@ export const ListTaskRow: FC<{
 
                 <Group flex={1} justify="end" gap={5}>
                   <Text fz={em(10)}>{num(ctx.progress.percent, { roundPrecision: 0 })}%</Text>
-                  <Progress value={ctx.progress.percent} w={60} color={ctx.progress.status.color || "dark"} />
+                  <Progress
+                    value={ctx.progress.percent}
+                    w={60}
+                    color={ctx.progress.status.color || "dark"}
+                  />
                 </Group>
               </Group>
             </Renderer>
@@ -257,10 +300,13 @@ export const ListTaskRow: FC<{
                   top: 0,
                   right: 0,
                   bottom: 0,
-                  background: `linear-gradient(to right, ${rgba("var(--mantine-color-body)", 0)}, ${rgba(
+                  background: `linear-gradient(to right, ${rgba(
+                    "var(--mantine-color-body)",
+                    0
+                  )}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba(
                     "var(--mantine-color-body)",
                     1
-                  )}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba("var(--mantine-color-body)", 1)})`,
+                  )}, ${rgba("var(--mantine-color-body)", 1)})`,
                 }}
               >
                 <Renderer visible={!task.parentId}>
@@ -299,7 +345,10 @@ export const ListTaskRow: FC<{
                   type={TagType.TASK}
                   onSelect={(tag) => {
                     if (!tag) return;
-                    ctx.onUpdate({ ...task, tagIds: [...new Set([...(task.tagIds || []), tag._id])] });
+                    ctx.onUpdate({
+                      ...task,
+                      tagIds: [...new Set([...(task.tagIds || []), tag._id])],
+                    });
                   }}
                   onOpen={() => setForceHover(true)}
                   onClose={() => setForceHover(false)}
@@ -418,19 +467,25 @@ export const ListTaskRow: FC<{
       </Group>
 
       {isSubTasksVisible && ctx.subTasks.length > 0 && !props.overlay && !props.overlay && (
-        <>
+        <Fragment>
           {ctx.subTasks.map((subTask, childIndex) => (
             <ListTaskRow
               key={subTask._id}
               id={subTask._id}
               showDivider
               generation={generation + 1}
-              indexType={childIndex === ctx.subTasks.length - 1 ? "last" : childIndex === 0 ? "first" : undefined}
+              indexType={
+                childIndex === ctx.subTasks.length - 1
+                  ? "last"
+                  : childIndex === 0
+                  ? "first"
+                  : undefined
+              }
               nextId={ctx.subTasks[childIndex + 1]?._id}
               prevId={ctx.subTasks[childIndex - 1]?._id}
             />
           ))}
-        </>
+        </Fragment>
       )}
     </Stack>
   );

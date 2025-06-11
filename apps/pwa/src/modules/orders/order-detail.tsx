@@ -1,3 +1,5 @@
+"use client";
+
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
@@ -8,7 +10,7 @@ import { getOrderByCode } from "@/modules/orders/orders-service";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Skeleton } from "@mantine/core";
 import { useParams } from "next/navigation";
-import { useEffect, type FC } from "react";
+import { Fragment, useEffect, type FC } from "react";
 
 export const OrderDetail: FC = () => {
   const params = useParams();
@@ -40,10 +42,10 @@ export const OrderDetail: FC = () => {
       {order.error && <Errored error={order.error} />}
 
       {order.data && (
-        <>
+        <Fragment>
           <OrderCard data={order.data} />
           <EventList ref={order.data.id} />
-        </>
+        </Fragment>
       )}
     </Container>
   );

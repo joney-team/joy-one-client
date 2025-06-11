@@ -9,7 +9,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { Anchor, Badge, Card, CardProps, em, Group, Stack, Text } from "@mantine/core";
 import { IconFileTypePdf } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
 interface LoanCardProps {
   loan: LoanEntity;
@@ -42,7 +42,7 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
         </Group>
 
         {!props.hideCustomer && (
-          <>
+          <Fragment>
             <Group justify="space-between">
               <Text fz={em(15)}>{t("customer")}</Text>
               <Anchor fw={500} onClick={() => router.push(`/customers/${customer.code}`)}>
@@ -50,15 +50,16 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
               </Anchor>
             </Group>
 
-            {customer.phone && workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
-              <Group justify="space-between">
-                <Text fz={em(15)}>{t("phone")}</Text>
-                <Text fz={em(15)} fw={500}>
-                  {customer.phone}
-                </Text>
-              </Group>
-            )}
-          </>
+            {customer.phone &&
+              workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
+                <Group justify="space-between">
+                  <Text fz={em(15)}>{t("phone")}</Text>
+                  <Text fz={em(15)} fw={500}>
+                    {customer.phone}
+                  </Text>
+                </Group>
+              )}
+          </Fragment>
         )}
 
         <Group justify="space-between">
@@ -86,11 +87,9 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
           <Badge color={loanStatusColors[loan.status]}>{t(`loan_status_${loan.status}`)}</Badge>
 
           {loan.status === LoanStatus.REJECTED && (
-            <>
-              <Text fz={em(13)} fw={500} c="red">
-                {t("reason")}: {loan.rejectReason || "Không rõ lý do"}
-              </Text>
-            </>
+            <Text fz={em(13)} fw={500} c="red">
+              {t("reason")}: {loan.rejectReason || "Không rõ lý do"}
+            </Text>
           )}
         </Stack>
 

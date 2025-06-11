@@ -25,23 +25,21 @@ export const ModalWorkspaceSettingsWorkSlots: FC = () => {
   }, 500);
 
   return (
-    <>
-      <Stack>
-        <Stack gap={5}>
-          <Text fz={em(12)}>• {t("work-slot-desc-1")}</Text>
+    <Stack>
+      <Stack gap={5}>
+        <Text fz={em(12)}>• {t("work-slot-desc-1")}</Text>
 
-          <Text fz={em(12)}>• {t("work-slot-desc-2")}</Text>
-        </Stack>
-
-        <WorkSlotsSettingsInput
-          slots={slots}
-          onChange={(s) => {
-            setSlots(s);
-            onUpdate(s);
-          }}
-        />
+        <Text fz={em(12)}>• {t("work-slot-desc-2")}</Text>
       </Stack>
-    </>
+
+      <WorkSlotsSettingsInput
+        slots={slots}
+        onChange={(s) => {
+          setSlots(s);
+          onUpdate(s);
+        }}
+      />
+    </Stack>
   );
 };
 

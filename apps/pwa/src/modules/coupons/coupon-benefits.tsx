@@ -1,3 +1,5 @@
+"use client";
+
 import {
   CouponRuleBenefit,
   CouponRuleBenefitType,
@@ -8,7 +10,7 @@ import {
 } from "@/modules/coupons/coupon-types";
 import { num, t } from "@/modules/lang/lang-service";
 import { em, Text, TextProps } from "@mantine/core";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
 interface CouponBenefitsProps extends TextProps {
   benefits: CouponRuleBenefit[];
@@ -19,7 +21,7 @@ export const CouponBenefits: FC<CouponBenefitsProps> = (props) => {
   delete _props.benefits;
 
   return (
-    <>
+    <Fragment>
       {props.benefits.map((benefit, i) => {
         if (benefit.type === CouponRuleBenefitType.DISCOUNT_ON_TOTAL) {
           const data: DiscountOnTotalData = benefit.data;
@@ -69,6 +71,6 @@ export const CouponBenefits: FC<CouponBenefitsProps> = (props) => {
 
         return null;
       })}
-    </>
+    </Fragment>
   );
 };

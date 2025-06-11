@@ -23,12 +23,29 @@ import {
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/workspace-roles-input";
 import { onActionLoad } from "@/utils/actions";
 import { onFormError } from "@/utils/exceptions.utils";
-import { ActionIcon, Badge, Button, Center, CopyButton, Group, PasswordInput, Stack, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Button,
+  Center,
+  CopyButton,
+  Group,
+  PasswordInput,
+  Stack,
+  Tooltip,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
-import { IconApiApp, IconCheck, IconCopy, IconEye, IconEyeOff, IconRefresh } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import {
+  IconApiApp,
+  IconCheck,
+  IconCopy,
+  IconEye,
+  IconEyeOff,
+  IconRefresh,
+} from "@tabler/icons-react";
+import { FC, Fragment, useState } from "react";
 
 interface ModalWorkspaceApiAppProps {
   app?: IWorkspaceApiApp;
@@ -99,7 +116,9 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
         setSecretKey(_app.secretKey);
         modals.updateModal({
           modalId: "ModalWorkspaceApiApp",
-          title: <ModalTitle title={`${t("info_entity", { entity: t("app") })}`} icon={IconApiApp} />,
+          title: (
+            <ModalTitle title={`${t("info_entity", { entity: t("app") })}`} icon={IconApiApp} />
+          ),
         });
         setApp(_app);
       }
@@ -112,7 +131,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
     <Form onSubmit={onSubmit}>
       <Stack gap={30} pt={16}>
         {!!app && (
-          <>
+          <Fragment>
             <FormSession title="ID">
               <CopyButton value={app._id}>
                 {({ copied, copy }) => (
@@ -165,7 +184,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
                 )}
               </CopyButton>
             </FormSession>
-          </>
+          </Fragment>
         )}
 
         <FormSession title="name">
@@ -173,7 +192,10 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
         </FormSession>
 
         <FormSession title="roles">
-          <WorkspaceRolesInput value={form.values.roles} onChange={(roles) => form.setFieldValue("roles", roles)} />
+          <WorkspaceRolesInput
+            value={form.values.roles}
+            onChange={(roles) => form.setFieldValue("roles", roles)}
+          />
         </FormSession>
 
         <FormSession title="branches">
@@ -215,7 +237,12 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
 export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => {
   return modals.open({
     modalId: "ModalWorkspaceApiApp",
-    title: <ModalTitle title={`${t(app ? "info_entity" : "create_new", { entity: t("app") })}`} icon={IconApiApp} />,
+    title: (
+      <ModalTitle
+        title={`${t(app ? "info_entity" : "create_new", { entity: t("app") })}`}
+        icon={IconApiApp}
+      />
+    ),
     children: <ModalWorkspaceApiApp app={app} />,
     size: "xl",
   });

@@ -9,9 +9,15 @@ import { CustomerEntity } from "@/modules/customers/customer-types";
 import { EventType } from "@/modules/events/event-types";
 import { useFetch } from "@/utils/use-fetch.util";
 import { ActionIcon, Group, Skeleton, Stack } from "@mantine/core";
-import { IconCalendarPlus, IconFiles, IconPill, IconStackPush, IconUserScan } from "@tabler/icons-react";
+import {
+  IconCalendarPlus,
+  IconFiles,
+  IconPill,
+  IconStackPush,
+  IconUserScan,
+} from "@tabler/icons-react";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { archiveCustomer, getCustomerByCode } from "./customer-service";
 
 import { EventList } from "@/components/event-list";
@@ -46,7 +52,8 @@ export const CustomerDetail = () => {
     },
     events: {
       types: [EventType.CUSTOMER_UPDATED],
-      condition: (e, data) => data?._id === e.ref || (e.relatedEntities || []).some((v) => v.id === data?._id),
+      condition: (e, data) =>
+        data?._id === e.ref || (e.relatedEntities || []).some((v) => v.id === data?._id),
     },
   });
 
@@ -57,7 +64,7 @@ export const CustomerDetail = () => {
       layout.setComponents({
         head: customer.name,
         navigation: (
-          <>
+          <Fragment>
             {workspace.hasPermission(WorkspacePermission.BOOKING_MANAGER) && (
               <Button
                 leftIcon={IconCalendarPlus}
@@ -77,7 +84,7 @@ export const CustomerDetail = () => {
             >
               {t("task")}
             </Button>
-          </>
+          </Fragment>
         ),
       });
     }
@@ -102,7 +109,7 @@ export const CustomerDetail = () => {
   if (customer.isArchived) return <Archived entity="customer" />;
 
   return (
-    <>
+    <Fragment>
       <Stack gap={30} p={16}>
         <CustomerInformations customer={customer} />
 
@@ -135,20 +142,27 @@ export const CustomerDetail = () => {
 
         <ButtonArchive
           name="customer"
-          enabled={!customer.isArchived && workspace.hasPermission(WorkspacePermission.CUSTOMERS_ARCHIVE)}
+          enabled={
+            !customer.isArchived && workspace.hasPermission(WorkspacePermission.CUSTOMERS_ARCHIVE)
+          }
           process={() => archiveCustomer(customer._id)}
         />
       </Stack>
 
       <CtasWrapper>
         <Renderer visible={workspace.isModuleActive("prescriptions")}>
-          <ActionIcon radius={150} size="xl" color="orange" onClick={() => OnModalPrescriptionForm({ customer })}>
+          <ActionIcon
+            radius={150}
+            size="xl"
+            color="orange"
+            onClick={() => OnModalPrescriptionForm({ customer })}
+          >
             <IconPill strokeWidth={1.5} />
           </ActionIcon>
         </Renderer>
 
         <Comments customer={customer} />
       </CtasWrapper>
-    </>
+    </Fragment>
   );
 };

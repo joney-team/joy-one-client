@@ -15,7 +15,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { t } from "@/modules/lang/lang-service";
 import { isDiff } from "@/utils/object.utils";
 import { IconPencil, IconPlusMinus, IconRefresh, IconTrash } from "@tabler/icons-react";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import GridLayout, { Layout } from "react-grid-layout";
 import { ManageWidgets } from "./components/manage-widgets";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
@@ -66,7 +66,9 @@ const setWidgetStorage = (id: string, func: (storage: WidgetStorage) => WidgetSt
   localStorage.setItem(getWidgetStorageKey(id), JSON.stringify(func(storage)));
 };
 
-export function Widgets<ContextType = object, WidgetType = string>(props: WidgetsProps<ContextType, WidgetType>) {
+export function Widgets<ContextType = object, WidgetType = string>(
+  props: WidgetsProps<ContextType, WidgetType>
+) {
   const { id } = props;
   const layout = useLayout();
   const workspaceLayout = useWorkspaceLayout();
@@ -113,7 +115,8 @@ export function Widgets<ContextType = object, WidgetType = string>(props: Widget
       };
 
       const lastGrid = gridLayout[gridLayout.length - 1];
-      const isXOverflow = !!lastGrid && lastGrid.x + lastGrid.w + widgetLayout.w > gridLayoutConfig.cols;
+      const isXOverflow =
+        !!lastGrid && lastGrid.x + lastGrid.w + widgetLayout.w > gridLayoutConfig.cols;
 
       if (isXOverflow) {
         x = 0;
@@ -183,7 +186,9 @@ export function Widgets<ContextType = object, WidgetType = string>(props: Widget
   };
 
   const updateState = (id: string, key: string, value: any) => {
-    props.onChange?.(widgets.map((v) => (v.id === id ? { ...v, state: { ...v.state, [key]: value } } : v)));
+    props.onChange?.(
+      widgets.map((v) => (v.id === id ? { ...v, state: { ...v.state, [key]: value } } : v))
+    );
   };
 
   const resetDefault = () => {
@@ -201,10 +206,12 @@ export function Widgets<ContextType = object, WidgetType = string>(props: Widget
   };
 
   const width =
-    layout.view === "mobile" ? layout.width - 16 * 2 : layout.width - workspaceLayout.navigationWidth - 16 * 2;
+    layout.view === "mobile"
+      ? layout.width - 16 * 2
+      : layout.width - workspaceLayout.navigationWidth - 16 * 2;
 
   return (
-    <>
+    <Fragment>
       <ContextMenu
         disabled={readonly}
         position="bottom-start"
@@ -222,7 +229,9 @@ export function Widgets<ContextType = object, WidgetType = string>(props: Widget
               <GridLayout
                 key={version}
                 width={width}
-                layout={layout.view === "mobile" ? gridLayout.map((v) => ({ ...v, w: 12 })) : gridLayout}
+                layout={
+                  layout.view === "mobile" ? gridLayout.map((v) => ({ ...v, w: 12 })) : gridLayout
+                }
                 rowHeight={gridLayoutConfig.rowHeight}
                 cols={gridLayoutConfig.cols}
                 containerPadding={[0, 0]}
@@ -267,7 +276,11 @@ export function Widgets<ContextType = object, WidgetType = string>(props: Widget
         </ContextMenu.Target>
 
         <ContextMenu.Dropdown>
-          <ContextMenu.Item fz={14} leftSection={<IconPencil size={16} />} onClick={() => setIsEditMode(!isEditMode)}>
+          <ContextMenu.Item
+            fz={14}
+            leftSection={<IconPencil size={16} />}
+            onClick={() => setIsEditMode(!isEditMode)}
+          >
             {t(isEditMode ? "disable" : "enable")} {t("resize_widget_layout").toLowerCase()}
           </ContextMenu.Item>
 
@@ -305,6 +318,6 @@ export function Widgets<ContextType = object, WidgetType = string>(props: Widget
           onClose={() => setIsManageWidgetsOpened(false)}
         />
       )}
-    </>
+    </Fragment>
   );
 }

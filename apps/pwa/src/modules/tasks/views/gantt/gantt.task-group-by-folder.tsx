@@ -14,9 +14,15 @@ import { useColor } from "@/modules/theme/use-color";
 import { StringUtils } from "@/utils/string.utils";
 import { ActionIcon, alpha, Box, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
-import { IconFolder, IconFolderOpen, IconHourglassHigh, IconPencil, IconPlus } from "@tabler/icons-react";
+import {
+  IconFolder,
+  IconFolderOpen,
+  IconHourglassHigh,
+  IconPencil,
+  IconPlus,
+} from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { useTaskDrop } from "../../tasks-dnd-provider";
 import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
@@ -41,13 +47,18 @@ export const GanttTaskGroupByFolders: FC<GanttTaskGroupByFoldersProps> = (props)
   }
 
   return (
-    <>
+    <Fragment>
       <GanttTaskGroupByFolder {...props} index={0} />
 
       {tasks.tagFolders.map((tagFolder, index) => (
-        <GanttTaskGroupByFolder key={tagFolder._id} {...props} tagFolder={tagFolder} index={index + 1} />
+        <GanttTaskGroupByFolder
+          key={tagFolder._id}
+          {...props}
+          tagFolder={tagFolder}
+          index={index + 1}
+        />
       ))}
-    </>
+    </Fragment>
   );
 };
 
@@ -97,7 +108,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
 
   if (props.position === "sidebar") {
     return (
-      <>
+      <Fragment>
         {/* Folder Infos */}
         {!props.pure && (
           <Hovered>
@@ -141,7 +152,9 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
                           variant="subtle"
                           color="gray"
                           opacity={hover.hovered ? 1 : 0}
-                          onClick={() => OnModalTagForm({ tag: props.tagFolder!, type: props.tagFolder!.type })}
+                          onClick={() =>
+                            OnModalTagForm({ tag: props.tagFolder!, type: props.tagFolder!.type })
+                          }
                         >
                           <IconPencil size={13} />
                         </ActionIcon>
@@ -150,7 +163,12 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
 
                     <Tooltip label={StringUtils.capitalizeFirstLetter(`${t("add")} ${t("tasks")}`)}>
                       <QuickCreateTaskInput tagFolderId={props.tagFolder?._id}>
-                        <ActionIcon size="sm" variant="subtle" color="gray" opacity={hover.hovered ? 1 : 0}>
+                        <ActionIcon
+                          size="sm"
+                          variant="subtle"
+                          color="gray"
+                          opacity={hover.hovered ? 1 : 0}
+                        >
                           <IconPlus size={16} />
                         </ActionIcon>
                       </QuickCreateTaskInput>
@@ -162,7 +180,10 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
           </Hovered>
         )}
 
-        <ChangeTagFolderDrop tagFolderId={props.tagFolder?._id} visible={allFolderTasks.length === 0} />
+        <ChangeTagFolderDrop
+          tagFolderId={props.tagFolder?._id}
+          visible={allFolderTasks.length === 0}
+        />
 
         {/* Tasks */}
         {!isCollapsed &&
@@ -171,22 +192,27 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
               <GanttTaskRowSidebar
                 key={task._id}
                 id={task._id}
-                indexType={index === folderRootTasks.length - 1 ? "last" : index === 0 ? "first" : undefined}
+                indexType={
+                  index === folderRootTasks.length - 1 ? "last" : index === 0 ? "first" : undefined
+                }
                 nextId={folderRootTasks[index + 1]?._id}
                 prevId={folderRootTasks[index - 1]?._id}
               />
             );
           })}
-      </>
+      </Fragment>
     );
   }
 
   const rangeDate = getRangeOfTasks(allFolderTasks);
   const tasksProgress = getTaskProgress(allFolderTasks, gantt.statuses);
-  const totalEstimatedTime = allFolderTasks.reduce((acc, task) => acc + (task.estimatedTime || 0), 0);
+  const totalEstimatedTime = allFolderTasks.reduce(
+    (acc, task) => acc + (task.estimatedTime || 0),
+    0
+  );
 
   return (
-    <>
+    <Fragment>
       {!props.pure && (
         <Group
           w="100%"
@@ -199,14 +225,21 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
         >
           {(function () {
             if (rangeDate.dueDate && rangeDate.startDate && folderTasks.length > 0) {
-              const startIndex = gantt.dates.findIndex((v) => dayjs(v).isSame(rangeDate.startDate, "day"));
-              const endIndex = gantt.dates.findIndex((v) => dayjs(v).isSame(rangeDate.dueDate, "day"));
+              const startIndex = gantt.dates.findIndex((v) =>
+                dayjs(v).isSame(rangeDate.startDate, "day")
+              );
+              const endIndex = gantt.dates.findIndex((v) =>
+                dayjs(v).isSame(rangeDate.dueDate, "day")
+              );
               const left = startIndex * gantt.state.columnSize;
 
               const _width =
-                startIndex === endIndex ? gantt.state.columnSize : (endIndex - startIndex + 1) * gantt.state.columnSize;
+                startIndex === endIndex
+                  ? gantt.state.columnSize
+                  : (endIndex - startIndex + 1) * gantt.state.columnSize;
 
-              const isStartToday = dayjs(rangeDate.startDate).isSame(dayjs(), "day") && props.index === 0;
+              const isStartToday =
+                dayjs(rangeDate.startDate).isSame(dayjs(), "day") && props.index === 0;
 
               return (
                 <Box
@@ -258,7 +291,12 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
 
           <Group px={8} pos="sticky" top={0} left={0}>
             {totalEstimatedTime > 0 && !gantt.state.isHideEstimateTime && (
-              <Group gap={0} bg={alpha(color(folderColor), 0.1)} px={3} style={{ borderRadius: 100 }}>
+              <Group
+                gap={0}
+                bg={alpha(color(folderColor), 0.1)}
+                px={3}
+                style={{ borderRadius: 100 }}
+              >
                 <ThemeIcon variant="transparent" color="gray" size="xs">
                   <IconHourglassHigh size={11} />
                 </ThemeIcon>
@@ -276,7 +314,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
         folderRootTasks.map((task) => {
           return <GanttTaskRowBody key={task._id} id={task._id} />;
         })}
-    </>
+    </Fragment>
   );
 };
 

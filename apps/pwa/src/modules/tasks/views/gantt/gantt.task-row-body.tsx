@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { formatDuration } from "@/components/inputs/estimate-time-input";
 import { num, t } from "@/modules/lang/lang-service";
@@ -21,7 +23,7 @@ import {
 import { useMouse } from "@mantine/hooks";
 import { IconGripVertical, IconHourglassHigh } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
 import { useGanttTaskState } from "./gantt.hooks";
@@ -191,7 +193,7 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
   if (!task) return null;
 
   return (
-    <>
+    <Fragment>
       <Group
         ref={mouse.ref}
         gap={0}
@@ -213,7 +215,7 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
           !state.isOutSideBody &&
           !isMoving &&
           gantt.scrollDirection !== "vertical" && (
-            <>
+            <Fragment>
               {(function () {
                 if (!isEstimating) return null;
                 const width = Math.abs(mouse.x - startEstimateAt);
@@ -258,7 +260,7 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
                   opacity={gantt.isScrolling ? 0 : 1}
                 />
               </Tooltip>
-            </>
+            </Fragment>
           )}
 
         {/* Render sub task estimation */}
@@ -268,12 +270,18 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
             const progress = getTaskProgress(ctx.subTasks, gantt.statuses);
 
             const rangeDate = getRangeOfTasks(ctx.subTasks);
-            const startIndex = gantt.dates.findIndex((v) => dayjs(v).isSame(rangeDate.startDate, "day"));
-            const endIndex = gantt.dates.findIndex((v) => dayjs(v).isSame(rangeDate.dueDate, "day"));
+            const startIndex = gantt.dates.findIndex((v) =>
+              dayjs(v).isSame(rangeDate.startDate, "day")
+            );
+            const endIndex = gantt.dates.findIndex((v) =>
+              dayjs(v).isSame(rangeDate.dueDate, "day")
+            );
             const left = startIndex * gantt.state.columnSize;
 
             const _width =
-              startIndex === endIndex ? gantt.state.columnSize : (endIndex - startIndex + 1) * gantt.state.columnSize;
+              startIndex === endIndex
+                ? gantt.state.columnSize
+                : (endIndex - startIndex + 1) * gantt.state.columnSize;
 
             const _color = color(progress.status.color || "gray");
 
@@ -305,9 +313,19 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
                 </Text>
 
                 <Box
-                  style={{ position: "relative", width: "100%", height: "100%", borderRadius: 100, overflow: "hidden" }}
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: 100,
+                    overflow: "hidden",
+                  }}
                 >
-                  <Box w={`${progress.percent}%`} h="100%" style={{ position: "absolute", top: 0, left: 0 }} />
+                  <Box
+                    w={`${progress.percent}%`}
+                    h="100%"
+                    style={{ position: "absolute", top: 0, left: 0 }}
+                  />
                 </Box>
               </Box>
             );
@@ -320,14 +338,20 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
         {(function () {
           if (!task.startDate || !task.dueDate || isEstimating) return null;
 
-          const startIndex = gantt.dates.findIndex((v) => dayjs(v).isSame(new Date(task.startDate! * 1000), "day"));
-          const endIndex = gantt.dates.findIndex((v) => dayjs(v).isSame(new Date(task.dueDate! * 1000), "day"));
+          const startIndex = gantt.dates.findIndex((v) =>
+            dayjs(v).isSame(new Date(task.startDate! * 1000), "day")
+          );
+          const endIndex = gantt.dates.findIndex((v) =>
+            dayjs(v).isSame(new Date(task.dueDate! * 1000), "day")
+          );
 
           const left = startIndex * gantt.state.columnSize;
           const right = Math.abs((gantt.dates.length - endIndex - 1) * gantt.state.columnSize);
 
           const _width =
-            startIndex === endIndex ? gantt.state.columnSize : (endIndex - startIndex + 1) * gantt.state.columnSize;
+            startIndex === endIndex
+              ? gantt.state.columnSize
+              : (endIndex - startIndex + 1) * gantt.state.columnSize;
 
           const width =
             isResizing === "right"
@@ -343,7 +367,7 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
           );
 
           return (
-            <>
+            <Fragment>
               {/* <Box
               bg="pink"
               w={10}
@@ -461,7 +485,7 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
                   </Text>
                 </Box>
               )}
-            </>
+            </Fragment>
           );
         })()}
 
@@ -469,7 +493,10 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
         {(function () {
           if (!!gantt.state.isHideEstimateTime) return null;
 
-          const totalSubTasksTime = ctx.subTasks.reduce((acc, task) => acc + (task.estimatedTime || 0), 0);
+          const totalSubTasksTime = ctx.subTasks.reduce(
+            (acc, task) => acc + (task.estimatedTime || 0),
+            0
+          );
           const totalEstimateTime = (task.estimatedTime || 0) + totalSubTasksTime;
           if (totalEstimateTime === 0) return null;
 
@@ -501,14 +528,14 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
       </Group>
 
       {state.isShowSubTasks && ctx.subTasks.length > 0 && (
-        <>
+        <Fragment>
           {ctx.subTasks
             .sort((a, b) => a.order - b.order)
             .map((task) => (
               <GanttTaskRowBody key={task._id} id={task._id} />
             ))}
-        </>
+        </Fragment>
       )}
-    </>
+    </Fragment>
   );
 };

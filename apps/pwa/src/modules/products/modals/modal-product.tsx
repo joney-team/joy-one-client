@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { EntityImage } from "@/components/entity-image";
@@ -9,7 +11,12 @@ import { uploadFile } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { ProductCategoryInput } from "@/modules/product-categories/product-category-input";
 import { archiveProduct, createProduct, updateProduct } from "@/modules/products/products-service";
-import { ProductCombo, ProductEntity, ProductSupply, ProductType } from "@/modules/products/products-types";
+import {
+  ProductCombo,
+  ProductEntity,
+  ProductSupply,
+  ProductType,
+} from "@/modules/products/products-types";
 import { onError } from "@/utils/exceptions.utils";
 import {
   ActionIcon,
@@ -78,20 +85,24 @@ const ProductForm: FC<
         if (value < 0) return t("validate_min_amount", { min: 0 });
 
         if (values.isRangePrice) {
-          if (values.minPrice && values.minPrice > value) return t("validate_range_price_with_default_price");
-          if (values.maxPrice && values.maxPrice < value) return t("validate_range_price_with_default_price");
+          if (values.minPrice && values.minPrice > value)
+            return t("validate_range_price_with_default_price");
+          if (values.maxPrice && values.maxPrice < value)
+            return t("validate_range_price_with_default_price");
         }
       },
       minPrice: (value: number, values: any) => {
         if (values.isRangePrice) {
           if (typeof value !== "number") return t("must_be_provided");
-          if (values.maxPrice && values.maxPrice < value) return t("validate_min_price_with_max_price");
+          if (values.maxPrice && values.maxPrice < value)
+            return t("validate_min_price_with_max_price");
         }
       },
       maxPrice: (value: number, values: any) => {
         if (values.isRangePrice) {
           if (typeof value !== "number") return t("must_be_provided");
-          if (values.minPrice && values.minPrice > value) return t("validate_max_price_with_min_price");
+          if (values.minPrice && values.minPrice > value)
+            return t("validate_max_price_with_min_price");
         }
       },
       voucherAmount: (value: number) => {
@@ -108,7 +119,8 @@ const ProductForm: FC<
     try {
       // Validate
       if (props.type === ProductType.COMBO) {
-        if (combos.length === 0) throw new Error(`${t("must_be_provided")} ${t("products")}/${t("services")}`);
+        if (combos.length === 0)
+          throw new Error(`${t("must_be_provided")} ${t("products")}/${t("services")}`);
       }
 
       let payload = {
@@ -126,7 +138,9 @@ const ProductForm: FC<
         payload.image = image.relativePath;
       }
 
-      const action = props.product ? () => updateProduct(props.product!._id, payload) : () => createProduct(payload);
+      const action = props.product
+        ? () => updateProduct(props.product!._id, payload)
+        : () => createProduct(payload);
 
       const res = await action();
       await props.onDone?.(res);
@@ -192,7 +206,12 @@ const ProductForm: FC<
             </Group>
           </Renderer>
 
-          <NumberInput label={t("default_price")} withAsterisk hideControls {...form.getInputProps("price")} />
+          <NumberInput
+            label={t("default_price")}
+            withAsterisk
+            hideControls
+            {...form.getInputProps("price")}
+          />
 
           <Renderer visible={props.type === ProductType.VOUCHER}>
             <NumberInput
@@ -203,7 +222,11 @@ const ProductForm: FC<
             />
           </Renderer>
 
-          <ProductCategoryInput label={t("categories")} type={props.type} {...form.getInputProps("categoryId")} />
+          <ProductCategoryInput
+            label={t("categories")}
+            type={props.type}
+            {...form.getInputProps("categoryId")}
+          />
         </Stack>
 
         <Stack>
@@ -280,7 +303,11 @@ const ProductForm: FC<
                             onChange={(e) => handlers.setItem(index, { ...supply, quantity: +e })}
                           />
 
-                          <ActionIcon color="gray" variant="transparent" onClick={() => handlers.remove(index)}>
+                          <ActionIcon
+                            color="gray"
+                            variant="transparent"
+                            onClick={() => handlers.remove(index)}
+                          >
                             <IconMinus size={16} />
                           </ActionIcon>
                         </Group>
@@ -324,7 +351,12 @@ const ProductForm: FC<
 
           <Renderer visible={props.type === ProductType.COMBO}>
             <Stack>
-              <Divider mb={-10} label={`${t("products")} / ${t("services")}`} labelPosition="left" fw={700} />
+              <Divider
+                mb={-10}
+                label={`${t("products")} / ${t("services")}`}
+                labelPosition="left"
+                fw={700}
+              />
 
               <Stack>
                 {combos.map((benefit, i) => (
@@ -478,15 +510,13 @@ const ModalContent = (props: ProductFormProps) => {
   return (
     <Tabs value={typeActive} onChange={(t) => setTypeActive(t as ProductType)}>
       {isAbleToSelectType && (
-        <>
-          <Tabs.List>
-            {Object.values(ProductType).map((type) => (
-              <Tabs.Tab value={type} key={type + "tab"}>
-                {t(`product_type_${type}`)}
-              </Tabs.Tab>
-            ))}
-          </Tabs.List>
-        </>
+        <Tabs.List>
+          {Object.values(ProductType).map((type) => (
+            <Tabs.Tab value={type} key={type + "tab"}>
+              {t(`product_type_${type}`)}
+            </Tabs.Tab>
+          ))}
+        </Tabs.List>
       )}
 
       {Object.values(ProductType).map((type) => (
@@ -501,7 +531,8 @@ const ModalContent = (props: ProductFormProps) => {
 
 export const OnProductModal = (props: ProductFormProps) => {
   let title = `${t(props.product ? "update" : "create_new")}`;
-  if (props.type || props.product) title += ` ${t(`product_type_${props.type || props.product?.type}`)}`;
+  if (props.type || props.product)
+    title += ` ${t(`product_type_${props.type || props.product?.type}`)}`;
 
   return modals.open({
     modalId: "ModalProductForm",
@@ -524,7 +555,15 @@ const ComboForm: FC<{
         type={[ProductType.PRODUCT, ProductType.SERVICE]}
         onSelect={(product) => onChange({ ...combo, product, productId: product._id })}
         renderTrigger={(ctx) => {
-          return <TextInput flex={1} label={t("product")} value={combo.product?.name} readOnly onClick={ctx.toggle} />;
+          return (
+            <TextInput
+              flex={1}
+              label={t("product")}
+              value={combo.product?.name}
+              readOnly
+              onClick={ctx.toggle}
+            />
+          );
         }}
       />
 

@@ -82,9 +82,11 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
   const totalAmount = receipt.amount + (receipt.tipAmount || 0);
   const isExpired = receipt.expireAt && receipt.expireAt < DateTimeUtils.timeToSeconds();
 
-  const isAbleToPrint = !!receipt.relatedOrderId && receipt.type === ReceiptType.INCOME && !receipt.isArchived;
+  const isAbleToPrint =
+    !!receipt.relatedOrderId && receipt.type === ReceiptType.INCOME && !receipt.isArchived;
 
-  const isAbleToUpdate = props.onUpdate && workspace.hasPermission(WorkspacePermission.RECEIPTS_UPDATE);
+  const isAbleToUpdate =
+    props.onUpdate && workspace.hasPermission(WorkspacePermission.RECEIPTS_UPDATE);
 
   const bankQrCode =
     bank && bankAccount && receipt
@@ -113,7 +115,11 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
           <Group justify="space-between" align="center">
             <Anchor td="none" onClick={() => OnReceiptDetailModal({ id: receipt.id })}>
               <Group flex={1} gap={8}>
-                <Tooltip label={t(receipt.type === ReceiptType.INCOME ? "income_receipt" : "expense_receipt")}>
+                <Tooltip
+                  label={t(
+                    receipt.type === ReceiptType.INCOME ? "income_receipt" : "expense_receipt"
+                  )}
+                >
                   <ThemeIcon size="lg" variant="light" color={receiptTypeColor} radius={100}>
                     <ReceiptTypeIcon size={20} />
                   </ThemeIcon>
@@ -139,32 +145,33 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
 
             <Group gap={10}>
               {!props.hideCustomer && props.receipt.relatedCustomer && (
-                <>
-                  <Anchor
-                    td="none"
-                    fw={500}
-                    fz={em(16)}
-                    component={Link}
-                    href={`/customers/${receipt.relatedCustomer!.code}`}
-                  >
-                    <Group justify="start" wrap="nowrap">
-                      <Card p={2} withBorder shadow="none" radius={150}>
-                        <Group gap={5} wrap="nowrap">
-                          <Avatar customer={receipt.relatedCustomer} size={32} radius="xl" />
+                <Anchor
+                  td="none"
+                  fw={500}
+                  fz={em(16)}
+                  component={Link}
+                  href={`/customers/${receipt.relatedCustomer!.code}`}
+                >
+                  <Group justify="start" wrap="nowrap">
+                    <Card p={2} withBorder shadow="none" radius={150}>
+                      <Group gap={5} wrap="nowrap">
+                        <Avatar customer={receipt.relatedCustomer} size={32} radius="xl" />
 
-                          <Stack gap={3} pr={10} align="left">
-                            <Text ta="left" fz={10} fw={600}>
-                              {receipt.relatedCustomer!.name}
-                            </Text>
-                            <Text ta="left" fz={8} fw={500} mt={-2}>
-                              {renderEntityCode(receipt.relatedCustomer?.code, receipt.relatedCustomer?.plainCode)}
-                            </Text>
-                          </Stack>
-                        </Group>
-                      </Card>
-                    </Group>
-                  </Anchor>
-                </>
+                        <Stack gap={3} pr={10} align="left">
+                          <Text ta="left" fz={10} fw={600}>
+                            {receipt.relatedCustomer!.name}
+                          </Text>
+                          <Text ta="left" fz={8} fw={500} mt={-2}>
+                            {renderEntityCode(
+                              receipt.relatedCustomer?.code,
+                              receipt.relatedCustomer?.plainCode
+                            )}
+                          </Text>
+                        </Stack>
+                      </Group>
+                    </Card>
+                  </Group>
+                </Anchor>
               )}
             </Group>
           </Group>
@@ -247,7 +254,9 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
                   >
                     <Text
                       ta="right"
-                      dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(receipt.note || "--") }}
+                      dangerouslySetInnerHTML={{
+                        __html: StringUtils.replaceLineBreaksToHTML(receipt.note || "--"),
+                      }}
                     />
                   </HoverToEdit>
                 </Table.Td>
@@ -354,7 +363,11 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
 
                         return (
                           <Group gap={5}>
-                            <paymentMethodOption.icon color={paymentMethodOption.color} size={25} strokeWidth={1.5} />
+                            <paymentMethodOption.icon
+                              color={paymentMethodOption.color}
+                              size={25}
+                              strokeWidth={1.5}
+                            />
                             <Text>{t(`payment_method_${receipt.paymentMethod}`)}</Text>
                           </Group>
                         );
@@ -412,56 +425,62 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
                           ) : (
                             <Stack align="end">
                               {workspace.hasPermission(WorkspacePermission.RECEIPTS_CENSORSHIP) ? (
-                                <>
-                                  <Group gap={8}>
-                                    <Button
-                                      leftSection={<IconCheck size={18} />}
-                                      radius={100}
-                                      size="xs"
-                                      onClick={() => OnModalDisburesementReceipt({ receipt })}
-                                    >
-                                      Duyệt chi
-                                    </Button>
+                                <Group gap={8}>
+                                  <Button
+                                    leftSection={<IconCheck size={18} />}
+                                    radius={100}
+                                    size="xs"
+                                    onClick={() => OnModalDisburesementReceipt({ receipt })}
+                                  >
+                                    Duyệt chi
+                                  </Button>
 
-                                    <Button
-                                      leftSection={<IconCheck size={18} />}
-                                      radius={100}
-                                      color="gray"
-                                      size="xs"
-                                      onClick={() => {
-                                        modals.openConfirmModal({
-                                          id: "ConfirmArchiveReceipt",
-                                          title: <ModalTitle color="red" title="Từ chối chi" icon={IconArchive} />,
-                                          children:
-                                            "Bạn có chắc chắn muốn từ chối chi? Hành động này không thể hoàn tác. Hoá đơn sẽ bị xoá.",
-                                          color: "red",
-                                          onConfirm: async () => {
-                                            return archiveReceipt(receipt.id).catch(onError);
-                                          },
-                                          labels: { confirm: "Từ chối chi", cancel: "Hủy" },
-                                          onCancel: () => modals.close("ConfirmArchiveReceipt"),
-                                          confirmProps: { color: "red" },
-                                        });
-                                      }}
-                                      variant="outline"
-                                    >
-                                      {t("reject")}
-                                    </Button>
-                                  </Group>
-                                </>
+                                  <Button
+                                    leftSection={<IconCheck size={18} />}
+                                    radius={100}
+                                    color="gray"
+                                    size="xs"
+                                    onClick={() => {
+                                      modals.openConfirmModal({
+                                        id: "ConfirmArchiveReceipt",
+                                        title: (
+                                          <ModalTitle
+                                            color="red"
+                                            title="Từ chối chi"
+                                            icon={IconArchive}
+                                          />
+                                        ),
+                                        children:
+                                          "Bạn có chắc chắn muốn từ chối chi? Hành động này không thể hoàn tác. Hoá đơn sẽ bị xoá.",
+                                        color: "red",
+                                        onConfirm: async () => {
+                                          return archiveReceipt(receipt.id).catch(onError);
+                                        },
+                                        labels: { confirm: "Từ chối chi", cancel: "Hủy" },
+                                        onCancel: () => modals.close("ConfirmArchiveReceipt"),
+                                        confirmProps: { color: "red" },
+                                      });
+                                    }}
+                                    variant="outline"
+                                  >
+                                    {t("reject")}
+                                  </Button>
+                                </Group>
                               ) : (
-                                <>
-                                  <Badge color="red" size="sm">
-                                    Chưa duyệt chi
-                                  </Badge>
-                                </>
+                                <Badge color="red" size="sm">
+                                  Chưa duyệt chi
+                                </Badge>
                               )}
                             </Stack>
                           );
                         }
 
                         return (
-                          <Badge color={receiptStatusOptions[receipt.status].color} size="sm" variant="outline">
+                          <Badge
+                            color={receiptStatusOptions[receipt.status].color}
+                            size="sm"
+                            variant="outline"
+                          >
                             {t(`receipt_status_${receipt.status}`)}
                           </Badge>
                         );
@@ -481,7 +500,11 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
             </Renderer>
 
             {receipt.status !== ReceiptStatus.PAID && (
-              <Button size="xs" leftIcon={IconCashRegister} onClick={() => OnModalPayReceipt({ receipt: receipt })}>
+              <Button
+                size="xs"
+                leftIcon={IconCashRegister}
+                onClick={() => OnModalPayReceipt({ receipt: receipt })}
+              >
                 {t("pay")}
               </Button>
             )}

@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalListTimekeepings } from "@/modules/hrm-timekeepings/modals/modal-timekeeping-list";
@@ -28,7 +30,7 @@ import {
 } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { IconAnalyze, IconAnalyzeOff, IconClockPlus } from "@tabler/icons-react";
-import { FC, useEffect } from "react";
+import { FC, Fragment, useEffect } from "react";
 import { Avatar } from "../../components/avatar";
 import { Calendar } from "../../components/calendar";
 import { Circle } from "../../components/circle";
@@ -129,9 +131,12 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
 
                 const isToday = DateTimeUtils.isToday(date);
                 const isWorking =
-                  isToday && v.timekeepings[v.timekeepings.length - 1].type === HrmTimekeepingType.CHECK_IN;
+                  isToday &&
+                  v.timekeepings[v.timekeepings.length - 1].type === HrmTimekeepingType.CHECK_IN;
                 const range = DateTimeUtils.getStartEndOfDay(date);
-                const isPendingApproval = v.timekeepings.some((v) => v.status === HrmTimekeepingStatus.PENDING);
+                const isPendingApproval = v.timekeepings.some(
+                  (v) => v.status === HrmTimekeepingStatus.PENDING
+                );
 
                 // const debugDay = new Date(2024, 7, 1, 0, 0, 0);
                 // const isDebug = DateTimeUtils.isMatchDay(date, debugDay);
@@ -224,7 +229,7 @@ export const TimekeepingsCalendarExplain: FC = () => {
   const theme = useMantineTheme();
 
   return (
-    <>
+    <Fragment>
       <Group gap={5}>
         <Circle size={8} bg="red.8" />
         <Text fz={em(12)}>{t(`hrm_timekeepings_late`)}</Text>
@@ -240,7 +245,12 @@ export const TimekeepingsCalendarExplain: FC = () => {
       </Group>
 
       <Group gap={5}>
-        <IconAnalyze strokeWidth={1.5} size={16} color={theme.colors.orange[6]} className="animRotate" />
+        <IconAnalyze
+          strokeWidth={1.5}
+          size={16}
+          color={theme.colors.orange[6]}
+          className="animRotate"
+        />
         <Text fz={em(12)}>{t(`hrm_timekeepings_working`)}</Text>
       </Group>
 
@@ -248,6 +258,6 @@ export const TimekeepingsCalendarExplain: FC = () => {
         <IconAnalyzeOff strokeWidth={1.5} size={16} color={theme.colors.gray[6]} />
         <Text fz={em(12)}>{t(`hrm_timekeepings_temporary_off`)}</Text>
       </Group>
-    </>
+    </Fragment>
   );
 };

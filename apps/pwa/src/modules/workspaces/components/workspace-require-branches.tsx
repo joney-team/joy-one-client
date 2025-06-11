@@ -1,3 +1,5 @@
+"use client";
+
 import { useCloseAppLoading } from "@/components/app-loading";
 import { useAuth } from "@/modules/auth/auth-context";
 import { t } from "@/modules/lang/lang-service";
@@ -24,22 +26,20 @@ export const WorkspaceRequireBranches: FC<{ workspace: WorkspaceContext }> = (pr
   };
 
   return (
-    <>
-      <Stack gap={30} align="center" justify="center" mih="100dvh">
-        <GoWorkIllustration width={150} />
-        <Stack gap={10}>
-          <Title c={color("primary")} tt="capitalize" order={4} ta="center">
-            {t("workspace_waiting_for_assign_branches")}
-          </Title>
-          <Text c="gray" fz={16} ta="center">
-            {t("workspace_waiting_for_assign_branches_desc")}
-          </Text>
-        </Stack>
-
-        <Anchor ta="center" onClick={onLeave} fz={12} c="gray">
-          {t("leave")}
-        </Anchor>
+    <Stack gap={30} align="center" justify="center" mih="100dvh">
+      <GoWorkIllustration width={150} />
+      <Stack gap={10}>
+        <Title c={color("primary")} tt="capitalize" order={4} ta="center">
+          {t("workspace_waiting_for_assign_branches")}
+        </Title>
+        <Text c="gray" fz={16} ta="center">
+          {t("workspace_waiting_for_assign_branches_desc")}
+        </Text>
       </Stack>
-    </>
+
+      <Anchor ta="center" onClick={onLeave} fz={12} c="gray">
+        {t("leave")}
+      </Anchor>
+    </Stack>
   );
 };

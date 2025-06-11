@@ -1,9 +1,21 @@
+"use client";
+
 import { getFileTypeIcon } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { formatBytes } from "@/utils/file.utils";
-import { Box, Card, Center, em, Group, Stack, Text, ThemeIcon, useMantineTheme } from "@mantine/core";
+import {
+  Box,
+  Card,
+  Center,
+  em,
+  Group,
+  Stack,
+  Text,
+  ThemeIcon,
+  useMantineTheme,
+} from "@mantine/core";
 import { IconCircleCheck, IconFile, IconVideo } from "@tabler/icons-react";
-import { FC, useRef } from "react";
+import { FC, Fragment, useRef } from "react";
 import { Image } from "../../components/image";
 
 export interface FileCardProps {
@@ -74,7 +86,7 @@ export const FileCard: FC<FileCardProps> = (props) => {
 
           if (fileType === FileType.VIDEO)
             return (
-              <>
+              <Fragment>
                 <video
                   src={url}
                   style={{
@@ -100,7 +112,7 @@ export const FileCard: FC<FileCardProps> = (props) => {
                     <IconVideo strokeWidth={1.2} />
                   </ThemeIcon>
                 </Center>
-              </>
+              </Fragment>
             );
 
           return (

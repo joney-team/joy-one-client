@@ -1,47 +1,59 @@
+"use client";
+
+import { type FC, Fragment } from "react";
 import { EntityImages } from "@/components/entity-images";
 import { TextInput } from "@/components/inputs/text-input";
 import { t } from "@/modules/lang/lang-service";
 import { LoanAssetType } from "@/modules/loans/loans-types";
 import { InputWrapper, SimpleGrid } from "@mantine/core";
-import { FC } from "react";
 import { LoanAssetDataInputProps } from ".";
 
 export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (props) => {
   return (
-    <>
+    <Fragment>
       <SimpleGrid cols={{ md: 2 }}>
         <TextInput
           label={t("device_name")}
           value={props.value?.deviceName || ""}
-          onChange={(event) => props.onChange?.({ ...(props.value as any), deviceName: event.currentTarget.value })}
+          onChange={(event) =>
+            props.onChange?.({ ...(props.value as any), deviceName: event.currentTarget.value })
+          }
           disabled={props.disabled}
         />
 
         <TextInput
           label={t("asset_type")}
           value={props.value?.assetType || ""}
-          onChange={(event) => props.onChange?.({ ...(props.value as any), assetType: event.currentTarget.value })}
+          onChange={(event) =>
+            props.onChange?.({ ...(props.value as any), assetType: event.currentTarget.value })
+          }
           disabled={props.disabled}
         />
 
         <TextInput
           label="IMEIL"
           value={props.value?.imeil || ""}
-          onChange={(event) => props.onChange?.({ ...(props.value as any), imeil: event.currentTarget.value })}
+          onChange={(event) =>
+            props.onChange?.({ ...(props.value as any), imeil: event.currentTarget.value })
+          }
           disabled={props.disabled}
         />
 
         <TextInput
           label="Serial"
           value={props.value?.serial || ""}
-          onChange={(event) => props.onChange?.({ ...(props.value as any), serial: event.currentTarget.value })}
+          onChange={(event) =>
+            props.onChange?.({ ...(props.value as any), serial: event.currentTarget.value })
+          }
           disabled={props.disabled}
         />
 
         <TextInput
           label={t("device_storage")}
           value={props.value?.storage || ""}
-          onChange={(event) => props.onChange?.({ ...(props.value as any), storage: event.currentTarget.value })}
+          onChange={(event) =>
+            props.onChange?.({ ...(props.value as any), storage: event.currentTarget.value })
+          }
           disabled={props.disabled}
         />
       </SimpleGrid>
@@ -54,6 +66,6 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
           disabled={props.disabled}
         />
       </InputWrapper>
-    </>
+    </Fragment>
   );
 };

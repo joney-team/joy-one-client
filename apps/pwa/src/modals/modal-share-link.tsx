@@ -1,8 +1,21 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
 import { t } from "@/modules/lang/lang-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
-import { ActionIcon, Card, em, Group, Modal, Skeleton, Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  em,
+  Group,
+  Modal,
+  Skeleton,
+  Stack,
+  Text,
+  ThemeIcon,
+  Title,
+} from "@mantine/core";
 import { useClipboard, useDisclosure } from "@mantine/hooks";
 import { IconCopy, IconShare2, IconX } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
@@ -54,33 +67,29 @@ export const ModalSharelink: FC = () => {
         </Group>
 
         {link ? (
-          <>
-            <Group justify="space-between" align="end">
-              <Stack gap={3} flex={1}>
-                <Text fz={em(12)} fw={500}>
-                  {t("link")}
-                </Text>
-                <Card p={5} pl={10} withBorder shadow="none">
-                  <Text truncate="end">{link}</Text>
-                </Card>
-              </Stack>
+          <Group justify="space-between" align="end">
+            <Stack gap={3} flex={1}>
+              <Text fz={em(12)} fw={500}>
+                {t("link")}
+              </Text>
+              <Card p={5} pl={10} withBorder shadow="none">
+                <Text truncate="end">{link}</Text>
+              </Card>
+            </Stack>
 
-              <Group>
-                <Button
-                  color={themeColor}
-                  leftIcon={IconCopy}
-                  variant={clipboard.copied ? "filled" : "outline"}
-                  onClick={() => clipboard.copy(link)}
-                >
-                  {t(clipboard.copied ? "copied" : "copy")}
-                </Button>
-              </Group>
+            <Group>
+              <Button
+                color={themeColor}
+                leftIcon={IconCopy}
+                variant={clipboard.copied ? "filled" : "outline"}
+                onClick={() => clipboard.copy(link)}
+              >
+                {t(clipboard.copied ? "copied" : "copy")}
+              </Button>
             </Group>
-          </>
+          </Group>
         ) : (
-          <>
-            <Skeleton height={100} />
-          </>
+          <Skeleton height={100} />
         )}
       </Stack>
     </Modal>

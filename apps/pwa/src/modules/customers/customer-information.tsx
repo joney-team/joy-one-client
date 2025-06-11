@@ -1,3 +1,5 @@
+"use client";
+
 import { UsersInput } from "@/components/inputs/users-input";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
@@ -49,7 +51,7 @@ import {
   IconUserSquareRounded,
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { EntityImage } from "../../components/entity-image";
 import { Renderer } from "../../components/renderer";
 
@@ -94,7 +96,10 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
         tagIds: (customer.tagIds || []).filter((tagId) => tagId !== tag._id),
       }).catch(onError);
     } else {
-      updateCustomer(customer._id, { ...customer, tagIds: [...(customer.tagIds || []), tag._id] }).catch(onError);
+      updateCustomer(customer._id, {
+        ...customer,
+        tagIds: [...(customer.tagIds || []), tag._id],
+      }).catch(onError);
     }
   };
 
@@ -148,7 +153,9 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                     <ThemeIcon color="dark" variant="transparent">
                       <IconCake strokeWidth={1.5} size={18} />
                     </ThemeIcon>
-                    <Text fz={em(15)}>{dayjs(customer.birthday * 1000).format(getDateFormat())}</Text>
+                    <Text fz={em(15)}>
+                      {dayjs(customer.birthday * 1000).format(getDateFormat())}
+                    </Text>
                   </Group>
                 )}
 
@@ -161,16 +168,21 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                   </Group>
                 )}
 
-                {customer.phone && workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
-                  <Anchor href={`tel:${customer.phone}`} c="dark" onClick={(e) => e.stopPropagation()}>
-                    <Group gap={1} wrap="nowrap">
-                      <ThemeIcon color="dark" variant="transparent">
-                        <IconPhone strokeWidth={1.5} size={18} />
-                      </ThemeIcon>
-                      <Text fz={em(15)}>{customer.phone}</Text>
-                    </Group>
-                  </Anchor>
-                )}
+                {customer.phone &&
+                  workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
+                    <Anchor
+                      href={`tel:${customer.phone}`}
+                      c="dark"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Group gap={1} wrap="nowrap">
+                        <ThemeIcon color="dark" variant="transparent">
+                          <IconPhone strokeWidth={1.5} size={18} />
+                        </ThemeIcon>
+                        <Text fz={em(15)}>{customer.phone}</Text>
+                      </Group>
+                    </Anchor>
+                  )}
 
                 <Renderer
                   visible={
@@ -207,14 +219,19 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         <IconAddressBook strokeWidth={1.5} size={18} />
                       </ThemeIcon>
                       <Text fz={em(15)}>
-                        {t("customer_relationship_contacts")}: {num(customer.relationshipContacts?.length)}
+                        {t("customer_relationship_contacts")}:{" "}
+                        {num(customer.relationshipContacts?.length)}
                       </Text>
                     </Group>
                   </Anchor>
                 </Renderer>
 
                 {customer.email && (
-                  <Anchor href={`mailto:${customer.email}`} c="dark" onClick={(e) => e.stopPropagation()}>
+                  <Anchor
+                    href={`mailto:${customer.email}`}
+                    c="dark"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <Group gap={1} wrap="nowrap">
                       <ThemeIcon color="dark" variant="transparent">
                         <IconMail strokeWidth={1.5} size={18} />
@@ -226,7 +243,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
               </Group>
 
               {viewport.view !== "mobile" && (
-                <>
+                <Fragment>
                   {customer.medicalHistory.length > 0 && (
                     <Group gap={1} wrap="nowrap">
                       <ThemeIcon color="dark" variant="transparent">
@@ -246,13 +263,13 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                       </Group>
                     </Anchor>
                   )}
-                </>
+                </Fragment>
               )}
             </Stack>
           </Group>
 
           {viewport.view === "mobile" && (
-            <>
+            <Fragment>
               {customer.medicalHistory.length > 0 && (
                 <Group gap={1} wrap="nowrap">
                   <ThemeIcon color="dark" variant="transparent">
@@ -270,7 +287,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                   <Text fz={16}>{renderLocation(customer.location)}</Text>
                 </Group>
               )}
-            </>
+            </Fragment>
           )}
 
           <Group gap={1} wrap="nowrap">
@@ -279,9 +296,14 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
             </ThemeIcon>
             <Group gap={5} wrap="nowrap">
               {tags.list.length > 0 ? (
-                <>
+                <Fragment>
                   {tags.list
-                    .filter((v) => v._id && customer.tagIds?.includes(v._id) === true && v.type === TagType.CUSTOMER)
+                    .filter(
+                      (v) =>
+                        v._id &&
+                        customer.tagIds?.includes(v._id) === true &&
+                        v.type === TagType.CUSTOMER
+                    )
                     .map((tag) => (
                       <Badge
                         key={tag._id}
@@ -297,7 +319,11 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
 
                   <Popover opened={tagListOpened}>
                     <Popover.Target>
-                      <Group gap={0} onClick={() => setTagListOpened(true)} style={{ cursor: "pointer" }}>
+                      <Group
+                        gap={0}
+                        onClick={() => setTagListOpened(true)}
+                        style={{ cursor: "pointer" }}
+                      >
                         <ThemeIcon size={13} variant="transparent" color="gray">
                           <IconPlus size={13} />
                         </ThemeIcon>
@@ -314,10 +340,20 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                             const isTagged = customer.tagIds?.includes(tag._id);
 
                             return (
-                              <Group gap={5} key={tag._id} onClick={() => toggleTag(tag)} style={{ cursor: "pointer" }}>
+                              <Group
+                                gap={5}
+                                key={tag._id}
+                                onClick={() => toggleTag(tag)}
+                                style={{ cursor: "pointer" }}
+                              >
                                 <Center w={20}>
                                   <ColorSwatch color={tag.color || ""} size={20}>
-                                    {isTagged && <CheckIcon color="white" style={{ width: rem(6), height: rem(6) }} />}
+                                    {isTagged && (
+                                      <CheckIcon
+                                        color="white"
+                                        style={{ width: rem(6), height: rem(6) }}
+                                      />
+                                    )}
                                   </ColorSwatch>
                                 </Center>
                                 <Text fz={10} fw={500}>
@@ -330,7 +366,10 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         <Group
                           gap={5}
                           onClick={() => {
-                            OnModalTagForm({ onDone: (tag) => toggleTag(tag), type: TagType.CUSTOMER });
+                            OnModalTagForm({
+                              onDone: (tag) => toggleTag(tag),
+                              type: TagType.CUSTOMER,
+                            });
                             setTagListOpened(false);
                           }}
                           style={{ cursor: "pointer" }}
@@ -348,11 +387,13 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                       </Stack>
                     </Popover.Dropdown>
                   </Popover>
-                </>
+                </Fragment>
               ) : (
                 <Group
                   gap={0}
-                  onClick={() => OnModalTagForm({ onDone: (tag) => toggleTag(tag), type: TagType.CUSTOMER })}
+                  onClick={() =>
+                    OnModalTagForm({ onDone: (tag) => toggleTag(tag), type: TagType.CUSTOMER })
+                  }
                   style={{ cursor: "pointer" }}
                 >
                   <ThemeIcon size={13} variant="transparent" color="gray">
@@ -369,7 +410,9 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
           <UsersInput
             showMainResponsible
             value={customer.assigneeUsers}
-            onChange={(users) => assignCustomer(customer._id, { userIds: users.map((v) => v.userId) })}
+            onChange={(users) =>
+              assignCustomer(customer._id, { userIds: users.map((v) => v.userId) })
+            }
             disabled={!workspace.hasPermission(WorkspacePermission.CUSTOMERS_ASSIGN)}
           />
         </Stack>

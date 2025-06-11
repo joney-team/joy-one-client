@@ -2,7 +2,7 @@
 
 import { ModalFiles } from "@/modules/files/modals/modal-files";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { type FC } from "react";
+import { Fragment, type FC } from "react";
 import { ModalBookingDetail } from "../modules/bookings/modals/modal-booking-detail";
 import { ModalNextBooking } from "../modules/bookings/modals/modal-next-booking";
 import { ModalCouponForm } from "../modules/coupons/modals/modal-coupon-form";
@@ -38,7 +38,7 @@ const Modals: FC = () => {
   if (!workspace.userMember) return null;
 
   return (
-    <>
+    <Fragment>
       <ModalProductCombo />
       <ModalProductComboUsing />
       <ModalProductStockIn />
@@ -68,7 +68,7 @@ const Modals: FC = () => {
       <ModalCheckInLocationForm />
       <ModalUpdateWorkspaceBranch />
       <ModalInput />
-    </>
+    </Fragment>
   );
 };
 

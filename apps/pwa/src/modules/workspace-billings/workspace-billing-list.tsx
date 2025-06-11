@@ -21,7 +21,18 @@ import { CalculateWorkspaceSubscriptionBillingResponse } from "@/modules/workspa
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { formatBytes } from "@/utils/file.utils";
 import { useList } from "@/utils/use-list.util";
-import { ActionIcon, Anchor, Badge, Card, em, Group, SimpleGrid, Skeleton, Stack, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Anchor,
+  Badge,
+  Card,
+  em,
+  Group,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  Text,
+} from "@mantine/core";
 import {
   IconArrowBigDown,
   IconArrowDown,
@@ -31,7 +42,7 @@ import {
   IconReceipt,
   IconReportMoney,
 } from "@tabler/icons-react";
-import { type FC, useEffect, useState } from "react";
+import { type FC, Fragment, useEffect, useState } from "react";
 import {
   getWorkspaceBillings,
   getWorkspaceBillingStatusLabel,
@@ -56,14 +67,20 @@ export const WorkspaceBillingList: FC = () => {
   });
 
   const fetchSubscriptionCalculated = async (workspaceId: string) => {
-    await calculateWorkspaceSubscriptionBillings({ workspaceId }).then(setSubscriptionCalculated).catch(console.error);
+    await calculateWorkspaceSubscriptionBillings({ workspaceId })
+      .then(setSubscriptionCalculated)
+      .catch(console.error);
   };
 
   useEffect(() => {
     layout.setComponents({
       head: t("ws_sub_billings"),
       navigation: (
-        <Button radius={100} leftIcon={IconArrowDown} onClick={() => OnModalWorkspaceBillingDeposit()}>
+        <Button
+          radius={100}
+          leftIcon={IconArrowDown}
+          onClick={() => OnModalWorkspaceBillingDeposit()}
+        >
           {t("deposit")}
         </Button>
       ),
@@ -121,7 +138,11 @@ export const WorkspaceBillingList: FC = () => {
                 </Stack>
               </Group>
 
-              <ActionIcon variant="transparent" color="white" onClick={() => OnModalWorkspaceBillingDeposit()}>
+              <ActionIcon
+                variant="transparent"
+                color="white"
+                onClick={() => OnModalWorkspaceBillingDeposit()}
+              >
                 <IconArrowBigDown strokeWidth={1.5} />
               </ActionIcon>
             </Group>
@@ -135,7 +156,11 @@ export const WorkspaceBillingList: FC = () => {
                   <Text c="dark" fz={12} fw={300}>
                     {t("pendingPayment")}
                   </Text>
-                  <Text c={(billings.report?.pendingPayment || 0) !== 0 ? "orange" : "dark"} fw={700} fz={16}>
+                  <Text
+                    c={(billings.report?.pendingPayment || 0) !== 0 ? "orange" : "dark"}
+                    fw={700}
+                    fz={16}
+                  >
                     {num(Math.abs(billings.report?.pendingPayment || 0))}
                   </Text>
                 </Stack>
@@ -144,8 +169,8 @@ export const WorkspaceBillingList: FC = () => {
           </Card>
         </SimpleGrid>
 
-        {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && !!workspace.workspaceSubscription && (
-          <>
+        {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) &&
+          !!workspace.workspaceSubscription && (
             <Card withBorder>
               <Stack>
                 <Group gap={8} align="center" justify="space-between">
@@ -153,7 +178,11 @@ export const WorkspaceBillingList: FC = () => {
                     <Text
                       size="lg"
                       c={workspace.workspaceSubscription.subscription.color}
-                      variant={workspace.workspaceSubscription.subscription.isDefault ? "outline" : "filled"}
+                      variant={
+                        workspace.workspaceSubscription.subscription.isDefault
+                          ? "outline"
+                          : "filled"
+                      }
                       fw={600}
                     >
                       {workspace.workspaceSubscription.subscription.name}
@@ -173,7 +202,7 @@ export const WorkspaceBillingList: FC = () => {
 
                   {!workspace.workspaceSubscription.fixedSubscriptionId &&
                     workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-                      <>
+                      <Fragment>
                         {(function () {
                           if (workspace.workspaceSubscription.subscription.isDefault) {
                             return (
@@ -189,19 +218,17 @@ export const WorkspaceBillingList: FC = () => {
                           }
 
                           return (
-                            <>
-                              <Anchor
-                                fw={500}
-                                fz={em(13)}
-                                c={color(workspace.balance.balance > 0 ? "primary" : "gray")}
-                                onClick={() => router.push(`/workspace-billings`)}
-                              >
-                                {t("balance")}: {num(workspace.balance.balance, { type: "money" })}
-                              </Anchor>
-                            </>
+                            <Anchor
+                              fw={500}
+                              fz={em(13)}
+                              c={color(workspace.balance.balance > 0 ? "primary" : "gray")}
+                              onClick={() => router.push(`/workspace-billings`)}
+                            >
+                              {t("balance")}: {num(workspace.balance.balance, { type: "money" })}
+                            </Anchor>
                           );
                         })()}
-                      </>
+                      </Fragment>
                     )}
                 </Group>
 
@@ -209,14 +236,19 @@ export const WorkspaceBillingList: FC = () => {
                   <Text fz={em(13)}>{t("members")}</Text>
                   <Text fz={em(13)} ta="right" fw={500}>
                     {num(workspace.workspaceSubscription.stat.totalMembers)} /{" "}
-                    {renderSubscriptionNum(workspace.workspaceSubscription.subscription.limitMembers)}
+                    {renderSubscriptionNum(
+                      workspace.workspaceSubscription.subscription.limitMembers
+                    )}
                   </Text>
                 </Group>
                 <Group justify="space-between">
                   <Text fz={em(13)}>{t("storage")}</Text>
                   <Text fz={em(13)} ta="right" fw={500}>
                     {formatBytes(workspace.workspaceSubscription.stat.storage)} /{" "}
-                    {renderSubscriptionNum(workspace.workspaceSubscription.subscription.limitStorage, formatBytes)}
+                    {renderSubscriptionNum(
+                      workspace.workspaceSubscription.subscription.limitStorage,
+                      formatBytes
+                    )}
                   </Text>
                 </Group>
 
@@ -227,7 +259,10 @@ export const WorkspaceBillingList: FC = () => {
                       workspace.workspaceSubscription.stat.totalMetaPages +
                         workspace.workspaceSubscription.stat.totalZaloOAs
                     )}{" "}
-                    / {renderSubscriptionNum(workspace.workspaceSubscription.subscription.limitSocialConnections)}
+                    /{" "}
+                    {renderSubscriptionNum(
+                      workspace.workspaceSubscription.subscription.limitSocialConnections
+                    )}
                   </Text>
                 </Group>
 
@@ -248,8 +283,7 @@ export const WorkspaceBillingList: FC = () => {
                 </Renderer>
               </Stack>
             </Card>
-          </>
-        )}
+          )}
 
         <Stack gap={10}>
           <SessionTitle name={t("ws_billings")} icon={IconReportMoney} />

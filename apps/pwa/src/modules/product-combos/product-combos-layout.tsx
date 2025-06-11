@@ -1,6 +1,7 @@
+"use client";
+
 import { Errored } from "@/components/errored";
 import { NavigationTabs } from "@/components/navigation-tabs";
-import { useLayout } from "@/layout/layout-context";
 import { useRouter } from "@/hooks/use-router";
 import { EventType } from "@/modules/events/event-types";
 import { getProducts } from "@/modules/products/products-service";
@@ -8,12 +9,11 @@ import { ProductType } from "@/modules/products/products-types";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Skeleton, Stack } from "@mantine/core";
 import { IconPackage, IconSettings } from "@tabler/icons-react";
-import { FC, PropsWithChildren } from "react";
+import { FC, Fragment, PropsWithChildren } from "react";
 import { ProductCombosOnboarding } from "./product-combos-onboarding";
 
 export const ProductComboLayout: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
-  const layout = useLayout();
 
   const checkCombos = useFetch({
     fetch: () => getProducts({ limit: 1, type: ProductType.COMBO }),
@@ -46,7 +46,7 @@ export const ProductComboLayout: FC<PropsWithChildren> = (props) => {
     );
 
   return (
-    <>
+    <Fragment>
       <NavigationTabs
         activeTab={router.pathname.includes("setup") ? "setup" : "combos"}
         tabs={[
@@ -71,6 +71,6 @@ export const ProductComboLayout: FC<PropsWithChildren> = (props) => {
       />
 
       {props.children}
-    </>
+    </Fragment>
   );
 };

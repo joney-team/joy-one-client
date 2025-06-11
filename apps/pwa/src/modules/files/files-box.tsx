@@ -1,9 +1,13 @@
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+"use client";
+
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { detectFileType, getFiles, onUploadFile, removeFile } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
+import { renderLink } from "@/modules/files/files-utils";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { t } from "@/modules/lang/lang-service";
+import { AppEntity } from "@/types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { useList } from "@/utils/use-list.util";
 import {
@@ -12,21 +16,19 @@ import {
   Card,
   CardProps,
   Center,
+  em,
   Group,
   Stack,
   StackProps,
   Text,
   ThemeIcon,
-  em,
 } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { useHover } from "@mantine/hooks";
 import { IconArrowsDiagonal, IconFile, IconUpload, IconVideo, IconX } from "@tabler/icons-react";
-import { FC, forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { FC, forwardRef, Fragment, useImperativeHandle, useRef, useState } from "react";
 import { Image } from "../../components/image";
 import { Renderer } from "../../components/renderer";
-import { renderLink } from "@/modules/files/files-utils";
-import { AppEntity } from "@/types";
 
 interface FilesBoxProps {
   query?: {
@@ -115,7 +117,9 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
     }
   };
 
-  useEventsListener([EventType.FILE_NEW, EventType.FILE_REMOVED], () => uploadedFiles.fetch(true, { isSilient: true }));
+  useEventsListener([EventType.FILE_NEW, EventType.FILE_REMOVED], () =>
+    uploadedFiles.fetch(true, { isSilient: true })
+  );
 
   const length = uploadedFiles.data.length + rawFiles.length;
 
@@ -147,11 +151,18 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
           ...props.wrapperStyle,
         }}
       >
-        <Stack p={8} gap={8} style={{ borderRadius: 8, position: "relative" }} {...props.filesWrapperProps}>
+        <Stack
+          p={8}
+          gap={8}
+          style={{ borderRadius: 8, position: "relative" }}
+          {...props.filesWrapperProps}
+        >
           <Renderer visible={length > 0}>
             <Group gap={10}>
               {uploadedFiles.data.map((file, index) => {
-                const specificDisabled = props.specificDisabledRelated?.find((v) => !!(file as any)[v]);
+                const specificDisabled = props.specificDisabledRelated?.find(
+                  (v) => !!(file as any)[v]
+                );
 
                 return (
                   <FileBoxCard
@@ -259,7 +270,7 @@ export const FileBoxCard: FC<{
 
             if (fileType === FileType.VIDEO)
               return (
-                <>
+                <Fragment>
                   <video
                     src={url}
                     style={{
@@ -285,7 +296,7 @@ export const FileBoxCard: FC<{
                       <IconVideo strokeWidth={1.2} />
                     </ThemeIcon>
                   </Center>
-                </>
+                </Fragment>
               );
 
             return (

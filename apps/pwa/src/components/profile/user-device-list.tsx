@@ -14,6 +14,7 @@ import { useList } from "@/utils/use-list.util";
 import { em, SimpleGrid, Skeleton } from "@mantine/core";
 import { IconDevices, IconLogout } from "@tabler/icons-react";
 import { UserDeviceCard } from "@/components/profile/user-device-card";
+import { Fragment } from "react";
 
 export const UserDeviceList = () => {
   const devices = useList({
@@ -27,7 +28,7 @@ export const UserDeviceList = () => {
   });
 
   return (
-    <>
+    <Fragment>
       <SessionTitle name={t("devices")} icon={IconDevices}>
         <Renderer visible={devices.count > 1}>
           <Button
@@ -59,6 +60,6 @@ export const UserDeviceList = () => {
           <Skeleton height={150} />
         </Renderer>
       </SimpleGrid>
-    </>
+    </Fragment>
   );
 };

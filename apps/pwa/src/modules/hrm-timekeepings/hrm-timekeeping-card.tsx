@@ -17,25 +17,25 @@ import {
   IconNote,
   IconX,
 } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { Button } from "@/components/buttons/button";
+import { ButtonArchive } from "@/components/buttons/button-archive";
+import { Image } from "@/components/image";
 import { getFiles } from "@/modules/files/file-service";
 import { FileEntity } from "@/modules/files/file-types";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import {
   approveTimekeeping,
   rejectTimekeeping,
   removeTimekeeping,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import { renderDateTime, t } from "@/modules/lang/lang-service";
+import { UserCard } from "@/modules/users/user-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { StringUtils } from "@/utils/string.utils";
 import { useList } from "@/utils/use-list.util";
-import { Button } from "@/components/buttons/button";
-import { ButtonArchive } from "@/components/buttons/button-archive";
-import { Image } from "@/components/image";
-import { UserCard } from "@/modules/users/user-card";
 
 interface HrmTimekeepingCardProps {
   timekeeping: HrmTimekeepingEntity;
@@ -92,16 +92,14 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
             {(function () {
               if (timekeeping.method === HrmTimekeepingMethod.LOCATION) {
                 return (
-                  <>
-                    {timekeeping.locationName && (
-                      <Group gap={3}>
-                        <ThemeIcon color="dark" size="xs" variant="transparent">
-                          <IconLocation size={16} />
-                        </ThemeIcon>
-                        <Text fz={em(15)}>{timekeeping.locationName}</Text>
-                      </Group>
-                    )}
-                  </>
+                  timekeeping.locationName && (
+                    <Group gap={3}>
+                      <ThemeIcon color="dark" size="xs" variant="transparent">
+                        <IconLocation size={16} />
+                      </ThemeIcon>
+                      <Text fz={em(15)}>{timekeeping.locationName}</Text>
+                    </Group>
+                  )
                 );
               }
             })()}
@@ -114,7 +112,9 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
 
                 <Text
                   fz={em(15)}
-                  dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(timekeeping.note) }}
+                  dangerouslySetInnerHTML={{
+                    __html: StringUtils.replaceLineBreaksToHTML(timekeeping.note),
+                  }}
                 />
               </Group>
             )}
@@ -122,7 +122,7 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
             {timekeeping.status === HrmTimekeepingStatus.PENDING && (
               <Group gap={10} wrap="nowrap">
                 {workspace.hasPermission(WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP) ? (
-                  <>
+                  <Fragment>
                     <Button
                       radius={100}
                       leftIcon={IconCheck}
@@ -142,7 +142,7 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
                     >
                       {t("reject")}
                     </Button>
-                  </>
+                  </Fragment>
                 ) : (
                   <Badge color="orange">{t("waiting_approval")}</Badge>
                 )}
@@ -182,7 +182,9 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
           </Stack>
         </Group>
 
-        {timekeeping.status === HrmTimekeepingStatus.REJECTED && <Badge color="red">{t("rejected")}</Badge>}
+        {timekeeping.status === HrmTimekeepingStatus.REJECTED && (
+          <Badge color="red">{t("rejected")}</Badge>
+        )}
 
         {workspace.hasPermission(WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP) &&
           timekeeping.status !== HrmTimekeepingStatus.PENDING && (

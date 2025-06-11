@@ -1,7 +1,14 @@
 import { NavigationTabs } from "@/components/navigation-tabs";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { Icon, IconCalendar, IconLayoutKanban, IconList, IconMist, IconStopwatch } from "@tabler/icons-react";
-import { FC, PropsWithChildren, useEffect } from "react";
+import {
+  Icon,
+  IconCalendar,
+  IconLayoutKanban,
+  IconList,
+  IconMist,
+  IconStopwatch,
+} from "@tabler/icons-react";
+import { FC, Fragment, PropsWithChildren, useEffect } from "react";
 import { BulkTasksActions } from "../components/bulk-tasks-actions";
 import { TaskDetail } from "../components/task-detail";
 import { TaskView } from "./types";
@@ -47,7 +54,9 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
     }
 
     if (params.code && !params.slug) {
-      return router.replace(`/tasks/${selectedView}/${folderTagSlug}/${taskCode}`, { scroll: false });
+      return router.replace(`/tasks/${selectedView}/${folderTagSlug}/${taskCode}`, {
+        scroll: false,
+      });
     }
   };
 
@@ -56,7 +65,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
   }, [router.pathname]);
 
   return (
-    <>
+    <Fragment>
       <NavigationTabs
         activeTab={view}
         tabs={views.map((key) => ({
@@ -71,7 +80,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
 
       <TaskDetail />
       <BulkTasksActions />
-    </>
+    </Fragment>
   );
 };
 

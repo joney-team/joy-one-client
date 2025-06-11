@@ -1,4 +1,5 @@
-import { type FC } from "react";
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
@@ -7,7 +8,10 @@ import { ModalTitle } from "@/components/modal-title";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { HrmTimekeepingCard } from "@/modules/hrm-timekeepings/hrm-timekeeping-card";
-import { approveTimekeeping, getTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
+import {
+  approveTimekeeping,
+  getTimekeepings,
+} from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import {
   HrmTimekeepingEntity,
   HrmTimekeepingStatus,
@@ -15,13 +19,24 @@ import {
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { calculateTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
 import { num, t } from "@/modules/lang/lang-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { useList } from "@/utils/use-list.util";
-import { Badge, Center, Group, SimpleGrid, Skeleton, Stack, Text, em, useMantineTheme } from "@mantine/core";
+import {
+  Badge,
+  Center,
+  Group,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  Text,
+  em,
+  useMantineTheme,
+} from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconAnalyze, IconClockCheck, IconListCheck, IconMoodSad } from "@tabler/icons-react";
+import { Fragment, type FC } from "react";
 
 interface ModalTImekeepingListProps {
   query?: any;
@@ -44,7 +59,9 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
   });
 
   const [userMemberInfos] = useWorkspaceMembers([props.query?.userId].filter(Boolean));
-  const member = props.query?.userId ? userMemberInfos.find((member) => member.userId === props.query?.userId) : null;
+  const member = props.query?.userId
+    ? userMemberInfos.find((member) => member.userId === props.query?.userId)
+    : null;
 
   useEventsListener(
     [
@@ -91,7 +108,9 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
     close();
   };
 
-  const pendingTimekeepings = timekeepings.data.filter((v) => v.status === HrmTimekeepingStatus.PENDING);
+  const pendingTimekeepings = timekeepings.data.filter(
+    (v) => v.status === HrmTimekeepingStatus.PENDING
+  );
 
   return (
     <Stack>
@@ -99,13 +118,18 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
         <Empty />
       ) : (
         props.captured && (
-          <>
+          <Fragment>
             {(function () {
               if (isWorking) {
                 return (
                   <Center p={10}>
                     <Group gap={5}>
-                      <IconAnalyze strokeWidth={1.5} size={18} color={theme.colors.orange[6]} className="animRotate" />
+                      <IconAnalyze
+                        strokeWidth={1.5}
+                        size={18}
+                        color={theme.colors.orange[6]}
+                        className="animRotate"
+                      />
                       <Text fz={em(15)} c="orange">
                         {t("working")}
                       </Text>
@@ -133,7 +157,9 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                     <Text fw={700}>{t("hrm_timekeepings_working_time")}:</Text>
                     <Text>{num(calculated.totalWorkingTime, { type: "hours" })}</Text>
                     {calculated.totalWorkingTime > 0 && (
-                      <Badge color="green">{DateTimeUtils.toHHMM(calculated.totalWorkingTime)}</Badge>
+                      <Badge color="green">
+                        {DateTimeUtils.toHHMM(calculated.totalWorkingTime)}
+                      </Badge>
                     )}
                   </Group>
 
@@ -159,17 +185,25 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                 </SimpleGrid>
               );
             })()}
-          </>
+          </Fragment>
         )
       )}
 
       {timekeepings.isHasData && (
-        <>
+        <Fragment>
           {pendingTimekeepings.length > 0 && (
             <Group justify="space-between" wrap="nowrap">
-              <Text>{t("hrm_timekeepings_approval_count", { count: num(pendingTimekeepings.length) })}</Text>
+              <Text>
+                {t("hrm_timekeepings_approval_count", { count: num(pendingTimekeepings.length) })}
+              </Text>
 
-              <Button size="xs" onClick={() => approveAll()} variant="outline" radius={100} leftIcon={IconListCheck}>
+              <Button
+                size="xs"
+                onClick={() => approveAll()}
+                variant="outline"
+                radius={100}
+                leftIcon={IconListCheck}
+              >
                 {t("approve_all")}
               </Button>
             </Group>
@@ -178,7 +212,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
           {timekeepings.data.map((timekeeping) => (
             <HrmTimekeepingCard key={timekeeping._id} timekeeping={timekeeping} />
           ))}
-        </>
+        </Fragment>
       )}
 
       {timekeepings.isFetching && <Skeleton height={150} />}
@@ -196,7 +230,9 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
 export const OnModalListTimekeepings = (props: ModalTImekeepingListProps) => {
   return modals.open({
     modalId: "ModalListTimekeepings",
-    title: <ModalTitle title={props.title || t("hrm_timekeepings_history")} icon={IconClockCheck} />,
+    title: (
+      <ModalTitle title={props.title || t("hrm_timekeepings_history")} icon={IconClockCheck} />
+    ),
     children: <ModalTImekeepingList {...props} />,
     size: "lg",
   });

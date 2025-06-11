@@ -1,10 +1,17 @@
+"use client";
+
 import { TextInput } from "@/components/inputs/text-input";
 import { useLang } from "@/modules/lang/lang-context";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { TaskTimeTracking } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils, parseTimeInput, setHoursMinutes, timeInputValue } from "@/utils/dateTime.utils";
+import {
+  DateTimeUtils,
+  parseTimeInput,
+  setHoursMinutes,
+  timeInputValue,
+} from "@/utils/dateTime.utils";
 import { StringUtils } from "@/utils/string.utils";
 import {
   ActionIcon,
@@ -39,7 +46,7 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Avatar } from "../avatar";
 import { Button } from "../buttons/button";
@@ -59,7 +66,9 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
   const timeTrackings = value || [];
 
   const totalTime =
-    timeTrackings.filter((v) => !!v.endAt).reduce((acc, curr) => acc + (curr.endAt || 0) - (curr.startAt || 0), 0) || 0;
+    timeTrackings
+      .filter((v) => !!v.endAt)
+      .reduce((acc, curr) => acc + (curr.endAt || 0) - (curr.startAt || 0), 0) || 0;
 
   const groupByUsers = timeTrackings.reduce(
     (acc, curr) => {
@@ -257,72 +266,71 @@ export const TimeTrackingGroupByUser: FC<{
       </Group>
 
       {isShowList && (
-        <>
-          <Stack pl={30}>
-            {props.timeTrackings
-              .filter((v) => !!v.endAt)
-              .map((t) => {
-                return (
-                  <Card withBorder p={10} key={props.user.userId + t.id}>
-                    <Group justify="space-between">
-                      <Group gap={0}>
-                        <Stack gap={3} align="center">
-                          <Text fz={14} fw={500}>
-                            {DateTimeUtils.toHHMM(t.endAt! - t.startAt)}
+        <Stack pl={30}>
+          {props.timeTrackings
+            .filter((v) => !!v.endAt)
+            .map((t) => {
+              return (
+                <Card withBorder p={10} key={props.user.userId + t.id}>
+                  <Group justify="space-between">
+                    <Group gap={0}>
+                      <Stack gap={3} align="center">
+                        <Text fz={14} fw={500}>
+                          {DateTimeUtils.toHHMM(t.endAt! - t.startAt)}
+                        </Text>
+
+                        <Renderer visible={t.billable}>
+                          <ThemeIcon variant="filled" size={18} radius={100}>
+                            <IconCurrencyDollar size={14} />
+                          </ThemeIcon>
+                        </Renderer>
+                      </Stack>
+
+                      <Divider orientation="vertical" mx={10} />
+
+                      <Stack gap={8}>
+                        <Group gap={5}>
+                          <ThemeIcon variant="transparent" size={18} color="gray">
+                            <IconCalendar size={16} />
+                          </ThemeIcon>
+
+                          <Text fz={14}>
+                            {StringUtils.capitalizeFirstLetter(
+                              dayjs(t.startAt * 1000).format(`dd ${getDateFormat()}`)
+                            )}
                           </Text>
 
-                          <Renderer visible={t.billable}>
-                            <ThemeIcon variant="filled" size={18} radius={100}>
-                              <IconCurrencyDollar size={14} />
-                            </ThemeIcon>
-                          </Renderer>
-                        </Stack>
+                          <ThemeIcon variant="transparent" size={18} color="gray" ml={5}>
+                            <IconClock size={16} />
+                          </ThemeIcon>
 
-                        <Divider orientation="vertical" mx={10} />
+                          <Text fz={14}>
+                            {dayjs(t.startAt * 1000).format("HH:mm")} -{" "}
+                            {dayjs(t.endAt! * 1000).format("HH:mm")}
+                          </Text>
+                        </Group>
 
-                        <Stack gap={8}>
+                        <Renderer visible={!!t.note}>
                           <Group gap={5}>
                             <ThemeIcon variant="transparent" size={18} color="gray">
-                              <IconCalendar size={16} />
+                              <IconNote />
                             </ThemeIcon>
-
-                            <Text fz={14}>
-                              {StringUtils.capitalizeFirstLetter(
-                                dayjs(t.startAt * 1000).format(`dd ${getDateFormat()}`)
-                              )}
-                            </Text>
-
-                            <ThemeIcon variant="transparent" size={18} color="gray" ml={5}>
-                              <IconClock size={16} />
-                            </ThemeIcon>
-
-                            <Text fz={14}>
-                              {dayjs(t.startAt * 1000).format("HH:mm")} - {dayjs(t.endAt! * 1000).format("HH:mm")}
-                            </Text>
+                            <Text fz={14}>{t.note}</Text>
                           </Group>
-
-                          <Renderer visible={!!t.note}>
-                            <Group gap={5}>
-                              <ThemeIcon variant="transparent" size={18} color="gray">
-                                <IconNote />
-                              </ThemeIcon>
-                              <Text fz={14}>{t.note}</Text>
-                            </Group>
-                          </Renderer>
-                        </Stack>
-                      </Group>
-
-                      <Group gap={5}>
-                        <ActionIcon variant="subtle" color="red" onClick={() => props.onRemove(t.id)}>
-                          <IconTrash size={16} strokeWidth={1.5} />
-                        </ActionIcon>
-                      </Group>
+                        </Renderer>
+                      </Stack>
                     </Group>
-                  </Card>
-                );
-              })}
-          </Stack>
-        </>
+
+                    <Group gap={5}>
+                      <ActionIcon variant="subtle" color="red" onClick={() => props.onRemove(t.id)}>
+                        <IconTrash size={16} strokeWidth={1.5} />
+                      </ActionIcon>
+                    </Group>
+                  </Group>
+                </Card>
+              );
+            })}
+        </Stack>
       )}
     </Stack>
   );
@@ -382,7 +390,11 @@ export const TimeTrackingForm: FC<{
   return (
     <Card withBorder shadow="none" p="md">
       <Card.Section withBorder p="sm" bg="gray.0">
-        <UserInput clearable={false} value={form.values.user} onChange={(user) => form.setFieldValue("user", user!)} />
+        <UserInput
+          clearable={false}
+          value={form.values.user}
+          onChange={(user) => form.setFieldValue("user", user!)}
+        />
       </Card.Section>
 
       <Card.Section withBorder p={0} py="sm" pr="sm">
@@ -406,7 +418,11 @@ export const TimeTrackingForm: FC<{
           )}
 
           {!!!props.timeTracking ? (
-            <ActionIcon radius={100} onClick={() => props.onStartTracking(form.values)} color="green">
+            <ActionIcon
+              radius={100}
+              onClick={() => props.onStartTracking(form.values)}
+              color="green"
+            >
               <IconPlayerPlayFilled size={16} />
             </ActionIcon>
           ) : (
@@ -455,7 +471,11 @@ export const TimeTrackingForm: FC<{
                       }
                     }}
                     rightSection={
-                      <ActionIcon variant="subtle" color="gray" onClick={() => startAtRef.current?.showPicker()}>
+                      <ActionIcon
+                        variant="subtle"
+                        color="gray"
+                        onClick={() => startAtRef.current?.showPicker()}
+                      >
                         <IconClock size={16} stroke={1.5} />
                       </ActionIcon>
                     }
@@ -484,7 +504,11 @@ export const TimeTrackingForm: FC<{
                     }}
                     onClick={() => endAtRef.current?.showPicker()}
                     rightSection={
-                      <ActionIcon variant="subtle" color="gray" onClick={() => endAtRef.current?.showPicker()}>
+                      <ActionIcon
+                        variant="subtle"
+                        color="gray"
+                        onClick={() => endAtRef.current?.showPicker()}
+                      >
                         <IconClock size={16} stroke={1.5} />
                       </ActionIcon>
                     }
@@ -494,7 +518,11 @@ export const TimeTrackingForm: FC<{
             </InputWrapper>
           </Renderer>
 
-          <TextInput label={t("note")} {...form.getInputProps("note")} value={form.values.note || ""} />
+          <TextInput
+            label={t("note")}
+            {...form.getInputProps("note")}
+            value={form.values.note || ""}
+          />
         </Stack>
       </Card.Section>
 

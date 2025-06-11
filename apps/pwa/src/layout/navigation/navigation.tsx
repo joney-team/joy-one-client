@@ -9,7 +9,17 @@ import { workspaceModules } from "@/modules/workspaces/workspace-modules";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView, getNavigationGroups } from "@/modules/workspaces/workspace-view";
 import { StringUtils } from "@/utils/string.utils";
-import { ActionIcon, Badge, Divider, Drawer, Group, ScrollArea, Stack, Text, ThemeIcon } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Divider,
+  Drawer,
+  Group,
+  ScrollArea,
+  Stack,
+  Text,
+  ThemeIcon,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
@@ -27,8 +37,13 @@ export const AppNavigation: FC = () => {
 
   const mobileDrawer = useDisclosure(false);
 
-  const components = (workspace.view.menu ?? getDefaultWorkspaceView(workspace.type).menu ?? []).filter((v) => {
-    if (v.type === "MODULE") return workspace.isModuleActive(v.moduleId as keyof typeof workspaceModules);
+  const components = (
+    workspace.view.menu ??
+    getDefaultWorkspaceView(workspace.type).menu ??
+    []
+  ).filter((v) => {
+    if (v.type === "MODULE")
+      return workspace.isModuleActive(v.moduleId as keyof typeof workspaceModules);
     return true;
   });
 
@@ -99,7 +114,9 @@ export const AppNavigation: FC = () => {
                 }}
               >
                 <Avatar workspace={workspace.userMember.workspace} size={30} />
-                <Text fw={600}>{StringUtils.limitCharacters(workspace.userMember.workspace.name || "", 12)}</Text>
+                <Text fw={600}>
+                  {StringUtils.limitCharacters(workspace.userMember.workspace.name || "", 12)}
+                </Text>
               </Group>
             }
           >
@@ -107,7 +124,11 @@ export const AppNavigation: FC = () => {
               {navigationGroup.map((group) => {
                 return (
                   <Fragment key={group.id}>
-                    <Divider tt="capitalize" label={group.name || t("general")} labelPosition="left" />
+                    <Divider
+                      tt="capitalize"
+                      label={group.name || t("general")}
+                      labelPosition="left"
+                    />
 
                     {group.moduleIds.map((moduleId) => {
                       const module = workspace.modules.find((v) => v.id === moduleId);
@@ -128,7 +149,10 @@ export const AppNavigation: FC = () => {
                           py={2}
                         >
                           <Group gap={8}>
-                            <ThemeIcon color={moduleColor} variant={isActive ? "filled" : "transparent"}>
+                            <ThemeIcon
+                              color={moduleColor}
+                              variant={isActive ? "filled" : "transparent"}
+                            >
                               <module.icon strokeWidth={isActive ? 1.8 : 1.5} size={20} />
                             </ThemeIcon>
 
@@ -158,7 +182,7 @@ export const AppNavigation: FC = () => {
   const navigationGroup = getNavigationGroups(components, workspace.availableModules);
 
   return (
-    <>
+    <Fragment>
       <WorkspaceNavigationDrawer
         targetProps={{
           w: "100%",
@@ -182,7 +206,13 @@ export const AppNavigation: FC = () => {
             return (
               <Fragment key={group.id}>
                 <Renderer visible={group.id !== "default" && !workspaceLayout.isNavbarCollapsed}>
-                  <Divider tt="capitalize" label={group.name} labelPosition="left" px={12} py={10} />
+                  <Divider
+                    tt="capitalize"
+                    label={group.name}
+                    labelPosition="left"
+                    px={12}
+                    py={10}
+                  />
                 </Renderer>
 
                 <Renderer visible={group.id !== "default" && workspaceLayout.isNavbarCollapsed}>
@@ -209,6 +239,6 @@ export const AppNavigation: FC = () => {
           })}
         </Stack>
       </ScrollArea.Autosize>
-    </>
+    </Fragment>
   );
 };

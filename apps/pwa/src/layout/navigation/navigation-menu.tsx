@@ -26,10 +26,16 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
-import { Icon, IconChevronDown, IconChevronUp, IconFolderPlus, IconPlus } from "@tabler/icons-react";
+import {
+  Icon,
+  IconChevronDown,
+  IconChevronUp,
+  IconFolderPlus,
+  IconPlus,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FC, useState } from "react";
+import { type FC, Fragment, useState } from "react";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 
 export const WorkspaceNavigationMenu: FC<{
@@ -41,7 +47,9 @@ export const WorkspaceNavigationMenu: FC<{
   isBeta?: boolean;
 }> = (props) => {
   const id = `nav-route-${props.route.replace("/", "").replace(/\//g, "-")}`;
-  const [isShowTaskFolder, setIsShowTaskFolder] = useState(localStorage.getItem(`task-folder`) === "true");
+  const [isShowTaskFolder, setIsShowTaskFolder] = useState(
+    localStorage.getItem(`task-folder`) === "true"
+  );
 
   const onToggleShowTaskFolders = () => {
     setIsShowTaskFolder(!isShowTaskFolder);
@@ -92,11 +100,20 @@ export const WorkspaceNavigationMenu: FC<{
           }
           disabled={!props.indicator || props.indicator === 0}
         >
-          <ActionIcon variant="transparent" color={color(isActive ? "primary" : "var(--mantine-color-text)")}>
+          <ActionIcon
+            variant="transparent"
+            color={color(isActive ? "primary" : "var(--mantine-color-text)")}
+          >
             <props.icon strokeWidth={1.5} />
           </ActionIcon>
         </Indicator>
-        <Text tt="capitalize" mt={-3} fz={10} fw={500} c={color(isActive ? "primary" : "var(--mantine-color-text)")}>
+        <Text
+          tt="capitalize"
+          mt={-3}
+          fz={10}
+          fw={500}
+          c={color(isActive ? "primary" : "var(--mantine-color-text)")}
+        >
           {props.label}
         </Text>
       </Stack>
@@ -104,7 +121,7 @@ export const WorkspaceNavigationMenu: FC<{
 
   if (workspaceLayout.isNavbarCollapsed)
     return (
-      <>
+      <Fragment>
         <Group justify="center">
           <Tooltip label={props.label} position="right">
             <Anchor component={Link} href={getRoute()} td="none">
@@ -118,11 +135,11 @@ export const WorkspaceNavigationMenu: FC<{
             </Anchor>
           </Tooltip>
         </Group>
-      </>
+      </Fragment>
     );
 
   return (
-    <>
+    <Fragment>
       <Anchor component={Link} href={getRoute()} td="none">
         <Group
           id={id}
@@ -146,7 +163,11 @@ export const WorkspaceNavigationMenu: FC<{
                   : color("primary.0")
                 : "transparent",
               border: `1px solid ${
-                isActive ? (colorScheme === "dark" ? rgba(color("primary"), 0.5) : color("primary.1")) : "transparent"
+                isActive
+                  ? colorScheme === "dark"
+                    ? rgba(color("primary"), 0.5)
+                    : color("primary.1")
+                  : "transparent"
               }`,
               borderRadius: 10,
             }}
@@ -199,7 +220,10 @@ export const WorkspaceNavigationMenu: FC<{
                     </Menu.Target>
 
                     <MenuDropdown>
-                      <Menu.Item leftSection={<IconPlus size={16} />} onClick={() => OnModalCreateTask()}>
+                      <Menu.Item
+                        leftSection={<IconPlus size={16} />}
+                        onClick={() => OnModalCreateTask()}
+                      >
                         <Text tt="capitalize" fz={em(14)}>
                           {t("create")} {t("task")}
                         </Text>
@@ -250,6 +274,6 @@ export const WorkspaceNavigationMenu: FC<{
       <Renderer visible={props.route === "/tasks" && taskFolderTags.length > 0 && isShowTaskFolder}>
         <WorkspaceNavigationTaskFolders />
       </Renderer>
-    </>
+    </Fragment>
   );
 };

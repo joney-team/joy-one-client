@@ -1,3 +1,5 @@
+"use client";
+
 import { Circle } from "@/components/circle";
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
@@ -34,7 +36,7 @@ import {
   IconFileTypePdf,
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { useColor } from "../theme/use-color";
 
 interface LoanListProps {
@@ -73,7 +75,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
           render: (_, data) => {
             const loan = data as LoanEntity;
             return (
-              <>
+              <Fragment>
                 <Renderer visible={loan.isLiquidated}>
                   <Badge variant="light" color="violet" size="xs">
                     {t("liquidation")}
@@ -85,11 +87,16 @@ export const LoanList: FC<LoanListProps> = (props) => {
                     {t("has_late_interest")}
                   </Badge>
                 </Renderer>
-              </>
+              </Fragment>
             );
           },
         }),
-        createdAt: DateTimeColumn({ name: "createdAt", isSortable: true, isDefaultHide: true, isHasFilter: true }),
+        createdAt: DateTimeColumn({
+          name: "createdAt",
+          isSortable: true,
+          isDefaultHide: true,
+          isHasFilter: true,
+        }),
         fulfilledAt: DateTimeColumn({
           name: "fulfilledAt",
           isSortable: true,
@@ -123,7 +130,8 @@ export const LoanList: FC<LoanListProps> = (props) => {
             const loanPackage = loan.package;
 
             const linkContractPdf =
-              loan.status !== LoanStatus.PENDING_SIGN && !!workspace.settings.loanSettings?.contractPdfUrl
+              loan.status !== LoanStatus.PENDING_SIGN &&
+              !!workspace.settings.loanSettings?.contractPdfUrl
                 ? workspace.settings.loanSettings?.contractPdfUrl?.replace("{code}", loan.code)
                 : undefined;
 
@@ -134,12 +142,17 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 <Group justify="space-between">
                   <Group gap={5}>
                     <Text fw={500}>{t(`loan_asset_type_${loan.assetType}`)}</Text>
-                    <Badge size="sm" variant="light" color={loanPackageTypeColors[loanPackage.type]}>
+                    <Badge
+                      size="sm"
+                      variant="light"
+                      color={loanPackageTypeColors[loanPackage.type]}
+                    >
                       {loanPackage.id}
                     </Badge>
                   </Group>
                   <Text ta="right">
-                    {renderLoanPeriod(loan.packagePeriodDays)} / {renderLoanPeriod(loan.package.days)}
+                    {renderLoanPeriod(loan.packagePeriodDays)} /{" "}
+                    {renderLoanPeriod(loan.package.days)}
                   </Text>
                 </Group>
 
@@ -180,7 +193,11 @@ export const LoanList: FC<LoanListProps> = (props) => {
           exportToExcel: (_, loan) => {
             return [
               { col: t("loan_package"), text: loan.package.id, width: 20 },
-              { col: t("loan_asset_type"), text: t(`loan_asset_type_${loan.assetType}`), width: 20 },
+              {
+                col: t("loan_asset_type"),
+                text: t(`loan_asset_type_${loan.assetType}`),
+                width: 20,
+              },
               { col: t("loan_amount"), money: loan.amount, width: 30 },
             ];
           },
@@ -189,12 +206,16 @@ export const LoanList: FC<LoanListProps> = (props) => {
           name: "loan_next_receipt_at",
           isSortable: true,
           render: ({ value, data: loan }) => {
-            const warningReceiptBeforeDays = workspace.settings.loanSettings?.warningReceiptBeforeDays || 0;
-            const isExpired = loan.nextReceiptAt && dayjs(loan.nextReceiptAt * 1000).isBefore(dayjs());
+            const warningReceiptBeforeDays =
+              workspace.settings.loanSettings?.warningReceiptBeforeDays || 0;
+            const isExpired =
+              loan.nextReceiptAt && dayjs(loan.nextReceiptAt * 1000).isBefore(dayjs());
             const isWarning =
               warningReceiptBeforeDays > 0 &&
               loan.nextReceiptAt &&
-              dayjs(loan.nextReceiptAt * 1000).isBefore(dayjs(now * 1000).add(warningReceiptBeforeDays + 1, "day"));
+              dayjs(loan.nextReceiptAt * 1000).isBefore(
+                dayjs(now * 1000).add(warningReceiptBeforeDays + 1, "day")
+              );
 
             const renderNextReceipt = () => {
               if (!loan.nextReceiptAt) return "--";
@@ -210,7 +231,10 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 <Text c={isExpired ? "red" : isWarning ? "orange" : "var(--mantine-color-text)"}>
                   {renderDate(loan.nextReceiptAt)}
                 </Text>
-                <Text fz={12} c={isExpired ? "red" : isWarning ? "orange" : "var(--mantine-color-text)"}>
+                <Text
+                  fz={12}
+                  c={isExpired ? "red" : isWarning ? "orange" : "var(--mantine-color-text)"}
+                >
                   {renderNextReceipt()}
                 </Text>
               </Stack>
@@ -247,27 +271,40 @@ export const LoanList: FC<LoanListProps> = (props) => {
               },
           render: ({ data: loan }) => {
             const percent = loan.paymentProgress
-              ? (loan.paymentProgress.filter((v) => v.isCompleted).length * 100) / loan.paymentProgress.length
+              ? (loan.paymentProgress.filter((v) => v.isCompleted).length * 100) /
+                loan.paymentProgress.length
               : 0;
 
             return (
               <Stack gap={10}>
                 <Group wrap="nowrap" gap={3} miw={200}>
-                  <Badge variant="light" style={{ borderRadius: 100 }} color={loanStatusColors[loan.status]}>
+                  <Badge
+                    variant="light"
+                    style={{ borderRadius: 100 }}
+                    color={loanStatusColors[loan.status]}
+                  >
                     {t(`loan_status_${loan.status}`)}
                   </Badge>
                 </Group>
 
                 <Renderer
-                  visible={[LoanStatus.FULFILLED, LoanStatus.COMPLETED, LoanStatus.OVERDUE].includes(loan.status)}
+                  visible={[
+                    LoanStatus.FULFILLED,
+                    LoanStatus.COMPLETED,
+                    LoanStatus.OVERDUE,
+                  ].includes(loan.status)}
                 >
                   <Tooltip label={`Tiến độ thanh toán ${round(percent, 1)}%`}>
                     <Group gap={4} wrap="nowrap">
                       {loan.paymentProgress?.map((r) => {
                         const isPaid = r.isCompleted;
-                        const isExpired = !isPaid && !!r.time && dayjs(r.time * 1000).isBefore(dayjs());
+                        const isExpired =
+                          !isPaid && !!r.time && dayjs(r.time * 1000).isBefore(dayjs());
                         const isExpireToday =
-                          !isPaid && !isPaid && !!r.time && dayjs(r.time * 1000).isSame(dayjs(), "day");
+                          !isPaid &&
+                          !isPaid &&
+                          !!r.time &&
+                          dayjs(r.time * 1000).isSame(dayjs(), "day");
 
                         return (
                           <Progress
@@ -303,7 +340,8 @@ export const LoanList: FC<LoanListProps> = (props) => {
         {
           permission: WorkspacePermission.LOANS_ARCHIVE,
           type: "archive",
-          available: (data) => data.every((v) => [LoanStatus.PENDING, LoanStatus.PENDING_SIGN].includes(v.status)),
+          available: (data) =>
+            data.every((v) => [LoanStatus.PENDING, LoanStatus.PENDING_SIGN].includes(v.status)),
           handler: (data) => archiveLoans(data.map((v) => v.id)),
         },
       ]}

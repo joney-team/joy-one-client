@@ -1,5 +1,6 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
-import { Errored } from "@/components/errored";
 import { ModalTitle } from "@/components/modal-title";
 import { useLayout } from "@/layout/layout-context";
 import { getCustomer, renderGener } from "@/modules/customers/customer-service";
@@ -17,7 +18,6 @@ import { loadImage } from "@/utils/asset.utils";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize, uppercase } from "@/utils/string.utils";
-import { useFetch } from "@/utils/use-fetch.util";
 import {
   ActionIcon,
   Anchor,
@@ -36,7 +36,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure, useForceUpdate } from "@mantine/hooks";
 import { IconDimensions, IconPrinter, IconSettings } from "@tabler/icons-react";
-import { FC, useRef, useState } from "react";
+import { type FC, Fragment, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
 interface PrinterProps {
@@ -151,7 +151,8 @@ export const ModalPrinter: FC = () => {
         setRelatedOrder(order);
       }
 
-      const customerId = _p.customer?._id || _p.order?.relatedCustomerId || _p.receipt?.relatedCustomerId;
+      const customerId =
+        _p.customer?._id || _p.order?.relatedCustomerId || _p.receipt?.relatedCustomerId;
       if (customerId) {
         const customer = await getCustomer(customerId);
         setCustomer(customer);
@@ -196,429 +197,467 @@ export const ModalPrinter: FC = () => {
         if (loading) return <Skeleton h={300} />;
 
         return (
-          <>
-            <Stack align="center">
-              <Card
-                withBorder
-                shadow="none"
-                p={5}
-                style={{
-                  width:
-                    printSettings.size === PrintSize.SMALL ? 200 : printSettings.size === PrintSize.MEDIUM ? 300 : 800,
-                  maxWidth: "100%",
-                }}
+          <Stack align="center">
+            <Card
+              withBorder
+              shadow="none"
+              p={5}
+              style={{
+                width:
+                  printSettings.size === PrintSize.SMALL
+                    ? 200
+                    : printSettings.size === PrintSize.MEDIUM
+                    ? 300
+                    : 800,
+                maxWidth: "100%",
+              }}
+            >
+              <div
+                ref={contentRef}
+                className={`printer printer-${printSettings.size.toLowerCase()}`}
               >
-                <div ref={contentRef} className={`printer printer-${printSettings.size.toLowerCase()}`}>
-                  <div className="printer-wrapper">
-                    <div className="printer-head">
-                      {printSettings.showLogo && !!workspace.userMember.workspace.logo && (
-                        <img className="logo" src={renderLink(workspace.userMember.workspace.logo)} alt="" />
-                      )}
+                <div className="printer-wrapper">
+                  <div className="printer-head">
+                    {printSettings.showLogo && !!workspace.userMember.workspace.logo && (
+                      <img
+                        className="logo"
+                        src={renderLink(workspace.userMember.workspace.logo)}
+                        alt=""
+                      />
+                    )}
 
-                      <div className="printer-head-metadata">
-                        <h3>{workspace.userMember.workspace.name}</h3>
-                        <div className={`flex ${printSettings.size === PrintSize.LARGE ? "gap-1" : "column"}`}>
-                          {(function () {
-                            if (!printSettings.showAddress || !workspace.userMember.workspace.location) return null;
+                    <div className="printer-head-metadata">
+                      <h3>{workspace.userMember.workspace.name}</h3>
+                      <div
+                        className={`flex ${
+                          printSettings.size === PrintSize.LARGE ? "gap-1" : "column"
+                        }`}
+                      >
+                        {(function () {
+                          if (
+                            !printSettings.showAddress ||
+                            !workspace.userMember.workspace.location
+                          )
+                            return null;
 
-                            if (printSettings.size === PrintSize.SMALL)
-                              return (
-                                <p>
-                                  ĐC:{" "}
-                                  {renderLocation(workspace.userMember.workspace.location, {
-                                    shortProvine: true,
-                                  }).replace("Hồ Chí Minh", "HCM")}
-                                </p>
-                              );
-
+                          if (printSettings.size === PrintSize.SMALL)
                             return (
                               <p>
                                 ĐC:{" "}
-                                {renderLocation(workspace.userMember.workspace.location).replace(/Thành phố/g, "TP.")}
+                                {renderLocation(workspace.userMember.workspace.location, {
+                                  shortProvine: true,
+                                }).replace("Hồ Chí Minh", "HCM")}
                               </p>
                             );
-                          })()}
 
-                          {workspace.userMember.workspace.hotline && (
-                            <p>Hotline: {workspace.userMember.workspace.hotline}</p>
-                          )}
-                        </div>
+                          return (
+                            <p>
+                              ĐC:{" "}
+                              {renderLocation(workspace.userMember.workspace.location).replace(
+                                /Thành phố/g,
+                                "TP."
+                              )}
+                            </p>
+                          );
+                        })()}
+
+                        {workspace.userMember.workspace.hotline && (
+                          <p>Hotline: {workspace.userMember.workspace.hotline}</p>
+                        )}
                       </div>
                     </div>
+                  </div>
 
-                    {(function () {
-                      const { receipt } = props;
-                      const order = props.order || relatedOrder;
+                  {(function () {
+                    const { receipt } = props;
+                    const order = props.order || relatedOrder;
 
-                      if (order) {
-                        const subTotalPrice = order.items.reduce((a, b) => a + b.price, 0);
-                        const totalAmount = receipt ? receipt.amount + (receipt.tipAmount || 0) : order.totalAmount;
-                        const renderMoney = (n: number) =>
-                          num(n, { type: printSettings.showCurrency ? "money" : undefined });
-                        const totalDiscount = order.discounts.reduce((a, b) => a + b.amount, 0);
+                    if (order) {
+                      const subTotalPrice = order.items.reduce((a, b) => a + b.price, 0);
+                      const totalAmount = receipt
+                        ? receipt.amount + (receipt.tipAmount || 0)
+                        : order.totalAmount;
+                      const renderMoney = (n: number) =>
+                        num(n, { type: printSettings.showCurrency ? "money" : undefined });
+                      const totalDiscount = order.discounts.reduce((a, b) => a + b.amount, 0);
 
-                        return (
-                          <div className="printer-body">
-                            <div className="printer-body-head">
-                              <h2>{uppercase(t(receipt ? "receipt" : "order"))}</h2>
+                      return (
+                        <div className="printer-body">
+                          <div className="printer-body-head">
+                            <h2>{uppercase(t(receipt ? "receipt" : "order"))}</h2>
 
-                              <div className="printer-head-metadata">
-                                <div>
-                                  <strong>{receipt?.code || order?.code}</strong>
-                                </div>
+                            <div className="printer-head-metadata">
+                              <div>
+                                <strong>{receipt?.code || order?.code}</strong>
                               </div>
                             </div>
+                          </div>
 
-                            <p className="text-smaller time">
-                              {t("printed_at")} <strong>{renderDateTime(new Date())}</strong>
-                            </p>
+                          <p className="text-smaller time">
+                            {t("printed_at")} <strong>{renderDateTime(new Date())}</strong>
+                          </p>
 
-                            <table>
-                              <thead>
+                          <table>
+                            <thead>
+                              <tr>
+                                <th className="ta-left">{t("detail")}</th>
+                                <th className="ta-right">{t("QTY")}</th>
+                                <th className="ta-right">
+                                  {printSettings.size === PrintSize.SMALL
+                                    ? t("print_total_short")
+                                    : t("print_total_long")}
+                                </th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              {order.items.map((item, key) => {
+                                const isHidden =
+                                  item.price === 0 && !!item.product.isHiddenInReceiptWhenNoPrice;
+                                if (isHidden) return null;
+
+                                return (
+                                  <tr key={key}>
+                                    <td className="ta-left">
+                                      {item.product.displayName || item.product.name}
+                                    </td>
+                                    <td className="ta-right">{num(item.quantity)}</td>
+                                    <td className="ta-right">{renderMoney(item.price)}</td>
+                                  </tr>
+                                );
+                              })}
+
+                              {subTotalPrice !== order.totalAmount && (
                                 <tr>
-                                  <th className="ta-left">{t("detail")}</th>
-                                  <th className="ta-right">{t("QTY")}</th>
-                                  <th className="ta-right">
-                                    {printSettings.size === PrintSize.SMALL
-                                      ? t("print_total_short")
-                                      : t("print_total_long")}
-                                  </th>
+                                  <td className="ta-right" colSpan={2}>
+                                    {t("subtotal")}
+                                  </td>
+                                  <td className="ta-right">{renderMoney(subTotalPrice)}</td>
                                 </tr>
-                              </thead>
-
-                              <tbody>
-                                {order.items.map((item, key) => {
-                                  const isHidden = item.price === 0 && !!item.product.isHiddenInReceiptWhenNoPrice;
-                                  if (isHidden) return null;
-
-                                  return (
-                                    <tr key={key}>
-                                      <td className="ta-left">{item.product.displayName || item.product.name}</td>
-                                      <td className="ta-right">{num(item.quantity)}</td>
-                                      <td className="ta-right">{renderMoney(item.price)}</td>
-                                    </tr>
-                                  );
-                                })}
-
-                                {subTotalPrice !== order.totalAmount && (
-                                  <tr>
-                                    <td className="ta-right" colSpan={2}>
-                                      {t("subtotal")}
-                                    </td>
-                                    <td className="ta-right">{renderMoney(subTotalPrice)}</td>
-                                  </tr>
-                                )}
-
-                                {totalDiscount > 0 && (
-                                  <tr>
-                                    <td className="ta-right" colSpan={2} style={{ width: 90 }}>
-                                      {t("discount")}
-                                    </td>
-                                    <td className="ta-right">{renderMoney(totalDiscount)}</td>
-                                  </tr>
-                                )}
-
-                                {!!receipt?.tipAmount && receipt.tipAmount > 0 && (
-                                  <tr>
-                                    <td className="ta-right" colSpan={2}>
-                                      TIP
-                                    </td>
-                                    <td className="ta-right">{renderMoney(receipt.tipAmount)}</td>
-                                  </tr>
-                                )}
-
-                                {order.paidAmount < order.totalAmount && order.paidAmount > 0 ? (
-                                  <>
-                                    <tr>
-                                      <td className="ta-right" colSpan={2}>
-                                        {t("payment")}
-                                      </td>
-                                      <td className="ta-right">{renderMoney(receipt?.amount || order.totalAmount)}</td>
-                                    </tr>
-
-                                    <tr>
-                                      <td className="ta-right" colSpan={2}>
-                                        {t("remaining")}
-                                      </td>
-                                      <td className="ta-right">
-                                        <strong>{renderMoney(order.totalAmount - order.paidAmount)}</strong>
-                                      </td>
-                                    </tr>
-
-                                    <tr>
-                                      <td className="ta-right" colSpan={2}>
-                                        {t("total_short")}
-                                      </td>
-                                      <td className="ta-right">
-                                        <strong>{renderMoney(totalAmount)}</strong>
-                                      </td>
-                                    </tr>
-                                  </>
-                                ) : (
-                                  <>
-                                    <tr>
-                                      <td className="ta-right" colSpan={2}>
-                                        {t("total_short")}
-                                      </td>
-                                      <td className="ta-right">
-                                        <strong>{renderMoney(totalAmount)}</strong>
-                                      </td>
-                                    </tr>
-                                  </>
-                                )}
-
-                                {!!receipt?.giveAmount && (
-                                  <tr>
-                                    <td className="ta-right" colSpan={2}>
-                                      {t("money_given_short")}
-                                    </td>
-                                    <td className="ta-right">{renderMoney(receipt.giveAmount)}</td>
-                                  </tr>
-                                )}
-                              </tbody>
-                            </table>
-
-                            <div className="printer-metadata ta-center">
-                              {order.relatedCustomer && printSettings.showCustomer && (
-                                <div>
-                                  {t("customer")} <br /> <strong>{order.relatedCustomer.name}</strong>
-                                </div>
                               )}
 
-                              {receipt?.cashierUser && printSettings.showCashier && (
-                                <div>
-                                  {t("cashier")} <br /> <strong>{receipt.cashierUser.name}</strong>
-                                </div>
+                              {totalDiscount > 0 && (
+                                <tr>
+                                  <td className="ta-right" colSpan={2} style={{ width: 90 }}>
+                                    {t("discount")}
+                                  </td>
+                                  <td className="ta-right">{renderMoney(totalDiscount)}</td>
+                                </tr>
                               )}
-                            </div>
 
-                            {props.bankQrCode && printSettings.showBankQrCode && (
-                              <div className="printer-qr-code">
-                                <img src={props.bankQrCode.url.replace("compact", "qr_only")} alt="" />
+                              {!!receipt?.tipAmount && receipt.tipAmount > 0 && (
+                                <tr>
+                                  <td className="ta-right" colSpan={2}>
+                                    TIP
+                                  </td>
+                                  <td className="ta-right">{renderMoney(receipt.tipAmount)}</td>
+                                </tr>
+                              )}
+
+                              {order.paidAmount < order.totalAmount && order.paidAmount > 0 ? (
+                                <Fragment>
+                                  <tr>
+                                    <td className="ta-right" colSpan={2}>
+                                      {t("payment")}
+                                    </td>
+                                    <td className="ta-right">
+                                      {renderMoney(receipt?.amount || order.totalAmount)}
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td className="ta-right" colSpan={2}>
+                                      {t("remaining")}
+                                    </td>
+                                    <td className="ta-right">
+                                      <strong>
+                                        {renderMoney(order.totalAmount - order.paidAmount)}
+                                      </strong>
+                                    </td>
+                                  </tr>
+
+                                  <tr>
+                                    <td className="ta-right" colSpan={2}>
+                                      {t("total_short")}
+                                    </td>
+                                    <td className="ta-right">
+                                      <strong>{renderMoney(totalAmount)}</strong>
+                                    </td>
+                                  </tr>
+                                </Fragment>
+                              ) : (
+                                <Fragment>
+                                  <tr>
+                                    <td className="ta-right" colSpan={2}>
+                                      {t("total_short")}
+                                    </td>
+                                    <td className="ta-right">
+                                      <strong>{renderMoney(totalAmount)}</strong>
+                                    </td>
+                                  </tr>
+                                </Fragment>
+                              )}
+
+                              {!!receipt?.giveAmount && (
+                                <tr>
+                                  <td className="ta-right" colSpan={2}>
+                                    {t("money_given_short")}
+                                  </td>
+                                  <td className="ta-right">{renderMoney(receipt.giveAmount)}</td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+
+                          <div className="printer-metadata ta-center">
+                            {order.relatedCustomer && printSettings.showCustomer && (
+                              <div>
+                                {t("customer")} <br /> <strong>{order.relatedCustomer.name}</strong>
+                              </div>
+                            )}
+
+                            {receipt?.cashierUser && printSettings.showCashier && (
+                              <div>
+                                {t("cashier")} <br /> <strong>{receipt.cashierUser.name}</strong>
                               </div>
                             )}
                           </div>
-                        );
-                      }
 
-                      if (props.prescription) {
-                        const prescription = props.prescription;
-                        const totalDays = prescription.items.reduce((a, b) => Math.max(a, b.days), 0);
-
-                        return (
-                          <div className="printer-body">
-                            <div className="printer-body-head justify-center">
-                              <h1 className="ta-center">{t("prescription_title")}</h1>
+                          {props.bankQrCode && printSettings.showBankQrCode && (
+                            <div className="printer-qr-code">
+                              <img
+                                src={props.bankQrCode.url.replace("compact", "qr_only")}
+                                alt=""
+                              />
                             </div>
+                          )}
+                        </div>
+                      );
+                    }
 
-                            {customer && (
-                              <div className="flex flex-wrap space-between">
-                                {customer.name && (
-                                  <p>
-                                    {t("full_name")}: <strong>{customer.name}</strong>
-                                  </p>
-                                )}
-                                {customer.birthday && (
-                                  <p>
-                                    {t("birthday")}: {new Date(customer.birthday * 1000).getFullYear()}
-                                  </p>
-                                )}
-                                {customer.gender && (
-                                  <p>
-                                    {t("gender")}: {renderGener(customer.gender)}
-                                  </p>
-                                )}
-                                {customer.location && (
-                                  <p>
-                                    {t("address")}: {renderLocation(customer.location)}
-                                  </p>
-                                )}
-                                {prescription.name && (
-                                  <>
-                                    <div className="full-width">
-                                      <strong>{prescription.name}</strong>
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-                            )}
+                    if (props.prescription) {
+                      const prescription = props.prescription;
+                      const totalDays = prescription.items.reduce((a, b) => Math.max(a, b.days), 0);
 
-                            <table className="bottom-dashed mb-1">
-                              <tbody>
-                                {prescription.items.map((item, key) => {
-                                  const total =
-                                    ((item.qty.morning || 0) + (item.qty.noon || 0) + (item.qty.afternoon || 0)) *
-                                    item.days;
+                      return (
+                        <div className="printer-body">
+                          <div className="printer-body-head justify-center">
+                            <h1 className="ta-center">{t("prescription_title")}</h1>
+                          </div>
 
-                                  const renderQty = (qty?: number) => {
-                                    if (!qty || qty <= 0) return "--";
-                                    return (
-                                      <strong>
-                                        {num(qty)} {item.unit}
-                                      </strong>
-                                    );
-                                  };
-
-                                  return (
-                                    <tr key={key}>
-                                      <td className="ta-left">
-                                        <div className="flex column gap-03">
-                                          <p>
-                                            <strong>
-                                              {key + 1}. {item.name}
-                                            </strong>
-                                          </p>
-                                          <div className="flex gap-1">
-                                            <p className="text-smaller">
-                                              {t("morning")}: {renderQty(item.qty.morning)}
-                                            </p>
-                                            <p className="text-smaller">
-                                              {t("noon")}: {renderQty(item.qty.noon)}
-                                            </p>
-                                            <p className="text-smaller">
-                                              {t("afternoon")}: {renderQty(item.qty.afternoon)}
-                                            </p>
-                                          </div>
-
-                                          {item.note && (
-                                            <p className="text-smaller">
-                                              {t("usage")}: <strong>{item.note}</strong>
-                                            </p>
-                                          )}
-                                        </div>
-                                      </td>
-                                      <td className="ta-left">
-                                        <p className="text-smaller ta-right">
-                                          <strong>
-                                            {num(total)} {item.unit}
-                                          </strong>
-                                        </p>
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                              </tbody>
-                            </table>
-
-                            <div className="flex column">
-                              <p>
-                                {t("days_num")}: <strong>{totalDays}</strong>
-                              </p>
-                              {!!prescription.note && (
+                          {customer && (
+                            <div className="flex flex-wrap space-between">
+                              {customer.name && (
                                 <p>
-                                  {t("advice")}: <strong>{prescription.note}</strong>
+                                  {t("full_name")}: <strong>{customer.name}</strong>
                                 </p>
                               )}
+                              {customer.birthday && (
+                                <p>
+                                  {t("birthday")}:{" "}
+                                  {new Date(customer.birthday * 1000).getFullYear()}
+                                </p>
+                              )}
+                              {customer.gender && (
+                                <p>
+                                  {t("gender")}: {renderGener(customer.gender)}
+                                </p>
+                              )}
+                              {customer.location && (
+                                <p>
+                                  {t("address")}: {renderLocation(customer.location)}
+                                </p>
+                              )}
+                              {prescription.name && (
+                                <div className="full-width">
+                                  <strong>{prescription.name}</strong>
+                                </div>
+                              )}
                             </div>
+                          )}
+
+                          <table className="bottom-dashed mb-1">
+                            <tbody>
+                              {prescription.items.map((item, key) => {
+                                const total =
+                                  ((item.qty.morning || 0) +
+                                    (item.qty.noon || 0) +
+                                    (item.qty.afternoon || 0)) *
+                                  item.days;
+
+                                const renderQty = (qty?: number) => {
+                                  if (!qty || qty <= 0) return "--";
+                                  return (
+                                    <strong>
+                                      {num(qty)} {item.unit}
+                                    </strong>
+                                  );
+                                };
+
+                                return (
+                                  <tr key={key}>
+                                    <td className="ta-left">
+                                      <div className="flex column gap-03">
+                                        <p>
+                                          <strong>
+                                            {key + 1}. {item.name}
+                                          </strong>
+                                        </p>
+                                        <div className="flex gap-1">
+                                          <p className="text-smaller">
+                                            {t("morning")}: {renderQty(item.qty.morning)}
+                                          </p>
+                                          <p className="text-smaller">
+                                            {t("noon")}: {renderQty(item.qty.noon)}
+                                          </p>
+                                          <p className="text-smaller">
+                                            {t("afternoon")}: {renderQty(item.qty.afternoon)}
+                                          </p>
+                                        </div>
+
+                                        {item.note && (
+                                          <p className="text-smaller">
+                                            {t("usage")}: <strong>{item.note}</strong>
+                                          </p>
+                                        )}
+                                      </div>
+                                    </td>
+                                    <td className="ta-left">
+                                      <p className="text-smaller ta-right">
+                                        <strong>
+                                          {num(total)} {item.unit}
+                                        </strong>
+                                      </p>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+
+                          <div className="flex column">
+                            <p>
+                              {t("days_num")}: <strong>{totalDays}</strong>
+                            </p>
+                            {!!prescription.note && (
+                              <p>
+                                {t("advice")}: <strong>{prescription.note}</strong>
+                              </p>
+                            )}
                           </div>
-                        );
-                      }
-                    })()}
-
-                    {printSettings.showThanks && (
-                      <div className="printer-footer">
-                        <p className="ta-center">{t("thanks_customer")}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </Card>
-
-              <Card withBorder shadow="none" p={10}>
-                <Group align="center" justify="space-around" gap={16}>
-                  <Switch
-                    label="Logo"
-                    defaultChecked={printSettings.showLogo}
-                    onChange={(e) => {
-                      const _checked = e.target.checked;
-                      changePrintSettings({ ...printSettings, showLogo: _checked });
-                    }}
-                  />
-
-                  <Switch
-                    label={t("address")}
-                    defaultChecked={printSettings.showAddress}
-                    onChange={(e) => {
-                      const _checked = e.target.checked;
-                      changePrintSettings({ ...printSettings, showAddress: _checked });
-                    }}
-                  />
-
-                  <Switch
-                    label={t("cashier")}
-                    defaultChecked={printSettings.showCashier}
-                    onChange={(e) => {
-                      const _checked = e.target.checked;
-                      changePrintSettings({ ...printSettings, showCashier: _checked });
-                    }}
-                  />
-
-                  <Switch
-                    label={t("show_currency")}
-                    defaultChecked={printSettings.showCurrency}
-                    onChange={(e) => {
-                      const _checked = e.target.checked;
-                      changePrintSettings({ ...printSettings, showCurrency: _checked });
-                    }}
-                  />
-
-                  <Switch
-                    label={capitalize(`${t("show")} ${t("customer")}`)}
-                    defaultChecked={printSettings.showCustomer}
-                    onChange={(e) => {
-                      const _checked = e.target.checked;
-                      changePrintSettings({ ...printSettings, showCustomer: _checked });
-                    }}
-                  />
-
-                  {props.bankQrCode && (
-                    <Switch
-                      label={t("payment_code")}
-                      defaultChecked={printSettings.showBankQrCode}
-                      onChange={(e) => {
-                        const _checked = e.target.checked;
-                        changePrintSettings({ ...printSettings, showBankQrCode: _checked });
-                      }}
-                    />
-                  )}
-
-                  <Group gap={5} justify="center">
-                    <ThemeIcon variant="transparent" color="dark">
-                      <IconDimensions size={25} strokeWidth={1.2} />
-                    </ThemeIcon>
-
-                    {Object.values(PrintSize).map((_size) => {
-                      return (
-                        <Button
-                          key={_size}
-                          variant={_size === printSettings.size ? "filled" : "outline"}
-                          color="dark"
-                          size="compact-md"
-                          fz={em(15)}
-                          fw={400}
-                          onClick={() => {
-                            changePrintSettings({ ...printSettings, size: _size });
-                          }}
-                        >
-                          {t(printSizeLabel(_size))}
-                        </Button>
+                        </div>
                       );
-                    })}
-                  </Group>
+                    }
+                  })()}
+
+                  {printSettings.showThanks && (
+                    <div className="printer-footer">
+                      <p className="ta-center">{t("thanks_customer")}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Card>
+
+            <Card withBorder shadow="none" p={10}>
+              <Group align="center" justify="space-around" gap={16}>
+                <Switch
+                  label="Logo"
+                  defaultChecked={printSettings.showLogo}
+                  onChange={(e) => {
+                    const _checked = e.target.checked;
+                    changePrintSettings({ ...printSettings, showLogo: _checked });
+                  }}
+                />
+
+                <Switch
+                  label={t("address")}
+                  defaultChecked={printSettings.showAddress}
+                  onChange={(e) => {
+                    const _checked = e.target.checked;
+                    changePrintSettings({ ...printSettings, showAddress: _checked });
+                  }}
+                />
+
+                <Switch
+                  label={t("cashier")}
+                  defaultChecked={printSettings.showCashier}
+                  onChange={(e) => {
+                    const _checked = e.target.checked;
+                    changePrintSettings({ ...printSettings, showCashier: _checked });
+                  }}
+                />
+
+                <Switch
+                  label={t("show_currency")}
+                  defaultChecked={printSettings.showCurrency}
+                  onChange={(e) => {
+                    const _checked = e.target.checked;
+                    changePrintSettings({ ...printSettings, showCurrency: _checked });
+                  }}
+                />
+
+                <Switch
+                  label={capitalize(`${t("show")} ${t("customer")}`)}
+                  defaultChecked={printSettings.showCustomer}
+                  onChange={(e) => {
+                    const _checked = e.target.checked;
+                    changePrintSettings({ ...printSettings, showCustomer: _checked });
+                  }}
+                />
+
+                {props.bankQrCode && (
+                  <Switch
+                    label={t("payment_code")}
+                    defaultChecked={printSettings.showBankQrCode}
+                    onChange={(e) => {
+                      const _checked = e.target.checked;
+                      changePrintSettings({ ...printSettings, showBankQrCode: _checked });
+                    }}
+                  />
+                )}
+
+                <Group gap={5} justify="center">
+                  <ThemeIcon variant="transparent" color="dark">
+                    <IconDimensions size={25} strokeWidth={1.2} />
+                  </ThemeIcon>
+
+                  {Object.values(PrintSize).map((_size) => {
+                    return (
+                      <Button
+                        key={_size}
+                        variant={_size === printSettings.size ? "filled" : "outline"}
+                        color="dark"
+                        size="compact-md"
+                        fz={em(15)}
+                        fw={400}
+                        onClick={() => {
+                          changePrintSettings({ ...printSettings, size: _size });
+                        }}
+                      >
+                        {t(printSizeLabel(_size))}
+                      </Button>
+                    );
+                  })}
                 </Group>
-              </Card>
-
-              <Group justify="center" mt={16}>
-                <Button miw={200} onClick={handlePrint} type="submit" leftSection={<IconPrinter size={18} />}>
-                  {t("quick_print")}
-                </Button>
               </Group>
+            </Card>
 
-              <Anchor ta="center" onClick={close} fz={12} c="gray">
-                {t("exit")}
-              </Anchor>
-            </Stack>
-          </>
+            <Group justify="center" mt={16}>
+              <Button
+                miw={200}
+                onClick={handlePrint}
+                type="submit"
+                leftSection={<IconPrinter size={18} />}
+              >
+                {t("quick_print")}
+              </Button>
+            </Group>
+
+            <Anchor ta="center" onClick={close} fz={12} c="gray">
+              {t("exit")}
+            </Anchor>
+          </Stack>
         );
       })()}
     </Modal>
@@ -649,7 +688,12 @@ export const PrintButton: FC<PrinterProps> = (props) => {
         <Divider orientation="vertical" />
 
         <Tooltip label={t("settings_and_preview")}>
-          <ActionIcon color="gray" w={40} variant="transparent" onClick={() => OnModalPrinter(props)}>
+          <ActionIcon
+            color="gray"
+            w={40}
+            variant="transparent"
+            onClick={() => OnModalPrinter(props)}
+          >
             <IconSettings size={18} />
           </ActionIcon>
         </Tooltip>

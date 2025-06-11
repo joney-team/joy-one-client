@@ -1,3 +1,5 @@
+"use client";
+
 import { WayPoint } from "@/components/way-point";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -7,7 +9,7 @@ import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { useList } from "@/utils/use-list.util";
 import { Center, Group, Loader, SimpleGrid, Stack } from "@mantine/core";
 import { IconList } from "@tabler/icons-react";
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { OrderTableProps } from "..";
 import { ProductCard } from "@/modules/products/product-card";
 import { useOrderTable } from "../order-table-context";
@@ -51,7 +53,7 @@ export const OrderTableProducts: FC<OrderTableProps> = () => {
   );
 
   return (
-    <>
+    <Fragment>
       <Group gap={8}>
         <OrderTableCtaCard
           label={t("all")}
@@ -105,6 +107,6 @@ export const OrderTableProducts: FC<OrderTableProps> = () => {
           onReached={() => products.fetch(false)}
         />
       </Stack>
-    </>
+    </Fragment>
   );
 };
