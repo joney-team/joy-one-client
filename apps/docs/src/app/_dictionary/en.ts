@@ -5,7 +5,7 @@ export default {
   backToTop: 'Scroll to top',
   lastUpdated: 'Last updated on',
   logo: {
-    title: 'React Hooks for Data Fetching'
+    title: 'Work management tool - Business management tool - Customer care tool'
   },
   // notFound: 'This page could not be found',
   poweredBy: 'Powered by',

@@ -7,7 +7,7 @@ RUN apk add --update \
   git python3 make g++ openssh-client
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/pwa/package.json ./apps/pwa/
+COPY apps/docs/package.json ./apps/docs/
 COPY packages/apis/package.json ./packages/apis/
 COPY packages/assets/package.json ./packages/assets/
 COPY packages/utils/package.json ./packages/utils/
@@ -26,16 +26,16 @@ RUN apk add --update \
 
 COPY --from=app-installer /app .
 
-RUN cd apps/pwa && pnpm build
+RUN cd apps/docs && pnpm build
 
 # Run-time
 FROM node:22-alpine AS runner
 WORKDIR /app
 
-COPY --from=app-builder /app/apps/pwa/.next/standalone .
-COPY --from=app-builder /app/apps/pwa/public ./apps/pwa/public
-COPY --from=app-builder /app/apps/pwa/.next/static ./apps/pwa/.next/static
+COPY --from=app-builder /app/apps/docs/.next/standalone .
+COPY --from=app-builder /app/apps/docs/public ./apps/docs/public
+COPY --from=app-builder /app/apps/docs/.next/static ./apps/docs/.next/static
 
 EXPOSE 3000
 
-CMD ["node", "apps/pwa/server.js"]
+CMD ["node", "apps/docs/server.js"]
