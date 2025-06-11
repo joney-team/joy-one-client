@@ -1,0 +1,75 @@
+@keyframes symbolLoader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.symbol-loader {
+  animation: symbolLoader 1s linear infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #dbdbdb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a0a1a1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #878888;
+}
+
+*::placeholder {
+  font-size: 80%;
+}
+
+.rbc-event-label {
+  font-size: 50%;
+  font-weight: 700;
+}
+
+.rbc-event {
+  overflow: auto !important;
+}
+
+.rbc-event::-webkit-scrollbar {
+  display: none;
+}
+
+.rbc-month-view {
+  height: 100vh;
+}
+
+.booking-form-calendar .rbc-time-header {
+  display: none;
+}
+
+.rbc-toolbar-label {
+  text-transform: capitalize;
+}
+
+.rbc-time-slot {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rbc-label {
+  font-size: 60%;
+  font-weight: 700;
+}
