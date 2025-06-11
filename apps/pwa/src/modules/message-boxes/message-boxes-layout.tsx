@@ -1,5 +1,6 @@
 "use client";
 
+import { type FC, type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { CommentsIllustration } from "@/components/illustrations/comments";
 import { useRouter } from "@/hooks/use-router";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
@@ -21,9 +22,8 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
 import { Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { useParams } from "next/navigation";
-import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 
-const Page: FC<PropsWithChildren> = (props) => {
+export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
   const [version, _forceUpdate] = useState(0);
   const forceUpdate = () => _forceUpdate((v) => v + 1);
   const workspace = useWorkspace();
@@ -124,7 +124,9 @@ const Page: FC<PropsWithChildren> = (props) => {
       if (isExisted && e.ref) {
         getMessageBox(e.ref)
           .then((data) => {
-            messageBoxes.current = messageBoxes.current.map((box) => (box._id === e.ref ? data : box));
+            messageBoxes.current = messageBoxes.current.map((box) =>
+              box._id === e.ref ? data : box
+            );
             forceUpdate();
           })
           .catch(() => {});
@@ -168,7 +170,11 @@ const Page: FC<PropsWithChildren> = (props) => {
             const index = messageBoxIds.current.findIndex((b) => b === box._id);
             const previousBoxId = messageBoxIds.current[index - 1];
             const nextBoxId = messageBoxIds.current[index + 1];
-            router.push(previousBoxId || nextBoxId ? `/message-boxes/${previousBoxId || nextBoxId}` : "/message-boxes");
+            router.push(
+              previousBoxId || nextBoxId
+                ? `/message-boxes/${previousBoxId || nextBoxId}`
+                : "/message-boxes"
+            );
           }
 
           messageBoxIds.current = messageBoxIds.current.filter((id) => id !== box._id);
@@ -222,11 +228,18 @@ const Page: FC<PropsWithChildren> = (props) => {
               <Card style={{ height: contentHeight }} shadow="xs" flex={1} p={0}>
                 {messageBoxIds.current.length > 0 ? (
                   <>
-                    <Stack gap={0} style={{ height: contentHeight, overflow: "hidden" }} align="stretch">
+                    <Stack
+                      gap={0}
+                      style={{ height: contentHeight, overflow: "hidden" }}
+                      align="stretch"
+                    >
                       <MessageBoxTabs />
 
                       <Stack flex={1} w="100%" gap={0}>
-                        <Group style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }} w="100%">
+                        <Group
+                          style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+                          w="100%"
+                        >
                           {messageBox && <MessageBoxHead key={messageBox._id} />}
                         </Group>
 
@@ -235,7 +248,12 @@ const Page: FC<PropsWithChildren> = (props) => {
                     </Stack>
                   </>
                 ) : (
-                  <Stack style={{ height: contentHeight, overflow: "hidden" }} w="100%" justify="center" align="center">
+                  <Stack
+                    style={{ height: contentHeight, overflow: "hidden" }}
+                    w="100%"
+                    justify="center"
+                    align="center"
+                  >
                     <CommentsIllustration width={300} />
                     <Text ta="center" c="gray" fz={12}>
                       {t("message_box_no_conversations")}
@@ -252,5 +270,3 @@ const Page: FC<PropsWithChildren> = (props) => {
     </MessageBoxesContext.Provider>
   );
 };
-
-export default Page;

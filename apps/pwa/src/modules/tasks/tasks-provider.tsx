@@ -43,7 +43,9 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
   const views = Object.values(TaskView);
 
   const viewFromPathname = router.pathname.split("/")[2] as TaskView;
-  const view = Object.values(TaskView).includes(viewFromPathname) ? viewFromPathname : TaskView.LIST;
+  const view = Object.values(TaskView).includes(viewFromPathname)
+    ? viewFromPathname
+    : TaskView.LIST;
 
   const setView = (view: TaskView) => {
     localStorage.setItem("tasks_view", view);
@@ -111,7 +113,9 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const removeSelectedTasks = (specificTaskIds?: string[]) => {
-    _setSelectedTaskIds(specificTaskIds ? (s) => s.filter((v) => !specificTaskIds.includes(v)) : []);
+    _setSelectedTaskIds(
+      specificTaskIds ? (s) => s.filter((v) => !specificTaskIds.includes(v)) : []
+    );
   };
 
   const toggleSelectTask = (taskId: string, isShiftKey?: boolean) => {
@@ -139,7 +143,9 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
       );
       _setSelectedTaskIds((s) => [...new Set([...s, ...output])]);
     } else {
-      _setSelectedTaskIds((v) => (v.includes(taskId) ? v.filter((v) => v !== taskId) : [...v, taskId]));
+      _setSelectedTaskIds((v) =>
+        v.includes(taskId) ? v.filter((v) => v !== taskId) : [...v, taskId]
+      );
     }
   };
 
@@ -169,7 +175,10 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
         setState,
         tagFolder,
         isInitialized,
-        tagFolders: tags.list.filter((v) => v.type === TagType.TASK_FOLDER),
+        tagFolders: tags.list.filter(
+          (v) =>
+            v.type === TagType.TASK_FOLDER && v.workspaceId === workspace.userMember?.workspaceId
+        ),
         statuses: workspace.settings?.taskStatuses || [],
         open,
         openFolder,

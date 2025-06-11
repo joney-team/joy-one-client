@@ -56,8 +56,8 @@ const TagsProvider: FC<PropsWithChildren> = (props) => {
   });
 
   useEffect(() => {
-    if (workspace.userMember?.userId) fetch();
-  }, [workspace.userMember?.userId]);
+    if (workspace.userMember?.workspaceId) fetch();
+  }, [workspace.userMember?.workspaceId]);
 
   return <Context.Provider value={contextValue}>{props.children}</Context.Provider>;
 };
