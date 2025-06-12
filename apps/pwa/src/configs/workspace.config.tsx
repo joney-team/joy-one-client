@@ -89,7 +89,7 @@ export const workspaceSettingNavs: WorkspaceSettingCardProps[] = [
   },
   {
     name: "workspaceSettingsMessages",
-    description: "WorkspaceSettingsMessagesDesc",
+    description: "workspaceSettingsMessagesDesc",
     icon: IconMessage2Cog,
     color: "yellow",
     href: "/workspace-settings/messages",
