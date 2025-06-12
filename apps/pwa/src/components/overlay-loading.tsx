@@ -1,4 +1,6 @@
-import { FC } from "react";
+import { useApp } from "@/app.context";
+import { Loader } from "@mantine/core";
+import { type FC } from "react";
 import { Animate } from "./animate/animate";
 
 interface OverlayLoadingProps {
@@ -7,6 +9,7 @@ interface OverlayLoadingProps {
 
 const OverlayLoading: FC<OverlayLoadingProps> = (props) => {
   const loading = props.enabled;
+  const app = useApp();
 
   return (
     <div
@@ -32,7 +35,29 @@ const OverlayLoading: FC<OverlayLoadingProps> = (props) => {
           padding: 30,
         }}
       >
-        <Animate src="/animate/symbol.json" style={{ width: 80 }} />
+        {app.metadata.isExtended ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <img
+              src={app.metadata.appIcon}
+              style={{
+                width: 100,
+                height: 100,
+              }}
+            />
+
+            <Loader size="sm" type="dots" />
+          </div>
+        ) : (
+          <Animate src="/animate/symbol.json" style={{ width: 80 }} />
+        )}
       </div>
     </div>
   );

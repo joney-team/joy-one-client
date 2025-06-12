@@ -20,13 +20,17 @@ export const CustomerKycList: FC = () => {
   });
 
   useEventsListener(
-    [EventType.CUSTOMER_KYC_APPROVED, EventType.CUSTOMER_KYC_REJECTED, EventType.CUSTOMER_KYC_PENDING],
+    [
+      EventType.CUSTOMER_KYC_APPROVED,
+      EventType.CUSTOMER_KYC_REJECTED,
+      EventType.CUSTOMER_KYC_PENDING,
+    ],
     () => kycs.fetch(true, { isSilient: true })
   );
 
   return (
     <InfiniteScroll loadMore={() => kycs.fetch()} hasMore={kycs.isAbleToLoadMore}>
-      <Stack gap={16}>
+      <Stack gap={16} p={16}>
         <Group gap={5}>
           <ButtonSelect
             label="Trạng thái"

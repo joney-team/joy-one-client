@@ -105,7 +105,12 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
         justify={workspaceLayout.isNavbarCollapsed ? "center" : "space-between"}
         wrap="nowrap"
         {...props.targetProps}
-        style={{ ...props.targetProps?.style, cursor: "pointer", userSelect: "none" }}
+        style={{
+          ...props.targetProps?.style,
+          cursor: "pointer",
+          userSelect: "none",
+          overflow: "hidden",
+        }}
         onClick={open}
       >
         <Avatar
