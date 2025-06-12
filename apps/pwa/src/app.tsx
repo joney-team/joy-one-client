@@ -14,6 +14,7 @@ import { eventsEmitter } from "./modules/events/event-service";
 import { type EventEntity } from "./modules/events/event-types";
 import { getAppConfig } from "./service";
 import type { AppConfig, AppMetadata } from "./types";
+import { v4 as uuid } from "uuid";
 
 const LangProvider = dynamic(() => import("@/modules/lang/lang-provider"));
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
@@ -34,6 +35,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
           const global = getGlobal();
           const config = await getAppConfig();
           global._appConfig = config;
+          global._sessionId = uuid();
           setConfig(config);
           resolve(config);
         } catch (error) {
