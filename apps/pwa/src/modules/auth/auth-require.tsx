@@ -84,7 +84,7 @@ export const AuthRequire: FC = () => {
         <Stack mih={layout.height} w={layout.width} p={16}>
           <Group justify="space-between" wrap="nowrap">
             <Group align="center" wrap="nowrap">
-              {app.metadata.appIcon ? (
+              {app.metadata.isExtended ? (
                 <Image src={app.metadata.appIcon} h={45} w={45} />
               ) : (
                 <Animate src="/animate/symbol-idle.json" style={{ width: 45, height: 45 }} />

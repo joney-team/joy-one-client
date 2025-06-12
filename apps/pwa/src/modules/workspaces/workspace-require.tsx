@@ -49,7 +49,7 @@ import { useApp } from "../../app.context";
 import { api } from "../apis";
 import { getUserMemberRoleLabel } from "../workspace-members/workspace-members-service";
 
-export const RequireWorkspace: FC<{ workspace: WorkspaceContext }> = (props) => {
+export const WorkspaceRequire: FC<{ workspace: WorkspaceContext }> = (props) => {
   useCloseAppLoading();
 
   const { workspace } = props;

@@ -55,7 +55,7 @@ import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from "rea
 import { api } from "../apis";
 import { Context } from "./workspace-context";
 import { getWorkspaceModuleName, WorkspaceModuleId, workspaceModules } from "./workspace-modules";
-import { RequireWorkspace } from "./workspace-require";
+import { WorkspaceRequire } from "./workspace-require";
 import { getDefaultWorkspaceView } from "./workspace-view";
 import {
   WorkspaceContext,
@@ -438,6 +438,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       state.current.userMembers = [];
       state.current.activatedWorkspaceId = undefined;
       localStorage.removeItem(StorageKey.WORKSPACE_ID);
+      _setIsInitialized(false);
     }
   }, [auth.user?._id, isInitialized]);
 
@@ -538,7 +539,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const Component = useMemo(() => {
     if (!isInitialized || !auth.user) return null;
     if (inviteCode) return <WorkspaceInvitation inviteCode={inviteCode} />;
-    if (!userMember) return <RequireWorkspace workspace={contextValue} />;
+    if (!userMember) return <WorkspaceRequire workspace={contextValue} />;
     if (isRequireBranches) return <WorkspaceRequireBranches workspace={contextValue} />;
     if (userMember.workspace.isArchived) return <WorkspaceArchived workspace={contextValue} />;
   }, [isInitialized, inviteCode, userMember, isRequireBranches, auth.user]);
