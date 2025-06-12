@@ -10,20 +10,32 @@ import { useLayout } from "./layout-context";
 import { WorkspaceNavigationSplitter } from "./navigation/navigation-splitter";
 import { backgroundColors, backgroundPatternColors } from "@joy-one-client/config/colors";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+
+const SuspenseFallback = () => {
+  return (
+    <Stack p={8} w="100%" h="100%">
+      <Skeleton h="100%" w="100%" />
+    </Stack>
+  );
+};
 
 const AppNavigation = dynamic(
   () => import("./navigation/navigation").then((m) => m.AppNavigation),
   {
     ssr: false,
+    loading: () => <SuspenseFallback />,
   }
 );
 
 const WorkspaceHeader = dynamic(() => import("./header/header").then((m) => m.WorkspaceHeader), {
   ssr: false,
+  loading: () => <SuspenseFallback />,
 });
 
 export const LayoutWorkspace: FC = () => {
   const layout = useLayout();
+  const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
   const colorScheme = useColorScheme();
   const _pinned = useHeadroom({
@@ -81,9 +93,11 @@ export const LayoutWorkspace: FC = () => {
               }
         }
       >
-        <Suspense fallback={<Skeleton h="100%" w="100%" />}>
-          <WorkspaceHeader />
-        </Suspense>
+        {workspace.isAvailable && (
+          <Suspense fallback={<SuspenseFallback />}>
+            <WorkspaceHeader />
+          </Suspense>
+        )}
       </Stack>
 
       <Stack
@@ -114,9 +128,11 @@ export const LayoutWorkspace: FC = () => {
               }
         }
       >
-        <Suspense fallback={<Skeleton h="100%" w="100%" />}>
-          <AppNavigation />
-        </Suspense>
+        {workspace.isAvailable && (
+          <Suspense fallback={<SuspenseFallback />}>
+            <AppNavigation />
+          </Suspense>
+        )}
       </Stack>
 
       <WorkspaceNavigationSplitter />

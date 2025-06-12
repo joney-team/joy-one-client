@@ -31,7 +31,11 @@ export function Layout<P>({ component: Component, nested, ...props }: LayoutProp
 
   if (!workspace.userMember && routeRule.auth === "workspace") return props.children;
   if (!auth.user && routeRule.auth === "auth") return props.children;
-  if (nested) return <Component {...componentProps}>{props.children}</Component>;
+
+  if (nested) {
+    if (!workspace.isAvailable) return props.children;
+    return <Component {...componentProps}>{props.children}</Component>;
+  }
 
   return (
     <Fragment>
