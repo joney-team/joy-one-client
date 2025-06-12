@@ -16,10 +16,12 @@ export const Sort: FC<ListContext> = (props) => {
 
   if (columnSettings.every((col) => !columns[col.id]?.isSortable)) return null;
 
-  const sorting = columnSettings.filter((col) => list.query[`sort${capitalizeFirstLetter(col.id)}`]);
+  const sorting = columnSettings.filter(
+    (col) => list.query[`sort${capitalizeFirstLetter(col.id, false)}`]
+  );
 
   const onReset = () => {
-    list.removeQueries(sorting.map((col) => `sort${capitalizeFirstLetter(col.id)}`));
+    list.removeQueries(sorting.map((col) => `sort${capitalizeFirstLetter(col.id, false)}`));
   };
 
   return (

@@ -101,5 +101,5 @@ export function getListDataId<T = any>(data: T): string {
 }
 
 export function getSortQueryKey(colId: string) {
-  return `sort${capitalizeFirstLetter(colId)}`;
+  return `sort${capitalizeFirstLetter(colId, false)}`;
 }

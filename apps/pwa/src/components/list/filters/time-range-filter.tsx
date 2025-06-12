@@ -20,7 +20,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
   list,
   Wrapper,
 }) => {
-  const filterKey = `timeRange${capitalizeFirstLetter(colKey)}`;
+  const filterKey = `timeRange${capitalizeFirstLetter(colKey, false)}`;
   const filterValue = list.query[filterKey] || "";
   const [period, date] = filterValue.split("-");
 

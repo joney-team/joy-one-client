@@ -52,9 +52,9 @@ export const limitCharacters = (text: string, length: number, subfix = '...'): s
   return string
 }
 
-export const capitalizeFirstLetter = (str: string): string => {
+export const capitalizeFirstLetter = (str: string, lowercaseAll = true): string => {
   if (!str) return ''
-  const strValue = str.toLowerCase()
+  const strValue = lowercaseAll ? str.toLowerCase() : str
   return strValue.charAt(0).toUpperCase() + strValue.slice(1)
 }
 
