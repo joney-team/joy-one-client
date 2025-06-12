@@ -1,5 +1,8 @@
 import { type FC } from "react";
-import { TextInput as MantineTextInput, type TextInputProps as MantineTextInputProps } from "@mantine/core";
+import {
+  TextInput as MantineTextInput,
+  type TextInputProps as MantineTextInputProps,
+} from "@mantine/core";
 
 interface TextInputProps extends MantineTextInputProps {
   label?: MantineTextInputProps["label"];
@@ -7,5 +10,5 @@ interface TextInputProps extends MantineTextInputProps {
 }
 
 export const TextInput: FC<TextInputProps> = ({ value, ref, ...props }) => {
-  return <MantineTextInput {...props} value={value ?? ""} ref={ref} />;
+  return <MantineTextInput {...props} ref={ref} />;
 };

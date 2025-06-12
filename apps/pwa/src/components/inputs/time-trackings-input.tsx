@@ -381,9 +381,7 @@ export const TimeTrackingForm: FC<{
 
   useEffect(() => {
     setTimeout(() => {
-      if (timeTrackingRef.current) {
-        timeTrackingRef.current.focus();
-      }
+      timeTrackingRef.current?.focus();
     }, 300);
   }, []);
 
