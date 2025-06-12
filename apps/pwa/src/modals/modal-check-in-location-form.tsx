@@ -12,6 +12,7 @@ import { t } from "@/modules/lang/lang-service";
 import { getGeolocation } from "@/modules/locations/locations-service";
 import { onActionLoad } from "@/utils/actions";
 import { useDisclosure } from "@mantine/hooks";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 interface ModalCheckInLocationFormProps {
   checkInLocation?: CheckInLocation;
@@ -61,7 +62,7 @@ export const ModalCheckInLocationForm: FC = () => {
       onClose={close}
       title={<ModalTitle title={t("check_in_location")} icon={IconMapPin} />}
       yOffset={16}
-      zIndex={350}
+      zIndex={zIndexes.modals}
     >
       <Stack>
         <TextInput
@@ -76,7 +77,7 @@ export const ModalCheckInLocationForm: FC = () => {
 
           <NumberInput label="Longitude" {...form.getInputProps("coordinates.lng")} />
 
-          <Tooltip label={t("positioning")} zIndex={350}>
+          <Tooltip label={t("positioning")} zIndex={zIndexes.modals + 1}>
             <ActionIcon
               w={36}
               h={36}

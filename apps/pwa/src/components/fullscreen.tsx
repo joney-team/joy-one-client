@@ -1,7 +1,11 @@
 import { Stack } from "@mantine/core";
 import { type FC, type PropsWithChildren } from "react";
 
-export const Fullscreen: FC<PropsWithChildren> = (props) => {
+interface FullscreenProps extends PropsWithChildren {
+  zIndex?: number;
+}
+
+export const Fullscreen: FC<FullscreenProps> = (props) => {
   return (
     <Stack
       bg="var(--mantine-color-body)"
@@ -12,7 +16,11 @@ export const Fullscreen: FC<PropsWithChildren> = (props) => {
       left={0}
       right={0}
       bottom={0}
-      style={{ zIndex: 500, overflowY: "scroll", overflowX: "hidden" }}
+      style={{
+        zIndex: typeof props.zIndex === "number" ? props.zIndex : 10,
+        overflowY: "scroll",
+        overflowX: "hidden",
+      }}
     >
       {props.children}
     </Stack>

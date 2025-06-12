@@ -16,7 +16,6 @@ interface WorkspaceLayoutState {
   bodyWidth: number;
   bodyHeight: number;
   pannelBackground: string;
-  pannelZIndex: number;
   transition: (property?: string) => string;
 }
 
@@ -62,7 +61,6 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
     setNavigationWidth: (width: number) => setNavigationWidthStorage(width.toString()),
     dividerColor: color({ light: "gray.2", dark: "dark.5" }),
     pannelBackground: color({ light: "white", dark: "dark.8" }),
-    pannelZIndex: 100,
     transition: (property) => `${property || "all"} 0.2s ease-out`,
   };
 };

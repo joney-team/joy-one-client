@@ -6,6 +6,7 @@ import { useMouse } from "@mantine/hooks";
 import { FC, Fragment, LegacyRef, useEffect, useRef, useState } from "react";
 import { useWorkspaceLayout } from "../hooks/use-workspace-layout";
 import { useLayout } from "../layout-context";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 const config = {
   minNavigationWidth: 60,
@@ -33,7 +34,7 @@ const SplitPointer: FC<{ ref: LegacyRef<HTMLDivElement> | undefined }> = (props)
         right={0}
         bottom={0}
         bg="transparent"
-        style={{ zIndex: 100 }}
+        style={{ zIndex: zIndexes.pannel + 1 }}
       />
       <Stack
         ref={props.ref}
@@ -46,7 +47,7 @@ const SplitPointer: FC<{ ref: LegacyRef<HTMLDivElement> | undefined }> = (props)
         bg={color("primary.7")}
         style={{
           left: width,
-          zIndex: workspaceLayout.pannelZIndex + 1,
+          zIndex: zIndexes.pannel + 1,
           transform: "translateX(-50%)",
           cursor: "col-resize",
         }}
@@ -94,7 +95,7 @@ export const WorkspaceNavigationSplitter: FC = () => {
         opacity={isHovering ? 0.5 : 0}
         style={{
           left: `${(workspaceLayout.navigationWidth / layout.width) * 100}%`,
-          zIndex: workspaceLayout.pannelZIndex + 1,
+          zIndex: zIndexes.pannel + 1,
           top: 0,
           transform: "translateX(-50%)",
           cursor: "col-resize",

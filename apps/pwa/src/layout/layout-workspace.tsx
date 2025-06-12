@@ -9,6 +9,7 @@ import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 import { WorkspaceNavigationSplitter } from "./navigation/navigation-splitter";
 import { backgroundColors, backgroundPatternColors } from "@joy-one-client/config/colors";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 const AppNavigation = dynamic(
   () => import("./navigation/navigation").then((m) => m.AppNavigation),
@@ -62,7 +63,7 @@ export const LayoutWorkspace: FC = () => {
                 right: 0,
                 width: "100dvw",
                 height: workspaceLayout.headerHeight,
-                zIndex: 10,
+                zIndex: zIndexes.pannel,
                 borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
                 transform: `translate3d(0, ${pinned ? 0 : "-110px"}, 0)`,
                 transition: workspaceLayout.transition("all"),
@@ -73,7 +74,7 @@ export const LayoutWorkspace: FC = () => {
                 width: "100dvw",
                 height: workspaceLayout.headerHeight,
                 paddingLeft: workspaceLayout.navigationWidth,
-                zIndex: 10,
+                zIndex: zIndexes.pannel,
                 borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
                 transform: `translate3d(0, ${pinned ? 0 : "-110px"}, 0)`,
                 transition: workspaceLayout.transition("all"),
@@ -94,6 +95,7 @@ export const LayoutWorkspace: FC = () => {
             ? {
                 bottom: 0,
                 left: 0,
+                zIndex: zIndexes.pannel,
                 height: workspaceLayout.navigationHeight,
                 width: "100dvw",
                 transform: `translate3d(0, ${pinned ? 0 : "110px"}, 0)`,
@@ -107,7 +109,7 @@ export const LayoutWorkspace: FC = () => {
                 left: 0,
                 width: workspaceLayout.navigationWidth,
                 height: workspaceLayout.navigationHeight,
-                zIndex: 10,
+                zIndex: zIndexes.pannel,
                 borderRight: `1px solid ${workspaceLayout.dividerColor}`,
               }
         }

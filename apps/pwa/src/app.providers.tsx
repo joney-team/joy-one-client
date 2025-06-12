@@ -14,6 +14,7 @@ import { SearchEngine } from "@/modules/search/search-engine";
 import TagsProvider from "@/modules/tags/tags-provider";
 import { generateTheme } from "@/modules/theme/generator";
 import WorkspaceProvider from "@/modules/workspaces/workspace-provider";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { MantineProvider } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import { ModalsProvider } from "@mantine/modals";
@@ -57,7 +58,7 @@ const AppProviders: FC<PropsWithChildren> = (props) => {
         </AuthProvider>
 
         <OverlayResizing />
-        <Notifications position="top-right" />
+        <Notifications position="top-right" zIndex={zIndexes.notifications} />
       </DatesProvider>
     </MantineProvider>
   );

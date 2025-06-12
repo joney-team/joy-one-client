@@ -2,6 +2,7 @@ import { useApp } from "@/app.context";
 import { Loader } from "@mantine/core";
 import { type FC } from "react";
 import { Animate } from "./animate/animate";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 interface OverlayLoadingProps {
   enabled?: boolean;
@@ -19,7 +20,7 @@ const OverlayLoading: FC<OverlayLoadingProps> = (props) => {
         left: 0,
         width: "100dvw",
         height: "100dvh",
-        zIndex: loading ? 9999 : -10,
+        zIndex: loading ? zIndexes.screenOverlay : -10,
         opacity: loading ? 1 : 0,
         visibility: loading ? "visible" : "hidden",
         background: "var(--mantine-color-body)",

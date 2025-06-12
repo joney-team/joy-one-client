@@ -4,6 +4,7 @@ import { t } from "@/modules/lang/lang-service";
 import { Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconResize } from "@tabler/icons-react";
 import { FC } from "react";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 const OverlayResizing: FC = () => {
   const layout = useLayout();
@@ -21,7 +22,7 @@ const OverlayResizing: FC = () => {
         left: 0,
         width: "100dvw",
         height: "100dvh",
-        zIndex: 9999,
+        zIndex: zIndexes.screenOverlay,
         background: "var(--mantine-color-body)",
       }}
     >

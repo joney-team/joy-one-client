@@ -19,6 +19,7 @@ import {
 import { useClipboard, useDisclosure } from "@mantine/hooks";
 import { IconCopy, IconShare2, IconX } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 interface ModalShareLinkState {
   task?: TaskEntity;
@@ -43,7 +44,13 @@ export const ModalSharelink: FC = () => {
   };
 
   return (
-    <Modal opened={opened} onClose={close} withCloseButton={false} zIndex={500} yOffset={100}>
+    <Modal
+      opened={opened}
+      onClose={close}
+      withCloseButton={false}
+      zIndex={zIndexes.modals + 1}
+      yOffset={100}
+    >
       <Stack>
         <Group justify="space-between">
           <Group gap={10}>

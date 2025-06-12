@@ -6,6 +6,7 @@ import { FC, PropsWithChildren, createContext, useContext, useRef, useState } fr
 import { Camera } from "./camera";
 import { onError } from "@/utils/exceptions.utils";
 import { Scanner } from "./camera-scanner";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 interface ScanArgs {
   onCaputure: (data: string) => Promise<boolean | void> | void | boolean;
@@ -74,7 +75,7 @@ const CameraProvider: FC<PropsWithChildren> = ({ children }) => {
             left: 0,
             width: viewport.width,
             height: viewport.height,
-            zIndex: 1000,
+            zIndex: zIndexes.camera,
             background: "black",
           }}
         >

@@ -7,9 +7,17 @@ import { parseFile, renderLink } from "@/modules/files/files-utils";
 import { num, t } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { ActionIcon, Anchor, em, Group, Modal, SimpleGrid, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconBrowser, IconChevronLeft, IconChevronRight, IconDownload, IconTrash, IconX } from "@tabler/icons-react";
+import {
+  IconBrowser,
+  IconChevronLeft,
+  IconChevronRight,
+  IconDownload,
+  IconTrash,
+  IconX,
+} from "@tabler/icons-react";
 import { FC, useState } from "react";
 
 interface ModalFileGalleryProps {
@@ -57,7 +65,9 @@ export const ModalFileGallery: FC = () => {
     await removeFile(activeFile._id)
       .then(async () => {
         if (!props) return;
-        const files = props.files.filter((v) => typeof v === "object" && v._id !== activeFile._id) as FileEntity[];
+        const files = props.files.filter(
+          (v) => typeof v === "object" && v._id !== activeFile._id
+        ) as FileEntity[];
         await props?.onRemoved?.();
         if (files.length === 0) return close();
         setProps({ ...props, files });
@@ -69,7 +79,8 @@ export const ModalFileGallery: FC = () => {
     if (!activeFile || typeof activeFile === "string") return;
     await onActionLoad({
       name: "Đang tải file xuống",
-      process: () => downloadFileFromURL(renderLink(activeFile.url), activeFile.fileName || _file.name),
+      process: () =>
+        downloadFileFromURL(renderLink(activeFile.url), activeFile.fileName || _file.name),
     });
   };
 
@@ -85,7 +96,7 @@ export const ModalFileGallery: FC = () => {
           overflow: "hidden",
         },
       }}
-      zIndex={300}
+      zIndex={zIndexes.modals}
     >
       <Group h={head} justify="space-between" px={16} bg="dark.7" wrap="nowrap" w="100%">
         <SimpleGrid cols={3} w="100%">
@@ -94,7 +105,11 @@ export const ModalFileGallery: FC = () => {
           </Text>
 
           <Group justify="center" wrap="nowrap" w="100%">
-            <ActionIcon color={index === 0 ? "gray.8" : "white"} variant="transparent" onClick={onPrev}>
+            <ActionIcon
+              color={index === 0 ? "gray.8" : "white"}
+              variant="transparent"
+              onClick={onPrev}
+            >
               <IconChevronLeft />
             </ActionIcon>
             <Text c="white">
@@ -164,7 +179,9 @@ export const ModalFileGallery: FC = () => {
               </Text>
 
               <Anchor href={renderLink(activeFile.url)} target="__blank" c="white" ta="center">
-                <Button rightSection={<IconBrowser strokeWidth={1.5} />}>{t("open_with_browser")}</Button>
+                <Button rightSection={<IconBrowser strokeWidth={1.5} />}>
+                  {t("open_with_browser")}
+                </Button>
               </Anchor>
             </Stack>
           );

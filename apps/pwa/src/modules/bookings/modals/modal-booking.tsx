@@ -42,6 +42,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
 import dayjs from "dayjs";
 import { FC, Fragment, useEffect, useState } from "react";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 interface ModalBookingProps {
   onDone?: (booking: BookingEntity) => any | Promise<any>;
@@ -360,7 +361,7 @@ export const OnModalBooking = (props?: ModalBookingProps) => {
     ),
     children: <ModalBooking {...props} />,
     fullScreen: getView() === "mobile",
-    zIndex: 100,
+    zIndex: zIndexes.modals,
     size: props?.booking ? undefined : 1200,
     yOffset: 15,
   });

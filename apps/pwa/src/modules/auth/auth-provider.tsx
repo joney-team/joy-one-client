@@ -5,6 +5,7 @@ import { Fullscreen } from "@/components/fullscreen";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
 import { defaultMetadata, setMetadata } from "@/configs/metadata.config";
 import { useRouter, useRouteRule } from "@/hooks/use-router";
+import { zIndexes } from "@joy-one-client/config/layout";
 import {
   initializeDevice,
   setDeviceLocale,
@@ -384,7 +385,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   return (
     <Context.Provider value={ctx}>
       {isInitialized && !user && routeRule.auth !== "public" && (
-        <Fullscreen>
+        <Fullscreen zIndex={zIndexes.requireAuth}>
           <AuthRequire />
         </Fullscreen>
       )}

@@ -1,6 +1,7 @@
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { ActionIcon, Group, Menu, useMantineColorScheme } from "@mantine/core";
+import { zIndexes } from "@joy-one-client/config/layout";
+import { ActionIcon, Menu, useMantineColorScheme } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
 import { IconAutomation, IconMoon, IconSun } from "@tabler/icons-react";
 import { FC } from "react";
@@ -11,9 +12,14 @@ export const ColorSchemes: FC = () => {
   const color = useColor();
 
   return (
-    <Menu zIndex={501}>
+    <Menu zIndex={zIndexes.requireAuth + 1}>
       <Menu.Target>
-        <ActionIcon size={30} color="var(--mantine-color-text)" variant="subtle" aria-label="Toggle color scheme">
+        <ActionIcon
+          size={30}
+          color="var(--mantine-color-text)"
+          variant="subtle"
+          aria-label="Toggle color scheme"
+        >
           {actualColorScheme === "light" && <IconSun size={20} />}
           {actualColorScheme === "dark" && <IconMoon size={20} />}
         </ActionIcon>

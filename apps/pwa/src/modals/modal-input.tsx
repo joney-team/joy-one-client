@@ -9,6 +9,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
+import { zIndexes } from "@joy-one-client/config/layout";
 import {
   Anchor,
   Group,
@@ -128,7 +129,7 @@ export const ModalInput: FC = () => {
       onClose={close}
       opened={opened}
       yOffset={16}
-      zIndex={300}
+      zIndex={zIndexes.modals + 1}
     >
       <form onSubmit={onSubmit}>
         <Stack gap={16}>

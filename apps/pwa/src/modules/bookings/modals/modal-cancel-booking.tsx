@@ -3,6 +3,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { cancelBooking } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { onError } from "@/utils/exceptions.utils";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -51,6 +52,6 @@ export const OnModalCancelBooking = (props: ModalCancelBookingProps) => {
     modalId: "cancel-booking",
     title: <ModalTitle color="red" title="Huỷ hẹn" icon={IconCalendarMinus} />,
     children: <ModalCancelBooking {...props} />,
-    zIndex: 100,
+    zIndex: zIndexes.modals,
   });
 };

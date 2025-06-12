@@ -18,6 +18,7 @@ import { loadImage } from "@/utils/asset.utils";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize, uppercase } from "@/utils/string.utils";
+import { zIndexes } from "@joy-one-client/config/layout";
 import {
   ActionIcon,
   Anchor,
@@ -187,7 +188,7 @@ export const ModalPrinter: FC = () => {
       opened={opened}
       onClose={close}
       title={<ModalTitle title={getTitle()} icon={IconPrinter} />}
-      zIndex={300}
+      zIndex={zIndexes.modals + 1}
       yOffset={10}
       fullScreen={viewport.view === "mobile"}
       size="xl"

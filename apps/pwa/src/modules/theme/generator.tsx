@@ -1,9 +1,18 @@
 import { type AppMetadata } from "@/types";
 import { primaryColors } from "@joy-one-client/config/colors";
-import { ComboboxItem, createTheme, em, InputWrapper, Notification, OptionsFilter } from "@mantine/core";
+import {
+  ComboboxItem,
+  createTheme,
+  em,
+  InputWrapper,
+  Modal,
+  Notification,
+  OptionsFilter,
+} from "@mantine/core";
 import { LayoutContext } from "../../layout/layout-context";
 import { StringUtils } from "../../utils/string.utils";
 import { getLocaleConfig } from "../lang/lang-service";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 export const getColorShape = (shape?: number) => {
   if (typeof shape === "number" && shape >= 0 && shape <= 9) {
@@ -113,6 +122,11 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
           },
         },
       },
+      Modal: Modal.extend({
+        defaultProps: {
+          zIndex: zIndexes.modals,
+        },
+      }),
     },
   });
 };

@@ -9,6 +9,7 @@ import { DatePicker, DatePickerProps, DatesRangeValue } from "@mantine/dates";
 import { modals } from "@mantine/modals";
 import { IconCalendar } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 interface ModalDatePickerProps {
   period?: Period;
@@ -48,7 +49,9 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
               value={range}
               onChange={(range) => {
                 if (range[0]) {
-                  const _range = DateTimeUtils.getStartEndOfWeek(new Date(range[0]).getTime() + 1000 * 60);
+                  const _range = DateTimeUtils.getStartEndOfWeek(
+                    new Date(range[0]).getTime() + 1000 * 60
+                  );
                   setRange([new Date(_range.start), new Date(_range.end)]);
                 }
               }}
@@ -145,7 +148,9 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
         <Stack align="center" justify="center">
           <NumberInput
             id="year-input"
-            defaultValue={props.date ? new Date(props.date).getFullYear() : new Date().getFullYear()}
+            defaultValue={
+              props.date ? new Date(props.date).getFullYear() : new Date().getFullYear()
+            }
             thousandSeparator={false}
           />
 
@@ -279,6 +284,6 @@ export const OnModalDatePicker = (props: ModalDatePickerProps) => {
     ),
     children: <ModalDatePicker {...props} />,
     yOffset: 10,
-    zIndex: 900,
+    zIndex: zIndexes.modals + 1,
   });
 };

@@ -64,6 +64,7 @@ import {
   WorkspaceMemberInvitationState,
   WorkspaceType,
 } from "./workspaces-types";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
@@ -544,7 +545,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   return (
     <Context.Provider value={contextValue}>
-      {Component && <Fullscreen>{Component}</Fullscreen>}
+      {Component && <Fullscreen zIndex={zIndexes.requireWorkspace}>{Component}</Fullscreen>}
 
       {props.children}
       <ConnectMetaPagesModal />
