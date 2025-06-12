@@ -4,7 +4,7 @@ import { useApp } from "@/app.context";
 import { Fullscreen } from "@/components/fullscreen";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
 import { defaultMetadata, setMetadata } from "@/configs/metadata.config";
-import { useRouter } from "@/hooks/use-router";
+import { useRouter, useRouteRule } from "@/hooks/use-router";
 import {
   initializeDevice,
   setDeviceLocale,
@@ -60,6 +60,7 @@ import { api } from "../apis";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
+  const routeRule = useRouteRule();
   const theme = useMantineTheme();
   const lang = useLang();
   const app = useApp();
@@ -382,7 +383,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   return (
     <Context.Provider value={ctx}>
-      {isInitialized && !user && (
+      {isInitialized && !user && routeRule.auth !== "public" && (
         <Fullscreen>
           <AuthRequire />
         </Fullscreen>

@@ -1,9 +1,9 @@
+import { useEffect, useRef, type FC } from "react";
 import { useApp } from "@/app.context";
 import OverlayLoading from "@/components/overlay-loading";
 import { useRouteRule } from "@/hooks/use-router";
 import { eventsEmitter } from "@/modules/events/event-service";
 import { useForceUpdate } from "@mantine/hooks";
-import { useEffect, useRef, type FC } from "react";
 
 export const closeAppLoading = () => {
   eventsEmitter.emit("app-loading", false);

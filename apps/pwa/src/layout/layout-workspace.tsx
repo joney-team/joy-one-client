@@ -8,6 +8,7 @@ import { Fragment, Suspense, useEffect, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 import { WorkspaceNavigationSplitter } from "./navigation/navigation-splitter";
+import { backgroundColors, backgroundPatternColors } from "@joy-one-client/config/colors";
 
 const AppNavigation = dynamic(
   () => import("./navigation/navigation").then((m) => m.AppNavigation),
@@ -19,16 +20,6 @@ const AppNavigation = dynamic(
 const WorkspaceHeader = dynamic(() => import("./header/header").then((m) => m.WorkspaceHeader), {
   ssr: false,
 });
-
-export const backgroundColors = {
-  light: "#f3f3f3",
-  dark: "#242424",
-};
-
-export const backgroundPatternColors = {
-  light: "#bcbcbc",
-  dark: "#3f3f3f",
-};
 
 export const LayoutWorkspace: FC = () => {
   const layout = useLayout();
