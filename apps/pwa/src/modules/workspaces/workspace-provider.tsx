@@ -541,7 +541,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     if (!userMember) return <RequireWorkspace workspace={contextValue} />;
     if (isRequireBranches) return <WorkspaceRequireBranches workspace={contextValue} />;
     if (userMember.workspace.isArchived) return <WorkspaceArchived workspace={contextValue} />;
-  }, [isInitialized, inviteCode, userMember, isRequireBranches]);
+  }, [isInitialized, inviteCode, userMember, isRequireBranches, auth.user]);
 
   return (
     <Context.Provider value={contextValue}>
