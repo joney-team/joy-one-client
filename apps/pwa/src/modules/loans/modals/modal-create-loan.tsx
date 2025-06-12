@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { LoanAssetDataInput } from "@/components/inputs/loan-asset-data-inputs";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { useFormSubmit } from "@/hooks/use-form";
@@ -37,6 +36,7 @@ import {
   Stack,
   Text,
   ThemeIcon,
+  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";

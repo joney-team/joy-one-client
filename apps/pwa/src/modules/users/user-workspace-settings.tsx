@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
-import { TextInput } from "@/components/inputs/text-input";
 import { configs } from "@/configs/layout.config";
 import { useAuth } from "@/modules/auth/auth-context";
 import { t } from "@/modules/lang/lang-service";
@@ -20,12 +19,15 @@ import {
   WorkspaceMember,
   WorkspaceMemberWorkingTimeType,
 } from "@/modules/workspace-members/workspace-members-types";
-import { WorkspacePermission, WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
+import {
+  WorkspacePermission,
+  WorkspaceSpecialRoleId,
+} from "@/modules/workspace-roles/workspace-roles-types";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/workspace-roles-input";
 import { onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
-import { Badge, Center, ColorInput, Select, Skeleton, Stack, Text } from "@mantine/core";
+import { Badge, Center, ColorInput, Select, Skeleton, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconArchive, IconLock } from "@tabler/icons-react";
@@ -37,7 +39,9 @@ interface UserWorkspaceSettingsProps {
   removeable?: boolean;
 }
 
-const UserWorkspaceSettingsForm: FC<UserWorkspaceSettingsProps & { userMember: WorkspaceMember }> = (props) => {
+const UserWorkspaceSettingsForm: FC<
+  UserWorkspaceSettingsProps & { userMember: WorkspaceMember }
+> = (props) => {
   const workspace = useWorkspace();
   const auth = useAuth();
   const color = useColor();
@@ -47,7 +51,9 @@ const UserWorkspaceSettingsForm: FC<UserWorkspaceSettingsProps & { userMember: W
 
   const isHasPermission = workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER);
   const isAbleToUpdate = isHasPermission || isMe;
-  const isMainWorkspaceAccessable = userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS);
+  const isMainWorkspaceAccessable = userMember.permissions.includes(
+    WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
+  );
   const isOwner = userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER);
 
   const onUpdate = useDebouncedCallback((values: UpdateWorkspaceMemberDto) => {

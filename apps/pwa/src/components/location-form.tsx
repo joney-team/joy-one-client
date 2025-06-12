@@ -1,11 +1,12 @@
-import { TextInput } from "@/components/inputs/text-input";
+"use client";
+
 import { Group } from "@mantine/core";
 import { Fragment, memo, type FC } from "react";
 
 import { t } from "@/modules/lang/lang-service";
 import { useLocations } from "@/modules/locations/locations-service";
 import { optionsFilter } from "@/modules/theme/generator";
-import { Select } from "@mantine/core";
+import { Select, TextInput } from "@mantine/core";
 
 export const LocationForm: FC<{
   form: any;

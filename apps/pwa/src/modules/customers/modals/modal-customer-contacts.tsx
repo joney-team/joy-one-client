@@ -1,5 +1,6 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { setCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
@@ -8,10 +9,26 @@ import { t } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { onError } from "@/utils/exceptions.utils";
-import { ActionIcon, Anchor, Card, em, Group, InputWrapper, Stack, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Anchor,
+  Card,
+  em,
+  Group,
+  InputWrapper,
+  Stack,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { useListState } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
-import { IconAddressBook, IconCheck, IconMinus, IconPhoneCall, IconPlus } from "@tabler/icons-react";
+import {
+  IconAddressBook,
+  IconCheck,
+  IconMinus,
+  IconPhoneCall,
+  IconPlus,
+} from "@tabler/icons-react";
 import { FC, useEffect, useRef } from "react";
 
 interface ModalCustomerContactsProps {
@@ -116,7 +133,12 @@ export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => 
               </Stack>
 
               <Renderer visible={isEditable}>
-                <ActionIcon size={36} color="gray" variant="subtle" onClick={() => handlers.remove(index)}>
+                <ActionIcon
+                  size={36}
+                  color="gray"
+                  variant="subtle"
+                  onClick={() => handlers.remove(index)}
+                >
                   <IconMinus strokeWidth={1.2} height={13} />
                 </ActionIcon>
               </Renderer>

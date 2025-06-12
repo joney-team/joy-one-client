@@ -1,8 +1,17 @@
-import { TextInput } from "@/components/inputs/text-input";
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
 import { updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
-import { ActionIcon, Group, InputWrapper, InputWrapperProps, Popover, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Group,
+  InputWrapper,
+  InputWrapperProps,
+  Popover,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { IconHourglassHigh } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, PropsWithChildren, useState } from "react";
@@ -99,7 +108,9 @@ export interface QuickEstimateTimeInputProps extends Omit<InputWrapperProps, "va
   task: TaskEntity;
 }
 
-export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInputProps>> = (props) => {
+export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInputProps>> = (
+  props
+) => {
   const [opened, setOpened] = useState(false);
 
   const children = props.children ? (

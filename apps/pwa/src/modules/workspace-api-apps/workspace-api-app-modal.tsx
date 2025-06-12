@@ -1,7 +1,8 @@
+"use client";
+
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Form } from "@/components/form";
 import { FormSession } from "@/components/form-session";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { t } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -32,6 +33,7 @@ import {
   Group,
   PasswordInput,
   Stack,
+  TextInput,
   Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";

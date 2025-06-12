@@ -1,5 +1,6 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
 import { t } from "@/modules/lang/lang-service";
@@ -10,7 +11,7 @@ import {
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { isPhoneNumber } from "@/utils/phone.utils";
-import { Checkbox, Stack } from "@mantine/core";
+import { Checkbox, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";

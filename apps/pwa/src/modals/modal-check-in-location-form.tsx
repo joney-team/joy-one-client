@@ -1,9 +1,8 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
-import { ActionIcon, Group, Modal, NumberInput, Stack, Tooltip } from "@mantine/core";
+import { ActionIcon, Group, Modal, NumberInput, Stack, TextInput, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheck, IconGps, IconMapPin } from "@tabler/icons-react";
 import { FC, useState } from "react";
@@ -85,7 +84,10 @@ export const ModalCheckInLocationForm: FC = () => {
                 onActionLoad({
                   process: () =>
                     getGeolocation().then((res) =>
-                      form.setFieldValue("coordinates", { lat: res.coords.latitude, lng: res.coords.longitude })
+                      form.setFieldValue("coordinates", {
+                        lat: res.coords.latitude,
+                        lng: res.coords.longitude,
+                      })
                     ),
                 })
               }

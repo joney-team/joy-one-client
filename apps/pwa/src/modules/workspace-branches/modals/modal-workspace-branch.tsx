@@ -1,11 +1,18 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Form } from "@/components/form";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { t } from "@/modules/lang/lang-service";
-import { createWorkspaceBranch, updateWorkspaceBranch } from "@/modules/workspace-branches/workspace-branches-service";
-import { WorkspaceBranchDto, WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
-import { Stack } from "@mantine/core";
+import {
+  createWorkspaceBranch,
+  updateWorkspaceBranch,
+} from "@/modules/workspace-branches/workspace-branches-service";
+import {
+  WorkspaceBranchDto,
+  WorkspaceBranchEntity,
+} from "@/modules/workspace-branches/workspace-branches-types";
+import { Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconBuilding, IconCheck, IconPlus } from "@tabler/icons-react";
@@ -48,7 +55,13 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
         <TextInput label={t("address")} {...form.getInputProps("location.address")} />
 
         <Stack align="center">
-          <Button action leftIcon={branch ? IconCheck : IconPlus} loading={loading} onClick={onSubmit} type="submit">
+          <Button
+            action
+            leftIcon={branch ? IconCheck : IconPlus}
+            loading={loading}
+            onClick={onSubmit}
+            type="submit"
+          >
             {t(branch ? "edit" : "create")}
           </Button>
         </Stack>
@@ -59,7 +72,12 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
 
 export const OnWorkspaceBranchModal = (branch?: WorkspaceBranchEntity) => {
   return modals.open({
-    title: <ModalTitle title={`${t(branch ? "edit" : "create")} ${t("workspace_branch")}`} icon={IconBuilding} />,
+    title: (
+      <ModalTitle
+        title={`${t(branch ? "edit" : "create")} ${t("workspace_branch")}`}
+        icon={IconBuilding}
+      />
+    ),
     children: <WorkspaceBranchModal branch={branch} />,
   });
 };

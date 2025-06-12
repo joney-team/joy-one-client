@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { configs } from "@/configs/layout.config";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -16,6 +15,7 @@ import {
   Stack,
   TagsInput,
   Text,
+  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCake, IconCheck, IconClipboardHeart, IconMail, IconPhone } from "@tabler/icons-react";

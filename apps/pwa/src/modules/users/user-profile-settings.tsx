@@ -4,7 +4,6 @@ import { Checkbox } from "@/components/checkbox";
 import { Container } from "@/components/container";
 import { FormSession } from "@/components/form-session";
 import { Image } from "@/components/image";
-import { TextInput } from "@/components/inputs/text-input";
 import { TimeZoneInput } from "@/components/inputs/timezone-input";
 import { SessionTitle } from "@/components/session-title";
 import { configs } from "@/configs/layout.config";
@@ -16,7 +15,7 @@ import { useLang } from "@/modules/lang/lang-context";
 import { getDateFormat, localeNames, t } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { Card, Divider, InputWrapper, Select, Space, Stack } from "@mantine/core";
+import { Card, Divider, InputWrapper, Select, Space, Stack, TextInput } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -53,7 +52,11 @@ export const UserProfileSettings: FC = () => {
           <Stack>
             <FormSession title="profile" description="profile_description">
               <Stack>
-                <TextInput leftSection={<IconUser size={16} />} label={t("name")} {...form.getInputProps("name")} />
+                <TextInput
+                  leftSection={<IconUser size={16} />}
+                  label={t("name")}
+                  {...form.getInputProps("name")}
+                />
                 <TextInput
                   leftSection={<IconPhone size={16} />}
                   label={t("phone")}
@@ -87,8 +90,13 @@ export const UserProfileSettings: FC = () => {
                 <Select
                   label={t("language")}
                   description={t("change_locale_desc")}
-                  leftSection={<Image src={`/lang/${form.values.settings.locale}.png`} w={16} h={16} />}
-                  data={Object.values(Locale).map((locale) => ({ label: localeNames[locale], value: locale }))}
+                  leftSection={
+                    <Image src={`/lang/${form.values.settings.locale}.png`} w={16} h={16} />
+                  }
+                  data={Object.values(Locale).map((locale) => ({
+                    label: localeNames[locale],
+                    value: locale,
+                  }))}
                   value={form.values.settings.locale}
                   onChange={(l) => lang.setLocale(l as Locale)}
                 />
@@ -148,7 +156,10 @@ export const UserProfileSettings: FC = () => {
 
                     <Checkbox
                       label={t("auto")}
-                      checked={form.values.settings.dateFormat === "auto" || !form.values.settings.dateFormat}
+                      checked={
+                        form.values.settings.dateFormat === "auto" ||
+                        !form.values.settings.dateFormat
+                      }
                       onChange={() => form.setFieldValue("settings.dateFormat", "auto")}
                     />
                   </Stack>

@@ -1,7 +1,8 @@
+"use client";
+
 import { useApp } from "@/app.context";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { LocationForm } from "@/components/location-form";
 import { createCustomerForm } from "@/modules/customer-forms/customer-form-service";
 import { getWorkspaceBranchById } from "@/modules/workspace-branches/workspace-branches-service";
@@ -9,7 +10,7 @@ import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-br
 import { getWorkspaceById } from "@/modules/workspaces/workspaces-service";
 import { WorkspaceEntity } from "@/modules/workspaces/workspaces-types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
-import { Card, Center, Group, Loader, Stack, Text, Title } from "@mantine/core";
+import { Card, Center, Group, Loader, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheck } from "@tabler/icons-react";
 import { useParams } from "next/navigation";

@@ -1,6 +1,5 @@
 "use client";
 
-import { TextInput } from "@/components/inputs/text-input";
 import { t } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
 import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
@@ -8,7 +7,7 @@ import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { DefaultTaskStatusId, TaskEntity, TaskStatus } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, em, Group, Menu } from "@mantine/core";
+import { ActionIcon, em, Group, Menu, TextInput } from "@mantine/core";
 import { IconCheck, IconSettings } from "@tabler/icons-react";
 import { FC, MouseEventHandler, useState } from "react";
 
@@ -23,7 +22,8 @@ interface TaskStatusOptionsProps {
 export const TaskStatusOptions: FC<TaskStatusOptionsProps> = (props) => {
   const workspace = useWorkspace();
   const status =
-    workspace.settings.taskStatuses.find((s) => s.id === props.task.status) || workspace.settings.taskStatuses[0];
+    workspace.settings.taskStatuses.find((s) => s.id === props.task.status) ||
+    workspace.settings.taskStatuses[0];
   const activatedStyle = renderTaskStatusStyle(props.task.status, workspace.settings.taskStatuses);
   const [opened, setOpened] = useState(false);
   const [search, setSearch] = useState("");
@@ -128,9 +128,18 @@ export const TaskStatusIcon: FC<
       onClick={props.onClick}
     >
       {closed ? (
-        <IconCheck color={props.white || closed ? "white" : _color} size={size * 0.7} strokeWidth={3} />
+        <IconCheck
+          color={props.white || closed ? "white" : _color}
+          size={size * 0.7}
+          strokeWidth={3}
+        />
       ) : (
-        <Group bg={props.white ? "white" : _color} w="100%" h="100%" style={{ borderRadius: "50%" }} />
+        <Group
+          bg={props.white ? "white" : _color}
+          w="100%"
+          h="100%"
+          style={{ borderRadius: "50%" }}
+        />
       )}
     </Group>
   );

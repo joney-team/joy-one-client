@@ -1,13 +1,14 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { onUploadFile } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { createPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { onError } from "@/utils/exceptions.utils";
-import { Group, Modal, Stack, Text, ThemeIcon, em } from "@mantine/core";
+import { Group, Modal, Stack, Text, ThemeIcon, em, TextInput } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -57,7 +58,9 @@ export const ModalParnterForm: FC = () => {
       payload.logo = file.relativePath;
     }
 
-    const action = props?.partner ? () => updatePartner(props.partner!._id, payload) : () => createPartner(payload);
+    const action = props?.partner
+      ? () => updatePartner(props.partner!._id, payload)
+      : () => createPartner(payload);
 
     await action()
       .then(async (res) => {
@@ -75,7 +78,9 @@ export const ModalParnterForm: FC = () => {
       onClose={close}
       title={
         <ModalTitle
-          title={props?.partner ? `${t("update")} ${t("partner")}` : `${t("create")} ${t("partner")}`}
+          title={
+            props?.partner ? `${t("update")} ${t("partner")}` : `${t("create")} ${t("partner")}`
+          }
           icon={IconTopologyStar3}
         />
       }

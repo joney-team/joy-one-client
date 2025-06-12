@@ -1,11 +1,12 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { t } from "@/modules/lang/lang-service";
 import { createWorkspaceSdk } from "@/modules/workspace-sdks/workspace-sdks-service";
 import { WorkspaceSdkEntity } from "@/modules/workspace-sdks/workspace-sdks-types";
 import { onError } from "@/utils/exceptions.utils";
-import { Modal, Stack } from "@mantine/core";
+import { Modal, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconPuzzle } from "@tabler/icons-react";

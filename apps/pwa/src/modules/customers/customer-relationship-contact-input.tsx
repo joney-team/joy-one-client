@@ -1,19 +1,34 @@
-import { TextInput } from "@/components/inputs/text-input";
+"use client";
+
 import { CustomerRelationshipContact } from "@/modules/customers/customer-types";
 import { t } from "@/modules/lang/lang-service";
-import { ActionIcon, Card, em, Group, InputWrapper, InputWrapperProps, SimpleGrid, Stack, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  em,
+  Group,
+  InputWrapper,
+  InputWrapperProps,
+  SimpleGrid,
+  Stack,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Button } from "../../components/buttons/button";
 import { Renderer } from "../../components/renderer";
 
-interface CustomerRelationshipContactInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
+interface CustomerRelationshipContactInputProps
+  extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: CustomerRelationshipContact[];
   onChange?: (value: CustomerRelationshipContact[]) => void;
   disabled?: boolean;
 }
 
-export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInputProps> = (props) => {
+export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInputProps> = (
+  props
+) => {
   const contacts = props.value || [];
 
   let _props = { ...props } as any;

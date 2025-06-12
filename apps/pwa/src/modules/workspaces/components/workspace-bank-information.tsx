@@ -1,10 +1,24 @@
-import { TextInput } from "@/components/inputs/text-input";
+"use client";
+
 import { getBanks } from "@/modules/plugins/banks/banks.services";
 import { BankInformation } from "@/modules/plugins/banks/banks.types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
-import { Badge, Box, Card, Group, Select, SelectProps, SimpleGrid, Stack, Text, ThemeIcon, em } from "@mantine/core";
+import {
+  Badge,
+  Box,
+  Card,
+  Group,
+  Select,
+  SelectProps,
+  SimpleGrid,
+  Stack,
+  Text,
+  ThemeIcon,
+  em,
+  TextInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheck, IconInfoCircle, IconLockCheck } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
@@ -62,7 +76,12 @@ export const WorkspaceBankInformation: FC = () => {
           <Select
             label="Chọn ngân hàng"
             searchable
-            data={banks.map((v) => ({ value: v.id.toString(), label: `${v.shortName}`, name: v.name, logo: v.logo }))}
+            data={banks.map((v) => ({
+              value: v.id.toString(),
+              label: `${v.shortName}`,
+              name: v.name,
+              logo: v.logo,
+            }))}
             {...form.getInputProps("bankId")}
             value={form.values.bankId?.toString()}
             onChange={(value) => form.setFieldValue("bankId", +value!)}
@@ -108,7 +127,12 @@ export const WorkspaceBankInformation: FC = () => {
             );
           })()}
 
-          <Button type="submit" loading={isSubmitting} onClick={onSubmit} disabled={!form.isDirty()}>
+          <Button
+            type="submit"
+            loading={isSubmitting}
+            onClick={onSubmit}
+            disabled={!form.isDirty()}
+          >
             Cập nhật
           </Button>
         </Group>

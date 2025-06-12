@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { t } from "@/modules/lang/lang-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { OnModalZaloOaSendZns } from "@/modules/plugins/zalo-oas/modal-zalo-oa-send-zns";
@@ -39,6 +38,7 @@ import {
   Title,
   Tooltip,
   em,
+  TextInput,
 } from "@mantine/core";
 import {
   IconCirclesRelation,

@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/buttons/button";
 import { FormSessionIcon } from "@/components/form-session";
-import { TextInput } from "@/components/inputs/text-input";
 import { TimeInput } from "@/components/inputs/time-input";
 import { UsersInput } from "@/components/inputs/users-input";
 import {
@@ -35,6 +34,7 @@ import {
   Textarea,
   ThemeIcon,
   Tooltip,
+  TextInput,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";

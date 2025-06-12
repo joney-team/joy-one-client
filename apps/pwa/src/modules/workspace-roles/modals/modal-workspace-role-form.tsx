@@ -1,6 +1,7 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { t } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -17,7 +18,18 @@ import {
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { onError, onFormErrorLegacy } from "@/utils/exceptions.utils";
-import { Card, Divider, Group, InputWrapper, Stack, Switch, Textarea, ThemeIcon, Tooltip } from "@mantine/core";
+import {
+  Card,
+  Divider,
+  Group,
+  InputWrapper,
+  Stack,
+  Switch,
+  Textarea,
+  ThemeIcon,
+  TextInput,
+  Tooltip,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconAccessible, IconCheck, IconLock } from "@tabler/icons-react";
@@ -119,25 +131,37 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
       />
 
       {isAbleToEdit && props.roleId !== WorkspaceSpecialRoleId.MEMBER && (
-        <Textarea label={t("description")} {...form.getInputProps("description")} style={{ minHeight: 80 }} />
+        <Textarea
+          label={t("description")}
+          {...form.getInputProps("description")}
+          style={{ minHeight: 80 }}
+        />
       )}
 
       <InputWrapper label={t("grant_permissions")}>
         <Stack mt={10}>
           {Object.entries(permissionGroups)
-            .filter(([_, group]) => !group.workspaceTypes || group.workspaceTypes.includes(workspace.type))
+            .filter(
+              ([_, group]) => !group.workspaceTypes || group.workspaceTypes.includes(workspace.type)
+            )
             .map(([groupKey, group]) => {
               const addPermission = (
                 permission: WorkspacePermission,
                 dependentPermissions: WorkspacePermission[] = []
               ) => {
-                const perrmissions = [...form.values.permissions, ...dependentPermissions, permission];
+                const perrmissions = [
+                  ...form.values.permissions,
+                  ...dependentPermissions,
+                  permission,
+                ];
                 form.setFieldValue("permissions", [...new Set(perrmissions)]);
               };
 
               const removePermission = (permission: WorkspacePermission) => {
                 const perrmissions = [...form.values.permissions];
-                form.setFieldValue("permissions", [...new Set(perrmissions.filter((p) => p !== permission))]);
+                form.setFieldValue("permissions", [
+                  ...new Set(perrmissions.filter((p) => p !== permission)),
+                ]);
               };
 
               return (
@@ -185,7 +209,9 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
                           {isHasDependentPermissions && (
                             <Tooltip
                               label={t("dependent_permissions", {
-                                permissions: dependentPermissions.map((p) => t(`ws_per_${p.value}`)).join(", "),
+                                permissions: dependentPermissions
+                                  .map((p) => t(`ws_per_${p.value}`))
+                                  .join(", "),
                               })}
                             >
                               <ThemeIcon size={16} variant="light" color="gray">
@@ -228,7 +254,12 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 export const OnModalRoleForm = (props?: ModalWorkspaceRoleFormProps) => {
   return modals.open({
     modalId: "ModalRoleForm",
-    title: <ModalTitle title={`${t(props?.roleId ? "update" : "create")} ${t("member_role")}`} icon={IconAccessible} />,
+    title: (
+      <ModalTitle
+        title={`${t(props?.roleId ? "update" : "create")} ${t("member_role")}`}
+        icon={IconAccessible}
+      />
+    ),
     children: <ModalWorkspaceRoleForm {...props} />,
   });
 };

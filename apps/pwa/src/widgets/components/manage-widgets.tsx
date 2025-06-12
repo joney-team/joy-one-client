@@ -1,12 +1,13 @@
-import { TextInput } from "@/components/inputs/text-input";
+"use client";
+
 import { ModalTitle } from "@/components/modal-title";
 import { t, tMulti } from "@/modules/lang/lang-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, Card, Group, Modal, Stack, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, Card, Group, Modal, Stack, Text, TextInput, Tooltip } from "@mantine/core";
 import { IconBox, IconMinus, IconPlus, IconPuzzle, IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Widget, WidgetModule, WidgetModules } from "../types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 
 interface ManageWidgetsProps<WidgetContextType = any, WidgetType = string> {
   widgets: Widget<WidgetType>[];
@@ -47,7 +48,8 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
 
           const isHideByWorkspaceType =
             mod.config.workspaceTypes && !mod.config.workspaceTypes.includes(workspace.type);
-          const isHideBySearch = search.length > 0 && !t(mod.config.name).toLowerCase().includes(search.toLowerCase());
+          const isHideBySearch =
+            search.length > 0 && !t(mod.config.name).toLowerCase().includes(search.toLowerCase());
 
           if (isHideByWorkspaceType || isHideBySearch) return null;
 
@@ -60,7 +62,14 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
           };
 
           return (
-            <Card key={key} withBorder shadow="none" radius="md" className="clickable" onClick={onClick}>
+            <Card
+              key={key}
+              withBorder
+              shadow="none"
+              radius="md"
+              className="clickable"
+              onClick={onClick}
+            >
               <Group justify="space-between">
                 <Group gap={10}>
                   <Icon strokeWidth={1.5} />

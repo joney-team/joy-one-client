@@ -2,7 +2,6 @@
 
 import { useApp } from "@/app.context";
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { currencies } from "@/configs/currency.config";
 import { getDateFormat, num, t } from "@/modules/lang/lang-service";
@@ -10,7 +9,19 @@ import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { Anchor, Group, InputWrapper, Modal, NumberInput, Select, Slider, Stack, Text, Textarea } from "@mantine/core";
+import {
+  Anchor,
+  Group,
+  InputWrapper,
+  Modal,
+  NumberInput,
+  Select,
+  Slider,
+  Stack,
+  Text,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
 import { DateInput, TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -108,7 +119,11 @@ export const ModalInput: FC = () => {
   return (
     <Modal
       title={
-        <ModalTitle color={props?.color} title={t(props?.title || "enter_data")} icon={props?.icon || IconCursorText} />
+        <ModalTitle
+          color={props?.color}
+          title={t(props?.title || "enter_data")}
+          icon={props?.icon || IconCursorText}
+        />
       }
       onClose={close}
       opened={opened}
@@ -136,7 +151,11 @@ export const ModalInput: FC = () => {
                   <TimeInput
                     leftSection={<IconClock size={18} strokeWidth={1.5} />}
                     w={100}
-                    defaultValue={form.values.value ? dayjs(form.values.value * 1000).format("HH:mm") : undefined}
+                    defaultValue={
+                      form.values.value
+                        ? dayjs(form.values.value * 1000).format("HH:mm")
+                        : undefined
+                    }
                     onChange={(d) => {
                       if (!d || !d.target.value) return;
                       const [hours, mins] = d.target.value.split(":");

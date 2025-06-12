@@ -1,12 +1,23 @@
+"use client";
+
 import { EntityImage } from "@/components/entity-image";
-import { TextInput } from "@/components/inputs/text-input";
 import { num, t } from "@/modules/lang/lang-service";
 import { getProduct, getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity } from "@/modules/products/products-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { ActionIcon, Card, Combobox, Group, Loader, Stack, Text, useCombobox } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  Combobox,
+  Group,
+  Loader,
+  Stack,
+  Text,
+  TextInput,
+  useCombobox,
+} from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconSearch, IconX } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
@@ -63,7 +74,11 @@ export const OrderTableSearch: FC = () => {
           <TextInput
             ref={searchInputRef}
             leftSection={
-              isSearching ? <Loader size={16} strokeWidth={1.5} /> : <IconSearch size={22} strokeWidth={1.5} />
+              isSearching ? (
+                <Loader size={16} strokeWidth={1.5} />
+              ) : (
+                <IconSearch size={22} strokeWidth={1.5} />
+              )
             }
             rightSection={
               searchInputRef.current?.value && (
@@ -102,10 +117,16 @@ export const OrderTableSearch: FC = () => {
                     <Text>{product.name}</Text>
                     <Text fz={12}>
                       {(function () {
-                        if (typeof product.minPrice === "number" && typeof product.maxPrice === "number")
-                          return `${num(product.minPrice, { type: "money" })} - ${num(product.maxPrice, {
-                            type: "money",
-                          })}`;
+                        if (
+                          typeof product.minPrice === "number" &&
+                          typeof product.maxPrice === "number"
+                        )
+                          return `${num(product.minPrice, { type: "money" })} - ${num(
+                            product.maxPrice,
+                            {
+                              type: "money",
+                            }
+                          )}`;
                         return num(product.price, { type: "money" });
                       })()}{" "}
                       / {product.unit}

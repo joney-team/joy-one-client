@@ -1,5 +1,6 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { api } from "@/modules/apis";
 import { t } from "@/modules/lang/lang-service";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
@@ -16,6 +17,7 @@ import {
   ThemeIcon,
   Title,
   em,
+  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconArrowLeft, IconCircleCheck, IconSend } from "@tabler/icons-react";

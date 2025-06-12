@@ -14,8 +14,17 @@ import {
   LoanAssetType,
 } from "@/modules/loans/loans-types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { ActionIcon, Group, InputWrapper, Modal, NumberInput, Select, SimpleGrid, Stack } from "@mantine/core";
-import { TextInput } from "@/components/inputs/text-input";
+import {
+  ActionIcon,
+  Group,
+  InputWrapper,
+  Modal,
+  NumberInput,
+  Select,
+  SimpleGrid,
+  Stack,
+  TextInput,
+} from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -39,7 +48,9 @@ const initialValues: LoanAssetEstimation = {
   estimatePrice: undefined as any,
 };
 
-export let OnModalLoanAssetEstimationForm: (props: ModalLoanAssetEstimationFormProps) => any = () => {};
+export let OnModalLoanAssetEstimationForm: (
+  props: ModalLoanAssetEstimationFormProps
+) => any = () => {};
 
 export const ModalLoanAssetEstimationForm: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -116,10 +127,12 @@ export const ModalLoanAssetEstimationForm: FC = () => {
           <Select
             label="Tài sản"
             placeholder="Chọn tài sản"
-            data={[LoanAssetType.MOTOBIKE_REGISTRATION, LoanAssetType.CAR_REGISTRATION].map((type) => ({
-              value: type,
-              label: t(`loan_asset_type_estimation_${type}`).replace("Đăng ký", ""),
-            }))}
+            data={[LoanAssetType.MOTOBIKE_REGISTRATION, LoanAssetType.CAR_REGISTRATION].map(
+              (type) => ({
+                value: type,
+                label: t(`loan_asset_type_estimation_${type}`).replace("Đăng ký", ""),
+              })
+            )}
             {...form.getInputProps("assetType")}
             withAsterisk
           />
@@ -148,7 +161,8 @@ export const ModalLoanAssetEstimationForm: FC = () => {
                     title: "Cập nhật nhãn hiệu",
                     type: InputModalType.TEXT,
                     label: "Tên nhãn hiệu",
-                    value: loans.assetEstimations.brands.find((v) => v.id === form.values.brandId)?.name,
+                    value: loans.assetEstimations.brands.find((v) => v.id === form.values.brandId)
+                      ?.name,
                     onDone: (value: string) => {
                       loans.setAssetEstimations({
                         ...loans.assetEstimations,
@@ -217,7 +231,8 @@ export const ModalLoanAssetEstimationForm: FC = () => {
                     title: "Cập nhật dòng / mẫu",
                     type: InputModalType.TEXT,
                     label: "Tên dòng / mẫu",
-                    value: loans.assetEstimations.models.find((v) => v.id === form.values.modelId)?.name,
+                    value: loans.assetEstimations.models.find((v) => v.id === form.values.modelId)
+                      ?.name,
                     onDone: (value: string) => {
                       loans.setAssetEstimations({
                         ...loans.assetEstimations,
@@ -285,7 +300,8 @@ export const ModalLoanAssetEstimationForm: FC = () => {
                   title: "Cập nhật màu",
                   type: InputModalType.TEXT,
                   label: "Tên màu",
-                  value: loans.assetEstimations.colors.find((v) => v.id === form.values.colorId)?.name,
+                  value: loans.assetEstimations.colors.find((v) => v.id === form.values.colorId)
+                    ?.name,
                   onDone: (value: string) => {
                     loans.setAssetEstimations({
                       ...loans.assetEstimations,
@@ -333,7 +349,11 @@ export const ModalLoanAssetEstimationForm: FC = () => {
           <DatePickerInput
             label="Năm sản xuất"
             level="decade"
-            value={form.values.productManufacturingDate ? new Date(form.values.productManufacturingDate * 1000) : null}
+            value={
+              form.values.productManufacturingDate
+                ? new Date(form.values.productManufacturingDate * 1000)
+                : null
+            }
             onYearSelect={(date) => {
               if (!date) return null;
               form.setFieldValue(
@@ -347,7 +367,12 @@ export const ModalLoanAssetEstimationForm: FC = () => {
           <TextInput label="Tên sản phẩm" {...form.getInputProps("productName")} />
         </SimpleGrid>
 
-        <NumberInput withAsterisk label="Định giá" hideControls {...form.getInputProps("estimatePrice")} />
+        <NumberInput
+          withAsterisk
+          label="Định giá"
+          hideControls
+          {...form.getInputProps("estimatePrice")}
+        />
 
         <InputWrapper label="Hình ảnh sản phẩm">
           <FilesBox query={{ ref: `loan-asset-estimations-${form.values.id}` }} autoUpload />

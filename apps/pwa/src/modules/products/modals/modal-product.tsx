@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { EntityImage } from "@/components/entity-image";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { ProductSelector } from "@/components/selector/product-selector";
@@ -31,6 +30,7 @@ import {
   Switch,
   Tabs,
   Text,
+  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useListState } from "@mantine/hooks";

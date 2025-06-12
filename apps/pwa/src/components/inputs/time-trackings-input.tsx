@@ -1,6 +1,5 @@
 "use client";
 
-import { TextInput } from "@/components/inputs/text-input";
 import { useLang } from "@/modules/lang/lang-context";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { TaskTimeTracking } from "@/modules/tasks/tasks-types";
@@ -26,6 +25,7 @@ import {
   Switch,
   Text,
   ThemeIcon,
+  TextInput,
 } from "@mantine/core";
 import { DateInput, TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";

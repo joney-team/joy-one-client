@@ -1,9 +1,21 @@
-import { TextInput } from "@/components/inputs/text-input";
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
-import { createProductCategory, useCategories } from "@/modules/product-categories/product-category-service";
+import {
+  createProductCategory,
+  useCategories,
+} from "@/modules/product-categories/product-category-service";
 import { ProductType } from "@/modules/products/products-types";
 import { onActionLoad } from "@/utils/actions";
-import { ActionIcon, Group, InputWrapper, InputWrapperProps, Popover, Select } from "@mantine/core";
+import {
+  ActionIcon,
+  Group,
+  InputWrapper,
+  InputWrapperProps,
+  Popover,
+  Select,
+  TextInput,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconList, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";

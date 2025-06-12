@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { useFormSubmit } from "@/hooks/use-form";
 import { t } from "@/modules/lang/lang-service";
@@ -22,6 +21,7 @@ import {
   Stack,
   Text,
   Textarea,
+  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";

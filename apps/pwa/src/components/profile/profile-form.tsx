@@ -1,11 +1,10 @@
 import { Avatar } from "@/components/avatar";
-import { TextInput } from "@/components/inputs/text-input";
 import { useAuth } from "@/modules/auth/auth-context";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { Group, LoadingOverlay, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Group, LoadingOverlay, Stack, Text, ThemeIcon, TextInput } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
@@ -73,7 +72,11 @@ export const ProfileForm: FC = () => {
 
       <TextInput label={t("name")} {...form.getInputProps("name")} />
       <TextInput label={t("phone")} {...form.getInputProps("phone")} placeholder="090 000 000" />
-      <TextInput label="Email" {...form.getInputProps("email")} disabled={auth.user!.isEmailVerified} />
+      <TextInput
+        label="Email"
+        {...form.getInputProps("email")}
+        disabled={auth.user!.isEmailVerified}
+      />
       <DateInput
         label={t("birthday")}
         valueFormat={getDateFormat()}

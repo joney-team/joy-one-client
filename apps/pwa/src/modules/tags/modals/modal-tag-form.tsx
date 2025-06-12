@@ -1,5 +1,6 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { configs } from "@/configs/layout.config";
 import { t } from "@/modules/lang/lang-service";
@@ -7,7 +8,7 @@ import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
-import { ActionIcon, ColorInput, Stack } from "@mantine/core";
+import { ActionIcon, ColorInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconFolderPlus, IconTag, IconX } from "@tabler/icons-react";

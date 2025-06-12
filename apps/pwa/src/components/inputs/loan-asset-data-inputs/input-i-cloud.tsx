@@ -2,10 +2,9 @@
 
 import { type FC, Fragment } from "react";
 import { EntityImages } from "@/components/entity-images";
-import { TextInput } from "@/components/inputs/text-input";
 import { t } from "@/modules/lang/lang-service";
 import { LoanAssetType } from "@/modules/loans/loans-types";
-import { InputWrapper, SimpleGrid } from "@mantine/core";
+import { InputWrapper, SimpleGrid, TextInput } from "@mantine/core";
 import { LoanAssetDataInputProps } from ".";
 
 export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (props) => {

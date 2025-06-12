@@ -1,10 +1,9 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { onError } from "@/utils/exceptions.utils";
-import { Stack } from "@mantine/core";
+import { Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconId } from "@tabler/icons-react";

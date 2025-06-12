@@ -6,7 +6,6 @@ import { Button } from "@/components/buttons/button";
 import { ButtonLanguage } from "@/components/buttons/button-language";
 import { ColorSchemes } from "@/components/color-schemes";
 import { Image } from "@/components/image";
-import { TextInput } from "@/components/inputs/text-input";
 import { Pattern } from "@/components/pattern";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
@@ -26,6 +25,7 @@ import {
   Text,
   Title,
   em,
+  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";

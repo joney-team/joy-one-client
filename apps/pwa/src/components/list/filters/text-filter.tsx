@@ -1,9 +1,8 @@
 "use client";
 
-import { TextInput } from "@/components/inputs/text-input";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { ActionIcon, Group, Popover, Text } from "@mantine/core";
+import { ActionIcon, Group, Popover, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { FilterProps } from "./types";

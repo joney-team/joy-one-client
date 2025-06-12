@@ -1,6 +1,7 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { DateInput } from "@/components/inputs/date-input";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { ProductSelector } from "@/components/selector/product-selector";
@@ -9,12 +10,25 @@ import {
   multipleProductsStockIn,
   productStockRecordTypeOptions,
 } from "@/modules/product-stocks/product-stocks-service";
-import { MultipleProductsStockInDto, ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
+import {
+  MultipleProductsStockInDto,
+  ProductStockRecordType,
+} from "@/modules/product-stocks/product-stocks-types";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { required } from "@/utils/form.validate";
-import { ActionIcon, Group, InputWrapper, Modal, NumberInput, Stack, Table, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Group,
+  InputWrapper,
+  Modal,
+  NumberInput,
+  Stack,
+  Table,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconBuildingWarehouse, IconChevronDown, IconPlus, IconTrash } from "@tabler/icons-react";
@@ -192,7 +206,10 @@ export const ModalProductStockIn: FC = () => {
                     </Table.Td>
 
                     <Table.Td miw={100}>
-                      <TextInput value={item.code || ""} {...form.getInputProps(`items.${i}.code`)} />
+                      <TextInput
+                        value={item.code || ""}
+                        {...form.getInputProps(`items.${i}.code`)}
+                      />
                     </Table.Td>
 
                     <Table.Td miw={100}>
@@ -200,7 +217,10 @@ export const ModalProductStockIn: FC = () => {
                     </Table.Td>
 
                     <Table.Td miw={100}>
-                      <TextInput value={item.note || ""} {...form.getInputProps(`items.${i}.note`)} />
+                      <TextInput
+                        value={item.note || ""}
+                        {...form.getInputProps(`items.${i}.note`)}
+                      />
                     </Table.Td>
 
                     <Table.Td>

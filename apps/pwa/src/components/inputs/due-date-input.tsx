@@ -1,3 +1,5 @@
+"use client";
+
 import { renderDate, renderDateTime, getDateTimeFormat, t } from "@/modules/lang/lang-service";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import {
@@ -10,8 +12,8 @@ import {
   Stack,
   Text,
   useMantineTheme,
+  TextInput,
 } from "@mantine/core";
-import { TextInput } from "@/components/inputs/text-input";
 import { DatePicker, TimeInput } from "@mantine/dates";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCalendar, IconClock, IconX } from "@tabler/icons-react";
@@ -34,7 +36,9 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
 
   const [pointed, setPointed] = useState<"start" | "due">("due");
   const pointedValue =
-    pointed === "start" ? DateTimeUtils.secondsToTime(props.startDate) : DateTimeUtils.secondsToTime(props.dueDate);
+    pointed === "start"
+      ? DateTimeUtils.secondsToTime(props.startDate)
+      : DateTimeUtils.secondsToTime(props.dueDate);
 
   const startDate = DateTimeUtils.secondsToTime(props.startDate);
   const dueDate = DateTimeUtils.secondsToTime(props.dueDate);
@@ -170,7 +174,16 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
         <Divider mx={-10} />
 
         <Group align="start">
-          <Stack flex={1} gap={10} py={10} bg={configs.backgroundColors[colorScheme]} mb={-10} ml={-10} mr={-16} px={5}>
+          <Stack
+            flex={1}
+            gap={10}
+            py={10}
+            bg={configs.backgroundColors[colorScheme]}
+            mb={-10}
+            ml={-10}
+            mr={-16}
+            px={5}
+          >
             <Suggestion
               label={t("today")}
               value={dayjs().format("dddd")}
@@ -183,7 +196,9 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
               label={t("tomorrow")}
               value={renderDate(Date.now() + 1000 * 60 * 60 * 24)}
               onSelect={() => {
-                onChangePointedValue(DateTimeUtils.getStartEndOfDay(Date.now() + 1000 * 60 * 60 * 24).end);
+                onChangePointedValue(
+                  DateTimeUtils.getStartEndOfDay(Date.now() + 1000 * 60 * 60 * 24).end
+                );
               }}
             />
 
@@ -197,33 +212,49 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
 
             <Suggestion
               label={t("next_weekend")}
-              value={renderDate(DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7).end)}
+              value={renderDate(
+                DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7).end
+              )}
               onSelect={() => {
-                onChangePointedValue(DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7).end);
+                onChangePointedValue(
+                  DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7).end
+                );
               }}
             />
 
             <Suggestion
               label={t("range_week", { week: 2 })}
-              value={renderDate(DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2).end)}
+              value={renderDate(
+                DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2).end
+              )}
               onSelect={() => {
-                onChangePointedValue(DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2).end);
+                onChangePointedValue(
+                  DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2).end
+                );
               }}
             />
 
             <Suggestion
               label={t("range_week", { week: 4 })}
-              value={renderDate(DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4).end)}
+              value={renderDate(
+                DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4).end
+              )}
               onSelect={() => {
-                onChangePointedValue(DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4).end);
+                onChangePointedValue(
+                  DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4).end
+                );
               }}
             />
 
             <Suggestion
               label={t("range_week", { week: 8 })}
-              value={renderDate(DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8).end)}
+              value={renderDate(
+                DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8).end
+              )}
               onSelect={() => {
-                onChangePointedValue(DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8).end);
+                onChangePointedValue(
+                  DateTimeUtils.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8).end
+                );
               }}
             />
           </Stack>

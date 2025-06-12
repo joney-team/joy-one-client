@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { useCamera } from "@/components/camera";
 import { EntityImage } from "@/components/entity-image";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { useFormSubmit } from "@/hooks/use-form";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
@@ -15,11 +14,30 @@ import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { Card, em, Group, InputWrapper, Modal, Select, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
+import {
+  Card,
+  em,
+  Group,
+  InputWrapper,
+  Modal,
+  Select,
+  SimpleGrid,
+  Stack,
+  Text,
+  ThemeIcon,
+  TextInput,
+} from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { Icon, IconCards, IconInfoCircle, IconQrcode, IconTextScan2, IconUserScan } from "@tabler/icons-react";
+import {
+  Icon,
+  IconCards,
+  IconInfoCircle,
+  IconQrcode,
+  IconTextScan2,
+  IconUserScan,
+} from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
 import { InputModalType, OnModalInput } from "../../modals/modal-input";
 import { decodeCid, registerCustomerKyc } from "./customer-kycs-service";
@@ -89,9 +107,15 @@ export const ModalRegisterCustomerKyc: FC = () => {
       if (!props) return;
 
       const dto: CustomerKycDto = {
-        backOfCidImage: await onUploadFile({ file: values.backOfCidImage }).then((res) => res.relativePath),
-        frontOfCidImage: await onUploadFile({ file: values.frontOfCidImage }).then((res) => res.relativePath),
-        portraitImage: await onUploadFile({ file: values.portraitImage }).then((res) => res.relativePath),
+        backOfCidImage: await onUploadFile({ file: values.backOfCidImage }).then(
+          (res) => res.relativePath
+        ),
+        frontOfCidImage: await onUploadFile({ file: values.frontOfCidImage }).then(
+          (res) => res.relativePath
+        ),
+        portraitImage: await onUploadFile({ file: values.portraitImage }).then(
+          (res) => res.relativePath
+        ),
         cidBirthday: values.cidBirthday,
         cidFullName: values.cidFullName,
         cidGender: values.cidGender,
@@ -256,7 +280,9 @@ export const ModalRegisterCustomerKyc: FC = () => {
                     label={t("province")}
                     {...form.getInputProps(`cidLocation.provinceId`)}
                     searchable
-                    data={locations.filter((l) => l.type === "province").map((l) => ({ value: l.id, label: l.name }))}
+                    data={locations
+                      .filter((l) => l.type === "province")
+                      .map((l) => ({ value: l.id, label: l.name }))}
                     onChange={(e) => {
                       form.setFieldValue(`cidLocation.provinceId`, e!);
                       form.setFieldValue(`cidLocation.districtId`, "");
@@ -271,7 +297,11 @@ export const ModalRegisterCustomerKyc: FC = () => {
                       {...form.getInputProps("cidLocation.districtId")}
                       searchable
                       data={locations
-                        .filter((l) => l.type === "district" && l.parentId === form.values.cidLocation?.provinceId)
+                        .filter(
+                          (l) =>
+                            l.type === "district" &&
+                            l.parentId === form.values.cidLocation?.provinceId
+                        )
                         .map((l) => ({ value: l.id, label: l.fullName }))}
                       onChange={(e) => {
                         form.setFieldValue("cidLocation.districtId", e!);
@@ -286,7 +316,10 @@ export const ModalRegisterCustomerKyc: FC = () => {
                       {...form.getInputProps("cidLocation.wardId")}
                       searchable
                       data={locations
-                        .filter((l) => l.type === "ward" && l.parentId === form.values.cidLocation?.districtId)
+                        .filter(
+                          (l) =>
+                            l.type === "ward" && l.parentId === form.values.cidLocation?.districtId
+                        )
                         .map((l) => ({ value: l.id, label: l.fullName }))}
                       flex={1}
                       filter={optionsFilter}

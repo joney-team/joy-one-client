@@ -1,5 +1,6 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
-import { TextInput } from "@/components/inputs/text-input";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { useLocations } from "@/modules/locations/locations-service";
@@ -19,6 +20,7 @@ import {
   Stack,
   Text,
   ThemeIcon,
+  TextInput,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";

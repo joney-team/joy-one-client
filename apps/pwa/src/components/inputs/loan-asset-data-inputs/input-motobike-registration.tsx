@@ -1,14 +1,17 @@
+"use client";
+
 import { EntityImage } from "@/components/entity-image";
 import { EntityImages } from "@/components/entity-images";
-import { TextInput } from "@/components/inputs/text-input";
 import { t } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { LoanAssetType } from "@/modules/loans/loans-types";
-import { InputWrapper, Select, SimpleGrid } from "@mantine/core";
+import { InputWrapper, Select, SimpleGrid, TextInput } from "@mantine/core";
 import { FC } from "react";
 import { LoanAssetDataInputProps } from ".";
 
-export const InputMotobileRegistration: FC<LoanAssetDataInputProps<LoanAssetType.MOTOBIKE_REGISTRATION>> = (props) => {
+export const InputMotobileRegistration: FC<
+  LoanAssetDataInputProps<LoanAssetType.MOTOBIKE_REGISTRATION>
+> = (props) => {
   const loans = useLoans();
 
   return (
@@ -39,42 +42,54 @@ export const InputMotobileRegistration: FC<LoanAssetDataInputProps<LoanAssetType
         <TextInput
           label={t("numberPlate")}
           value={props.value?.numberPlate || ""}
-          onChange={(e) => props.onChange?.({ ...(props.value as any), numberPlate: e.target.value })}
+          onChange={(e) =>
+            props.onChange?.({ ...(props.value as any), numberPlate: e.target.value })
+          }
           disabled={props.disabled}
         />
 
         <TextInput
           label={t("frameNumber")}
           value={props.value?.frameNumber || ""}
-          onChange={(e) => props.onChange?.({ ...(props.value as any), frameNumber: e.target.value })}
+          onChange={(e) =>
+            props.onChange?.({ ...(props.value as any), frameNumber: e.target.value })
+          }
           disabled={props.disabled}
         />
 
         <TextInput
           label={t("engineNumber")}
           value={props.value?.engineNumber || ""}
-          onChange={(e) => props.onChange?.({ ...(props.value as any), engineNumber: e.target.value })}
+          onChange={(e) =>
+            props.onChange?.({ ...(props.value as any), engineNumber: e.target.value })
+          }
           disabled={props.disabled}
         />
 
         <TextInput
           label={t("registrationNumber")}
           value={props.value?.registrationNumber || ""}
-          onChange={(e) => props.onChange?.({ ...(props.value as any), registrationNumber: e.target.value })}
+          onChange={(e) =>
+            props.onChange?.({ ...(props.value as any), registrationNumber: e.target.value })
+          }
           disabled={props.disabled}
         />
 
         <TextInput
           label={t("issuedDate")}
           value={props.value?.issuedDate || ""}
-          onChange={(e) => props.onChange?.({ ...(props.value as any), issuedDate: e.target.value })}
+          onChange={(e) =>
+            props.onChange?.({ ...(props.value as any), issuedDate: e.target.value })
+          }
           disabled={props.disabled}
         />
 
         <TextInput
           label={t("productManufacturingDate")}
           value={props.value?.productManufacturingDate || ""}
-          onChange={(e) => props.onChange?.({ ...(props.value as any), productManufacturingDate: e.target.value })}
+          onChange={(e) =>
+            props.onChange?.({ ...(props.value as any), productManufacturingDate: e.target.value })
+          }
           disabled={props.disabled}
         />
       </SimpleGrid>

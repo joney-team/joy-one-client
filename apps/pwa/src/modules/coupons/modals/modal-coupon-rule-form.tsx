@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/buttons/button";
 import { Editor } from "@/components/editor";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { ProductSelector } from "@/components/selector/product-selector";
 import { useFormSubmit } from "@/hooks/use-form";
@@ -35,6 +34,7 @@ import {
   Stack,
   Switch,
   Text,
+  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure, useListState } from "@mantine/hooks";

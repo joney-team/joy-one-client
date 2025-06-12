@@ -1,7 +1,8 @@
-import { TextInput } from "@/components/inputs/text-input";
+"use client";
+
 import { LoanSettings } from "@/modules/loans/loans-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { Grid, NumberInput, Switch } from "@mantine/core";
+import { Grid, NumberInput, Switch, TextInput } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { FC } from "react";
 

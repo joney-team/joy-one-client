@@ -1,8 +1,9 @@
+"use client";
+
 import { useCloseAppLoading } from "@/components/app-loading";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
-import { TextInput } from "@/components/inputs/text-input";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { uploadFile } from "@/modules/files/file-service";
@@ -26,6 +27,7 @@ import {
   InputWrapper,
   Stack,
   Text,
+  TextInput,
   ThemeIcon,
   Title,
   Tooltip,

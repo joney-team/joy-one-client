@@ -1,10 +1,9 @@
 "use client";
 
-import { TextInput } from "@/components/inputs/text-input";
 import { t, tMulti } from "@/modules/lang/lang-service";
 import { createTask } from "@/modules/tasks/tasks-service";
 import { onActionLoad } from "@/utils/actions";
-import { ActionIcon, Group, Popover } from "@mantine/core";
+import { ActionIcon, Group, Popover, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
 

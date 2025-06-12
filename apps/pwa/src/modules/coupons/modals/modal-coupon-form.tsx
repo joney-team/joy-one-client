@@ -1,6 +1,7 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { SearchSelectInput } from "@/components/inputs/search-select-input";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { useFormSubmit } from "@/hooks/use-form";
 import { createCoupon, getCouponRules } from "@/modules/coupons/coupon-service";
@@ -10,7 +11,16 @@ import { t } from "@/modules/lang/lang-service";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { StringUtils } from "@/utils/string.utils";
-import { Card, Group, InputWrapper, Modal, NumberInput, SimpleGrid, Stack } from "@mantine/core";
+import {
+  Card,
+  Group,
+  InputWrapper,
+  Modal,
+  NumberInput,
+  SimpleGrid,
+  Stack,
+  TextInput,
+} from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -76,7 +86,9 @@ export const ModalCouponForm: FC = () => {
     <Modal
       title={
         <ModalTitle
-          title={StringUtils.capitalizeFirstLetter(`${t(props?.coupon ? "update" : "create")} ${t("coupon")}`)}
+          title={StringUtils.capitalizeFirstLetter(
+            `${t(props?.coupon ? "update" : "create")} ${t("coupon")}`
+          )}
           icon={IconNotes}
         />
       }
@@ -92,7 +104,9 @@ export const ModalCouponForm: FC = () => {
             value={form.values.rule?._id}
             onChange={(v) => form.setFieldValue("rule", v?.data)}
             onSearch={(q) =>
-              getCouponRules({ q }).then(({ data }) => data.map((r) => ({ label: r.name, id: r._id, data: r })))
+              getCouponRules({ q }).then(({ data }) =>
+                data.map((r) => ({ label: r.name, id: r._id, data: r }))
+              )
             }
             onEdit={() =>
               OnModalCouponRuleForm({

@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { TextInput } from "@/components/inputs/text-input";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { PrescriptionSelector } from "@/components/selector/prescription-selector";
@@ -15,7 +14,11 @@ import {
   removePrescription,
   updatePrescription,
 } from "@/modules/prescriptions/prescriptions-service";
-import { PrescriptionDto, PrescriptionEntity, PrescriptionItem } from "@/modules/prescriptions/prescriptions-types";
+import {
+  PrescriptionDto,
+  PrescriptionEntity,
+  PrescriptionItem,
+} from "@/modules/prescriptions/prescriptions-types";
 import { ProductType } from "@/modules/products/products-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -34,11 +37,19 @@ import {
   Text,
   Textarea,
   em,
+  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useListState } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
-import { IconArchive, IconArrowDown, IconMinus, IconPill, IconPlus, IconSearch } from "@tabler/icons-react";
+import {
+  IconArchive,
+  IconArrowDown,
+  IconMinus,
+  IconPill,
+  IconPlus,
+  IconSearch,
+} from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { PrintButton } from "@/modals/modal-printer";
 
@@ -64,7 +75,9 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
     note: t(itemNotes[0]),
   };
 
-  const [items, handler] = useListState<PrescriptionItem>(props.prescription?.items || [defaultItem]);
+  const [items, handler] = useListState<PrescriptionItem>(
+    props.prescription?.items || [defaultItem]
+  );
 
   const form = useForm<PrescriptionDto>({
     initialValues: {
@@ -121,7 +134,11 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                         props={{ flex: 1 }}
                         type={[ProductType.PRODUCT]}
                         onSelect={(product) =>
-                          handler.setItem(index, { ...item, name: product.name, unit: product.unit })
+                          handler.setItem(index, {
+                            ...item,
+                            name: product.name,
+                            unit: product.unit,
+                          })
                         }
                         renderTrigger={(ctx) => {
                           return (
@@ -160,7 +177,9 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                         label={t("unit")}
                         maw={100}
                         value={item.unit}
-                        onChange={(e) => handler.setItem(index, { ...item, unit: e.currentTarget.value })}
+                        onChange={(e) =>
+                          handler.setItem(index, { ...item, unit: e.currentTarget.value })
+                        }
                       />
 
                       <NumberInput
@@ -173,21 +192,27 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                       <NumberInput
                         label={t("morning")}
                         value={item.qty.morning}
-                        onChange={(e) => handler.setItem(index, { ...item, qty: { ...item.qty, morning: +e } })}
+                        onChange={(e) =>
+                          handler.setItem(index, { ...item, qty: { ...item.qty, morning: +e } })
+                        }
                         maw={100}
                       />
 
                       <NumberInput
                         label={t("noon")}
                         value={item.qty.noon}
-                        onChange={(e) => handler.setItem(index, { ...item, qty: { ...item.qty, noon: +e } })}
+                        onChange={(e) =>
+                          handler.setItem(index, { ...item, qty: { ...item.qty, noon: +e } })
+                        }
                         maw={100}
                       />
 
                       <NumberInput
                         label={t("afternoon")}
                         value={item.qty.afternoon}
-                        onChange={(e) => handler.setItem(index, { ...item, qty: { ...item.qty, afternoon: +e } })}
+                        onChange={(e) =>
+                          handler.setItem(index, { ...item, qty: { ...item.qty, afternoon: +e } })
+                        }
                         maw={100}
                       />
                     </Group>
@@ -195,7 +220,9 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                     <TextInput
                       label={t("usage")}
                       value={item.note}
-                      onChange={(e) => handler.setItem(index, { ...item, note: e.currentTarget.value })}
+                      onChange={(e) =>
+                        handler.setItem(index, { ...item, note: e.currentTarget.value })
+                      }
                       flex={1}
                       placeholder={t("usage_placeholder")}
                     />
@@ -244,7 +271,11 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
         </Stack>
       </InputWrapper>
 
-      <Textarea label={t("advice")} {...form.getInputProps("note")} placeholder={t("advice_placeholder")} />
+      <Textarea
+        label={t("advice")}
+        {...form.getInputProps("note")}
+        placeholder={t("advice_placeholder")}
+      />
 
       <Group mt={10} justify="center" gap={10}>
         <CustomerInput
@@ -273,7 +304,13 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
             }}
             renderTrigger={(ctx) => {
               return (
-                <Button onClick={ctx.toggle} type="submit" maw="100%" variant="outline" radius={200}>
+                <Button
+                  onClick={ctx.toggle}
+                  type="submit"
+                  maw="100%"
+                  variant="outline"
+                  radius={200}
+                >
                   {t("select_prescription_template")}
                 </Button>
               );
