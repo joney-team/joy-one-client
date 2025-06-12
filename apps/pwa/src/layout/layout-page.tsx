@@ -51,9 +51,11 @@ export function Layout<P>({ component: Component, nested, ...props }: LayoutProp
               }
         }
       >
-        <Suspense>
-          <Component {...componentProps} />
-        </Suspense>
+        {workspace.isAvailable && (
+          <Suspense>
+            <Component {...componentProps} />
+          </Suspense>
+        )}
 
         {props.children}
       </Stack>

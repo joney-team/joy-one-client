@@ -1,7 +1,7 @@
 "use client";
 
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { Stack } from "@mantine/core";
+import { Skeleton, Stack } from "@mantine/core";
 import { useHeadroom } from "@mantine/hooks";
 import dynamic from "next/dynamic";
 import { Fragment, Suspense, useEffect, type FC } from "react";
@@ -81,7 +81,7 @@ export const LayoutWorkspace: FC = () => {
               }
         }
       >
-        <Suspense>
+        <Suspense fallback={<Skeleton h="100%" w="100%" />}>
           <WorkspaceHeader />
         </Suspense>
       </Stack>
@@ -114,7 +114,7 @@ export const LayoutWorkspace: FC = () => {
               }
         }
       >
-        <Suspense>
+        <Suspense fallback={<Skeleton h="100%" w="100%" />}>
           <AppNavigation />
         </Suspense>
       </Stack>

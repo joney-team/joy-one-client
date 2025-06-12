@@ -30,6 +30,7 @@ import { FC, Fragment, useEffect, useState } from "react";
 import { DetailFooter } from "./detail-footer";
 import { TaskDetailHead } from "./detail-head";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
+import { zIndexes } from "../../../../../../packages/config/layout";
 
 export const TaskDetail: FC = () => {
   const router = useRouter();
@@ -90,7 +91,6 @@ export const TaskDetail: FC = () => {
       withCloseButton={false}
       size={1600}
       yOffset={viewPadding}
-      zIndex={10}
       fullScreen={viewport.view !== "desktop"}
       styles={{
         body: {
