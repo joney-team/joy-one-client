@@ -34,8 +34,7 @@ import { ModalUpgradeVersion } from "./modal-upgrade-version";
 
 const Modals: FC = () => {
   const workspace = useWorkspace();
-
-  if (!workspace.userMember) return null;
+  if (!workspace.isAvailable) return null;
 
   return (
     <Fragment>

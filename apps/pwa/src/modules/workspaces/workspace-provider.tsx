@@ -65,6 +65,7 @@ import {
   WorkspaceType,
 } from "./workspaces-types";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { closeAppLoading, openAppLoading } from "@/components/app-loading";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
@@ -84,22 +85,21 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const [isInitialized, _setIsInitialized] = useState(false);
   const [isCreateNew, setIsCreateNew] = useState(false);
   const [invitationState, _setInvitationState] = useState<WorkspaceMemberInvitationState>();
-  const [_, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
+  const [workspaceId, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
   const state = useRef<{
-    activatedWorkspaceId?: string;
     balance?: WorkspaceBalance;
     subscription?: WorkspaceSubscriptionEntity;
     roles: WorkspaceRoleEntity[];
     settings?: WorkspaceSettingEntity;
-    userMembers: WorkspaceMember[];
+    workspaceMembers: WorkspaceMember[];
   }>({
     roles: [],
-    userMembers: [],
+    workspaceMembers: [],
   });
 
   const onlineStatus = useFetch({
-    skip: !state.current.activatedWorkspaceId,
+    skip: !workspaceId,
     fetch: () => getWorkspaceMemberOnlineStatus(),
     events: [
       EventType.SYNC_CLIENTS,
@@ -108,9 +108,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     ],
   });
 
-  const fetchUserMembers = async () => {
+  const fetchUserWorkspaceMembers = async () => {
     const result = await getMyWorkspaceMembers();
-    state.current.userMembers = result;
+    state.current.workspaceMembers = result;
     forceUpdate();
     return result;
   };
@@ -151,15 +151,16 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     await setWorkspaceSettings(settings).catch(onError);
   };
 
-  const select = (workspaceId: string) => {
+  const select = async (workspaceId: string) => {
+    openAppLoading("initial-workspace");
     setWorkspaceId(workspaceId);
-    _setIsInitialized(false);
-    initialize();
+    await initialize();
+    closeAppLoading();
   };
 
   const create = async (dto: WorkspaceDto) => {
     const workspace = await api.post<WorkspaceEntity>("/workspaces", dto);
-    const userWorkspaces = await fetchUserMembers();
+    const userWorkspaces = await fetchUserWorkspaceMembers();
     const userWorkspace = userWorkspaces.find(
       (userWorkspace) => userWorkspace.workspaceId === workspace._id
     );
@@ -168,19 +169,18 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const update = async (dto: WorkspaceDto) => {
     const workspace = await api.put(`/workspaces`, dto);
-    await fetchUserMembers();
+    await fetchUserWorkspaceMembers();
     return workspace;
   };
 
   const leave = () => {
-    localStorage.removeItem(StorageKey.WORKSPACE_ID);
-    state.current.activatedWorkspaceId = undefined;
+    setWorkspaceId(undefined);
     router.replace(`/`);
   };
 
   const archive = async () => {
     await api.delete(`/workspaces`);
-    await fetchUserMembers();
+    await fetchUserWorkspaceMembers();
     leave();
   };
 
@@ -203,7 +203,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const onSetWorkspaceId = (workspaceId: string) => {
     setWorkspaceId(workspaceId);
-    state.current.activatedWorkspaceId = workspaceId;
     forceUpdate();
   };
 
@@ -214,7 +213,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       await verifyWorkspaceMemberInvitation(invitationToken)
         .then(async (res) => {
           // Check if the workspace is already in the list
-          const userWorkspaces = await fetchUserMembers();
+          const userWorkspaces = await fetchUserWorkspaceMembers();
           const isAlreadyJoined = userWorkspaces.find((v) => v.userId === res.workspace._id);
           if (isAlreadyJoined) {
             setWorkspaceId(isAlreadyJoined.userId);
@@ -243,15 +242,19 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const initialize = async () => {
     try {
-      const userWorkspaces = await fetchUserMembers();
+      if (app.metadata.isExtended && app.metadata.workspaceId) {
+        onSetWorkspaceId(app.metadata.workspaceId);
+      }
+
+      const userWorkspaceMembers = await fetchUserWorkspaceMembers();
       await verifyInvitation();
 
-      const userWorkspace = userWorkspaces.find(
-        (userWorkspace) => userWorkspace.workspaceId === getWorkspaceId()
+      const workspaceMember = userWorkspaceMembers.find(
+        (member) => member.workspaceId === getWorkspaceId()
       );
-      if (userWorkspace && userWorkspace.workspaceId) {
+
+      if (workspaceMember && workspaceMember.workspaceId) {
         await fetchRelatedData();
-        onSetWorkspaceId(userWorkspace.workspaceId);
       }
     } catch (error) {
       console.error(error);
@@ -290,9 +293,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     return { ...output };
   };
 
-  const userMember = state.current.userMembers.find(
-    (w) => w.workspaceId === state.current.activatedWorkspaceId
-  );
+  const userMember = state.current.workspaceMembers.find((w) => w.workspaceId === workspaceId);
   const workspaceView: WorkspaceView = state.current.settings?.view || {};
 
   const modules = Object.entries(workspaceModules).map(([id, mo]) => ({
@@ -398,7 +399,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     ],
     () => {
       fetchRoles();
-      fetchUserMembers();
+      fetchUserWorkspaceMembers();
     }
   );
 
@@ -426,7 +427,10 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   }, [userMember?.workspaceId]);
 
   useEffect(() => {
-    if (auth.user?._id) initialize();
+    if (auth.user?._id) {
+      _setIsInitialized(false);
+      initialize();
+    }
   }, [auth.user?._id]);
 
   onReconnected(() => {
@@ -435,9 +439,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   useEffect(() => {
     if (isInitialized && !auth.user?._id) {
-      state.current.userMembers = [];
-      state.current.activatedWorkspaceId = undefined;
-      localStorage.removeItem(StorageKey.WORKSPACE_ID);
+      state.current.workspaceMembers = [];
+      setWorkspaceId(undefined);
       _setIsInitialized(false);
     }
   }, [auth.user?._id, isInitialized]);
@@ -497,7 +500,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         stepPrice: 1000,
       },
     userMember: userMember!,
-    userMembers: state.current.userMembers,
+    userMembers: state.current.workspaceMembers,
     select,
     create,
     update,
@@ -533,7 +536,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)),
     isShowBranches: !!userMember && userMember.workspace.branches > 0,
     defaultBranch: userMember?.workspaceBranches[0],
-    isAvailable: !!auth.user && !!userMember,
+    isAvailable: isInitialized && !!auth.user && !!userMember && !!state.current.settings,
   };
 
   const Component = useMemo(() => {

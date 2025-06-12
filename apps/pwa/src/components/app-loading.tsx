@@ -35,7 +35,7 @@ export const AppLoading: FC = () => {
     }
   }, [routeRule.auth, app.isInitialized]);
 
-  return <OverlayLoading enabled={!!loading.current} />;
+  return <OverlayLoading key={loading.current.toString()} enabled={!!loading.current} />;
 };
 
 export const useCloseAppLoading = (condition = true) => {

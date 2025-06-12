@@ -65,7 +65,6 @@ export const ModalInput: FC = () => {
   const [props, setProps] = useState<InputModalProps>();
   const workspace = useWorkspace();
   const args = props?.args || {};
-  const app = useApp();
   const color = useColor();
 
   const focusInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
