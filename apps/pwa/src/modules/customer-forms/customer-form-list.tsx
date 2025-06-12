@@ -13,77 +13,80 @@ import { OnCustomerFormModal } from "../customers/customer-form-modal";
 import { CustomerFormEntity } from "./customer-form-entity";
 import { customerFormStatusConfigs, multiArchiveCustomerForm } from "./customer-form-service";
 import { OnModalCustomerForm } from "./modal-customer-form";
+import { Stack } from "@mantine/core";
 
 export const CustomerFormList: FC = () => {
   return (
-    <List<CustomerFormEntity>
-      id="cfms"
-      route="/customer-forms"
-      creatable={{
-        onCreate: () => OnModalCustomerForm(),
-        label: t("link_form"),
-        icon: IconLink,
-      }}
-      columns={{
-        name: {
-          filter: { text: true },
-          render: ({ value, data }) => {
-            return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
+    <Stack p={16}>
+      <List<CustomerFormEntity>
+        id="cfms"
+        route="/customer-forms"
+        creatable={{
+          onCreate: () => OnModalCustomerForm(),
+          label: t("link_form"),
+          icon: IconLink,
+        }}
+        columns={{
+          name: {
+            filter: { text: true },
+            render: ({ value, data }) => {
+              return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
+            },
           },
-        },
-        phone: {
-          filter: { text: true },
-          render: ({ value, data }) => {
-            return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
+          phone: {
+            filter: { text: true },
+            render: ({ value, data }) => {
+              return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
+            },
           },
-        },
-        location: {
-          w: 400,
-          name: "address",
-          render: ({ value }) => renderLocation(value),
-        },
-        workspaceBranchId: WorkspaceBranchColumn({
-          w: 320,
-          onChange: (data) => {
-            if (!data) return;
-            OnModalUpdateWorkspaceBranch({
-              customerForms: [data],
-              workspaceBranch: data.workspaceBranch,
-            });
+          location: {
+            w: 400,
+            name: "address",
+            render: ({ value }) => renderLocation(value),
           },
-        }),
-        status: StatusColumn({
-          w: 200,
-          options: Object.entries(customerFormStatusConfigs).map(([key, value]) => ({
-            value: key,
-            label: t(value.label),
-            color: value.color,
-          })),
-        }),
-      }}
-      events={[
-        EventType.CUSTOMER_FORM_NEW,
-        EventType.CUSTOMER_FORM_UPDATED,
-        EventType.CUSTOMER_FORM_ARCHIVED,
-      ]}
-      multipleSelectActions={[
-        {
-          label: "move_workspace_branch",
-          icon: IconBuildingSkyscraper,
-          permission: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
-          handler: (data, ctx) =>
-            OnModalUpdateWorkspaceBranch({
-              customerForms: data,
-              onComplete: ctx.unSelect,
-              workspaceBranch: data[0].workspaceBranch,
-            }),
-        },
-        {
-          permission: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
-          type: "archive",
-          handler: (data) => multiArchiveCustomerForm(data.map((v) => v._id)),
-        },
-      ]}
-    />
+          workspaceBranchId: WorkspaceBranchColumn({
+            w: 320,
+            onChange: (data) => {
+              if (!data) return;
+              OnModalUpdateWorkspaceBranch({
+                customerForms: [data],
+                workspaceBranch: data.workspaceBranch,
+              });
+            },
+          }),
+          status: StatusColumn({
+            w: 200,
+            options: Object.entries(customerFormStatusConfigs).map(([key, value]) => ({
+              value: key,
+              label: t(value.label),
+              color: value.color,
+            })),
+          }),
+        }}
+        events={[
+          EventType.CUSTOMER_FORM_NEW,
+          EventType.CUSTOMER_FORM_UPDATED,
+          EventType.CUSTOMER_FORM_ARCHIVED,
+        ]}
+        multipleSelectActions={[
+          {
+            label: "move_workspace_branch",
+            icon: IconBuildingSkyscraper,
+            permission: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
+            handler: (data, ctx) =>
+              OnModalUpdateWorkspaceBranch({
+                customerForms: data,
+                onComplete: ctx.unSelect,
+                workspaceBranch: data[0].workspaceBranch,
+              }),
+          },
+          {
+            permission: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
+            type: "archive",
+            handler: (data) => multiArchiveCustomerForm(data.map((v) => v._id)),
+          },
+        ]}
+      />
+    </Stack>
   );
 };

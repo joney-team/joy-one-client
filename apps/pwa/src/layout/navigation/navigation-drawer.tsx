@@ -196,7 +196,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
             />
 
             <NavigationItem
-              href="/WorkspaceSettings/modules"
+              href="/workspace-settings/modules"
               leftSection={
                 <ThemeIcon variant="subtle" color="dark">
                   <IconLayout size={em(22)} strokeWidth={1.6} />
@@ -206,7 +206,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
             />
 
             <NavigationItem
-              href="/WorkspaceSettings/plugins"
+              href="/workspace-settings/plugins"
               leftSection={
                 <ThemeIcon variant="subtle" color="dark">
                   <IconPuzzle size={em(22)} strokeWidth={1.6} />
@@ -216,7 +216,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
             />
 
             <NavigationItem
-              href="/WorkspaceSettings/app"
+              href="/workspace-settings/app"
               leftSection={
                 <ThemeIcon variant="subtle" color="dark">
                   <IconWorld size={em(22)} strokeWidth={1.6} />

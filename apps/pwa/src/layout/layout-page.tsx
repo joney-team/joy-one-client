@@ -27,7 +27,7 @@ export function Layout<P>({ component: Component, nested, ...props }: LayoutProp
   const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
   const componentProps = props.props as any;
-  useCloseAppLoading(!!workspace.userMember);
+  useCloseAppLoading(!!workspace.userMember || routeRule.auth === "public");
 
   if (!workspace.userMember && routeRule.auth === "workspace") return props.children;
   if (!auth.user && routeRule.auth === "auth") return props.children;

@@ -1,4 +1,6 @@
+import { useApp } from "@/app.context";
 import OverlayLoading from "@/components/overlay-loading";
+import { useRouteRule } from "@/hooks/use-router";
 import { eventsEmitter } from "@/modules/events/event-service";
 import { useForceUpdate } from "@mantine/hooks";
 import { useEffect, useRef, type FC } from "react";
@@ -13,6 +15,8 @@ export const openAppLoading = (type: string | boolean) => {
 
 export const AppLoading: FC = () => {
   const forceUpdate = useForceUpdate();
+  const routeRule = useRouteRule();
+  const app = useApp();
   const loading = useRef<string | false>("initialize");
 
   useEffect(() => {
@@ -23,6 +27,13 @@ export const AppLoading: FC = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (app.isInitialized && routeRule.auth === "public") {
+      console.log("closeAppLoading");
+      closeAppLoading();
+    }
+  }, [routeRule.auth, app.isInitialized]);
 
   return <OverlayLoading enabled={!!loading.current} />;
 };

@@ -21,7 +21,9 @@ export const CustomerFormRegister: FC = () => {
   const params = useParams();
   const workspaceId = app.metadata.workspaceId || (params.workspaceId as string);
   const workspaceBranchId =
-    params.workspaceBranchId && params.workspaceBranchId !== "main" ? (params.workspaceBranchId as string) : null;
+    params.workspaceBranchId && params.workspaceBranchId !== "main"
+      ? (params.workspaceBranchId as string)
+      : null;
   const state = useRef<{
     workspace: WorkspaceEntity | null;
     workspaceBranch: WorkspaceBranchEntity | null;
@@ -152,7 +154,12 @@ export const CustomerFormRegister: FC = () => {
               Đăng ký nhận tư vấn
             </Title>
 
-            <TextInput withAsterisk label="Họ và tên" placeholder="Nhập họ và tên" {...form.getInputProps("name")} />
+            <TextInput
+              withAsterisk
+              label="Họ và tên"
+              placeholder="Nhập họ và tên"
+              {...form.getInputProps("name")}
+            />
 
             <TextInput
               label="Số điện thoại"

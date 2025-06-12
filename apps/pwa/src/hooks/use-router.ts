@@ -98,5 +98,14 @@ export const useRouter = (): AppRouter => {
 
 export const useRouteRule = () => {
   const pathname = usePathname();
-  return useMemo(() => routeRules[pathname] || defaultRouteRule, [pathname]);
+  
+  return useMemo(() => {
+    const rule = Object.keys(routeRules).find(key => pathname.startsWith(key));
+
+    if (rule && routeRules[rule]) {
+      return routeRules[rule];
+    }
+
+    return defaultRouteRule;
+  }, [pathname]);
 }
