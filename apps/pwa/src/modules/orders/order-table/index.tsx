@@ -6,9 +6,8 @@ import { OrderTableHead } from "./components/order-table-head";
 import { OrderTableProducts } from "./components/order-table-products";
 import { OrderTableTrackOrders } from "./components/order-table-track-orders";
 import { OrderForm } from "./form/order-form";
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { backgroundColors } from "@/layout/layout-workspace";
+import { backgroundColors } from "@joy-one-client/config/colors";
 
 export interface OrderTableProps {
   size: {
