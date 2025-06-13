@@ -22,17 +22,16 @@ dayjs.extend(customParseFormat);
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
 
-import { configs } from "@/configs/layout.config";
+import { closeAppLoading, openAppLoading } from "@/components/app-loading";
 import { StorageKey } from "@/types";
-import { wait } from "@/utils/common.utils";
 import { getGlobal } from "../../global";
 import { api } from "../apis";
 import { setUserLocale } from "../users/users-service";
 import { Context } from "./lang-context";
 
 const LangProvider: FC<PropsWithChildren> = (props) => {
-  const [locale, setLocale] = useState(getLocaleClient());
-  const [_config, setConfig] = useState<LocaleConfig>({} as LocaleConfig);
+  const [locale, _setLocale] = useState(getLocaleClient());
+  const [config, setConfig] = useState<LocaleConfig>({} as LocaleConfig);
   const [state, setState] = useState<LangState>({} as LangState);
   const global = getGlobal();
   global._langState = state;
@@ -66,18 +65,19 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
     } catch (error) {
       console.error(error);
     } finally {
-      setLocale(_locale);
+      _setLocale(_locale);
     }
   };
 
-  const _setLocale = async (locale: Locale | null = null, saveUserLocale = true) => {
+  const setLocale = async (locale: Locale | null = null, saveUserLocale = true) => {
     if (saveUserLocale) setUserLocale(locale);
 
-    if (locale) setCookie(StorageKey.LOCALE, locale, { maxAge: configs.maxAgeCookie });
+    if (locale) setCookie(StorageKey.LOCALE, locale, { maxAge: 60 * 60 * 24 * 400 });
     else deleteCookie(StorageKey.LOCALE);
 
-    await wait(100);
-    window.location.reload();
+    openAppLoading("lang");
+    await fetch(locale || getLocaleClient());
+    closeAppLoading();
   };
 
   // Sync week start for all locales
@@ -96,8 +96,8 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
     <Context.Provider
       value={{
         locale,
-        config: _config,
-        setLocale: _setLocale,
+        config: config,
+        setLocale,
         state,
         setState,
         weekStart,

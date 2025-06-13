@@ -6,7 +6,10 @@ import { WorkspaceMemberList } from "@/modules/workspace-members/workspace-membe
 import { OnModalTransferOwner } from "@/modules/workspaces/modals/modal-transfer-workspace-owner";
 import { OnModalWorkspaceInviteMember } from "@/modules/workspace-members/workspace-invite-member";
 import { t } from "@/modules/lang/lang-service";
-import { WorkspacePermission, WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
+import {
+  WorkspacePermission,
+  WorkspaceSpecialRoleId,
+} from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Group, Stack } from "@mantine/core";
 import { IconTransfer, IconUsersPlus } from "@tabler/icons-react";
@@ -17,7 +20,7 @@ const Page: NextPage = () => {
 
   return (
     <Stack gap={0}>
-      <Group>
+      <Group px={16} pt={16}>
         <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER)}>
           <Button
             leftIcon={IconUsersPlus}
@@ -30,7 +33,9 @@ const Page: NextPage = () => {
           </Button>
         </Renderer>
 
-        <Renderer visible={workspace.userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER)}>
+        <Renderer
+          visible={workspace.userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER)}
+        >
           <Button
             leftIcon={IconTransfer}
             onClick={() => OnModalTransferOwner()}
