@@ -1,15 +1,15 @@
-import { CONFIG } from '@/app.config'
-import { useLang } from '@/lang/hooks'
-import { Anchor, Box, Button, Container, Group, Image, rem, Stack, Text } from '@mantine/core'
-import { IconChevronRight } from '@tabler/icons-react'
-import Link from 'next/link'
-import { FC } from 'react'
+import config from "@joy-one-client/config";
+import { useLang } from "@/lang/hooks";
+import { Anchor, Box, Button, Container, Group, Image, rem, Stack, Text } from "@mantine/core";
+import { IconChevronRight } from "@tabler/icons-react";
+import Link from "next/link";
+import { FC } from "react";
 
 export const Footer: FC = () => {
   const { t } = useLang();
-  
+
   return (
-    <Box component="footer" style={{ background: '#0F1A30' }}>
+    <Box component="footer" style={{ background: "#0F1A30" }}>
       <Container size="lg" py={50}>
         <Stack align="center">
           <Anchor component={Link} href="/" mb={20}>
@@ -18,44 +18,50 @@ export const Footer: FC = () => {
 
           <Stack gap={8}>
             <Text ta="center" c="white" fz={rem(20)} fw={700}>
-              {t('company_name')}
+              {t("company_name")}
             </Text>
 
             <Text ta="center" c="white" fz={rem(15)}>
-              {t('company_tax_code')}: 0317333858
+              {t("company_tax_code")}: 0317333858
             </Text>
 
             <Text ta="center" c="white" fz={rem(15)}>
-              {t('company_address')}
+              {t("company_address")}
             </Text>
 
             <Text ta="center" c="white" fz={rem(15)}>
-              {t('phone_number')}: <Anchor c="white" href="tel:84918668140">0918 668 140</Anchor>
+              {t("phone_number")}:{" "}
+              <Anchor c="white" href="tel:84918668140">
+                0918 668 140
+              </Anchor>
             </Text>
 
             <Text ta="center" c="white" fz={rem(15)}>
-              {t('support_phone')}: <Anchor c="white" href="tel:0971153977">097 115 3977</Anchor>
+              {t("support_phone")}:{" "}
+              <Anchor c="white" href="tel:0971153977">
+                097 115 3977
+              </Anchor>
             </Text>
           </Stack>
 
-          <Anchor href={CONFIG.APP_URL + '?authType=register'}>
+          <Anchor href={config.APP_URL + "?authType=register"}>
             <Button
               mt={30}
               size="lg"
               radius={100}
               rightSection={<IconChevronRight strokeWidth={1.5} />}
             >
-              {t('try_now')}
+              {t("try_now")}
             </Button>
           </Anchor>
 
           <Group mt={20}>
             <Anchor ta="center" c="white" component={Link} href="/privacy-policy">
-              {t('privacy_policy')}
+              {t("privacy_policy")}
             </Anchor>
 
             <Anchor ta="center" c="white" component={Link} href="/terms-of-service">
-              {t('terms_of_service')}
+              {t("terms_of_service")}
             </Anchor>
           </Group>
 
@@ -67,5 +73,5 @@ export const Footer: FC = () => {
         </Stack>
       </Container>
     </Box>
-  )
-}
+  );
+};

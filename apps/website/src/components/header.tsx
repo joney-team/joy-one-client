@@ -1,19 +1,25 @@
-import { CONFIG } from '@/app.config';
-import { useLang } from '@/lang/hooks';
-import { Anchor, Button, Group, Image } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import Link from 'next/link';
-import { FC } from 'react';
-import { ButtonLanguage } from './language';
+import config from "@joy-one-client/config";
+import { useLang } from "@/lang/hooks";
+import { Anchor, Button, Group, Image } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+import Link from "next/link";
+import { FC } from "react";
+import { ButtonLanguage } from "./language";
 
 export const Header: FC = () => {
-  const isMobile = useMediaQuery('(max-width: 1023px)', true);
+  const isMobile = useMediaQuery("(max-width: 1023px)", true);
   const { t } = useLang();
 
   return (
     <Group justify={isMobile ? "center" : "space-between"}>
       <Anchor component={Link} href="/">
-        <Image src="/images/logo-horizontal.png" fit="contain" alt="JoyOne" height={isMobile ? 32 : 38} style={{ objectFit: 'contain' }} />
+        <Image
+          src="/images/logo-horizontal.png"
+          fit="contain"
+          alt="JoyOne"
+          height={isMobile ? 32 : 38}
+          style={{ objectFit: "contain" }}
+        />
       </Anchor>
 
       <Group visibleFrom="md" justify="flex-end" gap={30}>
@@ -30,22 +36,15 @@ export const Header: FC = () => {
         </Anchor> */}
 
         <Group>
-          <Anchor href={CONFIG.APP_URL + '?authType=signin'}>
-            <Button
-              variant="outline"
-              radius={100}
-              tt="uppercase"
-            >
-              {t('login')}
+          <Anchor href={config.APP_URL + "?authType=signin"}>
+            <Button variant="outline" radius={100} tt="uppercase">
+              {t("login")}
             </Button>
           </Anchor>
 
-          <Anchor href={CONFIG.APP_URL + '?authType=register'}>
-            <Button
-              radius={100}
-              tt="uppercase"
-            >
-              {t('register')}
+          <Anchor href={config.APP_URL + "?authType=register"}>
+            <Button radius={100} tt="uppercase">
+              {t("register")}
             </Button>
           </Anchor>
 
@@ -53,5 +52,5 @@ export const Header: FC = () => {
         </Group>
       </Group>
     </Group>
-  )
-}
+  );
+};
