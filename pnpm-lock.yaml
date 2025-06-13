@@ -265,11 +265,8 @@ importers:
   apps/website:
     dependencies:
       '@joy-one-client/config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/config
-      '@joy-one-client/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       '@mantine/core':
         specifier: ^7.15.2
         version: 7.17.8(@mantine/hooks@7.17.8(react@18.3.1))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -302,10 +299,10 @@ importers:
         version: 9.0.3
     devDependencies:
       '@types/node':
-        specifier: ^20
-        version: 20.19.0
+        specifier: ^22.15.30
+        version: 22.15.30
       '@types/react':
-        specifier: ^18
+        specifier: ^18.3.23
         version: 18.3.23
       '@types/react-dom':
         specifier: ^18
@@ -320,7 +317,7 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1(postcss@8.5.4)
       typescript:
-        specifier: ^5
+        specifier: ^5.8.3
         version: 5.8.3
 
   packages/apis:
@@ -8822,7 +8819,7 @@ snapshots:
   uncontrollable@7.2.1(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.27.6
-      '@types/react': 18.3.23
+      '@types/react': 19.1.6
       invariant: 2.2.4
       react: 18.3.1
       react-lifecycles-compat: 3.0.4

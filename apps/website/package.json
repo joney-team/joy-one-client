@@ -1,5 +1,5 @@
 {
-  "name": "joy-one-website",
+  "name": "website",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,8 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@joy-one-client/config": "workspace:*",
-    "@joy-one-client/utils": "workspace:*",
+    "@joy-one-client/config": "workspace:^",
     "@mantine/core": "^7.15.2",
     "@mantine/hooks": "^7.15.2",
     "@tabler/icons-react": "^3.4.0",
@@ -23,12 +22,12 @@
     "webrtc-adapter": "^9.0.1"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/node": "^22.15.30",
+    "@types/react": "^18.3.23",
     "@types/react-dom": "^18",
     "postcss": "^8.4.38",
     "postcss-preset-mantine": "^1.15.0",
     "postcss-simple-vars": "^7.0.1",
-    "typescript": "^5"
+    "typescript": "^5.8.3"
   }
 }
