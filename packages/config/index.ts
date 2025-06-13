@@ -23,14 +23,14 @@ const environmentConfigs: Record<string, EnvironmentConfig> = {
   },
   staging: {
     PUBLIC_URL: "https://staging.joyone.vn",
-    APP_URL: "https://staging.pwa.joyone.vn",
+    APP_URL: "https://staging.joyone.vn",
     API_CLIENT_SIDE_URL: "https://staging-api.joyone.vn",
     API_SERVER_SIDE_URL: "http://jo-server:4000",
     SECRET_KEY: "wzsjaledyu",
   },
   production: {
     PUBLIC_URL: "https://joyone.vn",
-    APP_URL: "https://pwa.joyone.vn",
+    APP_URL: "https://app.joyone.vn",
     API_CLIENT_SIDE_URL: "https://api.joyone.vn",
     API_SERVER_SIDE_URL: "http://jo-server:4000",
     SECRET_KEY: "wzsjaledyu",
