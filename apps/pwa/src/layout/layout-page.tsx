@@ -55,10 +55,12 @@ export function Layout<P>({ component: Component, nested, ...props }: LayoutProp
               }
         }
       >
-        {workspace.isAvailable && (
-          <Suspense>
+        {workspace.isAvailable ? (
+          <Suspense fallback={<PageLoading />}>
             <Component {...componentProps} />
           </Suspense>
+        ) : (
+          <PageLoading />
         )}
 
         {props.children}
@@ -70,6 +72,6 @@ export function Layout<P>({ component: Component, nested, ...props }: LayoutProp
 export function renderPage<P>(dynamicOptions: DynamicOptions<P> | Loader<P>) {
   return dynamic<P>(dynamicOptions, {
     ssr: false,
-    loading: PageLoading,
+    loading: () => <PageLoading />,
   });
 }
