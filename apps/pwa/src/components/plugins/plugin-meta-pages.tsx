@@ -6,12 +6,25 @@ import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
-import { Anchor, Card, Center, Group, SimpleGrid, Skeleton, Stack, Text, ThemeIcon, Title, em } from "@mantine/core";
+import {
+  Anchor,
+  Card,
+  Center,
+  Group,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  Text,
+  ThemeIcon,
+  Title,
+  em,
+} from "@mantine/core";
 import { IconCirclesRelation, IconLinkPlus, IconPuzzle } from "@tabler/icons-react";
 import { FC } from "react";
 import { Avatar } from "../avatar";
 import { Button } from "../buttons/button";
 import { Image } from "../image";
+import config from "@joy-one-client/config";
 
 export const PluginMetaPages: FC = () => {
   const workspace = useWorkspace();
@@ -56,6 +69,7 @@ export const PluginMetaPages: FC = () => {
                   <Stack gap={0}>
                     <Text>{page.name}</Text>
                     <Text fz={12}>#{page.id}</Text>
+                    {config.ENV === "development" && <Text fz={12}>#{page._id}</Text>}
                   </Stack>
                 </Group>
 
@@ -79,7 +93,11 @@ export const PluginMetaPages: FC = () => {
         })}
 
         <Center>
-          <Button type="submit" onClick={plugins.onConnectMetaPages} rightSection={<IconLinkPlus strokeWidth={1.5} />}>
+          <Button
+            type="submit"
+            onClick={plugins.onConnectMetaPages}
+            rightSection={<IconLinkPlus strokeWidth={1.5} />}
+          >
             {t("connect_more")}
           </Button>
         </Center>
