@@ -17,19 +17,22 @@ import { t } from "@/modules/lang/lang-service";
 import { alpha, Box, Group, Loader, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { RichTextEditor, useRichTextEditorContext } from "@mantine/tiptap";
+import { RichTextEditor, RichTextEditorProps, useRichTextEditorContext } from "@mantine/tiptap";
 import { IconPhoto, IconUpload } from "@tabler/icons-react";
-import { Extensions, useEditor } from "@tiptap/react";
+import { Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { ClipboardEventHandler, FC, useState } from "react";
 import { ImageResize } from "./image-resize";
 import { OnFileModal } from "@/modules/files/modals/modal-files";
 
 interface EditorProps {
-  value?: string;
+  value?: string | JSONContent | undefined | null;
   onChange?: (content?: string) => void;
+  onChangeJSON?: (content?: JSONContent) => void;
   delay?: number;
   placeholder?: string;
   uploadFileOptions?: UploadFileOptions;
+  isAlwayShowToolbar?: boolean;
+  props?: Partial<RichTextEditorProps>;
 }
 
 const extensions: Extensions = [
@@ -89,6 +92,7 @@ export const Editor: FC<EditorProps> = (props) => {
     content: props.value,
     onUpdate: (e) => {
       onChange(e.editor.getHTML());
+      props.onChangeJSON?.(e.editor.getJSON());
     },
     immediatelyRender: false,
   });
@@ -124,8 +128,9 @@ export const Editor: FC<EditorProps> = (props) => {
           onPaste={onPaste}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
+          {...props.props}
         >
-          {focused && (
+          {(focused || props.isAlwayShowToolbar) && (
             <RichTextEditor.Toolbar>
               <RichTextEditor.ControlsGroup>
                 <RichTextEditor.Bold />

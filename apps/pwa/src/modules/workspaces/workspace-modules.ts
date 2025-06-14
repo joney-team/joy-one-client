@@ -6,7 +6,7 @@ import {
   IconClipboardText,
   IconCoins, IconCreditCardPay, IconFiles,
   IconLayout, IconLayoutDashboard, IconList,
-  IconMailbox, IconMessage, IconMessage2Cog, IconMessageCircle, IconMessageUser, IconPackage, IconPill,
+  IconMailbox, IconMessage, IconMessage2Cog, IconMessageCircle, IconMessageUser, IconNews, IconPackage, IconPill,
   IconPuzzle,
   IconReportAnalytics, IconSettings, IconSettings2,
   IconStack2,
@@ -49,6 +49,8 @@ const combineModule = (config: WorkspaceModuleConfig): WorkspaceModule => {
 export const workspaceModules = {
   // Main
   dashboard: combineModule({ href: '/', icon: IconLayoutDashboard, hrefExact: true }),
+  posts: combineModule({ href: '/posts', icon: IconNews, permissions: WorkspacePermission.POSTS_VIEW }),
+  postsNew: combineModule({ href: '/posts/new', icon: IconNews, permissions: WorkspacePermission.POSTS_MANAGER, restrictDisplay: ['spotlight'] }),
 
   // HRM
   members: combineModule({ href: '/members', icon: IconUsersGroup, restrictDisplay: ['spotlight'], permissions: WorkspacePermission.WORKSPACE_MEMBERS_VIEW }),
@@ -93,7 +95,7 @@ export const workspaceModules = {
   workspaceSettingsBranches: combineModule({ href: '/WorkspaceSettings/branches', icon: IconBuildingSkyscraper, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
   workspaceSettingsApiApps: combineModule({ href: '/WorkspaceSettings/api-apps', icon: IconApiApp, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
   workspaceSettingsMessages: combineModule({ href: '/WorkspaceSettings/messages', icon: IconMessage2Cog, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  
+
   // Workspace Plugins
   workspacePlugins: combineModule({ href: '/WorkspaceSettings/plugins', icon: IconPuzzle, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
   workspacePluginsBanks: combineModule({ href: '/WorkspaceSettings/plugins/banks', icon: IconBuildingBank, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),

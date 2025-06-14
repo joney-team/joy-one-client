@@ -75,6 +75,9 @@ export enum WorkspacePermission {
   PRODUCT_COMBOS_MANAGER = 'PCM',
 
   EXPORT_DATA = 'ED',
+
+  POSTS_VIEW = 'PV',
+  POSTS_MANAGER = 'PM',
 }
 
 export interface WorkspaceRoleDto {

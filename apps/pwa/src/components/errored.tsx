@@ -4,7 +4,7 @@ import { IconInfoCircle } from "@tabler/icons-react";
 import { FC } from "react";
 
 export interface ErroredProps {
-  error?: string;
+  error?: string | Error | null;
   p?: number;
   visible?: boolean;
   centered?: boolean;
@@ -34,7 +34,7 @@ export const Errored: FC<ErroredProps> = (props) => {
         )}
 
         <Text ta={props.centered ? "center" : "left"} fz="xs" c="gray.6">
-          {props.error || t("error_unknown")}
+          {props.error instanceof Error ? props.error.message : props.error || t("error_unknown")}
         </Text>
       </Group>
     </Box>

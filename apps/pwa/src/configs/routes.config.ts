@@ -9,6 +9,10 @@ export const defaultRouteRule: RouteRule = {
 };
 
 export const routeRules: Record<string, RouteRule> = {
+  '/dev': {
+    auth: 'public',
+    workspace: false,
+  },
   '/connect': {
     auth: 'public',
     workspace: false,

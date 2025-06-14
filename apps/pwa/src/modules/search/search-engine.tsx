@@ -14,7 +14,12 @@ import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity } from "@/modules/products/products-types";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { search, searchArray } from "@/modules/search/search-service";
-import { SearchCustomer, SearchEntityResult, SearchLoan, SearchResult } from "@/modules/search/search-types";
+import {
+  SearchCustomer,
+  SearchEntityResult,
+  SearchLoan,
+  SearchResult,
+} from "@/modules/search/search-types";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -29,6 +34,7 @@ import {
   IconCashRegister,
   IconClipboardText,
   IconCreditCardPay,
+  IconNews,
   IconPill,
   IconSearch,
   IconStack2,
@@ -46,13 +52,16 @@ export const SearchEngine: FC = () => {
   const [searchResult, setSearchResult] = useState<SearchResult | undefined>(undefined);
   const [isSearching, setIsSearching] = useState(false);
 
-  const isHasSearchResult = !!query && query.length > 0 && !!searchResult && Object.keys(searchResult).length > 0;
+  const isHasSearchResult =
+    !!query && query.length > 0 && !!searchResult && Object.keys(searchResult).length > 0;
 
   const searchModules = workspace.availableModules.filter(
     (m) => !m.restrictDisplay || m.restrictDisplay.includes("spotlight")
   );
   const matchedModules =
-    query && query.length > 0 ? searchArray(searchModules, [], query, (m) => t(m.name || m.id)) : [];
+    query && query.length > 0
+      ? searchArray(searchModules, [], query, (m) => t(m.name || m.id))
+      : [];
 
   const strictSearchEntity = (entity: AppEntity) => {
     if ((workspace.settings.searchSettings?.hideEntities || []).includes(entity)) return false;
@@ -67,6 +76,24 @@ export const SearchEngine: FC = () => {
         const data = (searchResult as any)[entity] as SearchEntityResult[];
         if (!data || !strictSearchEntity(entity as AppEntity)) return;
 
+        if (entity === AppEntity.POSTS) {
+          actionGroups.push({
+            group: t("posts"),
+            actions: data.map((post) => {
+              return {
+                id: post._id,
+                label: post.title,
+                description: post.excerpt,
+                leftSection: <ActionIcon icon={IconNews} />,
+                onClick: async () => {
+                  return router.push(`/posts/${post._id}`);
+                },
+                datatype: entity,
+              };
+            }),
+          });
+        }
+
         if (entity === AppEntity.CUSTOMERS) {
           const customers = data as SearchCustomer[];
 
@@ -76,7 +103,11 @@ export const SearchEngine: FC = () => {
               return {
                 id: customer._id,
                 label: `${customer.name}`,
-                description: [customer.phone, customer.email, renderEntityCode(customer.code, customer.plainCode)]
+                description: [
+                  customer.phone,
+                  customer.email,
+                  renderEntityCode(customer.code, customer.plainCode),
+                ]
                   .filter((v) => !!v)
                   .filter((v) => !!v)
                   .join(" - "),
@@ -106,7 +137,9 @@ export const SearchEngine: FC = () => {
               datatype: entity,
             };
 
-            const existed = actionGroups.findIndex((v) => v.group === t(`product_type_${product.type}`));
+            const existed = actionGroups.findIndex(
+              (v) => v.group === t(`product_type_${product.type}`)
+            );
             if (existed >= 0) {
               actionGroups[existed].actions.push(action);
             } else {
@@ -163,7 +196,11 @@ export const SearchEngine: FC = () => {
               return {
                 id: loan.id!,
                 label: renderEntityCode(loan.code),
-                description: [loan.customerName, loan.customerPhone, loan.imeil ? `IMEIL: ${loan.imeil}` : ""]
+                description: [
+                  loan.customerName,
+                  loan.customerPhone,
+                  loan.imeil ? `IMEIL: ${loan.imeil}` : "",
+                ]
                   .filter((v) => !!v)
                   .join(" - "),
                 leftSection: <ActionIcon icon={IconCreditCardPay} />,
@@ -259,8 +296,12 @@ export const SearchEngine: FC = () => {
       actionGroups.push({
         group: t("modules"),
         actions: matchedModules.map((m) => {
-          const parent = workspace.modules.find((v) => v.href === `/${m.href.split("/")[1]}` && v.id !== m.id);
-          const label = parent ? `${t(parent.name || parent.id)} > ${t(m.name || m.id)}` : t(m.name || m.id);
+          const parent = workspace.modules.find(
+            (v) => v.href === `/${m.href.split("/")[1]}` && v.id !== m.id
+          );
+          const label = parent
+            ? `${t(parent.name || parent.id)} > ${t(m.name || m.id)}`
+            : t(m.name || m.id);
           return {
             id: m.id,
             label,

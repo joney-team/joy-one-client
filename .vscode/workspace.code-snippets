@@ -39,7 +39,7 @@
     "body": [
       "\"use client\";",
       "",
-      "import { Layout, renderPage } from \"@/layout/LayoutPage\";",
+      "import { Layout, renderPage } from \"@/layout/layout-page\";",
       "",
       "const Content = renderPage(() => import(\"${1:component}\").then((mod) => mod.${2:component}));",
       "export default () => <Layout component={Content} />;",

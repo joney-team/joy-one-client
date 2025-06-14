@@ -121,6 +121,7 @@ export enum AppEntity {
   WORKSPACE_BRANCHES = 'WB',
   MESSAGE_BOXES = 'MB',
   MESSAGES = 'MS',
+  POSTS = 'PS',
 }
 
 export interface AppPageMetadata {

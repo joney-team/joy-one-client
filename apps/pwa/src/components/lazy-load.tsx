@@ -18,7 +18,7 @@ export const PageLoading: (loadingProps: DynamicOptionsLoadingProps) => JSX.Elem
 export const LazyLoad: FC<LazyLoadProps> = ({ p }) => {
   return (
     <Stack p={p}>
-      <Skeleton height="40vh" />
+      <Skeleton height="50dvh" />
     </Stack>
   );
 };

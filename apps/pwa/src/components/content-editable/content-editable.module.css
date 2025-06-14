@@ -1,0 +1,21 @@
+.ContentEditable {
+  .Input {
+    border: 0.5px solid transparent;
+    border-radius: var(--mantine-radius-md);
+  }
+
+  &.isActive {
+    .Input {
+      padding: 0 0.5rem;
+
+      &:focus {
+        border: 0.5px solid var(--mantine-color-default-border);
+      }
+
+      &:hover:not(:focus) {
+        background-color: var(--mantine-color-default-hover);
+        opacity: 0.5;
+      }
+    }
+  }
+}

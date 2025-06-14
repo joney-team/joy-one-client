@@ -31,8 +31,7 @@ const defaultWorkspaceView: WorkspaceView = {
     { id: '', type: 'MODULE', moduleId: 'productCategories' },
     { id: '', type: 'MODULE', moduleId: 'productCombos' },
     { id: '', type: 'MODULE', moduleId: 'productStocks' },
-    // { id: '', type: 'MODULE', moduleId: 'vouchers' },
-    // { id: '', type: 'MODULE', moduleId: 'coupons' },
+    { id: '', type: 'MODULE', moduleId: 'posts' },
 
     { id: '', type: 'DIVIDER', dividerName: 'manage' },
     { id: '', type: 'MODULE', moduleId: 'partners' },

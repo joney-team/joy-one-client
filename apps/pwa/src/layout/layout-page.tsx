@@ -1,7 +1,7 @@
 "use client";
 
 import { useCloseAppLoading } from "@/components/app-loading";
-import { PageLoading } from "@/components/lazy-load";
+import { PageLazyLoad, PageLoading } from "@/components/lazy-load";
 import { useRouteRule } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -56,11 +56,11 @@ export function Layout<P>({ component: Component, nested, ...props }: LayoutProp
         }
       >
         {workspace.isAvailable ? (
-          <Suspense fallback={<PageLoading />}>
+          <Suspense fallback={<PageLazyLoad />}>
             <Component {...componentProps} />
           </Suspense>
         ) : (
-          <PageLoading />
+          <PageLazyLoad />
         )}
 
         {props.children}
@@ -72,6 +72,6 @@ export function Layout<P>({ component: Component, nested, ...props }: LayoutProp
 export function renderPage<P>(dynamicOptions: DynamicOptions<P> | Loader<P>) {
   return dynamic<P>(dynamicOptions, {
     ssr: false,
-    loading: () => <PageLoading />,
+    loading: PageLoading,
   });
 }
