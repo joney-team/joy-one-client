@@ -1,6 +1,6 @@
 import { Button } from "@/components/buttons/button";
 import { Hovered } from "@/components/hovered";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
 import { OnModalDatePicker } from "@/modals/modal-date-picker";
 import { useRouter } from "@/hooks/use-router";
@@ -50,7 +50,11 @@ export const ReportWidgets: FC = () => {
     const targetPeriod = _query.period || Period.MONTH;
 
     const period: Period =
-      targetPeriod === Period.YEAR ? Period.MONTH : targetPeriod === Period.MONTH ? Period.DATE : targetPeriod;
+      targetPeriod === Period.YEAR
+        ? Period.MONTH
+        : targetPeriod === Period.MONTH
+        ? Period.DATE
+        : targetPeriod;
 
     const date = _query.date ? new Date(+_query.date * 1000) : new Date();
     const range = DateTimeUtils.getRange(date, targetPeriod);
@@ -84,7 +88,8 @@ export const ReportWidgets: FC = () => {
           toTime: _query.toTime,
           period: _query.period,
           userId: _query.userId,
-          workspaceBranchIds: _query.workspaceBranchIds.length > 0 ? _query.workspaceBranchIds : undefined,
+          workspaceBranchIds:
+            _query.workspaceBranchIds.length > 0 ? _query.workspaceBranchIds : undefined,
         }) as any
       );
     },
@@ -107,7 +112,9 @@ export const ReportWidgets: FC = () => {
   const [userMemberInfos, isUserMemberInfosReady, setUerMemberInfo] = useWorkspaceMembers(
     [query.userId].filter(Boolean)
   );
-  const [workspaceBranches, isWorkspaceBranchesReady] = useWorkspaceBranches(query.workspaceBranchIds);
+  const [workspaceBranches, isWorkspaceBranchesReady] = useWorkspaceBranches(
+    query.workspaceBranchIds
+  );
 
   const ctx: ReportWidgetsContext = {
     isInitialized: report.isInitialized,
@@ -146,7 +153,11 @@ export const ReportWidgets: FC = () => {
           onChange={(value) => {
             report.setQuery("period", value, { isSilient: false });
           }}
-          onClear={Object.keys(report.query) ? undefined : () => report.removeQuery("period", { isSilient: false })}
+          onClear={
+            Object.keys(report.query)
+              ? undefined
+              : () => report.removeQuery("period", { isSilient: false })
+          }
         />
 
         <ButtonSelect
@@ -192,7 +203,12 @@ export const ReportWidgets: FC = () => {
 
               return (
                 <Group>
-                  <ThemeIcon radius={100} variant="transparent" color="var(--mantine-color-dimmed)" size="sm">
+                  <ThemeIcon
+                    radius={100}
+                    variant="transparent"
+                    color="var(--mantine-color-dimmed)"
+                    size="sm"
+                  >
                     {isSelected ? <IconMinus size={16} /> : <IconPlus size={16} />}
                   </ThemeIcon>
                 </Group>
@@ -205,7 +221,11 @@ export const ReportWidgets: FC = () => {
                     const selectedUser = userMemberInfos.find((v) => v.userId === query.userId);
 
                     return (
-                      <Group justify="space-between" style={{ position: "relative" }} ref={hover.ref}>
+                      <Group
+                        justify="space-between"
+                        style={{ position: "relative" }}
+                        ref={hover.ref}
+                      >
                         <Button
                           onClick={ctx.toggle}
                           size="compact-md"
@@ -278,10 +298,16 @@ export const ReportWidgets: FC = () => {
               return (
                 <Hovered>
                   {(hover) => {
-                    const workspaceBranch = workspaceBranches.find((v) => query.workspaceBranchIds.includes(v._id));
+                    const workspaceBranch = workspaceBranches.find((v) =>
+                      query.workspaceBranchIds.includes(v._id)
+                    );
 
                     return (
-                      <Group justify="space-between" style={{ position: "relative" }} ref={hover.ref}>
+                      <Group
+                        justify="space-between"
+                        style={{ position: "relative" }}
+                        ref={hover.ref}
+                      >
                         <Button
                           onClick={ctx.toggle}
                           size="compact-md"

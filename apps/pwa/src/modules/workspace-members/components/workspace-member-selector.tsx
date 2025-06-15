@@ -11,7 +11,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ActionIcon, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "../../components/selector";
+import { Selector, SelectorContext } from "../../../components/selector";
 
 interface WorkspaceMemberSelectorProps
   extends Omit<InputWrapperProps, "value" | "onChange" | "onSelect"> {

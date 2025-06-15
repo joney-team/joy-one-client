@@ -21,7 +21,7 @@ import { IconArrowDown, IconCalendar, IconCalendarTime, IconCheck } from "@table
 
 import { FormSession } from "@/components/form-session";
 import { CustomerInput } from "@/modules/customers/customer-input";
-import { UsersInput } from "@/components/inputs/users-input";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkSlotCreateEventDto, WorkSlotsInput } from "@/components/inputs/work-slots-input";
 import { getView } from "@/layout/layout-service";
 import { useColor } from "@/modules/theme/use-color";
@@ -179,7 +179,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
           onSelect={(value) => setCustomer(value)}
         />
 
-        <UsersInput
+        <WorkspaceMembersInput
           label={t("attendees")}
           showMainResponsible
           value={assigneeUsers}
@@ -241,7 +241,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
             </FormSession>
 
             <FormSession title={t("attendees")}>
-              <UsersInput
+              <WorkspaceMembersInput
                 showMainResponsible
                 value={assigneeUsers}
                 onChange={(value) => setAssigneeUsers(value)}

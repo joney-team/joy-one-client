@@ -3,7 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
-import { UserInput } from "@/components/inputs/user-input";
+import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { Renderer } from "@/components/renderer";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CustomerSelector } from "@/modules/customers/customer-selector";
@@ -139,7 +139,7 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
 
             <Tooltip label={t("assignee")}>
               <Group>
-                <UserInput
+                <WorkspaceMemberInput
                   value={orderTable.values.assigneeUsers[0]}
                   onChange={(value) =>
                     orderTable.setValues({

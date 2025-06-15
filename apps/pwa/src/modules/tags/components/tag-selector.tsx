@@ -1,3 +1,5 @@
+"use client";
+
 import { AppEntity } from "@/types";
 import { Button } from "@/components/buttons/button";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
@@ -7,9 +9,9 @@ import { getTags, interactTag } from "@/modules/tags/tags-service";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "../../components/selector";
-import { Circle } from "../../components/circle";
+import { FC, type ReactNode } from "react";
+import { Selector, SelectorContext } from "@/components/selector";
+import { Circle } from "@/components/circle";
 
 interface TagSelectorProps {
   type: TagType;

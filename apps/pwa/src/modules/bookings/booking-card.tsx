@@ -45,7 +45,7 @@ import {
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, useEffect, useState } from "react";
-import { UsersInput } from "../../components/inputs/users-input";
+import { WorkspaceMembersInput } from "../workspace-members/components/workspace-members-input";
 import { CustomerInput } from "../customers/customer-input";
 import { BookingEntity, BookingStatus } from "./booking-types";
 import { OnModalRescheduleBooking } from "./modals/modal-reschedule-booking";
@@ -342,7 +342,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
             )}
 
             <Group flex={1}>
-              <UsersInput
+              <WorkspaceMembersInput
                 label={t("attendees")}
                 value={booking.assigneeUsers}
                 collapsed={memberCollapsed}

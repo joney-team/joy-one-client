@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
-import { LoanAssetDataInput } from "@/components/inputs/loan-asset-data-inputs";
+import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { useFormSubmit } from "@/hooks/use-form";

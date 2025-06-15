@@ -1,3 +1,5 @@
+"use client";
+
 import { LoanAssetDataMap, LoanAssetType } from "@/modules/loans/loans-types";
 import { InputWrapper, InputWrapperProps, Stack } from "@mantine/core";
 import { FC } from "react";

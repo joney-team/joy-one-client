@@ -7,11 +7,14 @@ import { ProductType } from "@/modules/products/products-types";
 import { ActionIcon, Card, Group, NumberInput, Stack, Text, Tooltip } from "@mantine/core";
 import { IconMinus, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { UsersInput } from "@/components/inputs/users-input";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { useOrderTable } from "../order-table-context";
 import { OrderTableFormValueItem } from "../order-table-types";
 
-export const OrderFormItem: FC<{ index: number; item: OrderTableFormValueItem }> = ({ index, item }) => {
+export const OrderFormItem: FC<{ index: number; item: OrderTableFormValueItem }> = ({
+  index,
+  item,
+}) => {
   const Icon = getProductIcon(item.product.type);
   const color = useColor();
   const orderForm = useOrderTable();
@@ -83,7 +86,7 @@ export const OrderFormItem: FC<{ index: number; item: OrderTableFormValueItem }>
         <Group justify="space-between" wrap="nowrap">
           <Text fw={600}>{item.product.displayName || item.product.name}</Text>
 
-          <UsersInput
+          <WorkspaceMembersInput
             collapsed
             value={item.assigneeUsers}
             onChange={(value) => onUpdate({ ...item, assigneeUsers: value })}

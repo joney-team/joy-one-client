@@ -1,3 +1,5 @@
+"use client";
+
 import { Coordinates } from "@/types";
 import { OnModalCheckInLocationForm } from "@/modals/modal-check-in-location-form";
 import { CheckInLocation } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
@@ -108,12 +110,18 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                       {location.name}
                     </Text>
                     <Text c="gray" fz={em(12)} fw={500}>
-                      {t("coordinates")}: {StringUtils.limitCharacters(location.coordinates.lat.toString(), 15)}/
+                      {t("coordinates")}:{" "}
+                      {StringUtils.limitCharacters(location.coordinates.lat.toString(), 15)}/
                       {StringUtils.limitCharacters(location.coordinates.lng.toString(), 15)}
                     </Text>
                   </Stack>
 
-                  <Switch checked={!location.disabled} label={t("on_off_activate")} onChange={toggleDisable} mb={5} />
+                  <Switch
+                    checked={!location.disabled}
+                    label={t("on_off_activate")}
+                    onChange={toggleDisable}
+                    mb={5}
+                  />
 
                   <NumberInput
                     label={t("radius", { unit: t("meter") })}

@@ -11,7 +11,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext, SelectorProps } from "../../components/selector";
+import { Selector, SelectorContext, SelectorProps } from "../../../components/selector";
 
 interface PartnerSelectorProps
   extends Omit<

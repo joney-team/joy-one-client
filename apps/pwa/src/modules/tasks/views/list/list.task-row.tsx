@@ -4,9 +4,9 @@ import { ButtonSelect } from "@/components/buttons/button-select";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { CustomerInput } from "@/modules/customers/customer-input";
 import { DueDateInput } from "@/components/inputs/due-date-input";
-import { UsersInput } from "@/components/inputs/users-input";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { Renderer } from "@/components/renderer";
-import { TagSelector } from "@/modules/tags/tag-selector";
+import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useLayout } from "@/layout/layout-context";
@@ -376,7 +376,7 @@ export const ListTaskRow: FC<{
           </Group>
 
           <Group w={150} px={10}>
-            <UsersInput
+            <WorkspaceMembersInput
               collapsed
               value={task.assigneeUsers}
               onChange={(users) =>

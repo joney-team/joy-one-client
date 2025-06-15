@@ -1,9 +1,14 @@
+"use client";
+
 import { calendarProps } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
 import { useLang } from "@/modules/lang/lang-context";
 import { getDateFormat } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { isInWorkSlot, useWorkDaySlots } from "@/modules/workspace-settings/workspace-settings-service";
+import {
+  isInWorkSlot,
+  useWorkDaySlots,
+} from "@/modules/workspace-settings/workspace-settings-service";
 import { CalendarView } from "@/types";
 import { parseToTime } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
@@ -87,13 +92,19 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
   const nextRange = () => {
     const nextDate = dayjs(date).add(1, view).toDate();
     setDate(nextDate);
-    props.onDateChange?.({ start: dayjs(date).startOf(view).toDate(), end: dayjs(nextDate).endOf(view).toDate() });
+    props.onDateChange?.({
+      start: dayjs(date).startOf(view).toDate(),
+      end: dayjs(nextDate).endOf(view).toDate(),
+    });
   };
 
   const previousRange = () => {
     const previousDate = dayjs(date).subtract(1, view).toDate();
     setDate(previousDate);
-    props.onDateChange?.({ start: dayjs(previousDate).startOf(view).toDate(), end: dayjs(date).endOf(view).toDate() });
+    props.onDateChange?.({
+      start: dayjs(previousDate).startOf(view).toDate(),
+      end: dayjs(date).endOf(view).toDate(),
+    });
   };
 
   const onSelectSlot = (slot: SlotInfo) => {
@@ -131,7 +142,12 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
       <Group justify="space-between">
         <Group>
           <Group gap={5}>
-            <ActionIcon variant="outline" color={color("gray")} radius={100} onClick={previousRange}>
+            <ActionIcon
+              variant="outline"
+              color={color("gray")}
+              radius={100}
+              onClick={previousRange}
+            >
               <IconChevronLeft strokeWidth={1.5} size={18} />
             </ActionIcon>
 

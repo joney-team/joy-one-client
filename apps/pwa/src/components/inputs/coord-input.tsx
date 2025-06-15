@@ -1,6 +1,16 @@
+"use client";
+
 import { Coordinates } from "@/types";
 import { getGeolocation } from "@/modules/locations/locations-service";
-import { ActionIcon, Card, Group, InputWrapper, InputWrapperProps, NumberInput, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  Group,
+  InputWrapper,
+  InputWrapperProps,
+  NumberInput,
+  Tooltip,
+} from "@mantine/core";
 import { IconGps } from "@tabler/icons-react";
 import { FC, useState } from "react";
 

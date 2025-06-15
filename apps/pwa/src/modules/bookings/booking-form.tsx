@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { FormSessionIcon } from "@/components/form-session";
 import { TimeInput } from "@/components/inputs/time-input";
-import { UsersInput } from "@/components/inputs/users-input";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import {
   createBooking,
   rescheduleBooking,
@@ -157,7 +157,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       </FormSessionIcon>
 
       <FormSessionIcon icon={IconUsers} description="attendees">
-        <UsersInput
+        <WorkspaceMembersInput
           {...form.getInputProps("assigneeUsers")}
           flex={1}
           disabled={type === "RESCHEDULE"}

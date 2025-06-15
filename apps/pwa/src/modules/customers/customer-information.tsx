@@ -1,6 +1,6 @@
 "use client";
 
-import { UsersInput } from "@/components/inputs/users-input";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
@@ -407,7 +407,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
             </Group>
           </Group>
 
-          <UsersInput
+          <WorkspaceMembersInput
             showMainResponsible
             value={customer.assigneeUsers}
             onChange={(users) =>

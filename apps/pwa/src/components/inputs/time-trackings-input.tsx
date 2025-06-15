@@ -52,7 +52,7 @@ import { Avatar } from "../avatar";
 import { Button } from "../buttons/button";
 import { ModalTitle } from "../modal-title";
 import { Renderer } from "../renderer";
-import { UserInput } from "./user-input";
+import { WorkspaceMemberInput } from "../../modules/workspace-members/components/workspace-member-input";
 
 interface TimeTrackingsInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: TaskTimeTracking[];
@@ -388,7 +388,7 @@ export const TimeTrackingForm: FC<{
   return (
     <Card withBorder shadow="none" p="md">
       <Card.Section withBorder p="sm" bg="gray.0">
-        <UserInput
+        <WorkspaceMemberInput
           clearable={false}
           value={form.values.user}
           onChange={(user) => form.setFieldValue("user", user!)}

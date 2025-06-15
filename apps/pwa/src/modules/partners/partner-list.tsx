@@ -2,7 +2,7 @@ import { Avatar } from "@/components/avatar";
 import { List } from "@/components/list";
 import { EventType } from "@/modules/events/event-types";
 import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
-import { PartnerCard } from "@/modules/partners/partner-card";
+import { PartnerCard } from "@/modules/partners/components/partner-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Stack } from "@mantine/core";
 import { IconEdit, IconTopologyStar3 } from "@tabler/icons-react";

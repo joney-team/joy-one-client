@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
-import { TagSelector } from "@/modules/tags/tag-selector";
+import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
@@ -13,7 +13,7 @@ import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskEntites, getTaskEntity, updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskPriority, TaskStatus } from "@/modules/tasks/tasks-types";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { capitalize } from "@/utils/string.utils";
 import { ActionIcon, Card, Center, Divider, Group, Menu, Text, Tooltip } from "@mantine/core";

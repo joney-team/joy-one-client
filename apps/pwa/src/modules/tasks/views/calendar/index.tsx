@@ -3,7 +3,7 @@ import { Avatar } from "@/components/avatar";
 import { Calendar } from "@/components/calendar";
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
@@ -19,7 +19,18 @@ import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { objSelect } from "@/utils/object.utils";
 import { StringUtils } from "@/utils/string.utils";
 import { useList } from "@/utils/use-list.util";
-import { ActionIcon, Card, Group, Loader, rgba, ScrollArea, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  Group,
+  Loader,
+  rgba,
+  ScrollArea,
+  Stack,
+  Text,
+  ThemeIcon,
+  Tooltip,
+} from "@mantine/core";
 import { useForceUpdate, useHover } from "@mantine/hooks";
 import { IconCirclePlus, IconMinus, IconPlus, IconUsers, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
@@ -50,7 +61,10 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
 
   const tasks = useList<TaskEntity>({
     id: `calendar-${tagFolder?._id || "all"}`,
-    fetch: (q) => getTasks(objSelect(getQuery(q), ["fromDate", "toDate", "tagFolderId", "assigneeUserIds", "getAll"])),
+    fetch: (q) =>
+      getTasks(
+        objSelect(getQuery(q), ["fromDate", "toDate", "tagFolderId", "assigneeUserIds", "getAll"])
+      ),
   });
 
   const query = getQuery(tasks.query);
@@ -132,7 +146,11 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
               const isHasAssignee = assigneeUserIds.length > 0;
 
               return (
-                <Group justify="space-between" style={{ position: "relative" }} ref={assigneesHover.ref}>
+                <Group
+                  justify="space-between"
+                  style={{ position: "relative" }}
+                  ref={assigneesHover.ref}
+                >
                   <Button
                     onClick={ctx.toggle}
                     size="compact-md"
@@ -155,7 +173,9 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                         isHasAssignee && (
                           <Group gap={5} mr={0}>
                             {assigneeUserIds.map((userId, i) => {
-                              const assignee = assignees.find((assignee) => assignee.userId === userId);
+                              const assignee = assignees.find(
+                                (assignee) => assignee.userId === userId
+                              );
                               if (!assignee) return null;
                               return (
                                 <Group key={userId} ml={i > 0 ? -10 : 0}>
@@ -216,13 +236,17 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                 return (
                   <Group>
                     <Tooltip
-                      label={StringUtils.capitalizeFirstLetter(`${t("add")} ${t("task")} ${t("need_complete")}`)}
+                      label={StringUtils.capitalizeFirstLetter(
+                        `${t("add")} ${t("task")} ${t("need_complete")}`
+                      )}
                     >
                       <ActionIcon
                         variant="subtle"
                         radius={100}
                         color="gray"
-                        onClick={() => OnModalCreateTask({ dueDate: DateTimeUtils.timeToSeconds(date) })}
+                        onClick={() =>
+                          OnModalCreateTask({ dueDate: DateTimeUtils.timeToSeconds(date) })
+                        }
                         opacity={hovered || layout.view !== "desktop" ? 1 : 0}
                       >
                         <IconCirclePlus size={18} strokeWidth={1.5} />
@@ -307,7 +331,9 @@ const TaskRow: FC<{
   const assignee = task.assigneeUsers?.[0];
 
   const isDueDateExpired =
-    task.status !== DefaultTaskStatusId.CLOSED && task.dueDate && dayjs(task.dueDate * 1000).isBefore(dayjs());
+    task.status !== DefaultTaskStatusId.CLOSED &&
+    task.dueDate &&
+    dayjs(task.dueDate * 1000).isBefore(dayjs());
 
   const timeTrackings = (task.timeTrackings || []).filter(
     (v) => v.startAt && dayjs(v.startAt * 1000).isSame(date, "day")
@@ -315,17 +341,17 @@ const TaskRow: FC<{
 
   const isHasInProgressTimeTracking = timeTrackings.find((v) => !!!v.endAt);
 
-  const timeTrackingGroupByUsers: { user: WorkspaceMember; timeTrackings: TaskTimeTracking[] }[] = timeTrackings.reduce(
-    (acc: any, t) => {
+  const timeTrackingGroupByUsers: { user: WorkspaceMember; timeTrackings: TaskTimeTracking[] }[] =
+    timeTrackings.reduce((acc: any, t) => {
       const user = t.user;
       if (acc.find((v: any) => v.user._id === user.userId)) {
-        return acc.map((g: any) => (g.user._id === user.userId ? { ...g, timeTrackings: [...g.timeTrackings, t] } : g));
+        return acc.map((g: any) =>
+          g.user._id === user.userId ? { ...g, timeTrackings: [...g.timeTrackings, t] } : g
+        );
       } else {
         return [...acc, { user, timeTrackings: [t] }];
       }
-    },
-    []
-  );
+    }, []);
 
   useEffect(() => {
     if (isHasInProgressTimeTracking) {

@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/buttons/button";
 import { DueDateInput } from "@/components/inputs/due-date-input";
-import { UsersInput } from "@/components/inputs/users-input";
-import { TagSelector } from "@/modules/tags/tag-selector";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
+import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { num, renderDateTime, t } from "@/modules/lang/lang-service";
 import { TagType } from "@/modules/tags/tags-types";
@@ -391,7 +391,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
               />
 
               <CtaSection icon={IconUser} label={t("assignee")}>
-                <UsersInput
+                <WorkspaceMembersInput
                   collapsed
                   value={task.assigneeUsers}
                   onChange={(users) => {

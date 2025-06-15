@@ -4,7 +4,7 @@ import { ContentEditable } from "@/components/content-editable/content-editable"
 import { Hovered } from "@/components/hovered";
 import { formatDuration, QuickEstimateTimeInput } from "@/components/inputs/estimate-time-input";
 import { Renderer } from "@/components/renderer";
-import { TagSelector } from "@/modules/tags/tag-selector";
+import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { useLayout } from "@/layout/layout-context";
 import { num, t } from "@/modules/lang/lang-service";
 import { TagType } from "@/modules/tags/tags-types";

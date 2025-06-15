@@ -3,9 +3,9 @@ import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-membe
 import { ActionIcon, InputWrapperProps, em } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 
-interface UserInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
+interface WorkspaceMemberInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: WorkspaceMemberInfo;
   onChange?: (value?: WorkspaceMemberInfo) => void;
   collapsed?: boolean;
@@ -18,7 +18,7 @@ interface UserInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   userCardProps?: Omit<UserCardProps, "user">;
 }
 
-export const UserInput: FC<UserInputProps> = (props) => {
+export const WorkspaceMemberInput: FC<WorkspaceMemberInputProps> = (props) => {
   const {
     value,
     onChange,

@@ -6,7 +6,7 @@ import { Button } from "@/components/buttons/button";
 import { CalendarViewSelector } from "@/components/calendar-view-selector";
 import { Renderer } from "@/components/renderer";
 import { Selector } from "@/components/selector";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { calendarProps } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateBooking } from "./modals/modal-create-booking";

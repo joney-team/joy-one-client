@@ -2,7 +2,7 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Image } from "@/components/image";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { SessionTitle } from "@/components/session-title";
 import {
   HrmTimekeepingsCalendar,
@@ -36,7 +36,14 @@ import {
   em,
 } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
-import { IconArrowRight, IconClipboardList, IconMinus, IconPlus, IconUsers, IconX } from "@tabler/icons-react";
+import {
+  IconArrowRight,
+  IconClipboardList,
+  IconMinus,
+  IconPlus,
+  IconUsers,
+  IconX,
+} from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { type FC } from "react";
@@ -156,7 +163,11 @@ export const HrmTimekeepingList: FC = () => {
               const isHasAssignee = assigneeUserIds.length > 0;
 
               return (
-                <Group justify="space-between" style={{ position: "relative" }} ref={assigneesHover.ref}>
+                <Group
+                  justify="space-between"
+                  style={{ position: "relative" }}
+                  ref={assigneesHover.ref}
+                >
                   <Button
                     onClick={ctx.toggle}
                     size="compact-md"
@@ -179,7 +190,9 @@ export const HrmTimekeepingList: FC = () => {
                         isHasAssignee && (
                           <Group gap={5} mr={0}>
                             {assigneeUserIds.map((userId, i) => {
-                              const assignee = assignees.find((assignee) => assignee.userId === userId);
+                              const assignee = assignees.find(
+                                (assignee) => assignee.userId === userId
+                              );
                               if (!assignee) return null;
                               return (
                                 <Group key={userId} ml={i > 0 ? -10 : 0}>

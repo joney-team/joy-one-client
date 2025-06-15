@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, em, Group, InputWrapper, InputWrapperProps, Stack } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { FC, useEffect, useRef } from "react";

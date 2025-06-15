@@ -1,3 +1,5 @@
+"use client";
+
 import { CalendarView } from "@/types";
 import { t } from "@/modules/lang/lang-service";
 import { ActionIcon, Button, Card, Group, Tooltip } from "@mantine/core";

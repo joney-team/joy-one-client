@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { UsersInput } from "@/components/inputs/users-input";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { ModalTitle } from "@/components/modal-title";
 import { useAuth } from "@/modules/auth/auth-context";
 import { t } from "@/modules/lang/lang-service";
@@ -31,7 +31,7 @@ export const ModalTransferWorkspaceOwner: FC = () => {
           <Text fz={em(13)} fw={500} ta="center">
             {t("select_member")}
           </Text>
-          <UsersInput
+          <WorkspaceMembersInput
             ignoreUserIds={[auth.user._id]}
             value={newOwner ? [newOwner] : []}
             length={1}

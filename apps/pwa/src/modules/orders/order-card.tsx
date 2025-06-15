@@ -4,7 +4,11 @@ import { OnModalOrderTable } from "@/modules/orders/order-table/order-table-moda
 import { OnModalPrinter } from "@/modals/modal-printer";
 import { num, renderDateTime, t } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
-import { onPayOrder, orderPaymentStatusOptions, updateOrder } from "@/modules/orders/orders-service";
+import {
+  onPayOrder,
+  orderPaymentStatusOptions,
+  updateOrder,
+} from "@/modules/orders/orders-service";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -16,8 +20,8 @@ import { FC, useEffect, useState } from "react";
 import { Button } from "../../components/buttons/button";
 import { Circle } from "../../components/circle";
 import { CustomerInput } from "../customers/customer-input";
-import { UserInput } from "../../components/inputs/user-input";
-import { UsersInput } from "../../components/inputs/users-input";
+import { WorkspaceMemberInput } from "../workspace-members/components/workspace-member-input";
+import { WorkspaceMembersInput } from "../workspace-members/components/workspace-members-input";
 import { getOrderDto } from "@/modules/orders/order-table/order-table-provider";
 import { Renderer } from "../../components/renderer";
 
@@ -74,7 +78,10 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
                 <Card px={8} py={3} withBorder shadow="none" bg="transparent">
                   <Group gap={8}>
-                    <Circle color={color(orderPaymentStatusOptions[order.paymentStatus].color)} size={10} />
+                    <Circle
+                      color={color(orderPaymentStatusOptions[order.paymentStatus].color)}
+                      size={10}
+                    />
 
                     <Text fz={14} fw={500}>
                       {t(`order_payment_status_${order.paymentStatus}`)}
@@ -99,7 +106,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                   />
                 </Renderer>
 
-                <UserInput
+                <WorkspaceMemberInput
                   label={t("main_assignee")}
                   value={order.assigneeUsers?.[0]}
                   disabled={!isAbleToEdit}
@@ -134,7 +141,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                         <Text>
                           {index + 1}. {item.product.name}
                         </Text>
-                        <UsersInput
+                        <WorkspaceMembersInput
                           collapsed
                           value={item.assigneeUsers}
                           disabled={!isAbleToEdit}

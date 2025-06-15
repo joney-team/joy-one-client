@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
-import { LoanAssetDataInput } from "@/components/inputs/loan-asset-data-inputs";
+import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";

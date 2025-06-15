@@ -1,3 +1,5 @@
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -5,9 +7,9 @@ import { capitalize } from "@/utils/string.utils";
 import { em, Group, InputWrapperProps, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { Renderer } from "../../components/renderer";
+import { Renderer } from "@/components/renderer";
 import { TagSelector } from "./tag-selector";
-import { TaskTag } from "../tasks/components/task-tag";
+import { TaskTag } from "@/modules/tasks/components/task-tag";
 
 interface TagsInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   type: TagType;

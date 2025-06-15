@@ -1,3 +1,5 @@
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
 import { getTimeZones } from "@/modules/times/times-service";
 import { capitalize } from "@/utils/string.utils";

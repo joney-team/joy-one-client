@@ -1,3 +1,5 @@
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -6,7 +8,7 @@ import { Button, em, Group, InputWrapperProps, Text, ThemeIcon } from "@mantine/
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Renderer } from "../../components/renderer";
-import { TagSelector } from "../tags/tag-selector";
+import { TagSelector } from "../tags/components/tag-selector";
 import { TaskTag } from "../tasks/components/task-tag";
 import { CategoryEntity, CategoryType } from "./category-types";
 import { CategorySelector } from "./category-selector";

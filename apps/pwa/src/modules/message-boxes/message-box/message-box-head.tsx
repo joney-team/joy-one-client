@@ -25,7 +25,7 @@ import {
   IconUserSquareRounded,
 } from "@tabler/icons-react";
 import { FC } from "react";
-import { UserInput } from "@/components/inputs/user-input";
+import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { ModalTitle } from "@/components/modal-title";
 import { useMessageBoxes } from "../message-boxes-context";
 
@@ -88,7 +88,7 @@ export const MessageBoxHead: FC = () => {
       <Group gap={8}>
         <Tooltip label={t("assignee")}>
           <Group>
-            <UserInput
+            <WorkspaceMemberInput
               value={box.assigneeUser}
               onChange={(u) => {
                 onActionLoad({

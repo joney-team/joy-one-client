@@ -1,14 +1,14 @@
 import { useColor } from "@/modules/theme/use-color";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
+import { UserCard } from "@/modules/users/user-card";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { ActionIcon, em, Group, InputWrapperProps, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconFlagFilled, IconUserPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { Renderer } from "../renderer";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
-import { UserCard } from "@/modules/users/user-card";
+import { Renderer } from "../../../components/renderer";
 
-interface UsersInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
+interface WorkspaceMembersInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: WorkspaceMemberInfo[];
   onChange?: (value: WorkspaceMemberInfo[]) => void;
   collapsed?: boolean;
@@ -21,7 +21,7 @@ interface UsersInputProps extends Omit<InputWrapperProps, "value" | "onChange"> 
   tooltipLabel?: string;
 }
 
-export const UsersInput: FC<UsersInputProps> = (props) => {
+export const WorkspaceMembersInput: FC<WorkspaceMembersInputProps> = (props) => {
   const color = useColor();
   const {
     value,

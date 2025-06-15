@@ -1,11 +1,19 @@
+"use client";
+
 import { ActionIcon } from "@mantine/core";
-import { TimeInput as MantineTimeInput, TimeInputProps as MantineTimeInputProps } from "@mantine/dates";
+import {
+  TimeInput as MantineTimeInput,
+  TimeInputProps as MantineTimeInputProps,
+} from "@mantine/dates";
 import { IconClock } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, useEffect, useRef, useState } from "react";
 
 export interface TimeInputProps
-  extends Omit<MantineTimeInputProps, "defaultValue" | "onChange" | "value" | "ref" | "rightSection"> {
+  extends Omit<
+    MantineTimeInputProps,
+    "defaultValue" | "onChange" | "value" | "ref" | "rightSection"
+  > {
   value?: Date;
   defaultValue?: Date;
   onChange?: (time: [number, number]) => any;
@@ -42,7 +50,9 @@ export const TimeInput: FC<TimeInputProps> = (props) => {
         setIsFocused(false);
       }}
       rightSection={pickerControl}
-      defaultValue={value || defaultValue ? dayjs(value || defaultValue).format("HH:mm") : undefined}
+      defaultValue={
+        value || defaultValue ? dayjs(value || defaultValue).format("HH:mm") : undefined
+      }
       onChange={(value) => {
         const [hour, minute] = value.target.value.split(":");
         onChange?.([+hour, +minute]);

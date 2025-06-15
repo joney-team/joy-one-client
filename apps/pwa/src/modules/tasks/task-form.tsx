@@ -5,7 +5,7 @@ import { Hovered } from "@/components/hovered";
 import { DueDateInput } from "@/components/inputs/due-date-input";
 import { EstimateTimeInput } from "@/components/inputs/estimate-time-input";
 import { TimeTrackingsInput } from "@/components/inputs/time-trackings-input";
-import { UsersInput } from "@/components/inputs/users-input";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { Renderer } from "@/components/renderer";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
@@ -14,10 +14,10 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { onUploadFile } from "@/modules/files/file-service";
 import { num, renderDate, renderDateTime, t } from "@/modules/lang/lang-service";
-import { PartnersInput } from "@/modules/partners/partners-input";
+import { PartnersInput } from "@/modules/partners/components/partners-input";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { useTags } from "@/modules/tags/tags-context";
-import { TagsInput } from "@/modules/tags/tags-input";
+import { TagsInput } from "@/modules/tags/components/tags-input";
 import { TagType } from "@/modules/tags/tags-types";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import {
@@ -358,7 +358,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                 canRemove={(form.values.assigneeUsers?.length || 0) > 0}
                 onRemove={() => form.setFieldValue("assigneeUsers", [])}
               >
-                <UsersInput
+                <WorkspaceMembersInput
                   w="100%"
                   collapsed
                   flex={1}

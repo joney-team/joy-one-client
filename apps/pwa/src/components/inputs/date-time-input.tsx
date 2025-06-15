@@ -1,3 +1,5 @@
+"use client";
+
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { ActionIcon, Group, InputWrapper, InputWrapperProps, Stack } from "@mantine/core";
 import { Calendar, TimeInput } from "@mantine/dates";

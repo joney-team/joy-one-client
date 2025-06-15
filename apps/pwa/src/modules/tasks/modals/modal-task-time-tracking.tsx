@@ -1,7 +1,7 @@
 import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
-import { UserInput } from "@/components/inputs/user-input";
+import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { calendarDayJsLocalizer } from "@/configs/calendar.config";
@@ -342,7 +342,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
           color={color(tasks.tagFolder?.color || "primary")}
         />
 
-        <UserInput
+        <WorkspaceMemberInput
           clearable={false}
           value={user}
           onChange={(user) => setUser(user!)}

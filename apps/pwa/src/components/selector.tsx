@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useRef, useState } from "react";
+import { Fragment, type ReactNode, useMemo, useRef, useState } from "react";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { t } from "@/modules/lang/lang-service";
@@ -41,12 +41,8 @@ export interface SelectorContext<T extends SelectOption> {
   theme: MantineTheme;
 }
 
-export type SelectorRenderValue<T extends SelectOption> = (
-  ctx: SelectorContext<T>
-) => React.ReactNode;
-
-export type SelectorRenderOption<T extends SelectOption> = (item: T) => React.ReactNode;
-
+export type SelectorRenderValue<T extends SelectOption> = (ctx: SelectorContext<T>) => ReactNode;
+export type SelectorRenderOption<T extends SelectOption> = (item: T) => ReactNode;
 export type SelectorOnSearch<T extends SelectOption> = (value: string) => T[] | Promise<T[]>;
 
 export interface SelectorBaseProps<T extends SelectOption>

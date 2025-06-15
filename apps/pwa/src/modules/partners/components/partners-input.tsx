@@ -4,9 +4,10 @@ import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { PartnerCard } from "./partner-card";
 import { Renderer } from "@/components/renderer";
-import { PartnerSelector } from "@/modules/partners/partner-selector";
+import { PartnerSelector } from "@/modules/partners/components/partner-selector";
 
-interface PartnersInputProps extends Omit<InputWrapperProps, "value" | "onChange" | "onSelect" | "renderTrigger"> {
+interface PartnersInputProps
+  extends Omit<InputWrapperProps, "value" | "onChange" | "onSelect" | "renderTrigger"> {
   value?: PartnerEntity[];
   onChange?: (value: PartnerEntity[]) => void;
 }
@@ -34,7 +35,13 @@ export const PartnersInput: FC<PartnersInputProps> = (props) => {
       onSelect={toogleSelect}
       renderTrigger={(ctx) => {
         return (
-          <Group gap={10} py={1} flex={props.flex} style={{ cursor: "pointer" }} onClick={ctx.toggle}>
+          <Group
+            gap={10}
+            py={1}
+            flex={props.flex}
+            style={{ cursor: "pointer" }}
+            onClick={ctx.toggle}
+          >
             {partners.map((partner) => {
               return (
                 <PartnerCard

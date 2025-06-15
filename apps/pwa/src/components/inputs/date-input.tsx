@@ -1,8 +1,12 @@
-import { useLang } from "@/modules/lang/lang-context";
+"use client";
+
+import { type FC } from "react";
 import { getDateFormat } from "@/modules/lang/lang-service";
 import { DateTimeUtils, forceDate } from "@/utils/dateTime.utils";
-import { DateInput as MantineDateInput, DateInputProps as MantineDateInputProps } from "@mantine/dates";
-import { FC } from "react";
+import {
+  DateInput as MantineDateInput,
+  DateInputProps as MantineDateInputProps,
+} from "@mantine/dates";
 
 interface DateInputProps extends Omit<MantineDateInputProps, "value" | "onChange"> {
   value?: number | null;
@@ -10,8 +14,6 @@ interface DateInputProps extends Omit<MantineDateInputProps, "value" | "onChange
 }
 
 export const DateInput: FC<DateInputProps> = (props) => {
-  const lang = useLang();
-
   return (
     <MantineDateInput
       {...props}

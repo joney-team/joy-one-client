@@ -5,7 +5,7 @@ import { Avatar } from "@/components/avatar";
 import { Calendar } from "@/components/calendar";
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalTaskTimeTracking } from "@/modules/tasks/modals/modal-task-time-tracking";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
@@ -15,13 +15,27 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { TaskEntity, TaskTimeTracking } from "@/modules/tasks/tasks-types";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { WorkspaceMember, WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
+import {
+  WorkspaceMember,
+  WorkspaceMemberInfo,
+} from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { objSelect } from "@/utils/object.utils";
 import { StringUtils } from "@/utils/string.utils";
 import { useList } from "@/utils/use-list.util";
-import { ActionIcon, Card, Divider, Group, Loader, ScrollArea, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  Divider,
+  Group,
+  Loader,
+  ScrollArea,
+  Stack,
+  Text,
+  ThemeIcon,
+  Tooltip,
+} from "@mantine/core";
 import { useForceUpdate, useHover } from "@mantine/hooks";
 import { IconMinus, IconPlus, IconStopwatch, IconUsers, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
@@ -53,7 +67,9 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
   const tasks = useList<TaskEntity>({
     id: `tc-${ctx.tagFolder?._id || "all"}`,
     fetch: (q) => {
-      return getTasks(objSelect(getQuery(q), ["fromTrackingTime", "toTrackingTime", "assigneeUserIds", "getAll"]));
+      return getTasks(
+        objSelect(getQuery(q), ["fromTrackingTime", "toTrackingTime", "assigneeUserIds", "getAll"])
+      );
     },
   });
 
@@ -145,7 +161,11 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
               const isHasAssignee = assigneeUserIds.length > 0;
 
               return (
-                <Group justify="space-between" style={{ position: "relative" }} ref={assigneesHover.ref}>
+                <Group
+                  justify="space-between"
+                  style={{ position: "relative" }}
+                  ref={assigneesHover.ref}
+                >
                   <Button
                     onClick={ctx.toggle}
                     size="compact-md"
@@ -168,7 +188,9 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
                         isHasAssignee && (
                           <Group gap={5} mr={0}>
                             {assigneeUserIds.map((userId, i) => {
-                              const assignee = assignees.find((assignee) => assignee.userId === userId);
+                              const assignee = assignees.find(
+                                (assignee) => assignee.userId === userId
+                              );
                               if (!assignee) return null;
                               return (
                                 <Group key={userId} ml={i > 0 ? -10 : 0}>
@@ -267,13 +289,18 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
 
               return (
                 <Group>
-                  <Tooltip label={StringUtils.capitalizeFirstLetter(`${t("add")} ${t("time_trackings")}`)}>
+                  <Tooltip
+                    label={StringUtils.capitalizeFirstLetter(`${t("add")} ${t("time_trackings")}`)}
+                  >
                     <ActionIcon
                       variant="subtle"
                       radius={100}
                       color="gray"
                       onClick={() =>
-                        OnModalTaskTimeTracking({ date, onSubmit: () => tasks.fetch(true, { isSilient: true }) })
+                        OnModalTaskTimeTracking({
+                          date,
+                          onSubmit: () => tasks.fetch(true, { isSilient: true }),
+                        })
                       }
                       opacity={hovered || layout.view !== "desktop" ? 1 : 0}
                     >
@@ -289,7 +316,9 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
               const timeTrackingTasks = _tasks.filter(
                 (task) =>
                   task.timeTrackings &&
-                  task.timeTrackings.some((v) => v.startAt && dayjs(v.startAt * 1000).isSame(date, "day"))
+                  task.timeTrackings.some(
+                    (v) => v.startAt && dayjs(v.startAt * 1000).isSame(date, "day")
+                  )
               );
 
               return (
@@ -333,17 +362,17 @@ const TaskRow: FC<{
 
   const isHasInProgressTimeTracking = timeTrackings.find((v) => !!!v.endAt);
 
-  const timeTrackingGroupByUsers: { user: WorkspaceMember; timeTrackings: TaskTimeTracking[] }[] = timeTrackings.reduce(
-    (acc: any, t) => {
+  const timeTrackingGroupByUsers: { user: WorkspaceMember; timeTrackings: TaskTimeTracking[] }[] =
+    timeTrackings.reduce((acc: any, t) => {
       const user = t.user;
       if (acc.find((v: any) => v.user._id === user.userId)) {
-        return acc.map((g: any) => (g.user._id === user.userId ? { ...g, timeTrackings: [...g.timeTrackings, t] } : g));
+        return acc.map((g: any) =>
+          g.user._id === user.userId ? { ...g, timeTrackings: [...g.timeTrackings, t] } : g
+        );
       } else {
         return [...acc, { user, timeTrackings: [t] }];
       }
-    },
-    []
-  );
+    }, []);
 
   useEffect(() => {
     if (isHasInProgressTimeTracking) {

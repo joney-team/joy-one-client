@@ -24,7 +24,7 @@ import { createCustomer, updateCustomer } from "./customer-service";
 
 import { Form } from "@/components/form";
 import { DateInput } from "@/components/inputs/date-input";
-import { UsersInput } from "@/components/inputs/users-input";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { medicalHistoryOptions } from "@/configs/medical.config";
 import { useRouter } from "@/hooks/use-router";
 import { getLocaleClient, t } from "@/modules/lang/lang-service";
@@ -190,7 +190,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
           <CustomerRelationshipContactInput {...form.getInputProps("relationshipContacts")} />
         </Renderer>
 
-        <UsersInput
+        <WorkspaceMembersInput
           label={t("assignee")}
           style={{ flex: 1 }}
           {...form.getInputProps("assigneeUsers")}
