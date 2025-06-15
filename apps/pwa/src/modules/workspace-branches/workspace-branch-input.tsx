@@ -24,7 +24,7 @@ export const WorkspaceBranchInput: FC<WorkspaceBranchInputProps> = (props) => {
           if (!branch) return;
           props.onChange(branch);
         }}
-        renderTarget={(ctx) => {
+        target={(ctx) => {
           return (
             <Group
               w="100%"

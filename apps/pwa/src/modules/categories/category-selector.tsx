@@ -4,17 +4,18 @@ import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { interactTag } from "@/modules/tags/tags-service";
 import { AppEntity, ResponseList } from "@/types";
-import { em, Group, Text } from "@mantine/core";
+import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { api } from "../apis";
 import { CategoryEntity, CategoryType } from "./category-types";
+import { OnModalCategory } from "./modals/modal-category";
 
 interface CategorySelectorProps
-  extends Omit<SelectorProps<CategoryEntity>, "onSelect" | "onSearch"> {
+  extends Omit<SelectorProps<CategoryEntity>, "onSelect" | "onSearch" | "renderOption"> {
   type: CategoryType;
   excludeIds?: string[];
-  onSelect: (value?: CategoryEntity) => void;
+  onSelect?: (value?: CategoryEntity) => void;
   render?: (ctx: SelectorContext<CategoryEntity>) => ReactNode;
   createable?: boolean;
   onClose?: () => void;
@@ -48,16 +49,18 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
-      renderOptionChild={(category) => {
+      renderOption={(category) => {
         return (
-          <Group gap={10}>
-            <Text>{category.name}</Text>
-          </Group>
+          <Combobox.Option value={category._id} key={category._id}>
+            <Group gap={10}>
+              <Text>{category.name}</Text>
+            </Group>
+          </Combobox.Option>
         );
       }}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         const { toggle } = ctx;
-        if (props.render) return props.render(ctx);
+        if (props.target) return props.target(ctx);
 
         return (
           <Button
@@ -77,17 +80,9 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       onSelect={(e) => {
         if (!e) return;
         interactTag(e._id);
-        return props.onSelect(e);
+        return props.onSelect?.(e);
       }}
-      // onCreate={
-      //   createable
-      //     ? () =>
-      //         OnModalCategoryForm({
-      //           type: props.type,
-      //           onDone: (category) => props.onSelect(category),
-      //         })
-      //     : undefined
-      // }
+      onCreate={createable ? () => OnModalCategory({ onSuccess: props.onSelect }) : undefined}
     />
   );
 };

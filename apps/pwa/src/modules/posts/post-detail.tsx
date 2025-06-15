@@ -7,7 +7,7 @@ import { useParams } from "next/navigation";
 import { type FC } from "react";
 import { useQuery } from "../apis/use-query";
 import { EventType } from "../events/event-types";
-import { FormPost } from "./form-post";
+import { FormPost } from "./components/form-post";
 import { PostEntity } from "./posts-types";
 
 export const PostDetail: FC = () => {

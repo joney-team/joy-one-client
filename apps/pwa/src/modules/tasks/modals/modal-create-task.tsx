@@ -2,7 +2,7 @@ import { useRouter } from "@/hooks/use-router";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
-import { TaskForm, TaskFormProps } from "@/modules/tasks/task-form";
+import { TaskForm, TaskFormProps } from "@/modules/tasks/components/form-task";
 import { useLayout } from "@/layout/layout-context";
 import { t } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";

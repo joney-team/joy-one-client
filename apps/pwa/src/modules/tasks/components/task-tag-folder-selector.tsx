@@ -1,10 +1,12 @@
+"use client";
+
 import { AppEntity } from "@/types";
 import { Button } from "@/components/buttons/button";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { getTags } from "@/modules/tags/tags-service";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
-import { em, Group, Text } from "@mantine/core";
+import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
@@ -40,14 +42,16 @@ export const TaskTagFolderSelector: FC<TaskTagFolderSelectorProps> = (props) => 
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
-      renderOptionChild={(tag) => {
+      renderOption={(tag) => {
         return (
-          <Group gap={10}>
-            <Text>{tag.name}</Text>
-          </Group>
+          <Combobox.Option value={tag._id} key={tag._id}>
+            <Group gap={10}>
+              <Text>{tag.name}</Text>
+            </Group>
+          </Combobox.Option>
         );
       }}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         const { toggle } = ctx;
         if (props.render) return props.render(ctx);
 

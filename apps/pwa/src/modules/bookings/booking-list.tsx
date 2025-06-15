@@ -34,6 +34,7 @@ import {
   ActionIcon,
   Card,
   Center,
+  Combobox,
   Group,
   HoverCard,
   Loader,
@@ -304,23 +305,25 @@ export const BookingList: FC = () => {
                       label: t(`booking_status_${BookingStatus.CANCELLED}`),
                     },
                   ]}
-                  renderOptionChild={(option) => {
+                  renderOption={(option) => {
                     return (
-                      <Group gap={5}>
-                        <IconCircleFilled
-                          size={13}
-                          color={color(
-                            getBookingStatusColor(option.id as BookingStatus) || "primary"
-                          )}
-                        />
-                        <Text fz={11} c="gray" fw={500}>
-                          {option.label}
-                        </Text>
-                      </Group>
+                      <Combobox.Option value={option.id} key={option.id}>
+                        <Group gap={5}>
+                          <IconCircleFilled
+                            size={13}
+                            color={color(
+                              getBookingStatusColor(option.id as BookingStatus) || "primary"
+                            )}
+                          />
+                          <Text fz={11} c="gray" fw={500}>
+                            {option.label}
+                          </Text>
+                        </Group>
+                      </Combobox.Option>
                     );
                   }}
                   onSelect={(e) => selectStatus(e?.id)}
-                  renderTarget={(ctx) => {
+                  target={(ctx) => {
                     const statusColor = !query.status
                       ? "primary"
                       : getBookingStatusColor(query.status as BookingStatus);

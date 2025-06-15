@@ -2,8 +2,8 @@
 
 import { Fragment, type ReactNode, useMemo, useRef, useState } from "react";
 import { useLayout } from "@/layout/layout-context";
-import { useColor } from "@/modules/theme/use-color";
 import { t } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import {
@@ -41,7 +41,7 @@ export interface SelectorContext<T extends SelectOption> {
   theme: MantineTheme;
 }
 
-export type SelectorRenderValue<T extends SelectOption> = (ctx: SelectorContext<T>) => ReactNode;
+export type SelectorTarget<T extends SelectOption> = (ctx: SelectorContext<T>) => ReactNode;
 export type SelectorRenderOption<T extends SelectOption> = (item: T) => ReactNode;
 export type SelectorOnSearch<T extends SelectOption> = (value: string) => T[] | Promise<T[]>;
 
@@ -59,9 +59,9 @@ export interface SelectorBaseProps<T extends SelectOption>
   onSearch?: SelectorOnSearch<T>;
   onInitOptions?: () => T[] | Promise<T[]>;
   staticSearch?: boolean;
-  renderOptionChild?: SelectorRenderOption<T>;
-  renderOption?: SelectorRenderOption<T>;
-  renderTarget: SelectorRenderValue<T>;
+  // renderOptionChild?: SelectorRenderOption<T>;
+  renderOption: SelectorRenderOption<T>;
+  target: SelectorTarget<T>;
   dropdownProps?: ComboboxDropdownProps;
   autoCloseOnChange?: boolean;
   comboboxProps?: ComboboxProps;
@@ -88,9 +88,8 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     onSearch,
     onInitOptions,
     staticSearch,
-    renderOptionChild,
     renderOption,
-    renderTarget,
+    target: renderTarget,
     dropdownProps,
     autoCloseOnChange = true,
     comboboxProps,
@@ -122,14 +121,14 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
   const options = useMemo(() => {
     let opts = (
       selectOptions.length > 0 || !_initOptions || search.length > 0 ? selectOptions : _initOptions
-    ).filter((item) => (props.value ? getId(props.value) !== getId(item) : true));
+    ).filter((item) => (value ? getId(value) !== getId(item) : true));
 
-    if (props.excludeIds) {
-      opts = opts.filter((item) => !props.excludeIds?.includes(getId(item)));
+    if (excludeIds) {
+      opts = opts.filter((item) => !excludeIds?.includes(getId(item)));
     }
 
     return opts;
-  }, [selectOptions, _initOptions, search, props.value, props.excludeIds]);
+  }, [selectOptions, _initOptions, search, value, excludeIds]);
 
   const groupOptions = options.reduce((acc, item) => {
     const group = getGroup(item);
@@ -161,11 +160,11 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     props.staticSearch ? 0 : 300
   );
 
-  const _onInitOptions = async () => {
+  const _onInitOptions = useDebouncedCallback(async () => {
     if (!onInitOptions) return;
     const res = await onInitOptions();
     setInitOptions(res || []);
-  };
+  }, 300);
 
   const _onOpen = async () => {
     if (props.disabled) return;
@@ -193,8 +192,12 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
       }}
     >
       <Combobox
-        disabled={props.disabled}
+        disabled={disabled}
         store={combobox}
+        position="bottom-start"
+        shadow="sm"
+        offset={3}
+        onClose={onClose}
         onOptionSubmit={async (val) => {
           if (val === "$create") {
             props.onCreate?.(combobox);
@@ -205,26 +208,21 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
             if (autoCloseOnChange) combobox.closeDropdown();
           }
         }}
-        position="bottom-start"
-        shadow="sm"
-        offset={3}
-        onClose={onClose}
-        {...props.comboboxProps}
+        {...comboboxProps}
       >
         <Combobox.Target>
           <Group align="center">
-            {props.renderTarget({
-              value: props.value,
-              disabled: !!props.disabled,
-              onChange: (value) => props.onSelect?.(value, combobox),
+            {renderTarget({
+              value,
+              disabled: !!disabled,
+              onChange: (value) => onSelect?.(value, combobox),
               open: () => combobox.openDropdown(),
               toggle: () => {
                 if (combobox.dropdownOpened) {
                   combobox.closeDropdown();
-                  props.onClose?.();
+                  onClose?.();
                 } else {
                   _onOpen();
-                  _onInitOptions();
                 }
               },
               close: () => {
@@ -259,21 +257,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
             <ScrollArea.Autosize w="100%" type="scroll" mah={Math.min(400, layout.height * 0.4)}>
               {options.length > 0 ? (
                 <Fragment>
-                  {options
-                    .filter((v) => !getGroup(v))
-                    .map((item) => {
-                      if (props.renderOption) return props.renderOption(item);
-                      if (props.renderOptionChild)
-                        return (
-                          <Combobox.Option
-                            value={getId(item)}
-                            key={getId(item)}
-                            disabled={item.disabled}
-                          >
-                            {props.renderOptionChild(item)}
-                          </Combobox.Option>
-                        );
-                    })}
+                  {options.filter((v) => !getGroup(v)).map((item) => props.renderOption(item))}
 
                   {Object.keys(groupOptions).map((group, i) => {
                     return (
@@ -282,19 +266,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                         key={group + i}
                         styles={{ groupLabel: { fontSize: 12 } }}
                       >
-                        {groupOptions[group].map((item) => {
-                          if (props.renderOption) return props.renderOption(item);
-                          if (props.renderOptionChild)
-                            return (
-                              <Combobox.Option
-                                value={getId(item)}
-                                key={getId(item)}
-                                disabled={item.disabled}
-                              >
-                                {props.renderOptionChild(item)}
-                              </Combobox.Option>
-                            );
-                        })}
+                        {groupOptions[group].map((item) => props.renderOption(item))}
                       </Combobox.Group>
                     );
                   })}

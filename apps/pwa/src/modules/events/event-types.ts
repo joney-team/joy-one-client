@@ -206,6 +206,10 @@ export enum EventType {
   POST_NEW = 'POST_NEW',
   POST_UPDATED = 'POST_UPDATED',
   POST_ARCHIVED = 'POST_ARCHIVED',
+
+  CATEGORY_NEW = 'CATEGORY_NEW',
+  CATEGORY_UPDATED = 'CATEGORY_UPDATED',
+  CATEGORY_ARCHIVED = 'CATEGORY_ARCHIVED',
 }
 
 export interface EventEntity extends BaseMongoEntity {

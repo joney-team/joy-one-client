@@ -38,7 +38,7 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
         label: v.label,
         value: v.value,
       }))}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         return (
           <Wrapper
             onClick={ctx.toggle}

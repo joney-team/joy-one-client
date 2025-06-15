@@ -1,6 +1,6 @@
 import { Avatar } from "@/components/avatar";
 import { Renderer } from "@/components/renderer";
-import { SelectorRenderValue } from "@/components/selector";
+import { SelectorTarget } from "@/components/selector";
 import { CustomerSelector } from "@/modules/customers/customer-selector";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { ActionIcon, Card, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
@@ -14,7 +14,7 @@ interface CustomerInputProps extends Omit<InputWrapperProps, "value" | "onSelect
   onChange?: (value?: CustomerShortInfo) => void;
   disabled?: boolean;
   clearable?: boolean;
-  renderValue?: SelectorRenderValue<CustomerShortInfo>;
+  renderValue?: SelectorTarget<CustomerShortInfo>;
 }
 
 export const CustomerInput: FC<CustomerInputProps> = (props) => {
@@ -38,6 +38,7 @@ export const CustomerInput: FC<CustomerInputProps> = (props) => {
 
         return (
           <Group
+            p={props.p}
             flex={props.flex}
             onClick={(e) => {
               e.preventDefault();

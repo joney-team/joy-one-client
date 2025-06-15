@@ -5,7 +5,7 @@ import { customerInteraction, getCustomers } from "./customer-service";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
-import { em, Group, Stack, Text } from "@mantine/core";
+import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../components/selector";
@@ -27,23 +27,25 @@ export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
       searchPlaceholder={`${t("search_with", {
         query: ["name", "phone", "email", "code"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
-      renderOptionChild={(item) => {
+      renderOption={(item) => {
         return (
-          <Group gap={8} align="center" py={5}>
-            <Avatar customer={item} size={em(28)} />
-            <Stack gap={0}>
-              <Text>{item.name}</Text>
-              {!!item.phone && (
-                <Group gap={3}>
-                  <IconPhone size={13} strokeWidth={1.5} />
-                  <Text fz={em(12)}>{item.phone}</Text>
-                </Group>
-              )}
-            </Stack>
-          </Group>
+          <Combobox.Option value={item._id} key={item._id}>
+            <Group gap={8} align="center" py={5}>
+              <Avatar customer={item} size={em(28)} />
+              <Stack gap={0}>
+                <Text>{item.name}</Text>
+                {!!item.phone && (
+                  <Group gap={3}>
+                    <IconPhone size={13} strokeWidth={1.5} />
+                    <Text fz={em(12)}>{item.phone}</Text>
+                  </Group>
+                )}
+              </Stack>
+            </Group>
+          </Combobox.Option>
         );
       }}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         const { toggle } = ctx;
         if (props.render) return props.render(ctx);
 

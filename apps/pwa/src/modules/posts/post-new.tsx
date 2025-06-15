@@ -2,7 +2,7 @@
 
 import { Stack } from "@mantine/core";
 import { type FC } from "react";
-import { FormPost } from "./form-post";
+import { FormPost } from "./components/form-post";
 import { useRouter } from "@/hooks/use-router";
 
 export const PostNew: FC = () => {

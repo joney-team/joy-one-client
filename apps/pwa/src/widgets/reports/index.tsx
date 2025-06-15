@@ -294,7 +294,7 @@ export const ReportWidgets: FC = () => {
               if (!branch) return;
               report.setQuery("workspaceBranchIds", branch._id);
             }}
-            renderTarget={(ctx) => {
+            target={(ctx) => {
               return (
                 <Hovered>
                   {(hover) => {

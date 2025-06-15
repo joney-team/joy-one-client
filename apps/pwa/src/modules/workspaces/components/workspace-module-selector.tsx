@@ -3,7 +3,7 @@ import { t } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
 import { WorkspaceModule } from "@/modules/workspaces/workspace-modules";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { em, Group, Text, ThemeIcon } from "@mantine/core";
+import { Combobox, em, Group, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { SelectOption, Selector, SelectorContext } from "@/components/selector";
@@ -37,18 +37,20 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
-      renderOptionChild={(mo) => {
+      renderOption={(mo) => {
         return (
-          <Group gap={10} py={8}>
-            <ThemeIcon color="dark" variant="transparent">
-              <mo.icon strokeWidth={1.5} size={26} />
-            </ThemeIcon>
+          <Combobox.Option value={mo.id} key={mo.id}>
+            <Group gap={10} py={8}>
+              <ThemeIcon color="dark" variant="transparent">
+                <mo.icon strokeWidth={1.5} size={26} />
+              </ThemeIcon>
 
-            <Text>{mo.name}</Text>
-          </Group>
+              <Text>{mo.name}</Text>
+            </Group>
+          </Combobox.Option>
         );
       }}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         const { toggle } = ctx;
         if (props.renderTrigger) return props.renderTrigger(ctx);
         return (

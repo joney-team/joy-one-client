@@ -16,11 +16,14 @@ interface WorkspaceBranchesInputProps extends Omit<InputWrapperProps, "value" | 
 
 export const WorkspaceBranchesInput: FC<WorkspaceBranchesInputProps> = (props) => {
   const { value, onChange, disabled, autoHide, ...rest } = props;
-  const [branches, setBranches] = useState<Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline">[]>(value);
+  const [branches, setBranches] =
+    useState<Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline">[]>(value);
 
   const onAdd = (branch: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline">) => {
     const isSelected = branches.some((v) => branch?._id === v._id);
-    const workspaceBranches = isSelected ? branches.filter((v) => v._id !== branch._id) : [...branches, branch];
+    const workspaceBranches = isSelected
+      ? branches.filter((v) => v._id !== branch._id)
+      : [...branches, branch];
     setBranches(workspaceBranches);
     props.onChange(workspaceBranches);
   };
@@ -45,7 +48,7 @@ export const WorkspaceBranchesInput: FC<WorkspaceBranchesInputProps> = (props) =
             onAdd(branch);
           }
         }}
-        renderTarget={(ctx) => {
+        target={(ctx) => {
           return (
             <Hovered disabled={disabled}>
               {(hover) => {

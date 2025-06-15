@@ -5,7 +5,7 @@ import { t } from "@/modules/lang/lang-service";
 import { getProductIcon, getProducts } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { searchEntity } from "@/modules/search/search-service";
-import { em, Group, InputWrapperProps, Text } from "@mantine/core";
+import { Combobox, em, Group, InputWrapperProps, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "@/components/selector";
@@ -42,24 +42,26 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
-      renderOptionChild={(product) => {
+      renderOption={(product) => {
         const Icon = getProductIcon(product.type);
 
         return (
-          <Group gap={10}>
-            <EntityImage
-              src={product.image}
-              icon={Icon}
-              iconProps={{ strokeWidth: 1.2, size: 18 }}
-              onlyRead
-              size={em(30)}
-            />
+          <Combobox.Option value={product._id} key={product._id}>
+            <Group gap={10}>
+              <EntityImage
+                src={product.image}
+                icon={Icon}
+                iconProps={{ strokeWidth: 1.2, size: 18 }}
+                onlyRead
+                size={em(30)}
+              />
 
-            <Text>{product.name}</Text>
-          </Group>
+              <Text>{product.name}</Text>
+            </Group>
+          </Combobox.Option>
         );
       }}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         const { toggle } = ctx;
         if (props.renderTrigger) return props.renderTrigger(ctx);
         return (

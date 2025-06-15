@@ -13,7 +13,10 @@ import { FC, useState } from "react";
 const ModalCustomerForm: FC = () => {
   const color = useColor();
   const workspace = useWorkspace();
-  const [workspaceBranch, setWorkspaceBranch] = useState<Pick<WorkspaceBranchEntity, "_id" | "name"> | null>(null);
+  const [workspaceBranch, setWorkspaceBranch] = useState<Pick<
+    WorkspaceBranchEntity,
+    "_id" | "name"
+  > | null>(null);
   const link = `${config.APP_URL}/customer-forms/new/${workspace.userMember.workspaceId}/${
     workspaceBranch?._id || "main"
   }`;
@@ -32,7 +35,7 @@ const ModalCustomerForm: FC = () => {
         onSelect={(v) => {
           setWorkspaceBranch(v || null);
         }}
-        renderTarget={(ctx) => {
+        target={(ctx) => {
           return (
             <InputWrapper onClick={ctx.toggle} label={t("workspace_branch")} w="100%">
               <Group gap={8}>
@@ -74,7 +77,12 @@ const ModalCustomerForm: FC = () => {
               value={link}
               readOnly
               rightSection={
-                <ActionIcon component="div" variant="subtle" onClick={copy} color={color(copied ? "primary" : "color")}>
+                <ActionIcon
+                  component="div"
+                  variant="subtle"
+                  onClick={copy}
+                  color={color(copied ? "primary" : "color")}
+                >
                   {copied ? <IconCopyCheck size={18} /> : <IconCopy size={18} />}
                 </ActionIcon>
               }

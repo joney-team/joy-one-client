@@ -4,7 +4,7 @@ import { t } from "@/modules/lang/lang-service";
 import { searchArray, searchEntity } from "@/modules/search/search-service";
 import { getWorkspaceBranches } from "@/modules/workspace-branches/workspace-branches-service";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
-import { em, Group, Stack, Text } from "@mantine/core";
+import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../components/selector";
@@ -13,7 +13,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 
 type WorkspaceBranchOption = Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline">;
 
-interface WorkspaceBranchSelectorProps extends SelectorProps<WorkspaceBranchOption> {}
+interface WorkspaceBranchSelectorProps extends Partial<SelectorProps<WorkspaceBranchOption>> {}
 
 export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = (props) => {
   const workspace = useWorkspace();
@@ -51,20 +51,22 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = (props)
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
-      renderOptionChild={(item) => {
+      renderOption={(item) => {
         return (
-          <Group gap={8} justify="space-between">
-            <Group gap={8}>
-              <Stack gap={3}>
-                <Text>{item.name}</Text>
-              </Stack>
+          <Combobox.Option value={item._id} key={item._id}>
+            <Group gap={8} justify="space-between">
+              <Group gap={8}>
+                <Stack gap={3}>
+                  <Text>{item.name}</Text>
+                </Stack>
+              </Group>
             </Group>
-          </Group>
+          </Combobox.Option>
         );
       }}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         const { toggle } = ctx;
-        if (props.renderTarget) return props.renderTarget(ctx);
+        if (props.target) return props.target(ctx);
         return (
           <Button
             tt="capitalize"

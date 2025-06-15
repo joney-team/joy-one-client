@@ -8,7 +8,7 @@ import {
 } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
+import { ActionIcon, Combobox, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
@@ -54,25 +54,27 @@ export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props)
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
-      renderOptionChild={(user) => {
+      renderOption={(user) => {
         return (
-          <Group gap={8} justify="space-between">
-            <Group gap={8}>
-              <Avatar user={user} size={em(28)} />
-              <Stack gap={3}>
-                <Text>{user.name}</Text>
+          <Combobox.Option value={user._id} key={user._id}>
+            <Group gap={8} justify="space-between">
+              <Group gap={8}>
+                <Avatar user={user} size={em(28)} />
+                <Stack gap={3}>
+                  <Text>{user.name}</Text>
 
-                <Text fz={em(10)} mt={-2}>
-                  {getUserMemberRoleLabel(user)}
-                </Text>
-              </Stack>
+                  <Text fz={em(10)} mt={-2}>
+                    {getUserMemberRoleLabel(user)}
+                  </Text>
+                </Stack>
+              </Group>
+
+              {props.optionRightSection && props.optionRightSection(user)}
             </Group>
-
-            {props.optionRightSection && props.optionRightSection(user)}
-          </Group>
+          </Combobox.Option>
         );
       }}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         if (props.render) return props.render(ctx);
 
         return (

@@ -6,7 +6,7 @@ import { t } from "@/modules/lang/lang-service";
 import { getPrescriptions } from "@/modules/prescriptions/prescriptions-service";
 import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
 import { searchEntity } from "@/modules/search/search-service";
-import { em, Group, Text } from "@mantine/core";
+import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
@@ -26,14 +26,16 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
-      renderOptionChild={(prescription) => {
+      renderOption={(prescription) => {
         return (
-          <Group gap={10}>
-            <Text>{prescription.name}</Text>
-          </Group>
+          <Combobox.Option value={prescription._id} key={prescription._id}>
+            <Group gap={10}>
+              <Text>{prescription.name}</Text>
+            </Group>
+          </Combobox.Option>
         );
       }}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         const { toggle } = ctx;
         if (props.renderTrigger) return props.renderTrigger(ctx);
         return (

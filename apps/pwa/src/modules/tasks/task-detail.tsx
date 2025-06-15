@@ -2,7 +2,7 @@
 
 import { CommentBox } from "@/modules/comments/comment-box";
 import { Renderer } from "@/components/renderer";
-import { TaskForm } from "@/modules/tasks/task-form";
+import { TaskForm } from "@/modules/tasks/components/form-task";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useRouter } from "@/hooks/use-router";
@@ -27,10 +27,10 @@ import { useDisclosure, useHover } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import { FC, Fragment, useEffect, useState } from "react";
-import { DetailFooter } from "./detail-footer";
-import { TaskDetailHead } from "./detail-head";
+import { DetailFooter } from "./components/detail-footer";
+import { TaskDetailHead } from "./components/detail-head";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { zIndexes } from "../../../../../../packages/config/layout";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 export const TaskDetail: FC = () => {
   const router = useRouter();

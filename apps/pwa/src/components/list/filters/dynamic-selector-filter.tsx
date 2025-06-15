@@ -70,7 +70,7 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
         value: v.value,
         data: v.data,
       }))}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         return (
           <Wrapper
             onClick={ctx.toggle}

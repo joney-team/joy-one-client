@@ -1,5 +1,6 @@
 import { BaseMongoEntity } from "@/types";
 import { type JSONContent } from "@tiptap/react";
+import { CategoryEntity } from "../categories/category-types";
 
 export interface PostEntity extends BaseMongoEntity {
   title: string;
@@ -10,4 +11,5 @@ export interface PostEntity extends BaseMongoEntity {
   meta?: any;
   publishedAt?: number;
   categoryId?: string;
+  category?: CategoryEntity;
 }

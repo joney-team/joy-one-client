@@ -4,6 +4,9 @@ import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor";
 import { EntityImage } from "@/components/entity-image";
+import { Renderer } from "@/components/renderer";
+import { CategoryInput } from "@/modules/categories/category-input";
+import { CategoryEntity, CategoryType } from "@/modules/categories/category-types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import {
   Badge,
@@ -21,12 +24,10 @@ import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCheck } from "@tabler/icons-react";
 import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
-import { api } from "../apis";
-import { onUploadFile } from "../files/file-service";
-import { renderDateTime, t } from "../lang/lang-service";
-import { PostEntity } from "./posts-types";
-import { getFormattedDate } from "@mantine/dates";
-import { Renderer } from "@/components/renderer";
+import { api } from "../../apis";
+import { onUploadFile } from "../../files/file-service";
+import { renderDateTime, t } from "../../lang/lang-service";
+import { PostEntity } from "../posts-types";
 
 interface FormPostProps {
   post?: PostEntity;
@@ -40,12 +41,14 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
     excerpt: string;
     content?: JSONContent | null;
     thumbnail?: File;
+    category?: CategoryEntity | null;
   }>({
     initialValues: {
       title: post?.title || "",
       slug: post?.slug || "",
       excerpt: post?.excerpt || "",
       content: post?.content || null,
+      category: post?.category,
     },
   });
 
@@ -61,7 +64,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      const { thumbnail, ...dto } = values;
+      const { thumbnail, category, ...dto } = values;
 
       const thumbnailFile = values.thumbnail
         ? await onUploadFile({ file: values.thumbnail })
@@ -70,14 +73,16 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       let _post: PostEntity | undefined = post;
 
       if (post) {
-        post = await api.put<PostEntity>(`/posts/${post._id}`, {
+        _post = await api.put<PostEntity>(`/posts/${post._id}`, {
           ...dto,
           thumbnail: thumbnailFile?.relativePath || post.thumbnail,
+          categoryId: category?._id || null,
         });
       } else {
-        post = await api.post<PostEntity>("/posts", {
+        _post = await api.post<PostEntity>("/posts", {
           ...dto,
           thumbnail: thumbnailFile?.relativePath,
+          categoryId: category?._id || null,
         });
       }
 
@@ -86,6 +91,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
         slug: _post?.slug || "",
         excerpt: _post?.excerpt || "",
         content: _post?.content || null,
+        category: _post?.category || null,
       });
 
       form.reset();
@@ -196,6 +202,8 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
                 value={form.values.excerpt}
                 onChange={(e) => form.setFieldValue("excerpt", e.target.value)}
               />
+
+              <CategoryInput type={CategoryType.POSTS} {...form.getInputProps("category")} />
             </Stack>
           </Card>
         </Stack>

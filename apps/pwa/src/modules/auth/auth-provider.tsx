@@ -85,6 +85,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     await new Promise((resolve) => {
       const action = async () => {
         const global = getGlobal();
+        if (global.FBInitialized) return resolve(true);
+
         const FB = global.FB;
         const isInitialized = !!global.FBInitialized;
         if (isInitialized || !global.FB) {
@@ -92,8 +94,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
           action();
         } else {
           FB.init({
-            appId: app.config?.metaAppId,
-            version: app.config?.metaAppVersion,
+            appId: global._appConfig.metaAppId,
+            version: global._appConfig.metaAppVersion,
             xfbml: true,
           });
           resolve(true);

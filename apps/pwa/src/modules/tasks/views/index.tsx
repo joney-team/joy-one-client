@@ -10,7 +10,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, useEffect } from "react";
 import { BulkTasksActions } from "../components/bulk-tasks-actions";
-import { TaskDetail } from "../components/task-detail";
+import { TaskDetail } from "../task-detail";
 import { TaskView } from "./types";
 
 const allTaskViews: {

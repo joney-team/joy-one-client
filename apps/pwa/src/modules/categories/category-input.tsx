@@ -1,81 +1,45 @@
 "use client";
 
 import { t } from "@/modules/lang/lang-service";
-import { useTags } from "@/modules/tags/tags-context";
-import { TagEntity, TagType } from "@/modules/tags/tags-types";
-import { capitalize } from "@/utils/string.utils";
-import { Button, em, Group, InputWrapperProps, Text, ThemeIcon } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
-import { FC } from "react";
-import { Renderer } from "../../components/renderer";
-import { TagSelector } from "../tags/components/tag-selector";
-import { TaskTag } from "../tasks/components/task-tag";
-import { CategoryEntity, CategoryType } from "./category-types";
+import { ActionIcon, Input, InputWrapperProps } from "@mantine/core";
+import { type FC } from "react";
 import { CategorySelector } from "./category-selector";
+import { CategoryEntity, CategoryType } from "./category-types";
+import { IconX } from "@tabler/icons-react";
 
 interface CategoryInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   type: CategoryType;
-  value?: string;
-  onChange?: (value: string[]) => void;
+  value?: CategoryEntity;
+  onChange?: (value?: CategoryEntity | null) => void;
   disabled?: boolean;
 }
 
 export const CategoryInput: FC<CategoryInputProps> = (props) => {
   const { value, onChange, disabled, ...rest } = props;
 
-  const onSelect = (category?: CategoryEntity) => {
-    // if (!tag || props.disabled) return;
-    // const tags = value.find((t) => t._id === tag._id)
-    //   ? value.filter((t) => t._id !== tag._id)
-    //   : [...value, tag];
-    // props.onChange?.(tags.map((t) => t._id));
-  };
-
   return (
     <CategorySelector
       {...rest}
-      excludeIds={props.value ? [props.value] : undefined}
-      render={(ctx) => {
+      label={t("category")}
+      excludeIds={value ? [value._id] : undefined}
+      onSelect={onChange}
+      target={(ctx) => {
         return (
-          <Group
+          <Input
+            value={value?.name ?? ""}
             flex={1}
-            w="100%"
-            align="center"
-            style={{ cursor: "pointer" }}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              ctx.toggle();
-            }}
-          >
-            {/* <Renderer visible={value.length === 0}>
-              <Group gap={0} px={5}>
-                <ThemeIcon color="gray" variant="transparent">
-                  <IconPlus size={16} strokeWidth={1.5} />
-                </ThemeIcon>
-
-                <Text c="gray" fz={em(13)}>
-                  {capitalize(`${t("add")} ${t("tags")}`)}
-                </Text>
-              </Group>
-            </Renderer>
-
-            <Renderer visible={value.length > 0}>
-              <Group px={5} gap={5}>
-                {value.map((tag) => (
-                  <TaskTag key={tag._id} id={tag._id} onRemove={() => toogleSelect(tag)} />
-                ))}
-              </Group>
-            </Renderer> */}
-          </Group>
-        );
-      }}
-      onSelect={onSelect}
-      renderTarget={(ctx) => {
-        return (
-          <Button>
-            <IconPlus />
-          </Button>
+            placeholder={t("select_category")}
+            readOnly
+            onClick={ctx.toggle}
+            rightSectionPointerEvents="all"
+            rightSection={
+              value && (
+                <ActionIcon onClick={() => onChange?.(null)} color="gray" variant="subtle">
+                  <IconX size={14} />
+                </ActionIcon>
+              )
+            }
+          />
         );
       }}
     />

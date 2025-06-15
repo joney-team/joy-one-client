@@ -3,7 +3,7 @@ import { t } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
 import { WorkspaceRoleEntity } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { Checkbox, em, Group, Text } from "@mantine/core";
+import { Checkbox, Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
@@ -33,26 +33,28 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
-      renderOptionChild={(mo) => {
+      renderOption={(mo) => {
         const _color = color(mo.color || "gray");
         return (
-          <Group gap={10} onClick={() => props.onSelect?.(mo)}>
-            <Group gap={8} flex={1}>
-              <Circle size={12} color={_color} />
+          <Combobox.Option value={mo._id} key={mo._id}>
+            <Group gap={10} onClick={() => props.onSelect?.(mo)}>
+              <Group gap={8} flex={1}>
+                <Circle size={12} color={_color} />
 
-              <Text>{mo.name}</Text>
+                <Text>{mo.name}</Text>
+              </Group>
+
+              <Checkbox
+                checked={props.selectedIds?.includes(mo._id)}
+                onChange={() => props.onSelect?.(mo)}
+                radius={5}
+                size="xs"
+              />
             </Group>
-
-            <Checkbox
-              checked={props.selectedIds?.includes(mo._id)}
-              onChange={() => props.onSelect?.(mo)}
-              radius={5}
-              size="xs"
-            />
-          </Group>
+          </Combobox.Option>
         );
       }}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         const { toggle } = ctx;
         if (props.renderTrigger) return props.renderTrigger(ctx);
 

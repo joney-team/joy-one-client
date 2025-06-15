@@ -1,9 +1,11 @@
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
 import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { TaskStatus } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
+import { ActionIcon, Combobox, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
@@ -33,17 +35,19 @@ export const TaskStatusSelector: FC<TaskStatusSelectorProps> = (props) => {
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
-      renderOptionChild={(status) => {
+      renderOption={(status) => {
         return (
-          <Group gap={8} wrap="nowrap">
-            <TaskStatusIcon {...status} />
-            <Stack gap={3}>
-              <Text>{status.name}</Text>
-            </Stack>
-          </Group>
+          <Combobox.Option value={status.id} key={status.id}>
+            <Group gap={8} wrap="nowrap">
+              <TaskStatusIcon {...status} />
+              <Stack gap={3}>
+                <Text>{status.name}</Text>
+              </Stack>
+            </Group>
+          </Combobox.Option>
         );
       }}
-      renderTarget={(ctx) => {
+      target={(ctx) => {
         if (props.render) return props.render(ctx);
 
         return (
