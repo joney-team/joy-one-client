@@ -13,7 +13,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { useList } from "@/utils/use-list.util";
 import { em, SimpleGrid, Skeleton } from "@mantine/core";
 import { IconDevices, IconLogout } from "@tabler/icons-react";
-import { UserDeviceCard } from "@/components/profile/user-device-card";
+import { UserDeviceCard } from "./user-device-card";
 import { Fragment } from "react";
 
 export const UserDeviceList = () => {

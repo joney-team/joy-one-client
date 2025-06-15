@@ -3,7 +3,10 @@
 import { useColor } from "@/modules/theme/use-color";
 import { WorkSlot } from "@/types";
 import { useLayout } from "@/layout/layout-context";
-import { HrmTimekeepingEntity, HrmTimekeepingsRules } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
+import {
+  HrmTimekeepingEntity,
+  HrmTimekeepingsRules,
+} from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { calculateTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
 import { num, t } from "@/modules/lang/lang-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
@@ -12,7 +15,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { Badge, Card, Group, SimpleGrid, Stack, Table, Text } from "@mantine/core";
 import { FC } from "react";
-import { UserCard } from "@/modules/users/user-card";
+import { UserCard } from "@/modules/users/components/user-card";
 
 interface HrmTimekeepingsSummaryProps {
   timekeepings: HrmTimekeepingEntity[];
@@ -128,7 +131,9 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
                 >
                   <Group justify="end">
                     {summary.totalOvertime > 0 && (
-                      <Badge color={color("primary")}>{DateTimeUtils.toHHMM(summary.totalOvertime)}</Badge>
+                      <Badge color={color("primary")}>
+                        {DateTimeUtils.toHHMM(summary.totalOvertime)}
+                      </Badge>
                     )}
 
                     <Text>{num(summary.totalOvertime, { type: "hours" })}</Text>
@@ -169,7 +174,9 @@ const useTimekeepingsSummary = (
   timekeepings.forEach((v) => {
     if (pointedTimekeepingIds.includes(v._id)) return;
 
-    const _timekeepings = timekeepings.filter((t) => DateTimeUtils.isMatchDay(new Date(t.time * 1000), v.time * 1000));
+    const _timekeepings = timekeepings.filter((t) =>
+      DateTimeUtils.isMatchDay(new Date(t.time * 1000), v.time * 1000)
+    );
 
     pointedTimekeepingIds = [..._timekeepings.map((v) => v._id), v._id, ...pointedTimekeepingIds];
 

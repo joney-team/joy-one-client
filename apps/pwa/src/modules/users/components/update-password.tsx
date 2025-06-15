@@ -1,3 +1,5 @@
+"use client";
+
 import { useFormSubmit } from "@/hooks/use-form";
 import { Button } from "@/components/buttons/button";
 import { onSuccess } from "@/utils/actions";
@@ -50,7 +52,9 @@ export const UpdatePassword: FC = () => {
         {auth.user.isPasswordProvided && (
           <PasswordInput
             label={t("current_password")}
-            placeholder={StringUtils.convertToTitleCase(`${t("enter")} ${t("current_password")}`.toLowerCase())}
+            placeholder={StringUtils.convertToTitleCase(
+              `${t("enter")} ${t("current_password")}`.toLowerCase()
+            )}
             {...form.getInputProps("password")}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
           />
@@ -66,7 +70,9 @@ export const UpdatePassword: FC = () => {
 
           <PasswordInput
             label={t("confirm_password")}
-            placeholder={StringUtils.convertToTitleCase(`${t("enter")} ${t("confirm_password")}`.toLowerCase())}
+            placeholder={StringUtils.convertToTitleCase(
+              `${t("enter")} ${t("confirm_password")}`.toLowerCase()
+            )}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
             {...form.getInputProps("confirmPassword")}
           />

@@ -1,4 +1,4 @@
-import { UserCard, UserCardProps } from "@/modules/users/user-card";
+import { UserCard, UserCardProps } from "@/modules/users/components/user-card";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { ActionIcon, InputWrapperProps, em } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";

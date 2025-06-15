@@ -3,10 +3,14 @@
 import { Button } from "@/components/buttons/button";
 import { FilesBox } from "@/modules/files/files-box";
 import { ModalTitle } from "@/components/modal-title";
-import { UserCard } from "@/modules/users/user-card";
+import { UserCard } from "@/modules/users/components/user-card";
 import { t } from "@/modules/lang/lang-service";
 import { disburseReceipt, getPaymentMethodIcon } from "@/modules/receipts/receipts-service";
-import { ReceiptEntity, ReceiptPaymentMethod, ReceiptType } from "@/modules/receipts/receipts-types";
+import {
+  ReceiptEntity,
+  ReceiptPaymentMethod,
+  ReceiptType,
+} from "@/modules/receipts/receipts-types";
 import { onError } from "@/utils/exceptions.utils";
 import { StringUtils } from "@/utils/string.utils";
 import { Group, Stack, Text, em } from "@mantine/core";
@@ -47,7 +51,10 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
         Nội dung
       </Text>
       {receipt.note ? (
-        <Text dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(receipt.note) }} fw={700} />
+        <Text
+          dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(receipt.note) }}
+          fw={700}
+        />
       ) : (
         <Text fz={em(12)}>Không có nội dung</Text>
       )}
@@ -85,7 +92,12 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
         })}
       </Group>
 
-      <Button onClick={onSubmit} leftSection={<IconCheck strokeWidth={1.2} />} type="submit" color={color}>
+      <Button
+        onClick={onSubmit}
+        leftSection={<IconCheck strokeWidth={1.2} />}
+        type="submit"
+        color={color}
+      >
         Duyệt
       </Button>
     </Stack>

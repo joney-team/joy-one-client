@@ -31,7 +31,7 @@ import {
   removeTimekeeping,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import { renderDateTime, t } from "@/modules/lang/lang-service";
-import { UserCard } from "@/modules/users/user-card";
+import { UserCard } from "@/modules/users/components/user-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { StringUtils } from "@/utils/string.utils";

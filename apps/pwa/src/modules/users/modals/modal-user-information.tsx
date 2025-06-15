@@ -5,7 +5,7 @@ import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
-import { UserWorkspaceSettings } from "@/modules/users/user-workspace-settings";
+import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useAuth } from "@/modules/auth/auth-context";
@@ -111,7 +111,9 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
   const layout = useLayout();
   const workspace = useWorkspace();
   const auth = useAuth();
-  const mutualWorkspace = user.mutualWorkspaces.find((w) => w._id === workspace.userMember.workspaceId);
+  const mutualWorkspace = user.mutualWorkspaces.find(
+    (w) => w._id === workspace.userMember.workspaceId
+  );
   const isOnline = workspace.isUserOnline(user._id);
   const isMe = auth.user?._id === user._id;
 
@@ -145,7 +147,11 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
                   {user.name}
                 </Title>
 
-                <Badge color={isOnline ? "green" : "gray"} variant={isOnline ? "filled" : "light"} radius={4}>
+                <Badge
+                  color={isOnline ? "green" : "gray"}
+                  variant={isOnline ? "filled" : "light"}
+                  radius={4}
+                >
                   {isOnline ? t("online") : t("offline")}
                 </Badge>
               </Group>
@@ -164,17 +170,35 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
           <SimpleGrid cols={{ md: 3 }}>
             {!!member?.memberDisplayName && (
-              <ShortInfoSession label="display_name" value={member?.memberDisplayName} icon={IconUser} />
+              <ShortInfoSession
+                label="display_name"
+                value={member?.memberDisplayName}
+                icon={IconUser}
+              />
             )}
 
             {!!mutualWorkspace && member && (
-              <ShortInfoSession label="member_role" value={getUserMemberRoleLabel(member)} icon={IconAccessible} />
+              <ShortInfoSession
+                label="member_role"
+                value={getUserMemberRoleLabel(member)}
+                icon={IconAccessible}
+              />
             )}
 
-            <ShortInfoSession label="email" value={user.email} icon={IconMail} href={`mailto:${user.email}`} />
+            <ShortInfoSession
+              label="email"
+              value={user.email}
+              icon={IconMail}
+              href={`mailto:${user.email}`}
+            />
 
             {!!user.phone && (
-              <ShortInfoSession label="phone" value={user.phone} icon={IconPhone} href={`tel:${user.phone}`} />
+              <ShortInfoSession
+                label="phone"
+                value={user.phone}
+                icon={IconPhone}
+                href={`tel:${user.phone}`}
+              />
             )}
 
             {!!githubProvider && githubProvider.username && (
@@ -186,7 +210,13 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
               />
             )}
 
-            {!!user.birthday && <ShortInfoSession label="birthday" value={renderDate(user.birthday)} icon={IconCake} />}
+            {!!user.birthday && (
+              <ShortInfoSession
+                label="birthday"
+                value={renderDate(user.birthday)}
+                icon={IconCake}
+              />
+            )}
           </SimpleGrid>
         </Stack>
       </Group>

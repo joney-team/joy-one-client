@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { useAuth } from "@/modules/auth/auth-context";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";

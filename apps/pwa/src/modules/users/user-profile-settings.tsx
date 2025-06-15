@@ -21,7 +21,7 @@ import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCalendar, IconMail, IconPhone, IconUser } from "@tabler/icons-react";
 import { type FC } from "react";
-import { UserWorkspaceSettings } from "./user-workspace-settings";
+import { UserWorkspaceSettings } from "./components/user-workspace-settings-form";
 
 export const UserProfileSettings: FC = () => {
   const auth = useAuth();

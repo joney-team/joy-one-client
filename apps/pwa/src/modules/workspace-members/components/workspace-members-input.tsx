@@ -1,6 +1,6 @@
 import { useColor } from "@/modules/theme/use-color";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
-import { UserCard } from "@/modules/users/user-card";
+import { UserCard } from "@/modules/users/components/user-card";
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { ActionIcon, em, Group, InputWrapperProps, ThemeIcon, Tooltip } from "@mantine/core";

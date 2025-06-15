@@ -58,7 +58,7 @@ import { FilesBox } from "@/modules/files/files-box";
 import { HoverToEdit } from "@/components/hover-to-edit";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
-import { UserCard } from "@/modules/users/user-card";
+import { UserCard } from "@/modules/users/components/user-card";
 
 interface ReceiptCardProps {
   receipt: ReceiptEntity;

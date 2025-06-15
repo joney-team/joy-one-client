@@ -1,6 +1,6 @@
 "use client";
 
-import { ProfileForm } from "@/components/profile/profile-form";
+import { ProfileForm } from "./profile-form";
 import { useLayout } from "@/layout/layout-context";
 import { t } from "@/modules/lang/lang-service";
 import { Card, Center } from "@mantine/core";

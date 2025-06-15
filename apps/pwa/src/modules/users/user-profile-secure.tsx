@@ -3,8 +3,8 @@
 import { type FC, useEffect } from "react";
 
 import { Container } from "@/components/container";
-import { UpdatePassword } from "@/components/profile/update-password";
-import { UserDeviceList } from "@/components/profile/user-device-list";
+import { UpdatePassword } from "./components/update-password";
+import { UserDeviceList } from "./components/user-device-list";
 import { SessionTitle } from "@/components/session-title";
 import { useLayout } from "@/layout/layout-context";
 import { t } from "@/modules/lang/lang-service";
