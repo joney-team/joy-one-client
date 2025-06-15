@@ -8,7 +8,7 @@ import { searchEntity } from "@/modules/search/search-service";
 import { em, Group, InputWrapperProps, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "./selector";
+import { Selector, SelectorContext } from "@/components/selector";
 
 interface ProductSelectorProps {
   type?: ProductType | ProductType[];
@@ -36,8 +36,12 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
           return res;
         })
       }
-      onInitOptions={() => getProducts({ type: props.type, limit: 5 }).then((res) => res.data.filter(funcStrictType))}
-      searchPlaceholder={`${t("search_with", { query: ["name"].map((v) => t(v).toLowerCase()).join(", ") })}`}
+      onInitOptions={() =>
+        getProducts({ type: props.type, limit: 5 }).then((res) => res.data.filter(funcStrictType))
+      }
+      searchPlaceholder={`${t("search_with", {
+        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      })}`}
       renderOptionChild={(product) => {
         const Icon = getProductIcon(product.type);
 

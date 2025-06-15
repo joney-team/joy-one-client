@@ -5,13 +5,17 @@ import { BookingCard } from "@/modules/bookings/booking-card";
 import { Button } from "@/components/buttons/button";
 import { CalendarViewSelector } from "@/components/calendar-view-selector";
 import { Renderer } from "@/components/renderer";
-import { Selector } from "@/components/selector/selector";
+import { Selector } from "@/components/selector";
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
 import { calendarProps } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateBooking } from "./modals/modal-create-booking";
 import { CalendarView } from "@/types";
-import { bookingActiveStatus, getBookings, getBookingStatusColor } from "@/modules/bookings/booking-service";
+import {
+  bookingActiveStatus,
+  getBookings,
+  getBookingStatusColor,
+} from "@/modules/bookings/booking-service";
 import { BookingEntity, BookingStatus } from "./booking-types";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { EventType } from "@/modules/events/event-types";
@@ -19,11 +23,24 @@ import { useLang } from "@/modules/lang/lang-context";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
-import { isInWorkSlot, useWorkDaySlots } from "@/modules/workspace-settings/workspace-settings-service";
+import {
+  isInWorkSlot,
+  useWorkDaySlots,
+} from "@/modules/workspace-settings/workspace-settings-service";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { ObjectUtils } from "@/utils/object.utils";
 import { useList } from "@/utils/use-list.util";
-import { ActionIcon, Card, Center, Group, HoverCard, Loader, Stack, Text, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  Center,
+  Group,
+  HoverCard,
+  Loader,
+  Stack,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import {
   IconCalendarDown,
   IconChevronLeft,
@@ -74,9 +91,9 @@ export const BookingList: FC = () => {
 
       return getBookings(
         ObjectUtils.cleanObj({
-          rangeStartTime: `${DateTimeUtils.timeToSeconds(query.startTime)}-${DateTimeUtils.timeToSeconds(
-            query.endTime
-          )}`,
+          rangeStartTime: `${DateTimeUtils.timeToSeconds(
+            query.startTime
+          )}-${DateTimeUtils.timeToSeconds(query.endTime)}`,
           assigneeUserIds: query.assigneeUserIds.length > 0 ? query.assigneeUserIds : undefined,
           status: query.status || bookingActiveStatus,
           getAll: true,
@@ -93,7 +110,9 @@ export const BookingList: FC = () => {
     ],
   });
 
-  const [assignees, isAssigneesReady, setWorkspaceMember] = useWorkspaceMembers(bookings.query.assigneeUserIds);
+  const [assignees, isAssigneesReady, setWorkspaceMember] = useWorkspaceMembers(
+    bookings.query.assigneeUserIds
+  );
 
   const query = normalizeQuery(bookings.query);
 
@@ -190,7 +209,12 @@ export const BookingList: FC = () => {
           <Group justify="space-between">
             <Group flex={1}>
               <Group gap={5}>
-                <ActionIcon variant="outline" color={color("gray")} size="sm" onClick={previousRange}>
+                <ActionIcon
+                  variant="outline"
+                  color={color("gray")}
+                  size="sm"
+                  onClick={previousRange}
+                >
                   <IconChevronLeft strokeWidth={1.5} size={18} />
                 </ActionIcon>
 
@@ -285,7 +309,9 @@ export const BookingList: FC = () => {
                       <Group gap={5}>
                         <IconCircleFilled
                           size={13}
-                          color={color(getBookingStatusColor(option.id as BookingStatus) || "primary")}
+                          color={color(
+                            getBookingStatusColor(option.id as BookingStatus) || "primary"
+                          )}
                         />
                         <Text fz={11} c="gray" fw={500}>
                           {option.label}
@@ -298,7 +324,9 @@ export const BookingList: FC = () => {
                     const statusColor = !query.status
                       ? "primary"
                       : getBookingStatusColor(query.status as BookingStatus);
-                    const statusLabel = !query.status ? t("active") : t(`booking_status_${query.status}`);
+                    const statusLabel = !query.status
+                      ? t("active")
+                      : t(`booking_status_${query.status}`);
 
                     return (
                       <Card
@@ -357,7 +385,10 @@ export const BookingList: FC = () => {
                 </Button>
               )}
 
-              <CalendarViewSelector view={query.view} onChange={(view) => bookings.setQuery("view", view)} />
+              <CalendarViewSelector
+                view={query.view}
+                onChange={(view) => bookings.setQuery("view", view)}
+              />
 
               <Tooltip label={t("select_booking_slots_to_create_booking_desc")}>
                 <Button
@@ -460,8 +491,12 @@ export const BookingList: FC = () => {
                 const isAvailable = isInWorkspaceWorkSlots;
 
                 const bg = {
-                  light: isAvailable ? "var(--mantine-color-body)" : `var(--mantine-color-gray-light)`,
-                  dark: isAvailable ? "var(--mantine-color-default-hover)" : `var(--mantine-color-body)`,
+                  light: isAvailable
+                    ? "var(--mantine-color-body)"
+                    : `var(--mantine-color-gray-light)`,
+                  dark: isAvailable
+                    ? "var(--mantine-color-default-hover)"
+                    : `var(--mantine-color-body)`,
                 };
 
                 return {
@@ -472,7 +507,8 @@ export const BookingList: FC = () => {
               }}
               eventPropGetter={(e) => {
                 const event = bookings.data.find((v) => v._id === e.id);
-                const statusColor = getBookingStatusColor(event?.status as BookingStatus) || "primary";
+                const statusColor =
+                  getBookingStatusColor(event?.status as BookingStatus) || "primary";
 
                 return {
                   style: {

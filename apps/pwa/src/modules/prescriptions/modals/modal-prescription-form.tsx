@@ -3,8 +3,8 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
-import { PrescriptionSelector } from "@/components/selector/prescription-selector";
-import { ProductSelector } from "@/components/selector/product-selector";
+import { PrescriptionSelector } from "@/modules/prescriptions/components/prescription-selector";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 import { getView } from "@/layout/layout-service";
 import { CustomerInput } from "@/modules/customers/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";

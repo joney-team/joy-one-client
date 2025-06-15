@@ -12,7 +12,7 @@ import { FC, Fragment, useEffect } from "react";
 
 import { useRouter } from "@/hooks/use-router";
 import { Button } from "@/components/buttons/button";
-import { ProductCard } from "@/modules/products/product-card";
+import { ProductCard } from "@/modules/products/components/product-card";
 import { onArchive } from "@/utils/actions";
 import { useLayout } from "@/layout/layout-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";

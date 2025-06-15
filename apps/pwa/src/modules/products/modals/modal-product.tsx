@@ -5,7 +5,7 @@ import { ButtonArchive } from "@/components/buttons/button-archive";
 import { EntityImage } from "@/components/entity-image";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
-import { ProductSelector } from "@/components/selector/product-selector";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 import { uploadFile } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { ProductCategoryInput } from "@/modules/product-categories/product-category-input";

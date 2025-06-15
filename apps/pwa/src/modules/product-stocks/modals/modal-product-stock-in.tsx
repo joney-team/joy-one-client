@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { DateInput } from "@/components/inputs/date-input";
 import { ModalTitle } from "@/components/modal-title";
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
-import { ProductSelector } from "@/components/selector/product-selector";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 import { num, t, tMulti } from "@/modules/lang/lang-service";
 import {
   multipleProductsStockIn,

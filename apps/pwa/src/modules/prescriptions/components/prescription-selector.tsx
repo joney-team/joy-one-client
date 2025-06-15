@@ -9,7 +9,7 @@ import { searchEntity } from "@/modules/search/search-service";
 import { em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "./selector";
+import { Selector, SelectorContext } from "../../../components/selector";
 
 interface PrescriptionSelectorProps {
   excludeIds?: string[];
@@ -23,7 +23,9 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
       excludeIds={props.excludeIds}
       onSearch={(q) => searchEntity<PrescriptionEntity>(AppEntity.PRESCRIPTIONS, q)}
       onInitOptions={() => getPrescriptions({ limit: 5 }).then((res) => res.data)}
-      searchPlaceholder={`${t("search_with", { query: ["name"].map((v) => t(v).toLowerCase()).join(", ") })}`}
+      searchPlaceholder={`${t("search_with", {
+        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      })}`}
       renderOptionChild={(prescription) => {
         return (
           <Group gap={10}>

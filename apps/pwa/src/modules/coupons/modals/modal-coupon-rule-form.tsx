@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Editor } from "@/components/editor";
 import { ModalTitle } from "@/components/modal-title";
-import { ProductSelector } from "@/components/selector/product-selector";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 import { useFormSubmit } from "@/hooks/use-form";
 import { createCouponRule, updateCouponRule } from "@/modules/coupons/coupon-service";
 import {

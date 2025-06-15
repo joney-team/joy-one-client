@@ -3,7 +3,7 @@ import { type FC } from "react";
 import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
 import { ListQty } from "@/components/list-qty";
-import { ProductCard } from "@/modules/products/product-card";
+import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -21,8 +21,9 @@ export const ProductVoucherList: FC = () => {
     fetch: async (q) => getProducts({ ...q, type: ProductType.VOUCHER }),
   });
 
-  useEventsListener([EventType.PRODUCT_ARCHIVED, EventType.PRODUCT_UPDATE, EventType.PRODUCT_NEW], () =>
-    vouchers.fetch(true, { isSilient: true })
+  useEventsListener(
+    [EventType.PRODUCT_ARCHIVED, EventType.PRODUCT_UPDATE, EventType.PRODUCT_NEW],
+    () => vouchers.fetch(true, { isSilient: true })
   );
 
   return (

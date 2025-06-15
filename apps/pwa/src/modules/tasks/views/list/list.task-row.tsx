@@ -6,7 +6,7 @@ import { CustomerInput } from "@/modules/customers/customer-input";
 import { DueDateInput } from "@/components/inputs/due-date-input";
 import { UsersInput } from "@/components/inputs/users-input";
 import { Renderer } from "@/components/renderer";
-import { TagSelector } from "@/components/selector/tag-selector";
+import { TagSelector } from "@/modules/tags/tag-selector";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useLayout } from "@/layout/layout-context";

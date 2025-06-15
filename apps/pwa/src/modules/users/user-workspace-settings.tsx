@@ -23,7 +23,7 @@ import {
   WorkspacePermission,
   WorkspaceSpecialRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
-import { WorkspaceRolesInput } from "@/modules/workspace-roles/workspace-roles-input";
+import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import { onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";

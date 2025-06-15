@@ -6,8 +6,8 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ActionIcon, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "./selector";
-import { TaskStatusIcon } from "../../modules/tasks/components/task-status-options";
+import { Selector, SelectorContext } from "../../../components/selector";
+import { TaskStatusIcon } from "./task-status-options";
 
 interface TaskStatusSelectorProps {
   render?: (ctx: SelectorContext<TaskStatus>) => ReactNode;
@@ -30,7 +30,9 @@ export const TaskStatusSelector: FC<TaskStatusSelectorProps> = (props) => {
     <Selector
       {...props.inputProps}
       initOptions={taskStatuses}
-      searchPlaceholder={`${t("search_with", { query: ["name"].map((v) => t(v).toLowerCase()).join(", ") })}`}
+      searchPlaceholder={`${t("search_with", {
+        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      })}`}
       renderOptionChild={(status) => {
         return (
           <Group gap={8} wrap="nowrap">

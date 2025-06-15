@@ -7,7 +7,7 @@ import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-br
 import { em, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { Selector, SelectorProps } from "../../components/selector/selector";
+import { Selector, SelectorProps } from "../../components/selector";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 
@@ -21,22 +21,36 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = (props)
   return (
     <Selector
       {...props}
-      staticSearch={!workspace.userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)}
+      staticSearch={
+        !workspace.userMember.permissions.includes(
+          WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
+        )
+      }
       onSearch={(q) => {
-        if (workspace.userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)) {
+        if (
+          workspace.userMember.permissions.includes(
+            WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
+          )
+        ) {
           return searchEntity(AppEntity.WORKSPACE_BRANCHES, q);
         }
 
         return searchArray(workspace.userMember.workspaceBranches, ["name"], q);
       }}
       onInitOptions={() => {
-        if (workspace.userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)) {
+        if (
+          workspace.userMember.permissions.includes(
+            WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
+          )
+        ) {
           return getWorkspaceBranches({ limit: 5 }).then((res) => res.data);
         }
 
         return workspace.userMember.workspaceBranches;
       }}
-      searchPlaceholder={`${t("search_with", { query: ["name"].map((v) => t(v).toLowerCase()).join(", ") })}`}
+      searchPlaceholder={`${t("search_with", {
+        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      })}`}
       renderOptionChild={(item) => {
         return (
           <Group gap={8} justify="space-between">

@@ -6,9 +6,9 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Checkbox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "./selector";
+import { Selector, SelectorContext } from "../../../components/selector";
 import { useColor } from "@/modules/theme/use-color";
-import { Circle } from "../circle";
+import { Circle } from "../../../components/circle";
 
 type WorkspaceRoleOption = Pick<WorkspaceRoleEntity, "_id" | "name" | "color">;
 
@@ -30,7 +30,9 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
       autoCloseOnChange={false}
       staticSearch
       onInitOptions={() => options}
-      searchPlaceholder={`${t("search_with", { query: ["name"].map((v) => t(v).toLowerCase()).join(", ") })}`}
+      searchPlaceholder={`${t("search_with", {
+        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      })}`}
       renderOptionChild={(mo) => {
         const _color = color(mo.color || "gray");
         return (

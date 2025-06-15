@@ -2,38 +2,37 @@ import { t } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { capitalize } from "@/utils/string.utils";
-import { em, Group, InputWrapperProps, Text, ThemeIcon } from "@mantine/core";
+import { Button, em, Group, InputWrapperProps, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Renderer } from "../../components/renderer";
-import { TagSelector } from "./tag-selector";
+import { TagSelector } from "../tags/tag-selector";
 import { TaskTag } from "../tasks/components/task-tag";
+import { CategoryEntity, CategoryType } from "./category-types";
+import { CategorySelector } from "./category-selector";
 
-interface TagsInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
-  type: TagType;
-  value?: string[];
+interface CategoryInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
+  type: CategoryType;
+  value?: string;
   onChange?: (value: string[]) => void;
   disabled?: boolean;
 }
 
-export const TagsInput: FC<TagsInputProps> = (props) => {
-  const tags = useTags();
-  const value = props.value
-    ?.map((v) => tags.list.find((t) => t._id === v))
-    .filter((v) => !!v) as TagEntity[];
+export const CategoryInput: FC<CategoryInputProps> = (props) => {
+  const { value, onChange, disabled, ...rest } = props;
 
-  const toogleSelect = (tag?: TagEntity) => {
-    if (!tag || props.disabled) return;
-    const tags = value.find((t) => t._id === tag._id)
-      ? value.filter((t) => t._id !== tag._id)
-      : [...value, tag];
-    props.onChange?.(tags.map((t) => t._id));
+  const onSelect = (category?: CategoryEntity) => {
+    // if (!tag || props.disabled) return;
+    // const tags = value.find((t) => t._id === tag._id)
+    //   ? value.filter((t) => t._id !== tag._id)
+    //   : [...value, tag];
+    // props.onChange?.(tags.map((t) => t._id));
   };
 
   return (
-    <TagSelector
-      {...props}
-      excludeIds={value.map((tag) => tag._id)}
+    <CategorySelector
+      {...rest}
+      excludeIds={props.value ? [props.value] : undefined}
       render={(ctx) => {
         return (
           <Group
@@ -47,7 +46,7 @@ export const TagsInput: FC<TagsInputProps> = (props) => {
               ctx.toggle();
             }}
           >
-            <Renderer visible={value.length === 0}>
+            {/* <Renderer visible={value.length === 0}>
               <Group gap={0} px={5}>
                 <ThemeIcon color="gray" variant="transparent">
                   <IconPlus size={16} strokeWidth={1.5} />
@@ -65,11 +64,18 @@ export const TagsInput: FC<TagsInputProps> = (props) => {
                   <TaskTag key={tag._id} id={tag._id} onRemove={() => toogleSelect(tag)} />
                 ))}
               </Group>
-            </Renderer>
+            </Renderer> */}
           </Group>
         );
       }}
-      onSelect={toogleSelect}
+      onSelect={onSelect}
+      renderTarget={(ctx) => {
+        return (
+          <Button>
+            <IconPlus />
+          </Button>
+        );
+      }}
     />
   );
 };

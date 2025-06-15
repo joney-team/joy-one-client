@@ -9,11 +9,12 @@ import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
 
-import { useColor } from "@/modules/theme/use-color";
 import { onUploadFile } from "@/modules/files/file-service";
 import { FileType, UploadFileOptions } from "@/modules/files/file-types";
 import { renderLink } from "@/modules/files/files-utils";
+import { OnFileModal } from "@/modules/files/modals/modal-files";
 import { t } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
 import { alpha, Box, Group, Loader, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -22,7 +23,6 @@ import { IconPhoto, IconUpload } from "@tabler/icons-react";
 import { Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { ClipboardEventHandler, FC, useState } from "react";
 import { ImageResize } from "./image-resize";
-import { OnFileModal } from "@/modules/files/modals/modal-files";
 
 interface EditorProps {
   value?: string | JSONContent | undefined | null;
@@ -181,7 +181,14 @@ export const Editor: FC<EditorProps> = (props) => {
             </RichTextEditor.Toolbar>
           )}
 
-          <RichTextEditor.Content />
+          <RichTextEditor.Content
+            onClick={(e) => {
+              // If target has class "is-empty" then focus on the editor
+              if (!(e.target as HTMLElement).classList.contains("is-empty")) {
+                editor?.commands.focus();
+              }
+            }}
+          />
         </RichTextEditor>
 
         <Dropzone.Accept>

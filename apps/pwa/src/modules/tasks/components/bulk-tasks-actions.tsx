@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
-import { TagSelector } from "@/components/selector/tag-selector";
-import { TaskPrioritySelector } from "@/components/selector/task-priority-selector";
-import { TaskStatusSelector } from "@/components/selector/task-status-selector";
-import { TaskTagFolderSelector } from "@/components/selector/task-tag-folder-selector";
+import { TagSelector } from "@/modules/tags/tag-selector";
+import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
+import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
+import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { num, t } from "@/modules/lang/lang-service";
@@ -36,13 +36,17 @@ export const BulkTasksActions: FC = () => {
   const workspaceLayout = useWorkspaceLayout();
 
   const removeAll = () => {
-    const selectedTasks = tasks.selectedTaskIds.map((id) => getTaskEntity(id)!).filter((task) => !!task);
+    const selectedTasks = tasks.selectedTaskIds
+      .map((id) => getTaskEntity(id)!)
+      .filter((task) => !!task);
     updateTasks(selectedTasks.map((task) => ({ ...task, isArchived: true })));
     tasks.removeSelectedTasks();
   };
 
   const assignTask = (user: WorkspaceMember) => {
-    const selectedTasks = tasks.selectedTaskIds.map((id) => getTaskEntity(id)!).filter((task) => !!task);
+    const selectedTasks = tasks.selectedTaskIds
+      .map((id) => getTaskEntity(id)!)
+      .filter((task) => !!task);
     updateTasks(
       selectedTasks.map((task) => ({
         ...task,
@@ -52,12 +56,16 @@ export const BulkTasksActions: FC = () => {
   };
 
   const changeStatus = (status: TaskStatus) => {
-    const selectedTasks = tasks.selectedTaskIds.map((id) => getTaskEntity(id)!).filter((task) => !!task);
+    const selectedTasks = tasks.selectedTaskIds
+      .map((id) => getTaskEntity(id)!)
+      .filter((task) => !!task);
     updateTasks(selectedTasks.map((task) => ({ ...task, status: status.id })));
   };
 
   const changeFolder = (tagFolder?: TagEntity) => {
-    const relatedTasks = tasks.selectedTaskIds.map((id) => getTaskEntity(id)!).filter((task) => !!task);
+    const relatedTasks = tasks.selectedTaskIds
+      .map((id) => getTaskEntity(id)!)
+      .filter((task) => !!task);
     relatedTasks.forEach((task) => {
       const childTasks = getTaskEntites().filter((v) => v.parentId === task._id);
       childTasks.forEach((child) => relatedTasks.push(child));
@@ -68,19 +76,31 @@ export const BulkTasksActions: FC = () => {
 
   const setTag = (tag?: TagEntity) => {
     if (!tag) return;
-    const selectedTasks = tasks.selectedTaskIds.map((id) => getTaskEntity(id)!).filter((task) => !!task);
+    const selectedTasks = tasks.selectedTaskIds
+      .map((id) => getTaskEntity(id)!)
+      .filter((task) => !!task);
 
     if (selectedTasks.every((task) => task.tagIds?.includes(tag._id))) {
       return updateTasks(
-        selectedTasks.map((task) => ({ ...task, tagIds: task.tagIds?.filter((id) => id !== tag._id) }))
+        selectedTasks.map((task) => ({
+          ...task,
+          tagIds: task.tagIds?.filter((id) => id !== tag._id),
+        }))
       );
     }
 
-    updateTasks(selectedTasks.map((task) => ({ ...task, tagIds: [...new Set([...(task.tagIds || []), tag._id])] })));
+    updateTasks(
+      selectedTasks.map((task) => ({
+        ...task,
+        tagIds: [...new Set([...(task.tagIds || []), tag._id])],
+      }))
+    );
   };
 
   const changePriority = (priority: TaskPriority) => {
-    const selectedTasks = tasks.selectedTaskIds.map((id) => getTaskEntity(id)!).filter((task) => !!task);
+    const selectedTasks = tasks.selectedTaskIds
+      .map((id) => getTaskEntity(id)!)
+      .filter((task) => !!task);
     updateTasks(selectedTasks.map((task) => ({ ...task, priority: priority })));
   };
 
@@ -243,7 +263,12 @@ export const BulkTasksActions: FC = () => {
             </Button>
 
             <Tooltip label={t("unselect_all")}>
-              <ActionIcon color="gray" variant="subtle" radius={100} onClick={() => tasks.removeSelectedTasks()}>
+              <ActionIcon
+                color="gray"
+                variant="subtle"
+                radius={100}
+                onClick={() => tasks.removeSelectedTasks()}
+              >
                 <IconX size={18} />
               </ActionIcon>
             </Tooltip>
@@ -266,7 +291,10 @@ export const BulkTasksActions: FC = () => {
                   onSelect={changeStatus}
                   render={(ctx) => {
                     return (
-                      <Menu.Item leftSection={<IconPlaystationCircle size={18} />} onClick={ctx.toggle}>
+                      <Menu.Item
+                        leftSection={<IconPlaystationCircle size={18} />}
+                        onClick={ctx.toggle}
+                      >
                         {capitalize(`${t("change")} ${t("status")}`)}
                       </Menu.Item>
                     );
@@ -306,7 +334,10 @@ export const BulkTasksActions: FC = () => {
                   }}
                 />
 
-                <Menu.Item leftSection={<IconX size={18} />} onClick={() => tasks.removeSelectedTasks()}>
+                <Menu.Item
+                  leftSection={<IconX size={18} />}
+                  onClick={() => tasks.removeSelectedTasks()}
+                >
                   {t("unselect_all")}
                 </Menu.Item>
               </Menu.Dropdown>

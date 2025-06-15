@@ -7,7 +7,7 @@ import { Group, Text } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { FilterProps } from "./types";
-import { getId, Selector } from "@/components/selector/selector";
+import { getId, Selector } from "@/components/selector";
 
 export interface StaticSelectorFilterConfig {
   multiple?: boolean;

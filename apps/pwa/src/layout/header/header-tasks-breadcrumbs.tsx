@@ -1,5 +1,5 @@
 import { ContentEditable } from "@/components/content-editable/content-editable";
-import { TaskTagFolderSelector } from "@/components/selector/task-tag-folder-selector";
+import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useRouter } from "@/hooks/use-router";
 import { t } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";

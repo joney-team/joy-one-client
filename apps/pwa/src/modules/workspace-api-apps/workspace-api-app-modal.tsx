@@ -21,7 +21,7 @@ import {
   WorkspaceRoleEntity,
   WorkspaceSpecialRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
-import { WorkspaceRolesInput } from "@/modules/workspace-roles/workspace-roles-input";
+import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import { onActionLoad } from "@/utils/actions";
 import { onFormError } from "@/utils/exceptions.utils";
 import {

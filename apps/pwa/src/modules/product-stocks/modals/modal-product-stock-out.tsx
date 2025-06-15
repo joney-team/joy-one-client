@@ -1,11 +1,17 @@
 import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { ProductSelector } from "@/components/selector/product-selector";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 import { t, tMulti } from "@/modules/lang/lang-service";
 import { ProductStockEntity } from "@/modules/product-stocks/product-stocks-entity";
-import { productStockOut, productStockRecordTypeOptions } from "@/modules/product-stocks/product-stocks-service";
-import { ProductStockOutDto, ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
+import {
+  productStockOut,
+  productStockRecordTypeOptions,
+} from "@/modules/product-stocks/product-stocks-service";
+import {
+  ProductStockOutDto,
+  ProductStockRecordType,
+} from "@/modules/product-stocks/product-stocks-types";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { onError } from "@/utils/exceptions.utils";
 import { Input, InputWrapper, Modal, NumberInput, Stack, Textarea } from "@mantine/core";

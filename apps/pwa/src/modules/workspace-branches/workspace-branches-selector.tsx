@@ -7,7 +7,7 @@ import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-br
 import { em, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { Selector, SelectorProps } from "../../components/selector/selector";
+import { Selector, SelectorProps } from "../../components/selector";
 
 type WorkspaceBranchOption = Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline">;
 
@@ -19,7 +19,9 @@ export const WorkspaceBranchesSelector: FC<WorkspaceBranchesSelectorProps> = (pr
       {...props}
       onSearch={(q) => searchEntity(AppEntity.WORKSPACE_BRANCHES, q)}
       onInitOptions={() => getWorkspaceBranches({ limit: 5 }).then((res) => res.data)}
-      searchPlaceholder={`${t("search_with", { query: ["name"].map((v) => t(v).toLowerCase()).join(", ") })}`}
+      searchPlaceholder={`${t("search_with", {
+        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      })}`}
       renderOptionChild={(item) => {
         return (
           <Group gap={8} justify="space-between">

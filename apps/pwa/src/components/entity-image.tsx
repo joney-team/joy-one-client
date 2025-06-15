@@ -9,6 +9,7 @@ import { Icon, IconEye, IconPhoto, IconProps, IconUpload } from "@tabler/icons-r
 import { FC, useRef, useState } from "react";
 import { Button } from "./buttons/button";
 import { Renderer } from "./renderer";
+import { OnFileModal } from "@/modules/files/modals/modal-files";
 
 interface EntityImageProps {
   src?: string | File;
@@ -67,12 +68,25 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
         w={w}
         radius={props.radius || 10}
         style={{ cursor: "pointer", position: "relative" }}
-        onClick={() => openRef.current?.()}
+        onClick={() => {
+          if (disabled)
+            return OnModalFileGallery({
+              files: [{ url: src, fileName: props.name || "image", type: FileType.PHOTO }],
+            });
+          openRef.current?.();
+        }}
         withBorder
         shadow="none"
       >
         <Renderer visible={ableView}>
-          <Image src={src} h={h} w={w} fit={props.fit || "cover"} flex={1} onError={() => setLoadFailed(true)} />
+          <Image
+            src={src}
+            h={h}
+            w={w}
+            fit={props.fit || "cover"}
+            flex={1}
+            onError={() => setLoadFailed(true)}
+          />
         </Renderer>
 
         <Renderer visible={(!ableView && !hovered) || disabled}>
@@ -83,7 +97,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
           </Center>
         </Renderer>
 
-        <Renderer visible={!disabled && hovered}>
+        <Renderer visible={hovered}>
           <Stack
             gap={10}
             align="center"

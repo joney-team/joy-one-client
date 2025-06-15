@@ -5,7 +5,17 @@ import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, Badge, Card, CardProps, Group, Stack, Text, ThemeIcon, em } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  CardProps,
+  Group,
+  Stack,
+  Text,
+  ThemeIcon,
+  em,
+} from "@mantine/core";
 import {
   IconBuildingWarehouse,
   IconClock,
@@ -18,8 +28,8 @@ import {
   IconStack,
 } from "@tabler/icons-react";
 import { FC } from "react";
-import { EntityImage } from "../../components/entity-image";
-import { Renderer } from "../../components/renderer";
+import { EntityImage } from "../../../components/entity-image";
+import { Renderer } from "../../../components/renderer";
 
 export const ProductCard: FC<
   {
@@ -75,7 +85,9 @@ export const ProductCard: FC<
               <Text fz={em(15)} c="dark" fw={500}>
                 {(function () {
                   if (typeof product.minPrice === "number" && typeof product.maxPrice === "number")
-                    return `${num(product.minPrice, { type: "money" })} - ${num(product.maxPrice, { type: "money" })}`;
+                    return `${num(product.minPrice, { type: "money" })} - ${num(product.maxPrice, {
+                      type: "money",
+                    })}`;
                   return num(product.price, { type: "money" });
                 })()}{" "}
                 / {product.unit}
@@ -155,7 +167,11 @@ export const ProductCard: FC<
                     {t("terms_of_use")}:
                   </Text>
 
-                  <Renderer visible={!!product.voucherIncludeProducts && product.voucherIncludeProducts.length > 0}>
+                  <Renderer
+                    visible={
+                      !!product.voucherIncludeProducts && product.voucherIncludeProducts.length > 0
+                    }
+                  >
                     <Text fw={500} fz={em(13)} c="gray">
                       • {`${t("include_products")}:`}
                     </Text>
@@ -168,7 +184,11 @@ export const ProductCard: FC<
                     })}
                   </Renderer>
 
-                  <Renderer visible={!!product.voucherExcludeProducts && product.voucherExcludeProducts.length > 0}>
+                  <Renderer
+                    visible={
+                      !!product.voucherExcludeProducts && product.voucherExcludeProducts.length > 0
+                    }
+                  >
                     <Text fw={500} fz={em(13)} c="gray">
                       • {`${t("exclude_products")}:`}
                     </Text>
@@ -183,8 +203,10 @@ export const ProductCard: FC<
 
                   <Renderer
                     visible={
-                      (!product.voucherExcludeProducts || product.voucherExcludeProducts.length === 0) &&
-                      (!product.voucherIncludeProducts || product.voucherIncludeProducts.length === 0)
+                      (!product.voucherExcludeProducts ||
+                        product.voucherExcludeProducts.length === 0) &&
+                      (!product.voucherIncludeProducts ||
+                        product.voucherIncludeProducts.length === 0)
                     }
                   >
                     <Text fw={500} fz={em(13)} c="gray">
@@ -199,7 +221,9 @@ export const ProductCard: FC<
           {product.isStockCheck && product.stock && (
             <Group justify="space-between">
               <Badge
-                leftSection={<IconBuildingWarehouse size={13} strokeWidth={1.8} style={{ marginRight: -3 }} />}
+                leftSection={
+                  <IconBuildingWarehouse size={13} strokeWidth={1.8} style={{ marginRight: -3 }} />
+                }
                 variant={product.stock.quantity > 0 ? "light" : "outline"}
                 color={product.stock.quantity <= 0 ? "gray" : undefined}
                 fz={10}

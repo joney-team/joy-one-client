@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useMemo, useRef, useState } from "react";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { t } from "@/modules/lang/lang-service";
@@ -49,7 +49,17 @@ export type SelectorRenderOption<T extends SelectOption> = (item: T) => React.Re
 
 export type SelectorOnSearch<T extends SelectOption> = (value: string) => T[] | Promise<T[]>;
 
-export interface SelectorCommonProps<T extends SelectOption> {
+export interface SelectorBaseProps<T extends SelectOption>
+  extends Omit<InputWrapperProps, "value" | "onSelect" | "onChange"> {
+  value?: T;
+  onSelect?: (value: T | undefined, ctx: ComboboxStore) => Promise<void> | void;
+  onCreate?: (ctx: ComboboxStore) => void;
+  initOptions?: T[];
+  disabled?: boolean;
+  searchPlaceholder?: string;
+  onOpen?: () => void;
+  onClose?: () => void;
+  excludeIds?: string[];
   onSearch?: SelectorOnSearch<T>;
   onInitOptions?: () => T[] | Promise<T[]>;
   staticSearch?: boolean;
@@ -62,22 +72,7 @@ export interface SelectorCommonProps<T extends SelectOption> {
   searchProps?: ComboboxSearchProps;
 }
 
-export interface SelectorBaseProps<T extends SelectOption>
-  extends Omit<InputWrapperProps, "value" | "onSelect" | "onChange"> {
-  value?: T;
-  onSelect?: (value: T | undefined, ctx: ComboboxStore) => Promise<void> | void;
-  onCreate?: (ctx: ComboboxStore) => void;
-  initOptions?: T[];
-  disabled?: boolean;
-  searchPlaceholder?: string;
-  onOpen?: () => void;
-  onClose?: () => void;
-  excludeIds?: string[];
-}
-
-export interface SelectorProps<T extends SelectOption = any>
-  extends SelectorCommonProps<T>,
-    SelectorBaseProps<T> {}
+export interface SelectorProps<T extends SelectOption = any> extends SelectorBaseProps<T> {}
 
 export const getId = (item: SelectOption): string => ("id" in item ? item.id : item._id);
 
@@ -109,8 +104,9 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
 
   const [searching, setSearching] = useState(false);
   const [search, setSearch] = useState("");
+
   const color = useColor();
-  const viewport = useLayout();
+  const layout = useLayout();
 
   const [initOptions, setInitOptions] = useState<T[]>([]);
   const [selectOptions, setSelectOptions] = useState<T[]>([]);
@@ -127,13 +123,17 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
 
   const _initOptions = propsInitOptions || initOptions;
 
-  let options = (
-    selectOptions.length > 0 || !_initOptions || search.length > 0 ? selectOptions : _initOptions
-  ).filter((item) => (props.value ? getId(props.value) !== getId(item) : true));
+  const options = useMemo(() => {
+    let opts = (
+      selectOptions.length > 0 || !_initOptions || search.length > 0 ? selectOptions : _initOptions
+    ).filter((item) => (props.value ? getId(props.value) !== getId(item) : true));
 
-  if (props.excludeIds) {
-    options = options.filter((item) => !props.excludeIds?.includes(getId(item)));
-  }
+    if (props.excludeIds) {
+      opts = opts.filter((item) => !props.excludeIds?.includes(getId(item)));
+    }
+
+    return opts;
+  }, [selectOptions, _initOptions, search, props.value, props.excludeIds]);
 
   const groupOptions = options.reduce((acc, item) => {
     const group = getGroup(item);
@@ -169,13 +169,6 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     if (!onInitOptions) return;
     const res = await onInitOptions();
     setInitOptions(res || []);
-  };
-
-  const _onClose = () => {
-    props.onClose?.();
-    combobox.closeDropdown();
-    setSelectOptions([]);
-    setSearch("");
   };
 
   const _onOpen = async () => {
@@ -227,12 +220,8 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
             {props.renderTarget({
               value: props.value,
               disabled: !!props.disabled,
-              onChange: (value) => {
-                props.onSelect?.(value, combobox);
-              },
-              open: () => {
-                combobox.openDropdown();
-              },
+              onChange: (value) => props.onSelect?.(value, combobox),
+              open: () => combobox.openDropdown(),
               toggle: () => {
                 if (combobox.dropdownOpened) {
                   combobox.closeDropdown();
@@ -271,7 +260,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
           )}
 
           <Combobox.Options>
-            <ScrollArea.Autosize w="100%" type="scroll" mah={Math.min(400, viewport.height * 0.4)}>
+            <ScrollArea.Autosize w="100%" type="scroll" mah={Math.min(400, layout.height * 0.4)}>
               {options.length > 0 ? (
                 <Fragment>
                   {options
@@ -353,8 +342,4 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
       </Combobox>
     </InputWrapper>
   );
-}
-
-export function createSelectInput<T extends SelectOption>(_props: SelectorCommonProps<T>) {
-  return (props: SelectorBaseProps<T>) => <Selector {..._props} {...props} />;
 }

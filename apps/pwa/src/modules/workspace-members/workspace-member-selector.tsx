@@ -2,15 +2,19 @@ import { AppEntity } from "@/types";
 import { Avatar } from "@/components/avatar";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
-import { getUserMemberRoleLabel, getWorkspaceMemberList } from "@/modules/workspace-members/workspace-members-service";
+import {
+  getUserMemberRoleLabel,
+  getWorkspaceMemberList,
+} from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ActionIcon, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "../../components/selector/selector";
+import { Selector, SelectorContext } from "../../components/selector";
 
-interface WorkspaceMemberSelectorProps extends Omit<InputWrapperProps, "value" | "onChange" | "onSelect"> {
+interface WorkspaceMemberSelectorProps
+  extends Omit<InputWrapperProps, "value" | "onChange" | "onSelect"> {
   excludeIds?: string[];
   onSelect: (value: WorkspaceMember) => void;
   render?: (ctx: SelectorContext<WorkspaceMember>) => ReactNode;
@@ -22,8 +26,17 @@ interface WorkspaceMemberSelectorProps extends Omit<InputWrapperProps, "value" |
 }
 
 export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props) => {
-  const { excludeIds, onSelect, render, iconSize, avatarSize, collapsed, disabled, optionRightSection, ...rest } =
-    props;
+  const {
+    excludeIds,
+    onSelect,
+    render,
+    iconSize,
+    avatarSize,
+    collapsed,
+    disabled,
+    optionRightSection,
+    ...rest
+  } = props;
 
   const workspace = useWorkspace();
 
@@ -38,7 +51,9 @@ export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props)
           ...res.data.filter((v) => v._id !== workspace.userMember._id),
         ])
       }
-      searchPlaceholder={`${t("search_with", { query: ["name"].map((v) => t(v).toLowerCase()).join(", ") })}`}
+      searchPlaceholder={`${t("search_with", {
+        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      })}`}
       renderOptionChild={(user) => {
         return (
           <Group gap={8} justify="space-between">

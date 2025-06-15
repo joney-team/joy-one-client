@@ -8,7 +8,7 @@ import { searchEntity } from "@/modules/search/search-service";
 import { em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "../../components/selector/selector";
+import { Selector, SelectorContext } from "../../components/selector";
 
 interface CustomerSelectorProps {
   excludeIds?: string[];
@@ -21,7 +21,9 @@ export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
     <Selector
       excludeIds={props.excludeIds}
       onSearch={(q) => searchEntity<CustomerShortInfo>(AppEntity.CUSTOMERS, q)}
-      onInitOptions={() => getCustomers({ limit: 5, sortLastInteractionAt: -1 }).then((res) => res.data)}
+      onInitOptions={() =>
+        getCustomers({ limit: 5, sortLastInteractionAt: -1 }).then((res) => res.data)
+      }
       searchPlaceholder={`${t("search_with", {
         query: ["name", "phone", "email", "code"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

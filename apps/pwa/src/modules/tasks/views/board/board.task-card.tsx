@@ -3,8 +3,8 @@
 import { Button } from "@/components/buttons/button";
 import { DueDateInput } from "@/components/inputs/due-date-input";
 import { UsersInput } from "@/components/inputs/users-input";
-import { TagSelector } from "@/components/selector/tag-selector";
-import { TaskPrioritySelector } from "@/components/selector/task-priority-selector";
+import { TagSelector } from "@/modules/tags/tag-selector";
+import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { num, renderDateTime, t } from "@/modules/lang/lang-service";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";

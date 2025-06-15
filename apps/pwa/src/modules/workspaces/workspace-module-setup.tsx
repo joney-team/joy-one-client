@@ -2,7 +2,7 @@
 
 import { type FC, useEffect, useRef, useState } from "react";
 import { Renderer } from "@/components/renderer";
-import { WorkspaceModuleSelector } from "@/components/selector/workspace-module-selector";
+import { WorkspaceModuleSelector } from "@/modules/workspaces/components/workspace-module-selector";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { t } from "@/modules/lang/lang-service";

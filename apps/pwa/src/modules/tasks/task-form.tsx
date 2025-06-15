@@ -7,8 +7,8 @@ import { EstimateTimeInput } from "@/components/inputs/estimate-time-input";
 import { TimeTrackingsInput } from "@/components/inputs/time-trackings-input";
 import { UsersInput } from "@/components/inputs/users-input";
 import { Renderer } from "@/components/renderer";
-import { TaskPrioritySelector } from "@/components/selector/task-priority-selector";
-import { TaskStatusSelector } from "@/components/selector/task-status-selector";
+import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
+import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -101,7 +101,9 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
   const id = props.task?._id || "new_task_id";
 
   const tags = useTags();
-  const tagFolder = tags.list.find((v) => v._id === props.tagFolderId || v._id === taskFolders.tagFolder?._id);
+  const tagFolder = tags.list.find(
+    (v) => v._id === props.tagFolderId || v._id === taskFolders.tagFolder?._id
+  );
 
   const isInitialized = useRef(false);
   const forceUpdate = useForceUpdate();
@@ -163,7 +165,9 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         timeTrackings: values.timeTrackings || [],
         estimatedTime: values.estimatedTime,
       }).then(async (task) => {
-        await Promise.all(rawFiles.map(async (file) => onUploadFile({ file, ref: task._id }).catch(onError)));
+        await Promise.all(
+          rawFiles.map(async (file) => onUploadFile({ file, ref: task._id }).catch(onError))
+        );
         props.onClose?.();
         props.onCreated?.(task);
       });
@@ -262,7 +266,10 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                 inputProps={{ flex: 1 }}
                 onSelect={(status) => form.setFieldValue("status", status.id)}
                 render={(ctx) => {
-                  const statusStyled = renderTaskStatusStyle(form.values.status, workspace.settings.taskStatuses);
+                  const statusStyled = renderTaskStatusStyle(
+                    form.values.status,
+                    workspace.settings.taskStatuses
+                  );
                   const closedStatusStyled = renderTaskStatusStyle(
                     DefaultTaskStatusId.CLOSED,
                     workspace.settings.taskStatuses
@@ -364,18 +371,30 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
             </FormFieldWrapper>
 
             <FormFieldWrapper icon={IconFlag} label={t("priority")}>
-              <FormField canRemove={!!form.values.priority} onRemove={() => form.setFieldValue("priority", null)}>
+              <FormField
+                canRemove={!!form.values.priority}
+                onRemove={() => form.setFieldValue("priority", null)}
+              >
                 <TaskPrioritySelector
                   inputProps={{ flex: 1 }}
                   onSelect={(priority) => form.setFieldValue("priority", priority)}
                   render={(ctx) => {
                     return (
-                      <Group style={{ cursor: "pointer" }} flex={1} h={formFieldHeight} p={5} onClick={ctx.toggle}>
+                      <Group
+                        style={{ cursor: "pointer" }}
+                        flex={1}
+                        h={formFieldHeight}
+                        p={5}
+                        onClick={ctx.toggle}
+                      >
                         {(function () {
                           if (form.values.priority) {
                             return (
                               <Group gap={1}>
-                                <ThemeIcon color={getTaskPriorityColor(form.values.priority)} variant="transparent">
+                                <ThemeIcon
+                                  color={getTaskPriorityColor(form.values.priority)}
+                                  variant="transparent"
+                                >
                                   <IconFlagFilled size={20} />
                                 </ThemeIcon>
                                 <Text>{t(`task_priority_${form.values.priority}`)}</Text>
@@ -406,23 +425,39 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                     <Group style={{ cursor: "pointer", flex: 1 }} mih={formFieldHeight} p={5}>
                       {(function () {
                         if (form.values.dueDate && form.values.startDate) {
-                          if (DateTimeUtils.isMatchDay(form.values.dueDate * 1000, form.values.startDate * 1000)) {
+                          if (
+                            DateTimeUtils.isMatchDay(
+                              form.values.dueDate * 1000,
+                              form.values.startDate * 1000
+                            )
+                          ) {
                             return (
                               <Group c={isOutdated ? "red" : "var(--mantine-color-text)"} gap={5}>
-                                <Text>{dayjs(form.values.startDate * 1000).format("HH:mm")}</Text> <Text>-</Text>{" "}
+                                <Text>{dayjs(form.values.startDate * 1000).format("HH:mm")}</Text>{" "}
+                                <Text>-</Text>{" "}
                                 <Text>
-                                  {dayjs(form.values.dueDate * 1000).format("HH:mm")} {renderDate(form.values.dueDate)}
+                                  {dayjs(form.values.dueDate * 1000).format("HH:mm")}{" "}
+                                  {renderDate(form.values.dueDate)}
                                 </Text>
                               </Group>
                             );
                           }
 
-                          if (dayjs(form.values.startDate * 1000).isSame(dayjs(form.values.dueDate * 1000), "month")) {
+                          if (
+                            dayjs(form.values.startDate * 1000).isSame(
+                              dayjs(form.values.dueDate * 1000),
+                              "month"
+                            )
+                          ) {
                             return (
                               <Group c={isOutdated ? "red" : "var(--mantine-color-text)"} gap={5}>
-                                <Text>{dayjs(form.values.startDate * 1000).format("HH:mm DD/MM")}</Text> <Text>-</Text>{" "}
                                 <Text>
-                                  {dayjs(form.values.dueDate * 1000).format("HH:mm")} {renderDate(form.values.dueDate)}
+                                  {dayjs(form.values.startDate * 1000).format("HH:mm DD/MM")}
+                                </Text>{" "}
+                                <Text>-</Text>{" "}
+                                <Text>
+                                  {dayjs(form.values.dueDate * 1000).format("HH:mm")}{" "}
+                                  {renderDate(form.values.dueDate)}
                                 </Text>
                               </Group>
                             );
@@ -510,7 +545,10 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
             </FormFieldWrapper>
 
             <FormFieldWrapper icon={IconTopologyStar3} label={t("partners")}>
-              <FormField canRemove={!!form.values.partners?.length} onRemove={() => form.setFieldValue("partners", [])}>
+              <FormField
+                canRemove={!!form.values.partners?.length}
+                onRemove={() => form.setFieldValue("partners", [])}
+              >
                 <PartnersInput
                   flex={1}
                   p={5}
@@ -521,7 +559,10 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
             </FormFieldWrapper>
 
             <FormFieldWrapper icon={IconTags} label={t("tags")}>
-              <FormField canRemove={!!form.values.tagIds?.length} onRemove={() => form.setFieldValue("tagIds", [])}>
+              <FormField
+                canRemove={!!form.values.tagIds?.length}
+                onRemove={() => form.setFieldValue("tagIds", [])}
+              >
                 <TagsInput
                   flex={1}
                   type={TagType.TASK}

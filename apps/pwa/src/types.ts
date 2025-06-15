@@ -115,13 +115,14 @@ export enum AppEntity {
   TAGS = 'TGS',
   COMMENTS = 'CMT',
   ORDERS = 'O',
-  WORKSPACE_MEMBERS = 'M',
   USERS = 'U',
-  WORKSPACE = 'WS',
+  WORKSPACES = 'WS',
   WORKSPACE_BRANCHES = 'WB',
+  WORKSPACE_MEMBERS = 'M',
   MESSAGE_BOXES = 'MB',
   MESSAGES = 'MS',
   POSTS = 'PS',
+  CATEGORIES = 'CT',
 }
 
 export interface AppPageMetadata {

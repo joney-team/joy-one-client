@@ -5,7 +5,7 @@ import { EventType } from "@/modules/events/event-types";
 import { num, t } from "@/modules/lang/lang-service";
 import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
 import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
-import { ProductColumn } from "@/modules/products/product-column";
+import { ProductColumn } from "@/modules/products/components/product-column";
 import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Stack, Text } from "@mantine/core";

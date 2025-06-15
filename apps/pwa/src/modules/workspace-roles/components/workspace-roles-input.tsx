@@ -6,8 +6,8 @@ import { WorkspaceRoleEntity } from "@/modules/workspace-roles/workspace-roles-t
 import { ActionIcon, Badge, Group, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { Hovered } from "../../components/hovered";
-import { WorkspaceRolesSelector } from "../../components/selector/workspace-roles-selector";
+import { Hovered } from "@/components/hovered";
+import { WorkspaceRolesSelector } from "./workspace-roles-selector";
 
 type WorkspaceRoleOption = Pick<WorkspaceRoleEntity, "_id" | "name" | "color">;
 

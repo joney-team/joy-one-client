@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
-import { TaskTagFolderSelector } from "@/components/selector/task-tag-folder-selector";
+import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalShareLink } from "@/modals/modal-share-link";
 import { renderDateTime, t } from "@/modules/lang/lang-service";

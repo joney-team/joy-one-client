@@ -6,7 +6,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { em, Group, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { SelectOption, Selector, SelectorContext } from "./selector";
+import { SelectOption, Selector, SelectorContext } from "@/components/selector";
 
 type WorkspaceModuleOption = WorkspaceModule & SelectOption & { name: string };
 
@@ -24,7 +24,9 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
     .filter(
       (v) =>
         !props.excludeIds?.includes(v.id) &&
-        (!props.restrictDisplay || !v.restrictDisplay || props.restrictDisplay.includes(v.restrictDisplay as any))
+        (!props.restrictDisplay ||
+          !v.restrictDisplay ||
+          props.restrictDisplay.includes(v.restrictDisplay as any))
     );
 
   return (
@@ -32,7 +34,9 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
       autoCloseOnChange={false}
       excludeIds={props.excludeIds}
       onInitOptions={() => options}
-      searchPlaceholder={`${t("search_with", { query: ["name"].map((v) => t(v).toLowerCase()).join(", ") })}`}
+      searchPlaceholder={`${t("search_with", {
+        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      })}`}
       renderOptionChild={(mo) => {
         return (
           <Group gap={10} py={8}>

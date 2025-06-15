@@ -16,8 +16,8 @@ import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-pro
 import { OnModalProductStockOut } from "@/modules/product-stocks/modals/modal-product-stock-out";
 import { productStockRecordTypeOptions } from "@/modules/product-stocks/product-stocks-service";
 import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
-import { ProductCard } from "@/modules/products/product-card";
-import { ProductColumn } from "@/modules/products/product-column";
+import { ProductCard } from "@/modules/products/components/product-card";
+import { ProductColumn } from "@/modules/products/components/product-column";
 import { archiveProduct, getProduct } from "@/modules/products/products-service";
 import { UserColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";

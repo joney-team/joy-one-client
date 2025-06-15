@@ -8,7 +8,7 @@ import { ButtonPlus } from "@/components/buttons/button-plus";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Renderer } from "@/components/renderer";
 import { PartnerSelector } from "@/modules/partners/partner-selector";
-import { TagSelector } from "@/components/selector/tag-selector";
+import { TagSelector } from "@/modules/tags/tag-selector";
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/workspace-member-selector";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useLayout } from "@/layout/layout-context";
@@ -49,7 +49,9 @@ export const TaskMenuActions: FC = () => {
 
   const color = useColor();
 
-  const [assignees, isAssigneesReady, setAssignee] = useWorkspaceMembers(tasks.state.assigneeUserIds);
+  const [assignees, isAssigneesReady, setAssignee] = useWorkspaceMembers(
+    tasks.state.assigneeUserIds
+  );
   const assigneesHover = useHover();
   const partnersHover = useHover();
   const layout = useLayout();
@@ -66,13 +68,17 @@ export const TaskMenuActions: FC = () => {
 
   const onUndo = () => {
     if (!isAbleToUndo) return;
-    const currentIndex = taskHistories.histories.findIndex((v) => v.id === taskHistories.pointedHistoryId!);
+    const currentIndex = taskHistories.histories.findIndex(
+      (v) => v.id === taskHistories.pointedHistoryId!
+    );
     return taskHistories.switchHistory(taskHistories.histories[currentIndex - 1].id, "prev");
   };
 
   const onRedo = () => {
     if (!isAbleToRedo) return;
-    const currentIndex = taskHistories.histories.findIndex((v) => v.id === taskHistories.pointedHistoryId!);
+    const currentIndex = taskHistories.histories.findIndex(
+      (v) => v.id === taskHistories.pointedHistoryId!
+    );
     return taskHistories.switchHistory(taskHistories.histories[currentIndex + 1].id, "next");
   };
 
@@ -121,17 +127,27 @@ export const TaskMenuActions: FC = () => {
 
             return (
               <Group>
-                <ThemeIcon radius={100} variant="transparent" color="var(--mantine-color-dimmed)" size="sm">
+                <ThemeIcon
+                  radius={100}
+                  variant="transparent"
+                  color="var(--mantine-color-dimmed)"
+                  size="sm"
+                >
                   {isSelected ? <IconMinus size={16} /> : <IconPlus size={16} />}
                 </ThemeIcon>
               </Group>
             );
           }}
           render={(ctx) => {
-            const isHasAssignee = tasks.state.assigneeUserIds && tasks.state.assigneeUserIds.length > 0;
+            const isHasAssignee =
+              tasks.state.assigneeUserIds && tasks.state.assigneeUserIds.length > 0;
 
             return (
-              <Group justify="space-between" style={{ position: "relative" }} ref={assigneesHover.ref}>
+              <Group
+                justify="space-between"
+                style={{ position: "relative" }}
+                ref={assigneesHover.ref}
+              >
                 <Button
                   onClick={ctx.toggle}
                   size="compact-md"
@@ -154,7 +170,9 @@ export const TaskMenuActions: FC = () => {
                       isHasAssignee && (
                         <Group gap={5} mr={0}>
                           {tasks.state.assigneeUserIds?.map((userId, i) => {
-                            const assignee = assignees.find((assignee) => assignee.userId === userId);
+                            const assignee = assignees.find(
+                              (assignee) => assignee.userId === userId
+                            );
                             if (!assignee) return null;
 
                             return (
@@ -228,7 +246,11 @@ export const TaskMenuActions: FC = () => {
             const isHasPartner = tasks.state.partnerIds && tasks.state.partnerIds.length > 0;
 
             return (
-              <Group justify="space-between" style={{ position: "relative" }} ref={partnersHover.ref}>
+              <Group
+                justify="space-between"
+                style={{ position: "relative" }}
+                ref={partnersHover.ref}
+              >
                 <Button
                   onClick={ctx.toggle}
                   size="compact-md"
@@ -393,14 +415,23 @@ export const TaskMenuActions: FC = () => {
           isActive={tasks.state.showClosed}
           iconStrokeWidth={1.8}
           onClick={() => {
-            tasks.setState((s) => ({ ...s, showClosed: tasks.state.showClosed ? undefined : true }));
+            tasks.setState((s) => ({
+              ...s,
+              showClosed: tasks.state.showClosed ? undefined : true,
+            }));
           }}
         />
       </Group>
 
       <Group>
         <Renderer visible={isAbleToUndo || isAbleToRedo}>
-          <Card bg="transparent" radius={100} p={0} withBorder style={{ borderColor: color("gray.5") }}>
+          <Card
+            bg="transparent"
+            radius={100}
+            p={0}
+            withBorder
+            style={{ borderColor: color("gray.5") }}
+          >
             <Group gap={0}>
               <Tooltip label={t("undo")}>
                 <ActionIcon

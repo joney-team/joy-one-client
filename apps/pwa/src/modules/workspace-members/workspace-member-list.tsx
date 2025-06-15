@@ -25,11 +25,11 @@ import { AppEntity } from "@/types";
 import { Badge, Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconBuilding, IconLock, IconMail, IconPhone } from "@tabler/icons-react";
 import { FC } from "react";
-import { Clickable } from "../../components/clickable";
-import { List } from "../../components/list";
-import { DateTimeColumn } from "../../components/list/columns/date-time-column";
-import { WorkspaceBranchesInput } from "../workspace-branches/workspace-branches-input";
-import { WorkspaceRolesInput } from "../workspace-roles/workspace-roles-input";
+import { Clickable } from "@/components/clickable";
+import { List } from "@/components/list";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
+import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 
 export const WorkspaceMemberList: FC = () => {
   const workspace = useWorkspace();

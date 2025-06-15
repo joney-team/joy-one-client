@@ -5,7 +5,17 @@ import { ContentEditable } from "@/components/content-editable/content-editable"
 import { Editor } from "@/components/editor";
 import { EntityImage } from "@/components/entity-image";
 import { onError, onFormError } from "@/utils/exceptions.utils";
-import { Card, Grid, Group, InputWrapper, Stack, Textarea, TextInput } from "@mantine/core";
+import {
+  Badge,
+  Card,
+  Grid,
+  Group,
+  InputWrapper,
+  Stack,
+  Text,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCheck } from "@tabler/icons-react";
@@ -13,8 +23,10 @@ import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
 import { api } from "../apis";
 import { onUploadFile } from "../files/file-service";
-import { t } from "../lang/lang-service";
+import { renderDateTime, t } from "../lang/lang-service";
 import { PostEntity } from "./posts-types";
+import { getFormattedDate } from "@mantine/dates";
+import { Renderer } from "@/components/renderer";
 
 interface FormPostProps {
   post?: PostEntity;
@@ -83,78 +95,110 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
     }
   });
 
+  const Actions: FC = () => {
+    return (
+      <Card shadow="sm">
+        <Group justify="space-between">
+          <Stack gap={4}>
+            {post ? <Badge>{t("published")}</Badge> : <Badge color="gray">{t("draft")}</Badge>}
+            {post?.updatedAt && (
+              <Text fz={12} c="gray">
+                {t("updatedAt")}: {renderDateTime(post.updatedAt)}
+              </Text>
+            )}
+          </Stack>
+
+          <Button
+            disabled={!form.isDirty()}
+            onClick={onSubmit}
+            loading={form.submitting}
+            leftIcon={IconCheck}
+            radius={150}
+          >
+            {post ? t("update") : t("post_publish")}
+          </Button>
+        </Group>
+      </Card>
+    );
+  };
+
   return (
     <Grid>
       <Grid.Col span={{ base: 12, md: 8 }}>
-        <Card shadow="sm" p={0}>
-          <Stack gap={0}>
-            <Group p={12}>
-              <InputWrapper {...form.getInputProps("title")} flex={1}>
-                <ContentEditable
-                  value={form.values.title}
-                  onChange={(value) => {
-                    form.setFieldValue("title", value);
-                    autoGenerateSlug(value);
-                  }}
-                  placeholder={t("enter_title")}
-                  fz={25}
+        <Stack>
+          <Renderer views={["mobile", "tablet"]}>
+            <Actions />
+          </Renderer>
+
+          <Card shadow="sm" p={0}>
+            <Stack gap={0}>
+              <Stack p={12}>
+                <InputWrapper {...form.getInputProps("title")} flex={1}>
+                  <ContentEditable
+                    value={form.values.title}
+                    onChange={(value) => {
+                      form.setFieldValue("title", value);
+                      autoGenerateSlug(value);
+                    }}
+                    placeholder={t("enter_title")}
+                    fz={25}
+                  />
+                </InputWrapper>
+              </Stack>
+
+              <Editor
+                isAlwayShowToolbar
+                placeholder={t("enter_content")}
+                props={{
+                  styles: {
+                    root: {
+                      border: "none",
+                      borderRadius: 0,
+                    },
+                    content: {
+                      minHeight: "60dvh",
+                    },
+                    toolbar: {
+                      border: "none",
+                      paddingBottom: 0,
+                    },
+                  },
+                }}
+                value={form.values.content}
+                onChangeJSON={(value) => form.setFieldValue("content", value)}
+              />
+            </Stack>
+          </Card>
+        </Stack>
+      </Grid.Col>
+      <Grid.Col span={{ base: 12, md: 4 }}>
+        <Stack>
+          <Renderer views={["desktop"]}>
+            <Actions />
+          </Renderer>
+
+          <Card shadow="sm">
+            <Stack>
+              <TextInput label="Slug" {...form.getInputProps("slug")} />
+
+              <InputWrapper label={t("post_thumbnail")}>
+                <EntityImage
+                  src={form.values.thumbnail || post?.thumbnail}
+                  onChange={(value) => form.setFieldValue("thumbnail", value)}
+                  w={300}
+                  h={200}
                 />
               </InputWrapper>
 
-              <Button
-                disabled={!form.isDirty()}
-                onClick={onSubmit}
-                loading={form.submitting}
-                leftIcon={IconCheck}
-              >
-                {post ? t("update") : t("post_publish")}
-              </Button>
-            </Group>
-
-            <Editor
-              isAlwayShowToolbar
-              placeholder={t("enter_content")}
-              props={{
-                styles: {
-                  root: {
-                    borderRight: "none",
-                    borderLeft: "none",
-                    borderBottom: "none",
-                    borderRadius: 0,
-                  },
-                  content: {
-                    minHeight: "60dvh",
-                  },
-                },
-              }}
-              value={form.values.content}
-              onChangeJSON={(value) => form.setFieldValue("content", value)}
-            />
-          </Stack>
-        </Card>
-      </Grid.Col>
-      <Grid.Col span={{ base: 12, md: 4 }}>
-        <Card shadow="sm">
-          <Stack>
-            <TextInput label="Slug" {...form.getInputProps("slug")} />
-
-            <InputWrapper label={t("post_thumbnail")}>
-              <EntityImage
-                src={form.values.thumbnail || post?.thumbnail}
-                onChange={(value) => form.setFieldValue("thumbnail", value)}
-                w={300}
-                h={200}
+              <Textarea
+                label={t("excerpt")}
+                placeholder={t("enter_excerpt")}
+                value={form.values.excerpt}
+                onChange={(e) => form.setFieldValue("excerpt", e.target.value)}
               />
-            </InputWrapper>
-
-            <Textarea
-              label={t("excerpt")}
-              placeholder={t("enter_excerpt")}
-              value={form.values.excerpt}
-              onChange={(e) => form.setFieldValue("excerpt", e.target.value)}
-            />
-          </Stack>
-        </Card>
+            </Stack>
+          </Card>
+        </Stack>
       </Grid.Col>
     </Grid>
   );

@@ -3,10 +3,10 @@ import { Anchor, Group, Stack, Text } from "@mantine/core";
 import { IconBox } from "@tabler/icons-react";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { ProductEntity, ProductType } from "./products-types";
-import { getProductByIds, getProductIcon, getProducts } from "./products-service";
+import { ProductEntity, ProductType } from "../products-types";
+import { getProductByIds, getProductIcon, getProducts } from "../products-service";
 import { EntityImage } from "@/components/entity-image";
-import { searchEntity } from "../search/search-service";
+import { searchEntity } from "../../search/search-service";
 import { AppEntity } from "@/types";
 
 export interface ProductColumnArgs extends Omit<Column, "render"> {

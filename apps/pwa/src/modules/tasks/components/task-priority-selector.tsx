@@ -4,7 +4,7 @@ import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { ActionIcon, em, Group, InputWrapperProps, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconFlagFilled } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "./selector";
+import { Selector, SelectorContext } from "../../../components/selector";
 import { useColor } from "@/modules/theme/use-color";
 
 interface TaskPrioritySelectorProps {
@@ -23,7 +23,9 @@ export const TaskPrioritySelector: FC<TaskPrioritySelectorProps> = (props) => {
     <Selector
       {...props.inputProps}
       initOptions={Object.values(TaskPriority).map((priority) => ({ id: priority }))}
-      searchPlaceholder={`${t("search_with", { query: ["name"].map((v) => t(v).toLowerCase()).join(", ") })}`}
+      searchPlaceholder={`${t("search_with", {
+        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      })}`}
       renderOptionChild={(priority) => {
         const priorityColor = getTaskPriorityColor(priority.id);
         return (

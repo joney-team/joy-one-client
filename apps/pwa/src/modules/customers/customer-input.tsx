@@ -1,6 +1,6 @@
 import { Avatar } from "@/components/avatar";
 import { Renderer } from "@/components/renderer";
-import { SelectorRenderValue } from "@/components/selector/selector";
+import { SelectorRenderValue } from "@/components/selector";
 import { CustomerSelector } from "@/modules/customers/customer-selector";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { ActionIcon, Card, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";

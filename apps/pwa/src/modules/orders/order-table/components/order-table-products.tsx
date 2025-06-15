@@ -11,7 +11,7 @@ import { Center, Group, Loader, SimpleGrid, Stack } from "@mantine/core";
 import { IconList } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";
 import { OrderTableProps } from "..";
-import { ProductCard } from "@/modules/products/product-card";
+import { ProductCard } from "@/modules/products/components/product-card";
 import { useOrderTable } from "../order-table-context";
 import { OrderTableCtaCard } from "./order-table-cta-card";
 
