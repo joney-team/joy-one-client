@@ -140,7 +140,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                             unit: product.unit,
                           })
                         }
-                        renderTrigger={(ctx) => {
+                        target={(ctx) => {
                           return (
                             <TextInput
                               value={item.name}
@@ -302,7 +302,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
               form.setValues(prescription);
               handler.setState(prescription.items || [defaultItem]);
             }}
-            renderTrigger={(ctx) => {
+            target={(ctx) => {
               return (
                 <Button
                   onClick={ctx.toggle}

@@ -123,7 +123,7 @@ export const WorkspaceModuleSetup: FC = () => {
               onSelect={(mo) => {
                 handleComponents.append({ id: uuid(), moduleId: mo.id as any, type: "MODULE" });
               }}
-              renderTrigger={(ctx) => {
+              target={(ctx) => {
                 return (
                   <Tooltip label={`${t("add")} ${t("modules")}`}>
                     <ActionIcon variant="subtle" color="dark" onClick={ctx.toggle}>

@@ -327,7 +327,7 @@ const ProductForm: FC<
                         quantity: product.defaultQtyPerUse || 1,
                       });
                     }}
-                    renderTrigger={(ctx) => {
+                    target={(ctx) => {
                       return (
                         <Button
                           onClick={ctx.toggle}
@@ -392,7 +392,7 @@ const ProductForm: FC<
                       if (combos.some((c) => c.productId === product._id)) return;
                       combosHandler.append({ product, productId: product._id, quantity: 1 });
                     }}
-                    renderTrigger={(ctx) => {
+                    target={(ctx) => {
                       return (
                         <Button
                           tt="capitalize"
@@ -554,7 +554,7 @@ const ComboForm: FC<{
       <ProductSelector
         type={[ProductType.PRODUCT, ProductType.SERVICE]}
         onSelect={(product) => onChange({ ...combo, product, productId: product._id })}
-        renderTrigger={(ctx) => {
+        target={(ctx) => {
           return (
             <TextInput
               flex={1}

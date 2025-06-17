@@ -15,7 +15,7 @@ interface ProductSelectorProps {
   isStockCheck?: boolean;
   excludeIds?: string[];
   onSelect: (value: ProductEntity) => void;
-  renderTrigger?: (ctx: SelectorContext<ProductEntity>) => ReactNode;
+  target?: (ctx: SelectorContext<ProductEntity>) => ReactNode;
   props?: InputWrapperProps;
 }
 
@@ -63,7 +63,7 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
       }}
       target={(ctx) => {
         const { toggle } = ctx;
-        if (props.renderTrigger) return props.renderTrigger(ctx);
+        if (props.target) return props.target(ctx);
         return (
           <Button
             tt="capitalize"

@@ -88,7 +88,7 @@ export const ModalProductStockOut: FC = () => {
             isStockCheck
             excludeIds={form.values.product?._id ? [form.values.product?._id] : []}
             onSelect={(product) => form.setFieldValue("product", product)}
-            renderTrigger={(ctx) => {
+            target={(ctx) => {
               return (
                 <InputWrapper flex={1} label={t("product")}>
                   <Input

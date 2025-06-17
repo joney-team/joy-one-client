@@ -176,7 +176,7 @@ export const ModalProductStockIn: FC = () => {
                         type={ProductType.PRODUCT}
                         excludeIds={form.values.items.map((v) => v.product?._id || "")}
                         onSelect={(product) => onChange({ ...item, product })}
-                        renderTrigger={(ctx) => {
+                        target={(ctx) => {
                           return (
                             <InputWrapper flex={1} {...form.getInputProps(`items.${i}.product`)}>
                               <Group

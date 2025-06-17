@@ -14,7 +14,7 @@ import { Selector, SelectorContext } from "../../../components/selector";
 interface PrescriptionSelectorProps {
   excludeIds?: string[];
   onSelect: (value: PrescriptionEntity) => void;
-  renderTrigger?: (ctx: SelectorContext<PrescriptionEntity>) => ReactNode;
+  target?: (ctx: SelectorContext<PrescriptionEntity>) => ReactNode;
 }
 
 export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
@@ -37,7 +37,7 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
       }}
       target={(ctx) => {
         const { toggle } = ctx;
-        if (props.renderTrigger) return props.renderTrigger(ctx);
+        if (props.target) return props.target(ctx);
         return (
           <Button
             tt="capitalize"

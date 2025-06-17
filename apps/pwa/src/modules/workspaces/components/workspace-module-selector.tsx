@@ -14,7 +14,7 @@ interface WorkspaceModuleSelectorProps {
   restrictDisplay?: ("navigation" | "spotlight")[];
   onSelect: (value: WorkspaceModuleOption) => void;
   excludeIds?: string[];
-  renderTrigger?: (ctx: SelectorContext<WorkspaceModuleOption>) => ReactNode;
+  target?: (ctx: SelectorContext<WorkspaceModuleOption>) => ReactNode;
 }
 
 export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props) => {
@@ -52,7 +52,7 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
       }}
       target={(ctx) => {
         const { toggle } = ctx;
-        if (props.renderTrigger) return props.renderTrigger(ctx);
+        if (props.target) return props.target(ctx);
         return (
           <Button
             tt="capitalize"

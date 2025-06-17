@@ -7,7 +7,7 @@ import { Renderer } from "@/components/renderer";
 import { PartnerSelector } from "@/modules/partners/components/partner-selector";
 
 interface PartnersInputProps
-  extends Omit<InputWrapperProps, "value" | "onChange" | "onSelect" | "renderTrigger"> {
+  extends Omit<InputWrapperProps, "value" | "onChange" | "onSelect" | "target"> {
   value?: PartnerEntity[];
   onChange?: (value: PartnerEntity[]) => void;
 }
@@ -33,7 +33,7 @@ export const PartnersInput: FC<PartnersInputProps> = (props) => {
       {...rest}
       excludeIds={partners.map((p) => p._id)}
       onSelect={toogleSelect}
-      renderTrigger={(ctx) => {
+      target={(ctx) => {
         return (
           <Group
             gap={10}

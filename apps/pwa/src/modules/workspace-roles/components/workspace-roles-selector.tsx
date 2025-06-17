@@ -16,7 +16,7 @@ interface WorkspaceRolesSelectorProps {
   onSelect: (role: WorkspaceRoleOption) => void;
   disabled?: boolean;
   selectedIds?: string[];
-  renderTrigger?: (ctx: SelectorContext<WorkspaceRoleOption>) => ReactNode;
+  target?: (ctx: SelectorContext<WorkspaceRoleOption>) => ReactNode;
 }
 
 export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) => {
@@ -56,7 +56,7 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
       }}
       target={(ctx) => {
         const { toggle } = ctx;
-        if (props.renderTrigger) return props.renderTrigger(ctx);
+        if (props.target) return props.target(ctx);
 
         return (
           <Button

@@ -255,7 +255,7 @@ const RuleBenfitForm: FC<{
                 onSelect={(product) =>
                   onChange({ ...benefit, data: { ...data, product, productId: product._id } })
                 }
-                renderTrigger={(ctx) => {
+                target={(ctx) => {
                   return (
                     <TextInput
                       flex={1}
@@ -306,7 +306,7 @@ const RuleBenfitForm: FC<{
                 onSelect={(product) =>
                   onChange({ ...benefit, data: { ...data, product, productId: product._id } })
                 }
-                renderTrigger={(ctx) => {
+                target={(ctx) => {
                   return (
                     <TextInput
                       flex={1}

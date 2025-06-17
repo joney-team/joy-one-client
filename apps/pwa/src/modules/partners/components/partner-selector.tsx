@@ -22,14 +22,15 @@ interface PartnerSelectorProps
     | "searchPlaceholder"
     | "renderOption"
     | "onCreate"
+    | "target"
   > {
-  renderTrigger?: (ctx: SelectorContext<PartnerEntity>) => ReactNode;
+  target?: (ctx: SelectorContext<PartnerEntity>) => ReactNode;
   createable?: boolean;
   optionRightSection?: (value: PartnerEntity) => ReactNode;
 }
 
 export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
-  const { renderTrigger, createable = true, optionRightSection, ...rest } = props;
+  const { target, createable = true, optionRightSection, ...rest } = props;
 
   const workspace = useWorkspace();
   const _createable = createable && workspace.hasPermission(WorkspacePermission.PARTNERS_WRITE);
@@ -65,7 +66,7 @@ export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
       }}
       target={(ctx) => {
         const { toggle } = ctx;
-        if (renderTrigger) return renderTrigger(ctx);
+        if (target) return target(ctx);
         return (
           <Button
             tt="capitalize"

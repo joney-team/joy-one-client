@@ -49,7 +49,7 @@ export const WorkspaceRolesInput: FC<WorkspaceRolesInputProps> = (props) => {
             onAdd(role);
           }
         }}
-        renderTrigger={(ctx) => {
+        target={(ctx) => {
           return (
             <Hovered disabled={disabled}>
               {(hover) => {

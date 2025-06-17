@@ -242,7 +242,7 @@ export const TaskMenuActions: FC = () => {
               </Group>
             );
           }}
-          renderTrigger={(ctx) => {
+          target={(ctx) => {
             const isHasPartner = tasks.state.partnerIds && tasks.state.partnerIds.length > 0;
 
             return (
