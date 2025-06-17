@@ -78,8 +78,9 @@ export const Editor: FC<EditorProps> = (props) => {
   const color = useColor();
   const [focused, setFocused] = useState(false);
 
-  const onChange = useDebouncedCallback((val: string) => {
-    props.onChangeHTML?.(val);
+  const onChange = useDebouncedCallback((html: string, json: JSONContent) => {
+    props.onChangeHTML?.(html);
+    props.onChangeJSON?.(json);
   }, props.delay || 0);
 
   const editor = useEditor({
@@ -91,8 +92,7 @@ export const Editor: FC<EditorProps> = (props) => {
     ],
     content: props.value,
     onUpdate: (e) => {
-      onChange(e.editor.getHTML());
-      props.onChangeJSON?.(e.editor.getJSON());
+      onChange(e.editor.getHTML(), e.editor.getJSON());
     },
     immediatelyRender: false,
   });
