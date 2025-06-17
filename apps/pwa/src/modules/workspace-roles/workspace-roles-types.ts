@@ -78,6 +78,9 @@ export enum WorkspacePermission {
 
   POSTS_VIEW = 'PV',
   POSTS_MANAGER = 'PM',
+
+  CATEGORIES_VIEW = 'CV',
+  CATEGORIES_MANAGER = 'CM',
 }
 
 export interface WorkspaceRoleDto {

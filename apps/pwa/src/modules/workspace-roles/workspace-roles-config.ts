@@ -16,6 +16,8 @@ export enum PermissionGroupKey {
   PRESCRIPTIONS = 'prescriptions',
   REPORTS = 'reports',
   PROMOTIONS = 'promotions',
+  POSTS = 'posts',
+  CATEGORIES = 'categories',
 }
 
 export interface PermissionGroup {
@@ -117,6 +119,18 @@ export const permissionGroups: {
     permissions: [
       { value: WorkspacePermission.WORKSPACE_SETTINGS },
       { value: WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS },
+    ]
+  },
+  [PermissionGroupKey.POSTS]: {
+    permissions: [
+      { value: WorkspacePermission.POSTS_VIEW },
+      { value: WorkspacePermission.POSTS_MANAGER, dependentPermissions: [WorkspacePermission.POSTS_VIEW] },
+    ]
+  },
+  [PermissionGroupKey.CATEGORIES]: {
+    permissions: [
+      { value: WorkspacePermission.CATEGORIES_VIEW },
+      { value: WorkspacePermission.CATEGORIES_MANAGER, dependentPermissions: [WorkspacePermission.CATEGORIES_VIEW] },
     ]
   },
   [PermissionGroupKey.REPORTS]: {
