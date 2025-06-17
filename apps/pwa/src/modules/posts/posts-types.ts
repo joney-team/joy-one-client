@@ -7,6 +7,7 @@ export interface PostEntity extends BaseMongoEntity {
   slug: string;
   excerpt?: string;
   content: JSONContent;
+  contentHTML?: string;
   thumbnail?: string;
   meta?: any;
   publishedAt?: number;

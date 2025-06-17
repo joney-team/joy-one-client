@@ -26,7 +26,7 @@ import { ImageResize } from "./image-resize";
 
 interface EditorProps {
   value?: string | JSONContent | undefined | null;
-  onChange?: (content?: string) => void;
+  onChangeHTML?: (content?: string) => void;
   onChangeJSON?: (content?: JSONContent) => void;
   delay?: number;
   placeholder?: string;
@@ -79,7 +79,7 @@ export const Editor: FC<EditorProps> = (props) => {
   const [focused, setFocused] = useState(false);
 
   const onChange = useDebouncedCallback((val: string) => {
-    props.onChange?.(val);
+    props.onChangeHTML?.(val);
   }, props.delay || 0);
 
   const editor = useEditor({

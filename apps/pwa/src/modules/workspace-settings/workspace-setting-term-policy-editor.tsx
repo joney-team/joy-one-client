@@ -12,7 +12,9 @@ interface WorkspaceSettingTermsPoliciesEditorProps {
   doc: `terms-of-service` | `privacy-policy`;
 }
 
-export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPoliciesEditorProps> = (props) => {
+export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPoliciesEditorProps> = (
+  props
+) => {
   const workspace = useWorkspace();
   const router = useRouter();
 
@@ -48,7 +50,12 @@ export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPolici
             <Group flex={1} />
           </Group>
 
-          <Editor value={value} onChange={setValue} placeholder={t("type-content-placeholder")} delay={300} />
+          <Editor
+            value={value}
+            onChangeHTML={setValue}
+            placeholder={t("type-content-placeholder")}
+            delay={300}
+          />
         </Stack>
       </Card>
     </Stack>

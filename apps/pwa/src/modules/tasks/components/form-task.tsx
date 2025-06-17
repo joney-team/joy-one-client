@@ -577,7 +577,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
           <Editor
             value={form.values.description}
-            onChange={(v) => form.setFieldValue("description", v)}
+            onChangeHTML={(v) => form.setFieldValue("description", v)}
             delay={300}
             placeholder={t("task_description")}
             uploadFileOptions={{

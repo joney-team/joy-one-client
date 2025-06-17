@@ -40,6 +40,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
     slug: string;
     excerpt: string;
     content?: JSONContent | null;
+    contentHTML?: string;
     thumbnail?: File;
     category?: CategoryEntity | null;
   }>({
@@ -48,6 +49,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       slug: post?.slug || "",
       excerpt: post?.excerpt || "",
       content: post?.content || null,
+      contentHTML: post?.contentHTML || "",
       category: post?.category,
     },
   });
@@ -91,6 +93,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
         slug: _post?.slug || "",
         excerpt: _post?.excerpt || "",
         content: _post?.content || null,
+        contentHTML: _post?.contentHTML || "",
         category: _post?.category || null,
       });
 
@@ -171,6 +174,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
                   },
                 }}
                 value={form.values.content}
+                onChangeHTML={(value) => form.setFieldValue("contentHTML", value)}
                 onChangeJSON={(value) => form.setFieldValue("content", value)}
               />
             </Stack>

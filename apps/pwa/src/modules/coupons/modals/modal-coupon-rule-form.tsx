@@ -130,7 +130,7 @@ export const ModalCouponRuleForm: FC = () => {
         <InputWrapper label={t("description")} {...form.getInputProps("description")}>
           <Editor
             value={form.values.description}
-            onChange={(v) => form.setFieldValue("description", v)}
+            onChangeHTML={(v) => form.setFieldValue("description", v)}
             placeholder={t("description")}
           />
         </InputWrapper>
