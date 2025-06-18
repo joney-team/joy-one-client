@@ -569,3 +569,10 @@ body {
     cursor: pointer;
   }
 }
+
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 100%;
+}

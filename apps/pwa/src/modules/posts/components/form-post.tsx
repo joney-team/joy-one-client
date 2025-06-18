@@ -9,7 +9,9 @@ import { CategoryInput } from "@/modules/categories/category-input";
 import { CategoryEntity, CategoryType } from "@/modules/categories/category-types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import {
+  ActionIcon,
   Badge,
+  Box,
   Card,
   Grid,
   Group,
@@ -21,13 +23,15 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconEye } from "@tabler/icons-react";
 import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
 import { api } from "../../apis";
 import { onUploadFile } from "../../files/file-service";
 import { renderDateTime, t } from "../../lang/lang-service";
 import { PostEntity } from "../posts-types";
+import { modals } from "@mantine/modals";
+import { ModalTitle } from "@/components/modal-title";
 
 interface FormPostProps {
   post?: PostEntity;
@@ -104,6 +108,21 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
     }
   });
 
+  const onPreview = () => {
+    modals.open({
+      title: <ModalTitle title={t("preview")} icon={IconEye} />,
+      fullScreen: true,
+      children: (
+        <Group>
+          <Box
+            className="prose"
+            dangerouslySetInnerHTML={{ __html: form.values.contentHtml || "" }}
+          />
+        </Group>
+      ),
+    });
+  };
+
   const Actions: FC = () => {
     return (
       <Card shadow="sm">
@@ -117,15 +136,21 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
             )}
           </Stack>
 
-          <Button
-            disabled={!form.isDirty()}
-            onClick={onSubmit}
-            loading={form.submitting}
-            leftIcon={IconCheck}
-            radius={150}
-          >
-            {post ? t("update") : t("post_publish")}
-          </Button>
+          <Group gap={8}>
+            <ActionIcon variant="light" size={34} radius={150} onClick={onPreview}>
+              <IconEye size={16} />
+            </ActionIcon>
+
+            <Button
+              disabled={!form.isDirty()}
+              onClick={onSubmit}
+              loading={form.submitting}
+              leftIcon={IconCheck}
+              radius={150}
+            >
+              {post ? t("update") : t("post_publish")}
+            </Button>
+          </Group>
         </Group>
       </Card>
     );
