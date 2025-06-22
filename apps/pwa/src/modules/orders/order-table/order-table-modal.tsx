@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import type { CustomerEntity } from "@/modules/customers/customer-types";
 import { OrderEntity } from "@/modules/orders/order-entity";

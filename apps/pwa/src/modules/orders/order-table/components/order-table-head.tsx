@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import { ActionIcon, Group } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons-react";

@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Card, Group, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";

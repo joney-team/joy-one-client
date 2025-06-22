@@ -1,3 +1,5 @@
+"use client";
+
 import { Empty } from "@/components/empty";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -37,11 +39,16 @@ export const OrderTableTrackOrders: FC<{ w: number }> = ({ w }) => {
   });
 
   useEventsListener(
-    [EventType.ORDER_NEW, EventType.ORDER_UPDATED, EventType.ORDER_ARCHIVED, EventType.ORDER_SYNCED],
+    [
+      EventType.ORDER_NEW,
+      EventType.ORDER_UPDATED,
+      EventType.ORDER_ARCHIVED,
+      EventType.ORDER_SYNCED,
+    ],
     () => orders.fetch(true, { isSilient: true })
   );
 
-  if (!mod) return null;
+  if (!mod || orders.isEmpty) return null;
 
   return (
     <Stack

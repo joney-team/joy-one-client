@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import { Group, ScrollArea, Stack } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";

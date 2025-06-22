@@ -1,3 +1,5 @@
+"use client";
+
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -40,7 +42,9 @@ const defaultOrderValues: OrderTableFormValues = {
 
 export const OrderTableProvider: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
-  const isEnabled = workspace.hasPermission(WorkspacePermission.ORDERS_CREATE) && workspace.isModuleActive("orders");
+  const isEnabled =
+    workspace.hasPermission(WorkspacePermission.ORDERS_CREATE) &&
+    workspace.isModuleActive("orders");
 
   const [version, setVersion] = useState(0);
 
@@ -88,12 +92,16 @@ export const OrderTableProvider: FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     setCombos([]);
     if (values.current.relatedCustomer) {
-      getProductCombosByCustomer(values.current.relatedCustomer._id).then(setCombos).catch(console.error);
+      getProductCombosByCustomer(values.current.relatedCustomer._id)
+        .then(setCombos)
+        .catch(console.error);
     }
   }, [values.current.relatedCustomer]);
 
-  const subTotalAmount = calculated?.items.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0;
-  const totalDiscountAmount = calculated?.discounts.reduce((acc, discount) => acc + discount.amount, 0) || 0;
+  const subTotalAmount =
+    calculated?.items.reduce((acc, item) => acc + item.price * item.quantity, 0) || 0;
+  const totalDiscountAmount =
+    calculated?.discounts.reduce((acc, discount) => acc + discount.amount, 0) || 0;
   const totalAmount = (calculated?.totalAmount || 0) - (order.current?.paidAmount || 0);
 
   const reset = () => {
@@ -203,7 +211,9 @@ export const OrderTableProvider: FC<PropsWithChildren> = (props) => {
     totalDiscountAmount,
     totalAmount,
     addProduct: (product) => {
-      const seletedIndex = values.current.items.findIndex((item) => item.product._id === product._id);
+      const seletedIndex = values.current.items.findIndex(
+        (item) => item.product._id === product._id
+      );
       const qtyPerUse = product.defaultQtyPerUse || 1;
 
       if (seletedIndex !== -1) {
@@ -246,7 +256,9 @@ export const OrderTableProvider: FC<PropsWithChildren> = (props) => {
     pay,
     submit,
     removeProduct: (product) => {
-      const seletedIndex = values.current.items.findIndex((item) => item.product._id === product._id);
+      const seletedIndex = values.current.items.findIndex(
+        (item) => item.product._id === product._id
+      );
       if (seletedIndex !== -1) {
         const items = [...values.current.items].filter((_, index) => index !== seletedIndex);
         values.current.items = items;

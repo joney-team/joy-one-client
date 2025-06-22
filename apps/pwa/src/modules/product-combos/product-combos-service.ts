@@ -8,19 +8,19 @@ export async function getProductCombos(query?: any) {
 }
 
 export async function getProductCombo(id: string) {
-  return api.get<ProductComboEntity>(`/ProductCombos/${id}`)
+  return api.get<ProductComboEntity>(`/product-combos/${id}`)
 }
 
 export async function getProductCombosByCustomer(customerId: string) {
-  return api.get<ProductComboEntity[]>(`/ProductCombos/customers/${customerId}`)
+  return api.get<ProductComboEntity[]>(`/product-combos/customers/${customerId}`)
 }
 
 export async function useProductCombo(id: string, dto: UseProductComboDto) {
-  return api.post<ProductComboEntity>(`/ProductCombos/${id}/use`, dto)
+  return api.post<ProductComboEntity>(`/product-combos/${id}/use`, dto)
 }
 
 export async function revertProductComboHistory(historyId: string) {
-  return api.delete(`/ProductCombos/history/${historyId}`)
+  return api.delete(`/product-combos/history/${historyId}`)
 }
 
 export const productComboStatusOptions: {

@@ -111,7 +111,7 @@ export const AdminTools: FC = () => {
 
           <Button onClick={() => api.post(`/files/migrate/receipts`)}>File Receipts</Button>
 
-          <Button onClick={() => api.patch(`/ProductCombos/migrate/history`)}>
+          <Button onClick={() => api.patch(`/product-combos/migrate/history`)}>
             Product combo history
           </Button>
         </Group>
