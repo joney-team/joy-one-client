@@ -1,11 +1,11 @@
 "use client";
 
-import { AppEntity } from "@/types";
 import { Button } from "@/components/buttons/button";
+import { useQuery } from "@/modules/apis/use-query";
 import { t } from "@/modules/lang/lang-service";
-import { getPrescriptions } from "@/modules/prescriptions/prescriptions-service";
 import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
 import { searchEntity } from "@/modules/search/search-service";
+import { AppEntity, ResponseList } from "@/types";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
@@ -18,11 +18,19 @@ interface PrescriptionSelectorProps {
 }
 
 export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
+  const initOptions = useQuery<ResponseList<PrescriptionEntity>>({
+    route: "/prescriptions",
+    params: {
+      limit: 9,
+      sort: "lastInteractionAtDesc",
+    },
+  });
+
   return (
     <Selector
       excludeIds={props.excludeIds}
       onSearch={(q) => searchEntity<PrescriptionEntity>(AppEntity.PRESCRIPTIONS, q)}
-      onInitOptions={() => getPrescriptions({ limit: 5 }).then((res) => res.data)}
+      initOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

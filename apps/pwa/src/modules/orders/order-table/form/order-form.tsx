@@ -96,7 +96,7 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
           >
             <CustomerSelector
               onSelect={(value) => orderTable.setCustomer(value)}
-              render={(ctx) => {
+              target={(ctx) => {
                 return (
                   <Group onClick={ctx.toggle} gap={10} style={{ cursor: "pointer" }}>
                     <Avatar

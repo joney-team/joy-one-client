@@ -1,14 +1,17 @@
-import { AppEntity } from "@/types";
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { EntityImage } from "@/components/entity-image";
+import { Selector, SelectorContext } from "@/components/selector";
+import { useQuery } from "@/modules/apis/use-query";
 import { t } from "@/modules/lang/lang-service";
-import { getProductIcon, getProducts } from "@/modules/products/products-service";
+import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { searchEntity } from "@/modules/search/search-service";
+import { AppEntity, ResponseList } from "@/types";
 import { Combobox, em, Group, InputWrapperProps, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "@/components/selector";
 
 interface ProductSelectorProps {
   type?: ProductType | ProductType[];
@@ -23,6 +26,15 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
   const strictType = Array.isArray(props.type) ? props.type : [props.type];
   const funcStrictType = (v: ProductEntity) => strictType.includes(v.type);
 
+  const initOptions = useQuery<ResponseList<ProductEntity>>({
+    route: "/products",
+    params: {
+      limit: 9,
+      sort: "lastInteractionAtDesc",
+      type: props.type,
+    },
+  });
+
   return (
     <Selector
       {...props.props}
@@ -36,9 +48,7 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
           return res;
         })
       }
-      onInitOptions={() =>
-        getProducts({ type: props.type, limit: 5 }).then((res) => res.data.filter(funcStrictType))
-      }
+      initOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
