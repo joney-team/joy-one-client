@@ -1,6 +1,6 @@
 "use client";
 
-import { AppEntity } from "@/types";
+import { AppEntity, ResponseList } from "@/types";
 import { Button } from "@/components/buttons/button";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { t } from "@/modules/lang/lang-service";
@@ -12,6 +12,7 @@ import { IconPlus } from "@tabler/icons-react";
 import { FC, type ReactNode } from "react";
 import { Selector, SelectorContext } from "@/components/selector";
 import { Circle } from "@/components/circle";
+import { useQuery } from "@/modules/apis/use-query";
 
 interface TagSelectorProps {
   type: TagType;
@@ -26,11 +27,14 @@ interface TagSelectorProps {
 export const TagSelector: FC<TagSelectorProps> = (props) => {
   const { type, excludeIds, onSelect, render, createable = true, onClose, onOpen, ...rest } = props;
 
-  const onInitOptions = async () => {
-    return getTags({ limit: 9, sort: "lastInteractionAtDesc", type: props.type }).then((res) =>
-      res.data.map((tag) => ({ ...tag, _group: t("recently") }))
-    );
-  };
+  const initOptions = useQuery<ResponseList<TagEntity>>({
+    route: "/tags",
+    params: {
+      limit: 9,
+      sort: "lastInteractionAtDesc",
+      type: props.type,
+    },
+  });
 
   return (
     <Selector
@@ -38,7 +42,7 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
       onOpen={props.onOpen}
       onClose={props.onClose}
       excludeIds={props.excludeIds}
-      onInitOptions={onInitOptions}
+      initOptions={initOptions.data?.data?.map((tag) => ({ ...tag, _group: t("recently") }))}
       autoCloseOnChange={false}
       onSearch={(q) => searchEntity<TagEntity>(AppEntity.TAGS, q, { type: props.type })}
       searchPlaceholder={`${t("search_with", {

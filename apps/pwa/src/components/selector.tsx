@@ -59,7 +59,6 @@ export interface SelectorBaseProps<T extends SelectOption>
   onSearch?: SelectorOnSearch<T>;
   onInitOptions?: () => T[] | Promise<T[]>;
   staticSearch?: boolean;
-  // renderOptionChild?: SelectorRenderOption<T>;
   renderOption: SelectorRenderOption<T>;
   target: SelectorTarget<T>;
   dropdownProps?: ComboboxDropdownProps;

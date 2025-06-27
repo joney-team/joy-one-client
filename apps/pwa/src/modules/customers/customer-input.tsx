@@ -31,7 +31,7 @@ export const CustomerInput: FC<CustomerInputProps> = (props) => {
     <CustomerSelector
       {...rest}
       onSelect={_onSelect}
-      render={(ctx) => {
+      target={(ctx) => {
         if (renderValue) return renderValue(ctx);
 
         const { value, toggle, theme } = ctx;

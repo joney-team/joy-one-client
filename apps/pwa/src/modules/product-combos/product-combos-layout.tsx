@@ -36,14 +36,13 @@ export const ProductComboLayout: FC<PropsWithChildren> = (props) => {
 
   const isHasCombos = checkCombos.data.count > 0;
 
-  console.log("router.pathname", router.pathname);
-
-  if (!isHasCombos)
+  if (!isHasCombos) {
     return (
       <Stack p={16}>
         <ProductCombosOnboarding />
       </Stack>
     );
+  }
 
   return (
     <Fragment>

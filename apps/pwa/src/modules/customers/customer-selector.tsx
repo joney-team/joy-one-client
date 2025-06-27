@@ -1,29 +1,33 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { AppEntity } from "@/types";
-import { customerInteraction, getCustomers } from "./customer-service";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
+import { AppEntity, ResponseList } from "@/types";
 import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
-import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "../../components/selector";
+import { FC } from "react";
+import { Selector, SelectorProps } from "../../components/selector";
+import { useQuery } from "../apis/use-query";
+import { customerInteraction } from "./customer-service";
 
-interface CustomerSelectorProps {
-  excludeIds?: string[];
-  onSelect: (value: CustomerShortInfo) => void;
-  render?: (ctx: SelectorContext<CustomerShortInfo>) => ReactNode;
-}
+interface CustomerSelectorProps
+  extends Omit<SelectorProps<CustomerShortInfo>, "onSearch" | "renderOption"> {}
 
 export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
+  const initOptions = useQuery<ResponseList<CustomerShortInfo>>({
+    route: "/customers",
+    params: {
+      limit: 9,
+      sort: "lastInteractionAtDesc",
+    },
+  });
+
   return (
     <Selector
-      excludeIds={props.excludeIds}
+      {...props}
       onSearch={(q) => searchEntity<CustomerShortInfo>(AppEntity.CUSTOMERS, q)}
-      onInitOptions={() =>
-        getCustomers({ limit: 5, sortLastInteractionAt: -1 }).then((res) => res.data)
-      }
+      initOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
       searchPlaceholder={`${t("search_with", {
         query: ["name", "phone", "email", "code"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
@@ -47,7 +51,7 @@ export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
       }}
       target={(ctx) => {
         const { toggle } = ctx;
-        if (props.render) return props.render(ctx);
+        if (props.target) return props.target(ctx);
 
         return (
           <Button
@@ -64,10 +68,11 @@ export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
           </Button>
         );
       }}
-      onSelect={(e) => {
-        if (!e) return;
-        props.onSelect(e);
-        customerInteraction(e._id);
+      onSelect={(value, ctx) => {
+        if (!value) return;
+        props.onSelect?.(value, ctx);
+        customerInteraction(value._id);
+        initOptions.refetch();
       }}
     />
   );
