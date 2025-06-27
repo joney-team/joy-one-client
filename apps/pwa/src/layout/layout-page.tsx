@@ -7,7 +7,7 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Stack } from "@mantine/core";
 import dynamic, { DynamicOptions, Loader } from "next/dynamic";
-import { ComponentType, Fragment, PropsWithChildren, Suspense, type FC } from "react";
+import { ComponentType, PropsWithChildren, Suspense, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 
@@ -18,9 +18,15 @@ interface LayoutProps<P = {}> {
   props?: Omit<P, "children">;
   children?: React.ReactNode;
   nested?: boolean;
+  isPageLayout?: boolean;
 }
 
-export function Layout<P>({ component: Component, nested, ...props }: LayoutProps<P>) {
+export function Layout<P>({
+  component: Component,
+  nested,
+  isPageLayout,
+  ...props
+}: LayoutProps<P>) {
   const layout = useLayout();
   const routeRule = useRouteRule();
   const auth = useAuth();
@@ -38,34 +44,32 @@ export function Layout<P>({ component: Component, nested, ...props }: LayoutProp
   }
 
   return (
-    <Fragment>
-      <Stack
-        id="layout-root"
-        gap={0}
-        style={
-          layout.view === "mobile"
-            ? {
-                paddingTop: workspaceLayout.headerHeight,
-                paddingBottom: workspaceLayout.navigationHeight,
-              }
-            : {
-                paddingTop: workspaceLayout.headerHeight,
-                paddingLeft: workspaceLayout.navigationWidth,
-                transition: workspaceLayout.transition("padding-left"),
-              }
-        }
-      >
-        {workspace.isAvailable ? (
-          <Suspense fallback={<PageLazyLoad />}>
-            <Component {...componentProps} />
-          </Suspense>
-        ) : (
-          <PageLazyLoad />
-        )}
+    <Stack
+      id="layout-root"
+      gap={0}
+      style={
+        layout.view === "mobile"
+          ? {
+              paddingTop: workspaceLayout.headerHeight,
+              paddingBottom: workspaceLayout.navigationHeight,
+            }
+          : {
+              paddingTop: workspaceLayout.headerHeight,
+              paddingLeft: workspaceLayout.navigationWidth,
+              transition: workspaceLayout.transition("padding-left"),
+            }
+      }
+    >
+      {workspace.isAvailable ? (
+        <Suspense fallback={<PageLazyLoad />}>
+          <Component {...componentProps} children={isPageLayout ? props.children : undefined} />
+        </Suspense>
+      ) : (
+        <PageLazyLoad />
+      )}
 
-        {props.children}
-      </Stack>
-    </Fragment>
+      {isPageLayout ? null : props.children}
+    </Stack>
   );
 }
 
