@@ -1,6 +1,6 @@
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { renderLink } from "@/modules/files/files-utils";
 import { FileType } from "@/modules/files/file-types";
+import { renderLink } from "@/modules/files/files-utils";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { t } from "@/modules/lang/lang-service";
 import { ActionIcon, Box, Card, Center, em, Image, Stack, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
@@ -9,7 +9,6 @@ import { Icon, IconEye, IconPhoto, IconProps, IconUpload } from "@tabler/icons-r
 import { FC, useRef, useState } from "react";
 import { Button } from "./buttons/button";
 import { Renderer } from "./renderer";
-import { OnFileModal } from "@/modules/files/modals/modal-files";
 
 interface EntityImageProps {
   src?: string | File;

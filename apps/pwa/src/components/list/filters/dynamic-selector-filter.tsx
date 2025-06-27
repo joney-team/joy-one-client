@@ -19,7 +19,8 @@ export interface DynamicSelectorFilterConfig {
   multiple?: boolean;
   dropdownProps?: ComboboxDropdownProps;
   getOptions: (ids: string[]) => Promise<DynamicSelectorFilterOption[]>;
-  getInitialOptions: () => Promise<DynamicSelectorFilterOption[]>;
+  getInitialOptions?: () => Promise<DynamicSelectorFilterOption[]>;
+  initOptions?: DynamicSelectorFilterOption[];
   search: (query: string) => Promise<DynamicSelectorFilterOption[]>;
   render?: FC<{ data: any; isSelected: boolean }>;
 }
@@ -36,13 +37,17 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
 
   // Get initial options
   useEffect(() => {
-    config
-      .getInitialOptions()
-      .then((v) =>
-        setOptions((s) => [...s.filter((sv) => !v.find((v2) => v2.value === sv.value)), ...v])
-      )
-      .catch(console.error);
-  }, [config]);
+    if (config.getInitialOptions) {
+      config
+        .getInitialOptions()
+        .then((v) =>
+          setOptions((s) => [...s.filter((sv) => !v.find((v2) => v2.value === sv.value)), ...v])
+        )
+        .catch(console.error);
+    } else {
+      setOptions(config.initOptions || []);
+    }
+  }, [config.getInitialOptions]);
 
   // Get missing options
   useEffect(() => {
