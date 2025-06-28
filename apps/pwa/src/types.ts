@@ -1,5 +1,6 @@
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
+import { CustomField } from "./modules/custom-fields/custom-field-types";
 
 export interface RelatedEntity {
   entity: AppEntity;
@@ -19,6 +20,7 @@ export interface BaseEntity {
   workspaceBranchId?: string
   workspaceBranch?: Pick<WorkspaceBranchEntity, '_id' | 'name'>
   relatedEntities?: RelatedEntity[]
+  customFields?: CustomField[]
 }
 
 export interface BaseMongoEntity extends BaseEntity {

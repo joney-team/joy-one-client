@@ -32,6 +32,13 @@ import { renderDateTime, t } from "../../lang/lang-service";
 import { PostEntity } from "../posts-types";
 import { modals } from "@mantine/modals";
 import { ModalTitle } from "@/components/modal-title";
+import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
+import {
+  CustomField,
+  CustomFieldType,
+  CustomFieldValue,
+} from "@/modules/custom-fields/custom-field-types";
+import { AppEntity } from "@/types";
 
 interface FormPostProps {
   post?: PostEntity;
@@ -47,6 +54,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
     contentHtml?: string;
     thumbnail?: File;
     category?: CategoryEntity | null;
+    customFields?: CustomField[];
   }>({
     initialValues: {
       title: post?.title || "",
@@ -55,6 +63,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       content: post?.content || null,
       contentHtml: post?.contentHtml || "",
       category: post?.category,
+      customFields: post?.customFields || [],
     },
   });
 
@@ -70,7 +79,13 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      const { thumbnail, category, ...dto } = values;
+      const { thumbnail, category, customFields, ...dto } = values;
+
+      const customFieldValues: CustomFieldValue[] =
+        customFields?.map((customField) => ({
+          customFieldId: customField.customField._id,
+          value: customField.value,
+        })) || [];
 
       const thumbnailFile = values.thumbnail
         ? await onUploadFile({ file: values.thumbnail })
@@ -78,18 +93,17 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
       let _post: PostEntity | undefined = post;
 
+      const payload = {
+        ...dto,
+        customFieldValues,
+        thumbnail: thumbnailFile?.relativePath || post?.thumbnail,
+        categoryId: category?._id || null,
+      };
+
       if (post) {
-        _post = await api.put<PostEntity>(`/posts/${post._id}`, {
-          ...dto,
-          thumbnail: thumbnailFile?.relativePath || post.thumbnail,
-          categoryId: category?._id || null,
-        });
+        _post = await api.put<PostEntity>(`/posts/${post._id}`, payload);
       } else {
-        _post = await api.post<PostEntity>("/posts", {
-          ...dto,
-          thumbnail: thumbnailFile?.relativePath,
-          categoryId: category?._id || null,
-        });
+        _post = await api.post<PostEntity>("/posts", payload);
       }
 
       form.setInitialValues({
@@ -99,6 +113,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
         content: _post?.content || null,
         contentHtml: _post?.contentHtml || "",
         category: _post?.category || null,
+        customFields: _post?.customFields || [],
       });
 
       form.reset();
@@ -233,6 +248,12 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               />
 
               <CategoryInput type={CategoryType.POSTS} {...form.getInputProps("category")} />
+
+              <BuilderCustomFields
+                entity={AppEntity.POSTS}
+                value={form.values.customFields}
+                onChange={(value) => form.setFieldValue("customFields", value)}
+              />
             </Stack>
           </Card>
         </Stack>

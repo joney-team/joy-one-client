@@ -21,6 +21,7 @@ export const CustomFieldList: FC = () => {
         columns={{
           label: {},
           description: {},
+          key: { name: "Key", filter: { text: true } },
           type: EnumColumn({
             options: Object.values(CustomFieldType).map((type) => ({
               label: t(`custom_field_type_${type}`),

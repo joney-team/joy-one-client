@@ -28,6 +28,7 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
     type?: CustomFieldType;
     entities?: AppEntity[];
     config?: any;
+    key?: string;
   }>({
     initialValues: {
       label: customField?.label || "",
@@ -35,10 +36,18 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
       type: props.type || props.customField?.type,
       entities: props.customField?.entities || [],
       config: props.customField?.config || {},
+      key: props.customField?.key || "",
     },
     validate: {
       label: (value) => {
         if (!value) return t("required");
+      },
+      type: (value) => {
+        if (!value) return t("required");
+      },
+      entities: (value) => {
+        if (!value) return t("required");
+        if (value.length === 0) return t("required");
       },
     },
   });
@@ -74,7 +83,12 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
       <Stack>
         <TextInput autoFocus label={t("name")} {...form.getInputProps("label")} />
 
-        <Textarea label={t("description")} {...form.getInputProps("description")} />
+        <TextInput label={`Key (${t("optional")})`} {...form.getInputProps("key")} />
+
+        <Textarea
+          label={`${t("description")} (${t("optional")})`}
+          {...form.getInputProps("description")}
+        />
 
         <Select
           label={t("type")}
@@ -88,7 +102,14 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
         <MultiSelect
           label={t("apply")}
           {...form.getInputProps("entities")}
-          data={Object.values(AppEntity).map((entity) => ({
+          data={[
+            AppEntity.POSTS,
+            AppEntity.TASKS,
+            AppEntity.RECEIPTS,
+            AppEntity.CUSTOMERS,
+            AppEntity.LOANS,
+            AppEntity.ORDERS,
+          ].map((entity) => ({
             label: t(`entity_${entity}`),
             value: entity,
           }))}
