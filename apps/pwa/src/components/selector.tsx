@@ -48,7 +48,7 @@ export type SelectorOnSearch<T extends SelectOption> = (value: string) => T[] | 
 export interface SelectorBaseProps<T extends SelectOption>
   extends Omit<InputWrapperProps, "value" | "onSelect" | "onChange"> {
   value?: T;
-  onSelect?: (value: T | undefined, ctx: ComboboxStore) => Promise<void> | void;
+  onSelect?: (value: T | undefined, ctx: ComboboxStore) => Promise<any> | any;
   onCreate?: (ctx: ComboboxStore) => void;
   initOptions?: T[];
   disabled?: boolean;

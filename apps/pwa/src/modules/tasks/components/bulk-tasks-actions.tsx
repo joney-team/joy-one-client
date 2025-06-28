@@ -181,7 +181,7 @@ export const BulkTasksActions: FC = () => {
               type={TagType.TASK}
               excludeIds={tasks.state.tagIds}
               onSelect={setTag}
-              render={(ctx) => {
+              target={(ctx) => {
                 return (
                   <Tooltip label={t("set_tag")}>
                     <Button

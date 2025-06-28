@@ -2,6 +2,7 @@ import { BaseMongoEntity } from "@/types";
 
 export enum CategoryType {
   POSTS = 'POSTS',
+  PRODUCTS = 'PRODUCTS',
 }
 
 export interface CategoryDto {

@@ -107,7 +107,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
                 leftSection={<shortcut.icon size={18} />}
                 onClick={() => shortcut.onClick(router)}
               >
-                {t(mod.name)}
+                {mod.name}
               </Menu.Item>
             );
           })}
@@ -151,7 +151,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
                   leftSection={<shortcut.icon size={18} />}
                   onClick={() => shortcut.onClick(router)}
                 >
-                  {t(mod.name)}
+                  {mod.name}
                 </Menu.Item>
               );
             })}

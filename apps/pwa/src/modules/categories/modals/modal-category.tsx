@@ -1,18 +1,11 @@
 import { ModalTitle } from "@/components/modal-title";
+import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { modals } from "@mantine/modals";
-import { CategoryEntity, CategoryType } from "../category-types";
-import { FormCategory } from "../components/form-category";
 import { IconCategory } from "@tabler/icons-react";
-import { EventType } from "@/modules/events/event-types";
+import { FormCategory, FormCategoryProps } from "../components/form-category";
 
-interface OnModalCategoryProps {
-  type?: CategoryType;
-  category?: CategoryEntity;
-  onSuccess?: (category: CategoryEntity) => void;
-}
-
-export const OnModalCategory = (props?: OnModalCategoryProps) => {
+export const OnModalCategory = (props?: FormCategoryProps) => {
   return modals.open({
     modalId: "modal-category",
     title: (
@@ -31,6 +24,10 @@ export const OnModalCategory = (props?: OnModalCategoryProps) => {
         onSuccess={(category) => {
           modals.close("modal-category");
           props?.onSuccess?.(category);
+        }}
+        onArchive={() => {
+          modals.close("modal-category");
+          props?.onArchive?.();
         }}
       />
     ),

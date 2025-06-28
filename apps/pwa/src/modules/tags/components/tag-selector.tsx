@@ -1,31 +1,27 @@
 "use client";
 
-import { AppEntity, ResponseList } from "@/types";
 import { Button } from "@/components/buttons/button";
-import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
+import { Circle } from "@/components/circle";
+import { Selector, SelectorProps } from "@/components/selector";
+import { useQuery } from "@/modules/apis/use-query";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
-import { getTags, interactTag } from "@/modules/tags/tags-service";
+import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
+import { interactTag } from "@/modules/tags/tags-service";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { AppEntity, ResponseList } from "@/types";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import { FC, type ReactNode } from "react";
-import { Selector, SelectorContext } from "@/components/selector";
-import { Circle } from "@/components/circle";
-import { useQuery } from "@/modules/apis/use-query";
+import { FC } from "react";
 
-interface TagSelectorProps {
+interface TagSelectorProps
+  extends Omit<SelectorProps<TagEntity>, "renderOption" | "searchPlaceholder" | "onSearch"> {
   type: TagType;
-  excludeIds?: string[];
-  onSelect: (value?: TagEntity) => void;
-  render?: (ctx: SelectorContext<TagEntity>) => ReactNode;
   createable?: boolean;
-  onClose?: () => void;
-  onOpen?: () => void;
 }
 
 export const TagSelector: FC<TagSelectorProps> = (props) => {
-  const { type, excludeIds, onSelect, render, createable = true, onClose, onOpen, ...rest } = props;
+  const { type, excludeIds, onSelect, target, createable = true, onClose, onOpen, ...rest } = props;
 
   const initOptions = useQuery<ResponseList<TagEntity>>({
     route: "/tags",
@@ -60,7 +56,7 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
       }}
       target={(ctx) => {
         const { toggle } = ctx;
-        if (props.render) return props.render(ctx);
+        if (props.target) return props.target(ctx);
 
         return (
           <Button
@@ -77,17 +73,17 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
           </Button>
         );
       }}
-      onSelect={(e) => {
+      onSelect={(e, ctx) => {
         if (!e) return;
         interactTag(e._id);
-        return props.onSelect(e);
+        return props.onSelect?.(e, ctx);
       }}
       onCreate={
         createable
-          ? () =>
+          ? (ctx) =>
               OnModalTagForm({
                 type: props.type,
-                onDone: (tag) => props.onSelect(tag),
+                onDone: (tag) => props.onSelect?.(tag, ctx),
               })
           : undefined
       }

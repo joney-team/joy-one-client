@@ -5,7 +5,7 @@ import { useRouter } from "@/hooks/use-router";
 import { Avatar } from "@/components/avatar";
 import { useLayout } from "@/layout/layout-context";
 import { t } from "@/modules/lang/lang-service";
-import { workspaceModules } from "@/modules/workspaces/workspace-modules";
+import { workspaceModuleConfigs } from "@/modules/workspaces/workspace-modules";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView, getNavigationGroups } from "@/modules/workspaces/workspace-view";
 import { StringUtils } from "@/utils/string.utils";
@@ -43,7 +43,7 @@ export const AppNavigation: FC = () => {
     []
   ).filter((v) => {
     if (v.type === "MODULE")
-      return workspace.isModuleActive(v.moduleId as keyof typeof workspaceModules);
+      return workspace.isModuleActive(v.moduleId as keyof typeof workspaceModuleConfigs);
     return true;
   });
 
@@ -73,16 +73,16 @@ export const AppNavigation: FC = () => {
         align="start"
       >
         {mainCpns.map((v) => {
-          const mo = workspace.modules.find((m) => m.id === v.moduleId);
-          if (!mo) return null;
+          const mod = workspace.modules.find((m) => m.id === v.moduleId);
+          if (!mod) return null;
 
           return (
             <WorkspaceNavigationMenu
               key={v.id}
-              icon={mo.icon}
-              route={mo.href}
-              label={t(mo.name)}
-              exact={mo.href === "/"}
+              icon={mod.icon}
+              route={mod.href}
+              label={mod.name}
+              exact={mod.href === "/"}
             />
           );
         })}

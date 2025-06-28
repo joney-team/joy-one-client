@@ -1,12 +1,11 @@
 "use client";
 
-import { type FC, useEffect, useRef, useState } from "react";
 import { Renderer } from "@/components/renderer";
-import { WorkspaceModuleSelector } from "@/modules/workspaces/components/workspace-module-selector";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { t } from "@/modules/lang/lang-service";
 import { WorkspaceViewComponent } from "@/modules/workspace-settings/workspace-settings-types";
+import { WorkspaceModuleSelector } from "@/modules/workspaces/components/workspace-module-selector";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
@@ -38,6 +37,7 @@ import {
   IconRefresh,
   IconSeparator,
 } from "@tabler/icons-react";
+import { type FC, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 
 export const WorkspaceModuleSetup: FC = () => {
@@ -183,7 +183,7 @@ const ComponentItem: FC<{
   const { cpn } = props;
   const sortable = useSortable({ id: cpn.id, data: cpn });
   const [isHovered, setIsHovered] = useState(false);
-  const module = workspace.modules.find((v) => v.id === cpn.moduleId);
+  const mod = workspace.modules.find((v) => v.id === cpn.moduleId);
 
   const style = {
     transform: CSS.Transform.toString(sortable.transform),
@@ -213,15 +213,15 @@ const ComponentItem: FC<{
       wrap="nowrap"
     >
       <Group justify="space-between" w="100%">
-        {!!module ? (
+        {!!mod ? (
           <Group align="center" flex={1}>
             <ThemeIcon color="dark" variant="transparent">
-              <module.icon size={26} strokeWidth={1.5} />
+              <mod.icon size={26} strokeWidth={1.5} />
             </ThemeIcon>
 
-            <Text>{t(module.name)}</Text>
+            <Text>{mod.name}</Text>
 
-            <Renderer visible={!!module.isBeta}>
+            <Renderer visible={!!mod.isBeta}>
               <Badge color="orange" size="xs">
                 Beta
               </Badge>

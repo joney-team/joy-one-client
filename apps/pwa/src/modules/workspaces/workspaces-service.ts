@@ -1,7 +1,10 @@
 import { getLocalStorage } from "@/hooks/use-local-storage";
 import { AppPageMetadata, StorageKey } from "@/types";
 import { isServer } from "@/utils/common.utils";
-import { Icon, IconBuilding, IconBuildingHospital, IconCode, IconCreditCardPay, IconDental, IconPlant2, IconSparkles, IconStethoscope } from "@tabler/icons-react";
+import {
+  Icon, IconBuilding, IconBuildingHospital, IconCode, IconCreditCardPay,
+  IconDental, IconPlant2, IconSparkles, IconStethoscope
+} from "@tabler/icons-react";
 import { api } from "../apis";
 import { WorkspaceEntity, WorkspaceInviteInformation, WorkspaceType } from "./workspaces-types";
 

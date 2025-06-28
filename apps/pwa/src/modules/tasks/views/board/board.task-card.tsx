@@ -267,7 +267,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                   if (!t) return;
                   ctx.onUpdate({ ...task, tagIds: [...(task.tagIds || []), t._id] });
                 }}
-                render={(selector) => {
+                target={(selector) => {
                   return (
                     <CtaSection icon={IconTags} label={t("tags")} onClick={selector.toggle}>
                       <Group

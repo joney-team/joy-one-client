@@ -352,7 +352,7 @@ export const ListTaskRow: FC<{
                   }}
                   onOpen={() => setForceHover(true)}
                   onClose={() => setForceHover(false)}
-                  render={(selector) => {
+                  target={(selector) => {
                     return (
                       <Tooltip label={capitalize(`${t("add")} ${t("tags")}`)}>
                         <ActionIcon

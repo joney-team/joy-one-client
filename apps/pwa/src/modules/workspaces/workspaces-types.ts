@@ -8,7 +8,7 @@ import { VerifyInvitaionTokenResponse, WorkspaceMember, WorkspaceMemberOnlineSta
 import { WorkspacePermission, WorkspaceRoleEntity } from "../workspace-roles/workspace-roles-types";
 import { SetWorkspaceSettingsDto, WorkspaceSettingEntity, WorkspaceView } from "../workspace-settings/workspace-settings-types";
 import { WorkspaceSubscriptionEntity } from "../workspace-subscriptions/workspace-subscriptions-types";
-import { WorkspaceModule, WorkspaceModuleId, workspaceModules } from "./workspace-modules";
+import { WorkspaceModule, WorkspaceModuleId, workspaceModuleConfigs } from "./workspace-modules";
 import { WorkspaceBranchEntity } from "../workspace-branches/workspace-branches-types";
 
 export interface PluginMailerAccount {
@@ -86,7 +86,7 @@ export interface WorkspaceContext {
   view: WorkspaceView;
   setView: (view: WorkspaceView) => Promise<WorkspaceView>;
   resetView: () => Promise<WorkspaceView>;
-  isModuleActive: (id: keyof typeof workspaceModules) => boolean;
+  isModuleActive: (id: keyof typeof workspaceModuleConfigs) => boolean;
   modules: WorkspaceModule[];
   getModuleName: (id: WorkspaceModuleId) => string;
   availableModules: WorkspaceModule[];

@@ -2,10 +2,10 @@ import {
   IconAccessible, IconActivityHeartbeat, IconAi,
   IconApiApp, IconBox,
   IconBuildingBank, IconBuildingSkyscraper, IconBuildingWarehouse, IconCalendar,
-  IconCalendarCheck, IconCashRegister, IconCategory2,
+  IconCalendarCheck, IconCashRegister, IconCategory, IconCategory2,
   IconClipboardText,
   IconCoins, IconCreditCardPay, IconFiles,
-  IconLayout, IconLayoutDashboard, IconList,
+  IconLayout, IconLayoutDashboard,
   IconMailbox, IconMessage, IconMessage2Cog, IconMessageCircle, IconMessageUser, IconNews, IconPackage, IconPill,
   IconPuzzle,
   IconReportAnalytics, IconSettings, IconSettings2,
@@ -34,19 +34,19 @@ export interface WorkspaceModuleConfig {
 }
 
 export interface WorkspaceModule extends WorkspaceModuleConfig {
-  id: string;
+  id: WorkspaceModuleId;
   name: string;
 }
 
 const combineModule = (config: WorkspaceModuleConfig): WorkspaceModule => {
   return {
     ...config,
-    id: '',
+    id: '' as WorkspaceModuleId,
     name: '',
   }
 }
 
-export const workspaceModules = {
+export const workspaceModuleConfigs = {
   // Main
   dashboard: combineModule({ href: '/', icon: IconLayoutDashboard, hrefExact: true }),
   posts: combineModule({ href: '/posts', icon: IconNews, permissions: WorkspacePermission.POSTS_VIEW }),
@@ -68,7 +68,6 @@ export const workspaceModules = {
   productServices: combineModule({ href: '/services', icon: IconCategory2, permissions: WorkspacePermission.PRODUCTS_SERVICES_WRITE }),
   productStocks: combineModule({ href: '/product-stocks', icon: IconBuildingWarehouse, permissions: WorkspacePermission.PRODUCT_STOCK_VIEW }),
   productCombos: combineModule({ href: '/combos', icon: IconPackage, permissions: WorkspacePermission.PRODUCT_COMBOS_VIEW }),
-  productCategories: combineModule({ href: '/categories', icon: IconList, permissions: WorkspacePermission.PRODUCTS_SERVICES_WRITE }),
 
   partners: combineModule({ href: '/partners', icon: IconTopologyStar3, permissions: WorkspacePermission.PARTNERS_WRITE }),
   prescriptions: combineModule({ href: '/prescriptions', icon: IconPill, workspaceTypes: [WorkspaceType.DENTAL, WorkspaceType.CLINIC, WorkspaceType.HOSPITAL] }),
@@ -84,26 +83,27 @@ export const workspaceModules = {
 
   // Workspace Settings
   workspaceSettings: combineModule({ href: '/workspace-settings', icon: IconSettings, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspaceSettingsGeneral: combineModule({ href: '/WorkspaceSettings/general', icon: IconSettings2, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspaceSettingsOperation: combineModule({ href: '/WorkspaceSettings/operation', icon: IconActivityHeartbeat, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspaceSettingsDocuments: combineModule({ href: '/WorkspaceSettings/documents', icon: IconFiles, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspaceSettingsHrmTimekeepings: combineModule({ href: '/WorkspaceSettings/hrm-timekeepings', icon: IconCalendarCheck, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspaceSettingsApp: combineModule({ href: '/WorkspaceSettings/app', icon: IconWorld, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspaceSettingsRoles: combineModule({ href: '/WorkspaceSettings/roles', icon: IconAccessible, permissions: WorkspacePermission.WORKSPACE_ROLES_MANAGER, restrictDisplay: ['spotlight'] }),
-  workspaceSettingsCredit: combineModule({ href: '/WorkspaceSettings/credit', icon: IconCreditCardPay, permissions: WorkspacePermission.WORKSPACE_SETTINGS, workspaceTypes: [WorkspaceType.CREDIT], restrictDisplay: ['spotlight'] }),
-  workspaceSettingsModules: combineModule({ href: '/WorkspaceSettings/modules', icon: IconLayout, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspaceSettingsBranches: combineModule({ href: '/WorkspaceSettings/branches', icon: IconBuildingSkyscraper, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspaceSettingsApiApps: combineModule({ href: '/WorkspaceSettings/api-apps', icon: IconApiApp, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspaceSettingsMessages: combineModule({ href: '/WorkspaceSettings/messages', icon: IconMessage2Cog, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsGeneral: combineModule({ href: '/workspace-settings/general', icon: IconSettings2, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsOperation: combineModule({ href: '/workspace-settings/operation', icon: IconActivityHeartbeat, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsDocuments: combineModule({ href: '/workspace-settings/documents', icon: IconFiles, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsHrmTimekeepings: combineModule({ href: '/workspace-settings/hrm-timekeepings', icon: IconCalendarCheck, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsApp: combineModule({ href: '/workspace-settings/app', icon: IconWorld, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsRoles: combineModule({ href: '/workspace-settings/roles', icon: IconAccessible, permissions: WorkspacePermission.WORKSPACE_ROLES_MANAGER, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsCredit: combineModule({ href: '/workspace-settings/credit', icon: IconCreditCardPay, permissions: WorkspacePermission.WORKSPACE_SETTINGS, workspaceTypes: [WorkspaceType.CREDIT], restrictDisplay: ['spotlight'] }),
+  workspaceSettingsModules: combineModule({ href: '/workspace-settings/modules', icon: IconLayout, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsBranches: combineModule({ href: '/workspace-settings/branches', icon: IconBuildingSkyscraper, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsApiApps: combineModule({ href: '/workspace-settings/api-apps', icon: IconApiApp, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsMessages: combineModule({ href: '/workspace-settings/messages', icon: IconMessage2Cog, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsCategories: combineModule({ href: '/workspace-settings/categories', icon: IconCategory, permissions: WorkspacePermission.CATEGORIES_MANAGER, restrictDisplay: ['spotlight'] }),
 
-  // Workspace Plugins
-  workspacePlugins: combineModule({ href: '/WorkspaceSettings/plugins', icon: IconPuzzle, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspacePluginsBanks: combineModule({ href: '/WorkspaceSettings/plugins/banks', icon: IconBuildingBank, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
-  workspacePluginsZaloOas: combineModule({ href: '/WorkspaceSettings/plugins/zalo-oas', icon: IconZalo, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
-  workspacePluginsMetaPages: combineModule({ href: '/WorkspaceSettings/plugins/meta-pages', icon: IconFacebook, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspacePluginsMailer: combineModule({ href: '/WorkspaceSettings/plugins/mailer', icon: IconMailbox, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
-  workspacePluginsMessageHubs: combineModule({ href: '/WorkspaceSettings/plugins/message-hubs', icon: IconMessage, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
-  workspacePluginsAiAssistants: combineModule({ href: '/WorkspaceSettings/plugins/ai-assistants', icon: IconAi, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  // Workspace Setting Plugins
+  workspacePlugins: combineModule({ href: '/workspace-settings/plugins', icon: IconPuzzle, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspacePluginsBanks: combineModule({ href: '/workspace-settings/plugins/banks', icon: IconBuildingBank, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
+  workspacePluginsZaloOas: combineModule({ href: '/workspace-settings/plugins/zalo-oas', icon: IconZalo, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
+  workspacePluginsMetaPages: combineModule({ href: '/workspace-settings/plugins/meta-pages', icon: IconFacebook, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspacePluginsMailer: combineModule({ href: '/workspace-settings/plugins/mailer', icon: IconMailbox, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
+  workspacePluginsMessageHubs: combineModule({ href: '/workspace-settings/plugins/message-hubs', icon: IconMessage, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
+  workspacePluginsAiAssistants: combineModule({ href: '/workspace-settings/plugins/ai-assistants', icon: IconAi, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
 
   // Profile
   profileSettings: combineModule({ href: '/profile/settings', icon: IconSettings, restrictDisplay: ['spotlight'] }),
@@ -112,7 +112,7 @@ export const workspaceModules = {
   reports: combineModule({ href: '/reports', icon: IconReportAnalytics, permissions: WorkspacePermission.REPORTS_VIEW }),
 }
 
-export type WorkspaceModuleId = keyof typeof workspaceModules;
+export type WorkspaceModuleId = keyof typeof workspaceModuleConfigs;
 
 export const getWorkspaceModuleName = (id: WorkspaceModuleId, workspace?: Pick<WorkspaceEntity, 'type'>) => {
   if (workspace && id === 'orders' && [WorkspaceType.SPA, WorkspaceType.HOSPITAL, WorkspaceType.CLINIC, WorkspaceType.DENTAL].includes(workspace?.type)) {

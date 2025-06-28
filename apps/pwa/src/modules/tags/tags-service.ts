@@ -5,7 +5,8 @@ import { IconFolder } from "@tabler/icons-react";
 import { api } from "../apis";
 import { t } from "../lang/lang-service";
 import { getTasks } from "../tasks/tasks-service";
-import { ReorderTagsDto, TagDto, TagEntity } from "./tags-types";
+import { ReorderTagsDto, TagDto, TagEntity, TagType } from "./tags-types";
+import { MantineColor } from "@mantine/core";
 
 export async function createTag(dto: TagDto) {
   return api.post(`/tags`, dto);
@@ -34,7 +35,7 @@ export async function getTagMetadata(slug: string): Promise<AppPageMetadata> {
 export async function interactTag(tagId: string) {
   try {
     await api.post(`/tags/${tagId}/interact`);
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export const onRemoveTaskTagFolder = (tag: TagEntity, onDone?: () => void) => {
@@ -55,3 +56,10 @@ export const onRemoveTaskTagFolder = (tag: TagEntity, onDone?: () => void) => {
     },
   })
 }
+
+export const tagTypeConfigs: Record<TagType, { color: MantineColor }> = {
+  [TagType.CUSTOMER]: { color: "blue" },
+  [TagType.MESSAGE_BOX]: { color: "green" },
+  [TagType.TASK_FOLDER]: { color: "red" },
+  [TagType.TASK]: { color: "yellow" },
+};

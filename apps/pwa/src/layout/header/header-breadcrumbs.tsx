@@ -5,7 +5,7 @@ import { useLayout } from "@/layout/layout-context";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceModule } from "@/modules/workspaces/workspace-modules";
+import { getWorkspaceModuleName, WorkspaceModule } from "@/modules/workspaces/workspace-modules";
 import { Card, Group, Text, ThemeIcon } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconChevronRight } from "@tabler/icons-react";
@@ -88,6 +88,7 @@ const BreadcrumbItem: FC<{ m: WorkspaceModule }> = ({ m }) => {
   const hover = useHover();
   const router = useRouter();
   const color = useColor();
+  const workspace = useWorkspace();
 
   return (
     <Link href={m.href} style={{ textDecoration: "none" }}>
@@ -101,7 +102,7 @@ const BreadcrumbItem: FC<{ m: WorkspaceModule }> = ({ m }) => {
       >
         <Group gap={0}>
           <Text fz={13} fw={500} px={4}>
-            {t(m.name)}
+            {t(getWorkspaceModuleName(m.id, workspace.userMember?.workspace))}
           </Text>
         </Group>
       </Card>

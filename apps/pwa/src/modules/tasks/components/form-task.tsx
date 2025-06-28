@@ -20,7 +20,7 @@ import { PartnersInput } from "@/modules/partners/components/partners-input";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagsInput } from "@/modules/tags/components/tags-input";
-import { TagType } from "@/modules/tags/tags-types";
+import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import {
   createTask,
@@ -127,7 +127,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         relatedCustomerId: values.relatedCustomer?._id,
         assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMember) => user.userId),
         partnerIds: values.partners.map((partner: PartnerEntity) => partner._id),
-        tagIds: values.tagIds,
+        tagIds: values.tags.map((tag: TagEntity) => tag._id),
         timeTrackings: values.timeTrackings || [],
         estimatedTime: values.estimatedTime,
       },
@@ -163,7 +163,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         partnerIds: values.partners.map((partner: PartnerEntity) => partner._id),
         relatedCustomerId: props.customer?._id,
         tagFolderId: tagFolder?._id,
-        tagIds: values.tagIds,
+        tagIds: values.tags.map((tag: TagEntity) => tag._id),
         timeTrackings: values.timeTrackings || [],
         estimatedTime: values.estimatedTime,
       }).then(async (task) => {
@@ -240,7 +240,6 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
       relatedCustomer: props.customer || props.task?.relatedCustomer,
       dueDate: props.dueDate || props.task?.dueDate,
       timeTrackings: props.timeTrackings || props.task?.timeTrackings || [],
-      tagIds: props.task?.tagIds || [],
     });
     isInitialized.current = true;
     forceUpdate();
@@ -562,14 +561,14 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
             <FormFieldWrapper icon={IconTags} label={t("tags")}>
               <FormField
-                canRemove={!!form.values.tagIds?.length}
-                onRemove={() => form.setFieldValue("tagIds", [])}
+                canRemove={!!form.values.tags?.length}
+                onRemove={() => form.setFieldValue("tags", [])}
               >
                 <TagsInput
                   flex={1}
                   type={TagType.TASK}
-                  value={form.values.tagIds}
-                  onChange={(tags) => form.setFieldValue("tagIds", tags)}
+                  value={form.values.tags}
+                  onChange={(tags) => form.setFieldValue("tags", tags)}
                 />
               </FormField>
             </FormFieldWrapper>

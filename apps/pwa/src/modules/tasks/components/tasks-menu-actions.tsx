@@ -322,7 +322,7 @@ export const TaskMenuActions: FC = () => {
               tasks.setState((s) => ({ ...s, tagIds: undefined }));
             }
           }}
-          render={(ctx) => {
+          target={(ctx) => {
             const selectedTags = (tasks.state.tagIds || [])
               .map((tagId) => tags.list.find((tag) => tag._id === tagId))
               .filter(Boolean) as TagEntity[];

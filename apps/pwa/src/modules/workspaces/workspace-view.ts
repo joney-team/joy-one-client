@@ -28,7 +28,6 @@ const defaultWorkspaceView: WorkspaceView = {
     { id: '', type: 'DIVIDER', dividerName: 'business' },
     { id: '', type: 'MODULE', moduleId: 'products' },
     { id: '', type: 'MODULE', moduleId: 'productServices' },
-    { id: '', type: 'MODULE', moduleId: 'productCategories' },
     { id: '', type: 'MODULE', moduleId: 'productCombos' },
     { id: '', type: 'MODULE', moduleId: 'productStocks' },
     { id: '', type: 'MODULE', moduleId: 'posts' },

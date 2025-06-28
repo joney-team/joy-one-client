@@ -1,3 +1,5 @@
+"use client";
+
 import { FileType } from "@/modules/files/file-types";
 import { renderLink } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
@@ -80,15 +82,15 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
         <Renderer visible={ableView}>
           <Image
             src={src}
-            h={h}
-            w={w}
+            h="100%"
+            w="100%"
             fit={props.fit || "cover"}
             flex={1}
             onError={() => setLoadFailed(true)}
           />
         </Renderer>
 
-        <Renderer visible={(!ableView && !hovered) || disabled}>
+        <Renderer visible={!ableView}>
           <Center h="100%">
             <ThemeIcon size={size} color="gray.5" variant="transparent">
               <Icon strokeWidth={1.2} {...props.iconProps} />

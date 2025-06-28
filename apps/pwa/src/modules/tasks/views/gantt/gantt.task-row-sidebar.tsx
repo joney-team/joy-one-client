@@ -332,7 +332,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
                           tagIds: [...(task.tagIds || []).filter((v) => v !== tag._id), tag._id],
                         });
                       }}
-                      render={(ctx) => {
+                      target={(ctx) => {
                         return (
                           <ActionIcon size="sm" variant="subtle" color="gray" onClick={ctx.toggle}>
                             <IconTagPlus size={16} />

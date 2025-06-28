@@ -1,6 +1,7 @@
 "use client";
 
 import { useApp } from "@/app.context";
+import { closeAppLoading, openAppLoading } from "@/components/app-loading";
 import { Fullscreen } from "@/components/fullscreen";
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
 import { getGlobal } from "@/global";
@@ -48,13 +49,18 @@ import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
 import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../apis";
 import { Context } from "./workspace-context";
-import { getWorkspaceModuleName, WorkspaceModuleId, workspaceModules } from "./workspace-modules";
+import {
+  getWorkspaceModuleName,
+  workspaceModuleConfigs,
+  WorkspaceModuleId,
+} from "./workspace-modules";
 import { WorkspaceRequire } from "./workspace-require";
 import { getDefaultWorkspaceView } from "./workspace-view";
 import {
@@ -64,8 +70,6 @@ import {
   WorkspaceMemberInvitationState,
   WorkspaceType,
 } from "./workspaces-types";
-import { zIndexes } from "@joy-one-client/config/layout";
-import { closeAppLoading, openAppLoading } from "@/components/app-loading";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
@@ -296,26 +300,33 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const userMember = state.current.workspaceMembers.find((w) => w.workspaceId === workspaceId);
   const workspaceView: WorkspaceView = state.current.settings?.view || {};
 
-  const modules = Object.entries(workspaceModules).map(([id, mo]) => ({
-    ...mo,
-    id,
-    name: getWorkspaceModuleName(id as keyof typeof workspaceModules, userMember?.workspace),
-  }));
+  const modules = useMemo(() => {
+    return Object.entries(workspaceModuleConfigs).map(([id, mo]) => ({
+      ...mo,
+      id: id as WorkspaceModuleId,
+      name: getWorkspaceModuleName(
+        id as keyof typeof workspaceModuleConfigs,
+        userMember?.workspace
+      ),
+    }));
+  }, [userMember?.workspace]);
 
-  const availableModules = modules.filter((mo) => {
-    const _permissions = userMember?.permissions || [];
-    const ableToAccess =
-      (mo && !mo.permissions) ||
-      mo.permissions
-        ?.toString()
-        .split(",")
-        .every((p) => _permissions.includes(p as WorkspacePermission));
+  const availableModules = useMemo(() => {
+    return modules.filter((mo) => {
+      const _permissions = userMember?.permissions || [];
+      const ableToAccess =
+        (mo && !mo.permissions) ||
+        mo.permissions
+          ?.toString()
+          .split(",")
+          .every((p) => _permissions.includes(p as WorkspacePermission));
 
-    const isAvailableType =
-      !mo.workspaceTypes ||
-      mo.workspaceTypes.includes(userMember?.workspace?.type || WorkspaceType.BUSINESS);
-    return ableToAccess && isAvailableType;
-  });
+      const isAvailableType =
+        !mo.workspaceTypes ||
+        mo.workspaceTypes.includes(userMember?.workspace?.type || WorkspaceType.BUSINESS);
+      return ableToAccess && isAvailableType;
+    });
+  }, [modules, userMember?.permissions, userMember?.workspace?.type]);
 
   const isUserOnline = (userId: string) => {
     return !!onlineStatus.data?.[userId];

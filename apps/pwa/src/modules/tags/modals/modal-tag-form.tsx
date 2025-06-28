@@ -8,7 +8,7 @@ import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
-import { ActionIcon, ColorInput, Stack, TextInput } from "@mantine/core";
+import { ActionIcon, ColorInput, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconFolderPlus, IconTag, IconX } from "@tabler/icons-react";
@@ -17,7 +17,7 @@ import { FC, useEffect, useRef, useState } from "react";
 interface ModalTagFormProps {
   onDone?: (tag: TagEntity) => void | Promise<void>;
   tag?: TagEntity;
-  type: TagType;
+  type?: TagType;
 }
 
 export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
@@ -30,7 +30,7 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
       ...props.tag,
       name: props.tag?.name || "",
       color: props.tag?.color || "",
-      type: props.type,
+      type: props.type || props.tag?.type,
     },
     validate: {
       name: (value: string) => {
@@ -76,6 +76,16 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
           ref={inputNameRef}
           label={t("name")}
           {...form.getInputProps("name")}
+        />
+
+        <Select
+          label={t("type")}
+          disabled={!!props.type}
+          data={Object.values(TagType).map((type) => ({
+            label: t(`tag_type_${type}`),
+            value: type,
+          }))}
+          {...form.getInputProps("type")}
         />
 
         <ColorInput

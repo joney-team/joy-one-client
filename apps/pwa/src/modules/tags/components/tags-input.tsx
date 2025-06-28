@@ -1,42 +1,40 @@
 "use client";
 
+import { Renderer } from "@/components/renderer";
 import { t } from "@/modules/lang/lang-service";
-import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { capitalize } from "@/utils/string.utils";
 import { em, Group, InputWrapperProps, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { Renderer } from "@/components/renderer";
 import { TagSelector } from "./tag-selector";
-import { TaskTag } from "@/modules/tasks/components/task-tag";
 
 interface TagsInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   type: TagType;
-  value?: string[];
-  onChange?: (value: string[]) => void;
+  value?: TagEntity[];
+  onChange?: (value: TagEntity[]) => void;
   disabled?: boolean;
 }
 
 export const TagsInput: FC<TagsInputProps> = (props) => {
-  const tags = useTags();
-  const value = props.value
-    ?.map((v) => tags.list.find((t) => t._id === v))
-    .filter((v) => !!v) as TagEntity[];
+  const { type, value: rawValue, onChange, disabled, ...rest } = props;
+  const value = rawValue || [];
 
   const toogleSelect = (tag?: TagEntity) => {
-    if (!tag || props.disabled) return;
+    if (!tag || disabled) return;
     const tags = value.find((t) => t._id === tag._id)
       ? value.filter((t) => t._id !== tag._id)
       : [...value, tag];
-    props.onChange?.(tags.map((t) => t._id));
+    onChange?.(tags);
   };
 
   return (
     <TagSelector
-      {...props}
+      {...rest}
+      type={type}
       excludeIds={value.map((tag) => tag._id)}
-      render={(ctx) => {
+      target={(ctx) => {
         return (
           <Group
             flex={1}
@@ -71,7 +69,9 @@ export const TagsInput: FC<TagsInputProps> = (props) => {
           </Group>
         );
       }}
-      onSelect={toogleSelect}
+      onSelect={(value) => {
+        toogleSelect(value);
+      }}
     />
   );
 };

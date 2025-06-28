@@ -17,7 +17,16 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { useFetch } from "@/utils/use-fetch.util";
-import { Accordion, ActionIcon, Group, ScrollArea, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
+import {
+  Accordion,
+  ActionIcon,
+  Group,
+  ScrollArea,
+  Skeleton,
+  Stack,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import { IconLinkOff, IconLinkPlus, IconMail, IconPhoneCall, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
@@ -101,7 +110,11 @@ export const MetadataMessageBox: FC = () => {
             )}
 
             <Tooltip label={t("unlink")}>
-              <ActionIcon variant="light" color="gray" onClick={() => setCustomerToMessageBox(messageBox._id, null)}>
+              <ActionIcon
+                variant="light"
+                color="gray"
+                onClick={() => setCustomerToMessageBox(messageBox._id, null)}
+              >
                 <IconLinkOff size={16} />
               </ActionIcon>
             </Tooltip>
@@ -123,9 +136,11 @@ export const MetadataMessageBox: FC = () => {
                     })
                     .map((item) => {
                       const mod = workspace.availableModules.find((m) => m.id === item.moduleId);
-                      const isInView = (workspace.view.menu ?? getDefaultWorkspaceView(workspace.type).menu ?? []).some(
-                        (v) => v.moduleId === item.moduleId
-                      );
+                      const isInView = (
+                        workspace.view.menu ??
+                        getDefaultWorkspaceView(workspace.type).menu ??
+                        []
+                      ).some((v) => v.moduleId === item.moduleId);
 
                       if (!mod || !isInView) return null;
                       return (
@@ -135,7 +150,7 @@ export const MetadataMessageBox: FC = () => {
                               <ActionIcon variant="subtle" color="dark" component="div">
                                 <mod.icon size={18} />
                               </ActionIcon>
-                              <Text>{t(mod.name)}</Text>
+                              <Text>{mod.name}</Text>
 
                               {item.onCreate && (
                                 <ActionIcon
