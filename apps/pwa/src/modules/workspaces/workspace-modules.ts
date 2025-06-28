@@ -5,6 +5,7 @@ import {
   IconCalendarCheck, IconCashRegister, IconCategory, IconCategory2,
   IconClipboardText,
   IconCoins, IconCreditCardPay, IconFiles,
+  IconForms,
   IconLayout, IconLayoutDashboard,
   IconMailbox, IconMessage, IconMessage2Cog, IconMessageCircle, IconMessageUser, IconNews, IconPackage, IconPill,
   IconPuzzle,
@@ -95,6 +96,7 @@ export const workspaceModuleConfigs = {
   workspaceSettingsApiApps: combineModule({ href: '/workspace-settings/api-apps', icon: IconApiApp, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
   workspaceSettingsMessages: combineModule({ href: '/workspace-settings/messages', icon: IconMessage2Cog, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
   workspaceSettingsCategories: combineModule({ href: '/workspace-settings/categories', icon: IconCategory, permissions: WorkspacePermission.CATEGORIES_MANAGER, restrictDisplay: ['spotlight'] }),
+  workspaceSettingsCustomFields: combineModule({ href: '/workspace-settings/custom-fields', icon: IconForms, permissions: WorkspacePermission.CUSTOM_FIELDS_MANAGER, restrictDisplay: ['spotlight'] }),
 
   // Workspace Setting Plugins
   workspacePlugins: combineModule({ href: '/workspace-settings/plugins', icon: IconPuzzle, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),

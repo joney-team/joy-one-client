@@ -32,7 +32,8 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
   Wrapper,
   config,
 }) => {
-  const [options, setOptions] = useState<DynamicSelectorFilterOption[]>([]);
+  const [_options, setOptions] = useState<DynamicSelectorFilterOption[]>([]);
+  const options = config.initOptions || _options;
   const querySelectedOptions = list.query[colKey] ? `${list.query[colKey]}`.split(",") : [];
 
   // Get initial options
@@ -44,8 +45,6 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
           setOptions((s) => [...s.filter((sv) => !v.find((v2) => v2.value === sv.value)), ...v])
         )
         .catch(console.error);
-    } else {
-      setOptions(config.initOptions || []);
     }
   }, [config.getInitialOptions]);
 

@@ -10,7 +10,7 @@ export interface EnumColumnArgs extends Omit<Column, "render"> {
   options: {
     label: string;
     value: string;
-    color: string;
+    color?: string;
     icon?: Icon;
   }[];
 }
@@ -28,9 +28,9 @@ export const EnumColumn = (args: EnumColumnArgs): Column => {
         <Group gap={5}>
           {option.icon ? (
             <option.icon size={18} color={color(option.color)} />
-          ) : (
+          ) : option.color ? (
             <Circle color={color(option.color)} size={8} />
-          )}
+          ) : null}
 
           <Text fz={14} fw={500}>
             {option.label}
@@ -51,9 +51,9 @@ export const EnumColumn = (args: EnumColumnArgs): Column => {
               <Group gap={5}>
                 {v.icon ? (
                   <v.icon size={18} color={color(v.color)} />
-                ) : (
+                ) : v.color ? (
                   <Circle color={color(v.color)} size={8} />
-                )}
+                ) : null}
 
                 <Text fz={14} fw={500}>
                   {v.label}

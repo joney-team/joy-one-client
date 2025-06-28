@@ -1,6 +1,8 @@
 import { BaseMongoEntity } from "@/types";
 
 export enum WorkspacePermission {
+  CUSTOM_FIELDS_MANAGER = 'CFSM',
+
   CUSTOMERS_VIEW = 'CV',
   CUSTOMERS_VIEW_CONTACT = 'CVC',
   CUSTOMERS_CREATE = 'CC',

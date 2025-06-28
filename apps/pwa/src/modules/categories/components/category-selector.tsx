@@ -7,10 +7,9 @@ import { AppEntity, ResponseList } from "@/types";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { api } from "../apis";
-import { CategoryEntity, CategoryType } from "./category-types";
-import { OnModalCategory } from "./modals/modal-category";
-import { useQuery } from "../apis/use-query";
+import { CategoryEntity, CategoryType } from "../category-types";
+import { OnModalCategory } from "../modals/modal-category";
+import { useQuery } from "@/modules/apis/use-query";
 
 interface CategorySelectorProps
   extends Omit<SelectorProps<CategoryEntity>, "onSelect" | "onSearch" | "renderOption"> {

@@ -12,6 +12,7 @@ import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { PostEntity } from "./posts-types";
 import { PrimaryColumn } from "@/components/list/columns/primary-column";
 import { CategoryColumn } from "../categories/components/category-column";
+import { CategoryType } from "../categories/category-types";
 
 export const PostsList: FC = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ export const PostsList: FC = () => {
               return <EntityImage src={value} w={200} h={100} onlyRead />;
             },
           },
-          categoryId: CategoryColumn(),
+          categoryId: CategoryColumn({ type: CategoryType.POSTS }),
           excerpt: {},
           publishedAt: DateTimeColumn({ name: "publishedAt" }),
         }}

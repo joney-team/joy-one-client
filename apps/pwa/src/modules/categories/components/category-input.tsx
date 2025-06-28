@@ -4,7 +4,7 @@ import { t } from "@/modules/lang/lang-service";
 import { ActionIcon, Input, InputWrapperProps } from "@mantine/core";
 import { type FC } from "react";
 import { CategorySelector } from "./category-selector";
-import { CategoryEntity, CategoryType } from "./category-types";
+import { CategoryEntity, CategoryType } from "../category-types";
 import { IconX } from "@tabler/icons-react";
 
 interface CategoryInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {

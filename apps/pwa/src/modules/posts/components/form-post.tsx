@@ -5,7 +5,7 @@ import { ContentEditable } from "@/components/content-editable/content-editable"
 import { Editor } from "@/components/editor";
 import { EntityImage } from "@/components/entity-image";
 import { Renderer } from "@/components/renderer";
-import { CategoryInput } from "@/modules/categories/category-input";
+import { CategoryInput } from "@/modules/categories/components/category-input";
 import { CategoryEntity, CategoryType } from "@/modules/categories/category-types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import {
