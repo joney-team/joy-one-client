@@ -232,6 +232,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
     isInitialized.current = false;
     form.setValues({
       ...props.task,
+      tags: props.task?.tags || [],
       name: props.task?.name || "",
       partners: props.task?.partners || [],
       assigneeUsers: props.task?.assigneeUsers || [workspace.userMember],

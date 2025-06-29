@@ -6,7 +6,13 @@ import { IconInfoCircle, IconMoodCry } from "@tabler/icons-react";
 import { AxiosError } from "axios";
 import { StringUtils } from "./string.utils";
 
-export const onError = (error: any, notification?: NotificationData | string, throwError?: boolean) => {
+export const onError = (
+  error: any,
+  notification?: NotificationData | string,
+  throwError?: boolean
+) => {
+  console.error(error);
+
   let message: string = t("INTERNAL_SERVER_ERROR");
 
   if (error instanceof AxiosError) {
@@ -21,7 +27,11 @@ export const onError = (error: any, notification?: NotificationData | string, th
     if (typeof notification === "string") {
       notifications.update({
         id: notification,
-        message: <Text dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(message) }} />,
+        message: (
+          <Text
+            dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(message) }}
+          />
+        ),
         color: "red",
         loading: false,
         autoClose: true,
@@ -30,7 +40,11 @@ export const onError = (error: any, notification?: NotificationData | string, th
     } else {
       notifications.update({
         ...notification,
-        message: <Text dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(message) }} />,
+        message: (
+          <Text
+            dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(message) }}
+          />
+        ),
         color: "red",
         loading: false,
         autoClose: true,
@@ -40,7 +54,9 @@ export const onError = (error: any, notification?: NotificationData | string, th
   } else {
     notifications.show({
       title: t("action_failed"),
-      message: <Text dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(message) }} />,
+      message: (
+        <Text dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(message) }} />
+      ),
       color: "red",
       icon: <IconMoodCry strokeWidth={1.5} size={18} />,
       autoClose: true,
