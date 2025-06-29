@@ -16,7 +16,8 @@ export interface CustomFieldValue {
 }
 
 export interface CustomField extends CustomFieldValue {
-  customField: CustomFieldEntity;
+  type: CustomFieldType;
+  config?: any;
 }
 
 export interface CustomFieldDto {
@@ -24,6 +25,7 @@ export interface CustomFieldDto {
   label: string;
   key?: string;
   description?: string;
+  placeholder?: string;
   config?: any;
   entities: AppEntity[];
 }
@@ -34,6 +36,7 @@ export interface CustomFieldEntity extends BaseMongoEntity {
   label: string;
   config?: any;
   description?: string;
+  placeholder?: string;
   workspaceId: string;
   entities: AppEntity[];
 }

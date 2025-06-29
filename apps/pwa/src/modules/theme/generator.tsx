@@ -48,7 +48,11 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
       InputWrapper: InputWrapper.extend({
         styles: {
           label: {
-            fontSize: 12,
+            fontSize: 13,
+          },
+          description: {
+            fontSize: 11,
+            fontWeight: 300,
           },
         },
       }),

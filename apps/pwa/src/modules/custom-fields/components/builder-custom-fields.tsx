@@ -1,4 +1,5 @@
 import { useQuery } from "@/modules/apis/use-query";
+import { EventType } from "@/modules/events/event-types";
 import { AppEntity, ResponseList } from "@/types";
 import { FC, Fragment } from "react";
 import { CustomField, CustomFieldEntity } from "../custom-field-types";
@@ -23,19 +24,29 @@ export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
       entities: [props.entity],
       getAll: true,
     },
+    refetchEvents: [
+      EventType.CUSTOM_FIELDS_NEW,
+      EventType.CUSTOM_FIELDS_UPDATED,
+      EventType.CUSTOM_FIELDS_REMOVED,
+    ],
   });
 
-  const values = (customFields.data?.data || []).map((customField) => ({
-    customField,
-    customFieldId: customField._id,
-    value: props.value?.find((v) => v.customField._id === customField._id)?.value,
-  }));
+  const values: CustomField[] = (customFields.data?.data || []).map((customField) => {
+    const customFieldValue = props.value?.find((v) => v.customFieldId === customField._id);
+
+    return {
+      customFieldId: customField._id,
+      value: customFieldValue?.value,
+      type: customField.type,
+      config: customField.config,
+    };
+  });
 
   return (
     <Fragment>
       {customFields.data?.data?.map((customField) => {
         const Input = customFieldInputs[customField.type];
-        const customFieldValue = values.find((v) => v.customField._id === customField._id);
+        const customFieldValue = values.find((v) => v.customFieldId === customField._id);
 
         if (!Input) {
           return null;
@@ -48,7 +59,11 @@ export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
             value={customFieldValue?.value}
             onChange={(value) => {
               props.onChange(
-                values.map((v) => (v.customField._id === customField._id ? { ...v, value } : v))
+                values.map((v) =>
+                  v.customFieldId === customField._id
+                    ? { ...v, type: customField.type, config: customField.config, value }
+                    : v
+                )
               );
             }}
           />

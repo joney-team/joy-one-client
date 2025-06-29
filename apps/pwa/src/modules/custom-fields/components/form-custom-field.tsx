@@ -19,21 +19,25 @@ export interface FormCustomFieldProps {
   onArchive?: () => void;
 }
 
+const supportedTypes = [CustomFieldType.TEXT, CustomFieldType.NUMBER];
+
 export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
   const { customField, onSuccess } = props;
 
   const form = useForm<{
-    label?: string;
+    label: string;
     description?: string;
-    type?: CustomFieldType;
-    entities?: AppEntity[];
+    placeholder?: string;
+    type: CustomFieldType;
+    entities: AppEntity[];
     config?: any;
     key?: string;
   }>({
     initialValues: {
       label: customField?.label || "",
       description: customField?.description || "",
-      type: props.type || props.customField?.type,
+      placeholder: customField?.placeholder || "",
+      type: props.type || props.customField?.type || supportedTypes[0],
       entities: props.customField?.entities || [],
       config: props.customField?.config || {},
       key: props.customField?.key || "",
@@ -83,6 +87,8 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
       <Stack>
         <TextInput autoFocus label={t("name")} {...form.getInputProps("label")} />
 
+        <TextInput label={t("placeholder")} {...form.getInputProps("placeholder")} />
+
         <TextInput label={`Key (${t("optional")})`} {...form.getInputProps("key")} />
 
         <Textarea
@@ -93,7 +99,7 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
         <Select
           label={t("type")}
           {...form.getInputProps("type")}
-          data={Object.values(CustomFieldType).map((type) => ({
+          data={supportedTypes.map((type) => ({
             label: t(`custom_field_type_${type}`),
             value: type,
           }))}
