@@ -1,4 +1,4 @@
-export function runWithDelay<T>(promiseFn: () => Promise<T>, delayMs: number): Promise<T> {
+export function runWithDelay<T>(promiseFn: () => Promise<T>, delayMs = 1000): Promise<T> {
   return new Promise(async (resolve, reject) => {
     const start = Date.now();
 

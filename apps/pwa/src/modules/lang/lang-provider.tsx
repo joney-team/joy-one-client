@@ -62,7 +62,7 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
 
   const initialize = async (_locale: Locale) => {
     try {
-      await runWithDelay(() => fetchLocale(_locale), 1500);
+      await runWithDelay(() => fetchLocale(_locale), 1200);
     } catch (error) {
       console.error(error);
     } finally {

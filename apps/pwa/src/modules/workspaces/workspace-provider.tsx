@@ -261,7 +261,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         if (workspaceMember && workspaceMember.workspaceId) {
           await fetchRelatedData();
         }
-      }, 1500);
+      });
     } catch (error) {
       console.error(error);
     } finally {
