@@ -19,7 +19,7 @@ export interface FormCustomFieldProps {
   onArchive?: () => void;
 }
 
-const supportedTypes = [CustomFieldType.TEXT, CustomFieldType.NUMBER];
+const supportedTypes = [CustomFieldType.TEXT, CustomFieldType.NUMBER, CustomFieldType.SWITCH];
 
 export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
   const { customField, onSuccess } = props;

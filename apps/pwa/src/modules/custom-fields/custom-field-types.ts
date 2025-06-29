@@ -8,6 +8,7 @@ export enum CustomFieldType {
   MULTI_SELECT = "MULTI_SELECT",
   TEXTAREA = "TEXTAREA",
   FILE = "FILE",
+  SWITCH = 'SWITCH',
 }
 
 export interface CustomFieldValue {
