@@ -83,7 +83,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
       const customFieldValues: CustomFieldValue[] =
         customFields?.map((customField) => ({
-          customFieldId: customField.customField._id,
+          customFieldId: customField.customFieldId,
           value: customField.value,
         })) || [];
 
