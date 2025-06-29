@@ -1,4 +1,3 @@
-import { useCloseAppLoading } from "@/components/app-loading";
 import { Button } from "@/components/buttons/button";
 import { IconErrored } from "@/components/icons";
 import { Image } from "@/components/image";
@@ -39,8 +38,6 @@ export interface WorkspaceInvitationProps {
 }
 
 const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
-  useCloseAppLoading();
-
   const color = useColor();
   const layout = useLayout();
 

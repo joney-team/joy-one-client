@@ -1,6 +1,5 @@
 "use client";
 
-import { useCloseAppLoading } from "@/components/app-loading";
 import { useAuth } from "@/modules/auth/auth-context";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
@@ -11,8 +10,6 @@ import { FC } from "react";
 import { GoWorkIllustration } from "../../../components/illustrations/go-work";
 
 export const WorkspaceRequireBranches: FC<{ workspace: WorkspaceContext }> = (props) => {
-  useCloseAppLoading();
-
   const { workspace } = props;
   const auth = useAuth();
   const color = useColor();

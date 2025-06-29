@@ -1,6 +1,5 @@
 "use client";
 
-import { useCloseAppLoading } from "@/components/app-loading";
 import { PageLazyLoad, PageLoading } from "@/components/lazy-load";
 import { useRouteRule } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
@@ -33,7 +32,6 @@ export function Layout<P>({
   const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
   const componentProps = props.props as any;
-  useCloseAppLoading(!!workspace.userMember);
 
   if (!workspace.userMember && routeRule.auth === "workspace") return props.children;
   if (!auth.user && routeRule.auth === "auth") return props.children;

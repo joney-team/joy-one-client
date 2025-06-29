@@ -1,7 +1,7 @@
 "use client";
 
 import { useApp } from "@/app.context";
-import { closeAppLoading, openAppLoading } from "@/components/app-loading";
+import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
 import { Fullscreen } from "@/components/fullscreen";
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
 import { getGlobal } from "@/global";
@@ -70,6 +70,7 @@ import {
   WorkspaceMemberInvitationState,
   WorkspaceType,
 } from "./workspaces-types";
+import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
@@ -156,10 +157,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const select = async (workspaceId: string) => {
-    openAppLoading("initial-workspace");
     setWorkspaceId(workspaceId);
     await initialize();
-    closeAppLoading();
   };
 
   const create = async (dto: WorkspaceDto) => {
@@ -246,24 +245,28 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const initialize = async () => {
     try {
-      if (app.metadata.isExtended && app.metadata.workspaceId) {
-        onSetWorkspaceId(app.metadata.workspaceId);
-      }
+      startAppLoading("initial-workspace");
+      await runWithDelay(async () => {
+        if (app.metadata.isExtended && app.metadata.workspaceId) {
+          onSetWorkspaceId(app.metadata.workspaceId);
+        }
 
-      const userWorkspaceMembers = await fetchUserWorkspaceMembers();
-      await verifyInvitation();
+        const userWorkspaceMembers = await fetchUserWorkspaceMembers();
+        await verifyInvitation();
 
-      const workspaceMember = userWorkspaceMembers.find(
-        (member) => member.workspaceId === getWorkspaceId()
-      );
+        const workspaceMember = userWorkspaceMembers.find(
+          (member) => member.workspaceId === getWorkspaceId()
+        );
 
-      if (workspaceMember && workspaceMember.workspaceId) {
-        await fetchRelatedData();
-      }
+        if (workspaceMember && workspaceMember.workspaceId) {
+          await fetchRelatedData();
+        }
+      }, 1500);
     } catch (error) {
       console.error(error);
     } finally {
       _setIsInitialized(true);
+      endAppLoading("initial-workspace");
     }
   };
 

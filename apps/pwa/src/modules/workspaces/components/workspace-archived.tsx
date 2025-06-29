@@ -6,18 +6,19 @@ import { Center, em, Stack, Text, Title } from "@mantine/core";
 import { FC } from "react";
 import { Button } from "../../../components/buttons/button";
 import { Image } from "../../../components/image";
-import { useCloseAppLoading } from "@/components/app-loading";
 
 export const WorkspaceArchived: FC<{ workspace: WorkspaceContext }> = ({ workspace }) => {
-  useCloseAppLoading();
-
   const isOwner = workspace.userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER);
   const ownerName = "Owner";
 
   return (
     <Stack h="100dvh" justify="center">
       <Image
-        src={workspace.userMember.workspace.logo ? renderLink(workspace.userMember.workspace.logo) : "/symbol.png"}
+        src={
+          workspace.userMember.workspace.logo
+            ? renderLink(workspace.userMember.workspace.logo)
+            : "/symbol.png"
+        }
         w={workspace.userMember.workspace.logo ? 130 : 50}
         radius={5}
       />
@@ -27,7 +28,9 @@ export const WorkspaceArchived: FC<{ workspace: WorkspaceContext }> = ({ workspa
           {t("workspace_archived")}
         </Title>
         <Text fz={em(15)} ta="center">
-          {t(isOwner || !ownerName ? "workspace_archived_desc" : "workspace_archived_desc", { ownerName })}
+          {t(isOwner || !ownerName ? "workspace_archived_desc" : "workspace_archived_desc", {
+            ownerName,
+          })}
         </Text>
 
         <Center mt={10}>

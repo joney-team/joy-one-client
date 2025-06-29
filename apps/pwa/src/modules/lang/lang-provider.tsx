@@ -5,6 +5,7 @@ import { deleteCookie, setCookie } from "cookies-next/client";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { getLocaleClient } from "./lang-service";
 import { LangState, Locale, LocaleConfig } from "./lang-types";
+import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 
 import dayjs from "dayjs";
 import "dayjs/locale/en";
@@ -22,7 +23,7 @@ dayjs.extend(customParseFormat);
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
 
-import { closeAppLoading, openAppLoading } from "@/components/app-loading";
+import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
 import { StorageKey } from "@/types";
 import { getGlobal } from "../../global";
 import { api } from "../apis";
@@ -38,7 +39,7 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
 
   const weekStart = state.isStartOfWeekSunday ? 0 : 1;
 
-  const fetch = async (_locale: string) => {
+  const fetchLocale = async (_locale: string) => {
     const { config, dictionary } = await new Promise<{ config: LocaleConfig; dictionary: any }>(
       (resolve) => {
         const action = () => {
@@ -61,11 +62,12 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
 
   const initialize = async (_locale: Locale) => {
     try {
-      await fetch(_locale);
+      await runWithDelay(() => fetchLocale(_locale), 1500);
     } catch (error) {
       console.error(error);
     } finally {
       _setLocale(_locale);
+      endAppLoading("lang");
     }
   };
 
@@ -75,9 +77,9 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
     if (locale) setCookie(StorageKey.LOCALE, locale, { maxAge: 60 * 60 * 24 * 400 });
     else deleteCookie(StorageKey.LOCALE);
 
-    openAppLoading("lang");
-    await fetch(locale || getLocaleClient());
-    closeAppLoading();
+    startAppLoading("lang");
+    await fetchLocale(locale || getLocaleClient());
+    endAppLoading("lang");
   };
 
   // Sync week start for all locales

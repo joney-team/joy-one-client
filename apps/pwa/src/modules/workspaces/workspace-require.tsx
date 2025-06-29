@@ -1,6 +1,5 @@
 "use client";
 
-import { useCloseAppLoading } from "@/components/app-loading";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
@@ -50,8 +49,6 @@ import { api } from "../apis";
 import { getUserMemberRoleLabel } from "../workspace-members/workspace-members-service";
 
 export const WorkspaceRequire: FC<{ workspace: WorkspaceContext }> = (props) => {
-  useCloseAppLoading();
-
   const { workspace } = props;
   const auth = useAuth();
   const app = useApp();

@@ -1,6 +1,6 @@
 "use client";
 
-import { AppLoading } from "@/components/app-loading";
+import { AppLoading } from "@/components/app-loading/app-loading";
 import { wait } from "@/utils/common.utils";
 import dynamic from "next/dynamic";
 import { type FC, type PropsWithChildren, useEffect, useMemo, useState } from "react";

@@ -17,7 +17,6 @@ import { IconHome, IconLifebuoy, IconRefresh } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
 import { IconErrored } from "./icons";
-import { useCloseAppLoading } from "./app-loading";
 
 interface ErrorBoundaryProps {
   error: any;
@@ -26,7 +25,6 @@ interface ErrorBoundaryProps {
 
 const Content: FC<ErrorBoundaryProps> = (props) => {
   const isHome = window?.location?.pathname === "/";
-  useCloseAppLoading();
 
   // useEffect(() => {
   //   if (lang.isReady) {

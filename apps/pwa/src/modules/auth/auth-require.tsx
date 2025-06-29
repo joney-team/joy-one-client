@@ -1,7 +1,6 @@
 "use client";
 
 import { Animate } from "@/components/animate/animate";
-import { useCloseAppLoading } from "@/components/app-loading";
 import { Button } from "@/components/buttons/button";
 import { ButtonLanguage } from "@/components/buttons/button-language";
 import { ColorSchemes } from "@/components/color-schemes";
@@ -17,15 +16,15 @@ import {
   Card,
   Center,
   Divider,
+  em,
   Group,
   PasswordInput,
   PinInput,
   ScrollArea,
   Stack,
   Text,
-  Title,
-  em,
   TextInput,
+  Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -36,8 +35,6 @@ import { t } from "../lang/lang-service";
 import { renewPassword, requestRenewPassword, verifyRenewPasswordCode } from "./auth-service";
 
 export const AuthRequire: FC = () => {
-  useCloseAppLoading();
-
   const app = useApp();
   const layout = useLayout();
   const auth = useAuth();
