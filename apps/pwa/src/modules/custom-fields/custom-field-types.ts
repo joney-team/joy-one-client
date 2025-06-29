@@ -17,6 +17,7 @@ export interface CustomFieldValue {
 
 export interface CustomField extends CustomFieldValue {
   type: CustomFieldType;
+  key: string | null;
   config?: any;
 }
 

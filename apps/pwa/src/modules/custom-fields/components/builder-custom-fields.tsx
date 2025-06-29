@@ -37,6 +37,7 @@ export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
     return {
       customFieldId: customField._id,
       value: customFieldValue?.value,
+      key: customFieldValue?.key ?? null,
       type: customField.type,
       config: customField.config,
     };
