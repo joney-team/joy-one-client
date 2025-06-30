@@ -4,9 +4,14 @@ import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor";
 import { EntityImage } from "@/components/entity-image";
+import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
-import { CategoryInput } from "@/modules/categories/components/category-input";
 import { CategoryEntity, CategoryType } from "@/modules/categories/category-types";
+import { CategoryInput } from "@/modules/categories/components/category-input";
+import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
+import { CustomField, CustomFieldValue } from "@/modules/custom-fields/custom-field-types";
+import { ProductInput, ProductValue } from "@/modules/products/components/product-input";
+import { AppEntity } from "@/types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import {
   ActionIcon,
@@ -23,6 +28,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
+import { modals } from "@mantine/modals";
 import { IconCheck, IconEye } from "@tabler/icons-react";
 import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
@@ -30,15 +36,6 @@ import { api } from "../../apis";
 import { onUploadFile } from "../../files/file-service";
 import { renderDateTime, t } from "../../lang/lang-service";
 import { PostEntity } from "../posts-types";
-import { modals } from "@mantine/modals";
-import { ModalTitle } from "@/components/modal-title";
-import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
-import {
-  CustomField,
-  CustomFieldType,
-  CustomFieldValue,
-} from "@/modules/custom-fields/custom-field-types";
-import { AppEntity } from "@/types";
 
 interface FormPostProps {
   post?: PostEntity;
@@ -55,6 +52,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
     thumbnail?: File;
     category?: CategoryEntity | null;
     customFields?: CustomField[];
+    product: ProductValue | null;
   }>({
     initialValues: {
       title: post?.title || "",
@@ -64,6 +62,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       contentHtml: post?.contentHtml || "",
       category: post?.category,
       customFields: post?.customFields || [],
+      product: post?.product ?? null,
     },
   });
 
@@ -79,7 +78,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      const { thumbnail, category, customFields, ...dto } = values;
+      const { thumbnail, category, customFields, product, ...dto } = values;
 
       const customFieldValues: CustomFieldValue[] =
         customFields?.map((customField) => ({
@@ -98,6 +97,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
         customFieldValues,
         thumbnail: thumbnailFile?.relativePath || post?.thumbnail,
         categoryId: category?._id || null,
+        productId: product?._id || null,
       };
 
       if (post) {
@@ -114,6 +114,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
         contentHtml: _post?.contentHtml || "",
         category: _post?.category || null,
         customFields: _post?.customFields || [],
+        product: _post?.product || null,
       });
 
       form.reset();
@@ -248,6 +249,13 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               />
 
               <CategoryInput type={CategoryType.POSTS} {...form.getInputProps("category")} />
+
+              <ProductInput
+                flex={1}
+                label={t("link_entity", { entity: t("product") })}
+                value={form.values.product}
+                onChange={(value) => form.setFieldValue("product", value)}
+              />
 
               <BuilderCustomFields
                 entity={AppEntity.POSTS}

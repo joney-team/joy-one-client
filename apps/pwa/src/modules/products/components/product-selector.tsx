@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { EntityImage } from "@/components/entity-image";
-import { Selector, SelectorContext } from "@/components/selector";
+import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
 import { useQuery } from "@/modules/apis/use-query";
 import { t } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
@@ -13,7 +13,8 @@ import { Combobox, em, Group, InputWrapperProps, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 
-interface ProductSelectorProps {
+interface ProductSelectorProps
+  extends Omit<SelectorProps<ProductEntity>, "onSelect" | "onSearch" | "renderOption" | "target"> {
   type?: ProductType | ProductType[];
   isStockCheck?: boolean;
   excludeIds?: string[];
