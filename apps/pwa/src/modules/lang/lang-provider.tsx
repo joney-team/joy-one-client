@@ -78,8 +78,7 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
     else deleteCookie(StorageKey.LOCALE);
 
     startAppLoading("lang");
-    await fetchLocale(locale || getLocaleClient());
-    endAppLoading("lang");
+    await initialize(locale || getLocaleClient());
   };
 
   // Sync week start for all locales

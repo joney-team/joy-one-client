@@ -71,6 +71,7 @@ import {
   WorkspaceType,
 } from "./workspaces-types";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
+import { useLang } from "../lang/lang-context";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
@@ -83,6 +84,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const forceUpdate = useForceUpdate();
   const auth = useAuth();
   const router = useRouter();
+  const lang = useLang();
   const params = useParams();
   const inviteCode = params.inviteCode as string;
   const app = useApp();
@@ -312,7 +314,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         userMember?.workspace
       ),
     }));
-  }, [userMember?.workspace]);
+  }, [userMember?.workspace, lang.locale]);
 
   const availableModules = useMemo(() => {
     return modules.filter((mo) => {
