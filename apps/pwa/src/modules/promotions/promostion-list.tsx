@@ -1,14 +1,18 @@
 "use client";
 
+import { Circle } from "@/components/circle";
 import { List } from "@/components/list";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { EnumColumn } from "@/components/list/columns/enum-column";
+import { Selector } from "@/components/selector";
+import { t } from "@/modules/lang/lang-service";
+import { onActionLoad } from "@/utils/actions";
 import { Badge, Combobox, Group, Stack, Text, Tooltip } from "@mantine/core";
-import React from "react";
-import { PromotionEntity, PromotionStatus, PromotionType } from "./promotions-types";
-import { OnPromotionModal } from "./modals/modal-promotion";
-import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
-import { EventType } from "../events/event-types";
 import { IconEdit } from "@tabler/icons-react";
-import { num, t } from "@/modules/lang/lang-service";
+import { api } from "../apis";
+import { EventType } from "../events/event-types";
+import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
+import { OnPromotionModal } from "./modals/modal-promotion";
 import {
   promotionDescription,
   promotionRuleTypeConfigs,
@@ -16,12 +20,7 @@ import {
   promotionTermsOfUseCustomerLimit,
   promotionTermsOfUseExpireAt,
 } from "./promotions-service";
-import { EnumColumn } from "@/components/list/columns/enum-column";
-import { Selector } from "@/components/selector";
-import { Circle } from "@/components/circle";
-import { onActionLoad } from "@/utils/actions";
-import { api } from "../apis";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { PromotionEntity, PromotionStatus, PromotionType } from "./promotions-types";
 
 export const PromostionList = () => {
   return (

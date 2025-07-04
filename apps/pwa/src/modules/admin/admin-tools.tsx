@@ -18,6 +18,7 @@ import { TechIllustration } from "@/components/illustrations/tech";
 import { onError } from "@/utils/exceptions.utils";
 import { type FC } from "react";
 import { api } from "../apis";
+import { CustomerInput } from "../customers/components/customer-input";
 
 export const AdminTools: FC = () => {
   const workspace = useWorkspace();
@@ -27,6 +28,12 @@ export const AdminTools: FC = () => {
       <SessionTitle name="Admin Tools" icon={IconTools} />
       <Card shadow="xs">
         <Group>
+          <CustomerInput
+            onChange={(value) => {
+              console.log("value", value);
+            }}
+          />
+
           <Button onClick={() => api.post("/helpers/reset-redis")}>Reset Redis Cache</Button>
 
           <Button onClick={() => api.patch(`/loans/sync-all`)}>Sync All Loans</Button>

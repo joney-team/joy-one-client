@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "rm -rf .next && pnpm run:prepare && next dev --turbopack",
+    "dev:normal": "pnpm run:prepare && next dev",
     "dev:prod": "pnpm run:prepare && NEXT_PUBLIC_ENV=production next dev",
     "start": "next start",
     "build": "next build",

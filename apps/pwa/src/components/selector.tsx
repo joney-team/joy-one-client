@@ -1,12 +1,14 @@
 "use client";
 
-import { Fragment, type ReactNode, useMemo, useRef, useState } from "react";
 import { useLayout } from "@/layout/layout-context";
+import { api } from "@/modules/apis";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
+import { useList } from "@/utils/use-list.util";
 import {
+  Center,
   Combobox,
   ComboboxDropdownProps,
   ComboboxProps,
@@ -26,6 +28,7 @@ import {
 } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconBackground, IconPlus } from "@tabler/icons-react";
+import { Fragment, type ReactNode, useMemo, useRef, useState } from "react";
 
 type WithGroup = { _group?: string };
 type WithDisabled = { disabled?: boolean };
@@ -47,6 +50,8 @@ export type SelectorOnSearch<T extends SelectOption> = (value: string) => T[] | 
 
 export interface SelectorBaseProps<T extends SelectOption>
   extends Omit<InputWrapperProps, "value" | "onSelect" | "onChange"> {
+  listRoute?: string;
+  listParams?: Record<string, any>;
   value?: T;
   onSelect?: (value: T | undefined, ctx: ComboboxStore) => Promise<any> | any;
   onCreate?: (ctx: ComboboxStore) => void;
@@ -93,9 +98,25 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     autoCloseOnChange = true,
     comboboxProps,
     searchProps,
+    listRoute,
+    listParams,
     ...rest
   } = props;
 
+  const list = useList<T>({
+    isSkip: !listRoute || listRoute.length === 0,
+    id: `sopts${listRoute}${JSON.stringify(listParams)}`,
+    fetch: async (p) =>
+      api.get(listRoute!, {
+        params: {
+          sortLastInteractionAt: -1,
+          ...listParams,
+          ...p,
+        },
+      }),
+  });
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [searching, setSearching] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -177,6 +198,15 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     searchRef.current?.focus();
   };
 
+  const onScrollPositionChange = (pos: { x: number; y: number }) => {
+    if (!dropdownRef.current || !list.isAbleToLoadMore) return;
+    const scrollHeight = dropdownRef.current.scrollHeight;
+    const isNearBottom = pos.y >= scrollHeight - 400;
+    if (isNearBottom) {
+      list.loadMore();
+    }
+  };
+
   return (
     <InputWrapper
       {...rest}
@@ -202,7 +232,10 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
             props.onCreate?.(combobox);
             combobox.closeDropdown();
           } else {
-            const option = options.find((item) => getId(item) === val);
+            const option =
+              options.find((item) => getId(item) === val) ||
+              list.data.find((item) => getId(item) === val);
+
             await props.onSelect?.(option, combobox);
             if (autoCloseOnChange) combobox.closeDropdown();
           }
@@ -253,7 +286,13 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
           )}
 
           <Combobox.Options>
-            <ScrollArea.Autosize w="100%" type="scroll" mah={Math.min(400, layout.height * 0.4)}>
+            <ScrollArea.Autosize
+              w="100%"
+              type="scroll"
+              mah={Math.min(400, layout.height * 0.4)}
+              viewportRef={dropdownRef}
+              onScrollPositionChange={onScrollPositionChange}
+            >
               {options.length > 0 ? (
                 <Fragment>
                   {options.filter((v) => !getGroup(v)).map((item) => props.renderOption(item))}
@@ -272,7 +311,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                 </Fragment>
               ) : (
                 <Fragment>
-                  {!searching && (
+                  {!searching && !listRoute && (
                     <Combobox.Empty>
                       <Group gap={0} justify="center" flex={1}>
                         <ThemeIcon variant="transparent" color="gray.5">
@@ -284,6 +323,15 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                       </Group>
                     </Combobox.Empty>
                   )}
+                </Fragment>
+              )}
+
+              {list.isHasData && options.length === 0 && (
+                <Fragment>
+                  {list.data.map((item) => props.renderOption(item))}
+                  <Center opacity={list.isFetching ? 1 : 0}>
+                    <Loader size={14} type="dots" color="gray" />
+                  </Center>
                 </Fragment>
               )}
 

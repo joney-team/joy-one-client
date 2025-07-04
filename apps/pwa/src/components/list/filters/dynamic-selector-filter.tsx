@@ -18,6 +18,8 @@ export interface DynamicSelectorFilterOption {
 export interface DynamicSelectorFilterConfig {
   multiple?: boolean;
   dropdownProps?: ComboboxDropdownProps;
+  listRoute?: string;
+  listParams?: Record<string, any>;
   getOptions: (ids: string[]) => Promise<DynamicSelectorFilterOption[]>;
   getInitialOptions?: () => Promise<DynamicSelectorFilterOption[]>;
   initOptions?: DynamicSelectorFilterOption[];
@@ -67,6 +69,8 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
   return (
     <Selector
       key={colKey}
+      listRoute={config.listRoute}
+      listParams={config.listParams}
       autoCloseOnChange={!multiple}
       initOptions={options.map((v) => ({
         id: v.value,

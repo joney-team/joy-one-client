@@ -84,7 +84,7 @@ export const useList = <T = any>(args: UseListArgs<T>): UseList<T> => {
   const controller = useRef(new AbortController());
   const workspace = useWorkspace();
 
-  const isReadyToFetch = typeof args.isSkip === 'boolean' ? args.isSkip : true;
+  const isReadyToFetch = typeof args.isSkip === 'boolean' ? !args.isSkip : true;
   const listKey = args.id ? args.id.replace(/-/g, '') : undefined;
   const cacheId = listKey ? `${listKey}-${getWorkspaceId()}` : undefined;
   const cachedData = cacheId ? dataCached[cacheId] : undefined;

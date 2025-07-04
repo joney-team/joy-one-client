@@ -44,6 +44,7 @@ export function CustomerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
     filter: {
       dynamicSelector: {
         ...args?.filter,
+        listRoute: "/customers",
         multiple: true,
         getInitialOptions: async () => {
           const options = await getCustomers({
