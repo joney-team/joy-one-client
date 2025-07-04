@@ -27,7 +27,7 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
     route: "/tags",
     params: {
       limit: 9,
-      sort: "lastInteractionAtDesc",
+      sortLastInteractionAt: -1,
       type: props.type,
     },
   });

@@ -31,7 +31,7 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
     route: "/products",
     params: {
       limit: 9,
-      sort: "lastInteractionAtDesc",
+      sortLastInteractionAt: -1,
       type: props.type,
     },
   });

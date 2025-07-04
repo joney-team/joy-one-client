@@ -24,7 +24,7 @@ export const OrderTableProducts: FC<OrderTableProps> = () => {
     id: "order-table-products",
     fetch: (params) =>
       getProducts({
-        sort: "lastInteractionAtDesc",
+        sortLastInteractionAt: -1,
         ...filter,
         ...params,
       }),

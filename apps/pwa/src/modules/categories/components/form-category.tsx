@@ -112,6 +112,7 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
         <Select
           label={t("type")}
           {...form.getInputProps("type")}
+          readOnly={!!props.type}
           data={Object.values(CategoryType).map((type) => ({
             label: t(`category_type_${type}`),
             value: type,

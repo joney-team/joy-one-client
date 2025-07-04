@@ -19,7 +19,7 @@ export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
     route: "/customers",
     params: {
       limit: 9,
-      sort: "lastInteractionAtDesc",
+      sortLastInteractionAt: -1,
     },
   });
 

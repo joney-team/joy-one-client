@@ -31,11 +31,12 @@ export function CustomerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
             <Text fz={16} fw={500}>
               {value?.name || t("guest")}
             </Text>
-            {value?.phone && workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
-              <Text fz={14} c="gray">
-                {value.phone}
-              </Text>
-            )}
+            {value?.phone &&
+              workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
+                <Text fz={14} c="gray">
+                  {value.phone}
+                </Text>
+              )}
           </Stack>
         </Group>
       );
@@ -47,7 +48,7 @@ export function CustomerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
         getInitialOptions: async () => {
           const options = await getCustomers({
             limit: 5,
-            sort: "lastInteractionAt:desc",
+            sortLastInteractionAt: -1,
           });
 
           return options.data.map((v) => ({

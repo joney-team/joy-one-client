@@ -248,7 +248,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
                 onChange={(e) => form.setFieldValue("excerpt", e.target.value)}
               />
 
-              <CategoryInput type={CategoryType.POSTS} {...form.getInputProps("category")} />
+              <CategoryInput {...form.getInputProps("category")} />
 
               <ProductInput
                 flex={1}

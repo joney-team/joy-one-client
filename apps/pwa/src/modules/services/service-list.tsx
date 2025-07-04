@@ -1,17 +1,18 @@
 "use client";
 
-import { type FC } from "react";
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { EventType } from "@/modules/events/event-types";
 import { num } from "@/modules/lang/lang-service";
-import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductCard } from "@/modules/products/components/product-card";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Stack, Text } from "@mantine/core";
 import { IconCategory2, IconEdit } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { type FC } from "react";
+import { CategoryColumn } from "../categories/components/category-column";
 
 export const ServiceList: FC = () => {
   const router = useRouter();
@@ -38,6 +39,7 @@ export const ServiceList: FC = () => {
               );
             },
           },
+          categoryId: CategoryColumn(),
           unit: {
             w: 150,
           },

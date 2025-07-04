@@ -1,19 +1,19 @@
 import { Button } from "@/components/buttons/button";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
+import { api } from "@/modules/apis";
+import { useQuery } from "@/modules/apis/use-query";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
-import { interactTag } from "@/modules/tags/tags-service";
 import { AppEntity, ResponseList } from "@/types";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { CategoryEntity, CategoryType } from "../category-types";
 import { OnModalCategory } from "../modals/modal-category";
-import { useQuery } from "@/modules/apis/use-query";
 
 interface CategorySelectorProps
   extends Omit<SelectorProps<CategoryEntity>, "onSelect" | "onSearch" | "renderOption"> {
-  type: CategoryType;
+  type?: CategoryType;
   excludeIds?: string[];
   onSelect?: (value?: CategoryEntity) => void;
   render?: (ctx: SelectorContext<CategoryEntity>) => ReactNode;
@@ -29,7 +29,7 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
     route: "/categories",
     params: {
       limit: 9,
-      sort: "lastInteractionAtDesc",
+      sortLastInteractionAt: -1,
       type: props.type,
     },
   });
@@ -76,10 +76,10 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       }}
       onSelect={(e) => {
         if (!e) return;
-        interactTag(e._id);
+        api.patch(`/categories/${e._id}/interact`).catch(() => false);
         return props.onSelect?.(e);
       }}
-      onCreate={createable ? () => OnModalCategory({ onSuccess: props.onSelect }) : undefined}
+      onCreate={createable ? () => OnModalCategory({ onSuccess: props.onSelect, type }) : undefined}
     />
   );
 };

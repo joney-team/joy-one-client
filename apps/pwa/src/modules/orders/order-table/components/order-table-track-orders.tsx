@@ -32,7 +32,7 @@ export const OrderTableTrackOrders: FC<{ w: number }> = ({ w }) => {
     fetch: (params) =>
       getOrders({
         ...params,
-        sort: "createdAtDesc",
+        sortLastInteractionAt: -1,
         timeRangeCreatedAt: `${Period.DATE}-${DateTimeUtils.timeToSeconds()}`,
         getAll: true,
       }),

@@ -1,9 +1,9 @@
 import { ResponseList } from "@/types";
 import { Icon, IconBox, IconCategory2, IconGiftCard, IconPackage } from "@tabler/icons-react";
 import { api } from "../apis";
-import { ProductDto, ProductEntity, ProductType, ProductsQuery } from "./products-types";
+import { ProductDto, ProductEntity, ProductType } from "./products-types";
 
-export async function getProducts(query?: ProductsQuery): Promise<ResponseList<ProductEntity>> {
+export async function getProducts(query?: any): Promise<ResponseList<ProductEntity>> {
   return api.get<ResponseList<ProductEntity>>(`/products`, { params: query })
 }
 

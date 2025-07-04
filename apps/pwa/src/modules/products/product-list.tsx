@@ -1,17 +1,18 @@
 "use client";
 
-import { type FC } from "react";
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { useRouter } from "@/hooks/use-router";
 import { EventType } from "@/modules/events/event-types";
 import { num, t } from "@/modules/lang/lang-service";
-import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductCard } from "@/modules/products/components/product-card";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Badge, Stack, Text } from "@mantine/core";
 import { IconBox, IconBuildingWarehouse, IconEdit, IconEye } from "@tabler/icons-react";
+import { type FC } from "react";
+import { CategoryColumn } from "../categories/components/category-column";
 
 export const ProductList: FC = () => {
   const router = useRouter();
@@ -38,6 +39,7 @@ export const ProductList: FC = () => {
               );
             },
           },
+          categoryId: CategoryColumn(),
           stock: {
             w: 150,
             name: "product_stocks",

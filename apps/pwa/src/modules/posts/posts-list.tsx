@@ -3,16 +3,15 @@
 import { EntityImage } from "@/components/entity-image";
 import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { PrimaryColumn } from "@/components/list/columns/primary-column";
 import { useRouter } from "@/hooks/use-router";
 import { Stack } from "@mantine/core";
 import { IconNews } from "@tabler/icons-react";
 import { type FC } from "react";
+import { CategoryColumn } from "../categories/components/category-column";
 import { EventType } from "../events/event-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { PostEntity } from "./posts-types";
-import { PrimaryColumn } from "@/components/list/columns/primary-column";
-import { CategoryColumn } from "../categories/components/category-column";
-import { CategoryType } from "../categories/category-types";
 
 export const PostsList: FC = () => {
   const router = useRouter();
@@ -31,7 +30,7 @@ export const PostsList: FC = () => {
               return <EntityImage src={value} w={200} h={100} onlyRead />;
             },
           },
-          categoryId: CategoryColumn({ type: CategoryType.POSTS }),
+          categoryId: CategoryColumn(),
           excerpt: {},
           publishedAt: DateTimeColumn({ name: "publishedAt" }),
         }}

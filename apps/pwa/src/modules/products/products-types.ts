@@ -1,6 +1,5 @@
-import { BaseMongoEntity, Query } from "@/types";
-import { type ProductCategoryEntity } from "@/modules/product-categories/product-category-types";
 import { type ProductStock } from "@/modules/product-stocks/product-stocks-types";
+import { BaseMongoEntity, Query } from "@/types";
 
 export enum ProductType {
   PRODUCT = 'PRODUCT',
@@ -39,7 +38,7 @@ export interface ProductDto {
 }
 
 export interface ProductEntityBindData {
-  category: ProductCategoryEntity;
+  category: ProductEntity;
   combos: { productId: string; product: ProductEntity; quantity: number }[];
   voucherExcludeProducts: ProductEntity[];
   voucherIncludeProducts: ProductEntity[];

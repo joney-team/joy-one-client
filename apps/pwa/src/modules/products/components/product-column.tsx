@@ -45,7 +45,7 @@ export const ProductColumn = (args?: ProductColumnArgs): Column => {
           const options = await getProducts({
             limit: 5,
             type: args?.type,
-            sort: "sortLastInteractionAt:-1",
+            sortLastInteractionAt: -1,
           });
 
           return options.data.map((v) => ({

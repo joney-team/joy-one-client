@@ -21,7 +21,7 @@ export const TaskTagFolderSelector: FC<TaskTagFolderSelectorProps> = (props) => 
   const onInitOptions = async () => {
     const folders = await getTags({
       limit: 5,
-      sort: "updatedAtDesc",
+      sortLastInteractionAt: -1,
       type: TagType.TASK_FOLDER,
     }).then((res) => res.data.map((tag) => ({ ...tag, _group: t("recently") })));
 

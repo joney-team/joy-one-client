@@ -16,7 +16,7 @@ export function CategoryColumn<T = any>(args?: CategoryColumnArgs<T>): Column {
     route: "/categories",
     params: {
       limit: 9,
-      sort: "lastInteractionAt:desc",
+      sortLastInteractionAt: -1,
       type: args?.type,
     },
   });

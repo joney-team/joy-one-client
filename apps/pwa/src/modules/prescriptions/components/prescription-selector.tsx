@@ -22,7 +22,7 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
     route: "/prescriptions",
     params: {
       limit: 9,
-      sort: "lastInteractionAtDesc",
+      sortLastInteractionAt: -1,
     },
   });
 
