@@ -1,12 +1,16 @@
-import { configs } from "@/configs/layout.config";
-import { FileCard } from "@/modules/files/file-card";
+"use client";
+
 import { Button } from "@/components/buttons/button";
-import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Circle } from "@/components/circle";
 import { ModalTitle } from "@/components/modal-title";
+import { WayPoint } from "@/components/way-point";
+import { configs } from "@/configs/layout.config";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { FileCard } from "@/modules/files/file-card";
 import { FileEntity, FileType } from "@/modules/files/file-types";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { num, t } from "@/modules/lang/lang-service";
+import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useList } from "@/utils/use-list.util";
 import { Box, Card, em, Group, Modal, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
@@ -14,8 +18,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconPhotoSquareRounded, IconUpload } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
 import { getFiles, getMineTypeAccept, onUploadFile } from "../file-service";
-import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { num, t } from "@/modules/lang/lang-service";
 
 interface ModalFilesState {
   fileTypes?: FileType[];
@@ -23,7 +25,7 @@ interface ModalFilesState {
   onSelectedFiles: (files: FileEntity[]) => void;
 }
 
-export let OnFileModal: (state: ModalFilesState) => void = () => {};
+export let OnModalFiles: (state: ModalFilesState) => void = () => {};
 
 export const ModalFiles: FC = () => {
   const viewport = useLayout();
@@ -39,14 +41,15 @@ export const ModalFiles: FC = () => {
     .map((v) => files.data.find((f) => f._id === v))
     .filter((v) => !!v) as FileEntity[];
 
-  OnFileModal = (s) => {
+  OnModalFiles = (s) => {
     state.current = s;
     setSelectedFiles([]);
     open();
   };
 
   const toggleSeleteFile = (file: FileEntity) => {
-    if (!state.current || (state.current.fileTypes && !state.current.fileTypes.includes(file.type))) return;
+    if (!state.current || (state.current.fileTypes && !state.current.fileTypes.includes(file.type)))
+      return;
 
     if (_selectedFiles?.includes(file._id)) {
       // Un select file
@@ -58,7 +61,8 @@ export const ModalFiles: FC = () => {
         return close();
       }
 
-      if (state.current.length && _selectedFiles.length >= state.current.length) return setSelectedFiles([file._id]);
+      if (state.current.length && _selectedFiles.length >= state.current.length)
+        return setSelectedFiles([file._id]);
       setSelectedFiles((s) => [...s, file._id]);
     }
   };
@@ -88,34 +92,41 @@ export const ModalFiles: FC = () => {
         <Box
           style={{ overflow: "auto", height: viewport.height - 250, borderRadius: 10 }}
           bg={configs.backgroundColors[colorScheme]}
-          p={10}
+          id="files-list"
         >
-          <SimpleGrid cols={viewport.view === "mobile" ? 2 : viewport.view === "tablet" ? 4 : 6}>
-            {files.data.map((file, index) => {
-              return (
-                <FileCard
-                  file={file}
-                  key={file._id}
-                  isActive={_selectedFiles.includes(file._id)}
-                  onClick={() => toggleSeleteFile(file)}
-                  disabled={
-                    state.current?.fileTypes &&
-                    state.current?.fileTypes?.length > 0 &&
-                    !state.current.fileTypes.includes(file.type)
-                  }
-                  onDoubleClick={() =>
-                    OnModalFileGallery({
-                      files: files.data,
-                      index,
-                      onRemoved: () => files.fetch(true, { isSilient: true }),
-                    })
-                  }
-                />
-              );
-            })}
-          </SimpleGrid>
+          <Stack gap={0} p={16}>
+            <SimpleGrid cols={viewport.view === "mobile" ? 2 : viewport.view === "tablet" ? 4 : 6}>
+              {files.data.map((file, index) => {
+                return (
+                  <FileCard
+                    file={file}
+                    key={file._id}
+                    isActive={_selectedFiles.includes(file._id)}
+                    onClick={() => toggleSeleteFile(file)}
+                    disabled={
+                      state.current?.fileTypes &&
+                      state.current?.fileTypes?.length > 0 &&
+                      !state.current.fileTypes.includes(file.type)
+                    }
+                    onDoubleClick={() =>
+                      OnModalFileGallery({
+                        files: files.data,
+                        index,
+                        onRemoved: () => files.fetch(true, { isSilient: true }),
+                      })
+                    }
+                  />
+                );
+              })}
+            </SimpleGrid>
 
-          <ButtonViewMore mt={16} mb={16} visible={files.isAbleToLoadMore} onClick={() => files.fetch()} />
+            <WayPoint
+              enabled={files.isAbleToLoadMore}
+              scrollContainerId="files-list"
+              offset={100}
+              onReached={files.loadMore}
+            />
+          </Stack>
         </Box>
 
         <Group justify="space-between">
@@ -151,7 +162,9 @@ export const ModalFiles: FC = () => {
           >
             <Group>
               {t("complete")}
-              {selectedFiles.length > 0 && <Circle color="white" c="primary" label={num(selectedFiles.length)} />}
+              {selectedFiles.length > 0 && (
+                <Circle color="white" c="primary" label={num(selectedFiles.length)} />
+              )}
             </Group>
           </Button>
         </Group>

@@ -39,6 +39,7 @@ export interface CustomFieldEntity extends BaseMongoEntity {
   config?: any;
   description?: string;
   placeholder?: string;
+  order: number;
   workspaceId: string;
   entities: AppEntity[];
 }

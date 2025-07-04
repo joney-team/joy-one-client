@@ -70,10 +70,13 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
         radius={props.radius || 10}
         style={{ cursor: "pointer", position: "relative" }}
         onClick={() => {
-          if (disabled)
-            return OnModalFileGallery({
+          if (disabled) {
+            OnModalFileGallery({
               files: [{ url: src, fileName: props.name || "image", type: FileType.PHOTO }],
             });
+            return;
+          }
+
           openRef.current?.();
         }}
         withBorder

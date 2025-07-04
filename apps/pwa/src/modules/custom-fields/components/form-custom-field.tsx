@@ -6,7 +6,15 @@ import { Form } from "@/components/form";
 import { api } from "@/modules/apis";
 import { t } from "@/modules/lang/lang-service";
 import { onError, onFormError } from "@/utils/exceptions.utils";
-import { Center, MultiSelect, Select, Stack, Textarea, TextInput } from "@mantine/core";
+import {
+  Center,
+  MultiSelect,
+  NumberInput,
+  Select,
+  Stack,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, type FC } from "react";
 import { CustomFieldEntity, CustomFieldType } from "../custom-field-types";
@@ -32,6 +40,7 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
     entities: AppEntity[];
     config?: any;
     key?: string;
+    order: number;
   }>({
     initialValues: {
       label: customField?.label || "",
@@ -41,6 +50,7 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
       entities: props.customField?.entities || [],
       config: props.customField?.config || {},
       key: props.customField?.key || "",
+      order: props.customField?.order || 0,
     },
     validate: {
       label: (value) => {
@@ -120,6 +130,8 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
             value: entity,
           }))}
         />
+
+        <NumberInput label={t("sort_order")} {...form.getInputProps("order")} />
 
         <Center>
           <Button loading={form.submitting} type="submit">

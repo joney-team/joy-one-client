@@ -1,8 +1,10 @@
 import { useQuery } from "@/modules/apis/use-query";
 import { EventType } from "@/modules/events/event-types";
+import { t } from "@/modules/lang/lang-service";
 import { AppEntity, ResponseList } from "@/types";
+import { Card, InputWrapper, SimpleGrid, Switch } from "@mantine/core";
 import { FC, Fragment } from "react";
-import { CustomField, CustomFieldEntity } from "../custom-field-types";
+import { CustomField, CustomFieldEntity, CustomFieldType } from "../custom-field-types";
 import { customFieldInputs } from "../inputs/_index";
 
 export interface CustomFieldInputProps {
@@ -43,9 +45,13 @@ export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
     };
   });
 
+  const sortedCustomFields = customFields.data?.data?.sort((a, b) => b.order - a.order) || [];
+  const commonCustomFields = sortedCustomFields.filter((v) => v.type !== CustomFieldType.SWITCH);
+  const switchCustomFields = sortedCustomFields.filter((v) => v.type === CustomFieldType.SWITCH);
+
   return (
     <Fragment>
-      {customFields.data?.data?.map((customField) => {
+      {commonCustomFields.map((customField) => {
         const Input = customFieldInputs[customField.type];
         const customFieldValue = values.find((v) => v.customFieldId === customField._id);
 
@@ -70,6 +76,39 @@ export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
           />
         );
       })}
+
+      {switchCustomFields.length > 0 && (
+        <InputWrapper label={t("switch_custom_fields")}>
+          <Card shadow="none" withBorder p={12}>
+            <SimpleGrid>
+              {switchCustomFields.map((customField) => {
+                const Input = customFieldInputs[customField.type];
+                const customFieldValue = values.find((v) => v.customFieldId === customField._id);
+
+                if (!Input) {
+                  return null;
+                }
+
+                return (
+                  <Switch
+                    label={customField.label}
+                    checked={customFieldValue?.value}
+                    onChange={(event) => {
+                      props.onChange(
+                        values.map((v) =>
+                          v.customFieldId === customField._id
+                            ? { ...v, value: event.target.checked }
+                            : v
+                        )
+                      );
+                    }}
+                  />
+                );
+              })}
+            </SimpleGrid>
+          </Card>
+        </InputWrapper>
+      )}
     </Fragment>
   );
 };

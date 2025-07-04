@@ -3,10 +3,10 @@
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor";
-import { EntityImage } from "@/components/entity-image";
+import { ImageInput } from "@/components/inputs/image-input";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
-import { CategoryEntity, CategoryType } from "@/modules/categories/category-types";
+import { CategoryEntity } from "@/modules/categories/category-types";
 import { CategoryInput } from "@/modules/categories/components/category-input";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 import { CustomField, CustomFieldValue } from "@/modules/custom-fields/custom-field-types";
@@ -33,7 +33,6 @@ import { IconCheck, IconEye } from "@tabler/icons-react";
 import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
 import { api } from "../../apis";
-import { onUploadFile } from "../../files/file-service";
 import { renderDateTime, t } from "../../lang/lang-service";
 import { PostEntity } from "../posts-types";
 
@@ -49,7 +48,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
     excerpt: string;
     content?: JSONContent | null;
     contentHtml?: string;
-    thumbnail?: File;
+    thumbnail?: string;
     category?: CategoryEntity | null;
     customFields?: CustomField[];
     product: ProductValue | null;
@@ -78,7 +77,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      const { thumbnail, category, customFields, product, ...dto } = values;
+      const { category, customFields, product, ...dto } = values;
 
       const customFieldValues: CustomFieldValue[] =
         customFields?.map((customField) => ({
@@ -86,16 +85,11 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
           value: customField.value,
         })) || [];
 
-      const thumbnailFile = values.thumbnail
-        ? await onUploadFile({ file: values.thumbnail })
-        : undefined;
-
       let _post: PostEntity | undefined = post;
 
       const payload = {
         ...dto,
         customFieldValues,
-        thumbnail: thumbnailFile?.relativePath || post?.thumbnail,
         categoryId: category?._id || null,
         productId: product?._id || null,
       };
@@ -233,10 +227,10 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               <TextInput label="Slug" {...form.getInputProps("slug")} />
 
               <InputWrapper label={t("post_thumbnail")}>
-                <EntityImage
-                  src={form.values.thumbnail || post?.thumbnail}
+                <ImageInput
+                  value={form.values.thumbnail || post?.thumbnail}
                   onChange={(value) => form.setFieldValue("thumbnail", value)}
-                  w={300}
+                  w="100%"
                   h={200}
                 />
               </InputWrapper>

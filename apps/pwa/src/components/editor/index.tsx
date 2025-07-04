@@ -12,7 +12,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { onUploadFile } from "@/modules/files/file-service";
 import { FileType, UploadFileOptions } from "@/modules/files/file-types";
 import { renderLink } from "@/modules/files/files-utils";
-import { OnFileModal } from "@/modules/files/modals/modal-files";
+import { OnModalFiles } from "@/modules/files/modals/modal-files";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { alpha, Box, Group, Loader, Text, ThemeIcon } from "@mantine/core";
@@ -51,7 +51,7 @@ function InsertImageControl() {
   return (
     <RichTextEditor.Control
       onClick={() => {
-        OnFileModal({
+        OnModalFiles({
           fileTypes: [FileType.PHOTO],
           onSelectedFiles: (files) => {
             files.forEach((file) => {

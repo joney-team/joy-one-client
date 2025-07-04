@@ -1,6 +1,6 @@
-import { Box } from '@mantine/core';
-import { useThrottledCallback } from '@mantine/hooks';
-import { FC, useEffect, useRef } from 'react';
+import { Box } from "@mantine/core";
+import { useThrottledCallback } from "@mantine/hooks";
+import { FC, useEffect, useRef } from "react";
 
 interface WayPointProps {
   onReached?: () => void;
@@ -13,9 +13,9 @@ interface WayPointProps {
 
 export const WayPoint: FC<WayPointProps> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
-  const enabled = typeof props.enabled === 'boolean' ? props.enabled : true;
-  const offset = typeof props.offset === 'number' ? props.offset : 0;
-  const throttle = typeof props.throttle === 'number' ? props.throttle : 1000;
+  const enabled = typeof props.enabled === "boolean" ? props.enabled : true;
+  const offset = typeof props.offset === "number" ? props.offset : 0;
+  const throttle = typeof props.throttle === "number" ? props.throttle : 1000;
 
   const onReached = useThrottledCallback(() => {
     props.onReached?.();
@@ -23,31 +23,38 @@ export const WayPoint: FC<WayPointProps> = (props) => {
 
   useEffect(() => {
     if (enabled) {
-      setTimeout(() => {
-        const scrollContainer = props.scrollContainerRef ? props.scrollContainerRef : props.scrollContainerId ? document.getElementById(props.scrollContainerId) || window : window;
+      const scrollContainer = props.scrollContainerRef
+        ? props.scrollContainerRef
+        : props.scrollContainerId
+        ? document.getElementById(props.scrollContainerId) || window
+        : window;
 
-        const handleScroll = () => {
-          const innerHeight = scrollContainer instanceof Window ? window.innerHeight : (scrollContainer as HTMLElement).clientHeight;
-
-          // Detect when element visible on screen
+      const handleScroll = () => {
+        if (scrollContainer instanceof Window) {
           const rect = ref.current?.getBoundingClientRect();
-          if (rect && rect.top < innerHeight + offset) {
-            onReached?.();
-          }
+          const isReached = rect && rect.top < window.innerHeight + offset;
+          if (isReached) onReached?.();
+          return;
         }
 
-        scrollContainer.addEventListener('scroll', handleScroll);
+        const container = scrollContainer as HTMLElement;
+        const isReached =
+          container.scrollTop >= container.scrollHeight - container.clientHeight - offset;
 
-        return () => {
-          scrollContainer.removeEventListener('scroll', handleScroll);
-        }
+        if (isReached) onReached?.();
+      };
+
+      setTimeout(() => {
+        scrollContainer.addEventListener("scroll", handleScroll);
       }, 300);
+
+      return () => {
+        scrollContainer.removeEventListener("scroll", handleScroll);
+      };
     }
-  }, [enabled, props.scrollContainerRef, props.scrollContainerId])
+  }, [enabled, props.scrollContainerRef, props.scrollContainerId]);
 
   if (!enabled) return null;
 
-  return (
-    <Box ref={ref} w="100%" h={0} />
-  )
-}
+  return <Box ref={ref} w="100%" h={0} />;
+};
