@@ -50,7 +50,7 @@ export function List<T = any>(props: ListProps<T>) {
   const list = useList<T>({
     id: props.id,
     limit: props.limit,
-    isSkip: isInitialized,
+    isSkip: !isInitialized,
     fetch: (p, controller) => {
       let params = { ...p };
 

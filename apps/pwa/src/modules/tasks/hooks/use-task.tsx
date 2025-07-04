@@ -50,7 +50,9 @@ export const useTask = (id: string, initTask?: TaskEntity, isSkipLoadSubTasks = 
   const [task, setTask] = useState<TaskEntity | null>(initTask || taskEntities[id] || null);
   const color = useColor();
 
-  const currentStatusIndex = workspace.settings.taskStatuses.findIndex((v) => v.id === task?.status);
+  const currentStatusIndex = workspace.settings.taskStatuses.findIndex(
+    (v) => v.id === task?.status
+  );
   const isAbleToNextStatus = currentStatusIndex < workspace.settings.taskStatuses.length - 1;
 
   const onUpdate = (_task: TaskEntity) => {
@@ -94,17 +96,23 @@ export const useTask = (id: string, initTask?: TaskEntity, isSkipLoadSubTasks = 
     if (!taskEntities[id]) getTask(id).then(setTask);
   }, [id]);
 
-  const tagFolder = tags.list.find((v) => v.type === TagType.TASK_FOLDER && v._id === task?.tagFolderId);
+  const tagFolder = tags.list.find(
+    (v) => v.type === TagType.TASK_FOLDER && v._id === task?.tagFolderId
+  );
   const themeColor = color(tagFolder?.color || "primary");
   const isOutdated =
-    !!task?.dueDate && task.dueDate < DateTimeUtils.timeToSeconds() && task.status !== DefaultTaskStatusId.CLOSED;
+    !!task?.dueDate &&
+    task.dueDate < DateTimeUtils.timeToSeconds() &&
+    task.status !== DefaultTaskStatusId.CLOSED;
 
   const nextStatus = async () => {
     if (!task) return;
     const currentIndex = workspace.settings.taskStatuses.findIndex((v) => v.id === task.status);
     const nextIndex = currentIndex + 1;
     if (nextIndex >= workspace.settings.taskStatuses.length) return;
-    updateTasks([{ ...task, status: workspace.settings.taskStatuses[nextIndex].id }]).catch(onError);
+    updateTasks([{ ...task, status: workspace.settings.taskStatuses[nextIndex].id }]).catch(
+      onError
+    );
   };
 
   const toggleSelect = (isShiftKey?: boolean) => {
@@ -114,7 +122,9 @@ export const useTask = (id: string, initTask?: TaskEntity, isSkipLoadSubTasks = 
 
   const isSelected = !!task && tasks.selectedTaskIds.includes(task._id);
   const isAbleToSelect =
-    !!task && !task.isArchived && tasks.selectedTaskIds.every((v) => getTaskEntity(v)?.parentId === task.parentId);
+    !!task &&
+    !task.isArchived &&
+    tasks.selectedTaskIds.every((v) => getTaskEntity(v)?.parentId === task.parentId);
 
   const taskTags = tags.list.filter((v) => (task?.tagIds || []).includes(v._id));
 

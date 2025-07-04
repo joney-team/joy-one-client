@@ -136,7 +136,14 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     },
   });
 
-  const _initOptions = propsInitOptions || initOptions;
+  const _initOptions = list.isHasData
+    ? list.data.map((v) => ({
+        ...v,
+        label: "name" in v ? v.name : getId(v),
+        value: getId(v),
+        data: v,
+      }))
+    : propsInitOptions || initOptions;
 
   const options = useMemo(() => {
     let opts = (
@@ -326,14 +333,9 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                 </Fragment>
               )}
 
-              {list.isHasData && options.length === 0 && (
-                <Fragment>
-                  {list.data.map((item) => props.renderOption(item))}
-                  <Center opacity={list.isFetching ? 1 : 0}>
-                    <Loader size={14} type="dots" color="gray" />
-                  </Center>
-                </Fragment>
-              )}
+              <Center opacity={list.isFetching ? 1 : 0}>
+                <Loader size={14} type="dots" color="gray" />
+              </Center>
 
               {!!props.onCreate && (
                 <Fragment>

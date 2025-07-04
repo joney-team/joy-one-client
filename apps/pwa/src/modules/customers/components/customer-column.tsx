@@ -1,14 +1,14 @@
+import { Avatar } from "@/components/avatar";
 import { Column } from "@/components/list/types";
+import { useRouter } from "@/hooks/use-router";
+import { AppEntity } from "@/types";
 import { Group, Stack, Text } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
-import { useWorkspace } from "../../workspaces/workspace-context";
-import { useRouter } from "@/hooks/use-router";
-import { Avatar } from "@/components/avatar";
-import { WorkspacePermission } from "../../workspace-roles/workspace-roles-types";
 import { t } from "../../lang/lang-service";
-import { getCustomerByIds, getCustomers } from "../customer-service";
 import { searchEntity } from "../../search/search-service";
-import { AppEntity } from "@/types";
+import { WorkspacePermission } from "../../workspace-roles/workspace-roles-types";
+import { useWorkspace } from "../../workspaces/workspace-context";
+import { getCustomerByIds } from "../customer-service";
 
 export interface CustomerColumnArgs<Data = any> extends Omit<Column<Data>, "render"> {}
 
@@ -46,18 +46,6 @@ export function CustomerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
         ...args?.filter,
         listRoute: "/customers",
         multiple: true,
-        getInitialOptions: async () => {
-          const options = await getCustomers({
-            limit: 5,
-            sortLastInteractionAt: -1,
-          });
-
-          return options.data.map((v) => ({
-            label: v.name,
-            value: v._id,
-            data: v,
-          }));
-        },
         getOptions: async (ids: string[]) => {
           const options = await getCustomerByIds(ids);
           return options.map((v) => ({
