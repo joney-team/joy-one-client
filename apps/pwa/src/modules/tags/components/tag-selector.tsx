@@ -38,7 +38,7 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
       onOpen={props.onOpen}
       onClose={props.onClose}
       excludeIds={props.excludeIds}
-      initOptions={initOptions.data?.data?.map((tag) => ({ ...tag, _group: t("recently") }))}
+      pinnedOptions={initOptions.data?.data?.map((tag) => ({ ...tag, _group: t("recently") }))}
       autoCloseOnChange={false}
       onSearch={(q) => searchEntity<TagEntity>(AppEntity.TAGS, q, { type: props.type })}
       searchPlaceholder={`${t("search_with", {

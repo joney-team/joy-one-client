@@ -1,9 +1,11 @@
 "use client";
 
+import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useLayout } from "@/layout/layout-context";
 import { api } from "@/modules/apis";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { useList } from "@/utils/use-list.util";
@@ -55,14 +57,13 @@ export interface SelectorBaseProps<T extends SelectOption>
   value?: T;
   onSelect?: (value: T | undefined, ctx: ComboboxStore) => Promise<any> | any;
   onCreate?: (ctx: ComboboxStore) => void;
-  initOptions?: T[];
+  pinnedOptions?: T[];
   disabled?: boolean;
   searchPlaceholder?: string;
   onOpen?: () => void;
   onClose?: () => void;
   excludeIds?: string[];
   onSearch?: SelectorOnSearch<T>;
-  onInitOptions?: () => T[] | Promise<T[]>;
   staticSearch?: boolean;
   renderOption: SelectorRenderOption<T>;
   target: SelectorTarget<T>;
@@ -76,6 +77,9 @@ export interface SelectorProps<T extends SelectOption = any> extends SelectorBas
 
 export const getId = (item: SelectOption): string => ("id" in item ? item.id : item._id);
 
+export const getLabel = (item: any): string =>
+  "label" in item ? item.label : "name" in item ? item.name : getId(item);
+
 export const getGroup = (item: WithGroup): string | undefined => item._group;
 
 export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
@@ -83,14 +87,13 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     value,
     onSelect,
     onCreate,
-    initOptions: propsInitOptions,
+    pinnedOptions: propsPinnedOptions,
     disabled,
     searchPlaceholder,
     onOpen,
     onClose,
     excludeIds,
     onSearch,
-    onInitOptions,
     staticSearch,
     renderOption,
     target: renderTarget,
@@ -103,9 +106,11 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     ...rest
   } = props;
 
+  const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
+  const isListable = listRoute && listRoute.length > 0;
   const list = useList<T>({
-    isSkip: !listRoute || listRoute.length === 0,
-    id: `sopts${listRoute}${JSON.stringify(listParams)}`,
+    isSkip: !isListable,
+    id: `sopts${listRoute}${JSON.stringify(listParams)}${workspaceId}`,
     fetch: async (p) =>
       api.get(listRoute!, {
         params: {
@@ -123,8 +128,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
   const color = useColor();
   const layout = useLayout();
 
-  const [initOptions, setInitOptions] = useState<T[]>([]);
-  const [selectOptions, setSelectOptions] = useState<T[]>([]);
+  const [searchOptions, setSearchOptions] = useState<T[]>([]);
 
   const searchRef = useRef<HTMLInputElement>(null);
   const theme = useMantineTheme();
@@ -136,26 +140,38 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     },
   });
 
-  const _initOptions = list.isHasData
-    ? list.data.map((v) => ({
+  const options = useMemo(() => {
+    const listOptions = [...list.data].map((v) => ({
+      ...v,
+      label: getLabel(v),
+      value: getId(v),
+      data: v,
+    }));
+
+    const pinnedOptions = (propsPinnedOptions || [])
+      .filter((v) => !listOptions.find((v2) => getId(v) === getId(v2)))
+      .map((v) => ({
         ...v,
-        label: "name" in v ? v.name : getId(v),
+        label: getLabel(v),
         value: getId(v),
         data: v,
-      }))
-    : propsInitOptions || initOptions;
+      }));
 
-  const options = useMemo(() => {
-    let opts = (
-      selectOptions.length > 0 || !_initOptions || search.length > 0 ? selectOptions : _initOptions
-    ).filter((item) => (value ? getId(value) !== getId(item) : true));
+    const opts = (
+      searchOptions.length > 0 || search.length > 0
+        ? searchOptions
+        : [...pinnedOptions, ...listOptions]
+    )
+      .filter((item) => (value ? getId(value) !== getId(item) : true))
+      .filter((item) => {
+        if (excludeIds) {
+          return !excludeIds?.includes(getId(item));
+        }
+        return true;
+      });
 
-    if (excludeIds) {
-      opts = opts.filter((item) => !excludeIds?.includes(getId(item)));
-    }
-
-    return opts;
-  }, [selectOptions, _initOptions, search, value, excludeIds]);
+    return [...opts];
+  }, [searchOptions, search, value, excludeIds, propsPinnedOptions, list.data]);
 
   const groupOptions = options.reduce((acc, item) => {
     const group = getGroup(item);
@@ -169,7 +185,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
   const _onSearch = useDebouncedCallback(
     async (q?: string) => {
       if (!q || q.length < 0) {
-        setSelectOptions([]);
+        setSearchOptions([]);
         setSearching(false);
         return;
       }
@@ -177,7 +193,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
       try {
         setSearching(true);
         const res = await onSearch?.(q);
-        setSelectOptions(res || []);
+        setSearchOptions(res || []);
       } catch (error) {
         onError(error);
       } finally {
@@ -187,16 +203,9 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     props.staticSearch ? 0 : 300
   );
 
-  const _onInitOptions = useDebouncedCallback(async () => {
-    if (!onInitOptions) return;
-    const res = await onInitOptions();
-    setInitOptions(res || []);
-  }, 300);
-
   const _onOpen = async () => {
     if (props.disabled) return;
 
-    _onInitOptions();
     props.onOpen?.();
 
     combobox.openDropdown();
@@ -206,7 +215,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
   };
 
   const onScrollPositionChange = (pos: { x: number; y: number }) => {
-    if (!dropdownRef.current || !list.isAbleToLoadMore) return;
+    if (!dropdownRef.current || !list.isAbleToLoadMore || !isListable) return;
     const scrollHeight = dropdownRef.current.scrollHeight;
     const isNearBottom = pos.y >= scrollHeight - 400;
     if (isNearBottom) {
@@ -305,6 +314,8 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                   {options.filter((v) => !getGroup(v)).map((item) => props.renderOption(item))}
 
                   {Object.keys(groupOptions).map((group, i) => {
+                    if (groupOptions[group].length === 0) return null;
+
                     return (
                       <Combobox.Group
                         label={group}
@@ -333,9 +344,11 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                 </Fragment>
               )}
 
-              <Center opacity={list.isFetching ? 1 : 0}>
-                <Loader size={14} type="dots" color="gray" />
-              </Center>
+              {isListable && list.isFetching && (
+                <Center>
+                  <Loader size={14} type="dots" color="gray" />
+                </Center>
+              )}
 
               {!!props.onCreate && (
                 <Fragment>

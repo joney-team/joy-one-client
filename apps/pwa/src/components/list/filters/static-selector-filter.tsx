@@ -33,7 +33,7 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
     <Selector
       key={colKey}
       autoCloseOnChange={!multiple}
-      initOptions={config.options.map((v) => ({
+      pinnedOptions={config.options.map((v) => ({
         id: v.value,
         label: v.label,
         value: v.value,

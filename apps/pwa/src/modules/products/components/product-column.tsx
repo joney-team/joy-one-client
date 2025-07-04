@@ -1,13 +1,15 @@
+"use client";
+
+import { EntityImage } from "@/components/entity-image";
 import { Column } from "@/components/list/types";
+import { AppEntity } from "@/types";
 import { Anchor, Group, Stack, Text } from "@mantine/core";
 import { IconBox } from "@tabler/icons-react";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { ProductEntity, ProductType } from "../products-types";
-import { getProductByIds, getProductIcon, getProducts } from "../products-service";
-import { EntityImage } from "@/components/entity-image";
 import { searchEntity } from "../../search/search-service";
-import { AppEntity } from "@/types";
+import { getProductByIds, getProductIcon } from "../products-service";
+import { ProductEntity, ProductType } from "../products-types";
 
 export interface ProductColumnArgs extends Omit<Column, "render"> {
   extraInfos?: (value: ProductEntity) => ReactNode;
@@ -41,19 +43,8 @@ export const ProductColumn = (args?: ProductColumnArgs): Column => {
       dynamicSelector: {
         ...args?.filter,
         multiple: true,
-        getInitialOptions: async () => {
-          const options = await getProducts({
-            limit: 5,
-            type: args?.type,
-            sortLastInteractionAt: -1,
-          });
-
-          return options.data.map((v) => ({
-            label: v.name,
-            value: v._id,
-            data: v,
-          }));
-        },
+        listRoute: "/products",
+        listParams: args?.type ? { type: args?.type } : undefined,
         getOptions: async (ids: string[]) => {
           const options = await getProductByIds(ids);
           return options.map((v) => ({

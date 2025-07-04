@@ -287,7 +287,7 @@ export const BookingList: FC = () => {
                 />
 
                 <Selector
-                  initOptions={[
+                  pinnedOptions={[
                     {
                       id: "default",
                       label: t("active"),

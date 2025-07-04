@@ -21,8 +21,7 @@ export interface DynamicSelectorFilterConfig {
   listRoute?: string;
   listParams?: Record<string, any>;
   getOptions: (ids: string[]) => Promise<DynamicSelectorFilterOption[]>;
-  getInitialOptions?: () => Promise<DynamicSelectorFilterOption[]>;
-  initOptions?: DynamicSelectorFilterOption[];
+  pinnedOptions?: DynamicSelectorFilterOption[];
   search: (query: string) => Promise<DynamicSelectorFilterOption[]>;
   render?: FC<{ data: any; isSelected: boolean }>;
 }
@@ -35,20 +34,8 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
   config,
 }) => {
   const [_options, setOptions] = useState<DynamicSelectorFilterOption[]>([]);
-  const options = config.initOptions || _options;
+  const options = config.pinnedOptions || _options;
   const querySelectedOptions = list.query[colKey] ? `${list.query[colKey]}`.split(",") : [];
-
-  // Get initial options
-  useEffect(() => {
-    if (config.getInitialOptions) {
-      config
-        .getInitialOptions()
-        .then((v) =>
-          setOptions((s) => [...s.filter((sv) => !v.find((v2) => v2.value === sv.value)), ...v])
-        )
-        .catch(console.error);
-    }
-  }, [config.getInitialOptions]);
 
   // Get missing options
   useEffect(() => {
@@ -72,7 +59,7 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
       listRoute={config.listRoute}
       listParams={config.listParams}
       autoCloseOnChange={!multiple}
-      initOptions={options.map((v) => ({
+      pinnedOptions={options.map((v) => ({
         id: v.value,
         label: v.label,
         value: v.value,

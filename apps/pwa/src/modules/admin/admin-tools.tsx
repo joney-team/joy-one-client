@@ -19,6 +19,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { type FC } from "react";
 import { api } from "../apis";
 import { CustomerInput } from "../customers/components/customer-input";
+import { WorkspaceMemberSelector } from "../workspace-members/components/workspace-member-selector";
 
 export const AdminTools: FC = () => {
   const workspace = useWorkspace();
@@ -30,6 +31,12 @@ export const AdminTools: FC = () => {
         <Group>
           <CustomerInput
             onChange={(value) => {
+              console.log("value", value);
+            }}
+          />
+
+          <WorkspaceMemberSelector
+            onSelect={(value) => {
               console.log("value", value);
             }}
           />

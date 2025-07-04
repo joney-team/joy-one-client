@@ -1,13 +1,9 @@
-import { AppEntity } from "@/types";
 import { Avatar } from "@/components/avatar";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
-import {
-  getUserMemberRoleLabel,
-  getWorkspaceMemberList,
-} from "@/modules/workspace-members/workspace-members-service";
+import { getUserMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { AppEntity } from "@/types";
 import { ActionIcon, Combobox, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
@@ -38,19 +34,12 @@ export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props)
     ...rest
   } = props;
 
-  const workspace = useWorkspace();
-
   return (
-    <Selector
+    <Selector<WorkspaceMember>
       {...rest}
       autoCloseOnChange={false}
       excludeIds={props.excludeIds}
-      onInitOptions={() =>
-        getWorkspaceMemberList({ limit: 5 }).then((res) => [
-          workspace.userMember,
-          ...res.data.filter((v) => v._id !== workspace.userMember._id),
-        ])
-      }
+      listRoute="/workspace-members"
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

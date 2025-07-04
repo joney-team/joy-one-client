@@ -1,14 +1,14 @@
 import { Button } from "@/components/buttons/button";
 import { t } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
+import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceRoleEntity } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Checkbox, Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "../../../components/selector";
-import { useColor } from "@/modules/theme/use-color";
 import { Circle } from "../../../components/circle";
+import { Selector, SelectorContext } from "../../../components/selector";
 
 type WorkspaceRoleOption = Pick<WorkspaceRoleEntity, "_id" | "name" | "color">;
 
@@ -25,11 +25,11 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
   const color = useColor();
 
   return (
-    <Selector
+    <Selector<WorkspaceRoleOption>
       disabled={props.disabled}
       autoCloseOnChange={false}
       staticSearch
-      onInitOptions={() => options}
+      pinnedOptions={options}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

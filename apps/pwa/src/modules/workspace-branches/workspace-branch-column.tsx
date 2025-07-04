@@ -1,16 +1,21 @@
+"use client";
+
+import { Hovered } from "@/components/hovered";
+import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-selector-filter";
 import { Column } from "@/components/list/types";
+import { AppEntity } from "@/types";
 import { ActionIcon, Group, Text } from "@mantine/core";
 import { IconBuildingSkyscraper, IconFileExport } from "@tabler/icons-react";
-import { useWorkspace } from "../workspaces/workspace-context";
-import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-selector-filter";
 import { t } from "../lang/lang-service";
-import { Hovered } from "@/components/hovered";
-import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
-import { getWorkspaceBranchByIds, getWorkspaceBranches } from "./workspace-branches-service";
 import { searchEntity } from "../search/search-service";
-import { AppEntity } from "@/types";
+import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
+import { useWorkspace } from "../workspaces/workspace-context";
+import { getWorkspaceBranchByIds } from "./workspace-branches-service";
 
-export const WorkspaceBranchColumn = (args?: { onChange?: (data: any) => void; w?: number }): Column => {
+export const WorkspaceBranchColumn = (args?: {
+  onChange?: (data: any) => void;
+  w?: number;
+}): Column => {
   const workspace = useWorkspace();
 
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
@@ -37,7 +42,9 @@ export const WorkspaceBranchColumn = (args?: { onChange?: (data: any) => void; w
                   args.onChange(data);
                 }}
               >
-                <Text>{data.workspaceBranch ? data.workspaceBranch.name : t("main_workspace_branch")}</Text>
+                <Text>
+                  {data.workspaceBranch ? data.workspaceBranch.name : t("main_workspace_branch")}
+                </Text>
                 <ActionIcon variant="subtle" color="gray" opacity={hover.hovered ? 1 : 0}>
                   <IconFileExport size={16} />
                 </ActionIcon>
@@ -65,10 +72,7 @@ export const WorkspaceBranchColumn = (args?: { onChange?: (data: any) => void; w
                 const options = await searchEntity(AppEntity.WORKSPACE_BRANCHES, q);
                 return bindOptions(options.map((v) => ({ label: v.name, value: v._id, data: v })));
               },
-              getInitialOptions: async () => {
-                const options = await getWorkspaceBranches({ limit: 5 });
-                return bindOptions(options.data.map((v) => ({ label: v.name, value: v._id, data: v })));
-              },
+              listRoute: "/workspace-branches",
             },
           }
         : workspace.userMember.workspaceBranches.length > 1

@@ -1,26 +1,18 @@
+"use client";
+
 import { Column } from "@/components/list/types";
-import { useQuery } from "@/modules/apis/use-query";
 import { getCustomerByIds } from "@/modules/customers/customer-service";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
-import { AppEntity, ResponseList } from "@/types";
+import { AppEntity } from "@/types";
 import { IconCategory } from "@tabler/icons-react";
-import { CategoryEntity, CategoryType } from "../category-types";
+import { CategoryType } from "../category-types";
 
 export interface CategoryColumnArgs<Data = any> extends Omit<Column<Data>, "render"> {
   type?: CategoryType;
 }
 
 export function CategoryColumn<T = any>(args?: CategoryColumnArgs<T>): Column {
-  const categoryInitOptions = useQuery<ResponseList<CategoryEntity>>({
-    route: "/categories",
-    params: {
-      limit: 9,
-      sortLastInteractionAt: -1,
-      type: args?.type,
-    },
-  });
-
   return {
     icon: IconCategory,
     name: args?.name || "category",
@@ -30,12 +22,12 @@ export function CategoryColumn<T = any>(args?: CategoryColumnArgs<T>): Column {
       dynamicSelector: {
         ...args?.filter,
         multiple: true,
-        initOptions:
-          categoryInitOptions.data?.data.map((v) => ({
-            label: v.name,
-            value: v._id,
-            data: v,
-          })) || [],
+        listRoute: "/categories",
+        listParams: args?.type
+          ? {
+              type: args?.type,
+            }
+          : undefined,
         getOptions: async (ids: string[]) => {
           const options = await getCustomerByIds(ids);
           return options.map((v) => ({

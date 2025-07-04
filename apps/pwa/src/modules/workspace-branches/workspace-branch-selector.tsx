@@ -1,15 +1,16 @@
-import { AppEntity } from "@/types";
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { t } from "@/modules/lang/lang-service";
 import { searchArray, searchEntity } from "@/modules/search/search-service";
-import { getWorkspaceBranches } from "@/modules/workspace-branches/workspace-branches-service";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { AppEntity } from "@/types";
 import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../components/selector";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 
 type WorkspaceBranchOption = Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline">;
 
@@ -19,7 +20,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = (props)
   const workspace = useWorkspace();
 
   return (
-    <Selector
+    <Selector<WorkspaceBranchOption>
       {...props}
       staticSearch={
         !workspace.userMember.permissions.includes(
@@ -37,17 +38,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = (props)
 
         return searchArray(workspace.userMember.workspaceBranches, ["name"], q);
       }}
-      onInitOptions={() => {
-        if (
-          workspace.userMember.permissions.includes(
-            WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
-          )
-        ) {
-          return getWorkspaceBranches({ limit: 5 }).then((res) => res.data);
-        }
-
-        return workspace.userMember.workspaceBranches;
-      }}
+      listRoute="/workspace-branches"
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

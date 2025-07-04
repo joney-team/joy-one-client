@@ -82,10 +82,12 @@ export const PromostionList = () => {
                   <Selector
                     disabled={isEditable}
                     staticSearch
-                    initOptions={[PromotionStatus.ACTIVE, PromotionStatus.CLOSED].map((status) => ({
-                      id: status,
-                      label: t(promotionStatusConfigs[status].label),
-                    }))}
+                    pinnedOptions={[PromotionStatus.ACTIVE, PromotionStatus.CLOSED].map(
+                      (status) => ({
+                        id: status,
+                        label: t(promotionStatusConfigs[status].label),
+                      })
+                    )}
                     onSelect={(value) => {
                       onActionLoad({
                         process: () =>

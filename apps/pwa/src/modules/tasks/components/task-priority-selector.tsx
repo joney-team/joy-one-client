@@ -33,7 +33,7 @@ export const TaskPrioritySelector: FC<TaskPrioritySelectorProps> = (props) => {
   return (
     <Selector
       {...props.inputProps}
-      initOptions={Object.values(TaskPriority).map((priority) => ({ id: priority }))}
+      pinnedOptions={Object.values(TaskPriority).map((priority) => ({ id: priority }))}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

@@ -30,7 +30,7 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
     <Selector
       excludeIds={props.excludeIds}
       onSearch={(q) => searchEntity<PrescriptionEntity>(AppEntity.PRESCRIPTIONS, q)}
-      initOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
+      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

@@ -40,7 +40,7 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       onOpen={props.onOpen}
       onClose={props.onClose}
       excludeIds={props.excludeIds}
-      initOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
+      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
       autoCloseOnChange={false}
       onSearch={(q) => searchEntity<CategoryEntity>(AppEntity.CATEGORIES, q, { type: props.type })}
       searchPlaceholder={`${t("search_with", {

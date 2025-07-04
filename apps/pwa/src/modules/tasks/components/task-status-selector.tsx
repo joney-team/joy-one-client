@@ -31,7 +31,7 @@ export const TaskStatusSelector: FC<TaskStatusSelectorProps> = (props) => {
   return (
     <Selector
       {...props.inputProps}
-      initOptions={taskStatuses}
+      pinnedOptions={taskStatuses}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

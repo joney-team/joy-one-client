@@ -1,13 +1,14 @@
-import { AppEntity } from "@/types";
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { t } from "@/modules/lang/lang-service";
-import { getPartners } from "@/modules/partners/partners-service";
+import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { AppEntity } from "@/types";
 import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
@@ -16,13 +17,7 @@ import { Selector, SelectorContext, SelectorProps } from "../../../components/se
 interface PartnerSelectorProps
   extends Omit<
     SelectorProps<PartnerEntity>,
-    | "renderTarget"
-    | "onSearch"
-    | "onInitOptions"
-    | "searchPlaceholder"
-    | "renderOption"
-    | "onCreate"
-    | "target"
+    "renderTarget" | "onSearch" | "searchPlaceholder" | "renderOption" | "onCreate" | "target"
   > {
   target?: (ctx: SelectorContext<PartnerEntity>) => ReactNode;
   createable?: boolean;
@@ -36,10 +31,10 @@ export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
   const _createable = createable && workspace.hasPermission(WorkspacePermission.PARTNERS_WRITE);
 
   return (
-    <Selector
+    <Selector<PartnerEntity>
       {...rest}
       onSearch={(q) => searchEntity<PartnerEntity>(AppEntity.PARTNERS, q)}
-      onInitOptions={() => getPartners({ limit: 5 }).then((res) => res.data)}
+      listRoute="/partners"
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

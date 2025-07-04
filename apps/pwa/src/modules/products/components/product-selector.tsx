@@ -47,7 +47,7 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
           return res;
         })
       }
-      initOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
+      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

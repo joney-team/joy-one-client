@@ -44,15 +44,7 @@ export const UserColumn = (args?: UserColumnArgs): Column => {
       dynamicSelector: {
         ...args?.filter,
         multiple: true,
-        getInitialOptions: async () => {
-          return getWorkspaceMemberList({ limit: 5 }).then((res) =>
-            res.data.map((v) => ({
-              label: v.name,
-              value: v.userId,
-              data: v,
-            }))
-          );
-        },
+        listRoute: "/workspace-members",
         getOptions: async (ids: string[]) => {
           return getWorkspaceMemberByIds(ids).then((res) =>
             res.map((v) => ({

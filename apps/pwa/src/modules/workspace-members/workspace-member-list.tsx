@@ -1,21 +1,23 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { Clickable } from "@/components/clickable";
+import { List } from "@/components/list";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-selector-filter";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
-import {
-  getWorkspaceBranchByIds,
-  getWorkspaceBranches,
-} from "@/modules/workspace-branches/workspace-branches-service";
+import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
+import { getWorkspaceBranchByIds } from "@/modules/workspace-branches/workspace-branches-service";
 import {
   getUserMemberRoleLabel,
   updateWorkspaceMember,
 } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import {
   WorkspacePermission,
   WorkspaceSpecialRoleId,
@@ -25,11 +27,6 @@ import { AppEntity } from "@/types";
 import { Badge, Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconBuilding, IconLock, IconMail, IconPhone } from "@tabler/icons-react";
 import { FC } from "react";
-import { Clickable } from "@/components/clickable";
-import { List } from "@/components/list";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
-import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 
 export const WorkspaceMemberList: FC = () => {
   const workspace = useWorkspace();
@@ -189,12 +186,7 @@ export const WorkspaceMemberList: FC = () => {
                           options.map((v) => ({ label: v.name, value: v._id, data: v }))
                         );
                       },
-                      getInitialOptions: async () => {
-                        const options = await getWorkspaceBranches({ limit: 5 });
-                        return bindOptions(
-                          options.data.map((v) => ({ label: v.name, value: v._id, data: v }))
-                        );
-                      },
+                      listRoute: "/workspace-branches",
                     },
                   }
                 : workspace.userMember.workspaceBranches.length > 1

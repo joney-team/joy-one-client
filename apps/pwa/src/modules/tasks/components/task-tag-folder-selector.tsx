@@ -18,26 +18,11 @@ interface TaskTagFolderSelectorProps {
 }
 
 export const TaskTagFolderSelector: FC<TaskTagFolderSelectorProps> = (props) => {
-  const onInitOptions = async () => {
-    const folders = await getTags({
-      limit: 5,
-      sortLastInteractionAt: -1,
-      type: TagType.TASK_FOLDER,
-    }).then((res) => res.data.map((tag) => ({ ...tag, _group: t("recently") })));
-
-    return [
-      ...folders,
-      {
-        id: "none",
-        name: `${t("general_tasks")}`,
-      } as any,
-    ];
-  };
-
   return (
-    <Selector
+    <Selector<TagEntity>
       excludeIds={props.excludeIds}
-      onInitOptions={onInitOptions}
+      listRoute="/tags"
+      listParams={{ type: TagType.TASK_FOLDER }}
       onSearch={(q) => searchEntity<TagEntity>(AppEntity.TAGS, q, { type: TagType.TASK_FOLDER })}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
@@ -72,7 +57,7 @@ export const TaskTagFolderSelector: FC<TaskTagFolderSelectorProps> = (props) => 
       }}
       onSelect={(e) => {
         if (!e) return;
-        if (e.id === "none") return props.onSelect(undefined);
+        if ("id" in e && e.id === "none") return props.onSelect(undefined);
         return props.onSelect(e);
       }}
     />

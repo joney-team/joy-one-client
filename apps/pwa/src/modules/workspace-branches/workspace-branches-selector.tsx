@@ -1,9 +1,8 @@
-import { AppEntity } from "@/types";
 import { Button } from "@/components/buttons/button";
 import { t } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
-import { getWorkspaceBranches } from "@/modules/workspace-branches/workspace-branches-service";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
+import { AppEntity } from "@/types";
 import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -15,10 +14,10 @@ interface WorkspaceBranchesSelectorProps extends Partial<SelectorProps<Workspace
 
 export const WorkspaceBranchesSelector: FC<WorkspaceBranchesSelectorProps> = (props) => {
   return (
-    <Selector
+    <Selector<WorkspaceBranchOption>
       {...props}
       onSearch={(q) => searchEntity(AppEntity.WORKSPACE_BRANCHES, q)}
-      onInitOptions={() => getWorkspaceBranches({ limit: 5 }).then((res) => res.data)}
+      listRoute="/workspace-branches"
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { t } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
@@ -30,10 +32,10 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
     );
 
   return (
-    <Selector
+    <Selector<WorkspaceModuleOption>
       autoCloseOnChange={false}
       excludeIds={props.excludeIds}
-      onInitOptions={() => options}
+      pinnedOptions={options}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}
