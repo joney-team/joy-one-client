@@ -105,25 +105,27 @@ export const HrmTimekeepingList: FC = () => {
     workspace.hasPermission(WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP)
   ) {
     return (
-      <Card p={25} shadow="xs">
-        <Stack justify="center" align="center">
-          <Center>
-            <Image src={`/images/timekeeping-checkin.png`} w={em(250)} />
-          </Center>
+      <Stack p={16}>
+        <Card p={25} shadow="xs">
+          <Stack justify="center" align="center">
+            <Center>
+              <Image src={`/images/timekeeping-checkin.png`} w={em(250)} />
+            </Center>
 
-          <Title tt="capitalize" fw={500} fz={em(25)} c="primary">
-            {t("time_keeping_setup")}
-          </Title>
-          <Center>
-            <Button
-              rightSection={<IconArrowRight size={18} />}
-              onClick={() => router.push("/WorkspaceSettings/hrm-timekeepings")}
-            >
-              {t("start_now")}
-            </Button>
-          </Center>
-        </Stack>
-      </Card>
+            <Title tt="capitalize" fw={500} fz={em(25)} c="primary">
+              {t("time_keeping_setup")}
+            </Title>
+            <Center>
+              <Button
+                rightSection={<IconArrowRight size={18} />}
+                onClick={() => router.push("/WorkspaceSettings/hrm-timekeepings")}
+              >
+                {t("start_now")}
+              </Button>
+            </Center>
+          </Stack>
+        </Card>
+      </Stack>
     );
   }
 
