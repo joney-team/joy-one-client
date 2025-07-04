@@ -33,7 +33,7 @@ export const UserColumn = (args?: UserColumnArgs): Column => {
             <Text fz={16} fw={500}>
               {user.name}
             </Text>
-            <Text fz={14} c="gray">
+            <Text fz={10} c="gray">
               {getUserMemberRoleLabel(user)}
             </Text>
           </Stack>
@@ -72,7 +72,7 @@ export const UserColumn = (args?: UserColumnArgs): Column => {
                   {user.name}
                 </Text>
                 <Text fz={10} c="gray">
-                  {t(user.roleName || "guest")}
+                  {getUserMemberRoleLabel(user)}
                 </Text>
               </Stack>
             </Group>

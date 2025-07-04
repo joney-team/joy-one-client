@@ -105,7 +105,7 @@ export const ModalParnterForm: FC = () => {
                   },
                 }}
               >
-                LOGO
+                PT
               </Avatar>
 
               <Group gap={5}>

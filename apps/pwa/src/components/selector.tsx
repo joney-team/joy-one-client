@@ -207,8 +207,8 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     if (props.disabled) return;
 
     props.onOpen?.();
-
     combobox.openDropdown();
+    list.fetch(true, { isSilient: true });
 
     await wait(200);
     searchRef.current?.focus();
@@ -352,7 +352,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
 
               {!!props.onCreate && (
                 <Fragment>
-                  <Divider my={5} opacity={0.5} />
+                  {options.length > 0 && <Divider my={5} opacity={0.5} />}
                   <Combobox.Option value="$create">
                     <Group gap={0} justify="center">
                       <Group w={20} h={16} justify="center" align="center">
