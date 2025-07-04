@@ -2,6 +2,7 @@
 
 import { useApp } from "@/app.context";
 import { Button } from "@/components/buttons/button";
+import { DateInput } from "@/components/inputs/date-input";
 import { ModalTitle } from "@/components/modal-title";
 import { currencies } from "@/configs/currency.config";
 import { getDateFormat, num, t } from "@/modules/lang/lang-service";
@@ -23,7 +24,7 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { DateInput, TimeInput } from "@mantine/dates";
+import { TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { Icon, IconCalendar, IconCheck, IconClock, IconCursorText } from "@tabler/icons-react";
@@ -139,12 +140,10 @@ export const ModalInput: FC = () => {
                   <DateInput
                     leftSection={<IconCalendar size={18} strokeWidth={1.5} />}
                     flex={1}
-                    value={form.values.value ? dayjs(form.values.value * 1000).toDate() : undefined}
-                    valueFormat={getDateFormat()}
-                    placeholder={getDateFormat()}
+                    value={form.values.value}
                     onChange={(d) => {
                       if (!d) return;
-                      form.setFieldValue("value", DateTimeUtils.timeToSeconds(d));
+                      form.setFieldValue("value", d);
                     }}
                   />
 

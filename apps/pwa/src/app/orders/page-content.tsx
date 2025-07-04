@@ -1,6 +1,6 @@
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
-import { CustomerColumn } from "@/modules/customers/customer-column";
+import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { NumberColumn } from "@/components/list/columns/number-column";
 import { StatusColumn } from "@/components/list/columns/status-column";
@@ -75,7 +75,12 @@ const Page: NextPage = () => {
           }),
         },
       ]}
-      events={[EventType.ORDER_NEW, EventType.ORDER_UPDATED, EventType.ORDER_ARCHIVED, EventType.ORDER_SYNCED]}
+      events={[
+        EventType.ORDER_NEW,
+        EventType.ORDER_UPDATED,
+        EventType.ORDER_ARCHIVED,
+        EventType.ORDER_SYNCED,
+      ]}
       creatable={{
         onCreate: () => OnModalOrderTable(),
         permission: WorkspacePermission.ORDERS_CREATE,

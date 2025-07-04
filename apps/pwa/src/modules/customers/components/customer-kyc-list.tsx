@@ -5,7 +5,7 @@ import { CustomerEntity } from "@/modules/customers/customer-types";
 import { useList } from "@/utils/use-list.util";
 import { Skeleton, Stack } from "@mantine/core";
 import { FC } from "react";
-import { Empty } from "../../components/empty";
+import { Empty } from "../../../components/empty";
 import { CustomerKycCard } from "./customer-kyc-card";
 
 interface CustomerKycProps {

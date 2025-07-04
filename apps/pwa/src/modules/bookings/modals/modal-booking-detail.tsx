@@ -8,7 +8,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { useRouter } from "@/hooks/use-router";
 import { BookingCard } from "@/modules/bookings/booking-card";
 import { Button } from "@/components/buttons/button";
-import { CustomerCard } from "@/modules/customers/customer-card";
+import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { SessionTitle } from "@/components/session-title";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { t } from "@/modules/lang/lang-service";

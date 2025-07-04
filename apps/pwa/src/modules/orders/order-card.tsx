@@ -19,7 +19,7 @@ import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 import { Button } from "../../components/buttons/button";
 import { Circle } from "../../components/circle";
-import { CustomerInput } from "../customers/customer-input";
+import { CustomerInput } from "../customers/components/customer-input";
 import { WorkspaceMemberInput } from "../workspace-members/components/workspace-member-input";
 import { WorkspaceMembersInput } from "../workspace-members/components/workspace-members-input";
 import { getOrderDto } from "@/modules/orders/order-table/order-table-provider";

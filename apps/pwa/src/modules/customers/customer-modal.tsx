@@ -4,7 +4,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { modals } from "@mantine/modals";
 import { IconUser, IconUserPlus } from "@tabler/icons-react";
 
-import { CustomerForm, CustomerFormProps } from "@/modules/customers/customer-form";
+import { CustomerForm, CustomerFormProps } from "@/modules/customers/components/form-customer";
 import { getView } from "@/layout/layout-service";
 import { t } from "@/modules/lang/lang-service";
 
@@ -13,7 +13,9 @@ export const OnCustomerModal = (props?: CustomerFormProps) =>
     modalId: "CustomerForm",
     title: (
       <ModalTitle
-        title={props?.customer ? `${t("update")} ${t("customer")}` : `${t("create")} ${t("customer")}`}
+        title={
+          props?.customer ? `${t("update")} ${t("customer")}` : `${t("create")} ${t("customer")}`
+        }
         icon={props?.customer ? IconUser : IconUserPlus}
       />
     ),

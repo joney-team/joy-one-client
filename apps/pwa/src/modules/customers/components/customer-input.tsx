@@ -1,7 +1,7 @@
 import { Avatar } from "@/components/avatar";
 import { Renderer } from "@/components/renderer";
 import { SelectorTarget } from "@/components/selector";
-import { CustomerSelector } from "@/modules/customers/customer-selector";
+import { CustomerSelector } from "@/modules/customers/components/customer-selector";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { ActionIcon, Card, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";

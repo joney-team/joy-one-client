@@ -4,8 +4,14 @@ import { useRouter } from "@/hooks/use-router";
 import { onActionLoad } from "@/utils/actions";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalPrompt } from "@/modals/modal-prompt";
-import { approveCustomerKyc, rejectCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
-import { type CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";
+import {
+  approveCustomerKyc,
+  rejectCustomerKyc,
+} from "@/modules/customer-kycs/customer-kycs-service";
+import {
+  type CustomerKycEntity,
+  CustomerKycStatus,
+} from "@/modules/customer-kycs/customer-kycs-types";
 import { FileType } from "@/modules/files/file-types";
 import { renderDateTime, t } from "@/modules/lang/lang-service";
 import { StringUtils } from "@/utils/string.utils";
@@ -26,12 +32,12 @@ import {
 import { useHover } from "@mantine/hooks";
 import { IconArrowsDiagonal, IconCheck, IconUserScan } from "@tabler/icons-react";
 import { FC } from "react";
-import { Button } from "../../components/buttons/button";
-import { Image } from "../../components/image";
-import { EntityImage } from "../../components/entity-image";
+import { Button } from "../../../components/buttons/button";
+import { Image } from "../../../components/image";
+import { EntityImage } from "../../../components/entity-image";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { Renderer } from "../../components/renderer";
+import { Renderer } from "../../../components/renderer";
 
 interface CustomerKycCardProps {
   kyc: CustomerKycEntity;
@@ -205,7 +211,12 @@ const ImageCard: FC<{
   const hover = useHover();
 
   return (
-    <Card withBorder w="100%" p={5} style={{ position: "relative", overflow: "visible", cursor: "pointer" }}>
+    <Card
+      withBorder
+      w="100%"
+      p={5}
+      style={{ position: "relative", overflow: "visible", cursor: "pointer" }}
+    >
       <Stack w="100%" gap={5}>
         <Stack ref={hover.ref} style={{ position: "relative" }}>
           <Image src={url} w="100%" h={100} mih={100} mah={100} fit="contain" bg="gray.1" />

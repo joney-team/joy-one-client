@@ -24,10 +24,10 @@ import {
   Stack,
   Switch,
   Text,
-  ThemeIcon,
   TextInput,
+  ThemeIcon,
 } from "@mantine/core";
-import { DateInput, TimeInput } from "@mantine/dates";
+import { TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback, useDisclosure, useForceUpdate } from "@mantine/hooks";
 import {
@@ -46,13 +46,14 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
+import { WorkspaceMemberInput } from "../../modules/workspace-members/components/workspace-member-input";
 import { Avatar } from "../avatar";
 import { Button } from "../buttons/button";
 import { ModalTitle } from "../modal-title";
 import { Renderer } from "../renderer";
-import { WorkspaceMemberInput } from "../../modules/workspace-members/components/workspace-member-input";
+import { DateInput } from "./date-input";
 
 interface TimeTrackingsInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: TaskTimeTracking[];
@@ -343,7 +344,6 @@ export const TimeTrackingForm: FC<{
   onStopTracking: () => void;
   onChange?: (timeTracking: TaskTimeTracking) => void;
 }> = (props) => {
-  const lang = useLang();
   const workspace = useWorkspace();
   const startAtRef = useRef<HTMLInputElement>(null);
   const endAtRef = useRef<HTMLInputElement>(null);
@@ -437,14 +437,11 @@ export const TimeTrackingForm: FC<{
             <InputWrapper label={t("time")}>
               <Group gap={10} wrap="nowrap">
                 <DateInput
-                  valueFormat={getDateFormat()}
-                  value={DateTimeUtils.secondsToTime(form.values.startAt)}
+                  value={form.values.startAt}
                   onChange={(v) => {
                     if (!v) return;
-                    const startAt = new Date(v);
-                    form.setFieldValue("startAt", DateTimeUtils.timeToSeconds(startAt));
-                    const endAt = new Date(startAt.getTime() + 60 * 1000);
-                    form.setFieldValue("endAt", DateTimeUtils.timeToSeconds(endAt));
+                    form.setFieldValue("startAt", v);
+                    form.setFieldValue("endAt", v + 60);
                   }}
                 />
 

@@ -38,6 +38,7 @@ const defaultOrderValues: OrderTableFormValues = {
   coupons: [],
   vouchers: [],
   items: [],
+  promotions: [],
 };
 
 export const OrderTableProvider: FC<PropsWithChildren> = (props) => {
@@ -172,6 +173,7 @@ export const OrderTableProvider: FC<PropsWithChildren> = (props) => {
       ...defaultOrderValues,
       ...or,
       directDiscount: or.discounts.find((d) => d.type === OrderDiscountType.DIRECT)?.amount || 0,
+      promotions: or.promotions ?? [],
     };
     isDirty.current = false;
     forceUpdate();
@@ -332,6 +334,7 @@ export const getOrderDto = (values: OrderTableFormValues): OrderDto => {
     couponIds: values.coupons?.map((c) => c._id),
     voucherIds: values.vouchers?.map((v) => v._id),
     comboIds: values.combos?.map((c) => c.id),
+    promotionIds: values.promotions?.map((p) => p.id),
     directDiscount: values.directDiscount,
     assigneeUserIds: values.assigneeUsers.map((u) => u.userId),
     relatedCustomerId: values.relatedCustomer?._id,

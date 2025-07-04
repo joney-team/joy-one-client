@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/checkbox";
 import { Container } from "@/components/container";
 import { FormSession } from "@/components/form-session";
 import { Image } from "@/components/image";
+import { DateInput } from "@/components/inputs/date-input";
 import { TimeZoneInput } from "@/components/inputs/timezone-input";
 import { SessionTitle } from "@/components/session-title";
 import { configs } from "@/configs/layout.config";
@@ -12,11 +13,9 @@ import { getSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { getDateFormat, localeNames, t } from "@/modules/lang/lang-service";
+import { localeNames, t } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { Card, Divider, InputWrapper, Select, Space, Stack, TextInput } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCalendar, IconMail, IconPhone, IconUser } from "@tabler/icons-react";
@@ -72,13 +71,8 @@ export const UserProfileSettings: FC = () => {
                 <DateInput
                   label={t("birthday")}
                   leftSection={<IconCalendar size={16} />}
-                  valueFormat={getDateFormat()}
-                  placeholder={getDateFormat()}
-                  value={DateTimeUtils.secondsToTime(auth.user!.birthday)}
-                  onChange={(date) => {
-                    if (!date) return;
-                    form.setFieldValue("birthday", DateTimeUtils.timeToSeconds(date));
-                  }}
+                  value={auth.user!.birthday}
+                  onChange={(date) => form.setFieldValue("birthday", date)}
                 />
               </Stack>
             </FormSession>

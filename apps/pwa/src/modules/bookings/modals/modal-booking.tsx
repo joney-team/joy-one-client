@@ -20,7 +20,7 @@ import { modals } from "@mantine/modals";
 import { IconArrowDown, IconCalendar, IconCalendarTime, IconCheck } from "@tabler/icons-react";
 
 import { FormSession } from "@/components/form-session";
-import { CustomerInput } from "@/modules/customers/customer-input";
+import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkSlotCreateEventDto, WorkSlotsInput } from "@/components/inputs/work-slots-input";
 import { getView } from "@/layout/layout-service";

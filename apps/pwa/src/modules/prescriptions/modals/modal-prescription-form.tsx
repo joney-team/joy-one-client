@@ -6,7 +6,7 @@ import { Renderer } from "@/components/renderer";
 import { PrescriptionSelector } from "@/modules/prescriptions/components/prescription-selector";
 import { ProductSelector } from "@/modules/products/components/product-selector";
 import { getView } from "@/layout/layout-service";
-import { CustomerInput } from "@/modules/customers/customer-input";
+import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { t } from "@/modules/lang/lang-service";
 import {
@@ -131,7 +131,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                       </Text>
 
                       <ProductSelector
-                        props={{ flex: 1 }}
+                        flex={1}
                         type={[ProductType.PRODUCT]}
                         onSelect={(product) =>
                           handler.setItem(index, {

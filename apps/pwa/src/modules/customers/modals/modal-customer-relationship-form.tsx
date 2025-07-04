@@ -1,4 +1,4 @@
-import { CustomerForm } from "@/modules/customers/customer-form";
+import { CustomerForm } from "@/modules/customers/components/form-customer";
 import { ModalTitle } from "@/components/modal-title";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { t } from "@/modules/lang/lang-service";

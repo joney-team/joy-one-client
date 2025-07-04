@@ -3,8 +3,8 @@
 import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
 import { Comments } from "@/modules/comments/comments";
-import { CustomerBookings } from "@/modules/customers/customer-booking";
-import { CustomerInformations } from "@/modules/customers/customer-information";
+import { CustomerBookings } from "@/modules/customers/components/customer-booking";
+import { CustomerInformations } from "@/modules/customers/components/customer-information";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { EventType } from "@/modules/events/event-types";
 import { useFetch } from "@/utils/use-fetch.util";
@@ -18,7 +18,7 @@ import {
 } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import { Fragment, useEffect } from "react";
-import { archiveCustomer, getCustomerByCode } from "./customer-service";
+import { archiveCustomer, getCustomerByCode } from "../customer-service";
 
 import { EventList } from "@/components/event-list";
 import { SessionTitle } from "@/components/session-title";
@@ -32,7 +32,7 @@ import { CtasWrapper } from "@/components/cta-wrapper";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
-import { CustomerKyc } from "@/modules/customers/customer-kyc-list";
+import { CustomerKyc } from "@/modules/customers/components/customer-kyc-list";
 import { t } from "@/modules/lang/lang-service";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";

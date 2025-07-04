@@ -17,33 +17,31 @@ interface ProductSelectorProps
   extends Omit<SelectorProps<ProductEntity>, "onSelect" | "onSearch" | "renderOption" | "target"> {
   type?: ProductType | ProductType[];
   isStockCheck?: boolean;
-  excludeIds?: string[];
   onSelect: (value: ProductEntity) => void;
   target?: (ctx: SelectorContext<ProductEntity>) => ReactNode;
-  props?: InputWrapperProps;
 }
 
 export const ProductSelector: FC<ProductSelectorProps> = (props) => {
-  const strictType = Array.isArray(props.type) ? props.type : [props.type];
+  const { type, isStockCheck, excludeIds, onSelect, target, ...rest } = props;
+  const strictType = props.type ? (Array.isArray(props.type) ? props.type : [props.type]) : [];
   const funcStrictType = (v: ProductEntity) => strictType.includes(v.type);
 
   const initOptions = useQuery<ResponseList<ProductEntity>>({
     route: "/products",
     params: {
-      limit: 9,
+      limit: 15,
       sortLastInteractionAt: -1,
-      type: props.type,
+      type,
     },
   });
 
   return (
     <Selector
-      {...props.props}
-      excludeIds={props.excludeIds}
+      {...rest}
       onSearch={(q) =>
         searchEntity<ProductEntity>(AppEntity.PRODUCTS, q, {
-          isStockCheck: props.isStockCheck,
-          type: props.type,
+          isStockCheck,
+          type,
         }).then((res) => {
           if (strictType.length > 0) return res.filter(funcStrictType);
           return res;

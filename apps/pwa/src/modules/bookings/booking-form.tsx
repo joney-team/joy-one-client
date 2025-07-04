@@ -10,7 +10,7 @@ import {
   updateBooking,
 } from "@/modules/bookings/booking-service";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
-import { CustomerInput } from "@/modules/customers/customer-input";
+import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";

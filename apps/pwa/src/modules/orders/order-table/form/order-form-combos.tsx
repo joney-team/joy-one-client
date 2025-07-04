@@ -12,7 +12,7 @@ import { EntityImage } from "@/components/entity-image";
 import { ModalTitle } from "@/components/modal-title";
 import { useOrderTable } from "../order-table-context";
 
-export const OrderFormCombosVouchers: FC = () => {
+export const OrderFormCombos: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const orderForm = useOrderTable();
   const color = useColor();

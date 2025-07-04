@@ -5,24 +5,26 @@ import { Icon, IconChartBubble } from "@tabler/icons-react";
 import { Column } from "../types";
 import { useColor } from "@/modules/theme/use-color";
 
-export interface EnumColumnArgs extends Omit<Column, "render"> {
+export interface EnumColumnArgs<T extends string> extends Column {
   multiple?: boolean;
   options: {
     label: string;
-    value: string;
+    value: T;
     color?: string;
     icon?: Icon;
   }[];
 }
 
-export const EnumColumn = (args: EnumColumnArgs): Column => {
+export const EnumColumn = <T extends string>(args: EnumColumnArgs<T>): Column => {
   return {
     ...(args ? objUnselect(args, ["options"]) : {}),
     w: args?.w || 150,
     icon: args?.icon || IconChartBubble,
-    render: ({ value }) => {
+    render: (ctx) => {
+      if (args.render) return args.render(ctx);
+
       const color = useColor();
-      const option = args?.options.find((v) => v.value === value);
+      const option = args?.options.find((v) => v.value === ctx.value);
       if (!option) return null;
       return (
         <Group gap={5}>

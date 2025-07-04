@@ -18,7 +18,7 @@ import { Anchor, Grid, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconMessageUser } from "@tabler/icons-react";
 import { FC } from "react";
-import { InputModalType, OnModalInput } from "../../modals/modal-input";
+import { InputModalType, OnModalInput } from "../../../modals/modal-input";
 
 interface CustomerFormModalProps {
   _id: string;
@@ -39,7 +39,9 @@ export const RowInfo: FC<{
       </Grid.Col>
 
       <Grid.Col span="auto">
-        <Group gap={10}>{typeof props.value === "string" ? <Text>{props.value || "--"}</Text> : props.value}</Group>
+        <Group gap={10}>
+          {typeof props.value === "string" ? <Text>{props.value || "--"}</Text> : props.value}
+        </Group>
       </Grid.Col>
     </Grid>
   );
@@ -50,7 +52,11 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
   const customerForm = useFetch({
     id: props._id,
     fetch: () => getCustomerForm(props._id),
-    events: [EventType.CUSTOMER_FORM_NEW, EventType.CUSTOMER_FORM_UPDATED, EventType.CUSTOMER_FORM_ARCHIVED],
+    events: [
+      EventType.CUSTOMER_FORM_NEW,
+      EventType.CUSTOMER_FORM_UPDATED,
+      EventType.CUSTOMER_FORM_ARCHIVED,
+    ],
   });
 
   if (customerForm.isFetching) return <Skeleton height={150} />;

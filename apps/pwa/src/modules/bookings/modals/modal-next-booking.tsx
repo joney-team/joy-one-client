@@ -4,7 +4,7 @@ import { Anchor, Center, Modal, Stack, ThemeIcon, Title, em } from "@mantine/cor
 import { IconEye, IconUserScreen } from "@tabler/icons-react";
 
 import { BookingCard } from "@/modules/bookings/booking-card";
-import { CustomerCard } from "@/modules/customers/customer-card";
+import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { Period } from "@/types";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingStatus } from "../booking-types";
@@ -95,9 +95,18 @@ export const ModalNextBooking: FC = () => {
             Khách Hàng Tiếp Theo
           </Title>
 
-          {booking.customer && <CustomerCard customer={booking.customer} withBorder shadow="none" onClick={() => {}} />}
+          {booking.customer && (
+            <CustomerCard customer={booking.customer} withBorder shadow="none" onClick={() => {}} />
+          )}
 
-          <BookingCard booking={booking} hideCustomerInfo withBorder shadow="none" hideCtas onClick={() => {}} />
+          <BookingCard
+            booking={booking}
+            hideCustomerInfo
+            withBorder
+            shadow="none"
+            hideCtas
+            onClick={() => {}}
+          />
 
           <Stack justify="center" align="center">
             <Button

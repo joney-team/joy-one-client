@@ -6,7 +6,7 @@ import { FlexSize } from "@/components/flex-size";
 import { TechIllustration } from "@/components/illustrations/tech";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { OnModalBooking } from "@/modules/bookings/modals/modal-booking";
-import { CustomerInput } from "@/modules/customers/customer-input";
+import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { t } from "@/modules/lang/lang-service";

@@ -3,6 +3,6 @@
 import { Layout, renderPage } from "@/layout/layout-page";
 
 const Content = renderPage(() =>
-  import("@/modules/customers/components/customer-detail").then((mod) => mod.CustomerDetail)
+  import("@/modules/promotions/promostion-list").then((mod) => mod.PromostionList)
 );
 export default () => <Layout component={Content} />;

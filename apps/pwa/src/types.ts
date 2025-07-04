@@ -181,3 +181,14 @@ export interface AppMetadata {
   workspaceId?: string;
   isExtended: boolean;
 }
+
+export enum DynamicSelectionOperator {
+  INCLUDES = 'INCLUDES',
+  EXCLUDES = 'EXCLUDES',
+}
+
+export interface DynamicSelection<ValueType = any> {
+  entity?: string;
+  operator: DynamicSelectionOperator;
+  value: ValueType[];
+}

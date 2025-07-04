@@ -1,6 +1,6 @@
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { useRouter } from "@/hooks/use-router";
-import { renderGener, renderGenerIcon } from "./customer-service";
+import { renderGener, renderGenerIcon } from "../customer-service";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { renderDateTime } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
@@ -11,7 +11,7 @@ import { Anchor, Badge, Card, CardProps, Group, Stack, Text, ThemeIcon, em } fro
 import { IconClock, IconPhone, IconTags } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
-import { Avatar } from "../../components/avatar";
+import { Avatar } from "../../../components/avatar";
 
 interface CustomerCardProps extends CardProps {
   customer: CustomerShortInfo;
@@ -38,7 +38,13 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
   let pressTimer: NodeJS.Timeout;
 
   return (
-    <Card p={10} shadow="xs" style={!props.disableClick ? { cursor: "pointer" } : {}} onClick={onClick} {...rest}>
+    <Card
+      p={10}
+      shadow="xs"
+      style={!props.disableClick ? { cursor: "pointer" } : {}}
+      onClick={onClick}
+      {...rest}
+    >
       <Group gap={12} align="start">
         <Anchor component={Link} href={`/customers/${customer.code}`} td="none">
           <Avatar customer={customer} radius={5} size={60} />
@@ -78,20 +84,21 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
 
           {(!!customer.phone || !!customer.gender) && (
             <Group gap={16}>
-              {!!customer.phone && workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
-                <Anchor
-                  href={`tel:${customer.phone}`}
-                  c="var(--mantine-color-text)"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Group gap={1}>
-                    <ThemeIcon color="var(--mantine-color-text)" variant="transparent">
-                      <IconPhone strokeWidth={1.2} size={18} />
-                    </ThemeIcon>
-                    <Text fz={16}>{customer.phone}</Text>
-                  </Group>
-                </Anchor>
-              )}
+              {!!customer.phone &&
+                workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
+                  <Anchor
+                    href={`tel:${customer.phone}`}
+                    c="var(--mantine-color-text)"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Group gap={1}>
+                      <ThemeIcon color="var(--mantine-color-text)" variant="transparent">
+                        <IconPhone strokeWidth={1.2} size={18} />
+                      </ThemeIcon>
+                      <Text fz={16}>{customer.phone}</Text>
+                    </Group>
+                  </Anchor>
+                )}
 
               {!!customer.gender && (
                 <Group gap={1}>

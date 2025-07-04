@@ -7,9 +7,9 @@ import { AppEntity, ResponseList } from "@/types";
 import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { Selector, SelectorProps } from "../../components/selector";
-import { useQuery } from "../apis/use-query";
-import { customerInteraction } from "./customer-service";
+import { Selector, SelectorProps } from "../../../components/selector";
+import { useQuery } from "../../apis/use-query";
+import { customerInteraction } from "../customer-service";
 
 interface CustomerSelectorProps
   extends Omit<SelectorProps<CustomerShortInfo>, "onSearch" | "renderOption"> {}
@@ -18,7 +18,7 @@ export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
   const initOptions = useQuery<ResponseList<CustomerShortInfo>>({
     route: "/customers",
     params: {
-      limit: 9,
+      limit: 15,
       sortLastInteractionAt: -1,
     },
   });

@@ -46,7 +46,7 @@ import {
 import dayjs from "dayjs";
 import { FC, useEffect, useState } from "react";
 import { WorkspaceMembersInput } from "../workspace-members/components/workspace-members-input";
-import { CustomerInput } from "../customers/customer-input";
+import { CustomerInput } from "../customers/components/customer-input";
 import { BookingEntity, BookingStatus } from "./booking-types";
 import { OnModalRescheduleBooking } from "./modals/modal-reschedule-booking";
 

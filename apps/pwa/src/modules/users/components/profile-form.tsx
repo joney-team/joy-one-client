@@ -1,13 +1,12 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { DateInput } from "@/components/inputs/date-input";
 import { useAuth } from "@/modules/auth/auth-context";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
-import { getDateFormat, t } from "@/modules/lang/lang-service";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { t } from "@/modules/lang/lang-service";
 import { onError } from "@/utils/exceptions.utils";
-import { Group, LoadingOverlay, Stack, Text, ThemeIcon, TextInput } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
+import { Group, LoadingOverlay, Stack, Text, TextInput, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { IconUpload } from "@tabler/icons-react";
@@ -81,12 +80,8 @@ export const ProfileForm: FC = () => {
       />
       <DateInput
         label={t("birthday")}
-        valueFormat={getDateFormat()}
-        value={DateTimeUtils.secondsToTime(auth.user.birthday)}
-        onChange={(date) => {
-          if (!date) return;
-          form.setFieldValue("birthday", DateTimeUtils.timeToSeconds(date));
-        }}
+        defaultValue={auth.user!.birthday}
+        onChange={(date) => form.setFieldValue("birthday", date)}
       />
     </Stack>
   );

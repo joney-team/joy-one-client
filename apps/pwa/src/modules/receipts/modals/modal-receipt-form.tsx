@@ -1,23 +1,27 @@
 import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
 import { FilesBox } from "@/modules/files/files-box";
-import { CustomerInput } from "@/modules/customers/customer-input";
+import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { ModalTitle } from "@/components/modal-title";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CustomerEntity, CustomerShortInfo } from "@/modules/customers/customer-types";
 import { onUploadFile } from "@/modules/files/file-service";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { LoanEntity } from "@/modules/loans/loans-types";
-import { createReceipt, receiptTypeColors, receiptTypeIcons } from "@/modules/receipts/receipts-service";
+import {
+  createReceipt,
+  receiptTypeColors,
+  receiptTypeIcons,
+} from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptType } from "@/modules/receipts/receipts-types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
 import { Card, Center, Group, InputWrapper, NumberInput, Stack, Textarea } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { DateInput } from "@/components/inputs/date-input";
 
 interface ReceiptFormValues {
   amount: number;
@@ -26,7 +30,7 @@ interface ReceiptFormValues {
   data?: any;
   relatedCustomer?: CustomerShortInfo | undefined;
   relatedLoan?: LoanEntity | undefined;
-  expireAt?: number;
+  expireAt?: number | null;
 }
 
 interface ModalReceiptFormProps {
@@ -69,7 +73,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
       type: values.type,
       note: values.note,
       data: values.data,
-      expireAt: values.expireAt,
+      expireAt: values.expireAt ?? null,
       relatedCustomerId: values.relatedCustomer?._id,
       relatedLoanId: values.relatedLoan?.id,
       assigneeUserIds: [auth.user._id],
@@ -114,17 +118,20 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
         </InputWrapper>
       )}
 
-      <NumberInput label={t("money_amount")} withAsterisk hideControls {...form.getInputProps("amount")} />
+      <NumberInput
+        label={t("money_amount")}
+        withAsterisk
+        hideControls
+        {...form.getInputProps("amount")}
+      />
 
       <Textarea label={t("note")} {...form.getInputProps("note")} />
 
       <DateInput
         label={t("pay_expire")}
-        valueFormat={getDateFormat()}
-        value={DateTimeUtils.secondsToTime(form.values.expireAt)}
+        value={form.values.expireAt}
         onChange={(date) => {
-          if (!date) return;
-          form.setFieldValue("expireAt", DateTimeUtils.timeToSeconds(date));
+          form.setFieldValue("expireAt", date);
         }}
       />
 

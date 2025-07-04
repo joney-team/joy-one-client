@@ -18,7 +18,7 @@ export interface UserEntity extends BaseMongoEntity {
   name: string;
   avatar?: string;
   email?: string;
-  birthday?: number;
+  birthday?: number | null;
   phone?: string;
   authVersion: number;
   role: UserRole;
@@ -34,7 +34,7 @@ export interface UserEntity extends BaseMongoEntity {
 export interface UpdateUserProfileDto {
   name: string;
   avatar?: string;
-  birthday?: number;
+  birthday?: number | null;
   phone?: string;
   email?: string;
   settings?: UserSettings;

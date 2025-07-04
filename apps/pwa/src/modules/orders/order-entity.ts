@@ -4,6 +4,7 @@ import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { ProductVoucherEntity } from "@/modules/product-vouchers/product-vouchers-types";
 import { OrderDiscount, OrderItem, OrderPaymentStatus, OrderType } from "./orders-types";
+import { PromotionEntity } from "../promotions/promotions-types";
 
 export interface OrderEntity extends BasePostgresEntity {
   code: string;
@@ -18,6 +19,7 @@ export interface OrderEntity extends BasePostgresEntity {
   combos: ProductComboEntity[];
   coupons: CouponEntity[];
   vouchers: ProductVoucherEntity[];
+  promotions: PromotionEntity[];
   discounts: OrderDiscount[];
   discountAmount: number;
   paidAmount: number;

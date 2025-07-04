@@ -3,7 +3,7 @@ import { CodeColumn } from "@/components/list/columns/code-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { NumberColumn } from "@/components/list/columns/number-column";
 import { StatusColumn } from "@/components/list/columns/status-column";
-import { CustomerColumn } from "@/modules/customers/customer-column";
+import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { OrderCard } from "@/modules/orders/order-card";
@@ -77,7 +77,12 @@ export const OrderList: FC = () => {
             }),
           },
         ]}
-        events={[EventType.ORDER_NEW, EventType.ORDER_UPDATED, EventType.ORDER_ARCHIVED, EventType.ORDER_SYNCED]}
+        events={[
+          EventType.ORDER_NEW,
+          EventType.ORDER_UPDATED,
+          EventType.ORDER_ARCHIVED,
+          EventType.ORDER_SYNCED,
+        ]}
         creatable={{
           onCreate: () => OnModalOrderTable(),
           permission: WorkspacePermission.ORDERS_CREATE,

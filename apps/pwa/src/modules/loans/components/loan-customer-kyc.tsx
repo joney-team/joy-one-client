@@ -1,6 +1,6 @@
 "use client";
 
-import { CustomerKycCard } from "@/modules/customers/customer-kyc-card";
+import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
 import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";

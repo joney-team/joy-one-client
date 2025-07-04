@@ -53,6 +53,7 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
           description: {
             fontSize: 11,
             fontWeight: 300,
+            marginBottom: 4,
           },
         },
       }),

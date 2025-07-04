@@ -1,26 +1,26 @@
 "use client";
 
-import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { useLayout } from "@/layout/layout-context";
+import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
+import { OnCustomerModal } from "@/modules/customers/customer-modal";
+import { CustomerEntity } from "@/modules/customers/customer-types";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/modal-customer-relationship-contacts";
-import { OnCustomerModal } from "@/modules/customers/customer-modal";
-import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
-import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
-import { assignCustomer, renderGener, renderGenerIcon, updateCustomer } from "./customer-service";
-import { CustomerEntity } from "@/modules/customers/customer-types";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { getDateFormat, num, t } from "@/modules/lang/lang-service";
 import { getGoogleMapLink, useLocations } from "@/modules/locations/locations-service";
+import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
-import { renderEntityCode } from "@/modules/workspaces/utils";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import config from "@joy-one-client/config";
 import {
   ActionIcon,
   Anchor,
@@ -52,8 +52,9 @@ import {
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, Fragment, useState } from "react";
-import { EntityImage } from "../../components/entity-image";
-import { Renderer } from "../../components/renderer";
+import { EntityImage } from "../../../components/entity-image";
+import { Renderer } from "../../../components/renderer";
+import { assignCustomer, renderGener, renderGenerIcon, updateCustomer } from "../customer-service";
 
 interface CustomerInformationsProps {
   customer: CustomerEntity;
@@ -127,21 +128,29 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
             />
 
             <Stack gap={5}>
-              <Anchor
-                onClick={() => {
-                  if (!isCanUpdateInfo) return;
+              <Group>
+                <Anchor
+                  onClick={() => {
+                    if (!isCanUpdateInfo) return;
 
-                  OnModalCustomerPlainCodeForm({
-                    customer,
-                    onDone: () => {},
-                  });
-                }}
-                mb={-3}
-              >
-                <Text pl={5} fw={700} fz={em(13)}>
-                  {renderEntityCode(customer.code, customer.plainCode)}
-                </Text>
-              </Anchor>
+                    OnModalCustomerPlainCodeForm({
+                      customer,
+                      onDone: () => {},
+                    });
+                  }}
+                  mb={-3}
+                >
+                  <Text pl={5} fw={700} fz={em(13)}>
+                    {renderEntityCode(customer.code, customer.plainCode)}
+                  </Text>
+                </Anchor>
+
+                {config.ENV === "development" && (
+                  <Badge color="gray" variant="transparent">
+                    #{customer._id}
+                  </Badge>
+                )}
+              </Group>
 
               <Text fw={500} fz={em(18)}>
                 {customer.name}

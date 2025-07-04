@@ -6,7 +6,7 @@ import { Empty } from "@/components/empty";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { Renderer } from "@/components/renderer";
 import { useAuth } from "@/modules/auth/auth-context";
-import { CustomerSelector } from "@/modules/customers/customer-selector";
+import { CustomerSelector } from "@/modules/customers/components/customer-selector";
 import { num, t } from "@/modules/lang/lang-service";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
 import { useColor } from "@/modules/theme/use-color";
@@ -35,8 +35,8 @@ import {
 import { FC, Fragment } from "react";
 import { OrderTableProps } from "..";
 import { useOrderTable } from "../order-table-context";
-import { OrderFormCombosVouchers } from "./order-form-combos-vouchers";
-import { OrderFormCoupons } from "./order-form-coupons";
+import { OrderFormCombos } from "./order-form-combos";
+import { OrderFormPromotions } from "./order-form-promotions";
 import { OrderFormDiscounts } from "./order-form-discount";
 import { OrderFormItem } from "./order-form-item";
 import { OrderFormTip } from "./order-form-tip";
@@ -220,8 +220,8 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
             </Group>
 
             <Group>
-              <OrderFormCombosVouchers />
-              <OrderFormCoupons />
+              <OrderFormCombos />
+              <OrderFormPromotions />
             </Group>
           </Stack>
 

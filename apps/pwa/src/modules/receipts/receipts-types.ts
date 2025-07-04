@@ -29,7 +29,7 @@ export interface CreateReceiptDto {
   relatedCustomerId?: string;
   relatedLoanId?: string;
   data?: any;
-  expireAt?: number;
+  expireAt?: number | null;
 }
 
 export interface UpdateReceiptDto {

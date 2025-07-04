@@ -5,6 +5,7 @@ import { OrderCalculated, OrderType } from "@/modules/orders/orders-types";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { ProductVoucherEntity } from "@/modules/product-vouchers/product-vouchers-types";
 import { ProductEntity } from "@/modules/products/products-types";
+import { PromotionEntity } from "@/modules/promotions/promotions-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 
 export interface OrderTableFormValueItem {
@@ -25,6 +26,7 @@ export interface OrderTableFormValues {
   directDiscount?: number;
   note?: string;
   relatedCustomer?: CustomerShortInfo;
+  promotions: PromotionEntity[];
 }
 
 export interface OrderTableContext {

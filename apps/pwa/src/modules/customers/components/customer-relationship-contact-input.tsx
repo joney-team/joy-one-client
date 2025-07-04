@@ -16,8 +16,8 @@ import {
 } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { Button } from "../../components/buttons/button";
-import { Renderer } from "../../components/renderer";
+import { Button } from "../../../components/buttons/button";
+import { Renderer } from "../../../components/renderer";
 
 interface CustomerRelationshipContactInputProps
   extends Omit<InputWrapperProps, "value" | "onChange"> {

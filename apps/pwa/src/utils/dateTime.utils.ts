@@ -375,7 +375,7 @@ export function findNearestTimeSlot(now = new Date()) {
 }
 
 export function forceDate(data?: any) {
-  if (!data) return undefined;
+  if (!data) return null;
   if (isSeconds(data)) return new Date(data * 1000);
   return new Date(data);
 }

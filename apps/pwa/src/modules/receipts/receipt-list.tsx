@@ -8,7 +8,7 @@ import { EnumColumn } from "@/components/list/columns/enum-column";
 import { NumberColumn } from "@/components/list/columns/number-column";
 import { StatusColumn } from "@/components/list/columns/status-column";
 import { OnModalPrinter } from "@/modals/modal-printer";
-import { CustomerColumn } from "@/modules/customers/customer-column";
+import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";

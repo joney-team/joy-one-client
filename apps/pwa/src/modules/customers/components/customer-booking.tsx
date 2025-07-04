@@ -12,8 +12,8 @@ import { useList } from "@/utils/use-list.util";
 import { ActionIcon, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { IconCalendar, IconEye, IconLayoutNavbarCollapse } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
-import { Renderer } from "../../components/renderer";
-import { SessionTitle } from "../../components/session-title";
+import { Renderer } from "../../../components/renderer";
+import { SessionTitle } from "../../../components/session-title";
 
 interface CustomerBookingsProps {
   customer: CustomerEntity;
@@ -68,7 +68,11 @@ export const CustomerBookings: FC<CustomerBookingsProps> = (props) => {
         <Renderer visible={total > 1 || (total === 1 && bookings.count === 0)}>
           <Group gap={0} onClick={() => setIsCollapsed((s) => !s)} style={{ cursor: "pointer" }}>
             <ActionIcon variant="transparent" color={isCollapsed ? "gray" : "primary"}>
-              {isCollapsed ? <IconEye strokeWidth={1.1} /> : <IconLayoutNavbarCollapse size={20} strokeWidth={1.1} />}
+              {isCollapsed ? (
+                <IconEye strokeWidth={1.1} />
+              ) : (
+                <IconLayoutNavbarCollapse size={20} strokeWidth={1.1} />
+              )}
             </ActionIcon>
 
             <Text fz={12} c={isCollapsed ? "gray" : "primary"} fw={400}>
@@ -84,7 +88,13 @@ export const CustomerBookings: FC<CustomerBookingsProps> = (props) => {
       {bookings.count > 0 && (
         <SimpleGrid cols={props.cols || { md: 3 }}>
           {bookings.data.map((booking) => (
-            <BookingCard key={booking._id} booking={booking} hideCustomerInfo withBorder={false} shadow="xs" />
+            <BookingCard
+              key={booking._id}
+              booking={booking}
+              hideCustomerInfo
+              withBorder={false}
+              shadow="xs"
+            />
           ))}
         </SimpleGrid>
       )}

@@ -1,13 +1,13 @@
 import { Column } from "@/components/list/types";
 import { Group, Stack, Text } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
-import { useWorkspace } from "../workspaces/workspace-context";
+import { useWorkspace } from "../../workspaces/workspace-context";
 import { useRouter } from "@/hooks/use-router";
 import { Avatar } from "@/components/avatar";
-import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
-import { t } from "../lang/lang-service";
-import { getCustomerByIds, getCustomers } from "./customer-service";
-import { searchEntity } from "../search/search-service";
+import { WorkspacePermission } from "../../workspace-roles/workspace-roles-types";
+import { t } from "../../lang/lang-service";
+import { getCustomerByIds, getCustomers } from "../customer-service";
+import { searchEntity } from "../../search/search-service";
 import { AppEntity } from "@/types";
 
 export interface CustomerColumnArgs<Data = any> extends Omit<Column<Data>, "render"> {}

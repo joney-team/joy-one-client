@@ -1,10 +1,14 @@
+import { onUploadFile } from "@/modules/files/file-service";
 import { FileType } from "@/modules/files/file-types";
+import { renderLink } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
+import { t } from "@/modules/lang/lang-service";
 import {
   ActionIcon,
   Box,
   Card,
+  Center,
   Image,
   InputWrapper,
   InputWrapperProps,
@@ -12,12 +16,10 @@ import {
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useHover } from "@mantine/hooks";
+import { IconEye, IconPencil, IconPhoto, IconUpload } from "@tabler/icons-react";
 import { useRef, useState, type FC } from "react";
-import { Renderer } from "../renderer";
-import { IconEye, IconPencil, IconUpload } from "@tabler/icons-react";
 import { Button } from "../buttons/button";
-import { t } from "@/modules/lang/lang-service";
-import { renderLink } from "@/modules/files/files-utils";
+import { Renderer } from "../renderer";
 
 interface ImageInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: string;
@@ -29,7 +31,7 @@ interface ImageInputProps extends Omit<InputWrapperProps, "value" | "onChange"> 
 }
 
 export const ImageInput: FC<ImageInputProps> = (props) => {
-  const { value, onChange, disabled, ...rest } = props;
+  const { value, onChange, disabled, h, w, ...rest } = props;
   const [loadFailed, setLoadFailed] = useState(false);
   const openRef = useRef<() => void>(null);
   const hover = useHover();
@@ -47,11 +49,11 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
     <InputWrapper {...rest}>
       <Dropzone
         accept={IMAGE_MIME_TYPE}
-        onDrop={(files) => {
+        onDrop={async (files) => {
           if (files.length === 0) return;
           const file = files[0];
-          // const url = URL.createObjectURL(file);
-          // onChange?.(url);
+          const res = await onUploadFile({ file });
+          onChange?.(res.relativePath);
         }}
         disabled={disabled}
         multiple={false}
@@ -65,8 +67,8 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
           bg="gray.1"
           maw="100%"
           mah="100%"
-          h={props.h}
-          w={props.w}
+          h={h}
+          w={w}
           radius={props.radius || 10}
           className="clickable"
           onClick={() => {
@@ -89,6 +91,7 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
           }}
           withBorder
           shadow="none"
+          style={{ borderColor: "var(--mantine-color-default-border)" }}
         >
           {ableView && (
             <Image
@@ -99,6 +102,12 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
               flex={1}
               onError={() => setLoadFailed(true)}
             />
+          )}
+
+          {!ableView && !hover.hovered && (
+            <Center h="100%" w="100%">
+              <IconPhoto size={20} color="gray" strokeWidth={1.5} />
+            </Center>
           )}
 
           {hover.hovered && (

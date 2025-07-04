@@ -497,6 +497,10 @@
   cursor: pointer;
 }
 
+.unclickable {
+  cursor: not-allowed;
+}
+
 .unselectable {
   user-select: none !important;
   touch-action: none !important;

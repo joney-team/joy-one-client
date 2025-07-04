@@ -1,5 +1,5 @@
 import { ButtonSelect } from "@/components/buttons/button-select";
-import { CustomerKycCard } from "@/modules/customers/customer-kyc-card";
+import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { useEventsListener } from "@/modules/events/event-service";

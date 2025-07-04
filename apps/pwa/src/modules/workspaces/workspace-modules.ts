@@ -9,7 +9,7 @@ import {
   IconLayout, IconLayoutDashboard,
   IconMailbox, IconMessage, IconMessage2Cog, IconMessageCircle, IconMessageUser, IconNews, IconPackage, IconPill,
   IconPuzzle,
-  IconReportAnalytics, IconSettings, IconSettings2,
+  IconReportAnalytics, IconRosetteDiscount, IconSettings, IconSettings2,
   IconStack2,
   IconTopologyStar3,
   IconUserScan, IconUsersGroup,
@@ -50,8 +50,13 @@ const combineModule = (config: WorkspaceModuleConfig): WorkspaceModule => {
 export const workspaceModuleConfigs = {
   // Main
   dashboard: combineModule({ href: '/', icon: IconLayoutDashboard, hrefExact: true }),
+
+  // Posts
   posts: combineModule({ href: '/posts', icon: IconNews, permissions: WorkspacePermission.POSTS_VIEW }),
   postsNew: combineModule({ href: '/posts/new', icon: IconNews, permissions: WorkspacePermission.POSTS_MANAGER, restrictDisplay: ['spotlight'] }),
+
+  // Promotions
+  promotions: combineModule({ href: '/promotions', icon: IconRosetteDiscount, permissions: WorkspacePermission.PROMOTIONS_VIEW }),
 
   // HRM
   members: combineModule({ href: '/members', icon: IconUsersGroup, restrictDisplay: ['spotlight'], permissions: WorkspacePermission.WORKSPACE_MEMBERS_VIEW }),

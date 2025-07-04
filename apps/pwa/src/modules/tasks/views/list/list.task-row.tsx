@@ -2,7 +2,7 @@
 
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { ContentEditable } from "@/components/content-editable/content-editable";
-import { CustomerInput } from "@/modules/customers/customer-input";
+import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { DueDateInput } from "@/components/inputs/due-date-input";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { Renderer } from "@/components/renderer";

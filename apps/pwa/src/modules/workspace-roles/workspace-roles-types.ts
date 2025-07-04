@@ -83,6 +83,9 @@ export enum WorkspacePermission {
 
   CATEGORIES_VIEW = 'CV',
   CATEGORIES_MANAGER = 'CM',
+
+  PROMOTIONS_VIEW = 'PRV',
+  PROMOTIONS_MANAGER = 'PRM',
 }
 
 export interface WorkspaceRoleDto {

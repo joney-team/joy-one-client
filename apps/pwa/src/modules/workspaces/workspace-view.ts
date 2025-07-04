@@ -24,6 +24,7 @@ const defaultWorkspaceView: WorkspaceView = {
     { id: '', type: 'DIVIDER', dividerName: 'activities' },
     { id: '', type: 'MODULE', moduleId: 'orders' },
     { id: '', type: 'MODULE', moduleId: 'receipts' },
+    { id: '', type: 'MODULE', moduleId: 'promotions' },
 
     { id: '', type: 'DIVIDER', dividerName: 'business' },
     { id: '', type: 'MODULE', moduleId: 'products' },

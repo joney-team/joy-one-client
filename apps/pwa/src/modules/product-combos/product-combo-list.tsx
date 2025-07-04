@@ -4,7 +4,7 @@ import { type FC } from "react";
 import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { StatusColumn } from "@/components/list/columns/status-column";
-import { CustomerColumn } from "@/modules/customers/customer-column";
+import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { num, t, tMulti } from "@/modules/lang/lang-service";
 import { OnModalProductCombo } from "@/modules/product-combos/modals/modal-product-combo";
@@ -53,7 +53,12 @@ export const ProductComboList: FC = () => {
             exportToExcel: (productRefs) => {
               return {
                 text: productRefs
-                  .map((v) => `${v.productRef.name} (${num(v.quantity - v.quantityUsed)}/${num(v.quantity)})`)
+                  .map(
+                    (v) =>
+                      `${v.productRef.name} (${num(v.quantity - v.quantityUsed)}/${num(
+                        v.quantity
+                      )})`
+                  )
                   .join("\n"),
               };
             },

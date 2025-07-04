@@ -14,6 +14,7 @@ export interface OrderDto {
   couponIds?: string[];
   voucherIds?: string[];
   comboIds?: string[];
+  promotionIds?: string[];
   directDiscount?: number;
   assigneeUserIds?: string[];
   discountAmount?: number;

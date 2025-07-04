@@ -1,5 +1,5 @@
 import { Button } from "@/components/buttons/button";
-import { CustomerRelationshipContactInput } from "@/modules/customers/customer-relationship-contact-input";
+import { CustomerRelationshipContactInput } from "@/modules/customers/components/customer-relationship-contact-input";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { updateCustomer } from "../customer-service";
@@ -17,7 +17,9 @@ interface ModalCustomerRelationshipContactsProps {
   customer: CustomerEntity;
 }
 
-export const ModalCustomerRelationshipContacts: FC<ModalCustomerRelationshipContactsProps> = (props) => {
+export const ModalCustomerRelationshipContacts: FC<ModalCustomerRelationshipContactsProps> = (
+  props
+) => {
   const [contacts, handlers] = useListState(props.customer.relationshipContacts || []);
   const workspace = useWorkspace();
   const isEditable = workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO);
@@ -34,7 +36,11 @@ export const ModalCustomerRelationshipContacts: FC<ModalCustomerRelationshipCont
 
   return (
     <Stack>
-      <CustomerRelationshipContactInput value={contacts} onChange={handlers.setState} disabled={!isEditable} />
+      <CustomerRelationshipContactInput
+        value={contacts}
+        onChange={handlers.setState}
+        disabled={!isEditable}
+      />
 
       <Renderer visible={isEditable}>
         <Center>
@@ -47,7 +53,9 @@ export const ModalCustomerRelationshipContacts: FC<ModalCustomerRelationshipCont
   );
 };
 
-export const OnModalCustomerRelationshipContacts = (props: ModalCustomerRelationshipContactsProps) => {
+export const OnModalCustomerRelationshipContacts = (
+  props: ModalCustomerRelationshipContactsProps
+) => {
   return modals.open({
     modalId: "ModalCustomerRelationshipContacts",
     title: <ModalTitle title={t("customer_relationship_contacts")} icon={IconAddressBook} />,

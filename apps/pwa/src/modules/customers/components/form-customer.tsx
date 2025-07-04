@@ -20,7 +20,7 @@ import {
 import { useForm } from "@mantine/form";
 import { IconCake, IconCheck, IconClipboardHeart, IconMail, IconPhone } from "@tabler/icons-react";
 import { FC, useEffect } from "react";
-import { createCustomer, updateCustomer } from "./customer-service";
+import { createCustomer, updateCustomer } from "../customer-service";
 
 import { Form } from "@/components/form";
 import { DateInput } from "@/components/inputs/date-input";
@@ -31,8 +31,8 @@ import { getLocaleClient, t } from "@/modules/lang/lang-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Gender } from "@/types";
-import { LocationForm } from "../../components/location-form";
-import { Renderer } from "../../components/renderer";
+import { LocationForm } from "../../../components/location-form";
+import { Renderer } from "../../../components/renderer";
 import { CustomerRelationshipContactInput } from "./customer-relationship-contact-input";
 
 export interface CustomerFormProps {

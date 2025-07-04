@@ -9,7 +9,7 @@ import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-br
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { IconBuildingSkyscraper, IconLink } from "@tabler/icons-react";
 import { type FC } from "react";
-import { OnCustomerFormModal } from "../customers/customer-form-modal";
+import { OnCustomerFormModal } from "../customers/modals/modal-customer";
 import { CustomerFormEntity } from "./customer-form-entity";
 import { customerFormStatusConfigs, multiArchiveCustomerForm } from "./customer-form-service";
 import { OnModalCustomerForm } from "./modal-customer-form";
