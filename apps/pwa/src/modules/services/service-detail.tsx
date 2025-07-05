@@ -17,6 +17,7 @@ import { onArchive } from "@/utils/actions";
 import { useLayout } from "@/layout/layout-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useParams } from "next/navigation";
+import { Container } from "@/components/container";
 
 export const ServiceDetail: FC = () => {
   const workspace = useWorkspace();
@@ -41,39 +42,41 @@ export const ServiceDetail: FC = () => {
   }, [product.data]);
 
   return (
-    <Stack p={16}>
-      {!product.isInitialized && <Skeleton height={200} />}
-      {!!product.error && <Errored error={product.error} />}
-      {product.data && (
-        <Fragment>
-          <ProductCard product={product.data} />
-          <EventList ref={serviceId} />
+    <Container size="md" p={16}>
+      <Stack gap={30}>
+        {!product.isInitialized && <Skeleton height={200} />}
+        {!!product.error && <Errored error={product.error} />}
+        {product.data && (
+          <Fragment>
+            <ProductCard product={product.data} />
+            <EventList ref={serviceId} />
 
-          {workspace.hasPermission(WorkspacePermission.PRODUCTS_SERVICES_WRITE) && (
-            <Center>
-              <Button
-                h={25}
-                variant="subtle"
-                color="gray"
-                leftSection={
-                  <IconArchive strokeWidth={1.3} size={16} style={{ marginRight: -5 }} />
-                }
-                onClick={() =>
-                  onArchive({
-                    name: "Dịch vụ",
-                    process: () => archiveProduct(serviceId),
-                    onArchived: () => router.back(),
-                  })
-                }
-              >
-                <Text fz={12} fw={400}>
-                  Xoá
-                </Text>
-              </Button>
-            </Center>
-          )}
-        </Fragment>
-      )}
-    </Stack>
+            {workspace.hasPermission(WorkspacePermission.PRODUCTS_SERVICES_WRITE) && (
+              <Center>
+                <Button
+                  h={25}
+                  variant="subtle"
+                  color="gray"
+                  leftSection={
+                    <IconArchive strokeWidth={1.3} size={16} style={{ marginRight: -5 }} />
+                  }
+                  onClick={() =>
+                    onArchive({
+                      name: "Dịch vụ",
+                      process: () => archiveProduct(serviceId),
+                      onArchived: () => router.back(),
+                    })
+                  }
+                >
+                  <Text fz={12} fw={400}>
+                    Xoá
+                  </Text>
+                </Button>
+              </Center>
+            )}
+          </Fragment>
+        )}
+      </Stack>
+    </Container>
   );
 };

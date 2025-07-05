@@ -79,7 +79,7 @@ export const ProductDetail: FC = () => {
   }, [product.data]);
 
   return (
-    <Container size="xl" p={16}>
+    <Container size="md" p={16}>
       <Stack gap={30}>
         {!product.isInitialized && <Skeleton height={200} />}
         {!!product.error && <Errored error={product.error} />}
