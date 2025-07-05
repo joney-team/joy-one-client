@@ -107,18 +107,24 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
   } = props;
 
   const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
+
   const isListable = listRoute && listRoute.length > 0;
   const list = useList<T>({
     isSkip: !isListable,
     id: `sopts${listRoute}${JSON.stringify(listParams)}${workspaceId}`,
-    fetch: async (p) =>
-      api.get(listRoute!, {
+    fetch: async (p) => {
+      if (!listRoute || listRoute.length === 0) {
+        return { data: [], count: 0 };
+      }
+
+      return api.get(listRoute!, {
         params: {
           sortLastInteractionAt: -1,
           ...listParams,
           ...p,
         },
-      }),
+      });
+    },
   });
 
   const dropdownRef = useRef<HTMLDivElement>(null);

@@ -183,13 +183,15 @@ export const useList = <T = any>(args: UseListArgs<T>): UseList<T> => {
         ...combinedQuery,
       }, controller.current);
 
-      setList(s => ({
-        ...s,
-        data: _isReset ? response!.data : [...list.data, ...response!.data],
-        count: response!.count,
-        report: response!.report,
-        error: undefined,
-      }));
+      if (Array.isArray(response.data)) {
+        setList(s => ({
+          ...s,
+          data: _isReset ? response!.data : [...list.data, ...response!.data],
+          count: response!.count,
+          report: response!.report,
+          error: undefined,
+        }));
+      }
     } catch (error: any) {
       setList(s => ({
         ...s,
