@@ -18,8 +18,6 @@ import { TechIllustration } from "@/components/illustrations/tech";
 import { onError } from "@/utils/exceptions.utils";
 import { type FC } from "react";
 import { api } from "../apis";
-import { CustomerInput } from "../customers/components/customer-input";
-import { WorkspaceMemberSelector } from "../workspace-members/components/workspace-member-selector";
 
 export const AdminTools: FC = () => {
   const workspace = useWorkspace();
@@ -28,31 +26,23 @@ export const AdminTools: FC = () => {
     <Stack p={16}>
       <SessionTitle name="Admin Tools" icon={IconTools} />
       <Card shadow="xs">
-        <Group>
-          <CustomerInput
-            onChange={(value) => {
-              console.log("value", value);
-            }}
-          />
-
-          <WorkspaceMemberSelector
-            onSelect={(value) => {
-              console.log("value", value);
-            }}
-          />
-
+        <Stack align="start">
           <Button onClick={() => api.post("/helpers/reset-redis")}>Reset Redis Cache</Button>
 
           <Button onClick={() => api.patch(`/loans/sync-all`)}>Sync All Loans</Button>
 
           <Button onClick={() => api.patch(`/orders/sync-all`)}>Sync All Orders</Button>
 
+          <Button onClick={() => api.patch(`/loans/sync-customer-branch`)}>
+            Sync Loan branch to Customer branch
+          </Button>
+
           <Button
             onClick={() => Promise.all(new Array(100).fill(0).map(() => api.get(`/receipts`)))}
           >
             Test Rate Limit
           </Button>
-        </Group>
+        </Stack>
       </Card>
 
       <SessionTitle name="Set Runtime Webhook URL" icon={IconTools} />

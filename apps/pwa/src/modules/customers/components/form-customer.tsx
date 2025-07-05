@@ -34,6 +34,7 @@ import { Gender } from "@/types";
 import { LocationForm } from "../../../components/location-form";
 import { Renderer } from "../../../components/renderer";
 import { CustomerRelationshipContactInput } from "./customer-relationship-contact-input";
+import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 
 export interface CustomerFormProps {
   onDone?: (customer: CustomerEntity) => void | Promise<void>;
@@ -70,6 +71,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
       assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMember) => user.userId),
       presenterCustomerId: values.presenterCustomer?._id,
       relatedCustomerIds: values.relatedCustomers?.map((c: CustomerEntity) => c._id),
+      workspaceBranchId: values.workspaceBranch?._id,
     };
 
     delete payload.assigneeUsers;
@@ -104,6 +106,12 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
   return (
     <Form onSubmit={onSubmit}>
       <Stack>
+        <WorkspaceBranchInput
+          label={t("branch")}
+          value={form.values.workspaceBranch}
+          onChange={(branch) => form.setFieldValue("workspaceBranch", branch)}
+        />
+
         <TextInput autoFocus withAsterisk label={t("name")} {...form.getInputProps("name")} />
         <TextInput
           label={t("phone")}

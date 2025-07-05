@@ -64,6 +64,7 @@ export interface WorkspaceDto {
 export interface WorkspaceContext {
   isInitialized: boolean;
   isAvailable: boolean;
+  isHasAccessAllBranches: boolean;
   userMember: WorkspaceMember;
   userMembers: WorkspaceMember[];
   select: (workspaceId: string) => void;

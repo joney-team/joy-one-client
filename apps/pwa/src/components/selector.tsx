@@ -334,20 +334,16 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                   })}
                 </Fragment>
               ) : (
-                <Fragment>
-                  {!searching && !listRoute && (
-                    <Combobox.Empty>
-                      <Group gap={0} justify="center" flex={1}>
-                        <ThemeIcon variant="transparent" color="gray.5">
-                          <IconBackground strokeWidth={1.1} size={18} />
-                        </ThemeIcon>
-                        <Text c="gray.5" fz={12}>
-                          {t("type_something_to_search")}
-                        </Text>
-                      </Group>
-                    </Combobox.Empty>
-                  )}
-                </Fragment>
+                <Combobox.Empty>
+                  <Group gap={0} justify="center" flex={1}>
+                    <ThemeIcon variant="transparent" color="gray.5">
+                      <IconBackground strokeWidth={1.1} size={18} />
+                    </ThemeIcon>
+                    <Text c="gray.5" fz={12}>
+                      {t(searching ? "type_something_to_search" : "no_results")}
+                    </Text>
+                  </Group>
+                </Combobox.Empty>
               )}
 
               {isListable && list.isFetching && (

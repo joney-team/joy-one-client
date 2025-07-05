@@ -1,3 +1,5 @@
+"use client";
+
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { StatusColumn } from "@/components/list/columns/status-column";
@@ -7,13 +9,14 @@ import { renderLocation } from "@/modules/locations/locations-service";
 import { OnModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
 import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { AppEntity } from "@/types";
+import { Stack } from "@mantine/core";
 import { IconBuildingSkyscraper, IconLink } from "@tabler/icons-react";
 import { type FC } from "react";
 import { OnCustomerFormModal } from "../customers/modals/modal-customer";
 import { CustomerFormEntity } from "./customer-form-entity";
 import { customerFormStatusConfigs, multiArchiveCustomerForm } from "./customer-form-service";
 import { OnModalCustomerForm } from "./modal-customer-form";
-import { Stack } from "@mantine/core";
 
 export const CustomerFormList: FC = () => {
   return (
@@ -46,13 +49,7 @@ export const CustomerFormList: FC = () => {
           },
           workspaceBranchId: WorkspaceBranchColumn({
             w: 320,
-            onChange: (data) => {
-              if (!data) return;
-              OnModalUpdateWorkspaceBranch({
-                customerForms: [data],
-                workspaceBranch: data.workspaceBranch,
-              });
-            },
+            entity: AppEntity.CUSTOMER_FORMS,
           }),
           status: StatusColumn({
             w: 200,
@@ -75,9 +72,9 @@ export const CustomerFormList: FC = () => {
             permission: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
             handler: (data, ctx) =>
               OnModalUpdateWorkspaceBranch({
-                customerForms: data,
+                entity: AppEntity.CUSTOMER_FORMS,
+                ids: data.map((v) => v._id),
                 onComplete: ctx.unSelect,
-                workspaceBranch: data[0].workspaceBranch,
               }),
           },
           {

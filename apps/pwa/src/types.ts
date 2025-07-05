@@ -105,6 +105,7 @@ export interface ViewWidget<T = string> {
 
 export enum AppEntity {
   CUSTOMERS = 'C',
+  CUSTOMER_FORMS = 'CF',
   PARTNERS = 'PA',
   TASKS = 'A',
   PRODUCTS = 'P',

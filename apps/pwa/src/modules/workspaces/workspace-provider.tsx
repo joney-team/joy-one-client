@@ -245,9 +245,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     _setInvitationState(undefined);
   };
 
-  const initialize = async () => {
+  const initialize = async (args?: { isSilient?: boolean }) => {
     try {
-      startAppLoading("initial-workspace");
+      if (!args?.isSilient) startAppLoading("initial-workspace");
       await runWithDelay(async () => {
         if (app.metadata.isExtended && app.metadata.workspaceId) {
           onSetWorkspaceId(app.metadata.workspaceId);
@@ -268,7 +268,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       console.error(error);
     } finally {
       _setIsInitialized(true);
-      endAppLoading("initial-workspace");
+      if (!args?.isSilient) endAppLoading("initial-workspace");
     }
   };
 
@@ -431,7 +431,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       EventType.WORKSPACE_BRANCH_UPDATED,
     ],
     () => {
-      initialize();
+      initialize({ isSilient: true });
     }
   );
 
@@ -450,7 +450,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   }, [auth.user?._id]);
 
   onReconnected(() => {
-    if (auth.user?._id) initialize();
+    if (auth.user?._id) {
+      initialize({ isSilient: true });
+    }
   }, [auth.user?._id]);
 
   useEffect(() => {
@@ -496,6 +498,12 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     userMember?.workspace.branches > 0 &&
     !userMember.workspaceBranches.length &&
     !userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS);
+
+  const isShouldEnableBranches =
+    !!userMember &&
+    userMember.workspace.branches > 0 &&
+    (userMember.workspaceBranches.length > 1 ||
+      userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS));
 
   const contextValue: WorkspaceContext = {
     onlineStatus: onlineStatus.data || {},
@@ -545,11 +553,10 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     archive,
     join,
     ref: `${userMember?.workspaceId || "WS"}`,
-    isShouldEnableBranches:
+    isHasAccessAllBranches:
       !!userMember &&
-      userMember.workspace.branches > 0 &&
-      (userMember.workspaceBranches.length > 1 ||
-        userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)),
+      userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS),
+    isShouldEnableBranches,
     isShowBranches: !!userMember && userMember.workspace.branches > 0,
     defaultBranch: userMember?.workspaceBranches[0],
     isAvailable: isInitialized && !!auth.user && !!userMember && !!state.current.settings,

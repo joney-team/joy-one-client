@@ -1,6 +1,5 @@
 import { BasePostgresEntity, Coordinates } from "@/types";
-import { CustomerEntity, CustomerShortInfo } from "../customers/customer-types";
-import { ReceiptPaymentMethod } from "../receipts/receipts-types";
+import { CustomerShortInfo } from "../customers/customer-types";
 
 export interface LoanPayment {
   accountName: string,

@@ -9,12 +9,14 @@ import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { Gender } from "@/types";
+import { AppEntity, Gender } from "@/types";
 import { Stack } from "@mantine/core";
 import { IconGenderBigender, IconMail, IconPhone, IconUserSquare } from "@tabler/icons-react";
 import { type FC } from "react";
 import { customerGenderOptions } from "./customer-service";
 import { CustomerEntity } from "./customer-types";
+import { WorkspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
+import { OnModalUpdateWorkspaceBranch } from "../workspace-branches/modals/modal-update-workspace-branch";
 
 export const CustomerList: FC = () => {
   const workspace = useWorkspace();
@@ -73,13 +75,21 @@ export const CustomerList: FC = () => {
               };
             },
           },
+          workspaceBranchId: WorkspaceBranchColumn({
+            entity: AppEntity.CUSTOMERS,
+          }),
         }}
         card={({ data }) => <CustomerCard customer={data} />}
         creatable={{
           onCreate: () => OnCustomerModal(),
           permission: WorkspacePermission.CUSTOMERS_CREATE,
         }}
-        events={[EventType.CUSTOMER_NEW, EventType.CUSTOMER_UPDATED, EventType.CUSTOMER_ARCHIVED]}
+        events={[
+          EventType.CUSTOMER_NEW,
+          EventType.CUSTOMER_UPDATED,
+          EventType.CUSTOMER_ARCHIVED,
+          EventType.CUSTOMER_BULK_UPDATE_WORKSPACE_BRANCH,
+        ]}
       />
     </Stack>
   );

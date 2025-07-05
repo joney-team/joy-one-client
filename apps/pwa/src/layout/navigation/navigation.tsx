@@ -1,12 +1,12 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
-import { useRouter } from "@/hooks/use-router";
 import { Avatar } from "@/components/avatar";
+import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { t } from "@/modules/lang/lang-service";
-import { workspaceModuleConfigs } from "@/modules/workspaces/workspace-modules";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { workspaceModuleConfigs } from "@/modules/workspaces/workspace-modules";
 import { getDefaultWorkspaceView, getNavigationGroups } from "@/modules/workspaces/workspace-view";
 import { StringUtils } from "@/utils/string.utils";
 import {
@@ -24,9 +24,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { Renderer } from "../../components/renderer";
-import { WorkspaceNavigationMenu } from "./navigation-menu";
-import { WorkspaceNavigationDrawer } from "./navigation-drawer";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+import { WorkspaceNavigationDrawer } from "./navigation-drawer";
+import { WorkspaceNavigationMenu } from "./navigation-menu";
 
 export const AppNavigation: FC = () => {
   const layout = useLayout();

@@ -2,26 +2,27 @@
 
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
-import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { useFormSubmit } from "@/hooks/use-form";
 import { useRouter } from "@/hooks/use-router";
 import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
 import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
+import { OnModalRegisterCustomerKyc } from "@/modules/customer-kycs/modal-register-customer-kyc";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { t } from "@/modules/lang/lang-service";
+import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import { CreateLoanDto } from "@/modules/loans/loan-dtos";
 import { createLoan, getLoans, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { LoanAssetType } from "@/modules/loans/loans-types";
 import { getGeolocation } from "@/modules/locations/locations-service";
 import { useBanks } from "@/modules/plugins/banks/banks.services";
+import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { renderBankSelectOption } from "@/modules/workspaces/components/workspace-bank-information";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { onError } from "@/utils/exceptions.utils";
 import {
   Card,
@@ -35,8 +36,8 @@ import {
   Skeleton,
   Stack,
   Text,
-  ThemeIcon,
   TextInput,
+  ThemeIcon,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -52,7 +53,6 @@ import {
   IconUserScan,
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, useState } from "react";
-import { OnModalRegisterCustomerKyc } from "@/modules/customer-kycs/modal-register-customer-kyc";
 
 interface ModalCreateLoanProps {
   customer?: CustomerShortInfo;

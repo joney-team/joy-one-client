@@ -11,12 +11,24 @@ import { searchEntity } from "../search/search-service";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { getWorkspaceBranchByIds } from "./workspace-branches-service";
+import {
+  OnModalUpdateWorkspaceBranch,
+  permissionRequireds,
+} from "./modals/modal-update-workspace-branch";
 
-export const WorkspaceBranchColumn = (args?: {
-  onChange?: (data: any) => void;
+type WorkspaceBranchColumnData = any;
+
+interface WorkspaceBranchColumnProps {
   w?: number;
-}): Column => {
+  entity: AppEntity;
+}
+
+export const WorkspaceBranchColumn = (
+  args: WorkspaceBranchColumnProps
+): Column<WorkspaceBranchColumnData, any> => {
   const workspace = useWorkspace();
+  const permissionRequired = permissionRequireds[args.entity];
+  const isEditable = permissionRequired && workspace.hasPermission(permissionRequired);
 
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
     return [
@@ -30,22 +42,27 @@ export const WorkspaceBranchColumn = (args?: {
     icon: IconBuildingSkyscraper,
     name: "branch",
     render: ({ data }) => {
+      const id = data.id || data._id;
       return (
-        <Hovered disabled={!args?.onChange}>
+        <Hovered disabled={!isEditable}>
           {(hover) => {
             return (
-              <Group
-                ref={hover.ref}
-                gap={5}
-                onClick={() => {
-                  if (!args?.onChange) return;
-                  args.onChange(data);
-                }}
-              >
+              <Group ref={hover.ref} gap={5}>
                 <Text>
                   {data.workspaceBranch ? data.workspaceBranch.name : t("main_workspace_branch")}
                 </Text>
-                <ActionIcon variant="subtle" color="gray" opacity={hover.hovered ? 1 : 0}>
+
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  opacity={hover.hovered ? 1 : 0}
+                  onClick={() => {
+                    OnModalUpdateWorkspaceBranch({
+                      entity: args.entity,
+                      ids: [id],
+                    });
+                  }}
+                >
                   <IconFileExport size={16} />
                 </ActionIcon>
               </Group>
@@ -58,7 +75,7 @@ export const WorkspaceBranchColumn = (args?: {
       if (!data.workspaceBranch) return t("main_workspace_branch");
       return data.workspaceBranch.name;
     },
-    disabled: !workspace.isShowBranches,
+    disabled: !workspace.isShouldEnableBranches,
     filter:
       workspace.userMember.workspace.branches > 0 &&
       workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)

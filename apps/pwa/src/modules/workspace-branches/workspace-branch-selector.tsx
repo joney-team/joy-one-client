@@ -18,27 +18,25 @@ interface WorkspaceBranchSelectorProps extends Partial<SelectorProps<WorkspaceBr
 
 export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = (props) => {
   const workspace = useWorkspace();
+  const isFullAccess = workspace.userMember.permissions.includes(
+    WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
+  );
+
+  const listRoute = isFullAccess ? "/workspace-branches" : undefined;
 
   return (
     <Selector<WorkspaceBranchOption>
       {...props}
-      staticSearch={
-        !workspace.userMember.permissions.includes(
-          WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
-        )
-      }
+      staticSearch={!isFullAccess}
       onSearch={(q) => {
-        if (
-          workspace.userMember.permissions.includes(
-            WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
-          )
-        ) {
+        if (isFullAccess) {
           return searchEntity(AppEntity.WORKSPACE_BRANCHES, q);
         }
 
         return searchArray(workspace.userMember.workspaceBranches, ["name"], q);
       }}
-      listRoute="/workspace-branches"
+      listRoute={listRoute}
+      pinnedOptions={isFullAccess ? undefined : workspace.userMember.workspaceBranches}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

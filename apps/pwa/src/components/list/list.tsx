@@ -148,7 +148,10 @@ export function List<T = any>(props: ListProps<T>) {
     onSaveViewState,
     toggleActivatedMode,
     columnSettings: Object.keys(props.columns)
-      .filter((v) => !props.columns[v as keyof T]?.disabled)
+      .filter((v) => {
+        const column = props.columns[v as keyof T];
+        return column && column.disabled !== true;
+      })
       .map((v, i) => {
         const columnSetting = viewStateRef.current.columnSettings?.find((s) => s.id === v);
         const column = props.columns[v as keyof T];

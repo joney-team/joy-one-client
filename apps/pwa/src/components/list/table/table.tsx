@@ -54,7 +54,12 @@ export default function ListTable<T>(ctx: ListContext<T>) {
                 const isSelected = ctx.selectedIds.includes(id);
 
                 return (
-                  <Table.Td pl={isShowSelect ? 10 : undefined} key={columnSetting.id} w={w} align={column.align}>
+                  <Table.Td
+                    pl={isShowSelect ? 10 : undefined}
+                    key={columnSetting.id}
+                    w={w}
+                    align={column.align}
+                  >
                     <Group wrap="nowrap" gap={4} justify={column.align}>
                       {isShowSelect && (
                         <Checkbox

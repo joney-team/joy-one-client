@@ -38,6 +38,7 @@ import {
 import dayjs from "dayjs";
 import { FC, Fragment } from "react";
 import { useColor } from "../theme/use-color";
+import { AppEntity } from "@/types";
 
 interface LoanListProps {
   strictStatus?: LoanStatus[];
@@ -104,15 +105,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
           isHasFilter: true,
           w: 200,
         }),
-        workspaceBranchId: WorkspaceBranchColumn({
-          onChange: (data) => {
-            if (!data) return;
-            OnModalUpdateWorkspaceBranch({
-              loans: [data],
-              workspaceBranch: data.workspaceBranch,
-            });
-          },
-        }),
+        workspaceBranchId: WorkspaceBranchColumn({ entity: AppEntity.LOANS }),
         customerId: CustomerColumn({ valuePath: "customer" }),
         packageId: {
           icon: IconCoins,
@@ -332,9 +325,9 @@ export const LoanList: FC<LoanListProps> = (props) => {
           permission: WorkspacePermission.LOANS_UPDATE_WORKSPACE_BRANCH,
           handler: (data, ctx) =>
             OnModalUpdateWorkspaceBranch({
-              loans: data,
+              entity: AppEntity.LOANS,
+              ids: data.map((v) => v.id),
               onComplete: ctx.unSelect,
-              workspaceBranch: data[0].workspaceBranch,
             }),
         },
         {

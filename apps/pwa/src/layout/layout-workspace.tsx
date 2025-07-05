@@ -1,6 +1,9 @@
 "use client";
 
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { backgroundColors, backgroundPatternColors } from "@joy-one-client/config/colors";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { Skeleton, Stack } from "@mantine/core";
 import { useHeadroom } from "@mantine/hooks";
 import dynamic from "next/dynamic";
@@ -8,9 +11,6 @@ import { Fragment, Suspense, useEffect, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 import { WorkspaceNavigationSplitter } from "./navigation/navigation-splitter";
-import { backgroundColors, backgroundPatternColors } from "@joy-one-client/config/colors";
-import { zIndexes } from "@joy-one-client/config/layout";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 
 const SuspenseFallback = () => {
   return (
@@ -100,40 +100,42 @@ export const LayoutWorkspace: FC = () => {
         )}
       </Stack>
 
-      <Stack
-        gap={0}
-        bg={workspaceLayout.pannelBackground}
-        pos="fixed"
-        style={
-          layout.view === "mobile"
-            ? {
-                bottom: 0,
-                left: 0,
-                zIndex: zIndexes.pannel,
-                height: workspaceLayout.navigationHeight,
-                width: "100dvw",
-                transform: `translate3d(0, ${pinned ? 0 : "110px"}, 0)`,
-                transition: workspaceLayout.transition("all"),
-                borderTop: `1px solid ${workspaceLayout.dividerColor}`,
-                background: "red",
-                boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
-              }
-            : {
-                top: 0,
-                left: 0,
-                width: workspaceLayout.navigationWidth,
-                height: workspaceLayout.navigationHeight,
-                zIndex: zIndexes.pannel,
-                borderRight: `1px solid ${workspaceLayout.dividerColor}`,
-              }
-        }
-      >
-        {workspace.isAvailable && (
-          <Suspense fallback={<SuspenseFallback />}>
-            <AppNavigation />
-          </Suspense>
-        )}
-      </Stack>
+      {workspaceLayout.navigationHeight > 0 && (
+        <Stack
+          gap={0}
+          bg={workspaceLayout.pannelBackground}
+          pos="fixed"
+          style={
+            layout.view === "mobile"
+              ? {
+                  bottom: 0,
+                  left: 0,
+                  zIndex: zIndexes.pannel,
+                  height: workspaceLayout.navigationHeight,
+                  width: "100dvw",
+                  transform: `translate3d(0, ${pinned ? 0 : "110px"}, 0)`,
+                  transition: workspaceLayout.transition("all"),
+                  borderTop: `1px solid ${workspaceLayout.dividerColor}`,
+                  background: "red",
+                  boxShadow: "0 0 10px 0 rgba(0, 0, 0, 0.1)",
+                }
+              : {
+                  top: 0,
+                  left: 0,
+                  width: workspaceLayout.navigationWidth,
+                  height: workspaceLayout.navigationHeight,
+                  zIndex: zIndexes.pannel,
+                  borderRight: `1px solid ${workspaceLayout.dividerColor}`,
+                }
+          }
+        >
+          {workspace.isAvailable && (
+            <Suspense fallback={<SuspenseFallback />}>
+              <AppNavigation />
+            </Suspense>
+          )}
+        </Stack>
+      )}
 
       <WorkspaceNavigationSplitter />
     </Fragment>

@@ -4,6 +4,7 @@ import { ActionIcon, Group, Input, InputWrapper, InputWrapperProps } from "@mant
 import { IconChevronDown, IconX } from "@tabler/icons-react";
 import { FC } from "react";
 import { WorkspaceBranchSelector } from "./workspace-branch-selector";
+import { useWorkspace } from "../workspaces/workspace-context";
 
 interface WorkspaceBranchInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline"> | null;
@@ -14,6 +15,9 @@ interface WorkspaceBranchInputProps extends Omit<InputWrapperProps, "value" | "o
 
 export const WorkspaceBranchInput: FC<WorkspaceBranchInputProps> = (props) => {
   const { value, onChange, disabled, autoHide, ...rest } = props;
+  const workspace = useWorkspace();
+
+  if (!workspace.isShouldEnableBranches) return null;
 
   return (
     <InputWrapper {...rest}>
