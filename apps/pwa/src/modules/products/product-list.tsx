@@ -14,6 +14,8 @@ import { IconBox, IconBuildingWarehouse, IconEdit, IconEye } from "@tabler/icons
 import { type FC } from "react";
 import { CategoryColumn } from "../categories/components/category-column";
 import { PostColumn } from "../posts/components/post-column";
+import { EntityImage } from "@/components/entity-image";
+import { getProductIcon } from "./products-service";
 
 export const ProductList: FC = () => {
   const router = useRouter();
@@ -31,6 +33,20 @@ export const ProductList: FC = () => {
           permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,
         }}
         columns={{
+          image: {
+            w: 100,
+            align: "center",
+            render: ({ data }) => {
+              return (
+                <EntityImage
+                  src={data.image}
+                  icon={getProductIcon(data.type)}
+                  size={50}
+                  radius={8}
+                />
+              );
+            },
+          },
           name: {
             render: ({ data }) => {
               return (
