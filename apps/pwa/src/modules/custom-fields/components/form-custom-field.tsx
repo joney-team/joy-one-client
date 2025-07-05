@@ -120,6 +120,7 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
           {...form.getInputProps("entities")}
           data={[
             AppEntity.POSTS,
+            AppEntity.PROMOTIONS,
             AppEntity.TASKS,
             AppEntity.RECEIPTS,
             AppEntity.CUSTOMERS,

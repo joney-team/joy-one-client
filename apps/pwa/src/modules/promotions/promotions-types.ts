@@ -1,6 +1,7 @@
-import { BaseMongoEntity, BasePostgresEntity, DynamicSelection } from "@/types";
-import { ProductEntity } from "../products/products-types";
+import { BasePostgresEntity, DynamicSelection } from "@/types";
 import { CustomerEntity } from "../customers/customer-types";
+import { ProductEntity } from "../products/products-types";
+import { CustomFieldValue } from "../custom-fields/custom-field-types";
 
 export enum PromotionStatus {
   ACTIVE = 'ACTIVE',
@@ -24,6 +25,7 @@ export interface PromotionDto {
   productsSelection?: DynamicSelection<Pick<ProductEntity, '_id' | 'name' | 'type'>>;
   customersSelection?: DynamicSelection<Pick<CustomerEntity, '_id' | 'name' | 'phone'>>;
   status?: PromotionStatus;
+  customFieldValues?: CustomFieldValue[];
 }
 
 export interface PromotionEntity extends BasePostgresEntity {

@@ -11,6 +11,8 @@ import { useForm } from "@mantine/form";
 import { type FC } from "react";
 import { promotionRuleTypeConfigs, promotionRuleValueConfig } from "../promotions-service";
 import { PromotionDto, PromotionEntity, PromotionStatus, PromotionType } from "../promotions-types";
+import { CustomField, CustomFieldValue } from "@/modules/custom-fields/custom-field-types";
+import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 
 export interface FormPromotionProps {
   promotion?: PromotionEntity;
@@ -29,6 +31,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
     productsSelection: DynamicSelection;
     customersSelection: DynamicSelection;
     status: PromotionStatus;
+    customFields?: CustomField[];
   }>({
     initialValues: {
       name: props.promotion?.name || "",
@@ -49,6 +52,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
         value: [],
       },
       status: props.promotion?.status || PromotionStatus.ACTIVE,
+      customFields: props.promotion?.customFields || [],
     },
     validate: {
       name: (value) => {
@@ -62,6 +66,12 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
+      const customFieldValues: CustomFieldValue[] =
+        values.customFields?.map((customField) => ({
+          customFieldId: customField.customFieldId,
+          value: customField.value,
+        })) || [];
+
       const dto: PromotionDto = {
         name: values.name,
         description: values.description,
@@ -78,6 +88,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
           ...values.customersSelection,
           value: values.customersSelection.value.map((v) => v._id),
         },
+        customFieldValues,
       };
 
       let promotion: PromotionEntity | null = null;
@@ -151,6 +162,12 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
         />
 
         <DateTimeInput label={t("expireAt")} {...form.getInputProps("expireAt")} />
+
+        <BuilderCustomFields
+          entity={AppEntity.PROMOTIONS}
+          value={form.values.customFields}
+          onChange={(value) => form.setFieldValue("customFields", value)}
+        />
 
         <Center>
           <Button type="submit" loading={form.submitting}>

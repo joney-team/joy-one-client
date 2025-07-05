@@ -126,6 +126,7 @@ export enum AppEntity {
   MESSAGES = 'MS',
   POSTS = 'PS',
   CATEGORIES = 'CT',
+  PROMOTIONS = 'PR',
 }
 
 export interface AppPageMetadata {
