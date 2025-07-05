@@ -27,7 +27,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
     expireAt: number;
     type: PromotionType;
     value: number | null;
-    limitPerCustomer: number | null;
+    limitPerCustomer?: number;
     productsSelection: DynamicSelection;
     customersSelection: DynamicSelection;
     status: PromotionStatus;
@@ -40,7 +40,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
       expireAt: props.promotion?.expireAt || 0,
       type: props.promotion?.type || PromotionType.DISCOUNT_RATE,
       value: props.promotion?.value || null,
-      limitPerCustomer: props.promotion?.limitPerCustomer || null,
+      limitPerCustomer: props.promotion?.limitPerCustomer,
       productsSelection: props.promotion?.productsSelection || {
         entity: AppEntity.PRODUCTS,
         operator: DynamicSelectionOperator.INCLUDES,
@@ -79,7 +79,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
         expireAt: values.expireAt,
         type: values.type,
         value: values.value as number,
-        limitPerCustomer: values.limitPerCustomer as number,
+        limitPerCustomer: values.limitPerCustomer,
         productsSelection: {
           ...values.productsSelection,
           value: values.productsSelection.value.map((v) => v._id),
