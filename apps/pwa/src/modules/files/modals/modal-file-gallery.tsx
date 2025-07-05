@@ -96,7 +96,7 @@ export const ModalFileGallery: FC = () => {
           overflow: "hidden",
         },
       }}
-      zIndex={zIndexes.modals}
+      zIndex={zIndexes.modals + 200}
     >
       <Group h={head} justify="space-between" px={16} bg="dark.7" wrap="nowrap" w="100%">
         <SimpleGrid cols={3} w="100%">

@@ -2,12 +2,13 @@
 
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
-import { EntityImage } from "@/components/entity-image";
+import { ImageInput } from "@/components/inputs/image-input";
 import { Renderer } from "@/components/renderer";
-import { CategoryType } from "@/modules/categories/category-types";
 import { CategoryInput } from "@/modules/categories/components/category-input";
-import { uploadFile } from "@/modules/files/file-service";
+import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
+import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
 import { t } from "@/modules/lang/lang-service";
+import { PostSelector } from "@/modules/posts/components/post-selector";
 import { ProductSelector } from "@/modules/products/components/product-selector";
 import { archiveProduct, createProduct, updateProduct } from "@/modules/products/products-service";
 import {
@@ -16,6 +17,7 @@ import {
   ProductSupply,
   ProductType,
 } from "@/modules/products/products-types";
+import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import {
   ActionIcon,
@@ -156,21 +158,20 @@ export const FormProduct: FC<
           throw new Error(`${t("must_be_provided")} ${t("products")}/${t("services")}`);
       }
 
+      const { customFields, post, ...rest } = values;
+
       let payload = {
-        ...values,
+        ...rest,
         categoryId: values.category?._id,
         supplies,
         combos: combos.map((c) => ({ productId: c.productId, quantity: c.quantity })),
         voucherExcludeProductIds: voucherExcludeProducts.map((p) => p._id),
         voucherIncludeProductIds: voucherIncludeProducts.map((p) => p._id),
+        customFieldValues: getCustomFieldValue(customFields),
+        postId: post?._id,
       };
 
       if (!values.isRangePrice) delete payload.minPrice;
-
-      if (values.image instanceof File) {
-        const image = await uploadFile({ file: values.image, maxWidthOrHeight: 300 });
-        payload.image = image.relativePath;
-      }
 
       const action = props.product
         ? () => updateProduct(props.product!._id, payload)
@@ -190,7 +191,7 @@ export const FormProduct: FC<
     <Stack>
       <SimpleGrid cols={{ md: 2 }} spacing={30}>
         <Stack>
-          <EntityImage src={form.values.image} onChange={(f) => form.setFieldValue("image", f)} />
+          <ImageInput {...form.getInputProps("image")} w={150} h={150} />
 
           <TextInput withAsterisk label={t("name")} {...form.getInputProps("name")} />
 
@@ -267,6 +268,12 @@ export const FormProduct: FC<
               label={t("display_name")}
               description={t("product_display_name_desc")}
               {...form.getInputProps("displayName")}
+            />
+
+            <PostSelector
+              w="100%"
+              label={t("link_entity", { entity: t("post") })}
+              {...form.getInputProps("post")}
             />
 
             <Switch
@@ -513,6 +520,15 @@ export const FormProduct: FC<
               </Group>
             </Stack>
           </Renderer>
+
+          <BuilderCustomFields
+            before={
+              <Divider mb={-10} label={`${t("custom_fields")}`} labelPosition="left" fw={700} />
+            }
+            entity={AppEntity.PRODUCTS}
+            value={form.values.customFields}
+            onChange={(value) => form.setFieldValue("customFields", value)}
+          />
         </Stack>
       </SimpleGrid>
 

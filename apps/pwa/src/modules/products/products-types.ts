@@ -26,6 +26,7 @@ export interface ProductDto {
   warningOutOfStockQty?: number;
 
   categoryId?: string;
+  postId?: string;
   supplies?: ProductSupply[];
 
   // Combo related
@@ -75,6 +76,7 @@ export interface ProductEntity extends BaseMongoEntity, ProductEntityBindData {
 
   type: ProductType;
   categoryId?: string;
+  postId?: string;
 }
 
 export interface ProductsQuery extends Query {

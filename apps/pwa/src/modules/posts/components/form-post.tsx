@@ -9,8 +9,8 @@ import { Renderer } from "@/components/renderer";
 import { CategoryEntity } from "@/modules/categories/category-types";
 import { CategoryInput } from "@/modules/categories/components/category-input";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
-import { CustomField, CustomFieldValue } from "@/modules/custom-fields/custom-field-types";
-import { ProductInput, ProductValue } from "@/modules/products/components/product-input";
+import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
+import { CustomField } from "@/modules/custom-fields/custom-field-types";
 import { AppEntity } from "@/types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import {
@@ -51,7 +51,6 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
     thumbnail?: string;
     category?: CategoryEntity | null;
     customFields?: CustomField[];
-    product: ProductValue | null;
   }>({
     initialValues: {
       title: post?.title || "",
@@ -61,7 +60,6 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       contentHtml: post?.contentHtml || "",
       category: post?.category,
       customFields: post?.customFields || [],
-      product: post?.product ?? null,
     },
   });
 
@@ -77,21 +75,14 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      const { category, customFields, product, ...dto } = values;
-
-      const customFieldValues: CustomFieldValue[] =
-        customFields?.map((customField) => ({
-          customFieldId: customField.customFieldId,
-          value: customField.value,
-        })) || [];
+      const { category, customFields, ...dto } = values;
 
       let _post: PostEntity | undefined = post;
 
       const payload = {
         ...dto,
-        customFieldValues,
+        customFieldValues: getCustomFieldValue(customFields),
         categoryId: category?._id || null,
-        productId: product?._id || null,
       };
 
       if (post) {
@@ -108,7 +99,6 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
         contentHtml: _post?.contentHtml || "",
         category: _post?.category || null,
         customFields: _post?.customFields || [],
-        product: _post?.product || null,
       });
 
       form.reset();
@@ -243,13 +233,6 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               />
 
               <CategoryInput {...form.getInputProps("category")} />
-
-              <ProductInput
-                flex={1}
-                label={t("link_entity", { entity: t("product") })}
-                value={form.values.product}
-                onChange={(value) => form.setFieldValue("product", value)}
-              />
 
               <BuilderCustomFields
                 entity={AppEntity.POSTS}

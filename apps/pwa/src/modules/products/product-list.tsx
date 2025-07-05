@@ -13,6 +13,7 @@ import { Badge, Stack, Text } from "@mantine/core";
 import { IconBox, IconBuildingWarehouse, IconEdit, IconEye } from "@tabler/icons-react";
 import { type FC } from "react";
 import { CategoryColumn } from "../categories/components/category-column";
+import { PostColumn } from "../posts/components/post-column";
 
 export const ProductList: FC = () => {
   const router = useRouter();
@@ -40,6 +41,7 @@ export const ProductList: FC = () => {
             },
           },
           categoryId: CategoryColumn(),
+          postId: PostColumn(),
           stock: {
             w: 150,
             name: "product_stocks",

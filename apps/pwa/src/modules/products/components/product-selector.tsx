@@ -3,13 +3,12 @@
 import { Button } from "@/components/buttons/button";
 import { EntityImage } from "@/components/entity-image";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
-import { useQuery } from "@/modules/apis/use-query";
 import { t } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { searchEntity } from "@/modules/search/search-service";
-import { AppEntity, ResponseList } from "@/types";
-import { Combobox, em, Group, InputWrapperProps, Text } from "@mantine/core";
+import { AppEntity } from "@/types";
+import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 
@@ -26,18 +25,11 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
   const strictType = props.type ? (Array.isArray(props.type) ? props.type : [props.type]) : [];
   const funcStrictType = (v: ProductEntity) => strictType.includes(v.type);
 
-  const initOptions = useQuery<ResponseList<ProductEntity>>({
-    route: "/products",
-    params: {
-      limit: 15,
-      sortLastInteractionAt: -1,
-      type,
-    },
-  });
-
   return (
     <Selector
       {...rest}
+      listRoute="/products"
+      listParams={type ? { type } : undefined}
       onSearch={(q) =>
         searchEntity<ProductEntity>(AppEntity.PRODUCTS, q, {
           isStockCheck,
@@ -47,7 +39,6 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
           return res;
         })
       }
-      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

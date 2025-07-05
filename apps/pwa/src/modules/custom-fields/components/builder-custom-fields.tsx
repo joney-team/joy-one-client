@@ -3,7 +3,7 @@ import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { AppEntity, ResponseList } from "@/types";
 import { Card, InputWrapper, SimpleGrid, Switch } from "@mantine/core";
-import { FC, Fragment } from "react";
+import { FC, Fragment, ReactNode } from "react";
 import { CustomField, CustomFieldEntity, CustomFieldType } from "../custom-field-types";
 import { customFieldInputs } from "../inputs/_index";
 
@@ -14,6 +14,7 @@ export interface CustomFieldInputProps {
 }
 
 export interface BuilderCustomFieldsProps {
+  before?: ReactNode;
   entity: AppEntity;
   value?: CustomField[];
   onChange: (value: CustomField[]) => void;
@@ -51,6 +52,8 @@ export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
 
   return (
     <Fragment>
+      {commonCustomFields.length > 0 && props.before}
+
       {commonCustomFields.map((customField) => {
         const Input = customFieldInputs[customField.type];
         const customFieldValue = values.find((v) => v.customFieldId === customField._id);
@@ -91,6 +94,7 @@ export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
 
                 return (
                   <Switch
+                    key={customField._id}
                     label={customField.label}
                     checked={customFieldValue?.value}
                     onChange={(event) => {

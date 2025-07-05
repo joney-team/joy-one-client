@@ -20,6 +20,8 @@ import { IconEye, IconPencil, IconPhoto, IconUpload } from "@tabler/icons-react"
 import { useRef, useState, type FC } from "react";
 import { Button } from "../buttons/button";
 import { Renderer } from "../renderer";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 
 interface ImageInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: string;
@@ -28,14 +30,18 @@ interface ImageInputProps extends Omit<InputWrapperProps, "value" | "onChange"> 
   h?: number | string;
   w?: number | string;
   radius?: number;
+  permission?: WorkspacePermission;
 }
 
 export const ImageInput: FC<ImageInputProps> = (props) => {
-  const { value, onChange, disabled, h, w, ...rest } = props;
+  const workspace = useWorkspace();
+  const { value, onChange, disabled: propsDisabled, h, w, ...rest } = props;
   const [loadFailed, setLoadFailed] = useState(false);
   const openRef = useRef<() => void>(null);
   const hover = useHover();
   const ableView = !!value && !loadFailed;
+  const disabled =
+    propsDisabled || (props.permission && !workspace.hasPermission(props.permission));
 
   const onView = () => {
     if (!value) return;

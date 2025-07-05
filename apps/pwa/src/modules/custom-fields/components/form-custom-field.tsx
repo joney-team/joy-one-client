@@ -119,6 +119,7 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
           label={t("apply")}
           {...form.getInputProps("entities")}
           data={[
+            AppEntity.PRODUCTS,
             AppEntity.POSTS,
             AppEntity.PROMOTIONS,
             AppEntity.TASKS,

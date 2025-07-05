@@ -13,6 +13,7 @@ import { IconCategory2, IconEdit } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { type FC } from "react";
 import { CategoryColumn } from "../categories/components/category-column";
+import { PostColumn } from "../posts/components/post-column";
 
 export const ServiceList: FC = () => {
   const router = useRouter();
@@ -40,6 +41,7 @@ export const ServiceList: FC = () => {
             },
           },
           categoryId: CategoryColumn(),
+          postId: PostColumn(),
           unit: {
             w: 150,
           },
