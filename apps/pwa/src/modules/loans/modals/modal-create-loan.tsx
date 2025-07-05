@@ -319,48 +319,48 @@ export const ModalCreateLoan: FC = () => {
                       />
                     );
                   return (
-                    <Stack>
-                      <SimpleGrid cols={{ md: 3 }}>
-                        <Select
-                          label={t("asset_type")}
-                          data={assetTypeOptions.map((type) => ({
-                            value: type,
-                            label: t(`loan_asset_type_${type}`),
-                          }))}
-                          {...form.getInputProps("assetType")}
+                    <Card withBorder p={16} shadow="xs">
+                      <Stack>
+                        <SimpleGrid cols={{ md: 3 }}>
+                          <Select
+                            label={t("asset_type")}
+                            data={assetTypeOptions.map((type) => ({
+                              value: type,
+                              label: t(`loan_asset_type_${type}`),
+                            }))}
+                            {...form.getInputProps("assetType")}
+                          />
+
+                          <Select
+                            label={t("loan_period")}
+                            data={packageDaysOptions.map((d) => ({
+                              value: d.toString(),
+                              label: renderLoanPeriod(d),
+                            }))}
+                            {...form.getInputProps("packageDays")}
+                            value={form.values.packageDays?.toString()}
+                            onChange={(value) => form.setFieldValue("packageDays", +value!)}
+                          />
+
+                          <Select
+                            label={t("loan_payment_periods")}
+                            data={packagePeriodDaysOptions.map((d) => ({
+                              value: d.toString(),
+                              label: renderLoanPeriod(d),
+                            }))}
+                            {...form.getInputProps("packagePeriodDays")}
+                            value={form.values.packagePeriodDays?.toString()}
+                            onChange={(value) => form.setFieldValue("packagePeriodDays", +value!)}
+                          />
+                        </SimpleGrid>
+
+                        <NumberInput
+                          label={t("loan_amount")}
+                          hideControls
+                          {...form.getInputProps("amount")}
                         />
 
-                        <Select
-                          label={t("loan_period")}
-                          data={packageDaysOptions.map((d) => ({
-                            value: d.toString(),
-                            label: renderLoanPeriod(d),
-                          }))}
-                          {...form.getInputProps("packageDays")}
-                          value={form.values.packageDays?.toString()}
-                          onChange={(value) => form.setFieldValue("packageDays", +value!)}
-                        />
-
-                        <Select
-                          label={t("loan_payment_periods")}
-                          data={packagePeriodDaysOptions.map((d) => ({
-                            value: d.toString(),
-                            label: renderLoanPeriod(d),
-                          }))}
-                          {...form.getInputProps("packagePeriodDays")}
-                          value={form.values.packagePeriodDays?.toString()}
-                          onChange={(value) => form.setFieldValue("packagePeriodDays", +value!)}
-                        />
-                      </SimpleGrid>
-
-                      <NumberInput
-                        label={t("loan_amount")}
-                        hideControls
-                        {...form.getInputProps("amount")}
-                      />
-
-                      <InputWrapper label={t("loan_payment_account")}>
-                        <Card withBorder p={8}>
+                        <InputWrapper label={t("loan_payment_account")}>
                           <SimpleGrid cols={{ md: 3 }}>
                             <Select
                               placeholder={t("select_bank")}
@@ -389,20 +389,22 @@ export const ModalCreateLoan: FC = () => {
                               {...form.getInputProps("payment_accountName")}
                             />
                           </SimpleGrid>
-                        </Card>
-                      </InputWrapper>
-                    </Stack>
+                        </InputWrapper>
+                      </Stack>
+                    </Card>
                   );
                 })()}
               </Session>
 
               {form.values.assetType && !!customerKyc && (
                 <Session name={t("loan_asset_data")} icon={IconFileDots}>
-                  <LoanAssetDataInput
-                    assetType={form.values.assetType}
-                    value={form.values.assetData}
-                    onChange={(value) => form.setFieldValue("assetData", value)}
-                  />
+                  <Card withBorder p={16} shadow="xs">
+                    <LoanAssetDataInput
+                      assetType={form.values.assetType}
+                      value={form.values.assetData}
+                      onChange={(value) => form.setFieldValue("assetData", value)}
+                    />
+                  </Card>
                 </Session>
               )}
 
