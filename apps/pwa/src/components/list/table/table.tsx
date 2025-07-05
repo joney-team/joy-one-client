@@ -1,6 +1,6 @@
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
-import { ActionIcon, Checkbox, Group, Loader, Menu, Table } from "@mantine/core";
+import { ActionIcon, Checkbox, Group, Loader, Menu, Table, Text } from "@mantine/core";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { ListContext } from "../types";
 import { getIn, getListDataId, getValuePath } from "../utils";
@@ -81,7 +81,7 @@ export default function ListTable<T>(ctx: ListContext<T>) {
                           return <Renderer value={value} data={item} />;
                         }
 
-                        if (value) return value;
+                        if (value) return <Text>{value}</Text>;
                         return null;
                       })()}
                     </Group>

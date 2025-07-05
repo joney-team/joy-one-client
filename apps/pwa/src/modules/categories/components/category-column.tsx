@@ -16,8 +16,7 @@ export function CategoryColumn<T = any>(args?: CategoryColumnArgs<T>): Column {
   return {
     icon: IconCategory,
     name: args?.name || "category",
-    valuePath: args?.valuePath || "category",
-    render: ({ value }) => value?.name,
+    valuePath: args?.valuePath || "category.name",
     filter: {
       dynamicSelector: {
         ...args?.filter,

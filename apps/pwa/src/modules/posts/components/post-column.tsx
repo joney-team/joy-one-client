@@ -19,7 +19,7 @@ export const PostColumn = (args?: PostColumnArgs): Column => {
     valuePath: "post",
     name: args?.name || "post",
     render: ({ value }) => {
-      if (!value) return "--";
+      if (!value) return "";
       return (
         <Tooltip label={value.title}>
           <Clickable truncate href={`/posts/${value._id}`}>
