@@ -234,13 +234,14 @@ export const ModalCreateLoan: FC = () => {
                   renderValue={(ctx) => {
                     if (ctx.value)
                       return (
-                        <Stack gap={8}>
+                        <Stack gap={8} w="100%">
                           <CustomerCard
                             customer={ctx.value}
                             withBorder={false}
-                            shadow="none"
-                            p={0}
-                            radius={0}
+                            shadow="xs"
+                            p={10}
+                            w="100%"
+                            flex={1}
                             style={{ overflow: "visible" }}
                             disableClick
                           />
@@ -284,7 +285,7 @@ export const ModalCreateLoan: FC = () => {
                       <CustomerKycCard
                         kyc={customerKyc}
                         hideCustomer
-                        cardProps={{ p: 0, withBorder: false }}
+                        cardProps={{ p: 16, withBorder: false, shadow: "xs" }}
                         onApproved={(kyc) => setCustomerKyc(kyc)}
                       />
                     );
@@ -424,7 +425,9 @@ export const ModalCreateLoan: FC = () => {
   );
 };
 
-const Session: FC<PropsWithChildren<{ name: string; icon: Icon }>> = (props) => {
+const Session: FC<PropsWithChildren<{ name: string; icon: Icon; isWithoutCard?: boolean }>> = (
+  props
+) => {
   return (
     <Stack gap={5}>
       <Group gap={3}>
@@ -434,9 +437,13 @@ const Session: FC<PropsWithChildren<{ name: string; icon: Icon }>> = (props) => 
         <Text fw={500}>{props.name}</Text>
       </Group>
 
-      <Card withBorder p={10} style={{ overflow: "visible" }}>
-        {props.children}
-      </Card>
+      {!props.isWithoutCard ? (
+        <Card withBorder={false} shadow="none" p={10} style={{ overflow: "visible" }} bg="gray.1">
+          {props.children}
+        </Card>
+      ) : (
+        props.children
+      )}
     </Stack>
   );
 };

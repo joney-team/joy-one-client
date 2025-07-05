@@ -117,6 +117,7 @@ export const WorkspaceModuleSetup: FC = () => {
             </Tooltip>
 
             <WorkspaceModuleSelector
+              restrictDisplay={["navigation"]}
               excludeIds={components
                 .filter((v) => v.type === "MODULE" && !!v.moduleId)
                 .map((v) => v.moduleId!!)}

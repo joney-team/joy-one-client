@@ -109,7 +109,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
 
   useEffect(() => {
     initialize();
-  }, []);
+  }, [cacheKey]);
 
   useEffect(() => {
     if (isInitialized && messageBoxId) {

@@ -104,12 +104,12 @@ export const workspaceModuleConfigs = {
   workspaceSettingsCustomFields: combineModule({ href: '/workspace-settings/custom-fields', icon: IconForms, permissions: WorkspacePermission.CUSTOM_FIELDS_MANAGER, restrictDisplay: ['spotlight'] }),
 
   // Workspace Setting Plugins
-  workspacePlugins: combineModule({ href: '/workspace-settings/plugins', icon: IconPuzzle, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspacePluginsBanks: combineModule({ href: '/workspace-settings/plugins/banks', icon: IconBuildingBank, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
-  workspacePluginsZaloOas: combineModule({ href: '/workspace-settings/plugins/zalo-oas', icon: IconZalo, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
+  workspacePlugins: combineModule({ href: '/workspace-settings/plugins', icon: IconPuzzle, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
+  workspacePluginsBanks: combineModule({ href: '/workspace-settings/plugins/banks', icon: IconBuildingBank, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspacePluginsZaloOas: combineModule({ href: '/workspace-settings/plugins/zalo-oas', icon: IconZalo, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
   workspacePluginsMetaPages: combineModule({ href: '/workspace-settings/plugins/meta-pages', icon: IconFacebook, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
-  workspacePluginsMailer: combineModule({ href: '/workspace-settings/plugins/mailer', icon: IconMailbox, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
-  workspacePluginsMessageHubs: combineModule({ href: '/workspace-settings/plugins/message-hubs', icon: IconMessage, permissions: WorkspacePermission.WORKSPACE_SETTINGS }),
+  workspacePluginsMailer: combineModule({ href: '/workspace-settings/plugins/mailer', icon: IconMailbox, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
+  workspacePluginsMessageHubs: combineModule({ href: '/workspace-settings/plugins/message-hubs', icon: IconMessage, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
   workspacePluginsAiAssistants: combineModule({ href: '/workspace-settings/plugins/ai-assistants', icon: IconAi, permissions: WorkspacePermission.WORKSPACE_SETTINGS, restrictDisplay: ['spotlight'] }),
 
   // Profile
