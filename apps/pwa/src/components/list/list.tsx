@@ -130,13 +130,13 @@ export function List<T = any>(props: ListProps<T>) {
   }, [_selectedIds, list.data, isSelectAll]);
 
   const availableMultipleSelectActions = useMemo(() => {
-    return (props.multipleSelectActions || []).filter(
+    return (props.bulkActions || []).filter(
       (v) =>
         (!v.available ||
           v.available(list.data.filter((i) => selectedIds.includes(getListDataId(i))))) &&
         (!v.permission || workspace.hasPermission(v.permission))
     );
-  }, [props.multipleSelectActions, list.data, selectedIds, workspace.hasPermission]);
+  }, [props.bulkActions, list.data, selectedIds, workspace.hasPermission]);
 
   const ctx: ListContext<T> = {
     viewState: viewStateRef.current,

@@ -74,7 +74,7 @@ export interface FilterMode<Data = any> {
   disabled?: boolean;
 }
 
-export interface ListMultipleSelectAction<Data> {
+export interface ListBulkAction<Data> {
   type?: "common" | "archive";
   label?: string;
   icon?: Icon;
@@ -110,7 +110,7 @@ export type ListProps<Data = any> = (
   components?: {
     empty?: FC;
   };
-  multipleSelectActions?: ListMultipleSelectAction<Data>[];
+  bulkActions?: ListBulkAction<Data>[];
 };
 
 export type ColumnSetting = {
@@ -142,5 +142,5 @@ export type ListContext<Data = any> = ListProps<Data> & {
   unselect: (id: string) => void;
   selectAll: () => void;
   unselectAll: () => void;
-  availableMultipleSelectActions: ListMultipleSelectAction<Data>[];
+  availableMultipleSelectActions: ListBulkAction<Data>[];
 };

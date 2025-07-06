@@ -6,12 +6,14 @@ import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { PrimaryColumn } from "@/components/list/columns/primary-column";
 import { useRouter } from "@/hooks/use-router";
 import { Stack } from "@mantine/core";
-import { IconNews } from "@tabler/icons-react";
+import { IconArchive, IconNews } from "@tabler/icons-react";
 import { type FC } from "react";
 import { CategoryColumn } from "../categories/components/category-column";
 import { EventType } from "../events/event-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { PostEntity } from "./posts-types";
+import { api } from "../apis";
+import { onArchive } from "@/utils/actions";
 
 export const PostsList: FC = () => {
   const router = useRouter();
@@ -39,6 +41,19 @@ export const PostsList: FC = () => {
           onCreate: () => router.push("/posts/new"),
         }}
         events={[EventType.POST_NEW, EventType.POST_UPDATED, EventType.POST_ARCHIVED]}
+        bulkActions={[
+          {
+            type: "archive",
+            label: "archive",
+            icon: IconArchive,
+            permission: WorkspacePermission.POSTS_MANAGER,
+            handler: async (data) => {
+              onArchive({
+                process: () => api.delete("/posts/bulk", { ids: data.map((v) => v._id) }),
+              });
+            },
+          },
+        ]}
       />
     </Stack>
   );

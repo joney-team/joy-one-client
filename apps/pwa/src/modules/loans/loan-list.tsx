@@ -318,7 +318,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
           exportToExcel: false,
         },
       }}
-      multipleSelectActions={[
+      bulkActions={[
         {
           label: "move_workspace_branch",
           icon: IconBuildingSkyscraper,

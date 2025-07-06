@@ -11,15 +11,12 @@ import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Stack, Text } from "@mantine/core";
 import { IconCategory2, IconEdit } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 import { type FC } from "react";
 import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
 import { getProductIcon } from "../products/products-service";
 
 export const ServiceList: FC = () => {
-  const router = useRouter();
-
   return (
     <Stack p={16}>
       <List<ProductEntity>
@@ -50,7 +47,10 @@ export const ServiceList: FC = () => {
           name: {
             render: ({ data }) => {
               return (
-                <Clickable onClick={() => router.push(`/services/${data._id}`)}>
+                <Clickable
+                  permission={WorkspacePermission.PRODUCTS_SERVICES_WRITE}
+                  onClick={() => OnProductModal({ product: data })}
+                >
                   <Text>{data.name}</Text>
                 </Clickable>
               );
@@ -83,7 +83,7 @@ export const ServiceList: FC = () => {
           {
             label: "edit",
             icon: IconEdit,
-            onClick: (data) => OnProductModal({ type: ProductType.SERVICE, product: data }),
+            onClick: (data) => OnProductModal({ product: data }),
           },
         ]}
       />

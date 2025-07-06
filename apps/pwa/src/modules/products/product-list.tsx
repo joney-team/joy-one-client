@@ -3,7 +3,6 @@
 import { Clickable } from "@/components/clickable";
 import { EntityImage } from "@/components/entity-image";
 import { List } from "@/components/list";
-import { useRouter } from "@/hooks/use-router";
 import { EventType } from "@/modules/events/event-types";
 import { num, t } from "@/modules/lang/lang-service";
 import { ProductCard } from "@/modules/products/components/product-card";
@@ -11,15 +10,13 @@ import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Badge, Stack, Text } from "@mantine/core";
-import { IconBox, IconBuildingWarehouse, IconEdit, IconEye } from "@tabler/icons-react";
+import { IconBox, IconBuildingWarehouse, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
 import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
 import { getProductIcon } from "./products-service";
 
 export const ProductList: FC = () => {
-  const router = useRouter();
-
   return (
     <Stack p={16}>
       <List<ProductEntity>
@@ -50,7 +47,10 @@ export const ProductList: FC = () => {
           name: {
             render: ({ data }) => {
               return (
-                <Clickable onClick={() => router.push(`/products/${data._id}`)}>
+                <Clickable
+                  permission={WorkspacePermission.PRODUCTS_SERVICES_WRITE}
+                  onClick={() => OnProductModal({ product: data })}
+                >
                   <Text>{data.name}</Text>
                 </Clickable>
               );
@@ -111,12 +111,8 @@ export const ProductList: FC = () => {
           {
             label: "edit",
             icon: IconEdit,
-            onClick: (data) => OnProductModal({ type: ProductType.PRODUCT, product: data }),
-          },
-          {
-            label: "view",
-            icon: IconEye,
-            onClick: (data) => router.push(`/products/${data._id}`),
+            permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,
+            onClick: (data) => OnProductModal({ product: data }),
           },
         ]}
       />

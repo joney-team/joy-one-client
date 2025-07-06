@@ -65,7 +65,7 @@ export const CustomerFormList: FC = () => {
           EventType.CUSTOMER_FORM_UPDATED,
           EventType.CUSTOMER_FORM_ARCHIVED,
         ]}
-        multipleSelectActions={[
+        bulkActions={[
           {
             label: "move_workspace_branch",
             icon: IconBuildingSkyscraper,
