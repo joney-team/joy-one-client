@@ -126,6 +126,7 @@ export const ReceiptList: FC = () => {
           EventType.RECEIPT_DISBURSEMENT,
           EventType.RECEIPT_ARCHIVED,
           EventType.RECEIPT_UNARCHIVED,
+          EventType.RECEIPT_REVERT_PAYMENT,
         ]}
         actions={[
           {

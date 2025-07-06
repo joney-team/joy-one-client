@@ -14,37 +14,39 @@ export interface UseQueryArgs<T> {
   refetchCondition?: (data: EventEntity, currentData: T) => boolean;
   method?: 'get' | 'post';
   networkMode?: 'offlineFirst' | 'onlineFirst' | 'idle';
+  queryKey?: string[];
 }
 
 export type UseQuery<T> = UseQueryResult<T, AxiosError<unknown, any>>
 
-export const useQuery = <T = any>(query: string | (UseQueryArgs<T> & { route: string })): UseQuery<T> => {
-  const isReadyToFetch = typeof query === 'string' ? true : !query.isSkip;
-  const args = typeof query === 'string' ? {} as UseQueryArgs<T> : query;
-  const route = typeof query === 'string' ? query : query.route;
-  const params = typeof query === 'string' ? null : query.params;
-  const networkMode = typeof args.networkMode === 'string' ? args.networkMode as NetworkMode : 'offlineFirst';
+export const useQuery = <T = any>(args: string | (UseQueryArgs<T> & { route: string })): UseQuery<T> => {
+  const isReadyToFetch = typeof args === 'string' ? true : !args.isSkip;
+  const query = typeof args === 'string' ? {} as UseQueryArgs<T> : args;
+  const route = typeof args === 'string' ? args : args.route;
+  const params = typeof args === 'string' ? null : args.params;
+  const queryKey = typeof args === 'string' ? [] : args.queryKey || [];
+  const networkMode = typeof query.networkMode === 'string' ? query.networkMode as NetworkMode : 'offlineFirst';
   const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
   const stack = useQueryTanstack<T, AxiosError>({
-    queryKey: [route, params, workspaceId || 'general'],
+    queryKey: [...queryKey, route, params, workspaceId || 'general'],
     queryFn: ({ signal }) => {
-      if (args.method === 'post') {
-        return api.post<T>(route, args.params, { signal });
+      if (query.method === 'post') {
+        return api.post<T>(route, query.params, { signal });
       }
 
-      return api.get<T>(route, { params: args.params, signal });
+      return api.get<T>(route, { params: query.params, signal });
     },
     enabled: isReadyToFetch,
     networkMode,
   });
 
   // Event listener
-  const refetchEvents = args?.refetchEvents || [];
+  const refetchEvents = query?.refetchEvents || [];
 
   useEventsListener(refetchEvents, (e) => {
     if (isReadyToFetch && refetchEvents.length > 0 && stack.data) {
-      const condition = args?.refetchCondition;
+      const condition = query?.refetchCondition;
       if (condition && !condition(e, stack.data)) return;
       stack.refetch().catch(console.error);
     }

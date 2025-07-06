@@ -15,7 +15,12 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { num, renderDate, t } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
-import { archiveLoan, getLoanByCode, loanStatusColors, updateLoanAssetData } from "@/modules/loans/loans-service";
+import {
+  archiveLoan,
+  getLoanByCode,
+  loanStatusColors,
+  updateLoanAssetData,
+} from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { getGoogleMapLink } from "@/modules/locations/locations-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -103,6 +108,7 @@ export const LoanDetail: NextPage = () => {
         EventType.LOANS_REVERT_LIQUIDATION,
         EventType.LOANS_SYNCED,
         EventType.LOANS_CHANGE_WORKSPACE_BRANCH,
+        EventType.LOANS_APPROVED_REVERTED,
       ],
       condition: (e, _loan) => {
         return e.ref === _loan.id || (e.relatedEntities || []).some((v) => v.id === _loan.id);
@@ -137,7 +143,11 @@ export const LoanDetail: NextPage = () => {
   }, [loan.data]);
 
   useEventsListener(
-    [EventType.CUSTOMER_KYC_APPROVED, EventType.CUSTOMER_KYC_REJECTED, EventType.CUSTOMER_KYC_PENDING],
+    [
+      EventType.CUSTOMER_KYC_APPROVED,
+      EventType.CUSTOMER_KYC_REJECTED,
+      EventType.CUSTOMER_KYC_PENDING,
+    ],
     () => {
       if (loan.data) fetchCustomerKyc(loan.data.customerId);
     },
@@ -168,13 +178,17 @@ export const LoanDetail: NextPage = () => {
   const activeStep = getStepActive(loan.data, customerKyc);
 
   const linkContractPdf =
-    loan.data.status !== LoanStatus.PENDING_SIGN && !!workspace.settings.loanSettings?.contractPdfUrl
+    loan.data.status !== LoanStatus.PENDING_SIGN &&
+    !!workspace.settings.loanSettings?.contractPdfUrl
       ? workspace.settings.loanSettings?.contractPdfUrl?.replace("{code}", loan.data.code)
       : undefined;
 
   const linkLiquidationPdf =
     loan.data?.isLiquidated && workspace.settings.loanSettings?.contractLiquidationPdfUrl
-      ? workspace.settings.loanSettings?.contractLiquidationPdfUrl?.replace("{code}", loan.data.code)
+      ? workspace.settings.loanSettings?.contractLiquidationPdfUrl?.replace(
+          "{code}",
+          loan.data.code
+        )
       : undefined;
 
   return (
@@ -189,18 +203,24 @@ export const LoanDetail: NextPage = () => {
               </Title>
 
               <Group gap={10}>
-                {customer.data.phone && workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
-                  <Anchor href={`tel:${customer.data.phone}`} onClick={(e) => e.stopPropagation()}>
-                    <ActionIcon size="lg" radius={100}>
-                      <IconPhone size={18} />
-                    </ActionIcon>
-                  </Anchor>
-                )}
+                {customer.data.phone &&
+                  workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
+                    <Anchor
+                      href={`tel:${customer.data.phone}`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ActionIcon size="lg" radius={100}>
+                        <IconPhone size={18} />
+                      </ActionIcon>
+                    </Anchor>
+                  )}
 
                 {(customer.data.location || customer.data.secondaryLocation) && (
                   <Anchor
                     onClick={(e) => e.stopPropagation()}
-                    href={getGoogleMapLink(customer.data.location! || customer.data.secondaryLocation!)}
+                    href={getGoogleMapLink(
+                      customer.data.location! || customer.data.secondaryLocation!
+                    )}
                     target="_blank"
                   >
                     <ActionIcon size="lg" radius={100} variant="outline">
@@ -239,7 +259,11 @@ export const LoanDetail: NextPage = () => {
                 href={`tel:${customer.data.phone}`}
                 visible={workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)}
               />
-              <InfoCard label="Email" content={customer.data.email} href={`mailto:${customer.data.email}`} />
+              <InfoCard
+                label="Email"
+                content={customer.data.email}
+                href={`mailto:${customer.data.email}`}
+              />
               <InfoCard
                 label="loan_package"
                 content={`${loan.data.package.id} / ${t(`loan_asset_type_${loan.data.assetType}`)}`}
@@ -413,7 +437,9 @@ export const LoanDetail: NextPage = () => {
                   h={25}
                   variant="subtle"
                   color="gray"
-                  leftSection={<IconArchive strokeWidth={1.3} size={16} style={{ marginRight: -5 }} />}
+                  leftSection={
+                    <IconArchive strokeWidth={1.3} size={16} style={{ marginRight: -5 }} />
+                  }
                   onClick={() =>
                     onArchive({
                       name: `Hợp đồng vay ${renderEntityCode(loan.data!.code)}`,

@@ -246,6 +246,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
         enabled={!!dynamicRole?._id}
         process={() => removeWorkspaceRole(dynamicRole!._id)}
         onArchived={() => close()}
+        goBackWhenArchived={false}
       />
     </Stack>
   );

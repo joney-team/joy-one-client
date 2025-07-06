@@ -14,13 +14,16 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Group, Stack } from "@mantine/core";
 import { IconTransfer, IconUsersPlus } from "@tabler/icons-react";
 import { NextPage } from "next";
+import { useRouter } from "@/hooks/use-router";
 
 const Page: NextPage = () => {
   const workspace = useWorkspace();
+  const router = useRouter();
+  const modSettingRoles = workspace.getModule("workspaceSettingsRoles");
 
   return (
     <Stack gap={0}>
-      <Group px={16} pt={16}>
+      <Group px={16} pt={16} gap={10}>
         <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER)}>
           <Button
             leftIcon={IconUsersPlus}
@@ -30,6 +33,22 @@ const Page: NextPage = () => {
             radius={100}
           >
             {t("invite_members")}
+          </Button>
+        </Renderer>
+
+        <Renderer
+          visible={
+            modSettingRoles && workspace.hasPermission(WorkspacePermission.WORKSPACE_ROLES_MANAGER)
+          }
+        >
+          <Button
+            leftIcon={modSettingRoles.icon}
+            onClick={() => router.push(modSettingRoles.href)}
+            variant="outline"
+            size="xs"
+            radius={100}
+          >
+            {modSettingRoles.name}
           </Button>
         </Renderer>
 

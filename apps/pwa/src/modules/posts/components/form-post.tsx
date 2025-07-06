@@ -38,7 +38,7 @@ import { PostEntity } from "../posts-types";
 
 interface FormPostProps {
   post?: PostEntity;
-  onSuccess?: () => void;
+  onSuccess?: (post: PostEntity) => void;
 }
 
 export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
@@ -102,7 +102,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       });
 
       form.reset();
-      onSuccess?.();
+      onSuccess?.(_post);
     } catch (error) {
       onFormError(form, error);
     }
@@ -192,10 +192,6 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
                     content: {
                       minHeight: "60dvh",
                     },
-                    // toolbar: {
-                    //   border: "none",
-                    //   paddingBottom: 0,
-                    // },
                   },
                 }}
                 value={form.values.content}

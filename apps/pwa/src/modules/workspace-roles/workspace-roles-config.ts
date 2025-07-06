@@ -35,6 +35,7 @@ export const permissionGroups: {
       { value: WorkspacePermission.LOANS_VIEW },
       { value: WorkspacePermission.LOANS_CREATOR, dependentPermissions: [WorkspacePermission.LOANS_VIEW, WorkspacePermission.CUSTOMERS_VIEW, WorkspacePermission.CUSTOMERS_VIEW_CONTACT, WorkspacePermission.CUSTOMERS_CREATE] },
       { value: WorkspacePermission.LOANS_APPROVE, dependentPermissions: [WorkspacePermission.LOANS_VIEW, WorkspacePermission.CUSTOMERS_VIEW] },
+      { value: WorkspacePermission.LOANS_APPROVED_REVERTED, dependentPermissions: [WorkspacePermission.LOANS_VIEW, WorkspacePermission.CUSTOMERS_VIEW] },
       { value: WorkspacePermission.LOANS_FULFILL, dependentPermissions: [WorkspacePermission.LOANS_VIEW, WorkspacePermission.RECEIPTS_CREATE] },
       { value: WorkspacePermission.LOANS_CUSTOM_FULFILLED_AT, dependentPermissions: [WorkspacePermission.LOANS_FULFILL] },
       { value: WorkspacePermission.LOANS_PAY, dependentPermissions: [WorkspacePermission.LOANS_VIEW] },
@@ -73,6 +74,7 @@ export const permissionGroups: {
       { value: WorkspacePermission.RECEIPTS_CREATE, dependentPermissions: [WorkspacePermission.RECEIPTS_VIEW, WorkspacePermission.CUSTOMERS_VIEW] },
       { value: WorkspacePermission.RECEIPTS_UPDATE, dependentPermissions: [WorkspacePermission.RECEIPTS_VIEW, WorkspacePermission.CUSTOMERS_VIEW] },
       { value: WorkspacePermission.RECEIPTS_CENSORSHIP, dependentPermissions: [WorkspacePermission.RECEIPTS_VIEW, WorkspacePermission.CUSTOMERS_VIEW] },
+      { value: WorkspacePermission.RECEIPTS_REVERT_PAYMENT, dependentPermissions: [WorkspacePermission.RECEIPTS_VIEW, WorkspacePermission.CUSTOMERS_VIEW] },
     ]
   },
   [PermissionGroupKey.ORDERS]: {

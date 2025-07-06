@@ -16,6 +16,7 @@ export enum WorkspacePermission {
 
   LOANS_VIEW = 'LV',
   LOANS_APPROVE = 'LA',
+  LOANS_APPROVED_REVERTED = 'LAPR',
   LOANS_FULFILL = 'LF',
   LOANS_CREATOR = 'LC',
   LOANS_PAY = 'LP',
@@ -31,6 +32,7 @@ export enum WorkspacePermission {
   RECEIPTS_UPDATE = 'RU',
   RECEIPTS_CENSORSHIP = 'RCN',
   RECEIPTS_ARCHIVE = 'RAR',
+  RECEIPTS_REVERT_PAYMENT = 'RPRP',
 
   PRODUCTS_SERVICES_WRITE = 'PSW',
 
@@ -81,8 +83,8 @@ export enum WorkspacePermission {
   POSTS_VIEW = 'PV',
   POSTS_MANAGER = 'PM',
 
-  CATEGORIES_VIEW = 'CV',
-  CATEGORIES_MANAGER = 'CM',
+  CATEGORIES_VIEW = 'CTEV',
+  CATEGORIES_MANAGER = 'CTEM',
 
   PROMOTIONS_VIEW = 'PRV',
   PROMOTIONS_MANAGER = 'PRM',

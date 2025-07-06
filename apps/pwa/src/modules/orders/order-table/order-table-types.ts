@@ -30,6 +30,7 @@ export interface OrderTableFormValues {
 }
 
 export interface OrderTableContext {
+  version: number;
   calculated: OrderCalculated | null;
   isCalculating: boolean;
   isSubmitting: boolean;

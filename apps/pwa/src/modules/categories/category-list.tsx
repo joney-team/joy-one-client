@@ -23,10 +23,11 @@ export const CategoryList: FC = () => {
           name: {},
           slug: { filter: { text: true }, icon: IconOutlet },
           type: EnumColumn({
+            w: 200,
             options: Object.values(CategoryType).map((type) => ({
               label: t(`category_type_${type}`),
               value: type,
-              color: categoryTypeConfigs[type].color,
+              color: categoryTypeConfigs[type]?.color,
             })),
           }),
         }}

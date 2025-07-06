@@ -3,12 +3,12 @@ import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { ModalTitle } from "@/components/modal-title";
 import { useQuery } from "@/modules/apis/use-query";
-import { t } from "@/modules/lang/lang-service";
+import { num, t } from "@/modules/lang/lang-service";
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ResponseList } from "@/types";
-import { Card, Group, Modal, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Badge, Card, Group, Modal, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Icon, IconCheck } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode } from "react";
@@ -20,9 +20,11 @@ export const OrderFormPromotions: FC = () => {
   const mod = workspace.getModule("promotions");
   const orderTable = useOrderTable();
   const [opened, { open, close }] = useDisclosure(false);
+  const color = useColor();
 
   const promotions = useQuery<ResponseList<PromotionEntity>>({
     isSkip: !orderTable.values.relatedCustomer,
+    queryKey: [orderTable.version.toString()],
     route: `/promotions/customers/${orderTable.values.relatedCustomer?._id}`,
   });
 
@@ -34,6 +36,9 @@ export const OrderFormPromotions: FC = () => {
   ];
 
   const isHasPromotions = orderTable.values.relatedCustomer && allPromotions.length > 0;
+  const selectedPromotions = allPromotions.filter((p) =>
+    orderTable.values.promotions.some((c) => c.id === p.id)
+  );
 
   return (
     <Fragment>
@@ -46,6 +51,14 @@ export const OrderFormPromotions: FC = () => {
         fz={13}
         fw={400}
         onClick={open}
+        rightSection={
+          allPromotions.length > 0 ? (
+            <Badge size="xs" color={color("primary")} ml={-8}>
+              {num(selectedPromotions.length)}/
+              {num(Math.max(allPromotions.length, selectedPromotions.length))}
+            </Badge>
+          ) : undefined
+        }
       >
         {t("promotions")}
       </Button>

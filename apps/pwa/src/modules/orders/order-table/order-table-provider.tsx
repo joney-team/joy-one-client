@@ -197,6 +197,7 @@ export const OrderTableProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const ctx: OrderTableContext = {
+    version,
     calculated,
     isCalculating,
     isSubmitting,

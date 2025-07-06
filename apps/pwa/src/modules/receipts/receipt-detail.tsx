@@ -8,7 +8,7 @@ import { onActionLoad } from "@/utils/actions";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { archiveReceipt, getReceipt, updateReceipt } from "@/modules/receipts/receipts-service";
-import { ReceiptEntity, UpdateReceiptDto } from "@/modules/receipts/receipts-types";
+import { ReceiptEntity, ReceiptStatus, UpdateReceiptDto } from "@/modules/receipts/receipts-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
@@ -16,6 +16,9 @@ import { Badge, Center, Skeleton, Stack } from "@mantine/core";
 import { useParams } from "next/navigation";
 import { FC } from "react";
 import { AppEntity } from "@/types";
+import { api } from "../apis";
+import { IconReload } from "@tabler/icons-react";
+import { Button } from "@/components/buttons/button";
 
 export const ReceiptDetail: FC<{
   id?: string;
@@ -40,10 +43,12 @@ export const ReceiptDetail: FC<{
         EventType.RECEIPT_ARCHIVED,
         EventType.RECEIPT_UPDATED,
         EventType.RECEIPT_CHANGE_WORKSPACE_BRANCH,
+        EventType.RECEIPT_REVERT_PAYMENT,
       ],
       condition: (e, _receipt) =>
         e.ref === _receipt.id ||
-        (!!e.relatedEntities && e.relatedEntities.some((v) => v.entity === AppEntity.RECEIPTS && v.id === _receipt.id)),
+        (!!e.relatedEntities &&
+          e.relatedEntities.some((v) => v.entity === AppEntity.RECEIPTS && v.id === _receipt.id)),
     },
   });
 
@@ -58,6 +63,12 @@ export const ReceiptDetail: FC<{
         await updateReceipt(detail.data.id, dto);
       },
     });
+  };
+
+  const onRevertPayment = async () => {
+    if (!receipt) return;
+    await api.post(`/receipts/${receipt.id}/revert-payment`);
+    await detail.fetch();
   };
 
   if (detail.isFetching)
@@ -83,11 +94,29 @@ export const ReceiptDetail: FC<{
         <ReceiptCard receipt={receipt} onUpdate={onUpdate} isShowPrint isShowImage />
       </Stack>
 
+      {receipt.status === ReceiptStatus.PAID &&
+        workspace.hasPermission(WorkspacePermission.RECEIPTS_REVERT_PAYMENT) && (
+          <Center>
+            <Button
+              fw={400}
+              variant="outline"
+              color="gray"
+              onClick={onRevertPayment}
+              leftIcon={IconReload}
+              size="compact-sm"
+            >
+              {t("revert_payment")}
+            </Button>
+          </Center>
+        )}
+
       <EventList ref={receipt.id} />
 
       <ButtonArchive
         name="receipt"
-        enabled={!receipt.isArchived && workspace.hasPermission(WorkspacePermission.RECEIPTS_ARCHIVE)}
+        enabled={
+          !receipt.isArchived && workspace.hasPermission(WorkspacePermission.RECEIPTS_ARCHIVE)
+        }
         process={() => archiveReceipt(receipt.id)}
       />
     </Stack>

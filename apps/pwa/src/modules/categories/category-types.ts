@@ -2,6 +2,8 @@ import { BaseMongoEntity } from "@/types";
 
 export enum CategoryType {
   COMMON = 'COMMON',
+  PRODUCTS = 'PRODUCTS',
+  POSTS = 'POSTS',
 }
 
 export interface CategoryDto {

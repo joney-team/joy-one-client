@@ -39,6 +39,7 @@ import { DateTimePicker } from "@mantine/dates";
 import { FC, Fragment, useState } from "react";
 import { LoanRowInfo } from "./loan-row-info";
 import { useColor } from "@/modules/theme/use-color";
+import { api } from "@/modules/apis";
 
 interface LoanDisburesementProps {
   loan: LoanEntity;
@@ -70,6 +71,10 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
   });
 
   const disbursementReceipt = disbursementReceiptResponse.data;
+
+  const onRevertApproval = async () => {
+    await api.post(`/loans/${loan.id}/revert-approve`);
+  };
 
   const onSubmit = async () => {
     if (!props) return;
@@ -269,6 +274,12 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
       </Card>
 
       <Group justify="center">
+        {workspace.hasPermission(WorkspacePermission.LOANS_APPROVED_REVERTED) && (
+          <Button variant="outline" color="gray" onClick={onRevertApproval} disabled={isSubmitting}>
+            {t("revert_approval")}
+          </Button>
+        )}
+
         <Button type="submit" onClick={onSubmit} miw={200} loading={isSubmitting}>
           {t("loan-disbursement")}
         </Button>

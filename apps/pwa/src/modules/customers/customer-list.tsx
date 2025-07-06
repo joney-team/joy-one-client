@@ -7,16 +7,16 @@ import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity, Gender } from "@/types";
 import { Stack } from "@mantine/core";
 import { IconGenderBigender, IconMail, IconPhone, IconUserSquare } from "@tabler/icons-react";
 import { type FC } from "react";
+import { WorkspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { customerGenderOptions } from "./customer-service";
 import { CustomerEntity } from "./customer-types";
-import { WorkspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
-import { OnModalUpdateWorkspaceBranch } from "../workspace-branches/modals/modal-update-workspace-branch";
+import { useWorkspace } from "../workspaces/workspace-context";
+import { Clickable } from "@/components/clickable";
 
 export const CustomerList: FC = () => {
   const workspace = useWorkspace();
@@ -56,8 +56,16 @@ export const CustomerList: FC = () => {
           },
           phone: {
             icon: IconPhone,
-            filter: { text: true },
-            disabled: !workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT),
+            filter: workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)
+              ? { text: true }
+              : undefined,
+            render: ({ data }) => {
+              if (!workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)) {
+                return data.phone;
+              }
+
+              return <Clickable href={`tel:${data.phone}`}>{data.phone}</Clickable>;
+            },
             exportToExcel: (value) => {
               return {
                 text: value,

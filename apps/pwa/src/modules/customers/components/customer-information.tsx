@@ -177,21 +177,20 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                   </Group>
                 )}
 
-                {customer.phone &&
-                  workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
-                    <Anchor
-                      href={`tel:${customer.phone}`}
-                      c="dark"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Group gap={1} wrap="nowrap">
-                        <ThemeIcon color="dark" variant="transparent">
-                          <IconPhone strokeWidth={1.5} size={18} />
-                        </ThemeIcon>
-                        <Text fz={em(15)}>{customer.phone}</Text>
-                      </Group>
-                    </Anchor>
-                  )}
+                {customer.phone && (
+                  <Anchor
+                    href={`tel:${customer.phone}`}
+                    c="dark"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Group gap={1} wrap="nowrap">
+                      <ThemeIcon color="dark" variant="transparent">
+                        <IconPhone strokeWidth={1.5} size={18} />
+                      </ThemeIcon>
+                      <Text fz={em(15)}>{customer.phone}</Text>
+                    </Group>
+                  </Anchor>
+                )}
 
                 <Renderer
                   visible={

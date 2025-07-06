@@ -1,6 +1,7 @@
 "use client";
 
 import { Clickable } from "@/components/clickable";
+import { EntityImage } from "@/components/entity-image";
 import { List } from "@/components/list";
 import { EventType } from "@/modules/events/event-types";
 import { num } from "@/modules/lang/lang-service";
@@ -12,9 +13,8 @@ import { Stack, Text } from "@mantine/core";
 import { IconCategory2, IconEdit } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { type FC } from "react";
+import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
-import { PostColumn } from "../posts/components/post-column";
-import { EntityImage } from "@/components/entity-image";
 import { getProductIcon } from "../products/products-service";
 
 export const ServiceList: FC = () => {
@@ -56,8 +56,7 @@ export const ServiceList: FC = () => {
               );
             },
           },
-          categoryId: CategoryColumn(),
-          postId: PostColumn(),
+          categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
           unit: {
             w: 150,
           },

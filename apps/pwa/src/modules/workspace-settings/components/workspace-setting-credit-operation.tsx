@@ -86,6 +86,16 @@ export const WorkspaceSettingCreditOperation: FC = () => {
           }}
         />
       </Grid.Col>
+
+      <Grid.Col span={12}>
+        <Switch
+          label="Tự động xoá hồ sơ vay không được duyệt"
+          defaultChecked={workspace.settings.loanSettings?.isAutoArchivePendingLoans}
+          onChange={(e) => {
+            onChange("isAutoArchivePendingLoans", e.target.checked);
+          }}
+        />
+      </Grid.Col>
     </Grid>
   );
 };

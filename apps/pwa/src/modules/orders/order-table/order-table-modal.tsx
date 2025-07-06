@@ -8,6 +8,7 @@ import { FC, useEffect } from "react";
 import { OrderTable } from ".";
 import { useOrderTable } from "./order-table-context";
 import { OrderTableProvider } from "./order-table-provider";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 export interface OrderTableModalArgs {
   order?: OrderEntity;
@@ -50,6 +51,7 @@ export const OnModalOrderTable = (args?: OrderTableModalArgs) => {
     onClose: () => {
       modals.close("OrderTable");
     },
+    zIndex: zIndexes.modals - 10,
     styles: {
       body: {
         padding: 0,

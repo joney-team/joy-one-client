@@ -24,7 +24,7 @@ export function CategoryColumn<T = any>(args?: CategoryColumnArgs<T>): Column {
         listRoute: "/categories",
         listParams: args?.type
           ? {
-              type: args?.type,
+              type: args.type,
             }
           : undefined,
         getOptions: async (ids: string[]) => {

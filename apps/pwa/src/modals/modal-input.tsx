@@ -129,7 +129,7 @@ export const ModalInput: FC = () => {
       onClose={close}
       opened={opened}
       yOffset={16}
-      zIndex={zIndexes.modals + 1}
+      zIndex={zIndexes.modals + 10}
     >
       <form onSubmit={onSubmit}>
         <Stack gap={16}>

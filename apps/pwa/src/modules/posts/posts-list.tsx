@@ -23,7 +23,7 @@ export const PostsList: FC = () => {
         id="pst"
         route="/posts"
         columns={{
-          _id: PrimaryColumn({ name: "title", route: "/posts/:_id", valuePath: "title" }),
+          _id: PrimaryColumn({ name: "title", route: "/posts/:_id/edit", valuePath: "title" }),
           thumbnail: {
             name: "post_thumbnail",
             render: ({ value }) => {

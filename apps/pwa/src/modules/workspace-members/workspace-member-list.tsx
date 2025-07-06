@@ -55,7 +55,7 @@ export const WorkspaceMemberList: FC = () => {
                 onClick={() => OnModalUserInformation(data.userId)}
               >
                 <Avatar user={data} size={30} />
-                <Clickable>
+                <Clickable onClick={() => OnModalUserInformation(data.userId)}>
                   <Text>{data.name || t("unamed")}</Text>
                 </Clickable>
               </Group>

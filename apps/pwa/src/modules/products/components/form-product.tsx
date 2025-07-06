@@ -6,6 +6,7 @@ import { Editor } from "@/components/editor";
 import { ImageInput } from "@/components/inputs/image-input";
 import { LaunchingSoon } from "@/components/launching-soon";
 import { Renderer } from "@/components/renderer";
+import { CategoryType } from "@/modules/categories/category-types";
 import { CategoryInput } from "@/modules/categories/components/category-input";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
@@ -303,7 +304,11 @@ export const FormProduct: FC<
                   />
                 </Renderer>
 
-                <CategoryInput label={t("categories")} {...form.getInputProps("category")} />
+                <CategoryInput
+                  label={t("categories")}
+                  {...form.getInputProps("category")}
+                  type={CategoryType.PRODUCTS}
+                />
               </Stack>
 
               <Stack>

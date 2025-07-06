@@ -9,7 +9,7 @@ export const PostNew: FC = () => {
   const router = useRouter();
   return (
     <Stack p={16}>
-      <FormPost onSuccess={() => router.replace("/posts")} />
+      <FormPost onSuccess={(post) => router.replace(`/posts/${post._id}/edit`)} />
     </Stack>
   );
 };

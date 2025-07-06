@@ -5,6 +5,7 @@ import { modals } from "@mantine/modals";
 import { IconCashRegister, IconExternalLink } from "@tabler/icons-react";
 import { FC } from "react";
 import { ActionIcon, Group } from "@mantine/core";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 interface ModalPromptProps {
   id: string;
@@ -17,6 +18,7 @@ export const ReceiptDetailModal: FC<ModalPromptProps> = (props) => {
 export const OnReceiptDetailModal = (props: ModalPromptProps) => {
   return modals.open({
     modalId: "ReceiptDetailModal",
+    zIndex: zIndexes.modals,
     title: (
       <ModalTitle
         title={t("receipt")}

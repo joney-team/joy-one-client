@@ -1,6 +1,7 @@
 "use client";
 
 import { Clickable } from "@/components/clickable";
+import { EntityImage } from "@/components/entity-image";
 import { List } from "@/components/list";
 import { useRouter } from "@/hooks/use-router";
 import { EventType } from "@/modules/events/event-types";
@@ -12,9 +13,8 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { Badge, Stack, Text } from "@mantine/core";
 import { IconBox, IconBuildingWarehouse, IconEdit, IconEye } from "@tabler/icons-react";
 import { type FC } from "react";
+import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
-import { PostColumn } from "../posts/components/post-column";
-import { EntityImage } from "@/components/entity-image";
 import { getProductIcon } from "./products-service";
 
 export const ProductList: FC = () => {
@@ -56,8 +56,7 @@ export const ProductList: FC = () => {
               );
             },
           },
-          categoryId: CategoryColumn(),
-          postId: PostColumn(),
+          categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
           stock: {
             w: 150,
             name: "product_stocks",

@@ -94,6 +94,17 @@ export const AdminTools: FC = () => {
           >
             execSendReportToAdmin
           </Button>
+
+          <Button
+            color="cyan"
+            onClick={() =>
+              api.post(`/scheduling/execRemovePendingLoans`, {
+                workspaceId: workspace.userMember.workspaceId,
+              })
+            }
+          >
+            execRemovePendingLoans
+          </Button>
         </Group>
       </Card>
 

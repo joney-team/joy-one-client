@@ -210,6 +210,7 @@ export interface LoanSettings {
   contractLiquidationPdfUrl?: string;
   isAutoSelectWorkspaceBranch?: boolean;
   receiptPdfUrl?: string;
+  isAutoArchivePendingLoans?: boolean;
 }
 // ======================= End Loan Settings =======================
 
