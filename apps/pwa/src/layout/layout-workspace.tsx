@@ -4,7 +4,7 @@ import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { backgroundColors, backgroundPatternColors } from "@joy-one-client/config/colors";
 import { zIndexes } from "@joy-one-client/config/layout";
-import { Skeleton, Stack } from "@mantine/core";
+import { Stack } from "@mantine/core";
 import { useHeadroom } from "@mantine/hooks";
 import dynamic from "next/dynamic";
 import { Fragment, Suspense, useEffect, type FC } from "react";
@@ -12,25 +12,15 @@ import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 import { WorkspaceNavigationSplitter } from "./navigation/navigation-splitter";
 
-const SuspenseFallback = () => {
-  return (
-    <Stack p={8} w="100%" h="100%">
-      <Skeleton h="100%" w="100%" />
-    </Stack>
-  );
-};
-
 const AppNavigation = dynamic(
   () => import("./navigation/navigation").then((m) => m.AppNavigation),
   {
     ssr: false,
-    loading: () => <SuspenseFallback />,
   }
 );
 
 const WorkspaceHeader = dynamic(() => import("./header/header").then((m) => m.WorkspaceHeader), {
   ssr: false,
-  loading: () => <SuspenseFallback />,
 });
 
 export const LayoutWorkspace: FC = () => {
@@ -94,7 +84,7 @@ export const LayoutWorkspace: FC = () => {
         }
       >
         {workspace.isAvailable && (
-          <Suspense fallback={<SuspenseFallback />}>
+          <Suspense>
             <WorkspaceHeader />
           </Suspense>
         )}
@@ -130,7 +120,7 @@ export const LayoutWorkspace: FC = () => {
           }
         >
           {workspace.isAvailable && (
-            <Suspense fallback={<SuspenseFallback />}>
+            <Suspense>
               <AppNavigation />
             </Suspense>
           )}
