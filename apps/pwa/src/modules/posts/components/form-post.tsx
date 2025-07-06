@@ -164,7 +164,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
             <Actions />
           </Renderer>
 
-          <Card shadow="sm" p={0}>
+          <Card shadow="sm" p={0} style={{ overflow: "unset !important" }}>
             <Stack gap={0}>
               <Stack p={12}>
                 <InputWrapper {...form.getInputProps("title")} flex={1}>
@@ -192,10 +192,10 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
                     content: {
                       minHeight: "60dvh",
                     },
-                    toolbar: {
-                      border: "none",
-                      paddingBottom: 0,
-                    },
+                    // toolbar: {
+                    //   border: "none",
+                    //   paddingBottom: 0,
+                    // },
                   },
                 }}
                 value={form.values.content}

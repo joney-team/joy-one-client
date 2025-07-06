@@ -10,6 +10,7 @@ export enum ProductType {
 
 export interface ProductDto {
   name: string;
+  content?: string;
   displayName?: string;
   tags: string[];
   unit: string;
@@ -49,6 +50,7 @@ export interface ProductEntityBindData {
 export interface ProductEntity extends BaseMongoEntity, ProductEntityBindData {
   name: string;
   image?: string;
+  content?: string;
   displayName?: string;
   tags: string[];
   unit: string;

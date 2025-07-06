@@ -20,7 +20,7 @@ import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { RichTextEditor, RichTextEditorProps, useRichTextEditorContext } from "@mantine/tiptap";
 import { IconPhoto, IconUpload } from "@tabler/icons-react";
-import { Extensions, JSONContent, useEditor } from "@tiptap/react";
+import { BubbleMenu, Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { ClipboardEventHandler, FC, useState } from "react";
 import { ImageResize } from "./image-resize";
 
@@ -131,7 +131,7 @@ export const Editor: FC<EditorProps> = (props) => {
           {...props.props}
         >
           {(focused || props.isAlwayShowToolbar) && (
-            <RichTextEditor.Toolbar>
+            <RichTextEditor.Toolbar sticky stickyOffset="var(--docs-header-height)">
               <RichTextEditor.ControlsGroup>
                 <RichTextEditor.Bold />
                 <RichTextEditor.Italic />
@@ -180,6 +180,14 @@ export const Editor: FC<EditorProps> = (props) => {
               </RichTextEditor.ControlsGroup>
             </RichTextEditor.Toolbar>
           )}
+
+          <BubbleMenu editor={editor}>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Bold />
+              <RichTextEditor.Italic />
+              <RichTextEditor.Link />
+            </RichTextEditor.ControlsGroup>
+          </BubbleMenu>
 
           <RichTextEditor.Content
             onClick={(e) => {

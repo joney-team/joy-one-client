@@ -2,13 +2,14 @@
 
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
+import { Editor } from "@/components/editor";
 import { ImageInput } from "@/components/inputs/image-input";
+import { LaunchingSoon } from "@/components/launching-soon";
 import { Renderer } from "@/components/renderer";
 import { CategoryInput } from "@/modules/categories/components/category-input";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
 import { t } from "@/modules/lang/lang-service";
-import { PostSelector } from "@/modules/posts/components/post-selector";
 import { ProductSelector } from "@/modules/products/components/product-selector";
 import { archiveProduct, createProduct, updateProduct } from "@/modules/products/products-service";
 import {
@@ -29,24 +30,44 @@ import {
   SimpleGrid,
   Stack,
   Switch,
+  Tabs,
   Text,
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useListState } from "@mantine/hooks";
-import { IconCheck, IconMinus, IconPlus, IconX } from "@tabler/icons-react";
+import {
+  IconChartBar,
+  IconCheck,
+  IconMinus,
+  IconNews,
+  IconPlus,
+  IconSettings,
+  IconX,
+} from "@tabler/icons-react";
 import { FC, useState } from "react";
 
-export interface FormProductProps {
-  product?: ProductEntity;
-  type?: ProductType;
+export type FormProductProps = {
   onDone?: (product: ProductEntity) => void | Promise<void>;
-}
+} & (
+  | {
+      type: ProductType;
+    }
+  | {
+      product: ProductEntity;
+    }
+);
 
 const defaultUnitPerType: { [key in ProductType]?: string } = {
   [ProductType.COMBO]: "package",
   [ProductType.VOUCHER]: "voucher",
 };
+
+enum FormProductTab {
+  SETTING = "SETTING",
+  POST = "POST",
+  ANALYTICS = "ANALYTICS",
+}
 
 const FormProductCombo: FC<{
   combo: ProductCombo;
@@ -85,28 +106,30 @@ const FormProductCombo: FC<{
 };
 
 export const FormProduct: FC<
-  Omit<FormProductProps, "type"> & {
-    type: ProductType;
+  FormProductProps & {
     onClose: () => void;
   }
 > = (props) => {
+  const [tab, setTab] = useState<FormProductTab>(FormProductTab.SETTING);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const product = "product" in props ? props.product : undefined;
+  const type = ("type" in props ? props.type : product?.type) as ProductType;
 
-  const [supplies, handlers] = useListState<ProductSupply>(props.product?.supplies || []);
-  const [combos, combosHandler] = useListState(props?.product?.combos || []);
+  const [supplies, handlers] = useListState<ProductSupply>(product?.supplies || []);
+  const [combos, combosHandler] = useListState(product?.combos || []);
   const [voucherIncludeProducts, voucherIncludeProductsHandler] = useListState(
-    props?.product?.voucherIncludeProducts || []
+    product?.voucherIncludeProducts || []
   );
   const [voucherExcludeProducts, voucherExcludeProductsHandler] = useListState(
-    props?.product?.voucherExcludeProducts || []
+    product?.voucherExcludeProducts || []
   );
 
   const form = useForm({
     initialValues: {
-      ...props.product,
-      type: props.type,
-      unit: props.product?.unit || t(defaultUnitPerType[props.type] || "") || "",
-      isRangePrice: typeof props.product?.minPrice === "number",
+      ...product,
+      type,
+      unit: product?.unit || t(defaultUnitPerType[type] || "") || "",
+      isRangePrice: typeof product?.minPrice === "number",
     } as any,
     validate: {
       name: (value: string) => {
@@ -141,7 +164,7 @@ export const FormProduct: FC<
         }
       },
       voucherAmount: (value: number) => {
-        if (props.type === ProductType.VOUCHER) {
+        if (type === ProductType.VOUCHER) {
           if (typeof value !== "number") return t("must_be_provided");
           if (value < 0) return t("validate_min_amount", { min: 0 });
         }
@@ -153,12 +176,12 @@ export const FormProduct: FC<
     setIsSubmitting(true);
     try {
       // Validate
-      if (props.type === ProductType.COMBO) {
+      if (type === ProductType.COMBO) {
         if (combos.length === 0)
           throw new Error(`${t("must_be_provided")} ${t("products")}/${t("services")}`);
       }
 
-      const { customFields, post, ...rest } = values;
+      const { customFields, ...rest } = values;
 
       let payload = {
         ...rest,
@@ -168,13 +191,12 @@ export const FormProduct: FC<
         voucherExcludeProductIds: voucherExcludeProducts.map((p) => p._id),
         voucherIncludeProductIds: voucherIncludeProducts.map((p) => p._id),
         customFieldValues: getCustomFieldValue(customFields),
-        postId: post?._id,
       };
 
       if (!values.isRangePrice) delete payload.minPrice;
 
-      const action = props.product
-        ? () => updateProduct(props.product!._id, payload)
+      const action = product
+        ? () => updateProduct(product!._id, payload)
         : () => createProduct(payload);
 
       const res = await action();
@@ -189,362 +211,424 @@ export const FormProduct: FC<
 
   return (
     <Stack>
-      <SimpleGrid cols={{ md: 2 }} spacing={30}>
-        <Stack>
-          <ImageInput {...form.getInputProps("image")} w={150} h={150} />
+      <Stack>
+        <Tabs value={tab} onChange={(value) => setTab(value as FormProductTab)} variant="outline">
+          <Tabs.List>
+            <Tabs.Tab value={FormProductTab.SETTING} fw={500}>
+              <Group align="center" gap={5}>
+                <IconSettings size={16} strokeWidth={1.5} />
+                {t("settings")}
+              </Group>
+            </Tabs.Tab>
+            <Tabs.Tab value={FormProductTab.POST} fw={500}>
+              <Group align="center" gap={5}>
+                <IconNews size={16} strokeWidth={1.5} />
+                {t("post")}
+              </Group>
+            </Tabs.Tab>
+            <Tabs.Tab value={FormProductTab.ANALYTICS} fw={500} disabled={!product?._id}>
+              <Group align="center" gap={5}>
+                <IconChartBar size={16} strokeWidth={1.5} />
+                {t("analytics")}
+              </Group>
+            </Tabs.Tab>
+          </Tabs.List>
 
-          <TextInput withAsterisk label={t("name")} {...form.getInputProps("name")} />
+          <Tabs.Panel value={FormProductTab.SETTING} pt={16}>
+            <SimpleGrid cols={{ md: 2 }} spacing={30}>
+              <Stack>
+                <ImageInput {...form.getInputProps("image")} w={150} h={150} />
 
-          <TextInput withAsterisk label={t("unit")} {...form.getInputProps("unit")} />
+                <TextInput withAsterisk label={t("name")} {...form.getInputProps("name")} />
 
-          <Renderer visible={props.type === ProductType.PRODUCT}>
-            <NumberInput
-              label={t("min_per_use")}
-              description={t("default_is", { value: 1 })}
-              {...form.getInputProps("defaultQtyPerUse")}
-              hideControls
-            />
-          </Renderer>
+                <TextInput withAsterisk label={t("unit")} {...form.getInputProps("unit")} />
 
-          <Switch
-            label={t("range_price")}
-            checked={form.values.isRangePrice}
-            onChange={(e) => form.setFieldValue("isRangePrice", e.target.checked)}
-          />
-
-          <Renderer visible={form.values.isRangePrice}>
-            <Group wrap="nowrap" align="start">
-              <NumberInput
-                withAsterisk
-                label={t("min_price")}
-                flex={1}
-                hideControls
-                {...form.getInputProps("minPrice")}
-              />
-              <NumberInput
-                withAsterisk
-                label={t("max_price")}
-                onBlur={() => {
-                  if (
-                    typeof form.values.maxPrice === "number" &&
-                    typeof form.values.minPrice === "number" &&
-                    !form.values.price
-                  ) {
-                    const middlePrice = (form.values.minPrice + form.values.maxPrice) / 2;
-                    if (middlePrice >= 0) form.setFieldValue("price", middlePrice);
-                  }
-                }}
-                flex={1}
-                hideControls
-                {...form.getInputProps("maxPrice")}
-              />
-            </Group>
-          </Renderer>
-
-          <NumberInput
-            label={t("default_price")}
-            withAsterisk
-            hideControls
-            {...form.getInputProps("price")}
-          />
-
-          <Renderer visible={props.type === ProductType.VOUCHER}>
-            <NumberInput
-              withAsterisk
-              label={t("voucherAmount")}
-              hideControls
-              {...form.getInputProps("voucherAmount")}
-            />
-          </Renderer>
-
-          <CategoryInput label={t("categories")} {...form.getInputProps("category")} />
-        </Stack>
-
-        <Stack>
-          <Stack>
-            <Divider mb={-10} label={t("settings")} labelPosition="left" fw={700} />
-
-            <TextInput
-              label={t("display_name")}
-              description={t("product_display_name_desc")}
-              {...form.getInputProps("displayName")}
-            />
-
-            <PostSelector
-              w="100%"
-              label={t("link_entity", { entity: t("post") })}
-              {...form.getInputProps("post")}
-            />
-
-            <Switch
-              label={t("product_hide_ticket")}
-              checked={form.values.isHiddenInReceiptWhenNoPrice}
-              styles={{ label: { fontSize: 14 } }}
-              {...form.getInputProps("isHiddenInReceiptWhenNoPrice")}
-            />
-
-            <Renderer visible={props.type === ProductType.PRODUCT}>
-              <Switch
-                label={t("product_stock_check")}
-                checked={form.values.isStockCheck}
-                styles={{ label: { fontSize: 14 } }}
-                {...form.getInputProps("isStockCheck")}
-              />
-
-              <Renderer visible={form.values.isStockCheck}>
-                <NumberInput
-                  label={t("label_warning_out_of_date")}
-                  description={t("label_warning_out_of_date_desc")}
-                  hideControls
-                  {...form.getInputProps("warningOutOfDateBeforeDays")}
-                />
-
-                <NumberInput
-                  label={t("label_warning_out_of_stock")}
-                  description={t("label_warning_out_of_stock_desc")}
-                  {...form.getInputProps("warningOutOfStockQty")}
-                  hideControls
-                />
-              </Renderer>
-            </Renderer>
-          </Stack>
-
-          <Renderer visible={[ProductType.PRODUCT, ProductType.SERVICE].includes(props.type)}>
-            <Stack>
-              <Divider mb={-10} label={t("product_supplies")} labelPosition="left" fw={700} />
-              <Text fz={em(10)} c="gray">
-                {t("enter_product_supplies")}
-              </Text>
-
-              <Stack gap={10}>
-                {supplies.map((supply, index) => {
-                  return (
-                    <Card key={index} py={5} px={8} withBorder>
-                      <Group justify="space-between" wrap="nowrap">
-                        <Group gap={5}>
-                          <Text fz={em(13)} fw={400}>
-                            {supply.product.name}
-                          </Text>
-                          <Text fz={em(10)} fw={400}>
-                            ({supply.product.unit})
-                          </Text>
-                        </Group>
-
-                        <Group gap={5}>
-                          <NumberInput
-                            maw={100}
-                            size="xs"
-                            placeholder={t("amount")}
-                            min={0}
-                            value={supply.quantity}
-                            onChange={(e) => handlers.setItem(index, { ...supply, quantity: +e })}
-                          />
-
-                          <ActionIcon
-                            color="gray"
-                            variant="transparent"
-                            onClick={() => handlers.remove(index)}
-                          >
-                            <IconMinus size={16} />
-                          </ActionIcon>
-                        </Group>
-                      </Group>
-                    </Card>
-                  );
-                })}
-
-                <Group mt={5}>
-                  <ProductSelector
-                    type={[ProductType.PRODUCT]}
-                    excludeIds={[...supplies.map((s) => s.productId), props.product?._id || ""]}
-                    onSelect={(product) => {
-                      handlers.append({
-                        productId: product._id,
-                        product,
-                        quantity: product.defaultQtyPerUse || 1,
-                      });
-                    }}
-                    target={(ctx) => {
-                      return (
-                        <Button
-                          onClick={ctx.toggle}
-                          tt="capitalize"
-                          size="xs"
-                          variant="light"
-                          radius={100}
-                          leftIcon={IconPlus}
-                          fz={em(14)}
-                          fw={500}
-                        >
-                          {t("add")} {t("product_supplies")}
-                        </Button>
-                      );
-                    }}
+                <Renderer visible={type === ProductType.PRODUCT}>
+                  <NumberInput
+                    label={t("min_per_use")}
+                    description={t("default_is", { value: 1 })}
+                    {...form.getInputProps("defaultQtyPerUse")}
+                    hideControls
                   />
-                </Group>
-              </Stack>
-            </Stack>
-          </Renderer>
+                </Renderer>
 
-          <Renderer visible={props.type === ProductType.COMBO}>
-            <Stack>
-              <Divider
-                mb={-10}
-                label={`${t("products")} / ${t("services")}`}
-                labelPosition="left"
-                fw={700}
-              />
+                <Switch
+                  label={t("range_price")}
+                  checked={form.values.isRangePrice}
+                  onChange={(e) => form.setFieldValue("isRangePrice", e.target.checked)}
+                />
+
+                <Renderer visible={form.values.isRangePrice}>
+                  <Group wrap="nowrap" align="start">
+                    <NumberInput
+                      withAsterisk
+                      label={t("min_price")}
+                      flex={1}
+                      hideControls
+                      {...form.getInputProps("minPrice")}
+                    />
+                    <NumberInput
+                      withAsterisk
+                      label={t("max_price")}
+                      onBlur={() => {
+                        if (
+                          typeof form.values.maxPrice === "number" &&
+                          typeof form.values.minPrice === "number" &&
+                          !form.values.price
+                        ) {
+                          const middlePrice = (form.values.minPrice + form.values.maxPrice) / 2;
+                          if (middlePrice >= 0) form.setFieldValue("price", middlePrice);
+                        }
+                      }}
+                      flex={1}
+                      hideControls
+                      {...form.getInputProps("maxPrice")}
+                    />
+                  </Group>
+                </Renderer>
+
+                <NumberInput
+                  label={t("default_price")}
+                  withAsterisk
+                  hideControls
+                  {...form.getInputProps("price")}
+                />
+
+                <Renderer visible={type === ProductType.VOUCHER}>
+                  <NumberInput
+                    withAsterisk
+                    label={t("voucherAmount")}
+                    hideControls
+                    {...form.getInputProps("voucherAmount")}
+                  />
+                </Renderer>
+
+                <CategoryInput label={t("categories")} {...form.getInputProps("category")} />
+              </Stack>
 
               <Stack>
-                {combos.map((benefit, i) => (
-                  <Card key={i} withBorder shadow="none" p={10}>
-                    <Stack gap={5}>
-                      <Group justify="space-between" wrap="nowrap" align="start">
-                        <FormProductCombo
-                          key={i}
-                          combo={benefit}
-                          onChange={(v) => combosHandler.setItem(i, v)}
-                          onRemove={() => combosHandler.remove(i)}
-                        />
+                <Stack>
+                  <Divider mb={-10} label={t("settings")} labelPosition="left" fw={700} />
 
-                        <ActionIcon
-                          variant="subtle"
-                          color="gray"
-                          disabled={combos.length === 1}
-                          onClick={() => combosHandler.remove(i)}
-                        >
-                          <IconX size={16} />
-                        </ActionIcon>
+                  <TextInput
+                    label={t("display_name")}
+                    description={t("product_display_name_desc")}
+                    {...form.getInputProps("displayName")}
+                  />
+
+                  <Switch
+                    label={t("product_hide_ticket")}
+                    checked={form.values.isHiddenInReceiptWhenNoPrice}
+                    styles={{ label: { fontSize: 14 } }}
+                    {...form.getInputProps("isHiddenInReceiptWhenNoPrice")}
+                  />
+
+                  <Renderer visible={type === ProductType.PRODUCT}>
+                    <Switch
+                      label={t("product_stock_check")}
+                      checked={form.values.isStockCheck}
+                      styles={{ label: { fontSize: 14 } }}
+                      {...form.getInputProps("isStockCheck")}
+                    />
+
+                    <Renderer visible={form.values.isStockCheck}>
+                      <NumberInput
+                        label={t("label_warning_out_of_date")}
+                        description={t("label_warning_out_of_date_desc")}
+                        hideControls
+                        {...form.getInputProps("warningOutOfDateBeforeDays")}
+                      />
+
+                      <NumberInput
+                        label={t("label_warning_out_of_stock")}
+                        description={t("label_warning_out_of_stock_desc")}
+                        {...form.getInputProps("warningOutOfStockQty")}
+                        hideControls
+                      />
+                    </Renderer>
+                  </Renderer>
+                </Stack>
+
+                <Renderer visible={[ProductType.PRODUCT, ProductType.SERVICE].includes(type)}>
+                  <Stack>
+                    <Divider mb={-10} label={t("product_supplies")} labelPosition="left" fw={700} />
+                    <Text fz={em(10)} c="gray">
+                      {t("enter_product_supplies")}
+                    </Text>
+
+                    <Stack gap={10}>
+                      {supplies.map((supply, index) => {
+                        return (
+                          <Card key={index} py={5} px={8} withBorder>
+                            <Group justify="space-between" wrap="nowrap">
+                              <Group gap={5}>
+                                <Text fz={em(13)} fw={400}>
+                                  {supply.product.name}
+                                </Text>
+                                <Text fz={em(10)} fw={400}>
+                                  ({supply.product.unit})
+                                </Text>
+                              </Group>
+
+                              <Group gap={5}>
+                                <NumberInput
+                                  maw={100}
+                                  size="xs"
+                                  placeholder={t("amount")}
+                                  min={0}
+                                  value={supply.quantity}
+                                  onChange={(e) =>
+                                    handlers.setItem(index, { ...supply, quantity: +e })
+                                  }
+                                />
+
+                                <ActionIcon
+                                  color="gray"
+                                  variant="transparent"
+                                  onClick={() => handlers.remove(index)}
+                                >
+                                  <IconMinus size={16} />
+                                </ActionIcon>
+                              </Group>
+                            </Group>
+                          </Card>
+                        );
+                      })}
+
+                      <Group mt={5}>
+                        <ProductSelector
+                          type={[ProductType.PRODUCT]}
+                          excludeIds={[...supplies.map((s) => s.productId), product?._id || ""]}
+                          onSelect={(product) => {
+                            handlers.append({
+                              productId: product._id,
+                              product,
+                              quantity: product.defaultQtyPerUse || 1,
+                            });
+                          }}
+                          target={(ctx) => {
+                            return (
+                              <Button
+                                onClick={ctx.toggle}
+                                tt="capitalize"
+                                size="xs"
+                                variant="light"
+                                radius={100}
+                                leftIcon={IconPlus}
+                                fz={em(14)}
+                                fw={500}
+                              >
+                                {t("add")} {t("product_supplies")}
+                              </Button>
+                            );
+                          }}
+                        />
                       </Group>
                     </Stack>
-                  </Card>
-                ))}
+                  </Stack>
+                </Renderer>
 
-                <Group>
-                  <ProductSelector
-                    excludeIds={combos.map((c) => c.productId)}
-                    type={[ProductType.PRODUCT, ProductType.SERVICE]}
-                    isStockCheck={true}
-                    onSelect={(product) => {
-                      if (combos.some((c) => c.productId === product._id)) return;
-                      combosHandler.append({ product, productId: product._id, quantity: 1 });
-                    }}
-                    target={(ctx) => {
-                      return (
-                        <Button
-                          tt="capitalize"
-                          size="xs"
-                          variant="light"
-                          radius={100}
-                          leftIcon={IconPlus}
-                          fz={em(14)}
-                          fw={500}
-                          onClick={ctx.toggle}
-                        >
-                          {t("add")} {`${t("products")} / ${t("services")}`.toLowerCase()}
-                        </Button>
-                      );
-                    }}
-                  />
-                </Group>
+                <Renderer visible={type === ProductType.COMBO}>
+                  <Stack>
+                    <Divider
+                      mb={-10}
+                      label={`${t("products")} / ${t("services")}`}
+                      labelPosition="left"
+                      fw={700}
+                    />
+
+                    <Stack>
+                      {combos.map((benefit, i) => (
+                        <Card key={i} withBorder shadow="none" p={10}>
+                          <Stack gap={5}>
+                            <Group justify="space-between" wrap="nowrap" align="start">
+                              <FormProductCombo
+                                key={i}
+                                combo={benefit}
+                                onChange={(v) => combosHandler.setItem(i, v)}
+                                onRemove={() => combosHandler.remove(i)}
+                              />
+
+                              <ActionIcon
+                                variant="subtle"
+                                color="gray"
+                                disabled={combos.length === 1}
+                                onClick={() => combosHandler.remove(i)}
+                              >
+                                <IconX size={16} />
+                              </ActionIcon>
+                            </Group>
+                          </Stack>
+                        </Card>
+                      ))}
+
+                      <Group>
+                        <ProductSelector
+                          excludeIds={combos.map((c) => c.productId)}
+                          type={[ProductType.PRODUCT, ProductType.SERVICE]}
+                          isStockCheck={true}
+                          onSelect={(product) => {
+                            if (combos.some((c) => c.productId === product._id)) return;
+                            combosHandler.append({
+                              product,
+                              productId: product._id,
+                              quantity: 1,
+                            });
+                          }}
+                          target={(ctx) => {
+                            return (
+                              <Button
+                                tt="capitalize"
+                                size="xs"
+                                variant="light"
+                                radius={100}
+                                leftIcon={IconPlus}
+                                fz={em(14)}
+                                fw={500}
+                                onClick={ctx.toggle}
+                              >
+                                {t("add")} {`${t("products")} / ${t("services")}`.toLowerCase()}
+                              </Button>
+                            );
+                          }}
+                        />
+                      </Group>
+                    </Stack>
+                  </Stack>
+                </Renderer>
+
+                <Renderer visible={type === ProductType.VOUCHER}>
+                  <Stack>
+                    <Divider
+                      mb={-10}
+                      label={`${t("voucher_config")}`}
+                      labelPosition="left"
+                      fw={700}
+                    />
+
+                    <NumberInput
+                      label={t("expireInDays")}
+                      description={t("expireInDays_desc")}
+                      {...form.getInputProps("voucherExpireInDays")}
+                    />
+
+                    <Divider
+                      mb={-10}
+                      label={`${t("include_products")}`}
+                      labelPosition="left"
+                      fw={700}
+                    />
+
+                    {voucherIncludeProducts.map((product, i) => (
+                      <Card key={product._id} withBorder shadow="none" p={8}>
+                        <Group justify="space-between">
+                          <Text>{product.name}</Text>
+
+                          <ActionIcon
+                            variant="transparent"
+                            color="gray"
+                            onClick={() => voucherIncludeProductsHandler.remove(i)}
+                          >
+                            <IconX strokeWidth={1.3} size={18} />
+                          </ActionIcon>
+                        </Group>
+                      </Card>
+                    ))}
+
+                    <Group>
+                      <ProductSelector
+                        type={[ProductType.SERVICE, ProductType.PRODUCT]}
+                        excludeIds={voucherIncludeProducts.map((p) => p._id)}
+                        onSelect={(product) => {
+                          if (voucherIncludeProducts.some((p) => p._id === product._id)) return;
+                          voucherIncludeProductsHandler.append(product);
+                        }}
+                      />
+                    </Group>
+
+                    <Divider
+                      mb={-10}
+                      label={`${t("exclude_products")}`}
+                      labelPosition="left"
+                      fw={700}
+                    />
+
+                    {voucherExcludeProducts.map((product, i) => (
+                      <Card key={product._id} withBorder shadow="none" p={8}>
+                        <Group justify="space-between">
+                          <Text>{product.name}</Text>
+
+                          <ActionIcon
+                            variant="transparent"
+                            color="gray"
+                            onClick={() => voucherExcludeProductsHandler.remove(i)}
+                          >
+                            <IconX strokeWidth={1.3} size={18} />
+                          </ActionIcon>
+                        </Group>
+                      </Card>
+                    ))}
+
+                    <Group>
+                      <ProductSelector
+                        excludeIds={voucherIncludeProducts.map((p) => p._id)}
+                        type={[ProductType.SERVICE, ProductType.PRODUCT]}
+                        onSelect={(product) => {
+                          if (combos.some((c) => c.productId === product._id)) return;
+                          voucherExcludeProductsHandler.append(product);
+                        }}
+                      />
+                    </Group>
+                  </Stack>
+                </Renderer>
+
+                <BuilderCustomFields
+                  before={
+                    <Divider
+                      mb={-10}
+                      label={`${t("custom_fields")}`}
+                      labelPosition="left"
+                      fw={700}
+                    />
+                  }
+                  entity={AppEntity.PRODUCTS}
+                  value={form.values.customFields}
+                  onChange={(value) => form.setFieldValue("customFields", value)}
+                />
               </Stack>
-            </Stack>
-          </Renderer>
+            </SimpleGrid>
+          </Tabs.Panel>
 
-          <Renderer visible={props.type === ProductType.VOUCHER}>
-            <Stack>
-              <Divider mb={-10} label={`${t("voucher_config")}`} labelPosition="left" fw={700} />
+          <Tabs.Panel value={FormProductTab.POST} pt={16}>
+            <Editor
+              isAlwayShowToolbar
+              placeholder={t("enter_content")}
+              value={form.values.content}
+              onChangeHTML={(value) => form.setFieldValue("content", value)}
+            />
+          </Tabs.Panel>
 
-              <NumberInput
-                label={t("expireInDays")}
-                description={t("expireInDays_desc")}
-                {...form.getInputProps("voucherExpireInDays")}
-              />
-
-              <Divider mb={-10} label={`${t("include_products")}`} labelPosition="left" fw={700} />
-
-              {voucherIncludeProducts.map((product, i) => (
-                <Card key={product._id} withBorder shadow="none" p={8}>
-                  <Group justify="space-between">
-                    <Text>{product.name}</Text>
-
-                    <ActionIcon
-                      variant="transparent"
-                      color="gray"
-                      onClick={() => voucherIncludeProductsHandler.remove(i)}
-                    >
-                      <IconX strokeWidth={1.3} size={18} />
-                    </ActionIcon>
-                  </Group>
-                </Card>
-              ))}
-
-              <Group>
-                <ProductSelector
-                  type={[ProductType.SERVICE, ProductType.PRODUCT]}
-                  excludeIds={voucherIncludeProducts.map((p) => p._id)}
-                  onSelect={(product) => {
-                    if (voucherIncludeProducts.some((p) => p._id === product._id)) return;
-                    voucherIncludeProductsHandler.append(product);
-                  }}
-                />
-              </Group>
-
-              <Divider mb={-10} label={`${t("exclude_products")}`} labelPosition="left" fw={700} />
-
-              {voucherExcludeProducts.map((product, i) => (
-                <Card key={product._id} withBorder shadow="none" p={8}>
-                  <Group justify="space-between">
-                    <Text>{product.name}</Text>
-
-                    <ActionIcon
-                      variant="transparent"
-                      color="gray"
-                      onClick={() => voucherExcludeProductsHandler.remove(i)}
-                    >
-                      <IconX strokeWidth={1.3} size={18} />
-                    </ActionIcon>
-                  </Group>
-                </Card>
-              ))}
-
-              <Group>
-                <ProductSelector
-                  excludeIds={voucherIncludeProducts.map((p) => p._id)}
-                  type={[ProductType.SERVICE, ProductType.PRODUCT]}
-                  onSelect={(product) => {
-                    if (combos.some((c) => c.productId === product._id)) return;
-                    voucherExcludeProductsHandler.append(product);
-                  }}
-                />
-              </Group>
-            </Stack>
-          </Renderer>
-
-          <BuilderCustomFields
-            before={
-              <Divider mb={-10} label={`${t("custom_fields")}`} labelPosition="left" fw={700} />
-            }
-            entity={AppEntity.PRODUCTS}
-            value={form.values.customFields}
-            onChange={(value) => form.setFieldValue("customFields", value)}
-          />
-        </Stack>
-      </SimpleGrid>
-
-      <Stack mt={25} align="center" justify="center" gap={10}>
-        <Button loading={isSubmitting} onClick={onSubmit} leftIcon={IconCheck} type="submit">
-          {t("complete")}
-        </Button>
-
-        {props.product?._id && (
-          <ButtonArchive
-            process={() => archiveProduct(props.product!._id)}
-            onArchived={() => props.onClose()}
-            goBackWhenArchived={false}
-          />
-        )}
+          <Tabs.Panel value={FormProductTab.ANALYTICS} pt={16}>
+            <LaunchingSoon shadow="none" />
+          </Tabs.Panel>
+        </Tabs>
       </Stack>
+
+      {[FormProductTab.SETTING, FormProductTab.POST].includes(tab) && (
+        <Stack mt={25} align="center" justify="center" gap={10}>
+          <Button loading={isSubmitting} onClick={onSubmit} leftIcon={IconCheck} type="submit">
+            {t(product ? "update" : "create_new")}
+          </Button>
+
+          {product?._id && (
+            <ButtonArchive
+              process={() => archiveProduct(product!._id)}
+              onArchived={() => props.onClose()}
+              goBackWhenArchived={false}
+            />
+          )}
+        </Stack>
+      )}
     </Stack>
   );
 };
