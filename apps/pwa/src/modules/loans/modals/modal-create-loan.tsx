@@ -218,15 +218,6 @@ export const ModalCreateLoan: FC = () => {
 
           return (
             <Fragment>
-              <Renderer visible={workspace.isShouldEnableBranches}>
-                <Session name={t("branch")} icon={IconBuildingSkyscraper}>
-                  <WorkspaceBranchInput
-                    value={form.values.workspaceBranch}
-                    onChange={(branch) => form.setFieldValue("workspaceBranch", branch)}
-                  />
-                </Session>
-              </Renderer>
-
               <Session name={t("customer")} icon={IconUser}>
                 <CustomerInput
                   value={customer}
@@ -407,6 +398,15 @@ export const ModalCreateLoan: FC = () => {
                   </Card>
                 </Session>
               )}
+
+              <Renderer visible={workspace.isShouldEnableBranches}>
+                <Session name={t("branch")} icon={IconBuildingSkyscraper}>
+                  <WorkspaceBranchInput
+                    value={form.values.workspaceBranch}
+                    onChange={(branch) => form.setFieldValue("workspaceBranch", branch)}
+                  />
+                </Session>
+              </Renderer>
 
               <Group mt={10} justify="center">
                 <Button
