@@ -47,7 +47,7 @@ export const ModalCreateTask: FC = () => {
         />
       }
       fullScreen={layout.view === "mobile"}
-      size={800}
+      size={830}
     >
       <Stack gap={10} pb={layout.view === "mobile" ? 16 * 2 : 0}>
         <Renderer visible={!!tagFolder || !!parentTask || !!parnetTagFolder}>
