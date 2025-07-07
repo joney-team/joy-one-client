@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { onArchive } from "@/utils/actions";
 import { t } from "@/modules/lang/lang-service";

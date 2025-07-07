@@ -1,3 +1,5 @@
+"use client";
+
 import { useHover } from "@mantine/hooks";
 import { FC, ReactNode, RefCallback } from "react";
 

@@ -21,18 +21,6 @@ export const WorkspaceSettingCreditOperation: FC = () => {
 
   return (
     <Grid>
-      {workspace.isShouldEnableBranches && (
-        <Grid.Col span={12}>
-          <Switch
-            label="Tự động chọn chi nhánh khi tạo hợp đồng"
-            defaultChecked={workspace.settings.loanSettings?.isAutoSelectWorkspaceBranch}
-            onChange={(e) => {
-              onChange("isAutoSelectWorkspaceBranch", e.target.checked);
-            }}
-          />
-        </Grid.Col>
-      )}
-
       <Grid.Col span={6}>
         <NumberInput
           label="Tỷ lệ chênh lệch định giá (0 - 100)"
@@ -96,6 +84,18 @@ export const WorkspaceSettingCreditOperation: FC = () => {
           }}
         />
       </Grid.Col>
+
+      {workspace.isShouldEnableBranches && (
+        <Grid.Col span={12}>
+          <Switch
+            label="Tự động chọn chi nhánh khi tạo hợp đồng"
+            defaultChecked={workspace.settings.loanSettings?.isAutoSelectWorkspaceBranch}
+            onChange={(e) => {
+              onChange("isAutoSelectWorkspaceBranch", e.target.checked);
+            }}
+          />
+        </Grid.Col>
+      )}
     </Grid>
   );
 };

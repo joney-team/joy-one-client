@@ -1,3 +1,5 @@
+"use client";
+
 import { ActionIcon, CopyButton, Group, MantineSize, StyleProp, Text } from "@mantine/core";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { FontWeight } from "next/dist/compiled/@vercel/og/satori";

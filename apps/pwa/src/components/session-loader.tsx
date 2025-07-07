@@ -1,3 +1,5 @@
+"use client";
+
 import { Skeleton, Stack } from "@mantine/core";
 import { FC } from "react";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { getDateFormat } from "@/modules/lang/lang-service";
 import { Group, Text, ThemeIcon } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";

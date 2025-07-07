@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Anchor, Button, Stack, Text, Title, em } from "@mantine/core";
@@ -24,8 +26,8 @@ export const PluginMailer: FC = () => {
           </Title>
 
           <Text ta="center">
-            Hệ thống đang dùng email <strong>{workspace.settings.mailer.user}</strong> để gửi Mail cho khách hàng hoặc
-            các thông báo hệ thống cho thành viên.
+            Hệ thống đang dùng email <strong>{workspace.settings.mailer.user}</strong> để gửi Mail
+            cho khách hàng hoặc các thông báo hệ thống cho thành viên.
           </Text>
         </Stack>
 
@@ -45,7 +47,8 @@ export const PluginMailer: FC = () => {
         </Title>
 
         <Text ta="center">
-          Thiết lập tài khoản gửi Mail riêng nhằm giúp khách hàng dễ dàng nhận diện thương hiệu của bạn.
+          Thiết lập tài khoản gửi Mail riêng nhằm giúp khách hàng dễ dàng nhận diện thương hiệu của
+          bạn.
         </Text>
       </Stack>
 

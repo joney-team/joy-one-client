@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -15,7 +17,13 @@ export const Account: FC<AppAccountProps> = (props) => {
   const workspace = useWorkspace();
 
   return (
-    <Group gap={5} id="app-account" style={{ cursor: "pointer" }} onClick={() => router.push(`/profile`)} wrap="nowrap">
+    <Group
+      gap={5}
+      id="app-account"
+      style={{ cursor: "pointer" }}
+      onClick={() => router.push(`/profile`)}
+      wrap="nowrap"
+    >
       <Avatar
         user={workspace.userMember}
         style={{ cursor: "pointer" }}

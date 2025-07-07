@@ -1,3 +1,5 @@
+"use client";
+
 import { Anchor, AnchorProps, Group } from "@mantine/core";
 import { FC, PropsWithChildren } from "react";
 import { Hovered } from "./hovered";

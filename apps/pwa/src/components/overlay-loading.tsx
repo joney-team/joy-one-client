@@ -1,3 +1,5 @@
+"use client";
+
 import { useApp } from "@/app.context";
 import { Loader } from "@mantine/core";
 import { type FC } from "react";

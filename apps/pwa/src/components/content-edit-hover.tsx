@@ -1,3 +1,5 @@
+"use client";
+
 import { ActionIcon, Group } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconPencil } from "@tabler/icons-react";

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BankTransactionEntity,
   BankTransactionPaymentGateway,
@@ -7,7 +9,6 @@ import { Anchor, Center, em, Stack, Text, Title } from "@mantine/core";
 import { FC, useEffect } from "react";
 import { Button } from "./buttons/button";
 import { Loading } from "./loading";
-import { useLayout } from "@/layout/layout-context";
 interface CheckoutProps {
   tx: BankTransactionEntity;
   onBack: () => void;
@@ -15,7 +16,6 @@ interface CheckoutProps {
 
 export const Checkout: FC<CheckoutProps> = (props) => {
   const { status } = props.tx;
-  const layout = useLayout();
 
   useEffect(() => {
     if (

@@ -1,13 +1,15 @@
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
 import { Group, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import type { FC, ReactNode } from "react";
 
-export const FormSession: FC<{ title: string; description?: string; children: React.ReactNode }> = ({
-  title,
-  description,
-  children,
-}) => {
+export const FormSession: FC<{
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}> = ({ title, description, children }) => {
   return (
     <Group align="start" w="100%">
       <Stack gap={3} w="30%">

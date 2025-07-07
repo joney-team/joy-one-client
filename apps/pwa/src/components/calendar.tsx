@@ -1,3 +1,5 @@
+"use client";
+
 import { CalendarView } from "@/types";
 import { renderDate, t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
@@ -30,7 +32,10 @@ export const Calendar: FC<CalendarProps> = (props) => {
   const nextRange = () => {
     const nextDate = dayjs(date).add(1, view).toDate();
     setDate(nextDate);
-    props.onChange?.({ start: dayjs(nextDate).startOf(view).toDate(), end: dayjs(nextDate).endOf(view).toDate() });
+    props.onChange?.({
+      start: dayjs(nextDate).startOf(view).toDate(),
+      end: dayjs(nextDate).endOf(view).toDate(),
+    });
   };
 
   const previousRange = () => {
@@ -82,7 +87,9 @@ export const Calendar: FC<CalendarProps> = (props) => {
   const calendarViews: Record<CalendarView, React.ReactNode | undefined> = {
     [CalendarView.DAY]: undefined,
     [CalendarView.WEEK]: undefined,
-    [CalendarView.MONTH]: <MonthView {...props} _startAt={startAt.toDate()} _endAt={endAt.toDate()} />,
+    [CalendarView.MONTH]: (
+      <MonthView {...props} _startAt={startAt.toDate()} _endAt={endAt.toDate()} />
+    ),
   };
 
   return (
@@ -243,7 +250,9 @@ const DateSlot: FC<{
           {thisDate.getDate()}
         </Badge>
 
-        {props.renderDayHead ? props.renderDayHead(thisDate, hover.hovered, !props.isInThisMonth) : null}
+        {props.renderDayHead
+          ? props.renderDayHead(thisDate, hover.hovered, !props.isInThisMonth)
+          : null}
       </Group>
 
       {props.renderDay ? props.renderDay(thisDate, hover.hovered, !props.isInThisMonth) : null}

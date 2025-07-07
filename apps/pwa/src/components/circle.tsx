@@ -1,3 +1,5 @@
+"use client";
+
 import { em, ThemeIcon, ThemeIconProps } from "@mantine/core";
 import React, { FC } from "react";
 

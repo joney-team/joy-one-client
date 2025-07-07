@@ -1,3 +1,5 @@
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
 import { Box, Group, Text, ThemeIcon } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";

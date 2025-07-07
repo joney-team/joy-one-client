@@ -1,3 +1,5 @@
+"use client";
+
 import dynamic, { DynamicOptionsLoadingProps } from "next/dynamic";
 import { FC } from "react";
 

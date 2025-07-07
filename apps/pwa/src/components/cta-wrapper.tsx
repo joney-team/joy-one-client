@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import { Stack } from "@mantine/core";
 import { FC, PropsWithChildren } from "react";

@@ -1,3 +1,5 @@
+"use client";
+
 import { InputModalProps, OnModalInput } from "@/modals/modal-input";
 import { FC, PropsWithChildren } from "react";
 import { Hovered } from "./hovered";

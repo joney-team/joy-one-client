@@ -1,6 +1,8 @@
-import { Tooltip, TooltipProps } from '@mantine/core';
-import { Icon, IconProps } from '@tabler/icons-react';
-import { FC, PropsWithChildren } from 'react'
+"use client";
+
+import { Tooltip, TooltipProps } from "@mantine/core";
+import { Icon, IconProps } from "@tabler/icons-react";
+import { FC, PropsWithChildren } from "react";
 
 interface TooltipIconProps extends IconProps {
   icon: Icon;
@@ -15,5 +17,5 @@ export const TooltipIcon: FC<PropsWithChildren<TooltipIconProps>> = (props) => {
     <Tooltip label={props.label} {...props.tooltip}>
       <props.icon size={18} {...props} />
     </Tooltip>
-  )
-}
+  );
+};

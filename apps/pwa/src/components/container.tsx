@@ -1,4 +1,10 @@
-import { Container as MantineContainer, ContainerProps as MantineContainerProps, Stack } from "@mantine/core";
+"use client";
+
+import {
+  Container as MantineContainer,
+  ContainerProps as MantineContainerProps,
+  Stack,
+} from "@mantine/core";
 import { FC } from "react";
 
 export interface ContainerProps extends MantineContainerProps {}

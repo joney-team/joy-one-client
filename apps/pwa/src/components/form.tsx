@@ -1,3 +1,5 @@
+"use client";
+
 import { FC, PropsWithChildren, useEffect, useRef } from "react";
 
 interface FormProps {

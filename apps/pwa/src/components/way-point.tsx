@@ -1,3 +1,5 @@
+"use client";
+
 import { Box } from "@mantine/core";
 import { useThrottledCallback } from "@mantine/hooks";
 import { FC, useEffect, useRef } from "react";

@@ -1,3 +1,5 @@
+"use client";
+
 import { Group, Text, TextProps } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { FC, PropsWithChildren } from "react";

@@ -1,3 +1,5 @@
+"use client";
+
 import { FC, ReactNode } from "react";
 
 import { getEvents } from "@/modules/events/event-service";
@@ -39,12 +41,15 @@ interface EventListProps {
 }
 
 export const EventList: FC<EventListProps> = (props) => {
-  const id = props.id || `list-event-${JSON.stringify({ ref: props.ref, userId: props.userId, type: props.type })}`;
+  const id =
+    props.id ||
+    `list-event-${JSON.stringify({ ref: props.ref, userId: props.userId, type: props.type })}`;
 
   const events = useList<EventEntity>({
     id: id,
     limit: 5,
-    fetch: async (query) => getEvents({ ...query, ref: props.ref, userId: props.userId, type: props.type }),
+    fetch: async (query) =>
+      getEvents({ ...query, ref: props.ref, userId: props.userId, type: props.type }),
     events: {
       types: [
         EventType.LOANS_JUST_CREATED,
@@ -69,7 +74,9 @@ export const EventList: FC<EventListProps> = (props) => {
         EventType.RECEIPT_CHANGE_WORKSPACE_BRANCH,
       ],
       condition: (event) => {
-        return event.ref === props.ref || (event.relatedEntities || []).some((v) => v.id === props.ref);
+        return (
+          event.ref === props.ref || (event.relatedEntities || []).some((v) => v.id === props.ref)
+        );
       },
     },
   });
@@ -86,7 +93,12 @@ export const EventList: FC<EventListProps> = (props) => {
       <Errored error={events.error} visible={events.isHasError} />
 
       {events.data.length > 0 && (
-        <Timeline active={1} bulletSize={25} lineWidth={1.5} styles={{ itemBullet: { padding: 0, border: 0 } }}>
+        <Timeline
+          active={1}
+          bulletSize={25}
+          lineWidth={1.5}
+          styles={{ itemBullet: { padding: 0, border: 0 } }}
+        >
           {events.data.map((event) => {
             return <EventItem key={event._id} event={event} />;
           })}
@@ -95,7 +107,13 @@ export const EventList: FC<EventListProps> = (props) => {
 
       {events.isAbleToLoadMore && (
         <Group justify="start" pl={45}>
-          <ButtonViewMore onClick={events.loadMore} size="compact-xs" fz={10} iconSpacing={-12} iconSize={12} />
+          <ButtonViewMore
+            onClick={events.loadMore}
+            size="compact-xs"
+            fz={10}
+            iconSpacing={-12}
+            iconSize={12}
+          />
         </Group>
       )}
     </Stack>
@@ -110,7 +128,11 @@ export const EventItem: FC<{ event: EventEntity }> = (props) => {
       <Stack>
         <Group gap={5}>
           {props.event.user && (
-            <Group gap={5} style={{ cursor: "pointer" }} onClick={() => OnModalUserInformation(props.event.user!._id)}>
+            <Group
+              gap={5}
+              style={{ cursor: "pointer" }}
+              onClick={() => OnModalUserInformation(props.event.user!._id)}
+            >
               <Avatar user={props.event.user} size={18} hideOnlineStatus />
 
               <Text fz={10} c="gray" fw={500}>
@@ -180,9 +202,11 @@ function EventItemTitle(props: { event: EventEntity }) {
 
   const workspaceMembersIds = [
     ...new Set(
-      [event.userId, ...(event.data?.fromAssigneeUserIds || []), ...(event.data?.toAssigneeUserIds || [])].filter(
-        Boolean
-      ) as string[]
+      [
+        event.userId,
+        ...(event.data?.fromAssigneeUserIds || []),
+        ...(event.data?.toAssigneeUserIds || []),
+      ].filter(Boolean) as string[]
     ),
   ];
 
@@ -228,9 +252,20 @@ function EventItemTitle(props: { event: EventEntity }) {
     );
   }
 
-  if (event.type === EventType.TASK_STATUS_UPDATED && event.data && event.data.fromStatus && event.data.toStatus) {
-    const fromStatusStyle = renderTaskStatusStyle(event.data.fromStatus, workspace.settings.taskStatuses);
-    const toStatusStyle = renderTaskStatusStyle(event.data.toStatus, workspace.settings.taskStatuses);
+  if (
+    event.type === EventType.TASK_STATUS_UPDATED &&
+    event.data &&
+    event.data.fromStatus &&
+    event.data.toStatus
+  ) {
+    const fromStatusStyle = renderTaskStatusStyle(
+      event.data.fromStatus,
+      workspace.settings.taskStatuses
+    );
+    const toStatusStyle = renderTaskStatusStyle(
+      event.data.toStatus,
+      workspace.settings.taskStatuses
+    );
 
     return (
       <Group gap={8}>
@@ -262,8 +297,12 @@ function EventItemTitle(props: { event: EventEntity }) {
     const fromAssigneeUserIds = event.data.fromAssigneeUserIds;
     const toAssigneeUserIds = event.data.toAssigneeUserIds;
 
-    const newAssigneeUserIds = toAssigneeUserIds.filter((id: string) => !fromAssigneeUserIds.includes(id));
-    const removedAssigneeUserIds = fromAssigneeUserIds.filter((id: string) => !toAssigneeUserIds.includes(id));
+    const newAssigneeUserIds = toAssigneeUserIds.filter(
+      (id: string) => !fromAssigneeUserIds.includes(id)
+    );
+    const removedAssigneeUserIds = fromAssigneeUserIds.filter(
+      (id: string) => !toAssigneeUserIds.includes(id)
+    );
 
     if (newAssigneeUserIds.length > 0) {
       return (

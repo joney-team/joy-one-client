@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { t } from "@/modules/lang/lang-service";
 import { StringUtils } from "@/utils/string.utils";
@@ -17,7 +19,16 @@ export interface EmptyProps extends StackProps {
 }
 
 export const Empty: FC<EmptyProps> = (props) => {
-  const { message: messageProp, entity, icon, color: colorProp, visible, ref, hideBorder, ...rest } = props;
+  const {
+    message: messageProp,
+    entity,
+    icon,
+    color: colorProp,
+    visible,
+    ref,
+    hideBorder,
+    ...rest
+  } = props;
 
   const color = useColor();
 
@@ -26,7 +37,11 @@ export const Empty: FC<EmptyProps> = (props) => {
 
   if (typeof props.visible === "boolean" && !!!props.visible) return null;
 
-  const message = messageProp ? t(messageProp) : entity ? t(`empty_entity`, { entity: t(entity) }) : t("empty_data");
+  const message = messageProp
+    ? t(messageProp)
+    : entity
+    ? t(`empty_entity`, { entity: t(entity) })
+    : t("empty_data");
 
   return (
     <Stack

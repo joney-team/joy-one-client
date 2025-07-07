@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import { FC } from "react";
 

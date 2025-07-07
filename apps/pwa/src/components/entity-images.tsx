@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { FileType } from "@/modules/files/file-types";
@@ -149,7 +151,12 @@ const EntityImage: FC<EntityImageProps> = (props) => {
 
           <Group
             gap={0}
-            style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%,-50%)",
+            }}
             p={2}
           >
             <ActionIcon variant="subtle" color="white" onClick={onViewDetail}>

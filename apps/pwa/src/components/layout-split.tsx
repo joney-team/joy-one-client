@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { Group, GroupProps, Stack } from "@mantine/core";
 import { useForceUpdate, useMouse } from "@mantine/hooks";

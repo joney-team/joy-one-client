@@ -1,7 +1,11 @@
+"use client";
+
 import { Checkbox as MantineCheckbox, CheckboxProps as MantineCheckboxProps } from "@mantine/core";
 import { IconCircleFilled } from "@tabler/icons-react";
 
-const CheckboxIcon: MantineCheckboxProps["icon"] = ({ indeterminate, ...others }) => <IconCircleFilled {...others} />;
+const CheckboxIcon: MantineCheckboxProps["icon"] = ({ indeterminate, ...others }) => (
+  <IconCircleFilled {...others} />
+);
 
 export const Checkbox = (props: MantineCheckboxProps) => {
   return (

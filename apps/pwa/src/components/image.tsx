@@ -1,3 +1,5 @@
+"use client";
+
 import { renderLink } from "@/modules/files/files-utils";
 import { Center, ImageProps, Image as MantineImage, Stack } from "@mantine/core";
 import { FC, useState } from "react";

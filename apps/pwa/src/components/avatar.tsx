@@ -1,3 +1,5 @@
+"use client";
+
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { renderLink } from "@/modules/files/files-utils";
 import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";

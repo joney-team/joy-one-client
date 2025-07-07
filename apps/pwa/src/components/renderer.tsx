@@ -1,3 +1,5 @@
+"use client";
+
 import { ViewportType } from "@/types";
 import { useLayout } from "@/layout/layout-context";
 import { FC, PropsWithChildren } from "react";

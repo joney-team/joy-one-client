@@ -1,3 +1,5 @@
+"use client";
+
 import { currencies } from "@/configs/currency.config";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { round } from "@/utils/number.utils";

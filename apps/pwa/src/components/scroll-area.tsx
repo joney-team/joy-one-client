@@ -1,4 +1,10 @@
-import { ScrollArea as MantineScrollArea, ScrollAreaProps as MantineScrollAreaProps, Stack } from "@mantine/core";
+"use client";
+
+import {
+  ScrollArea as MantineScrollArea,
+  ScrollAreaProps as MantineScrollAreaProps,
+  Stack,
+} from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { FC, useRef } from "react";
 
@@ -21,7 +27,8 @@ export const ScrollArea: FC<ScrollAreaProps> = (props) => {
     const contentHeight = contentRef.current.scrollHeight;
 
     if (reachBottom) {
-      const isReachBottom = Math.ceil(pos.y + viewportHeight) + (reachBottom.offset ?? 0) >= contentHeight;
+      const isReachBottom =
+        Math.ceil(pos.y + viewportHeight) + (reachBottom.offset ?? 0) >= contentHeight;
       if (isReachBottom) reachBottom.onReach?.();
     }
   }, 300);

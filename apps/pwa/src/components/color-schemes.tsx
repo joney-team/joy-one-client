@@ -1,3 +1,5 @@
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { zIndexes } from "@joy-one-client/config/layout";

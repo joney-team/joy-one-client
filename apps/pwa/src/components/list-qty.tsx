@@ -1,3 +1,5 @@
+"use client";
+
 import { num, t } from "@/modules/lang/lang-service";
 import { UseList } from "@/utils/use-list.util";
 import { Badge, em } from "@mantine/core";

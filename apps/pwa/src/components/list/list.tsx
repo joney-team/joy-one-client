@@ -305,7 +305,7 @@ export function List<T = any>(props: ListProps<T>) {
 
       <WayPoint
         enabled={list.isAbleToLoadMore}
-        offset={300}
+        offset={350}
         onReached={() => list.fetch(false, {})}
       />
 

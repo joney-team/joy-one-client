@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";

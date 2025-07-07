@@ -1,3 +1,5 @@
+"use client";
+
 import { configs } from "@/configs/layout.config";
 import LangProvider from "@/modules/lang/lang-provider";
 import { t } from "@/modules/lang/lang-service";
