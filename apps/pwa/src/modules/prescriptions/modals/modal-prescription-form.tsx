@@ -52,6 +52,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { PrintButton } from "@/modals/modal-printer";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 interface ModalPrescriptionFormProps {
   prescription?: PrescriptionEntity;
@@ -364,5 +365,6 @@ export const OnModalPrescriptionForm = (props: ModalPrescriptionFormProps) => {
     children: <ModalPrescriptionForm {...props} />,
     size: "xl",
     fullScreen: getView() === "mobile",
+    zIndex: zIndexes.modals,
   });
 };
