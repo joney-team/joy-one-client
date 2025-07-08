@@ -45,10 +45,10 @@ import {
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, useEffect, useState } from "react";
-import { WorkspaceMembersInput } from "../workspace-members/components/workspace-members-input";
-import { CustomerInput } from "../customers/components/customer-input";
-import { BookingEntity, BookingStatus } from "./booking-types";
-import { OnModalRescheduleBooking } from "./modals/modal-reschedule-booking";
+import { WorkspaceMembersInput } from "../../workspace-members/components/workspace-members-input";
+import { CustomerInput } from "../../customers/components/customer-input";
+import { BookingEntity, BookingStatus } from "../booking-types";
+import { OnModalRescheduleBooking } from "../modals/modal-reschedule-booking";
 
 interface BookingCardProps extends CardProps {
   booking: BookingEntity;
@@ -128,7 +128,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           </Badge>
         </Stack>
 
-        <Stack flex={1}>
+        <Stack flex={1} gap={8}>
           <Group align="start">
             <Stack gap={8} flex={1}>
               <Text fz={15} fw={500}>
@@ -201,7 +201,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </Text>
                       </Group>
 
-                      <Divider label="Trạng thái" labelPosition="left" />
+                      <Divider label={t("status")} labelPosition="left" />
                       <Group
                         gap={10}
                         style={{ cursor: "pointer", userSelect: "none" }}
@@ -312,7 +312,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
             </Group>
           </Group>
 
-          <Group flex={1} gap={30}>
+          <Group flex={1} gap={30} align="start">
             <Timeline active={3} bulletSize={10} lineWidth={1} mt={5} mb={-12} color="grey">
               <Timeline.Item title={renderTime(startTime)} fz={13} />
               <Timeline.Item title={renderTime(endTime)} fz={13} />
@@ -334,21 +334,23 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
             </Stack>
           </Group>
 
-          <Group>
+          <Group align="start" mt={12}>
             {booking.customer && !hideCustomerInfo && (
               <Group flex={1}>
                 <CustomerInput label={t("customer")} value={booking.customer} disabled />
               </Group>
             )}
 
-            <Group flex={1}>
-              <WorkspaceMembersInput
-                label={t("attendees")}
-                value={booking.assigneeUsers}
-                collapsed={memberCollapsed}
-                disabled
-              />
-            </Group>
+            {booking.assigneeUsers && booking.assigneeUsers.length > 0 && (
+              <Group flex={1}>
+                <WorkspaceMembersInput
+                  label={t("attendees")}
+                  value={booking.assigneeUsers}
+                  collapsed={memberCollapsed}
+                  disabled
+                />
+              </Group>
+            )}
           </Group>
 
           {booking.status === BookingStatus.CANCELLED && booking.reasonForCancellation && (

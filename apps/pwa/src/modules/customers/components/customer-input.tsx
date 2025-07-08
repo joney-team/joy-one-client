@@ -41,6 +41,7 @@ export const CustomerInput: FC<CustomerInputProps> = (props) => {
             p={props.p}
             flex={props.flex}
             onClick={(e) => {
+              if (disabled) return;
               e.preventDefault();
               e.stopPropagation();
               toggle();
@@ -78,7 +79,10 @@ export const CustomerInput: FC<CustomerInputProps> = (props) => {
                   }}
                   withBorder
                   radius={150}
-                  onClick={toggle}
+                  onClick={() => {
+                    if (disabled) return;
+                    toggle();
+                  }}
                 >
                   <Group gap={8} wrap="nowrap">
                     <Avatar customer={value} size={em(28)} radius="xl" />

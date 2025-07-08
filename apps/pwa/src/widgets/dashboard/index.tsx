@@ -1,7 +1,7 @@
 import { useRouter } from "@/hooks/use-router";
 import { Period } from "@/types";
 import { useAuth } from "@/modules/auth/auth-context";
-import { useEventsListener } from "@/modules/events/event-service";
+import { onReconnected, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useReports } from "@/modules/reports/reports-context";
 import { ReportEntity } from "@/modules/reports/reports-entity";
@@ -40,7 +40,9 @@ export const DashboardWidgets: FC = () => {
         const ranges = {
           current: {
             start: startOfMonth.current,
-            end: dayjs(dayjs(startOfMonth.current).add(totalDateBwtStartOfMonthToNow, "day").toDate())
+            end: dayjs(
+              dayjs(startOfMonth.current).add(totalDateBwtStartOfMonthToNow, "day").toDate()
+            )
               .endOf("day")
               .toDate(),
           },
@@ -86,12 +88,16 @@ export const DashboardWidgets: FC = () => {
         rangeReports.setData({
           ...rangeReports.data,
           period: rangeReports.data.period.map((v) => (v._id === _report._id ? { ..._report } : v)),
-          prevPeriod: rangeReports.data.prevPeriod.map((v) => (v._id === _report._id ? { ..._report } : v)),
+          prevPeriod: rangeReports.data.prevPeriod.map((v) =>
+            v._id === _report._id ? { ..._report } : v
+          ),
         });
       }
     },
     [rangeReports.data]
   );
+
+  onReconnected(() => rangeReports.fetch(), [workspace.userMember?.workspaceId]);
 
   const context: DashboardWidgetsContext = {
     router,

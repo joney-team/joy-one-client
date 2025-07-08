@@ -6,7 +6,7 @@ import { FC, Fragment, useState } from "react";
 
 import { useColor } from "@/modules/theme/use-color";
 import { useRouter } from "@/hooks/use-router";
-import { BookingCard } from "@/modules/bookings/booking-card";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Button } from "@/components/buttons/button";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { SessionTitle } from "@/components/session-title";

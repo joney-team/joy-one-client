@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
-import { BookingCard } from "@/modules/bookings/booking-card";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Button } from "@/components/buttons/button";
 import { CalendarViewSelector } from "@/components/calendar-view-selector";
 import { Renderer } from "@/components/renderer";
@@ -534,7 +534,7 @@ export const BookingList: FC = () => {
 
                       <HoverCard.Dropdown>
                         <Group w="max-content">
-                          <BookingCard w={350} booking={booking} p={0} withBorder={false} />
+                          <BookingCard w={380} booking={booking} p={0} withBorder={false} />
                         </Group>
                       </HoverCard.Dropdown>
                     </HoverCard>

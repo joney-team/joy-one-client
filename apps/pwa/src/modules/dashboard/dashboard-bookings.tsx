@@ -12,7 +12,7 @@ import { FC, useEffect, useState } from "react";
 import { SessionTitle } from "@/components/session-title";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
-import { BookingCard } from "@/modules/bookings/booking-card";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 
 export const DashboardBookings: FC = () => {
   const getInitialQuery = () => {

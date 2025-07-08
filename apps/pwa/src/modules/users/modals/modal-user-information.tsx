@@ -9,7 +9,7 @@ import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useAuth } from "@/modules/auth/auth-context";
-import { BookingCard } from "@/modules/bookings/booking-card";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { EventType } from "@/modules/events/event-types";

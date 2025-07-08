@@ -1,4 +1,4 @@
-import { BookingCard } from "@/modules/bookings/booking-card";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Empty } from "@/components/empty";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { EventType } from "@/modules/events/event-types";

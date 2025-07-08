@@ -3,7 +3,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Anchor, Center, Modal, Stack, ThemeIcon, Title, em } from "@mantine/core";
 import { IconEye, IconUserScreen } from "@tabler/icons-react";
 
-import { BookingCard } from "@/modules/bookings/booking-card";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { Period } from "@/types";
 import { getBookings } from "@/modules/bookings/booking-service";

@@ -35,6 +35,7 @@ import {
   ThemeIcon,
   Tooltip,
   TextInput,
+  Title,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
@@ -49,7 +50,7 @@ import {
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, Fragment, useEffect, useMemo } from "react";
-import { BookingEntity, BookingStatus, CreateBookingDto } from "./booking-types";
+import { BookingEntity, BookingStatus, CreateBookingDto } from "../booking-types";
 
 export interface BookingFormProps {
   startTime?: Date;
@@ -140,11 +141,16 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
   return (
     <Stack pt={16} gap={30}>
       <FormSessionIcon icon={IconReservedLine} description="title">
-        <TextInput
-          {...form.getInputProps("title")}
-          placeholder={getBookingTitle(form.values) || t("title")}
-          readOnly={type === "RESCHEDULE"}
-        />
+        {type === "RESCHEDULE" ? (
+          <Title order={5} fw={500}>
+            {getBookingTitle(form.values) || t("title")}
+          </Title>
+        ) : (
+          <TextInput
+            {...form.getInputProps("title")}
+            placeholder={getBookingTitle(form.values) || t("title")}
+          />
+        )}
       </FormSessionIcon>
 
       <FormSessionIcon icon={IconUserSquareRounded} description="customer">
@@ -156,7 +162,11 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         />
       </FormSessionIcon>
 
-      <FormSessionIcon icon={IconUsers} description="attendees">
+      <FormSessionIcon
+        icon={IconUsers}
+        description="attendees"
+        visible={!(type === "RESCHEDULE" && form.values.assigneeUsers?.length === 0)}
+      >
         <WorkspaceMembersInput
           {...form.getInputProps("assigneeUsers")}
           flex={1}
@@ -208,11 +218,12 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
         <Stack>
           <Group flex={1}>
-            <Tooltip label={t("date")}>
+            <Tooltip label={t("select_date")}>
               <Group flex={1}>
                 <DateInput
                   flex={1}
                   defaultValue={form.values.startTime}
+                  placeholder={getDateFormat()}
                   valueFormat={getDateFormat()}
                   onChange={(value) => {
                     const currentStartTime = dayjs(form.values.startTime);
@@ -317,7 +328,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         </Stack>
       </FormSessionIcon>
 
-      <FormSessionIcon icon={IconNotebook} description="details">
+      <FormSessionIcon icon={IconNotebook} description="details" visible={type !== "RESCHEDULE"}>
         <Textarea
           {...form.getInputProps("note")}
           placeholder={capitalize(`${t("enter")} ${t("details")} (${t("optional")})`)}

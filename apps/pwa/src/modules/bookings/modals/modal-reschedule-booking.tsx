@@ -1,4 +1,4 @@
-import { BookingForm } from "../booking-form";
+import { BookingForm } from "../components/form-booking";
 import { ModalTitle } from "@/components/modal-title";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { modals } from "@mantine/modals";

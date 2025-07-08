@@ -2,7 +2,7 @@ import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { SessionLoader } from "@/components/session-loader";
-import { BookingCard } from "@/modules/bookings/booking-card";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
 import { CustomerEntity } from "@/modules/customers/customer-types";
