@@ -230,9 +230,7 @@ export const ModalPrinter: FC = () => {
                     <div className="printer-head-metadata">
                       <h3>{workspace.userMember.workspace.name}</h3>
                       <div
-                        className={`flex ${
-                          printSettings.size === PrintSize.LARGE ? "gap-1" : "column"
-                        }`}
+                        className={`flex ${printSettings.size === PrintSize.LARGE ? "" : "column"}`}
                       >
                         {(function () {
                           if (
