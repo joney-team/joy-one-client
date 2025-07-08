@@ -57,6 +57,7 @@ import { type FC, useEffect, useRef, useState } from "react";
 import { Calendar } from "react-big-calendar";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useColor } from "@/modules/theme/use-color";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 const normalizeQuery = (query: any) => {
   const date = query.date ? dayjs(+query.date * 1000).toDate() : new Date();
@@ -525,7 +526,7 @@ export const BookingList: FC = () => {
                   const booking = (props.event as any)._data as BookingEntity;
 
                   return (
-                    <HoverCard shadow="xs" zIndex={10}>
+                    <HoverCard shadow="xs" zIndex={zIndexes.pannel + 1}>
                       <HoverCard.Target>
                         <Text fz={14} fw={500}>
                           {getBookingTitle(booking)}

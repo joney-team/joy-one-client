@@ -5,6 +5,6 @@ export const zIndexes = {
   requireWorkspace: 200,
   camera: 10,
   pannel: 100,
-  bulkActions: 100,
-  modals: 110,
+  bulkActions: 150,
+  modals: 180,
 };
