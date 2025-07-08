@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";

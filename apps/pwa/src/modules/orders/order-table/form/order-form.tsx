@@ -61,6 +61,7 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
               pr={16 * 0.5}
               py={16 * 0.5}
               justify="space-between"
+              flex={1}
             >
               <Text fw={700} fz={14} flex={1} c="white" ta="left">
                 #{orderTable.order.code}
@@ -95,6 +96,9 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
             }}
           >
             <CustomerSelector
+              comboboxProps={{
+                position: "bottom",
+              }}
               onSelect={(value) => orderTable.setCustomer(value)}
               target={(ctx) => {
                 return (

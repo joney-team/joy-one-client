@@ -245,7 +245,6 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
       <Combobox
         disabled={disabled}
         store={combobox}
-        position="bottom-start"
         shadow="sm"
         offset={3}
         onClose={onClose}

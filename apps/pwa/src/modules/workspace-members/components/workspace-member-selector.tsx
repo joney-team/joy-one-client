@@ -9,7 +9,7 @@ import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
 
-interface WorkspaceMemberSelectorProps
+export interface WorkspaceMemberSelectorProps
   extends Omit<InputWrapperProps, "value" | "onChange" | "onSelect"> {
   excludeIds?: string[];
   onSelect: (value: WorkspaceMember) => void;
