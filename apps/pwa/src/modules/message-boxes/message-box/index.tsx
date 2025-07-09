@@ -33,8 +33,15 @@ export const MessageBox: FC = () => {
       bg={layout.view === "mobile" ? undefined : "var(--mantine-color-dark-outline-hover)"}
       id="message-box"
     >
-      <Stack id="messages" flex={1} pos="relative" style={{ height: messagesHeight, overflow: "hidden" }}>
-        {messagesHeight > 0 && <MessagesMessageBox box={box} height={messagesHeight} />}
+      <Stack
+        id="messages"
+        flex={1}
+        pos="relative"
+        style={{ height: messagesHeight, overflow: "hidden" }}
+      >
+        {messagesHeight > 0 && (
+          <MessagesMessageBox key={box._id} box={box} height={messagesHeight} />
+        )}
       </Stack>
 
       <Stack ref={inputSize.ref}>

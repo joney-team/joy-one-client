@@ -98,19 +98,24 @@ export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> =
     };
   }, []);
 
-  useEventsListener([EventType.MESSAGE_NEW, EventType.MESSAGE_UPDATED], (ev) => {
-    if (ev.data && ev.data.boxId === props.box._id) {
-      const isAtBottom =
-        messageRef.current &&
-        messageRef.current.scrollHeight - messageRef.current.scrollTop <= messageRef.current.clientHeight + 100;
+  useEventsListener(
+    [EventType.MESSAGE_NEW, EventType.MESSAGE_UPDATED],
+    (msgEvent) => {
+      if (msgEvent.data && msgEvent.data.boxId === props.box._id) {
+        const isAtBottom =
+          messageRef.current &&
+          messageRef.current.scrollHeight - messageRef.current.scrollTop <=
+            messageRef.current.clientHeight + 100;
 
-      messages.fetch(true, { isSilient: true }).then(async (res) => {
-        if (!isAtBottom) return;
-        if (res) await loadImages(res.data);
-        scrollToBottom("smooth", 200);
-      });
-    }
-  });
+        messages.fetch(true, { isSilient: true }).then(async (res) => {
+          if (!isAtBottom) return;
+          if (res) await loadImages(res.data);
+          scrollToBottom("smooth", 200);
+        });
+      }
+    },
+    [props.box._id]
+  );
 
   useEffect(() => {
     if (messages.isAbleToLoadMore) {
@@ -130,7 +135,9 @@ export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> =
 
   const messagesList = [...messages.data].reverse();
 
-  const [userMemberInfos] = useWorkspaceMembers([...new Set(messagesList.map((m) => m.userId || "").filter(Boolean))]);
+  const [userMemberInfos] = useWorkspaceMembers([
+    ...new Set(messagesList.map((m) => m.userId || "").filter(Boolean)),
+  ]);
 
   return (
     <ScrollArea
@@ -154,10 +161,13 @@ export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> =
           const prevMsg = messagesList[index - 1];
           const nextMsg = messagesList[index + 1];
           const senderMember = userMemberInfos.find((m) => m.userId === msg.userId);
-          const timeBtw = prevMsg ? dayjs(msg.createdAt * 1000).diff(dayjs(prevMsg.createdAt * 1000), "minutes") : 0;
+          const timeBtw = prevMsg
+            ? dayjs(msg.createdAt * 1000).diff(dayjs(prevMsg.createdAt * 1000), "minutes")
+            : 0;
           const limitTimeBtw = 30;
 
-          const needToShowDivider = timeBtw > limitTimeBtw || (prevMsg && prevMsg?.userId !== msg.userId);
+          const needToShowDivider =
+            timeBtw > limitTimeBtw || (prevMsg && prevMsg?.userId !== msg.userId);
 
           const isFirstSession = prevMsg?.type !== msg.type || needToShowDivider;
           const isLastSession = nextMsg?.type !== msg.type || !nextMsg;
@@ -183,7 +193,10 @@ export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> =
 
           const getTime = () => {
             const isToday = dayjs(msg.createdAt * 1000).isSame(dayjs(), "day");
-            const isYesterday = dayjs(msg.createdAt * 1000).isSame(dayjs().subtract(1, "day"), "day");
+            const isYesterday = dayjs(msg.createdAt * 1000).isSame(
+              dayjs().subtract(1, "day"),
+              "day"
+            );
             const isSameWeek = dayjs(msg.createdAt * 1000).isSame(dayjs(), "week");
 
             if (isToday) return renderTime(msg.createdAt);
@@ -198,7 +211,12 @@ export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> =
                 <Space h={10} w={10} />
               </Renderer>
 
-              <Group gap={8} wrap="nowrap" align="start" justify={msg.type === MessageType.RECEIVE ? "start" : "end"}>
+              <Group
+                gap={8}
+                wrap="nowrap"
+                align="start"
+                justify={msg.type === MessageType.RECEIVE ? "start" : "end"}
+              >
                 <Renderer visible={msg.type === MessageType.RECEIVE}>
                   <Avatar
                     messageBox={props.box}
@@ -242,7 +260,9 @@ export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> =
                             OnModalUserInformation(senderMember?.userId || "");
                           }}
                         >
-                          {msg.resource === MessageResource.AI_ASSISTANT ? t("ai_assistant") : senderMember?.name || ""}
+                          {msg.resource === MessageResource.AI_ASSISTANT
+                            ? t("ai_assistant")
+                            : senderMember?.name || ""}
                         </Anchor>
 
                         <Text fz={12} c="gray.6" ta="right">
@@ -265,16 +285,24 @@ export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> =
                         borderRadius: getBorderRadius(),
                       }}
                     >
-                      <Stack gap={8} align={msg.type === MessageType.RECEIVE ? "flex-start" : "flex-end"}>
+                      <Stack
+                        gap={8}
+                        align={msg.type === MessageType.RECEIVE ? "flex-start" : "flex-end"}
+                      >
                         <Renderer visible={!!msg.text}>
                           <Text
                             style={{ wordBreak: "break-word" }}
-                            dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(msg.text || "") }}
+                            dangerouslySetInnerHTML={{
+                              __html: StringUtils.replaceLineBreaksToHTML(msg.text || ""),
+                            }}
                           />
                         </Renderer>
 
                         <Renderer visible={(msg.attachments || []).length > 0}>
-                          <SimpleGrid cols={(msg.attachments || []).length === 1 ? 1 : 2} spacing={8}>
+                          <SimpleGrid
+                            cols={(msg.attachments || []).length === 1 ? 1 : 2}
+                            spacing={8}
+                          >
                             {(msg.attachments || []).map((att, i) => {
                               const file = parseFile(att.url || "");
                               return (
@@ -312,7 +340,10 @@ export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> =
                         return (
                           <Group justify="center" gap={0}>
                             <ThemeIcon variant="transparent" size="xs" color="gray">
-                              <IconAnalyze size={12} style={{ animation: `symbolLoader 2s linear infinite` }} />
+                              <IconAnalyze
+                                size={12}
+                                style={{ animation: `symbolLoader 2s linear infinite` }}
+                              />
                             </ThemeIcon>
 
                             <Text fz={em(10)} ta="center" c="gray">
