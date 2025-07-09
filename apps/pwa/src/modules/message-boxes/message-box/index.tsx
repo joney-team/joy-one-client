@@ -4,7 +4,7 @@ import { useElementSize } from "@mantine/hooks";
 import { FC, useEffect } from "react";
 import { useMessageBoxes } from "../message-boxes-context";
 import { InputMessageBox } from "./message-box-input";
-import { MessagesMessageBox } from "./messages-message-box";
+import { MessageBoxMessages } from "./message-box-messages";
 
 export const MessageBox: FC = () => {
   const messageBoxes = useMessageBoxes();
@@ -40,7 +40,7 @@ export const MessageBox: FC = () => {
         style={{ height: messagesHeight, overflow: "hidden" }}
       >
         {messagesHeight > 0 && (
-          <MessagesMessageBox key={box._id} box={box} height={messagesHeight} />
+          <MessageBoxMessages key={box._id} box={box} height={messagesHeight} />
         )}
       </Stack>
 

@@ -1,7 +1,11 @@
-import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
+"use client";
+
+import { Avatar } from "@/components/avatar";
+import { Renderer } from "@/components/renderer";
 import { eventsEmitter, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { detectFileType } from "@/modules/files/file-service";
+import { FileSrcCard } from "@/modules/files/file-src-card";
 import { FileType } from "@/modules/files/file-types";
 import { parseFile } from "@/modules/files/files-utils";
 import { getDateFormat, getTimeFormat, renderTime, t } from "@/modules/lang/lang-service";
@@ -13,6 +17,9 @@ import {
   MessageStatus,
   MessageType,
 } from "@/modules/message-boxes/message-boxes-types";
+import { useColor } from "@/modules/theme/use-color";
+import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { loadImage } from "@/utils/asset.utils";
 import { StringUtils } from "@/utils/string.utils";
@@ -34,13 +41,8 @@ import {
 import { IconAnalyze, IconUserFilled, IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, Fragment, useEffect, useRef } from "react";
-import { Avatar } from "@/components/avatar";
-import { FileSrcCard } from "@/modules/files/file-src-card";
-import { Renderer } from "@/components/renderer";
-import { useColor } from "@/modules/theme/use-color";
-import { useColorScheme } from "@/modules/theme/use-color-scheme";
 
-export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> = (props) => {
+export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> = (props) => {
   const color = useColor();
   const colorScheme = useColorScheme();
   const messageRef = useRef<HTMLDivElement>(null);
@@ -61,7 +63,6 @@ export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> =
 
   const messages = useList({
     autoFetch: false,
-    id: `messages-${props.box._id}`,
     fetch: (q) =>
       getMessages({
         boxId: props.box._id,
@@ -83,7 +84,7 @@ export const MessagesMessageBox: FC<{ box: MessageBoxEntity; height: number }> =
 
   useEffect(() => {
     messages.setStatus({ isInitialized: false });
-    messages.fetch(true, { isSilient: false }).then(() => scrollToBottom("instant"));
+    messages.fetch(true, { isSilient: true }).then(() => scrollToBottom("instant"));
   }, [props.box._id]);
 
   useEffect(() => {
