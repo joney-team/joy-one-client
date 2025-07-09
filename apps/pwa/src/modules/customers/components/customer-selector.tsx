@@ -10,7 +10,6 @@ import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
-import { customerInteraction } from "../customer-service";
 
 interface CustomerSelectorProps
   extends Omit<SelectorProps<CustomerShortInfo>, "onSearch" | "renderOption"> {}
@@ -64,7 +63,6 @@ export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
       onSelect={(value, ctx) => {
         if (!value) return;
         props.onSelect?.(value, ctx);
-        customerInteraction(value._id);
       }}
     />
   );
