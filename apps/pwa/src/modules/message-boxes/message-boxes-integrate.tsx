@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { t } from "@/modules/lang/lang-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
@@ -57,7 +59,12 @@ export const MessageBoxesIntegrate: FC = () => {
 
               <Text ta="center">{t("message-hubs-description")}</Text>
 
-              <Button mt={10} type="submit" leftIcon={IconPlus} onClick={plugins.onCreateMessageHub}>
+              <Button
+                mt={10}
+                type="submit"
+                leftIcon={IconPlus}
+                onClick={plugins.onCreateMessageHub}
+              >
                 {t("create_new")}
               </Button>
             </Stack>

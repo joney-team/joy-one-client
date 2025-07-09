@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { eventsEmitter } from "@/modules/events/event-service";
 import { uploadFile } from "@/modules/files/file-service";
@@ -5,7 +7,11 @@ import { FileSrcCard } from "@/modules/files/file-src-card";
 import { FileType } from "@/modules/files/file-types";
 import { parseFile } from "@/modules/files/files-utils";
 import { t } from "@/modules/lang/lang-service";
-import { sendFileMessage, sendImageMessage, sendTextMessage } from "@/modules/message-boxes/message-boxes-service";
+import {
+  sendFileMessage,
+  sendImageMessage,
+  sendTextMessage,
+} from "@/modules/message-boxes/message-boxes-service";
 import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
 import { ActionIcon, em, Group, ScrollArea, Stack, Text, Textarea, Title } from "@mantine/core";
 import {
@@ -110,7 +116,11 @@ export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
               {files.length > 0 && (
                 <Group gap={10}>
                   {files.map((file, key) => (
-                    <FileSrcCard src={file} key={key} onRemove={() => setFiles((f) => f.filter((f) => f !== file))} />
+                    <FileSrcCard
+                      src={file}
+                      key={key}
+                      onRemove={() => setFiles((f) => f.filter((f) => f !== file))}
+                    />
                   ))}
                 </Group>
               )}
@@ -123,17 +133,34 @@ export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
                   onDrop={(files) => setFiles((f) => [...f, ...files])}
                   style={{ padding: 0, border: "none", background: "transparent" }}
                 >
-                  <ActionIcon component="div" size="lg" variant="subtle" color="gray" style={{ pointerEvents: "all" }}>
+                  <ActionIcon
+                    component="div"
+                    size="lg"
+                    variant="subtle"
+                    color="gray"
+                    style={{ pointerEvents: "all" }}
+                  >
                     <IconPhoto size={em(22)} strokeWidth={1.5} />
                   </ActionIcon>
                 </Dropzone>
 
                 <Dropzone
-                  accept={[...PDF_MIME_TYPE, ...MS_WORD_MIME_TYPE, ...MS_EXCEL_MIME_TYPE, ...MS_POWERPOINT_MIME_TYPE]}
+                  accept={[
+                    ...PDF_MIME_TYPE,
+                    ...MS_WORD_MIME_TYPE,
+                    ...MS_EXCEL_MIME_TYPE,
+                    ...MS_POWERPOINT_MIME_TYPE,
+                  ]}
                   onDrop={(files) => setFiles((f) => [...f, ...files])}
                   style={{ padding: 0, border: "none", background: "transparent" }}
                 >
-                  <ActionIcon component="div" size="lg" variant="subtle" color="gray" style={{ pointerEvents: "all" }}>
+                  <ActionIcon
+                    component="div"
+                    size="lg"
+                    variant="subtle"
+                    color="gray"
+                    style={{ pointerEvents: "all" }}
+                  >
                     <IconPaperclip size={em(22)} strokeWidth={1.5} />
                   </ActionIcon>
                 </Dropzone>

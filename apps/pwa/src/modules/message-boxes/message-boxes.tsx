@@ -1,7 +1,10 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { Renderer } from "@/components/renderer";
 import { WayPoint } from "@/components/way-point";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
@@ -14,9 +17,8 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useList } from "@/utils/use-list.util";
 import { Box, Group, rgba, ScrollArea, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyze, IconPuzzle } from "@tabler/icons-react";
-import { MessageBoxesIntegrate } from "./message-boxes-integrate";
 import { CardMessageBox } from "./message-box/message-box-card";
-import { Renderer } from "@/components/renderer";
+import { MessageBoxesIntegrate } from "./message-boxes-integrate";
 
 export const MessageBoxList = () => {
   const plugins = usePlugins();

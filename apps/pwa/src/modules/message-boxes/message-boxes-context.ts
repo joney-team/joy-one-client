@@ -2,13 +2,10 @@ import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
 import { createContext, useContext } from "react";
 
 interface ContextType {
-  messageBoxes: MessageBoxEntity[];
-  messageBoxIds: string[];
   messageBox: MessageBoxEntity | null;
   messageBoxId: string | null;
   open: (box: MessageBoxEntity) => void;
-  close: (box: MessageBoxEntity) => void;
-  isInitialized: boolean;
+  close: () => void;
 }
 
 export const MessageBoxesContext = createContext({} as ContextType);

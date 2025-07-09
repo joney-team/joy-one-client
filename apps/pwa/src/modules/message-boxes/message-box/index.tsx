@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import { Card, Stack } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
@@ -32,6 +34,7 @@ export const MessageBox: FC = () => {
       gap={0}
       bg={layout.view === "mobile" ? undefined : "var(--mantine-color-dark-outline-hover)"}
       id="message-box"
+      pos="relative"
     >
       <Stack
         id="messages"
@@ -44,7 +47,7 @@ export const MessageBox: FC = () => {
         )}
       </Stack>
 
-      <Stack ref={inputSize.ref}>
+      <Stack ref={inputSize.ref} pos="absolute" bottom={0} left={0} right={0}>
         <Stack p={layout.view === "mobile" ? 16 : 12}>
           <Card bg="var(--mantine-color-body)" shadow="xs" p={0}>
             <InputMessageBox box={box} />
