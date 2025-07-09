@@ -34,6 +34,7 @@ import {
   IconCashRegister,
   IconClipboardText,
   IconCreditCardPay,
+  IconMessageCircle,
   IconNews,
   IconPill,
   IconSearch,
@@ -55,6 +56,7 @@ export const SearchEngine: FC = () => {
   const isHasSearchResult =
     !!query && query.length > 0 && !!searchResult && Object.keys(searchResult).length > 0;
 
+  const isMessageBoxesEnabled = workspace.getModule("messageBoxes");
   const searchModules = workspace.availableModules.filter(
     (m) => !m.restrictDisplay || m.restrictDisplay.includes("spotlight")
   );
@@ -75,6 +77,23 @@ export const SearchEngine: FC = () => {
       Object.keys(searchResult).forEach((entity) => {
         const data = (searchResult as any)[entity] as SearchEntityResult[];
         if (!data || !strictSearchEntity(entity as AppEntity)) return;
+
+        if (isMessageBoxesEnabled && entity === AppEntity.MESSAGE_BOXES) {
+          actionGroups.push({
+            group: t("message_boxes"),
+            actions: data.map((box) => {
+              return {
+                id: box._id,
+                label: box.name,
+                description: box.description,
+                leftSection: <ActionIcon icon={IconMessageCircle} />,
+                onClick: async () => {
+                  return router.push(`/message-boxes/${box._id}`);
+                },
+              };
+            }),
+          });
+        }
 
         if (entity === AppEntity.POSTS) {
           actionGroups.push({
