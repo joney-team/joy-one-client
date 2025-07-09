@@ -28,7 +28,7 @@ export const MessageBoxList = () => {
     fetch: (q) =>
       getMessageBoxes({
         ...q,
-        lastInteractionAt: -1,
+        sortLastInteractionAt: -1,
       }),
     events: [
       EventType.MESSAGE_NEW,
