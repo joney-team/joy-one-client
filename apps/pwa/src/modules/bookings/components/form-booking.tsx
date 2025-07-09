@@ -153,7 +153,11 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         )}
       </FormSessionIcon>
 
-      <FormSessionIcon icon={IconUserSquareRounded} description="customer">
+      <FormSessionIcon
+        icon={IconUserSquareRounded}
+        description="customer"
+        visible={!(type === "RESCHEDULE" && !form.values.customer)}
+      >
         <CustomerInput
           {...form.getInputProps("customer")}
           clearable
