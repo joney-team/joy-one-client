@@ -84,7 +84,7 @@ export const SearchEngine: FC = () => {
             actions: data.map((box) => {
               return {
                 id: box._id,
-                label: box.name,
+                label: box.name || box.senderName,
                 description: box.description,
                 leftSection: <ActionIcon icon={IconMessageCircle} />,
                 onClick: async () => {
