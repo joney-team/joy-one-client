@@ -17,6 +17,7 @@ import { Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { useParams } from "next/navigation";
 import { type FC, type PropsWithChildren } from "react";
 import { useQuery } from "../apis/use-query";
+import { Errored } from "@/components/errored";
 
 export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
   const workspaceLayout = useWorkspaceLayout();
@@ -63,17 +64,16 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
     >
       {(function () {
         if (layout.view === "mobile") {
-          if (messageBox)
+          if (messageBoxId) {
+            if (messageBox.isLoading) return <Skeleton height="50dvh" />;
+            if (messageBox.error) return <Errored error={messageBox.error} />;
+
             return (
-              <Stack
-                id="mobile-message-box"
-                style={{
-                  height: workspaceLayout.bodyHeight,
-                }}
-              >
+              <Stack style={{ height: workspaceLayout.bodyHeight }}>
                 <MessageBox />
               </Stack>
             );
+          }
 
           return (
             <Stack>

@@ -65,8 +65,9 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
     autoFetch: false,
     fetch: (q) =>
       getMessages({
-        boxId: props.box._id,
         ...q,
+        boxId: props.box._id,
+        getAll: true,
       }).then(async (res) => {
         await loadImages(res.data);
         return res;
