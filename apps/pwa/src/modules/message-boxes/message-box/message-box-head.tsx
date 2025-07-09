@@ -126,7 +126,7 @@ export const MessageBoxHead: FC = () => {
             color="violet.9"
             onClick={() => {
               if (aiPlugin) toggleMessageBoxAiAssistant(box._id, !box.aiAssistantDisabled);
-              else router.push("/message-boxes/integrations");
+              else router.push("/workspace-settings/messages");
             }}
           >
             <IconRobot size={20} />
