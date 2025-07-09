@@ -27,7 +27,7 @@ export const WorkspaceSettingMessageHubs: FC = () => {
 
   if (plugins.messageHubs.length === 0) {
     return (
-      <Container>
+      <Container p={16}>
         <Card shadow="xs">
           <Stack align="center" py={20}>
             <Group gap={30} mb={20}>
