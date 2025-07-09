@@ -13,6 +13,7 @@ import { SessionTitle } from "@/components/session-title";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
+import { EventType } from "../events/event-types";
 
 export const DashboardBookings: FC = () => {
   const getInitialQuery = () => {
@@ -51,6 +52,14 @@ export const DashboardBookings: FC = () => {
           })
       );
     },
+    events: [
+      EventType.BOOKING_NEW,
+      EventType.BOOKING_UPDATED,
+      EventType.BOOKING_CHECKIN,
+      EventType.BOOKING_IN_PROGRESS,
+      EventType.BOOKING_COMPLETED,
+      EventType.BOOKING_CANCELLED,
+    ],
   });
 
   const bookingData = bookings.data || [];

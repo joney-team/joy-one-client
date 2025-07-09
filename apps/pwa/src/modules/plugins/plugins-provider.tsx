@@ -1,8 +1,8 @@
 "use client";
 
+import { useRouter } from "@/hooks/use-router";
 import { OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { useRouter } from "@/hooks/use-router";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -27,13 +27,18 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
   const theme = useMantineTheme();
   const router = useRouter();
-  const parsedPrimaryColor = parseThemeColor({ color: workspace.userMember?.workspace.appColor || "primary", theme });
+  const parsedPrimaryColor = parseThemeColor({
+    color: workspace.userMember?.workspace.appColor || "primary",
+    theme,
+  });
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [messageHubs, setMessageHubs] = useState<PluginMessageHubEntity[]>([]);
   const [zaloOas, setZaloOas] = useState<PluginZaloOaEntity[]>([]);
   const [metaPages, setMetaPages] = useState<PluginMetaPageEntity[]>([]);
-  const [znsTemplateConfigs, setZnsTemplateConfigs] = useState<ZnsTemplateConfigs>({} as ZnsTemplateConfigs);
+  const [znsTemplateConfigs, setZnsTemplateConfigs] = useState<ZnsTemplateConfigs>(
+    {} as ZnsTemplateConfigs
+  );
   const [aiAssistants, setAiAssistants] = useState<PluginAiAssistantEntity[]>([]);
 
   const fetchMessageHubs = async () => {
@@ -92,7 +97,9 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
             brandLogo: workspace.userMember.workspace.logo,
             locale: workspace.userMember.workspace.locale || getLocaleClient(),
             position: "right",
-            welcomMessage: t("welcome_message_placeholder", { workspaceName: workspace.userMember.workspace.name }),
+            welcomMessage: t("welcome_message_placeholder", {
+              workspaceName: workspace.userMember.workspace.name,
+            }),
             welcomSubMessage: t("welcomSubMessage_placeholder"),
             welcomeInputs: [
               {
@@ -105,7 +112,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
             ],
           },
         });
-        router.push(`/plugins/message-hubs`);
+        router.push(`/workspace-settings/plugins/message-hubs`);
       },
     });
   };
@@ -117,7 +124,11 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
   };
 
   useEventsListener(
-    [EventType.PLUGIN_MESSAGE_HUBS_NEW, EventType.PLUGIN_MESSAGE_HUBS_UPDATED, EventType.PLUGIN_MESSAGE_HUBS_REMOVED],
+    [
+      EventType.PLUGIN_MESSAGE_HUBS_NEW,
+      EventType.PLUGIN_MESSAGE_HUBS_UPDATED,
+      EventType.PLUGIN_MESSAGE_HUBS_REMOVED,
+    ],
     () => fetchMessageHubs(),
     [workspace.userMember?.workspaceId]
   );
