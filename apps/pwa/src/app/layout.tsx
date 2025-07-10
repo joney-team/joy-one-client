@@ -4,7 +4,6 @@ import { ColorSchemeScript } from "@mantine/core";
 import { headers } from "next/headers";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 
 import { getWorkspaceMetadata } from "@/modules/workspaces/utils";
 import { type TemplateString } from "next/dist/lib/metadata/types/metadata-types";
@@ -24,8 +23,6 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "../styles/app.style.css";
 import "../styles/react-big-calendar.css";
 import { isExtendedApp } from "@/service";
-
-const font = Inter({ subsets: ["latin"], display: "swap" });
 
 export async function generateMetadata(): Promise<Metadata> {
   let metadata: AppMetadata = defaultMetadata;
@@ -79,13 +76,27 @@ export default async function RootLayout(props: Readonly<{ children: React.React
       <head>
         <ColorSchemeScript />
         <meta charSet="UTF-8" />
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no" />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+          rel="stylesheet"
+        />
       </head>
 
-      <body suppressHydrationWarning className={font.className} tabIndex={-1}>
+      <body suppressHydrationWarning tabIndex={-1}>
         <App metadata={metadata}>{props.children}</App>
 
-        <script async defer crossOrigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+        <script
+          async
+          defer
+          crossOrigin="anonymous"
+          src="https://connect.facebook.net/en_US/sdk.js"
+        ></script>
       </body>
     </html>
   );

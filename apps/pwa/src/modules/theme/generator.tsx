@@ -24,6 +24,7 @@ export const getColorShape = (shape?: number) => {
 
 export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
   return createTheme({
+    fontFamily: "Inter, sans-serif",
     colors: {
       primary: [
         primaryColors[0],
