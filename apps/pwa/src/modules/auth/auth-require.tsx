@@ -77,10 +77,10 @@ export const AuthRequire: FC = () => {
               )}
 
               <Stack gap={0}>
-                <Title fz={layout.view === "desktop" ? 28 : 22} fw={800} c={color("primary")}>
+                <Title fz={{ base: 22, md: 28 }} fw={800} c={color("primary")}>
                   {app.metadata.appName || "Joy One"}
                 </Title>
-                <Text fz={layout.view === "desktop" ? 14 : 12} c="gray">
+                <Text fz={{ base: 12, md: 14 }} c="gray">
                   Enjoy Work in One Place
                 </Text>
               </Stack>
