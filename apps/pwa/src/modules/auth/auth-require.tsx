@@ -52,6 +52,8 @@ export const AuthRequire: FC = () => {
     if (authType === "signin") setAuthType("signin");
   }, []);
 
+  const logoSize = layout.view === "desktop" ? 45 : 35;
+
   return (
     <Stack
       h={layout.height}
@@ -64,18 +66,21 @@ export const AuthRequire: FC = () => {
       <ScrollArea.Autosize w={layout.width} mah={layout.height} scrollbars="y">
         <Stack mih={layout.height} w={layout.width} p={16}>
           <Group justify="space-between" wrap="nowrap">
-            <Group align="center" wrap="nowrap">
+            <Group align="center" wrap="nowrap" gap={layout.view === "desktop" ? 16 : 8}>
               {app.metadata.isExtended ? (
-                <Image src={app.metadata.appIcon} h={45} w={45} />
+                <Image src={app.metadata.appIcon} h={logoSize} w={logoSize} />
               ) : (
-                <Animate src="/animate/symbol-idle.json" style={{ width: 45, height: 45 }} />
+                <Animate
+                  src="/animate/symbol-idle.json"
+                  style={{ width: logoSize, height: logoSize }}
+                />
               )}
 
               <Stack gap={0}>
-                <Title fz={28} fw={800} c={color("primary")}>
+                <Title fz={layout.view === "desktop" ? 28 : 22} fw={800} c={color("primary")}>
                   {app.metadata.appName || "Joy One"}
                 </Title>
-                <Text fz={14} c="gray">
+                <Text fz={layout.view === "desktop" ? 14 : 12} c="gray">
                   Enjoy Work in One Place
                 </Text>
               </Stack>
