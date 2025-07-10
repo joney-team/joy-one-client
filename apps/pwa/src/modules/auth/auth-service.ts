@@ -1,12 +1,11 @@
 import { configs } from "@/configs/layout.config";
 import { StorageKey } from "@/types";
 import { decryptData, encryptData } from "@/utils/crypto.utils";
+import config from "@joy-one-client/config";
 import { getGlobal } from "../../global";
+import { api } from "../apis";
 import { t } from "../lang/lang-service";
 import { AuthRenewPasswordByCodeDto, AuthRequestRenewUserPasswordDto, AuthTokenResult, AuthVerifyRenewPasswordCodeDto } from "./auth-types";
-import config from "@joy-one-client/config";
-import { api } from "../apis";
-import { apiServerSide } from "../apis/server";
 
 export async function requestRenewPassword(dto: AuthRequestRenewUserPasswordDto) {
   return api.post(`/auth/renew-password/request`, dto)

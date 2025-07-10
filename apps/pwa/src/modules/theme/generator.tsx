@@ -8,6 +8,7 @@ import {
   Modal,
   Notification,
   OptionsFilter,
+  Switch,
 } from "@mantine/core";
 import { LayoutContext } from "../../layout/layout-context";
 import { StringUtils } from "../../utils/string.utils";
@@ -58,13 +59,13 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
           },
         },
       }),
-      Switch: {
+      Switch: Switch.extend({
         styles: {
           label: {
-            fontSize: 12,
+            fontSize: 13,
           },
         },
-      },
+      }),
       Checkbox: {
         styles: {
           label: {
