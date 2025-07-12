@@ -29,7 +29,7 @@ export interface WorkspaceSearchSettings {
 }
 
 export interface SetWorkspaceSettingsDto {
-  wSlots?: WorkSlot[];
+  wSlots: WorkSlot[];
   bankAccount?: BankAccount;
   mailer?: PluginMailerAccount;
   hrmTimeKeepingsRules?: HrmTimekeepingsRules;
@@ -40,7 +40,7 @@ export interface SetWorkspaceSettingsDto {
   allowDuplicateBookings?: boolean;
   loanSettings?: LoanSettings;
   memberPermissions: WorkspacePermission[];
-  taskStatuses?: TaskStatus[];
+  taskStatuses: TaskStatus[];
   termsOfService?: string;
   policy?: string;
   view?: WorkspaceView;
