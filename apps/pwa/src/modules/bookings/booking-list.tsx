@@ -173,7 +173,9 @@ export const BookingList: FC = () => {
     return dayjs(query.date).format(`dddd ${getDateFormat()}`);
   };
 
-  const toggleAssigneeUser = (member: WorkspaceMember) => {
+  const toggleAssigneeUser = (member?: WorkspaceMember) => {
+    if (!member) return;
+
     setWorkspaceMember(member);
     const isSelected = query.assigneeUserIds.includes(member.userId);
     const assigneeUserIds = isSelected
@@ -245,7 +247,7 @@ export const BookingList: FC = () => {
                       </ActionIcon>
                     );
                   }}
-                  render={(ctx) => {
+                  target={(ctx) => {
                     return (
                       <Card
                         py={0}

@@ -195,6 +195,7 @@ export const ReportWidgets: FC = () => {
         <Renderer visible={workspace.hasPermission(WorkspacePermission.REPORTS_VIEW)}>
           <WorkspaceMemberSelector
             onSelect={(user) => {
+              if (!user) return;
               setUerMemberInfo(user);
               report.setQuery("userId", user.userId);
             }}
@@ -214,7 +215,7 @@ export const ReportWidgets: FC = () => {
                 </Group>
               );
             }}
-            render={(ctx) => {
+            target={(ctx) => {
               return (
                 <Hovered>
                   {(hover) => {

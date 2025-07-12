@@ -32,9 +32,8 @@ export const ModalTransferWorkspaceOwner: FC = () => {
             {t("select_member")}
           </Text>
           <WorkspaceMembersInput
-            ignoreUserIds={[auth.user._id]}
+            excludeIds={[auth.user._id]}
             value={newOwner ? [newOwner] : []}
-            length={1}
             onChange={(users) => {
               setNewOwner(users[0]);
             }}

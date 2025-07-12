@@ -43,7 +43,9 @@ export const BulkTasksActions: FC = () => {
     tasks.removeSelectedTasks();
   };
 
-  const assignTask = (user: WorkspaceMember) => {
+  const assignTask = (user?: WorkspaceMember) => {
+    if (!user) return;
+
     const selectedTasks = tasks.selectedTaskIds
       .map((id) => getTaskEntity(id)!)
       .filter((task) => !!task);
@@ -158,7 +160,7 @@ export const BulkTasksActions: FC = () => {
 
             <WorkspaceMemberSelector
               onSelect={assignTask}
-              render={(ctx) => {
+              target={(ctx) => {
                 return (
                   <Button
                     leftIcon={IconUsersPlus}
@@ -303,7 +305,7 @@ export const BulkTasksActions: FC = () => {
 
                 <WorkspaceMemberSelector
                   onSelect={assignTask}
-                  render={(ctx) => {
+                  target={(ctx) => {
                     return (
                       <Menu.Item leftSection={<IconUsersPlus size={18} />} onClick={ctx.toggle}>
                         {t("assign_task")}

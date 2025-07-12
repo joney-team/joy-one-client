@@ -1,45 +1,36 @@
 import { useColor } from "@/modules/theme/use-color";
-import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { UserCard } from "@/modules/users/components/user-card";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
+import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
+import {
+  WorkspaceMemberSelector,
+  WorkspaceMemberSelectorProps,
+} from "@/modules/workspace-members/components/workspace-member-selector";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
-import { ActionIcon, em, Group, InputWrapperProps, ThemeIcon, Tooltip } from "@mantine/core";
+import { ActionIcon, em, Group, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconFlagFilled, IconUserPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Renderer } from "../../../components/renderer";
 
-interface WorkspaceMembersInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
+interface WorkspaceMembersInputProps
+  extends Omit<WorkspaceMemberSelectorProps, "value" | "onChange" | "target"> {
   value?: WorkspaceMemberInfo[];
   onChange?: (value: WorkspaceMemberInfo[]) => void;
   collapsed?: boolean;
   showMainResponsible?: boolean;
   disabled?: boolean;
-  length?: number;
-  ignoreUserIds?: string[];
-  avatarSize?: number | string;
-  iconSize?: number | string;
   tooltipLabel?: string;
 }
 
 export const WorkspaceMembersInput: FC<WorkspaceMembersInputProps> = (props) => {
   const color = useColor();
-  const {
-    value,
-    onChange,
-    collapsed,
-    showMainResponsible,
-    length,
-    ignoreUserIds,
-    avatarSize,
-    iconSize,
-    tooltipLabel,
-    ...rest
-  } = props;
+  const { value, onChange, collapsed, showMainResponsible, tooltipLabel, ...rest } = props;
 
   const users = value || [];
   const disabled = props.disabled || !!!onChange;
 
-  const toogleSelect = (user: WorkspaceMemberInfo) => {
+  const toogleSelect = (user?: WorkspaceMemberInfo) => {
+    if (!user) return;
+
     const index = users.findIndex((u) => u.userId === user.userId);
     if (index === -1) {
       onChange?.([...users, user]);
@@ -53,7 +44,7 @@ export const WorkspaceMembersInput: FC<WorkspaceMembersInputProps> = (props) => 
       {...rest}
       excludeIds={users.map((u) => u.userId)}
       onSelect={toogleSelect}
-      render={(ctx) => {
+      target={(ctx) => {
         return (
           <Group
             flex={props.flex}
@@ -72,7 +63,7 @@ export const WorkspaceMembersInput: FC<WorkspaceMembersInputProps> = (props) => 
                   <Tooltip label={user.name} key={user.userId}>
                     <Group align="center" justify="center" style={{ position: "relative" }}>
                       <UserCard
-                        avatarSize={avatarSize}
+                        avatarSize={rest.avatarSize}
                         user={user}
                         collapsed={collapsed}
                         onClick={() => {
@@ -107,7 +98,7 @@ export const WorkspaceMembersInput: FC<WorkspaceMembersInputProps> = (props) => 
               <Tooltip label={tooltipLabel} disabled={!!!tooltipLabel || disabled}>
                 <ActionIcon
                   color="gray.4"
-                  size={iconSize || em(34)}
+                  size={rest.iconSize || em(34)}
                   variant="outline"
                   radius={150}
                   onClick={ctx.toggle}

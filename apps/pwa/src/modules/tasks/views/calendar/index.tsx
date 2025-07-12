@@ -116,6 +116,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
         <Group gap={8}>
           <WorkspaceMemberSelector
             onSelect={(user) => {
+              if (!user) return;
               setAssignee(user);
               const isSelected = assigneeUserIds.includes(user.userId);
               let _assigneeUserIds: string[] = [...assigneeUserIds];
@@ -142,7 +143,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                 </Group>
               );
             }}
-            render={(ctx) => {
+            target={(ctx) => {
               const isHasAssignee = assigneeUserIds.length > 0;
 
               return (

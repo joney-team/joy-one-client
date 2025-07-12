@@ -114,14 +114,15 @@ export const TaskMenuActions: FC = () => {
         )}
 
         <WorkspaceMemberSelector
-          onSelect={(user) =>
+          onSelect={(user) => {
+            if (!user) return;
             tasks.setState((s) => ({
               ...s,
               assigneeUserIds: s.assigneeUserIds?.includes(user.userId)
                 ? s.assigneeUserIds?.filter((id) => id !== user.userId)
                 : [...(s.assigneeUserIds || []), user.userId],
-            }))
-          }
+            }));
+          }}
           optionRightSection={(user) => {
             const isSelected = tasks.state.assigneeUserIds?.includes(user.userId);
 
@@ -138,7 +139,7 @@ export const TaskMenuActions: FC = () => {
               </Group>
             );
           }}
-          render={(ctx) => {
+          target={(ctx) => {
             const isHasAssignee =
               tasks.state.assigneeUserIds && tasks.state.assigneeUserIds.length > 0;
 
@@ -349,6 +350,7 @@ export const TaskMenuActions: FC = () => {
                       <Group gap={3} wrap="nowrap">
                         {selectedTags.map((tag) => (
                           <TaskTag
+                            key={tag._id}
                             id={tag._id}
                             h={18}
                             fz={12}

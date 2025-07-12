@@ -95,13 +95,14 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
             }}
           >
             <CustomerSelector
-              comboboxProps={{
-                position: "bottom",
-              }}
               onSelect={(value) => orderTable.setCustomer(value)}
-              target={(ctx) => {
+              target={(customerSelectorCtx) => {
                 return (
-                  <Group onClick={ctx.toggle} gap={10} style={{ cursor: "pointer" }}>
+                  <Group
+                    onClick={customerSelectorCtx.toggle}
+                    gap={10}
+                    style={{ cursor: "pointer" }}
+                  >
                     <Avatar
                       icon={IconUserSquareRounded}
                       customer={orderTable.values.relatedCustomer}
@@ -129,7 +130,7 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
                         if (orderTable.values.relatedCustomer) {
                           orderTable.setCustomer(undefined);
                         } else {
-                          ctx.toggle();
+                          customerSelectorCtx.toggle();
                         }
                       }}
                     >
@@ -150,6 +151,9 @@ export const OrderForm: FC<OrderTableProps> = (props) => {
                       assigneeUsers: value ? [value] : [],
                     })
                   }
+                  comboboxProps={{
+                    position: "bottom-end",
+                  }}
                   clearable
                 />
               </Group>

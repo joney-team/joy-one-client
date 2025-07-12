@@ -246,7 +246,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
         disabled={disabled}
         store={combobox}
         shadow="sm"
-        offset={3}
+        offset={4}
         onClose={onClose}
         onOptionSubmit={async (val) => {
           if (val === "$create") {

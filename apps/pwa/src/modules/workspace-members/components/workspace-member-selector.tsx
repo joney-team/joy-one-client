@@ -4,41 +4,26 @@ import { searchEntity } from "@/modules/search/search-service";
 import { getUserMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { AppEntity } from "@/types";
-import { ActionIcon, Combobox, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
+import { ActionIcon, Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { Selector, SelectorContext } from "../../../components/selector";
+import { Selector, SelectorProps } from "../../../components/selector";
 
 export interface WorkspaceMemberSelectorProps
-  extends Omit<InputWrapperProps, "value" | "onChange" | "onSelect"> {
-  excludeIds?: string[];
-  onSelect: (value: WorkspaceMember) => void;
-  render?: (ctx: SelectorContext<WorkspaceMember>) => ReactNode;
+  extends Omit<SelectorProps<WorkspaceMember>, "listRoute" | "searchPlaceholder" | "renderOption"> {
   iconSize?: number;
   avatarSize?: number;
   collapsed?: boolean;
-  disabled?: boolean;
   optionRightSection?: (user: WorkspaceMember) => ReactNode;
 }
 
 export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props) => {
-  const {
-    excludeIds,
-    onSelect,
-    render,
-    iconSize,
-    avatarSize,
-    collapsed,
-    disabled,
-    optionRightSection,
-    ...rest
-  } = props;
+  const { iconSize, avatarSize, collapsed, optionRightSection, ...rest } = props;
 
   return (
     <Selector<WorkspaceMember>
       {...rest}
       autoCloseOnChange={false}
-      excludeIds={props.excludeIds}
       listRoute="/workspace-members"
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
@@ -48,7 +33,7 @@ export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props)
           <Combobox.Option value={user._id} key={user._id}>
             <Group gap={8} justify="space-between">
               <Group gap={8}>
-                <Avatar user={user} size={em(28)} />
+                <Avatar user={user} size={avatarSize || 28} />
                 <Stack gap={3}>
                   <Text>{user.name}</Text>
 
@@ -64,7 +49,7 @@ export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props)
         );
       }}
       target={(ctx) => {
-        if (props.render) return props.render(ctx);
+        if (rest.target) return rest.target(ctx);
 
         return (
           <ActionIcon
@@ -77,10 +62,6 @@ export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props)
             <IconUserPlus size={18} />
           </ActionIcon>
         );
-      }}
-      onSelect={(e) => {
-        if (!e) return;
-        props.onSelect(e);
       }}
       onSearch={(q) => searchEntity(AppEntity.WORKSPACE_MEMBERS, q)}
     />

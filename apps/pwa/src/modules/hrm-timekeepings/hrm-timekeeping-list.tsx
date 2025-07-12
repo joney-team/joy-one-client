@@ -135,6 +135,7 @@ export const HrmTimekeepingList: FC = () => {
         <Group gap={10} justify={viewport.view === "mobile" ? "center" : "start"}>
           <WorkspaceMemberSelector
             onSelect={(user) => {
+              if (!user) return;
               setAssignee(user);
               const isSelected = assigneeUserIds.includes(user.userId);
               let _assigneeUserIds: string[] = [...assigneeUserIds];
@@ -161,7 +162,7 @@ export const HrmTimekeepingList: FC = () => {
                 </Group>
               );
             }}
-            render={(ctx) => {
+            target={(ctx) => {
               const isHasAssignee = assigneeUserIds.length > 0;
 
               return (

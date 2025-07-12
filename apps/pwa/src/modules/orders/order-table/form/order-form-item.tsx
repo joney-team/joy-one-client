@@ -98,6 +98,9 @@ export const OrderFormItem: FC<{ index: number; item: OrderTableFormValueItem }>
                 ? t("assignee_products_revenue").toString()
                 : t("assignee_services_revenue").toString()
             }
+            comboboxProps={{
+              position: "bottom-end",
+            }}
           />
         </Group>
 
