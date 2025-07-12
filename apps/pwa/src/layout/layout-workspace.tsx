@@ -127,7 +127,7 @@ export const LayoutWorkspace: FC = () => {
         </Stack>
       )}
 
-      <WorkspaceNavigationSplitter />
+      {layout.view !== "mobile" && <WorkspaceNavigationSplitter />}
     </Fragment>
   );
 };

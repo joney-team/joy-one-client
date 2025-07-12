@@ -43,11 +43,11 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
       ? +navigationWidthStorage
       : workspaceLayoutConfig.defaultNavigationExpandedWidth;
 
-    const navigationHeight = layout.isStandalone
+    const navigationHeight = layout.view === 'mobile' && isDetailPage ? 0 : (layout.isStandalone
       ? workspaceLayoutConfig.standaloneNavigationHeight
       : layout.view === "mobile"
-        ? isDetailPage ? 0 : workspaceLayoutConfig.mobileNavigationHeight
-        : layout.height;
+        ? workspaceLayoutConfig.mobileNavigationHeight
+        : layout.height);
 
     return {
       navigationWidth,

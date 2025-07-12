@@ -48,7 +48,10 @@ export const MessageBox: FC = () => {
       </Stack>
 
       <Stack ref={inputSize.ref} pos="absolute" bottom={0} left={0} right={0}>
-        <Stack p={layout.view === "mobile" ? 16 : 12}>
+        <Stack
+          p={layout.view === "mobile" ? 16 : 12}
+          pb={layout.isStandalone && !layout.isAndroid ? 36 : undefined}
+        >
           <Card bg="var(--mantine-color-body)" shadow="xs" p={0}>
             <InputMessageBox box={box} />
           </Card>
