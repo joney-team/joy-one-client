@@ -137,12 +137,16 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     return _user;
   };
 
-  const signOut = () => {
-    Promise.all([api.post(`/auth/sign-out`).catch(() => false), firebaseAuth.signOut()]);
-    clearTokens();
-    localStorage.removeItem(StorageKey.WORKSPACE_ID);
-    setUser(undefined);
-    router.replace("/");
+  const signOut = async () => {
+    try {
+      await Promise.all([api.post(`/auth/sign-out`), firebaseAuth.signOut()]);
+      clearTokens();
+      localStorage.removeItem(StorageKey.WORKSPACE_ID);
+      setUser(undefined);
+      router.replace("/");
+    } catch (error) {
+      onError(error);
+    }
   };
 
   const _signInWithFirebase = async (idToken: string, username?: string) => {

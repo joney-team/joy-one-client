@@ -299,7 +299,7 @@ export const Profile: FC = () => {
             color="gray"
             fw={400}
             fz={em(14)}
-            onClick={() => auth.signOut().catch(onError)}
+            onClick={auth.signOut}
           >
             {t("sign_out")}
           </Button>
