@@ -11,7 +11,7 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { PluginMetaPages } from "@/components/plugins/plugin-meta-pages";
-import { PluginZaloOAs } from "@/components/plugins/plugin-zalo-oas";
+import { PluginZaloOAs } from "@/modules/plugins/zalo-oas/zalo-oas";
 
 export const MessageBoxesIntegrate: FC = () => {
   const color = useColor();

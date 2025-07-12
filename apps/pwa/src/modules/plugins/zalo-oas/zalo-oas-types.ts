@@ -63,3 +63,21 @@ export interface ZnsTemplateConfig {
 export type ZnsTemplateConfigs = {
   [key in PluginZaloOaZNSTemplateId]: ZnsTemplateConfig;
 }
+
+export interface ZaloOaGmfGroupSetting {
+  isAdminNotificationEnabled?: boolean;
+}
+
+export interface ZaloOaGmfGroupSettings {
+  [groupId: string]: ZaloOaGmfGroupSetting;
+}
+
+export interface ZaloOaGmfGroup extends ZaloOaGmfGroupSetting {
+  name: string;
+  avatar: string;
+  group_id: string;
+  group_link: string;
+  group_description: string;
+  total_member: number;
+  status: 'enabled' | 'disabled';
+}

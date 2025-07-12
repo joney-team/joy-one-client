@@ -280,15 +280,15 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     }
   }, 500);
 
-  const setSettings = async (dto: SetWorkspaceSettingsDto, exec?: boolean) => {
+  const setSettings = async (dto: Partial<SetWorkspaceSettingsDto>, exec?: boolean) => {
     state.current.settings = {
       ...state.current.settings,
       ...(dto as any),
     } as WorkspaceSettingEntity;
     syncSettings(state.current.settings);
     forceUpdate();
-    if (exec) await setWorkspaceSettings(dto);
-    else onChangeSettings(dto);
+    if (exec) await setWorkspaceSettings(state.current.settings);
+    else onChangeSettings(state.current.settings);
   };
 
   const getWorkspaceDisplayView = (_view?: WorkspaceView) => {

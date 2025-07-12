@@ -1,58 +1,33 @@
 "use client";
 
-import { Period } from "@/types";
-import { getBookings } from "@/modules/bookings/booking-service";
-import { BookingStatus } from "@/modules/bookings/booking-types";
-import { t } from "@/modules/lang/lang-service";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { useFetch } from "@/utils/use-fetch.util";
-import { Group, SimpleGrid, Stack } from "@mantine/core";
-import { IconAnalyze, IconClipboardList } from "@tabler/icons-react";
-import { FC, useEffect, useState } from "react";
-import { SessionTitle } from "@/components/session-title";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
+import { SessionTitle } from "@/components/session-title";
+import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
+import { t } from "@/modules/lang/lang-service";
+import { Period, ResponseList, StorageKey } from "@/types";
+import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { Group, SimpleGrid, Stack } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
+import { IconAnalyze, IconClipboardList } from "@tabler/icons-react";
+import { FC } from "react";
+import { useQuery } from "../apis/use-query";
 import { EventType } from "../events/event-types";
 
 export const DashboardBookings: FC = () => {
-  const getInitialQuery = () => {
-    const query = localStorage.getItem("dashboard-bookings-query");
-    if (query) return JSON.parse(query);
-    return { status: "in_progress", assigneeUserIds: [] as string[] };
-  };
+  const [query, setQuery] = useLocalStorage({
+    key: StorageKey.DASHBOARD_BOOKINGS_QUERY,
+    defaultValue: { status: "in_progress", assigneeUserIds: [] as string[] },
+  });
 
-  const [query, setQuery] = useState(getInitialQuery());
-
-  useEffect(() => {
-    localStorage.setItem("dashboard-bookings-query", JSON.stringify(query));
-  }, [query]);
-
-  const bookings = useFetch({
-    id: "next-booking",
-    default: [],
-    fetch: async () => {
-      return getBookings({
-        timeRangeStartTime: `${Period.DATE}-${DateTimeUtils.timeToSeconds()}`,
-      }).then((r) =>
-        r.data
-          .filter((b) => {
-            if (query.assigneeUserIds.length > 0)
-              return query.assigneeUserIds.includes(b.assigneeUserIds?.[0] || "");
-            return true;
-          })
-          .filter((b) => {
-            if (query.status === "in_progress")
-              return [
-                BookingStatus.IN_PROGRESS,
-                BookingStatus.CHECK_IN,
-                BookingStatus.JUST_CREATED,
-              ].includes(b.status);
-            return true;
-          })
-      );
+  const todayBookings = useQuery<ResponseList<BookingEntity>>({
+    route: "/bookings",
+    params: {
+      timeRangeStartTime: `${Period.DATE}-${DateTimeUtils.timeToSeconds()}`,
+      getAll: true,
     },
-    events: [
+    refetchEvents: [
       EventType.BOOKING_NEW,
       EventType.BOOKING_UPDATED,
       EventType.BOOKING_CHECKIN,
@@ -62,9 +37,23 @@ export const DashboardBookings: FC = () => {
     ],
   });
 
-  const bookingData = bookings.data || [];
+  const bookingData = (todayBookings.data?.data || [])
+    .filter((b) => {
+      if (query.assigneeUserIds.length > 0)
+        return query.assigneeUserIds.includes(b.assigneeUserIds?.[0] || "");
+      return true;
+    })
+    .filter((b) => {
+      if (query.status === "in_progress")
+        return [
+          BookingStatus.IN_PROGRESS,
+          BookingStatus.CHECK_IN,
+          BookingStatus.JUST_CREATED,
+        ].includes(b.status);
+      return true;
+    });
 
-  if (bookingData.length === 0) return null;
+  if ((todayBookings.data?.count || 0) === 0) return null;
 
   return (
     <Stack>

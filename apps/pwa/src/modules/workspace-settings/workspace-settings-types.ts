@@ -10,6 +10,7 @@ import { PluginMailerAccount } from "@/modules/workspaces/workspaces-types";
 import { DashboardWidgetType } from "@/widgets/dashboard/types";
 import { ReportWidgetType } from "@/widgets/reports/types";
 import { Widget } from "@/widgets/types";
+import { ZaloOaGmfGroupSettings } from "../plugins/zalo-oas/zalo-oas-types";
 export interface WorkspaceViewComponent {
   id: string;
   type: 'MODULE' | 'DIVIDER';
@@ -25,30 +26,6 @@ export interface WorkspaceView {
 
 export interface WorkspaceSearchSettings {
   hideEntities?: AppEntity[];
-}
-
-export interface WorkspaceSettingEntity extends BaseMongoEntity {
-  workspaceId: string;
-  wSlots: WorkSlot[];
-  bankAccount?: BankAccount;
-  mailer?: PluginMailerAccount;
-  hrmTimeKeepingsRules?: HrmTimekeepingsRules;
-  allowPayTicketMultipleTimes?: boolean;
-  bookingsAutoRemindCustomerBookingBeforeDays?: number;
-  bookingsAutoRemindCustomerBookingTime?: string;
-  allowTip?: boolean;
-  allowDuplicateBookings?: boolean;
-  loanSettings?: LoanSettings;
-  memberPermissions: WorkspacePermission[];
-  taskStatuses: TaskStatus[];
-  termsOfService?: string;
-  policy?: string;
-  view?: WorkspaceView;
-  receiptImagesRequired?: boolean;
-  receiptPaymentMethodDefault?: ReceiptPaymentMethod;
-  searchSettings?: WorkspaceSearchSettings;
-  currencyCode?: string;
-  isAuthSessionRestricted?: boolean;
 }
 
 export interface SetWorkspaceSettingsDto {
@@ -72,4 +49,7 @@ export interface SetWorkspaceSettingsDto {
   searchSettings?: WorkspaceSearchSettings;
   currencyCode?: string;
   isAuthSessionRestricted?: boolean;
+  zaloOaGmfGroupSettings?: ZaloOaGmfGroupSettings;
 }
+
+export interface WorkspaceSettingEntity extends BaseMongoEntity, SetWorkspaceSettingsDto {}

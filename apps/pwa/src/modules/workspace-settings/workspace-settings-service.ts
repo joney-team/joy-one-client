@@ -27,7 +27,7 @@ export function useWorkDaySlots() {
   const workspace = useWorkspace();
 
   let workDaySlots: WorkDaySlot[] = new Array(7).fill(0).reduce((acc, _, curr) => {
-    const relatedSlots = workspace.settings.wSlots.filter(v => v.dayWeek === curr);
+    const relatedSlots = (workspace.settings.wSlots || []).filter(v => v.dayWeek === curr);
     const startSlot = relatedSlots.reduce((acc, curr) => {
       return acc.startHour < curr.startHour ? acc : curr;
     }, relatedSlots[0]);

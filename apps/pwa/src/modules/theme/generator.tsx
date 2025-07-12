@@ -1,6 +1,7 @@
 import { type AppMetadata } from "@/types";
 import { primaryColors } from "@joy-one-client/config/colors";
 import {
+  Card,
   ComboboxItem,
   createTheme,
   em,
@@ -57,6 +58,12 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
             fontWeight: 300,
             marginBottom: 4,
           },
+        },
+      }),
+      Card: Card.extend({
+        defaultProps: {
+          shadow: "xs",
+          withBorder: false,
         },
       }),
       Switch: Switch.extend({

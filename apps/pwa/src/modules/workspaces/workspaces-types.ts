@@ -82,7 +82,7 @@ export interface WorkspaceContext {
   workspaceSubscription: WorkspaceSubscriptionEntity | null;
   balance: WorkspaceBalance;
   updateSettings: (settings: WorkspaceSettingEntity) => Promise<void>;
-  setSettings: (dto: SetWorkspaceSettingsDto, exec?: boolean) => void | Promise<void>;
+  setSettings: (dto: Partial<SetWorkspaceSettingsDto>, exec?: boolean) => void | Promise<void>;
   type: WorkspaceType;
   view: WorkspaceView;
   setView: (view: WorkspaceView) => Promise<WorkspaceView>;

@@ -74,6 +74,7 @@ export enum StorageKey {
   SESSION_ID = '_s_id',
   WORKSPACE_AUTH_SESSION_ID = '_ws_sid',
   LAYOUT_NAVIGATION_WIDTH = '_l_nw',
+  DASHBOARD_BOOKINGS_QUERY = '_db_bq',
 }
 
 export enum Period {
