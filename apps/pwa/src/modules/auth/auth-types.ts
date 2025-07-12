@@ -74,7 +74,7 @@ export interface AuthContext {
   user: UserAuthResult;
   device: DeviceEntity;
   isInitialized: boolean;
-  signOut: (deviceId?: string) => Promise<void>;
+  signOut: () => void;
   signInWithGoogle: () => Promise<void>
   signInWithFacebook: () => Promise<void>
   signInWithGithub: () => Promise<void>

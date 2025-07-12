@@ -1,11 +1,9 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
-import { Button } from "@/components/buttons/button";
 import { useAuth } from "@/modules/auth/auth-context";
 import { DeviceEntity } from "@/modules/devices/devices-types";
 import { renderDate, t } from "@/modules/lang/lang-service";
-import { signOutOtherDevices } from "@/modules/users/users-service";
+import { useColor } from "@/modules/theme/use-color";
 import { Badge, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import {
   IconDeviceDesktop,
@@ -59,6 +57,7 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
               {ua.os.name} ({ua.os.version})
             </Text>
           )}
+
           {!!ua.browser.name && (
             <Text fz={em(12)} c="gray">
               {ua.browser.name}{" "}
@@ -71,7 +70,7 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
             {renderDate(device.lastActiveAt * 1000)})
           </Text>
 
-          <Group mt={10}>
+          {/* <Group mt={10}>
             <Button
               size="compact-xs"
               variant="light"
@@ -81,7 +80,7 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
             >
               {t("sign_out")}
             </Button>
-          </Group>
+          </Group> */}
         </Stack>
       </Group>
     </Card>

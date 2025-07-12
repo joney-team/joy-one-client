@@ -1,20 +1,17 @@
 "use client";
 
-import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
+import { getUserDevices } from "@/modules/devices/devices-service";
 import { useUserEventsListner } from "@/modules/events/event-service";
 import { t } from "@/modules/lang/lang-service";
-import { getUserDevices } from "@/modules/devices/devices-service";
-import { signOutOtherDevices } from "@/modules/users/users-service";
-import { onError } from "@/utils/exceptions.utils";
 import { useList } from "@/utils/use-list.util";
-import { em, SimpleGrid, Skeleton } from "@mantine/core";
-import { IconDevices, IconLogout } from "@tabler/icons-react";
-import { UserDeviceCard } from "./user-device-card";
+import { SimpleGrid, Skeleton } from "@mantine/core";
+import { IconDevices } from "@tabler/icons-react";
 import { Fragment } from "react";
+import { UserDeviceCard } from "./user-device-card";
 
 export const UserDeviceList = () => {
   const devices = useList({
@@ -30,7 +27,7 @@ export const UserDeviceList = () => {
   return (
     <Fragment>
       <SessionTitle name={t("devices")} icon={IconDevices}>
-        <Renderer visible={devices.count > 1}>
+        {/* <Renderer visible={devices.count > 1}>
           <Button
             size="xs"
             fz={em(14)}
@@ -42,7 +39,7 @@ export const UserDeviceList = () => {
           >
             {t("sign_out_another_device")}
           </Button>
-        </Renderer>
+        </Renderer> */}
       </SessionTitle>
 
       <SimpleGrid cols={1}>

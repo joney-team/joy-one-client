@@ -3,9 +3,7 @@
 import { useApp } from "@/app.context";
 import { Fullscreen } from "@/components/fullscreen";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
-import { defaultMetadata, setMetadata } from "@/configs/metadata.config";
 import { useRouter, useRouteRule } from "@/hooks/use-router";
-import { zIndexes } from "@joy-one-client/config/layout";
 import {
   initializeDevice,
   setDeviceLocale,
@@ -26,19 +24,20 @@ import { LangState } from "@/modules/lang/lang-types";
 import { showInAppNotification } from "@/modules/notifications/notification-service";
 import { NotificationEntity } from "@/modules/notifications/notification-types";
 import { getTimeZones } from "@/modules/times/times-service";
-import { setUserLocale, signOut } from "@/modules/users/users-service";
+import { setUserLocale } from "@/modules/users/users-service";
 import { UpdateUserProfileDto, UserEntity } from "@/modules/users/users-types";
-import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
 import { isDiff, objSelect } from "@/utils/object.utils";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { useMantineTheme } from "@mantine/core";
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getToken, onMessage } from "firebase/messaging";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { getGlobal } from "../../global";
+import { api } from "../apis";
 import { Context } from "./auth-context";
 import { AuthRequire } from "./auth-require";
 import {
@@ -57,7 +56,6 @@ import type {
   AuthTokenResult,
   UserAuthResult,
 } from "./auth-types";
-import { api } from "../apis";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
@@ -139,20 +137,12 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     return _user;
   };
 
-  const onSignOut = () => {
+  const signOut = () => {
+    Promise.all([api.post(`/auth/sign-out`).catch(() => false), firebaseAuth.signOut()]);
     clearTokens();
     localStorage.removeItem(StorageKey.WORKSPACE_ID);
     setUser(undefined);
     router.replace("/");
-  };
-
-  const _signOut = async () => {
-    await Promise.all([signOut(), firebaseAuth.signOut()]);
-
-    onSignOut();
-
-    if (isExtendedApp()) return;
-    setMetadata(defaultMetadata);
   };
 
   const _signInWithFirebase = async (idToken: string, username?: string) => {
@@ -332,10 +322,10 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   useUserEventsListner(
     (e) => {
       if (device && e.eventName === "SIGN_OUT" && e.data?.deviceId === device?._id) {
-        onSignOut();
+        signOut();
       }
     },
-    [device, onSignOut]
+    [device, signOut]
   );
 
   useEffect(() => {
@@ -375,7 +365,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     device: device!,
     user: user!,
     isInitialized,
-    signOut: _signOut,
+    signOut,
     updateProfile,
     signInWithEmailAndPassword,
     registerWithEmailAndPassword,

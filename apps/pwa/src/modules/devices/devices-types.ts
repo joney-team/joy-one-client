@@ -54,4 +54,5 @@ export interface DeviceEntity extends BaseMongoEntity {
   ua: UaResult;
   notificationToken?: string;
   locale?: Locale;
+  userId: string;
 }
