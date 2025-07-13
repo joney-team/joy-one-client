@@ -27,18 +27,24 @@ import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { round } from "@/utils/number.utils";
 import { Anchor, Badge, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
 import {
+  IconBan,
   IconBrandSpeedtest,
   IconBuildingSkyscraper,
   IconCircle,
   IconCircleDashedMinus,
+  IconClipboard,
   IconCoins,
   IconCreditCardPay,
   IconFileTypePdf,
+  IconRefresh,
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, Fragment } from "react";
 import { useColor } from "../theme/use-color";
 import { AppEntity } from "@/types";
+import { OnModalPrompt } from "@/modals/modal-prompt";
+import { StringUtils } from "@/utils/string.utils";
+import { api } from "../apis";
 
 interface LoanListProps {
   strictStatus?: LoanStatus[];
@@ -331,6 +337,43 @@ export const LoanList: FC<LoanListProps> = (props) => {
             }),
         },
         {
+          label: "reject",
+          icon: IconBan,
+          permission: WorkspacePermission.LOANS_APPROVE,
+          available: (data) => data.every((v) => [LoanStatus.PENDING].includes(v.status)),
+          handler: (data, ctx) =>
+            OnModalPrompt({
+              title: StringUtils.capitalizeFirstLetter(`${t("reject")} ${t("loan")}`),
+              message: t("enter_reject_reason"),
+              onSubmit: async (reason) => {
+                await api.post(`/loans/bulk-reject`, {
+                  loanIds: data.map((v) => v.id),
+                  reason,
+                });
+                ctx.unSelect();
+              },
+              icon: IconClipboard,
+              color: "red",
+              suggestions: [
+                t("wrong_information"),
+                t("info_does_not_match_img"),
+                t("img_is_blurry"),
+              ],
+            }),
+        },
+        {
+          label: "loan_revert_rejected",
+          icon: IconRefresh,
+          permission: WorkspacePermission.LOANS_APPROVE,
+          available: (data) => data.every((v) => [LoanStatus.REJECTED].includes(v.status)),
+          handler: async (data, ctx) => {
+            await api.post(`/loans/bulk-revert-rejected`, {
+              loanIds: data.map((v) => v.id),
+            });
+            ctx.unSelect();
+          },
+        },
+        {
           permission: WorkspacePermission.LOANS_ARCHIVE,
           type: "archive",
           available: (data) =>
@@ -352,6 +395,8 @@ export const LoanList: FC<LoanListProps> = (props) => {
         EventType.REPORT_RANGE_SYNCED,
         EventType.LOANS_SYNCED,
         EventType.LOANS_CHANGE_WORKSPACE_BRANCH,
+        EventType.LOANS_APPROVED_REVERTED,
+        EventType.LOANS_REVERT_REJECTED,
       ]}
       card={({ data: loan }) => <LoanCard loan={loan} />}
       filterModes={[

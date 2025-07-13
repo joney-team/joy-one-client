@@ -96,12 +96,12 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              api.post(`/scheduling/execRemovePendingLoans`, {
+              api.post(`/scheduling/execRejectPendingLoans`, {
                 workspaceId: workspace.userMember.workspaceId,
               })
             }
           >
-            execRemovePendingLoans
+            execRejectPendingLoans
           </Button>
         </Group>
       </Card>
