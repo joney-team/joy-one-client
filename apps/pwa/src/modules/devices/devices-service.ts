@@ -43,8 +43,13 @@ export async function getDevice(): Promise<DeviceEntity | undefined> {
 }
 
 export const getDeviceIdentifyId = async (): Promise<string> => {
+  const deviceIdentifyId = localStorage.getItem(StorageKey.DEVICE_IDENTIFY_ID);
+  if (deviceIdentifyId) return deviceIdentifyId;
+
   const { get } = await FingerprintJS.load();
-  const { visitorId } = await get({});
+  const { visitorId } = await get();
+  localStorage.setItem(StorageKey.DEVICE_IDENTIFY_ID, visitorId);
+  
   return visitorId;
 };
 
