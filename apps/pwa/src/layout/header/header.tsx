@@ -9,7 +9,18 @@ import { t } from "@/modules/lang/lang-service";
 import { UserNotifications } from "@/modules/notifications/user-notifications";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, Card, Center, Divider, Group, Kbd, Text, ThemeIcon, rem, rgba } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  Center,
+  Divider,
+  Group,
+  Kbd,
+  Text,
+  ThemeIcon,
+  rem,
+  rgba,
+} from "@mantine/core";
 import { spotlight } from "@mantine/spotlight";
 import { IconChevronLeft, IconLayoutSidebarLeftExpand, IconSearch } from "@tabler/icons-react";
 import { FC, memo } from "react";
@@ -83,14 +94,27 @@ export const WorkspaceHeader: FC = memo(() => {
   }
 
   return (
-    <Group justify="space-between" align="center" gap={8} flex={1} wrap="nowrap" h="100%" w="100%" px={8}>
+    <Group
+      justify="space-between"
+      align="center"
+      gap={8}
+      flex={1}
+      wrap="nowrap"
+      h="100%"
+      w="100%"
+      px={8}
+    >
       <Group gap={5} flex={1} wrap="nowrap">
         <Group gap={5} flex={1} wrap="nowrap">
           <Renderer visible={workspaceLayout.isNavbarCollapsed}>
             <ActionIcon
               variant="subtle"
               color="gray.6"
-              onClick={() => workspaceLayout.setNavigationWidth(workspaceLayoutConfig.defaultNavigationExpandedWidth)}
+              onClick={() =>
+                workspaceLayout.setNavigationWidth(
+                  workspaceLayoutConfig.defaultNavigationExpandedWidth
+                )
+              }
             >
               <IconLayoutSidebarLeftExpand strokeWidth={1.5} size={20} />
             </ActionIcon>
@@ -100,8 +124,20 @@ export const WorkspaceHeader: FC = memo(() => {
           <WorkspaceHeaderBreadcrumbs />
         </Group>
 
-        <Group wrap="nowrap" justify="center" gap={5} onClick={spotlight.open} style={{ cursor: "pointer" }} flex={1}>
-          <Card bg={rgba(configs.backgroundColors[colorScheme], 0.7)} p={0} radius={100}>
+        <Group
+          wrap="nowrap"
+          justify="center"
+          gap={5}
+          onClick={spotlight.open}
+          style={{ cursor: "pointer" }}
+          flex={1}
+        >
+          <Card
+            shadow="none"
+            bg={rgba(configs.backgroundColors[colorScheme], 0.7)}
+            p={0}
+            radius={100}
+          >
             <Group gap={5} pl={5} align="center">
               <ThemeIcon variant="subtle" color="gray.6">
                 <IconSearch size={16} strokeWidth={1.5} />
@@ -119,7 +155,11 @@ export const WorkspaceHeader: FC = memo(() => {
         </Group>
 
         <Group flex={1} justify="end" gap={8} wrap="nowrap">
-          {layout.components.navigation ? layout.components.navigation : <WorkspaceHeaderShortcuts />}
+          {layout.components.navigation ? (
+            layout.components.navigation
+          ) : (
+            <WorkspaceHeaderShortcuts />
+          )}
         </Group>
       </Group>
 

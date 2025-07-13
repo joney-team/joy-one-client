@@ -35,6 +35,7 @@ export const NotificationCard: FC<{
       <Card
         p={8}
         withBorder
+        shadow="none"
         style={{
           cursor: "pointer",
           borderColor: readed ? "var(--mantine-color-default-hover)" : color(`${_color}.2`),
@@ -51,7 +52,9 @@ export const NotificationCard: FC<{
                 {translateNotification(notification.title, notification.titleParams)}
               </Text>
               {notification.body && (
-                <Text fz={em(12)}>{translateNotification(notification.body, notification.bodyParams)}</Text>
+                <Text fz={em(12)}>
+                  {translateNotification(notification.body, notification.bodyParams)}
+                </Text>
               )}
 
               <Text fz={em(10)} c="gray">
