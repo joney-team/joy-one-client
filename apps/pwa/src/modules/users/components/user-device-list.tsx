@@ -1,21 +1,29 @@
 "use client";
 
+import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
+import { useAuth } from "@/modules/auth/auth-context";
 import { getUserDevices } from "@/modules/devices/devices-service";
 import { useUserEventsListner } from "@/modules/events/event-service";
 import { t } from "@/modules/lang/lang-service";
+import { onError } from "@/utils/exceptions.utils";
 import { useList } from "@/utils/use-list.util";
-import { SimpleGrid, Skeleton } from "@mantine/core";
-import { IconDevices } from "@tabler/icons-react";
+import { ActionIcon, Group, SimpleGrid, Skeleton } from "@mantine/core";
+import { IconDevices, IconLogout, IconRefresh } from "@tabler/icons-react";
 import { Fragment } from "react";
 import { UserDeviceCard } from "./user-device-card";
 
 export const UserDeviceList = () => {
+  const auth = useAuth();
+
   const devices = useList({
-    fetch: () => getUserDevices(),
+    fetch: () =>
+      getUserDevices({
+        sortLastActiveAt: -1,
+      }),
   });
 
   useUserEventsListner((e) => {
@@ -24,22 +32,41 @@ export const UserDeviceList = () => {
     }
   });
 
+  const onSignOutOtherDevices = async () => {
+    await auth
+      .signOutOtherDevices()
+      .then(() => devices.fetch(true))
+      .catch(onError);
+  };
+
   return (
     <Fragment>
       <SessionTitle name={t("devices")} icon={IconDevices}>
-        {/* <Renderer visible={devices.count > 1}>
-          <Button
-            size="xs"
-            fz={em(14)}
-            variant="light"
-            color="gray"
-            fw={400}
-            leftSection={<IconLogout size={16} style={{ marginRight: -5 }} />}
-            onClick={() => signOutOtherDevices().catch(onError)}
-          >
-            {t("sign_out_another_device")}
-          </Button>
-        </Renderer> */}
+        <Renderer visible={devices.count > 1}>
+          <Group gap={8}>
+            <Button
+              size="xs"
+              fz={14}
+              variant="light"
+              color="gray"
+              fw={400}
+              leftIcon={IconLogout}
+              onClick={onSignOutOtherDevices}
+            >
+              {t("sign_out_another_device")}
+            </Button>
+
+            <ActionIcon
+              w={30}
+              h={30}
+              onClick={() => devices.fetch(true, { isSilient: true })}
+              color="gray"
+              variant="light"
+            >
+              <IconRefresh size={16} strokeWidth={1.5} />
+            </ActionIcon>
+          </Group>
+        </Renderer>
       </SessionTitle>
 
       <SimpleGrid cols={1}>

@@ -13,8 +13,9 @@ import { getDeviceIdentifyId } from "./modules/devices/devices-service";
 import { eventsEmitter } from "./modules/events/event-service";
 import { type EventEntity } from "./modules/events/event-types";
 import { getAppConfig } from "./service";
-import type { AppConfig, AppMetadata } from "./types";
+import { StorageKey, type AppConfig, type AppMetadata } from "./types";
 import { v4 as uuid } from "uuid";
+import { getLocalStorage } from "./hooks/use-local-storage";
 
 const LangProvider = dynamic(() => import("@/modules/lang/lang-provider"));
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
@@ -51,7 +52,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
 
   const joinWorkspaceRoom = async (workspaceId: string) => {
     const token = await getAccessToken();
-    const deviceId = await getDeviceIdentifyId();
+    const deviceId = getLocalStorage(StorageKey.DEVICE_ID);
 
     socket.io.once("reconnect", () => {
       joinWorkspaceRoom(workspaceId);
@@ -66,7 +67,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
 
   const joinSocket = async () => {
     const token = await getAccessToken();
-    const deviceId = await getDeviceIdentifyId();
+    const deviceId = getLocalStorage(StorageKey.DEVICE_ID);
     socket.io.once("reconnect", joinSocket);
 
     socket.emit("JOIN", {

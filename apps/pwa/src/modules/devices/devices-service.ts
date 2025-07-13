@@ -16,8 +16,8 @@ export async function registerDevice() {
   });
 }
 
-export async function getUserDevices(): Promise<ResponseList<DeviceEntity>> {
-  return api.get('/devices');
+export async function getUserDevices(query?: any): Promise<ResponseList<DeviceEntity>> {
+  return api.get('/devices', { params: query });
 }
 
 export async function getDevice(): Promise<DeviceEntity | undefined> {

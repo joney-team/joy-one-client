@@ -5,15 +5,14 @@ import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
-import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
-import { useLayout } from "@/layout/layout-context";
-import { useColor } from "@/modules/theme/use-color";
 import { useAuth } from "@/modules/auth/auth-context";
-import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { EventType } from "@/modules/events/event-types";
 import { renderDate, renderFromNow, t } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
+import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
 import { getUserPublicInformation } from "@/modules/users/users-service";
 import { UserPublicInformation } from "@/modules/users/users-types";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
@@ -55,7 +54,6 @@ export let OnModalUserInformation: (userId: string) => void = () => {};
 export const ModalUserInformation: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const userId = useRef<string | null>(null);
-  const layout = useLayout();
 
   const userInformation = useFetch({
     autoFetch: false,
@@ -108,7 +106,6 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
   const { user } = props;
   const [tab, setTab] = useState<string>("activity");
 
-  const layout = useLayout();
   const workspace = useWorkspace();
   const auth = useAuth();
   const mutualWorkspace = user.mutualWorkspaces.find(

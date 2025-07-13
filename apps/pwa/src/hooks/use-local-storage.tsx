@@ -14,5 +14,5 @@ export const useLocalStorage = (key: StorageKey, defaultValue?: string | undefin
 };
 
 export const getLocalStorage = (key: StorageKey): string | null => {
-  return readLocalStorageValue({ key: key.toString() }) || null;
+  return readLocalStorageValue({ key: key.toString() }) ?? null;
 };

@@ -4,6 +4,7 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { DeviceEntity } from "@/modules/devices/devices-types";
 import { renderDate, t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import { StringUtils } from "@/utils/string.utils";
 import { Badge, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import {
   IconDeviceDesktop,
@@ -45,12 +46,19 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
               {ua.device.model || t("unknow_device")}
               {ua.device.vendor ? ` - ${ua.device.vendor}` : ""}
             </Text>
+
             {auth.device._id === device._id && (
               <Badge size="xs" color={color("primary")}>
                 {t("this_device")}
               </Badge>
             )}
           </Group>
+
+          {device.identifyId && (
+            <Text fz={em(12)} c="gray" truncate="end" maw={200}>
+              ID: {StringUtils.compact(device.identifyId, 5, 5)}
+            </Text>
+          )}
 
           {!!ua.os.name && !!ua.os.version && (
             <Text fz={em(12)} c="gray">
@@ -69,18 +77,6 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
             {t("active_at")} {dayjs(device.lastActiveAt * 1000).fromNow()} (
             {renderDate(device.lastActiveAt * 1000)})
           </Text>
-
-          {/* <Group mt={10}>
-            <Button
-              size="compact-xs"
-              variant="light"
-              color="gray"
-              fz={em(13)}
-              onClick={() => signOutOtherDevices()}
-            >
-              {t("sign_out")}
-            </Button>
-          </Group> */}
         </Stack>
       </Group>
     </Card>

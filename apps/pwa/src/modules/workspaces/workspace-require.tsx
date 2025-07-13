@@ -170,6 +170,7 @@ export const WorkspaceRequire: FC<{ workspace: WorkspaceContext }> = (props) => 
               return (
                 <Card
                   withBorder
+                  shadow="none"
                   p={12}
                   key={userMember.workspaceId}
                   onClick={() => {

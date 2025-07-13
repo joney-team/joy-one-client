@@ -82,4 +82,5 @@ export interface AuthContext {
   signInWithEmailAndPassword: (dto: AuthSignInWithEmailPasswordDto) => Promise<void>;
   registerWithEmailAndPassword: (dto: AuthSignUpWithEmailPasswordDto) => Promise<void>;
   registerNotification: () => Promise<void>;
+  signOutOtherDevices: () => Promise<void>;
 }

@@ -49,7 +49,8 @@ export interface SetDeviceLocaleDto {
 }
 
 export interface DeviceEntity extends BaseMongoEntity {
-  userAgent: string;
+  userAgent?: string;
+  identifyId: string;
   lastActiveAt: number;
   ua: UaResult;
   notificationToken?: string;

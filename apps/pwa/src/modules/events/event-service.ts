@@ -1,8 +1,11 @@
+"use client";
+
 import { ResponseList } from "@/types";
 import EventEmitter from "events";
 import { DependencyList, useEffect } from "react";
 import { api, socket } from "../apis";
 import { EventEntity, EventType, QueryEvents, UserEventDto } from "./event-types";
+import { useAuth } from "../auth/auth-context";
 
 export const eventsEmitter = new EventEmitter();
 eventsEmitter.setMaxListeners(500);
@@ -46,13 +49,15 @@ export const usePureEventsListner = (listener: (event: EventEntity) => void, dep
 }
 
 export const useUserEventsListner = (listener: (event: UserEventDto) => void, deps?: DependencyList) => {
+  const auth = useAuth();
+
   useEffect(() => {
     socket.on("USER_EVENT", listener);
 
     return () => {
       socket.removeListener("USER_EVENT", listener);
     }
-  }, deps || [])
+  }, [auth.user?._id, ...(deps || [])])
 }
 
 export function getEvents(query?: QueryEvents): Promise<ResponseList<EventEntity>> {

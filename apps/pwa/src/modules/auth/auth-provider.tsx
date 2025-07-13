@@ -15,6 +15,7 @@ import {
   onReconnected,
   removeEventsListner,
   useEventsListener,
+  useUserEventsListner,
 } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
@@ -56,7 +57,7 @@ import type {
   UserAuthResult,
 } from "./auth-types";
 import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { startAppLoading } from "@/components/app-loading/app-loading";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
@@ -294,6 +295,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     }
   };
 
+  const signOutOtherDevices = async () => {
+    const tokens = await api.post(`/auth/sign-out/other-devices`);
+    await saveTokens(tokens);
+  };
+
   const syncUserSettingToLangState = () => {
     if (!user) return;
 
@@ -377,6 +383,20 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   onReconnected(() => initialize("reconnect"), []);
   onAppChannelMessage("SIGN_OUT", onReset);
 
+  useUserEventsListner(async (event) => {
+    const deviceId = getLocalStorage(StorageKey.DEVICE_ID);
+
+    const isSignOut =
+      event.eventName === "SIGN_OUT_DEVICES" &&
+      Array.isArray(event.data?.deviceIds) &&
+      event.data?.deviceIds.includes(deviceId);
+
+    if (isSignOut) {
+      await firebaseAuth.signOut();
+      onReset();
+    }
+  });
+
   const ctx: AuthContext = {
     signInWithGoogle,
     device: device!,
@@ -389,6 +409,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     signInWithFacebook,
     registerNotification,
     signInWithGithub,
+    signOutOtherDevices,
   };
 
   return (
