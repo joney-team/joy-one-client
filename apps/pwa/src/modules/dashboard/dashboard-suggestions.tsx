@@ -3,9 +3,20 @@
 import { useApp } from "@/app.context";
 import { Renderer } from "@/components/renderer";
 import { onError } from "@/utils/exceptions.utils";
-import { ActionIcon, Card, Group, SimpleGrid, Stack, Text, em, rem } from "@mantine/core";
+import {
+  ActionIcon,
+  Anchor,
+  Card,
+  Group,
+  Image,
+  SimpleGrid,
+  Stack,
+  Text,
+  em,
+  rem,
+} from "@mantine/core";
 import { IconBell, IconX } from "@tabler/icons-react";
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../auth/auth-context";
 import { useColor } from "../theme/use-color";
 import { t } from "../lang/lang-service";
@@ -15,6 +26,79 @@ import { onActionLoad } from "@/utils/actions";
 import { useLayout } from "@/layout/layout-context";
 import { OnInstallWebAppTutorial } from "@/modals/modal-install-web-app-tutorial";
 import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
+import { modals } from "@mantine/modals";
+import { Button } from "@/components/buttons/button";
+
+interface SuggestionItemProps extends Suggestion {
+  onRefresh: () => void;
+  onIgnore: () => void;
+}
+
+const SuggestionItem: FC<SuggestionItemProps> = (props) => {
+  const color = useColor();
+  const { title, message, image } = props;
+
+  const onClick = async () => {
+    try {
+      await props.onClick();
+      props.onRefresh();
+    } catch (error) {
+      onError(error);
+    }
+  };
+
+  useEffect(() => {
+    if (props.onRendered) {
+      const timer = setTimeout(() => {
+        props.onRendered?.();
+      }, 500);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [props.onRendered]);
+
+  return (
+    <Card
+      bg={color(props.bg || "primary.5")}
+      p={10}
+      style={{ cursor: "pointer" }}
+      onClick={onClick}
+    >
+      <Group justify="space-between" align="start" wrap="nowrap">
+        <Group wrap="nowrap">
+          <img src={image} style={{ width: 50, height: 50, objectFit: "contain" }} />
+
+          <Stack gap={0}>
+            <Text fw={700} fz={em(15)} c="white">
+              {t(title)}
+            </Text>
+            <Stack fz={rem(12)} c="white">
+              {message}
+            </Stack>
+          </Stack>
+        </Group>
+
+        <Renderer visible={!props.notIgnore}>
+          <ActionIcon
+            variant="transparent"
+            color="white"
+            mt={-10}
+            mr={-10}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              props.onIgnore();
+            }}
+          >
+            <IconX size={16} />
+          </ActionIcon>
+        </Renderer>
+      </Group>
+    </Card>
+  );
+};
 
 interface Suggestion {
   id: string;
@@ -24,6 +108,7 @@ interface Suggestion {
   bg?: any;
   notIgnore?: boolean;
   onClick: () => Promise<void> | void;
+  onRendered?: () => void;
 }
 
 export const DashboardSuggestions: FC = () => {
@@ -48,6 +133,11 @@ export const DashboardSuggestions: FC = () => {
       !auth.device.notificationToken &&
       !ignored.includes("notification")
     ) {
+      const onCloseModal = (isIgnore = false) => {
+        modals.close("modal_turn_on_notification");
+        if (isIgnore) localStorage.setItem("ignore_modal_noti", "true");
+      };
+
       output.push({
         id: "notification",
         title: "turn_on_notification",
@@ -59,6 +149,44 @@ export const DashboardSuggestions: FC = () => {
             icon: IconBell,
             process: () => auth.registerNotification(),
           }),
+        onRendered: () => {
+          const ignoreModal = localStorage.getItem("ignore_modal_noti");
+          if (ignoreModal) return;
+
+          modals.open({
+            modalId: "modal_turn_on_notification",
+            withCloseButton: false,
+            onClose: () => onCloseModal(),
+            children: (
+              <Stack justify="center" align="center" py={8}>
+                <Image src="/images/notification.png" w={100} h={100} />
+                <Stack gap={3}>
+                  <Text fw={600} ta="center" fz={20} tt="uppercase">
+                    {t("turn_on_notification")}
+                  </Text>
+                  <Text ta="center" fw={300}>
+                    {t("turn_on_notification_notice_2")}
+                  </Text>
+                </Stack>
+
+                <Button
+                  action
+                  mt={15}
+                  onClick={async () => {
+                    await auth.registerNotification();
+                    onCloseModal();
+                  }}
+                >
+                  {t("confirm")}
+                </Button>
+
+                <Anchor fz={14} c="gray" onClick={() => onCloseModal(true)}>
+                  {t("skip")}
+                </Anchor>
+              </Stack>
+            ),
+          });
+        },
       });
     }
 
@@ -80,6 +208,8 @@ export const DashboardSuggestions: FC = () => {
     ignored,
     version,
   ]);
+
+  onAppChannelMessage("DashboardSuggestionsRefresh", () => setVersion((v) => v + 1));
 
   // const initialize = async () => {
   //   setSuggestions(s => s.filter(v => !isIgnored(v.id)));
@@ -199,36 +329,6 @@ export const DashboardSuggestions: FC = () => {
 
   if (suggestions.length <= 0) return null;
 
-  // return (
-  //   <Stack gap={10}>
-  //     <SessionTitle name={t('sugesstions')} icon={IconDirections} />
-  //     <SimpleGrid cols={viewport.view === 'desktop' ? 3 : 1}>
-  //       {workspace.balance.pendingPayment < 0 && <SuggestionItem
-  //         id="pending-payment"
-  //         bg="red.6"
-  //         title={t("pending_payment_suggesstion_title")}
-  //         message={t("pending_payment_suggesstion_content")}
-  //         image='/images/pending-payment.png'
-  //         onClick={() => {
-  //           if (workspace.permissions[WorkspacePermission.WORKSPACE_BILLINGS_MANAGER]) {
-  //             router.push(`/workspace-billings`);
-  //           } else {
-  //             onInfo(t("pending_payment_member_message"));
-  //           }
-  //         }}
-  //         notIgnore
-  //         onRefresh={initialize}
-  //       />}
-
-  //       {suggestions.map((s) => (
-  //         <SuggestionItem key={s.id} {...s} onRefresh={initialize} />
-  //       ))}
-  //     </SimpleGrid>
-  //   </Stack>
-  // )
-
-  onAppChannelMessage("DashboardSuggestionsRefresh", () => setVersion((v) => v + 1));
-
   return (
     <SimpleGrid cols={{ base: 1, md: 3 }}>
       {suggestions.map((s) => (
@@ -245,64 +345,5 @@ export const DashboardSuggestions: FC = () => {
         />
       ))}
     </SimpleGrid>
-  );
-};
-
-interface SuggestionItemProps extends Suggestion {
-  onRefresh: () => void;
-  onIgnore: () => void;
-}
-
-const SuggestionItem: FC<SuggestionItemProps> = (props) => {
-  const color = useColor();
-  const { title, message, image } = props;
-
-  const onClick = async () => {
-    try {
-      await props.onClick();
-      props.onRefresh();
-    } catch (error) {
-      onError(error);
-    }
-  };
-
-  return (
-    <Card
-      bg={color(props.bg || "primary.5")}
-      p={10}
-      style={{ cursor: "pointer" }}
-      onClick={onClick}
-    >
-      <Group justify="space-between" align="start" wrap="nowrap">
-        <Group wrap="nowrap">
-          <img src={image} style={{ width: 50, height: 50, objectFit: "contain" }} />
-
-          <Stack gap={0}>
-            <Text fw={700} fz={em(15)} c="white">
-              {t(title)}
-            </Text>
-            <Stack fz={rem(12)} c="white">
-              {message}
-            </Stack>
-          </Stack>
-        </Group>
-
-        <Renderer visible={!props.notIgnore}>
-          <ActionIcon
-            variant="transparent"
-            color="white"
-            mt={-10}
-            mr={-10}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              props.onIgnore();
-            }}
-          >
-            <IconX size={16} />
-          </ActionIcon>
-        </Renderer>
-      </Group>
-    </Card>
   );
 };

@@ -6,7 +6,7 @@ import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { getLocaleClient, t } from "@/modules/lang/lang-service";
+import { getClientLocale, t } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onErrorLog } from "@/utils/exceptions.utils";
 import { parseThemeColor, useMantineTheme } from "@mantine/core";
@@ -95,7 +95,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
             color: parsedPrimaryColor.value,
             brandName: workspace.userMember.workspace.name,
             brandLogo: workspace.userMember.workspace.logo,
-            locale: workspace.userMember.workspace.locale || getLocaleClient(),
+            locale: workspace.userMember.workspace.locale || getClientLocale(),
             position: "right",
             welcomMessage: t("welcome_message_placeholder", {
               workspaceName: workspace.userMember.workspace.name,

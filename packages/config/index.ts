@@ -10,16 +10,16 @@ export interface EnvironmentConfig {
 
 const environmentConfigs: Record<string, EnvironmentConfig> = {
   development: {
-    // PUBLIC_URL: "http://localhost:3000",
-    // APP_URL: "http://localhost:3000",
-    // API_CLIENT_SIDE_URL: "http://localhost:4000",
-    // API_SERVER_SIDE_URL: "http://localhost:4000",
-    // SECRET_KEY: "wzsjaledyu",
-    PUBLIC_URL: "https://joyone.vn",
-    APP_URL: "https://app.joyone.vn",
-    API_CLIENT_SIDE_URL: "https://api.joyone.vn",
-    API_SERVER_SIDE_URL: "http://jo-server:4000",
+    PUBLIC_URL: "http://localhost:3000",
+    APP_URL: "http://localhost:3000",
+    API_CLIENT_SIDE_URL: "http://localhost:4000",
+    API_SERVER_SIDE_URL: "http://localhost:4000",
     SECRET_KEY: "wzsjaledyu",
+    // PUBLIC_URL: "https://joyone.vn",
+    // APP_URL: "https://app.joyone.vn",
+    // API_CLIENT_SIDE_URL: "https://api.joyone.vn",
+    // API_SERVER_SIDE_URL: "http://jo-server:4000",
+    // SECRET_KEY: "wzsjaledyu",
   },
   staging: {
     PUBLIC_URL: "https://staging.joyone.vn",

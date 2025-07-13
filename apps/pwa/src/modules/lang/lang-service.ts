@@ -9,7 +9,7 @@ import { getGlobal } from '../../global';
 import { WorkspaceSettingEntity } from '../workspace-settings/workspace-settings-types';
 import { Dictionary, LangState, Locale, LocaleConfig } from './lang-types';
 
-export const getLocaleClient = () => {
+export const getClientLocale = (): Locale => {
   let locale: Locale | undefined = undefined;
 
   try {
@@ -111,7 +111,7 @@ export const num = (value: any, args?: { roundPrecision?: number, type?: 'money'
       if (_val === 1) return `${_val} ${t('hr')}`;
       return `${_val} ${t('hrs')}`;
     }
-    return (+_value).toLocaleString(getLocaleClient());
+    return (+_value).toLocaleString(getClientLocale());
   }
 
   return `${_args.prefix || ''}${render()}${_args.suffix || ''}`.trim();
@@ -128,8 +128,8 @@ export const getTimeFormat = () => {
 
 export const getDateFormat = () => {
   const state = getLangState();
-  if (state.dateFormat === 'auto') return defaultDateFormats[getLocaleClient()];
-  return state.dateFormat || defaultDateFormats[getLocaleClient()];
+  if (state.dateFormat === 'auto') return defaultDateFormats[getClientLocale()];
+  return state.dateFormat || defaultDateFormats[getClientLocale()];
 };
 
 export const getDateTimeFormat = () => {

@@ -2,10 +2,20 @@ import { useColor } from "@/modules/theme/use-color";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
-import { getLocaleClient, t } from "@/modules/lang/lang-service";
+import { getClientLocale, t } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
 import { TagType } from "@/modules/tags/tags-types";
-import { ActionIcon, em, getThemeColor, Group, rgba, Stack, Text, Tooltip, useMantineTheme } from "@mantine/core";
+import {
+  ActionIcon,
+  em,
+  getThemeColor,
+  Group,
+  rgba,
+  Stack,
+  Text,
+  Tooltip,
+  useMantineTheme,
+} from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import {
   IconCalendarDown,
@@ -54,7 +64,9 @@ export const SidebarHead: FC = () => {
       <Text fz={em(13)}>{t("name")}</Text>
 
       <Group gap={5}>
-        <Tooltip label={t(gantt.state.isHideEstimateTime ? "show_estimate_time" : "hide_estimate_time")}>
+        <Tooltip
+          label={t(gantt.state.isHideEstimateTime ? "show_estimate_time" : "hide_estimate_time")}
+        >
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -66,7 +78,11 @@ export const SidebarHead: FC = () => {
               });
             }}
           >
-            {gantt.state.isHideEstimateTime ? <IconHourglassOff size={16} /> : <IconHourglassHigh size={16} />}
+            {gantt.state.isHideEstimateTime ? (
+              <IconHourglassOff size={16} />
+            ) : (
+              <IconHourglassHigh size={16} />
+            )}
           </ActionIcon>
         </Tooltip>
 
@@ -79,7 +95,11 @@ export const SidebarHead: FC = () => {
               gantt.toggleSisplayTaskStatusColor();
             }}
           >
-            {gantt.state.displayTaskStatusColor ? <IconDropletFilled size={16} /> : <IconDroplet size={16} />}
+            {gantt.state.displayTaskStatusColor ? (
+              <IconDropletFilled size={16} />
+            ) : (
+              <IconDroplet size={16} />
+            )}
           </ActionIcon>
         </Tooltip>
 
@@ -123,7 +143,11 @@ export const BodyHead: FC = () => {
   const gantt = useGantt();
   const layout = useLayout();
   const workspaceLayout = useWorkspaceLayout();
-  const weeks = getWeeksFromRange(gantt.state.fromDate, gantt.state.toDate, getLocaleClient() === Locale.VI);
+  const weeks = getWeeksFromRange(
+    gantt.state.fromDate,
+    gantt.state.toDate,
+    getClientLocale() === Locale.VI
+  );
 
   return (
     <Stack
@@ -156,7 +180,9 @@ export const BodyHead: FC = () => {
               key={index}
               w={`${gantt.state.columnSize * week.dates.length}px`}
               maw={`${gantt.state.columnSize * week.dates.length}px`}
-              style={{ borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}` }}
+              style={{
+                borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}`,
+              }}
               h="100%"
               justify="center"
               px={10}
@@ -168,12 +194,14 @@ export const BodyHead: FC = () => {
                   {(function () {
                     const isSameMonth = dayjs(week.from).isSame(week.to, "month");
                     if (isSameMonth) {
-                      return `${dayjs(week.from).format("D")} - ${dayjs(week.to).format("D")} ${dayjs(week.from).format(
-                        "MMMM"
-                      )}`;
+                      return `${dayjs(week.from).format("D")} - ${dayjs(week.to).format(
+                        "D"
+                      )} ${dayjs(week.from).format("MMMM")}`;
                     }
 
-                    return `${dayjs(week.from).format("MMM D")} - ${dayjs(week.to).format("MMM D")}`;
+                    return `${dayjs(week.from).format("MMM D")} - ${dayjs(week.to).format(
+                      "MMM D"
+                    )}`;
                   })()}
                 </Text>
               )}
@@ -194,7 +222,9 @@ export const BodyHead: FC = () => {
             <Group
               key={index}
               w={gantt.state.columnSize}
-              style={{ borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}` }}
+              style={{
+                borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}`,
+              }}
               h="100%"
               justify="center"
             >
@@ -245,7 +275,9 @@ export const GridColumns: FC = () => {
               borderLeft: first
                 ? undefined
                 : `${isToday ? 2 : 1}px solid ${
-                    isToday ? getThemeColor(color("primary.3"), theme) : workspaceLayout.dividerColor
+                    isToday
+                      ? getThemeColor(color("primary.3"), theme)
+                      : workspaceLayout.dividerColor
                   }`,
               position: "relative",
             }}
@@ -273,10 +305,10 @@ export const SidebarRowSticky: FC<PropsWithChildren & { visible?: boolean }> = (
         background: `linear-gradient(to right, ${rgba("var(--mantine-color-body)", 0)}, ${rgba(
           "var(--mantine-color-body)",
           1
-        )}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba(
+        )}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba(
           "var(--mantine-color-body)",
           1
-        )}, ${rgba("var(--mantine-color-body)", 1)})`,
+        )}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba("var(--mantine-color-body)", 1)})`,
       }}
     >
       {props.children}

@@ -18,6 +18,7 @@
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@fingerprintjs/fingerprintjs": "^4.6.2",
     "@joy-one-client/apis": "workspace:*",
     "@joy-one-client/config": "workspace:*",
     "@joy-one-client/utils": "workspace:*",

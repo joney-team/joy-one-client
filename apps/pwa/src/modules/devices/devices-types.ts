@@ -36,7 +36,7 @@ interface UaResult {
 }
 
 export interface RegisterDeviceDto {
-  userAgent: string;
+  identifyId: string;
   locale?: Locale;
 }
 

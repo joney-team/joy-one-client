@@ -1,18 +1,18 @@
-import { getLocalStorage } from "@/hooks/use-local-storage";
-import { getLocaleClient } from "@/modules/lang/lang-service";
+import { getClientLocale } from "@/modules/lang/lang-service";
 import { ResponseList, StorageKey } from "@/types";
 import { isServer } from "@/utils/common.utils";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { AxiosError } from "axios";
 import { api } from "../apis";
 import type { DeviceEntity, RegisterDeviceDto, SetDeviceLocaleDto, SetDeviceNotificationTokenDto } from "./devices-types";
 
-export async function registerDevice(): Promise<DeviceEntity> {
-  const userAgent = navigator.userAgent;
-  const dto: RegisterDeviceDto = {
-    userAgent,
-    locale: getLocaleClient(),
-  }
-  return api.post('/devices/register', dto);
+export async function registerDevice() {
+  const identifyId = await getDeviceIdentifyId();
+
+  return api.post<DeviceEntity, RegisterDeviceDto>('/devices', {
+    identifyId,
+    locale: getClientLocale(),
+  });
 }
 
 export async function getUserDevices(): Promise<ResponseList<DeviceEntity>> {
@@ -20,12 +20,12 @@ export async function getUserDevices(): Promise<ResponseList<DeviceEntity>> {
 }
 
 export async function getDevice(): Promise<DeviceEntity | undefined> {
-  const deviceId = getDeviceId();
-  if (!deviceId) return undefined;
+  const identifyId = await getDeviceIdentifyId();
+  if (!identifyId) return undefined;
 
   return new Promise((resolve) => {
     const action = () => {
-      api.get(`/devices/${deviceId}`)
+      api.get(`/devices/${identifyId}`)
         .then((res) => resolve(res))
         .catch((err) => {
           if (err instanceof AxiosError) {
@@ -42,16 +42,17 @@ export async function getDevice(): Promise<DeviceEntity | undefined> {
   })
 }
 
-export const getDeviceId = () => getLocalStorage(StorageKey.DEVICE_ID) as string;
-export const setDeviceId = (deviceId: string) => localStorage.setItem(StorageKey.DEVICE_ID, deviceId);
-export const removeDeviceId = () => localStorage.removeItem(StorageKey.DEVICE_ID);
+export const getDeviceIdentifyId = async (): Promise<string> => {
+  const { get } = await FingerprintJS.load();
+  const { visitorId } = await get({});
+  return visitorId;
+};
 
 export async function initializeDevice() {
   // Device
   let device = await getDevice();
   if (!device) device = await registerDevice();
-  setDeviceId(device._id);
-
+  localStorage.setItem(StorageKey.DEVICE_ID, device._id);
   return device;
 }
 

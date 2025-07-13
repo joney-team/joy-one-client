@@ -18,7 +18,7 @@ import {
 } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { getLocaleClient, t } from "@/modules/lang/lang-service";
+import { getClientLocale, t } from "@/modules/lang/lang-service";
 import { LangState } from "@/modules/lang/lang-types";
 import { showInAppNotification } from "@/modules/notifications/notification-service";
 import { NotificationEntity } from "@/modules/notifications/notification-types";
@@ -73,7 +73,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   const syncLocaleDeviceToUser = async (_user: UserEntity) => {
     try {
-      const currentLocale = getLocaleClient();
+      const currentLocale = getClientLocale();
       if (_user.locale !== currentLocale) {
         await setUserLocale(_user.locale);
       }
@@ -296,9 +296,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   const syncUserSettingToLangState = () => {
     if (!user) return;
-    if (user.settings.locale && user.settings.locale !== lang.locale) {
-      lang.setLocale(user.settings.locale, false);
-    }
 
     const keys: (keyof LangState)[] = [
       "isStartOfWeekSunday",

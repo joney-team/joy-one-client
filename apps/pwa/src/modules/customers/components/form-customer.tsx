@@ -27,7 +27,7 @@ import { DateInput } from "@/components/inputs/date-input";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { medicalHistoryOptions } from "@/configs/medical.config";
 import { useRouter } from "@/hooks/use-router";
-import { getLocaleClient, t } from "@/modules/lang/lang-service";
+import { getClientLocale, t } from "@/modules/lang/lang-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Gender } from "@/types";
@@ -189,7 +189,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
             label={t("medical_history")}
             leftSection={<IconClipboardHeart strokeWidth={1.2} size={18} />}
             style={{ flex: 1 }}
-            data={medicalHistoryOptions[getLocaleClient()]}
+            data={medicalHistoryOptions[getClientLocale()]}
             {...form.getInputProps("medicalHistory")}
           />
         </Renderer>

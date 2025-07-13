@@ -3,7 +3,7 @@
 import { onReconnected } from "@/modules/events/event-service";
 import { deleteCookie, setCookie } from "cookies-next/client";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
-import { getLocaleClient } from "./lang-service";
+import { getClientLocale } from "./lang-service";
 import { LangState, Locale, LocaleConfig } from "./lang-types";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 
@@ -31,7 +31,7 @@ import { setUserLocale } from "../users/users-service";
 import { Context } from "./lang-context";
 
 const LangProvider: FC<PropsWithChildren> = (props) => {
-  const [locale, _setLocale] = useState(getLocaleClient());
+  const [locale, _setLocale] = useState(getClientLocale());
   const [config, setConfig] = useState<LocaleConfig>({} as LocaleConfig);
   const [state, setState] = useState<LangState>({} as LangState);
   const global = getGlobal();
@@ -71,14 +71,12 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
     }
   };
 
-  const setLocale = async (locale: Locale | null = null, saveUserLocale = true) => {
-    if (saveUserLocale) setUserLocale(locale);
-
+  const setLocale = async (locale: Locale | null = null) => {
     if (locale) setCookie(StorageKey.LOCALE, locale, { maxAge: 60 * 60 * 24 * 400 });
     else deleteCookie(StorageKey.LOCALE);
 
     startAppLoading("lang");
-    await initialize(locale || getLocaleClient());
+    await initialize(locale || getClientLocale());
   };
 
   // Sync week start for all locales
@@ -86,11 +84,11 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
   Object.values(Locale).forEach((v) => dayjs.updateLocale(v, { weekStart }));
 
   // Reinitialize when reconnected
-  onReconnected(() => initialize(getLocaleClient()), [locale]);
+  onReconnected(() => initialize(getClientLocale()), [locale]);
 
   // Initialize when component is mounted
   useEffect(() => {
-    initialize(getLocaleClient());
+    initialize(getClientLocale());
   }, []);
 
   return (

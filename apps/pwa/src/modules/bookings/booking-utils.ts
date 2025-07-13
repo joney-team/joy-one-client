@@ -1,5 +1,5 @@
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { getLocaleClient, t } from "../lang/lang-service";
+import { getClientLocale, t } from "../lang/lang-service";
 import { BookingEntity } from "./booking-types";
 
 export function getBookingDate(dateInSeconds: number, original?: boolean) {
@@ -8,13 +8,13 @@ export function getBookingDate(dateInSeconds: number, original?: boolean) {
 
   const isToday = DateTimeUtils.isToday(_date);
   const isTomorrow = DateTimeUtils.isTomorrow(_date);
-  const time = _date.toLocaleTimeString(getLocaleClient())
+  const time = _date.toLocaleTimeString(getClientLocale())
     .split(':')
     .map(v => v.padStart(2, '0'))
     .slice(0, 2)
     .join(':');
 
-  const date = _date.toLocaleDateString(getLocaleClient())
+  const date = _date.toLocaleDateString(getClientLocale())
     .split('/')
     .map(v => v.padStart(2, '0'))
     .join('/');

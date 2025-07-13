@@ -47,6 +47,7 @@ export const ButtonLanguage: FC = () => {
             return (
               <Card
                 withBorder
+                shadow="none"
                 key={locale}
                 p={10}
                 style={{ cursor: "pointer" }}

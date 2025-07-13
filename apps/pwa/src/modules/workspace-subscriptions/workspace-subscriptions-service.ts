@@ -1,5 +1,5 @@
 import { api } from "../apis";
-import { getLocaleClient } from "../lang/lang-service";
+import { getClientLocale } from "../lang/lang-service";
 import { CalculateWorkspaceSubscriptionBillingResponse, CalculateWorkspaceSubscriptionBillingsDto, SelectWorkspaceSubscriptionDto, WorkspaceSubscriptionEntity } from "./workspace-subscriptions-types";
 
 export async function getWorkspaceSubscription() {
@@ -17,5 +17,5 @@ export async function calculateWorkspaceSubscriptionBillings(dto: CalculateWorks
 export const renderSubscriptionNum = (num: number, format?: (value: any) => string) => {
   if (num <= 0) return 'Unlimited';
   if (format) return format(num);
-  return num.toLocaleString(getLocaleClient());
+  return num.toLocaleString(getClientLocale());
 }

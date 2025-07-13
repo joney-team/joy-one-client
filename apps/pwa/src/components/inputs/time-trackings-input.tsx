@@ -272,7 +272,7 @@ export const TimeTrackingGroupByUser: FC<{
             .filter((v) => !!v.endAt)
             .map((t) => {
               return (
-                <Card withBorder p={10} key={props.user.userId + t.id}>
+                <Card withBorder shadow="none" p={10} key={props.user.userId + t.id}>
                   <Group justify="space-between">
                     <Group gap={0}>
                       <Stack gap={3} align="center">

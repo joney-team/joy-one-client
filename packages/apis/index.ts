@@ -11,6 +11,7 @@ interface ApiInstanceOptions {
   getWorkspaceId?: () => string | null;
   getDeviceId?: () => string | null;
   getSessionId?: () => string | null;
+  getLocale?: () => string | null;
 }
 
 export class ApiInstance {
@@ -74,6 +75,9 @@ export class ApiInstance {
 
     const deviceId = this.options.getDeviceId?.();
     if (deviceId) headers['X-Device-Id'] = deviceId;
+
+    const locale = this.options.getLocale?.();
+    if (locale) headers['Accept-Language'] = locale;
 
     return {
       ...(config ?? {}),

@@ -9,7 +9,7 @@ import { getGlobal } from "./global";
 import { socket } from "./modules/apis";
 import { QueryProvider } from "./modules/apis/query";
 import { getAccessToken } from "./modules/auth/auth-service";
-import { getDeviceId } from "./modules/devices/devices-service";
+import { getDeviceIdentifyId } from "./modules/devices/devices-service";
 import { eventsEmitter } from "./modules/events/event-service";
 import { type EventEntity } from "./modules/events/event-types";
 import { getAppConfig } from "./service";
@@ -51,6 +51,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
 
   const joinWorkspaceRoom = async (workspaceId: string) => {
     const token = await getAccessToken();
+    const deviceId = await getDeviceIdentifyId();
 
     socket.io.once("reconnect", () => {
       joinWorkspaceRoom(workspaceId);
@@ -59,17 +60,18 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
     socket.emit("JOIN_WORKSPACE", {
       workspaceId,
       token,
-      deviceId: getDeviceId(),
+      deviceId,
     });
   };
 
   const joinSocket = async () => {
     const token = await getAccessToken();
+    const deviceId = await getDeviceIdentifyId();
     socket.io.once("reconnect", joinSocket);
 
     socket.emit("JOIN", {
       token,
-      deviceId: getDeviceId(),
+      deviceId,
     });
   };
 

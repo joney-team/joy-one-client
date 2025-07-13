@@ -1,5 +1,5 @@
 import { api } from "../apis";
-import { getDeviceId } from "../devices/devices-service";
+import { getDeviceIdentifyId } from "../devices/devices-service";
 import { Locale } from "../lang/lang-types";
 import { SignOutDto, UpdateUserPasswordDto, UserPublicInformation } from "./users-types";
 
@@ -8,7 +8,8 @@ export async function signOut() {
 }
 
 export async function signOutOtherDevices() {
-  const dto: SignOutDto = { deviceId: getDeviceId()! };
+  const deviceId = await getDeviceIdentifyId();
+  const dto: SignOutDto = { deviceId };
   return api.post(`/auth/sign-out/other-devices`, dto)
 }
 
