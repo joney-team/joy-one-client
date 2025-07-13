@@ -5,6 +5,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { AxiosError } from "axios";
 import { api } from "../apis";
 import type { DeviceEntity, RegisterDeviceDto, SetDeviceLocaleDto, SetDeviceNotificationTokenDto } from "./devices-types";
+import { v4 as uuid } from "uuid";
 
 export async function registerDevice() {
   const identifyId = await getDeviceIdentifyId();
@@ -46,11 +47,16 @@ export const getDeviceIdentifyId = async (): Promise<string> => {
   const deviceIdentifyId = localStorage.getItem(StorageKey.DEVICE_IDENTIFY_ID);
   if (deviceIdentifyId) return deviceIdentifyId;
 
-  const { get } = await FingerprintJS.load();
-  const { visitorId } = await get();
-  localStorage.setItem(StorageKey.DEVICE_IDENTIFY_ID, visitorId);
-  
-  return visitorId;
+  try {
+    const { get } = await FingerprintJS.load();
+    const { visitorId } = await get();
+    localStorage.setItem(StorageKey.DEVICE_IDENTIFY_ID, visitorId);
+    return visitorId;
+  } catch {
+    const visitorId = uuid();
+    localStorage.setItem(StorageKey.DEVICE_IDENTIFY_ID, visitorId);
+    return visitorId;
+  }
 };
 
 export async function initializeDevice() {

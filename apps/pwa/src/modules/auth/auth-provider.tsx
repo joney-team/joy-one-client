@@ -334,7 +334,10 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   );
 
   useEffect(() => {
-    if (app.isInitialized) initialize("init");
+    if (app.isInitialized) {
+      setIsInitialized(false);
+      initialize("init");
+    }
   }, [app.isInitialized]);
 
   onAppChannelMessage(
