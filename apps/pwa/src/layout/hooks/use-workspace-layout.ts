@@ -1,3 +1,5 @@
+"use client";
+
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { StorageKey } from "@/types";
 import { useLocalStorage } from "@mantine/hooks";

@@ -65,12 +65,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
 
   const joinSocket = async () => {
     const token = await getAccessToken();
-
-    socket.once("JOINED", () => {});
-
-    socket.io.once("reconnect", () => {
-      joinSocket();
-    });
+    socket.io.once("reconnect", joinSocket);
 
     socket.emit("JOIN", {
       token,
@@ -88,10 +83,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
 
     socket.on("EVENT_NEW", onEventNew);
 
-    const onReconnect = () => {
-      eventsEmitter.emit("RECONNECTED");
-    };
-
+    const onReconnect = () => eventsEmitter.emit("RECONNECTED");
     socket.io.on("reconnect", onReconnect);
 
     return () => {

@@ -14,6 +14,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import { onActionLoad } from "@/utils/actions";
 import { useLayout } from "@/layout/layout-context";
 import { OnInstallWebAppTutorial } from "@/modals/modal-install-web-app-tutorial";
+import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
 
 interface Suggestion {
   id: string;
@@ -226,6 +227,8 @@ export const DashboardSuggestions: FC = () => {
   //   </Stack>
   // )
 
+  onAppChannelMessage("DashboardSuggestionsRefresh", () => setVersion((v) => v + 1));
+
   return (
     <SimpleGrid cols={{ base: 1, md: 3 }}>
       {suggestions.map((s) => (
@@ -234,6 +237,7 @@ export const DashboardSuggestions: FC = () => {
           {...s}
           onRefresh={() => {
             setVersion((prev) => prev + 1);
+            postAppChannelMessage("DashboardSuggestionsRefresh");
           }}
           onIgnore={() => {
             setIgnored((prev) => [...prev, s.id]);

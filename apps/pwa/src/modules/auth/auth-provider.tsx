@@ -15,7 +15,6 @@ import {
   onReconnected,
   removeEventsListner,
   useEventsListener,
-  useUserEventsListner,
 } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
@@ -56,6 +55,9 @@ import type {
   AuthTokenResult,
   UserAuthResult,
 } from "./auth-types";
+import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import { startAppLoading } from "@/components/app-loading/app-loading";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
@@ -67,6 +69,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [user, setUser] = useState<UserAuthResult>();
   const [device, setDevice] = useState<DeviceEntity>();
+  const [, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
   const syncLocaleDeviceToUser = async (_user: UserEntity) => {
     try {
@@ -123,11 +126,16 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       if (accessToken) {
         _user = await api.get(`/auth`);
         setUser(_user);
+        startAppLoading("initial-workspace");
       }
 
       // Sync locale device to user
       if (_user && !_user.locale) {
         syncLocaleDeviceToUser(_user!);
+      }
+
+      if (type === "auth") {
+        postAppChannelMessage("SIGN_IN");
       }
     } catch (error) {
       console.log(`Error when initializing auth > ${error}`);
@@ -137,13 +145,18 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     return _user;
   };
 
+  const onReset = () => {
+    setUser(undefined);
+    setWorkspaceId(undefined);
+    router.replace("/");
+  };
+
   const signOut = async () => {
     try {
       await Promise.all([api.post(`/auth/sign-out`), firebaseAuth.signOut()]);
       clearTokens();
-      localStorage.removeItem(StorageKey.WORKSPACE_ID);
-      setUser(undefined);
-      router.replace("/");
+      onReset();
+      postAppChannelMessage("SIGN_OUT");
     } catch (error) {
       onError(error);
     }
@@ -323,18 +336,17 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     [user?._id]
   );
 
-  useUserEventsListner(
-    (e) => {
-      if (device && e.eventName === "SIGN_OUT" && e.data?.deviceId === device?._id) {
-        signOut();
-      }
-    },
-    [device, signOut]
-  );
-
   useEffect(() => {
     if (app.isInitialized) initialize("init");
   }, [app.isInitialized]);
+
+  onAppChannelMessage(
+    "SIGN_IN",
+    () => {
+      if (app.isInitialized) initialize("init");
+    },
+    [app.isInitialized]
+  );
 
   useEffect(() => {
     if (!!device?.notificationToken && "Notification" in window) {
@@ -353,8 +365,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   }, [device?.notificationToken, device?.locale, lang.locale]);
 
   useEffect(() => {
-    if (device) app.joinSocket();
-  }, [device]);
+    if (device?._id) app.joinSocket();
+  }, [device?._id]);
 
   useEffect(() => {
     if (isInitialized && device && lang.locale !== device.locale) {
@@ -363,6 +375,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   }, [isInitialized, lang]);
 
   onReconnected(() => initialize("reconnect"), []);
+  onAppChannelMessage("SIGN_OUT", onReset);
 
   const ctx: AuthContext = {
     signInWithGoogle,

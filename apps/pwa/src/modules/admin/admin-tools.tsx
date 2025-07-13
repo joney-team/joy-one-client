@@ -10,11 +10,9 @@ import {
   IconClipboard,
   IconReportAnalytics,
   IconSearch,
-  IconSettings2,
   IconTools,
 } from "@tabler/icons-react";
 
-import { TechIllustration } from "@/components/illustrations/tech";
 import { onError } from "@/utils/exceptions.utils";
 import { type FC } from "react";
 import { api } from "../apis";
@@ -117,20 +115,12 @@ export const AdminTools: FC = () => {
         </Group>
       </Card>
 
-      <SessionTitle name="Migrations" icon={IconSettings2} />
+      {/* <SessionTitle name="Migrations" icon={IconSettings2} />
       <Card shadow="xs">
         <Group>
-          <Button onClick={() => api.post(`/receipts/migrate-loan-receipts`)}>
-            Fix Loan Receipts - Invalid type EXPENSE
-          </Button>
-
-          <Button onClick={() => api.post(`/files/migrate/receipts`)}>File Receipts</Button>
-
-          <Button onClick={() => api.patch(`/product-combos/migrate/history`)}>
-            Product combo history
-          </Button>
+         
         </Group>
-      </Card>
+      </Card> */}
 
       <SessionTitle name="Reports" icon={IconReportAnalytics} />
       <Card shadow="xs">
@@ -186,12 +176,12 @@ export const AdminTools: FC = () => {
         </Group>
       </Card>
 
-      <SessionTitle name="Illustrations" icon={IconClipboard} />
+      {/* <SessionTitle name="Illustrations" icon={IconClipboard} />
       <Card shadow="xs">
         <Stack>
           <TechIllustration width={1000} />
         </Stack>
-      </Card>
+      </Card> */}
     </Stack>
   );
 };

@@ -13,3 +13,4 @@ export function isExtendedApp() {
 export function isDevelopment() {
   return (config.ENV as string) === 'development';
 }
+
