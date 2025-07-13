@@ -667,7 +667,7 @@ export const PrintButton: FC<PrinterProps> = (props) => {
   const theme = useMantineTheme();
 
   return (
-    <Card p={0} withBorder radius={100} style={{ borderColor: theme.colors.gray[4] }}>
+    <Card p={0} withBorder shadow="none" radius={100} style={{ borderColor: theme.colors.gray[4] }}>
       <Group gap={0} justify="space-around">
         <Tooltip label={t("quick_print")}>
           <Center>

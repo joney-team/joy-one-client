@@ -109,7 +109,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
   });
 
   return (
-    <Card withBorder {...props.cardProps}>
+    <Card withBorder shadow="none" {...props.cardProps}>
       <Stack h="100%" flex={1}>
         <Stack gap={8} flex={1}>
           <Group justify="space-between" align="center">

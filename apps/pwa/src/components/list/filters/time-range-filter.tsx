@@ -8,9 +8,14 @@ import { Period } from "@/types";
 import { timeToSeconds } from "@joy-one-client/utils/date-time";
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
 import { Group } from "@mantine/core";
-import { IconCalendar, IconCalendarEvent, IconCalendarMonth } from "@tabler/icons-react";
+import {
+  IconCalendar,
+  IconCalendarDot,
+  IconCalendarEvent,
+  IconCalendarMonth,
+} from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { FilterProps } from "./types";
 
 export interface TimeRangeFilterConfig {}
@@ -21,8 +26,19 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
   Wrapper,
 }) => {
   const filterKey = `timeRange${capitalizeFirstLetter(colKey, false)}`;
-  const filterValue = list.query[filterKey] || "";
-  const [period, date] = filterValue.split("-");
+  const filterRangeKey = `range${capitalizeFirstLetter(colKey, false)}`;
+  const filterValue = list.query[filterKey] || list.query[filterRangeKey] || "";
+  const { period, fromDate, toDate } = useMemo(() => {
+    if (filterRangeKey) {
+      return {
+        period: Period.DATE,
+        fromDate: filterValue.split("-")[0],
+        toDate: filterValue.split("-")[1],
+      };
+    }
+
+    return { period: Period.DATE, fromDate: filterValue };
+  }, [filterValue]);
 
   const options = [
     {
@@ -63,6 +79,18 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
           },
         }),
     },
+    {
+      label: t("time_range"),
+      icon: IconCalendarDot,
+      value: "Range",
+      onClick: () =>
+        OnModalDatePicker({
+          onRangeSelected: (date) => {
+            if (!date) return;
+            list.setQuery(filterRangeKey, `${timeToSeconds(date[0])}-${timeToSeconds(date[1])}`);
+          },
+        }),
+    },
   ];
 
   return (
@@ -70,16 +98,22 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
       <Menu.Target>
         <Group>
           <Wrapper
-            onClear={filterValue ? () => list.removeQuery(filterKey) : undefined}
+            onClear={
+              filterValue
+                ? () => list.removeQuery(filterRangeKey ? filterRangeKey : filterKey)
+                : undefined
+            }
             active={!!filterValue}
           >
             {filterValue && (
               <Text fz={12} fw={700}>
                 {(function () {
-                  if (period === Period.DATE) return renderDate(+date * 1000);
+                  if (filterRangeKey)
+                    return `${renderDate(+fromDate * 1000)} - ${renderDate(+toDate * 1000)}`;
+                  if (period === Period.DATE) return renderDate(+fromDate * 1000);
                   if (period === Period.MONTH)
-                    return capitalizeFirstLetter(dayjs(+date * 1000).format(`MMMM YYYY`));
-                  if (period === Period.YEAR) return dayjs(+date * 1000).format(`YYYY`);
+                    return capitalizeFirstLetter(dayjs(+fromDate * 1000).format(`MMMM YYYY`));
+                  if (period === Period.YEAR) return dayjs(+fromDate * 1000).format(`YYYY`);
                 })()}
               </Text>
             )}
