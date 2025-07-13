@@ -165,7 +165,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
             <Stack align="center" gap={5} mt={16}>
               <Badge color="red">{t("rejected")}</Badge>
 
-              <Text c="red">{loan.rejectReason}</Text>
+              {loan.rejectReason && <Text c="red">{t(loan.rejectReason)}</Text>}
             </Stack>
           )}
         </Stack>
