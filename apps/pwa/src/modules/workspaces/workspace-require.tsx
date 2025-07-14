@@ -172,6 +172,8 @@ export const WorkspaceRequire: FC<{ workspace: WorkspaceContext }> = (props) => 
                   withBorder
                   shadow="none"
                   p={12}
+                  maw="80dvw"
+                  w={350}
                   key={userMember.workspaceId}
                   onClick={() => {
                     if (!userMember.workspaceId) return;

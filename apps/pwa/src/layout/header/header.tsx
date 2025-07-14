@@ -74,7 +74,7 @@ export const WorkspaceHeader: FC = memo(() => {
             </ActionIcon>
 
             {typeof layout.components.head === "string" ? (
-              <Text fz={16} fw={600} truncate="end">
+              <Text fz={16} fw={600} truncate="end" maw="50dvw">
                 {layout.components.head}
               </Text>
             ) : (
