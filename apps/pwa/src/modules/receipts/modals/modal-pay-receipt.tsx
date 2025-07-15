@@ -5,11 +5,11 @@ import { CopyText } from "@/components/copy-text";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { Timer } from "@/components/timer";
-import { getView } from "@/layout/layout-service";
+import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
-import { FilesBox } from "@/modules/files/files-box";
 import { uploadFile } from "@/modules/files/file-service";
+import { FilesBox } from "@/modules/files/files-box";
 import { num, t, tMulti } from "@/modules/lang/lang-service";
 import { getLoan } from "@/modules/loans/loans-service";
 import {
@@ -31,12 +31,14 @@ import { loadImage } from "@/utils/asset.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { round } from "@/utils/number.utils";
 import { removeAccents } from "@/utils/string.utils";
+import { zIndexes } from "@joy-one-client/config/layout";
 import {
   ActionIcon,
   Anchor,
   Card,
   Center,
   Group,
+  Modal,
   NumberInput,
   Skeleton,
   Stack,
@@ -46,9 +48,10 @@ import {
   em,
   useMantineTheme,
 } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck, IconClipboardCheck, IconRefresh } from "@tabler/icons-react";
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { PrintButton } from "../../../modals/modal-printer";
 import { OnReceiptDetailModal } from "./modal-receipt-detail";
 
@@ -58,7 +61,7 @@ interface ModalPayReceiptProps {
   onClosed?: () => void;
 }
 
-const ModalPayReceipt: FC<ModalPayReceiptProps> = (props) => {
+const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
   const workspace = useWorkspace();
   const theme = useMantineTheme();
   const banks = useBanks();
@@ -84,13 +87,6 @@ const ModalPayReceipt: FC<ModalPayReceiptProps> = (props) => {
     if (receipt.type === ReceiptType.INCOME && receipt.relatedLoanId && receipt.relatedCustomer) {
       const customer = receipt.relatedCustomer;
       const loan = await getLoan(receipt.relatedLoanId);
-
-      // const { assetData, assetType } = loan;
-
-      // if (assetType === LoanAssetType.ICLOUD && assetData.deviceName) {
-      //   return `${removeAccents(customer.name).toUpperCase()} ${assetData.deviceName} ${loan.code} ${receipt.code}`;
-      // }
-
       return `${removeAccents(customer.name).toUpperCase()} ${loan.code} ${receipt.code}`;
     }
 
@@ -397,15 +393,13 @@ const ModalPayReceipt: FC<ModalPayReceiptProps> = (props) => {
                 </Renderer>
               </Group>
 
-              <Card p={10} withBorder>
-                <FilesBox
-                  rawFiles={receiptFiles}
-                  onChangeRawFiles={(_files) => setReceiptFiles(_files)}
-                  filesWrapperProps={{
-                    justify: "center",
-                  }}
-                />
-              </Card>
+              <FilesBox
+                rawFiles={receiptFiles}
+                onChangeRawFiles={(_files) => setReceiptFiles(_files)}
+                filesWrapperProps={{
+                  justify: "center",
+                }}
+              />
             </Stack>
 
             <Renderer visible={!!receipt.relatedOrderId}>
@@ -430,13 +424,41 @@ const ModalPayReceipt: FC<ModalPayReceiptProps> = (props) => {
   );
 };
 
-export const OnModalPayReceipt = (props: ModalPayReceiptProps) =>
-  modals.open({
-    modalId: "ModalPayReceipt",
-    children: <ModalPayReceipt {...props} />,
-    withCloseButton: false,
-    closeOnClickOutside: false,
-    closeOnEscape: false,
-    size: 550,
-    yOffset: getView() === "mobile" ? 10 : undefined,
-  });
+export let OnModalPayReceipt: (props: ModalPayReceiptProps) => void = () => {};
+
+export const ModalPayReceipt: FC = () => {
+  const props = useRef<ModalPayReceiptProps | null>(null);
+  const layout = useLayout();
+  const [opened, { open, close }] = useDisclosure(false);
+
+  OnModalPayReceipt = (p) => {
+    props.current = p || null;
+    open();
+  };
+
+  return (
+    <Modal
+      withCloseButton={false}
+      zIndex={zIndexes.modals + 1}
+      opened={opened}
+      onClose={close}
+      size={550}
+      yOffset={layout.view === "mobile" ? 10 : undefined}
+    >
+      {props.current && (
+        <ModalPayReceiptContent
+          key={props.current.receipt.id}
+          {...props.current}
+          onClosed={() => {
+            props.current?.onClosed?.();
+            close();
+          }}
+          onPaid={() => {
+            props.current?.onPaid?.();
+            close();
+          }}
+        />
+      )}
+    </Modal>
+  );
+};

@@ -1,13 +1,14 @@
 import { renderLink } from "@/modules/files/files-utils";
 import { t } from "@/modules/lang/lang-service";
 import { WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
-import { WorkspaceContext } from "@/modules/workspaces/workspaces-types";
 import { Center, em, Stack, Text, Title } from "@mantine/core";
 import { FC } from "react";
 import { Button } from "../../../components/buttons/button";
 import { Image } from "../../../components/image";
+import { useWorkspace } from "../workspace-context";
 
-export const WorkspaceArchived: FC<{ workspace: WorkspaceContext }> = ({ workspace }) => {
+export const WorkspaceArchived: FC = () => {
+  const workspace = useWorkspace();
   const isOwner = workspace.userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER);
   const ownerName = "Owner";
 

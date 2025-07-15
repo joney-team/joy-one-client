@@ -391,7 +391,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       EventType.WORKSPACE_BILLINGS_WITHDRAWN,
       EventType.WORKSPACE_BILLINGS_PAYMENT_PAID,
     ],
-    fetchWorkspaceBalance
+    () => fetchWorkspaceBalance()
   );
 
   useEventsListener(
@@ -400,7 +400,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       EventType.WORKSPACE_BILLINGS_PAYMENT_PAID,
       EventType.WORKSPACE_SUBSCRIPTION_UPDATED,
     ],
-    fetchSubscription
+    () => fetchSubscription()
   );
 
   useEventsListener(
@@ -408,8 +408,11 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       EventType.WORKSPACE_ARCHIVED,
       EventType.WORKSPACE_ROLES_NEW,
       EventType.WORKSPACE_ROLES_UPDATED,
-      EventType.WORKSPACE_SETTING_UPDATED,
       EventType.WORKSPACE_ROLES_REMOVED,
+      EventType.WORKSPACE_SETTING_UPDATED,
+      EventType.WORKSPACE_INVITE_CODE_UPDATED,
+      EventType.WORKSPACE_MEMBER_TRANSFER_OWNER,
+      EventType.WORKSPACE_BRANCH_NEW,
     ],
     () => {
       fetchRoles();
@@ -420,7 +423,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   useEventsListener(
     [
       EventType.WORKSPACE_UPDATED,
-      EventType.WORKSPACE_INVITE_CODE_UPDATED,
       EventType.WORKSPACE_MEMBER_JOINED,
       EventType.WORKSPACE_MEMBER_LEAVED,
       EventType.WORKSPACE_MEMBER_UPDATED,
@@ -428,7 +430,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       EventType.WORKSPACE_BRANCH_NEW,
       EventType.WORKSPACE_BRANCH_UPDATED,
     ],
-    () => fetchRelatedData
+    () => fetchRelatedData()
   );
 
   onReconnected(() => {
@@ -556,9 +558,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const Component = useMemo(() => {
     if (!isInitialized || !auth.user) return null;
     if (inviteCode) return <WorkspaceInvitation inviteCode={inviteCode} />;
-    if (!userMember) return <WorkspaceRequire workspace={contextValue} />;
-    if (isRequireBranches) return <WorkspaceRequireBranches workspace={contextValue} />;
-    if (userMember.workspace.isArchived) return <WorkspaceArchived workspace={contextValue} />;
+    if (!userMember) return <WorkspaceRequire />;
+    if (isRequireBranches) return <WorkspaceRequireBranches />;
+    if (userMember.workspace.isArchived) return <WorkspaceArchived />;
   }, [isInitialized, inviteCode, userMember, isRequireBranches, auth.user]);
 
   return (

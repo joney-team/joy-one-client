@@ -243,6 +243,7 @@ export const FileBoxCard: FC<{
   return (
     <Card
       withBorder
+      shadow="none"
       w={150}
       p={5}
       style={{ position: "relative", overflow: "visible", cursor: "pointer" }}

@@ -6,7 +6,17 @@ import { t } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { regenerateWorkspaceInviteCode } from "@/modules/workspaces/workspaces-service";
-import { ActionIcon, Card, Center, CopyButton, Group, Stack, Text, Tooltip, em } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  Center,
+  CopyButton,
+  Group,
+  Stack,
+  Text,
+  Tooltip,
+  em,
+} from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconCopy, IconRefresh, IconUsersPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -18,7 +28,8 @@ export const WorkspaceInviteMember: FC = () => {
   const isReachMemberLimit =
     workspace.workspaceSubscription &&
     workspace.workspaceSubscription.subscription.limitMembers > 0 &&
-    workspace.workspaceSubscription?.stat.totalMembers >= workspace.workspaceSubscription?.subscription.limitMembers;
+    workspace.workspaceSubscription?.stat.totalMembers >=
+      workspace.workspaceSubscription?.subscription.limitMembers;
 
   if (isReachMemberLimit) {
     return (
@@ -54,10 +65,6 @@ const CreateMemberInvitationLink: FC = () => {
   const workspace = useWorkspace();
   const invitationLink = `${config.APP_URL}/join/${workspace.userMember.workspace.inviteCode}`;
 
-  const onRegenerateInviteCode = async () => {
-    return regenerateWorkspaceInviteCode();
-  };
-
   return (
     <Stack align="center" p={30}>
       <MembersIllustration width={250} />
@@ -81,7 +88,11 @@ const CreateMemberInvitationLink: FC = () => {
           </CopyButton>
 
           <Tooltip label={t("regenerate_link")}>
-            <ActionIcon onClick={onRegenerateInviteCode} variant="subtle" color="gray">
+            <ActionIcon
+              onClick={() => regenerateWorkspaceInviteCode()}
+              variant="subtle"
+              color="gray"
+            >
               <IconRefresh size={18} />
             </ActionIcon>
           </Tooltip>

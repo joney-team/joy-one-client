@@ -31,6 +31,7 @@ import { ModalInstallWebAppTutorial } from "./modal-install-web-app-tutorial";
 import { ModalPrinter } from "./modal-printer";
 import { ModalSharelink } from "./modal-share-link";
 import { ModalUpgradeVersion } from "./modal-upgrade-version";
+import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 
 const Modals: FC = () => {
   const workspace = useWorkspace();
@@ -67,6 +68,7 @@ const Modals: FC = () => {
       <ModalCheckInLocationForm />
       <ModalUpdateWorkspaceBranch />
       <ModalInput />
+      <ModalPayReceipt />
     </Fragment>
   );
 };

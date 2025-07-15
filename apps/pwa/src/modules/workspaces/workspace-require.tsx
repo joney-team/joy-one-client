@@ -48,8 +48,8 @@ import { useApp } from "../../app.context";
 import { api } from "../apis";
 import { getUserMemberRoleLabel } from "../workspace-members/workspace-members-service";
 
-export const WorkspaceRequire: FC<{ workspace: WorkspaceContext }> = (props) => {
-  const { workspace } = props;
+export const WorkspaceRequire: FC = () => {
+  const workspace = useWorkspace();
   const auth = useAuth();
   const app = useApp();
   const layout = useLayout();
@@ -173,7 +173,7 @@ export const WorkspaceRequire: FC<{ workspace: WorkspaceContext }> = (props) => 
                   shadow="none"
                   p={12}
                   maw="80dvw"
-                  w={350}
+                  w={450}
                   key={userMember.workspaceId}
                   onClick={() => {
                     if (!userMember.workspaceId) return;

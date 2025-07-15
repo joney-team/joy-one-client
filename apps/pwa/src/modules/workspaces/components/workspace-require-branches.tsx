@@ -3,14 +3,14 @@
 import { useAuth } from "@/modules/auth/auth-context";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { WorkspaceContext } from "@/modules/workspaces/workspaces-types";
 import { isExtendedApp } from "@/service";
 import { Anchor, Stack, Text, Title } from "@mantine/core";
 import { FC } from "react";
 import { GoWorkIllustration } from "../../../components/illustrations/go-work";
+import { useWorkspace } from "../workspace-context";
 
-export const WorkspaceRequireBranches: FC<{ workspace: WorkspaceContext }> = (props) => {
-  const { workspace } = props;
+export const WorkspaceRequireBranches: FC = () => {
+  const workspace = useWorkspace();
   const auth = useAuth();
   const color = useColor();
 

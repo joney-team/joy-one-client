@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "@/hooks/use-router";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
@@ -12,6 +14,7 @@ import { em, Group, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";
 import { FC, useRef } from "react";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 export let OnModalCreateTask: (props?: TaskFormProps) => void = () => {};
 
@@ -48,6 +51,7 @@ export const ModalCreateTask: FC = () => {
       }
       fullScreen={layout.view === "mobile"}
       size={830}
+      zIndex={zIndexes.modals + 1}
     >
       <Stack gap={10} pb={layout.view === "mobile" ? 16 * 2 : 0}>
         <Renderer visible={!!tagFolder || !!parentTask || !!parnetTagFolder}>
