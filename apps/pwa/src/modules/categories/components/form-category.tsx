@@ -4,7 +4,7 @@ import { t } from "@/modules/lang/lang-service";
 import { Center, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, type FC } from "react";
-import { CategoryEntity, CategoryType } from "../category-types";
+import { CategoryDto, CategoryEntity, CategoryType } from "../category-types";
 import { Button } from "@/components/buttons/button";
 import { onUploadFile } from "@/modules/files/file-service";
 import { api } from "@/modules/apis";
@@ -12,6 +12,10 @@ import { onError, onFormError } from "@/utils/exceptions.utils";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { Form } from "@/components/form";
 import { ButtonArchive } from "@/components/buttons/button-archive";
+import { CustomField } from "@/modules/custom-fields/custom-field-types";
+import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
+import { AppEntity } from "@/types";
+import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
 
 export interface FormCategoryProps {
   category?: CategoryEntity;
@@ -24,15 +28,17 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
   const { category, onSuccess } = props;
 
   const form = useForm<{
-    name?: string;
+    name: string;
     slug?: string;
     type?: CategoryType;
     thumbnail?: File;
+    customFields?: CustomField[];
   }>({
     initialValues: {
       name: category?.name || "",
       slug: category?.slug || "",
       type: props.type || props.category?.type,
+      customFields: props.category?.customFields || [],
     },
     validate: {
       name: (value) => {
@@ -56,25 +62,26 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      const thumbnail = values.thumbnail
+      if (!values.name) return;
+      const { customFields, thumbnail, ...rest } = values;
+
+      const thumbnailValue = values.thumbnail
         ? await onUploadFile({ file: values.thumbnail })
         : undefined;
 
       let category: CategoryEntity;
 
       if (props.category) {
-        category = await api.put(`/categories/${props.category._id}`, {
-          type: values.type,
-          name: values.name,
-          slug: values.slug,
-          thumbnail: thumbnail?.relativePath || props.category.thumbnail,
+        category = await api.put<CategoryEntity, CategoryDto>(`/categories/${props.category._id}`, {
+          ...rest,
+          thumbnail: thumbnailValue?.relativePath ?? props.category.thumbnail,
+          customFieldValues: getCustomFieldValue(values.customFields),
         });
       } else {
-        category = await api.post("/categories", {
-          type: values.type,
-          name: values.name,
-          slug: values.slug,
-          thumbnail: thumbnail?.relativePath,
+        category = await api.post<CategoryEntity, CategoryDto>("/categories", {
+          ...rest,
+          thumbnail: thumbnailValue?.relativePath,
+          customFieldValues: getCustomFieldValue(values.customFields),
         });
       }
 
@@ -95,10 +102,9 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
   }, [category, props.onArchive]);
 
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit} autoFocus={!props.category}>
       <Stack>
         <TextInput
-          autoFocus
           label={t("name")}
           {...form.getInputProps("name")}
           onChange={(e) => {
@@ -117,6 +123,12 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
             label: t(`category_type_${type}`),
             value: type,
           }))}
+        />
+
+        <BuilderCustomFields
+          entity={AppEntity.CATEGORIES}
+          value={form.values.customFields}
+          onChange={(value) => form.setFieldValue("customFields", value)}
         />
 
         <Center>

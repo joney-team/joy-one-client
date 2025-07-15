@@ -198,7 +198,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
     }),
   ];
 
-  const getPlugin = (id: string) => plugins.find((p) => p.id === id) ?? null;
+  const getPlugin = (id: string | null | undefined) => plugins.find((p) => p.id === id) ?? null;
 
   return (
     <Context.Provider

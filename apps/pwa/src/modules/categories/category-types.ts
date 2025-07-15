@@ -1,4 +1,5 @@
 import { BaseMongoEntity } from "@/types";
+import { CustomFieldValue } from "../custom-fields/custom-field-types";
 
 export enum CategoryType {
   COMMON = 'COMMON',
@@ -15,6 +16,7 @@ export interface CategoryDto {
   description?: string;
   parentId?: string;
   order?: number;
+  customFieldValues?: CustomFieldValue[];
 }
 
 export interface CategorySortItemDto {

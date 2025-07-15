@@ -121,8 +121,9 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
           data={[
             AppEntity.PRODUCTS,
             AppEntity.POSTS,
+            AppEntity.CATEGORIES,
             AppEntity.PROMOTIONS,
-            AppEntity.TASKS,
+            // AppEntity.TASKS,
             AppEntity.RECEIPTS,
             AppEntity.CUSTOMERS,
             AppEntity.LOANS,

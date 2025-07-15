@@ -2,7 +2,7 @@
 
 import { EnumColumn } from "@/components/list/columns/enum-column";
 import { List } from "@/components/list/list";
-import { Stack } from "@mantine/core";
+import { Stack, Text } from "@mantine/core";
 import { IconCategory, IconEdit, IconOutlet } from "@tabler/icons-react";
 import { type FC } from "react";
 import { EventType } from "../events/event-types";
@@ -10,6 +10,8 @@ import { t } from "../lang/lang-service";
 import { categoryTypeConfigs } from "./category-service";
 import { CategoryEntity, CategoryType } from "./category-types";
 import { OnModalCategory } from "./modals/modal-category";
+import { Clickable } from "@/components/clickable";
+import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 
 export const CategoryList: FC = () => {
   return (
@@ -20,7 +22,18 @@ export const CategoryList: FC = () => {
         icon={IconCategory}
         route="/categories"
         columns={{
-          name: {},
+          name: {
+            render: ({ data }) => {
+              return (
+                <Clickable
+                  permission={WorkspacePermission.CATEGORIES_MANAGER}
+                  onClick={() => OnModalCategory({ category: data })}
+                >
+                  <Text>{data.name}</Text>
+                </Clickable>
+              );
+            },
+          },
           slug: { filter: { text: true }, icon: IconOutlet },
           type: EnumColumn({
             w: 200,
