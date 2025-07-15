@@ -6,6 +6,7 @@ import { Avatar } from "@/components/avatar";
 import { t } from "@/modules/lang/lang-service";
 import {
   closeMesssageBox,
+  messageBoxPlatformImages,
   messageBoxStatusColors,
   removeMessageBox,
   setAssigneeToMessageBox,
@@ -14,7 +15,7 @@ import {
 import { MessageBoxStatus } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { onActionLoad, onArchive } from "@/utils/actions";
-import { ActionIcon, Badge, Group, Stack, Text, Title, Tooltip } from "@mantine/core";
+import { ActionIcon, Badge, Group, Image, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import {
   IconCheck,
@@ -35,6 +36,8 @@ export const MessageBoxHead: FC = () => {
   const router = useRouter();
   const color = useColor();
   const plugins = usePlugins();
+  const plugin = plugins.getPlugin(box?.platformId);
+
   const aiPlugin = plugins.aiAssistants[0];
   const isAiAssistantEnabled = box && aiPlugin && aiPlugin.enabled && !box.aiAssistantDisabled;
 
@@ -77,11 +80,16 @@ export const MessageBoxHead: FC = () => {
         />
 
         <Stack gap={3}>
-          <Title fz={18}>{box?.senderName || box?.customer?.name}</Title>
+          <Title fz={18}>{box?.senderName || box?.customer?.name || t("guest")}</Title>
 
-          <Text fz={14} c="dimmed">
-            #{box.senderId}
-          </Text>
+          {plugin && (
+            <Group gap={4}>
+              <Image src={messageBoxPlatformImages[box.platformType]} w={16} h={16} />
+              <Text fz={14} c="dimmed">
+                {plugin.name}
+              </Text>
+            </Group>
+          )}
         </Stack>
       </Group>
 

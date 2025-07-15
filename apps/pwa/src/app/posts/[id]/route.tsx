@@ -1,6 +1,5 @@
 import { apiServerSide } from "@/modules/apis/server";
 import { PostEntity } from "@/modules/posts/posts-types";
-import { redirect } from "next/navigation";
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   const { id } = await params;

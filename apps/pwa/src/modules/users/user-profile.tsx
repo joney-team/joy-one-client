@@ -155,7 +155,7 @@ export const Profile: FC = () => {
           </Renderer>
 
           <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
-            <NavItem icon={IconPuzzle} name={t("plugins")} href="/plugins" />
+            <NavItem icon={IconPuzzle} name={t("plugins")} href="/workspace-settings/plugins" />
           </Renderer>
 
           <Renderer

@@ -22,6 +22,7 @@ import { PluginMetaPageEntity } from "./meta-pages/meta-pages-types";
 import { Context } from "./plugins-context";
 import { getPluginZaloOas, getZnsTemplateConfigs } from "./zalo-oas/zalo-oas-service";
 import { PluginZaloOaEntity, ZnsTemplateConfigs } from "./zalo-oas/zalo-oas-types";
+import { Plugin } from "./plugins-types";
 
 const PluginsProvider: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
@@ -170,6 +171,34 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
   });
 
   const isHasPlugin = messageHubs.length > 0 || zaloOas.length > 0 || metaPages.length > 0;
+  const plugins: Plugin[] = [
+    ...metaPages.map((p) => {
+      const plugin: Plugin = {
+        type: "metaPages",
+        id: p.id,
+        name: p.name,
+      };
+      return plugin;
+    }),
+    ...zaloOas.map((p) => {
+      const plugin: Plugin = {
+        type: "zaloOas",
+        id: p.id,
+        name: p.name,
+      };
+      return plugin;
+    }),
+    ...messageHubs.map((p) => {
+      const plugin: Plugin = {
+        type: "messageHubs",
+        id: p._id,
+        name: p.name,
+      };
+      return plugin;
+    }),
+  ];
+
+  const getPlugin = (id: string) => plugins.find((p) => p.id === id) ?? null;
 
   return (
     <Context.Provider
@@ -183,6 +212,8 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
         znsTemplateConfigs,
         onConnectMetaPages,
         aiAssistants,
+        plugins,
+        getPlugin,
       }}
     >
       {props.children}

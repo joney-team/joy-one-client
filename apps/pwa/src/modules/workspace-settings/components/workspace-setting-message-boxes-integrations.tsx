@@ -9,7 +9,7 @@ import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/ai-assi
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { capitalize, StringUtils } from "@/utils/string.utils";
-import { ActionIcon, Card, Group, Stack, Switch, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { IconClock, IconMessage, IconPlus } from "@tabler/icons-react";
 import { Handle, Position, ReactFlow } from "@xyflow/react";
@@ -17,6 +17,8 @@ import { FC, Fragment } from "react";
 import { Avatar } from "@/components/avatar";
 import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows";
 import { Image } from "@/components/image";
+import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service";
+import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types";
 
 const cardRootSize = {
   width: 300,
@@ -59,9 +61,14 @@ const RootNode = () => {
         >
           <Avatar workspace={workspace.userMember.workspace} radius={8} size={70} />
           <Stack gap={0}>
-            <Text fz={25} fw={500} truncate="end">
-              {workspace.userMember.workspace.name}
-            </Text>
+            <Tooltip
+              label={workspace.userMember.workspace.name}
+              disabled={workspace.userMember.workspace.name.length < 10}
+            >
+              <Text fz={25} fw={500} truncate="end" maw={160}>
+                {workspace.userMember.workspace.name}
+              </Text>
+            </Tooltip>
             <Text fz={12} c="gray.6" truncate="end">
               {t("workspace")}
             </Text>
@@ -150,6 +157,13 @@ const AiIntegrationNode = () => {
 const PluginNode = (props: any) => {
   const { plugin, name, type } = props.data;
 
+  const platformType =
+    type === "metaPages"
+      ? MessageBoxPlatformType.META_PAGE
+      : type === "zalaOAs"
+      ? MessageBoxPlatformType.ZALO
+      : MessageBoxPlatformType.MESSAGE_HUB;
+
   const PluginAvatar: FC = (
     {
       metaPages: () => <Avatar color="primary" pluginMetaPage={plugin} size={30} />,
@@ -173,11 +187,31 @@ const PluginNode = (props: any) => {
         style={{ cursor: "default" }}
       >
         <Group gap={10} align="center" w={cardSize.width} h={cardSize.height} p={16} wrap="nowrap">
-          <PluginAvatar />
+          <Indicator
+            label={<Image src={messageBoxPlatformImages[platformType]} w={16} h={16} />}
+            radius={8}
+            color="var(--mantine-color-body)"
+            position="bottom-end"
+            offset={5}
+            styles={{
+              indicator: {
+                paddingInline: 0,
+                width: 20,
+                height: 20,
+                transform: "translate(50%, 80%)",
+                zIndex: 10,
+              },
+            }}
+          >
+            <PluginAvatar />
+          </Indicator>
           <Stack gap={0}>
-            <Text fz={16} fw={500} truncate="end">
-              {name || t("plugin")}
-            </Text>
+            <Tooltip label={name} disabled={!name || name.length < 15}>
+              <Text fz={16} fw={500} truncate="end" maw={150}>
+                {name || t("plugin")}
+              </Text>
+            </Tooltip>
+
             {!!plugin.lastInteractionAt && (
               <Tooltip
                 label={capitalize(

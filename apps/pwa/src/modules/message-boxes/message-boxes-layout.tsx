@@ -29,9 +29,9 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
 
   const messageBoxId = params.boxId as string;
 
-  const messageBox = useQuery({
-    route: `/message-boxes/${messageBoxId}`,
+  const messageBox = useQuery<MessageBoxEntity>({
     isSkip: !messageBoxId,
+    route: `/message-boxes/${messageBoxId}`,
   });
 
   if (!plugins.isInitialized)
@@ -52,7 +52,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
   return (
     <MessageBoxesContext.Provider
       value={{
-        messageBox: messageBox.data,
+        messageBox: messageBox.data ?? null,
         messageBoxId,
         open: (box: MessageBoxEntity) => {
           router.push(`/message-boxes/${box._id}`);

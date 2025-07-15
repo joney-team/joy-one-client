@@ -1,6 +1,7 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
+import { Avatar } from "@/components/avatar";
+import { TextOverflow } from "@/components/text-overflow";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { renderDateTime, renderTime, t } from "@/modules/lang/lang-service";
@@ -15,14 +16,14 @@ import {
   MessageBoxStatus,
 } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
+import { useColor } from "@/modules/theme/use-color";
 import { forceDate } from "@/utils/dateTime.utils";
 import { StringUtils } from "@/utils/string.utils";
 import { useList } from "@/utils/use-list.util";
-import { Badge, Card, Group, Image, Indicator, Stack, Text } from "@mantine/core";
+import { Badge, Card, Group, Image, Indicator, Stack, Text, Tooltip } from "@mantine/core";
+import { IconUserSquareRounded } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC } from "react";
-import { Avatar } from "@/components/avatar";
-import { TextOverflow } from "@/components/text-overflow";
 import { useMessageBoxes } from "../message-boxes-context";
 interface CardMessageBoxProps {
   box: MessageBoxEntity;
@@ -34,6 +35,7 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
   const color = useColor();
   const plugins = usePlugins();
   const aiPlugin = plugins.aiAssistants[0];
+  const plugin = plugins.getPlugin(box.platformId);
 
   const isAiAssistantEnabled = aiPlugin && aiPlugin.enabled && !box.aiAssistantDisabled;
 
@@ -68,7 +70,11 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
     >
       <Group w="100%" align="start" gap={12} wrap="nowrap">
         <Indicator
-          label={<Image src={messageBoxPlatformImages[box.platformType]} w={16} h={16} />}
+          label={
+            <Tooltip label={plugin?.name} disabled={!plugin}>
+              <Image src={messageBoxPlatformImages[box.platformType]} w={16} h={16} />
+            </Tooltip>
+          }
           radius={8}
           color="var(--mantine-color-body)"
           position="bottom-end"
@@ -85,6 +91,7 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
         >
           <Avatar
             messageBox={box}
+            icon={IconUserSquareRounded}
             src={box.senderAvatar || box.customer?.avatar}
             size={42}
             radius={8}

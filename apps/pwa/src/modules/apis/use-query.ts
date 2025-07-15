@@ -13,7 +13,7 @@ export interface UseQueryArgs<T> {
   refetchEvents?: EventType[]
   refetchCondition?: (data: EventEntity, currentData: T) => boolean;
   method?: 'get' | 'post';
-  networkMode?: 'offlineFirst' | 'onlineFirst' | 'idle';
+  networkMode?: NetworkMode;
   queryKey?: string[];
 }
 
@@ -25,7 +25,7 @@ export const useQuery = <T = any>(args: string | (UseQueryArgs<T> & { route: str
   const route = typeof args === 'string' ? args : args.route;
   const params = typeof args === 'string' ? null : args.params;
   const queryKey = typeof args === 'string' ? [] : args.queryKey || [];
-  const networkMode = typeof query.networkMode === 'string' ? query.networkMode as NetworkMode : 'offlineFirst';
+  const networkMode = query.networkMode ?? 'offlineFirst';
   const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
   const stack = useQueryTanstack<T, AxiosError>({
