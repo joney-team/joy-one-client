@@ -2,19 +2,23 @@
 
 import { Button } from "@/components/buttons/button";
 import { DueDateInput } from "@/components/inputs/due-date-input";
-import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { TagSelector } from "@/modules/tags/components/tag-selector";
-import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { num, renderDateTime, t } from "@/modules/lang/lang-service";
+import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
+import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
+import {
+  getTaskEntity,
+  getTaskPriorityColor,
+  renderTaskStatusStyle,
+} from "@/modules/tasks/tasks-service";
 import { ReorderTaskPotision, TaskEntity } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { capitalize } from "@/utils/string.utils";
 import {
@@ -30,7 +34,7 @@ import {
   ThemeIcon,
   Tooltip,
 } from "@mantine/core";
-import { useHover } from "@mantine/hooks";
+import { useHover, useInViewport } from "@mantine/hooks";
 import {
   Icon,
   IconCalendar,
@@ -45,12 +49,11 @@ import {
   IconUser,
   IconX,
 } from "@tabler/icons-react";
-import { FC, Fragment, PropsWithChildren, useState } from "react";
+import { FC, PropsWithChildren, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag, useTaskDrop } from "../../tasks-dnd-provider";
 
 interface BoardTaskCardProps {
   id: string;
-  overlay?: boolean;
   showStatus?: boolean;
 
   indexType?: "first" | "last";
@@ -60,6 +63,7 @@ interface BoardTaskCardProps {
 
 export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
   const tasks = useTasks();
+  const inViewport = useInViewport();
 
   const [task, ctx] = useTask(props.id);
   const [isShowSubTasks, setIsShowSubTasks] = useState(false);
@@ -77,43 +81,25 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
   const isParentDragging = draggingTaskId === task.parentId;
 
   const goDetail = () => tasks.open(task);
+  const taskDrag = useTaskDrag(task._id, "card", !inViewport.inViewport);
 
-  const render = (overlay: boolean) => {
-    if (overlay)
-      return (_props: PropsWithChildren) => (
-        <Stack gap={5}>
-          <Card
-            shadow="xs"
-            p={10}
-            flex={1}
-            style={{
-              transform: `rotate(-2deg)`,
-            }}
-            role="dialog"
-            tabIndex={-1}
-          >
-            {_props.children}
-          </Card>
-        </Stack>
-      );
+  return (
+    <Stack flex={1} gap={10} style={{ position: "relative" }}>
+      <Stack>
+        <BoardCardDroppable
+          visible={!isSelfDragging && !isParentDragging && props.prevId !== draggingTaskId}
+          targetTask={task}
+          position={ReorderTaskPotision.BEFORE}
+          status={task.status}
+        />
 
-    return (_props: PropsWithChildren) => {
-      const taskDrag = useTaskDrag(task._id, "card");
-
-      return (
-        <Fragment>
-          <BoardCardDroppable
-            visible={!isSelfDragging && !isParentDragging && props.prevId !== draggingTaskId}
-            targetTask={task}
-            position={ReorderTaskPotision.BEFORE}
-            status={task.status}
-          />
-
-          <Stack
-            opacity={taskDrag.isDragging ? 0.5 : 1}
-            gap={5}
-            style={{ position: "relative", zIndex: 1 }}
-          >
+        <Stack
+          ref={inViewport.ref}
+          h={260}
+          opacity={taskDrag.isDragging ? 0.5 : 1}
+          style={{ position: "relative", zIndex: 1 }}
+        >
+          {inViewport.inViewport && (
             <Card
               shadow="xs"
               p={10}
@@ -123,93 +109,71 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
               {...taskDrag.listeners}
               role="dialog"
               tabIndex={-1}
+              h="100%"
             >
-              {_props.children}
-            </Card>
-          </Stack>
+              <Stack gap={5} h="100%">
+                <Stack gap={2} id={draggableId} style={{ cursor: "grab" }}>
+                  <Group onClick={goDetail} justify="space-between" align="center" wrap="nowrap">
+                    <Group flex={1} gap={5}>
+                      <Badge fz={em(10)} color="gray" size="xs" variant="outline">
+                        {renderEntityCode(task.code)}
+                      </Badge>
 
-          <BoardCardDroppable
-            visible={
-              !isSelfDragging && !isParentDragging && props.indexType === "last" && !isHasChild
-            }
-            targetTask={task}
-            position={ReorderTaskPotision.AFTER}
-            status={task.status}
-            isSubTask
-          />
-        </Fragment>
-      );
-    };
-  };
+                      {ctx.tagFolder && !tasks.tagFolder && (
+                        <Badge
+                          fz={em(10)}
+                          color={ctx.tagFolder.color || "gray"}
+                          size="xs"
+                          variant="outline"
+                        >
+                          {ctx.tagFolder.name}
+                        </Badge>
+                      )}
+                    </Group>
 
-  const Wrapper = render(!!props.overlay);
+                    <Group gap={0} wrap="nowrap">
+                      {!task.parentId && (
+                        <Tooltip label={t("create_sub_task")}>
+                          <ActionIcon
+                            variant="subtle"
+                            color="gray.6"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              OnModalCreateTask({
+                                parentId: task._id,
+                                onClose: () => setIsShowSubTasks(true),
+                              });
+                            }}
+                          >
+                            <IconPlus size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      )}
 
-  return (
-    <Stack flex={1} gap={10} style={{ position: "relative" }}>
-      <Wrapper>
-        <Stack gap={5}>
-          <Stack gap={2} id={draggableId} style={{ cursor: props.overlay ? "grabbing" : "grab" }}>
-            <Group onClick={goDetail} justify="space-between" align="center" wrap="nowrap">
-              <Group flex={1} gap={5}>
-                <Badge fz={em(10)} color="gray" size="xs" variant="outline">
-                  {renderEntityCode(task.code)}
-                </Badge>
+                      {ctx.isAbleToNextStatus && !props.showStatus && (
+                        <Tooltip label={t("next_status")}>
+                          <ActionIcon
+                            variant="subtle"
+                            color={taskStatusStyle.color}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              return ctx.nextStatus();
+                            }}
+                          >
+                            <IconCaretRightFilled size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      )}
+                    </Group>
+                  </Group>
 
-                {ctx.tagFolder && !tasks.tagFolder && (
-                  <Badge
-                    fz={em(10)}
-                    color={ctx.tagFolder.color || "gray"}
-                    size="xs"
-                    variant="outline"
-                  >
-                    {ctx.tagFolder.name}
-                  </Badge>
-                )}
-              </Group>
+                  <Stack style={{ cursor: "pointer" }} onClick={goDetail} gap={5}>
+                    <Text fz={em(15)} fw={500}>
+                      {task.name}
+                    </Text>
 
-              <Group gap={0} wrap="nowrap">
-                {!task.parentId && (
-                  <Tooltip label={t("create_sub_task")}>
-                    <ActionIcon
-                      variant="subtle"
-                      color="gray.6"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        OnModalCreateTask({
-                          parentId: task._id,
-                          onClose: () => setIsShowSubTasks(true),
-                        });
-                      }}
-                    >
-                      <IconPlus size={16} />
-                    </ActionIcon>
-                  </Tooltip>
-                )}
-
-                {ctx.isAbleToNextStatus && !props.showStatus && (
-                  <Tooltip label={t("next_status")}>
-                    <ActionIcon
-                      variant="subtle"
-                      color={taskStatusStyle.color}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        return ctx.nextStatus();
-                      }}
-                    >
-                      <IconCaretRightFilled size={16} />
-                    </ActionIcon>
-                  </Tooltip>
-                )}
-              </Group>
-            </Group>
-
-            <Stack style={{ cursor: "pointer" }} onClick={goDetail} gap={5}>
-              <Text fz={em(15)} fw={500}>
-                {task.name}
-              </Text>
-
-              {/* <Renderer visible={!!ctx.tags.length}>
+                    {/* <Renderer visible={!!ctx.tags.length}>
                 <Group gap={3} wrap='nowrap'>
                   {ctx.tags.map(tag => <TaskTag
                     key={tag._id}
@@ -218,222 +182,239 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                   />)}
                 </Group>
               </Renderer> */}
-            </Stack>
-          </Stack>
+                  </Stack>
+                </Stack>
 
-          {!props.overlay && (
-            <Stack gap={0}>
-              {props.showStatus && (
-                <CtaSection icon={IconPlaystationCircle} label={t("status")}>
-                  <Group gap={0}>
-                    <TaskStatusOptions
-                      task={task}
-                      target={
-                        <Group gap={5}>
-                          <Button
+                <Stack gap={0}>
+                  {props.showStatus && (
+                    <CtaSection icon={IconPlaystationCircle} label={t("status")}>
+                      <Group gap={0}>
+                        <TaskStatusOptions
+                          task={task}
+                          target={
+                            <Group gap={5}>
+                              <Button
+                                color={taskStatusStyle.color}
+                                variant="subtle"
+                                size="compact-sm"
+                                fz={em(14)}
+                              >
+                                {taskStatusStyle.name}
+                              </Button>
+                            </Group>
+                          }
+                          onSelect={(s) => ctx.onUpdate({ ...task, status: s })}
+                        />
+
+                        {ctx.isAbleToNextStatus && (
+                          <ActionIcon
+                            size="sm"
+                            variant="subtle"
                             color={taskStatusStyle.color}
-                            variant="subtle"
-                            size="compact-sm"
-                            fz={em(14)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              return ctx.nextStatus();
+                            }}
                           >
-                            {taskStatusStyle.name}
-                          </Button>
-                        </Group>
-                      }
-                      onSelect={(s) => ctx.onUpdate({ ...task, status: s })}
-                    />
-
-                    {ctx.isAbleToNextStatus && (
-                      <ActionIcon
-                        size="sm"
-                        variant="subtle"
-                        color={taskStatusStyle.color}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          return ctx.nextStatus();
-                        }}
-                      >
-                        <IconCaretRightFilled size={16} />
-                      </ActionIcon>
-                    )}
-                  </Group>
-                </CtaSection>
-              )}
-
-              <TagSelector
-                type={TagType.TASK}
-                onSelect={(t) => {
-                  if (!t) return;
-                  ctx.onUpdate({ ...task, tagIds: [...(task.tagIds || []), t._id] });
-                }}
-                target={(selector) => {
-                  return (
-                    <CtaSection icon={IconTags} label={t("tags")} onClick={selector.toggle}>
-                      <Group
-                        gap={3}
-                        flex={1}
-                        style={{ cursor: "pointer" }}
-                        className="unselectable"
-                      >
-                        {ctx.tags.length ? (
-                          ctx.tags.map((tag) => <TaskTag key={tag._id} id={tag._id} h={26} />)
-                        ) : (
-                          <Button
-                            color="gray"
-                            variant="subtle"
-                            leftIcon={IconPlus}
-                            iconSpacing={-12}
-                            iconSize={16}
-                            size="compact-sm"
-                            fz={13}
-                            fw={400}
-                          >
-                            {capitalize(`${t("add")} ${t("tag")}`)}
-                          </Button>
+                            <IconCaretRightFilled size={16} />
+                          </ActionIcon>
                         )}
                       </Group>
                     </CtaSection>
-                  );
-                }}
-              />
+                  )}
 
-              <CtaSection
-                icon={IconCalendar}
-                onRemove={() => ctx.onUpdate({ ...task, dueDate: null, startDate: null })}
-                canRemove={!!task.dueDate || !!task.startDate}
-                label={t("due_date")}
-              >
-                <Menu shadow="xs">
-                  <Menu.Target>
-                    <Group style={{ cursor: "pointer" }} flex={1}>
-                      {(function () {
-                        if (task.dueDate) {
-                          return (
-                            <Text c={ctx.isOutdated ? "red" : "var(--mantine-primary-color-text)"}>
-                              {renderDateTime(task.dueDate, true)}
-                            </Text>
-                          );
-                        }
-
-                        return (
-                          <Button
-                            color="gray"
-                            variant="subtle"
-                            leftIcon={IconPlus}
-                            iconSpacing={-12}
-                            iconSize={16}
-                            size="compact-sm"
-                            fz={13}
-                            fw={400}
+                  <TagSelector
+                    type={TagType.TASK}
+                    onSelect={(t) => {
+                      if (!t) return;
+                      ctx.onUpdate({ ...task, tagIds: [...(task.tagIds || []), t._id] });
+                    }}
+                    target={(selector) => {
+                      return (
+                        <CtaSection icon={IconTags} label={t("tags")} onClick={selector.toggle}>
+                          <Group
+                            gap={3}
+                            flex={1}
+                            style={{ cursor: "pointer" }}
+                            className="unselectable"
                           >
-                            {t("add_due_date")}
-                          </Button>
-                        );
-                      })()}
-                    </Group>
-                  </Menu.Target>
+                            {ctx.tags.length ? (
+                              ctx.tags.map((tag) => <TaskTag key={tag._id} id={tag._id} h={26} />)
+                            ) : (
+                              <Button
+                                color="gray"
+                                variant="subtle"
+                                leftIcon={IconPlus}
+                                iconSpacing={-12}
+                                iconSize={16}
+                                size="compact-sm"
+                                fz={13}
+                                fw={400}
+                              >
+                                {capitalize(`${t("add")} ${t("tag")}`)}
+                              </Button>
+                            )}
+                          </Group>
+                        </CtaSection>
+                      );
+                    }}
+                  />
 
-                  <Menu.Dropdown>
-                    <DueDateInput
-                      p={5}
-                      startDate={task.startDate}
-                      dueDate={task.dueDate}
-                      onChange={(e) => {
-                        ctx.onUpdate({ ...task, ...e });
+                  <CtaSection
+                    icon={IconCalendar}
+                    onRemove={() => ctx.onUpdate({ ...task, dueDate: null, startDate: null })}
+                    canRemove={!!task.dueDate || !!task.startDate}
+                    label={t("due_date")}
+                  >
+                    <Menu shadow="xs">
+                      <Menu.Target>
+                        <Group style={{ cursor: "pointer" }} flex={1}>
+                          {(function () {
+                            if (task.dueDate) {
+                              return (
+                                <Text
+                                  c={ctx.isOutdated ? "red" : "var(--mantine-primary-color-text)"}
+                                >
+                                  {renderDateTime(task.dueDate, true)}
+                                </Text>
+                              );
+                            }
+
+                            return (
+                              <Button
+                                color="gray"
+                                variant="subtle"
+                                leftIcon={IconPlus}
+                                iconSpacing={-12}
+                                iconSize={16}
+                                size="compact-sm"
+                                fz={13}
+                                fw={400}
+                              >
+                                {t("add_due_date")}
+                              </Button>
+                            );
+                          })()}
+                        </Group>
+                      </Menu.Target>
+
+                      <Menu.Dropdown>
+                        <DueDateInput
+                          p={5}
+                          startDate={task.startDate}
+                          dueDate={task.dueDate}
+                          onChange={(e) => {
+                            ctx.onUpdate({ ...task, ...e });
+                          }}
+                        />
+                      </Menu.Dropdown>
+                    </Menu>
+                  </CtaSection>
+
+                  <TaskPrioritySelector
+                    onSelect={(priority) => ctx.onUpdate({ ...task, priority })}
+                    render={(selector) => {
+                      return (
+                        <CtaSection
+                          icon={task.priority ? IconFlagFilled : IconFlag}
+                          iconColor={
+                            task.priority ? getTaskPriorityColor(task.priority) : undefined
+                          }
+                          label={t("priority")}
+                          canRemove={!!task.priority}
+                          onRemove={() => ctx.onUpdate({ ...task, priority: null })}
+                          onClick={selector.toggle}
+                        >
+                          <Group style={{ cursor: "pointer" }} flex={1}>
+                            {(function () {
+                              if (task.priority) {
+                                return (
+                                  <Group gap={1}>
+                                    <Text>{t(`task_priority_${task.priority}`)}</Text>
+                                  </Group>
+                                );
+                              }
+
+                              return (
+                                <Button
+                                  color="gray"
+                                  variant="subtle"
+                                  leftIcon={IconPlus}
+                                  iconSpacing={-12}
+                                  iconSize={16}
+                                  size="compact-sm"
+                                  fz={13}
+                                  fw={400}
+                                >
+                                  {t("add_priority")}
+                                </Button>
+                              );
+                            })()}
+                          </Group>
+                        </CtaSection>
+                      );
+                    }}
+                  />
+
+                  <CtaSection icon={IconUser} label={t("assignee")}>
+                    <WorkspaceMembersInput
+                      collapsed
+                      value={task.assigneeUsers}
+                      onChange={(users) => {
+                        ctx.onUpdate({ ...task, assigneeUserIds: users.map((v) => v.userId) });
                       }}
                     />
-                  </Menu.Dropdown>
-                </Menu>
-              </CtaSection>
+                  </CtaSection>
 
-              <TaskPrioritySelector
-                onSelect={(priority) => ctx.onUpdate({ ...task, priority })}
-                render={(selector) => {
-                  return (
+                  {ctx.subTasks.length > 0 && (
                     <CtaSection
-                      icon={task.priority ? IconFlagFilled : IconFlag}
-                      iconColor={task.priority ? getTaskPriorityColor(task.priority) : undefined}
-                      label={t("priority")}
-                      canRemove={!!task.priority}
-                      onRemove={() => ctx.onUpdate({ ...task, priority: null })}
-                      onClick={selector.toggle}
+                      icon={IconSubtask}
+                      label={t("subtasks")}
+                      applyCollapse
+                      isCollapsed={isShowSubTasks}
                     >
-                      <Group style={{ cursor: "pointer" }} flex={1}>
-                        {(function () {
-                          if (task.priority) {
-                            return (
-                              <Group gap={1}>
-                                <Text>{t(`task_priority_${task.priority}`)}</Text>
-                              </Group>
-                            );
-                          }
-
-                          return (
-                            <Button
-                              color="gray"
-                              variant="subtle"
-                              leftIcon={IconPlus}
-                              iconSpacing={-12}
-                              iconSize={16}
-                              size="compact-sm"
-                              fz={13}
-                              fw={400}
-                            >
-                              {t("add_priority")}
-                            </Button>
-                          );
-                        })()}
+                      <Group justify="space-between" gap={5} flex={1}>
+                        <Button
+                          fz={em(14)}
+                          size="compact-xs"
+                          color="gray.8"
+                          variant="subtle"
+                          onClick={() => setIsShowSubTasks((s) => !s)}
+                        >
+                          {t("subtasks_count", { count: num(ctx.subTasks.length) })}
+                        </Button>
+                        <Group flex={1} justify="end" gap={5}>
+                          <Text fz={em(10)}>
+                            {num(ctx.progress.percent, { roundPrecision: 0 })}%
+                          </Text>
+                          <Progress
+                            value={ctx.progress.percent}
+                            w={60}
+                            color={ctx.progress.status.color || "dark"}
+                          />
+                        </Group>
                       </Group>
                     </CtaSection>
-                  );
-                }}
-              />
-
-              <CtaSection icon={IconUser} label={t("assignee")}>
-                <WorkspaceMembersInput
-                  collapsed
-                  value={task.assigneeUsers}
-                  onChange={(users) => {
-                    ctx.onUpdate({ ...task, assigneeUserIds: users.map((v) => v.userId) });
-                  }}
-                />
-              </CtaSection>
-
-              {ctx.subTasks.length > 0 && (
-                <CtaSection
-                  icon={IconSubtask}
-                  label={t("subtasks")}
-                  applyCollapse
-                  isCollapsed={isShowSubTasks}
-                >
-                  <Group justify="space-between" gap={5} flex={1}>
-                    <Button
-                      fz={em(14)}
-                      size="compact-xs"
-                      color="gray.8"
-                      variant="subtle"
-                      onClick={() => setIsShowSubTasks((s) => !s)}
-                    >
-                      {t("subtasks_count", { count: num(ctx.subTasks.length) })}
-                    </Button>
-                    <Group flex={1} justify="end" gap={5}>
-                      <Text fz={em(10)}>{num(ctx.progress.percent, { roundPrecision: 0 })}%</Text>
-                      <Progress
-                        value={ctx.progress.percent}
-                        w={60}
-                        color={ctx.progress.status.color || "dark"}
-                      />
-                    </Group>
-                  </Group>
-                </CtaSection>
-              )}
-            </Stack>
+                  )}
+                </Stack>
+              </Stack>
+            </Card>
           )}
         </Stack>
-      </Wrapper>
 
-      {ctx.subTasks.length > 0 && isShowSubTasks && !props.overlay && (
+        <BoardCardDroppable
+          visible={
+            !isSelfDragging && !isParentDragging && props.indexType === "last" && !isHasChild
+          }
+          targetTask={task}
+          position={ReorderTaskPotision.AFTER}
+          status={task.status}
+          isSubTask
+        />
+      </Stack>
+
+      {ctx.subTasks.length > 0 && isShowSubTasks && (
         <Stack gap={10} pl={20}>
           {ctx.subTasks.map((subTask, index) => (
             <BoardTaskCard

@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayout } from "@/layout/layout-context";
-import { getTaskEntity, getTaskEntites, updateTasks } from "@/modules/tasks/tasks-service";
+import { getTaskEntites, getTaskEntity, updateTasks } from "@/modules/tasks/tasks-service";
 import { addItemToIndex } from "@/utils/array.utils";
 import { objSelect } from "@/utils/object.utils";
 import {
@@ -17,10 +17,8 @@ import {
 import { Group } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useRef } from "react";
+import { TaskCardOverlay } from "./tasks-dnd-overlay";
 import { ReorderTaskPotision, TaskEntity } from "./tasks-types";
-import { BoardTaskCard } from "./views/board/board.task-card";
-import { GanttTaskRowSidebar } from "./views/gantt/gantt.task-row-sidebar";
-import { ListTaskRow } from "./views/list/list.task-row";
 
 export interface DndTasksContextState {
   draggingTaskId?: string;
@@ -137,9 +135,13 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
 
           const relatedTasks = allTasks
             .filter((t) =>
-              isSubTask ? t.parentId === targetTask._id : t._id !== task._id && t.parentId === targetTask.parentId
+              isSubTask
+                ? t.parentId === targetTask._id
+                : t._id !== task._id && t.parentId === targetTask.parentId
             )
-            .filter((t) => !!state.current.ignoreTagFolder || t.tagFolderId === targetTask.tagFolderId);
+            .filter(
+              (t) => !!state.current.ignoreTagFolder || t.tagFolderId === targetTask.tagFolderId
+            );
 
           if (isDebug) {
             console.log(
@@ -162,7 +164,9 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
             {
               ...task,
               parentId: isSubTask ? targetTask._id : relatedTasks[0].parentId,
-              tagFolderId: state.current.ignoreTagFolder ? task.tagFolderId : relatedTasks[0]?.tagFolderId,
+              tagFolderId: state.current.ignoreTagFolder
+                ? task.tagFolderId
+                : relatedTasks[0]?.tagFolderId,
             },
             indexOfPosition
           ).map((t, i) => ({ ...t, order: i }));
@@ -175,7 +179,9 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
               .filter((t) => t.parentId && t.parentId === task._id)
               .map((t) => ({ ...t, tagFolderId: targetTask.tagFolderId }));
 
-            updatedTasks = updatedTasks.filter((v) => !subTasksChanged.find((k) => k._id === v._id));
+            updatedTasks = updatedTasks.filter(
+              (v) => !subTasksChanged.find((k) => k._id === v._id)
+            );
             updatedTasks = [...updatedTasks, ...subTasksChanged];
           }
         } else {
@@ -199,23 +205,11 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
 
       <DragOverlay
         style={{
-          width: state.current?.overlayWidth,
-          height: state.current?.overlayHeight,
+          width: 280,
+          height: 42,
         }}
       >
-        {state.current.draggingTaskId && (
-          <Group
-            opacity={viewTypeOpacities[state.current.viewType as keyof typeof viewTypeOpacities] || 0.9}
-            style={{
-              width: state.current.overlayWidth,
-              height: state.current.overlayHeight,
-            }}
-          >
-            {state.current.viewType === "row" && <ListTaskRow id={state.current.draggingTaskId} overlay />}
-            {state.current.viewType === "card" && <BoardTaskCard id={state.current.draggingTaskId} overlay />}
-            {state.current.viewType === "gantt" && <GanttTaskRowSidebar id={state.current.draggingTaskId} overlay />}
-          </Group>
-        )}
+        {state.current.draggingTaskId && <TaskCardOverlay id={state.current.draggingTaskId} />}
       </DragOverlay>
     </DndContext>
   );
@@ -268,11 +262,12 @@ export const getTaskDragId = (taskId: string, viewType: string) => {
   return `${taskId}-${viewType}`;
 };
 
-export const useTaskDrag = (taskId: string, viewType: string) => {
+export const useTaskDrag = (taskId: string, viewType: string, disabled?: boolean) => {
   const dragId = getTaskDragId(taskId, viewType);
 
   const draggable = useDraggable({
     id: dragId,
+    disabled,
     data: { viewType, taskId },
   });
 

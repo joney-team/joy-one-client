@@ -1,3 +1,5 @@
+"use client";
+
 import { t } from "@/modules/lang/lang-service";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";

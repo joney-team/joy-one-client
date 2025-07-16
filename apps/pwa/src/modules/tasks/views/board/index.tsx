@@ -1,8 +1,10 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { t } from "@/modules/lang/lang-service";
+import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -12,9 +14,9 @@ import { useElementSize } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
+import { TasksDndProvider } from "../../tasks-dnd-provider";
 import { BoardTaskGroupByStatuses } from "./board.task-group-by-statuses";
 import { viewBoardConfig } from "./config";
-import { TasksDndProvider } from "../../tasks-dnd-provider";
 
 export const TasksBoardView: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
@@ -28,7 +30,8 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
     if (container.ref.current) {
       const rect = container.ref.current!.getBoundingClientRect();
       const vHeight = document.documentElement.clientHeight;
-      const height = vHeight - rect.top - (layout.view === "mobile" ? (layout.isStandalone ? 80 : 65) : 20);
+      const height =
+        vHeight - rect.top - (layout.view === "mobile" ? (layout.isStandalone ? 80 : 65) : 0);
       setHeight(height);
     }
   };
@@ -102,7 +105,9 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
               </Card>
             </Renderer>
 
-            {tasks.state.showClosed && <BoardTaskGroupByStatuses statusId={DefaultTaskStatusId.CLOSED} />}
+            {tasks.state.showClosed && (
+              <BoardTaskGroupByStatuses statusId={DefaultTaskStatusId.CLOSED} />
+            )}
           </Group>
         </ScrollArea>
       </Stack>

@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { Avatar } from "@/components/avatar";
 import { Calendar } from "@/components/calendar";
