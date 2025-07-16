@@ -11,16 +11,12 @@ import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import {
-  getTaskEntity,
-  getTaskPriorityColor,
-  renderTaskStatusStyle,
-} from "@/modules/tasks/tasks-service";
+import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { ReorderTaskPotision, TaskEntity } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { renderEntityCode } from "@/modules/workspaces/utils";
-import { capitalize } from "@/utils/string.utils";
+import { capitalize, StringUtils } from "@/utils/string.utils";
 import {
   ActionIcon,
   Badge,
@@ -82,6 +78,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
 
   const goDetail = () => tasks.open(task);
   const taskDrag = useTaskDrag(task._id, "card", !inViewport.inViewport);
+  const fixedHeight = task.childCount > 0 ? 280 : 250;
 
   return (
     <Stack flex={1} gap={10} style={{ position: "relative" }}>
@@ -95,7 +92,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
 
         <Stack
           ref={inViewport.ref}
-          h={260}
+          h={fixedHeight}
           opacity={taskDrag.isDragging ? 0.5 : 1}
           style={{ position: "relative", zIndex: 1 }}
         >
@@ -112,7 +109,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
               h="100%"
             >
               <Stack gap={5} h="100%">
-                <Stack gap={2} id={draggableId} style={{ cursor: "grab" }}>
+                <Stack gap={2} id={draggableId} style={{ cursor: "grab" }} flex={1}>
                   <Group onClick={goDetail} justify="space-between" align="center" wrap="nowrap">
                     <Group flex={1} gap={5}>
                       <Badge fz={em(10)} color="gray" size="xs" variant="outline">
@@ -168,21 +165,13 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                     </Group>
                   </Group>
 
-                  <Stack style={{ cursor: "pointer" }} onClick={goDetail} gap={5}>
-                    <Text fz={em(15)} fw={500}>
-                      {task.name}
-                    </Text>
-
-                    {/* <Renderer visible={!!ctx.tags.length}>
-                <Group gap={3} wrap='nowrap'>
-                  {ctx.tags.map(tag => <TaskTag
-                    key={tag._id}
-                    id={tag._id}
-                    h={26}
-                  />)}
-                </Group>
-              </Renderer> */}
-                  </Stack>
+                  <Tooltip label={task.name} disabled={task.name.length < 60} maw="70dvw" multiline>
+                    <Stack style={{ cursor: "pointer" }} onClick={goDetail} gap={5} flex={1}>
+                      <Text fz={em(15)} fw={500}>
+                        {StringUtils.limitCharacters(task.name, 60)}
+                      </Text>
+                    </Stack>
+                  </Tooltip>
                 </Stack>
 
                 <Stack gap={0}>

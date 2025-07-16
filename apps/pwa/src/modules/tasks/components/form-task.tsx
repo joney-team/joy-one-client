@@ -81,6 +81,7 @@ import { FilesBox } from "../../files/files-box";
 import { useTaskFolders } from "../hooks/use-task-folders";
 import { ListTaskRow } from "../views/list/list.task-row";
 import { ListTaskRowHead } from "../views/list/list.task-row-head";
+import { TasksDndProvider } from "../tasks-dnd-provider";
 
 export interface TaskFormProps {
   task?: TaskEntity;
@@ -643,29 +644,31 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
             </Group>
 
             {subTasks.length > 0 && (
-              <Stack gap={5} mt={8}>
-                <Card withBorder shadow="none" p={0}>
-                  <Stack gap={0}>
-                    <Stack py={5}>
-                      <ListTaskRowHead />
+              <TasksDndProvider>
+                <Stack gap={5} mt={8}>
+                  <Card withBorder shadow="none" p={0}>
+                    <Stack gap={0}>
+                      <Stack py={5}>
+                        <ListTaskRowHead />
+                      </Stack>
+
+                      <Divider />
+
+                      {subTasks.map((task, index) => {
+                        return (
+                          <ListTaskRow
+                            key={task._id}
+                            id={task._id}
+                            showDivider={index < subTasks.length - 1}
+                            limitName={20}
+                            allowEditName={false}
+                          />
+                        );
+                      })}
                     </Stack>
-
-                    <Divider />
-
-                    {subTasks.map((task, index) => {
-                      return (
-                        <ListTaskRow
-                          key={task._id}
-                          id={task._id}
-                          showDivider={index < subTasks.length - 1}
-                          limitName={20}
-                          allowEditName={false}
-                        />
-                      );
-                    })}
-                  </Stack>
-                </Card>
-              </Stack>
+                  </Card>
+                </Stack>
+              </TasksDndProvider>
             )}
           </Stack>
         )}
