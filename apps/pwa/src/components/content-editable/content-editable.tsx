@@ -2,7 +2,7 @@ import { Box } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { ClipboardEvent, FC, useEffect, useRef } from "react";
 import { placeCaretAtEnd } from "./utils";
-import { classNames } from "@/utils/ui.utils";
+import { classNamesRecord } from "@/utils/ui.utils";
 
 import styles from "./content-editable.module.css";
 
@@ -104,7 +104,7 @@ export const ContentEditable: FC<ContentEditableProps> = (props) => {
 
   return (
     <Box
-      className={classNames({
+      className={classNamesRecord({
         [styles.ContentEditable]: true,
         [styles.isActive]: !props.disabled,
       })}

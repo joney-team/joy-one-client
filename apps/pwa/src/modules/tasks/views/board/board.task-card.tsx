@@ -12,7 +12,7 @@ import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
+import { getTaskPriorityColor, renderTaskStatus } from "@/modules/tasks/tasks-service";
 import { ReorderTaskPotision, TaskEntity } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -69,7 +69,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
 
   if (!task) return null;
 
-  const taskStatusStyle = renderTaskStatusStyle(task.status, tasks.statuses);
+  const taskStatusStyle = renderTaskStatus(task.status, tasks.statuses);
   const draggableId = getTaskDragId(task._id, "card");
 
   const isSelfDragging = draggingTaskId === props.id;

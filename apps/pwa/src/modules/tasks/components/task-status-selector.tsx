@@ -2,7 +2,7 @@
 
 import { t } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
-import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
+import { renderTaskStatus } from "@/modules/tasks/tasks-service";
 import { TaskStatus } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ActionIcon, Combobox, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
@@ -25,7 +25,7 @@ export const TaskStatusSelector: FC<TaskStatusSelectorProps> = (props) => {
 
   const taskStatuses = workspace.settings.taskStatuses.map((status) => ({
     ...status,
-    name: renderTaskStatusStyle(status.id, workspace.settings.taskStatuses).name,
+    name: renderTaskStatus(status.id, workspace.settings.taskStatuses).name,
   })) as TaskStatus[];
 
   return (

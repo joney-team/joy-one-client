@@ -46,7 +46,7 @@ import {
   IconTagPlus,
 } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
-import { getTaskDragId, useDndTasks, useTaskDrag } from "../../tasks-dnd-provider";
+import { getTaskDragId, useDndTasks, useTaskDrag } from "../../../tasks-dnd-provider";
 import { ListTaskRowDropper } from "./list.task-row-dropper";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 

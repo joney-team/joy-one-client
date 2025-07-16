@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayout } from "@/layout/layout-context";
-import { getTaskEntity, getTaskEntites, updateTasks } from "@/modules/tasks/tasks-service";
+import { getTaskEntity, getTaskEntites, bulkUpdateTasks } from "@/modules/tasks/tasks-service";
 import { addItemToIndex } from "@/utils/array.utils";
 import { objSelect } from "@/utils/object.utils";
 import {
@@ -20,7 +20,7 @@ import { createContext, FC, PropsWithChildren, useContext, useEffect, useRef } f
 import { ReorderTaskPotision, TaskEntity } from "./tasks-types";
 import { BoardTaskCard } from "./views/board/board.task-card";
 import { GanttTaskRowSidebar } from "./views/gantt/gantt.task-row-sidebar";
-import { ListTaskRow } from "./views/list/list.task-row";
+import { ListTaskRow } from "./views/list/legacy/list.task-row";
 
 export interface DndTasksContextState {
   draggingTaskId?: string;
@@ -137,9 +137,13 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
 
           const relatedTasks = allTasks
             .filter((t) =>
-              isSubTask ? t.parentId === targetTask._id : t._id !== task._id && t.parentId === targetTask.parentId
+              isSubTask
+                ? t.parentId === targetTask._id
+                : t._id !== task._id && t.parentId === targetTask.parentId
             )
-            .filter((t) => !!state.current.ignoreTagFolder || t.tagFolderId === targetTask.tagFolderId);
+            .filter(
+              (t) => !!state.current.ignoreTagFolder || t.tagFolderId === targetTask.tagFolderId
+            );
 
           if (isDebug) {
             console.log(
@@ -162,7 +166,9 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
             {
               ...task,
               parentId: isSubTask ? targetTask._id : relatedTasks[0].parentId,
-              tagFolderId: state.current.ignoreTagFolder ? task.tagFolderId : relatedTasks[0]?.tagFolderId,
+              tagFolderId: state.current.ignoreTagFolder
+                ? task.tagFolderId
+                : relatedTasks[0]?.tagFolderId,
             },
             indexOfPosition
           ).map((t, i) => ({ ...t, order: i }));
@@ -175,7 +181,9 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
               .filter((t) => t.parentId && t.parentId === task._id)
               .map((t) => ({ ...t, tagFolderId: targetTask.tagFolderId }));
 
-            updatedTasks = updatedTasks.filter((v) => !subTasksChanged.find((k) => k._id === v._id));
+            updatedTasks = updatedTasks.filter(
+              (v) => !subTasksChanged.find((k) => k._id === v._id)
+            );
             updatedTasks = [...updatedTasks, ...subTasksChanged];
           }
         } else {
@@ -191,7 +199,7 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
           console.log("\n");
         }
 
-        updateTasks(updatedTasks);
+        bulkUpdateTasks(updatedTasks);
         return reset();
       }}
     >
@@ -205,15 +213,23 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
       >
         {state.current.draggingTaskId && (
           <Group
-            opacity={viewTypeOpacities[state.current.viewType as keyof typeof viewTypeOpacities] || 0.9}
+            opacity={
+              viewTypeOpacities[state.current.viewType as keyof typeof viewTypeOpacities] || 0.9
+            }
             style={{
               width: state.current.overlayWidth,
               height: state.current.overlayHeight,
             }}
           >
-            {state.current.viewType === "row" && <ListTaskRow id={state.current.draggingTaskId} overlay />}
-            {state.current.viewType === "card" && <BoardTaskCard id={state.current.draggingTaskId} overlay />}
-            {state.current.viewType === "gantt" && <GanttTaskRowSidebar id={state.current.draggingTaskId} overlay />}
+            {state.current.viewType === "row" && (
+              <ListTaskRow id={state.current.draggingTaskId} overlay />
+            )}
+            {state.current.viewType === "card" && (
+              <BoardTaskCard id={state.current.draggingTaskId} overlay />
+            )}
+            {state.current.viewType === "gantt" && (
+              <GanttTaskRowSidebar id={state.current.draggingTaskId} overlay />
+            )}
           </Group>
         )}
       </DragOverlay>

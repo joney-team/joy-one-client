@@ -8,7 +8,7 @@ import { OnModalShareLink } from "@/modals/modal-share-link";
 import { renderDateTime, t } from "@/modules/lang/lang-service";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { useTask } from "@/modules/tasks/hooks/use-task";
-import { getRelatedTasks, getTaskEntity, updateTasks } from "@/modules/tasks/tasks-service";
+import { getRelatedTasks, getTaskEntity, bulkUpdateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { capitalize, StringUtils } from "@/utils/string.utils";
 import config from "@joy-one-client/config";
@@ -84,7 +84,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
           <TaskTagFolderSelector
             excludeIds={[tagFolder?._id || "none"]}
             onSelect={(tag) => {
-              updateTasks([{ ...task, tagFolderId: tag?._id }]);
+              bulkUpdateTasks([{ ...task, tagFolderId: tag?._id }]);
             }}
             render={(ctx) => {
               return (

@@ -32,7 +32,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag } from "../../tasks-dnd-provider";
-import { ListTaskRowDropper } from "../list/list.task-row-dropper";
+import { ListTaskRowDropper } from "../list/legacy/list.task-row-dropper";
 import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
 import { useGanttTaskState } from "./gantt.hooks";

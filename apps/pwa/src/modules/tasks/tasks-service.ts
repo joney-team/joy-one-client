@@ -74,18 +74,22 @@ export const DefaultTaskStatusIcons: { [id: string]: string } = {
   [DefaultTaskStatusId.CLOSED]: 'IconCheck',
 }
 
-export function renderTaskStatusStyle(statusId: string, workspaceStatuses: TaskStatus[]) {
-  const status = workspaceStatuses.find(s => s.id === statusId) || workspaceStatuses.find(v => v.id === DefaultTaskStatusId.TODO)!;
-  let icon = (status.icon && TaskIcons[status.icon])
+export function renderTaskStatus(statusId: string, statuses: TaskStatus[]) {
+  const status = statuses.find(s => s.id === statusId) || statuses.find(v => v.id === DefaultTaskStatusId.TODO)!;
+  const icon = (status.icon && TaskIcons[status.icon])
     ? TaskIcons[status.icon]
     : TaskIcons[DefaultTaskStatusIcons[statusId]] || TaskIcons['IconCircleFilled'];
-  let name: string = status.name || t(`dts_${status.id}`);
-  let color = status.color || DefaultTaskStatusColors[status.id] || 'gray';
+  const name: string = status.name || t(`dts_${status.id}`);
+  const color = status.color || DefaultTaskStatusColors[status.id] || 'gray';
+  const index = statuses.findIndex(v => v.id === statusId);
+  const progress = (index + 1) / statuses.length;
 
   return {
     icon,
-    name: name.toUpperCase(),
+    name: name,
     color,
+    progress,
+    index,
   }
 }
 
@@ -119,7 +123,7 @@ export function getTaskProgress(tasks: TaskEntity[], statuses: TaskStatus[]) {
   }
 }
 
-export const updateTasks = async (tasks: TaskEntity[], addToHistory = true) => {
+export const bulkUpdateTasks = async (tasks: TaskEntity[], addToHistory = true) => {
   taskEntities = {
     ...taskEntities,
     ...Object.fromEntries(tasks.map(task => [task._id, task]))
@@ -143,7 +147,7 @@ export const updateTasks = async (tasks: TaskEntity[], addToHistory = true) => {
     tasksEmitter.emit('history', taskHistory);
   }
 
-  return response.updatedTasks;
+  return tasks;
 }
 
 export const syncTasks = (opts: {

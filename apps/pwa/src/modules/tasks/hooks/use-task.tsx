@@ -16,7 +16,7 @@ import {
   syncTasks,
   taskEntities,
   tasksEmitter,
-  updateTasks,
+  bulkUpdateTasks,
 } from "../tasks-service";
 import { DefaultTaskStatusId, TaskEntity, TaskStatus } from "../tasks-types";
 import { useColor } from "@/modules/theme/use-color";
@@ -57,7 +57,7 @@ export const useTask = (id: string, initTask?: TaskEntity, isSkipLoadSubTasks = 
 
   const onUpdate = (_task: TaskEntity) => {
     setTask(_task);
-    updateTasks([_task]).catch(onError);
+    bulkUpdateTasks([_task]).catch(onError);
   };
 
   const subTaskList = useList({
@@ -110,7 +110,7 @@ export const useTask = (id: string, initTask?: TaskEntity, isSkipLoadSubTasks = 
     const currentIndex = workspace.settings.taskStatuses.findIndex((v) => v.id === task.status);
     const nextIndex = currentIndex + 1;
     if (nextIndex >= workspace.settings.taskStatuses.length) return;
-    updateTasks([{ ...task, status: workspace.settings.taskStatuses[nextIndex].id }]).catch(
+    bulkUpdateTasks([{ ...task, status: workspace.settings.taskStatuses[nextIndex].id }]).catch(
       onError
     );
   };

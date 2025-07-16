@@ -7,7 +7,7 @@ import { Renderer } from "@/components/renderer";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { onArchive } from "@/utils/actions";
 import { num, t } from "@/modules/lang/lang-service";
-import { getTasks, renderTaskStatusStyle, updateTasks } from "@/modules/tasks/tasks-service";
+import { getTasks, renderTaskStatus, bulkUpdateTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskStatus } from "@/modules/tasks/tasks-types";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -159,12 +159,12 @@ export const CreateStatusForm: FC = () => {
             fw={400}
             autoFocus
             value={name}
-            onChange={(v) => setName(v.toUpperCase())}
+            onChange={(v) => setName(v)}
             placeholder={t("enter_name")}
           />
         ) : (
           <Title fz={em(15)} fw={400} flex={1} onClick={() => setIsActivated(true)} c="gray">
-            {t("add")} {t("status").toLowerCase()}
+            {t("add_entity", { entity: t("status").toLowerCase() })}
           </Title>
         )}
 
@@ -206,7 +206,7 @@ export const StatusCard: FC<{
   overlay?: boolean;
 }> = (props) => {
   const workspace = useWorkspace();
-  const styled = renderTaskStatusStyle(props.status.id, workspace.settings.taskStatuses);
+  const styled = renderTaskStatus(props.status.id, workspace.settings.taskStatuses);
   const isDefaultStatus = Object.values<string>(DefaultTaskStatusId).includes(props.status.id);
 
   const onChangeName = useDebouncedCallback(async (value?: string | null) => {
@@ -214,15 +214,12 @@ export const StatusCard: FC<{
       v.id === props.status.id ? { ...v, name: value } : v
     );
     await setWorkspaceSettings({ ...workspace.settings, taskStatuses });
-  }, 500);
+  }, 1000);
 
   const onRemove = async () => {
     const taskStatuses = workspace.settings.taskStatuses.filter((v) => v.id !== props.status.id);
     const relatedTasks = await getTasks({ status: props.status.id }).then((res) => res.data);
-    const statusStyle = renderTaskStatusStyle(
-      DefaultTaskStatusId.TODO,
-      workspace.settings.taskStatuses
-    );
+    const statusStyle = renderTaskStatus(DefaultTaskStatusId.TODO, workspace.settings.taskStatuses);
 
     onArchive({
       name: t("task_status"),
@@ -239,7 +236,7 @@ export const StatusCard: FC<{
       ),
       process: async () => {
         await setWorkspaceSettings({ ...workspace.settings, taskStatuses }),
-          await updateTasks(
+          await bulkUpdateTasks(
             relatedTasks.map((t) => {
               return {
                 ...t,
@@ -291,7 +288,7 @@ export const StatusCard: FC<{
 
         <Space />
 
-        <ContentEditable value={styled.name} fz={16} fw={400} autoFocus onChange={onChangeName} />
+        <ContentEditable value={styled.name} fz={16} fw={400} onChange={onChangeName} />
 
         <Group justify="end">
           <Renderer visible={!isDefaultStatus}>

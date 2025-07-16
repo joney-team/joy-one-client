@@ -1,0 +1,25 @@
+.ListTaskRow {
+  cursor: pointer;
+  user-select: none;
+  outline: none !important;
+
+  &:not(.isReadOnly) {
+    &:hover {
+      background-color: var(--mantine-color-default-hover);
+
+      & .SelectBox {
+        opacity: 1;
+      }
+    }
+  }
+
+  & .SelectBox {
+    opacity: 0;
+  }
+
+  &.isSelected {
+    & .SelectBox {
+      opacity: 1;
+    }
+  }
+}

@@ -12,7 +12,7 @@ import { onReconnected, useEventsListener } from "@/modules/events/event-service
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
+import { getTasks, renderTaskStatus } from "@/modules/tasks/tasks-service";
 import { TaskEntity, TaskTimeTracking } from "@/modules/tasks/tasks-types";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import {
@@ -354,7 +354,7 @@ const TaskRow: FC<{
 
   const color = useColor();
 
-  const statusStyle = renderTaskStatusStyle(task.status, workspace.settings.taskStatuses);
+  const statusStyle = renderTaskStatus(task.status, workspace.settings.taskStatuses);
   const assignee = task.assigneeUsers?.[0];
 
   const timeTrackings = (task.timeTrackings || []).filter(

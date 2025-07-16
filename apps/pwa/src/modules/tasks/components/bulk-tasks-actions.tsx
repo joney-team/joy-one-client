@@ -11,7 +11,7 @@ import { useLayout } from "@/layout/layout-context";
 import { num, t } from "@/modules/lang/lang-service";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { getTaskEntites, getTaskEntity, updateTasks } from "@/modules/tasks/tasks-service";
+import { getTaskEntites, getTaskEntity, bulkUpdateTasks } from "@/modules/tasks/tasks-service";
 import { TaskPriority, TaskStatus } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
@@ -39,7 +39,7 @@ export const BulkTasksActions: FC = () => {
     const selectedTasks = tasks.selectedTaskIds
       .map((id) => getTaskEntity(id)!)
       .filter((task) => !!task);
-    updateTasks(selectedTasks.map((task) => ({ ...task, isArchived: true })));
+    bulkUpdateTasks(selectedTasks.map((task) => ({ ...task, isArchived: true })));
     tasks.removeSelectedTasks();
   };
 
@@ -49,7 +49,7 @@ export const BulkTasksActions: FC = () => {
     const selectedTasks = tasks.selectedTaskIds
       .map((id) => getTaskEntity(id)!)
       .filter((task) => !!task);
-    updateTasks(
+    bulkUpdateTasks(
       selectedTasks.map((task) => ({
         ...task,
         assigneeUserIds: [...new Set([...(task.assigneeUserIds || []), user.userId])],
@@ -61,7 +61,7 @@ export const BulkTasksActions: FC = () => {
     const selectedTasks = tasks.selectedTaskIds
       .map((id) => getTaskEntity(id)!)
       .filter((task) => !!task);
-    updateTasks(selectedTasks.map((task) => ({ ...task, status: status.id })));
+    bulkUpdateTasks(selectedTasks.map((task) => ({ ...task, status: status.id })));
   };
 
   const changeFolder = (tagFolder?: TagEntity) => {
@@ -73,7 +73,7 @@ export const BulkTasksActions: FC = () => {
       childTasks.forEach((child) => relatedTasks.push(child));
     });
 
-    updateTasks(relatedTasks.map((task) => ({ ...task, tagFolderId: tagFolder?._id })));
+    bulkUpdateTasks(relatedTasks.map((task) => ({ ...task, tagFolderId: tagFolder?._id })));
   };
 
   const setTag = (tag?: TagEntity) => {
@@ -83,7 +83,7 @@ export const BulkTasksActions: FC = () => {
       .filter((task) => !!task);
 
     if (selectedTasks.every((task) => task.tagIds?.includes(tag._id))) {
-      return updateTasks(
+      return bulkUpdateTasks(
         selectedTasks.map((task) => ({
           ...task,
           tagIds: task.tagIds?.filter((id) => id !== tag._id),
@@ -91,7 +91,7 @@ export const BulkTasksActions: FC = () => {
       );
     }
 
-    updateTasks(
+    bulkUpdateTasks(
       selectedTasks.map((task) => ({
         ...task,
         tagIds: [...new Set([...(task.tagIds || []), tag._id])],
@@ -103,7 +103,7 @@ export const BulkTasksActions: FC = () => {
     const selectedTasks = tasks.selectedTaskIds
       .map((id) => getTaskEntity(id)!)
       .filter((task) => !!task);
-    updateTasks(selectedTasks.map((task) => ({ ...task, priority: priority })));
+    bulkUpdateTasks(selectedTasks.map((task) => ({ ...task, priority: priority })));
   };
 
   if (tasks.selectedTaskIds.length === 0) return null;

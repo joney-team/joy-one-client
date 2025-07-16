@@ -116,6 +116,8 @@ export interface TaskHistory {
 }
 
 export interface TasksContext {
+  tasks: TaskEntity[],
+  refetch: () => Promise<any>,
   views: TaskView[],
   view: TaskView,
   setView: (view: TaskView) => void,

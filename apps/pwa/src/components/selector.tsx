@@ -111,6 +111,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
   const isListable = listRoute && listRoute.length > 0;
   const list = useList<T>({
     isSkip: !isListable,
+    autoFetch: false,
     id: `sopts${listRoute}${JSON.stringify(listParams)}${workspaceId}`,
     fetch: async (p) => {
       if (!listRoute || listRoute.length === 0) {
@@ -214,7 +215,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
 
     props.onOpen?.();
     combobox.openDropdown();
-    list.fetch(true, { isSilient: true });
+    if (isListable) list.fetch(true, { isSilient: true });
 
     await wait(200);
     searchRef.current?.focus();

@@ -2,7 +2,7 @@
 
 import { t } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
-import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
+import { renderTaskStatus } from "@/modules/tasks/tasks-service";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { DefaultTaskStatusId, TaskEntity, TaskStatus } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
@@ -12,7 +12,7 @@ import { IconCheck, IconSettings } from "@tabler/icons-react";
 import { FC, MouseEventHandler, useState } from "react";
 
 interface TaskStatusOptionsProps {
-  task: TaskEntity;
+  task: Pick<TaskEntity, "_id" | "status">;
   size?: number;
   disabled?: boolean;
   target?: React.ReactNode;
@@ -24,7 +24,7 @@ export const TaskStatusOptions: FC<TaskStatusOptionsProps> = (props) => {
   const status =
     workspace.settings.taskStatuses.find((s) => s.id === props.task.status) ||
     workspace.settings.taskStatuses[0];
-  const activatedStyle = renderTaskStatusStyle(props.task.status, workspace.settings.taskStatuses);
+  const activatedStyle = renderTaskStatus(props.task.status, workspace.settings.taskStatuses);
   const [opened, setOpened] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -72,7 +72,7 @@ export const TaskStatusOptions: FC<TaskStatusOptionsProps> = (props) => {
           ? searchArray(workspace.settings.taskStatuses, ["name"], search)
           : workspace.settings.taskStatuses
         ).map((status) => {
-          const iconStyle = renderTaskStatusStyle(status.id, workspace.settings.taskStatuses);
+          const iconStyle = renderTaskStatus(status.id, workspace.settings.taskStatuses);
 
           return (
             <Menu.Item

@@ -1,7 +1,7 @@
 "use client";
 
 import { t } from "@/modules/lang/lang-service";
-import { updateTasks } from "@/modules/tasks/tasks-service";
+import { bulkUpdateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import {
   ActionIcon,
@@ -138,7 +138,7 @@ export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInput
               e.preventDefault();
               e.stopPropagation();
               const duration = parseTimeInput((e.target as HTMLInputElement).value);
-              updateTasks([
+              bulkUpdateTasks([
                 {
                   ...props.task,
                   estimatedTime: duration,

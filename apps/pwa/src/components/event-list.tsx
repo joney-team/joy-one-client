@@ -18,7 +18,7 @@ import {
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { eventVariantColors, eventVariantIcons } from "@/modules/events/event-config";
 import { t } from "@/modules/lang/lang-service";
-import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
+import { getTaskPriorityColor, renderTaskStatus } from "@/modules/tasks/tasks-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import dayjs from "dayjs";
@@ -258,14 +258,11 @@ function EventItemTitle(props: { event: EventEntity }) {
     event.data.fromStatus &&
     event.data.toStatus
   ) {
-    const fromStatusStyle = renderTaskStatusStyle(
+    const fromStatusStyle = renderTaskStatus(
       event.data.fromStatus,
       workspace.settings.taskStatuses
     );
-    const toStatusStyle = renderTaskStatusStyle(
-      event.data.toStatus,
-      workspace.settings.taskStatuses
-    );
+    const toStatusStyle = renderTaskStatus(event.data.toStatus, workspace.settings.taskStatuses);
 
     return (
       <Group gap={8}>

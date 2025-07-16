@@ -2,7 +2,7 @@
 
 import { configs } from "@/configs/layout.config";
 import { num, t } from "@/modules/lang/lang-service";
-import { tasksEmitter, updateTasks } from "@/modules/tasks/tasks-service";
+import { tasksEmitter, bulkUpdateTasks } from "@/modules/tasks/tasks-service";
 import { TaskHistory } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Button, Group, Stack, Text } from "@mantine/core";
@@ -23,8 +23,8 @@ const TaskHistoriesProvider: FC<PropsWithChildren> = (props) => {
     const _history = histories.current.find((v) => v.id === id);
     if (!_history) return;
 
-    if (position === "prev" && _history.prevTasks) updateTasks(_history.prevTasks, false);
-    if (position === "next" && _history.tasks) updateTasks(_history.tasks, false);
+    if (position === "prev" && _history.prevTasks) bulkUpdateTasks(_history.prevTasks, false);
+    if (position === "next" && _history.tasks) bulkUpdateTasks(_history.tasks, false);
     setPointedHistoryId(id);
   };
 

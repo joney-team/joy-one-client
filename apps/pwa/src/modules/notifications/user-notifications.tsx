@@ -18,7 +18,7 @@ import {
   UserNotificationStat,
 } from "@/modules/notifications/notification-types";
 import { onError } from "@/utils/exceptions.utils";
-import { classNames } from "@/utils/ui.utils";
+import { classNamesRecord } from "@/utils/ui.utils";
 import { useList } from "@/utils/use-list.util";
 import { ActionIcon, Drawer, Group, Indicator, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -129,7 +129,7 @@ export const UserNotifications: FC = () => {
           <IconBell
             size={em(23)}
             strokeWidth={1.5}
-            className={classNames({
+            className={classNamesRecord({
               animTada: !!stat && stat.unListViewed > 0,
             })}
           />

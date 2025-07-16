@@ -7,13 +7,23 @@ import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { num, t } from "@/modules/lang/lang-service";
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { getTasks, renderTaskStatusStyle, syncTasks } from "@/modules/tasks/tasks-service";
+import { getTasks, renderTaskStatus, syncTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { capitalize } from "@/utils/string.utils";
 import { useList } from "@/utils/use-list.util";
-import { ActionIcon, Group, ScrollArea, Stack, Text, Tooltip, alpha, em, useMantineTheme } from "@mantine/core";
+import {
+  ActionIcon,
+  Group,
+  ScrollArea,
+  Stack,
+  Text,
+  Tooltip,
+  alpha,
+  em,
+  useMantineTheme,
+} from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -69,8 +79,9 @@ export const BoardTaskGroupByStatuses: FC<BoardTaskGroupByStatusesProps> = (prop
   );
 
   const status =
-    workspace.settings.taskStatuses.find((s) => s.id === props.statusId) || workspace.settings.taskStatuses[0];
-  const statusStyle = renderTaskStatusStyle(props.statusId, workspace.settings.taskStatuses);
+    workspace.settings.taskStatuses.find((s) => s.id === props.statusId) ||
+    workspace.settings.taskStatuses[0];
+  const statusStyle = renderTaskStatus(props.statusId, workspace.settings.taskStatuses);
 
   const wrapperSize = useElementSize();
   const headSize = 34;
@@ -102,7 +113,12 @@ export const BoardTaskGroupByStatuses: FC<BoardTaskGroupByStatusesProps> = (prop
               variant={!isTodoStatus ? "filled" : "light"}
               color={statusStyle.color}
               leftSection={
-                <TaskStatusIcon {...status} white={status.id !== DefaultTaskStatusId.TODO} size={16} mr={-8} />
+                <TaskStatusIcon
+                  {...status}
+                  white={status.id !== DefaultTaskStatusId.TODO}
+                  size={16}
+                  mr={-8}
+                />
               }
               tt="uppercase"
               fz={10}
@@ -120,7 +136,12 @@ export const BoardTaskGroupByStatuses: FC<BoardTaskGroupByStatusesProps> = (prop
           <Group justify="end" gap={0}>
             <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
               <Tooltip label={capitalize(`${t("update")} ${t("task_status")}`)}>
-                <ActionIcon variant="subtle" size="sm" color="gray" onClick={() => OnTaskSatusesModal()}>
+                <ActionIcon
+                  variant="subtle"
+                  size="sm"
+                  color="gray"
+                  onClick={() => OnTaskSatusesModal()}
+                >
                   <IconPencil size={16} strokeWidth={1.5} />
                 </ActionIcon>
               </Tooltip>
@@ -170,7 +191,9 @@ export const BoardTaskGroupByStatuses: FC<BoardTaskGroupByStatusesProps> = (prop
                     <BoardTaskCard
                       key={task._id}
                       id={task._id}
-                      indexType={index === tasks.length - 1 ? "last" : index === 0 ? "first" : undefined}
+                      indexType={
+                        index === tasks.length - 1 ? "last" : index === 0 ? "first" : undefined
+                      }
                       nextId={tasks[index + 1]?._id}
                       prevId={tasks[index - 1]?._id}
                     />
@@ -178,7 +201,10 @@ export const BoardTaskGroupByStatuses: FC<BoardTaskGroupByStatusesProps> = (prop
                 </Stack>
               </Renderer>
 
-              <ChangeStatusDrop visible={!!dndTasks.draggingTaskId && tasks.length === 0} statusId={status.id} />
+              <ChangeStatusDrop
+                visible={!!dndTasks.draggingTaskId && tasks.length === 0}
+                statusId={status.id}
+              />
 
               <Renderer visible={!isClosedTasks && !!!dndTasks.draggingTaskId}>
                 <Group>

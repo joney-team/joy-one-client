@@ -27,8 +27,8 @@ import {
   getTaskPriorityColor,
   getTaskProgress,
   getTasks,
-  renderTaskStatusStyle,
-  updateTasks,
+  renderTaskStatus,
+  bulkUpdateTasks,
 } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity, TaskTimeTracking } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -79,8 +79,8 @@ import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { CustomerInput } from "../../customers/components/customer-input";
 import { FilesBox } from "../../files/files-box";
 import { useTaskFolders } from "../hooks/use-task-folders";
-import { ListTaskRow } from "../views/list/list.task-row";
-import { ListTaskRowHead } from "../views/list/list.task-row-head";
+import { ListTaskRow } from "../views/list/legacy/list.task-row";
+import { ListTaskRowHead } from "../views/list/legacy/list.task-row-head";
 
 export interface TaskFormProps {
   task?: TaskEntity;
@@ -91,7 +91,7 @@ export interface TaskFormProps {
   status?: string;
   order?: number;
   dueDate?: number;
-  tagFolderId?: string | null;
+  tagFolderId?: string | null | undefined;
   timeTrackings?: TaskTimeTracking[];
 }
 
@@ -115,7 +115,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
   const onUpdate = useDebouncedCallback((values: any) => {
     if (!props.task?._id || !values.name || !isInitialized.current) return;
-    updateTasks([
+    bulkUpdateTasks([
       {
         ...props.task,
         name: values.name,
@@ -268,11 +268,11 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                 inputProps={{ flex: 1 }}
                 onSelect={(status) => form.setFieldValue("status", status.id)}
                 render={(ctx) => {
-                  const statusStyled = renderTaskStatusStyle(
+                  const statusStyled = renderTaskStatus(
                     form.values.status,
                     workspace.settings.taskStatuses
                   );
-                  const closedStatusStyled = renderTaskStatusStyle(
+                  const closedStatusStyled = renderTaskStatus(
                     DefaultTaskStatusId.CLOSED,
                     workspace.settings.taskStatuses
                   );

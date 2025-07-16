@@ -3,7 +3,7 @@
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { EventList } from "@/components/event-list";
 import { t } from "@/modules/lang/lang-service";
-import { updateTasks } from "@/modules/tasks/tasks-service";
+import { bulkUpdateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconTimelineEvent } from "@tabler/icons-react";
@@ -36,7 +36,7 @@ export const DetailFooter: FC<DetailFooterProps> = (props) => {
         name="task"
         process={async () => {
           if (!task) return;
-          await updateTasks([{ ...task, isArchived: true }]);
+          await bulkUpdateTasks([{ ...task, isArchived: true }]);
           onClose();
         }}
       />

@@ -4,7 +4,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { formatDuration } from "@/components/inputs/estimate-time-input";
 import { num, t } from "@/modules/lang/lang-service";
 import { useTask } from "@/modules/tasks/hooks/use-task";
-import { getTaskProgress, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
+import { getTaskProgress, renderTaskStatus } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
@@ -53,7 +53,7 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
 
   const mouseX = useRef(0);
 
-  const taskStatusStyled = renderTaskStatusStyle(task?.status, workspace?.settings?.taskStatuses);
+  const taskStatusStyled = renderTaskStatus(task?.status, workspace?.settings?.taskStatuses);
   const selectorPosition = mouse.x - 25;
 
   useEffect(() => {

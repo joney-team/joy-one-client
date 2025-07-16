@@ -5,15 +5,18 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
-import { getTaskEntites, getTaskEntity, tasksEmitter } from "@/modules/tasks/tasks-service";
-import { TaskEntity, TaskPriority } from "@/modules/tasks/tasks-types";
+import { tasksEmitter } from "@/modules/tasks/tasks-service";
+import { DefaultTaskStatusId, TaskEntity, TaskPriority } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { ResponseList } from "@/types";
 import { shiftSelect } from "@/utils/array.utils";
 import { useParams } from "next/navigation";
 import { Dispatch, FC, PropsWithChildren, SetStateAction, useEffect, useState } from "react";
+import { useQuery } from "../apis/use-query";
 import { getSessionId } from "../auth/auth-service";
 import { Context } from "./tasks-context";
 import { TaskView } from "./views/types";
+import { onTasksUpdated } from "./hooks/use-task";
 
 export interface TasksState {
   showClosed?: boolean;
@@ -59,6 +62,37 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
       return newState;
     });
   };
+
+  const tasks = useQuery<ResponseList<TaskEntity>>({
+    route: "/tasks",
+    params: {
+      getAll: true,
+      parentId: "root",
+      statusNotIn: [DefaultTaskStatusId.CLOSED],
+      tagFolderId: tagFolder?._id,
+      sort: "orderAsc",
+    },
+  });
+
+  onTasksUpdated(
+    (updatedTasks) => {
+      if (tasks.data) {
+        tasks.set((state) => {
+          if (!state) return state;
+
+          return {
+            ...state,
+            data: state.data.map((task) => {
+              const updatedTask = updatedTasks.find((t) => t._id === task._id);
+              if (updatedTask) return updatedTask;
+              return task;
+            }),
+          };
+        });
+      }
+    },
+    [tasks]
+  );
 
   const initialize = async () => {
     const cachedView = localStorage.getItem("tasks_view") as TaskView;
@@ -119,19 +153,11 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const toggleSelectTask = (taskId: string, isShiftKey?: boolean) => {
-    const pointedTask = getTaskEntity(taskId);
+    const pointedTask = tasks.data?.data.find((v) => v._id === taskId);
     if (!pointedTask) return;
 
-    const allTasks = getTaskEntites();
-    const _relatedTaskIds = allTasks
-      .filter(
-        (v) =>
-          v._id === taskId ||
-          (v.parentId === pointedTask.parentId &&
-            v.status === pointedTask.status &&
-            v.tagFolderId === pointedTask.tagFolderId)
-      )
-      .map((v) => v._id);
+    const allTasks = tasks.data?.data ?? [];
+    const _relatedTaskIds = allTasks.map((v) => v._id);
     const _selectedTaskIds = _relatedTaskIds.filter((v) => selectedTaskIds.includes(v));
 
     if (isShiftKey && _relatedTaskIds.some((v) => selectedTaskIds.includes(v))) {
@@ -168,6 +194,8 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
   return (
     <Context.Provider
       value={{
+        tasks: (tasks.data?.data ?? []).sort((a, b) => a.order - b.order),
+        refetch: () => tasks.refetch(),
         views,
         view,
         setView,
@@ -189,7 +217,7 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
         params,
         getSelectedView,
         removeFolder,
-        selectedTaskIds: selectedTaskIds.filter((v) => !!getTaskEntity(v)),
+        selectedTaskIds: selectedTaskIds.filter((v) => tasks.data?.data.some((l) => l._id === v)),
         toggleSelectTask,
         removeSelectedTasks,
       }}

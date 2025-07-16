@@ -12,7 +12,7 @@ import {
 import { CalendarView } from "@/types";
 import { parseToTime } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { classNames } from "@/utils/ui.utils";
+import { classNamesRecord } from "@/utils/ui.utils";
 import { ActionIcon, Card, Group, Stack, Text } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import dayjs from "dayjs";
@@ -235,7 +235,7 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
             const isAvailable = isInWorkspaceWorkSlots && !props.disabled;
 
             return {
-              className: classNames({ available: isAvailable }),
+              className: classNamesRecord({ available: isAvailable }),
               style: {
                 backgroundColor: isAvailable ? "white" : color("gray.1"),
               },

@@ -1,4 +1,4 @@
-import { NetworkMode, UseQueryResult, useQuery as useQueryTanstack } from "@tanstack/react-query";
+import { NetworkMode, useQueryClient, UseQueryResult, useQuery as useQueryTanstack } from "@tanstack/react-query";
 
 import { AxiosError } from "axios";
 import { api } from ".";
@@ -17,19 +17,23 @@ export interface UseQueryArgs<T> {
   queryKey?: string[];
 }
 
-export type UseQuery<T> = UseQueryResult<T, AxiosError<unknown, any>>
+export type UseQuery<T> = UseQueryResult<T, AxiosError<unknown, any>> & {
+  set: (fn: (data: T | undefined) => T | undefined) => void;
+}
 
 export const useQuery = <T = any>(args: string | (UseQueryArgs<T> & { route: string })): UseQuery<T> => {
+  const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
+  const queryClient = useQueryClient()
   const isReadyToFetch = typeof args === 'string' ? true : !args.isSkip;
   const query = typeof args === 'string' ? {} as UseQueryArgs<T> : args;
   const route = typeof args === 'string' ? args : args.route;
   const params = typeof args === 'string' ? null : args.params;
-  const queryKey = typeof args === 'string' ? [] : args.queryKey || [];
+  const inputQueryKey = typeof args === 'string' ? [] : args.queryKey || [];
+  const queryKey = [...inputQueryKey, route, params, workspaceId || 'general'];
   const networkMode = query.networkMode ?? 'offlineFirst';
-  const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
   const stack = useQueryTanstack<T, AxiosError>({
-    queryKey: [...queryKey, route, params, workspaceId || 'general'],
+    queryKey,
     queryFn: ({ signal }) => {
       if (query.method === 'post') {
         return api.post<T>(route, query.params, { signal });
@@ -52,7 +56,12 @@ export const useQuery = <T = any>(args: string | (UseQueryArgs<T> & { route: str
     }
   }, [refetchEvents, isReadyToFetch, route, params])
 
-  return stack
+  return {
+    ...stack,
+    set: (fn) => {
+      queryClient.setQueryData(queryKey, fn(stack.data))
+    }
+  }
 }
 
 export interface UseDynmicQueryArgs<T> {
