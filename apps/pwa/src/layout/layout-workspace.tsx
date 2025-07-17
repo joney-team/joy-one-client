@@ -11,6 +11,7 @@ import { Fragment, Suspense, useEffect, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 import { WorkspaceNavigationSplitter } from "./navigation/navigation-splitter";
+import OverlayLoading from "@/components/overlay-loading";
 
 const AppNavigation = dynamic(
   () => import("./navigation/navigation").then((m) => m.AppNavigation),
@@ -119,9 +120,13 @@ export const LayoutWorkspace: FC = () => {
                 }
           }
         >
-          {workspace.isAvailable && (
+          {workspace.isAvailable ? (
             <Suspense>
               <AppNavigation />
+            </Suspense>
+          ) : (
+            <Suspense>
+              <OverlayLoading enabled />
             </Suspense>
           )}
         </Stack>

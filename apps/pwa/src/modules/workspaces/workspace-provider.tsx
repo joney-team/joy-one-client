@@ -215,8 +215,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       forceUpdate();
     } catch (error) {
       console.error(error);
-    } finally {
-      endAppLoading("initial-workspace");
     }
   };
 

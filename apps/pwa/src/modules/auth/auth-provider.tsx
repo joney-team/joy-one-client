@@ -127,7 +127,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       if (accessToken) {
         _user = await api.get(`/auth`);
         setUser(_user);
-        startAppLoading("initial-workspace");
       }
 
       // Sync locale device to user
