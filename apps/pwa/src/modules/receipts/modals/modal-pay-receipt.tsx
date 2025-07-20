@@ -51,7 +51,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck, IconClipboardCheck, IconRefresh } from "@tabler/icons-react";
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { PrintButton } from "../../../modals/modal-printer";
 import { OnReceiptDetailModal } from "./modal-receipt-detail";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
@@ -97,22 +97,39 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
   const [transactionDesc, setTransactionDesc] = useState<string>("");
   const [giveAmount, setGiveAmount] = useState<number>();
-  const [workspaceBranch, setWorkspaceBranch] = useState<Pick<
-    WorkspaceBranchEntity,
-    "_id" | "name" | "hotline"
-  > | null>(null);
+  const [workspaceBranch, setWorkspaceBranch] = useState(workspace.defaultBranch);
 
-  const bank = banks.find((v) => workspace.settings.bankAccount?.bankId === v.id);
-  const bankAccount = workspace.settings.bankAccount;
   const totalAmount = round(receipt.amount + (receipt.tipAmount || 0));
 
-  const bankQrCode =
-    bank && bankAccount && receipt
-      ? getStaticQrCode(bank, bankAccount, {
+  const bankInformation = useMemo(() => {
+    const bankAccount = workspaceBranch?.settings?.bankAccount || workspace.settings.bankAccount;
+    const bankInformation = banks.find((v) => v.id === bankAccount?.bankId);
+
+    if (
+      !receipt ||
+      !bankInformation ||
+      !bankAccount ||
+      !bankAccount.bankId ||
+      !bankAccount.accountNumber
+    )
+      return undefined;
+
+    return {
+      bankAccount,
+      qr: getStaticQrCode(
+        bankInformation,
+        {
+          bankId: bankAccount.bankId,
+          accountNumber: bankAccount.accountNumber,
+          accountName: bankAccount.accountName,
+        },
+        {
           amount: totalAmount,
           description: transactionDesc,
-        })
-      : undefined;
+        }
+      ),
+    };
+  }, [workspaceBranch, banks]);
 
   const onClose = async () => {
     const data = await getReceipt(receipt.id);
@@ -194,10 +211,10 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
   });
 
   useEffect(() => {
-    if (bankQrCode?.url) {
-      loadImage(bankQrCode.url);
+    if (bankInformation) {
+      loadImage(bankInformation.qr.url);
     }
-  }, [bankQrCode?.url]);
+  }, [bankInformation]);
 
   return (
     <Stack gap={16}>
@@ -247,15 +264,17 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
               </Text>
             </Stack>
 
-            <Stack>
-              <Text fw={500} fz={14}>
-                {t("branch")}
-              </Text>
-              <WorkspaceBranchInput
-                value={workspaceBranch}
-                onChange={(branch) => setWorkspaceBranch(branch)}
-              />
-            </Stack>
+            {workspace.isShouldEnableBranches && (
+              <Stack gap={0}>
+                <Text fw={500} fz={14}>
+                  {t("branch")}
+                </Text>
+                <WorkspaceBranchInput
+                  value={workspaceBranch}
+                  onChange={(branch) => setWorkspaceBranch(branch)}
+                />
+              </Stack>
+            )}
 
             <Stack gap={25}>
               <Text mb={-20} fw={500} fz={14}>
@@ -265,7 +284,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                 {paymentMethods.map((method) => {
                   const Icon = getPaymentMethodIcon(method);
 
-                  if (method === ReceiptPaymentMethod.BANK_TRANSFER && (!bank || !bankAccount))
+                  if (method === ReceiptPaymentMethod.BANK_TRANSFER && !bankInformation)
                     return null;
 
                   return (
@@ -288,11 +307,11 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
               <Card withBorder p={10}>
                 {(function () {
-                  if (paymentMethod === ReceiptPaymentMethod.BANK_TRANSFER && bank && bankAccount) {
+                  if (paymentMethod === ReceiptPaymentMethod.BANK_TRANSFER && bankInformation) {
                     return (
                       <Stack gap={8}>
                         <Center>
-                          <Image showLoading src={bankQrCode?.url} w={250} maw="100%" />
+                          <Image showLoading src={bankInformation?.qr.url} w={250} maw="100%" />
                         </Center>
 
                         <Timer />
@@ -336,17 +355,20 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                             </CopyText>
                           </Group>
 
-                          {bankQrCode?.account.accountName && (
+                          {bankInformation?.bankAccount.accountName && (
                             <Group justify="space-between">
                               <Text>{t("bank_account_name")}: </Text>
-                              <CopyText fw={500} text={bankQrCode.account.accountName} />
+                              <CopyText fw={500} text={bankInformation.bankAccount.accountName} />
                             </Group>
                           )}
 
-                          {bankQrCode?.account.accountNumber && (
+                          {bankInformation?.bankAccount.accountNumber && (
                             <Group justify="space-between">
                               <Text>{t("bank_account_number")}: </Text>
-                              <CopyText fw={500} text={bankQrCode?.account.accountNumber} />
+                              <CopyText
+                                fw={500}
+                                text={bankInformation?.bankAccount.accountNumber}
+                              />
                             </Group>
                           )}
                         </Stack>
@@ -420,7 +442,11 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
             <Renderer visible={!!receipt.relatedOrderId}>
               <Group justify="center" mt={8}>
-                <PrintButton receipt={receipt} bankQrCode={bankQrCode} label={t("print_receipt")} />
+                <PrintButton
+                  receipt={receipt}
+                  bankQrCode={bankInformation?.qr}
+                  label={t("print_receipt")}
+                />
               </Group>
             </Renderer>
 

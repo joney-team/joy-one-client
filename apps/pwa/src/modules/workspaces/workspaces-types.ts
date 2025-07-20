@@ -99,7 +99,7 @@ export interface WorkspaceContext {
   join: (code: string) => Promise<void>;
   ref: string;
   onlineStatus: WorkspaceMemberOnlineStatus;
-  defaultBranch?: Pick<WorkspaceBranchEntity, '_id' | 'name' | 'hotline'>;
+  defaultBranch?: Pick<WorkspaceBranchEntity, '_id' | 'name' | 'hotline' | 'settings'> | null;
   isShouldEnableBranches: boolean;
   isShowBranches: boolean;
   currency: AppCurrency;

@@ -7,8 +7,10 @@ import { WorkspaceBranchSelector } from "./workspace-branch-selector";
 import { useWorkspace } from "../workspaces/workspace-context";
 
 interface WorkspaceBranchInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
-  value?: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline"> | null;
-  onChange: (value: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline"> | null) => void;
+  value?: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline" | "settings"> | null;
+  onChange: (
+    value: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline" | "settings"> | null
+  ) => void;
   disabled?: boolean;
   autoHide?: boolean;
 }
