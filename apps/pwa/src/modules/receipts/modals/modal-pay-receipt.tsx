@@ -54,6 +54,8 @@ import { IconCashRegister, IconCheck, IconClipboardCheck, IconRefresh } from "@t
 import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { PrintButton } from "../../../modals/modal-printer";
 import { OnReceiptDetailModal } from "./modal-receipt-detail";
+import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
+import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 
 interface ModalPayReceiptProps {
   receipt: ReceiptEntity;
@@ -95,6 +97,10 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
   const [transactionDesc, setTransactionDesc] = useState<string>("");
   const [giveAmount, setGiveAmount] = useState<number>();
+  const [workspaceBranch, setWorkspaceBranch] = useState<Pick<
+    WorkspaceBranchEntity,
+    "_id" | "name" | "hotline"
+  > | null>(null);
 
   const bank = banks.find((v) => workspace.settings.bankAccount?.bankId === v.id);
   const bankAccount = workspace.settings.bankAccount;
@@ -241,8 +247,18 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
               </Text>
             </Stack>
 
+            <Stack>
+              <Text fw={500} fz={14}>
+                {t("branch")}
+              </Text>
+              <WorkspaceBranchInput
+                value={workspaceBranch}
+                onChange={(branch) => setWorkspaceBranch(branch)}
+              />
+            </Stack>
+
             <Stack gap={25}>
-              <Text mb={-20} fw={500} fz={em(14)}>
+              <Text mb={-20} fw={500} fz={14}>
                 {t("payment_method")}
               </Text>
               <Group gap={10}>
@@ -266,7 +282,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                 })}
               </Group>
 
-              <Text mb={-20} fw={500} fz={em(14)}>
+              <Text mb={-20} fw={500} fz={14}>
                 {t("payment_info")}
               </Text>
 

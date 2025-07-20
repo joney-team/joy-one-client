@@ -4,6 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Form } from "@/components/form";
 import { ModalTitle } from "@/components/modal-title";
 import { t } from "@/modules/lang/lang-service";
+import { FormBankAccount } from "@/modules/plugins/banks/form-bank-account";
 import {
   createWorkspaceBranch,
   updateWorkspaceBranch,
@@ -12,7 +13,7 @@ import {
   WorkspaceBranchDto,
   WorkspaceBranchEntity,
 } from "@/modules/workspace-branches/workspace-branches-types";
-import { Stack, TextInput } from "@mantine/core";
+import { Stack, Tabs, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconBuilding, IconCheck, IconPlus } from "@tabler/icons-react";
@@ -31,6 +32,7 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
         wardId: branch?.location?.wardId || "",
         address: branch?.location?.address || "",
       },
+      settings: branch?.settings || {},
     },
   });
 
@@ -48,11 +50,31 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
   return (
     <Form onSubmit={onSubmit}>
       <Stack>
-        <TextInput withAsterisk label={t("name")} {...form.getInputProps("name")} autoFocus />
+        <Tabs defaultValue="info" variant="outline">
+          <Tabs.List>
+            <Tabs.Tab value="info">Thông tin</Tabs.Tab>
+            <Tabs.Tab value="bank">Ngân hàng</Tabs.Tab>
+          </Tabs.List>
 
-        <TextInput label={t("hotline")} {...form.getInputProps("hotline")} />
+          <Tabs.Panel value="info">
+            <Stack py={16}>
+              <TextInput withAsterisk label={t("name")} {...form.getInputProps("name")} autoFocus />
 
-        <TextInput label={t("address")} {...form.getInputProps("location.address")} />
+              <TextInput label={t("hotline")} {...form.getInputProps("hotline")} />
+
+              <TextInput label={t("address")} {...form.getInputProps("location.address")} />
+            </Stack>
+          </Tabs.Panel>
+
+          <Tabs.Panel value="bank">
+            <Stack py={16}>
+              <FormBankAccount
+                bankAccount={form.values.settings?.bankAccount}
+                onChange={(acc) => form.setFieldValue("settings.bankAccount", acc)}
+              />
+            </Stack>
+          </Tabs.Panel>
+        </Tabs>
 
         <Stack align="center">
           <Button
