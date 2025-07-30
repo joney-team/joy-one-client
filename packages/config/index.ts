@@ -1,4 +1,4 @@
-const ENV = "development";
+const ENV = "production";
 
 export interface EnvironmentConfig {
   PUBLIC_URL: string;
