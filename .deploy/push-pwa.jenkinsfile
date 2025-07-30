@@ -36,7 +36,7 @@ pipeline {
                 'https://deploy.joyone.vn/api/application.saveDockerProvider' \
                 -H 'accept: application/json' \
                 -H 'Content-Type: application/json' \
-                -H 'x-api-key: ${DEKLOY_API_KEY}' \
+                -H 'x-api-key: $DEKLOY_API_KEY' \
                 -d '{
                 "dockerImage": "${IMAGE_TAG}",
                 "applicationId": "${APPLICATION_ID}"
@@ -48,7 +48,7 @@ pipeline {
                 'https://deploy.joyone.vn/api/application.redeploy' \
                 -H 'accept: application/json' \
                 -H 'Content-Type: application/json' \
-                -H 'x-api-key: ${DEKLOY_API_KEY}' \
+                -H 'x-api-key: $DEKLOY_API_KEY' \
                 -d '{
                 "applicationId": "${APPLICATION_ID}"
               }'
