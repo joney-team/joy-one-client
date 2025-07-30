@@ -5,6 +5,10 @@ pipeline {
     disableConcurrentBuilds(abortPrevious: true)
   }
 
+  environment {
+    DEKLOY_API_KEY = credentials('dekloy-api-key')
+  }
+
   stages {
     stage('Setup') {
       steps {
@@ -71,7 +75,6 @@ def setup() {
   env.ENV = env.GIT_BRANCH_NAME.replaceAll('-pwa$', '')
   env.RELEASE_VPS = "joy-one-${env.ENV}"
   env.APPLICATION_ID = "ppdefZjT54CDloyJzPh2T"
-  env.DEKLOY_API_KEY = credentials('dekloy-api-key')
 
   // Replace file packages/config/index.ts with env.GIT_BRANCH and remove origin 
   sh "sed -i 's/ENV = \"development\"/ENV = \"${env.ENV}\"/g' packages/config/index.ts"
