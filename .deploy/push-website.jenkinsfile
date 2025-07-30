@@ -5,6 +5,10 @@ pipeline {
     disableConcurrentBuilds(abortPrevious: true)
   }
 
+  environment {
+    DEKLOY_API_KEY = credentials('dekloy-api-key')
+  }
+
   stages {
     stage('Setup') {
       steps {
