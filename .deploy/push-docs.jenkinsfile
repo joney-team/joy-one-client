@@ -138,7 +138,7 @@ def releaseDekloy() {
 
       sh """
       curl -X 'POST' \
-        'https://deploy.joyone.vn/api/application.redeploy' \
+        'https://deploy.joyone.vn/api/application.deploy' \
         -H 'accept: application/json' \
         -H 'Content-Type: application/json' \
         -H 'x-api-key: $DEKLOY_API_KEY' \

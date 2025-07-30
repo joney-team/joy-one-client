@@ -70,7 +70,6 @@ def setup() {
   env.GIT_BRANCH_NAME = env.GIT_BRANCH.replaceAll('origin/', '')
   env.ENV = env.GIT_BRANCH_NAME.replaceAll('-pwa$', '')
   env.RELEASE_VPS = "joy-one-${env.ENV}"
-  env.SERVICES = "joy-one-jo-client-pwa-owu0c9"
   env.APPLICATION_ID = "ppdefZjT54CDloyJzPh2T"
 
   // Replace file packages/config/index.ts with env.GIT_BRANCH and remove origin 
@@ -115,7 +114,7 @@ def releaseDekloy() {
 
       sh """
       curl -X 'POST' \
-        'https://deploy.joyone.vn/api/application.redeploy' \
+        'https://deploy.joyone.vn/api/application.deploy' \
         -H 'accept: application/json' \
         -H 'Content-Type: application/json' \
         -H 'x-api-key: $DEKLOY_API_KEY' \

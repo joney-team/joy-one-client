@@ -30,8 +30,29 @@ pipeline {
       steps {
         script {
           sh "docker pull ${IMAGE_TAG}"
-          SERVICES.split('\\|').each { service ->
-            sh "docker service update ${service} --image ${IMAGE_TAG}"
+          withCredentials([string(credentialsId: 'dekloy-api-key', variable: 'DEKLOY_API_KEY')]) {
+              sh """
+              curl -X 'POST' \
+                'https://deploy.joyone.vn/api/application.saveDockerProvider' \
+                -H 'accept: application/json' \
+                -H 'Content-Type: application/json' \
+                -H 'x-api-key: $DEKLOY_API_KEY' \
+                -d '{
+                "dockerImage": "${IMAGE_TAG}",
+                "applicationId": "${APPLICATION_ID}"
+              }'
+              """
+
+              sh """
+              curl -X 'POST' \
+                'https://deploy.joyone.vn/api/application.redeploy' \
+                -H 'accept: application/json' \
+                -H 'Content-Type: application/json' \
+                -H 'x-api-key: $DEKLOY_API_KEY' \
+                -d '{
+                "applicationId": "${APPLICATION_ID}"
+              }'
+              """
           }
         }
       }
@@ -74,6 +95,8 @@ def setup() {
   env.ENV = env.GIT_BRANCH_NAME.replaceAll('-website$', '')
   env.RELEASE_VPS = "joy-one-${env.ENV}"
   env.SERVICES = "joy-one-jo-client-website-bbigho"
+  env.APPLICATION_ID = "b62ZqSCkZZq3dNGMHmMO4"
+  env.DEKLOY_API_KEY = credentials('dekloy-api-key')
 
   // Replace file packages/config/index.ts with env.GIT_BRANCH and remove origin 
   sh "sed -i 's/ENV = \"development\"/ENV = \"${env.ENV}\"/g' packages/config/index.ts"
@@ -98,5 +121,31 @@ def sendNotification(status) {
           "BUILD_TAG": "${env.BUILD_TAG}"
         }
       }'
+  """
+}
+
+def releaseDekloy() {
+  sh "docker pull ${IMAGE_TAG}"
+  sh """
+  curl -X 'POST' \
+    'https://deploy.joyone.vn/api/application.saveDockerProvider' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -H 'x-api-key: $DEKLOY_API_KEY' \
+    -d '{
+    "dockerImage": "${IMAGE_TAG}",
+    "applicationId": "${APPLICATION_ID}"
+  }'
+  """
+
+  sh """
+  curl -X 'POST' \
+    'https://deploy.joyone.vn/api/application.deploy' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -H 'x-api-key: $DEKLOY_API_KEY' \
+    -d '{
+    "applicationId": "${APPLICATION_ID}"
+  }'
   """
 }
