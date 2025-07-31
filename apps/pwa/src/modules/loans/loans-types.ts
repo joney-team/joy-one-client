@@ -92,6 +92,7 @@ export interface LoanAssetsICloud extends LoanAssetData {
   storage: string;
   imeil: string;
   serial: string;
+  deviceSecretKey: string;
 }
 
 export type LoanAssetDataMap = {

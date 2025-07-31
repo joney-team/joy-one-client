@@ -174,6 +174,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
       <SessionTitle mb={-20} name={t("loan_asset_data")} icon={IconClipboardText} />
       <Card shadow="xs">
         <LoanAssetDataInput
+          loanId={loan.id}
           assetType={loan.assetType}
           value={loan.assetData}
           disabled={!ableToUpdate}

@@ -353,7 +353,7 @@ const Session: FC<PropsWithChildren<{ name: string; icon: Icon }>> = (props) => 
         <Text fw={500}>{props.name}</Text>
       </Group>
 
-      <Card withBorder p={10}>
+      <Card withBorder p={10} shadow="none">
         {props.children}
       </Card>
     </Stack>
