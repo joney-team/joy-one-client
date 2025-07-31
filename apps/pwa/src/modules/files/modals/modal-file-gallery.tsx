@@ -19,6 +19,8 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { useFileSize } from "../files-hooks";
+import { formatBytes } from "@joy-one-client/utils/files";
 
 interface ModalFileGalleryProps {
   files: FileEntity[] | { _id?: string; url: string; fileName?: string; type?: FileType }[];
@@ -34,9 +36,10 @@ export const ModalFileGallery: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalFileGalleryProps>();
   const [index, setIndex] = useState<number>(0);
-  const viewport = useLayout();
+  const layout = useLayout();
   const head = 60;
   const activeFile = props?.files[index];
+  const fileSize = useFileSize(renderLink(activeFile?.url));
 
   OnModalFileGallery = (p) => {
     setIndex(p.index || 0);
@@ -57,7 +60,7 @@ export const ModalFileGallery: FC = () => {
 
   if (!props || !activeFile) return null;
 
-  const bodyHeight = viewport.height - head;
+  const bodyHeight = layout.height - head;
   const _file = parseFile(activeFile.url);
 
   const onRemove = async () => {
@@ -78,7 +81,7 @@ export const ModalFileGallery: FC = () => {
   const onDownload = async () => {
     if (!activeFile || typeof activeFile === "string") return;
     await onActionLoad({
-      name: "Đang tải file xuống",
+      name: t("file_downloading"),
       process: () =>
         downloadFileFromURL(renderLink(activeFile.url), activeFile.fileName || _file.name),
     });
@@ -100,9 +103,17 @@ export const ModalFileGallery: FC = () => {
     >
       <Group h={head} justify="space-between" px={16} bg="dark.7" wrap="nowrap" w="100%">
         <SimpleGrid cols={3} w="100%">
-          <Text w="100%" c="white" truncate="end">
-            {_file.name}
-          </Text>
+          <Group wrap="nowrap" gap={10}>
+            <Text c="white" truncate="end" maw={layout.view === "mobile" ? "30dvw" : "40dvw"}>
+              {_file.name}
+            </Text>
+
+            {fileSize.size && (
+              <Text fz={12} c="gray">
+                {formatBytes(fileSize.size)}
+              </Text>
+            )}
+          </Group>
 
           <Group justify="center" wrap="nowrap" w="100%">
             <ActionIcon
