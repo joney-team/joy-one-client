@@ -259,7 +259,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       await runWithDelay(async () => {
         // Auto set workspace id when app is extended
         if (app.metadata.isExtended && app.metadata.workspaceId) {
-          setWorkspaceId(workspaceId);
+          setWorkspaceId(app.metadata.workspaceId);
         }
 
         await fetchUserWorkspaceMembers();
