@@ -60,7 +60,7 @@ import {
 import { NextPage } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { LoanDisburesement } from "./components/loan-disbursement";
 import { LoanDocuments } from "./components/loan-documents";
 import { LoanCustomerKyc } from "./components/loan-customer-kyc";
@@ -76,6 +76,7 @@ export const LoanDetail: NextPage = () => {
   const layout = useLayout();
   const color = useColor();
 
+  const isAutoRedirectStep = useRef(true);
   const [customerKyc, setCustomerKyc] = useState<CustomerKycEntity>();
   const [_pointedStep, setPointedStep] = useState(0);
   const pointedStep = _pointedStep > 3 ? 3 : _pointedStep;
@@ -90,8 +91,11 @@ export const LoanDetail: NextPage = () => {
     fetch: async () => {
       const loan = await getLoanByCode(code);
       const kyc = await fetchCustomerKyc(loan.customerId);
-      const step = getStepActive(loan, kyc);
-      setPointedStep(step);
+      if (isAutoRedirectStep.current) {
+        const step = getStepActive(loan, kyc);
+        setPointedStep(step);
+      }
+
       return loan;
     },
     events: {
@@ -347,7 +351,10 @@ export const LoanDetail: NextPage = () => {
               active={activeStep}
               size="xs"
               onStepClick={(s) => {
-                if (s <= activeStep) setPointedStep(s);
+                if (s <= activeStep) {
+                  setPointedStep(s);
+                  isAutoRedirectStep.current = false;
+                }
               }}
             >
               <Stepper.Step

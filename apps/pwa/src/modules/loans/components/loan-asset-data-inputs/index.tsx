@@ -26,17 +26,13 @@ const Inputs: Record<LoanAssetType, FC<LoanAssetDataInputProps>> = {
 };
 
 export const LoanAssetDataInput: FC<LoanAssetDataInputProps> = (props) => {
-  let _props = { ...props } as any;
-
-  delete _props.value;
-  delete _props.onChange;
-  delete _props.assetType;
+  const { assetType, loanId, value, onChange, disabled, ...rest } = props;
 
   const Input = Inputs[props.assetType];
   if (!Input) return null;
 
   return (
-    <InputWrapper {..._props}>
+    <InputWrapper {...rest}>
       <Stack>
         <Input {...props} />
       </Stack>
