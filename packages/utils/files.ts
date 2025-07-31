@@ -59,27 +59,53 @@ export const isImageFile = (file: File) => {
 export function downloadJSON(data: any, filename: string = "data.json"): void {
   // Convert the data to a JSON string
   const jsonString: string = JSON.stringify(data, null, 2);
-  
+
   // Create a Blob containing the JSON string
   const blob: Blob = new Blob([jsonString], { type: "application/json" });
-  
+
   // Create a URL for the Blob
   const url: string = URL.createObjectURL(blob);
-  
+
   // Create a temporary anchor element
   const link: HTMLAnchorElement = document.createElement("a");
-  
+
   // Set the download attributes
   link.href = url;
   link.download = filename;
-  
+
   // Append the link to the body (required in Firefox)
   document.body.appendChild(link);
-  
+
   // Simulate a click on the link
   link.click();
-  
+
   // Clean up
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+export async function getFileSizeFromUrl(url: string): Promise<number | null> {
+  try {
+    // 1. Try with Header Content-Length
+    const headResponse = await fetch(url, { method: 'HEAD' });
+    if (headResponse.ok) {
+      const contentLength = headResponse.headers.get('Content-Length');
+      if (contentLength) {
+        return parseInt(contentLength, 10);
+      }
+    }
+
+    // 2. Try with blob
+    const getResponse = await fetch(url);
+    if (!getResponse.ok) {
+      console.error(`GET request failed: ${getResponse.status}`);
+      return null;
+    }
+
+    const blob = await getResponse.blob();
+    return blob.size;
+  } catch (error) {
+    console.error('Error getting file size:', error);
+    return null;
+  }
 }
