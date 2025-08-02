@@ -18,13 +18,14 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useFileSize } from "../files-hooks";
 import { formatBytes } from "@joy-one-client/utils/files";
 
 interface ModalFileGalleryProps {
   files: FileEntity[] | { _id?: string; url: string; fileName?: string; type?: FileType }[];
   index?: number;
+  readonly?: boolean;
   disabled?: boolean;
   onRemoved?: () => Promise<any> | any;
   background?: string;
@@ -40,6 +41,7 @@ export const ModalFileGallery: FC = () => {
   const head = 60;
   const activeFile = props?.files[index];
   const fileSize = useFileSize(renderLink(activeFile?.url));
+  const disabled = props?.disabled || props?.readonly;
 
   OnModalFileGallery = (p) => {
     setIndex(p.index || 0);
@@ -57,6 +59,24 @@ export const ModalFileGallery: FC = () => {
     if (index - 1 < 0) return;
     setIndex(index - 1);
   };
+
+  useEffect(() => {
+    if (opened) {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "ArrowRight") {
+          onNext();
+        } else if (event.key === "ArrowLeft") {
+          onPrev();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [opened, onNext, onPrev, index]);
 
   if (!props || !activeFile) return null;
 
@@ -117,6 +137,7 @@ export const ModalFileGallery: FC = () => {
 
           <Group justify="center" wrap="nowrap" w="100%">
             <ActionIcon
+              component="div"
               color={index === 0 ? "gray.8" : "white"}
               variant="transparent"
               onClick={onPrev}
@@ -128,6 +149,7 @@ export const ModalFileGallery: FC = () => {
             </Text>
 
             <ActionIcon
+              component="div"
               color={index + 1 >= props.files.length ? "gray.8" : "white"}
               variant="transparent"
               onClick={onNext}
@@ -137,17 +159,17 @@ export const ModalFileGallery: FC = () => {
           </Group>
 
           <Group justify="end" wrap="nowrap" w="100%">
-            <ActionIcon variant="subtle" color="white" onClick={onDownload}>
+            <ActionIcon component="div" variant="subtle" color="white" onClick={onDownload}>
               <IconDownload strokeWidth={1.5} />
             </ActionIcon>
 
-            {!props.disabled && (
-              <ActionIcon variant="subtle" color="white" onClick={onRemove}>
+            {!disabled && (
+              <ActionIcon component="div" variant="subtle" color="white" onClick={onRemove}>
                 <IconTrash strokeWidth={1.5} />
               </ActionIcon>
             )}
 
-            <ActionIcon variant="subtle" color="white" onClick={close}>
+            <ActionIcon component="div" variant="subtle" color="white" onClick={close}>
               <IconX strokeWidth={1.5} size={30} />
             </ActionIcon>
           </Group>

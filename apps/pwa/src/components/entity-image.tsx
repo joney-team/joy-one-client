@@ -71,6 +71,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
         style={{ cursor: "pointer", position: "relative" }}
         onClick={() => {
           if (disabled) {
+            console.log("click");
             OnModalFileGallery({
               files: [{ url: src, fileName: props.name || "image", type: FileType.PHOTO }],
             });

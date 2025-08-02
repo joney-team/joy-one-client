@@ -66,6 +66,9 @@ import { LoanCustomerKyc } from "./components/loan-customer-kyc";
 import { LoanPayments } from "./components/loan-payments";
 import { useColor } from "../theme/use-color";
 import { useLocations } from "../locations/locations-context";
+import { OnModalFileGallery } from "../files/modals/modal-file-gallery";
+import { FileType } from "../files/file-types";
+import { EntityImage } from "@/components/entity-image";
 
 export const LoanDetail: NextPage = () => {
   const params = useParams();
@@ -201,7 +204,7 @@ export const LoanDetail: NextPage = () => {
     <Stack p={16}>
       <Card shadow="xs">
         <Group align="start">
-          <Avatar customer={loan.data.customer} size={80} radius={10} />
+          <EntityImage src={customer.data.avatar} onlyRead size={80} radius={10} />
           <Stack gap={10} flex={1}>
             <Group justify="space-between" w="100%" align="start">
               <Title fz={18} fw={600}>
