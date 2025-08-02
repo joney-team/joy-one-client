@@ -7,16 +7,17 @@ import { OnWorkspaceBranchModal } from "@/modules/workspace-branches/modals/moda
 import { Clickable } from "@/components/clickable";
 import { EventType } from "@/modules/events/event-types";
 import { t, tMulti } from "@/modules/lang/lang-service";
-import { renderLocation } from "@/modules/locations/locations-service";
 import { getWorkspaceBranches } from "./workspace-branches-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Stack, Text, Title } from "@mantine/core";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
+import { useLocations } from "../locations/locations-context";
 
 export const WorkspaceBranchList: FC = () => {
   const color = useColor();
   const workspace = useWorkspace();
+  const { renderVnLocation: renderLocation } = useLocations();
 
   return (
     <Stack p={16}>
@@ -68,7 +69,12 @@ export const WorkspaceBranchList: FC = () => {
                     </Text>
                   </Stack>
 
-                  <Button action leftIcon={IconPlus} onClick={() => OnWorkspaceBranchModal()} color={color("primary")}>
+                  <Button
+                    action
+                    leftIcon={IconPlus}
+                    onClick={() => OnWorkspaceBranchModal()}
+                    color={color("primary")}
+                  >
                     {tMulti(["create"], ["branch"])}
                   </Button>
                 </Stack>

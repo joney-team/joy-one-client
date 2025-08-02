@@ -40,13 +40,13 @@ export const CustomerFormRegister: FC = () => {
     name: string;
     phone: string;
     email?: string;
-    location?: any;
+    vnLocation?: any;
   }>({
     initialValues: {
       name: "",
       phone: "",
       email: "",
-      location: {},
+      vnLocation: {},
     },
     validate: {
       name: (value) => {
@@ -57,13 +57,9 @@ export const CustomerFormRegister: FC = () => {
         if (!value) return "Số điện thoại không được để trống";
         return null;
       },
-      location: {
+      vnLocation: {
         address: (value) => {
           if (!value) return "Địa chỉ không được để trống";
-          return null;
-        },
-        districtId: (value) => {
-          if (!value) return "Quận/Huyện không được để trống";
           return null;
         },
         provinceId: (value) => {

@@ -8,7 +8,6 @@ import { useFormSubmit } from "@/hooks/use-form";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { onUploadFile } from "@/modules/files/file-service";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
-import { useLocations } from "@/modules/locations/locations-service";
 import { optionsFilter } from "@/modules/theme/generator";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
@@ -24,8 +23,8 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  ThemeIcon,
   TextInput,
+  ThemeIcon,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
@@ -40,6 +39,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
 import { InputModalType, OnModalInput } from "../../modals/modal-input";
+import { useLocations } from "../locations/locations-context";
 import { decodeCid, registerCustomerKyc } from "./customer-kycs-service";
 import { CustomerKycDto } from "./customer-kycs-types";
 
@@ -52,7 +52,7 @@ export let OnModalRegisterCustomerKyc: (props: ModalRegisterCustomerKycProps) =>
 
 export const ModalRegisterCustomerKyc: FC = () => {
   const camera = useCamera();
-  const [locations] = useLocations();
+  const { vnLocations } = useLocations();
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalRegisterCustomerKycProps>();
 
@@ -60,7 +60,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
 
   const form = useForm({
     initialValues: {
-      cidLocation: {},
+      cidVnLocation: {},
     } as any,
     validate: {
       cidNumber: (value: string) => {
@@ -70,9 +70,9 @@ export const ModalRegisterCustomerKyc: FC = () => {
       cidFullName: (value: string) => {
         if (!value) return t("required");
       },
-      cidLocation: (value: any) => {
+      cidVnLocation: (value: any) => {
         if (!value.provinceId) return t("required");
-        if (!value.districtId) return t("required");
+        if (!value.wardId) return t("required");
         if (!value.address) return t("required");
       },
       cidGender: (value: string) => {
@@ -119,7 +119,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
         cidBirthday: values.cidBirthday,
         cidFullName: values.cidFullName,
         cidGender: values.cidGender,
-        cidLocation: values.cidLocation,
+        cidVnLocation: values.cidVnLocation,
         cidNumber: values.cidNumber,
         cidRaw: values.cidRaw,
         cidCreatedAt: values.cidCreatedAt,
@@ -276,57 +276,42 @@ export const ModalRegisterCustomerKyc: FC = () => {
             <InputWrapper label={t("cidMainLocation")}>
               <Card p={8} withBorder>
                 <Stack>
-                  <Select
-                    label={t("province")}
-                    {...form.getInputProps(`cidLocation.provinceId`)}
-                    searchable
-                    data={locations
-                      .filter((l) => l.type === "province")
-                      .map((l) => ({ value: l.id, label: l.name }))}
-                    onChange={(e) => {
-                      form.setFieldValue(`cidLocation.provinceId`, e!);
-                      form.setFieldValue(`cidLocation.districtId`, "");
-                      form.setFieldValue(`cidLocation.wardId`, "");
-                    }}
-                    filter={optionsFilter}
-                  />
-
-                  <Group wrap="nowrap">
+                  <SimpleGrid cols={{ base: 1, md: 2 }}>
                     <Select
-                      label={t("district")}
-                      {...form.getInputProps("cidLocation.districtId")}
+                      label={t("province")}
+                      {...form.getInputProps(`cidVnLocation.provinceId`)}
                       searchable
-                      data={locations
-                        .filter(
-                          (l) =>
-                            l.type === "district" &&
-                            l.parentId === form.values.cidLocation?.provinceId
-                        )
-                        .map((l) => ({ value: l.id, label: l.fullName }))}
+                      data={vnLocations
+                        .filter((l) => l.type === "province")
+                        .map((l) => ({ value: l.id, label: l.name }))}
                       onChange={(e) => {
-                        form.setFieldValue("cidLocation.districtId", e!);
-                        form.setFieldValue("cidLocation.wardId", "");
+                        form.setFieldValue(`cidVnLocation.provinceId`, e!);
+                        form.setFieldValue(`cidVnLocation.wardId`, "");
                       }}
-                      flex={1}
                       filter={optionsFilter}
                     />
 
                     <Select
                       label={t("ward")}
-                      {...form.getInputProps("cidLocation.wardId")}
+                      {...form.getInputProps("cidVnLocation.wardId")}
                       searchable
-                      data={locations
+                      data={vnLocations
                         .filter(
                           (l) =>
-                            l.type === "ward" && l.parentId === form.values.cidLocation?.districtId
+                            l.type === "ward" &&
+                            l.parentId === form.values.cidVnLocation?.provinceId &&
+                            form.values.cidVnLocation?.provinceId
                         )
                         .map((l) => ({ value: l.id, label: l.fullName }))}
                       flex={1}
                       filter={optionsFilter}
                     />
-                  </Group>
+                  </SimpleGrid>
 
-                  <TextInput label={t("address")} {...form.getInputProps("cidLocation.address")} />
+                  <TextInput
+                    label={t("address")}
+                    {...form.getInputProps("cidVnLocation.address")}
+                  />
                 </Stack>
               </Card>
             </InputWrapper>

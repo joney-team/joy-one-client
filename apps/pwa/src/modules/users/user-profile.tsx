@@ -13,11 +13,9 @@ import { useLayout } from "@/layout/layout-context";
 import { OnModalWorkspaceSubscription } from "@/modules/workspace-subscriptions/modal-workspace-subscriptions";
 import { useAuth } from "@/modules/auth/auth-context";
 import { num, t } from "@/modules/lang/lang-service";
-import { renderLocation } from "@/modules/locations/locations-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderSubscriptionNum } from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { onError } from "@/utils/exceptions.utils";
 import { formatBytes } from "@/utils/file.utils";
 import {
   ActionIcon,
@@ -138,7 +136,7 @@ export const Profile: FC = () => {
               </Text>
               {workspace.userMember.workspace.location && (
                 <Text fz={em(13)} fw={400}>
-                  {renderLocation(workspace.userMember.workspace.location)}
+                  {workspace.userMember.workspace.location?.address}
                 </Text>
               )}
             </Stack>
