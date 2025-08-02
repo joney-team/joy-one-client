@@ -1,77 +1,8 @@
 import { isDevelopment } from "@/service";
 import { Coordinates } from "@/types";
 import { isServer } from "@/utils/common.utils";
-import { useEffect, useState } from "react";
-import { api } from "../apis";
 import { CheckInLocation } from "../hrm-timekeepings/hrm-timekeepings-types";
 import { t } from "../lang/lang-service";
-import { Location, LocationEntity } from "./locations-types";
-
-let cachedLocations: Location[] = [];
-
-export const useLocations = () => {
-  const [locations, setLocations] = useState<Location[]>(cachedLocations);
-
-  const fetchLocations = async (retryTime: number): Promise<any> => {
-    if (retryTime && retryTime > 10) return false;
-
-    return api.get('/locations')
-      .then((res) => {
-        setLocations(res.data);
-        cachedLocations = res.data;
-      })
-      .catch(async () => {
-        // await new Promise(r => setTimeout(r, 1000 * retryTime));
-        // fetchLocations(retryTime);
-      })
-
-  }
-
-  useEffect(() => {
-    if (!cachedLocations.length) {
-      fetchLocations(0)
-    }
-  }, [])
-
-  return [locations, (location) => renderLocation(location)] as [Location[], (location?: LocationEntity) => string];
-}
-
-export function renderLocation(location?: LocationEntity, args?: {
-  shortProvine?: boolean,
-  shortDistrict?: boolean,
-  shortWard?: boolean,
-}) {
-  if (!location) return '';
-  let address: string[] = [];
-
-  if (location.provinceId) {
-    const province = cachedLocations.find((loc) => loc.id === location.provinceId);
-    if (province) {
-      if (args?.shortProvine) address.push(province.name)
-      else address.push(province.fullName);
-    }
-  }
-
-  if (location.districtId) {
-    const district = cachedLocations.find((loc) => loc.id === location.districtId);
-    if (district) {
-      if (args?.shortDistrict) address.push(district.name)
-      else address.push(district.fullName);
-    }
-  }
-
-  if (location.wardId) {
-    const ward = cachedLocations.find((loc) => loc.id === location.wardId);
-    if (ward) {
-      if (args?.shortWard) address.push(ward.name)
-      else address.push(ward.fullName);
-    }
-  }
-
-  if (location.address) address.push(location.address);
-
-  return address.reverse().join(', ');
-}
 
 export const isGeolocationSupported = () => !isServer()
   && "navigator" in window
@@ -137,24 +68,20 @@ export function findAvailableLocationToCheckIn(coords: Coordinates, checkInLocat
   })
 }
 
-export const detectEntityLocation = (address: string) => {
-  let entityLocation: LocationEntity = {};
-  const infos = address.split(',').map(v => v.trim()).reverse();
-  const province = cachedLocations.find(v => v.type === 'province' && v.name.includes(infos[0]))
-  const district = cachedLocations.find(v => v.type === 'district' && v.name.includes(infos[1]))
-  const ward = cachedLocations.find(v => v.type === 'ward' && v.name.includes(infos[2]))
+// export const detectEntityLocation = (address: string) => {
+//   let entityLocation: LocationEntity = {};
+//   const infos = address.split(',').map(v => v.trim()).reverse();
+//   const province = cachedLocations.find(v => v.type === 'province' && v.name.includes(infos[0]))
+//   const district = cachedLocations.find(v => v.type === 'district' && v.name.includes(infos[1]))
+//   const ward = cachedLocations.find(v => v.type === 'ward' && v.name.includes(infos[2]))
 
-  entityLocation.provinceId = province?.id;
-  entityLocation.districtId = district?.id;
-  entityLocation.wardId = ward?.id;
-  entityLocation.address = address.split(',').slice(0, 2).join(', ');
+//   entityLocation.provinceId = province?.id;
+//   entityLocation.districtId = district?.id;
+//   entityLocation.wardId = ward?.id;
+//   entityLocation.address = address.split(',').slice(0, 2).join(', ');
 
-  return entityLocation;
-}
-
-export const getGoogleMapLink = (address: string | LocationEntity) => {
-  return `https://www.google.com/maps?q=${encodeURIComponent(typeof address === 'object' ? renderLocation(address) : address)}`
-}
+//   return entityLocation;
+// }
 
 export const getGoogleMapLinkCoord = (coord: Coordinates) => {
   return `https://www.google.com/maps/place/${coord.lat},${coord.lng}`

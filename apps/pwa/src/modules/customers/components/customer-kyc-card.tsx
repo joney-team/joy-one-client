@@ -38,6 +38,7 @@ import { EntityImage } from "../../../components/entity-image";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Renderer } from "../../../components/renderer";
+import { useLocations } from "@/modules/locations/locations-context";
 
 interface CustomerKycCardProps {
   kyc: CustomerKycEntity;
@@ -52,6 +53,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
   const customer = kyc.customer;
   const router = useRouter();
   const lastVersion = kyc.versions[kyc.versions.length - 1]!;
+  const { renderVnLocation: renderLocation } = useLocations();
 
   if (!lastVersion) return null;
 
@@ -134,10 +136,19 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
         )}
 
         {lastVersion.cidFullName && (
-          <Group justify="space-between">
+          <Group justify="space-between" wrap="nowrap">
             <Text fz={em(15)}>{t("cidFullName")}</Text>
-            <Text fz={em(15)} fw={500}>
+            <Text fz={em(15)} fw={500} ta="right">
               {lastVersion.cidFullName}
+            </Text>
+          </Group>
+        )}
+
+        {lastVersion.cidVnLocation && Object.keys(lastVersion.cidVnLocation).length > 0 && (
+          <Group justify="space-between">
+            <Text fz={em(15)}>{t("address")}</Text>
+            <Text fz={em(15)} fw={500}>
+              {renderLocation(lastVersion.cidVnLocation, { shortProvine: true, shortWard: true })}
             </Text>
           </Group>
         )}

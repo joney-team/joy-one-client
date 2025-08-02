@@ -7,6 +7,7 @@ export interface CustomerFormEntity extends Omit<BaseMongoEntity, 'workspaceId' 
   phone: string;
   email?: string;
   location?: LocationEntity;
+  vnLocation?: LocationEntity;
   dynamicData?: any;
   status: CustomerFormStatus;
   workspaceId: string;

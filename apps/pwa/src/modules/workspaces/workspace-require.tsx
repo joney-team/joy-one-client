@@ -8,12 +8,11 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { uploadFile } from "@/modules/files/file-service";
 import { useLang } from "@/modules/lang/lang-context";
 import { t } from "@/modules/lang/lang-service";
-import { renderLocation } from "@/modules/locations/locations-service";
 import { LocationEntity } from "@/modules/locations/locations-types";
 import { WorkspaceTypeItem } from "@/modules/workspaces/components/workpsace-type-item";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceTypeIcon } from "@/modules/workspaces/workspaces-service";
-import { WorkspaceContext, WorkspaceType } from "@/modules/workspaces/workspaces-types";
+import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onError } from "@/utils/exceptions.utils";
 import { StringUtils } from "@/utils/string.utils";
 import {
@@ -165,8 +164,6 @@ export const WorkspaceRequire: FC = () => {
             {availabelUserMembers.map((userMember) => {
               if (!userMember.workspaceId) return null;
 
-              const location = renderLocation(userMember.workspace.location);
-
               return (
                 <Card
                   withBorder
@@ -198,7 +195,7 @@ export const WorkspaceRequire: FC = () => {
                           <ThemeIcon size="xs" variant="transparent" color="dark">
                             <IconLocation strokeWidth={1.2} />
                           </ThemeIcon>
-                          <Text fz="xs">{location}</Text>
+                          <Text fz="xs">{userMember.workspace.location?.address}</Text>
                         </Group>
                       )}
                     </Stack>

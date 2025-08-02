@@ -5,7 +5,6 @@ import { List } from "@/components/list";
 import { StatusColumn } from "@/components/list/columns/status-column";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
-import { renderLocation } from "@/modules/locations/locations-service";
 import { OnModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
 import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -13,12 +12,14 @@ import { AppEntity } from "@/types";
 import { Stack } from "@mantine/core";
 import { IconBuildingSkyscraper, IconLink } from "@tabler/icons-react";
 import { type FC } from "react";
-import { OnCustomerFormModal } from "../customers/modals/modal-customer";
+import { OnCustomerFormModal } from "../customers/modals/modal-customer-form";
 import { CustomerFormEntity } from "./customer-form-entity";
 import { customerFormStatusConfigs, multiArchiveCustomerForm } from "./customer-form-service";
 import { OnModalCustomerForm } from "./modal-customer-form";
+import { useLocations } from "../locations/locations-context";
 
 export const CustomerFormList: FC = () => {
+  const { renderVnLocation: renderLocation } = useLocations();
   return (
     <Stack p={16}>
       <List<CustomerFormEntity>
@@ -42,7 +43,7 @@ export const CustomerFormList: FC = () => {
               return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
             },
           },
-          location: {
+          vnLocation: {
             w: 400,
             name: "address",
             render: ({ value }) => renderLocation(value),

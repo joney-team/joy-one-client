@@ -25,6 +25,7 @@ import {
   ReceiptType,
 } from "@/modules/receipts/receipts-types";
 import { useColor } from "@/modules/theme/use-color";
+import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { loadImage } from "@/utils/asset.utils";
@@ -54,8 +55,6 @@ import { IconCashRegister, IconCheck, IconClipboardCheck, IconRefresh } from "@t
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { PrintButton } from "../../../modals/modal-printer";
 import { OnReceiptDetailModal } from "./modal-receipt-detail";
-import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
-import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 
 interface ModalPayReceiptProps {
   receipt: ReceiptEntity;
@@ -129,7 +128,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
         }
       ),
     };
-  }, [workspaceBranch, banks]);
+  }, [workspaceBranch, banks, transactionDesc]);
 
   const onClose = async () => {
     const data = await getReceipt(receipt.id);
@@ -183,8 +182,8 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
         OnReceiptDetailModal({ id: _receipt.id });
       }
 
-      setReceipt(_receipt);
       setTransactionDesc(await getDefaultTransactionDesc(_receipt));
+      setReceipt(_receipt);
     } catch (error) {
       onError(error);
     }

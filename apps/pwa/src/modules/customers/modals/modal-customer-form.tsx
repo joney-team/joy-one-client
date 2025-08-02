@@ -11,7 +11,6 @@ import {
 import { CustomerFormStatus } from "@/modules/customer-forms/customer-form-types";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
-import { renderLocation } from "@/modules/locations/locations-service";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Anchor, Grid, Group, Skeleton, Stack, Text } from "@mantine/core";
@@ -19,6 +18,7 @@ import { modals } from "@mantine/modals";
 import { IconCheck, IconMessageUser } from "@tabler/icons-react";
 import { FC } from "react";
 import { InputModalType, OnModalInput } from "../../../modals/modal-input";
+import { useLocations } from "@/modules/locations/locations-context";
 
 interface CustomerFormModalProps {
   _id: string;
@@ -49,6 +49,7 @@ export const RowInfo: FC<{
 
 const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
   const color = useColor();
+  const { renderVnLocation: renderLocation } = useLocations();
   const customerForm = useFetch({
     id: props._id,
     fetch: () => getCustomerForm(props._id),
@@ -104,7 +105,7 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
           </Anchor>
         }
       />
-      <RowInfo label={t("location")} value={renderLocation(customerForm.data.location)} />
+      <RowInfo label={t("location")} value={renderLocation(customerForm.data.vnLocation)} />
 
       {(function () {
         if (customerForm.data.status === CustomerFormStatus.PENDING) {

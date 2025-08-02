@@ -58,7 +58,6 @@ import type {
 } from "./auth-types";
 import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
-import { startAppLoading } from "@/components/app-loading/app-loading";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
