@@ -190,7 +190,7 @@ export const WorkspaceRequire: FC = () => {
                         <Text fz="xs">{getUserMemberRoleLabel(userMember)}</Text>
                       </Group>
 
-                      {!!location && (
+                      {!!userMember.workspace.location?.address && (
                         <Group wrap="nowrap" gap={3} align="start">
                           <ThemeIcon size="xs" variant="transparent" color="dark">
                             <IconLocation strokeWidth={1.2} />
