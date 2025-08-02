@@ -8,8 +8,13 @@ export interface CustomerDto {
   birthday?: number;
   avatar?: string;
   email?: string;
+
   location?: LocationEntity;
   secondaryLocation?: LocationEntity;
+
+  vnLocation?: LocationEntity;
+  vnSecondaryLocation?: LocationEntity;
+
   presenterCustomerId?: string;
   gender?: Gender;
   medicalHistory?: string[];
@@ -37,8 +42,15 @@ export interface CustomerEntity extends BaseMongoEntity {
   phone: string;
   avatar?: string;
   email?: string;
+
   location?: LocationEntity;
   secondaryLocation?: LocationEntity;
+  vnLocation?: LocationEntity;
+  vnSecondaryLocation?: LocationEntity;
+  vnPrevLocationFullAddress?: string;
+  vnPrevSecondaryLocationFullAddress?: string;
+  vnLocationFullAddress?: string;
+
   presenterCustomerId?: string;
   presenterCustomer?: CustomerEntity;
   gender: Gender;

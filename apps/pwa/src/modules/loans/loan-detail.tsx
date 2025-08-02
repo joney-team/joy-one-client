@@ -22,7 +22,6 @@ import {
   updateLoanAssetData,
 } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
-import { getGoogleMapLink } from "@/modules/locations/locations-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -66,6 +65,7 @@ import { LoanDocuments } from "./components/loan-documents";
 import { LoanCustomerKyc } from "./components/loan-customer-kyc";
 import { LoanPayments } from "./components/loan-payments";
 import { useColor } from "../theme/use-color";
+import { useLocations } from "../locations/locations-context";
 
 export const LoanDetail: NextPage = () => {
   const params = useParams();
@@ -75,6 +75,7 @@ export const LoanDetail: NextPage = () => {
   const loans = useLoans();
   const layout = useLayout();
   const color = useColor();
+  const { getGoogleMapLink } = useLocations();
 
   const isAutoRedirectStep = useRef(true);
   const [customerKyc, setCustomerKyc] = useState<CustomerKycEntity>();
@@ -124,6 +125,7 @@ export const LoanDetail: NextPage = () => {
     skip: !loan.data,
     id: `customer-${loan.data?.customerId}`,
     fetch: () => getCustomer(loan.data!.customerId),
+    events: [EventType.CUSTOMER_UPDATED],
   });
 
   const _updateAssetData = useDebouncedCallback((assetData) => {

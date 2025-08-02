@@ -1,7 +1,6 @@
 import { Gender, ResponseList } from "@/types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { api } from "../apis";
-import { detectEntityLocation } from "../locations/locations-service";
 import { CustomerKycDto, CustomerKycEntity, RejectCustomerKycDto } from "./customer-kycs-types";
 
 export async function getCustomerKycs(query?: any) {
@@ -45,7 +44,6 @@ export const decodeCid = (cid: string) => {
     cidFullName,
     cidBirthday: parseCidDate(cidBirthday),
     cidGender: genderMatching[cidGender] || Gender.OTHER,
-    cidLocation: detectEntityLocation(address),
     address,
     cidCreatedAt: parseCidDate(cidCreatedAt),
   }

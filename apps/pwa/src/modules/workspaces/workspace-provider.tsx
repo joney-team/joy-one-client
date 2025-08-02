@@ -13,7 +13,6 @@ import { getWorkspaceAuthSessionId } from "@/modules/auth/auth-service";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
-import { useLocations } from "@/modules/locations/locations-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
 import { getWorkspaceBalance } from "@/modules/workspace-billings/workspace-billings-service";
 import { WorkspaceBalance } from "@/modules/workspace-billings/workspace-billings-types";
@@ -81,8 +80,6 @@ const syncSettings = (settings: WorkspaceSettingEntity) => {
 };
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
-  useLocations();
-
   const state = useRef<{
     balance?: WorkspaceBalance;
     subscription?: WorkspaceSubscriptionEntity;

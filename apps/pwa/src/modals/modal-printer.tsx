@@ -7,7 +7,6 @@ import { getCustomer, renderGener } from "@/modules/customers/customer-service";
 import { CustomerEntity, CustomerShortInfo } from "@/modules/customers/customer-types";
 import { renderLink } from "@/modules/files/files-utils";
 import { num, renderDateTime, t } from "@/modules/lang/lang-service";
-import { renderLocation } from "@/modules/locations/locations-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { BankQrCode } from "@/modules/plugins/banks/banks.types";
@@ -240,24 +239,9 @@ export const ModalPrinter: FC = () => {
                             return null;
 
                           if (printSettings.size === PrintSize.SMALL)
-                            return (
-                              <p>
-                                ĐC:{" "}
-                                {renderLocation(workspace.userMember.workspace.location, {
-                                  shortProvine: true,
-                                }).replace("Hồ Chí Minh", "HCM")}
-                              </p>
-                            );
+                            return <p>ĐC: {workspace.userMember.workspace.location?.address}</p>;
 
-                          return (
-                            <p>
-                              ĐC:{" "}
-                              {renderLocation(workspace.userMember.workspace.location).replace(
-                                /Thành phố/g,
-                                "TP."
-                              )}
-                            </p>
-                          );
+                          return <p>ĐC: {workspace.userMember.workspace.location?.address}</p>;
                         })()}
 
                         {workspace.userMember.workspace.hotline && (
@@ -460,11 +444,6 @@ export const ModalPrinter: FC = () => {
                               {customer.gender && (
                                 <p>
                                   {t("gender")}: {renderGener(customer.gender)}
-                                </p>
-                              )}
-                              {customer.location && (
-                                <p>
-                                  {t("address")}: {renderLocation(customer.location)}
                                 </p>
                               )}
                               {prescription.name && (

@@ -9,7 +9,6 @@ import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-c
 import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/modal-customer-relationship-contacts";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { getDateFormat, num, t } from "@/modules/lang/lang-service";
-import { getGoogleMapLink, useLocations } from "@/modules/locations/locations-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -43,7 +42,6 @@ import {
   IconCake,
   IconClipboardHeart,
   IconMail,
-  IconMapPin,
   IconPencil,
   IconPhone,
   IconPlus,
@@ -55,6 +53,7 @@ import { FC, Fragment, useState } from "react";
 import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
 import { assignCustomer, renderGener, renderGenerIcon, updateCustomer } from "../customer-service";
+import { CustomerLocations } from "./customer-locations";
 
 interface CustomerInformationsProps {
   customer: CustomerEntity;
@@ -62,7 +61,6 @@ interface CustomerInformationsProps {
 }
 
 export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
-  const [_, renderLocation] = useLocations();
   const viewport = useLayout();
   const workspace = useWorkspace();
   const tags = useTags();
@@ -261,16 +259,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                     </Group>
                   )}
 
-                  {customer.location && (
-                    <Anchor href={getGoogleMapLink(customer.location)} target="_blank">
-                      <Group gap={1} wrap="nowrap">
-                        <ThemeIcon color="dark" variant="transparent">
-                          <IconMapPin strokeWidth={1.5} size={18} />
-                        </ThemeIcon>
-                        <Text fz={16}>{renderLocation(customer.location)}</Text>
-                      </Group>
-                    </Anchor>
-                  )}
+                  <CustomerLocations customer={customer} />
                 </Fragment>
               )}
             </Stack>
@@ -287,14 +276,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                 </Group>
               )}
 
-              {customer.location && (
-                <Group gap={1} wrap="nowrap">
-                  <ThemeIcon color="dark" variant="transparent">
-                    <IconMapPin strokeWidth={1.5} size={18} />
-                  </ThemeIcon>
-                  <Text fz={16}>{renderLocation(customer.location)}</Text>
-                </Group>
-              )}
+              <CustomerLocations customer={customer} />
             </Fragment>
           )}
 
