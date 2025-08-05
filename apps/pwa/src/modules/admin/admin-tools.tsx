@@ -125,6 +125,17 @@ export const AdminTools: FC = () => {
           >
             execRejectPendingLoans
           </Button>
+
+          <Button
+            color="cyan"
+            onClick={() =>
+              api.post(`/scheduling/heathcheckSocialConnections`, {
+                workspaceId: workspace.userMember.workspaceId,
+              })
+            }
+          >
+            heathcheckSocialConnections
+          </Button>
         </Group>
       </Card>
 
