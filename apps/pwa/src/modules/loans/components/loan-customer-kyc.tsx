@@ -48,12 +48,6 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
 
   const kyc = props.kyc?.versions[props.kyc?.versions.length - 1];
 
-  console.log(
-    "customer.vnSecondaryLocation",
-    customer.vnSecondaryLocation,
-    customer.secondaryLocation
-  );
-
   return (
     <Grid>
       <Grid.Col span={{ md: 5 }}>
