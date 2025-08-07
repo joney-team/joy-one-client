@@ -32,7 +32,7 @@ export const LocationsProvider: FC<PropsWithChildren> = (props) => {
     }
 
     if (location.address) address.push(location.address);
-    return address.reverse().join(", ");
+    return address.reverse().join(", ").replace(/  /g, " ");
   };
 
   const getGoogleMapLink: GetGoogleMapLink = (location) => {
