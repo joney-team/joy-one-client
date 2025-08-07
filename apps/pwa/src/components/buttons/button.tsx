@@ -34,7 +34,6 @@ export const Button: FC<ButtonProps> = (props) => {
     href,
     onClick: propsOnClick,
     weight,
-    type,
     isGradient,
     leftIcon: LeftIcon,
     rightIcon: RightIcon,
