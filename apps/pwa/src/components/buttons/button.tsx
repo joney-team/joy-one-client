@@ -27,15 +27,35 @@ export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
 }
 
 export const Button: FC<ButtonProps> = (props) => {
+  const {
+    id,
+    children,
+    component,
+    href,
+    onClick: propsOnClick,
+    weight,
+    type,
+    isGradient,
+    leftIcon: LeftIcon,
+    rightIcon: RightIcon,
+    iconSize: propsIconSize,
+    iconSpacing: propsIconSpacing,
+    iconStrokeWidth: propsIconStrokeWidth,
+    action,
+    visible,
+    label,
+    ...rest
+  } = props;
+
   const [funcLoading, setFuncLoading] = useState(false);
   const color = useColor();
 
   const onClick = async (e: any) => {
-    if (!props.onClick) return;
+    if (!propsOnClick) return;
     setFuncLoading(true);
 
     try {
-      await props.onClick(e);
+      await propsOnClick(e);
     } catch (error) {
       onError(error);
     }
@@ -44,21 +64,11 @@ export const Button: FC<ButtonProps> = (props) => {
   };
 
   const isLoading = props.loading || funcLoading;
-  const _props = { ...props };
 
-  delete _props.isGradient;
-  delete _props.leftIcon;
-  delete _props.iconSize;
-  delete _props.rightIcon;
-  delete _props.iconSpacing;
-  delete _props.iconStrokeWidth;
-  delete _props.action;
-  delete _props.visible;
-
-  if (props.visible === false) return null;
+  if (visible === false) return null;
 
   const h = props.h;
-  const miw = props.miw || (props.action || props.type === "submit" ? 180 : props.miw);
+  const miw = props.miw || (action || props.type === "submit" ? 180 : props.miw);
   const radius = props.radius;
 
   const defaultIconSpacings = {
@@ -69,8 +79,8 @@ export const Button: FC<ButtonProps> = (props) => {
   };
 
   const iconSpacing =
-    typeof props.iconSpacing === "number"
-      ? props.iconSpacing
+    typeof propsIconSpacing === "number"
+      ? propsIconSize
       : (defaultIconSpacings as any)[props.size || ""] || defaultIconSpacings["default"];
 
   const defaultIconSizes = {
@@ -102,8 +112,8 @@ export const Button: FC<ButtonProps> = (props) => {
     default: 1.6,
   };
   const iconStrokeWidth =
-    typeof props.iconStrokeWidth === "number"
-      ? props.iconStrokeWidth
+    typeof propsIconStrokeWidth === "number"
+      ? propsIconStrokeWidth
       : (defaultSconStrokeWidth as any)[props.size || ""] || defaultSconStrokeWidth["default"];
 
   const getColor = (c?: string) => {
@@ -113,12 +123,12 @@ export const Button: FC<ButtonProps> = (props) => {
 
   return (
     <ButtonMantine
-      {..._props}
-      component={props.component}
-      href={props.href}
+      {...rest}
+      component={component}
+      href={href}
       leftSection={
-        props.leftIcon ? (
-          <props.leftIcon
+        LeftIcon ? (
+          <LeftIcon
             size={iconSize}
             strokeWidth={iconStrokeWidth}
             style={{ marginRight: iconSpacing }}
@@ -128,8 +138,8 @@ export const Button: FC<ButtonProps> = (props) => {
         )
       }
       rightSection={
-        props.rightIcon ? (
-          <props.rightIcon
+        RightIcon ? (
+          <RightIcon
             size={iconSize}
             strokeWidth={iconStrokeWidth}
             style={{ marginLeft: iconSpacing }}
@@ -145,7 +155,7 @@ export const Button: FC<ButtonProps> = (props) => {
       disabled={isLoading || props.disabled}
       onClick={onClick}
       gradient={
-        props.isGradient
+        isGradient
           ? {
               from: color("primary.8"),
               to: color("primary.6"),
@@ -153,7 +163,7 @@ export const Button: FC<ButtonProps> = (props) => {
             }
           : props.gradient
       }
-      variant={props.isGradient ? "gradient" : props.variant}
+      variant={isGradient ? "gradient" : props.variant}
       styles={{
         ...props.styles,
         label: {
@@ -163,7 +173,7 @@ export const Button: FC<ButtonProps> = (props) => {
       }}
       color={getColor(props.color)}
     >
-      {props.label ? t(props.label) : props.children}
+      {props.label ? t(props.label) : children}
     </ButtonMantine>
   );
 };

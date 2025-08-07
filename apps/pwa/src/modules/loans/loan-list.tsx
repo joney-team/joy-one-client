@@ -45,6 +45,8 @@ import { AppEntity } from "@/types";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { StringUtils } from "@/utils/string.utils";
 import { api } from "../apis";
+import { useLocations } from "../locations/locations-context";
+import { CustomerKycEntity } from "../customer-kycs/customer-kycs-types";
 
 interface LoanListProps {
   strictStatus?: LoanStatus[];
@@ -56,6 +58,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
   const workspace = useWorkspace();
   const now = DateTimeUtils.timeToSeconds(DateTimeUtils.getStartEndOfDay(new Date()).end);
   const color = useColor();
+  const location = useLocations();
 
   return (
     <List
@@ -191,6 +194,15 @@ export const LoanList: FC<LoanListProps> = (props) => {
           },
           exportToExcel: (_, loan) => {
             return [
+              { col: "CCCD", text: loan.metadata?.cidNumber?.toString() || "" },
+              {
+                col: "Địa chỉ",
+                text: location.renderVnLocation(loan.metadata?.cidVnLocation) || "-",
+              },
+              {
+                col: "Địa chỉ cũ",
+                text: location.renderVnLocation(loan.metadata?.cidLocation) || "-",
+              },
               { col: t("loan_package"), text: loan.package.id, width: 20 },
               {
                 col: t("loan_asset_type"),
