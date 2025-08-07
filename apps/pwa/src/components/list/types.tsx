@@ -28,10 +28,12 @@ export type ExportToExcelItem = {
   date?: number;
 };
 
+export type ExportToExcelOutput = ExportToExcelItem | (ExportToExcelItem & { col: string })[];
+
 export type ExportToExcel<Data, FieldType> = (
   value: FieldType,
   data: Data
-) => ExportToExcelItem | (ExportToExcelItem & { col: string })[];
+) => ExportToExcelOutput | Promise<ExportToExcelOutput>;
 
 export type Column<Data = any, FieldType = any> = {
   name?: string;
