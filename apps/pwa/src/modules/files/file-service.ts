@@ -1,5 +1,3 @@
-"use client";
-
 import imageCompression from 'browser-image-compression';
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
