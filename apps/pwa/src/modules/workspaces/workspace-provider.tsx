@@ -82,7 +82,6 @@ const syncSettings = (settings: WorkspaceSettingEntity) => {
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const state = useRef<{
     balance?: WorkspaceBalance;
-    subscription?: WorkspaceSubscriptionEntity;
     roles: WorkspaceRoleEntity[];
     settings?: WorkspaceSettingEntity;
     workspaceMembers: WorkspaceMember[];
@@ -142,13 +141,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     const result = await getWorkspaceSettings();
     syncSettings(result);
     state.current.settings = result;
-    forceUpdate();
-    return result;
-  };
-
-  const fetchSubscription = async () => {
-    const result = await getWorkspaceSubscription();
-    state.current.subscription = result;
     forceUpdate();
     return result;
   };
@@ -391,15 +383,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   useEventsListener(
     [
-      EventType.WORKSPACE_BILLINGS_PAYMENT_NEW,
-      EventType.WORKSPACE_BILLINGS_PAYMENT_PAID,
-      EventType.WORKSPACE_SUBSCRIPTION_UPDATED,
-    ],
-    () => fetchSubscription()
-  );
-
-  useEventsListener(
-    [
       EventType.WORKSPACE_ARCHIVED,
       EventType.WORKSPACE_ROLES_NEW,
       EventType.WORKSPACE_ROLES_UPDATED,
@@ -431,7 +414,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     if (userMember) {
       app.joinWorkspaceRoom(userMember.workspaceId);
-      fetchSubscription();
     }
   }, [userMember]);
 
@@ -516,7 +498,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     leave,
     invitationState,
     leaveInvitation,
-    workspaceSubscription: state.current.subscription ?? null,
     isHrmTimekeepingAvailable:
       !!state.current.settings &&
       !!state.current.settings.hrmTimeKeepingsRules &&
