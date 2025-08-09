@@ -110,6 +110,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
 
   const isListable = listRoute && listRoute.length > 0;
   const list = useList<T>({
+    autoFetch: false,
     isSkip: !isListable,
     id: `sopts${listRoute}${JSON.stringify(listParams)}${workspaceId}`,
     fetch: async (p) => {

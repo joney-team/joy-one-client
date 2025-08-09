@@ -1,8 +1,10 @@
 "use client";
 
+import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
 import { useApp } from "@/app.context";
 import { Fullscreen } from "@/components/fullscreen";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
+import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useRouter, useRouteRule } from "@/hooks/use-router";
 import {
   initializeDevice,
@@ -56,8 +58,6 @@ import type {
   AuthTokenResult,
   UserAuthResult,
 } from "./auth-types";
-import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
-import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
@@ -369,8 +369,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   }, [device?.notificationToken, device?.locale, lang.locale]);
 
   useEffect(() => {
-    if (device?._id) app.joinSocket();
-  }, [device?._id]);
+    if (user?._id) app.joinSocket();
+  }, [user?._id]);
 
   useEffect(() => {
     if (isInitialized && device && lang.locale !== device.locale) {

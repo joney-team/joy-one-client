@@ -14,6 +14,7 @@ import { useDisclosure, useForceUpdate } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import { FC, useEffect } from "react";
 import { useColor } from "../../theme/use-color";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 
 export function setBookingReaded(bookingId: string) {
   const readedBookings = (localStorage.getItem("readed_bookings") || "").split(",");
@@ -35,6 +36,7 @@ export const ModalNextBooking: FC = () => {
   const readedBookings = (localStorage.getItem("readed_bookings") || "").split(",");
 
   const relatedBookings = useFetch({
+    skip: !workspace.hasPermission(WorkspacePermission.BOOKING_VIEW),
     id: "next-booking",
     default: [],
     fetch: async () => {

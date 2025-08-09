@@ -10,12 +10,10 @@ import { useRouter } from "@/hooks/use-router";
 import { ConnectMetaPagesModal, OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getWorkspaceAuthSessionId } from "@/modules/auth/auth-service";
-import { onReconnected, useEventsListener } from "@/modules/events/event-service";
+import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
-import { getWorkspaceBalance } from "@/modules/workspace-billings/workspace-billings-service";
-import { WorkspaceBalance } from "@/modules/workspace-billings/workspace-billings-types";
 import {
   getMyWorkspaceMembers,
   joinWorkspaceMember,
@@ -40,8 +38,6 @@ import {
   WorkspaceSettingEntity,
   WorkspaceView,
 } from "@/modules/workspace-settings/workspace-settings-types";
-import { getWorkspaceSubscription } from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
-import { WorkspaceSubscriptionEntity } from "@/modules/workspace-subscriptions/workspace-subscriptions-types";
 import { WorkspaceArchived } from "@/modules/workspaces/components/workspace-archived";
 import { WorkspaceRequireBranches } from "@/modules/workspaces/components/workspace-require-branches";
 import WorkspaceInvitation from "@/modules/workspaces/workspace-invitation";
@@ -81,7 +77,6 @@ const syncSettings = (settings: WorkspaceSettingEntity) => {
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const state = useRef<{
-    balance?: WorkspaceBalance;
     roles: WorkspaceRoleEntity[];
     settings?: WorkspaceSettingEntity;
     workspaceMembers: WorkspaceMember[];
@@ -112,22 +107,16 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     isSkip: !userMember,
     route: "/workspace-members/online-status",
     refetchEvents: [
-      EventType.SYNC_CLIENTS,
       EventType.WORKSPACE_MEMBER_LEAVED,
       EventType.WORKSPACE_MEMBER_JOINED,
+      EventType.WORKSPACE_MEMBER_ONLINE,
+      EventType.WORKSPACE_MEMBER_OFFLINE,
     ],
   });
 
   const fetchUserWorkspaceMembers = async () => {
     state.current.workspaceMembers = await getMyWorkspaceMembers();
     forceUpdate();
-  };
-
-  const fetchWorkspaceBalance = async () => {
-    const result = await getWorkspaceBalance();
-    state.current.balance = result;
-    forceUpdate();
-    return result;
   };
 
   const fetchRoles = async () => {
@@ -191,7 +180,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       const initial = await workspaceInitialize();
 
       state.current.roles = initial.roles;
-      state.current.balance = initial.balance;
       state.current.settings = initial.settings;
 
       // Check if the workspace is restricted to the current session
@@ -372,17 +360,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   useEventsListener(
     [
-      EventType.WORKSPACE_BILLINGS_DEPOSITED,
-      EventType.WORKSPACE_BILLINGS_PAYMENT_NEW,
-      EventType.WORKSPACE_BILLINGS_CASHBACK_NEW,
-      EventType.WORKSPACE_BILLINGS_WITHDRAWN,
-      EventType.WORKSPACE_BILLINGS_PAYMENT_PAID,
-    ],
-    () => fetchWorkspaceBalance()
-  );
-
-  useEventsListener(
-    [
       EventType.WORKSPACE_ARCHIVED,
       EventType.WORKSPACE_ROLES_NEW,
       EventType.WORKSPACE_ROLES_UPDATED,
@@ -503,7 +480,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       !!state.current.settings.hrmTimeKeepingsRules &&
       !!state.current.settings.hrmTimeKeepingsRules.acceptLocations &&
       state.current.settings.hrmTimeKeepingsRules.acceptLocations.length > 0,
-    balance: state.current.balance!,
     setSettings,
     view: workspaceView,
     setView,
