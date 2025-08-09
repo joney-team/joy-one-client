@@ -79,7 +79,6 @@ export interface WorkspaceContext {
   roles: WorkspaceRoleEntity[];
   permissions: WorkspacePermission[];
   hasPermission: (permission: WorkspacePermission) => boolean;
-  balance: WorkspaceBalance;
   updateSettings: (settings: WorkspaceSettingEntity) => Promise<void>;
   setSettings: (dto: Partial<SetWorkspaceSettingsDto>, exec?: boolean) => void | Promise<void>;
   type: WorkspaceType;

@@ -108,11 +108,11 @@ export const ModalWorkspaceSubscription: FC = () => {
     setStep("PAYMENT");
   };
 
-  useEffect(() => {
-    if (step === "PAYMENT" && workspace.balance.balance >= totalAmount) {
-      onSelectSubscription();
-    }
-  }, [totalAmount, workspace.balance.balance, step]);
+  // useEffect(() => {
+  //   if (step === "PAYMENT" && workspace.balance.balance >= totalAmount) {
+  //     onSelectSubscription();
+  //   }
+  // }, [totalAmount, workspace.balance.balance, step]);
 
   // useEffect(() => {
   //   if (
