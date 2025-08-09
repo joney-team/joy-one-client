@@ -32,7 +32,5 @@ export const ReportsProvider: FC<PropsWithChildren> = (props) => {
     [workspace.userMember?.workspaceId, workspace.userMember?.userId]
   );
 
-  onReconnected(() => realtimeReport.fetch(), [workspace.userMember?.workspaceId]);
-
   return <Context.Provider value={{ realtimeReport }}>{props.children}</Context.Provider>;
 };

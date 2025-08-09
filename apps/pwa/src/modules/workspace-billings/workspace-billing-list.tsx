@@ -2,28 +2,20 @@ import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
-import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalWorkspaceBillingDeposit } from "@/modules/workspace-billings/modals/modal-workspace-billing-deposit";
-import { OnModalWorkspaceSubscription } from "@/modules/workspace-subscriptions/modal-workspace-subscriptions";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDate, renderDateTime, t } from "@/modules/lang/lang-service";
+import { num, renderDateTime, t } from "@/modules/lang/lang-service";
 import { useColor, useGradient } from "@/modules/theme/use-color";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import {
-  calculateWorkspaceSubscriptionBillings,
-  renderSubscriptionNum,
-} from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
+import { OnModalWorkspaceBillingDeposit } from "@/modules/workspace-billings/modals/modal-workspace-billing-deposit";
+import { calculateWorkspaceSubscriptionBillings } from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
 import { CalculateWorkspaceSubscriptionBillingResponse } from "@/modules/workspace-subscriptions/workspace-subscriptions-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { formatBytes } from "@/utils/file.utils";
 import { useList } from "@/utils/use-list.util";
 import {
   ActionIcon,
-  Anchor,
   Badge,
   Card,
   em,
@@ -36,13 +28,11 @@ import {
 import {
   IconArrowBigDown,
   IconArrowDown,
-  IconArrowsExchange,
   IconCashRegister,
-  IconConfetti,
   IconReceipt,
   IconReportMoney,
 } from "@tabler/icons-react";
-import { type FC, Fragment, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import {
   getWorkspaceBillings,
   getWorkspaceBillingStatusLabel,
@@ -168,122 +158,6 @@ export const WorkspaceBillingList: FC = () => {
             </Group>
           </Card>
         </SimpleGrid>
-
-        {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) &&
-          !!workspace.workspaceSubscription && (
-            <Card withBorder>
-              <Stack>
-                <Group gap={8} align="center" justify="space-between">
-                  <Group gap={10} align="center">
-                    <Text
-                      size="lg"
-                      c={workspace.workspaceSubscription.subscription.color}
-                      variant={
-                        workspace.workspaceSubscription.subscription.isDefault
-                          ? "outline"
-                          : "filled"
-                      }
-                      fw={600}
-                    >
-                      {workspace.workspaceSubscription.subscription.name}
-                    </Text>
-
-                    {!workspace.workspaceSubscription.fixedSubscriptionId &&
-                      !workspace.workspaceSubscription.subscription.isDefault &&
-                      workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-                        <Anchor c="gray" onClick={() => OnModalWorkspaceSubscription()} fz={em(12)}>
-                          <Group gap={3}>
-                            <IconArrowsExchange strokeWidth={1.5} size={16} />
-                            {t("change-subscriptions")}
-                          </Group>
-                        </Anchor>
-                      )}
-                  </Group>
-
-                  {!workspace.workspaceSubscription.fixedSubscriptionId &&
-                    workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-                      <Fragment>
-                        {(function () {
-                          if (workspace.workspaceSubscription.subscription.isDefault) {
-                            return (
-                              <Button
-                                radius={100}
-                                color="yellow"
-                                leftSection={<IconConfetti size={18} />}
-                                onClick={() => OnModalWorkspaceSubscription()}
-                              >
-                                {t("upgrade-subscriptions")}
-                              </Button>
-                            );
-                          }
-
-                          return (
-                            <Anchor
-                              fw={500}
-                              fz={em(13)}
-                              c={color(workspace.balance.balance > 0 ? "primary" : "gray")}
-                              onClick={() => router.push(`/workspace-billings`)}
-                            >
-                              {t("balance")}: {num(workspace.balance.balance, { type: "money" })}
-                            </Anchor>
-                          );
-                        })()}
-                      </Fragment>
-                    )}
-                </Group>
-
-                <Group justify="space-between">
-                  <Text fz={em(13)}>{t("members")}</Text>
-                  <Text fz={em(13)} ta="right" fw={500}>
-                    {num(workspace.workspaceSubscription.stat.totalMembers)} /{" "}
-                    {renderSubscriptionNum(
-                      workspace.workspaceSubscription.subscription.limitMembers
-                    )}
-                  </Text>
-                </Group>
-                <Group justify="space-between">
-                  <Text fz={em(13)}>{t("storage")}</Text>
-                  <Text fz={em(13)} ta="right" fw={500}>
-                    {formatBytes(workspace.workspaceSubscription.stat.storage)} /{" "}
-                    {renderSubscriptionNum(
-                      workspace.workspaceSubscription.subscription.limitStorage,
-                      formatBytes
-                    )}
-                  </Text>
-                </Group>
-
-                <Group justify="space-between">
-                  <Text fz={em(13)}>{t("social-connections")} (Fanpage / Zalo OAs)</Text>
-                  <Text fz={em(13)} ta="right" fw={500}>
-                    {num(
-                      workspace.workspaceSubscription.stat.totalMetaPages +
-                        workspace.workspaceSubscription.stat.totalZaloOAs
-                    )}{" "}
-                    /{" "}
-                    {renderSubscriptionNum(
-                      workspace.workspaceSubscription.subscription.limitSocialConnections
-                    )}
-                  </Text>
-                </Group>
-
-                <Renderer
-                  visible={
-                    !workspace.workspaceSubscription.subscription.isDefault &&
-                    workspace.workspaceSubscription.subscription.pricePerMember > 0 &&
-                    !!subscriptionCalculated &&
-                    !!subscriptionCalculated.nextBillingAt
-                  }
-                >
-                  <Group justify="space-between">
-                    <Text fz={em(13)}>{t("next_billing_at")}</Text>
-                    <Text fz={em(13)} ta="right" fw={500}>
-                      {renderDate(subscriptionCalculated?.nextBillingAt)}
-                    </Text>
-                  </Group>
-                </Renderer>
-              </Stack>
-            </Card>
-          )}
 
         <Stack gap={10}>
           <SessionTitle name={t("ws_billings")} icon={IconReportMoney} />

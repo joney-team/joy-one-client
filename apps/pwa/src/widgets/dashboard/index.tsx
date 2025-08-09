@@ -1,7 +1,6 @@
 import { useRouter } from "@/hooks/use-router";
-import { Period } from "@/types";
 import { useAuth } from "@/modules/auth/auth-context";
-import { onReconnected, useEventsListener } from "@/modules/events/event-service";
+import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useReports } from "@/modules/reports/reports-context";
 import { ReportEntity } from "@/modules/reports/reports-entity";
@@ -10,6 +9,7 @@ import { RangeReport } from "@/modules/reports/reports-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
+import { Period } from "@/types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Stack } from "@mantine/core";
@@ -96,8 +96,6 @@ export const DashboardWidgets: FC = () => {
     },
     [rangeReports.data]
   );
-
-  onReconnected(() => rangeReports.fetch(), [workspace.userMember?.workspaceId]);
 
   const context: DashboardWidgetsContext = {
     router,

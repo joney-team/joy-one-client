@@ -16,8 +16,8 @@ export const api = new ApiInstance({
   getLocale: () => getClientLocale()
 });
 
-export const apiFiles = new ApiInstance({
-  baseURL: environment.API_FILES_URL,
+export const apiTools = new ApiInstance({
+  baseURL: environment.API_TOOLS_URL,
   getToken: async () => getAccessToken(),
   retrieveToken: async () => retrieveAccessToken(),
   getWorkspaceId: () => getLocalStorage(StorageKey.WORKSPACE_ID),

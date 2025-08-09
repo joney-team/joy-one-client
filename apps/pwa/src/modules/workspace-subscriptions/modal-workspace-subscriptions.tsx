@@ -69,8 +69,7 @@ export const ModalWorkspaceSubscription: FC = () => {
 
   const totalAmount = calculated?.totalPrice || 0;
   const totalPrice = calculated
-    ? calculated.selectedSubscription.pricePerMember *
-      (workspace.workspaceSubscription?.stat.totalMembers ?? 0)
+    ? calculated.selectedSubscription.pricePerMember * (workspace.userMembers.length ?? 0)
     : 0;
 
   const onCalculate = async (_selectedSubscriptionId: string) => {
@@ -115,14 +114,14 @@ export const ModalWorkspaceSubscription: FC = () => {
     }
   }, [totalAmount, workspace.balance.balance, step]);
 
-  useEffect(() => {
-    if (
-      step === "PROCESSING" &&
-      workspace.workspaceSubscription?.subscriptionId === calculated?.selectedSubscription._id
-    ) {
-      setStep("COMPLETED");
-    }
-  }, [workspace.workspaceSubscription?.subscriptionId, calculated?.selectedSubscription._id, step]);
+  // useEffect(() => {
+  //   if (
+  //     step === "PROCESSING" &&
+  //     workspace.workspaceSubscription?.subscriptionId === calculated?.selectedSubscription._id
+  //   ) {
+  //     setStep("COMPLETED");
+  //   }
+  // }, [workspace.workspaceSubscription?.subscriptionId, calculated?.selectedSubscription._id, step]);
 
   useEventsListener(
     [
@@ -158,7 +157,7 @@ export const ModalWorkspaceSubscription: FC = () => {
 
   return (
     <Stack p={16}>
-      {(function () {
+      {/* {(function () {
         if (subscriptions.isFetching || billingBankAccount.isFetching)
           return <Skeleton height={300} />;
         if (subscriptions.error || billingBankAccount.error || !billingBankAccount.data)
@@ -365,7 +364,7 @@ export const ModalWorkspaceSubscription: FC = () => {
               })}
           </SimpleGrid>
         );
-      })()}
+      })()} */}
     </Stack>
   );
 };

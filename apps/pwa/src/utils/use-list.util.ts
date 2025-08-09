@@ -213,12 +213,12 @@ export const useList = <T = any>(args: UseListArgs<T>): UseList<T> => {
     }
   }, [JSON.stringify(query), autoFetch, listKey, isReadyToFetch, workspace.userMember?.workspaceId])
 
-  // Auto fetch when server reconnected
-  onReconnected(() => {
-    if (autoFetch && isReadyToFetch) {
-      fetch(true, { isSilient: true });
-    }
-  }, [JSON.stringify(query), autoFetch, listKey, isReadyToFetch])
+  // // Auto fetch when server reconnected
+  // onReconnected(() => {
+  //   if (autoFetch && isReadyToFetch) {
+  //     fetch(true, { isSilient: true });
+  //   }
+  // }, [JSON.stringify(query), autoFetch, listKey, isReadyToFetch])
 
   // Abort controller
   useEffect(() => {
