@@ -166,10 +166,6 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
     if (workspace.userMember?.workspaceId) fetch();
   }, [workspace.userMember?.workspaceId]);
 
-  onReconnected(() => {
-    fetch();
-  });
-
   const isHasPlugin = messageHubs.length > 0 || zaloOas.length > 0 || metaPages.length > 0;
   const plugins: Plugin[] = [
     ...metaPages.map((p) => {

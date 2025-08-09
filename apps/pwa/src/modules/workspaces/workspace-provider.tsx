@@ -428,10 +428,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     () => fetchRelatedData()
   );
 
-  onReconnected(() => {
-    if (userMember) initialize();
-  }, [userMember]);
-
   useEffect(() => {
     if (userMember) {
       app.joinWorkspaceRoom(userMember.workspaceId);
