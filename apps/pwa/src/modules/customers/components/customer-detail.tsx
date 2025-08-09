@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
-import { Comments } from "@/modules/comments/comments";
 import { CustomerBookings } from "@/modules/customers/components/customer-booking";
 import { CustomerInformations } from "@/modules/customers/components/customer-information";
 import { CustomerEntity } from "@/modules/customers/customer-types";
@@ -35,8 +34,8 @@ import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-boo
 import { CustomerKyc } from "@/modules/customers/components/customer-kyc-list";
 import { t } from "@/modules/lang/lang-service";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 
 export const CustomerDetail = () => {
   const workspace = useWorkspace();
@@ -160,8 +159,6 @@ export const CustomerDetail = () => {
             <IconPill strokeWidth={1.5} />
           </ActionIcon>
         </Renderer>
-
-        <Comments customer={customer} />
       </CtasWrapper>
     </Fragment>
   );
