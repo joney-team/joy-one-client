@@ -23,9 +23,9 @@ export class ApiInstance {
   constructor(options?: ApiInstanceOptions) {
     this.options = options ?? {};
 
-    this.baseURL = this.options.baseURL || this.options.isServerSide
+    this.baseURL = this.options.baseURL ?? (this.options.isServerSide
       ? environment.API_SERVER_SIDE_URL
-      : environment.API_CLIENT_SIDE_URL;
+      : environment.API_CLIENT_SIDE_URL);
 
     // Setup axios instance
     const instance = axios.create({
