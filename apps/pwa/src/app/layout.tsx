@@ -11,8 +11,8 @@ import { type TemplateString } from "next/dist/lib/metadata/types/metadata-types
 import { defaultMetadata } from "@/configs/metadata.config";
 import type { AppMetadata } from "@/types";
 
-import "@mantine/charts/styles.css";
 import "@mantine/core/styles.css";
+import "@mantine/charts/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/spotlight/styles.css";
