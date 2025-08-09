@@ -1,6 +1,6 @@
 import { useFetch } from "@/utils/use-fetch.util";
 import { FC, PropsWithChildren } from "react";
-import { onReconnected, useEventsListener } from "../events/event-service";
+import { useEventsListener } from "../events/event-service";
 import { EventType } from "../events/event-types";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { Context } from "./reports-context";

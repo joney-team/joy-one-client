@@ -69,11 +69,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
     const token = await getAccessToken();
     const deviceId = getLocalStorage(StorageKey.DEVICE_ID);
     socket.io.once("reconnect", joinSocket);
-
-    socket.emit("JOIN", {
-      token,
-      deviceId,
-    });
+    socket.emit("AUTH", { token, deviceId });
   };
 
   useEffect(() => {

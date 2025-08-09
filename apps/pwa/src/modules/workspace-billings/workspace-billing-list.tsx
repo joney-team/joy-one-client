@@ -75,7 +75,7 @@ export const WorkspaceBillingList: FC = () => {
         </Button>
       ),
     });
-  }, [workspace.balance.balance]);
+  }, []);
 
   useEffect(() => {
     if (workspace.userMember.workspaceId) {
