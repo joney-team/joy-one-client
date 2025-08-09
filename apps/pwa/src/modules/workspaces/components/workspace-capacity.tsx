@@ -1,4 +1,4 @@
-import { api } from "@/modules/apis";
+import { api, apiFiles } from "@/modules/apis";
 import { FileCapacity } from "@/modules/files/file-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { formatBytes } from "@/utils/file.utils";
@@ -16,7 +16,7 @@ export const WorkspaceCapacity: FC = () => {
   const workspace = useWorkspace();
 
   const fetchCapacity = async () => {
-    await api
+    await apiFiles
       .get(`/files/capacity/workspace`)
       .then((res) => setCapacity(res))
       .catch(console.error);
