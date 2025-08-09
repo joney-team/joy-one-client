@@ -14,7 +14,6 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
-import { WorkspaceBalance } from "@/modules/workspace-billings/workspace-billings-types";
 import {
   getMyWorkspaceMembers,
   joinWorkspaceMember,
@@ -108,9 +107,10 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     isSkip: !userMember,
     route: "/workspace-members/online-status",
     refetchEvents: [
-      EventType.SYNC_CLIENTS,
       EventType.WORKSPACE_MEMBER_LEAVED,
       EventType.WORKSPACE_MEMBER_JOINED,
+      EventType.WORKSPACE_MEMBER_ONLINE,
+      EventType.WORKSPACE_MEMBER_OFFLINE,
     ],
   });
 
