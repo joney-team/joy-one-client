@@ -1,11 +1,10 @@
-import { onReconnected, useEventsListener } from "@/modules/events/event-service";
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useEventsListener } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
-import { getWorkspaceId } from "@/modules/workspaces/workspaces-service";
+import { StorageKey } from "@/types";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { objClean } from "./object.utils";
-import { useLocalStorage } from "@/hooks/use-local-storage";
-import { StorageKey } from "@/types";
 
 export interface UseFetchArgs<T = any> {
   id?: string;
@@ -114,11 +113,11 @@ export function useFetch<T = any>(args: UseFetchArgs<T>, deps?: any[]): UseFetch
   }, [autoFetch, isReadyToFetch, fetchKey, args.skip, ...(deps || [])])
 
   // Auto fetch when server reconnected
-  onReconnected(() => {
-    if ((!!state.error || args.isAlwayRefetchWhenReconnect) && isReadyToFetch) {
-      fetch({ isSilient: true });
-    }
-  }, [state.error, isReadyToFetch, args.isAlwayRefetchWhenReconnect, fetchKey])
+  // onReconnected(() => {
+  //   if ((!!state.error || args.isAlwayRefetchWhenReconnect) && isReadyToFetch) {
+  //     fetch({ isSilient: true });
+  //   }
+  // }, [state.error, isReadyToFetch, args.isAlwayRefetchWhenReconnect, fetchKey])
 
   // Abort controller
   useEffect(() => {

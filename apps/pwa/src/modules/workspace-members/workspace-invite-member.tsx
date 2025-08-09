@@ -1,11 +1,14 @@
-import config from "@joy-one-client/config";
+"use client";
+
 import { Button } from "@/components/buttons/button";
+import { MembersIllustration } from "@/components/illustrations/members";
 import { Image } from "@/components/image";
 import { ModalTitle } from "@/components/modal-title";
 import { t } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { regenerateWorkspaceInviteCode } from "@/modules/workspaces/workspaces-service";
+import config from "@joy-one-client/config";
 import {
   ActionIcon,
   Card,
@@ -21,15 +24,10 @@ import { modals } from "@mantine/modals";
 import { IconCheck, IconCopy, IconRefresh, IconUsersPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { OnModalWorkspaceSubscription } from "../workspace-subscriptions/modal-workspace-subscriptions";
-import { MembersIllustration } from "@/components/illustrations/members";
 
 export const WorkspaceInviteMember: FC = () => {
   const workspace = useWorkspace();
-  const isReachMemberLimit =
-    workspace.workspaceSubscription &&
-    workspace.workspaceSubscription.subscription.limitMembers > 0 &&
-    workspace.workspaceSubscription?.stat.totalMembers >=
-      workspace.workspaceSubscription?.subscription.limitMembers;
+  const isReachMemberLimit = false;
 
   if (isReachMemberLimit) {
     return (

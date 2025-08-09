@@ -108,10 +108,6 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
       });
   }, [tagFolder, tasks.isInitialized]);
 
-  onReconnected(() => {
-    tasks.fetch(true, { isSilient: true });
-  }, [tagFolder]);
-
   return (
     <ScrollArea.Autosize mah="100%" flex={1}>
       <Stack p={16}>
