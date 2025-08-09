@@ -20,9 +20,10 @@ import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { RichTextEditor, RichTextEditorProps, useRichTextEditorContext } from "@mantine/tiptap";
 import { IconPhoto, IconUpload } from "@tabler/icons-react";
-import { BubbleMenu, Extensions, JSONContent, useEditor } from "@tiptap/react";
+import { Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { ClipboardEventHandler, FC, useState } from "react";
 import { ImageResize } from "./image-resize";
+import { BubbleMenu } from "@tiptap/react/menus";
 
 interface EditorProps {
   value?: string | JSONContent | undefined | null;

@@ -18,7 +18,6 @@ import "@mantine/notifications/styles.css";
 import "@mantine/spotlight/styles.css";
 import "@mantine/tiptap/styles.css";
 import "@xyflow/react/dist/style.css";
-import "maplibre-gl/dist/maplibre-gl.css";
 
 import "../styles/app.style.css";
 import "../styles/react-big-calendar.css";

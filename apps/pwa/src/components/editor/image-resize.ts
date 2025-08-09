@@ -4,10 +4,11 @@ import Image from '@tiptap/extension-image';
 export const ImageResize = Image.extend({
   addAttributes() {
     return {
+      // @ts-ignore
       ...this.parent?.(),
       style: {
         default: 'width: 100%; height: auto; cursor: pointer;',
-        parseHTML: (element) => {
+        parseHTML: (element: HTMLElement) => {
           const width = element.getAttribute('width');
           return width
             ? `width: ${width}px; height: auto; cursor: pointer;`
@@ -17,11 +18,10 @@ export const ImageResize = Image.extend({
     };
   },
   addNodeView() {
-    return ({ node, editor, getPos }) => {
-      const {
-        view,
-        options: { editable },
-      } = editor;
+    // @ts-ignore
+    return ({ node, editor, ...rest }) => {
+      const { view, options: { editable } } = editor;
+
       const { style } = node.attrs;
       const $wrapper = document.createElement('div');
       const $container = document.createElement('div');
@@ -29,12 +29,12 @@ export const ImageResize = Image.extend({
       const iconStyle = 'width: 24px; height: 24px; cursor: pointer; margin-bottom: 0px !important;';
 
       const dispatchNodeView = () => {
-        if (typeof getPos === 'function') {
+        if (rest.getPos && typeof rest.getPos === 'function') {
           const newAttrs = {
             ...node.attrs,
             style: `${$img.style.cssText}`,
           };
-          view.dispatch(view.state.tr.setNodeMarkup(getPos(), null, newAttrs));
+          view.dispatch(view.state.tr.setNodeMarkup(rest.getPos()!, null, newAttrs));
         }
       };
       const paintPositionContoller = () => {
@@ -93,7 +93,7 @@ export const ImageResize = Image.extend({
           $img.setAttribute('style', `${$img.style.cssText} margin: 0 0 0 auto;`);
           dispatchNodeView();
         });
-        
+
 
         $postionController.appendChild($leftController);
         $postionController.appendChild($centerController);
@@ -127,7 +127,7 @@ export const ImageResize = Image.extend({
 
       Object.entries(node.attrs).forEach(([key, value]) => {
         if (value === undefined || value === null) return;
-        $img.setAttribute(key, value);
+        $img.setAttribute(key, value as string);
       });
 
       if (!editable) return { dom: $container };

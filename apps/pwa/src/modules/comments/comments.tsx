@@ -31,7 +31,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { Link, RichTextEditor } from "@mantine/tiptap";
 import { IconMessage, IconPin, IconSend } from "@tabler/icons-react";
 import Placeholder from "@tiptap/extension-placeholder";
-import { BubbleMenu, useEditor } from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
+import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
 import { type FC, Fragment, useEffect, useState } from "react";
 

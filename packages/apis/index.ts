@@ -12,6 +12,7 @@ interface ApiInstanceOptions {
   getDeviceId?: () => string | null;
   getSessionId?: () => string | null;
   getLocale?: () => string | null;
+  baseURL?: string
 }
 
 export class ApiInstance {
@@ -22,7 +23,7 @@ export class ApiInstance {
   constructor(options?: ApiInstanceOptions) {
     this.options = options ?? {};
 
-    this.baseURL = this.options.isServerSide
+    this.baseURL = options?.baseURL || this.options.isServerSide
       ? environment.API_SERVER_SIDE_URL
       : environment.API_CLIENT_SIDE_URL;
 

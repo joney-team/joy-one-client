@@ -1,9 +1,11 @@
+"use client";
+
+import imageCompression from 'browser-image-compression';
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
 import { IMAGE_MIME_TYPE, MS_EXCEL_MIME_TYPE, MS_POWERPOINT_MIME_TYPE, MS_WORD_MIME_TYPE, PDF_MIME_TYPE } from "@mantine/dropzone";
 import { Icon, IconFile, IconMusic, IconPdf, IconPhoto, IconUpload, IconVideo } from "@tabler/icons-react";
-import imageCompression from 'browser-image-compression';
-import { api } from "../apis";
+import { apiFiles } from "../apis";
 import { t } from "../lang/lang-service";
 import { FileEntity, FileType, UploadFile } from "./file-types";
 import { parseFile } from "./files-utils";
@@ -36,17 +38,17 @@ export function getMineTypeAccept(fileType: FileType[]) {
 }
 
 export async function getFiles(query?: any) {
-  return api.get<ResponseList<FileEntity>>(`/files`, { params: query })
+  return apiFiles.get<ResponseList<FileEntity>>(`/files`, { params: query })
 }
 
 export async function removeFileFromRelativePath(relativePath: string) {
-  return api.delete(`/files/paths/${relativePath}`)
+  return apiFiles.delete(`/files/paths/${relativePath}`)
 }
 
 export async function removeFile(fileId: string) {
   return onActionLoad({
     name: 'Xóa tệp tin',
-    process: () => api.delete(`/files/${fileId}`)
+    process: () => apiFiles.delete(`/files/${fileId}`)
   })
 }
 
@@ -75,12 +77,12 @@ export async function uploadFile(uploadFile: UploadFile) {
   if (uploadFile.relatedLoanId) formData.append('relatedLoanId', uploadFile.relatedLoanId);
   if (uploadFile.relatedEntities) formData.append('relatedEntities', JSON.stringify(uploadFile.relatedEntities));
 
-  return api.formData<FileEntity>('/files/upload', formData)
+  return apiFiles.formData<FileEntity>('/files/upload', formData)
 }
 
 export async function onUploadFiles(files: UploadFile[], onUploaded?: (files: FileEntity[]) => Promise<void> | void) {
   return onActionLoad<FileEntity[]>({
-    name: "Tải lên hình ảnh / tài liệu",
+    name: t('upload_files'),
     icon: IconUpload,
     process: async () => {
       let _files: FileEntity[] = [];
@@ -110,7 +112,7 @@ export async function onUploadFile(file: UploadFile, onUploaded?: (file: FileEnt
 
 export async function getFileInfo(rawUrl: string) {
   const fileName = rawUrl.split('/').pop();
-  return api.get<FileEntity>(`/files/${fileName?.split('.')[0]}/info`);
+  return apiFiles.get<FileEntity>(`/files/${fileName?.split('.')[0]}/info`);
 }
 
 export function getFileTypeIcon(fileType: FileType) {
