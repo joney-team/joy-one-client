@@ -102,7 +102,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
           </Center>
         </Renderer>
 
-        <Renderer visible={hovered}>
+        <Renderer visible={true}>
           <Stack
             gap={10}
             align="center"
@@ -150,16 +150,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
             </Renderer>
 
             <Renderer visible={!disabled}>
-              <Button
-                leftIcon={IconUpload}
-                size="xs"
-                iconSize={16}
-                variant="transparent"
-                color="white"
-                fw={400}
-                fz={em(14)}
-                iconSpacing={-8}
-              >
+              <Button leftIcon={IconUpload} size="xs" variant="transparent" color="white" fw={400}>
                 {t("upload")}
               </Button>
             </Renderer>
