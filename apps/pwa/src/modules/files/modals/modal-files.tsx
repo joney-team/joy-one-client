@@ -142,7 +142,7 @@ export const ModalFiles: FC = () => {
               });
             }}
           >
-            <Card withBorder style={{ borderStyle: "dashed", cursor: "pointer" }}>
+            <Card withBorder shadow="none" className="clickable" style={{ borderStyle: "dashed" }}>
               <Group gap={10} justify="center">
                 <ThemeIcon variant="transparent" color="dark">
                   <IconUpload strokeWidth={1.5} />
