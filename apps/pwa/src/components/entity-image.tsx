@@ -48,7 +48,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
   };
 
   const ableView = !!props.src && !loadFailed;
-  const hovered = hover.hovered;
+  const hovered = hover.hovered && ableView;
 
   return (
     <Dropzone
@@ -102,7 +102,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
           </Center>
         </Renderer>
 
-        <Renderer visible={true}>
+        <Renderer visible={hovered}>
           <Stack
             gap={10}
             align="center"
@@ -137,6 +137,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
                 p={5}
               >
                 <ActionIcon
+                  component="div"
                   variant="subtle"
                   color="white"
                   onClick={(e) => {
