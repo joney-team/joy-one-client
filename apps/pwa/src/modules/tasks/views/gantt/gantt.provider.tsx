@@ -5,7 +5,7 @@ import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { getTasks, syncTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { useForceUpdate, useThrottledCallback } from "@mantine/hooks";
 import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { ganttConfig } from "./gantt.config";
@@ -78,7 +78,8 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
     // Detect scroll to the end of left or right
     const isEndLeft = contentBody.scrollLeft <= 0 + offset;
-    const isEndRight = contentBody.scrollLeft >= contentBody.scrollWidth - contentBody.clientWidth - offset;
+    const isEndRight =
+      contentBody.scrollLeft >= contentBody.scrollWidth - contentBody.clientWidth - offset;
 
     if (isEndLeft || isEndRight) {
       if (isEndLeft) {
@@ -145,10 +146,13 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const resetTaskHovered = () => {
-    tasksState.current = Object.keys(tasksState.current || ({} as GanttTaskStates)).reduce((out, s) => {
-      out[s] = { ...tasksState.current[s], hovered: false };
-      return out;
-    }, {} as GanttTaskStates);
+    tasksState.current = Object.keys(tasksState.current || ({} as GanttTaskStates)).reduce(
+      (out, s) => {
+        out[s] = { ...tasksState.current[s], hovered: false };
+        return out;
+      },
+      {} as GanttTaskStates
+    );
   };
 
   const toggleSisplayTaskStatusColor = () => {
@@ -189,7 +193,9 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
         ? -_state.columnSize * 0.8
         : (args as { offset?: number }).offset || -_state.columnSize * 0.8;
     const behavior =
-      typeof args === "number" ? "instant" : (args as { behavior?: "smooth" | "instant" }).behavior || "smooth";
+      typeof args === "number"
+        ? "instant"
+        : (args as { behavior?: "smooth" | "instant" }).behavior || "smooth";
 
     const _date = new Date(date);
     _date.setHours(0, 0, 0, 0);
@@ -295,7 +301,11 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     state: _state,
     setState: (s: GanttState) => _setState(s),
     dividerPosition:
-      typeof _state.dividerPosition === "number" ? _state.dividerPosition : layout.view === "mobile" ? 0.5 : 0.3,
+      typeof _state.dividerPosition === "number"
+        ? _state.dividerPosition
+        : layout.view === "mobile"
+        ? 0.5
+        : 0.3,
     activeLayout: activeLayout.current,
     setActiveLayout,
     dates,
@@ -322,5 +332,9 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     isScrolling: scrollDirection !== null,
   };
 
-  return <Context.Provider value={contextValue}>{isInitialized ? props.children : null}</Context.Provider>;
+  return (
+    <Context.Provider value={contextValue}>
+      {isInitialized ? props.children : null}
+    </Context.Provider>
+  );
 };

@@ -15,22 +15,22 @@ export const ListTableHead: FC<ListContext & { columnId: string; colIndex: numbe
   const column = columns[columnId];
 
   const sortKey = getSortQueryKey(columnId);
-  const sortValue = list.query[sortKey];
+  const sortValue = list.params[sortKey];
   const sortValueType = +sortValue === 1 ? "asc" : +sortValue === -1 ? "desc" : "none";
 
   const onSort = () => {
     if (!column?.isSortable) return;
 
     if (sortValueType === "none") {
-      return list.setQuery(sortKey, "-1");
+      return list.setParam(sortKey, "-1");
     }
 
     if (sortValueType === "desc") {
-      return list.setQuery(sortKey, "1");
+      return list.setParam(sortKey, "1");
     }
 
     if (sortValueType === "asc") {
-      return list.removeQuery(sortKey);
+      return list.removeParam(sortKey);
     }
   };
 
@@ -57,13 +57,20 @@ export const ListTableHead: FC<ListContext & { columnId: string; colIndex: numbe
   const { isSortable: sortable } = column;
 
   const isShowSelectAll = colIndex === 0 && isShowMultipleSelectActions;
-  const isSelectedAll = list.data.length > 0 && list.data.every((v: any) => selectedIds.includes(v.id || v._id || ""));
+  const isSelectedAll =
+    list.data.length > 0 && list.data.every((v: any) => selectedIds.includes(v.id || v._id || ""));
 
   return (
     <Table.Th
       className="unselectable"
       ref={hover.ref}
-      bg={sortable ? (hover.hovered ? "var(--mantine-color-default-hover)" : "transparent") : "transparent"}
+      bg={
+        sortable
+          ? hover.hovered
+            ? "var(--mantine-color-default-hover)"
+            : "transparent"
+          : "transparent"
+      }
       style={{ cursor: sortable ? "pointer" : "default" }}
       onClick={sortable ? onSort : undefined}
       pl={isShowSelectAll ? 10 : undefined}

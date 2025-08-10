@@ -61,19 +61,18 @@ export const LoanList: FC<LoanListProps> = (props) => {
   const location = useLocations();
 
   return (
-    <List
+    <List<LoanEntity>
       id={`loans-list-${(props.strictStatus || ["all"]).join("-")}`}
       name="loans"
       limit={16}
       icon={IconCreditCardPay}
-      fetch={(p, controller) =>
-        getLoans(
-          {
-            status: props.strictStatus ? props.strictStatus : p.status,
-            ...p,
-          },
-          controller
-        )
+      route="/loans"
+      params={
+        props.strictStatus
+          ? {
+              status: props.strictStatus,
+            }
+          : undefined
       }
       creatable={{
         onCreate: () => OnModalCreateLoan(),
@@ -404,7 +403,6 @@ export const LoanList: FC<LoanListProps> = (props) => {
         EventType.LOANS_ARCHIVED,
         EventType.LOANS_LIQUIDATION,
         EventType.LOANS_REVERT_LIQUIDATION,
-        EventType.REPORT_RANGE_SYNCED,
         EventType.LOANS_SYNCED,
         EventType.LOANS_CHANGE_WORKSPACE_BRANCH,
         EventType.LOANS_APPROVED_REVERTED,

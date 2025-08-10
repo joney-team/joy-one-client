@@ -23,7 +23,7 @@ export const FilterItem: FC<
   const onReset: MouseEventHandler<HTMLElement> = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    list.removeQuery(colKey);
+    list.removeParam(colKey);
   };
 
   const Wrapper: FilterWrapperProps = ({
@@ -34,7 +34,7 @@ export const FilterItem: FC<
     onClear,
     active,
   }) => {
-    const isHasValue = !!list.query[colKey] || onClear;
+    const isHasValue = !!list.params[colKey] || onClear;
     return (
       <ActionButton
         icon={column.icon || IconFilter}
@@ -80,7 +80,7 @@ export const FilterItem: FC<
 
 export const FilterBar: FC<ListContext> = (ctx) => {
   const isHasFilter = Object.values(ctx.columns).some((v) => v?.filter);
-  const onReset = () => ctx.list.removeAllQueries();
+  const onReset = () => ctx.list.removeAllParams();
   const workspaceLayout = useWorkspaceLayout();
 
   if (!ctx.viewState.isFilterVisible || !isHasFilter) return null;
@@ -118,7 +118,7 @@ export const Filter: FC<ListContext> = (ctx) => {
 
   if (!isHasFilter) return null;
 
-  const filterCount = Object.keys(ctx.list.query).reduce((acc, key) => {
+  const filterCount = Object.keys(ctx.list.params).reduce((acc, key) => {
     const ignoreKeys = ["sort"];
     if (ignoreKeys.some((v) => key.indexOf(v) > -1)) return acc;
     return acc + 1;

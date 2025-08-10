@@ -1,7 +1,13 @@
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
 import React from "react";
 import ReactDOMServer from 'react-dom/server';
-import { Column } from "./types";
+import { BaseData, Column } from "./types";
+
+export function getId(obj: BaseData) {
+  if ('id' in obj) return obj.id;
+  if ('_id' in obj) return obj._id;
+  return ''
+}
 
 export const getIn = (obj: any, path: string) => {
   try {

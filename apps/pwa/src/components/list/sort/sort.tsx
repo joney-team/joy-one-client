@@ -17,11 +17,11 @@ export const Sort: FC<ListContext> = (props) => {
   if (columnSettings.every((col) => !columns[col.id]?.isSortable)) return null;
 
   const sorting = columnSettings.filter(
-    (col) => list.query[`sort${capitalizeFirstLetter(col.id, false)}`]
+    (col) => list.params[`sort${capitalizeFirstLetter(col.id, false)}`]
   );
 
   const onReset = () => {
-    list.removeQueries(sorting.map((col) => `sort${capitalizeFirstLetter(col.id, false)}`));
+    list.removeParams(sorting.map((col) => `sort${capitalizeFirstLetter(col.id, false)}`));
   };
 
   return (
@@ -44,7 +44,7 @@ export const Sort: FC<ListContext> = (props) => {
           if (!column || !column.isSortable) return null;
 
           const queryKey = getSortQueryKey(columnSetting.id);
-          const querySort = list.query[queryKey];
+          const querySort = list.params[queryKey];
 
           const isAsc = querySort === "1";
           const isDesc = querySort === "-1";
@@ -61,8 +61,8 @@ export const Sort: FC<ListContext> = (props) => {
                     variant={isAsc ? "filled" : "subtle"}
                     color={color(isAsc ? "primary" : "dark")}
                     onClick={() => {
-                      if (isAsc) return list.removeQuery(queryKey);
-                      return list.setQuery(queryKey, "1");
+                      if (isAsc) return list.removeParam(queryKey);
+                      return list.setParam(queryKey, "1");
                     }}
                   >
                     <IconArrowUp size={16} />
@@ -72,8 +72,8 @@ export const Sort: FC<ListContext> = (props) => {
                     variant={isDesc ? "filled" : "subtle"}
                     color={color(isDesc ? "primary" : "dark")}
                     onClick={() => {
-                      if (isDesc) return list.removeQuery(queryKey);
-                      return list.setQuery(queryKey, "-1");
+                      if (isDesc) return list.removeParam(queryKey);
+                      return list.setParam(queryKey, "-1");
                     }}
                   >
                     <IconArrowDown size={16} />

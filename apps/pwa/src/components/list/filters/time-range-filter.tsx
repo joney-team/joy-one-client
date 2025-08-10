@@ -27,7 +27,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
 }) => {
   const filterKey = `timeRange${capitalizeFirstLetter(colKey, false)}`;
   const filterRangeKey = `range${capitalizeFirstLetter(colKey, false)}`;
-  const filterValue = list.query[filterKey] || list.query[filterRangeKey] || "";
+  const filterValue = list.params[filterKey] || list.params[filterRangeKey] || "";
   const { period, fromDate, toDate } = useMemo(() => {
     if (filterRangeKey) {
       return {
@@ -49,7 +49,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         OnModalDatePicker({
           onSelected(date) {
             if (!date) return;
-            list.setQuery(filterKey, `${Period.DATE}-${timeToSeconds(date)}`);
+            list.setParam(filterKey, `${Period.DATE}-${timeToSeconds(date)}`);
           },
         }),
     },
@@ -62,7 +62,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
           period: Period.MONTH,
           onRangeSelected: (date) => {
             if (!date) return;
-            list.setQuery(filterKey, `${Period.MONTH}-${timeToSeconds(date[0])}`);
+            list.setParam(filterKey, `${Period.MONTH}-${timeToSeconds(date[0])}`);
           },
         }),
     },
@@ -75,7 +75,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
           period: Period.YEAR,
           onRangeSelected: (date) => {
             if (!date) return;
-            list.setQuery(filterKey, `${Period.YEAR}-${timeToSeconds(date[0])}`);
+            list.setParam(filterKey, `${Period.YEAR}-${timeToSeconds(date[0])}`);
           },
         }),
     },
@@ -87,7 +87,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         OnModalDatePicker({
           onRangeSelected: (date) => {
             if (!date) return;
-            list.setQuery(filterRangeKey, `${timeToSeconds(date[0])}-${timeToSeconds(date[1])}`);
+            list.setParam(filterRangeKey, `${timeToSeconds(date[0])}-${timeToSeconds(date[1])}`);
           },
         }),
     },
@@ -100,7 +100,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
           <Wrapper
             onClear={
               filterValue
-                ? () => list.removeQuery(filterRangeKey ? filterRangeKey : filterKey)
+                ? () => list.removeParam(filterRangeKey ? filterRangeKey : filterKey)
                 : undefined
             }
             active={!!filterValue}

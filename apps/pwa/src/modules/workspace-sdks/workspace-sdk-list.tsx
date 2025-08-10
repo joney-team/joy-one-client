@@ -5,7 +5,7 @@ import { OnModalWorkspaceSdkForm } from "./modals/modal-workspace-sdk-form";
 import { getWorkspaceSdks, removeWorkspaceSdk } from "./workspace-sdks-service";
 import { WorkspaceSdkEntity } from "./workspace-sdks-types";
 import { onArchive } from "@/utils/actions";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { ActionIcon, Card, Group, Stack, Text } from "@mantine/core";
 import { IconPlus, IconPuzzle, IconTrash } from "@tabler/icons-react";
 import { FC } from "react";
@@ -42,7 +42,10 @@ export const WorkspaceSdkList: FC = () => {
                     onArchive({
                       name: `SDK ${sdk.name}`,
                       icon: IconPuzzle,
-                      process: () => removeWorkspaceSdk(sdk._id).then(() => sdks.fetch(true, { isSilient: true })),
+                      process: () =>
+                        removeWorkspaceSdk(sdk._id).then(() =>
+                          sdks.fetch(true, { isSilient: true })
+                        ),
                     })
                   }
                 >
@@ -57,7 +60,9 @@ export const WorkspaceSdkList: FC = () => {
         <Button
           variant="outline"
           leftIcon={IconPlus}
-          onClick={() => OnModalWorkspaceSdkForm({ onFinish: () => sdks.fetch(true, { isSilient: true }) })}
+          onClick={() =>
+            OnModalWorkspaceSdkForm({ onFinish: () => sdks.fetch(true, { isSilient: true }) })
+          }
         >
           {t("create")} SDK
         </Button>

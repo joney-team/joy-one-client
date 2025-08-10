@@ -12,7 +12,7 @@ import { CustomerEntity } from "@/modules/customers/customer-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { onError } from "@/utils/exceptions.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   ActionIcon,
   Box,
@@ -24,7 +24,7 @@ import {
   Stack,
   Text,
   ThemeIcon,
-  TypographyStylesProvider,
+  Typography,
   alpha,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -129,13 +129,13 @@ export const Comments: FC<CommentsProps> = (props) => {
             <ThemeIcon variant="transparent" color="orange">
               <IconPin strokeWidth={1.5} size={18} />
             </ThemeIcon>
-            <TypographyStylesProvider>
+            <Typography>
               <div
                 dangerouslySetInnerHTML={{
                   __html: pinnedComment.text || (pinnedComment as any).content || "",
                 }}
               />
-            </TypographyStylesProvider>
+            </Typography>
           </Group>
         )}
         <Indicator

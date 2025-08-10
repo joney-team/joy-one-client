@@ -4,7 +4,7 @@ import { ProductVoucherCard } from "@/modules/product-vouchers/product-voucher-c
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { getProductVouchers } from "@/modules/product-vouchers/product-vouchers-service";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import { type FC } from "react";
 import InfiniteScroll from "react-infinite-scroller";
@@ -19,10 +19,15 @@ export const ReleasedProductVoucherList: FC = () => {
       }),
   });
 
-  useEventsListener([EventType.PRODUCT_VOUCHERS_NEW, EventType.PRODUCT_UPDATE], () => productVouchers.fetch(true));
+  useEventsListener([EventType.PRODUCT_VOUCHERS_NEW, EventType.PRODUCT_UPDATE], () =>
+    productVouchers.fetch(true)
+  );
 
   return (
-    <InfiniteScroll loadMore={() => productVouchers.fetch()} hasMore={productVouchers.isAbleToLoadMore}>
+    <InfiniteScroll
+      loadMore={() => productVouchers.fetch()}
+      hasMore={productVouchers.isAbleToLoadMore}
+    >
       <Stack>
         <Group gap={8}>
           <ListQty list={productVouchers} />

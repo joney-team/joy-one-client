@@ -19,7 +19,7 @@ import {
 } from "@/modules/notifications/notification-types";
 import { onError } from "@/utils/exceptions.utils";
 import { classNames } from "@/utils/ui.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { ActionIcon, Drawer, Group, Indicator, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";

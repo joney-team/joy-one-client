@@ -36,7 +36,7 @@ import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-t
 import { AppEntity } from "@/types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   ActionIcon,
   Card,

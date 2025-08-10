@@ -11,7 +11,7 @@ import { FileEntity, FileType } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { num, t } from "@/modules/lang/lang-service";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Box, Card, em, Group, Modal, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { useDisclosure } from "@mantine/hooks";

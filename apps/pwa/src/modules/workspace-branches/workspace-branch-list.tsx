@@ -1,18 +1,18 @@
-import { type FC } from "react";
-import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
+import { Clickable } from "@/components/clickable";
 import { BranchesIllustration } from "@/components/illustrations/branches";
 import { List } from "@/components/list";
-import { OnWorkspaceBranchModal } from "@/modules/workspace-branches/modals/modal-workspace-branch";
-import { Clickable } from "@/components/clickable";
 import { EventType } from "@/modules/events/event-types";
 import { t, tMulti } from "@/modules/lang/lang-service";
-import { getWorkspaceBranches } from "./workspace-branches-service";
+import { useColor } from "@/modules/theme/use-color";
+import { OnWorkspaceBranchModal } from "@/modules/workspace-branches/modals/modal-workspace-branch";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Stack, Text, Title } from "@mantine/core";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
+import { type FC } from "react";
 import { useLocations } from "../locations/locations-context";
+import { WorkspaceBranchEntity } from "./workspace-branches-types";
 
 export const WorkspaceBranchList: FC = () => {
   const color = useColor();
@@ -21,12 +21,12 @@ export const WorkspaceBranchList: FC = () => {
 
   return (
     <Stack p={16}>
-      <List
+      <List<WorkspaceBranchEntity>
         creatable={{
           onCreate: () => OnWorkspaceBranchModal(),
           permission: WorkspacePermission.WORKSPACE_SETTINGS,
         }}
-        fetch={(p) => getWorkspaceBranches(p)}
+        route="/workspace-branches"
         id="workspace-branches"
         columns={{
           name: {
