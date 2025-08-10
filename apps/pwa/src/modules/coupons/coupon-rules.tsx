@@ -6,7 +6,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { num, t } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Badge, em, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import { FC } from "react";
 import InfiniteScroll from "react-infinite-scroller";
@@ -20,7 +20,11 @@ export const CouponRules: FC = () => {
   });
 
   useEventsListener(
-    [EventType.COUPON_RULES_ARCHIVED, EventType.COUPON_RULES_CREATED, EventType.COUPON_RULES_UPDATED],
+    [
+      EventType.COUPON_RULES_ARCHIVED,
+      EventType.COUPON_RULES_CREATED,
+      EventType.COUPON_RULES_UPDATED,
+    ],
     () => rules.fetch(true)
   );
 
@@ -28,7 +32,10 @@ export const CouponRules: FC = () => {
     <InfiniteScroll loadMore={() => rules.fetch()} hasMore={rules.isAbleToLoadMore}>
       <Stack>
         <Group gap={10}>
-          <ButtonPlus onClick={() => OnModalCouponRuleForm()} permission={WorkspacePermission.COUPONS_MANAGER} />
+          <ButtonPlus
+            onClick={() => OnModalCouponRuleForm()}
+            permission={WorkspacePermission.COUPONS_MANAGER}
+          />
 
           <Badge variant="light" size="xl" fz={em(12)} style={{ borderRadius: 100 }}>
             {t("qty")}

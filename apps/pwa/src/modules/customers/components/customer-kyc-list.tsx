@@ -2,7 +2,7 @@
 
 import { getCustomerKycs } from "@/modules/customer-kycs/customer-kycs-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Skeleton, Stack } from "@mantine/core";
 import { FC } from "react";
 import { Empty } from "../../../components/empty";

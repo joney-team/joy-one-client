@@ -18,6 +18,7 @@ import { ActionIcon, Tooltip } from "@mantine/core";
 import { IconCalendarDown, IconCashRegister, IconEdit } from "@tabler/icons-react";
 import { NextPage } from "next";
 import { OrderItemsColumn } from "../../modules/orders/order-items-columns";
+import { OrderEntity } from "@/modules/orders/order-entity";
 
 const Page: NextPage = () => {
   const workspace = useWorkspace();
@@ -26,11 +27,11 @@ const Page: NextPage = () => {
   if (!mod) return null;
 
   return (
-    <List
+    <List<OrderEntity>
       id="ors"
       name={mod.name}
       icon={mod.icon}
-      fetch={(p) => getOrders(p)}
+      route="/orders"
       columns={{
         code: CodeColumn({ href: (value) => `/orders/${value}` }),
         createdAt: DateTimeColumn({ name: "time", isSortable: true }),

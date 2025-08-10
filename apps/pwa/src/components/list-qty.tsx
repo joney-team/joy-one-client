@@ -1,11 +1,12 @@
 "use client";
 
 import { num, t } from "@/modules/lang/lang-service";
-import { UseList } from "@/utils/use-list.util";
+import { UseList } from "@/components/list/use-list";
 import { Badge, em } from "@mantine/core";
 import { FC } from "react";
+import { BaseData } from "./list/types";
 
-export interface ListQtyProps<T = any> {
+export interface ListQtyProps<T extends BaseData = any> {
   list: UseList<T>;
 }
 

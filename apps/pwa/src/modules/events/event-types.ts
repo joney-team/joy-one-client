@@ -223,12 +223,26 @@ export enum EventType {
   PROMOTION_ARCHIVED = 'PROMOTION_ARCHIVED',
 }
 
+export enum EventChannel {
+  WORKSPACE = 'WORKSPACE',
+  PERSONAL = 'PERSONAL',
+  NONE = 'NONE',
+}
+
+export enum EventDataActionType {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  ARCHIVED = 'ARCHIVED',
+}
+
 export interface EventEntity extends BaseMongoEntity {
-  ref?: string;
-  workspaceId: string;
+  channel: EventChannel;
   type: EventType;
-  variant?: EventVariant;
+  actionType?: EventDataActionType;
   time: number;
+  ref?: string;
+  workspaceId?: string;
+  variant?: EventVariant;
   userId?: string;
   user?: WorkspaceMemberInfo;
   data?: any;

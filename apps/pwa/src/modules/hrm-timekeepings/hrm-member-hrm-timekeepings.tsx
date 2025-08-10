@@ -11,9 +11,12 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { getTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
-import { HrmTimekeepingEntity, HrmTimekeepingStatus } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
+import {
+  HrmTimekeepingEntity,
+  HrmTimekeepingStatus,
+} from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { ActionIcon, Card, Group, SimpleGrid, Skeleton, Stack, Text, em } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight, IconClipboardList } from "@tabler/icons-react";
 
@@ -36,7 +39,11 @@ export const HrmMemberTimekeepings: FC = () => {
       date,
       userId: auth.user._id,
       getAll: true,
-      status: [HrmTimekeepingStatus.AUTO_APPROVAL, HrmTimekeepingStatus.MANUAL_APPROVAL, HrmTimekeepingStatus.PENDING],
+      status: [
+        HrmTimekeepingStatus.AUTO_APPROVAL,
+        HrmTimekeepingStatus.MANUAL_APPROVAL,
+        HrmTimekeepingStatus.PENDING,
+      ],
     };
   };
 
@@ -70,7 +77,7 @@ export const HrmMemberTimekeepings: FC = () => {
     [auth.user._id]
   );
 
-  const query = getQuery(timekeepings.query);
+  const query = getQuery(timekeepings.params);
 
   return (
     <Stack p={16}>
@@ -116,13 +123,15 @@ export const HrmMemberTimekeepings: FC = () => {
               size={30}
               radius={150}
               color="dark.2"
-              onClick={() => timekeepings.setQuery("date", +query.fromTime - 1000)}
+              onClick={() => timekeepings.setParam("date", +query.fromTime - 1000)}
             >
               <IconChevronLeft strokeWidth={1.5} size={18} />
             </ActionIcon>
 
             <Group justify="center">
-              <Text ta="center" fz={em(15)}>{`Tháng ${query.date.getMonth() + 1}/${query.date.getFullYear()}`}</Text>
+              <Text ta="center" fz={em(15)}>{`Tháng ${
+                query.date.getMonth() + 1
+              }/${query.date.getFullYear()}`}</Text>
             </Group>
 
             <ActionIcon
@@ -133,7 +142,7 @@ export const HrmMemberTimekeepings: FC = () => {
               onClick={() => {
                 console.log("query", query);
                 console.log("query", +query.toTime + 10000);
-                timekeepings.setQuery("date", +query.toTime + 10000);
+                timekeepings.setParam("date", +query.toTime + 10000);
               }}
             >
               <IconChevronRight strokeWidth={1.5} size={18} />
@@ -143,7 +152,11 @@ export const HrmMemberTimekeepings: FC = () => {
           {timekeepings.isFetching ? (
             <Skeleton height={300} />
           ) : (
-            <HrmTimekeepingsCalendar initialDate={query.date} showAddButton timekeepings={timekeepings.data} />
+            <HrmTimekeepingsCalendar
+              initialDate={query.date}
+              showAddButton
+              timekeepings={timekeepings.data}
+            />
           )}
         </Stack>
       </Card>

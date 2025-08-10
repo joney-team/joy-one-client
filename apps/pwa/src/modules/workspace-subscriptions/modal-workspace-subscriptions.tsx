@@ -31,7 +31,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { formatBytes } from "@/utils/file.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   Anchor,
   Badge,

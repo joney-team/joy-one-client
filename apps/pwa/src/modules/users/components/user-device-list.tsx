@@ -10,7 +10,7 @@ import { getUserDevices } from "@/modules/devices/devices-service";
 import { useUserEventsListner } from "@/modules/events/event-service";
 import { t } from "@/modules/lang/lang-service";
 import { onError } from "@/utils/exceptions.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { ActionIcon, Group, SimpleGrid, Skeleton } from "@mantine/core";
 import { IconDevices, IconLogout, IconRefresh } from "@tabler/icons-react";
 import { Fragment } from "react";

@@ -22,7 +22,7 @@ import { num, t } from "@/modules/lang/lang-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   Badge,
   Center,

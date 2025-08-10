@@ -10,7 +10,7 @@ import { EventType } from "@/modules/events/event-types";
 import { getProducts } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import InfiniteScroll from "react-infinite-scroller";
 

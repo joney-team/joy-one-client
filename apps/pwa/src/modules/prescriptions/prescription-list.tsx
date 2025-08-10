@@ -9,8 +9,18 @@ import { num, t } from "@/modules/lang/lang-service";
 import { getPrescriptions } from "@/modules/prescriptions/prescriptions-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { capitalize } from "@/utils/string.utils";
-import { useList } from "@/utils/use-list.util";
-import { ActionIcon, Badge, Card, Group, SimpleGrid, Skeleton, Stack, Text, em } from "@mantine/core";
+import { useList } from "@/components/list/use-list";
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  Group,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  Text,
+  em,
+} from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
 import { type FC } from "react";
 import InfiniteScroll from "react-infinite-scroller";
@@ -47,7 +57,10 @@ export const PrescriptionList: FC = () => {
         {prescriptions.isHasData && (
           <SimpleGrid cols={{ md: 3 }}>
             {prescriptions.data.map((prescription) => {
-              const totalDays = prescription.items.reduce((acc, item) => Math.max(acc, item.days), 0);
+              const totalDays = prescription.items.reduce(
+                (acc, item) => Math.max(acc, item.days),
+                0
+              );
 
               return (
                 <Card

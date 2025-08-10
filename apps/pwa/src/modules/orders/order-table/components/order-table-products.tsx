@@ -6,7 +6,7 @@ import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { getProductIcon, getProducts } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Center, Group, Loader, SimpleGrid, Stack } from "@mantine/core";
 import { IconList } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";

@@ -19,7 +19,7 @@ import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { forceDate } from "@/utils/dateTime.utils";
 import { StringUtils } from "@/utils/string.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Badge, Card, Group, Image, Indicator, Stack, Text, Tooltip } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
 import dayjs from "dayjs";

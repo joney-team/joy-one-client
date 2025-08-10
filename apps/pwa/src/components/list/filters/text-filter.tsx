@@ -20,7 +20,7 @@ export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
   config,
 }) => {
   const [opened, setOpened] = useState(false);
-  const value = list.query[colKey] || "";
+  const value = list.params[colKey] || "";
   const color = useColor();
 
   const placeholder =
@@ -61,7 +61,7 @@ export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
               e.preventDefault();
               e.stopPropagation();
               const value = (e.target as any).value;
-              list.setQuery(colKey, value);
+              list.setParam(colKey, value);
               setOpened(false);
             }
           }}

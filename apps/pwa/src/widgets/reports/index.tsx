@@ -18,7 +18,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { ObjectUtils } from "@/utils/object.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Group, Loader, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {
   IconBuildingSkyscraper,
@@ -106,8 +106,8 @@ export const ReportWidgets: FC = () => {
     [report.data]
   );
 
-  const query = getQuery(report.query);
-  const period = report.query.period || Period.MONTH;
+  const query = getQuery(report.params);
+  const period = report.params.period || Period.MONTH;
 
   const [userMemberInfos, isUserMemberInfosReady, setUerMemberInfo] = useWorkspaceMembers(
     [query.userId].filter(Boolean)
@@ -151,40 +151,40 @@ export const ReportWidgets: FC = () => {
             },
           ]}
           onChange={(value) => {
-            report.setQuery("period", value, { isSilient: false });
+            report.setParam("period", value, { isSilient: false });
           }}
           onClear={
-            Object.keys(report.query)
+            Object.keys(report.params)
               ? undefined
-              : () => report.removeQuery("period", { isSilient: false })
+              : () => report.removeParam("period", { isSilient: false })
           }
         />
 
         <ButtonSelect
           icon={IconClock}
           label={(function () {
-            const date = report.query.date ? new Date(+report.query.date * 1000) : new Date();
+            const date = report.params.date ? new Date(+report.params.date * 1000) : new Date();
             if (period === Period.MONTH) return `${date.getMonth() + 1}/${date.getFullYear()}`;
             if (period === Period.YEAR) return `${date.getFullYear()}`;
             if (period === Period.DATE) return renderDate(date);
           })()}
           isActive
-          onClear={() => report.removeQuery("date", { isSilient: false })}
+          onClear={() => report.removeParam("date", { isSilient: false })}
           onClick={() =>
             OnModalDatePicker({
               period,
-              date: report.query.date ? new Date(+report.query.date * 1000) : new Date(),
+              date: report.params.date ? new Date(+report.params.date * 1000) : new Date(),
               onSelected:
                 period === Period.DATE
                   ? (date) => {
-                      report.setQuery("date", DateTimeUtils.timeToSeconds(date));
+                      report.setParam("date", DateTimeUtils.timeToSeconds(date));
                     }
                   : undefined,
               onRangeSelected:
                 period !== Period.DATE
                   ? (range) => {
                       if (range) {
-                        report.setQuery("date", DateTimeUtils.timeToSeconds(range[0]));
+                        report.setParam("date", DateTimeUtils.timeToSeconds(range[0]));
                       }
                     }
                   : undefined,
@@ -197,7 +197,7 @@ export const ReportWidgets: FC = () => {
             onSelect={(user) => {
               if (!user) return;
               setUerMemberInfo(user);
-              report.setQuery("userId", user.userId);
+              report.setParam("userId", user.userId);
             }}
             optionRightSection={(user) => {
               const isSelected = query.userId === user.userId;
@@ -274,7 +274,7 @@ export const ReportWidgets: FC = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               e.preventDefault();
-                              report.removeQuery("userId");
+                              report.removeParam("userId");
                             }}
                           >
                             <IconX size={7} strokeWidth={4} />
@@ -293,7 +293,7 @@ export const ReportWidgets: FC = () => {
           <WorkspaceBranchSelector
             onSelect={(branch) => {
               if (!branch) return;
-              report.setQuery("workspaceBranchIds", branch._id);
+              report.setParam("workspaceBranchIds", branch._id);
             }}
             target={(ctx) => {
               return (
@@ -354,7 +354,7 @@ export const ReportWidgets: FC = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               e.preventDefault();
-                              report.removeQuery("workspaceBranchIds");
+                              report.removeParam("workspaceBranchIds");
                             }}
                           >
                             <IconX size={7} strokeWidth={4} />
@@ -374,7 +374,7 @@ export const ReportWidgets: FC = () => {
 
       <Widgets
         id="reports"
-        key={JSON.stringify(report.query)}
+        key={JSON.stringify(report.params)}
         readonly={!workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}
         widgets={workspace.view.reportWidgets}
         defaultWidgets={getDefaultWorkspaceView(workspace.type).reportWidgets}

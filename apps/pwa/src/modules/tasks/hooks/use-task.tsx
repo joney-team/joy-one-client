@@ -2,7 +2,7 @@
 
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { useEffect, useState } from "react";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";

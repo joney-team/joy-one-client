@@ -2,7 +2,7 @@ import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Empty } from "@/components/empty";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { EventType } from "@/modules/events/event-types";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Stack } from "@mantine/core";
 import { AccordionItemComponent } from "./message-box-metadata-types";
 
