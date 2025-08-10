@@ -1,4 +1,4 @@
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { AccordionItemComponent } from "./message-box-metadata-types";
 import { getLoans } from "@/modules/loans/loans-service";
 import { EventType } from "@/modules/events/event-types";

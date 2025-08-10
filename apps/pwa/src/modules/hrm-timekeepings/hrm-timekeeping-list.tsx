@@ -20,7 +20,7 @@ import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-membe
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   Card,
   Center,
@@ -96,7 +96,7 @@ export const HrmTimekeepingList: FC = () => {
     }
   );
 
-  const query = getQuery(timekeepings.query);
+  const query = getQuery(timekeepings.params);
   const [assignees, isAssigneesReady, setAssignee] = useWorkspaceMembers(query.assigneeUserIds);
   const assigneeUserIds: string[] = query.assigneeUserIds || [];
 
@@ -146,9 +146,9 @@ export const HrmTimekeepingList: FC = () => {
               }
 
               if (_assigneeUserIds.length === 0) {
-                timekeepings.removeQuery("assigneeUserIds");
+                timekeepings.removeParam("assigneeUserIds");
               } else {
-                timekeepings.setQuery("assigneeUserIds", _assigneeUserIds);
+                timekeepings.setParam("assigneeUserIds", _assigneeUserIds);
               }
             }}
             optionRightSection={(user) => {
@@ -226,7 +226,7 @@ export const HrmTimekeepingList: FC = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        timekeepings.removeQuery("assigneeUserIds");
+                        timekeepings.removeParam("assigneeUserIds");
                       }}
                     >
                       <IconX size={7} strokeWidth={4} />
@@ -271,9 +271,9 @@ export const HrmTimekeepingList: FC = () => {
               timekeepings={timekeepings.data}
               onDateChange={(range) => {
                 if (dayjs(range.start).isSame(dayjs(), "day")) {
-                  timekeepings.removeQuery("date");
+                  timekeepings.removeParam("date");
                 } else {
-                  timekeepings.setQuery("date", DateTimeUtils.timeToSeconds(range.start));
+                  timekeepings.setParam("date", DateTimeUtils.timeToSeconds(range.start));
                 }
               }}
             />

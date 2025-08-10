@@ -7,7 +7,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { getReceipts } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Center, Skeleton, Stack } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconClockCheck } from "@tabler/icons-react";
@@ -28,7 +28,12 @@ export const ModalListReceipts: FC<ModalListReceiptsProps> = (props) => {
   });
 
   useEventsListener(
-    [EventType.RECEIPT_NEW, EventType.RECEIPT_PAID, EventType.RECEIPT_DISBURSEMENT, EventType.RECEIPT_ARCHIVED],
+    [
+      EventType.RECEIPT_NEW,
+      EventType.RECEIPT_PAID,
+      EventType.RECEIPT_DISBURSEMENT,
+      EventType.RECEIPT_ARCHIVED,
+    ],
     () => receipts.fetch(true, { isSilient: true })
   );
 

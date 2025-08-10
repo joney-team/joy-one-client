@@ -7,8 +7,9 @@ import { getIn, getListDataId, getValuePath } from "../utils";
 import { ListTableHead } from "./table-head";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { t } from "@/modules/lang/lang-service";
+import { BaseData } from "@/components/list/types";
 
-export default function ListTable<T>(ctx: ListContext<T>) {
+export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
   const actions = ctx.actions || [];
   const workspace = useWorkspace();
 
@@ -24,6 +25,7 @@ export default function ListTable<T>(ctx: ListContext<T>) {
         borderLeft: "none",
         borderRight: "none",
       }}
+      stickyHeader
     >
       <Table.Thead>
         <Table.Tr bg="var(--mantine-color-default-hover)">

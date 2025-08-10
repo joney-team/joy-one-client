@@ -9,7 +9,7 @@ import { CommentEntity } from "@/modules/comments/comment-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { em, Group, ScrollArea, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { IconMessages } from "@tabler/icons-react";
@@ -101,7 +101,10 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
         </Text>
       </Group>
 
-      <Stack h={rootSize.height - headerHeight - inputsSize.height} style={{ position: "relative" }}>
+      <Stack
+        h={rootSize.height - headerHeight - inputsSize.height}
+        style={{ position: "relative" }}
+      >
         <ScrollArea
           viewportRef={commentsViewport}
           style={{ pointerEvents: "all" }}
@@ -124,10 +127,14 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
                   const nextMsg = _comments[index + 1];
 
                   const isFirstSession = prevMsg?.createdByUserId !== comment.createdByUserId;
-                  const isLastSession = nextMsg?.createdByUserId !== comment.createdByUserId || !nextMsg;
+                  const isLastSession =
+                    nextMsg?.createdByUserId !== comment.createdByUserId || !nextMsg;
                   const isOnlyOneMessageSession = isFirstSession && isLastSession;
                   const timeBtw = prevMsg
-                    ? dayjs(comment.createdAt * 1000).diff(dayjs(prevMsg.createdAt * 1000), "minutes")
+                    ? dayjs(comment.createdAt * 1000).diff(
+                        dayjs(prevMsg.createdAt * 1000),
+                        "minutes"
+                      )
                     : 0;
 
                   return (
@@ -145,7 +152,12 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
           </Renderer>
 
           <Renderer visible={comments.isEmpty}>
-            <Stack flex={1} h={rootSize.height - headerHeight - inputsSize.height} justify="center" align="center">
+            <Stack
+              flex={1}
+              h={rootSize.height - headerHeight - inputsSize.height}
+              justify="center"
+              align="center"
+            >
               <CommentsIllustration width={150} />
               <Text c="gray" fz={12}>
                 {t("no_comments")}

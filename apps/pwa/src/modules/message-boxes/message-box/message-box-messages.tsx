@@ -23,7 +23,7 @@ import { OnModalUserInformation } from "@/modules/users/modals/modal-user-inform
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { loadImage } from "@/utils/asset.utils";
 import { StringUtils } from "@/utils/string.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   Anchor,
   Card,

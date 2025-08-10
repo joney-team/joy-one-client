@@ -13,7 +13,7 @@ import { OnModalWorkspaceBillingDeposit } from "@/modules/workspace-billings/mod
 import { calculateWorkspaceSubscriptionBillings } from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
 import { CalculateWorkspaceSubscriptionBillingResponse } from "@/modules/workspace-subscriptions/workspace-subscriptions-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   ActionIcon,
   Badge,

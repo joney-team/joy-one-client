@@ -20,7 +20,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { objSelect } from "@/utils/object.utils";
 import { StringUtils } from "@/utils/string.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   ActionIcon,
   Card,
@@ -69,7 +69,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
       ),
   });
 
-  const query = getQuery(tasks.query);
+  const query = getQuery(tasks.params);
   const [assignees, isAssigneesReady, setAssignee] = useWorkspaceMembers(query.assigneeUserIds);
   const assigneeUserIds: string[] = query.assigneeUserIds || [];
 
@@ -125,9 +125,9 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
               }
 
               if (_assigneeUserIds.length === 0) {
-                tasks.removeQuery("assigneeUserIds");
+                tasks.removeParam("assigneeUserIds");
               } else {
-                tasks.setQuery("assigneeUserIds", _assigneeUserIds);
+                tasks.setParam("assigneeUserIds", _assigneeUserIds);
               }
             }}
             optionRightSection={(user) => {
@@ -205,7 +205,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        tasks.removeQuery("assigneeUserIds");
+                        tasks.removeParam("assigneeUserIds");
                       }}
                     >
                       <IconX size={7} strokeWidth={4} />
@@ -224,9 +224,9 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
               onChange={(range) => {
                 const isThisMonth = dayjs(range.start).isSame(new Date(), "month");
                 if (isThisMonth) {
-                  tasks.removeQuery("date");
+                  tasks.removeParam("date");
                 } else {
-                  tasks.setQuery("date", DateTimeUtils.timeToSeconds(range.start) + 60 * 60 * 24);
+                  tasks.setParam("date", DateTimeUtils.timeToSeconds(range.start) + 60 * 60 * 24);
                 }
               }}
               renderDayHead={(date, hovered, isOutOfRange) => {

@@ -55,17 +55,11 @@ export const ExportButton: FC<ListContext> = (props) => {
     onActionLoad({
       process: async () => {
         try {
-          const queryFn =
-            "fetch" in props
-              ? () => props.fetch({ ...props.list.query, getAll: true }).then((res) => res.data)
-              : () =>
-                  api
-                    .get<ResponseList<any>>(props.route, {
-                      params: { ...props.list.query, getAll: true },
-                    })
-                    .then((res) => res.data);
-
-          const data = await queryFn();
+          const data = await api
+            .get<ResponseList<any>>(props.route, {
+              params: { ...props.list.params, getAll: true },
+            })
+            .then((res) => res.data);
 
           if (data.length === 0) throw new Error(t("NO_DATA_TO_EXPORT"));
 

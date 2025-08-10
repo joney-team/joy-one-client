@@ -8,7 +8,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   Center,
   Combobox,

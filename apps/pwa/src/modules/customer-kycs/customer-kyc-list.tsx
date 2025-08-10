@@ -5,7 +5,7 @@ import { Errored } from "@/components/errored";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { num, t } from "@/modules/lang/lang-service";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Badge, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyzeFilled } from "@tabler/icons-react";
 import { FC } from "react";
@@ -35,13 +35,13 @@ export const CustomerKycList: FC = () => {
           <ButtonSelect
             label="Trạng thái"
             icon={IconAnalyzeFilled}
-            onClear={() => kycs.removeQueries(["status"])}
-            value={kycs.query.status}
+            onClear={() => kycs.removeParams(["status"])}
+            value={kycs.params.status}
             options={Object.values(CustomerKycStatus).map((status) => ({
               label: t(status.toLowerCase()),
               value: status,
             }))}
-            onChange={(tagIds) => kycs.setQuery("status", tagIds)}
+            onChange={(tagIds) => kycs.setParam("status", tagIds)}
           />
         </Group>
 
