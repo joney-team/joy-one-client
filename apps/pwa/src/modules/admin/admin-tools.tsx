@@ -28,6 +28,8 @@ export const AdminTools: FC = () => {
         <Stack align="start">
           <Button onClick={() => api.post("/helpers/reset-redis")}>Reset Redis Cache</Button>
 
+          <Button onClick={() => api.patch(`/receipts/sync-all`)}>Sync All Receipts</Button>
+
           <Button onClick={() => api.patch(`/loans/sync-all`)}>Sync All Loans</Button>
 
           <Button onClick={() => api.patch(`/orders/sync-all`)}>Sync All Orders</Button>
