@@ -43,7 +43,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
     id: `customer-contacts-${customer._id}`,
     skip: !workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT),
     fetch: () => getCustomerContacts(customer._id),
-    events: [EventType.CUSTOMER_CONTACTS_UPDATED],
+    refetchEvents: [EventType.CUSTOMER_CONTACTS_UPDATED],
   });
 
   const kyc = props.kyc?.versions[props.kyc?.versions.length - 1];

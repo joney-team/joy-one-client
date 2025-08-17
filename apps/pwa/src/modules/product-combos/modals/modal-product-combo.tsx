@@ -17,7 +17,17 @@ import {
 import { productTypeOptions } from "@/modules/products/products-service";
 import { onActionLoad } from "@/utils/actions";
 import { useFetch } from "@/utils/use-fetch.util";
-import { ActionIcon, Anchor, Badge, Group, Modal, Skeleton, Stack, Table, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Anchor,
+  Badge,
+  Group,
+  Modal,
+  Skeleton,
+  Stack,
+  Table,
+  Text,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPackage, IconPlus, IconTrash } from "@tabler/icons-react";
 import { FC, useRef } from "react";
@@ -38,7 +48,7 @@ export const ModalProductCombo: FC = () => {
     id: propsRef.current?.id,
     skip: !!!propsRef.current?.id,
     fetch: () => getProductCombo(propsRef.current!.id),
-    events: [EventType.PRODUCT_COMBO_UPDATE],
+    refetchEvents: [EventType.PRODUCT_COMBO_UPDATE],
   });
 
   const onRevertHistory = (historyId: string) => {
@@ -89,7 +99,14 @@ export const ModalProductCombo: FC = () => {
               </Stack>
             </Group>
 
-            <Table mt={16} captionSide="bottom" withTableBorder withRowBorders withColumnBorders striped>
+            <Table
+              mt={16}
+              captionSide="bottom"
+              withTableBorder
+              withRowBorders
+              withColumnBorders
+              striped
+            >
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th>{t("time")}</Table.Th>
@@ -139,7 +156,10 @@ export const ModalProductCombo: FC = () => {
                                     • {product?.name}
                                   </Text>
 
-                                  <Badge variant="light" color={color(record.quantity >= 0 ? "primary" : "red")}>
+                                  <Badge
+                                    variant="light"
+                                    color={color(record.quantity >= 0 ? "primary" : "red")}
+                                  >
                                     {num(record.quantity)}
                                   </Badge>
                                 </Group>

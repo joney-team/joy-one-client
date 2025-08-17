@@ -37,7 +37,7 @@ export const PartnerDetail: FC = () => {
   const data = useFetch<PartnerEntity>({
     id: `partners-${partnerId}`,
     fetch: async () => getPartner(partnerId as string),
-    events: {
+    refetchEvents: {
       types: [EventType.PARTNER_UPDATED, EventType.PARTNER_ARCHIVED],
       condition: (e, _partner) => e.ref === _partner._id,
     },

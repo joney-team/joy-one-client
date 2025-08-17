@@ -53,7 +53,7 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
   const customerForm = useFetch({
     id: props._id,
     fetch: () => getCustomerForm(props._id),
-    events: [
+    refetchEvents: [
       EventType.CUSTOMER_FORM_NEW,
       EventType.CUSTOMER_FORM_UPDATED,
       EventType.CUSTOMER_FORM_ARCHIVED,
