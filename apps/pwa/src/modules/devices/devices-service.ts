@@ -59,12 +59,14 @@ export const getDeviceIdentifyId = async (): Promise<string> => {
 };
 
 export async function initializeDevice() {
-  // Device
-  let device = await getDevice();
-  console.log('device', device);
-  if (!device) device = await registerDevice();
-  localStorage.setItem(StorageKey.DEVICE_ID, device._id);
-  return device;
+  // Current Device
+  const device = await getDevice();
+  if (device) return device;
+
+  // Register new device
+  const newDevice = await registerDevice();
+  localStorage.setItem(StorageKey.DEVICE_ID, newDevice._id);
+  return newDevice;
 }
 
 export async function setDeviceNotificationToken(dto: SetDeviceNotificationTokenDto): Promise<DeviceEntity> {
