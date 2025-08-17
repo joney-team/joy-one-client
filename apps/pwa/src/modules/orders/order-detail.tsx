@@ -21,7 +21,7 @@ export const OrderDetail: FC = () => {
     {
       id: `orders-${code}`,
       fetch: () => getOrderByCode(code),
-      events: {
+      refetchEvents: {
         types: [EventType.ORDER_SYNCED, EventType.ORDER_UPDATED],
         condition: (e, _order) => {
           return e.ref === _order.id;

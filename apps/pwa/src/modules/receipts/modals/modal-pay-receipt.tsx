@@ -195,11 +195,11 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
     const data = await getReceipt(props.receipt.id);
     setReceipt(data);
 
-    const workspaceBranchId = data.workspaceBranchId || data.relatedCustomer?.workspaceBranchId;
-
-    if (workspaceBranchId) {
-      const branch = await getWorkspaceBranchById(workspaceBranchId);
+    if (data.workspaceBranchId) {
+      const branch = await getWorkspaceBranchById(data.workspaceBranchId);
       setWorkspaceBranch(branch);
+    } else {
+      setWorkspaceBranch(null);
     }
 
     setTransactionDesc(await getDefaultTransactionDesc(data));
