@@ -94,6 +94,8 @@ export type CustomerShortInfo = Pick<CustomerEntity,
   | 'avatar'
   | 'tagIds'
   | 'lastCheckin'
+  | 'workspaceId'
+  | 'workspaceBranchId'
 > & {
   _id: string;
 };

@@ -2,10 +2,9 @@ import { getClientLocale } from "@/modules/lang/lang-service";
 import { ResponseList, StorageKey } from "@/types";
 import { isServer } from "@/utils/common.utils";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import { AxiosError } from "axios";
+import { v4 as uuid } from "uuid";
 import { api } from "../apis";
 import type { DeviceEntity, RegisterDeviceDto, SetDeviceLocaleDto, SetDeviceNotificationTokenDto } from "./devices-types";
-import { v4 as uuid } from "uuid";
 
 export async function registerDevice() {
   const identifyId = await getDeviceIdentifyId();
