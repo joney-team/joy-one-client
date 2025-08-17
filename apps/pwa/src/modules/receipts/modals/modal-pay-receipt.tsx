@@ -55,9 +55,10 @@ import { IconCashRegister, IconCheck, IconClipboardCheck, IconRefresh } from "@t
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { PrintButton } from "../../../modals/modal-printer";
 import { OnReceiptDetailModal } from "./modal-receipt-detail";
+import { getWorkspaceBranchById } from "@/modules/workspace-branches/workspace-branches-service";
 
 interface ModalPayReceiptProps {
-  receipt: ReceiptEntity;
+  receipt: Pick<ReceiptEntity, "id">;
   onPaid?: () => void;
   onClosed?: () => void;
 }
@@ -68,7 +69,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
   const banks = useBanks();
 
   const color = useColor();
-  const [receipt, setReceipt] = useState(props.receipt);
+  const [receipt, setReceipt] = useState<ReceiptEntity | null>(null);
   const [receiptFiles, setReceiptFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -91,14 +92,13 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
       return `${removeAccents(customer.name).toUpperCase()} ${loan.code} ${receipt.code}`;
     }
 
-    return props.receipt.code;
+    return receipt.code;
   };
 
   const [transactionDesc, setTransactionDesc] = useState<string>("");
   const [giveAmount, setGiveAmount] = useState<number>();
   const [workspaceBranch, setWorkspaceBranch] = useState(workspace.defaultBranch);
-
-  const totalAmount = round(receipt.amount + (receipt.tipAmount || 0));
+  const totalAmount = receipt ? round(receipt.amount + (receipt.tipAmount || 0)) : 0;
 
   const bankInformation = useMemo(() => {
     const bankAccount = workspaceBranch?.settings?.bankAccount || workspace.settings.bankAccount;
@@ -131,6 +131,8 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
   }, [workspaceBranch, banks, transactionDesc]);
 
   const onClose = async () => {
+    if (!receipt) return;
+
     const data = await getReceipt(receipt.id);
     if (data.status === ReceiptStatus.PAID) {
       props.onPaid?.();
@@ -189,16 +191,32 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
     }
   };
 
-  const initialize = async () => {
-    setLoading(true);
-    setTransactionDesc(await getDefaultTransactionDesc(props.receipt));
-    setLoading(false);
-  };
-
   const fetchReceipt = async () => {
     const data = await getReceipt(props.receipt.id);
     setReceipt(data);
+
+    const workspaceBranchId = data.workspaceBranchId || data.relatedCustomer?.workspaceBranchId;
+
+    if (workspaceBranchId) {
+      const branch = await getWorkspaceBranchById(workspaceBranchId);
+      setWorkspaceBranch(branch);
+    }
+
     setTransactionDesc(await getDefaultTransactionDesc(data));
+    return data;
+  };
+
+  const initialize = async () => {
+    if (!props.receipt) return;
+    setLoading(true);
+    try {
+      await fetchReceipt();
+    } catch (error) {
+      onError(error);
+      props.onClosed?.();
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -219,6 +237,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
     <Stack gap={16}>
       {(function () {
         if (loading) return <Skeleton h={200} />;
+        if (!receipt) return null;
 
         if (receipt.status === ReceiptStatus.PAID)
           return (
@@ -357,7 +376,13 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                           {bankInformation?.bankAccount.accountName && (
                             <Group justify="space-between">
                               <Text>{t("bank_account_name")}: </Text>
-                              <CopyText fw={500} text={bankInformation.bankAccount.accountName} />
+                              <CopyText
+                                fw={500}
+                                truncate="end"
+                                w="100%"
+                                maw={200}
+                                text={bankInformation.bankAccount.accountName}
+                              />
                             </Group>
                           )}
 
