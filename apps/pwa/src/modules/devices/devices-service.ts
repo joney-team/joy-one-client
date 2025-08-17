@@ -29,12 +29,10 @@ export async function getDevice(): Promise<DeviceEntity | undefined> {
       api.get(`/devices/${identifyId}`)
         .then((res) => resolve(res))
         .catch((err) => {
-          if (err instanceof AxiosError) {
-            if (err.response?.status === 404) {
-              resolve(undefined);
-            } else {
-              setTimeout(action, 3000);
-            }
+          if (typeof err === 'object' && err.status === 404) {
+            resolve(undefined);
+          } else {
+            setTimeout(action, 3000);
           }
         })
     }
@@ -52,7 +50,8 @@ export const getDeviceIdentifyId = async (): Promise<string> => {
     const { visitorId } = await get();
     localStorage.setItem(StorageKey.DEVICE_IDENTIFY_ID, visitorId);
     return visitorId;
-  } catch {
+  } catch (error) {
+    console.warn(`FingerprintJS error > ${error}`);
     const visitorId = uuid();
     localStorage.setItem(StorageKey.DEVICE_IDENTIFY_ID, visitorId);
     return visitorId;
@@ -62,6 +61,7 @@ export const getDeviceIdentifyId = async (): Promise<string> => {
 export async function initializeDevice() {
   // Device
   let device = await getDevice();
+  console.log('device', device);
   if (!device) device = await registerDevice();
   localStorage.setItem(StorageKey.DEVICE_ID, device._id);
   return device;
