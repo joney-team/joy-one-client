@@ -63,7 +63,7 @@ export const ProductDetail: FC = () => {
   const product = useFetch({
     id: `products-${productId}`,
     fetch: async () => getProduct(productId),
-    events: {
+    refetchEvents: {
       types: events,
       condition: (e, _product) =>
         e.ref === _product._id || (e.relatedEntities || []).some((v) => v.id === _product._id),

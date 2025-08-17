@@ -49,7 +49,7 @@ export const CustomerDetail = () => {
     fetch: async () => {
       return getCustomerByCode(customerCode);
     },
-    events: {
+    refetchEvents: {
       types: [EventType.CUSTOMER_UPDATED],
       condition: (e, data) =>
         data?._id === e.ref || (e.relatedEntities || []).some((v) => v.id === data?._id),

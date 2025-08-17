@@ -19,7 +19,7 @@ export const WorkspaceApiAppList: FC = () => {
   const apps = useFetch({
     default: [],
     fetch: () => getWorkspaceApiApps({ getAll: true }).then((res) => res.data),
-    events: [
+    refetchEvents: [
       EventType.WORKSPACE_API_APP_CREATED,
       EventType.WORKSPACE_API_APP_UPDATED,
       EventType.WORKSPACE_API_APP_ARCHIVED,

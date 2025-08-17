@@ -102,7 +102,7 @@ export const LoanDetail: NextPage = () => {
 
       return loan;
     },
-    events: {
+    refetchEvents: {
       types: [
         EventType.LOANS_JUST_CREATED,
         EventType.LOANS_PENDING,
@@ -128,7 +128,7 @@ export const LoanDetail: NextPage = () => {
     skip: !loan.data,
     id: `customer-${loan.data?.customerId}`,
     fetch: () => getCustomer(loan.data!.customerId),
-    events: [EventType.CUSTOMER_UPDATED],
+    refetchEvents: [EventType.CUSTOMER_UPDATED],
   });
 
   const _updateAssetData = useDebouncedCallback((assetData) => {

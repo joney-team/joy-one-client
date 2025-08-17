@@ -36,7 +36,7 @@ export const ReceiptDetail: FC<{
       onLoaded?.(receipt);
       return receipt;
     },
-    events: {
+    refetchEvents: {
       types: [
         EventType.RECEIPT_PAID,
         EventType.RECEIPT_DISBURSEMENT,

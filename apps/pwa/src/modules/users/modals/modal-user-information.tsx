@@ -64,7 +64,7 @@ export const ModalUserInformation: FC = () => {
         close();
       });
     },
-    events: {
+    refetchEvents: {
       types: [
         EventType.WORKSPACE_MEMBER_UPDATED,
         EventType.WORKSPACE_MEMBER_LEAVED,

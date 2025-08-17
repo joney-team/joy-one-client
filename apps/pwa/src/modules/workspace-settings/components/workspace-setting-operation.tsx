@@ -11,7 +11,10 @@ import { searchGetAvailableEntities } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { OnModalWorkspaceSettingsWorkSlots } from "@/modules/workspace-settings/modals/modal-workspace-setting-work-slots";
-import { setWorkspaceSettings, useWorkDaySlots } from "@/modules/workspace-settings/workspace-settings-service";
+import {
+  setWorkspaceSettings,
+  useWorkDaySlots,
+} from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
 import {
@@ -43,7 +46,7 @@ export const WorkspaceOperationSettings: FC = () => {
   const searchAvailableEntities = useFetch({
     id: "search-available-entities",
     fetch: async () => searchGetAvailableEntities(),
-    events: [EventType.WORKSPACE_SETTING_UPDATED],
+    refetchEvents: [EventType.WORKSPACE_SETTING_UPDATED],
   });
 
   const workDaySlots = useWorkDaySlots();
@@ -141,8 +144,13 @@ export const WorkspaceOperationSettings: FC = () => {
 
         <Select
           label={t("receipt_payment_method_default")}
-          defaultValue={workspace.settings.receiptPaymentMethodDefault || Object.values(ReceiptPaymentMethod)[0]}
-          data={Object.values(ReceiptPaymentMethod).map((value) => ({ value, label: t(`payment_method_${value}`) }))}
+          defaultValue={
+            workspace.settings.receiptPaymentMethodDefault || Object.values(ReceiptPaymentMethod)[0]
+          }
+          data={Object.values(ReceiptPaymentMethod).map((value) => ({
+            value,
+            label: t(`payment_method_${value}`),
+          }))}
           onChange={(value) => {
             setWorkspaceSettings({
               ...workspace.settings,
@@ -236,12 +244,21 @@ export const WorkspaceOperationSettings: FC = () => {
                     ...workspace.settings,
                     searchSettings: {
                       ...workspace.settings.searchSettings,
-                      hideEntities: isAvailable ? [...hideEntities, e] : hideEntities.filter((item) => item !== e),
+                      hideEntities: isAvailable
+                        ? [...hideEntities, e]
+                        : hideEntities.filter((item) => item !== e),
                     },
                   });
                 };
 
-                return <Switch key={e} label={t(`entity_${e}`)} defaultChecked={isAvailable} onChange={toggle} />;
+                return (
+                  <Switch
+                    key={e}
+                    label={t(`entity_${e}`)}
+                    defaultChecked={isAvailable}
+                    onChange={toggle}
+                  />
+                );
               })}
             </SimpleGrid>
           </Card>

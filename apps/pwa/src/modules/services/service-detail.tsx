@@ -28,7 +28,7 @@ export const ServiceDetail: FC = () => {
   const serviceId = params.id as string;
   const product = useFetch({
     fetch: async () => getProduct(serviceId),
-    events: {
+    refetchEvents: {
       types: [EventType.PRODUCT_NEW, EventType.PRODUCT_UPDATE, EventType.PRODUCT_ARCHIVED],
       condition: (e, _product) =>
         e.ref === _product._id || (e.relatedEntities || []).some((v) => v.id === _product._id),
