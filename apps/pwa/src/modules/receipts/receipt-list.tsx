@@ -38,6 +38,8 @@ import {
   IconCreditCard,
   IconPrinter,
 } from "@tabler/icons-react";
+import { WorkspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
+import { AppEntity } from "@/types";
 
 export const ReceiptList: FC = () => {
   const workspace = useWorkspace();
@@ -57,6 +59,7 @@ export const ReceiptList: FC = () => {
           code: CodeColumn({
             onClick: (_, data) => OnReceiptDetailModal({ id: data.id }),
           }),
+          workspaceBranchId: WorkspaceBranchColumn({ entity: AppEntity.RECEIPTS }),
           createdAt: DateTimeColumn({ name: "createdAt", isSortable: true, isHasFilter: true }),
           paidAt: DateTimeColumn({
             name: "paidAt",

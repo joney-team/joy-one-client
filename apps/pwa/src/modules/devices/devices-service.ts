@@ -60,7 +60,10 @@ export const getDeviceIdentifyId = async (): Promise<string> => {
 export async function initializeDevice() {
   // Current Device
   const device = await getDevice();
-  if (device) return device;
+  if (device) {
+    localStorage.setItem(StorageKey.DEVICE_ID, device._id);
+    return device;
+  }
 
   // Register new device
   const newDevice = await registerDevice();
