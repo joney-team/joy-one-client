@@ -1,10 +1,11 @@
-# Build step  
-FROM node:22-alpine AS app-installer
-WORKDIR /app
-
+FROM node:22-alpine3.21 AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN apk add --update \
-  git python3 make g++ openssh-client
+
+# Build step  
+FROM base AS app-installer
+WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/pwa/package.json ./apps/pwa/
@@ -12,24 +13,20 @@ COPY packages/apis/package.json ./packages/apis/
 COPY packages/assets/package.json ./packages/assets/
 COPY packages/utils/package.json ./packages/utils/
 
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY . .
 
 # Build step
-FROM node:22-alpine AS app-builder
+FROM base AS app-builder
 WORKDIR /app
-
-RUN corepack enable && corepack prepare pnpm@latest --activate
-RUN apk add --update \
-  git python3 make g++ openssh-client
 
 COPY --from=app-installer /app .
 
 RUN cd apps/pwa && pnpm build
 
 # Run-time
-FROM node:22-alpine AS runner
+FROM base AS runner
 WORKDIR /app
 
 COPY --from=app-builder /app/apps/pwa/.next/standalone .
