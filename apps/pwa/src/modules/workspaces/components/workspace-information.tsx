@@ -3,8 +3,6 @@
 import { Avatar } from "@/components/avatar";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
-import { useLocations } from "@/modules/locations/locations-service";
-import { optionsFilter } from "@/modules/theme/generator";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceTypeIcon } from "@/modules/workspaces/workspaces-service";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
@@ -31,7 +29,6 @@ import { WorkspaceTypeItem } from "./workpsace-type-item";
 let timeout: NodeJS.Timeout;
 export const WorkspaceInformation: FC = () => {
   const workspace = useWorkspace();
-  const [locations, renderLocation] = useLocations();
   const [avatarUploading, setAvatarUploading] = useState(false);
 
   const form = useForm({
@@ -101,51 +98,6 @@ export const WorkspaceInformation: FC = () => {
           <TextInput label="Hotline" {...form.getInputProps("hotline")} placeholder="19008088" />
         </SimpleGrid>
 
-        <Select
-          label={t("province")}
-          {...form.getInputProps("location.provinceId")}
-          searchable
-          data={locations
-            .filter((l) => l.type === "province")
-            .map((l) => ({ value: l.id, label: l.name }))}
-          onChange={(e) => {
-            form.setFieldValue("location.provinceId", e!);
-            form.setFieldValue("location.districtId", "");
-            form.setFieldValue("location.wardId", "");
-          }}
-          filter={optionsFilter}
-        />
-
-        <Group wrap="nowrap">
-          <Select
-            label={t("district")}
-            {...form.getInputProps("location.districtId")}
-            searchable
-            data={locations
-              .filter(
-                (l) => l.type === "district" && l.parentId === form.values.location?.provinceId
-              )
-              .map((l) => ({ value: l.id, label: l.fullName }))}
-            onChange={(e) => {
-              form.setFieldValue("location.districtId", e!);
-              form.setFieldValue("location.wardId", "");
-            }}
-            flex={1}
-            filter={optionsFilter}
-          />
-
-          <Select
-            label={t("ward")}
-            {...form.getInputProps("location.wardId")}
-            searchable
-            data={locations
-              .filter((l) => l.type === "ward" && l.parentId === form.values.location?.districtId)
-              .map((l) => ({ value: l.id, label: l.fullName }))}
-            flex={1}
-            filter={optionsFilter}
-          />
-        </Group>
-
         <TextInput label={t("address")} {...form.getInputProps("location.address")} />
 
         <InputWrapper label={t("workspace_type")} {...form.getInputProps("type")}>
@@ -184,7 +136,9 @@ export const WorkspaceInformation: FC = () => {
             </Anchor>
           )}
           {workspace.userMember?.workspace?.location && (
-            <Text fz={12}>Địa chỉ: {renderLocation(workspace.userMember.workspace.location)}</Text>
+            <Text fz={12}>
+              {t("address")}: {workspace.userMember.workspace.location?.address}
+            </Text>
           )}
         </Stack>
       </Group>

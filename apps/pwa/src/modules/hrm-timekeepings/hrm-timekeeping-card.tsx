@@ -35,7 +35,7 @@ import { UserCard } from "@/modules/users/components/user-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { StringUtils } from "@/utils/string.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 
 interface HrmTimekeepingCardProps {
   timekeeping: HrmTimekeepingEntity;

@@ -1,6 +1,6 @@
 import { useFetch } from "@/utils/use-fetch.util";
 import { FC, PropsWithChildren } from "react";
-import { onReconnected, useEventsListener } from "../events/event-service";
+import { useEventsListener } from "../events/event-service";
 import { EventType } from "../events/event-types";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { Context } from "./reports-context";
@@ -31,8 +31,6 @@ export const ReportsProvider: FC<PropsWithChildren> = (props) => {
     },
     [workspace.userMember?.workspaceId, workspace.userMember?.userId]
   );
-
-  onReconnected(() => realtimeReport.fetch(), [workspace.userMember?.workspaceId]);
 
   return <Context.Provider value={{ realtimeReport }}>{props.children}</Context.Provider>;
 };

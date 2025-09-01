@@ -7,7 +7,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { ActionIcon, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { IconEye, IconLayoutNavbarCollapse, IconStack2 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
@@ -64,7 +64,11 @@ export const CustomerTasks: FC<CustomerTasksProps> = (props) => {
         <Renderer visible={total > 1 || (total === 1 && tasks.count === 0)}>
           <Group gap={0} onClick={() => setIsCollapsed((s) => !s)} style={{ cursor: "pointer" }}>
             <ActionIcon variant="transparent" color={isCollapsed ? "gray" : "primary"}>
-              {isCollapsed ? <IconEye strokeWidth={1.1} /> : <IconLayoutNavbarCollapse size={20} strokeWidth={1.1} />}
+              {isCollapsed ? (
+                <IconEye strokeWidth={1.1} />
+              ) : (
+                <IconLayoutNavbarCollapse size={20} strokeWidth={1.1} />
+              )}
             </ActionIcon>
 
             <Text fz={12} c={isCollapsed ? "gray" : "primary"} fw={400}>

@@ -17,7 +17,10 @@ export const ButtonHrmTimeKeeping: FC = () => {
 
   const previousTimekeeping = useFetch({
     fetch: () => getPreviousTimeKeeping(),
-    events: [EventType.HRM_TIMEKEEPING_MEMBER_CHECK_IN, EventType.HRM_TIMEKEEPING_MEMBER_CHECK_OUT],
+    refetchEvents: [
+      EventType.HRM_TIMEKEEPING_MEMBER_CHECK_IN,
+      EventType.HRM_TIMEKEEPING_MEMBER_CHECK_OUT,
+    ],
   });
 
   useEffect(() => {
@@ -30,13 +33,19 @@ export const ButtonHrmTimeKeeping: FC = () => {
 
   const prevType = previousTimekeeping.data?.type || HrmTimekeepingType.CHECK_OUT;
   const nextType =
-    prevType === HrmTimekeepingType.CHECK_IN ? HrmTimekeepingType.CHECK_OUT : HrmTimekeepingType.CHECK_IN;
+    prevType === HrmTimekeepingType.CHECK_IN
+      ? HrmTimekeepingType.CHECK_OUT
+      : HrmTimekeepingType.CHECK_IN;
 
   if (!workspace.isHrmTimekeepingAvailable) return null;
 
   if (nextType === HrmTimekeepingType.CHECK_IN) {
     return (
-      <Button leftSection={<IconLogin2 size={18} />} onClick={() => OnModalCaptureLocationTimekeeping()} size="xs">
+      <Button
+        leftSection={<IconLogin2 size={18} />}
+        onClick={() => OnModalCaptureLocationTimekeeping()}
+        size="xs"
+      >
         Chấm công
       </Button>
     );

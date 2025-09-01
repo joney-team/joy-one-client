@@ -196,7 +196,6 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
                 }}
                 value={form.values.content}
                 onChangeHTML={(value) => form.setFieldValue("contentHtml", value)}
-                onChangeJSON={(value) => form.setFieldValue("content", value)}
               />
             </Stack>
           </Card>

@@ -11,14 +11,13 @@ import { type TemplateString } from "next/dist/lib/metadata/types/metadata-types
 import { defaultMetadata } from "@/configs/metadata.config";
 import type { AppMetadata } from "@/types";
 
-import "@mantine/charts/styles.css";
 import "@mantine/core/styles.css";
+import "@mantine/charts/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/spotlight/styles.css";
 import "@mantine/tiptap/styles.css";
 import "@xyflow/react/dist/style.css";
-import "maplibre-gl/dist/maplibre-gl.css";
 
 import "../styles/app.style.css";
 import "../styles/react-big-calendar.css";

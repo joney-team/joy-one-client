@@ -3,19 +3,19 @@
 import { AppLoading } from "@/components/app-loading/app-loading";
 import { wait } from "@/utils/common.utils";
 import dynamic from "next/dynamic";
-import { type FC, type PropsWithChildren, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type FC, type PropsWithChildren } from "react";
+import { v4 as uuid } from "uuid";
 import { AppContext } from "./app.context";
 import { getGlobal } from "./global";
+import { getLocalStorage } from "./hooks/use-local-storage";
 import { socket } from "./modules/apis";
 import { QueryProvider } from "./modules/apis/query";
 import { getAccessToken } from "./modules/auth/auth-service";
-import { getDeviceIdentifyId } from "./modules/devices/devices-service";
 import { eventsEmitter } from "./modules/events/event-service";
 import { type EventEntity } from "./modules/events/event-types";
+import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
-import { v4 as uuid } from "uuid";
-import { getLocalStorage } from "./hooks/use-local-storage";
 
 const LangProvider = dynamic(() => import("@/modules/lang/lang-provider"));
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
@@ -69,11 +69,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
     const token = await getAccessToken();
     const deviceId = getLocalStorage(StorageKey.DEVICE_ID);
     socket.io.once("reconnect", joinSocket);
-
-    socket.emit("JOIN", {
-      token,
-      deviceId,
-    });
+    socket.emit("AUTH", { token, deviceId });
   };
 
   useEffect(() => {
@@ -84,14 +80,13 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
       eventsEmitter.emit(event.type, event);
     };
 
-    socket.on("EVENT_NEW", onEventNew);
-
     const onReconnect = () => eventsEmitter.emit("RECONNECTED");
     socket.io.on("reconnect", onReconnect);
+    socket.on("EVENT_NEW", onEventNew);
 
     return () => {
-      socket.off("EVENT_NEW", onEventNew);
       socket.io.off("reconnect", onReconnect);
+      socket.off("EVENT_NEW", onEventNew);
     };
   }, []);
 
@@ -125,14 +120,16 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   return (
     <QueryProvider>
       <AppContext.Provider value={context}>
-        <LayoutProvider>
-          <LangProvider>
-            <Providers>
-              {props.children}
-              <AppLoading />
-            </Providers>
-          </LangProvider>
-        </LayoutProvider>
+        <LocationsProvider>
+          <LayoutProvider>
+            <LangProvider>
+              <Providers>
+                {props.children}
+                <AppLoading />
+              </Providers>
+            </LangProvider>
+          </LayoutProvider>
+        </LocationsProvider>
       </AppContext.Provider>
     </QueryProvider>
   );

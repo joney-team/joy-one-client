@@ -12,7 +12,7 @@ import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { capitalize } from "@/utils/string.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   ActionIcon,
   Group,

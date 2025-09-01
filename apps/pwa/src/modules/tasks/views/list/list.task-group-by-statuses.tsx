@@ -7,7 +7,7 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle, syncTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { ActionIcon, Button, Card, Group, Stack, Text, em } from "@mantine/core";
 import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
@@ -27,11 +27,15 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
   const workspace = useWorkspace();
   const ctx = useTasks();
 
-  const [isVisible, setIsVisible] = useState(typeof props.defaultVisible === "boolean" ? props.defaultVisible : true);
+  const [isVisible, setIsVisible] = useState(
+    typeof props.defaultVisible === "boolean" ? props.defaultVisible : true
+  );
 
   const tagFolderId = props.tagFolderId || "root";
   const isClosedTasks = props.status === DefaultTaskStatusId.CLOSED;
-  const listId = `tasks-group-by-statues-${props.status}-${tagFolderId}-${JSON.stringify(ctx.state)}`;
+  const listId = `tasks-group-by-statues-${props.status}-${tagFolderId}-${JSON.stringify(
+    ctx.state
+  )}`;
 
   const taskList = useList({
     id: listId,
@@ -47,7 +51,8 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
   });
 
   const status =
-    workspace.settings.taskStatuses.find((s) => s.id === props.status) || workspace.settings.taskStatuses[0];
+    workspace.settings.taskStatuses.find((s) => s.id === props.status) ||
+    workspace.settings.taskStatuses[0];
   const statusStyle = renderTaskStatusStyle(props.status, workspace.settings.taskStatuses);
   const tasks = taskList.data.sort((a, b) => a.order - b.order);
 
@@ -83,7 +88,14 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
             size="compact-sm"
             variant={isClosedTasks || !status.isDefault ? "filled" : "light"}
             color={statusStyle.color}
-            leftSection={<TaskStatusIcon {...status} white={isClosedTasks || !status.isDefault} size={16} mr={-3} />}
+            leftSection={
+              <TaskStatusIcon
+                {...status}
+                white={isClosedTasks || !status.isDefault}
+                size={16}
+                mr={-3}
+              />
+            }
             tt="uppercase"
             fz={em(12)}
           >
@@ -127,7 +139,9 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
                     id={task._id}
                     key={task._id + props.tagFolderId || "general"}
                     showDivider={index < tasks.length - 1}
-                    indexType={index === tasks.length - 1 ? "last" : index === 0 ? "first" : undefined}
+                    indexType={
+                      index === tasks.length - 1 ? "last" : index === 0 ? "first" : undefined
+                    }
                     nextId={tasks[index + 1]?._id}
                     prevId={tasks[index - 1]?._id}
                   />
@@ -136,7 +150,11 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
             </Stack>
           </Renderer>
 
-          <ListTaskStatusDropper tagFolderId={props.tagFolderId} status={props.status} enabled={taskList.isEmpty} />
+          <ListTaskStatusDropper
+            tagFolderId={props.tagFolderId}
+            status={props.status}
+            enabled={taskList.isEmpty}
+          />
         </Stack>
       </Renderer>
     </Stack>

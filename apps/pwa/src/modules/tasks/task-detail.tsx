@@ -1,15 +1,16 @@
 "use client";
 
-import { CommentBox } from "@/modules/comments/comment-box";
 import { Renderer } from "@/components/renderer";
-import { TaskForm } from "@/modules/tasks/components/form-task";
-import { useLayout } from "@/layout/layout-context";
-import { useColor } from "@/modules/theme/use-color";
 import { useRouter } from "@/hooks/use-router";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
+import { useLayout } from "@/layout/layout-context";
+import { CommentBox } from "@/modules/comments/comment-box";
 import { t } from "@/modules/lang/lang-service";
+import { TaskForm } from "@/modules/tasks/components/form-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskByCode, getTaskEntity, getTaskEntityByCode } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import {
   Card,
@@ -29,15 +30,12 @@ import { useParams } from "next/navigation";
 import { FC, Fragment, useEffect, useState } from "react";
 import { DetailFooter } from "./components/detail-footer";
 import { TaskDetailHead } from "./components/detail-head";
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { zIndexes } from "@joy-one-client/config/layout";
 
 export const TaskDetail: FC = () => {
   const router = useRouter();
   const params = useParams();
   const viewport = useLayout();
   const taskCode = params.code as string;
-  const layout = useLayout();
   const workspaceLayout = useWorkspaceLayout();
 
   const [taskId, setTaskId] = useState<string | null>(null);
@@ -192,6 +190,7 @@ const TaskCodeButton: FC<{ task: TaskEntity }> = (props) => {
             <Group>
               <Card
                 withBorder
+                shadow="none"
                 h={26}
                 py={0}
                 px={8}

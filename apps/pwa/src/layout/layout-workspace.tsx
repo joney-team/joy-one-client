@@ -69,7 +69,6 @@ export const LayoutWorkspace: FC = () => {
                 zIndex: zIndexes.pannel,
                 borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
                 transform: `translate3d(0, ${pinned ? 0 : "-110px"}, 0)`,
-                transition: workspaceLayout.transition("all"),
               }
             : {
                 top: 0,
@@ -80,7 +79,7 @@ export const LayoutWorkspace: FC = () => {
                 zIndex: zIndexes.pannel,
                 borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
                 transform: `translate3d(0, ${pinned ? 0 : "-110px"}, 0)`,
-                transition: workspaceLayout.transition("all"),
+                transition: workspaceLayout.transition("padding-left"),
               }
         }
       >

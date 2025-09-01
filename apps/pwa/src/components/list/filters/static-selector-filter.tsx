@@ -26,7 +26,7 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
   config,
 }) => {
   const { multiple, options, dropdownProps } = config;
-  const value = list.query[colKey] ? `${list.query[colKey]}`.split(",") : [];
+  const value = list.params[colKey] ? `${list.params[colKey]}`.split(",") : [];
   const selectedOptions = options.filter((v) => value.includes(v.value));
 
   return (
@@ -98,15 +98,15 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
             : [...selectedOptions, value];
 
           if (_value.length === 0) {
-            list.removeQuery(colKey);
+            list.removeParam(colKey);
           } else {
-            list.setQuery(
+            list.setParam(
               colKey,
               _value.map((v) => v?.value)
             );
           }
         } else {
-          list.setQuery(colKey, value?.value);
+          list.setParam(colKey, value?.value);
         }
       }}
       dropdownProps={dropdownProps}

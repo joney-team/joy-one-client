@@ -18,7 +18,14 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconCake, IconCheck, IconClipboardHeart, IconMail, IconPhone } from "@tabler/icons-react";
+import {
+  IconCake,
+  IconCheck,
+  IconClipboardHeart,
+  IconLocation,
+  IconMail,
+  IconPhone,
+} from "@tabler/icons-react";
 import { FC, useEffect } from "react";
 import { createCustomer, updateCustomer } from "../customer-service";
 
@@ -35,6 +42,7 @@ import { LocationForm } from "../../../components/location-form";
 import { Renderer } from "../../../components/renderer";
 import { CustomerRelationshipContactInput } from "./customer-relationship-contact-input";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
+import { api } from "@/modules/apis";
 
 export interface CustomerFormProps {
   onDone?: (customer: CustomerEntity) => void | Promise<void>;
@@ -55,8 +63,8 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
         ({
           assigneeUsers: [workspace.userMember],
         } as any)),
-      location: props.customer?.location || {},
-      secondaryLocation: props.customer?.secondaryLocation || {},
+      vnLocation: props.customer?.vnLocation || {},
+      vnSecondaryLocation: props.customer?.vnSecondaryLocation || {},
     },
     validate: {
       name: (value: string) => {
@@ -89,6 +97,17 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
       })
       .catch(onError);
   });
+
+  const convertLocations = async () => {
+    if (!props.customer) return;
+
+    const updated = await api.patch<CustomerEntity>(
+      `/customers/${props.customer?._id}/convert-vn-locations`
+    );
+
+    form.setFieldValue("vnLocation", updated.vnLocation);
+    form.setFieldValue("vnSecondaryLocation", updated.vnSecondaryLocation);
+  };
 
   useEffect(() => {
     form.reset();
@@ -161,7 +180,9 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
                 Địa chỉ hiện tại
               </Text>
               <Card withBorder shadow="none" p={10}>
-                <LocationForm form={form} />
+                <Stack gap={8}>
+                  <LocationForm form={form} path="vnLocation" />
+                </Stack>
               </Card>
             </Stack>
 
@@ -170,7 +191,9 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
                 Địa chỉ thứ 2 (Quê quán)
               </Text>
               <Card withBorder shadow="none" p={10}>
-                <LocationForm form={form} path="secondaryLocation" />
+                <Stack gap={8}>
+                  <LocationForm form={form} path="vnSecondaryLocation" />
+                </Stack>
               </Card>
             </Stack>
           </Stack>
@@ -204,7 +227,13 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
           {...form.getInputProps("assigneeUsers")}
         />
 
-        <Center mt={10}>
+        <Group mt={10} justify="center" align="center">
+          {props.customer && (
+            <Button leftIcon={IconLocation} variant="outline" onClick={convertLocations}>
+              {t("convert_locations")}
+            </Button>
+          )}
+
           <Button
             type="submit"
             loading={form.submitting}
@@ -213,7 +242,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
           >
             {t("complete")}
           </Button>
-        </Center>
+        </Group>
       </Stack>
     </Form>
   );

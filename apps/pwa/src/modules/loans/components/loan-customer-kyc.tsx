@@ -7,7 +7,6 @@ import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/cu
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { EventType } from "@/modules/events/event-types";
 import { num, renderDate } from "@/modules/lang/lang-service";
-import { getGoogleMapLink, renderLocation } from "@/modules/locations/locations-service";
 import { formatPhoneNumber } from "@/utils/phone.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import {
@@ -21,12 +20,14 @@ import {
   Stack,
   Text,
   ThemeIcon,
+  Tooltip,
 } from "@mantine/core";
 import { IconAddressBook, IconShieldCheck } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { LoanRowInfo } from "./loan-row-info";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useLocations } from "@/modules/locations/locations-context";
 
 interface LoanCustomerKycProps {
   customer: CustomerEntity;
@@ -36,12 +37,13 @@ interface LoanCustomerKycProps {
 export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
   const { customer } = props;
   const workspace = useWorkspace();
+  const { renderVnLocation: renderLocation, getGoogleMapLink } = useLocations();
 
   const contacts = useFetch({
     id: `customer-contacts-${customer._id}`,
     skip: !workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT),
     fetch: () => getCustomerContacts(customer._id),
-    events: [EventType.CUSTOMER_CONTACTS_UPDATED],
+    refetchEvents: [EventType.CUSTOMER_CONTACTS_UPDATED],
   });
 
   const kyc = props.kyc?.versions[props.kyc?.versions.length - 1];
@@ -84,24 +86,36 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
             <LoanRowInfo
               label="Địa chỉ hiện tại"
               value={
-                <Anchor
-                  href={customer.location && getGoogleMapLink(customer.location)}
-                  target="_blank"
+                <Tooltip
+                  label={`Địa chỉ cũ: ${customer.vnLocationFullAddress}`}
+                  disabled={!customer.vnLocationFullAddress}
                 >
-                  {renderLocation(customer.location) || "--"}
-                </Anchor>
+                  <Anchor
+                    href={customer.vnLocation && getGoogleMapLink(customer.vnLocation)}
+                    target="_blank"
+                  >
+                    {renderLocation(customer.vnLocation) || "--"}
+                  </Anchor>
+                </Tooltip>
               }
             />
 
             <LoanRowInfo
               label="Địa chỉ thứ 2 (Quê quán)"
               value={
-                <Anchor
-                  href={customer.secondaryLocation && getGoogleMapLink(customer.secondaryLocation)}
-                  target="_blank"
+                <Tooltip
+                  label={`Địa chỉ thứ 2 cũ: ${customer.vnPrevSecondaryLocationFullAddress}`}
+                  disabled={!customer.vnPrevSecondaryLocationFullAddress}
                 >
-                  {renderLocation(customer.secondaryLocation)}
-                </Anchor>
+                  <Anchor
+                    href={
+                      customer.vnSecondaryLocation && getGoogleMapLink(customer.vnSecondaryLocation)
+                    }
+                    target="_blank"
+                  >
+                    {renderLocation(customer.vnSecondaryLocation) || "--"}
+                  </Anchor>
+                </Tooltip>
               }
             />
 

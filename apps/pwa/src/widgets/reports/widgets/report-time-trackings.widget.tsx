@@ -14,7 +14,7 @@ import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { StringUtils } from "@/utils/string.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { WidgetProps } from "@/widgets/types";
 import { Card, Group, Skeleton, Stack, Table, Text, ThemeIcon } from "@mantine/core";
 import { IconFolder, IconStopwatch } from "@tabler/icons-react";
@@ -64,12 +64,13 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
               label={t("folder")}
               autoHideLabel
               activeColor={
-                tasks.query.tagFolderId
-                  ? taskFolderTags.find((f) => f._id === tasks.query.tagFolderId)?.color || "primary"
+                tasks.params.tagFolderId
+                  ? taskFolderTags.find((f) => f._id === tasks.params.tagFolderId)?.color ||
+                    "primary"
                   : "gray"
               }
               iconStrokeWidth={1.8}
-              value={tasks.query.tagFolderId}
+              value={tasks.params.tagFolderId}
               options={taskFolderTags.map((f) => ({
                 label: f.name,
                 value: f._id,
@@ -79,8 +80,8 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
                   </ThemeIcon>
                 ),
               }))}
-              onClear={() => tasks.removeQuery("tagFolderId")}
-              onChange={(value) => tasks.setQuery("tagFolderId", value)}
+              onClear={() => tasks.removeParam("tagFolderId")}
+              onChange={(value) => tasks.setParam("tagFolderId", value)}
               enabled={taskFolderTags.length > 0}
             />
           </Group>
@@ -99,7 +100,9 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>{t("member")}</Table.Th>
-                <Table.Th>{StringUtils.capitalizeFirstLetter(`${t("total")} ${t("assigned_tasks")}`)}</Table.Th>
+                <Table.Th>
+                  {StringUtils.capitalizeFirstLetter(`${t("total")} ${t("assigned_tasks")}`)}
+                </Table.Th>
                 <Table.Th>{t("tasks_completed_rate")}</Table.Th>
                 <Table.Th>{t("time_trackings")}</Table.Th>
               </Table.Tr>
@@ -108,10 +111,13 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
             <Table.Tbody>
               {users.map((user) => {
                 const now = DateTimeUtils.timeToSeconds();
-                const relatedTasks = tasks.data.filter((t) => t.relatedUserIds?.some((u) => u === user.userId));
+                const relatedTasks = tasks.data.filter((t) =>
+                  t.relatedUserIds?.some((u) => u === user.userId)
+                );
 
                 const totalTimeTrackings = relatedTasks.reduce((acc, t) => {
-                  const relatedTimeTrackings = t.timeTrackings?.filter((t) => t.user.userId === user.userId) || [];
+                  const relatedTimeTrackings =
+                    t.timeTrackings?.filter((t) => t.user.userId === user.userId) || [];
                   const totalTime = relatedTimeTrackings.reduce((acc, t) => {
                     const seconds = (t.endAt || now) - t.startAt;
                     return acc + seconds;
@@ -120,9 +126,13 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
                   return acc + totalTime;
                 }, 0);
 
-                const assignedTasks = relatedTasks.filter((v) => v.assigneeUserIds?.includes(user.userId));
+                const assignedTasks = relatedTasks.filter((v) =>
+                  v.assigneeUserIds?.includes(user.userId)
+                );
 
-                const completedAssignedTasks = assignedTasks.filter((t) => t.status === DefaultTaskStatusId.CLOSED);
+                const completedAssignedTasks = assignedTasks.filter(
+                  (t) => t.status === DefaultTaskStatusId.CLOSED
+                );
 
                 return (
                   <Table.Tr key={user.userId}>
@@ -141,7 +151,9 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
                           })
                         : "--"}
                     </Table.Td>
-                    <Table.Td>{totalTimeTrackings > 0 ? DateTimeUtils.toHHMM(totalTimeTrackings) : "--"}</Table.Td>
+                    <Table.Td>
+                      {totalTimeTrackings > 0 ? DateTimeUtils.toHHMM(totalTimeTrackings) : "--"}
+                    </Table.Td>
                   </Table.Tr>
                 );
               })}

@@ -6,7 +6,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { num, t } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Badge, em, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import { type FC } from "react";
 import InfiniteScroll from "react-infinite-scroller";
@@ -34,7 +34,10 @@ export const CouponList: FC = () => {
     <InfiniteScroll loadMore={() => coupons.fetch()} hasMore={coupons.isAbleToLoadMore}>
       <Stack>
         <Group gap={10}>
-          <ButtonPlus onClick={() => OnModalCouponForm()} permission={WorkspacePermission.COUPONS_MANAGER} />
+          <ButtonPlus
+            onClick={() => OnModalCouponForm()}
+            permission={WorkspacePermission.COUPONS_MANAGER}
+          />
 
           <Badge variant="light" size="xl" fz={em(12)} style={{ borderRadius: 100 }}>
             {t("qty")}

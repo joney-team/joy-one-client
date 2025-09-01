@@ -45,6 +45,8 @@ import { AppEntity } from "@/types";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { StringUtils } from "@/utils/string.utils";
 import { api } from "../apis";
+import { useLocations } from "../locations/locations-context";
+import { CustomerKycEntity } from "../customer-kycs/customer-kycs-types";
 
 interface LoanListProps {
   strictStatus?: LoanStatus[];
@@ -56,21 +58,21 @@ export const LoanList: FC<LoanListProps> = (props) => {
   const workspace = useWorkspace();
   const now = DateTimeUtils.timeToSeconds(DateTimeUtils.getStartEndOfDay(new Date()).end);
   const color = useColor();
+  const location = useLocations();
 
   return (
-    <List
+    <List<LoanEntity>
       id={`loans-list-${(props.strictStatus || ["all"]).join("-")}`}
       name="loans"
       limit={16}
       icon={IconCreditCardPay}
-      fetch={(p, controller) =>
-        getLoans(
-          {
-            status: props.strictStatus ? props.strictStatus : p.status,
-            ...p,
-          },
-          controller
-        )
+      route="/loans"
+      params={
+        props.strictStatus
+          ? {
+              status: props.strictStatus,
+            }
+          : undefined
       }
       creatable={{
         onCreate: () => OnModalCreateLoan(),
@@ -191,6 +193,15 @@ export const LoanList: FC<LoanListProps> = (props) => {
           },
           exportToExcel: (_, loan) => {
             return [
+              { col: "CCCD", text: loan.metadata?.cidNumber?.toString() || "" },
+              {
+                col: "Địa chỉ",
+                text: location.renderVnLocation(loan.metadata?.cidVnLocation) || "-",
+              },
+              {
+                col: "Địa chỉ cũ",
+                text: location.renderVnLocation(loan.metadata?.cidLocation) || "-",
+              },
               { col: t("loan_package"), text: loan.package.id, width: 20 },
               {
                 col: t("loan_asset_type"),
@@ -392,7 +403,6 @@ export const LoanList: FC<LoanListProps> = (props) => {
         EventType.LOANS_ARCHIVED,
         EventType.LOANS_LIQUIDATION,
         EventType.LOANS_REVERT_LIQUIDATION,
-        EventType.REPORT_RANGE_SYNCED,
         EventType.LOANS_SYNCED,
         EventType.LOANS_CHANGE_WORKSPACE_BRANCH,
         EventType.LOANS_APPROVED_REVERTED,

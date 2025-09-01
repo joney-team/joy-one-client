@@ -2,10 +2,9 @@ import { getClientLocale } from "@/modules/lang/lang-service";
 import { ResponseList, StorageKey } from "@/types";
 import { isServer } from "@/utils/common.utils";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import { AxiosError } from "axios";
+import { v4 as uuid } from "uuid";
 import { api } from "../apis";
 import type { DeviceEntity, RegisterDeviceDto, SetDeviceLocaleDto, SetDeviceNotificationTokenDto } from "./devices-types";
-import { v4 as uuid } from "uuid";
 
 export async function registerDevice() {
   const identifyId = await getDeviceIdentifyId();
@@ -29,12 +28,10 @@ export async function getDevice(): Promise<DeviceEntity | undefined> {
       api.get(`/devices/${identifyId}`)
         .then((res) => resolve(res))
         .catch((err) => {
-          if (err instanceof AxiosError) {
-            if (err.response?.status === 404) {
-              resolve(undefined);
-            } else {
-              setTimeout(action, 3000);
-            }
+          if (typeof err === 'object' && err.status === 404) {
+            resolve(undefined);
+          } else {
+            setTimeout(action, 3000);
           }
         })
     }
@@ -52,7 +49,8 @@ export const getDeviceIdentifyId = async (): Promise<string> => {
     const { visitorId } = await get();
     localStorage.setItem(StorageKey.DEVICE_IDENTIFY_ID, visitorId);
     return visitorId;
-  } catch {
+  } catch (error) {
+    console.warn(`FingerprintJS error > ${error}`);
     const visitorId = uuid();
     localStorage.setItem(StorageKey.DEVICE_IDENTIFY_ID, visitorId);
     return visitorId;
@@ -60,11 +58,17 @@ export const getDeviceIdentifyId = async (): Promise<string> => {
 };
 
 export async function initializeDevice() {
-  // Device
-  let device = await getDevice();
-  if (!device) device = await registerDevice();
-  localStorage.setItem(StorageKey.DEVICE_ID, device._id);
-  return device;
+  // Current Device
+  const device = await getDevice();
+  if (device) {
+    localStorage.setItem(StorageKey.DEVICE_ID, device._id);
+    return device;
+  }
+
+  // Register new device
+  const newDevice = await registerDevice();
+  localStorage.setItem(StorageKey.DEVICE_ID, newDevice._id);
+  return newDevice;
 }
 
 export async function setDeviceNotificationToken(dto: SetDeviceNotificationTokenDto): Promise<DeviceEntity> {

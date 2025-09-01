@@ -21,7 +21,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { UseList, useList } from "@/utils/use-list.util";
+import { UseList, useList } from "@/components/list/use-list";
 import {
   ActionIcon,
   Anchor,
@@ -64,7 +64,7 @@ export const ModalUserInformation: FC = () => {
         close();
       });
     },
-    events: {
+    refetchEvents: {
       types: [
         EventType.WORKSPACE_MEMBER_UPDATED,
         EventType.WORKSPACE_MEMBER_LEAVED,

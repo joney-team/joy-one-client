@@ -22,7 +22,6 @@ import {
   updateLoanAssetData,
 } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
-import { getGoogleMapLink } from "@/modules/locations/locations-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -60,12 +59,16 @@ import {
 import { NextPage } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { LoanDisburesement } from "./components/loan-disbursement";
 import { LoanDocuments } from "./components/loan-documents";
 import { LoanCustomerKyc } from "./components/loan-customer-kyc";
 import { LoanPayments } from "./components/loan-payments";
 import { useColor } from "../theme/use-color";
+import { useLocations } from "../locations/locations-context";
+import { OnModalFileGallery } from "../files/modals/modal-file-gallery";
+import { FileType } from "../files/file-types";
+import { EntityImage } from "@/components/entity-image";
 
 export const LoanDetail: NextPage = () => {
   const params = useParams();
@@ -75,7 +78,9 @@ export const LoanDetail: NextPage = () => {
   const loans = useLoans();
   const layout = useLayout();
   const color = useColor();
+  const { getGoogleMapLink } = useLocations();
 
+  const isAutoRedirectStep = useRef(true);
   const [customerKyc, setCustomerKyc] = useState<CustomerKycEntity>();
   const [_pointedStep, setPointedStep] = useState(0);
   const pointedStep = _pointedStep > 3 ? 3 : _pointedStep;
@@ -90,11 +95,14 @@ export const LoanDetail: NextPage = () => {
     fetch: async () => {
       const loan = await getLoanByCode(code);
       const kyc = await fetchCustomerKyc(loan.customerId);
-      const step = getStepActive(loan, kyc);
-      setPointedStep(step);
+      if (isAutoRedirectStep.current) {
+        const step = getStepActive(loan, kyc);
+        setPointedStep(step);
+      }
+
       return loan;
     },
-    events: {
+    refetchEvents: {
       types: [
         EventType.LOANS_JUST_CREATED,
         EventType.LOANS_PENDING,
@@ -120,6 +128,7 @@ export const LoanDetail: NextPage = () => {
     skip: !loan.data,
     id: `customer-${loan.data?.customerId}`,
     fetch: () => getCustomer(loan.data!.customerId),
+    refetchEvents: [EventType.CUSTOMER_UPDATED],
   });
 
   const _updateAssetData = useDebouncedCallback((assetData) => {
@@ -195,7 +204,7 @@ export const LoanDetail: NextPage = () => {
     <Stack p={16}>
       <Card shadow="xs">
         <Group align="start">
-          <Avatar customer={loan.data.customer} size={80} radius={10} />
+          <EntityImage src={customer.data.avatar} onlyRead size={80} radius={10} />
           <Stack gap={10} flex={1}>
             <Group justify="space-between" w="100%" align="start">
               <Title fz={18} fw={600}>
@@ -347,7 +356,10 @@ export const LoanDetail: NextPage = () => {
               active={activeStep}
               size="xs"
               onStepClick={(s) => {
-                if (s <= activeStep) setPointedStep(s);
+                if (s <= activeStep) {
+                  setPointedStep(s);
+                  isAutoRedirectStep.current = false;
+                }
               }}
             >
               <Stepper.Step

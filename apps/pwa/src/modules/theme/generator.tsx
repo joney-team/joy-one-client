@@ -2,14 +2,22 @@ import { type AppMetadata } from "@/types";
 import { primaryColors } from "@joy-one-client/config/colors";
 import {
   Card,
+  Checkbox,
   ComboboxItem,
   createTheme,
   em,
   InputWrapper,
+  LoadingOverlay,
+  Menu,
+  MenuItem,
   Modal,
   Notification,
+  NumberFormatter,
+  NumberInput,
   OptionsFilter,
   Switch,
+  TagsInput,
+  Tooltip,
 } from "@mantine/core";
 import { LayoutContext } from "../../layout/layout-context";
 import { StringUtils } from "../../utils/string.utils";
@@ -73,21 +81,21 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
           },
         },
       }),
-      Checkbox: {
+      Checkbox: Checkbox.extend({
         styles: {
           label: {
             fontSize: 13,
             paddingLeft: 8,
           },
         },
-      },
-      Tooltip: {
+      }),
+      Tooltip: Tooltip.extend({
         styles: {
           tooltip: {
             fontSize: 13,
           },
         },
-      },
+      }),
       Notification: Notification.extend({
         styles: {
           root: {
@@ -99,7 +107,7 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
           },
         },
       }),
-      Menu: {
+      Menu: Menu.extend({
         styles: {
           dropdown: {
             boxShadow: "0px 2px 12px rgba(0, 0, 0, 0.2)",
@@ -110,32 +118,32 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
           shadow: "xs",
           offset: 5,
         },
-      },
-      MenuItem: {
+      }),
+      MenuItem: MenuItem.extend({
         defaultProps: {
           px: 12,
           py: 5,
           fz: 15,
         },
-      },
-      NumberInput: {
+      }),
+      NumberInput: NumberInput.extend({
         defaultProps: getLocaleConfig().defaultNumberInputProps || {},
-      },
-      NumberFormatter: {
+      }),
+      NumberFormatter: NumberFormatter.extend({
         defaultProps: getLocaleConfig().defaultNumberInputProps || {},
-      },
-      TagsInput: {
+      }),
+      TagsInput: TagsInput.extend({
         defaultProps: {
           splitChars: [",", ";", " ", "|"],
         },
-      },
-      LoadingOverlay: {
+      }),
+      LoadingOverlay: LoadingOverlay.extend({
         defaultProps: {
           loaderProps: {
             size: "xs",
           },
         },
-      },
+      }),
       Modal: Modal.extend({
         defaultProps: {
           zIndex: zIndexes.modals,
