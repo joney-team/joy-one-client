@@ -17,6 +17,7 @@ import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
 import { AptabaseProvider } from "@aptabase/react";
+import environment from "@joy-one-client/config";
 
 const LangProvider = dynamic(() => import("@/modules/lang/lang-provider"));
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
@@ -120,8 +121,12 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
 
   return (
     <AptabaseProvider
-      appKey="A-SH-2108254846"
-      options={{ apiUrl: "https://aptabase.joyone.vn/api" }}
+      appKey={environment.ANALYTICS_KEY}
+      options={{
+        apiUrl: "https://aptabase.joyone.vn/api/v0/event",
+        appVersion: config?.version,
+        isDebug: environment.ENV !== "production",
+      }}
     >
       <QueryProvider>
         <AppContext.Provider value={context}>
