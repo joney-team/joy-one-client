@@ -10,7 +10,7 @@ export const GeneralAnalytics: FC = () => {
   const { trackEvent } = useTracking();
 
   const onChangeModule = useDebouncedCallback(() => {
-    if (!workspace.activatedModule || workspace.activatedModule.id === "dashboard") return;
+    if (!workspace.activatedModule) return;
     trackEvent(`Access module > ${workspace.activatedModule?.id}`);
   }, 300);
 
