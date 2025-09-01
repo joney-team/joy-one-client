@@ -80,14 +80,13 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
       eventsEmitter.emit(event.type, event);
     };
 
-    socket.on("EVENT_NEW", onEventNew);
-
     const onReconnect = () => eventsEmitter.emit("RECONNECTED");
     socket.io.on("reconnect", onReconnect);
+    socket.on("EVENT_NEW", onEventNew);
 
     return () => {
-      socket.off("EVENT_NEW", onEventNew);
       socket.io.off("reconnect", onReconnect);
+      socket.off("EVENT_NEW", onEventNew);
     };
   }, []);
 
