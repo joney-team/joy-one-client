@@ -28,6 +28,7 @@ import {
   IconUserPlus,
 } from "@tabler/icons-react";
 import { Button } from "../../components/buttons/button";
+import { useAptabase } from "@aptabase/react";
 
 const shortcuts: {
   icon: Icon;
@@ -76,6 +77,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
   const layout = useLayout();
   const router = useRouter();
   const color = useColor();
+  const { trackEvent } = useAptabase();
 
   const availableShortcuts = shortcuts.filter((shortcut) => {
     const isHasPermission = !shortcut.permission || workspace.hasPermission(shortcut.permission);
@@ -134,7 +136,15 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
         <Menu>
           <Menu.Target>
             <Group>
-              <Button id="create-credit" size="xs" leftIcon={IconCirclePlus} isGradient>
+              <Button
+                id="create-credit"
+                size="xs"
+                leftIcon={IconCirclePlus}
+                isGradient
+                onClick={() => {
+                  trackEvent("SHORTCUT_NEW_CLICKED");
+                }}
+              >
                 {t("shortcut_new")}
               </Button>
             </Group>
