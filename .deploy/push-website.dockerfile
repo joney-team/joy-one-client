@@ -4,7 +4,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Build step  
-FROM node:22-alpine AS app-installer
+FROM base AS app-installer
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -18,7 +18,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 COPY . .
 
 # Build step
-FROM node:22-alpine AS app-builder
+FROM base AS app-builder
 WORKDIR /app
 
 COPY --from=app-installer /app .
@@ -26,7 +26,7 @@ COPY --from=app-installer /app .
 RUN cd apps/website && pnpm build
 
 # Run-time
-FROM node:22-alpine AS runner
+FROM base AS runner
 WORKDIR /app
 
 COPY --from=app-builder /app/apps/website/.next/standalone .
