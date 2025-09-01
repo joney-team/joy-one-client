@@ -1,13 +1,13 @@
 import { useApp } from "@/app.context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useAptabase } from "@aptabase/react";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useEffect, type FC } from "react";
+import { useTracking } from "./hooks";
 
 export const GeneralAnalytics: FC = () => {
   const app = useApp();
   const workspace = useWorkspace();
-  const { trackEvent } = useAptabase();
+  const { trackEvent } = useTracking();
 
   const onChangeModule = useDebouncedCallback(() => {
     if (!workspace.activatedModule || workspace.activatedModule.id === "dashboard") return;
