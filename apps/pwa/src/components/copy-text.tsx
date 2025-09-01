@@ -1,28 +1,25 @@
 "use client";
 
-import { ActionIcon, CopyButton, Group, MantineSize, StyleProp, Text } from "@mantine/core";
+import { ActionIcon, CopyButton, Group, Text, TextProps, Tooltip } from "@mantine/core";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
-import { FontWeight } from "next/dist/compiled/@vercel/og/satori";
 import { FC, PropsWithChildren } from "react";
 
-export const CopyText: FC<
-  PropsWithChildren<{
-    text: string;
-    empty?: string;
-    fz?: StyleProp<number | MantineSize | (string & {})>;
-    fw?: StyleProp<FontWeight>;
-  }>
-> = (props) => {
+export interface CopyTextProps extends TextProps {
+  text: string;
+  empty?: string;
+}
+
+export const CopyText: FC<PropsWithChildren<CopyTextProps>> = ({ text, empty, ...props }) => {
   return (
-    <CopyButton value={props.text}>
+    <CopyButton value={text}>
       {({ copied, copy }) => (
         <Group gap={3} onClick={copy} style={{ maxWidth: "100%" }} wrap="nowrap">
           {props.children ? (
             props.children
           ) : (
-            <Text fw={props.fw} fz={props.fz}>
-              {props.text || props.empty || ""}
-            </Text>
+            <Tooltip label={text} disabled={!text}>
+              <Text {...props}>{text || empty || ""}</Text>
+            </Tooltip>
           )}
 
           <ActionIcon bg="transparent" onClick={copy} variant="white">

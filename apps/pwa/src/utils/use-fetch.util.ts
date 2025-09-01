@@ -1,11 +1,10 @@
-import { onReconnected, useEventsListener } from "@/modules/events/event-service";
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useEventsListener } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
-import { getWorkspaceId } from "@/modules/workspaces/workspaces-service";
+import { StorageKey } from "@/types";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { objClean } from "./object.utils";
-import { useLocalStorage } from "@/hooks/use-local-storage";
-import { StorageKey } from "@/types";
 
 export interface UseFetchArgs<T = any> {
   id?: string;
@@ -14,7 +13,7 @@ export interface UseFetchArgs<T = any> {
   reset?: boolean;
   skip?: boolean;
   autoFetch?: boolean;
-  events?: EventType[] | ({
+  refetchEvents?: EventType[] | ({
     types: EventType[];
     condition?: (data: EventEntity, currentData: T) => boolean;
   }),
@@ -114,11 +113,11 @@ export function useFetch<T = any>(args: UseFetchArgs<T>, deps?: any[]): UseFetch
   }, [autoFetch, isReadyToFetch, fetchKey, args.skip, ...(deps || [])])
 
   // Auto fetch when server reconnected
-  onReconnected(() => {
-    if ((!!state.error || args.isAlwayRefetchWhenReconnect) && isReadyToFetch) {
-      fetch({ isSilient: true });
-    }
-  }, [state.error, isReadyToFetch, args.isAlwayRefetchWhenReconnect, fetchKey])
+  // onReconnected(() => {
+  //   if ((!!state.error || args.isAlwayRefetchWhenReconnect) && isReadyToFetch) {
+  //     fetch({ isSilient: true });
+  //   }
+  // }, [state.error, isReadyToFetch, args.isAlwayRefetchWhenReconnect, fetchKey])
 
   // Abort controller
   useEffect(() => {
@@ -129,15 +128,15 @@ export function useFetch<T = any>(args: UseFetchArgs<T>, deps?: any[]): UseFetch
 
   // Event listener
   const isReadyToEventListen = isReadyToFetch && state.data;
-  const events = Array.isArray(args.events) ? args.events : args.events?.types || [];
+  const events = Array.isArray(args.refetchEvents) ? args.refetchEvents : args.refetchEvents?.types || [];
   
   useEventsListener(events, (e) => {
     if (state.data) {
-      const condition = args.events && 'condition' in args.events ? args.events.condition : undefined;
+      const condition = args.refetchEvents && 'condition' in args.refetchEvents ? args.refetchEvents.condition : undefined;
       if (condition && !condition(e, state.data) || !isReadyToEventListen) return;
       fetch({ isSilient: true });
     }
-  }, [args.events, state.data, isReadyToEventListen, fetchKey])
+  }, [args.refetchEvents, state.data, isReadyToEventListen, fetchKey])
 
   return objClean({
     ...status.current,

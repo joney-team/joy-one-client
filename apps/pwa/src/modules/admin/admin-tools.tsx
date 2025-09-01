@@ -8,6 +8,7 @@ import { Card, Group, Stack, Textarea } from "@mantine/core";
 import {
   IconCalendar,
   IconClipboard,
+  IconLocation,
   IconReportAnalytics,
   IconSearch,
   IconTools,
@@ -27,6 +28,8 @@ export const AdminTools: FC = () => {
         <Stack align="start">
           <Button onClick={() => api.post("/helpers/reset-redis")}>Reset Redis Cache</Button>
 
+          <Button onClick={() => api.patch(`/receipts/sync-all`)}>Sync All Receipts</Button>
+
           <Button onClick={() => api.patch(`/loans/sync-all`)}>Sync All Loans</Button>
 
           <Button onClick={() => api.patch(`/orders/sync-all`)}>Sync All Orders</Button>
@@ -39,6 +42,27 @@ export const AdminTools: FC = () => {
             onClick={() => Promise.all(new Array(100).fill(0).map(() => api.get(`/receipts`)))}
           >
             Test Rate Limit
+          </Button>
+        </Stack>
+      </Card>
+
+      <SessionTitle name="VN Locations" icon={IconLocation} />
+      <Card shadow="xs">
+        <Stack align="start">
+          <Button onClick={() => api.patch("/locations/crawls/vn-locations")}>
+            Crawl VN Location
+          </Button>
+
+          <Button onClick={() => api.patch("/customers/migrateCustomerVnLocations")}>
+            Sync Customers
+          </Button>
+
+          <Button onClick={() => api.patch("/customer-kycs/bulkConvertVnLocations")}>
+            Sync Customer KYCs
+          </Button>
+
+          <Button onClick={() => api.patch("/customer-forms/bulkConvertVnLocations")}>
+            Sync Customer Forms
           </Button>
         </Stack>
       </Card>
@@ -102,6 +126,17 @@ export const AdminTools: FC = () => {
             }
           >
             execRejectPendingLoans
+          </Button>
+
+          <Button
+            color="cyan"
+            onClick={() =>
+              api.post(`/scheduling/heathcheckSocialConnections`, {
+                workspaceId: workspace.userMember.workspaceId,
+              })
+            }
+          >
+            heathcheckSocialConnections
           </Button>
         </Group>
       </Card>

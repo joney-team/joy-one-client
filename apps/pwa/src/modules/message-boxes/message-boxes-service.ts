@@ -71,7 +71,7 @@ export const useMessageBox = (id: string) => {
       if (!id) return;
       return getMessageBox(id);
     },
-    events: [
+    refetchEvents: [
       EventType.MESSAGE_BOX_IN_PROGRESS,
       EventType.MESSAGE_BOX_CLOSED,
       EventType.MESSAGE_BOX_WAITING,

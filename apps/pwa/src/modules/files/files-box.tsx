@@ -9,7 +9,7 @@ import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { t } from "@/modules/lang/lang-service";
 import { AppEntity } from "@/types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   ActionIcon,
   BoxProps,

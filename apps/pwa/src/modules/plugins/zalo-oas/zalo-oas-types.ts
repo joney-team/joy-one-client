@@ -73,6 +73,7 @@ export interface ZaloOaGmfGroupSettings {
 }
 
 export interface ZaloOaGmfGroup extends ZaloOaGmfGroupSetting {
+  id: string;
   name: string;
   avatar: string;
   group_id: string;

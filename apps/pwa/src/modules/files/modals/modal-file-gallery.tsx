@@ -18,11 +18,14 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { useFileSize } from "../files-hooks";
+import { formatBytes } from "@joy-one-client/utils/files";
 
 interface ModalFileGalleryProps {
   files: FileEntity[] | { _id?: string; url: string; fileName?: string; type?: FileType }[];
   index?: number;
+  readonly?: boolean;
   disabled?: boolean;
   onRemoved?: () => Promise<any> | any;
   background?: string;
@@ -34,9 +37,11 @@ export const ModalFileGallery: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalFileGalleryProps>();
   const [index, setIndex] = useState<number>(0);
-  const viewport = useLayout();
+  const layout = useLayout();
   const head = 60;
   const activeFile = props?.files[index];
+  const fileSize = useFileSize(renderLink(activeFile?.url));
+  const disabled = props?.disabled || props?.readonly;
 
   OnModalFileGallery = (p) => {
     setIndex(p.index || 0);
@@ -55,9 +60,27 @@ export const ModalFileGallery: FC = () => {
     setIndex(index - 1);
   };
 
+  useEffect(() => {
+    if (opened) {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "ArrowRight") {
+          onNext();
+        } else if (event.key === "ArrowLeft") {
+          onPrev();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [opened, onNext, onPrev, index]);
+
   if (!props || !activeFile) return null;
 
-  const bodyHeight = viewport.height - head;
+  const bodyHeight = layout.height - head;
   const _file = parseFile(activeFile.url);
 
   const onRemove = async () => {
@@ -78,7 +101,7 @@ export const ModalFileGallery: FC = () => {
   const onDownload = async () => {
     if (!activeFile || typeof activeFile === "string") return;
     await onActionLoad({
-      name: "Đang tải file xuống",
+      name: t("file_downloading"),
       process: () =>
         downloadFileFromURL(renderLink(activeFile.url), activeFile.fileName || _file.name),
     });
@@ -100,12 +123,21 @@ export const ModalFileGallery: FC = () => {
     >
       <Group h={head} justify="space-between" px={16} bg="dark.7" wrap="nowrap" w="100%">
         <SimpleGrid cols={3} w="100%">
-          <Text w="100%" c="white" truncate="end">
-            {_file.name}
-          </Text>
+          <Group wrap="nowrap" gap={10}>
+            <Text c="white" truncate="end" maw={layout.view === "mobile" ? "30dvw" : "40dvw"}>
+              {_file.name}
+            </Text>
+
+            {fileSize.size && (
+              <Text fz={12} c="gray">
+                {formatBytes(fileSize.size)}
+              </Text>
+            )}
+          </Group>
 
           <Group justify="center" wrap="nowrap" w="100%">
             <ActionIcon
+              component="div"
               color={index === 0 ? "gray.8" : "white"}
               variant="transparent"
               onClick={onPrev}
@@ -117,6 +149,7 @@ export const ModalFileGallery: FC = () => {
             </Text>
 
             <ActionIcon
+              component="div"
               color={index + 1 >= props.files.length ? "gray.8" : "white"}
               variant="transparent"
               onClick={onNext}
@@ -126,17 +159,17 @@ export const ModalFileGallery: FC = () => {
           </Group>
 
           <Group justify="end" wrap="nowrap" w="100%">
-            <ActionIcon variant="subtle" color="white" onClick={onDownload}>
+            <ActionIcon component="div" variant="subtle" color="white" onClick={onDownload}>
               <IconDownload strokeWidth={1.5} />
             </ActionIcon>
 
-            {!props.disabled && (
-              <ActionIcon variant="subtle" color="white" onClick={onRemove}>
+            {!disabled && (
+              <ActionIcon component="div" variant="subtle" color="white" onClick={onRemove}>
                 <IconTrash strokeWidth={1.5} />
               </ActionIcon>
             )}
 
-            <ActionIcon variant="subtle" color="white" onClick={close}>
+            <ActionIcon component="div" variant="subtle" color="white" onClick={close}>
               <IconX strokeWidth={1.5} size={30} />
             </ActionIcon>
           </Group>

@@ -1,6 +1,6 @@
 import { api } from "@/modules/apis";
 import { ResponseList } from "@/types";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { ActionIcon, Anchor, Card, Group, Stack, Switch, Text } from "@mantine/core";
 import { type FC } from "react";
 import { ZaloOaGmfGroup } from "../zalo-oas-types";

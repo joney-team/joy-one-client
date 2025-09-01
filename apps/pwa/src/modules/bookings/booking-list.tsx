@@ -29,7 +29,7 @@ import {
 } from "@/modules/workspace-settings/workspace-settings-service";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { ObjectUtils } from "@/utils/object.utils";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import {
   ActionIcon,
   Card,
@@ -113,10 +113,10 @@ export const BookingList: FC = () => {
   });
 
   const [assignees, isAssigneesReady, setWorkspaceMember] = useWorkspaceMembers(
-    bookings.query.assigneeUserIds
+    bookings.params.assigneeUserIds
   );
 
-  const query = normalizeQuery(bookings.query);
+  const query = normalizeQuery(bookings.params);
 
   const startWeek = dayjs(query.date).startOf("week");
   const dayWeek = new Array(7).fill(0).map((_, index) => {
@@ -139,27 +139,27 @@ export const BookingList: FC = () => {
   const setDate = (date: Date) => {
     const isToday = dayjs(date).isSame(new Date(), "day");
     if (isToday) {
-      bookings.removeQuery("date");
+      bookings.removeParam("date");
     } else {
-      bookings.setQuery("date", DateTimeUtils.timeToSeconds(date));
+      bookings.setParam("date", DateTimeUtils.timeToSeconds(date));
     }
   };
 
   const nextRange = () => {
     const nextDate = dayjs(query.date).add(1, query.view).toDate();
     if (dayjs(nextDate).isSame(new Date(), "day")) {
-      bookings.removeQuery("date");
+      bookings.removeParam("date");
     } else {
-      bookings.setQuery("date", DateTimeUtils.timeToSeconds(nextDate));
+      bookings.setParam("date", DateTimeUtils.timeToSeconds(nextDate));
     }
   };
 
   const previousRange = () => {
     const previousDate = dayjs(query.date).subtract(1, query.view).toDate();
     if (dayjs(previousDate).isSame(new Date(), "day")) {
-      bookings.removeQuery("date");
+      bookings.removeParam("date");
     } else {
-      bookings.setQuery("date", DateTimeUtils.timeToSeconds(previousDate));
+      bookings.setParam("date", DateTimeUtils.timeToSeconds(previousDate));
     }
   };
 
@@ -183,9 +183,9 @@ export const BookingList: FC = () => {
       : [...query.assigneeUserIds, member.userId];
 
     if (assigneeUserIds.length === 0) {
-      bookings.removeQuery("assigneeUserIds");
+      bookings.removeParam("assigneeUserIds");
     } else {
-      bookings.setQuery("assigneeUserIds", assigneeUserIds.toString());
+      bookings.setParam("assigneeUserIds", assigneeUserIds.toString());
     }
   };
 
@@ -193,14 +193,14 @@ export const BookingList: FC = () => {
 
   const selectStatus = (status?: string) => {
     if (status === "default" || !status) {
-      bookings.removeQuery("status");
+      bookings.removeParam("status");
     } else if (Object.values(BookingStatus).includes(status as BookingStatus)) {
-      bookings.setQuery("status", status);
+      bookings.setParam("status", status);
     }
   };
 
-  const isCanResetFilter = Object.keys(bookings.query).length > 0;
-  const resetFilter = () => bookings.removeAllQueries();
+  const isCanResetFilter = Object.keys(bookings.params).length > 0;
+  const resetFilter = () => bookings.removeAllParams();
 
   useEffect(() => {
     syncColumnSize();
@@ -393,17 +393,14 @@ export const BookingList: FC = () => {
 
               <CalendarViewSelector
                 view={query.view}
-                onChange={(view) => bookings.setQuery("view", view)}
+                onChange={(view) => bookings.setParam("view", view)}
               />
 
               <Tooltip label={t("select_booking_slots_to_create_booking_desc")}>
                 <Button
                   size="compact-sm"
-                  h={32}
-                  fz={12}
+                  h={30}
                   leftIcon={IconPlus}
-                  iconSize={16}
-                  iconSpacing={-10}
                   onClick={() => OnModalCreateBooking()}
                 >
                   {t("create_booking")}

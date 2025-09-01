@@ -1,10 +1,11 @@
 "use client";
 
 import { Renderer } from "@/components/renderer";
-import { OnModalWorkspaceInviteMember } from "@/modules/workspace-members/workspace-invite-member";
 import { t } from "@/modules/lang/lang-service";
+import { OnModalWorkspaceInviteMember } from "@/modules/workspace-members/workspace-invite-member";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { isExtendedApp } from "@/service";
 import {
   ActionIcon,
   Divider,
@@ -23,7 +24,6 @@ import {
   IconBuildingSkyscraper,
   IconLayout,
   IconLayoutSidebarLeftCollapse,
-  IconOctahedronPlus,
   IconPlus,
   IconPuzzle,
   IconSettings,
@@ -35,8 +35,7 @@ import {
 import Link from "next/link";
 import { FC, Fragment } from "react";
 import { Avatar } from "../../components/avatar";
-import { workspaceLayoutConfig, useWorkspaceLayout } from "../hooks/use-workspace-layout";
-import { isExtendedApp } from "@/service";
+import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 
 interface WorkspaceNavigationDrawerProps {
   style?: MantineStyleProp;
@@ -162,18 +161,16 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
               mt={3}
               workspace={workspace.userMember.workspace}
               size={45}
-              bg="var(--mantine-color-body)"
               radius={5}
+              bg="var(--mantine-color-body)"
             />
 
             <Group flex={1} justify="space-between" wrap="nowrap" gap={2} align="start">
-              <Stack gap={5} w="100%">
+              <Stack gap={0} w="100%">
                 <Text fz={rem(18)} fw={600}>
                   {workspace.userMember.workspace.name}
                 </Text>
-                {workspace.workspaceSubscription && (
-                  <Text fz={rem(12)}>• {workspace.workspaceSubscription.subscription.name}</Text>
-                )}
+                <Text fz={rem(12)}>Workspace</Text>
               </Stack>
 
               <ActionIcon variant="subtle" color="var(--mantine-color-dimmed)" onClick={close}>
@@ -224,18 +221,6 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
               }
               label="custom_domain"
             />
-
-            <Renderer visible={!isExtendedApp()}>
-              <NavigationItem
-                href="/workspace-billings"
-                leftSection={
-                  <ThemeIcon variant="subtle" color="dark">
-                    <IconOctahedronPlus size={em(22)} strokeWidth={1.6} />
-                  </ThemeIcon>
-                }
-                label="workspace-subscriptions"
-              />
-            </Renderer>
           </Renderer>
 
           <Renderer

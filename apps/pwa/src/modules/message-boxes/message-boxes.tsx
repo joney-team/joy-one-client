@@ -14,7 +14,7 @@ import { MessageBoxStatus } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Box, Group, rgba, ScrollArea, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyze, IconPuzzle } from "@tabler/icons-react";
 import { CardMessageBox } from "./message-box/message-box-card";
@@ -64,20 +64,20 @@ export const MessageBoxList = () => {
           icon={IconAnalyze}
           label={t("status")}
           autoHideLabel
-          value={boxes.query.status}
+          value={boxes.params.status}
           options={Object.values(MessageBoxStatus).map((st) => ({
             label: t(`msg_boxes_status_${st}`),
             value: st,
           }))}
-          onClear={() => boxes.removeQueries(["status"])}
-          onChange={(status) => boxes.setQuery("status", status)}
+          onClear={() => boxes.removeParams(["status"])}
+          onChange={(status) => boxes.setParam("status", status)}
         />
 
         <ButtonSelect
           icon={IconPuzzle}
           label={t("platform")}
           autoHideLabel
-          value={boxes.query.platformId}
+          value={boxes.params.platformId}
           options={[
             ...plugins.zaloOas.map((z) => ({
               label: z.name,
@@ -95,8 +95,8 @@ export const MessageBoxList = () => {
               leftSession: <Avatar pluginMetaPage={m} size={20} />,
             })),
           ]}
-          onClear={() => boxes.removeQueries(["platformId"])}
-          onChange={(platformId) => boxes.setQuery("platformId", platformId)}
+          onClear={() => boxes.removeParams(["platformId"])}
+          onChange={(platformId) => boxes.setParam("platformId", platformId)}
         />
       </Group>
 

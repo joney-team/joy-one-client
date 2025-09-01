@@ -33,9 +33,7 @@ interface LoanPaymentsProps {
 }
 
 export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
-  const layout = useLayout();
   const color = useColor();
-
   const loan = props.loan.data;
 
   const receipts = useFetch({
@@ -46,7 +44,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
         type: ReceiptType.INCOME,
         getAll: true,
       }).then((res) => res.data),
-    events: [
+    refetchEvents: [
       EventType.RECEIPT_NEW,
       EventType.RECEIPT_PAID,
       EventType.RECEIPT_UPDATED,

@@ -14,8 +14,12 @@ import { IconAnalyze, IconClipboardList } from "@tabler/icons-react";
 import { FC } from "react";
 import { useQuery } from "../apis/use-query";
 import { EventType } from "../events/event-types";
+import { useWorkspace } from "../workspaces/workspace-context";
+import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 
 export const DashboardBookings: FC = () => {
+  const workspace = useWorkspace();
+
   const [query, setQuery] = useLocalStorage({
     key: StorageKey.DASHBOARD_BOOKINGS_QUERY,
     defaultValue: { status: "in_progress", assigneeUserIds: [] as string[] },
@@ -23,6 +27,7 @@ export const DashboardBookings: FC = () => {
 
   const todayBookings = useQuery<ResponseList<BookingEntity>>({
     route: "/bookings",
+    isSkip: !workspace.hasPermission(WorkspacePermission.BOOKING_VIEW),
     params: {
       timeRangeStartTime: `${Period.DATE}-${DateTimeUtils.timeToSeconds()}`,
       getAll: true,

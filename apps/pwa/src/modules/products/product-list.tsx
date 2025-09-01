@@ -96,17 +96,7 @@ export const ProductList: FC = () => {
           },
         }}
         card={({ data }) => <ProductCard product={data} />}
-        events={[
-          EventType.PRODUCT_NEW,
-          EventType.PRODUCT_UPDATE,
-          EventType.PRODUCT_ARCHIVED,
-
-          EventType.PRODUCT_STOCK_IN,
-          EventType.PRODUCT_STOCK_IN_REVERT,
-          EventType.PRODUCT_STOCK_OUT,
-          EventType.PRODUCT_STOCK_OUT_REVERT,
-          EventType.PRODUCT_STOCK_IN_MULTIPLE,
-        ]}
+        events={[EventType.PRODUCT_NEW, EventType.PRODUCT_UPDATE, EventType.PRODUCT_ARCHIVED]}
         actions={[
           {
             label: "edit",

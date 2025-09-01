@@ -4,7 +4,7 @@ import { FC, ReactNode } from "react";
 
 import { getEvents } from "@/modules/events/event-service";
 import { EventEntity, EventType, EventVariant } from "@/modules/events/event-types";
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { Badge, Group, Stack, StackProps, Text, ThemeIcon, Timeline, Tooltip } from "@mantine/core";
 import {
   IconArrowRight,

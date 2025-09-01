@@ -11,7 +11,8 @@ export enum CustomerKycStatus {
 export interface CustomerKycDto {
   cidNumber: string;
   cidFullName: string;
-  cidLocation: LocationEntity;
+  cidLocation?: LocationEntity;
+  cidVnLocation?: LocationEntity;
   cidCreatedAt?: number;
   cidGender: Gender;
   cidBirthday: number;
@@ -30,7 +31,8 @@ export interface CustomerKycVersion {
 
   cidNumber: string;
   cidFullName: string;
-  cidLocation: LocationEntity;
+  cidLocation?: LocationEntity;
+  cidVnLocation?: LocationEntity;
   cidRaw: string;
   cidGender: Gender;
   cidBirthday: number;

@@ -445,7 +445,7 @@ export const TimeTrackingForm: FC<{
                   }}
                 />
 
-                <Group gap={5}>
+                <Group gap={5} wrap="nowrap">
                   <TimeInput
                     flex={1}
                     ref={startAtRef}

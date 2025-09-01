@@ -1,12 +1,18 @@
 import { type FC } from "react";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { ActionIcon, Group, Menu, MenuDropdown, Stack, ThemeIcon } from "@mantine/core";
 import { IconColumns3, IconDotsVertical, IconEye, IconEyeOff } from "@tabler/icons-react";
 import { ListContext, Column } from "../types";
 import { ActionButton } from "./action-button";
 import { t } from "@/modules/lang/lang-service";
+import { BaseData } from "@/components/list/types";
 
 export const ColsSettings: FC<ListContext> = (ctx) => {
   if (ctx.viewState.view !== "table") return null;
@@ -31,7 +37,7 @@ export const ColsSettings: FC<ListContext> = (ctx) => {
   );
 };
 
-export function Columns<T = any>(ctx: ListContext<T>) {
+export function Columns<T extends BaseData>(ctx: ListContext<T>) {
   const { setViewState, viewState, columnSettings: cols } = ctx;
 
   const sensors = useSensors(
@@ -72,7 +78,9 @@ export function Columns<T = any>(ctx: ListContext<T>) {
             const toggleVisible = () =>
               setViewState({
                 ...viewState,
-                columnSettings: cols.map((v) => (v.id === columnSetting.id ? { ...v, isVisible: !v.isVisible } : v)),
+                columnSettings: cols.map((v) =>
+                  v.id === columnSetting.id ? { ...v, isVisible: !v.isVisible } : v
+                ),
               });
 
             if (!column) return null;

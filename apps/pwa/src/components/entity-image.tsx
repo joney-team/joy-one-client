@@ -48,7 +48,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
   };
 
   const ableView = !!props.src && !loadFailed;
-  const hovered = hover.hovered;
+  const hovered = hover.hovered && ableView;
 
   return (
     <Dropzone
@@ -71,6 +71,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
         style={{ cursor: "pointer", position: "relative" }}
         onClick={() => {
           if (disabled) {
+            console.log("click");
             OnModalFileGallery({
               files: [{ url: src, fileName: props.name || "image", type: FileType.PHOTO }],
             });
@@ -136,6 +137,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
                 p={5}
               >
                 <ActionIcon
+                  component="div"
                   variant="subtle"
                   color="white"
                   onClick={(e) => {
@@ -149,16 +151,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
             </Renderer>
 
             <Renderer visible={!disabled}>
-              <Button
-                leftIcon={IconUpload}
-                size="xs"
-                iconSize={16}
-                variant="transparent"
-                color="white"
-                fw={400}
-                fz={em(14)}
-                iconSpacing={-8}
-              >
+              <Button leftIcon={IconUpload} size="xs" variant="transparent" color="white" fw={400}>
                 {t("upload")}
               </Button>
             </Renderer>

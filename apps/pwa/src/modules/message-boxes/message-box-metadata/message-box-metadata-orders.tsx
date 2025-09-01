@@ -1,4 +1,4 @@
-import { useList } from "@/utils/use-list.util";
+import { useList } from "@/components/list/use-list";
 import { AccordionItemComponent } from "./message-box-metadata-types";
 import { getOrders } from "@/modules/orders/orders-service";
 import { EventType } from "@/modules/events/event-types";
@@ -9,7 +9,12 @@ import { OrderCard } from "@/modules/orders/order-card";
 export const MessageBoxMetadataOrders: AccordionItemComponent = ({ customer }) => {
   const orders = useList({
     fetch: async () => getOrders({ relatedCustomerId: customer._id }),
-    events: [EventType.ORDER_NEW, EventType.ORDER_UPDATED, EventType.ORDER_ARCHIVED, EventType.ORDER_SYNCED],
+    events: [
+      EventType.ORDER_NEW,
+      EventType.ORDER_UPDATED,
+      EventType.ORDER_ARCHIVED,
+      EventType.ORDER_SYNCED,
+    ],
   });
 
   return (

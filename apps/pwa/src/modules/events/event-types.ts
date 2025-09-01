@@ -44,6 +44,8 @@ export enum EventType {
   WORKSPACE_MEMBER_LEAVED = 'WORKSPACE_MEMBER_LEAVED',
   WORKSPACE_MEMBER_UPDATED = 'WORKSPACE_MEMBER_UPDATED',
   WORKSPACE_MEMBER_TRANSFER_OWNER = 'WORKSPACE_MEMBER_TRANSFER_OWNER',
+  WORKSPACE_MEMBER_ONLINE = 'WORKSPACE_MEMBER_ONLINE',
+  WORKSPACE_MEMBER_OFFLINE = 'WORKSPACE_MEMBER_OFFLINE',
 
   CUSTOMER_NEW = 'CUSTOMER_NEW',
   CUSTOMER_UPDATED = 'CUSTOMER_UPDATED',
@@ -71,7 +73,6 @@ export enum EventType {
   COMMENT_UNPINNED = 'COMMENT_UNPINNED',
 
   SYNC_TAGS = 'SYNC_TAGS',
-  SYNC_CLIENTS = 'SYNC_CLIENTS',
 
   TAGS_ARCHIVED = 'TAGS_ARCHIVED',
 
@@ -201,6 +202,8 @@ export enum EventType {
   PLUGIN_AI_ASSISTANTS_REMOVED = 'PLUGIN_AI_ASSISTANTS_REMOVED',
 
   USER_PROFILE_UPDATED = 'USER_PROFILE_UPDATED',
+  USER_ONLINE = 'USER_ONLINE',
+  USER_OFFLINE = 'USER_OFFLINE',
 
   ORDER_NEW = 'ORDER_NEW',
   ORDER_UPDATED = 'ORDER_UPDATED',
@@ -220,12 +223,26 @@ export enum EventType {
   PROMOTION_ARCHIVED = 'PROMOTION_ARCHIVED',
 }
 
+export enum EventChannel {
+  WORKSPACE = 'WORKSPACE',
+  PERSONAL = 'PERSONAL',
+  NONE = 'NONE',
+}
+
+export enum EventDataActionType {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  ARCHIVED = 'ARCHIVED',
+}
+
 export interface EventEntity extends BaseMongoEntity {
-  ref?: string;
-  workspaceId: string;
+  channel: EventChannel;
   type: EventType;
-  variant?: EventVariant;
+  actionType?: EventDataActionType;
   time: number;
+  ref?: string;
+  workspaceId?: string;
+  variant?: EventVariant;
   userId?: string;
   user?: WorkspaceMemberInfo;
   data?: any;

@@ -1,5 +1,12 @@
 import { BasePostgresEntity, Coordinates } from "@/types";
 import { CustomerShortInfo } from "../customers/customer-types";
+import { LocationEntity } from "../locations/locations-types";
+
+export interface LoanMetadata {
+  cidNumber?: number;
+  cidVnLocation?: LocationEntity;
+  cidLocation?: LocationEntity;
+}
 
 export interface LoanPayment {
   accountName: string,
@@ -92,6 +99,7 @@ export interface LoanAssetsICloud extends LoanAssetData {
   storage: string;
   imeil: string;
   serial: string;
+  deviceSecretKey: string;
 }
 
 export type LoanAssetDataMap = {
@@ -136,6 +144,7 @@ export interface LoanEntity<T extends LoanAssetType = any> extends BasePostgresE
   isLiquidated?: boolean;
   isHasLateInterestReceipt?: boolean;
   source?: LoanSource;
+  metadata?: LoanMetadata;
 }
 
 // ======================= Loan Asset Estimation =======================

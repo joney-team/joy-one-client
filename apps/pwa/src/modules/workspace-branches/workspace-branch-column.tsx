@@ -71,9 +71,9 @@ export const WorkspaceBranchColumn = (
         </Hovered>
       );
     },
-    exportToExcel: ({ data }) => {
-      if (!data.workspaceBranch) return t("main_workspace_branch");
-      return data.workspaceBranch.name;
+    exportToExcel: (_, loan) => {
+      if (!loan.workspaceBranch) return t("main_workspace_branch");
+      return loan.workspaceBranch.name;
     },
     disabled: !workspace.isShouldEnableBranches,
     filter:

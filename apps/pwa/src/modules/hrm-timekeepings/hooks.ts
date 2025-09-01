@@ -10,7 +10,7 @@ export const useHrmTimekeeping = () => {
 
   const prevTimekeeping = useFetch({
     fetch: () => getPreviousTimeKeeping(),
-    events: [
+    refetchEvents: [
       EventType.HRM_TIMEKEEPING_MEMBER_CHECK_IN,
       EventType.HRM_TIMEKEEPING_MEMBER_CHECK_OUT,
     ]

@@ -1,63 +1,41 @@
 "use client";
 
 import { useApp } from "@/app.context";
-import { useColor } from "@/modules/theme/use-color";
 import { Avatar } from "@/components/avatar";
-import { ColorSchemes } from "@/components/color-schemes";
-import { Container } from "@/components/container";
 import { Button } from "@/components/buttons/button";
 import { ButtonHrmTimeKeeping } from "@/components/buttons/button-hrm-timekeepings";
 import { ButtonLanguage } from "@/components/buttons/button-language";
+import { ColorSchemes } from "@/components/color-schemes";
+import { Container } from "@/components/container";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalWorkspaceSubscription } from "@/modules/workspace-subscriptions/modal-workspace-subscriptions";
 import { useAuth } from "@/modules/auth/auth-context";
-import { num, t } from "@/modules/lang/lang-service";
-import { renderLocation } from "@/modules/locations/locations-service";
+import { t } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { renderSubscriptionNum } from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { onError } from "@/utils/exceptions.utils";
-import { formatBytes } from "@/utils/file.utils";
-import {
-  ActionIcon,
-  Anchor,
-  Card,
-  Divider,
-  Group,
-  Space,
-  Stack,
-  Text,
-  ThemeIcon,
-  em,
-  rem,
-} from "@mantine/core";
+import { ActionIcon, Divider, Group, Space, Stack, Text, ThemeIcon, em, rem } from "@mantine/core";
 import {
   Icon,
-  IconArrowsExchange,
   IconChevronRight,
   IconClockCheck,
-  IconConfetti,
   IconLayout,
   IconLogout,
   IconNotification,
   IconPencil,
   IconPuzzle,
-  IconReportMoney,
   IconSettings,
   IconShieldLock,
   IconSignRight,
   IconVersions,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { type FC, Fragment, useEffect } from "react";
+import { type FC, useEffect } from "react";
 
 export const Profile: FC = () => {
   const auth = useAuth();
   const app = useApp();
   const workspace = useWorkspace();
   const router = useRouter();
-  const color = useColor();
   const layout = useLayout();
 
   useEffect(() => {
@@ -138,7 +116,7 @@ export const Profile: FC = () => {
               </Text>
               {workspace.userMember.workspace.location && (
                 <Text fz={em(13)} fw={400}>
-                  {renderLocation(workspace.userMember.workspace.location)}
+                  {workspace.userMember.workspace.location?.address}
                 </Text>
               )}
             </Stack>
@@ -157,121 +135,7 @@ export const Profile: FC = () => {
           <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
             <NavItem icon={IconPuzzle} name={t("plugins")} href="/workspace-settings/plugins" />
           </Renderer>
-
-          <Renderer
-            visible={
-              !!workspace.workspaceSubscription &&
-              !workspace.workspaceSubscription.fixedSubscriptionId &&
-              workspace.hasPermission(WorkspacePermission.WORKSPACE_BILLINGS_MANAGER)
-            }
-          >
-            <NavItem
-              icon={IconReportMoney}
-              name={t("workspace-subscriptions")}
-              href="/workspace-billings"
-            />
-          </Renderer>
         </Stack>
-
-        {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) &&
-          !!workspace.workspaceSubscription && (
-            <Card withBorder>
-              <Stack>
-                <Group gap={8} align="center" justify="space-between">
-                  <Group gap={10} align="center">
-                    <Text
-                      size="lg"
-                      c={workspace.workspaceSubscription.subscription.color}
-                      variant={
-                        workspace.workspaceSubscription.subscription.isDefault
-                          ? "outline"
-                          : "filled"
-                      }
-                      fw={600}
-                    >
-                      {workspace.workspaceSubscription.subscription.name}
-                    </Text>
-
-                    {!workspace.workspaceSubscription.fixedSubscriptionId &&
-                      !workspace.workspaceSubscription.subscription.isDefault &&
-                      workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-                        <Anchor c="gray" onClick={() => OnModalWorkspaceSubscription()} fz={em(12)}>
-                          <Group gap={3}>
-                            <IconArrowsExchange strokeWidth={1.5} size={16} />
-                            {t("change-subscriptions")}
-                          </Group>
-                        </Anchor>
-                      )}
-                  </Group>
-
-                  {!workspace.workspaceSubscription.fixedSubscriptionId &&
-                    workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-                      <Fragment>
-                        {(function () {
-                          if (workspace.workspaceSubscription.subscription.isDefault) {
-                            return (
-                              <Button
-                                radius={100}
-                                color="yellow"
-                                leftSection={<IconConfetti size={18} />}
-                                onClick={() => OnModalWorkspaceSubscription()}
-                              >
-                                {t("upgrade-subscriptions")}
-                              </Button>
-                            );
-                          }
-
-                          return (
-                            <Anchor
-                              fw={500}
-                              fz={em(13)}
-                              c={color(workspace.balance.balance > 0 ? "primary" : "gray")}
-                              onClick={() => router.push(`/workspace-billings`)}
-                            >
-                              {t("balance")}: {num(workspace.balance.balance, { type: "money" })}
-                            </Anchor>
-                          );
-                        })()}
-                      </Fragment>
-                    )}
-                </Group>
-
-                <Group justify="space-between">
-                  <Text fz={em(13)}>{t("members")}</Text>
-                  <Text fz={em(13)} ta="right" fw={500}>
-                    {num(workspace.workspaceSubscription.stat.totalMembers)} /{" "}
-                    {renderSubscriptionNum(
-                      workspace.workspaceSubscription.subscription.limitMembers
-                    )}
-                  </Text>
-                </Group>
-                <Group justify="space-between">
-                  <Text fz={em(13)}>{t("storage")}</Text>
-                  <Text fz={em(13)} ta="right" fw={500}>
-                    {formatBytes(workspace.workspaceSubscription.stat.storage)} /{" "}
-                    {renderSubscriptionNum(
-                      workspace.workspaceSubscription.subscription.limitStorage,
-                      formatBytes
-                    )}
-                  </Text>
-                </Group>
-
-                <Group justify="space-between">
-                  <Text fz={em(13)}>{t("social-connections")} (Fanpage / Zalo OAs)</Text>
-                  <Text fz={em(13)} ta="right" fw={500}>
-                    {num(
-                      workspace.workspaceSubscription.stat.totalMetaPages +
-                        workspace.workspaceSubscription.stat.totalZaloOAs
-                    )}{" "}
-                    /{" "}
-                    {renderSubscriptionNum(
-                      workspace.workspaceSubscription.subscription.limitSocialConnections
-                    )}
-                  </Text>
-                </Group>
-              </Stack>
-            </Card>
-          )}
 
         <Group mt={10} justify="center" align="center">
           {workspace.userMembers.length > 1 && !app.metadata.isExtended && (

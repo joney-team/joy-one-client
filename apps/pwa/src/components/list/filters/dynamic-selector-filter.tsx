@@ -35,7 +35,7 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
 }) => {
   const [_options, setOptions] = useState<DynamicSelectorFilterOption[]>([]);
   const options = config.pinnedOptions || _options;
-  const querySelectedOptions = list.query[colKey] ? `${list.query[colKey]}`.split(",") : [];
+  const querySelectedOptions = list.params[colKey] ? `${list.params[colKey]}`.split(",") : [];
 
   // Get missing options
   useEffect(() => {
@@ -48,7 +48,7 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
         )
         .catch(console.error);
     }
-  }, [list.query[colKey]]);
+  }, [list.params[colKey]]);
 
   const { multiple, render: Render, dropdownProps } = config;
   const selectedOptions = options.filter((v) => querySelectedOptions.includes(v.value));
@@ -152,12 +152,12 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
             ? querySelectedOptions.filter((v) => v !== value?.value)
             : [...querySelectedOptions, value?.value];
           if (_querySelectedOptions.length === 0) {
-            list.removeQuery(colKey);
+            list.removeParam(colKey);
           } else {
-            list.setQuery(colKey, _querySelectedOptions);
+            list.setParam(colKey, _querySelectedOptions);
           }
         } else {
-          list.setQuery(colKey, value?.value);
+          list.setParam(colKey, value?.value);
         }
       }}
       dropdownProps={dropdownProps}

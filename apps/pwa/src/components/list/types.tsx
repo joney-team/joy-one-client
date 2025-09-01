@@ -4,10 +4,12 @@ import type { DynamicSelectorFilterConfig } from "./filters/dynamic-selector-fil
 import type { StaticSelectorFilterConfig } from "./filters/static-selector-filter";
 import type { TextFilterConfig } from "./filters/text-filter";
 import type { TimeRangeFilterConfig } from "./filters/time-range-filter";
-import { UseList } from "@/utils/use-list.util";
+import { UseList, UseListArgs } from "@/components/list/use-list";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { ResponseList } from "@/types";
 import { EventType } from "@/modules/events/event-types";
+
+export type BaseData = { id: string } | { _id: string };
 
 export type ListSort = {
   label: string;
@@ -28,10 +30,12 @@ export type ExportToExcelItem = {
   date?: number;
 };
 
+export type ExportToExcelOutput = ExportToExcelItem | (ExportToExcelItem & { col: string })[];
+
 export type ExportToExcel<Data, FieldType> = (
   value: FieldType,
   data: Data
-) => ExportToExcelItem | (ExportToExcelItem & { col: string })[];
+) => ExportToExcelOutput | Promise<ExportToExcelOutput>;
 
 export type Column<Data = any, FieldType = any> = {
   name?: string;
@@ -88,16 +92,15 @@ export type ListFetch<Data = any> = (
   controller?: AbortController
 ) => Promise<ResponseList<Data & { id?: string; _id?: string }>>;
 
-export type ListProps<Data = any> = (
-  | { fetch: ListFetch<Data> }
-  | { route: string; params?: Record<string, any> }
-) & {
+export type ListProps<Data extends BaseData> = {
+  route: string;
+  params?: Record<string, any>;
   id: string;
   name?: string;
   icon?: Icon;
   columns: Columns<Data>;
   filterModes?: FilterMode<Data>[];
-  events?: EventType[];
+  events?: UseListArgs["events"];
   card?: FC<{ data: Data }>;
   actions?: ListAction<Data>[];
   limit?: number;
@@ -127,7 +130,7 @@ export interface ListViewState {
   activatedModes?: string[];
 }
 
-export type ListContext<Data = any> = ListProps<Data> & {
+export type ListContext<Data extends BaseData = any> = ListProps<Data> & {
   list: UseList<Data>;
   viewState: ListViewState;
   setViewState: (viewState: ListViewState) => void;
