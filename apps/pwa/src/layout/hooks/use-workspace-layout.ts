@@ -6,7 +6,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import { useMemo } from "react";
 import { useLayout } from "../layout-context";
 import { useColor } from "@/modules/theme/use-color";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 interface WorkspaceLayoutState {
   navigationWidth: number;
@@ -24,19 +24,23 @@ interface WorkspaceLayoutState {
 
 export const workspaceLayoutConfig = {
   defaultNavigationExpandedWidth: 200,
-  defaultNavigationCollapsedWidth: 60,
+  defaultNavigationCollapsedWidth: 80,
   mobileNavigationHeight: 55,
   standaloneNavigationHeight: 75,
 };
 
 export const useWorkspaceLayout = (): WorkspaceLayoutState => {
+  const pathname = usePathname();
   const params = useParams();
   const layout = useLayout();
   const color = useColor();
   const colorScheme = useColorScheme();
   const [navigationWidthStorage, setNavigationWidthStorage] = useLocalStorage({ key: StorageKey.LAYOUT_NAVIGATION_WIDTH });
 
-  const isDetailPage = Object.keys(params).length > 0;
+  const isDetailPage = useMemo(() => {
+    if (pathname.startsWith('/tasks')) return false;
+    return Object.keys(params).length > 0
+  }, [pathname, params]);
 
   const state = useMemo(() => {
     const headerHeight = layout.view === "mobile" ? 48 : 48;

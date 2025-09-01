@@ -399,11 +399,8 @@ export const BookingList: FC = () => {
               <Tooltip label={t("select_booking_slots_to_create_booking_desc")}>
                 <Button
                   size="compact-sm"
-                  h={32}
-                  fz={12}
+                  h={30}
                   leftIcon={IconPlus}
-                  iconSize={16}
-                  iconSpacing={-10}
                   onClick={() => OnModalCreateBooking()}
                 >
                   {t("create_booking")}
