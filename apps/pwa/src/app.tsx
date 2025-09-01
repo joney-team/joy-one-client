@@ -18,6 +18,7 @@ import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
 import { AptabaseProvider } from "@aptabase/react";
 import environment from "@joy-one-client/config";
+import { GeneralAnalytics } from "./components/analytics/general-analytics";
 
 const LangProvider = dynamic(() => import("@/modules/lang/lang-provider"));
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
@@ -136,6 +137,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
                 <Providers>
                   {props.children}
                   <AppLoading />
+                  <GeneralAnalytics />
                 </Providers>
               </LangProvider>
             </LayoutProvider>
