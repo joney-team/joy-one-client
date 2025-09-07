@@ -1,6 +1,5 @@
 "use client";
 
-import { type FC, Fragment, memo } from "react";
 import { type AppRouter, useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
@@ -27,6 +26,7 @@ import {
   IconStackPush,
   IconUserPlus,
 } from "@tabler/icons-react";
+import { type FC, Fragment, memo } from "react";
 import { Button } from "../../components/buttons/button";
 
 const shortcuts: {

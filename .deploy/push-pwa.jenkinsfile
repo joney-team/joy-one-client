@@ -30,7 +30,6 @@ pipeline {
     }
 
     stage("Release") {
-      agent { label "${RELEASE_VPS}" }
       steps {
         script {
           releaseDekloy()
@@ -73,7 +72,6 @@ def setup() {
   env.GIT_COMMIT_BY = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
   env.GIT_BRANCH_NAME = env.GIT_BRANCH.replaceAll('origin/', '')
   env.ENV = env.GIT_BRANCH_NAME.replaceAll('-pwa$', '')
-  env.RELEASE_VPS = "joy-one-${env.ENV}"
   env.APPLICATION_ID = "ppdefZjT54CDloyJzPh2T"
 
   // Replace file packages/config/index.ts with env.GIT_BRANCH and remove origin 
@@ -102,7 +100,6 @@ def sendNotification(status) {
 }
 
 def releaseDekloy() {
-  sh "docker pull ${IMAGE_TAG}"
   sh """
   curl -X 'POST' \
     'https://deploy.joyone.vn/api/application.saveDockerProvider' \
