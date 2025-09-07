@@ -32,6 +32,7 @@ export interface UseListArgs<T = any> {
     types: EventType[];
     condition?: (data: EventEntity, currentData: T[]) => boolean;
   })
+  isRefetchAllEvents?: boolean;
 }
 
 export type UseListFetch<T = any> = (isReset?: boolean, options?: { isSilient?: boolean, addonQuery?: any }) => Promise<UseListFetchReponse<T> | void>;
@@ -247,6 +248,10 @@ export const useList = <T extends BaseData>(args: UseListArgs<T>): UseList<T> =>
   const events = Array.isArray(args.events) ? args.events : args.events?.types || [];
   const onEvent = async (e: EventEntity) => {
     try {
+      if (args.isRefetchAllEvents) {
+        return fetch(true, { isSilient: true });
+      }
+
       if (e.actionType === EventDataActionType.ARCHIVED) {
         return;
       }
