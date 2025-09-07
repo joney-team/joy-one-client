@@ -66,12 +66,12 @@ pipeline {
 def setup() {
   env.DOCKER_USERNAME = 'huuthongdev'
   env.NOTIFIER_URL = "https://jenkins-notifier.joyone.vn/build-notify"
-  env.DOCKER_FILE = ".deploy/push-pwa.dockerfile"
+  env.DOCKER_FILE = ".deploy/push-docs.dockerfile"
   env.IMAGE_TAG = "${DOCKER_USERNAME}/${env.JOB_NAME}:${env.BUILD_ID}"
   env.GIT_COMMIT_COMMENT = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
   env.GIT_COMMIT_BY = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
   env.GIT_BRANCH_NAME = env.GIT_BRANCH.replaceAll('origin/', '')
-  env.ENV = env.GIT_BRANCH_NAME.replaceAll('-pwa$', '')
+  env.ENV = env.GIT_BRANCH_NAME.replaceAll('-docs$', '')
   env.APPLICATION_ID = "vUl13MFANROi3vmHJ1Y2m"
 
   // Replace file packages/config/index.ts with env.GIT_BRANCH and remove origin 
