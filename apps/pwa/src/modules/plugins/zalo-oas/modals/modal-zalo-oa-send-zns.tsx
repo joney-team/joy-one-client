@@ -80,7 +80,7 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
           <TextInput
             key={index}
             value={form.values[item.fieldName]}
-            label={item.description}
+            label={t(item.description)}
             description={item.fieldName}
             {...form.getInputProps(item.fieldName)}
           />
