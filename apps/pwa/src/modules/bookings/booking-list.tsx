@@ -102,6 +102,7 @@ export const BookingList: FC = () => {
         })
       );
     },
+    isRefetchAllEvents: true,
     events: [
       EventType.BOOKING_NEW,
       EventType.BOOKING_UPDATED,
