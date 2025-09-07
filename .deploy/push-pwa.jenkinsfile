@@ -30,7 +30,7 @@ pipeline {
     }
 
     stage("Release") {
-      agent { label "${RELEASE_VPS}" }
+      // agent { label "${RELEASE_VPS}" }
       steps {
         script {
           releaseDekloy()
@@ -102,7 +102,7 @@ def sendNotification(status) {
 }
 
 def releaseDekloy() {
-  sh "docker pull ${IMAGE_TAG}"
+  // sh "docker pull ${IMAGE_TAG}"
   sh """
   curl -X 'POST' \
     'https://deploy.joyone.vn/api/application.saveDockerProvider' \
