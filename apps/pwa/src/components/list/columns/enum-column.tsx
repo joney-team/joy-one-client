@@ -48,13 +48,14 @@ export const EnumColumn = <T extends string>(args: EnumColumnArgs<T>): Column =>
           value: v.value,
           render: () => {
             const color = useColor();
+            const iconColor = v.color ? color(v.color) : undefined;
 
             return (
               <Group gap={5} w="max-content">
                 {v.icon ? (
-                  <v.icon size={18} color={color(v.color)} />
+                  <v.icon size={18} color={iconColor} />
                 ) : v.color ? (
-                  <Circle color={color(v.color)} size={8} />
+                  <Circle color={iconColor} size={8} />
                 ) : null}
 
                 <Text fz={14} fw={500}>
