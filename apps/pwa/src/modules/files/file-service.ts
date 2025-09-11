@@ -113,21 +113,19 @@ export async function getFileInfo(rawUrl: string) {
   return apiTools.get<FileEntity>(`/files/${fileName?.split('.')[0]}/info`);
 }
 
-export function getFileTypeIcon(fileType: FileType) {
-  const icons: {
-    [key in FileType]: Icon;
-  } = {
-    [FileType.PHOTO]: IconPhoto,
-    [FileType.VIDEO]: IconVideo,
-    [FileType.AUDIO]: IconMusic,
-    [FileType.PDF]: IconPdf,
-    [FileType.MS_WORD]: IconFile,
-    [FileType.MS_EXCEL]: IconFile,
-    [FileType.MS_POWERPOINT]: IconFile,
-    [FileType.UNKNOWN]: IconFile,
-  }
+export const fileTypeIcons: Record<FileType, Icon> = {
+  [FileType.PHOTO]: IconPhoto,
+  [FileType.VIDEO]: IconVideo,
+  [FileType.AUDIO]: IconMusic,
+  [FileType.PDF]: IconPdf,
+  [FileType.MS_WORD]: IconFile,
+  [FileType.MS_EXCEL]: IconFile,
+  [FileType.MS_POWERPOINT]: IconFile,
+  [FileType.UNKNOWN]: IconFile,
+}
 
-  return icons[fileType];
+export function getFileTypeIcon(fileType: FileType) {
+  return fileTypeIcons[fileType];
 }
 
 export async function downloadFileFromURL(url: string, filename: string) {
