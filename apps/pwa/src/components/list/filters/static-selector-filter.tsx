@@ -74,7 +74,7 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
 
         return (
           <Combobox.Option value={itemId} key={itemId} fz={14}>
-            <Group gap={8}>
+            <Group gap={8} wrap="nowrap">
               {multiple && (
                 <Checkbox
                   checked={selectedOptions.some((v) => v.value === item.value)}

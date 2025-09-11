@@ -34,6 +34,7 @@ export const WorkspaceFileManager: FC = () => {
             },
           },
           type: EnumColumn<FileType>({
+            w: 160,
             options: Object.values(FileType).map((type) => ({
               icon: fileTypeIcons[type],
               label: t(`file_type_${type}`),

@@ -17,8 +17,8 @@ export const useColor = () => {
   const theme = useMantineTheme();
   const colorScheme = useColorScheme();
 
-  return (color?: string | { light?: string; dark?: string }) => {
-    if (!color) return undefined;
+  return (color?: string | { light?: string; dark?: string }): string => {
+    if (!color) return "";
 
     if (typeof color === "string") {
       return getColor(theme, color);
