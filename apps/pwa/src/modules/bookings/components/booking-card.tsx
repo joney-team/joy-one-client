@@ -184,23 +184,6 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </Anchor>
                       )}
 
-                      <Group
-                        gap={10}
-                        style={{ cursor: "pointer", userSelect: "none" }}
-                        onClick={() => {
-                          close();
-                          triggerRemindBooking(booking._id);
-                        }}
-                      >
-                        <ThemeIcon size="sm" radius={100} color="orange">
-                          <IconSend color="white" size={12} />
-                        </ThemeIcon>
-
-                        <Text fz={12} fw={500}>
-                          {t("remind_booking")}
-                        </Text>
-                      </Group>
-
                       <Divider label={t("status")} labelPosition="left" />
                       <Group
                         gap={10}
