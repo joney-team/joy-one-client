@@ -18,7 +18,7 @@ export const useColor = () => {
   const colorScheme = useColorScheme();
 
   return (color?: string | { light?: string; dark?: string }) => {
-    if (!color) return "";
+    if (!color) return undefined;
 
     if (typeof color === "string") {
       return getColor(theme, color);

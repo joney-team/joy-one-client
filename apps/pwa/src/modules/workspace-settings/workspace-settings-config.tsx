@@ -73,6 +73,11 @@ export const workspaceSettingCards: WorkspaceSettingCardProps[] = [
     description: "workspaceSettingsCustomFieldsDesc",
     color: "orange",
   },
+  {
+    moduleId: "workspaceSettingsFileManager",
+    description: "workspaceSettingsFileManagerDesc",
+    color: "blue",
+  },
 ];
 
 export const workspacePluginCards: WorkspaceSettingCardProps[] = [
