@@ -3,7 +3,7 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useEffect, type FC } from "react";
-import { getClarity, useTracking } from "./hooks";
+import { getClarity, useTracking } from "./hooks-analytics";
 
 export const GeneralAnalytics: FC = () => {
   const app = useApp();
