@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { useRouter } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";

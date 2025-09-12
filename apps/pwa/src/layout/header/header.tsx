@@ -1,3 +1,5 @@
+"use client";
+
 import { Account } from "@/components/account";
 import { ColorSchemes } from "@/components/color-schemes";
 import { Renderer } from "@/components/renderer";
