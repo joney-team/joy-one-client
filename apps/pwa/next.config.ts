@@ -1,9 +1,7 @@
-import bundleAnalyzer from '@next/bundle-analyzer'
 import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  reactStrictMode: false,
   env: {
     NEXT_PUBLIC_EXTENDED_APP: process.env['NEXT_PUBLIC_EXTENDED_APP'],
   },
@@ -20,8 +18,4 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
 }
 
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-})
-
-export default withBundleAnalyzer(nextConfig);
+export default nextConfig;
