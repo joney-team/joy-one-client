@@ -81,7 +81,7 @@ export const ProductList: FC = () => {
           price: {
             w: 250,
             align: "right",
-            isSortable: true,
+            sortable: true,
             render: ({ data }) => {
               if (data.minPrice && data.maxPrice) {
                 return (

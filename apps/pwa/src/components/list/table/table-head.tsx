@@ -19,7 +19,7 @@ export const ListTableHead: FC<ListContext & { columnId: string; colIndex: numbe
   const sortValueType = +sortValue === 1 ? "asc" : +sortValue === -1 ? "desc" : "none";
 
   const onSort = () => {
-    if (!column?.isSortable) return;
+    if (!column?.sortable) return;
 
     if (sortValueType === "none") {
       return list.setParam(sortKey, "-1");
@@ -54,7 +54,7 @@ export const ListTableHead: FC<ListContext & { columnId: string; colIndex: numbe
 
   if (!column) return null;
 
-  const { isSortable: sortable } = column;
+  const { sortable: sortable } = column;
 
   const isShowSelectAll = colIndex === 0 && isShowMultipleSelectActions;
   const isSelectedAll =
@@ -93,7 +93,7 @@ export const ListTableHead: FC<ListContext & { columnId: string; colIndex: numbe
             {t(column?.name || getValuePath(columnId, column))}
           </Text>
 
-          {column.isSortable && (
+          {column.sortable && (
             <ActionIcon
               variant="subtle"
               color="var(--mantine-color-dimmed)"

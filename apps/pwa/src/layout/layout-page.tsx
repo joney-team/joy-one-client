@@ -3,11 +3,13 @@
 import { PageLazyLoad, PageLoading } from "@/components/lazy-load";
 import { useRouteRule } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
+import { UserRole } from "@/modules/users/users-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Stack } from "@mantine/core";
 import dynamic, { DynamicOptions, Loader } from "next/dynamic";
 import { ComponentType, PropsWithChildren, Suspense, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
+import { LayoutAdmin } from "./layout-admin";
 import { useLayout } from "./layout-context";
 
 export interface PageProps extends PropsWithChildren {}
@@ -32,9 +34,18 @@ export function Layout<P>({
   const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
   const componentProps = props.props as any;
+  const isRequireAuth = routeRule.auth !== "public";
 
   if (!workspace.userMember && routeRule.auth === "workspace") return props.children;
-  if (!auth.user && routeRule.auth === "auth") return props.children;
+  if (!auth.user && isRequireAuth) return props.children;
+
+  if (routeRule.auth === "admin") {
+    return (
+      <LayoutAdmin>
+        <Component {...componentProps} />
+      </LayoutAdmin>
+    );
+  }
 
   if (nested) {
     if (!workspace.isAvailable) return props.children;

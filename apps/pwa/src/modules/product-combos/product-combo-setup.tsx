@@ -52,7 +52,7 @@ export const ProductComboSetup: FC = () => {
               );
             },
           },
-          price: NumberColumn({ type: "money", name: t("price"), isSortable: true }),
+          price: NumberColumn({ type: "money", name: t("price"), sortable: true }),
         }}
         card={(props) => <ProductCard product={props.data} />}
         actions={[

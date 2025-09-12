@@ -30,7 +30,7 @@ export const CustomerList: FC = () => {
         route="/customers"
         columns={{
           code: CodeColumn({ href: (value) => `/customers/${value}` }),
-          createdAt: DateTimeColumn({ name: "createdAt", isSortable: true, isHasFilter: true }),
+          createdAt: DateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
           avatar: {
             w: 120,
             align: "center",

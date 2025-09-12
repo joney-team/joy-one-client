@@ -1,13 +1,12 @@
+import { UseList, UseListArgs } from "@/components/list/use-list";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { ResponseList } from "@/types";
 import type { Icon } from "@tabler/icons-react";
 import type { FC } from "react";
 import type { DynamicSelectorFilterConfig } from "./filters/dynamic-selector-filter";
 import type { StaticSelectorFilterConfig } from "./filters/static-selector-filter";
 import type { TextFilterConfig } from "./filters/text-filter";
 import type { TimeRangeFilterConfig } from "./filters/time-range-filter";
-import { UseList, UseListArgs } from "@/components/list/use-list";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { ResponseList } from "@/types";
-import { EventType } from "@/modules/events/event-types";
 
 export type BaseData = { id: string } | { _id: string };
 
@@ -52,8 +51,8 @@ export type Column<Data = any, FieldType = any> = {
   w?: number;
   render?: ColumnItemRenderer<FieldType, Data>;
   align?: "left" | "center" | "right";
-  isSortable?: boolean;
-  isDefaultHide?: boolean;
+  sortable?: boolean;
+  defaultHidden?: boolean;
   disabled?: boolean;
 };
 
