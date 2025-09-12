@@ -2,9 +2,8 @@ import { useApp } from "@/app.context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useDebouncedCallback } from "@mantine/hooks";
-import Clarity from "@microsoft/clarity";
 import { useEffect, type FC } from "react";
-import { useTracking } from "./hooks";
+import { getClarity, useTracking } from "./hooks";
 
 export const GeneralAnalytics: FC = () => {
   const app = useApp();
@@ -24,8 +23,9 @@ export const GeneralAnalytics: FC = () => {
   }, [app.isInitialized, workspace.activatedModule]);
 
   useEffect(() => {
-    if (auth.user) {
-      Clarity.identify(auth.user._id, auth.device._id, undefined, auth.user.name);
+    const clarity = getClarity();
+    if (auth.user && clarity) {
+      clarity("identify", auth.user._id, auth.device._id, undefined, auth.user.name);
     }
   }, [auth.user]);
 

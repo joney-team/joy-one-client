@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 
 import { getWorkspaceMetadata } from "@/modules/workspaces/utils";
 import { type TemplateString } from "next/dist/lib/metadata/types/metadata-types";
+import { ScriptsAnalytics } from "@/components/analytics/scripts-analytics";
 
 import { defaultMetadata } from "@/configs/metadata.config";
 import type { AppMetadata } from "@/types";
@@ -22,8 +23,6 @@ import "@xyflow/react/dist/style.css";
 import "../styles/app.style.css";
 import "../styles/react-big-calendar.css";
 import { isExtendedApp } from "@/service";
-import config from "@joy-one-client/config";
-import Script from "next/script";
 
 export async function generateMetadata(): Promise<Metadata> {
   let metadata: AppMetadata = defaultMetadata;
@@ -100,17 +99,7 @@ export default async function RootLayout(props: Readonly<{ children: React.React
         />
       </body>
 
-      <Script
-        id="microsoft-clarity"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `(function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "${config.ANALYTICS_KEY}");`,
-        }}
-      />
+      <ScriptsAnalytics />
     </html>
   );
 }
