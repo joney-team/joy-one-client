@@ -1,13 +1,12 @@
 "use client";
 
-import { useAptabase } from "@aptabase/react";
+import Clarity from "@microsoft/clarity";
 
 export const useTracking = () => {
-  const { trackEvent } = useAptabase();
-
   return {
-    trackEvent: (event: string, data?: Record<string, any>) => {
-      trackEvent(event, data);
+    trackEvent: (event: string, value?: Record<string, any>) => {
+      console.debug(event, value);
+      Clarity.event(event);
     },
   };
 };
