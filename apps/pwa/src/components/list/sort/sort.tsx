@@ -14,7 +14,7 @@ export const Sort: FC<ListContext> = (props) => {
   const color = useColor();
   const layout = useLayout();
 
-  if (columnSettings.every((col) => !columns[col.id]?.isSortable)) return null;
+  if (columnSettings.every((col) => !columns[col.id]?.sortable)) return null;
 
   const sorting = columnSettings.filter(
     (col) => list.params[`sort${capitalizeFirstLetter(col.id, false)}`]
@@ -41,7 +41,7 @@ export const Sort: FC<ListContext> = (props) => {
       <Menu.Dropdown>
         {columnSettings.map((columnSetting) => {
           const column = columns[columnSetting.id];
-          if (!column || !column.isSortable) return null;
+          if (!column || !column.sortable) return null;
 
           const queryKey = getSortQueryKey(columnSetting.id);
           const querySort = list.params[queryKey];

@@ -35,7 +35,7 @@ export const OrderList: FC = () => {
         route="/orders"
         columns={{
           code: CodeColumn({ href: (value) => `/orders/${value}` }),
-          createdAt: DateTimeColumn({ name: "time", isSortable: true }),
+          createdAt: DateTimeColumn({ name: "time", sortable: true }),
           relatedCustomerId: CustomerColumn({
             name: "customer",
             valuePath: "relatedCustomer",
@@ -45,7 +45,7 @@ export const OrderList: FC = () => {
             valuePath: "createdByUser",
           }),
           items: OrderItemsColumn,
-          totalAmount: NumberColumn({ type: "money", isSortable: true }),
+          totalAmount: NumberColumn({ type: "money", sortable: true }),
           paymentStatus: StatusColumn({
             w: 200,
             options: Object.values(OrderPaymentStatus).map((status) => ({

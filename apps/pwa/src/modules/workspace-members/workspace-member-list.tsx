@@ -67,7 +67,7 @@ export const WorkspaceMemberList: FC = () => {
             isFromNow: true,
             hideTime: true,
             isHasFilter: false,
-            isSortable: true,
+            sortable: true,
             w: 180,
           }),
           email: {

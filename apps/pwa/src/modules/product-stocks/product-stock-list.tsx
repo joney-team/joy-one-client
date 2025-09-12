@@ -22,7 +22,7 @@ export const ProductStockList: FC = () => {
         name="product_stocks"
         route="/product-stocks"
         columns={{
-          createdAt: DateTimeColumn({ isSortable: true, name: "time" }),
+          createdAt: DateTimeColumn({ sortable: true, name: "time" }),
           productId: ProductColumn({
             type: ProductType.PRODUCT,
             valuePath: "product",
@@ -44,7 +44,7 @@ export const ProductStockList: FC = () => {
           }),
           code: { name: "product_stock_code" },
           quantity: {
-            isSortable: true,
+            sortable: true,
             render: ({ data }) => {
               return (
                 <Text>

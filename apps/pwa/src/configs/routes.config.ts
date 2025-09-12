@@ -1,5 +1,5 @@
 export type RouteRule = {
-  auth?: "auth" | "workspace" | "public";
+  auth?: "auth" | "workspace" | "public" | 'admin';
   workspace?: boolean;
 };
 
@@ -27,6 +27,14 @@ export const routeRules: Record<string, RouteRule> = {
   },
   '/bank-transactions/callback': {
     auth: 'workspace',
+    workspace: false,
+  },
+  '/admin/tools': {
+    auth: 'admin',
+    workspace: false,
+  },
+  '/admin/workspaces': {
+    auth: 'admin',
     workspace: false,
   },
 }

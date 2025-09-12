@@ -42,7 +42,7 @@ export const WorkspaceFileManager: FC = () => {
             })),
           }),
           size: {
-            isSortable: true,
+            sortable: true,
             render: ({ value }) => {
               return formatBytes(value ?? 0);
             },

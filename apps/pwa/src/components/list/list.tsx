@@ -175,7 +175,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
           id: v,
           name: column?.name || v,
           order: columnSetting ? columnSetting.order : i,
-          isVisible: columnSetting ? columnSetting.isVisible : !column?.isDefaultHide,
+          isVisible: columnSetting ? columnSetting.isVisible : !column?.defaultHidden,
         };
       })
       .sort((a, b) => a.order - b.order),
