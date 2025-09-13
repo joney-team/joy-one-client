@@ -24,7 +24,12 @@ import {
   rgba,
 } from "@mantine/core";
 import { spotlight } from "@mantine/spotlight";
-import { IconChevronLeft, IconLayoutSidebarLeftExpand, IconSearch } from "@tabler/icons-react";
+import {
+  IconChevronLeft,
+  IconLayoutSidebarLeftCollapse,
+  IconLayoutSidebarLeftExpand,
+  IconSearch,
+} from "@tabler/icons-react";
 import { FC, memo } from "react";
 import { workspaceLayoutConfig, useWorkspaceLayout } from "../hooks/use-workspace-layout";
 import { WorkspaceHeaderAccount } from "./header-account";
@@ -32,7 +37,7 @@ import { WorkspaceHeaderBreadcrumbs } from "./header-breadcrumbs";
 import { WorkspaceHeaderShortcuts } from "./header-shortcuts";
 import { WorkspaceHeaderTasksBreadcrumbs } from "./header-tasks-breadcrumbs";
 
-export const WorkspaceHeader: FC = memo(() => {
+export const HeaderWorkspace: FC = memo(() => {
   const router = useRouter();
   const layout = useLayout();
   const workspace = useWorkspace();
@@ -108,19 +113,23 @@ export const WorkspaceHeader: FC = memo(() => {
     >
       <Group gap={5} flex={1} wrap="nowrap">
         <Group gap={5} flex={1} wrap="nowrap">
-          <Renderer visible={workspaceLayout.isNavbarCollapsed}>
-            <ActionIcon
-              variant="subtle"
-              color="gray.6"
-              onClick={() =>
-                workspaceLayout.setNavigationWidth(
-                  workspaceLayoutConfig.defaultNavigationExpandedWidth
-                )
-              }
-            >
+          <ActionIcon
+            variant="subtle"
+            color="gray.6"
+            onClick={() => {
+              workspaceLayout.setNavigationWidth(
+                workspaceLayout.isNavbarCollapsed
+                  ? workspaceLayoutConfig.defaultNavigationExpandedWidth
+                  : workspaceLayoutConfig.minNavigationWidth
+              );
+            }}
+          >
+            {workspaceLayout.isNavbarCollapsed ? (
               <IconLayoutSidebarLeftExpand strokeWidth={1.5} size={20} />
-            </ActionIcon>
-          </Renderer>
+            ) : (
+              <IconLayoutSidebarLeftCollapse strokeWidth={1.5} size={20} />
+            )}
+          </ActionIcon>
 
           <WorkspaceHeaderTasksBreadcrumbs />
           <WorkspaceHeaderBreadcrumbs />

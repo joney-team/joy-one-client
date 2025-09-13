@@ -20,21 +20,26 @@ const AppNavigation = dynamic(
   }
 );
 
-const WorkspaceHeader = dynamic(() => import("./header/header").then((m) => m.WorkspaceHeader), {
-  ssr: false,
-});
+const HeaderWorkspace = dynamic(
+  () => import("./header/header-workspace").then((m) => m.HeaderWorkspace),
+  {
+    ssr: false,
+  }
+);
 
 export const LayoutWorkspace: FC = () => {
   const layout = useLayout();
   const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
   const colorScheme = useColorScheme();
+
   const _pinned = useHeadroom({
     fixedAt:
       layout.view === "mobile"
         ? workspaceLayout.navigationHeight / 2
         : workspaceLayout.headerHeight / 2,
   });
+
   const pinned =
     layout.view === "mobile" && !layout.isStandalone ? !layout.isBrowerCollapsed : _pinned;
 
@@ -83,7 +88,7 @@ export const LayoutWorkspace: FC = () => {
       >
         {workspace.isAvailable && (
           <Suspense>
-            <WorkspaceHeader />
+            <HeaderWorkspace />
           </Suspense>
         )}
       </Stack>
