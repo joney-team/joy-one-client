@@ -1,5 +1,7 @@
 "use client";
 
+import config from "@joy-one-client/config";
+
 export const getClarity = () => {
   return (window as any).clarity;
 };
@@ -7,6 +9,7 @@ export const getClarity = () => {
 export const useTracking = () => {
   return {
     trackEvent: (event: string) => {
+      if (config.isDevelopment) return null;
       const clarity = getClarity();
       if (clarity) clarity("event", event);
     },
