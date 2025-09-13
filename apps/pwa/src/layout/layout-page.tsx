@@ -65,7 +65,6 @@ export function Layout<P>({
           : {
               paddingTop: workspaceLayout.headerHeight,
               paddingLeft: workspaceLayout.navigationWidth,
-              transition: workspaceLayout.transition("padding-left"),
             }
       }
     >

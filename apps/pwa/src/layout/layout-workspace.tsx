@@ -78,8 +78,6 @@ export const LayoutWorkspace: FC = () => {
                 paddingLeft: workspaceLayout.navigationWidth,
                 zIndex: zIndexes.pannel,
                 borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
-                transform: `translate3d(0, ${pinned ? 0 : "-110px"}, 0)`,
-                transition: workspaceLayout.transition("padding-left"),
               }
         }
       >

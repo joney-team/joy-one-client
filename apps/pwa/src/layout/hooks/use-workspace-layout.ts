@@ -27,6 +27,9 @@ export const workspaceLayoutConfig = {
   defaultNavigationCollapsedWidth: 80,
   mobileNavigationHeight: 55,
   standaloneNavigationHeight: 75,
+  headerHeight: 48,
+  minNavigationWidth: 62,
+  maxNavigationWidth: 400,
 };
 
 export const useWorkspaceLayout = (): WorkspaceLayoutState => {
@@ -43,8 +46,6 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
   }, [pathname, params]);
 
   const state = useMemo(() => {
-    const headerHeight = layout.view === "mobile" ? 48 : 48;
-
     const navigationWidth = navigationWidthStorage
       ? +navigationWidthStorage
       : workspaceLayoutConfig.defaultNavigationExpandedWidth;
@@ -58,11 +59,11 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
     return {
       navigationWidth,
       navigationHeight,
-      headerHeight,
+      headerHeight: workspaceLayoutConfig.headerHeight,
       headerWidth: layout.width - navigationWidth,
       isNavbarCollapsed: navigationWidth <= workspaceLayoutConfig.defaultNavigationCollapsedWidth * 2,
       bodyWidth: layout.width - navigationWidth,
-      bodyHeight: layout.height - headerHeight,
+      bodyHeight: layout.height - workspaceLayoutConfig.headerHeight,
     };
   }, [layout.width, layout.height, layout.isBrowerCollapsed, colorScheme, navigationWidthStorage, isDetailPage]);
 
