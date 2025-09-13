@@ -125,18 +125,6 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
               {workspace.userMember.workspace.name}
             </Text>
           </Stack>
-
-          <ActionIcon
-            variant="subtle"
-            color="var(--mantine-color-dimmed)"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              workspaceLayout.setNavigationWidth(workspaceLayoutConfig.minNavigationWidth);
-            }}
-          >
-            <IconLayoutSidebarLeftCollapse strokeWidth={1.6} size={20} />
-          </ActionIcon>
         </Renderer>
       </Group>
 
