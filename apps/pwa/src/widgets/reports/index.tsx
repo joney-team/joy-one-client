@@ -291,6 +291,7 @@ export const ReportWidgets: FC = () => {
 
         {workspace.isShouldEnableBranches && (
           <WorkspaceBranchSelector
+            isShowRoot
             onSelect={(branch) => {
               if (!branch) return;
               report.setParam("workspaceBranchIds", branch._id);
@@ -299,9 +300,10 @@ export const ReportWidgets: FC = () => {
               return (
                 <Hovered>
                   {(hover) => {
-                    const workspaceBranch = workspaceBranches.find((v) =>
-                      query.workspaceBranchIds.includes(v._id)
-                    );
+                    const workspaceBranch = [
+                      ...workspaceBranches,
+                      { _id: "root", name: t("main_workspace_branch") },
+                    ].find((v) => query.workspaceBranchIds.includes(v._id));
 
                     return (
                       <Group
@@ -313,7 +315,11 @@ export const ReportWidgets: FC = () => {
                           onClick={ctx.toggle}
                           size="compact-md"
                           h={32}
-                          color={query.userId ? "primary" : "var(--mantine-color-dimmed)"}
+                          color={
+                            query.workspaceBranchIds.length > 0
+                              ? "primary"
+                              : "var(--mantine-color-dimmed)"
+                          }
                           variant="outline"
                           radius={100}
                           fz={12}
