@@ -9,8 +9,7 @@
     "ws:apps:dev": "pnpm run:prepare && NEXT_PUBLIC_EXTENDED_APP=true next dev",
     "ws:apps:build": "pnpm run:prepare && NEXT_PUBLIC_EXTENDED_APP=true next build",
     "ws:apps:start": "NEXT_PUBLIC_EXTENDED_APP=true next start",
-    "run:prepare": "node scripts/prepare.js",
-    "analyze": "ANALYZE=true pnpm build"
+    "run:prepare": "node scripts/prepare.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

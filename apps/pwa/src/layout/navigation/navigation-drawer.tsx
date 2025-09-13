@@ -132,9 +132,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              workspaceLayout.setNavigationWidth(
-                workspaceLayoutConfig.defaultNavigationCollapsedWidth
-              );
+              workspaceLayout.setNavigationWidth(workspaceLayoutConfig.minNavigationWidth);
             }}
           >
             <IconLayoutSidebarLeftCollapse strokeWidth={1.6} size={20} />

@@ -42,11 +42,13 @@ const environmentConfigs: Record<string, EnvironmentConfig> = {
 
 export type Config = EnvironmentConfig & {
   ENV: string;
+  isDevelopment: boolean;
 };
 
 const config: Config = {
   ...environmentConfigs[ENV] || environmentConfigs.development,
   ENV,
+  isDevelopment: ENV === "development",
 };
 
 export default config;

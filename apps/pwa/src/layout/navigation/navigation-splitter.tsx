@@ -1,28 +1,22 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { Stack } from "@mantine/core";
 import { useMouse } from "@mantine/hooks";
 import { FC, Fragment, LegacyRef, useEffect, useRef, useState } from "react";
-import { useWorkspaceLayout } from "../hooks/use-workspace-layout";
+import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 import { useLayout } from "../layout-context";
-import { zIndexes } from "@joy-one-client/config/layout";
-
-const config = {
-  minNavigationWidth: 60,
-  maxNavigationWidth: 400,
-};
 
 const SplitPointer: FC<{ ref: LegacyRef<HTMLDivElement> | undefined }> = (props) => {
   const color = useColor();
   const mouse = useMouse({ resetOnExit: false });
-  const workspaceLayout = useWorkspaceLayout();
 
   const width =
-    mouse.x <= config.minNavigationWidth
-      ? config.minNavigationWidth
-      : mouse.x >= config.maxNavigationWidth
-      ? config.maxNavigationWidth
+    mouse.x <= workspaceLayoutConfig.minNavigationWidth
+      ? workspaceLayoutConfig.minNavigationWidth
+      : mouse.x >= workspaceLayoutConfig.maxNavigationWidth
+      ? workspaceLayoutConfig.maxNavigationWidth
       : mouse.x;
 
   return (
