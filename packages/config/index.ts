@@ -48,6 +48,7 @@ export type Config = EnvironmentConfig & {
 const config: Config = {
   ...environmentConfigs[ENV] || environmentConfigs.development,
   ENV,
+  // @ts-ignore
   isDevelopment: ENV === "development",
 };
 
