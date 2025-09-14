@@ -67,7 +67,13 @@ const SaleTab: FC<SaleTabProps> = (props) => {
         <Group w={10} justify="center" align="center">
           <Circle size={8} bg={color(props.dotColor ?? "primary.3")} />
         </Group>
-        <Text fz={14} fw={500} c={props.active ? "dark" : "white"}>
+        <Text
+          fz={14}
+          fw={500}
+          c={props.active ? "dark" : "white"}
+          truncate="end"
+          maw={props.active ? undefined : 40}
+        >
           {props.name}
         </Text>
         <ActionIcon
@@ -119,7 +125,7 @@ export const OrderSaleTabs: FC = () => {
       {orderSale.orders.map((order, index) => (
         <SaleTab
           key={order.id}
-          name={order.code ?? `${t("order")} ${index + 1}`}
+          name={order.code ?? `#${index + 1} ${t("order")} `}
           active={order.id === orderSale.activeOrderId}
           onClose={() => orderSale.closeOrder()}
           onClick={() => orderSale.setActiveOrderId(order.id)}
@@ -130,7 +136,7 @@ export const OrderSaleTabs: FC = () => {
 
       <Stack h={config.tabHeight} justify="center" px={10}>
         <Tooltip label={t("create_entity", { entity: t("order") })}>
-          <ActionIcon onClick={() => orderSale.addOrder()}>
+          <ActionIcon onClick={() => orderSale.addOrder()} size="lg">
             <IconCirclePlus size={20} />
           </ActionIcon>
         </Tooltip>

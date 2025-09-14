@@ -25,7 +25,6 @@ interface WorkspaceLayoutState {
 
 export const workspaceLayoutConfig = {
   defaultNavigationExpandedWidth: 200,
-  defaultNavigationCollapsedWidth: 80,
   mobileNavigationHeight: 55,
   standaloneNavigationHeight: 75,
   headerHeight: 48,
@@ -40,11 +39,13 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
   const color = useColor();
   const colorScheme = useColorScheme();
   const routeRule = useRouteRule();
-  const [navigationWidthStorage, setNavigationWidthStorage] = useLocalStorage({ key: StorageKey.LAYOUT_NAVIGATION_WIDTH });
+  const [navigationWidthStorage, setNavigationWidthStorage] = useLocalStorage({
+    key: StorageKey.LAYOUT_NAVIGATION_WIDTH,
+  });
 
   const isDetailPage = useMemo(() => {
-    if (pathname.startsWith('/tasks')) return false;
-    return Object.keys(params).length > 0
+    if (pathname.startsWith("/tasks")) return false;
+    return Object.keys(params).length > 0;
   }, [pathname, params]);
 
   const state = useMemo(() => {
@@ -54,22 +55,32 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
       ? +navigationWidthStorage
       : workspaceLayoutConfig.defaultNavigationExpandedWidth;
 
-    const navigationHeight = layout.view === 'mobile' && isDetailPage ? 0 : (layout.isStandalone
-      ? workspaceLayoutConfig.standaloneNavigationHeight
-      : layout.view === "mobile"
+    const navigationHeight =
+      layout.view === "mobile" && isDetailPage
+        ? 0
+        : layout.isStandalone
+        ? workspaceLayoutConfig.standaloneNavigationHeight
+        : layout.view === "mobile"
         ? workspaceLayoutConfig.mobileNavigationHeight
-        : layout.height);
+        : layout.height;
 
     return {
       navigationWidth,
       navigationHeight,
       headerHeight: headerHeight,
       headerWidth: layout.width - navigationWidth,
-      isNavbarCollapsed: navigationWidth <= workspaceLayoutConfig.defaultNavigationCollapsedWidth * 2,
+      isNavbarCollapsed: navigationWidth <= workspaceLayoutConfig.minNavigationWidth * 1.5,
       bodyWidth: layout.width - navigationWidth,
       bodyHeight: layout.height - headerHeight,
     };
-  }, [layout.width, layout.height, layout.isBrowerCollapsed, colorScheme, navigationWidthStorage, isDetailPage]);
+  }, [
+    layout.width,
+    layout.height,
+    layout.isBrowerCollapsed,
+    colorScheme,
+    navigationWidthStorage,
+    isDetailPage,
+  ]);
 
   return {
     ...state,
