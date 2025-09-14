@@ -1,6 +1,7 @@
 export type RouteRule = {
   auth?: "auth" | "workspace" | "public" | 'admin';
   workspace?: boolean;
+  isHideHeader?: boolean;
 };
 
 export const defaultRouteRule: RouteRule = {
@@ -36,5 +37,10 @@ export const routeRules: Record<string, RouteRule> = {
   '/admin/workspaces': {
     auth: 'admin',
     workspace: false,
+  },
+  '/orders/sale': {
+    auth: 'workspace',
+    workspace: true,
+    isHideHeader: true,
   },
 }

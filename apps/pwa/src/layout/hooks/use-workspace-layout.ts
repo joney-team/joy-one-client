@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { useLayout } from "../layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useParams, usePathname } from "next/navigation";
+import { useRouteRule } from "@/hooks/use-router";
 
 interface WorkspaceLayoutState {
   navigationWidth: number;
@@ -38,6 +39,7 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
   const layout = useLayout();
   const color = useColor();
   const colorScheme = useColorScheme();
+  const routeRule = useRouteRule();
   const [navigationWidthStorage, setNavigationWidthStorage] = useLocalStorage({ key: StorageKey.LAYOUT_NAVIGATION_WIDTH });
 
   const isDetailPage = useMemo(() => {
@@ -46,6 +48,8 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
   }, [pathname, params]);
 
   const state = useMemo(() => {
+    const headerHeight = routeRule.isHideHeader ? 0 : workspaceLayoutConfig.headerHeight;
+
     const navigationWidth = navigationWidthStorage
       ? +navigationWidthStorage
       : workspaceLayoutConfig.defaultNavigationExpandedWidth;
@@ -59,11 +63,11 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
     return {
       navigationWidth,
       navigationHeight,
-      headerHeight: workspaceLayoutConfig.headerHeight,
+      headerHeight: headerHeight,
       headerWidth: layout.width - navigationWidth,
       isNavbarCollapsed: navigationWidth <= workspaceLayoutConfig.defaultNavigationCollapsedWidth * 2,
       bodyWidth: layout.width - navigationWidth,
-      bodyHeight: layout.height - workspaceLayoutConfig.headerHeight,
+      bodyHeight: layout.height - headerHeight,
     };
   }, [layout.width, layout.height, layout.isBrowerCollapsed, colorScheme, navigationWidthStorage, isDetailPage]);
 

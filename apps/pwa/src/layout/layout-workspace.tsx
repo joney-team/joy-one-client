@@ -1,5 +1,6 @@
 "use client";
 
+import OverlayLoading from "@/components/overlay-loading";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { backgroundColors, backgroundPatternColors } from "@joy-one-client/config/colors";
@@ -11,7 +12,6 @@ import { Fragment, Suspense, useEffect, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 import { WorkspaceNavigationSplitter } from "./navigation/navigation-splitter";
-import OverlayLoading from "@/components/overlay-loading";
 
 const AppNavigation = dynamic(
   () => import("./navigation/navigation").then((m) => m.AppNavigation),
@@ -60,38 +60,40 @@ export const LayoutWorkspace: FC = () => {
 
   return (
     <Fragment>
-      <Stack
-        gap={0}
-        bg={workspaceLayout.pannelBackground}
-        pos="fixed"
-        style={
-          layout.view === "mobile"
-            ? {
-                top: 0,
-                right: 0,
-                width: "100dvw",
-                height: workspaceLayout.headerHeight,
-                zIndex: zIndexes.pannel,
-                borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
-                transform: `translate3d(0, ${pinned ? 0 : "-110px"}, 0)`,
-              }
-            : {
-                top: 0,
-                left: 0,
-                width: "100dvw",
-                height: workspaceLayout.headerHeight,
-                paddingLeft: workspaceLayout.navigationWidth,
-                zIndex: zIndexes.pannel,
-                borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
-              }
-        }
-      >
-        {workspace.isAvailable && (
-          <Suspense>
-            <HeaderWorkspace />
-          </Suspense>
-        )}
-      </Stack>
+      {workspaceLayout.headerHeight > 0 && (
+        <Stack
+          gap={0}
+          bg={workspaceLayout.pannelBackground}
+          pos="fixed"
+          style={
+            layout.view === "mobile"
+              ? {
+                  top: 0,
+                  right: 0,
+                  width: "100dvw",
+                  height: workspaceLayout.headerHeight,
+                  zIndex: zIndexes.pannel,
+                  borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
+                  transform: `translate3d(0, ${pinned ? 0 : "-110px"}, 0)`,
+                }
+              : {
+                  top: 0,
+                  left: 0,
+                  width: "100dvw",
+                  height: workspaceLayout.headerHeight,
+                  paddingLeft: workspaceLayout.navigationWidth,
+                  zIndex: zIndexes.pannel,
+                  borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
+                }
+          }
+        >
+          {workspace.isAvailable && (
+            <Suspense>
+              <HeaderWorkspace />
+            </Suspense>
+          )}
+        </Stack>
+      )}
 
       {workspaceLayout.navigationHeight > 0 && (
         <Stack

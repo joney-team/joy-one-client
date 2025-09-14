@@ -23,7 +23,6 @@ import { useDisclosure, useElementSize, useHover } from "@mantine/hooks";
 import {
   IconBuildingSkyscraper,
   IconLayout,
-  IconLayoutSidebarLeftCollapse,
   IconPlus,
   IconPuzzle,
   IconSettings,
@@ -35,7 +34,7 @@ import {
 import Link from "next/link";
 import { FC, Fragment } from "react";
 import { Avatar } from "../../components/avatar";
-import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+import { useWorkspaceLayout } from "../hooks/use-workspace-layout";
 
 interface WorkspaceNavigationDrawerProps {
   style?: MantineStyleProp;

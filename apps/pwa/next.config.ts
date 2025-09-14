@@ -2,6 +2,7 @@ import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  reactStrictMode: false,
   env: {
     NEXT_PUBLIC_EXTENDED_APP: process.env['NEXT_PUBLIC_EXTENDED_APP'],
   },
