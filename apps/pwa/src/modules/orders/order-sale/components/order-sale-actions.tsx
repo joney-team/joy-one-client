@@ -9,13 +9,13 @@ export const OrderSaleActions: FC = () => {
   const orderSale = useOrderSale();
 
   return (
-    <Group>
+    <Group gap={8} pr={8}>
       <ActionIcon>
-        <IconPrinter size={20} />
+        <IconPrinter size={20} strokeWidth={1.5} />
       </ActionIcon>
 
       <ActionIcon onClick={orderSale.removeOrder}>
-        <IconTrash size={20} />
+        <IconTrash size={20} strokeWidth={1.5} />
       </ActionIcon>
     </Group>
   );

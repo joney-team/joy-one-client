@@ -69,17 +69,23 @@ export const orderPaymentStatusOptions: {
 
 export const onPayOrder = async (
   order: OrderEntity,
-  args?: Pick<ModalPayReceiptProps, "onClosed" | "onPaid"> & { tipAmount?: number }
+  args?: Pick<ModalPayReceiptProps, "onClosed" | "onPaid"> & {
+    tipAmount?: number;
+    isWithoutActionLoad?: boolean;
+  }
 ) => {
+  const process = async () => {
+    const receipt = await payOrder(order.id, {
+      amount: order.totalAmount - order.paidAmount,
+      tipAmount: args?.tipAmount,
+    });
+    OnModalPayReceipt({ receipt, onClosed: args?.onClosed, onPaid: args?.onPaid });
+  };
+
+  if (args?.isWithoutActionLoad) return process();
+
   return onActionLoad({
     isShowCompleted: false,
-    process: async () => {
-      const receipt = await payOrder(order.id, {
-        amount: order.totalAmount - order.paidAmount,
-        tipAmount: args?.tipAmount,
-      });
-
-      OnModalPayReceipt({ receipt, onClosed: args?.onClosed, onPaid: args?.onPaid });
-    },
+    process,
   });
 };

@@ -81,7 +81,7 @@ export const OrderSaleItemComponent: FC<{
           />
 
           <Stack gap={0}>
-            <Text fw={500} truncate="end" w={300}>
+            <Text fw={500} truncate="end" w={250}>
               {item.product.displayName || item.product.name}
             </Text>
             <Group>
@@ -97,7 +97,7 @@ export const OrderSaleItemComponent: FC<{
           </Stack>
         </Group>
 
-        <Group gap={30} justify="end">
+        <Group gap={20} justify="end">
           <WorkspaceMembersInput
             collapsed
             value={item.assigneeUsers}
@@ -167,7 +167,7 @@ export const OrderSaleItemComponent: FC<{
             value={item.price}
             hideControls
             radius={0}
-            w={150}
+            w={100}
             readOnly={!item.product.minPrice || !item.product.maxPrice}
             styles={{
               input: {

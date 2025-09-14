@@ -1,12 +1,15 @@
 "use client";
 
+import { Button } from "@/components/buttons/button";
 import { useRouter } from "@/hooks/use-router";
 import { workspaceLayoutConfig } from "@/layout/hooks/use-workspace-layout";
 import { useQuery } from "@/modules/apis/use-query";
+import { useEventsListener } from "@/modules/events/event-service";
+import { EventType } from "@/modules/events/event-types";
 import { t, tMulti } from "@/modules/lang/lang-service";
 import { onArchive } from "@/utils/actions";
 import { timeToSeconds } from "@joy-one-client/utils/date-time";
-import { Group, Stack } from "@mantine/core";
+import { Group, Stack, Title } from "@mantine/core";
 import { readLocalStorageValue, useLocalStorage, UseStorageOptions } from "@mantine/hooks";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, type FC } from "react";
@@ -15,22 +18,19 @@ import { OrderCalculateDto } from "../orders-dtos";
 import {
   archiveOrder,
   createOrder,
-  getOrderByCode,
   getOrderById,
   getOrderList,
   onPayOrder,
   updateOrder,
 } from "../orders-service";
-import { OrderCalculated, OrderPaymentStatus } from "../orders-types";
+import { OrderCalculated } from "../orders-types";
 import { OrderSaleCheckout } from "./components/order-sale-checkout";
 import { OrderSaleHeader } from "./components/order-sale-header";
 import { OrderSaleItems } from "./components/order-sale-items";
 import { Context } from "./order-sale-context";
 import type { OrderSaleContext, OrderSaleContextState, TOrderSale } from "./order-sale-types";
 import { normalizeOrderSale, normalizeOrderSaleForCalculate } from "./order-sale-utils";
-import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
-import { onError } from "@/utils/exceptions.utils";
+import { IconList, IconPlus } from "@tabler/icons-react";
 
 const initialStorage: UseStorageOptions<OrderSaleContextState> = {
   key: "order-sale",
@@ -154,7 +154,7 @@ export const OrderSale: FC = () => {
     if (!activeOrder || totalAmount === 0) return;
     if (!activeOrder.isSaved || activeOrder.isDirty) await saveOrder();
     const order = await getOrderById(activeOrder.id);
-    await onPayOrder(order);
+    await onPayOrder(order, { isWithoutActionLoad: true });
     await fetchOrder(activeOrder.id);
   };
 
@@ -249,7 +249,7 @@ export const OrderSale: FC = () => {
       <Stack h="100dvh" gap={0}>
         <OrderSaleHeader />
 
-        {activeOrder && (
+        {activeOrder ? (
           <Group
             w="100%"
             h={`calc(100dvh - ${workspaceLayoutConfig.headerHeight}px)`}
@@ -259,6 +259,25 @@ export const OrderSale: FC = () => {
             <OrderSaleItems key={activeOrder.id + "items"} />
             <OrderSaleCheckout key={activeOrder.id + "checkout"} />
           </Group>
+        ) : (
+          <Stack flex={1} h="100%" justify="center" align="center">
+            <Title fw={400} ta="center">
+              {t("order_sale_title")}
+            </Title>
+            <Group justify="center" align="center">
+              <Button
+                variant="outline"
+                color="gray"
+                onClick={() => router.push("/orders")}
+                leftIcon={IconList}
+              >
+                {t("list")}
+              </Button>
+              <Button onClick={() => context.addOrder()} leftIcon={IconPlus}>
+                {t("create_entity", { entity: t("order") })}
+              </Button>
+            </Group>
+          </Stack>
         )}
       </Stack>
     </Context.Provider>

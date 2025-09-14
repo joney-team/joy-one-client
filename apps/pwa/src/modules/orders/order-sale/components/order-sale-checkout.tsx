@@ -31,7 +31,7 @@ export const OrderSaleCheckout: FC = () => {
   const paidAmount = orderSale.activeOrder?.paidAmount ?? 0;
 
   return (
-    <Stack h="100%" w={500} p={12} pl={0}>
+    <Stack h="100%" w={480} p={12} pl={0}>
       <Card shadow="xs" mih="100%">
         <Stack mih="100%">
           <Stack flex={1}>
