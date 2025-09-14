@@ -5,7 +5,7 @@ import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-membe
 import { OrderCalculated, OrderPaymentStatus } from "../orders-types";
 import { OrderEntity } from "../order-entity";
 
-export type OrderSaleProduct = Pick<
+export type OrderProduct = Pick<
   ProductEntity,
   | "_id"
   | "name"
@@ -19,20 +19,20 @@ export type OrderSaleProduct = Pick<
   | "type"
 >;
 
-export interface OrderSaleItem {
-  product: OrderSaleProduct;
+export interface OrderItem {
+  product: OrderProduct;
   quantity: number;
   price: number;
   assigneeUsers: WorkspaceMemberInfo[];
   note?: string;
 }
 
-export interface TOrderSale {
+export interface Order {
   id: string;
   isSaved: boolean;
   isDirty?: boolean;
   code?: string;
-  items: OrderSaleItem[];
+  items: OrderItem[];
   relatedCustomer?: CustomerShortInfo | null;
   directDiscount?: number;
   note?: string;
@@ -43,23 +43,23 @@ export interface TOrderSale {
   tipAmount?: number;
 }
 
-export interface OrderSaleContextState {
-  orders: TOrderSale[];
+export interface OrdersManagementState {
+  orders: Order[];
   activeOrderId: string;
 }
 
-export interface OrderSaleContext extends OrderSaleContextState {
+export interface OrdersManagementContext extends OrdersManagementState {
   isInitialized: boolean;
-  activeOrder: TOrderSale | null;
+  activeOrder: Order | null;
   setActiveOrderId: (orderId: string) => void;
   addOrder: (order?: OrderEntity) => void;
-  addProduct: (product: OrderSaleProduct) => void;
+  addProduct: (product: OrderProduct) => void;
   removeProduct: (productId: string) => void;
-  updateProductItem: (productId: string, item: Partial<Omit<OrderSaleItem, "product">>) => void;
+  updateProductItem: (productId: string, item: Partial<Omit<OrderItem, "product">>) => void;
   closeOrder: () => void;
   removeOrder: () => void;
   calculating: UseQuery<OrderCalculated>;
-  updateOrder: (values: Partial<TOrderSale>) => void;
+  updateOrder: (values: Partial<Order>) => void;
   payOrder: () => Promise<void>;
   saveOrder: () => Promise<void>;
 }

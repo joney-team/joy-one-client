@@ -9,6 +9,7 @@ export const WorkspaceLayoutSidebarCollapseButton: FC<WorkspaceLayoutSidebarColl
   props
 ) => {
   const workspaceLayout = useWorkspaceLayout();
+
   return (
     <ActionIcon
       variant="subtle"

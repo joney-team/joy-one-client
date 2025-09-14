@@ -1,9 +1,9 @@
 import { OrderEntity } from "../order-entity";
 import { OrderCalculateDto } from "../orders-dtos";
 import { OrderType } from "../orders-types";
-import { TOrderSale } from "./order-sale-types";
+import { Order } from "./orders-management-types";
 
-export const normalizeOrderSale = (order: OrderEntity): TOrderSale => {
+export const normalizeOrderSale = (order: OrderEntity): Order => {
   return {
     id: order.id,
     isSaved: true,
@@ -24,7 +24,7 @@ export const normalizeOrderSale = (order: OrderEntity): TOrderSale => {
   };
 };
 
-export const normalizeOrderSaleForCalculate = (orderSale: TOrderSale): OrderCalculateDto => {
+export const normalizeOrderSaleForCalculate = (orderSale: Order): OrderCalculateDto => {
   return {
     id: orderSale.id,
     type: OrderType.COMMON,

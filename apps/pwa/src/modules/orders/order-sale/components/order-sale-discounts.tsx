@@ -5,11 +5,11 @@ import { num, t } from "@/modules/lang/lang-service";
 import { Group, Skeleton, Text } from "@mantine/core";
 import { IconCoin, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { useOrderSale } from "../order-sale-context";
+import { userOrdersManagement } from "../../orders-management/orders-management-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 
 export const OrderSaleDiscounts: FC = () => {
-  const orderSale = useOrderSale();
+  const orderSale = userOrdersManagement();
   const directDiscount = orderSale.activeOrder?.directDiscount ?? 0;
 
   const onDirectDiscount = () => {

@@ -7,11 +7,11 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Group, Skeleton, Text } from "@mantine/core";
 import { IconCoin, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { useOrderSale } from "../order-sale-context";
+import { userOrdersManagement } from "../../orders-management/orders-management-context";
 
 export const OrderSaleTip: FC = () => {
   const workspace = useWorkspace();
-  const orderSale = useOrderSale();
+  const orderSale = userOrdersManagement();
   const tipAmount = orderSale.activeOrder?.tipAmount ?? 0;
 
   const onTip = () => {

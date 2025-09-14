@@ -3,13 +3,13 @@
 import { ActionIcon, Group } from "@mantine/core";
 import { IconPrinter, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
-import { useOrderSale } from "../order-sale-context";
+import { userOrdersManagement } from "../../orders-management/orders-management-context";
 
 export const OrderSaleActions: FC = () => {
-  const orderSale = useOrderSale();
+  const orderSale = userOrdersManagement();
 
   return (
-    <Group gap={8} pr={8}>
+    <Group gap={8}>
       <ActionIcon>
         <IconPrinter size={20} strokeWidth={1.5} />
       </ActionIcon>
