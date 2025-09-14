@@ -298,7 +298,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
               <Stack
                 style={{
                   maxWidth: "100%",
-                  overflowX: "visible",
+                  overflowX: "scroll",
                 }}
               >
                 <ListTable {...ctx} />
