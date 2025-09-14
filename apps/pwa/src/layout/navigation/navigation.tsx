@@ -186,8 +186,8 @@ export const AppNavigation: FC = () => {
       <WorkspaceNavigationDrawer
         targetProps={{
           w: "100%",
-          h: workspaceLayout.headerHeight,
-          mih: workspaceLayout.headerHeight,
+          h: workspaceLayoutConfig.headerHeight,
+          mih: workspaceLayoutConfig.headerHeight,
           style: {
             borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
           },

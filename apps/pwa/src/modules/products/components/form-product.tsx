@@ -241,8 +241,9 @@ export const FormProduct: FC<
                 <ImageInput {...form.getInputProps("image")} w={150} h={150} />
 
                 <TextInput withAsterisk label={t("name")} {...form.getInputProps("name")} />
-
                 <TextInput withAsterisk label={t("unit")} {...form.getInputProps("unit")} />
+
+                <TextInput label={t("code")} {...form.getInputProps("code")} />
 
                 <Renderer visible={type === ProductType.PRODUCT}>
                   <NumberInput

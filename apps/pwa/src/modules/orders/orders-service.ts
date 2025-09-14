@@ -1,4 +1,7 @@
-import { OnModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
+import {
+  ModalPayReceiptProps,
+  OnModalPayReceipt,
+} from "@/modules/receipts/modals/modal-pay-receipt";
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
 import { api } from "../apis";
@@ -15,12 +18,16 @@ export async function getOrderById(id: string) {
   return api.get<OrderEntity>(`/orders/ids/${id}`);
 }
 
+export async function getOrdersByIds(ids: string[]) {
+  return api.get<OrderEntity[]>(`/orders/ids`, { params: { ids } });
+}
+
 export async function getOrderList(query?: any) {
-  return api.get<ResponseList<OrderEntity>>('/orders', { params: query });
+  return api.get<ResponseList<OrderEntity>>("/orders", { params: query });
 }
 
 export async function createOrder(dto: OrderDto) {
-  return api.post<OrderEntity>('/orders', dto);
+  return api.post<OrderEntity>("/orders", dto);
 }
 
 export async function updateOrder(id: string, dto: OrderDto) {
@@ -28,7 +35,7 @@ export async function updateOrder(id: string, dto: OrderDto) {
 }
 
 export async function calculateOrder(dto: OrderCalculateDto) {
-  return api.post<OrderCalculated>('/orders/calculate', dto);
+  return api.post<OrderCalculated>("/orders/calculate", dto);
 }
 
 export async function payOrder(id: string, dto: PayOrderDto) {
@@ -40,7 +47,7 @@ export async function archiveOrder(id: string) {
 }
 
 export async function getOrders(query?: any) {
-  return api.get<ResponseList<OrderEntity>>('/orders', { params: query });
+  return api.get<ResponseList<OrderEntity>>("/orders", { params: query });
 }
 
 export async function syncOrder(id: string) {
@@ -49,28 +56,30 @@ export async function syncOrder(id: string) {
 
 export const orderPaymentStatusOptions: {
   [key in OrderPaymentStatus]: {
-    color: string,
-  }
+    color: string;
+  };
 } = {
   [OrderPaymentStatus.PROCESSING]: {
-    color: 'primary',
+    color: "primary",
   },
   [OrderPaymentStatus.COMPLETED]: {
-    color: 'green',
-  }
-}
+    color: "green",
+  },
+};
 
-export const onPayOrder = async (order: OrderEntity) => {
-  if (order.paymentStatus === OrderPaymentStatus.COMPLETED) return;
-
-  onActionLoad({
+export const onPayOrder = async (
+  order: OrderEntity,
+  args?: Pick<ModalPayReceiptProps, "onClosed" | "onPaid"> & { tipAmount?: number }
+) => {
+  return onActionLoad({
     isShowCompleted: false,
     process: async () => {
       const receipt = await payOrder(order.id, {
         amount: order.totalAmount - order.paidAmount,
-      })
+        tipAmount: args?.tipAmount,
+      });
 
-      OnModalPayReceipt({ receipt })
-    }
-  })
-}
+      OnModalPayReceipt({ receipt, onClosed: args?.onClosed, onPaid: args?.onPaid });
+    },
+  });
+};

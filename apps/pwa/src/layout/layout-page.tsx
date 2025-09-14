@@ -3,7 +3,6 @@
 import { PageLazyLoad, PageLoading } from "@/components/lazy-load";
 import { useRouteRule } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
-import { UserRole } from "@/modules/users/users-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Stack } from "@mantine/core";
 import dynamic, { DynamicOptions, Loader } from "next/dynamic";

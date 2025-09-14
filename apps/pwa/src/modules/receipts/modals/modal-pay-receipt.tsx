@@ -57,7 +57,7 @@ import { PrintButton } from "../../../modals/modal-printer";
 import { OnReceiptDetailModal } from "./modal-receipt-detail";
 import { getWorkspaceBranchById } from "@/modules/workspace-branches/workspace-branches-service";
 
-interface ModalPayReceiptProps {
+export interface ModalPayReceiptProps {
   receipt: Pick<ReceiptEntity, "id">;
   onPaid?: () => void;
   onClosed?: () => void;
