@@ -8,7 +8,7 @@ import { ActionIcon, Box, Divider, Group, Stack, Text, Tooltip } from "@mantine/
 import { useHover } from "@mantine/hooks";
 import { IconCirclePlus, IconX } from "@tabler/icons-react";
 import { Fragment, type FC } from "react";
-import { useOrderSale } from "../order-sale-context";
+import { userOrdersManagement } from "../../orders-management/orders-management-context";
 
 const config = {
   borderRadius: 8,
@@ -117,8 +117,9 @@ const SaleTab: FC<SaleTabProps> = (props) => {
 };
 
 export const OrderSaleTabs: FC = () => {
-  const orderSale = useOrderSale();
+  const orderSale = userOrdersManagement();
   const orderActiveIndex = orderSale.orders.findIndex((o) => o.id === orderSale.activeOrderId);
+  const orderCount = orderSale.orders.length;
 
   return (
     <Group h={workspaceLayoutConfig.headerHeight} align="end" gap={0} flex={1}>
@@ -134,13 +135,15 @@ export const OrderSaleTabs: FC = () => {
         />
       ))}
 
-      <Stack h={config.tabHeight} justify="center" px={10}>
-        <Tooltip label={t("create_entity", { entity: t("order") })}>
-          <ActionIcon onClick={() => orderSale.addOrder()} size="lg">
-            <IconCirclePlus size={20} />
-          </ActionIcon>
-        </Tooltip>
-      </Stack>
+      {orderCount < 8 && (
+        <Stack h={config.tabHeight} justify="center" px={10}>
+          <Tooltip label={t("create_entity", { entity: t("order") })}>
+            <ActionIcon onClick={() => orderSale.addOrder()} size="lg">
+              <IconCirclePlus size={20} />
+            </ActionIcon>
+          </Tooltip>
+        </Stack>
+      )}
     </Group>
   );
 };

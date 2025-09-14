@@ -15,13 +15,13 @@ import { Card, Group, Popover, Stack, Text, TextInput } from "@mantine/core";
 import { useClickOutside, useThrottledValue } from "@mantine/hooks";
 import { IconSearch, IconUserSquareRounded } from "@tabler/icons-react";
 import { useEffect, useMemo, useState, type FC } from "react";
-import { useOrderSale } from "../order-sale-context";
+import { userOrdersManagement } from "../../orders-management/orders-management-context";
 
 const searchBoxWidth = 400;
 
 export const OrderSaleSearchBox: FC = () => {
   const color = useColor();
-  const orderSale = useOrderSale();
+  const orderSale = userOrdersManagement();
   const [isOpened, setIsOpened] = useState(false);
   const ref = useClickOutside(() => setIsOpened(false));
 
