@@ -27,7 +27,11 @@ import type {
   OrdersManagementContext,
   OrdersManagementState,
 } from "./orders-management-types";
-import { normalizeOrderSale, normalizeOrderSaleForCalculate } from "./orders-management-utils";
+import { normalizeEntityToOrder, normalizeOrderForSubmission } from "./orders-management-utils";
+import { useFetch } from "@/utils/use-fetch.util";
+import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
+import { ResponseList } from "@/types";
+import { PromotionEntity } from "@/modules/promotions/promotions-types";
 
 const initialStorage: UseStorageOptions<OrdersManagementState> = {
   key: "orders-management",
@@ -69,7 +73,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     const serverOrders = await getOrderList({ ids: _state.orders.map((v) => v.id) });
     _state.orders = _state.orders.map((o) => {
       const serverOrder = serverOrders.data.find((v) => v.id === o.id);
-      return serverOrder ? normalizeOrderSale(serverOrder) : o;
+      return serverOrder ? normalizeEntityToOrder(serverOrder) : o;
     });
 
     if (orderCode) {
@@ -98,7 +102,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     route: "/orders/calculate",
     method: "post",
     isSkip: !activeOrder,
-    params: activeOrder ? normalizeOrderSaleForCalculate(activeOrder) : undefined,
+    params: activeOrder ? normalizeOrderForSubmission(activeOrder) : undefined,
   });
 
   const totalAmount = (calculating.data?.totalAmount ?? 0) - (calculating.data?.paidAmount ?? 0);
@@ -133,23 +137,25 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     const order = await getOrderById(orderId);
     setState((s) => ({
       ...s,
-      orders: s.orders.map((o) => (o.id === orderId ? { ...o, ...normalizeOrderSale(order) } : o)),
+      orders: s.orders.map((o) =>
+        o.id === orderId ? { ...o, ...normalizeEntityToOrder(order) } : o
+      ),
     }));
   };
 
   const saveOrder = async () => {
     if (!activeOrder) return;
     if (!activeOrder.isSaved) {
-      const order = await createOrder(normalizeOrderSaleForCalculate(activeOrder));
+      const order = await createOrder(normalizeOrderForSubmission(activeOrder));
       setState((s) => ({
         ...s,
-        orders: s.orders.map((o) => (o.id === activeOrder.id ? normalizeOrderSale(order) : o)),
+        orders: s.orders.map((o) => (o.id === activeOrder.id ? normalizeEntityToOrder(order) : o)),
       }));
     } else {
-      const order = await updateOrder(activeOrder.id, normalizeOrderSaleForCalculate(activeOrder));
+      const order = await updateOrder(activeOrder.id, normalizeOrderForSubmission(activeOrder));
       setState((s) => ({
         ...s,
-        orders: s.orders.map((o) => (o.id === activeOrder.id ? normalizeOrderSale(order) : o)),
+        orders: s.orders.map((o) => (o.id === activeOrder.id ? normalizeEntityToOrder(order) : o)),
       }));
     }
   };
@@ -162,18 +168,21 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     await fetchOrder(activeOrder.id);
   };
 
-  useEventsListener(
-    [EventType.ORDER_SYNCED, EventType.ORDER_UPDATED],
-    (e) => {
-      const relatedOrder = state.orders.find((o) => o.id === e.ref);
-      if (relatedOrder) fetchOrder(relatedOrder.id);
-    },
-    [state.orders]
-  );
+  const availablePromotions = useQuery<ResponseList<PromotionEntity>>({
+    isSkip: !activeOrder?.relatedCustomer?._id,
+    route: `/promotions/customers/${activeOrder?.relatedCustomer?._id}`,
+  });
+
+  const availableCombos = useQuery<ProductComboEntity[]>({
+    route: `/product-combos/customers/${activeOrder?.relatedCustomer?._id}`,
+    isSkip: !activeOrder?.relatedCustomer?._id,
+  });
 
   const context: OrdersManagementContext = {
     isInitialized,
     orders: state.orders,
+    availableCombos,
+    availablePromotions,
     activeOrder,
     calculating,
     activeOrderId: state.activeOrderId,
@@ -181,7 +190,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
       setState((s) => ({ ...s, activeOrderId: orderId }));
     },
     addOrder: (order) => {
-      const _order = order ? normalizeOrderSale(order) : generateInitialOrderSale();
+      const _order = order ? normalizeEntityToOrder(order) : generateInitialOrderSale();
       _order.createdAt = timeToSeconds();
       setState((s) => ({ ...s, orders: [...s.orders, _order], activeOrderId: _order.id }));
     },
@@ -247,6 +256,15 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     payOrder,
     saveOrder,
   };
+
+  useEventsListener(
+    [EventType.ORDER_SYNCED, EventType.ORDER_UPDATED],
+    (e) => {
+      const relatedOrder = state.orders.find((o) => o.id === e.ref);
+      if (relatedOrder) fetchOrder(relatedOrder.id);
+    },
+    [state.orders]
+  );
 
   return <Context.Provider value={context}>{props.children}</Context.Provider>;
 };

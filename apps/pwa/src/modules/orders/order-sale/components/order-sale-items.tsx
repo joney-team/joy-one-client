@@ -9,7 +9,7 @@ import { ProductType } from "@/modules/products/products-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { ActionIcon, Badge, Card, Group, NumberInput, Stack, Text, ThemeIcon } from "@mantine/core";
-import { IconBox, IconMinus, IconNote, IconPlus } from "@tabler/icons-react";
+import { IconBox, IconMinus, IconNote, IconPlus, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
 import { OrderItem } from "../../orders-management/orders-management-types";
@@ -170,6 +170,10 @@ export const OrderSaleItemComponent: FC<{
           <Text w={120} ta="right" pr={8} fw={500}>
             {num(item.price * item.quantity, { type: "money" })}
           </Text>
+
+          <ActionIcon variant="subtle" color="gray" onClick={onRemove}>
+            <IconTrash size={14} strokeWidth={1.5} />
+          </ActionIcon>
         </Group>
       </Group>
     </Card>
