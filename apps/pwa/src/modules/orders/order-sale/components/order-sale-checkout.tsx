@@ -15,8 +15,10 @@ import {
 } from "@tabler/icons-react";
 import { Fragment, type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
+import { OrderSaleCombos } from "./order-sale-combos";
 import { OrderSaleDiscounts } from "./order-sale-discounts";
 import { OrderSaleTip } from "./order-sale-tip";
+import { OrderSalePromotions } from "./order-sale-promotions";
 
 export const OrderSaleCheckout: FC = () => {
   const orderSale = userOrdersManagement();
@@ -116,6 +118,8 @@ export const OrderSaleCheckout: FC = () => {
             </Group>
 
             <Divider variant="dashed" />
+            <OrderSaleCombos />
+            <OrderSalePromotions />
             <OrderSaleDiscounts />
             <OrderSaleTip />
             <Divider variant="dashed" />

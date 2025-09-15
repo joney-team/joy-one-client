@@ -3,7 +3,7 @@ import { OrderCalculateDto } from "../orders-dtos";
 import { OrderType } from "../orders-types";
 import { Order } from "./orders-management-types";
 
-export const normalizeOrderSale = (order: OrderEntity): Order => {
+export const normalizeEntityToOrder = (order: OrderEntity): Order => {
   return {
     id: order.id,
     isSaved: true,
@@ -21,10 +21,15 @@ export const normalizeOrderSale = (order: OrderEntity): Order => {
     paymentStatus: order.paymentStatus,
     paidAmount: order.paidAmount,
     tipAmount: 0,
+    relatedCustomer: order.relatedCustomer,
+    combos: order.combos,
+    prevCombos: order.combos,
+    promotions: order.promotions,
+    prevPromotions: order.promotions,
   };
 };
 
-export const normalizeOrderSaleForCalculate = (orderSale: Order): OrderCalculateDto => {
+export const normalizeOrderForSubmission = (orderSale: Order): OrderCalculateDto => {
   return {
     id: orderSale.id,
     type: OrderType.COMMON,
@@ -38,5 +43,8 @@ export const normalizeOrderSaleForCalculate = (orderSale: Order): OrderCalculate
     assigneeUserIds: orderSale.assigneeUsers.map((u) => u.userId),
     note: orderSale.note,
     directDiscount: orderSale.directDiscount,
+    relatedCustomerId: orderSale.relatedCustomer?._id,
+    comboIds: orderSale.combos?.map((c) => c.id),
+    promotionIds: orderSale.promotions?.map((p) => p.id),
   };
 };

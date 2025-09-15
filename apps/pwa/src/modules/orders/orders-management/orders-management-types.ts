@@ -4,6 +4,9 @@ import { ProductEntity } from "@/modules/products/products-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { OrderCalculated, OrderPaymentStatus } from "../orders-types";
 import { OrderEntity } from "../order-entity";
+import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
+import { PromotionEntity } from "@/modules/promotions/promotions-types";
+import { ResponseList } from "@/types";
 
 export type OrderProduct = Pick<
   ProductEntity,
@@ -41,6 +44,10 @@ export interface Order {
   paymentStatus?: OrderPaymentStatus;
   paidAmount?: number;
   tipAmount?: number;
+  combos?: ProductComboEntity[];
+  prevCombos?: ProductComboEntity[];
+  promotions?: PromotionEntity[];
+  prevPromotions?: PromotionEntity[];
 }
 
 export interface OrdersManagementState {
@@ -51,6 +58,8 @@ export interface OrdersManagementState {
 export interface OrdersManagementContext extends OrdersManagementState {
   isInitialized: boolean;
   activeOrder: Order | null;
+  availableCombos: UseQuery<ProductComboEntity[]>;
+  availablePromotions: UseQuery<ResponseList<PromotionEntity>>;
   setActiveOrderId: (orderId: string) => void;
   addOrder: (order?: OrderEntity) => void;
   addProduct: (product: OrderProduct) => void;

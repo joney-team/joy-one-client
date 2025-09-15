@@ -80,6 +80,7 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
     colorScheme,
     navigationWidthStorage,
     isDetailPage,
+    routeRule,
   ]);
 
   return {
