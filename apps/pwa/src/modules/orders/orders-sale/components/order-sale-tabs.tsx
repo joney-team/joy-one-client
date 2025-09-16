@@ -1,14 +1,15 @@
 "use client";
 
 import { Circle } from "@/components/circle";
-import { workspaceLayoutConfig } from "@/layout/hooks/use-workspace-layout";
+import FlexContainer from "@/components/flex-container/flex-container";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { ActionIcon, Box, Divider, Group, Stack, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, Box, Divider, Group, Stack, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
-import { IconCirclePlus, IconX } from "@tabler/icons-react";
-import { Fragment, type FC } from "react";
+import { IconX } from "@tabler/icons-react";
+import { Fragment, useEffect, type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
+import { scrollToElementById } from "@joy-one-client/utils/scrollToElementById";
 
 const config = {
   borderRadius: 8,
@@ -22,6 +23,7 @@ interface SaleTabProps {
   onClick: () => void;
   hideDivider?: boolean;
   dotColor?: string;
+  id: string;
 }
 
 const SaleTab: FC<SaleTabProps> = (props) => {
@@ -37,6 +39,7 @@ const SaleTab: FC<SaleTabProps> = (props) => {
       className="clickable unselectable"
       ref={hovered.ref}
       onClick={props.onClick}
+      id={props.id}
     >
       {props.active && (
         <Box h={config.tabHeight} w={config.borderRadius} bg={bg} pos="relative">
@@ -64,18 +67,12 @@ const SaleTab: FC<SaleTabProps> = (props) => {
         pr={8}
         gap={8}
       >
-        <Group w={10} justify="center" align="center">
+        <Group gap={8}>
           <Circle size={8} bg={color(props.dotColor ?? "primary.3")} />
+          <Text fz={14} fw={500} c={props.active ? "dark" : "white"}>
+            {props.name}
+          </Text>
         </Group>
-        <Text
-          fz={14}
-          fw={500}
-          c={props.active ? "dark" : "white"}
-          truncate="end"
-          maw={props.active ? undefined : 40}
-        >
-          {props.name}
-        </Text>
         <ActionIcon
           variant="subtle"
           size="xs"
@@ -119,31 +116,29 @@ const SaleTab: FC<SaleTabProps> = (props) => {
 export const OrderSaleTabs: FC = () => {
   const orderSale = userOrdersManagement();
   const orderActiveIndex = orderSale.orders.findIndex((o) => o.id === orderSale.activeOrderId);
-  const orderCount = orderSale.orders.length;
+
+  useEffect(() => {
+    if (orderSale.activeOrderId) {
+      scrollToElementById(orderSale.activeOrderId + "-tab");
+    }
+  }, [orderSale.activeOrderId]);
 
   return (
-    <Group h={workspaceLayoutConfig.headerHeight} align="end" gap={0} flex={1}>
-      {orderSale.orders.map((order, index) => (
-        <SaleTab
-          key={order.id}
-          name={order.code ?? `#${index + 1} ${t("order")} `}
-          active={order.id === orderSale.activeOrderId}
-          onClose={() => orderSale.closeOrder()}
-          onClick={() => orderSale.setActiveOrderId(order.id)}
-          hideDivider={index === orderActiveIndex - 1}
-          dotColor={!order.isSaved || order.isDirty ? "orange.3" : "primary.3"}
-        />
-      ))}
-
-      {orderCount < 8 && (
-        <Stack h={config.tabHeight} justify="center" px={10}>
-          <Tooltip label={t("create_entity", { entity: t("order") })}>
-            <ActionIcon onClick={() => orderSale.addOrder()} size="lg">
-              <IconCirclePlus size={20} />
-            </ActionIcon>
-          </Tooltip>
-        </Stack>
-      )}
-    </Group>
+    <FlexContainer hideScrollbars style={{ height: "100%" }}>
+      <Group gap={0} w="max-content" wrap="nowrap" h="100%">
+        {orderSale.orders.map((order, index) => (
+          <SaleTab
+            key={order.id}
+            id={order.id + "-tab"}
+            name={order.code ?? `#${index + 1} ${t("order")}`}
+            active={order.id === orderSale.activeOrderId}
+            onClose={() => orderSale.closeOrder(order.id)}
+            onClick={() => orderSale.setActiveOrderId(order.id)}
+            hideDivider={index === orderActiveIndex - 1}
+            dotColor={!order.isSaved || order.isDirty ? "orange.3" : "primary.3"}
+          />
+        ))}
+      </Group>
+    </FlexContainer>
   );
 };
