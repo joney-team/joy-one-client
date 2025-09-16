@@ -60,13 +60,12 @@ export type Columns<Data = any> = {
   [key in keyof Data]?: Column<Data, Data[key]>;
 };
 
-export interface ListAction<Data> {
+export type ListAction<Data> = {
   label: string;
   icon: Icon;
-  onClick: (data: Data) => void;
   disabled?: (data: Data) => boolean;
   permission?: WorkspacePermission;
-}
+} & ({ onClick: (data: Data) => void } | { href: (data: Data) => string });
 
 export interface FilterMode<Data = any> {
   param: string;
@@ -104,11 +103,10 @@ export type ListProps<Data extends BaseData> = {
   actions?: ListAction<Data>[];
   limit?: number;
   creatable?: {
-    onCreate: () => void;
     permission?: WorkspacePermission;
     label?: string;
     icon?: Icon;
-  };
+  } & ({ onCreate: () => void } | { href: string });
   components?: {
     empty?: FC;
   };
