@@ -47,7 +47,7 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
 
         return (
           <Combobox.Option value={product._id} key={product._id}>
-            <Group gap={10}>
+            <Group gap={10} wrap="nowrap">
               <EntityImage
                 src={product.image}
                 icon={Icon}

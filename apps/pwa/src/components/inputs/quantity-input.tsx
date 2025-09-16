@@ -10,16 +10,15 @@ interface QuantityInputProps {
   min?: number;
 }
 
-export const QuantityInput: FC<QuantityInputProps> = (props) => {
-  const { value, onChange } = props;
+export const QuantityInput: FC<QuantityInputProps> = ({ value, onChange, min, ...rest }) => {
+  const step = rest.step ?? 1;
   const color = useColor();
-  const step = props.step ?? 1;
 
-  const isCanDescrease = props.min ? props.value - step >= props.min : true;
+  const isCanDescrease = min ? value - step >= min : true;
 
   const onDecrease = () => {
-    const _value = props.value - step;
-    if (props.min && _value <= props.min) return;
+    const _value = value - step;
+    if (min && _value <= min) return;
     onChange(_value);
   };
 
@@ -44,7 +43,7 @@ export const QuantityInput: FC<QuantityInputProps> = (props) => {
 
         <NumberInput
           hideControls
-          value={props.value}
+          value={value}
           onChange={(value) => {
             if (!value || Number.isNaN(value) || +value <= 0) return;
             onChange(+value);
@@ -63,9 +62,7 @@ export const QuantityInput: FC<QuantityInputProps> = (props) => {
           }}
           onBlur={(e) => {
             const value = e.target.value;
-            if (+value === 0) {
-              props.onChange(0);
-            }
+            if (+value === 0) onChange(0);
           }}
         />
 
