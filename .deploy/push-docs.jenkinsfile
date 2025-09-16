@@ -6,7 +6,7 @@ pipeline {
   }
 
   environment {
-    DEKLOY_API_KEY = credentials('dekloy-staging-api-key')
+    DEKLOY_API_KEY = credentials('dokploy-staging-api-key')
   }
 
   stages {
