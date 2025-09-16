@@ -16,6 +16,7 @@ import { IconBox, IconNote, IconPlus, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
 import { OrderItem } from "../../orders-management/orders-management-types";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 
 export const OrderSaleItemComponent: FC<{
   index: number;
@@ -117,7 +118,7 @@ export const OrderSaleItemComponent: FC<{
   }
 
   return (
-    <Card p={8} shadow="xs" withBorder>
+    <Card p={8} shadow="xs" withBorder={false}>
       <Group justify="space-between">
         <Group gap={12} pl={8} wrap="nowrap">
           <Text w={18}>{index + 1}.</Text>
@@ -226,7 +227,10 @@ export const OrderSaleItems: FC = () => {
             key={item.product._id}
             index={index}
             item={item}
-            onUpdate={(item) => orderSale.updateProductItem(item.product._id, item)}
+            onUpdate={(item) => {
+              if (item.quantity <= 0) return orderSale.removeProduct(item.product._id);
+              return orderSale.updateProductItem(item.product._id, item);
+            }}
             onRemove={() => orderSale.removeProduct(item.product._id)}
           />
         );
@@ -240,10 +244,18 @@ export const OrderSaleItems: FC = () => {
         )}
 
         {view === "mobile" && (
-          <Group justify="center" align="center" mb={20}>
-            <Button leftIcon={IconPlus} variant="outline" color="gray">
-              {t("add_entity", { entity: t("products_services") })}
-            </Button>
+          <Group justify="center" align="center" py={20}>
+            <ProductSelector
+              type={[ProductType.PRODUCT, ProductType.SERVICE]}
+              onSelect={(product) => orderSale.addProduct(product)}
+              target={(ctx) => {
+                return (
+                  <Button leftIcon={IconPlus} variant="outline" color="gray" onClick={ctx.toggle}>
+                    {t("add_entity", { entity: t("products_services") })}
+                  </Button>
+                );
+              }}
+            />
           </Group>
         )}
       </Stack>
