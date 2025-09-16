@@ -1,7 +1,10 @@
 "use client";
 
+import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
+import { QuantityInput } from "@/components/inputs/quantity-input";
+import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { num, t } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
@@ -9,7 +12,7 @@ import { ProductType } from "@/modules/products/products-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { ActionIcon, Badge, Card, Group, NumberInput, Stack, Text, ThemeIcon } from "@mantine/core";
-import { IconBox, IconMinus, IconNote, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconBox, IconNote, IconPlus, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
 import { OrderItem } from "../../orders-management/orders-management-types";
@@ -21,6 +24,7 @@ export const OrderSaleItemComponent: FC<{
   onRemove: () => void;
 }> = ({ index, item, onUpdate, onRemove }) => {
   const color = useColor();
+  const { view } = useLayout();
 
   const onChangeNote = () => {
     OnModalInput({
@@ -33,27 +37,89 @@ export const OrderSaleItemComponent: FC<{
     });
   };
 
-  const onIncrease = () => {
-    onUpdate({
-      ...item,
-      quantity: item.quantity + (item.product.defaultQtyPerUse ?? 1),
-    });
-  };
+  if (view === "mobile") {
+    return (
+      <Card p={12} shadow="none" withBorder>
+        <Stack>
+          <Group gap={8} wrap="nowrap">
+            <Text w={18}>{index + 1}.</Text>
+            <Text fw={500} truncate="end" w={300}>
+              {item.product.displayName || item.product.name}
+            </Text>
 
-  const onDecrease = () => {
-    const tempQuantity = item.quantity - (item.product.defaultQtyPerUse ?? 1);
-    if (tempQuantity <= 0) return onRemove();
+            <ActionIcon variant="subtle" color="gray" onClick={onRemove}>
+              <IconTrash size={14} strokeWidth={1.5} />
+            </ActionIcon>
+          </Group>
 
-    onUpdate({
-      ...item,
-      quantity: item.quantity - (item.product.defaultQtyPerUse ?? 1),
-    });
-  };
+          <Group justify="space-between">
+            <Group gap={4} style={{ cursor: "pointer" }} onClick={onChangeNote}>
+              {!item.note ? (
+                <IconPlus size={12} color={color("blue")} />
+              ) : (
+                <IconNote size={12} color={color("blue")} />
+              )}
+
+              <Text fz={12} c={color("blue")}>
+                {item.note || t("note")}
+              </Text>
+            </Group>
+
+            <WorkspaceMembersInput
+              collapsed
+              value={item.assigneeUsers}
+              onChange={(value) => onUpdate({ ...item, assigneeUsers: value })}
+              tooltipLabel={
+                item.product.type === ProductType.PRODUCT
+                  ? t("assignee_products_revenue").toString()
+                  : t("assignee_services_revenue").toString()
+              }
+            />
+          </Group>
+
+          <Group justify="space-between">
+            <Group gap={3}>
+              <NumberInput
+                variant="unstyled"
+                value={item.price}
+                hideControls
+                radius={0}
+                w={100}
+                readOnly={!item.product.minPrice || !item.product.maxPrice}
+                styles={{
+                  input: {
+                    fontSize: "1rem",
+                    borderBottom: `1px solid ${color("gray.3")}`,
+                  },
+                }}
+              />
+
+              {item.product.unit && (
+                <Group>
+                  <Badge variant="light" color="gray" tt="initial">
+                    /{item.product.unit}
+                  </Badge>
+                </Group>
+              )}
+            </Group>
+
+            <Group gap={8} justify="end">
+              <QuantityInput
+                step={item.product.defaultQtyPerUse}
+                onChange={(value) => onUpdate({ ...item, quantity: value })}
+                value={item.quantity}
+              />
+            </Group>
+          </Group>
+        </Stack>
+      </Card>
+    );
+  }
 
   return (
-    <Card shadow="xs" withBorder={false} p={8}>
+    <Card p={8} shadow="xs" withBorder>
       <Group justify="space-between">
-        <Group gap={12} pl={8}>
+        <Group gap={12} pl={8} wrap="nowrap">
           <Text w={18}>{index + 1}.</Text>
 
           <EntityImage
@@ -95,52 +161,11 @@ export const OrderSaleItemComponent: FC<{
           />
 
           <Group gap={8}>
-            <Card
-              py={0}
-              px={3}
-              bg="gray.1"
-              shadow="none"
-              style={{
-                borderRadius: 100,
-              }}
-            >
-              <Group wrap="nowrap" gap={0}>
-                <ActionIcon color="gray.4" radius={100} onClick={onDecrease}>
-                  <IconMinus size={16} strokeWidth={1.5} />
-                </ActionIcon>
-
-                <NumberInput
-                  hideControls
-                  value={item.quantity}
-                  onChange={(value) => {
-                    if (!value || Number.isNaN(value) || +value <= 0) return;
-                    onUpdate({ ...item, quantity: +value });
-                  }}
-                  min={0}
-                  maw={60}
-                  step={item.product.defaultQtyPerUse || 1}
-                  styles={{
-                    input: {
-                      textAlign: "center",
-                      background: "none",
-                      border: "none",
-                      boxShadow: "none",
-                      padding: 0,
-                    },
-                  }}
-                  onBlur={(e) => {
-                    const value = e.target.value;
-                    if (+value === 0) {
-                      onUpdate({ ...item, quantity: 0 });
-                    }
-                  }}
-                />
-
-                <ActionIcon color={color("primary.3")} radius={100} onClick={onIncrease}>
-                  <IconPlus size={16} strokeWidth={1.5} />
-                </ActionIcon>
-              </Group>
-            </Card>
+            <QuantityInput
+              step={item.product.defaultQtyPerUse}
+              onChange={(value) => onUpdate({ ...item, quantity: value })}
+              value={item.quantity}
+            />
 
             {item.product.unit && (
               <Group w={70}>
@@ -182,10 +207,11 @@ export const OrderSaleItemComponent: FC<{
 
 export const OrderSaleItems: FC = () => {
   const orderSale = userOrdersManagement();
+  const { view } = useLayout();
 
   if (!orderSale.activeOrder)
     return (
-      <Stack flex={1} h="100%" justify="center" align="center">
+      <Stack h="100%" justify="center" align="center">
         <ThemeIcon color="gray" variant="light" size="xl">
           <IconBox />
         </ThemeIcon>
@@ -193,7 +219,7 @@ export const OrderSaleItems: FC = () => {
     );
 
   return (
-    <Stack flex={1} h="100%" gap={8} p={12}>
+    <Stack gap={8}>
       {orderSale.activeOrder.items.map((item, index) => {
         return (
           <OrderSaleItemComponent
@@ -206,11 +232,21 @@ export const OrderSaleItems: FC = () => {
         );
       })}
 
-      {orderSale.activeOrder.items.length === 0 && (
-        <Stack flex={1} justify="center" align="center">
-          <Empty message="add_product_to_order" hideBorder />
-        </Stack>
-      )}
+      <Stack gap={0}>
+        {orderSale.activeOrder.items.length === 0 && (
+          <Stack justify="center" align="center">
+            <Empty message="add_product_to_order" hideBorder />
+          </Stack>
+        )}
+
+        {view === "mobile" && (
+          <Group justify="center" align="center" mb={20}>
+            <Button leftIcon={IconPlus} variant="outline" color="gray">
+              {t("add_entity", { entity: t("products_services") })}
+            </Button>
+          </Group>
+        )}
+      </Stack>
     </Stack>
   );
 };

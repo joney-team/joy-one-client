@@ -107,16 +107,22 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
 
   const totalAmount = (calculating.data?.totalAmount ?? 0) - (calculating.data?.paidAmount ?? 0);
 
-  const closeOrder = () => {
-    if (!activeOrder) return;
-    if (activeOrder.code === orderCode) router.removeQuery("code");
+  const closeOrder = (id?: string | null) => {
+    const _id = id ?? activeOrder?.id;
+    const orderIndex = state.orders.findIndex((o) => o.id === _id);
+    const order = state.orders[orderIndex];
 
-    const orders = [...state.orders].filter((o) => o.id !== activeOrder.id);
+    if (!order) return;
+    if (order.code === orderCode) router.removeQuery("code");
+
+    const nextActiveOrderId =
+      state.orders[orderIndex + 1]?.id ?? state.orders[orderIndex - 1]?.id ?? state.orders[0]?.id;
+    const orders = [...state.orders].filter((o) => o.id !== order.id);
 
     setState((s) => ({
       ...s,
       orders,
-      activeOrderId: s.activeOrderId === activeOrder.id ? orders[0]?.id : s.activeOrderId,
+      activeOrderId: s.activeOrderId === order.id ? nextActiveOrderId : s.activeOrderId,
     }));
   };
 
@@ -129,7 +135,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
         if (!activeOrder.isSaved) return Promise.resolve();
         return archiveOrder(activeOrder.id);
       },
-      onArchived: () => closeOrder(),
+      onArchived: () => closeOrder(activeOrder.id),
     });
   };
 

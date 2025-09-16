@@ -65,7 +65,7 @@ export interface OrdersManagementContext extends OrdersManagementState {
   addProduct: (product: OrderProduct) => void;
   removeProduct: (productId: string) => void;
   updateProductItem: (productId: string, item: Partial<Omit<OrderItem, "product">>) => void;
-  closeOrder: () => void;
+  closeOrder: (id?: string | null) => void;
   removeOrder: () => void;
   calculating: UseQuery<OrderCalculated>;
   updateOrder: (values: Partial<Order>) => void;

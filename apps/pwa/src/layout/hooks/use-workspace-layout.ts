@@ -56,7 +56,7 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
       : workspaceLayoutConfig.defaultNavigationExpandedWidth;
 
     const navigationHeight =
-      layout.view === "mobile" && isDetailPage
+      layout.view === "mobile" && (isDetailPage || routeRule.isHideNavigation)
         ? 0
         : layout.isStandalone
         ? workspaceLayoutConfig.standaloneNavigationHeight
