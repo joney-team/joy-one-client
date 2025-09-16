@@ -15,6 +15,7 @@ import { OrderCalculateDto } from "../orders-dtos";
 import {
   archiveOrder,
   createOrder,
+  getOrderByCode,
   getOrderById,
   getOrderList,
   onPayOrder,
@@ -63,6 +64,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderCode = searchParams.get("code");
+  const mode = searchParams.get("mode");
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [state, setState] = useLocalStorage<OrdersManagementState>(initialStorage);
@@ -70,19 +72,35 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
   const initialize = async () => {
     let _state = getCurrentState();
 
+    // Re-fetch orders
     const serverOrders = await getOrderList({ ids: _state.orders.map((v) => v.id) });
     _state.orders = _state.orders.map((o) => {
       const serverOrder = serverOrders.data.find((v) => v.id === o.id);
       return serverOrder ? normalizeEntityToOrder(serverOrder) : o;
     });
 
+    // Order by code
     if (orderCode) {
+      if (!_state.orders.some((o) => o.code === orderCode)) {
+        const orderByCode = await getOrderByCode(orderCode).catch(() => null);
+        if (orderByCode) _state.orders.push(normalizeEntityToOrder(orderByCode));
+      }
+
       const order = _state.orders.find((o) => o.code === orderCode);
       if (order) _state.activeOrderId = order.id;
     }
 
+    // Auto create blank order
     if (_state.orders.length === 0 && props.autoCreateBlankOrder) {
       _state.orders.push(generateInitialOrderSale());
+    }
+
+    // New order
+    if (mode === "new") {
+      router.removeQuery("mode", true);
+      const newOrder = generateInitialOrderSale();
+      _state.orders.push(newOrder);
+      _state.activeOrderId = newOrder.id;
     }
 
     if (!_state.activeOrderId) _state.activeOrderId = _state.orders[0]?.id;

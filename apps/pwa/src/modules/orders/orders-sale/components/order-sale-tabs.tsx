@@ -4,12 +4,12 @@ import { Circle } from "@/components/circle";
 import FlexContainer from "@/components/flex-container/flex-container";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import { scrollToElementById } from "@joy-one-client/utils/scrollToElementById";
 import { ActionIcon, Box, Divider, Group, Stack, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconX } from "@tabler/icons-react";
 import { Fragment, useEffect, type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
-import { scrollToElementById } from "@joy-one-client/utils/scrollToElementById";
 
 const config = {
   borderRadius: 8,
