@@ -150,24 +150,9 @@ export const AdminTools: FC = () => {
         </Group>
       </Card>
 
-      {/* <SessionTitle name="Migrations" icon={IconSettings2} />
-      <Card shadow="xs">
-        <Group>
-         
-        </Group>
-      </Card> */}
-
       <SessionTitle name="Reports" icon={IconReportAnalytics} />
       <Card shadow="xs">
         <Group>
-          <Button
-            onClick={() => {
-              api.patch(`/reports/sync-all`).catch(onError);
-            }}
-          >
-            Sync Reports - Current Workspace
-          </Button>
-
           <Button
             color="orange"
             onClick={() => {

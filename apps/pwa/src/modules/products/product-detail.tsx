@@ -96,14 +96,14 @@ export const ProductDetail: FC = () => {
                   route="/product-stocks"
                   params={{ productId, sortExpireAt: 1 }}
                   columns={{
-                    createdAt: DateTimeColumn({ isSortable: true, name: "time" }),
+                    createdAt: DateTimeColumn({ sortable: true, name: "time" }),
                     code: { name: "product_stock_code", filter: { text: true } },
                     createdByUserId: UserColumn({
                       name: "member",
                       valuePath: "createdByUser",
                     }),
                     quantity: {
-                      isSortable: true,
+                      sortable: true,
                       render: ({ data }) => {
                         return (
                           <Text>
@@ -119,7 +119,7 @@ export const ProductDetail: FC = () => {
                       isFromNow: true,
                     }),
                     costPrice: NumberColumn({ name: "costPrice", type: "money" }),
-                    note: { isDefaultHide: true },
+                    note: { defaultHidden: true },
                   }}
                   creatable={{
                     onCreate: () => OnModalProductStockIn({ product: product.data }),
@@ -183,7 +183,7 @@ export const ProductDetail: FC = () => {
                       }),
                     }),
                     quantity: NumberColumn({ name: "quantity" }),
-                    note: { isDefaultHide: true },
+                    note: { defaultHidden: true },
                   }}
                   events={events}
                 />

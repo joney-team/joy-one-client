@@ -30,11 +30,10 @@ export const WorkspaceBranchColumn = (
   const permissionRequired = permissionRequireds[args.entity];
   const isEditable = permissionRequired && workspace.hasPermission(permissionRequired);
 
+  const rootOption = { label: t("main_workspace_branch"), value: "root", data: null };
+
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
-    return [
-      ...options.map((v) => ({ label: v.label, value: v.value, data: v.data })),
-      { label: t("main_workspace_branch"), value: "root", data: null },
-    ];
+    return [...options.map((v) => ({ label: v.label, value: v.value, data: v.data })), rootOption];
   };
 
   return {
@@ -81,6 +80,7 @@ export const WorkspaceBranchColumn = (
       workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)
         ? {
             dynamicSelector: {
+              pinnedOptions: [rootOption],
               getOptions: async (ids) => {
                 const options = await getWorkspaceBranchByIds(ids.filter((v) => v !== "root"));
                 return bindOptions(options.map((v) => ({ label: v.name, value: v._id, data: v })));

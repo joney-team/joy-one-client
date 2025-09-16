@@ -59,12 +59,7 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
       listRoute={config.listRoute}
       listParams={config.listParams}
       autoCloseOnChange={!multiple}
-      pinnedOptions={options.map((v) => ({
-        id: v.value,
-        label: v.label,
-        value: v.value,
-        data: v.data,
-      }))}
+      pinnedOptions={options.map((v) => ({ id: v.value, ...v }))}
       target={(ctx) => {
         return (
           <Wrapper
@@ -125,39 +120,30 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
         const value = await columns[colKey]?.filter?.dynamicSelector?.search?.(q);
         return (value || []).map((v) => ({
           id: v.value,
-          label: v.label,
-          value: v.value,
-          data: v.data,
+          ...v,
         }));
       }}
-      onSelect={(value) => {
-        const isSelected = querySelectedOptions.some((v) => v === value?.value);
+      onSelect={(option) => {
+        const isSelected = querySelectedOptions.some((v) => v === option?.value);
 
         // Add option if not included
-        const isIncluded = options.some((v) => v.value === value?.value);
-        if (!isIncluded && value) {
-          setOptions((s) => [
-            ...s,
-            {
-              label: value.label,
-              value: value.value,
-              data: value.data,
-            },
-          ]);
+        const isIncluded = options.some((v) => v.value === option?.value);
+        if (!isIncluded && option) {
+          setOptions((s) => [...s, option]);
         }
 
         // Update query
         if (multiple) {
           const _querySelectedOptions = isSelected
-            ? querySelectedOptions.filter((v) => v !== value?.value)
-            : [...querySelectedOptions, value?.value];
+            ? querySelectedOptions.filter((v) => v !== option?.value)
+            : [...querySelectedOptions, option?.value];
           if (_querySelectedOptions.length === 0) {
             list.removeParam(colKey);
           } else {
             list.setParam(colKey, _querySelectedOptions);
           }
         } else {
-          list.setParam(colKey, value?.value);
+          list.setParam(colKey, option?.value);
         }
       }}
       dropdownProps={dropdownProps}

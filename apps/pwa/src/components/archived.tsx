@@ -16,7 +16,6 @@ export interface ArchivedProps {
 
 export const Archived: FC<ArchivedProps> = (props) => {
   const color = useColor();
-  const layout = useLayout();
 
   const Icon = props.icon || IconBackground;
   const _color = color("red.5");
@@ -33,7 +32,7 @@ export const Archived: FC<ArchivedProps> = (props) => {
       p={16}
       style={{
         borderRadius: 8,
-        border: `1px dashed ${alpha(_color, 0.5)}`,
+        border: `1px dashed ${alpha(_color || "", 0.5)}`,
       }}
     >
       <ThemeIcon variant="transparent" color={_color}>

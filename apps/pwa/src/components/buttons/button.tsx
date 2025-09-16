@@ -72,9 +72,9 @@ export const Button: FC<ButtonProps> = (props) => {
 
   const defaultIconSpacings = {
     xs: -3,
-    "compact-xs": -10,
+    "compact-xs": -8,
     "compact-sm": -5,
-    default: -7,
+    default: -3,
   };
 
   const iconSpacing =

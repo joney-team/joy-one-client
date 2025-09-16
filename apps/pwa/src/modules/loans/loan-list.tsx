@@ -102,14 +102,14 @@ export const LoanList: FC<LoanListProps> = (props) => {
         }),
         createdAt: DateTimeColumn({
           name: "createdAt",
-          isSortable: true,
-          isDefaultHide: true,
+          sortable: true,
+          defaultHidden: true,
           isHasFilter: true,
         }),
         fulfilledAt: DateTimeColumn({
           name: "fulfilledAt",
-          isSortable: true,
-          isDefaultHide: true,
+          sortable: true,
+          defaultHidden: true,
           isHasFilter: true,
           w: 200,
         }),
@@ -214,7 +214,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
         },
         nextReceiptAt: {
           name: "loan_next_receipt_at",
-          isSortable: true,
+          sortable: true,
           render: ({ value, data: loan }) => {
             const warningReceiptBeforeDays =
               workspace.settings.loanSettings?.warningReceiptBeforeDays || 0;

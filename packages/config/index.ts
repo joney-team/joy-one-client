@@ -1,4 +1,4 @@
-const ENV = "development";
+const ENV = "production";
 
 export interface EnvironmentConfig {
   PUBLIC_URL: string;
@@ -18,35 +18,38 @@ const environmentConfigs: Record<string, EnvironmentConfig> = {
     API_CLIENT_SIDE_URL: "http://localhost:4000",
     API_SERVER_SIDE_URL: "http://localhost:4000",
     SECRET_KEY: "wzsjaledyu",
-    ANALYTICS_KEY: "A-SH-2108254846"
+    ANALYTICS_KEY: "t9j567r7qx",
   },
   staging: {
     PUBLIC_URL: "https://staging.joyone.vn",
-    APP_URL: "https://staging.joyone.vn",
+    APP_URL: "https://staging-app.joyone.vn",
     API_TOOLS_URL: "https://staging-api.joyone.vn",
     API_CLIENT_SIDE_URL: "https://staging-api.joyone.vn",
     API_SERVER_SIDE_URL: "http://jo-server:4000",
     SECRET_KEY: "wzsjaledyu",
-    ANALYTICS_KEY: "A-SH-2108254846"
+    ANALYTICS_KEY: "t9j567r7qx",
   },
   production: {
     PUBLIC_URL: "https://joyone.vn",
     APP_URL: "https://app.joyone.vn",
     API_TOOLS_URL: "https://api.joyone.vn",
     API_CLIENT_SIDE_URL: "https://api.joyone.vn",
-    API_SERVER_SIDE_URL: "http://jo-server:4000",
+    API_SERVER_SIDE_URL: "http://joy-one-jo-server-8bogeh:4000",
     SECRET_KEY: "wzsjaledyu",
-    ANALYTICS_KEY: "A-SH-2108254846"
+    ANALYTICS_KEY: "t9j567r7qx",
   },
-}
+};
 
 export type Config = EnvironmentConfig & {
   ENV: string;
+  isDevelopment: boolean;
 };
 
 const config: Config = {
-  ...environmentConfigs[ENV] || environmentConfigs.development,
+  ...(environmentConfigs[ENV] || environmentConfigs.development),
   ENV,
+  // @ts-ignore
+  isDevelopment: ENV === "development",
 };
 
 export default config;

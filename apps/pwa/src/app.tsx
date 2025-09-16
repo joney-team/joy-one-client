@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState, type FC, type PropsWithChildren } from "react";
 import { v4 as uuid } from "uuid";
 import { AppContext } from "./app.context";
+import { GeneralAnalytics } from "./components/analytics/general-analytics";
 import { getGlobal } from "./global";
 import { getLocalStorage } from "./hooks/use-local-storage";
 import { socket } from "./modules/apis";
@@ -16,9 +17,6 @@ import { type EventEntity } from "./modules/events/event-types";
 import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
-import { AptabaseProvider } from "@aptabase/react";
-import environment from "@joy-one-client/config";
-import { GeneralAnalytics } from "./components/analytics/general-analytics";
 
 const LangProvider = dynamic(() => import("@/modules/lang/lang-provider"));
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
@@ -121,29 +119,20 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   );
 
   return (
-    <AptabaseProvider
-      appKey={environment.ANALYTICS_KEY}
-      options={{
-        apiUrl: "https://aptabase.joyone.vn/api/v0/event",
-        appVersion: config?.version,
-        isDebug: environment.ENV !== "production",
-      }}
-    >
-      <QueryProvider>
-        <AppContext.Provider value={context}>
-          <LocationsProvider>
-            <LayoutProvider>
-              <LangProvider>
-                <Providers>
-                  {props.children}
-                  <AppLoading />
-                  <GeneralAnalytics />
-                </Providers>
-              </LangProvider>
-            </LayoutProvider>
-          </LocationsProvider>
-        </AppContext.Provider>
-      </QueryProvider>
-    </AptabaseProvider>
+    <QueryProvider>
+      <AppContext.Provider value={context}>
+        <LocationsProvider>
+          <LayoutProvider>
+            <LangProvider>
+              <Providers>
+                {props.children}
+                <AppLoading />
+                <GeneralAnalytics />
+              </Providers>
+            </LangProvider>
+          </LayoutProvider>
+        </LocationsProvider>
+      </AppContext.Provider>
+    </QueryProvider>
   );
 };

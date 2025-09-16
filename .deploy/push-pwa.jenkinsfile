@@ -5,6 +5,10 @@ pipeline {
     disableConcurrentBuilds(abortPrevious: true)
   }
 
+  environment {
+    DEKLOY_API_KEY = credentials('dekloy-staging-api-key')
+  }
+
   stages {
     stage('Setup') {
       steps {
@@ -26,13 +30,9 @@ pipeline {
     }
 
     stage("Release") {
-      agent { label "${RELEASE_VPS}" }
       steps {
         script {
-          sh "docker pull ${IMAGE_TAG}"
-          SERVICES.split('\\|').each { service ->
-            sh "docker service update ${service} --image ${IMAGE_TAG}"
-          }
+          releaseDekloy()
         }
       }
     }
@@ -72,12 +72,10 @@ def setup() {
   env.GIT_COMMIT_BY = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
   env.GIT_BRANCH_NAME = env.GIT_BRANCH.replaceAll('origin/', '')
   env.ENV = env.GIT_BRANCH_NAME.replaceAll('-pwa$', '')
-  env.RELEASE_VPS = "vonic-staging"
-  env.SERVICES = "joy-one_jo-client-pwa"
+  env.APPLICATION_ID = "6YC0ckk4efld2_rn0hpT-"
 
   // Replace file packages/config/index.ts with env.GIT_BRANCH and remove origin 
   sh "sed -i 's/ENV = \"development\"/ENV = \"${env.ENV}\"/g' packages/config/index.ts"
-
 }
 
 def sendNotification(status) {
@@ -98,5 +96,30 @@ def sendNotification(status) {
           "BUILD_TAG": "${env.BUILD_TAG}"
         }
       }'
+  """
+}
+
+def releaseDekloy() {
+  sh """
+  curl -X 'POST' \
+    'https://staging-deploy.joyone.vn/api/application.saveDockerProvider' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -H 'x-api-key: $DEKLOY_API_KEY' \
+    -d '{
+    "dockerImage": "${IMAGE_TAG}",
+    "applicationId": "${APPLICATION_ID}"
+  }'
+  """
+
+  sh """
+  curl -X 'POST' \
+    'https://staging-deploy.joyone.vn/api/application.deploy' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -H 'x-api-key: $DEKLOY_API_KEY' \
+    -d '{
+    "applicationId": "${APPLICATION_ID}"
+  }'
   """
 }

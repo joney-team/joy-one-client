@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 
 import { getWorkspaceMetadata } from "@/modules/workspaces/utils";
 import { type TemplateString } from "next/dist/lib/metadata/types/metadata-types";
+import { ScriptsAnalytics } from "@/components/analytics/scripts-analytics";
 
 import { defaultMetadata } from "@/configs/metadata.config";
 import type { AppMetadata } from "@/types";
@@ -95,8 +96,10 @@ export default async function RootLayout(props: Readonly<{ children: React.React
           defer
           crossOrigin="anonymous"
           src="https://connect.facebook.net/en_US/sdk.js"
-        ></script>
+        />
       </body>
+
+      <ScriptsAnalytics />
     </html>
   );
 }

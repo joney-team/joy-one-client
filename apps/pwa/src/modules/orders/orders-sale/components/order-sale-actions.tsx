@@ -1,0 +1,60 @@
+"use client";
+
+import { useLayout } from "@/layout/layout-context";
+import { t } from "@/modules/lang/lang-service";
+import { ActionIcon, Group, Menu } from "@mantine/core";
+import { IconCirclePlus, IconDots, IconPrinter, IconTrash } from "@tabler/icons-react";
+import { type FC } from "react";
+import { userOrdersManagement } from "../../orders-management/orders-management-context";
+
+export const OrderSaleActions: FC = () => {
+  const orderSale = userOrdersManagement();
+  const { view } = useLayout();
+
+  if (view === "mobile") {
+    return (
+      <Group gap={4}>
+        <ActionIcon onClick={() => orderSale.addOrder()}>
+          <IconCirclePlus size={20} strokeWidth={1.5} />
+        </ActionIcon>
+
+        <Menu>
+          <Menu.Target>
+            <ActionIcon>
+              <IconDots size={20} strokeWidth={1.5} />
+            </ActionIcon>
+          </Menu.Target>
+
+          <Menu.Dropdown>
+            <Menu.Item
+              onClick={orderSale.removeOrder}
+              leftSection={<IconTrash size={20} strokeWidth={1.5} />}
+            >
+              {t("archive")}
+            </Menu.Item>
+
+            <Menu.Item leftSection={<IconPrinter size={20} strokeWidth={1.5} />}>
+              {t("print")}
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+      </Group>
+    );
+  }
+
+  return (
+    <Group gap={8}>
+      <ActionIcon onClick={() => orderSale.addOrder()}>
+        <IconCirclePlus size={20} strokeWidth={1.5} />
+      </ActionIcon>
+
+      <ActionIcon>
+        <IconPrinter size={20} strokeWidth={1.5} />
+      </ActionIcon>
+
+      <ActionIcon onClick={orderSale.removeOrder}>
+        <IconTrash size={20} strokeWidth={1.5} />
+      </ActionIcon>
+    </Group>
+  );
+};

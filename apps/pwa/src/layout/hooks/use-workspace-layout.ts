@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { useLayout } from "../layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useParams, usePathname } from "next/navigation";
+import { useRouteRule } from "@/hooks/use-router";
 
 interface WorkspaceLayoutState {
   navigationWidth: number;
@@ -24,9 +25,11 @@ interface WorkspaceLayoutState {
 
 export const workspaceLayoutConfig = {
   defaultNavigationExpandedWidth: 200,
-  defaultNavigationCollapsedWidth: 80,
   mobileNavigationHeight: 55,
   standaloneNavigationHeight: 75,
+  headerHeight: 48,
+  minNavigationWidth: 62,
+  maxNavigationWidth: 400,
 };
 
 export const useWorkspaceLayout = (): WorkspaceLayoutState => {
@@ -35,36 +38,50 @@ export const useWorkspaceLayout = (): WorkspaceLayoutState => {
   const layout = useLayout();
   const color = useColor();
   const colorScheme = useColorScheme();
-  const [navigationWidthStorage, setNavigationWidthStorage] = useLocalStorage({ key: StorageKey.LAYOUT_NAVIGATION_WIDTH });
+  const routeRule = useRouteRule();
+  const [navigationWidthStorage, setNavigationWidthStorage] = useLocalStorage({
+    key: StorageKey.LAYOUT_NAVIGATION_WIDTH,
+  });
 
   const isDetailPage = useMemo(() => {
-    if (pathname.startsWith('/tasks')) return false;
-    return Object.keys(params).length > 0
+    if (pathname.startsWith("/tasks")) return false;
+    return Object.keys(params).length > 0;
   }, [pathname, params]);
 
   const state = useMemo(() => {
-    const headerHeight = layout.view === "mobile" ? 48 : 48;
+    const headerHeight = routeRule.isHideHeader ? 0 : workspaceLayoutConfig.headerHeight;
 
     const navigationWidth = navigationWidthStorage
       ? +navigationWidthStorage
       : workspaceLayoutConfig.defaultNavigationExpandedWidth;
 
-    const navigationHeight = layout.view === 'mobile' && isDetailPage ? 0 : (layout.isStandalone
-      ? workspaceLayoutConfig.standaloneNavigationHeight
-      : layout.view === "mobile"
+    const navigationHeight =
+      layout.view === "mobile" && (isDetailPage || routeRule.isHideNavigation)
+        ? 0
+        : layout.isStandalone
+        ? workspaceLayoutConfig.standaloneNavigationHeight
+        : layout.view === "mobile"
         ? workspaceLayoutConfig.mobileNavigationHeight
-        : layout.height);
+        : layout.height;
 
     return {
       navigationWidth,
       navigationHeight,
-      headerHeight,
+      headerHeight: headerHeight,
       headerWidth: layout.width - navigationWidth,
-      isNavbarCollapsed: navigationWidth <= workspaceLayoutConfig.defaultNavigationCollapsedWidth * 2,
+      isNavbarCollapsed: navigationWidth <= workspaceLayoutConfig.minNavigationWidth * 1.5,
       bodyWidth: layout.width - navigationWidth,
       bodyHeight: layout.height - headerHeight,
     };
-  }, [layout.width, layout.height, layout.isBrowerCollapsed, colorScheme, navigationWidthStorage, isDetailPage]);
+  }, [
+    layout.width,
+    layout.height,
+    layout.isBrowerCollapsed,
+    colorScheme,
+    navigationWidthStorage,
+    isDetailPage,
+    routeRule,
+  ]);
 
   return {
     ...state,

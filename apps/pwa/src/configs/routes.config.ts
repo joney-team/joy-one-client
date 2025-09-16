@@ -1,32 +1,48 @@
 export type RouteRule = {
-  auth?: "auth" | "workspace" | "public";
+  auth?: "auth" | "workspace" | "public" | "admin";
   workspace?: boolean;
+  isHideHeader?: boolean;
+  isHideNavigation?: boolean;
 };
 
 export const defaultRouteRule: RouteRule = {
-  auth: 'workspace',
+  auth: "workspace",
   workspace: true,
 };
 
 export const routeRules: Record<string, RouteRule> = {
-  '/dev': {
-    auth: 'public',
+  "/dev": {
+    auth: "public",
     workspace: false,
   },
-  '/connect': {
-    auth: 'public',
+  "/connect": {
+    auth: "public",
     workspace: false,
   },
-  '/customer-forms/new': {
-    auth: 'public',
+  "/customer-forms/new": {
+    auth: "public",
     workspace: false,
   },
-  '/plugins/zalo-oas/connect-callback': {
-    auth: 'workspace',
+  "/plugins/zalo-oas/connect-callback": {
+    auth: "workspace",
     workspace: false,
   },
-  '/bank-transactions/callback': {
-    auth: 'workspace',
+  "/bank-transactions/callback": {
+    auth: "workspace",
     workspace: false,
   },
-}
+  "/admin/tools": {
+    auth: "admin",
+    workspace: false,
+  },
+  "/admin/workspaces": {
+    auth: "admin",
+    workspace: false,
+  },
+  "/orders/sale": {
+    auth: "workspace",
+    workspace: true,
+    isHideHeader: true,
+    isHideNavigation: true,
+  },
+};
