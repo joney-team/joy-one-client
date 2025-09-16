@@ -72,7 +72,7 @@ def setup() {
   env.GIT_COMMIT_BY = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
   env.GIT_BRANCH_NAME = env.GIT_BRANCH.replaceAll('origin/', '')
   env.ENV = env.GIT_BRANCH_NAME.replaceAll('-website$', '')
-  env.APPLICATION_ID = "b62ZqSCkZZq3dNGMHmMO4"
+  env.APPLICATION_ID = "-dxSag_tWvfmUGi1QW4sB"
 
   // Replace file packages/config/index.ts with env.GIT_BRANCH and remove origin 
   sh "sed -i 's/ENV = \"development\"/ENV = \"${env.ENV}\"/g' packages/config/index.ts"
