@@ -25,7 +25,7 @@ const environmentConfigs: Record<string, EnvironmentConfig> = {
     APP_URL: "https://staging-app.joyone.vn",
     API_TOOLS_URL: "https://staging-api.joyone.vn",
     API_CLIENT_SIDE_URL: "https://staging-api.joyone.vn",
-    API_SERVER_SIDE_URL: "http://jo-server:4000",
+    API_SERVER_SIDE_URL: "http://joy-one-staging-server-apis-ol2vcf:4000",
     SECRET_KEY: "wzsjaledyu",
     ANALYTICS_KEY: "t9j567r7qx",
   },
