@@ -8,7 +8,7 @@ import { api } from "../apis";
 import { ReceiptEntity } from "../receipts/receipts-types";
 import { OrderEntity } from "./order-entity";
 import { OrderCalculateDto, OrderDto } from "./orders-dtos";
-import { OrderCalculated, OrderPaymentStatus, PayOrderDto } from "./orders-types";
+import { OrderEntityCalculated, OrderPaymentStatus, PayOrderDto } from "./orders-types";
 
 export async function getOrderByCode(code: string) {
   return api.get<OrderEntity>(`/orders/codes/${code}`);
@@ -35,7 +35,7 @@ export async function updateOrder(id: string, dto: OrderDto) {
 }
 
 export async function calculateOrder(dto: OrderCalculateDto) {
-  return api.post<OrderCalculated>("/orders/calculate", dto);
+  return api.post<OrderEntityCalculated>("/orders/calculate", dto);
 }
 
 export async function payOrder(id: string, dto: PayOrderDto) {

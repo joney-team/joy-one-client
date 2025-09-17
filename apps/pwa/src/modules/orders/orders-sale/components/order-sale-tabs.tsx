@@ -10,6 +10,7 @@ import { useHover } from "@mantine/hooks";
 import { IconX } from "@tabler/icons-react";
 import { Fragment, useEffect, type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
+import { useOrderFeatureName } from "../../order-hooks";
 
 const config = {
   borderRadius: 8,
@@ -116,6 +117,7 @@ const SaleTab: FC<SaleTabProps> = (props) => {
 export const OrderSaleTabs: FC = () => {
   const orderSale = userOrdersManagement();
   const orderActiveIndex = orderSale.orders.findIndex((o) => o.id === orderSale.activeOrderId);
+  const orderFeatureName = useOrderFeatureName();
 
   useEffect(() => {
     if (orderSale.activeOrderId) {
@@ -130,7 +132,7 @@ export const OrderSaleTabs: FC = () => {
           <SaleTab
             key={order.id}
             id={order.id + "-tab"}
-            name={order.code ?? `#${index + 1} ${t("order")}`}
+            name={order.code ?? `#${index + 1} ${orderFeatureName.singular}`}
             active={order.id === orderSale.activeOrderId}
             onClose={() => orderSale.closeOrder(order.id)}
             onClick={() => orderSale.setActiveOrderId(order.id)}

@@ -5,6 +5,9 @@ import { useQuery } from "@/modules/apis/use-query";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { t, tMulti } from "@/modules/lang/lang-service";
+import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
+import { PromotionEntity } from "@/modules/promotions/promotions-types";
+import { ResponseList } from "@/types";
 import { onArchive } from "@/utils/actions";
 import { timeToSeconds } from "@joy-one-client/utils/date-time";
 import { readLocalStorageValue, useLocalStorage, UseStorageOptions } from "@mantine/hooks";
@@ -21,7 +24,7 @@ import {
   onPayOrder,
   updateOrder,
 } from "../orders-service";
-import { OrderCalculated } from "../orders-types";
+import { OrderEntityCalculated } from "../orders-types";
 import { Context } from "./orders-management-context";
 import type {
   Order,
@@ -29,10 +32,6 @@ import type {
   OrdersManagementState,
 } from "./orders-management-types";
 import { normalizeEntityToOrder, normalizeOrderForSubmission } from "./orders-management-utils";
-import { useFetch } from "@/utils/use-fetch.util";
-import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
-import { ResponseList } from "@/types";
-import { PromotionEntity } from "@/modules/promotions/promotions-types";
 
 const initialStorage: UseStorageOptions<OrdersManagementState> = {
   key: "orders-management",
@@ -56,9 +55,7 @@ const getCurrentState = () => {
   return readLocalStorageValue<OrdersManagementState>(initialStorage);
 };
 
-interface OrdersManagementProps extends PropsWithChildren {
-  autoCreateBlankOrder?: boolean;
-}
+interface OrdersManagementProps extends PropsWithChildren {}
 
 export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
   const router = useRouter();
@@ -90,17 +87,17 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
       if (order) _state.activeOrderId = order.id;
     }
 
-    // Auto create blank order
-    if (_state.orders.length === 0 && props.autoCreateBlankOrder) {
-      _state.orders.push(generateInitialOrderSale());
-    }
-
     // New order
     if (mode === "new") {
       router.removeQuery("mode", true);
-      const newOrder = generateInitialOrderSale();
-      _state.orders.push(newOrder);
-      _state.activeOrderId = newOrder.id;
+      let order = _state.orders.find((o) => !o.isSaved && o.items.length === 0);
+
+      if (!order) {
+        order = generateInitialOrderSale();
+        _state.orders.push(order);
+      }
+
+      _state.activeOrderId = order.id;
     }
 
     if (!_state.activeOrderId) _state.activeOrderId = _state.orders[0]?.id;
@@ -116,7 +113,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     return state.orders.find((o) => o.id === state.activeOrderId) || null;
   }, [state.orders, state.activeOrderId]);
 
-  const calculating = useQuery<OrderCalculated, OrderCalculateDto>({
+  const calculating = useQuery<OrderEntityCalculated, OrderCalculateDto>({
     route: "/orders/calculate",
     method: "post",
     isSkip: !activeOrder,

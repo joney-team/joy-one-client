@@ -2,7 +2,7 @@ import { UseQuery } from "@/modules/apis/use-query";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { ProductEntity } from "@/modules/products/products-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
-import { OrderCalculated, OrderPaymentStatus } from "../orders-types";
+import { OrderDiscount, OrderEntityCalculated, OrderPaymentStatus } from "../orders-types";
 import { OrderEntity } from "../order-entity";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
@@ -20,6 +20,7 @@ export type OrderProduct = Pick<
   | "displayName"
   | "defaultQtyPerUse"
   | "type"
+  | "isHiddenInReceiptWhenNoPrice"
 >;
 
 export interface OrderItem {
@@ -50,6 +51,11 @@ export interface Order {
   prevPromotions?: PromotionEntity[];
 }
 
+export interface OrderCalculated extends Order {
+  totalAmount: number;
+  discounts: OrderDiscount[];
+}
+
 export interface OrdersManagementState {
   orders: Order[];
   activeOrderId: string;
@@ -67,7 +73,7 @@ export interface OrdersManagementContext extends OrdersManagementState {
   updateProductItem: (productId: string, item: Partial<Omit<OrderItem, "product">>) => void;
   closeOrder: (id?: string | null) => void;
   removeOrder: () => void;
-  calculating: UseQuery<OrderCalculated>;
+  calculating: UseQuery<OrderEntityCalculated>;
   updateOrder: (values: Partial<Order>) => void;
   payOrder: () => Promise<void>;
   saveOrder: () => Promise<void>;

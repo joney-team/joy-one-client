@@ -1,7 +1,8 @@
+"use client";
+
 import { OnModalPrinter } from "@/modals/modal-printer";
 import { num, renderDateTime, t } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
-import { getOrderDto } from "@/modules/orders/order-table/order-table-provider";
 import {
   onPayOrder,
   orderPaymentStatusOptions,
@@ -23,6 +24,10 @@ import { Renderer } from "../../components/renderer";
 import { CustomerInput } from "../customers/components/customer-input";
 import { WorkspaceMemberInput } from "../workspace-members/components/workspace-member-input";
 import { WorkspaceMembersInput } from "../workspace-members/components/workspace-members-input";
+import {
+  normalizeEntityToOrder,
+  normalizeOrderForSubmission,
+} from "./orders-management/orders-management-utils";
 
 interface OrderCardProps {
   data: OrderEntity;
@@ -38,15 +43,10 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
   const updateOrderDebounced = useDebouncedCallback(async (newOrder: OrderEntity) => {
     if (!order) return;
+    const _order = normalizeEntityToOrder(newOrder);
+
     onActionLoad({
-      process: async () =>
-        updateOrder(
-          order.id,
-          getOrderDto({
-            ...newOrder,
-            assigneeUsers: newOrder.assigneeUsers ?? [],
-          })
-        ),
+      process: async () => updateOrder(order.id, normalizeOrderForSubmission(_order)),
     });
   }, 1000);
 

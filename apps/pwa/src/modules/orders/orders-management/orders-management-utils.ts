@@ -1,3 +1,5 @@
+"use client";
+
 import { OrderEntity } from "../order-entity";
 import { OrderCalculateDto } from "../orders-dtos";
 import { OrderType } from "../orders-types";

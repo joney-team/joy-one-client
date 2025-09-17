@@ -3,12 +3,12 @@ import { WorkspaceMemberInfo } from "../workspace-members/workspace-members-type
 import { OrderEntity } from "./order-entity";
 
 export enum OrderType {
-  COMMON = 'COMMON',
+  COMMON = "COMMON",
 }
 
 export enum OrderPaymentStatus {
-  PROCESSING = 'PROCESSING',
-  COMPLETED = 'COMPLETED',
+  PROCESSING = "PROCESSING",
+  COMPLETED = "COMPLETED",
 }
 
 export interface OrderDtoItem {
@@ -26,11 +26,11 @@ export interface OrderItem extends OrderDtoItem {
 }
 
 export enum OrderDiscountType {
-  DIRECT = 'DIRECT',
-  USE_EXISTED_COMBO = 'USE_EXISTED_COMBO',
-  USE_DIRECT_COMBO = 'USE_DIRECT_COMBO',
-  COUPON = 'COUPON',
-  VOUCHER = 'VOUCHER',
+  DIRECT = "DIRECT",
+  USE_EXISTED_COMBO = "USE_EXISTED_COMBO",
+  USE_DIRECT_COMBO = "USE_DIRECT_COMBO",
+  COUPON = "COUPON",
+  VOUCHER = "VOUCHER",
 }
 
 export interface OrderDiscount {
@@ -48,7 +48,7 @@ export interface OrderDiscount {
   productVoucherAmount?: number;
 }
 
-export interface OrderCalculated extends OrderEntity { }
+export interface OrderEntityCalculated extends OrderEntity {}
 
 export interface PayOrderDto {
   amount: number;

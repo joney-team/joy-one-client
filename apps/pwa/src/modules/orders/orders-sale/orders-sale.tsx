@@ -18,11 +18,7 @@ import { OrderSaleItems } from "./components/order-sale-items";
 export const OrdersSaleContent = () => {
   const router = useRouter();
   const { view } = useLayout();
-  const { activeOrder, addOrder, isInitialized } = userOrdersManagement();
-
-  if (!isInitialized) {
-    return <OverlayLoading enabled />;
-  }
+  const { activeOrder, addOrder } = userOrdersManagement();
 
   if (view === "mobile") {
     return (
@@ -110,7 +106,7 @@ export const OrdersSaleContent = () => {
 
 export const OrdersSale: FC = () => {
   return (
-    <OrdersManagementProvider autoCreateBlankOrder>
+    <OrdersManagementProvider>
       <OrdersSaleContent />
     </OrdersManagementProvider>
   );

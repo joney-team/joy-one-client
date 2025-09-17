@@ -210,7 +210,7 @@ export const OrderSaleItems: FC = () => {
   const orderSale = userOrdersManagement();
   const { view } = useLayout();
 
-  if (!orderSale.activeOrder)
+  if (!orderSale.activeOrder) {
     return (
       <Stack h="100%" justify="center" align="center">
         <ThemeIcon color="gray" variant="light" size="xl">
@@ -218,6 +218,7 @@ export const OrderSaleItems: FC = () => {
         </ThemeIcon>
       </Stack>
     );
+  }
 
   return (
     <Stack gap={8}>
