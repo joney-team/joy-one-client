@@ -83,6 +83,12 @@ export const FilterBar: FC<ListContext> = (ctx) => {
   const onReset = () => ctx.list.removeAllParams();
   const workspaceLayout = useWorkspaceLayout();
 
+  const filterCount = Object.keys(ctx.list.params).reduce((acc, key) => {
+    const ignoreKeys = ["sort"];
+    if (ignoreKeys.some((v) => key.indexOf(v) > -1)) return acc;
+    return acc + 1;
+  }, 0);
+
   if (!ctx.viewState.isFilterVisible || !isHasFilter) return null;
 
   return (
@@ -103,10 +109,10 @@ export const FilterBar: FC<ListContext> = (ctx) => {
 
       <ActionButton
         icon={IconRefresh}
-        label={t("reset")}
+        label={t("clear_filter")}
         onClick={onReset}
         borderStyle="dashed"
-        disabled={!isHasFilter}
+        disabled={filterCount === 0}
       />
     </Group>
   );

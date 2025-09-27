@@ -20,7 +20,7 @@ import {
   Tooltip,
   useMantineTheme,
 } from "@mantine/core";
-import { useInViewport, useMergedRef, useMouse } from "@mantine/hooks";
+import { useMergedRef, useMouse } from "@mantine/hooks";
 import { IconGripVertical, IconHourglassHigh } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, Fragment, useEffect, useRef, useState } from "react";
@@ -28,6 +28,7 @@ import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
 import { useGanttTaskState } from "./gantt.hooks";
 import { getRangeOfTasks } from "./gantt.utils";
+import { useInViewport } from "@/hooks/use-in-viewport";
 
 interface GanttTaskRowBodyProps {
   id: string;

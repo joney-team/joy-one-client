@@ -16,7 +16,7 @@ import {
   Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Icon, IconBuilding, IconLogout, IconTools } from "@tabler/icons-react";
+import { Icon, IconBuilding, IconLogout, IconPlayerPlay, IconTools } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PropsWithChildren, type FC } from "react";
@@ -37,6 +37,11 @@ const navItems: {
     route: "/workspaces",
     name: "Workspaces",
     icon: IconBuilding,
+  },
+  {
+    route: "/playground",
+    name: "Playground",
+    icon: IconPlayerPlay,
   },
 ];
 

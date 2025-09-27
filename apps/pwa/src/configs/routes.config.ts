@@ -39,6 +39,10 @@ export const routeRules: Record<string, RouteRule> = {
     auth: "admin",
     workspace: false,
   },
+  "/admin/playground": {
+    auth: "admin",
+    workspace: false,
+  },
   "/orders/sale": {
     auth: "workspace",
     workspace: true,

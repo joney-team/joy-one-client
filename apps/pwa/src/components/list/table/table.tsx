@@ -1,3 +1,5 @@
+"use client";
+
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { ActionIcon, Checkbox, Group, Loader, Menu, Table, Text } from "@mantine/core";
@@ -141,7 +143,7 @@ export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
       </Table.Tbody>
 
       {ctx.list.isFetching && (
-        <Table.Caption pt={0} pb={ctx.spacing * 2}>
+        <Table.Caption py={ctx.spacing * 2}>
           <Loader size="sm" type="dots" color="gray" />
         </Table.Caption>
       )}

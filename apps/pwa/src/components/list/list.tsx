@@ -131,6 +131,13 @@ export function List<T extends BaseData>(props: ListProps<T>) {
     list.fetch(true, { isSilient: false });
   };
 
+  const refreshList = () => {
+    setIsRefreshing(true);
+    list.fetch(true, { isSilient: true }).finally(() => {
+      setIsRefreshing(false);
+    });
+  };
+
   useEffect(() => {
     if (isInitialized && isViewStateChanged) {
       localStorage.setItem(listViewId, JSON.stringify(viewStateRef.current));
@@ -234,6 +241,16 @@ export function List<T extends BaseData>(props: ListProps<T>) {
                   </Text>
 
                   <Group gap={3}>
+                    <ActionIcon
+                      loading={isRefreshing}
+                      variant="subtle"
+                      radius="50%"
+                      color={list.newDataCount > 0 ? undefined : "gray"}
+                      onClick={refreshList}
+                    >
+                      <IconRefresh size={16} strokeWidth={1.8} />
+                    </ActionIcon>
+
                     {list.count > 0 && (
                       <Badge variant="light" color="dark" size="sm">
                         {num(list.count)}
@@ -249,22 +266,6 @@ export function List<T extends BaseData>(props: ListProps<T>) {
                         {t("list_new_data", { count: num(list.newDataCount) })}
                       </Badge>
                     )}
-
-                    <ActionIcon
-                      // size={22}
-                      loading={isRefreshing}
-                      variant="subtle"
-                      radius="50%"
-                      color={list.newDataCount > 0 ? undefined : "gray"}
-                      onClick={() => {
-                        setIsRefreshing(true);
-                        list.fetch(true, { isSilient: true }).finally(() => {
-                          setIsRefreshing(false);
-                        });
-                      }}
-                    >
-                      <IconRefresh size={16} strokeWidth={1.8} />
-                    </ActionIcon>
                   </Group>
                 </Group>
 

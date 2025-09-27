@@ -32,7 +32,7 @@ import {
   ThemeIcon,
   Tooltip,
 } from "@mantine/core";
-import { useDebouncedCallback, useHover, useInViewport } from "@mantine/hooks";
+import { useDebouncedCallback, useHover } from "@mantine/hooks";
 import {
   IconCalendar,
   IconCornerDownRight,
@@ -49,6 +49,7 @@ import {
 import { FC, Fragment, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag } from "../../tasks-dnd-provider";
 import { ListTaskRowDropper } from "./list.task-row-dropper";
+import { useInViewport } from "@/hooks/use-in-viewport";
 
 export const ListTaskRow: FC<{
   id: string;

@@ -1,3 +1,5 @@
+"use client";
+
 import { ActionIcon, Checkbox, Group, Table, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconSelector } from "@tabler/icons-react";
