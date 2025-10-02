@@ -18,7 +18,10 @@ interface WorkspaceBranchSelectorProps extends Partial<SelectorProps<WorkspaceBr
   isShowRoot?: boolean;
 }
 
-export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = (props) => {
+export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
+  isShowRoot,
+  ...props
+}) => {
   const workspace = useWorkspace();
   const isFullAccess = workspace.userMember.permissions.includes(
     WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
@@ -44,7 +47,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = (props)
       listRoute={listRoute}
       pinnedOptions={
         isFullAccess
-          ? props.isShowRoot
+          ? isShowRoot
             ? [rootOption]
             : undefined
           : workspace.userMember.workspaceBranches

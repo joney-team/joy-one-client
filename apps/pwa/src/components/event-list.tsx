@@ -107,13 +107,7 @@ export const EventList: FC<EventListProps> = (props) => {
 
       {events.isAbleToLoadMore && (
         <Group justify="start" pl={45}>
-          <ButtonViewMore
-            onClick={events.loadMore}
-            size="compact-xs"
-            fz={10}
-            iconSpacing={-12}
-            iconSize={12}
-          />
+          <ButtonViewMore onClick={events.loadMore} />
         </Group>
       )}
     </Stack>

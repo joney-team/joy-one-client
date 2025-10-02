@@ -6,6 +6,7 @@ import { useEventsListener } from "../events/event-service";
 import { EventEntity, EventType } from "../events/event-types";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { StorageKey } from "@/types";
+import { useMemo } from "react";
 
 export interface UseQueryArgs<T, P = Record<string, any>> {
   params?: P;
@@ -30,13 +31,12 @@ export const useQuery = <T = any, P = Record<string, any>>(
   const networkMode = query.networkMode ?? "offlineFirst";
   const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
+  const queryKeyIn = useMemo(() => {
+    return [...queryKey, route, params ? JSON.stringify(params) : "pn", workspaceId || "general"];
+  }, [queryKey, route, params, workspaceId]);
+
   const stack = useQueryTanstack<T, AxiosError>({
-    queryKey: [
-      ...queryKey,
-      route,
-      params ? JSON.stringify(params) : "pn",
-      workspaceId || "general",
-    ],
+    queryKey: queryKeyIn,
     queryFn: ({ signal }) => {
       if (query.method === "post") {
         return api.post<T>(route, query.params, { signal });
@@ -49,7 +49,9 @@ export const useQuery = <T = any, P = Record<string, any>>(
   });
 
   // Event listener
-  const refetchEvents = query?.refetchEvents || [];
+  const refetchEvents = useMemo(() => {
+    return query?.refetchEvents || [];
+  }, [query.refetchEvents]);
 
   useEventsListener(
     refetchEvents,

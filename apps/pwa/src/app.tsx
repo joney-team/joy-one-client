@@ -120,8 +120,8 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
 
   return (
     <QueryProvider>
-      <AppContext.Provider value={context}>
-        <LocationsProvider>
+      <LocationsProvider>
+        <AppContext.Provider value={context}>
           <LayoutProvider>
             <LangProvider>
               <Providers>
@@ -131,8 +131,8 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
               </Providers>
             </LangProvider>
           </LayoutProvider>
-        </LocationsProvider>
-      </AppContext.Provider>
+        </AppContext.Provider>
+      </LocationsProvider>
     </QueryProvider>
   );
 };
