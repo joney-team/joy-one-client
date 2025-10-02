@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { eventsEmitter } from "@/modules/events/event-service";
-import { uploadFile } from "@/modules/files/file-service";
+import { uploadWorkspaceFile } from "@/modules/files/file-service";
 import { FileSrcCard } from "@/modules/files/file-src-card";
 import { FileType } from "@/modules/files/file-types";
 import { parseFile } from "@/modules/files/files-utils";
@@ -45,7 +45,8 @@ export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
       for (let index = 0; index < files.length; index++) {
         const file = files[index];
         const type = parseFile(file).type;
-        const url = file instanceof File ? await uploadFile({ file }).then((r) => r.url) : file;
+        const url =
+          file instanceof File ? await uploadWorkspaceFile({ file }).then((r) => r.url) : file;
 
         if (type === FileType.PHOTO) {
           await sendImageMessage(props.box._id, { url });

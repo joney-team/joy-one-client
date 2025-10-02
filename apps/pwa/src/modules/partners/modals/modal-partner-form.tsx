@@ -3,7 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { onUploadFile } from "@/modules/files/file-service";
+import { onUploadWorkspaceFile } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { createPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
@@ -54,7 +54,7 @@ export const ModalParnterForm: FC = () => {
     let payload = { ...values };
 
     if (avatar) {
-      const file = await onUploadFile({ file: avatar, compressSize: 0.3 });
+      const file = await onUploadWorkspaceFile({ file: avatar, compressSize: 0.3 });
       payload.logo = file.relativePath;
     }
 

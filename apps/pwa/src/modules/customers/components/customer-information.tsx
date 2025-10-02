@@ -7,7 +7,7 @@ import { CustomerEntity } from "@/modules/customers/customer-types";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/modal-customer-relationship-contacts";
-import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
+import { onUploadWorkspaceFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { getDateFormat, num, t } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
@@ -80,7 +80,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
   const uploadAvatar = async (file: File) => {
     try {
       const _currentAvatar = customer.avatar;
-      const _file = await onUploadFile({ file, compressSize: 1 });
+      const _file = await onUploadWorkspaceFile({ file, compressSize: 1 });
       await updateCustomer(customer._id, { ...customer, avatar: _file.relativePath });
       if (_currentAvatar) await removeFileFromRelativePath(_currentAvatar).catch(onError);
     } catch (error) {

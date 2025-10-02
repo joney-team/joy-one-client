@@ -6,7 +6,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, type FC } from "react";
 import { CategoryDto, CategoryEntity, CategoryType } from "../category-types";
 import { Button } from "@/components/buttons/button";
-import { onUploadFile } from "@/modules/files/file-service";
+import { onUploadWorkspaceFile } from "@/modules/files/file-service";
 import { api } from "@/modules/apis";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -66,7 +66,7 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
       const { customFields, thumbnail, ...rest } = values;
 
       const thumbnailValue = values.thumbnail
-        ? await onUploadFile({ file: values.thumbnail })
+        ? await onUploadWorkspaceFile({ file: values.thumbnail })
         : undefined;
 
       let category: CategoryEntity;

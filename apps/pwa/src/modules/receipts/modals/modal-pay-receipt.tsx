@@ -8,7 +8,7 @@ import { Timer } from "@/components/timer";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
-import { uploadFile } from "@/modules/files/file-service";
+import { uploadWorkspaceFile } from "@/modules/files/file-service";
 import { FilesBox } from "@/modules/files/files-box";
 import { num, t, tMulti } from "@/modules/lang/lang-service";
 import { getLoan } from "@/modules/loans/loans-service";
@@ -152,7 +152,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
       await Promise.all(
         receiptFiles.map((file) =>
-          uploadFile({
+          uploadWorkspaceFile({
             file,
             relatedCustomerId: receipt.relatedCustomerId,
             relatedReceiptId: receipt.id,

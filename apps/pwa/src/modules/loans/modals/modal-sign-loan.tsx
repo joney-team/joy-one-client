@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { SignatureInput } from "@/components/inputs/signature-input";
 import { ModalTitle } from "@/components/modal-title";
-import { onUploadFile } from "@/modules/files/file-service";
+import { onUploadWorkspaceFile } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { signLoan } from "@/modules/loans/loans-service";
 import { LoanEntity } from "@/modules/loans/loans-types";
@@ -30,7 +30,7 @@ export const ModalSignLoan: FC = () => {
   const onSubmit = async () => {
     if (!signature || !props) return;
     try {
-      const signatureImage = await onUploadFile({ file: signature });
+      const signatureImage = await onUploadWorkspaceFile({ file: signature });
       await signLoan(props.loan.id, { signature: signatureImage.relativePath });
       onClose();
     } catch (error) {
@@ -45,7 +45,12 @@ export const ModalSignLoan: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={`Ký khoản vay #${renderEntityCode(props?.loan.code)}`} icon={IconCreditCardPay} />}
+      title={
+        <ModalTitle
+          title={`Ký khoản vay #${renderEntityCode(props?.loan.code)}`}
+          icon={IconCreditCardPay}
+        />
+      }
       onClose={onClose}
       opened={opened}
       size={1000}

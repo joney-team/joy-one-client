@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
-import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
+import { onUploadWorkspaceFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceTypeIcon } from "@/modules/workspaces/workspaces-service";
@@ -53,7 +53,7 @@ export const WorkspaceInformation: FC = () => {
     setAvatarUploading(true);
     try {
       const currentAvatar = workspace.userMember?.workspace?.logo;
-      const _file = await onUploadFile({ file, maxWidthOrHeight: 300 });
+      const _file = await onUploadWorkspaceFile({ file, maxWidthOrHeight: 300 });
       await workspace.update({
         ...workspace.userMember.workspace,
         logo: _file.relativePath,
