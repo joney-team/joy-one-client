@@ -41,6 +41,7 @@ export const ModalLang: FC = () => {
           return (
             <Card
               withBorder
+              shadow="none"
               key={locale}
               p={10}
               style={{ cursor: "pointer", borderColor: isSelected ? color("primary") : undefined }}
@@ -58,6 +59,7 @@ export const ModalLang: FC = () => {
 
         <Card
           withBorder
+          shadow="none"
           p={10}
           style={{ cursor: "pointer", borderColor: !lang.locale ? color("primary") : undefined }}
           onClick={() => onSelect()}

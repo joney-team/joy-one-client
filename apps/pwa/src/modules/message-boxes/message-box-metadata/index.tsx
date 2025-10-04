@@ -12,7 +12,6 @@ import { CustomerEntity } from "@/modules/customers/customer-types";
 import { t } from "@/modules/lang/lang-service";
 import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { setCustomerToMessageBox } from "@/modules/message-boxes/message-boxes-service";
-import { OnModalOrderTable } from "@/modules/orders/order-table/order-table-modal";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
@@ -33,7 +32,6 @@ import { FC } from "react";
 import { useMessageBoxes } from "../message-boxes-context";
 import { MessageBoxMetadataBookings } from "./message-box-metadata-bookings";
 import { MessageBoxMetadataLoans } from "./message-box-metadata-loans";
-import { MessageBoxMetadataOrders } from "./message-box-metadata-orders";
 import { AccordionItem } from "./message-box-metadata-types";
 
 const accordionItems: AccordionItem[] = [
@@ -48,11 +46,11 @@ const accordionItems: AccordionItem[] = [
     component: MessageBoxMetadataBookings,
     onCreate: (customer) => OnModalBooking({ customer }),
   },
-  {
-    moduleId: "orders",
-    component: MessageBoxMetadataOrders,
-    onCreate: (customer) => OnModalOrderTable({ customer }),
-  },
+  // TODO: Add orders
+  // {
+  //   moduleId: "orders",
+  //   component: MessageBoxMetadataOrders,
+  // },
 ];
 
 export const MetadataMessageBox: FC = () => {

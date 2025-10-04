@@ -1,6 +1,5 @@
-import { useColor } from "@/modules/theme/use-color";
-import { onActionLoad } from "@/utils/actions";
-import { OnModalOrderTable } from "@/modules/orders/order-table/order-table-modal";
+"use client";
+
 import { OnModalPrinter } from "@/modals/modal-printer";
 import { num, renderDateTime, t } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
@@ -10,8 +9,10 @@ import {
   updateOrder,
 } from "@/modules/orders/orders-service";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
+import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onActionLoad } from "@/utils/actions";
 import { Anchor, Card, CardProps, Group, Stack, Table, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCashRegister, IconEdit, IconPrinter } from "@tabler/icons-react";
@@ -19,11 +20,14 @@ import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 import { Button } from "../../components/buttons/button";
 import { Circle } from "../../components/circle";
+import { Renderer } from "../../components/renderer";
 import { CustomerInput } from "../customers/components/customer-input";
 import { WorkspaceMemberInput } from "../workspace-members/components/workspace-member-input";
 import { WorkspaceMembersInput } from "../workspace-members/components/workspace-members-input";
-import { getOrderDto } from "@/modules/orders/order-table/order-table-provider";
-import { Renderer } from "../../components/renderer";
+import {
+  normalizeEntityToOrder,
+  normalizeOrderForSubmission,
+} from "./orders-management/orders-management-utils";
 
 interface OrderCardProps {
   data: OrderEntity;
@@ -39,15 +43,10 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
   const updateOrderDebounced = useDebouncedCallback(async (newOrder: OrderEntity) => {
     if (!order) return;
+    const _order = normalizeEntityToOrder(newOrder);
+
     onActionLoad({
-      process: async () =>
-        updateOrder(
-          order.id,
-          getOrderDto({
-            ...newOrder,
-            assigneeUsers: newOrder.assigneeUsers ?? [],
-          })
-        ),
+      process: async () => updateOrder(order.id, normalizeOrderForSubmission(_order)),
     });
   }, 1000);
 
@@ -224,10 +223,11 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
           <Group justify="center">
             <Button
               variant="subtle"
+              component={Link}
+              href={`/orders/sale?code=${order.code}`}
               size="xs"
               leftIcon={IconEdit}
               color="gray"
-              onClick={() => OnModalOrderTable({ order })}
               fw={400}
             >
               {t("edit")}

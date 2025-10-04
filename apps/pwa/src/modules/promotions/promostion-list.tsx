@@ -64,7 +64,7 @@ export const PromostionList = () => {
               );
             },
           },
-          expireAt: DateTimeColumn({ name: "expireAt", isDefaultHide: true, isSortable: true }),
+          expireAt: DateTimeColumn({ name: "expireAt", defaultHidden: true, sortable: true }),
           status: EnumColumn<PromotionStatus>({
             w: 200,
             options: Object.values(PromotionStatus).map((status) => ({

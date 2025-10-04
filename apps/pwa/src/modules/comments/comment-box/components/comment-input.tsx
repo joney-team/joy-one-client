@@ -1,7 +1,18 @@
 import { uploadFile } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { detectMessageAttachmentType } from "@/modules/message-boxes/message-boxes-service";
-import { ActionIcon, Button, Card, em, Group, ScrollArea, Stack, Text, Textarea, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Card,
+  em,
+  Group,
+  ScrollArea,
+  Stack,
+  Text,
+  Textarea,
+  Title,
+} from "@mantine/core";
 import {
   Dropzone,
   IMAGE_MIME_TYPE,
@@ -83,7 +94,13 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
         }}
       >
         <Stack p={16} w="100%" style={{ pointerEvents: "all" }}>
-          <Card bg="var(--mantine-color-body)" shadow="xs" w="100%" p={8} style={{ position: "relative", zIndex: 1 }}>
+          <Card
+            bg="var(--mantine-color-body)"
+            shadow="xs"
+            w="100%"
+            p={8}
+            style={{ position: "relative", zIndex: 1 }}
+          >
             <Stack gap={5}>
               <Textarea
                 px={8}
@@ -107,7 +124,11 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
                 {files.length > 0 && (
                   <Group gap={10}>
                     {files.map((file, key) => (
-                      <FileSrcCard key={key} src={file} onRemove={() => setFiles((f) => f.filter((f) => f !== file))} />
+                      <FileSrcCard
+                        key={key}
+                        src={file}
+                        onRemove={() => setFiles((f) => f.filter((f) => f !== file))}
+                      />
                     ))}
                   </Group>
                 )}
@@ -120,17 +141,32 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
                     onDrop={(files) => setFiles((f) => [...f, ...files])}
                     style={{ padding: 0, border: "none", background: "transparent" }}
                   >
-                    <ActionIcon size="lg" variant="subtle" color="gray" style={{ pointerEvents: "all" }}>
+                    <ActionIcon
+                      size="lg"
+                      variant="subtle"
+                      color="gray"
+                      style={{ pointerEvents: "all" }}
+                    >
                       <IconPhoto size={em(22)} strokeWidth={1.5} />
                     </ActionIcon>
                   </Dropzone>
 
                   <Dropzone
-                    accept={[...PDF_MIME_TYPE, ...MS_WORD_MIME_TYPE, ...MS_EXCEL_MIME_TYPE, ...MS_POWERPOINT_MIME_TYPE]}
+                    accept={[
+                      ...PDF_MIME_TYPE,
+                      ...MS_WORD_MIME_TYPE,
+                      ...MS_EXCEL_MIME_TYPE,
+                      ...MS_POWERPOINT_MIME_TYPE,
+                    ]}
                     onDrop={(files) => setFiles((f) => [...f, ...files])}
                     style={{ padding: 0, border: "none", background: "transparent" }}
                   >
-                    <ActionIcon size="lg" variant="subtle" color="gray" style={{ pointerEvents: "all" }}>
+                    <ActionIcon
+                      size="lg"
+                      variant="subtle"
+                      color="gray"
+                      style={{ pointerEvents: "all" }}
+                    >
                       <IconPaperclip size={em(22)} strokeWidth={1.5} />
                     </ActionIcon>
                   </Dropzone>

@@ -151,12 +151,12 @@ export const ReportWidgets: FC = () => {
             },
           ]}
           onChange={(value) => {
-            report.setParam("period", value, { isSilient: false });
+            report.setParams({ period: value }, { isSilient: false });
           }}
           onClear={
             Object.keys(report.params)
               ? undefined
-              : () => report.removeParam("period", { isSilient: false })
+              : () => report.removeParams(["period"], { isSilient: false })
           }
         />
 
@@ -169,7 +169,7 @@ export const ReportWidgets: FC = () => {
             if (period === Period.DATE) return renderDate(date);
           })()}
           isActive
-          onClear={() => report.removeParam("date", { isSilient: false })}
+          onClear={() => report.removeParams(["date"], { isSilient: false })}
           onClick={() =>
             OnModalDatePicker({
               period,
@@ -177,14 +177,14 @@ export const ReportWidgets: FC = () => {
               onSelected:
                 period === Period.DATE
                   ? (date) => {
-                      report.setParam("date", DateTimeUtils.timeToSeconds(date));
+                      report.setParams({ date: DateTimeUtils.timeToSeconds(date) });
                     }
                   : undefined,
               onRangeSelected:
                 period !== Period.DATE
                   ? (range) => {
                       if (range) {
-                        report.setParam("date", DateTimeUtils.timeToSeconds(range[0]));
+                        report.setParams({ date: DateTimeUtils.timeToSeconds(range[0]) });
                       }
                     }
                   : undefined,
@@ -197,7 +197,7 @@ export const ReportWidgets: FC = () => {
             onSelect={(user) => {
               if (!user) return;
               setUerMemberInfo(user);
-              report.setParam("userId", user.userId);
+              report.setParams({ userId: user.userId });
             }}
             optionRightSection={(user) => {
               const isSelected = query.userId === user.userId;
@@ -274,7 +274,7 @@ export const ReportWidgets: FC = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               e.preventDefault();
-                              report.removeParam("userId");
+                              report.removeParams(["userId"]);
                             }}
                           >
                             <IconX size={7} strokeWidth={4} />
@@ -291,17 +291,19 @@ export const ReportWidgets: FC = () => {
 
         {workspace.isShouldEnableBranches && (
           <WorkspaceBranchSelector
+            isShowRoot
             onSelect={(branch) => {
               if (!branch) return;
-              report.setParam("workspaceBranchIds", branch._id);
+              report.setParams({ workspaceBranchIds: branch._id });
             }}
             target={(ctx) => {
               return (
                 <Hovered>
                   {(hover) => {
-                    const workspaceBranch = workspaceBranches.find((v) =>
-                      query.workspaceBranchIds.includes(v._id)
-                    );
+                    const workspaceBranch = [
+                      ...workspaceBranches,
+                      { _id: "root", name: t("main_workspace_branch") },
+                    ].find((v) => query.workspaceBranchIds.includes(v._id));
 
                     return (
                       <Group
@@ -313,7 +315,11 @@ export const ReportWidgets: FC = () => {
                           onClick={ctx.toggle}
                           size="compact-md"
                           h={32}
-                          color={query.userId ? "primary" : "var(--mantine-color-dimmed)"}
+                          color={
+                            query.workspaceBranchIds.length > 0
+                              ? "primary"
+                              : "var(--mantine-color-dimmed)"
+                          }
                           variant="outline"
                           radius={100}
                           fz={12}
@@ -354,7 +360,7 @@ export const ReportWidgets: FC = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               e.preventDefault();
-                              report.removeParam("workspaceBranchIds");
+                              report.removeParams(["workspaceBranchIds"]);
                             }}
                           >
                             <IconX size={7} strokeWidth={4} />

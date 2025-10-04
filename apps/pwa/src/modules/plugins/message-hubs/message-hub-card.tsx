@@ -9,12 +9,23 @@ import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { uploadFile } from "@/modules/files/file-service";
 import { localeNames, t } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
-import { removePluginMessageHub, updatePluginMessageHub } from "@/modules/plugins/message-hubs/message-hubs-service";
-import { ChannelWidgetWelcomeInput, PluginMessageHubEntity } from "@/modules/plugins/message-hubs/message-hubs-types";
+import {
+  removePluginMessageHub,
+  updatePluginMessageHub,
+} from "@/modules/plugins/message-hubs/message-hubs-service";
+import {
+  ChannelWidgetWelcomeInput,
+  PluginMessageHubEntity,
+} from "@/modules/plugins/message-hubs/message-hubs-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { isDiff } from "@/utils/object.utils";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
   ActionIcon,
@@ -71,20 +82,31 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
     let _widgetSettings = { ...debouced };
 
     if ((_widgetSettings.brandLogo as any) instanceof File) {
-      const brandLogo = await uploadFile({ file: _widgetSettings.brandLogo as any, maxWidthOrHeight: 200 });
+      const brandLogo = await uploadFile({
+        file: _widgetSettings.brandLogo as any,
+        maxWidthOrHeight: 200,
+      });
       _widgetSettings.brandLogo = brandLogo.url;
     }
 
     if ((_widgetSettings.chatIcon as any) instanceof File) {
-      const chatIcon = await uploadFile({ file: _widgetSettings.chatIcon as any, maxWidthOrHeight: 200 });
+      const chatIcon = await uploadFile({
+        file: _widgetSettings.chatIcon as any,
+        maxWidthOrHeight: 200,
+      });
       _widgetSettings.chatIcon = chatIcon.url;
     }
 
     if (_widgetSettings.welcomeInputs) {
-      _widgetSettings.welcomeInputs = _widgetSettings.welcomeInputs.filter((input) => !!input.type && !!input.id);
+      _widgetSettings.welcomeInputs = _widgetSettings.welcomeInputs.filter(
+        (input) => !!input.type && !!input.id
+      );
     }
 
-    updatePluginMessageHub(messageHub._id, { ...props.messageHub, widgetSettings: _widgetSettings });
+    updatePluginMessageHub(messageHub._id, {
+      ...props.messageHub,
+      widgetSettings: _widgetSettings,
+    });
   };
 
   useEffect(() => {
@@ -214,15 +236,21 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
           <TextInput
             label={t("welcome_message")}
             value={widgetSettings.welcomMessage}
-            placeholder={t("welcome_message_placeholder", { workspaceName: workspace.userMember.workspace.name })}
-            onChange={(e) => setWidgetSettings({ ...widgetSettings, welcomMessage: e.target.value })}
+            placeholder={t("welcome_message_placeholder", {
+              workspaceName: workspace.userMember.workspace.name,
+            })}
+            onChange={(e) =>
+              setWidgetSettings({ ...widgetSettings, welcomMessage: e.target.value })
+            }
           />
 
           <TextInput
             label={t("welcomSubMessage")}
             value={widgetSettings.welcomSubMessage}
             placeholder={t("welcomSubMessage_placeholder")}
-            onChange={(e) => setWidgetSettings({ ...widgetSettings, welcomSubMessage: e.target.value })}
+            onChange={(e) =>
+              setWidgetSettings({ ...widgetSettings, welcomSubMessage: e.target.value })
+            }
           />
 
           <Select
@@ -232,7 +260,9 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
               { value: "right", label: t("right") },
             ]}
             value={widgetSettings.position}
-            onChange={(position) => setWidgetSettings({ ...widgetSettings, position: position as any })}
+            onChange={(position) =>
+              setWidgetSettings({ ...widgetSettings, position: position as any })
+            }
           />
 
           <Select
@@ -252,7 +282,14 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
         />
 
         <Center>
-          <Button variant="subtle" size="xs" color="red" leftIcon={IconTrash} onClick={onRemove} fw={400}>
+          <Button
+            variant="subtle"
+            size="xs"
+            color="red"
+            leftIcon={IconTrash}
+            onClick={onRemove}
+            fw={400}
+          >
             {t("remove")}
           </Button>
         </Center>
@@ -313,7 +350,10 @@ const WelcomInputs: FC<{
         }}
       >
         <Stack mt={3} gap={10}>
-          <SortableContext items={props.inputs.map((v) => v.id)} strategy={verticalListSortingStrategy}>
+          <SortableContext
+            items={props.inputs.map((v) => v.id)}
+            strategy={verticalListSortingStrategy}
+          >
             {props.inputs.map((input, index) => {
               return (
                 <WelcomInput

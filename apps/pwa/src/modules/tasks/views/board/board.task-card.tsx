@@ -30,7 +30,7 @@ import {
   ThemeIcon,
   Tooltip,
 } from "@mantine/core";
-import { useHover, useInViewport } from "@mantine/hooks";
+import { useHover } from "@mantine/hooks";
 import {
   Icon,
   IconCalendar,
@@ -47,6 +47,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag, useTaskDrop } from "../../tasks-dnd-provider";
+import { useInViewport } from "@/hooks/use-in-viewport";
 
 interface BoardTaskCardProps {
   id: string;

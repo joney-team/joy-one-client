@@ -343,6 +343,7 @@ export const FileBoxCard: FC<{
                     createdAt: DateTimeUtils.timeToSeconds(),
                     relativePath: "",
                     size: file.size,
+                    path: "",
                   };
                   OnModalFileGallery({ files: [_file], disabled: props.disabled });
                 } else {

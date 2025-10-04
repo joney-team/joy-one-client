@@ -14,15 +14,24 @@ import { Selector, SelectorProps } from "../../components/selector";
 
 type WorkspaceBranchOption = Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline">;
 
-interface WorkspaceBranchSelectorProps extends Partial<SelectorProps<WorkspaceBranchOption>> {}
+interface WorkspaceBranchSelectorProps extends Partial<SelectorProps<WorkspaceBranchOption>> {
+  isShowRoot?: boolean;
+}
 
-export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = (props) => {
+export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
+  isShowRoot,
+  ...props
+}) => {
   const workspace = useWorkspace();
   const isFullAccess = workspace.userMember.permissions.includes(
     WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
   );
 
   const listRoute = isFullAccess ? "/workspace-branches" : undefined;
+  const rootOption = {
+    _id: "root",
+    name: t("main_workspace_branch"),
+  };
 
   return (
     <Selector<WorkspaceBranchOption>
@@ -36,7 +45,13 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = (props)
         return searchArray(workspace.userMember.workspaceBranches, ["name"], q);
       }}
       listRoute={listRoute}
-      pinnedOptions={isFullAccess ? undefined : workspace.userMember.workspaceBranches}
+      pinnedOptions={
+        isFullAccess
+          ? isShowRoot
+            ? [rootOption]
+            : undefined
+          : workspace.userMember.workspaceBranches
+      }
       searchPlaceholder={`${t("search_with", {
         query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
       })}`}

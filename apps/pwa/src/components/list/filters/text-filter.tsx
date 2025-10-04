@@ -61,7 +61,7 @@ export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
               e.preventDefault();
               e.stopPropagation();
               const value = (e.target as any).value;
-              list.setParam(colKey, value);
+              list.setParams({ [colKey]: value });
               setOpened(false);
             }
           }}

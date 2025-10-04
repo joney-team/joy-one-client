@@ -80,8 +80,8 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
                   </ThemeIcon>
                 ),
               }))}
-              onClear={() => tasks.removeParam("tagFolderId")}
-              onChange={(value) => tasks.setParam("tagFolderId", value)}
+              onClear={() => tasks.removeParams(["tagFolderId"])}
+              onChange={(value) => tasks.setParams({ tagFolderId: value })}
               enabled={taskFolderTags.length > 0}
             />
           </Group>

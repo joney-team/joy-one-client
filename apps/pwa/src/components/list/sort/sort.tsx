@@ -14,7 +14,7 @@ export const Sort: FC<ListContext> = (props) => {
   const color = useColor();
   const layout = useLayout();
 
-  if (columnSettings.every((col) => !columns[col.id]?.isSortable)) return null;
+  if (columnSettings.every((col) => !columns[col.id]?.sortable)) return null;
 
   const sorting = columnSettings.filter(
     (col) => list.params[`sort${capitalizeFirstLetter(col.id, false)}`]
@@ -41,7 +41,7 @@ export const Sort: FC<ListContext> = (props) => {
       <Menu.Dropdown>
         {columnSettings.map((columnSetting) => {
           const column = columns[columnSetting.id];
-          if (!column || !column.isSortable) return null;
+          if (!column || !column.sortable) return null;
 
           const queryKey = getSortQueryKey(columnSetting.id);
           const querySort = list.params[queryKey];
@@ -61,8 +61,8 @@ export const Sort: FC<ListContext> = (props) => {
                     variant={isAsc ? "filled" : "subtle"}
                     color={color(isAsc ? "primary" : "dark")}
                     onClick={() => {
-                      if (isAsc) return list.removeParam(queryKey);
-                      return list.setParam(queryKey, "1");
+                      if (isAsc) return list.removeParams([queryKey]);
+                      return list.setParams({ [queryKey]: "1" });
                     }}
                   >
                     <IconArrowUp size={16} />
@@ -72,8 +72,8 @@ export const Sort: FC<ListContext> = (props) => {
                     variant={isDesc ? "filled" : "subtle"}
                     color={color(isDesc ? "primary" : "dark")}
                     onClick={() => {
-                      if (isDesc) return list.removeParam(queryKey);
-                      return list.setParam(queryKey, "-1");
+                      if (isDesc) return list.removeParams([queryKey]);
+                      return list.setParams({ [queryKey]: "-1" });
                     }}
                   >
                     <IconArrowDown size={16} />

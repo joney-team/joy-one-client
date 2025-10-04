@@ -1,11 +1,11 @@
 "use client";
 
 import { onReconnected } from "@/modules/events/event-service";
+import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 import { deleteCookie, setCookie } from "cookies-next/client";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { getClientLocale } from "./lang-service";
 import { LangState, Locale, LocaleConfig } from "./lang-types";
-import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 
 import dayjs from "dayjs";
 import "dayjs/locale/en";
@@ -27,7 +27,6 @@ import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loa
 import { StorageKey } from "@/types";
 import { getGlobal } from "../../global";
 import { api } from "../apis";
-import { setUserLocale } from "../users/users-service";
 import { Context } from "./lang-context";
 
 const LangProvider: FC<PropsWithChildren> = (props) => {
