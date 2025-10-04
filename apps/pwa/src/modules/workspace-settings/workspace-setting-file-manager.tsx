@@ -9,6 +9,8 @@ import { fileTypeIcons } from "../files/file-service";
 import { FileEntity, FileType } from "../files/file-types";
 import { OnModalFileGallery } from "../files/modals/modal-file-gallery";
 import { t } from "../lang/lang-service";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { UserColumn } from "../users/user-column";
 
 export const WorkspaceFileManager: FC = () => {
   return (
@@ -38,6 +40,7 @@ export const WorkspaceFileManager: FC = () => {
               );
             },
           },
+          createdAt: DateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
           fileName: {
             render: ({ value, data }) => {
               return (
