@@ -140,27 +140,27 @@ export const BookingList: FC = () => {
   const setDate = (date: Date) => {
     const isToday = dayjs(date).isSame(new Date(), "day");
     if (isToday) {
-      bookings.removeParam("date");
+      bookings.removeParams(["date"]);
     } else {
-      bookings.setParam("date", DateTimeUtils.timeToSeconds(date));
+      bookings.setParams({ date: DateTimeUtils.timeToSeconds(date) });
     }
   };
 
   const nextRange = () => {
     const nextDate = dayjs(query.date).add(1, query.view).toDate();
     if (dayjs(nextDate).isSame(new Date(), "day")) {
-      bookings.removeParam("date");
+      bookings.removeParams(["date"]);
     } else {
-      bookings.setParam("date", DateTimeUtils.timeToSeconds(nextDate));
+      bookings.setParams({ date: DateTimeUtils.timeToSeconds(nextDate) });
     }
   };
 
   const previousRange = () => {
     const previousDate = dayjs(query.date).subtract(1, query.view).toDate();
     if (dayjs(previousDate).isSame(new Date(), "day")) {
-      bookings.removeParam("date");
+      bookings.removeParams(["date"]);
     } else {
-      bookings.setParam("date", DateTimeUtils.timeToSeconds(previousDate));
+      bookings.setParams({ date: DateTimeUtils.timeToSeconds(previousDate) });
     }
   };
 
@@ -184,9 +184,9 @@ export const BookingList: FC = () => {
       : [...query.assigneeUserIds, member.userId];
 
     if (assigneeUserIds.length === 0) {
-      bookings.removeParam("assigneeUserIds");
+      bookings.removeParams(["assigneeUserIds"]);
     } else {
-      bookings.setParam("assigneeUserIds", assigneeUserIds.toString());
+      bookings.setParams({ assigneeUserIds: assigneeUserIds.toString() });
     }
   };
 
@@ -194,9 +194,9 @@ export const BookingList: FC = () => {
 
   const selectStatus = (status?: string) => {
     if (status === "default" || !status) {
-      bookings.removeParam("status");
+      bookings.removeParams(["status"]);
     } else if (Object.values(BookingStatus).includes(status as BookingStatus)) {
-      bookings.setParam("status", status);
+      bookings.setParams({ status });
     }
   };
 
@@ -394,7 +394,7 @@ export const BookingList: FC = () => {
 
               <CalendarViewSelector
                 view={query.view}
-                onChange={(view) => bookings.setParam("view", view)}
+                onChange={(view) => bookings.setParams({ view })}
               />
 
               <Tooltip label={t("select_booking_slots_to_create_booking_desc")}>

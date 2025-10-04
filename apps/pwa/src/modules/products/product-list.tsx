@@ -15,6 +15,7 @@ import { type FC } from "react";
 import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
 import { getProductIcon } from "./products-service";
+import { CodeColumn } from "@/components/list/columns/code-column";
 
 export const ProductList: FC = () => {
   return (
@@ -56,6 +57,7 @@ export const ProductList: FC = () => {
               );
             },
           },
+          code: CodeColumn({ defaultHidden: true }),
           categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
           stock: {
             w: 150,
@@ -81,7 +83,7 @@ export const ProductList: FC = () => {
           price: {
             w: 250,
             align: "right",
-            isSortable: true,
+            sortable: true,
             render: ({ data }) => {
               if (data.minPrice && data.maxPrice) {
                 return (

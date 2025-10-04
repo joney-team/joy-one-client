@@ -4,20 +4,29 @@ import { t } from "../lang/lang-service";
 import { ReceiptEntity } from "../receipts/receipts-types";
 import {
   LoanAssetEstimations,
-  LoanEntity, LoanLiquidationCalculated, LoanPackageType,
-  LoanPaymentPlanResult, LoanStatus,
+  LoanEntity,
+  LoanLiquidationCalculated,
+  LoanPackageType,
+  LoanPaymentPlanResult,
+  LoanStatus,
 } from "./loans-types";
 
 import { api } from "../apis";
 import {
-  CreateLoanDto, FulfillLoanDto, GetPaymentPlanDto,
+  CreateLoanDto,
+  FulfillLoanDto,
+  GetPaymentPlanDto,
   ImportLoanDto,
-  RejectLoanDto, SignLoanDto, UpdateLoanAmountDto,
-  UpdateLoanAssetDataDto, UpdateLoanPackageDto, UpdateLoanWorkspaceBranchDto
+  RejectLoanDto,
+  SignLoanDto,
+  UpdateLoanAmountDto,
+  UpdateLoanAssetDataDto,
+  UpdateLoanPackageDto,
+  UpdateLoanWorkspaceBranchDto,
 } from "./loan-dtos";
 
 export async function getLoans(query?: any, controller?: AbortController) {
-  return api.get<ResponseList<LoanEntity>>('/loans', { params: query, signal: controller?.signal });
+  return api.get<ResponseList<LoanEntity>>("/loans", { params: query, signal: controller?.signal });
 }
 
 export async function getLoan(id: string) {
@@ -90,7 +99,7 @@ export async function prepareLoanAssetData(data: any) {
     for (let i = 0; i < _data.images.length; i++) {
       const f = _data.images[i];
       if (f instanceof File) {
-        const _file = await uploadFile({ file: f, });
+        const _file = await uploadFile({ file: f });
         _data.images[i] = _file.relativePath;
       }
     }
@@ -100,7 +109,7 @@ export async function prepareLoanAssetData(data: any) {
     for (let i = 0; i < _data.receipts.length; i++) {
       const f = _data.receipts[i];
       if (f instanceof File) {
-        const _file = await uploadFile({ file: f, });
+        const _file = await uploadFile({ file: f });
         _data.receipts[i] = _file.relativePath;
       }
     }
@@ -116,7 +125,7 @@ export async function prepareLoanAssetData(data: any) {
     _data.driverLicenseImages.back = _file.relativePath;
   }
 
-  return _data
+  return _data;
 }
 
 export async function loanLiquidation(id: string) {
@@ -132,30 +141,30 @@ export async function getLoanPaymentPlan(dto: GetPaymentPlanDto) {
 }
 
 export const loanStatusColors: {
-  [key in LoanStatus]: string
+  [key in LoanStatus]: string;
 } = {
-  [LoanStatus.PENDING_SIGN]: 'gray',
-  [LoanStatus.PENDING]: 'gray',
-  [LoanStatus.APPROVED]: 'violet',
-  [LoanStatus.FULFILLED]: 'orange',
-  [LoanStatus.REJECTED]: 'red',
-  [LoanStatus.COMPLETED]: 'green',
-  [LoanStatus.OVERDUE]: 'red',
-}
+  [LoanStatus.PENDING_SIGN]: "gray",
+  [LoanStatus.PENDING]: "gray",
+  [LoanStatus.APPROVED]: "violet",
+  [LoanStatus.FULFILLED]: "orange",
+  [LoanStatus.REJECTED]: "red",
+  [LoanStatus.COMPLETED]: "green",
+  [LoanStatus.OVERDUE]: "red",
+};
 
 export const defaultLoanAssetEstimations: LoanAssetEstimations = {
   brands: [],
   estimations: [],
   models: [],
   colors: [],
-}
+};
 
 export async function getLoanAssetEstimations(): Promise<LoanAssetEstimations> {
   try {
     let data = await api.get(`/loans/asset-estimations`);
 
-    Object.keys(defaultLoanAssetEstimations).forEach(key => {
-      if (typeof data[key] === 'undefined') {
+    Object.keys(defaultLoanAssetEstimations).forEach((key) => {
+      if (typeof data[key] === "undefined") {
         data[key] = (defaultLoanAssetEstimations as any)[key];
       }
     });
@@ -175,20 +184,20 @@ export async function healthCheckLoan(loanId: string) {
 }
 
 export const loanPackageTypeColors: {
-  [key in LoanPackageType]: string
+  [key in LoanPackageType]: string;
 } = {
-  [LoanPackageType.FIXED_CAPITAL]: 'violet',
-  [LoanPackageType.UNFIXED_CAPITAL]: 'grape',
-  [LoanPackageType.INSTALLMENT]: 'green',
-}
+  [LoanPackageType.FIXED_CAPITAL]: "violet",
+  [LoanPackageType.UNFIXED_CAPITAL]: "grape",
+  [LoanPackageType.INSTALLMENT]: "green",
+};
 
 export function renderLoanPeriod(days: number) {
   const month = Math.ceil(days / 30);
   if (days >= 30 && Number.isInteger(month)) {
-    return `${month} ${t('months')}`;
+    return `${month} ${t("months")}`;
   }
 
-  return `${days} ${t('days')}`;
+  return `${days} ${t("days")}`;
 }
 
 export async function loanLiquidationCalculate(id: string) {

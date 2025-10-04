@@ -23,7 +23,6 @@ import { useDisclosure, useElementSize, useHover } from "@mantine/hooks";
 import {
   IconBuildingSkyscraper,
   IconLayout,
-  IconLayoutSidebarLeftCollapse,
   IconPlus,
   IconPuzzle,
   IconSettings,
@@ -35,7 +34,7 @@ import {
 import Link from "next/link";
 import { FC, Fragment } from "react";
 import { Avatar } from "../../components/avatar";
-import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+import { useWorkspaceLayout } from "../hooks/use-workspace-layout";
 
 interface WorkspaceNavigationDrawerProps {
   style?: MantineStyleProp;
@@ -125,20 +124,6 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
               {workspace.userMember.workspace.name}
             </Text>
           </Stack>
-
-          <ActionIcon
-            variant="subtle"
-            color="var(--mantine-color-dimmed)"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              workspaceLayout.setNavigationWidth(
-                workspaceLayoutConfig.defaultNavigationCollapsedWidth
-              );
-            }}
-          >
-            <IconLayoutSidebarLeftCollapse strokeWidth={1.6} size={20} />
-          </ActionIcon>
         </Renderer>
       </Group>
 

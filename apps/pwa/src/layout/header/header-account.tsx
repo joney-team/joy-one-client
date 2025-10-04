@@ -4,15 +4,20 @@ import { useApp } from "@/app.context";
 import { Avatar } from "@/components/avatar";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
-import { OnModalLang } from "@/modules/lang/modal-language";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useLang } from "@/modules/lang/lang-context";
 import { t } from "@/modules/lang/lang-service";
-import { UserRole } from "@/modules/users/users-types";
+import { OnModalLang } from "@/modules/lang/modal-language";
 import { getUserMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ActionIcon, em, Group, Menu, Stack, Text } from "@mantine/core";
-import { IconBell, IconChevronDown, IconLogout2, IconSettings, IconShieldLock, IconTools } from "@tabler/icons-react";
+import {
+  IconBell,
+  IconChevronDown,
+  IconLogout2,
+  IconSettings,
+  IconShieldLock,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
 
@@ -52,11 +57,19 @@ export const WorkspaceHeaderAccount: FC = () => {
       <Menu.Dropdown miw={200} className="shadow">
         <Menu.Label>{t("profile")}</Menu.Label>
 
-        <Menu.Item component={Link} href="/profile/settings" leftSection={<IconSettings size={20} strokeWidth={1.6} />}>
+        <Menu.Item
+          component={Link}
+          href="/profile/settings"
+          leftSection={<IconSettings size={20} strokeWidth={1.6} />}
+        >
           {t("profile_settings")}
         </Menu.Item>
 
-        <Menu.Item component={Link} href="/profile/secure" leftSection={<IconShieldLock size={20} strokeWidth={1.6} />}>
+        <Menu.Item
+          component={Link}
+          href="/profile/secure"
+          leftSection={<IconShieldLock size={20} strokeWidth={1.6} />}
+        >
           {t("secure")}
         </Menu.Item>
 
@@ -70,15 +83,12 @@ export const WorkspaceHeaderAccount: FC = () => {
           {t("notifications")}
         </Menu.Item>
 
-        <Menu.Item leftSection={<Image src={`/lang/${lang.locale}.png`} w={18} />} onClick={() => OnModalLang()}>
+        <Menu.Item
+          leftSection={<Image src={`/lang/${lang.locale}.png`} w={18} />}
+          onClick={() => OnModalLang()}
+        >
           {t("language")}
         </Menu.Item>
-
-        <Renderer visible={auth.user.role === UserRole.SYS_ADMIN}>
-          <Menu.Item component={Link} href="/admin-tools" leftSection={<IconTools size={20} strokeWidth={1.6} />}>
-            Admin Tools
-          </Menu.Item>
-        </Renderer>
 
         <Menu.Label>
           {t("version")} {app.config.version}

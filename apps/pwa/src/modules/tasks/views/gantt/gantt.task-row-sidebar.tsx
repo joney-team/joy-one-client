@@ -16,7 +16,7 @@ import { getTaskEntity } from "@/modules/tasks/tasks-service";
 import { ReorderTaskPotision } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Box, Button, em, Group, rgba, ThemeIcon, Title, Tooltip } from "@mantine/core";
-import { useDebouncedCallback, useHover, useInViewport, useMergedRef } from "@mantine/hooks";
+import { useDebouncedCallback, useHover, useMergedRef } from "@mantine/hooks";
 import {
   IconArrowRight,
   IconCornerDownRight,
@@ -36,6 +36,7 @@ import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
 import { useGanttTaskState } from "./gantt.hooks";
 import { SidebarRowSticky } from "./gantt.layout";
+import { useInViewport } from "@/hooks/use-in-viewport";
 
 export interface GanttTaskRowSidebarProps {
   id: string;

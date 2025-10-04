@@ -5,7 +5,7 @@ import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loa
 import { Fullscreen } from "@/components/fullscreen";
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
 import { getGlobal } from "@/global";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useRouter } from "@/hooks/use-router";
 import { ConnectMetaPagesModal, OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
 import { useAuth } from "@/modules/auth/auth-context";
@@ -46,6 +46,7 @@ import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
 import { AxiosError } from "axios";
@@ -510,6 +511,19 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     if (isRequireBranches) return <WorkspaceRequireBranches />;
     if (userMember.workspace.isArchived) return <WorkspaceArchived />;
   }, [isInitialized, inviteCode, userMember, isRequireBranches, auth.user]);
+
+  useEffect(() => {
+    if (isInitialized && contextValue.userMembers.length > 0) {
+      const query = new URLSearchParams(window.location.search);
+      const workspaceId = query.get("w");
+      const userMember = contextValue.userMembers.find((m) => m.workspaceId === workspaceId);
+      const currentWorkspaceId = getLocalStorage(StorageKey.WORKSPACE_ID);
+      if (userMember && userMember.workspaceId !== currentWorkspaceId) {
+        router.replace(removeParams("w"));
+        select(userMember.workspaceId);
+      }
+    }
+  }, [isInitialized, contextValue.userMembers]);
 
   return (
     <Context.Provider value={contextValue}>

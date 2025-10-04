@@ -38,6 +38,9 @@ export const AdminTools: FC = () => {
             Sync Loan branch to Customer branch
           </Button>
 
+          <Button onClick={() => api.patch(`/files/migrate`)}>Migrate files</Button>
+          <Button onClick={() => api.patch(`/files/remove-old-files`)}>Remove old files</Button>
+
           <Button
             onClick={() => Promise.all(new Array(100).fill(0).map(() => api.get(`/receipts`)))}
           >
@@ -150,24 +153,9 @@ export const AdminTools: FC = () => {
         </Group>
       </Card>
 
-      {/* <SessionTitle name="Migrations" icon={IconSettings2} />
-      <Card shadow="xs">
-        <Group>
-         
-        </Group>
-      </Card> */}
-
       <SessionTitle name="Reports" icon={IconReportAnalytics} />
       <Card shadow="xs">
         <Group>
-          <Button
-            onClick={() => {
-              api.patch(`/reports/sync-all`).catch(onError);
-            }}
-          >
-            Sync Reports - Current Workspace
-          </Button>
-
           <Button
             color="orange"
             onClick={() => {

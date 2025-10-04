@@ -7,7 +7,6 @@ import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { t } from "@/modules/lang/lang-service";
 import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { OnModalLoanCalculator } from "@/modules/loans/modals/modal-loan-calculator";
-import { OnModalOrderTable } from "@/modules/orders/order-table/order-table-modal";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -26,16 +25,18 @@ import {
   IconStackPush,
   IconUserPlus,
 } from "@tabler/icons-react";
+import Link from "next/link";
 import { type FC, Fragment, memo } from "react";
 import { Button } from "../../components/buttons/button";
 
-const shortcuts: {
+type Shortcut = {
   icon: Icon;
-  onClick: (router: AppRouter) => void;
   permission?: WorkspacePermission;
   moduleId?: WorkspaceModuleId;
   workspaceType?: WorkspaceType;
-}[] = [
+} & ({ onClick: (router: AppRouter) => void } | { href: string });
+
+const shortcuts: Shortcut[] = [
   {
     icon: IconCreditCardPay,
     moduleId: "loans",
@@ -56,7 +57,7 @@ const shortcuts: {
     moduleId: "orders",
     permission: WorkspacePermission.ORDERS_CREATE,
     icon: IconClipboardPlus,
-    onClick: () => OnModalOrderTable(),
+    href: "/orders/sale?mode=new",
   },
   {
     moduleId: "tasks",
@@ -101,11 +102,23 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
             const mod = workspace.modules.find((m) => m.id === shortcut.moduleId);
             if (!mod) return null;
 
+            if ("onClick" in shortcut) {
+              return (
+                <Menu.Item
+                  key={mod.id}
+                  leftSection={<shortcut.icon size={18} />}
+                  onClick={() => shortcut.onClick(router)}
+                >
+                  {mod.name}
+                </Menu.Item>
+              );
+            }
             return (
               <Menu.Item
                 key={mod.id}
                 leftSection={<shortcut.icon size={18} />}
-                onClick={() => shortcut.onClick(router)}
+                component={Link}
+                href={shortcut.href}
               >
                 {mod.name}
               </Menu.Item>
@@ -145,11 +158,23 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
               const mod = workspace.modules.find((m) => m.id === shortcut.moduleId);
               if (!mod) return null;
 
+              if ("onClick" in shortcut) {
+                return (
+                  <Menu.Item
+                    key={mod.id}
+                    leftSection={<shortcut.icon size={18} />}
+                    onClick={() => shortcut.onClick(router)}
+                  >
+                    {mod.name}
+                  </Menu.Item>
+                );
+              }
               return (
                 <Menu.Item
                   key={mod.id}
                   leftSection={<shortcut.icon size={18} />}
-                  onClick={() => shortcut.onClick(router)}
+                  component={Link}
+                  href={shortcut.href}
                 >
                   {mod.name}
                 </Menu.Item>

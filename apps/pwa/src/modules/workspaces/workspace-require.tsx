@@ -31,17 +31,9 @@ import {
   Tooltip,
   em,
 } from "@mantine/core";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
-import {
-  IconCheck,
-  IconInfoCircle,
-  IconLocation,
-  IconPlus,
-  IconUpload,
-  IconUser,
-} from "@tabler/icons-react";
+import { IconCheck, IconInfoCircle, IconLocation, IconPlus, IconUser } from "@tabler/icons-react";
 import { ChangeEventHandler, FC, useEffect, useState } from "react";
 import { useApp } from "../../app.context";
 import { api } from "../apis";
@@ -343,35 +335,6 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
             }
           />
         </Group>
-
-        <InputWrapper label="Logo">
-          <Dropzone
-            accept={IMAGE_MIME_TYPE}
-            onDrop={(files) => {
-              if (!files.length) return;
-              setLogo(files[0]);
-            }}
-            multiple={false}
-            style={{ cursor: "pointer" }}
-          >
-            <Group style={{ position: "relative" }} pt={3} gap={8}>
-              <Avatar
-                src={logo ? URL.createObjectURL(logo) : form.values.logo}
-                size={60}
-                radius={10}
-              >
-                {form.values?.name?.slice(0, 2) || "W"}
-              </Avatar>
-
-              <Group gap={3}>
-                <ThemeIcon variant="transparent" color="dark" size="md">
-                  <IconUpload strokeWidth={1.2} size={18} />
-                </ThemeIcon>
-                <Text fz={12}>{t("click_to_change")}</Text>
-              </Group>
-            </Group>
-          </Dropzone>
-        </InputWrapper>
 
         <InputWrapper
           label={t("workspace_type")}

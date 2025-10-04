@@ -2,25 +2,23 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Image } from "@/components/image";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
+import { useList } from "@/components/list/use-list";
 import { SessionTitle } from "@/components/session-title";
+import { useLayout } from "@/layout/layout-context";
+import { useEventsListener } from "@/modules/events/event-service";
+import { EventType } from "@/modules/events/event-types";
 import {
   HrmTimekeepingsCalendar,
   TimekeepingsCalendarExplain,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-calendar";
 import { HrmTimekeepingsSummary } from "@/modules/hrm-timekeepings/hrm-timekeepings-summary";
-import { useLayout } from "@/layout/layout-context";
 import { OnModalListTimekeepings } from "@/modules/hrm-timekeepings/modals/modal-timekeeping-list";
-import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
-import { getTimekeepings } from "./hrm-timekeepings-service";
-import { HrmTimekeepingEntity, HrmTimekeepingStatus } from "./hrm-timekeepings-types";
 import { t } from "@/modules/lang/lang-service";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { useList } from "@/components/list/use-list";
 import {
   Card,
   Center,
@@ -47,6 +45,8 @@ import {
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { type FC } from "react";
+import { getTimekeepings } from "./hrm-timekeepings-service";
+import { HrmTimekeepingEntity, HrmTimekeepingStatus } from "./hrm-timekeepings-types";
 
 export const HrmTimekeepingList: FC = () => {
   const workspace = useWorkspace();
@@ -146,9 +146,9 @@ export const HrmTimekeepingList: FC = () => {
               }
 
               if (_assigneeUserIds.length === 0) {
-                timekeepings.removeParam("assigneeUserIds");
+                timekeepings.removeParams(["assigneeUserIds"]);
               } else {
-                timekeepings.setParam("assigneeUserIds", _assigneeUserIds);
+                timekeepings.setParams({ assigneeUserIds: _assigneeUserIds });
               }
             }}
             optionRightSection={(user) => {
@@ -226,7 +226,7 @@ export const HrmTimekeepingList: FC = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        timekeepings.removeParam("assigneeUserIds");
+                        timekeepings.removeParams(["assigneeUserIds"]);
                       }}
                     >
                       <IconX size={7} strokeWidth={4} />
@@ -271,9 +271,9 @@ export const HrmTimekeepingList: FC = () => {
               timekeepings={timekeepings.data}
               onDateChange={(range) => {
                 if (dayjs(range.start).isSame(dayjs(), "day")) {
-                  timekeepings.removeParam("date");
+                  timekeepings.removeParams(["date"]);
                 } else {
-                  timekeepings.setParam("date", DateTimeUtils.timeToSeconds(range.start));
+                  timekeepings.setParams({ date: DateTimeUtils.timeToSeconds(range.start) });
                 }
               }}
             />

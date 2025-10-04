@@ -1,5 +1,6 @@
 import { getGradient, getThemeColor, MantineTheme, useMantineTheme } from "@mantine/core";
 import { useColorScheme } from "./use-color-scheme";
+import { backgroundColors } from "@joy-one-client/config/colors";
 
 export const getColor = (theme: MantineTheme, color?: string) => {
   if (!color) return "";
@@ -17,8 +18,12 @@ export const useColor = () => {
   const theme = useMantineTheme();
   const colorScheme = useColorScheme();
 
-  return (color?: string | { light?: string; dark?: string }) => {
+  return (color?: string | { light?: string; dark?: string }): string => {
     if (!color) return "";
+
+    if (typeof color === 'string' && ['background', 'bg'].includes(color)) {
+      return backgroundColors[colorScheme];
+    }
 
     if (typeof color === "string") {
       return getColor(theme, color);

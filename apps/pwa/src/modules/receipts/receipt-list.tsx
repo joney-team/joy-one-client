@@ -60,23 +60,24 @@ export const ReceiptList: FC = () => {
             onClick: (_, data) => OnReceiptDetailModal({ id: data.id }),
           }),
           workspaceBranchId: WorkspaceBranchColumn({ entity: AppEntity.RECEIPTS }),
-          createdAt: DateTimeColumn({ name: "createdAt", isSortable: true, isHasFilter: true }),
+          createdAt: DateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
           paidAt: DateTimeColumn({
             name: "paidAt",
-            isSortable: true,
-            isDefaultHide: true,
+            sortable: true,
+            defaultHidden: true,
             isHasFilter: true,
             w: 200,
           }),
           expireAt: DateTimeColumn({
             name: "receipt_expireAt",
-            isSortable: true,
-            isDefaultHide: true,
+            sortable: true,
+            defaultHidden: true,
             isHasFilter: true,
             w: 200,
           }),
           type: EnumColumn({
             icon: IconArrowsDoubleSwNe,
+            w: 110,
             options: Object.values(ReceiptType).map((type) => ({
               label: t(`receipt_type_${type}`),
               value: type,
@@ -111,7 +112,7 @@ export const ReceiptList: FC = () => {
               icon: receiptPaymentMethodOptions[paymentMethod].icon,
             })),
           }),
-          amount: NumberColumn({ align: "right", isSortable: true, type: "money" }),
+          amount: NumberColumn({ align: "right", sortable: true, type: "money" }),
         }}
         filterModes={[
           {

@@ -7,18 +7,17 @@ import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
 import { OrderCard } from "@/modules/orders/order-card";
-import { OnModalOrderTable } from "@/modules/orders/order-table/order-table-modal";
 import { onPayOrder, orderPaymentStatusOptions } from "@/modules/orders/orders-service";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
 import { UserColumn } from "@/modules/users/user-column";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { ActionIcon, Stack, Tooltip } from "@mantine/core";
 import { IconCalendarDown, IconCashRegister, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
-import { OrderItemsColumn } from "./order-items-columns";
 import { OrderEntity } from "./order-entity";
+import { OrderItemsColumn } from "./order-items-columns";
 
 export const OrderList: FC = () => {
   const workspace = useWorkspace();
@@ -35,7 +34,7 @@ export const OrderList: FC = () => {
         route="/orders"
         columns={{
           code: CodeColumn({ href: (value) => `/orders/${value}` }),
-          createdAt: DateTimeColumn({ name: "time", isSortable: true }),
+          createdAt: DateTimeColumn({ name: "time", sortable: true }),
           relatedCustomerId: CustomerColumn({
             name: "customer",
             valuePath: "relatedCustomer",
@@ -45,7 +44,7 @@ export const OrderList: FC = () => {
             valuePath: "createdByUser",
           }),
           items: OrderItemsColumn,
-          totalAmount: NumberColumn({ type: "money", isSortable: true }),
+          totalAmount: NumberColumn({ type: "money", sortable: true }),
           paymentStatus: StatusColumn({
             w: 200,
             options: Object.values(OrderPaymentStatus).map((status) => ({
@@ -84,14 +83,14 @@ export const OrderList: FC = () => {
           EventType.ORDER_SYNCED,
         ]}
         creatable={{
-          onCreate: () => OnModalOrderTable(),
+          href: "/orders/sale?mode=new",
           permission: WorkspacePermission.ORDERS_CREATE,
         }}
         actions={[
           {
             label: "edit",
             icon: IconEdit,
-            onClick: (data) => OnModalOrderTable({ order: data }),
+            href: (data) => `/orders/sale?code=${data.code}`,
           },
         ]}
         card={OrderCard}

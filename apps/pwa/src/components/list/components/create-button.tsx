@@ -2,22 +2,36 @@ import { Button } from "@/components/buttons/button";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon } from "@mantine/core";
+import { ActionIcon, ActionIconProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { ListContext } from "../types";
+import Link from "next/link";
 
 export const CreateButton: FC<ListContext> = (props) => {
   const layout = useLayout();
   const workspace = useWorkspace();
   const color = useColor();
 
-  if (!props.creatable || (props.creatable.permission && !workspace.hasPermission(props.creatable.permission)))
+  if (
+    !props.creatable ||
+    (props.creatable.permission && !workspace.hasPermission(props.creatable.permission))
+  )
     return null;
+
+  const baseProps =
+    "href" in props.creatable
+      ? {
+          component: Link,
+          href: props.creatable.href,
+        }
+      : {
+          onClick: props.creatable.onCreate,
+        };
 
   if (layout.view === "mobile") {
     return (
-      <ActionIcon color={color("primary")} size={26} onClick={props.creatable.onCreate}>
+      <ActionIcon color={color("primary")} size={26} {...(baseProps as ActionIconProps)}>
         {props.creatable.icon ? <props.creatable.icon size={16} /> : <IconPlus size={16} />}
       </ActionIcon>
     );
@@ -28,8 +42,8 @@ export const CreateButton: FC<ListContext> = (props) => {
       leftIcon={props.creatable.icon || IconPlus}
       iconSize={16}
       size="compact-sm"
-      onClick={props.creatable.onCreate}
       label={props.creatable.label || "create"}
+      {...baseProps}
     />
   );
 };

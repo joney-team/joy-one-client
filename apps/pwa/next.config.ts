@@ -1,4 +1,3 @@
-import bundleAnalyzer from '@next/bundle-analyzer'
 import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
@@ -20,8 +19,4 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
 }
 
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-})
-
-export default withBundleAnalyzer(nextConfig);
+export default nextConfig;

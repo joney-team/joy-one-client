@@ -1,0 +1,112 @@
+.Printer {
+  &.SMALL {
+    font-size: 10px;
+  }
+
+  &.MEDIUM {
+    font-size: 15px;
+  }
+
+  &.LARGE {
+    font-size: 15px;
+  }
+
+  & .PrinterWrapper {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  & .PrinterHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+
+    & .Logo {
+      width: 4em;
+    }
+
+    & .PrinterHeaderMetadata {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0em;
+
+      & .WorkspaceName {
+        font-size: 1em;
+        font-weight: 700;
+      }
+
+      & .WorkspaceInformation {
+        font-size: 0.8em;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
+  & .PrinterBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    & .PrinterBodyHead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    & .PrinterHeadMetadata {
+      font-size: 0.8em;
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+    }
+
+    & .TextSmaller {
+      font-size: 0.8em;
+      margin-top: -0.8em;
+    }
+
+    & .TaLeft {
+      text-align: left;
+    }
+
+    & .TaRight {
+      text-align: right;
+    }
+
+    & .TaCenter {
+      text-align: center;
+    }
+  }
+
+  & .Table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgb(106, 106, 106);
+
+    th,
+    td {
+      border: 1px solid rgb(106, 106, 106);
+      padding: 0.2em;
+    }
+
+    &.BottomDashed {
+      border: none !important;
+
+      th,
+      td {
+        border: none;
+        border-bottom: 1px dashed rgb(106, 106, 106) !important;
+      }
+    }
+  }
+
+  & .Heading {
+    font-weight: 700;
+  }
+}

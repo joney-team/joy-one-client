@@ -1,7 +1,8 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
 import { ChillIllustration } from "@/components/illustrations/chill";
+import { useList } from "@/components/list/use-list";
+import { WayPoint } from "@/components/way-point";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
@@ -17,20 +18,19 @@ import {
   NotificationEntity,
   UserNotificationStat,
 } from "@/modules/notifications/notification-types";
+import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { classNames } from "@/utils/ui.utils";
-import { useList } from "@/components/list/use-list";
 import { ActionIcon, Drawer, Group, Indicator, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconBell, IconBrush } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";
 import { Button } from "../../components/buttons/button";
-import { ButtonViewMore } from "../../components/buttons/button-view-more";
 import { Errored } from "../../components/errored";
 import { ModalTitle } from "../../components/modal-title";
-import { NotificationCard } from "./notification-card";
 import { Renderer } from "../../components/renderer";
+import { NotificationCard } from "./notification-card";
 
 const EmptyNotification: FC<{ visible: boolean }> = ({ visible }) => {
   if (!visible) return null;
@@ -136,59 +136,69 @@ export const UserNotifications: FC = () => {
         </Indicator>
       </ActionIcon>
 
-      <Drawer
-        offset={layout.view === "mobile" ? 0 : 10}
-        radius={layout.view === "mobile" ? 0 : "md"}
+      <Drawer.Root
         opened={opened}
         onClose={close}
-        title={
-          <Group gap={5}>
-            <ThemeIcon variant="transparent" color={color("primary")}>
-              <IconBell />
-            </ThemeIcon>
-            <Text fw={700} c={color("primary")}>
-              {t("notifications")}
-            </Text>
-
-            {notifications.count > 0 && (
-              <Group ml={16}>
-                <Button
-                  size="compact-xs"
-                  variant="outline"
-                  leftSection={<IconBrush size={14} style={{ marginRight: -5 }} />}
-                  px={10}
-                  radius={100}
-                  color="gray"
-                  onClick={onClean}
-                  style={{ borderWidth: 0.5 }}
-                >
-                  <Text fw={500} fz={em(13)}>
-                    {t("clean")}
-                  </Text>
-                </Button>
-              </Group>
-            )}
-          </Group>
-        }
+        offset={layout.view === "mobile" ? 0 : 10}
+        radius={layout.view === "mobile" ? 0 : "md"}
         position="right"
       >
-        <Stack pb={20}>
-          <Renderer visible={notifications.count > 0}>
-            <Stack onClick={close}>
-              {notifications.data.map((noti) => {
-                return <NotificationCard notification={noti} key={noti._id} />;
-              })}
-            </Stack>
-          </Renderer>
+        <Drawer.Overlay />
+        <Drawer.Content id="user-notifications-content">
+          <Drawer.Header>
+            <Drawer.Title>
+              <Group gap={5}>
+                <ThemeIcon variant="transparent" color={color("primary")}>
+                  <IconBell />
+                </ThemeIcon>
+                <Text fw={700} c={color("primary")}>
+                  {t("notifications")}
+                </Text>
 
-          <EmptyNotification visible={notifications.isEmpty} />
-          <Errored error={notifications.error} visible={notifications.isHasError} />
-          <ButtonViewMore
-            visible={notifications.isAbleToLoadMore}
-            onClick={() => notifications.fetch()}
-          />
-        </Stack>
-      </Drawer>
+                {notifications.count > 0 && (
+                  <Group ml={16}>
+                    <Button
+                      size="compact-xs"
+                      variant="outline"
+                      leftSection={<IconBrush size={14} style={{ marginRight: -5 }} />}
+                      px={10}
+                      radius={100}
+                      color="gray"
+                      onClick={onClean}
+                      style={{ borderWidth: 0.5 }}
+                    >
+                      <Text fw={500} fz={em(13)}>
+                        {t("clean")}
+                      </Text>
+                    </Button>
+                  </Group>
+                )}
+              </Group>
+            </Drawer.Title>
+            <Drawer.CloseButton />
+          </Drawer.Header>
+          <Drawer.Body>
+            <Stack>
+              <Renderer visible={notifications.count > 0}>
+                <Stack onClick={close}>
+                  {notifications.data.map((noti) => {
+                    return <NotificationCard notification={noti} key={noti._id} />;
+                  })}
+                </Stack>
+              </Renderer>
+
+              <EmptyNotification visible={notifications.isEmpty} />
+              <Errored error={notifications.error} visible={notifications.isHasError} />
+            </Stack>
+
+            <WayPoint
+              scrollContainerId="user-notifications-content"
+              enabled={notifications.isAbleToLoadMore}
+              onReached={notifications.loadMore}
+            />
+          </Drawer.Body>
+        </Drawer.Content>
+      </Drawer.Root>
     </Fragment>
   );
 };

@@ -2,14 +2,15 @@ import { type ProductStock } from "@/modules/product-stocks/product-stocks-types
 import { BaseMongoEntity, Query } from "@/types";
 
 export enum ProductType {
-  PRODUCT = 'PRODUCT',
-  SERVICE = 'SERVICE',
-  COMBO = 'COMBO',
-  VOUCHER = 'VOUCHER',
+  PRODUCT = "PRODUCT",
+  SERVICE = "SERVICE",
+  COMBO = "COMBO",
+  VOUCHER = "VOUCHER",
 }
 
 export interface ProductDto {
   name: string;
+  code?: string;
   content?: string;
   displayName?: string;
   tags: string[];
@@ -50,6 +51,7 @@ export interface ProductEntityBindData {
 export interface ProductEntity extends BaseMongoEntity, ProductEntityBindData {
   name: string;
   image?: string;
+  code?: string;
   content?: string;
   displayName?: string;
   tags: string[];
@@ -69,7 +71,7 @@ export interface ProductEntity extends BaseMongoEntity, ProductEntityBindData {
 
   // Combo related
   combosExpireInDays?: number;
-  
+
   // Voucher related
   voucherAmount?: number;
   voucherExpireInDays?: number;

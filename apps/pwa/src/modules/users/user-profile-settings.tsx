@@ -15,18 +15,40 @@ import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
 import { localeNames, t } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
-import { Card, Divider, InputWrapper, Select, Space, Stack, TextInput } from "@mantine/core";
+import {
+  Card,
+  Divider,
+  Group,
+  InputWrapper,
+  Select,
+  Space,
+  Stack,
+  Text,
+  TextInput,
+  ThemeIcon,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { IconCalendar, IconMail, IconPhone, IconUser } from "@tabler/icons-react";
-import { type FC } from "react";
+import { IconCalendar, IconMail, IconPhone, IconUpload, IconUser } from "@tabler/icons-react";
+import { useEffect, type FC } from "react";
 import { UserWorkspaceSettings } from "./components/user-workspace-settings-form";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { onActionLoad } from "@/utils/actions";
+import { Avatar } from "@/components/avatar";
+import { useLayout } from "@/layout/layout-context";
 
 export const UserProfileSettings: FC = () => {
   const auth = useAuth();
   const lang = useLang();
+  const layout = useLayout();
 
   const onUpdate = useDebouncedCallback(auth.updateProfile, 300);
+
+  useEffect(() => {
+    layout.setComponents({
+      head: t("profile_settings"),
+    });
+  }, []);
 
   const form = useForm({
     initialValues: auth.user!,
@@ -51,6 +73,36 @@ export const UserProfileSettings: FC = () => {
           <Stack>
             <FormSession title="profile" description="profile_description">
               <Stack>
+                <Dropzone
+                  accept={IMAGE_MIME_TYPE}
+                  onDrop={(files) => {
+                    if (!files.length) return;
+                    onActionLoad({
+                      process: () => auth.uploadAvatar(files[0]),
+                    });
+                  }}
+                  multiple={false}
+                >
+                  <Group className="clickable" gap={5}>
+                    <Avatar
+                      user={{
+                        name: auth.user.name,
+                        avatar: auth.user.avatar,
+                        userId: auth.user._id,
+                      }}
+                      size={60}
+                      hideOnlineStatus
+                    />
+
+                    <Group gap={5}>
+                      <ThemeIcon variant="transparent" color="dark" size="md">
+                        <IconUpload strokeWidth={1.2} size={16} />
+                      </ThemeIcon>
+                      <Text fz={10}>{t("click-to-change-avatar")}</Text>
+                    </Group>
+                  </Group>
+                </Dropzone>
+
                 <TextInput
                   leftSection={<IconUser size={16} />}
                   label={t("name")}

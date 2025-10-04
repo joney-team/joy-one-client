@@ -58,6 +58,7 @@ import type {
   AuthTokenResult,
   UserAuthResult,
 } from "./auth-types";
+import { reducePhotoSize } from "../files/file-service";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
@@ -225,6 +226,14 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   const updateProfile = async (values: UpdateUserProfileDto) => {
     return api.put(`/users/profile`, values).then((res) => setUser(res));
+  };
+
+  const uploadAvatar = async (file: File) => {
+    const _file = await reducePhotoSize(file, { maxWidthOrHeight: 300 });
+    const form = new FormData();
+    form.append("file", _file);
+    const _user = await api.formData(`/users/avatar`, form);
+    return setUser(_user);
   };
 
   const registerNotification = async () => {
@@ -408,6 +417,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     registerNotification,
     signInWithGithub,
     signOutOtherDevices,
+    uploadAvatar,
   };
 
   return (

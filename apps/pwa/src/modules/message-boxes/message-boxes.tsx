@@ -70,7 +70,7 @@ export const MessageBoxList = () => {
             value: st,
           }))}
           onClear={() => boxes.removeParams(["status"])}
-          onChange={(status) => boxes.setParam("status", status)}
+          onChange={(status) => boxes.setParams({ status })}
         />
 
         <ButtonSelect
@@ -96,7 +96,7 @@ export const MessageBoxList = () => {
             })),
           ]}
           onClear={() => boxes.removeParams(["platformId"])}
-          onChange={(platformId) => boxes.setParam("platformId", platformId)}
+          onChange={(platformId) => boxes.setParams({ platformId })}
         />
       </Group>
 

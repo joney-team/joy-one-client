@@ -6,7 +6,7 @@ pipeline {
   }
 
   environment {
-    DEKLOY_API_KEY = credentials('dekloy-api-key')
+    DEKLOY_API_KEY = credentials('dokploy-api-key')
   }
 
   stages {
@@ -72,7 +72,7 @@ def setup() {
   env.GIT_COMMIT_BY = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
   env.GIT_BRANCH_NAME = env.GIT_BRANCH.replaceAll('origin/', '')
   env.ENV = env.GIT_BRANCH_NAME.replaceAll('-docs$', '')
-  env.APPLICATION_ID = "vUl13MFANROi3vmHJ1Y2m"
+  env.APPLICATION_ID = "g_n1k0kEPQqFKwWaOKQGM"
 
   // Replace file packages/config/index.ts with env.GIT_BRANCH and remove origin 
   sh "sed -i 's/ENV = \"development\"/ENV = \"${env.ENV}\"/g' packages/config/index.ts"
@@ -102,7 +102,7 @@ def sendNotification(status) {
 def releaseDekloy() {
   sh """
   curl -X 'POST' \
-    'https://deploy.joyone.vn/api/application.saveDockerProvider' \
+    'https://devops.joyone.vn/api/application.saveDockerProvider' \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
     -H 'x-api-key: $DEKLOY_API_KEY' \
@@ -114,7 +114,7 @@ def releaseDekloy() {
 
   sh """
   curl -X 'POST' \
-    'https://deploy.joyone.vn/api/application.deploy' \
+    'https://devops.joyone.vn/api/application.deploy' \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
     -H 'x-api-key: $DEKLOY_API_KEY' \

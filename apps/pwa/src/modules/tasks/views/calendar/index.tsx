@@ -125,9 +125,9 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
               }
 
               if (_assigneeUserIds.length === 0) {
-                tasks.removeParam("assigneeUserIds");
+                tasks.removeParams(["assigneeUserIds"]);
               } else {
-                tasks.setParam("assigneeUserIds", _assigneeUserIds);
+                tasks.setParams({ assigneeUserIds: _assigneeUserIds });
               }
             }}
             optionRightSection={(user) => {
@@ -205,7 +205,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        tasks.removeParam("assigneeUserIds");
+                        tasks.removeParams(["assigneeUserIds"]);
                       }}
                     >
                       <IconX size={7} strokeWidth={4} />
@@ -224,9 +224,11 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
               onChange={(range) => {
                 const isThisMonth = dayjs(range.start).isSame(new Date(), "month");
                 if (isThisMonth) {
-                  tasks.removeParam("date");
+                  tasks.removeParams(["date"]);
                 } else {
-                  tasks.setParam("date", DateTimeUtils.timeToSeconds(range.start) + 60 * 60 * 24);
+                  tasks.setParams({
+                    date: DateTimeUtils.timeToSeconds(range.start) + 60 * 60 * 24,
+                  });
                 }
               }}
               renderDayHead={(date, hovered, isOutOfRange) => {

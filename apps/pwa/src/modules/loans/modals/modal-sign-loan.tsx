@@ -45,7 +45,12 @@ export const ModalSignLoan: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={`Ký khoản vay #${renderEntityCode(props?.loan.code)}`} icon={IconCreditCardPay} />}
+      title={
+        <ModalTitle
+          title={`Ký khoản vay #${renderEntityCode(props?.loan.code)}`}
+          icon={IconCreditCardPay}
+        />
+      }
       onClose={onClose}
       opened={opened}
       size={1000}

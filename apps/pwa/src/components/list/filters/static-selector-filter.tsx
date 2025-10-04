@@ -74,7 +74,7 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
 
         return (
           <Combobox.Option value={itemId} key={itemId} fz={14}>
-            <Group gap={8}>
+            <Group gap={8} wrap="nowrap">
               {multiple && (
                 <Checkbox
                   checked={selectedOptions.some((v) => v.value === item.value)}
@@ -98,15 +98,12 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
             : [...selectedOptions, value];
 
           if (_value.length === 0) {
-            list.removeParam(colKey);
+            list.removeParams([colKey]);
           } else {
-            list.setParam(
-              colKey,
-              _value.map((v) => v?.value)
-            );
+            list.setParams({ [colKey]: _value.map((v) => v?.value) });
           }
         } else {
-          list.setParam(colKey, value?.value);
+          list.setParams({ [colKey]: value?.value });
         }
       }}
       dropdownProps={dropdownProps}

@@ -48,7 +48,7 @@ export const Profile: FC = () => {
     <Container p={16}>
       <Stack>
         <Group justify="space-between" style={{ cursor: "pointer" }}>
-          <Group gap={10} onClick={() => router.push(`/profile/information`)}>
+          <Group gap={10} onClick={() => router.push("/profile/settings")}>
             <Avatar user={workspace.userMember} size={40} hideOnlineStatus />
 
             <Stack gap={0}>

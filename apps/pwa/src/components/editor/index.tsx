@@ -6,7 +6,6 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import TextAlign from "@tiptap/extension-text-align";
-import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
 
 import { onUploadFile } from "@/modules/files/file-service";
@@ -37,8 +36,7 @@ interface EditorProps {
 }
 
 const extensions: Extensions = [
-  StarterKit,
-  Underline,
+  StarterKit.configure({ link: false }),
   Link,
   Superscript,
   Subscript,

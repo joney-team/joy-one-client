@@ -1,3 +1,5 @@
+"use client";
+
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { ActionIcon, Checkbox, Group, Loader, Menu, Table, Text } from "@mantine/core";
@@ -8,6 +10,7 @@ import { ListTableHead } from "./table-head";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { t } from "@/modules/lang/lang-service";
 import { BaseData } from "@/components/list/types";
+import Link from "next/link";
 
 export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
   const actions = ctx.actions || [];
@@ -106,16 +109,29 @@ export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
                           (action.disabled && action.disabled?.(item) === true) ||
                           (action.permission && !workspace.hasPermission(action.permission));
 
-                        return (
-                          <Menu.Item
-                            key={action.label}
-                            onClick={() => action.onClick(item)}
-                            leftSection={<action.icon size={16} />}
-                            disabled={isDisabled}
-                          >
-                            {t(action.label)}
-                          </Menu.Item>
-                        );
+                        if ("onClick" in action)
+                          return (
+                            <Menu.Item
+                              key={action.label}
+                              onClick={() => action.onClick(item)}
+                              leftSection={<action.icon size={16} />}
+                              disabled={isDisabled}
+                            >
+                              {t(action.label)}
+                            </Menu.Item>
+                          );
+
+                        if ("href" in action)
+                          return (
+                            <Menu.Item
+                              key={action.label}
+                              component={Link}
+                              href={action.href(item)}
+                              leftSection={<action.icon size={16} />}
+                            >
+                              {t(action.label)}
+                            </Menu.Item>
+                          );
                       })}
                     </Menu.Dropdown>
                   </Menu>
@@ -127,7 +143,7 @@ export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
       </Table.Tbody>
 
       {ctx.list.isFetching && (
-        <Table.Caption pt={0} pb={ctx.spacing * 2}>
+        <Table.Caption py={ctx.spacing * 2}>
           <Loader size="sm" type="dots" color="gray" />
         </Table.Caption>
       )}

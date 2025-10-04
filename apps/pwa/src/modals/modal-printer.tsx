@@ -83,8 +83,8 @@ const printSettingsKey = "print-settings-v2";
 
 const getPrintSettings = (): PrintSettings => {
   let settings: PrintSettings = {
-    showLogo: true,
     size: PrintSize.MEDIUM,
+    showLogo: true,
     showBankQrCode: true,
     showAddress: true,
     showCashier: true,
