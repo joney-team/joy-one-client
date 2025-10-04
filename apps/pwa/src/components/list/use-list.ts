@@ -11,6 +11,7 @@ import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import { isPlural } from "../../utils/string.utils";
 import { BaseData } from "./types";
 import { getId } from "./utils";
+import { removeParams, setParams } from "@joy-one-client/utils/location-query";
 
 export interface UseListFetchReponse<T = any> {
   data: T[];
@@ -51,7 +52,7 @@ export type UseListSetParam = (
 ) => void;
 export type UseListSetParams = (
   params: { [key: string]: any | any[] },
-  options?: { isSilient?: boolean; isReplace?: boolean }
+  options?: { isSilient?: boolean }
 ) => void;
 export type UseListRemoveParam = (key: string, options?: { isSilient?: boolean }) => void;
 export type UseListRemoveParams = (keys: string[], options?: { isSilient?: boolean }) => void;
@@ -75,9 +76,7 @@ export interface UseList<T extends BaseData> {
   isAbleToLoadMore: boolean;
   loadMore: () => Promise<UseListFetchReponse<T> | void>;
   setData: UseListSetData<T>;
-  setParam: UseListSetParam;
   setParams: UseListSetParams;
-  removeParam: UseListRemoveParam;
   removeParams: UseListRemoveParams;
   removeAllParams: UseListRemoveAllParams;
   ref: MutableRefObject<UseListData<T>>;
@@ -354,55 +353,31 @@ export const useList = <T extends BaseData>(args: UseListArgs<T>): UseList<T> =>
     ref,
     report: list.report,
     limit,
-    setData: (data: T[], count?: number) =>
+    setData: (data: T[], count?: number) => {
       setList((s) => ({
         ...s,
         data,
         count: typeof count === "number" ? count : s.count,
-      })),
-    setParam: (key, value, options) => {
-      const _isSilient = typeof options?.isSilient === "boolean" ? options?.isSilient : false;
-      if (!_isSilient) onChangeQuery();
-
-      const params = new URLSearchParams(searchs.toString());
-      const _key = key ? `${listKey}-${key}` : key;
-      if (!value || value.length === 0) params.delete(_key);
-      else params.set(_key, value);
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      }));
     },
-    setParams: (queries, options) => {
-      const _isSilient = typeof options?.isSilient === "boolean" ? options.isSilient : false;
-      const _isReplace = typeof options?.isReplace === "boolean" ? options.isReplace : false;
-      if (!_isSilient) onChangeQuery();
-
-      const params = new URLSearchParams(_isReplace ? "" : searchs.toString());
-      Object.keys(queries).forEach((key) => {
-        const _key = key ? `${listKey}-${key}` : key;
-        if (!queries[key] || queries[key].length === 0) params.delete(_key);
-        else params.set(_key, queries[key]);
-      });
-
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-    },
-    removeParam: (key, options) => {
+    setParams: (params, options) => {
       const _isSilient = typeof options?.isSilient === "boolean" ? options.isSilient : false;
       if (!_isSilient) onChangeQuery();
 
-      const params = new URLSearchParams(searchs.toString());
-      const _key = key ? `${listKey}-${key}` : key;
-      params.delete(_key);
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      router.replace(
+        setParams(
+          Object.keys(params).reduce(
+            (acc, key) => ({ ...acc, [`${listKey}-${key}`]: params[key] }),
+            {}
+          )
+        ),
+        { scroll: false }
+      );
     },
     removeParams: (keys, options) => {
       const _isSilient = typeof options?.isSilient === "boolean" ? options.isSilient : false;
       if (!_isSilient) onChangeQuery();
-
-      const params = new URLSearchParams(searchs.toString());
-      keys.forEach((key) => {
-        const _key = key ? `${listKey}-${key}` : key;
-        params.delete(_key);
-      });
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      router.replace(removeParams(...keys.map((key) => `${listKey}-${key}`)), { scroll: false });
     },
     removeAllParams: (options) => {
       const _isSilient = typeof options?.isSilient === "boolean" ? options.isSilient : false;

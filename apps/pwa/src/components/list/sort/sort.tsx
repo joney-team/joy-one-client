@@ -61,8 +61,8 @@ export const Sort: FC<ListContext> = (props) => {
                     variant={isAsc ? "filled" : "subtle"}
                     color={color(isAsc ? "primary" : "dark")}
                     onClick={() => {
-                      if (isAsc) return list.removeParam(queryKey);
-                      return list.setParam(queryKey, "1");
+                      if (isAsc) return list.removeParams([queryKey]);
+                      return list.setParams({ [queryKey]: "1" });
                     }}
                   >
                     <IconArrowUp size={16} />
@@ -72,8 +72,8 @@ export const Sort: FC<ListContext> = (props) => {
                     variant={isDesc ? "filled" : "subtle"}
                     color={color(isDesc ? "primary" : "dark")}
                     onClick={() => {
-                      if (isDesc) return list.removeParam(queryKey);
-                      return list.setParam(queryKey, "-1");
+                      if (isDesc) return list.removeParams([queryKey]);
+                      return list.setParams({ [queryKey]: "-1" });
                     }}
                   >
                     <IconArrowDown size={16} />

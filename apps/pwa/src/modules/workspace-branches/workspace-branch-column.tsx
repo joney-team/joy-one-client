@@ -4,7 +4,7 @@ import { Hovered } from "@/components/hovered";
 import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-selector-filter";
 import { Column } from "@/components/list/types";
 import { AppEntity } from "@/types";
-import { ActionIcon, Group, Text } from "@mantine/core";
+import { ActionIcon, Group, Text, Tooltip } from "@mantine/core";
 import { IconBuildingSkyscraper, IconFileExport } from "@tabler/icons-react";
 import { t } from "../lang/lang-service";
 import { searchEntity } from "../search/search-service";
@@ -42,14 +42,20 @@ export const WorkspaceBranchColumn = (
     name: "branch",
     render: ({ data }) => {
       const id = data.id || data._id;
+      const branchName = data.workspaceBranch
+        ? data.workspaceBranch.name
+        : t("main_workspace_branch");
+
       return (
         <Hovered disabled={!isEditable}>
           {(hover) => {
             return (
               <Group ref={hover.ref} gap={5}>
-                <Text>
-                  {data.workspaceBranch ? data.workspaceBranch.name : t("main_workspace_branch")}
-                </Text>
+                <Tooltip label={branchName}>
+                  <Text truncate maw={120}>
+                    {branchName}
+                  </Text>
+                </Tooltip>
 
                 <ActionIcon
                   variant="subtle"

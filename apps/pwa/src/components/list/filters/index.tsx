@@ -23,7 +23,7 @@ export const FilterItem: FC<
   const onReset: MouseEventHandler<HTMLElement> = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    list.removeParam(colKey);
+    list.removeParams([colKey]);
   };
 
   const Wrapper: FilterWrapperProps = ({

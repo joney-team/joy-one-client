@@ -17,6 +17,7 @@ import {
 import dayjs from "dayjs";
 import { FC, useMemo } from "react";
 import { FilterProps } from "./types";
+import { useColor } from "@/modules/theme/use-color";
 
 export interface TimeRangeFilterConfig {}
 
@@ -25,9 +26,15 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
   list,
   Wrapper,
 }) => {
-  const filterKey = `timeRange${capitalizeFirstLetter(colKey, false)}`;
+  const color = useColor();
+  const filterPeriodKey = `timeRange${capitalizeFirstLetter(colKey, false)}`;
+  const filterPeriodValue = list.params[filterPeriodKey];
+
   const filterRangeKey = `range${capitalizeFirstLetter(colKey, false)}`;
-  const filterValue = list.params[filterKey] || list.params[filterRangeKey] || "";
+  const filterRangeValue = list.params[filterRangeKey];
+
+  const filterValue = filterPeriodValue ?? filterRangeValue ?? "";
+
   const { period, fromDate, toDate } = useMemo(() => {
     if (filterRangeKey) {
       return {
@@ -40,6 +47,14 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
     return { period: Period.DATE, fromDate: filterValue };
   }, [filterValue]);
 
+  const activatedValue = useMemo(() => {
+    if (filterRangeValue) return "Range";
+
+    if (filterValue) {
+      return String(filterValue).split("-")[0];
+    }
+  }, [filterValue]);
+
   const options = [
     {
       label: t("date"),
@@ -49,7 +64,10 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         OnModalDatePicker({
           onSelected(date) {
             if (!date) return;
-            list.setParam(filterKey, `${Period.DATE}-${timeToSeconds(date)}`);
+            list.setParams({
+              [filterRangeKey]: null,
+              [filterPeriodKey]: `${Period.DATE}-${timeToSeconds(date)}`,
+            });
           },
         }),
     },
@@ -62,7 +80,10 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
           period: Period.MONTH,
           onRangeSelected: (date) => {
             if (!date) return;
-            list.setParam(filterKey, `${Period.MONTH}-${timeToSeconds(date[0])}`);
+            list.setParams({
+              [filterRangeKey]: null,
+              [filterPeriodKey]: `${Period.MONTH}-${timeToSeconds(date[0])}`,
+            });
           },
         }),
     },
@@ -75,7 +96,10 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
           period: Period.YEAR,
           onRangeSelected: (date) => {
             if (!date) return;
-            list.setParam(filterKey, `${Period.YEAR}-${timeToSeconds(date[0])}`);
+            list.setParams({
+              [filterRangeKey]: null,
+              [filterPeriodKey]: `${Period.YEAR}-${timeToSeconds(date[0])}`,
+            });
           },
         }),
     },
@@ -87,7 +111,10 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         OnModalDatePicker({
           onRangeSelected: (date) => {
             if (!date) return;
-            list.setParam(filterRangeKey, `${timeToSeconds(date[0])}-${timeToSeconds(date[1])}`);
+            list.setParams({
+              [filterPeriodKey]: null,
+              [filterRangeKey]: `${timeToSeconds(date[0])}-${timeToSeconds(date[1])}`,
+            });
           },
         }),
     },
@@ -99,9 +126,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         <Group>
           <Wrapper
             onClear={
-              filterValue
-                ? () => list.removeParam(filterRangeKey ? filterRangeKey : filterKey)
-                : undefined
+              filterValue ? () => list.removeParams([filterRangeValue, filterPeriodKey]) : undefined
             }
             active={!!filterValue}
           >
@@ -122,15 +147,21 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
       </Menu.Target>
 
       <MenuDropdown>
-        {options.map((option) => (
-          <Menu.Item
-            key={option.value}
-            leftSection={<option.icon size={16} />}
-            onClick={option.onClick}
-          >
-            {option.label}
-          </Menu.Item>
-        ))}
+        {options.map((option) => {
+          const isActive = activatedValue === option.value;
+
+          return (
+            <Menu.Item
+              key={option.value}
+              onClick={option.onClick}
+              leftSection={
+                <option.icon size={16} color={isActive ? color("primary") : undefined} />
+              }
+            >
+              {option.label}
+            </Menu.Item>
+          );
+        })}
       </MenuDropdown>
     </Menu>
   );

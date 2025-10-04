@@ -41,7 +41,7 @@ export const CustomerKycList: FC = () => {
               label: t(status.toLowerCase()),
               value: status,
             }))}
-            onChange={(tagIds) => kycs.setParam("status", tagIds)}
+            onChange={(tagIds) => kycs.setParams({ status: tagIds })}
           />
         </Group>
 

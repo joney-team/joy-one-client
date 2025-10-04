@@ -123,7 +123,7 @@ export const HrmMemberTimekeepings: FC = () => {
               size={30}
               radius={150}
               color="dark.2"
-              onClick={() => timekeepings.setParam("date", +query.fromTime - 1000)}
+              onClick={() => timekeepings.setParams({ date: +query.fromTime - 1000 })}
             >
               <IconChevronLeft strokeWidth={1.5} size={18} />
             </ActionIcon>
@@ -142,7 +142,7 @@ export const HrmMemberTimekeepings: FC = () => {
               onClick={() => {
                 console.log("query", query);
                 console.log("query", +query.toTime + 10000);
-                timekeepings.setParam("date", +query.toTime + 10000);
+                timekeepings.setParams({ date: +query.toTime + 10000 });
               }}
             >
               <IconChevronRight strokeWidth={1.5} size={18} />

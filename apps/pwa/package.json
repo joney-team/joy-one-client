@@ -6,6 +6,7 @@
     "dev": "rm -rf .next && pnpm run:prepare && next dev --turbopack",
     "start": "next start",
     "build": "next build",
+    "typescript": "tsc",
     "ws:apps:dev": "pnpm run:prepare && NEXT_PUBLIC_EXTENDED_APP=true next dev",
     "ws:apps:build": "pnpm run:prepare && NEXT_PUBLIC_EXTENDED_APP=true next build",
     "ws:apps:start": "NEXT_PUBLIC_EXTENDED_APP=true next start",

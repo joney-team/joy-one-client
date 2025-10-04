@@ -21,3 +21,12 @@ export const removeParams = (...params: string[]) => {
   });
   return combinePathname(query);
 };
+
+export const setParams = (params: Record<string, string>, options?: { replace?: boolean }) => {
+  const query = new URLSearchParams(options?.replace ? "" : window.location.search);
+  Object.keys(params).forEach((key) => {
+    if (params[key] === null) query.delete(key);
+    else query.set(key, params[key]);
+  });
+  return combinePathname(query);
+};

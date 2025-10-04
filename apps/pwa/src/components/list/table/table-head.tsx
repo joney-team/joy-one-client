@@ -24,15 +24,15 @@ export const ListTableHead: FC<ListContext & { columnId: string; colIndex: numbe
     if (!column?.sortable) return;
 
     if (sortValueType === "none") {
-      return list.setParam(sortKey, "-1");
+      return list.setParams({ [sortKey]: "-1" });
     }
 
     if (sortValueType === "desc") {
-      return list.setParam(sortKey, "1");
+      return list.setParams({ [sortKey]: "1" });
     }
 
     if (sortValueType === "asc") {
-      return list.removeParam(sortKey);
+      return list.removeParams([sortKey]);
     }
   };
 

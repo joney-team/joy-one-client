@@ -77,6 +77,7 @@ export const ReceiptList: FC = () => {
           }),
           type: EnumColumn({
             icon: IconArrowsDoubleSwNe,
+            w: 110,
             options: Object.values(ReceiptType).map((type) => ({
               label: t(`receipt_type_${type}`),
               value: type,

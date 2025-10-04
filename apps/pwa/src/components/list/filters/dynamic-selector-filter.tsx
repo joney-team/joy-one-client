@@ -3,11 +3,11 @@
 import { ActionIcon, Checkbox, Combobox, ComboboxDropdownProps } from "@mantine/core";
 
 import { Renderer } from "@/components/renderer";
+import { getId, Selector } from "@/components/selector";
 import { Group, Text } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { FilterProps } from "./types";
-import { getId, Selector } from "@/components/selector";
 
 export interface DynamicSelectorFilterOption {
   label: string;
@@ -138,12 +138,12 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
             ? querySelectedOptions.filter((v) => v !== option?.value)
             : [...querySelectedOptions, option?.value];
           if (_querySelectedOptions.length === 0) {
-            list.removeParam(colKey);
+            list.removeParams([colKey]);
           } else {
-            list.setParam(colKey, _querySelectedOptions);
+            list.setParams({ [colKey]: _querySelectedOptions });
           }
         } else {
-          list.setParam(colKey, option?.value);
+          list.setParams({ [colKey]: option?.value });
         }
       }}
       dropdownProps={dropdownProps}
