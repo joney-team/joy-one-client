@@ -102,11 +102,11 @@ async function handleUploadFile(uploadFile: UploadFile, route: string) {
   return apiTools.formData<FileEntity>(route, formData);
 }
 
-export async function uploadWorkspaceFile(uploadFile: UploadFile) {
-  return handleUploadFile(uploadFile, "/files/workspace/upload");
+export async function uploadFile(uploadFile: UploadFile) {
+  return handleUploadFile(uploadFile, "/files/upload");
 }
 
-export async function onUploadWorkspaceFiles(
+export async function onUploadFiles(
   files: UploadFile[],
   onUploaded?: (files: FileEntity[]) => Promise<void> | void
 ) {
@@ -117,7 +117,7 @@ export async function onUploadWorkspaceFiles(
       let _files: FileEntity[] = [];
 
       for (let file of files) {
-        const res = await uploadWorkspaceFile(file);
+        const res = await uploadFile(file);
         _files.push(res);
       }
 
@@ -127,7 +127,7 @@ export async function onUploadWorkspaceFiles(
   });
 }
 
-export async function onUploadWorkspaceFile(
+export async function onUploadFile(
   file: UploadFile,
   onUploaded?: (file: FileEntity) => Promise<void> | void
 ) {
@@ -135,7 +135,7 @@ export async function onUploadWorkspaceFile(
     name: t("upload_files"),
     icon: IconUpload,
     process: async () => {
-      const res = await uploadWorkspaceFile(file);
+      const res = await uploadFile(file);
       await onUploaded?.(res);
       return res;
     },

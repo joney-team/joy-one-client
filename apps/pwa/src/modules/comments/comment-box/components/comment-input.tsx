@@ -1,4 +1,4 @@
-import { uploadWorkspaceFile } from "@/modules/files/file-service";
+import { uploadFile } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { detectMessageAttachmentType } from "@/modules/message-boxes/message-boxes-service";
 import {
@@ -43,7 +43,7 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
       const _files = await Promise.all(
         files.map((f) =>
           f instanceof File
-            ? uploadWorkspaceFile({
+            ? uploadFile({
                 file: f,
                 ref: ctx.ref,
               }).then((r) => r.url)

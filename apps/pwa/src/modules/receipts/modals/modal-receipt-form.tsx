@@ -5,7 +5,7 @@ import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { ModalTitle } from "@/components/modal-title";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CustomerEntity, CustomerShortInfo } from "@/modules/customers/customer-types";
-import { onUploadWorkspaceFile } from "@/modules/files/file-service";
+import { onUploadFile } from "@/modules/files/file-service";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { LoanEntity } from "@/modules/loans/loans-types";
 import {
@@ -81,7 +81,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
       .then(async (receipt) => {
         await Promise.all(
           receiptFiles.map((file) =>
-            onUploadWorkspaceFile({
+            onUploadFile({
               file,
               relatedReceiptId: receipt.id,
             })

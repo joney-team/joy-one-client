@@ -6,7 +6,7 @@ import { Errored } from "@/components/errored";
 import { TimekeepingsIllustration } from "@/components/illustrations/timekeepings";
 import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
-import { onUploadWorkspaceFile } from "@/modules/files/file-service";
+import { onUploadFile } from "@/modules/files/file-service";
 import {
   captureLocationTimekeeping,
   getPreviousTimeKeeping,
@@ -69,7 +69,7 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
 
       const timekeeping = await captureLocationTimekeeping({ coordinates });
 
-      await onUploadWorkspaceFile({
+      await onUploadFile({
         file,
         compressSize: 1,
         relatedHrmTimekeepingId: timekeeping._id,

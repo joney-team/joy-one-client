@@ -6,7 +6,7 @@ import { Renderer } from "@/components/renderer";
 import { onArchive } from "@/utils/actions";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { uploadWorkspaceFile } from "@/modules/files/file-service";
+import { uploadFile } from "@/modules/files/file-service";
 import { localeNames, t } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
 import {
@@ -82,7 +82,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
     let _widgetSettings = { ...debouced };
 
     if ((_widgetSettings.brandLogo as any) instanceof File) {
-      const brandLogo = await uploadWorkspaceFile({
+      const brandLogo = await uploadFile({
         file: _widgetSettings.brandLogo as any,
         maxWidthOrHeight: 200,
       });
@@ -90,7 +90,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
     }
 
     if ((_widgetSettings.chatIcon as any) instanceof File) {
-      const chatIcon = await uploadWorkspaceFile({
+      const chatIcon = await uploadFile({
         file: _widgetSettings.chatIcon as any,
         maxWidthOrHeight: 200,
       });

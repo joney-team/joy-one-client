@@ -8,7 +8,7 @@ import Superscript from "@tiptap/extension-superscript";
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
 
-import { onUploadWorkspaceFile } from "@/modules/files/file-service";
+import { onUploadFile } from "@/modules/files/file-service";
 import { FileType, UploadFileOptions } from "@/modules/files/file-types";
 import { renderLink } from "@/modules/files/files-utils";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
@@ -99,7 +99,7 @@ export const Editor: FC<EditorProps> = (props) => {
   const onDropImage = async (files: File[]) => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const _file = await onUploadWorkspaceFile({ file, ...props.uploadFileOptions });
+      const _file = await onUploadFile({ file, ...props.uploadFileOptions });
       editor?.commands.setImage({ src: renderLink(_file.relativePath) });
     }
   };

@@ -4,7 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { Errored } from "@/components/errored";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { onUploadWorkspaceFile, removeFileFromRelativePath } from "@/modules/files/file-service";
+import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { getPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
@@ -66,7 +66,7 @@ export const PartnerDetail: FC = () => {
   const uploadLogo = async (file: File) => {
     try {
       const _currentAvatar = partner.logo;
-      const _file = await onUploadWorkspaceFile({ file, compressSize: 1 });
+      const _file = await onUploadFile({ file, compressSize: 1 });
       await updatePartner(partner._id, { ...partner, logo: _file.relativePath });
       if (_currentAvatar) await removeFileFromRelativePath(_currentAvatar).catch(onError);
     } catch (error) {

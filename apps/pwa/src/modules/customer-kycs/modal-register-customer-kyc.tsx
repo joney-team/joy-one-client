@@ -6,7 +6,7 @@ import { EntityImage } from "@/components/entity-image";
 import { ModalTitle } from "@/components/modal-title";
 import { useFormSubmit } from "@/hooks/use-form";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { onUploadWorkspaceFile } from "@/modules/files/file-service";
+import { onUploadFile } from "@/modules/files/file-service";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { optionsFilter } from "@/modules/theme/generator";
 import { detectQrCode } from "@/modules/tools/tools-service";
@@ -107,13 +107,13 @@ export const ModalRegisterCustomerKyc: FC = () => {
       if (!props) return;
 
       const dto: CustomerKycDto = {
-        backOfCidImage: await onUploadWorkspaceFile({ file: values.backOfCidImage }).then(
+        backOfCidImage: await onUploadFile({ file: values.backOfCidImage }).then(
           (res) => res.relativePath
         ),
-        frontOfCidImage: await onUploadWorkspaceFile({ file: values.frontOfCidImage }).then(
+        frontOfCidImage: await onUploadFile({ file: values.frontOfCidImage }).then(
           (res) => res.relativePath
         ),
-        portraitImage: await onUploadWorkspaceFile({ file: values.portraitImage }).then(
+        portraitImage: await onUploadFile({ file: values.portraitImage }).then(
           (res) => res.relativePath
         ),
         cidBirthday: values.cidBirthday,

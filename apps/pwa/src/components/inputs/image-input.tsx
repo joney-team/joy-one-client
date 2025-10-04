@@ -1,4 +1,4 @@
-import { onUploadWorkspaceFile } from "@/modules/files/file-service";
+import { onUploadFile } from "@/modules/files/file-service";
 import { FileType } from "@/modules/files/file-types";
 import { renderLink } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
@@ -58,7 +58,7 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
         onDrop={async (files) => {
           if (files.length === 0) return;
           const file = files[0];
-          const res = await onUploadWorkspaceFile({ file });
+          const res = await onUploadFile({ file });
           onChange?.(res.relativePath);
         }}
         disabled={disabled}

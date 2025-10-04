@@ -8,7 +8,7 @@ import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
-import { onUploadWorkspaceFiles } from "@/modules/files/file-service";
+import { onUploadFiles } from "@/modules/files/file-service";
 import { num, t } from "@/modules/lang/lang-service";
 import { fulfillLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanReceiptData, LoanStatus } from "@/modules/loans/loans-types";
@@ -82,9 +82,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
 
     try {
       if (files.length === 0) throw new Error("Vui lòng chọn file");
-      const _files = await onUploadWorkspaceFiles(files.map((f) => ({ file: f }))).catch(
-        console.error
-      );
+      const _files = await onUploadFiles(files.map((f) => ({ file: f }))).catch(console.error);
       if (!Array.isArray(_files) || _files.length === 0) throw new Error("Vui lòng chọn file");
 
       await fulfillLoan(loan.id, {

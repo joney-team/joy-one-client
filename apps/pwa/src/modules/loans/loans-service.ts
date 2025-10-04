@@ -1,5 +1,5 @@
 import { ResponseList } from "@/types";
-import { uploadWorkspaceFile } from "../files/file-service";
+import { uploadFile } from "../files/file-service";
 import { t } from "../lang/lang-service";
 import { ReceiptEntity } from "../receipts/receipts-types";
 import {
@@ -99,7 +99,7 @@ export async function prepareLoanAssetData(data: any) {
     for (let i = 0; i < _data.images.length; i++) {
       const f = _data.images[i];
       if (f instanceof File) {
-        const _file = await uploadWorkspaceFile({ file: f });
+        const _file = await uploadFile({ file: f });
         _data.images[i] = _file.relativePath;
       }
     }
@@ -109,19 +109,19 @@ export async function prepareLoanAssetData(data: any) {
     for (let i = 0; i < _data.receipts.length; i++) {
       const f = _data.receipts[i];
       if (f instanceof File) {
-        const _file = await uploadWorkspaceFile({ file: f });
+        const _file = await uploadFile({ file: f });
         _data.receipts[i] = _file.relativePath;
       }
     }
   }
 
   if (_data.driverLicenseImages?.front instanceof File) {
-    const _file = await uploadWorkspaceFile({ file: _data.driverLicenseImages.front });
+    const _file = await uploadFile({ file: _data.driverLicenseImages.front });
     _data.driverLicenseImages.front = _file.relativePath;
   }
 
   if (_data.driverLicenseImages?.back instanceof File) {
-    const _file = await uploadWorkspaceFile({ file: _data.driverLicenseImages.back });
+    const _file = await uploadFile({ file: _data.driverLicenseImages.back });
     _data.driverLicenseImages.back = _file.relativePath;
   }
 

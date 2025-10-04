@@ -17,7 +17,7 @@ import { Dropzone } from "@mantine/dropzone";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconPhotoSquareRounded, IconUpload } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
-import { getFiles, getMineTypeAccept, onUploadWorkspaceFile } from "../file-service";
+import { getFiles, getMineTypeAccept, onUploadFile } from "../file-service";
 
 interface ModalFilesState {
   fileTypes?: FileType[];
@@ -135,7 +135,7 @@ export const ModalFiles: FC = () => {
             accept={state.current?.fileTypes && getMineTypeAccept(state.current?.fileTypes)}
             onDrop={(_files) => {
               _files.map((file) => {
-                onUploadWorkspaceFile({ file }, async (file) => {
+                onUploadFile({ file }, async (file) => {
                   await files.fetch(true, { isSilient: true });
                   toggleSeleteFile(file);
                 });

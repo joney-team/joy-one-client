@@ -5,7 +5,7 @@ import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
-import { uploadWorkspaceFile } from "@/modules/files/file-service";
+import { uploadFile } from "@/modules/files/file-service";
 import { useLang } from "@/modules/lang/lang-context";
 import { t } from "@/modules/lang/lang-service";
 import { LocationEntity } from "@/modules/locations/locations-types";
@@ -257,7 +257,7 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
     setIsSubmitting(true);
     let _logo = "";
     if (logo) {
-      const file = await uploadWorkspaceFile({ file: logo, maxWidthOrHeight: 300 });
+      const file = await uploadFile({ file: logo, maxWidthOrHeight: 300 });
       _logo = file.relativePath;
     }
 

@@ -14,7 +14,7 @@ import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selec
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { onUploadWorkspaceFile } from "@/modules/files/file-service";
+import { onUploadFile } from "@/modules/files/file-service";
 import { num, renderDate, renderDateTime, t } from "@/modules/lang/lang-service";
 import { PartnersInput } from "@/modules/partners/components/partners-input";
 import { PartnerEntity } from "@/modules/partners/partners-types";
@@ -169,9 +169,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         estimatedTime: values.estimatedTime,
       }).then(async (task) => {
         await Promise.all(
-          rawFiles.map(async (file) =>
-            onUploadWorkspaceFile({ file, ref: task._id }).catch(onError)
-          )
+          rawFiles.map(async (file) => onUploadFile({ file, ref: task._id }).catch(onError))
         );
         props.onClose?.();
         props.onCreated?.(task);

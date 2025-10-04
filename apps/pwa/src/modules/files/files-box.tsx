@@ -2,12 +2,7 @@
 
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import {
-  detectFileType,
-  getFiles,
-  onUploadWorkspaceFile,
-  removeFile,
-} from "@/modules/files/file-service";
+import { detectFileType, getFiles, onUploadFile, removeFile } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { renderLink } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
@@ -93,7 +88,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
           const { entity, entityId, ...rest } = props.query || {};
           const relatedEntities = entity && entityId ? [{ id: entityId, entity }] : [];
 
-          return onUploadWorkspaceFile({ file, relatedEntities, ...rest });
+          return onUploadFile({ file, relatedEntities, ...rest });
         })
       ).then(() => uploadedFiles.fetch(true, { isSilient: true }));
     } else {

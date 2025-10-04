@@ -6,7 +6,7 @@ import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Renderer } from "@/components/renderer";
 import { getColorShape } from "@/modules/theme/generator";
-import { onUploadWorkspaceFile, removeFileFromRelativePath } from "@/modules/files/file-service";
+import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -61,7 +61,7 @@ export const WorkspaceAppSettings: FC = () => {
 
       if (values.iconFile) {
         const currentLogo = workspace.userMember.workspace.appIcon;
-        const _file = await onUploadWorkspaceFile({ file: values.iconFile, maxWidthOrHeight: 512 });
+        const _file = await onUploadFile({ file: values.iconFile, maxWidthOrHeight: 512 });
         appIcon = _file.relativePath;
         if (currentLogo) await removeFileFromRelativePath(currentLogo).catch(() => false);
       }
