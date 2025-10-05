@@ -361,7 +361,7 @@ export const OnModalBooking = (props?: ModalBookingProps) => {
     ),
     children: <ModalBooking {...props} />,
     fullScreen: getView() === "mobile",
-    zIndex: zIndexes.modals,
+    zIndex: zIndexes.commonModals,
     size: props?.booking ? undefined : 1200,
     yOffset: 15,
   });

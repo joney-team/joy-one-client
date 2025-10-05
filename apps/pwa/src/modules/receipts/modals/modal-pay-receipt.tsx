@@ -505,7 +505,7 @@ export const ModalPayReceipt: FC = () => {
   return (
     <Modal
       withCloseButton={false}
-      zIndex={zIndexes.modals + 1}
+      zIndex={zIndexes.commonModals + 1}
       opened={opened}
       onClose={close}
       size={550}

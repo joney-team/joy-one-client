@@ -18,7 +18,7 @@ export const ReceiptDetailModal: FC<ModalPromptProps> = (props) => {
 export const OnReceiptDetailModal = (props: ModalPromptProps) => {
   return modals.open({
     modalId: "ReceiptDetailModal",
-    zIndex: zIndexes.modals,
+    zIndex: zIndexes.commonModals,
     title: (
       <ModalTitle
         title={t("receipt")}

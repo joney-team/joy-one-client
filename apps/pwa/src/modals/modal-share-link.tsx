@@ -48,7 +48,7 @@ export const ModalSharelink: FC = () => {
       opened={opened}
       onClose={close}
       withCloseButton={false}
-      zIndex={zIndexes.modals + 1}
+      zIndex={zIndexes.commonModals + 1}
       yOffset={100}
     >
       <Stack>

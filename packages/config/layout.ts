@@ -6,5 +6,7 @@ export const zIndexes = {
   camera: 10,
   pannel: 100,
   bulkActions: 150,
-  modals: 180,
+  commonModals: 180,
+  modalPayReceipt: 181,
+  modalPrinter: 182,
 };

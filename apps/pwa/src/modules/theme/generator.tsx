@@ -146,7 +146,7 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
       }),
       Modal: Modal.extend({
         defaultProps: {
-          zIndex: zIndexes.modals,
+          zIndex: zIndexes.commonModals,
         },
       }),
     },

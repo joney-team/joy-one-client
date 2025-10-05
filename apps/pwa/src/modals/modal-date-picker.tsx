@@ -284,6 +284,6 @@ export const OnModalDatePicker = (props: ModalDatePickerProps) => {
     ),
     children: <ModalDatePicker {...props} />,
     yOffset: 10,
-    zIndex: zIndexes.modals + 1,
+    zIndex: zIndexes.commonModals + 1,
   });
 };

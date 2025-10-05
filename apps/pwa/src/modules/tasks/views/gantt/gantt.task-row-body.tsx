@@ -374,50 +374,6 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
 
               return (
                 <Fragment>
-                  {/* <Box
-              bg="pink"
-              w={10}
-              h={10}
-              style={{
-                position: 'absolute',
-                borderRadius: 20,
-                top: '50%',
-                transform: 'translate(-5px, -50%)',
-                left: mouse.x,
-                zIndex: 10,
-              }}
-            /> */}
-
-                  {/* <Box
-              bg="green"
-              w={30}
-              h={30}
-              style={{
-                position: 'absolute',
-                borderRadius: 20,
-                top: '50%',
-                transform: 'translate(15px, -50%)',
-                right: right,
-                zIndex: 10,
-              }}
-              fz={8}
-              fw={600}
-            /> */}
-
-                  {/* <Box
-              bg="blue"
-              w={10}
-              h={10}
-              style={{
-                position: 'absolute',
-                borderRadius: 20,
-                top: '50%',
-                transform: 'translate(-5px, -50%)',
-                left: left,
-                zIndex: 10,
-              }}
-            /> */}
-
                   <Box
                     w={width}
                     h="calc(100% - 18px)"

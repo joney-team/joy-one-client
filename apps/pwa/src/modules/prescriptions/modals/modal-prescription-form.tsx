@@ -365,6 +365,6 @@ export const OnModalPrescriptionForm = (props: ModalPrescriptionFormProps) => {
     children: <ModalPrescriptionForm {...props} />,
     size: "xl",
     fullScreen: getView() === "mobile",
-    zIndex: zIndexes.modals,
+    zIndex: zIndexes.commonModals,
   });
 };

@@ -52,6 +52,6 @@ export const OnModalCancelBooking = (props: ModalCancelBookingProps) => {
     modalId: "cancel-booking",
     title: <ModalTitle color="red" title="Huỷ hẹn" icon={IconCalendarMinus} />,
     children: <ModalCancelBooking {...props} />,
-    zIndex: zIndexes.modals,
+    zIndex: zIndexes.commonModals,
   });
 };

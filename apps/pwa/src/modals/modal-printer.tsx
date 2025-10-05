@@ -163,7 +163,8 @@ export const ModalPrinter: FC = () => {
       open();
 
       if (p.force) {
-        await wait(100);
+        setIsLoading(false);
+        await wait(200);
         handlePrint();
       }
     } catch (error) {
@@ -187,7 +188,7 @@ export const ModalPrinter: FC = () => {
       opened={opened}
       onClose={close}
       title={<ModalTitle title={getTitle()} icon={IconPrinter} />}
-      zIndex={zIndexes.modals + 1}
+      zIndex={zIndexes.modalPrinter}
       yOffset={10}
       fullScreen={viewport.view === "mobile"}
       size="xl"

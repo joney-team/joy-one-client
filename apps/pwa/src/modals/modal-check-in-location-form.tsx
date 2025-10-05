@@ -62,7 +62,7 @@ export const ModalCheckInLocationForm: FC = () => {
       onClose={close}
       title={<ModalTitle title={t("check_in_location")} icon={IconMapPin} />}
       yOffset={16}
-      zIndex={zIndexes.modals}
+      zIndex={zIndexes.commonModals}
     >
       <Stack>
         <TextInput
@@ -77,7 +77,7 @@ export const ModalCheckInLocationForm: FC = () => {
 
           <NumberInput label="Longitude" {...form.getInputProps("coordinates.lng")} />
 
-          <Tooltip label={t("positioning")} zIndex={zIndexes.modals + 1}>
+          <Tooltip label={t("positioning")} zIndex={zIndexes.commonModals + 1}>
             <ActionIcon
               w={36}
               h={36}
