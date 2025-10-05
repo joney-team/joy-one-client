@@ -34,7 +34,7 @@ const environmentConfigs: Record<string, EnvironmentConfig> = {
     APP_URL: "https://app.joyone.vn",
     API_TOOLS_URL: "https://api.joyone.vn",
     API_CLIENT_SIDE_URL: "https://api.joyone.vn",
-    API_SERVER_SIDE_URL: "http://joy-one-jo-server-8bogeh:4000",
+    API_SERVER_SIDE_URL: "http://joy-one-server-apis-jvh0gk:4000",
     SECRET_KEY: "wzsjaledyu",
     ANALYTICS_KEY: "t9j567r7qx",
   },
