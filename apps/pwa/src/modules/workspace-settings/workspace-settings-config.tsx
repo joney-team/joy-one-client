@@ -117,4 +117,10 @@ export const workspacePluginCards: WorkspaceSettingCardProps[] = [
     image: "/images/ai-assistants.png",
     moduleId: "workspacePluginsAiAssistants",
   },
+  {
+    name: "workspacePluginsEInvoices",
+    description: "workspacePluginsEInvoices_desc",
+    image: "/images/e-invoices.svg",
+    moduleId: "workspacePluginsEInvoices",
+  },
 ];

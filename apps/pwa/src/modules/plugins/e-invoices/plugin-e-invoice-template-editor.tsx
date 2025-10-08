@@ -1,0 +1,216 @@
+import { Button } from "@/components/buttons/button";
+import { useQuery } from "@/modules/apis/use-query";
+import { t } from "@/modules/lang/lang-service";
+import { v4 as uuidv4 } from "uuid";
+import {
+  ActionIcon,
+  Card,
+  Group,
+  SegmentedControl,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
+import { FC } from "react";
+import {
+  PluginEInvoiceTemplate,
+  PluginEInvoiceTemplateField,
+  PluginEInvoiceTemplateType,
+  PluginEInvoiceTemplateVariables,
+} from "./plugin-e-invoices.types";
+
+const TemplateField: FC<{
+  index: number;
+  field: Partial<PluginEInvoiceTemplateField>;
+  onChange: (field: Partial<PluginEInvoiceTemplateField>) => void;
+  variables: PluginEInvoiceTemplateVariables;
+  onRemove: () => void;
+}> = (props) => {
+  const fieldType = props.field.type ?? "variable";
+  const fieldVariableName = props.field.variable ?? "";
+  const fieldVariable = props.variables[fieldVariableName];
+  const children = props.field.children ?? [];
+
+  const onChildChange = (id: string, field: Partial<PluginEInvoiceTemplateField>) => {
+    props.onChange({
+      ...props.field,
+      children: props.field.children?.map((f) => (f.id === id ? { ...f, ...field } : f)) ?? [],
+    });
+  };
+
+  const onChildRemove = (id: string) => {
+    props.onChange({
+      ...props.field,
+      children: props.field.children?.filter((child) => child.id !== id) ?? [],
+    });
+  };
+
+  return (
+    <Card shadow="none" withBorder p={10}>
+      <Group wrap="nowrap">
+        <Stack flex={1} gap={10}>
+          <Group wrap="nowrap" flex={1} gap={10}>
+            <Text fz={14} c="gray">
+              {props.index + 1}.
+            </Text>
+
+            <TextInput w={120} placeholder={t("field_name")} />
+
+            <SegmentedControl
+              data={[
+                {
+                  value: "variable",
+                  label: t("variable"),
+                },
+                {
+                  value: "input",
+                  label: t("manual_input"),
+                },
+              ]}
+              value={fieldType}
+              onChange={(value) => {
+                props.onChange({
+                  ...props.field,
+                  type: value as PluginEInvoiceTemplateField["type"],
+                });
+              }}
+            />
+
+            {fieldType === "variable" && (
+              <Select
+                flex={1}
+                placeholder={t("variable")}
+                data={Object.keys(props.variables).map((key) => ({
+                  label: t(`plugin_e_invoice_template_variable_${key}`),
+                  value: key,
+                }))}
+                value={props.field.variable}
+                onChange={(value) => {
+                  props.onChange({ ...props.field, variable: value });
+                }}
+              />
+            )}
+
+            {fieldType === "input" && (
+              <TextInput
+                flex={1}
+                placeholder={t("value")}
+                value={props.field.value ?? ""}
+                onChange={(e) => {
+                  props.onChange({ ...props.field, value: e.target.value });
+                }}
+              />
+            )}
+          </Group>
+
+          {fieldVariable &&
+            fieldVariable.childVariables &&
+            Object.keys(fieldVariable.childVariables).length > 0 && (
+              <Stack pl={26}>
+                <Card shadow="none" withBorder={false} bg="gray.0" p={10}>
+                  <Stack gap={10}>
+                    {children.map((child, index) => {
+                      return (
+                        <TemplateField
+                          index={index}
+                          key={props.index.toString() + index.toString()}
+                          field={child}
+                          variables={
+                            fieldVariable.childVariables as PluginEInvoiceTemplateVariables
+                          }
+                          onRemove={() => onChildRemove(child.id)}
+                          onChange={(field) => {
+                            onChildChange(child.id, field);
+                          }}
+                        />
+                      );
+                    })}
+
+                    <Group justify="end">
+                      <Button
+                        variant="outline"
+                        leftIcon={IconPlus}
+                        color="gray"
+                        size="xs"
+                        onClick={() => {
+                          props.onChange({
+                            ...props.field,
+                            children: [...children, { id: uuidv4() }],
+                          });
+                        }}
+                      >
+                        {t("add_entity", { entity: t("child_field") })}
+                      </Button>
+                    </Group>
+                  </Stack>
+                </Card>
+              </Stack>
+            )}
+        </Stack>
+
+        <ActionIcon onClick={props.onRemove} variant="subtle" color="gray" size="xs">
+          <IconTrash size={14} />
+        </ActionIcon>
+      </Group>
+    </Card>
+  );
+};
+
+export interface PluginEInvoiceTemplateEditorProps {
+  type: PluginEInvoiceTemplateType;
+  template: PluginEInvoiceTemplate | undefined;
+  onChange: (template: PluginEInvoiceTemplate) => void;
+}
+
+export const PluginEInvoiceTemplateEditor: FC<PluginEInvoiceTemplateEditorProps> = (props) => {
+  const { data: variables } = useQuery<PluginEInvoiceTemplateVariables>({
+    route: "/plugins/e-invoices/templates/variables",
+  });
+
+  if (!variables) return null;
+
+  return (
+    <Stack>
+      {props.template?.fields?.map((field, index) => (
+        <TemplateField
+          key={field.id}
+          index={index}
+          field={field}
+          variables={variables}
+          onRemove={() => {
+            props.onChange({
+              ...props.template,
+              fields: props.template?.fields?.filter((f) => f.id !== field.id) ?? [],
+            });
+          }}
+          onChange={(field) => {
+            props.onChange({
+              ...props.template,
+              fields: props.template?.fields?.map((f) => (f.id === field.id ? field : f)) ?? [],
+            });
+          }}
+        />
+      ))}
+
+      <Group justify="end">
+        <Button
+          variant="outline"
+          leftIcon={IconPlus}
+          onClick={() => {
+            props.onChange({
+              ...props.template,
+              fields: [
+                ...(props.template?.fields ?? []),
+                { id: uuidv4(), fieldName: "", variable: "" },
+              ],
+            });
+          }}
+        >
+          {t("add_entity", { entity: t("field") })}
+        </Button>
+      </Group>
+    </Stack>
+  );
+};

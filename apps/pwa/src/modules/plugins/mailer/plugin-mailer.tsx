@@ -5,7 +5,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Anchor, Button, Stack, Text, Title, em } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { MailerIllustration } from "../illustrations/mailer";
+import { MailerIllustration } from "@/components/illustrations/mailer";
 import { PluginMailerForm } from "./plugin-mailer-form";
 
 export const PluginMailer: FC = () => {

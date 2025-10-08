@@ -2,7 +2,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { Avatar } from "@/components/avatar";
 import { Container } from "@/components/container";
 import { Button } from "@/components/buttons/button";
-import { OnPluginAiAssistantModal } from "@/modules/plugins/ai-assistants/modal-plugin-ai-assistants";
+import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
 import { t } from "@/modules/lang/lang-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -10,7 +10,7 @@ import { ActionIcon, Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine
 import { IconAi, IconCirclesRelation, IconLinkPlus, IconPencil } from "@tabler/icons-react";
 import { type FC } from "react";
 
-export const WorkspaceSettingAiAssistants: FC = () => {
+export const AiAssistantList: FC = () => {
   const plugins = usePlugins();
   const workspace = useWorkspace();
   const color = useColor();
@@ -34,7 +34,12 @@ export const WorkspaceSettingAiAssistants: FC = () => {
 
             <Text ta="center">{t("ai_assistant_desc")}</Text>
 
-            <Button mt={10} action onClick={() => OnPluginAiAssistantModal()} leftIcon={IconLinkPlus}>
+            <Button
+              mt={10}
+              action
+              onClick={() => OnModalCreatePluginAiAssistant()}
+              leftIcon={IconLinkPlus}
+            >
               {t("connect")}
             </Button>
           </Stack>
@@ -62,7 +67,11 @@ export const WorkspaceSettingAiAssistants: FC = () => {
                 </Stack>
 
                 <Stack>
-                  <ActionIcon variant="subtle" color="gray" onClick={() => OnPluginAiAssistantModal(plugin)}>
+                  <ActionIcon
+                    variant="subtle"
+                    color="gray"
+                    onClick={() => OnModalCreatePluginAiAssistant(plugin)}
+                  >
                     <IconPencil size={16} />
                   </ActionIcon>
                 </Stack>

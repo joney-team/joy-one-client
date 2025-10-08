@@ -3,9 +3,9 @@
 import { useColor } from "@/modules/theme/use-color";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins";
-import { OnPluginAiAssistantModal } from "@/modules/plugins/ai-assistants/modal-plugin-ai-assistants";
+import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
 import { renderDateTime, renderFromNow, t } from "@/modules/lang/lang-service";
-import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/ai-assistants-service";
+import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { capitalize, StringUtils } from "@/utils/string.utils";
@@ -105,7 +105,7 @@ const AiIntegrationNode = () => {
             style={{
               cursor: "pointer",
             }}
-            onClick={() => OnPluginAiAssistantModal(aiPlugin)}
+            onClick={() => OnModalCreatePluginAiAssistant(aiPlugin)}
           >
             <Image src="/images/ai-assistants.png" w={40} h={40} />
 

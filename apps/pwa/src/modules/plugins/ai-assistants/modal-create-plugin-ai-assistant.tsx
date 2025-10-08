@@ -8,16 +8,33 @@ import {
   createPluginAiAssistant,
   removePluginAiAssistant,
   updatePluginAiAssistant,
-} from "@/modules/plugins/ai-assistants/ai-assistants-service";
+} from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service";
 import {
   PluginAiAssistantEntity,
   PluginAiAssistantProvider,
-} from "@/modules/plugins/ai-assistants/ai-assistants-types";
+} from "@/modules/plugins/ai-assistants/plugin-ai-assistants-types";
 import { onError } from "@/utils/exceptions.utils";
-import { Card, Group, InputWrapper, PasswordInput, Radio, SimpleGrid, Stack, Text, TextInput } from "@mantine/core";
+import {
+  Card,
+  Group,
+  InputWrapper,
+  PasswordInput,
+  Radio,
+  SimpleGrid,
+  Stack,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
-import { IconAi, IconCheck, IconExternalLink, IconKey, IconLinkPlus, IconNotebook } from "@tabler/icons-react";
+import {
+  IconAi,
+  IconCheck,
+  IconExternalLink,
+  IconKey,
+  IconLinkPlus,
+  IconNotebook,
+} from "@tabler/icons-react";
 import { FC, useState } from "react";
 
 export const pluginAiAssistantProviders: {
@@ -45,7 +62,7 @@ export const pluginAiAssistantProviders: {
   },
 };
 
-export const PluginAiAssistantModal: FC<{
+export const ModalCreatePluginAiAssistant: FC<{
   plugin?: PluginAiAssistantEntity;
 }> = ({ plugin }) => {
   const [loading, setLoading] = useState(false);
@@ -211,11 +228,11 @@ export const PluginAiAssistantModal: FC<{
   );
 };
 
-export const OnPluginAiAssistantModal = (plugin?: PluginAiAssistantEntity) => {
+export const OnModalCreatePluginAiAssistant = (plugin?: PluginAiAssistantEntity) => {
   return modals.open({
     modalId: "PluginAiAssistantModal",
     title: <ModalTitle title="ai_assistant" icon={IconAi} color="violet.9" />,
-    children: <PluginAiAssistantModal plugin={plugin} />,
+    children: <ModalCreatePluginAiAssistant plugin={plugin} />,
     size: "600px",
   });
 };

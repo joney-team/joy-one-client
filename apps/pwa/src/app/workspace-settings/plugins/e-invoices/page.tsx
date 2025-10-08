@@ -3,8 +3,8 @@
 import { Layout, renderPage } from "@/layout/layout-page";
 
 const Content = renderPage(() =>
-  import("@/modules/plugins/ai-assistants/plugin-ai-assistant-list").then(
-    (mod) => mod.AiAssistantList
+  import("@/modules/plugins/e-invoices/plugin-e-invoice-provider-list").then(
+    (mod) => mod.PluginEInvoiceProviderList
   )
 );
 

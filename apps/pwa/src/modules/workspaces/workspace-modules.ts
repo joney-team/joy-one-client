@@ -15,6 +15,7 @@ import {
   IconClipboardText,
   IconCoins,
   IconCreditCardPay,
+  IconFileInvoice,
   IconFiles,
   IconFolderRoot,
   IconForms,
@@ -326,6 +327,12 @@ export const workspaceModuleConfigs = {
   workspacePluginsAiAssistants: combineModule({
     href: "/workspace-settings/plugins/ai-assistants",
     icon: IconAi,
+    permissions: WorkspacePermission.WORKSPACE_SETTINGS,
+    restrictDisplay: ["spotlight"],
+  }),
+  workspacePluginsEInvoices: combineModule({
+    href: "/workspace-settings/plugins/e-invoices",
+    icon: IconFileInvoice,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
   }),
