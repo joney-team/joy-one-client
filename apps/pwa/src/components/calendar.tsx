@@ -111,15 +111,7 @@ export const Calendar: FC<CalendarProps> = (props) => {
 
         <Group gap={5}>
           {!dayjs(date).isSame(new Date(), view) && (
-            <Button
-              size="compact-sm"
-              fz={12}
-              leftIcon={IconCalendarDown}
-              iconSize={16}
-              iconSpacing={-10}
-              variant="light"
-              onClick={goToday}
-            >
+            <Button size="compact-sm" leftIcon={IconCalendarDown} variant="light" onClick={goToday}>
               {t("today")}
             </Button>
           )}

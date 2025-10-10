@@ -1,7 +1,5 @@
-import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
-import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { calendarDayJsLocalizer } from "@/configs/calendar.config";
@@ -11,6 +9,8 @@ import { t } from "@/modules/lang/lang-service";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { createTask } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
+import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import {
@@ -80,11 +80,14 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
     const offset = 15;
     const nearestTime = findNearestTimeSlot(new Date(time.getTime() - offset * 60 * 1000));
     const el = document.getElementsByClassName(`rbc-time-slot ${nearestTime}`);
-    if (el && el[0])
-      viewport.current?.scrollTo({
-        top: (el[0] as any).offsetTop,
-        behavior: "instant",
-      });
+    if (el?.[0]) {
+      el?.[0].scrollIntoView({ behavior: "instant" });
+    } else {
+      const indicator = document.getElementsByClassName("rbc-current-time-indicator");
+      if (indicator?.[0]) {
+        indicator?.[0].scrollIntoView({ behavior: "instant" });
+      }
+    }
   };
 
   const onSubmit = async () => {
@@ -93,6 +96,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         throw new Error(
           StringUtils.capitalizeFirstLetter(`${t("please")} ${t("enter_task_name")}`)
         );
+
       if (!slot)
         throw new Error(
           StringUtils.capitalizeFirstLetter(`${t("please")} ${t("select")} ${t("time")}`)
@@ -112,6 +116,10 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         0
       );
 
+      if (startAt > endAt) {
+        throw new Error(t("start_time_must_be_before_end_time"));
+      }
+
       const result = await createTask({
         name,
         assigneeUserIds: [user.userId],
@@ -119,9 +127,9 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         status: DefaultTaskStatusId.CLOSED,
         timeTrackings: [
           {
-            userId: user.userId,
-            user: user,
             id: uuId(),
+            userId: user.userId,
+            user,
             startAt: DateTimeUtils.timeToSeconds(startAt),
             endAt: DateTimeUtils.timeToSeconds(endAt),
             billable,
@@ -290,6 +298,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
                 <ActionIcon
                   variant="subtle"
                   color="gray"
+                  component="div"
                   onClick={() => startAtRef.current?.showPicker()}
                 >
                   <IconClock size={16} stroke={1.5} />
@@ -303,9 +312,10 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
 
             <TimeInput
               ref={endAtRef}
-              value={timeInputValue(slot?.endAt)}
+              disabled={!slot}
+              defaultValue={timeInputValue(slot?.endAt)}
               onChange={(e) => {
-                if (!slot || slot.startAt > slot.endAt) return;
+                if (!slot) return;
                 const [hours, minutes] = e.currentTarget.value.split(":");
                 const endAt = setHoursMinutes(new Date().getTime(), +hours, +minutes);
 
@@ -321,6 +331,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
                 <ActionIcon
                   variant="subtle"
                   color="gray"
+                  component="div"
                   onClick={() => endAtRef.current?.showPicker()}
                 >
                   <IconClock size={16} stroke={1.5} />

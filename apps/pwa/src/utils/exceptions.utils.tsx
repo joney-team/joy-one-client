@@ -11,8 +11,6 @@ export const onError = (
   notification?: NotificationData | string,
   throwError?: boolean
 ) => {
-  console.error(error);
-
   let message: string = t("INTERNAL_SERVER_ERROR");
 
   if (error instanceof AxiosError) {

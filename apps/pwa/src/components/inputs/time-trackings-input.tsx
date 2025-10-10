@@ -437,6 +437,7 @@ export const TimeTrackingForm: FC<{
             <InputWrapper label={t("time")}>
               <Group gap={10} wrap="nowrap">
                 <DateInput
+                  clearable={false}
                   value={form.values.startAt}
                   onChange={(v) => {
                     if (!v) return;

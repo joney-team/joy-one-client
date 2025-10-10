@@ -1,19 +1,19 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
 import { Avatar } from "@/components/avatar";
-import { Calendar } from "@/components/calendar";
 import { Button } from "@/components/buttons/button";
+import { Calendar } from "@/components/calendar";
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalTaskTimeTracking } from "@/modules/tasks/modals/modal-task-time-tracking";
-import { onReconnected, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { t } from "@/modules/lang/lang-service";
+import { OnModalTaskTimeTracking } from "@/modules/tasks/modals/modal-task-time-tracking";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { TaskEntity, TaskTimeTracking } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import {
   WorkspaceMember,
@@ -23,7 +23,6 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { objSelect } from "@/utils/object.utils";
 import { StringUtils } from "@/utils/string.utils";
-import { useList } from "@/components/list/use-list";
 import {
   ActionIcon,
   Card,
@@ -66,45 +65,15 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
 
   const tasks = useList<TaskEntity>({
     id: `tc-${ctx.tagFolder?._id || "all"}`,
-    fetch: (q) => {
-      return getTasks(
+    fetch: (q) =>
+      getTasks(
         objSelect(getQuery(q), ["fromTrackingTime", "toTrackingTime", "assigneeUserIds", "getAll"])
-      );
-    },
+      ),
+    events: [EventType.TASKS_UPDATED, EventType.TASK_NEW, EventType.TASK_ARCHIVED],
   });
 
   const _tasks = tasks.data.filter((v) => !ctx.tagFolder || v.tagFolderId === ctx.tagFolder?._id);
-
   const query = getQuery(tasks.params);
-
-  useEventsListener(
-    [EventType.TASK_NEW, EventType.TASK_ARCHIVED],
-    () => {
-      tasks.fetch(true, { isSilient: true });
-    },
-    []
-  );
-
-  useEventsListener(
-    [EventType.TASKS_UPDATED],
-    (ev) => {
-      const tasksData = ev.data.tasks as TaskEntity[];
-      if (tasksData) {
-        tasks.setData(
-          tasks.data.map((t) => {
-            const updatedTask = tasksData.find((nt) => nt._id === t._id);
-            if (updatedTask) return updatedTask;
-            return t;
-          })
-        );
-      }
-    },
-    [tasks.data]
-  );
-
-  onReconnected(() => {
-    tasks.fetch(true, { isSilient: true });
-  }, []);
 
   const timeTrackingUsers = _tasks.reduce((acc, task) => {
     task.timeTrackings?.forEach((v) => {
@@ -118,6 +87,17 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
 
     return acc;
   }, [] as { user: WorkspaceMemberInfo; timeTrackings: TaskTimeTracking[] }[]);
+
+  const onChangeDate = (date: Date) => {
+    const isThisMonth = dayjs(date).isSame(new Date(), "month");
+    if (isThisMonth) {
+      tasks.removeParams(["date"]);
+    } else {
+      tasks.setParams({
+        date: DateTimeUtils.timeToSeconds(date) + 60 * 60 * 24,
+      });
+    }
+  };
 
   const assigneeUserIds: string[] = query.assigneeUserIds || [];
   const [assignees, isAssigneesReady, setAssignee] = useWorkspaceMembers([
@@ -276,20 +256,10 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
 
         <Card shadow="xs" p={16}>
           <Calendar
+            key={tasks.params.date}
             initialDate={query.date}
-            onChange={(range) => {
-              const isThisMonth = dayjs(range.start).isSame(new Date(), "month");
-              if (isThisMonth) {
-                tasks.removeParams(["date"]);
-              } else {
-                tasks.setParams({
-                  date: DateTimeUtils.timeToSeconds(range.start) + 60 * 60 * 24,
-                });
-              }
-            }}
+            onChange={(range) => onChangeDate(range.start)}
             renderDayHead={(date, hovered, isOutOfRange) => {
-              if (isOutOfRange) return null;
-
               return (
                 <Group>
                   <Tooltip
@@ -299,12 +269,13 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
                       variant="subtle"
                       radius={100}
                       color="gray"
-                      onClick={() =>
+                      onClick={() => {
+                        if (isOutOfRange) onChangeDate(date);
                         OnModalTaskTimeTracking({
                           date,
                           onSubmit: () => tasks.fetch(true, { isSilient: true }),
-                        })
-                      }
+                        });
+                      }}
                       opacity={hovered || layout.view !== "desktop" ? 1 : 0}
                     >
                       <IconStopwatch size={20} />
@@ -353,7 +324,6 @@ const TaskRow: FC<{
   const hover = useHover();
   const forceUpdate = useForceUpdate();
   const tasks = useTasks();
-
   const color = useColor();
 
   const statusStyle = renderTaskStatusStyle(task.status, workspace.settings.taskStatuses);

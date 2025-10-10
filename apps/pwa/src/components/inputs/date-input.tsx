@@ -32,7 +32,7 @@ export const DateInput: FC<DateInputProps> = (props) => {
         if (!e) return onChange?.(null);
         onChange?.(DateTimeUtils.timeToSeconds(e));
       }}
-      clearable
+      clearable={props.clearable ?? true}
     />
   );
 };
