@@ -56,6 +56,10 @@ export const permissionGroups: {
         dependentPermissions: [WorkspacePermission.LOANS_VIEW, WorkspacePermission.RECEIPTS_CREATE],
       },
       {
+        value: WorkspacePermission.LOANS_FULFILLED_REVERTED,
+        dependentPermissions: [WorkspacePermission.LOANS_VIEW, WorkspacePermission.CUSTOMERS_VIEW],
+      },
+      {
         value: WorkspacePermission.LOANS_CUSTOM_FULFILLED_AT,
         dependentPermissions: [WorkspacePermission.LOANS_FULFILL],
       },

@@ -153,7 +153,7 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
                 <Stack gap={3} pr={10}>
                   <Text fw={700}>{invite.name}</Text>
                   <Text fz={12} c="gray">
-                    {t(`ws_t_${invite.type}`)}
+                    {t(`ws_${invite.type}`)}
                   </Text>
                 </Stack>
               </Group>

@@ -33,7 +33,7 @@ export const AdminWorkspaces: FC = () => {
             valuePath: "workspace.type",
             name: "Type",
             options: Object.values(WorkspaceType).map((type) => ({
-              label: t(`ws_t_${type}`),
+              label: t(`ws_${type}`),
               value: type,
             })),
           }),

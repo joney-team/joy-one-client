@@ -5,7 +5,7 @@ import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 import { deleteCookie, setCookie } from "cookies-next/client";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { getClientLocale } from "./lang-service";
-import { LangState, Locale, LocaleConfig } from "./lang-types";
+import { Dictionary, LangState, Locale, LocaleConfig } from "./lang-types";
 
 import dayjs from "dayjs";
 import "dayjs/locale/en";
@@ -39,18 +39,19 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
   const weekStart = state.isStartOfWeekSunday ? 0 : 1;
 
   const fetchLocale = async (_locale: string) => {
-    const { config, dictionary } = await new Promise<{ config: LocaleConfig; dictionary: any }>(
-      (resolve) => {
-        const action = () => {
-          api
-            .get(`/lang/${_locale}`)
-            .then((res) => resolve(res))
-            .catch(() => setTimeout(action, 3000));
-        };
+    const { config, dictionary } = await new Promise<{
+      config: LocaleConfig;
+      dictionary: Dictionary;
+    }>((resolve) => {
+      const action = () => {
+        api
+          .get(`/lang/${_locale}`)
+          .then((res) => resolve(res))
+          .catch(() => setTimeout(action, 3000));
+      };
 
-        action();
-      }
-    );
+      action();
+    });
 
     const global = getGlobal();
     global._dictionary = dictionary;

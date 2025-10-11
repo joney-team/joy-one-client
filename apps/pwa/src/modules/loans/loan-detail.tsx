@@ -117,6 +117,7 @@ export const LoanDetail: NextPage = () => {
         EventType.LOANS_SYNCED,
         EventType.LOANS_CHANGE_WORKSPACE_BRANCH,
         EventType.LOANS_APPROVED_REVERTED,
+        EventType.LOANS_FULFILLED_REVERTED,
       ],
       condition: (e, _loan) => {
         return e.ref === _loan.id || (e.relatedEntities || []).some((v) => v.id === _loan.id);

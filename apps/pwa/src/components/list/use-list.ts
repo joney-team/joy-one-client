@@ -38,7 +38,7 @@ export interface UseListArgs<T = any> {
         types: EventType[];
         condition?: (data: EventEntity, currentData: T[]) => boolean;
       };
-  isRefetchAllEvents?: boolean;
+  isIgnoreEventActionType?: boolean;
 }
 
 export type UseListFetch<T = any> = (
@@ -272,7 +272,7 @@ export const useList = <T extends BaseData>(args: UseListArgs<T>): UseList<T> =>
   const events = Array.isArray(args.events) ? args.events : args.events?.types || [];
   const onEvent = async (e: EventEntity) => {
     try {
-      if (args.isRefetchAllEvents) {
+      if (args.isIgnoreEventActionType) {
         return fetch(true, { isSilient: true });
       }
 

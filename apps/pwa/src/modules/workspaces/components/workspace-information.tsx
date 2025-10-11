@@ -107,7 +107,7 @@ export const WorkspaceInformation: FC = () => {
                 <WorkspaceTypeItem
                   key={type}
                   icon={getWorkspaceTypeIcon(type)}
-                  label={t(`ws_t_${type}`).toString()}
+                  label={t(`ws_${type}`).toString()}
                   isActive={form.values.type === type}
                   onClick={() => form.setFieldValue("type", type)}
                 />

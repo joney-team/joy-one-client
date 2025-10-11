@@ -403,6 +403,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
         EventType.LOANS_ARCHIVED,
         EventType.LOANS_LIQUIDATION,
         EventType.LOANS_REVERT_LIQUIDATION,
+        EventType.LOANS_FULFILLED_REVERTED,
         EventType.LOANS_SYNCED,
         EventType.LOANS_CHANGE_WORKSPACE_BRANCH,
         EventType.LOANS_APPROVED_REVERTED,

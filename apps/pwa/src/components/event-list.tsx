@@ -50,29 +50,9 @@ export const EventList: FC<EventListProps> = (props) => {
     limit: 5,
     fetch: async (query) =>
       getEvents({ ...query, ref: props.ref, userId: props.userId, type: props.type }),
+    isIgnoreEventActionType: true,
     events: {
-      types: [
-        EventType.LOANS_JUST_CREATED,
-        EventType.LOANS_PENDING,
-        EventType.LOANS_APPROVED,
-        EventType.LOANS_REJECTED,
-        EventType.LOANS_UPDATED,
-        EventType.LOANS_SYNCED,
-        EventType.LOANS_FULFILLED,
-        EventType.LOANS_COMPLETED,
-        EventType.LOANS_ARCHIVED,
-        EventType.LOANS_LIQUIDATION,
-        EventType.LOANS_REVERT_LIQUIDATION,
-        EventType.LOANS_CHANGE_WORKSPACE_BRANCH,
-
-        EventType.RECEIPT_NEW,
-        EventType.RECEIPT_PAID,
-        EventType.RECEIPT_UPDATED,
-        EventType.RECEIPT_DISBURSEMENT,
-        EventType.RECEIPT_ARCHIVED,
-        EventType.RECEIPT_UNARCHIVED,
-        EventType.RECEIPT_CHANGE_WORKSPACE_BRANCH,
-      ],
+      types: Object.values(EventType),
       condition: (event) => {
         return (
           event.ref === props.ref || (event.relatedEntities || []).some((v) => v.id === props.ref)

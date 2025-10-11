@@ -1,18 +1,18 @@
 "use client";
 
-import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
+import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Renderer } from "@/components/renderer";
-import { useLayout } from "@/layout/layout-context";
-import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
-import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
 import { EventType } from "@/modules/events/event-types";
 import { renderDate, t, tMulti } from "@/modules/lang/lang-service";
 import { healthCheckLoan, revertLiquidationLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
+import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
+import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
 import { getReceipts } from "@/modules/receipts/receipts-service";
 import { ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
+import { useColor } from "@/modules/theme/use-color";
 import { onActionLoad } from "@/utils/actions";
 import { useFetch, UseFetch } from "@/utils/use-fetch.util";
 import { Card, Center, Group, Skeleton, Stack, Table, Text } from "@mantine/core";
@@ -24,9 +24,11 @@ import {
   IconRefresh,
 } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
-import { LoanRowInfo } from "./loan-row-info";
 import { LoanReceiptCard } from "./loan-receipt-card";
-import { useColor } from "@/modules/theme/use-color";
+import { LoanRowInfo } from "./loan-row-info";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { api } from "@/modules/apis";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 
 interface LoanPaymentsProps {
   loan: UseFetch<LoanEntity>;
@@ -35,6 +37,7 @@ interface LoanPaymentsProps {
 export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
   const color = useColor();
   const loan = props.loan.data;
+  const { hasPermission } = useWorkspace();
 
   const receipts = useFetch({
     id: `loan_${loan?.id}_receipts`,
@@ -63,6 +66,22 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
     (receipts.data || []).filter(
       (v) => v.type === ReceiptType.INCOME && v.status === ReceiptStatus.PENDING
     ).length >= 2;
+
+  const onRevertFulfill = async () => {
+    if (!loan || !hasPermission(WorkspacePermission.LOANS_FULFILLED_REVERTED)) return;
+    openConfirmModal({
+      title: <ModalTitle color="red" title={t("confirm")} icon={IconRefresh} />,
+      children: "Bạn có chắc chắn muốn hoàn tác thanh toán này?",
+      color: "red",
+      onConfirm: () =>
+        onActionLoad({
+          name: t("event_type_" + EventType.LOANS_FULFILLED_REVERTED),
+          process: () => api.post(`/loans/${loan.id}/revert-fulfilled`),
+        }),
+      labels: { confirm: "Tiếp tục", cancel: "Hủy" },
+      confirmProps: { color: "red" },
+    });
+  };
 
   const onRevertLiquidation = async () => {
     if (!loan) return;
@@ -95,6 +114,23 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
             }}
           >
             {t("liquidation")}
+          </Button>
+        </Renderer>
+
+        <Renderer
+          visible={
+            hasPermission(WorkspacePermission.LOANS_FULFILLED_REVERTED) &&
+            loan.status !== LoanStatus.COMPLETED
+          }
+        >
+          <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertFulfill}>
+            {t(`permission_${WorkspacePermission.LOANS_FULFILLED_REVERTED}`)}
+          </Button>
+        </Renderer>
+
+        <Renderer visible={!!liquidationReceipt && loan.status !== LoanStatus.COMPLETED}>
+          <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertLiquidation}>
+            {t("revert_liquidation")}
           </Button>
         </Renderer>
 

@@ -200,7 +200,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
                         >
                           <Switch
                             key={permission.value}
-                            label={t(`ws_per_${permission.value}`)}
+                            label={t(`permission_${permission.value}`)}
                             color={isHasDependentPermissions ? "orange" : undefined}
                             checked={isChecked}
                             onClick={onToggle}
@@ -210,7 +210,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
                             <Tooltip
                               label={t("dependent_permissions", {
                                 permissions: dependentPermissions
-                                  .map((p) => t(`ws_per_${p.value}`))
+                                  .map((p) => t(`permission_${p.value}`))
                                   .join(", "),
                               })}
                             >
