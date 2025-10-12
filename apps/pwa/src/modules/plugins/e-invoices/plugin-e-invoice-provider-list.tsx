@@ -31,7 +31,7 @@ export const PluginEInvoiceProviderList: FC = () => {
 
   if (data && data.length > 0) {
     return (
-      <Container py={20} size={1000}>
+      <Container py={20} size={1200}>
         <PluginEInvoiceProviderItem provider={data[0]} onRefetch={() => refetch()} />
       </Container>
     );
@@ -53,7 +53,7 @@ export const PluginEInvoiceProviderList: FC = () => {
             mt={10}
             type="submit"
             rightIcon={IconArrowRight}
-            onClick={() => OnModalEInvoiceProvider({ onDone: () => refetch() })}
+            onClick={() => OnModalEInvoiceProvider({ mode: "create", onDone: () => refetch() })}
           >
             {t("start_now")}
           </Button>

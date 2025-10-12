@@ -2,16 +2,18 @@ import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 
 export enum PluginEInvoicesProvider {
   MATBAO = "MATBAO",
+  MATBAO_BETA = "MATBAO_BETA",
 }
 
 export enum PluginEInvoiceTemplateType {
-  LOAN_RECEIPT = "LOAN_RECEIPT",
-  ORDER_RECEIPT = "ORDER_RECEIPT",
+  LOAN_INCOME_RECEIPT = "LOAN_INCOME_RECEIPT",
+  ORDER_INCOME_RECEIPT = "ORDER_INCOME_RECEIPT",
 }
 
 export type PluginEInvoiceTemplateField = { id: string } & Partial<{
   type: "input" | "variable";
-  value: string | null;
+  inputType?: "text" | "number";
+  value: string | number | null;
   fieldName: string | null;
   variable: string | null;
   children: Omit<PluginEInvoiceTemplateField, "children">[];
@@ -57,3 +59,16 @@ export interface PluginEInvoiceTemplateVariable {
 export interface PluginEInvoiceTemplateVariables {
   [key: string]: PluginEInvoiceTemplateVariable;
 }
+
+export interface PluginEInvoicesProviderInformation {
+  name: string;
+  apiUrl: string;
+  logo: string;
+  isBeta?: boolean;
+  defaultTemplates?: PluginEInvoiceTemplates;
+}
+
+export type PluginEInvoicesProviderInformations = Record<
+  PluginEInvoicesProvider,
+  PluginEInvoicesProviderInformation
+>;

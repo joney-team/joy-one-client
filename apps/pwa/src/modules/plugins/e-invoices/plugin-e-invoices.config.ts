@@ -1,21 +1,7 @@
 import {
-  PluginEInvoicesProvider,
   PluginEInvoicesProviderStatus,
   PluginEInvoiceTemplateType,
 } from "./plugin-e-invoices.types";
-
-export const eInvoicesProviders: Record<
-  PluginEInvoicesProvider,
-  {
-    name: string;
-    logo: string;
-  }
-> = {
-  [PluginEInvoicesProvider.MATBAO]: {
-    name: "Mắt Bão",
-    logo: "https://www.matbao.net/images/menu-v2/Logo_MB_v2_c.svg",
-  },
-};
 
 export const eInvoicesProviderStatuses: Record<
   PluginEInvoicesProviderStatus,
@@ -39,6 +25,6 @@ export const eInvoicesProviderStatuses: Record<
 };
 
 export const eInvoicesTemplateTypes: Record<PluginEInvoiceTemplateType, string> = {
-  [PluginEInvoiceTemplateType.LOAN_RECEIPT]: "loans",
-  [PluginEInvoiceTemplateType.ORDER_RECEIPT]: "orders",
+  [PluginEInvoiceTemplateType.LOAN_INCOME_RECEIPT]: "loans",
+  [PluginEInvoiceTemplateType.ORDER_INCOME_RECEIPT]: "orders",
 };

@@ -6,6 +6,7 @@ import {
   ActionIcon,
   Card,
   Group,
+  NumberInput,
   SegmentedControl,
   Select,
   Stack,
@@ -13,7 +14,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import {
   PluginEInvoiceTemplate,
   PluginEInvoiceTemplateField,
@@ -128,61 +129,90 @@ const TemplateField: FC<{
             )}
 
             {fieldType === "input" && (
-              <TextInput
-                flex={1}
-                placeholder={t("value")}
-                value={props.field.value ?? ""}
-                onChange={(e) => {
-                  props.onChange({ ...props.field, value: e.target.value });
-                }}
-              />
+              <Fragment>
+                <SegmentedControl
+                  data={[
+                    {
+                      value: "text",
+                      label: t("text"),
+                    },
+                    {
+                      value: "number",
+                      label: t("number"),
+                    },
+                  ]}
+                  value={props.field.inputType ?? "text"}
+                  onChange={(value) => {
+                    props.onChange({
+                      ...props.field,
+                      inputType: value as PluginEInvoiceTemplateField["inputType"],
+                    });
+                  }}
+                />
+
+                {props.field.inputType === "number" ? (
+                  <NumberInput
+                    flex={1}
+                    placeholder={t("value")}
+                    value={props.field.value ?? ""}
+                    onChange={(e) => {
+                      props.onChange({ ...props.field, value: e });
+                    }}
+                  />
+                ) : (
+                  <TextInput
+                    flex={1}
+                    placeholder={t("value")}
+                    value={props.field.value ?? ""}
+                    onChange={(e) => {
+                      props.onChange({ ...props.field, value: e.target.value });
+                    }}
+                  />
+                )}
+              </Fragment>
             )}
           </Group>
 
-          {fieldVariable &&
-            fieldVariable.childVariables &&
-            Object.keys(fieldVariable.childVariables).length > 0 && (
-              <Stack pl={26}>
-                <Card shadow="none" withBorder={false} bg="gray.0" p={10}>
-                  <Stack gap={10}>
-                    {children.map((child, index) => {
-                      return (
-                        <TemplateField
-                          templateType={props.templateType}
-                          index={index}
-                          key={props.index.toString() + index.toString()}
-                          field={child}
-                          variables={
-                            fieldVariable.childVariables as PluginEInvoiceTemplateVariables
-                          }
-                          onRemove={() => onChildRemove(child.id)}
-                          onChange={(field) => {
-                            onChildChange(child.id, field);
-                          }}
-                        />
-                      );
-                    })}
-
-                    <Group justify="end">
-                      <Button
-                        variant="outline"
-                        leftIcon={IconPlus}
-                        color="gray"
-                        size="xs"
-                        onClick={() => {
-                          props.onChange({
-                            ...props.field,
-                            children: [...children, getInitField()],
-                          });
+          {fieldVariable && fieldVariable.childVariables && (
+            <Stack pl={26}>
+              <Card shadow="none" withBorder={false} bg="gray.0" p={10}>
+                <Stack gap={10}>
+                  {children.map((child, index) => {
+                    return (
+                      <TemplateField
+                        templateType={props.templateType}
+                        index={index}
+                        key={props.index.toString() + index.toString()}
+                        field={child}
+                        variables={fieldVariable.childVariables as PluginEInvoiceTemplateVariables}
+                        onRemove={() => onChildRemove(child.id)}
+                        onChange={(field) => {
+                          onChildChange(child.id, field);
                         }}
-                      >
-                        {t("add_entity", { entity: t("child_field") })}
-                      </Button>
-                    </Group>
-                  </Stack>
-                </Card>
-              </Stack>
-            )}
+                      />
+                    );
+                  })}
+
+                  <Group justify="end">
+                    <Button
+                      variant="outline"
+                      leftIcon={IconPlus}
+                      color="gray"
+                      size="xs"
+                      onClick={() => {
+                        props.onChange({
+                          ...props.field,
+                          children: [...children, getInitField()],
+                        });
+                      }}
+                    >
+                      {t("add_entity", { entity: t("child_field") })}
+                    </Button>
+                  </Group>
+                </Stack>
+              </Card>
+            </Stack>
+          )}
         </Stack>
 
         <ActionIcon onClick={props.onRemove} variant="subtle" color="gray" size="xs">

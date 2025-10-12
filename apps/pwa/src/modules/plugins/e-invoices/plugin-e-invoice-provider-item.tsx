@@ -1,29 +1,26 @@
 import { Button } from "@/components/buttons/button";
+import { CopyText } from "@/components/copy-text";
 import { Image } from "@/components/image";
 import { SessionTitle } from "@/components/session-title";
 import { api } from "@/modules/apis";
+import { useQuery } from "@/modules/apis/use-query";
 import { t } from "@/modules/lang/lang-service";
-import { Badge, Card, Group, SimpleGrid, Stack, Text } from "@mantine/core";
-import { IconEdit, IconRefresh } from "@tabler/icons-react";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
+import { onError } from "@/utils/exceptions.utils";
+import { Badge, Card, Group, Stack, Text } from "@mantine/core";
+import { useDebouncedCallback } from "@mantine/hooks";
+import { IconArchive, IconEdit, IconRefresh } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
 import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor";
-import {
-  eInvoicesProviders,
-  eInvoicesProviderStatuses,
-  eInvoicesTemplateTypes,
-} from "./plugin-e-invoices.config";
+import { eInvoicesProviderStatuses } from "./plugin-e-invoices.config";
 import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 import {
+  PluginEInvoicesProviderInformations,
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
-import { useDebouncedCallback } from "@mantine/hooks";
-import { onError } from "@/utils/exceptions.utils";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
-import { useQuery } from "@/modules/apis/use-query";
-import { CopyText } from "@/components/copy-text";
 
 interface PluginEInvoiceProviderItemProps {
   provider: PluginEInvoicesProviderEntity;
@@ -35,7 +32,12 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
   onRefetch,
 }) => {
   const workspace = useWorkspace();
-  const providerConfig = eInvoicesProviders[provider.provider];
+  const providerConfigs = useQuery<PluginEInvoicesProviderInformations>({
+    route: "/plugins/e-invoices/providers/informations",
+    networkMode: "offlineFirst",
+  });
+
+  const providerConfig = providerConfigs.data?.[provider.provider];
   const status = eInvoicesProviderStatuses[provider.status];
   const [templates, setTemplates] = useState(provider.templates);
 
@@ -55,9 +57,16 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
     }
   }, 1000);
 
+  const archive = async () => {
+    await api.delete(`/plugins/e-invoices/providers/${provider._id}`);
+    await onRefetch();
+  };
+
   useEffect(() => {
     syncTemplates();
   }, [templates]);
+
+  if (!providerConfig) return null;
 
   return (
     <Stack>
@@ -95,10 +104,40 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 size="xs"
                 leftIcon={IconEdit}
                 onClick={() => {
-                  OnModalEInvoiceProvider({ onDone: () => onRefetch(), provider });
+                  OnModalEInvoiceProvider({
+                    onDone: () => onRefetch(),
+                    provider,
+                    mode: "update_provider",
+                  });
                 }}
               >
-                {t("edit")}
+                {t("change_provider")}
+              </Button>
+
+              <Button
+                variant="outline"
+                color="gray"
+                size="xs"
+                leftIcon={IconEdit}
+                onClick={() => {
+                  OnModalEInvoiceProvider({
+                    onDone: () => onRefetch(),
+                    provider,
+                    mode: "update_auth",
+                  });
+                }}
+              >
+                {t("change_auth")}
+              </Button>
+
+              <Button
+                variant="outline"
+                color="gray"
+                size="xs"
+                leftIcon={IconArchive}
+                onClick={archive}
+              >
+                {t("archive")}
               </Button>
             </Group>
           </Stack>
@@ -109,7 +148,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
         <Stack flex={1}>
           {Object.values(PluginEInvoiceTemplateType).map((type) => {
             if (
-              (type === PluginEInvoiceTemplateType.LOAN_RECEIPT &&
+              (type === PluginEInvoiceTemplateType.LOAN_INCOME_RECEIPT &&
                 workspace.type !== WorkspaceType.CREDIT) ||
               !variables
             )
@@ -118,7 +157,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
             return (
               <Stack key={type} gap={5}>
                 <SessionTitle
-                  name={t("template_entity", { entity: t(eInvoicesTemplateTypes[type]) })}
+                  name={t("template_entity", { entity: t(`e_invoice_template_type_${type}`) })}
                 />
                 <Card>
                   <PluginEInvoiceTemplateEditor
