@@ -59,6 +59,7 @@ import { HoverToEdit } from "@/components/hover-to-edit";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { UserCard } from "@/modules/users/components/user-card";
+import { api } from "../apis";
 
 interface ReceiptCardProps {
   receipt: ReceiptEntity;
@@ -498,6 +499,18 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
             <Renderer visible={isAbleToPrint}>
               <PrintButton receipt={receipt} bankQrCode={bankQrCode} label={t("print_receipt")} />
             </Renderer>
+
+            {receipt.status === ReceiptStatus.PAID &&
+              workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE) && (
+                <Button
+                  size="xs"
+                  color="teal"
+                  leftIcon={IconCashRegister}
+                  onClick={() => api.post(`/plugins/e-invoices`, { receiptId: receipt.id })}
+                >
+                  {t("export_entity", { entity: t("e_invoice") })}
+                </Button>
+              )}
 
             {receipt.status !== ReceiptStatus.PAID && (
               <Button

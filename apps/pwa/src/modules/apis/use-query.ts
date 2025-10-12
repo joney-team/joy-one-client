@@ -2,7 +2,7 @@ import { NetworkMode, UseQueryResult, useQuery as useQueryTanstack } from "@tans
 
 import { AxiosError } from "axios";
 import { api } from ".";
-import { useEventsListener } from "../events/event-service";
+import { onReconnected, useEventsListener } from "../events/event-service";
 import { EventEntity, EventType } from "../events/event-types";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { StorageKey } from "@/types";
@@ -13,6 +13,7 @@ export interface UseQueryArgs<T, P = Record<string, any>> {
   isSkip?: boolean;
   refetchEvents?: EventType[];
   refetchCondition?: (data: EventEntity, currentData: T) => boolean;
+  refetchWhenReconnected?: boolean;
   method?: "get" | "post";
   networkMode?: NetworkMode;
   queryKey?: string[];
@@ -30,6 +31,7 @@ export const useQuery = <T = any, P = Record<string, any>>(
   const queryKey = typeof args === "string" ? [] : args.queryKey || [];
   const networkMode = query.networkMode ?? "offlineFirst";
   const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
+  const refetchWhenReconnected = query.refetchWhenReconnected ?? false;
 
   const queryKeyIn = useMemo(() => {
     return [...queryKey, route, params ? JSON.stringify(params) : "pn", workspaceId || "general"];
@@ -64,6 +66,12 @@ export const useQuery = <T = any, P = Record<string, any>>(
     },
     [refetchEvents, isReadyToFetch, route, params]
   );
+
+  onReconnected(() => {
+    if (refetchWhenReconnected) {
+      stack.refetch().catch(console.error);
+    }
+  }, [refetchWhenReconnected, stack]);
 
   return stack;
 };

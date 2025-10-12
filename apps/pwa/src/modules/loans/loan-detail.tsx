@@ -1,15 +1,14 @@
-import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
+import { EntityImage } from "@/components/entity-image";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
 import { Renderer } from "@/components/renderer";
-import { useLayout } from "@/layout/layout-context";
-import { OnCustomerModal } from "@/modules/customers/customer-modal";
-import { OnModalSignLoan } from "@/modules/loans/modals/modal-sign-loan";
 import { useRouter } from "@/hooks/use-router";
+import { useLayout } from "@/layout/layout-context";
 import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
 import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";
+import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -22,9 +21,10 @@ import {
   updateLoanAssetData,
 } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
+import { OnModalSignLoan } from "@/modules/loans/modals/modal-sign-loan";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { formatPhoneNumber } from "@/utils/phone.utils";
@@ -60,15 +60,12 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import { useLocations } from "../locations/locations-context";
+import { useColor } from "../theme/use-color";
+import { LoanCustomerKyc } from "./components/loan-customer-kyc";
 import { LoanDisburesement } from "./components/loan-disbursement";
 import { LoanDocuments } from "./components/loan-documents";
-import { LoanCustomerKyc } from "./components/loan-customer-kyc";
 import { LoanPayments } from "./components/loan-payments";
-import { useColor } from "../theme/use-color";
-import { useLocations } from "../locations/locations-context";
-import { OnModalFileGallery } from "../files/modals/modal-file-gallery";
-import { FileType } from "../files/file-types";
-import { EntityImage } from "@/components/entity-image";
 
 export const LoanDetail: NextPage = () => {
   const params = useParams();

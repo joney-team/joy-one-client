@@ -3,7 +3,7 @@ import { Image } from "@/components/image";
 import { SessionTitle } from "@/components/session-title";
 import { api } from "@/modules/apis";
 import { t } from "@/modules/lang/lang-service";
-import { Badge, Card, Group, Stack, Text } from "@mantine/core";
+import { Badge, Card, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { IconEdit, IconRefresh } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
@@ -14,9 +14,16 @@ import {
   eInvoicesTemplateTypes,
 } from "./plugin-e-invoices.config";
 import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
-import { PluginEInvoiceTemplateType } from "./plugin-e-invoices.types";
+import {
+  PluginEInvoiceTemplateType,
+  PluginEInvoiceTemplateVariables,
+} from "./plugin-e-invoices.types";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { onError } from "@/utils/exceptions.utils";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
+import { useQuery } from "@/modules/apis/use-query";
+import { CopyText } from "@/components/copy-text";
 
 interface PluginEInvoiceProviderItemProps {
   provider: PluginEInvoicesProviderEntity;
@@ -27,9 +34,15 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
   provider,
   onRefetch,
 }) => {
+  const workspace = useWorkspace();
   const providerConfig = eInvoicesProviders[provider.provider];
   const status = eInvoicesProviderStatuses[provider.status];
   const [templates, setTemplates] = useState(provider.templates);
+
+  const { data: variables } = useQuery<PluginEInvoiceTemplateVariables>({
+    route: "/plugins/e-invoices/templates/variables",
+    refetchWhenReconnected: true,
+  });
 
   const syncTemplates = useDebouncedCallback(() => {
     if (JSON.stringify(templates) !== JSON.stringify(provider.templates)) {
@@ -92,20 +105,52 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
         </Group>
       </Card>
 
-      {Object.values(PluginEInvoiceTemplateType).map((type) => (
-        <Stack key={type} gap={5}>
-          <SessionTitle name={t("template_entity", { entity: t(eInvoicesTemplateTypes[type]) })} />
+      <Group align="start" wrap="nowrap">
+        <Stack flex={1}>
+          {Object.values(PluginEInvoiceTemplateType).map((type) => {
+            if (
+              (type === PluginEInvoiceTemplateType.LOAN_RECEIPT &&
+                workspace.type !== WorkspaceType.CREDIT) ||
+              !variables
+            )
+              return null;
+
+            return (
+              <Stack key={type} gap={5}>
+                <SessionTitle
+                  name={t("template_entity", { entity: t(eInvoicesTemplateTypes[type]) })}
+                />
+                <Card>
+                  <PluginEInvoiceTemplateEditor
+                    type={type}
+                    template={templates[type]}
+                    variables={variables}
+                    onChange={(template) => {
+                      setTemplates({ ...templates, [type]: template });
+                    }}
+                  />
+                </Card>
+              </Stack>
+            );
+          })}
+        </Stack>
+
+        <Stack gap={5}>
+          <SessionTitle name={t("variable_list")} />
           <Card>
-            <PluginEInvoiceTemplateEditor
-              type={type}
-              template={templates[type]}
-              onChange={(template) => {
-                setTemplates({ ...templates, [type]: template });
-              }}
-            />
+            <Stack>
+              {Object.entries(variables ?? {}).map(([key]) => (
+                <Stack key={key} gap={5}>
+                  <CopyText fw={600} text={key} />
+                  <Text fz={14} c="gray">
+                    {t(`e_invoice_variable_${key}`)}
+                  </Text>
+                </Stack>
+              ))}
+            </Stack>
           </Card>
         </Stack>
-      ))}
+      </Group>
     </Stack>
   );
 };

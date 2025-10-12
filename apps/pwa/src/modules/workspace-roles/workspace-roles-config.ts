@@ -169,6 +169,10 @@ export const permissionGroups: {
           WorkspacePermission.CUSTOMERS_VIEW,
         ],
       },
+      {
+        value: WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE,
+        dependentPermissions: [WorkspacePermission.RECEIPTS_VIEW],
+      },
     ],
   },
   [PermissionGroupKey.ORDERS]: {

@@ -20,17 +20,41 @@ import {
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+
+const getInitField = (): PluginEInvoiceTemplateField => ({
+  id: uuidv4(),
+  type: "input",
+});
 
 const TemplateField: FC<{
+  templateType: PluginEInvoiceTemplateType;
   index: number;
   field: Partial<PluginEInvoiceTemplateField>;
   onChange: (field: Partial<PluginEInvoiceTemplateField>) => void;
-  variables: PluginEInvoiceTemplateVariables;
+  variables: PluginEInvoiceTemplateVariables | null;
   onRemove: () => void;
 }> = (props) => {
+  const workspace = useWorkspace();
   const fieldType = props.field.type ?? "variable";
   const fieldVariableName = props.field.variable ?? "";
-  const fieldVariable = props.variables[fieldVariableName];
+
+  const availableVariables = Object.entries(props.variables ?? {}).reduce((acc, [key, value]) => {
+    if (value.templateTypes && !value.templateTypes?.includes(props.templateType)) {
+      return acc;
+    }
+
+    if (value.workspaceTypes && !value.workspaceTypes?.includes(workspace.type)) {
+      return acc;
+    }
+
+    return {
+      ...acc,
+      [key]: value,
+    };
+  }, {} as PluginEInvoiceTemplateVariables);
+
+  const fieldVariable = availableVariables[fieldVariableName];
   const children = props.field.children ?? [];
 
   const onChildChange = (id: string, field: Partial<PluginEInvoiceTemplateField>) => {
@@ -56,17 +80,25 @@ const TemplateField: FC<{
               {props.index + 1}.
             </Text>
 
-            <TextInput w={120} placeholder={t("field_name")} />
+            <TextInput
+              w={120}
+              placeholder={t("field_name")}
+              value={props.field.fieldName ?? ""}
+              onChange={(e) => {
+                props.onChange({ ...props.field, fieldName: e.target.value });
+              }}
+            />
 
             <SegmentedControl
               data={[
                 {
-                  value: "variable",
-                  label: t("variable"),
-                },
-                {
                   value: "input",
                   label: t("manual_input"),
+                },
+                {
+                  value: "variable",
+                  label: t("variable"),
+                  disabled: Object.keys(availableVariables).length === 0,
                 },
               ]}
               value={fieldType}
@@ -74,6 +106,8 @@ const TemplateField: FC<{
                 props.onChange({
                   ...props.field,
                   type: value as PluginEInvoiceTemplateField["type"],
+                  variable: null,
+                  value: null,
                 });
               }}
             />
@@ -82,8 +116,8 @@ const TemplateField: FC<{
               <Select
                 flex={1}
                 placeholder={t("variable")}
-                data={Object.keys(props.variables).map((key) => ({
-                  label: t(`plugin_e_invoice_template_variable_${key}`),
+                data={Object.keys(availableVariables).map((key) => ({
+                  label: t(`e_invoice_variable_${key}`),
                   value: key,
                 }))}
                 value={props.field.variable}
@@ -114,6 +148,7 @@ const TemplateField: FC<{
                     {children.map((child, index) => {
                       return (
                         <TemplateField
+                          templateType={props.templateType}
                           index={index}
                           key={props.index.toString() + index.toString()}
                           field={child}
@@ -137,7 +172,7 @@ const TemplateField: FC<{
                         onClick={() => {
                           props.onChange({
                             ...props.field,
-                            children: [...children, { id: uuidv4() }],
+                            children: [...children, getInitField()],
                           });
                         }}
                       >
@@ -162,20 +197,18 @@ export interface PluginEInvoiceTemplateEditorProps {
   type: PluginEInvoiceTemplateType;
   template: PluginEInvoiceTemplate | undefined;
   onChange: (template: PluginEInvoiceTemplate) => void;
+  variables: PluginEInvoiceTemplateVariables;
 }
 
 export const PluginEInvoiceTemplateEditor: FC<PluginEInvoiceTemplateEditorProps> = (props) => {
-  const { data: variables } = useQuery<PluginEInvoiceTemplateVariables>({
-    route: "/plugins/e-invoices/templates/variables",
-  });
-
-  if (!variables) return null;
+  const { variables } = props;
 
   return (
     <Stack>
       {props.template?.fields?.map((field, index) => (
         <TemplateField
           key={field.id}
+          templateType={props.type}
           index={index}
           field={field}
           variables={variables}
@@ -196,15 +229,13 @@ export const PluginEInvoiceTemplateEditor: FC<PluginEInvoiceTemplateEditorProps>
 
       <Group justify="end">
         <Button
+          size="xs"
           variant="outline"
           leftIcon={IconPlus}
           onClick={() => {
             props.onChange({
               ...props.template,
-              fields: [
-                ...(props.template?.fields ?? []),
-                { id: uuidv4(), fieldName: "", variable: "" },
-              ],
+              fields: [...(props.template?.fields ?? []), getInitField()],
             });
           }}
         >

@@ -50,6 +50,7 @@ export interface PluginEInvoiceTemplateVariable {
   name?: string;
   description?: string;
   childVariables?: Record<string, PluginEInvoiceTemplateVariable>;
+  templateTypes?: PluginEInvoiceTemplateType[];
   workspaceTypes?: WorkspaceType[];
 }
 
