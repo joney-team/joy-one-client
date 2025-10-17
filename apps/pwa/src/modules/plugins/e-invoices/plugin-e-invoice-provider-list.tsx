@@ -43,10 +43,10 @@ export const PluginEInvoiceProviderList: FC = () => {
         <Stack align="center" py={20}>
           <Stack gap={8}>
             <Title ta="center" order={2} fw={300} c={color("primary")}>
-              {t("workspacePluginsEInvoices")}
+              {t("eInvoices")}
             </Title>
 
-            <Text ta="center">{t("workspacePluginsEInvoices_desc")}</Text>
+            <Text ta="center">{t("eInvoices_desc")}</Text>
           </Stack>
 
           <Button

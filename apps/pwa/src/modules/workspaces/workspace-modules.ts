@@ -19,6 +19,7 @@ import {
   IconFiles,
   IconFolderRoot,
   IconForms,
+  IconInvoice,
   IconLayout,
   IconLayoutDashboard,
   IconMailbox,
@@ -181,6 +182,11 @@ export const workspaceModuleConfigs = {
     href: "/receipts",
     icon: IconCashRegister,
     permissions: WorkspacePermission.RECEIPTS_VIEW,
+  }),
+  eInvoices: combineModule({
+    href: "/e-invoices",
+    icon: IconFileInvoice,
+    permissions: WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE,
   }),
 
   // Credit

@@ -1,7 +1,6 @@
 import { Button } from "@/components/buttons/button";
-import { useQuery } from "@/modules/apis/use-query";
 import { t } from "@/modules/lang/lang-service";
-import { v4 as uuidv4 } from "uuid";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import {
   ActionIcon,
   Card,
@@ -15,13 +14,13 @@ import {
 } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
+import { v4 as uuidv4 } from "uuid";
 import {
   PluginEInvoiceTemplate,
   PluginEInvoiceTemplateField,
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 
 const getInitField = (): PluginEInvoiceTemplateField => ({
   id: uuidv4(),

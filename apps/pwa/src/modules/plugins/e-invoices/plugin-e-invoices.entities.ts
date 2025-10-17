@@ -13,3 +13,14 @@ export interface PluginEInvoicesProviderEntity extends BaseMongoEntity {
   templates: PluginEInvoiceTemplates;
   status: PluginEInvoicesProviderStatus;
 }
+
+export interface PluginEInvoicesEntity extends BaseMongoEntity {
+  providerId: string;
+  receiptId: string;
+  receiptCode: string;
+  invoiceId: string;
+  invoiceData: Record<string, unknown>;
+  providerData: Record<string, unknown>;
+  url?: string;
+  provider: Pick<PluginEInvoicesProviderEntity, "_id" | "provider">;
+}
