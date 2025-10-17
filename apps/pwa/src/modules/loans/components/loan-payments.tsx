@@ -109,9 +109,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
             color="orange"
             variant="subtle"
             leftIcon={IconBrandSpeedtest}
-            onClick={() => {
-              OnModalLoanLiquidation(loan);
-            }}
+            onClick={() => OnModalLoanLiquidation(loan)}
           >
             {t("liquidation")}
           </Button>
@@ -125,12 +123,6 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
         >
           <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertFulfill}>
             {t(`permission_${WorkspacePermission.LOANS_FULFILLED_REVERTED}`)}
-          </Button>
-        </Renderer>
-
-        <Renderer visible={!!liquidationReceipt && loan.status !== LoanStatus.COMPLETED}>
-          <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertLiquidation}>
-            {t("revert_liquidation")}
           </Button>
         </Renderer>
 
