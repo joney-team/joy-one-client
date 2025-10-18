@@ -15,6 +15,10 @@ export const routeRules: Record<string, RouteRule> = {
     auth: "public",
     workspace: false,
   },
+  "/sentry-example-page": {
+    auth: "public",
+    workspace: false,
+  },
   "/connect": {
     auth: "public",
     workspace: false,

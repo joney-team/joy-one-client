@@ -17,8 +17,10 @@ import {
 } from "@mantine/core";
 import { IconHome, IconLifebuoy, IconRefresh } from "@tabler/icons-react";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { IconErrored } from "./icons";
+import * as Sentry from "@sentry/nextjs";
+import { useLang } from "@/modules/lang/lang-context";
 
 interface ErrorBoundaryProps {
   error: any;
@@ -28,17 +30,9 @@ interface ErrorBoundaryProps {
 const Content: FC<ErrorBoundaryProps> = (props) => {
   const isHome = window?.location?.pathname === "/";
 
-  // useEffect(() => {
-  //   if (lang.isReady) {
-  //     // if (config.SENTRY_DSN) {
-  //     //   Sentry.init({
-  //     //     dsn: config.SENTRY_DSN,
-  //     //     integrations: [],
-  //     //   });
-  //     //   Sentry.captureException(props.error);
-  //     // }
-  //   }
-  // }, [lang.isReady]);
+  useEffect(() => {
+    Sentry.captureException(props.error);
+  }, []);
 
   return (
     <Container size="sm">
