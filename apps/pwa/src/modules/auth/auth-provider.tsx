@@ -59,6 +59,7 @@ import type {
   UserAuthResult,
 } from "./auth-types";
 import { reducePhotoSize } from "../files/file-service";
+import * as Sentry from "@sentry/react";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
@@ -328,6 +329,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       if (authType) router.removeQuery("authType", true);
 
       if (!user.settings.timezone) detectTimeZone();
+
+      Sentry.setUser({ id: user._id, username: user.name, email: user.email });
     }
   }, [isInitialized, user]);
 

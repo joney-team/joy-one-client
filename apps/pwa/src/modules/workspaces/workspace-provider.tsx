@@ -1,5 +1,6 @@
 "use client";
 
+import * as Sentry from "@sentry/react";
 import { useApp } from "@/app.context";
 import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
 import { Fullscreen } from "@/components/fullscreen";
@@ -524,6 +525,15 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       }
     }
   }, [isInitialized, contextValue.userMembers]);
+
+  useEffect(() => {
+    if (contextValue.userMember) {
+      Sentry.setExtra("Workspace", {
+        code: contextValue.userMember.workspace.code,
+        name: contextValue.userMember.workspace.name,
+      });
+    }
+  }, [contextValue.userMember]);
 
   return (
     <Context.Provider value={contextValue}>
