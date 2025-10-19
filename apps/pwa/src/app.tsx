@@ -1,5 +1,6 @@
 "use client";
 
+import * as Sentry from "@sentry/react";
 import { AppLoading } from "@/components/app-loading/app-loading";
 import { wait } from "@/utils/common.utils";
 import dynamic from "next/dynamic";
@@ -17,10 +18,9 @@ import { type EventEntity } from "./modules/events/event-types";
 import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
-import * as Sentry from "@sentry/react";
 import config from "@joy-one-client/config";
 
-Sentry.init({ dsn: config.SENTRY_DSN });
+if (!config.isDevelopment) Sentry.init({ dsn: config.SENTRY_DSN });
 
 const LangProvider = dynamic(() => import("@/modules/lang/lang-provider"));
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));

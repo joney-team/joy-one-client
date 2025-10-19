@@ -49,7 +49,6 @@ import {
 import { FC, Fragment, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag } from "../../tasks-dnd-provider";
 import { ListTaskRowDropper } from "./list.task-row-dropper";
-import { useInViewport } from "@/hooks/use-in-viewport";
 
 export const ListTaskRow: FC<{
   id: string;
@@ -62,7 +61,6 @@ export const ListTaskRow: FC<{
   nextId?: string;
   prevId?: string;
 }> = (props) => {
-  const inViewport = useInViewport();
   const [isSubTasksVisible, setIsSubTasksVisible] = useState(false);
   const [task, ctx] = useTask(props.id, undefined, isSubTasksVisible);
   const color = useColor();
@@ -108,10 +106,10 @@ export const ListTaskRow: FC<{
   const isDraggingAsRootHasChild_thisAsChild =
     draggingTask && draggingTask.childCount > 0 && !!task.parentId;
   const isAbleToDrop = draggingTask && !isSelfDragging && !isDraggingAsParent;
-  const draggable = useTaskDrag(task._id, "row", !inViewport.inViewport);
+  const draggable = useTaskDrag(task._id, "row");
 
   return (
-    <Stack gap={0} w="100%" ref={inViewport.ref}>
+    <Stack gap={0} w="100%">
       <Group
         wrap="nowrap"
         gap={0}
@@ -128,333 +126,320 @@ export const ListTaskRow: FC<{
         }}
         bg="var(--mantine-color-body)"
       >
-        {inViewport.inViewport && (
-          <Fragment>
-            <ListTaskRowDropper
-              visible={
-                isAbleToDrop &&
-                props.prevId !== draggingTaskId &&
-                !isDraggingAsRootHasChild_thisAsChild
-              }
-              indexSpacing={indexSpacing * 3}
-              targetTask={task}
-              position={ReorderTaskPotision.BEFORE}
-            />
+        <ListTaskRowDropper
+          visible={
+            isAbleToDrop && props.prevId !== draggingTaskId && !isDraggingAsRootHasChild_thisAsChild
+          }
+          indexSpacing={indexSpacing * 3}
+          targetTask={task}
+          position={ReorderTaskPotision.BEFORE}
+        />
 
-            <ListTaskRowDropper
-              visible={
-                isAbleToDrop &&
-                props.indexType === "last" &&
-                !isHasChild &&
-                !isDraggingAsRootHasChild_thisAsChild
-              }
-              indexSpacing={indexSpacing * 3}
-              targetTask={task}
-              position={ReorderTaskPotision.AFTER}
-            />
+        <ListTaskRowDropper
+          visible={
+            isAbleToDrop &&
+            props.indexType === "last" &&
+            !isHasChild &&
+            !isDraggingAsRootHasChild_thisAsChild
+          }
+          indexSpacing={indexSpacing * 3}
+          targetTask={task}
+          position={ReorderTaskPotision.AFTER}
+        />
 
-            <ActionIcon
-              ref={draggable.setNodeRef}
-              {...draggable.listeners}
-              {...draggable.attributes}
-              variant="transparent"
-              color="gray"
-              style={{ cursor: "move", outline: "none" }}
-              mr={-5}
-            >
-              <IconGripVertical size={16} strokeWidth={1.2} />
-            </ActionIcon>
+        <ActionIcon
+          ref={draggable.setNodeRef}
+          {...draggable.listeners}
+          {...draggable.attributes}
+          variant="transparent"
+          color="gray"
+          style={{ cursor: "move", outline: "none" }}
+          mr={-5}
+        >
+          <IconGripVertical size={16} strokeWidth={1.2} />
+        </ActionIcon>
 
-            <ActionIcon
-              color={ctx.isSelected ? color("primary") : "gray"}
-              variant="subtle"
-              opacity={
-                (hovered || ctx.isSelected || layout.view !== "desktop") && ctx.isAbleToSelect
-                  ? 1
-                  : 0
-              }
-              style={{ visibility: ctx.isAbleToSelect ? "visible" : "hidden" }}
-              onClick={(e) => ctx.toggleSelect(e.shiftKey)}
-              disabled={!ctx.isAbleToSelect}
-            >
-              {ctx.isSelected ? (
-                <IconSquareCheckFilled size={18} />
-              ) : (
-                <IconSquareDashed strokeWidth={1.5} size={18} />
-              )}
-            </ActionIcon>
+        <ActionIcon
+          color={ctx.isSelected ? color("primary") : "gray"}
+          variant="subtle"
+          opacity={
+            (hovered || ctx.isSelected || layout.view !== "desktop") && ctx.isAbleToSelect ? 1 : 0
+          }
+          style={{ visibility: ctx.isAbleToSelect ? "visible" : "hidden" }}
+          onClick={(e) => ctx.toggleSelect(e.shiftKey)}
+          disabled={!ctx.isAbleToSelect}
+        >
+          {ctx.isSelected ? (
+            <IconSquareCheckFilled size={18} />
+          ) : (
+            <IconSquareDashed strokeWidth={1.5} size={18} />
+          )}
+        </ActionIcon>
 
-            <Group pl={indexSpacing} flex={1} py={5} gap={5} wrap="nowrap">
-              <Renderer visible={!!task.parentId}>
-                <ThemeIcon size="xs" color="gray" variant="transparent">
-                  <IconCornerDownRight strokeWidth={1.5} />
-                </ThemeIcon>
-              </Renderer>
+        <Group pl={indexSpacing} flex={1} py={5} gap={5} wrap="nowrap">
+          <Renderer visible={!!task.parentId}>
+            <ThemeIcon size="xs" color="gray" variant="transparent">
+              <IconCornerDownRight strokeWidth={1.5} />
+            </ThemeIcon>
+          </Renderer>
 
-              <TaskStatusOptions
-                task={task}
-                onSelect={(s) => ctx.onUpdate({ ...task, status: s })}
-              />
+          <TaskStatusOptions task={task} onSelect={(s) => ctx.onUpdate({ ...task, status: s })} />
 
-              <Group
-                flex={1}
-                gap={10}
-                id="pointed"
-                style={{
-                  cursor: isEditName ? "text" : "pointer",
-                  position: "relative",
-                }}
-                onClick={() => {
-                  if (!isEditName && !forceHover) open(task);
-                }}
-                wrap="nowrap"
-              >
-                <Group flex={1} gap={5} wrap="nowrap">
-                  <Renderer visible={!!ctx.tags.length}>
-                    <Group gap={3} wrap="nowrap">
-                      {ctx.tags.map((tag) => (
-                        <TaskTag
-                          key={tag._id}
-                          id={tag._id}
-                          h={26}
-                          onRemove={() => {
-                            ctx.onUpdate({
-                              ...task,
-                              tagIds: task.tagIds?.filter((v) => v !== tag._id),
-                            });
-                          }}
-                        />
-                      ))}
-                    </Group>
-                  </Renderer>
-
-                  {isEditName ? (
-                    <ContentEditable
-                      fz={16}
-                      fw={500}
-                      autoFocus
-                      value={task.name}
-                      onChange={onChangeName}
-                      onEnter={() => setIsEditName(false)}
-                      onBlur={() => setIsEditName(false)}
-                    />
-                  ) : (
-                    <Text
-                      fz={16}
-                      fw={500}
-                      c={hover.hovered ? color("primary") : undefined}
-                      truncate="end"
-                      maw={650}
-                    >
-                      {StringUtils.limitCharacters(task.name, props.limitName || 100)}
-                    </Text>
-                  )}
-                </Group>
-
-                <Renderer visible={isHasChild}>
-                  <Group gap={3} wrap="nowrap">
-                    <Button
-                      size="compact-sm"
-                      color="gray.8"
-                      variant="subtle"
-                      leftSection={<IconSubtask size={16} style={{ marginRight: -6 }} />}
-                      fz={em(12)}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleSubTasks();
-                      }}
-                    >
-                      {num(task.childCount)}
-                    </Button>
-
-                    <Group flex={1} justify="end" gap={5}>
-                      <Text fz={em(10)}>{num(ctx.progress.percent, { roundPrecision: 0 })}%</Text>
-                      <Progress
-                        value={ctx.progress.percent}
-                        w={60}
-                        color={ctx.progress.status.color || "dark"}
-                      />
-                    </Group>
-                  </Group>
-                </Renderer>
-
-                <Renderer visible={!isEditName && hovered}>
-                  <Group
-                    gap={2}
-                    wrap="nowrap"
-                    pl={35}
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      bottom: 0,
-                      background: `linear-gradient(to right, ${rgba(
-                        "var(--mantine-color-body)",
-                        0
-                      )}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba(
-                        "var(--mantine-color-body)",
-                        1
-                      )}, ${rgba("var(--mantine-color-body)", 1)})`,
-                    }}
-                  >
-                    <Renderer visible={!task.parentId}>
-                      <Tooltip label={t("create_sub_task")}>
-                        <ActionIcon
-                          variant="subtle"
-                          color="gray.6"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            OnModalCreateTask({ parentId: task._id });
-                          }}
-                        >
-                          <IconPlus size={16} />
-                        </ActionIcon>
-                      </Tooltip>
-                    </Renderer>
-
-                    <Renderer visible={allowEditName}>
-                      <Tooltip label={t("edit_task_name")}>
-                        <ActionIcon
-                          variant="subtle"
-                          color="gray.6"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsEditName(true);
-                          }}
-                        >
-                          <IconPencil size={16} />
-                        </ActionIcon>
-                      </Tooltip>
-                    </Renderer>
-
-                    <TagSelector
-                      type={TagType.TASK}
-                      onSelect={(tag) => {
-                        if (!tag) return;
+          <Group
+            flex={1}
+            gap={10}
+            id="pointed"
+            style={{
+              cursor: isEditName ? "text" : "pointer",
+              position: "relative",
+            }}
+            onClick={() => {
+              if (!isEditName && !forceHover) open(task);
+            }}
+            wrap="nowrap"
+          >
+            <Group flex={1} gap={5} wrap="nowrap">
+              <Renderer visible={!!ctx.tags.length}>
+                <Group gap={3} wrap="nowrap">
+                  {ctx.tags.map((tag) => (
+                    <TaskTag
+                      key={tag._id}
+                      id={tag._id}
+                      h={26}
+                      onRemove={() => {
                         ctx.onUpdate({
                           ...task,
-                          tagIds: [...new Set([...(task.tagIds || []), tag._id])],
+                          tagIds: task.tagIds?.filter((v) => v !== tag._id),
                         });
                       }}
-                      onOpen={() => setForceHover(true)}
-                      onClose={() => setForceHover(false)}
-                      target={(selector) => {
-                        return (
-                          <Tooltip label={capitalize(`${t("add")} ${t("tags")}`)}>
-                            <ActionIcon
-                              variant="subtle"
-                              color="gray.6"
-                              size="sm"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                selector.toggle();
-                              }}
-                            >
-                              <IconTagPlus size={16} />
-                            </ActionIcon>
-                          </Tooltip>
-                        );
-                      }}
                     />
-                  </Group>
-                </Renderer>
-              </Group>
+                  ))}
+                </Group>
+              </Renderer>
 
-              <Group w={150} px={10}>
-                <WorkspaceMembersInput
-                  collapsed
-                  value={task.assigneeUsers}
-                  onChange={(users) =>
-                    ctx.onUpdate({
-                      ...task,
-                      assigneeUserIds: users.map((v) => v.userId),
-                      assigneeUsers: users,
-                    })
-                  }
+              {isEditName ? (
+                <ContentEditable
+                  fz={16}
+                  fw={500}
+                  autoFocus
+                  value={task.name}
+                  onChange={onChangeName}
+                  onEnter={() => setIsEditName(false)}
+                  onBlur={() => setIsEditName(false)}
                 />
-              </Group>
-
-              <Group w={200} px={10}>
-                <CustomerInput
-                  value={task.relatedCustomer || undefined}
-                  onSelect={(customer) =>
-                    ctx.onUpdate({
-                      ...task,
-                      relatedCustomerId: customer?._id || undefined,
-                      relatedCustomer: customer || undefined,
-                    })
-                  }
-                  clearable
-                />
-              </Group>
-
-              <Group w={150} px={10}>
-                <ButtonSelect
-                  inactiveColor="gray.4"
-                  size={32}
-                  icon={IconCalendar}
-                  label={renderDateTime(task.dueDate, true)}
-                  activeColor={ctx.isOutdated ? "red" : "blue"}
-                  isActive={!!task.dueDate}
-                  dropdown={() => (
-                    <DueDateInput
-                      p={5}
-                      startDate={task.startDate}
-                      dueDate={task.dueDate}
-                      onChange={(e) => {
-                        ctx.onUpdate({ ...task, ...e });
-                      }}
-                    />
-                  )}
-                  onClear={() => ctx.onUpdate({ ...task, dueDate: null, startDate: null })}
-                />
-              </Group>
-
-              <Group w={70} px={10} justify="center">
-                <ButtonSelect
-                  inactiveColor="gray.4"
-                  size={32}
-                  icon={task.priority ? IconFlagFilled : IconFlag}
-                  value={task.priority}
-                  isActive={!!task.priority}
-                  hideOptionLabel
-                  options={Object.values(TaskPriority)
-                    .reverse()
-                    .map((priority) => ({
-                      value: priority,
-                      label: t(`task_priority_${priority}`),
-                      icon: IconFlagFilled,
-                      activeColor: getTaskPriorityColor(priority),
-                    }))}
-                  onChange={(value) => {
-                    ctx.onUpdate({ ...task, priority: value as any });
-                  }}
-                  onClear={() => ctx.onUpdate({ ...task, priority: undefined })}
-                />
-              </Group>
+              ) : (
+                <Text
+                  fz={16}
+                  fw={500}
+                  c={hover.hovered ? color("primary") : undefined}
+                  truncate="end"
+                  maw={650}
+                >
+                  {StringUtils.limitCharacters(task.name, props.limitName || 100)}
+                </Text>
+              )}
             </Group>
 
-            <ListTaskRowDropper
-              isSubTask
-              indexSpacing={childIndexSpacing * 2}
-              targetTask={task}
-              position={ReorderTaskPotision.AFTER}
-              visible={
-                isAbleToDrop && !task.parentId && !isHasChild && !isDraggingAsRootAndHasChild
+            <Renderer visible={isHasChild}>
+              <Group gap={3} wrap="nowrap">
+                <Button
+                  size="compact-sm"
+                  color="gray.8"
+                  variant="subtle"
+                  leftSection={<IconSubtask size={16} style={{ marginRight: -6 }} />}
+                  fz={em(12)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleSubTasks();
+                  }}
+                >
+                  {num(task.childCount)}
+                </Button>
+
+                <Group flex={1} justify="end" gap={5}>
+                  <Text fz={em(10)}>{num(ctx.progress.percent, { roundPrecision: 0 })}%</Text>
+                  <Progress
+                    value={ctx.progress.percent}
+                    w={60}
+                    color={ctx.progress.status.color || "dark"}
+                  />
+                </Group>
+              </Group>
+            </Renderer>
+
+            <Renderer visible={!isEditName && hovered}>
+              <Group
+                gap={2}
+                wrap="nowrap"
+                pl={35}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: `linear-gradient(to right, ${rgba(
+                    "var(--mantine-color-body)",
+                    0
+                  )}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba(
+                    "var(--mantine-color-body)",
+                    1
+                  )}, ${rgba("var(--mantine-color-body)", 1)})`,
+                }}
+              >
+                <Renderer visible={!task.parentId}>
+                  <Tooltip label={t("create_sub_task")}>
+                    <ActionIcon
+                      variant="subtle"
+                      color="gray.6"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        OnModalCreateTask({ parentId: task._id });
+                      }}
+                    >
+                      <IconPlus size={16} />
+                    </ActionIcon>
+                  </Tooltip>
+                </Renderer>
+
+                <Renderer visible={allowEditName}>
+                  <Tooltip label={t("edit_task_name")}>
+                    <ActionIcon
+                      variant="subtle"
+                      color="gray.6"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsEditName(true);
+                      }}
+                    >
+                      <IconPencil size={16} />
+                    </ActionIcon>
+                  </Tooltip>
+                </Renderer>
+
+                <TagSelector
+                  type={TagType.TASK}
+                  onSelect={(tag) => {
+                    if (!tag) return;
+                    ctx.onUpdate({
+                      ...task,
+                      tagIds: [...new Set([...(task.tagIds || []), tag._id])],
+                    });
+                  }}
+                  onOpen={() => setForceHover(true)}
+                  onClose={() => setForceHover(false)}
+                  target={(selector) => {
+                    return (
+                      <Tooltip label={capitalize(`${t("add")} ${t("tags")}`)}>
+                        <ActionIcon
+                          variant="subtle"
+                          color="gray.6"
+                          size="sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            selector.toggle();
+                          }}
+                        >
+                          <IconTagPlus size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                    );
+                  }}
+                />
+              </Group>
+            </Renderer>
+          </Group>
+
+          <Group w={150} px={10}>
+            <WorkspaceMembersInput
+              collapsed
+              value={task.assigneeUsers}
+              onChange={(users) =>
+                ctx.onUpdate({
+                  ...task,
+                  assigneeUserIds: users.map((v) => v.userId),
+                  assigneeUsers: users,
+                })
               }
             />
+          </Group>
 
-            {taskParent && (
-              <ListTaskRowDropper
-                targetTask={taskParent}
-                position={ReorderTaskPotision.AFTER}
-                visible={isAbleToDrop && props.indexType === "last"}
-              />
-            )}
-          </Fragment>
+          <Group w={200} px={10}>
+            <CustomerInput
+              value={task.relatedCustomer || undefined}
+              onSelect={(customer) =>
+                ctx.onUpdate({
+                  ...task,
+                  relatedCustomerId: customer?._id || undefined,
+                  relatedCustomer: customer || undefined,
+                })
+              }
+              clearable
+            />
+          </Group>
+
+          <Group w={150} px={10}>
+            <ButtonSelect
+              inactiveColor="gray.4"
+              size={32}
+              icon={IconCalendar}
+              label={renderDateTime(task.dueDate, true)}
+              activeColor={ctx.isOutdated ? "red" : "blue"}
+              isActive={!!task.dueDate}
+              dropdown={() => (
+                <DueDateInput
+                  p={5}
+                  startDate={task.startDate}
+                  dueDate={task.dueDate}
+                  onChange={(e) => {
+                    ctx.onUpdate({ ...task, ...e });
+                  }}
+                />
+              )}
+              onClear={() => ctx.onUpdate({ ...task, dueDate: null, startDate: null })}
+            />
+          </Group>
+
+          <Group w={70} px={10} justify="center">
+            <ButtonSelect
+              inactiveColor="gray.4"
+              size={32}
+              icon={task.priority ? IconFlagFilled : IconFlag}
+              value={task.priority}
+              isActive={!!task.priority}
+              hideOptionLabel
+              options={Object.values(TaskPriority)
+                .reverse()
+                .map((priority) => ({
+                  value: priority,
+                  label: t(`task_priority_${priority}`),
+                  icon: IconFlagFilled,
+                  activeColor: getTaskPriorityColor(priority),
+                }))}
+              onChange={(value) => {
+                ctx.onUpdate({ ...task, priority: value as any });
+              }}
+              onClear={() => ctx.onUpdate({ ...task, priority: undefined })}
+            />
+          </Group>
+        </Group>
+
+        <ListTaskRowDropper
+          isSubTask
+          indexSpacing={childIndexSpacing * 2}
+          targetTask={task}
+          position={ReorderTaskPotision.AFTER}
+          visible={isAbleToDrop && !task.parentId && !isHasChild && !isDraggingAsRootAndHasChild}
+        />
+
+        {taskParent && (
+          <ListTaskRowDropper
+            targetTask={taskParent}
+            position={ReorderTaskPotision.AFTER}
+            visible={isAbleToDrop && props.indexType === "last"}
+          />
         )}
       </Group>
 
