@@ -180,7 +180,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
       const plugin: Plugin = {
         type: "zaloOas",
         id: p.id,
-        name: p.name,
+        name: p.info.name,
       };
       return plugin;
     }),

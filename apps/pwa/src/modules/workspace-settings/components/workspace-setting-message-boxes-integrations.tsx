@@ -299,7 +299,7 @@ export const WorkspaceSettingMessageBoxesIntegrations: FC = () => {
       ...plugins.zaloOas.map((m) => ({
         id: m._id,
         type: "plugin",
-        data: { name: m.name, plugin: m, type: "zalaOAs" },
+        data: { name: m.info.name, plugin: m, type: "zalaOAs" },
         position: { x: 0, y: 0 },
         ...cardSize,
       })),

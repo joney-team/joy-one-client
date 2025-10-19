@@ -80,7 +80,7 @@ export const MessageBoxList = () => {
           value={boxes.params.platformId}
           options={[
             ...plugins.zaloOas.map((z) => ({
-              label: z.name,
+              label: z.info.name,
               value: z._id,
               leftSession: <Avatar pluginZaloOa={z} size={20} />,
             })),

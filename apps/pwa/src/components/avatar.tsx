@@ -89,7 +89,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
     if (props.customer) return props.customer.avatar;
     if (props.partner) return props.partner.logo;
     if (props.pluginMetaPage) return props.pluginMetaPage.logo;
-    if (props.pluginZaloOa) return props.pluginZaloOa.avatar;
+    if (props.pluginZaloOa) return props.pluginZaloOa.info.avatar;
     if (props.user) return props.user.avatar;
   };
 
