@@ -2,28 +2,28 @@ import { BaseMongoEntity } from "@/types";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 
 export enum PluginZaloOaStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
 }
 
 export enum PluginZaloOaZNSTemplateId {
-  BOOKING = 'BOOKING',
-  CUSTOMER_BIRTHDAY = 'CUSTOMER_BIRTHDAY',
-  OTP = 'OTP',
+  BOOKING = "BOOKING",
+  CUSTOMER_BIRTHDAY = "CUSTOMER_BIRTHDAY",
+  OTP = "OTP",
 
-  LOAN_FULFILLED = 'LOAN_FULFILLED',
-  LOAN_RECEIPT_PAID = 'LOAN_RECEIPT_PAID',
-  LOAN_RECEIPT_PARTIAL_PAY = 'LOAN_RECEIPT_PARTIAL_PAY',
-  LOAN_RECEIPT_REMIND = 'LOAN_RECEIPT_REMIND',
+  LOAN_FULFILLED = "LOAN_FULFILLED",
+  LOAN_RECEIPT_PAID = "LOAN_RECEIPT_PAID",
+  LOAN_RECEIPT_PARTIAL_PAY = "LOAN_RECEIPT_PARTIAL_PAY",
+  LOAN_RECEIPT_REMIND = "LOAN_RECEIPT_REMIND",
 }
 
 export type PluginZaloZNSTemplateIds = {
   [key in PluginZaloOaZNSTemplateId]?: string;
-}
+};
 
 export type PluginZaloZNSTemplateStatues = {
   [key in PluginZaloOaZNSTemplateId]?: boolean;
-}
+};
 
 export interface UpdatePluginZaloOaDto {
   znsTemplateIds?: PluginZaloZNSTemplateIds;
@@ -41,7 +41,7 @@ export interface ZaloOaInfo {
   cate_name: string;
 }
 
-export interface PluginZaloOaEntity extends BaseMongoEntity, ZaloOaInfo {
+export interface PluginZaloOaEntity extends BaseMongoEntity {
   workspaceId: string;
   id: string;
   znsTemplateIds?: PluginZaloZNSTemplateIds;
@@ -49,6 +49,7 @@ export interface PluginZaloOaEntity extends BaseMongoEntity, ZaloOaInfo {
   status: PluginZaloOaStatus;
   isDisabled?: boolean;
   isDefault: boolean;
+  info: ZaloOaInfo;
 }
 
 export interface PluginZaloConnectCallbackDto {
@@ -56,13 +57,13 @@ export interface PluginZaloConnectCallbackDto {
 }
 
 export interface ZnsTemplateConfig {
-  workspaceTypes?: WorkspaceType[],
-  fields: { fieldName: string, description: string, default?: string }[],
+  workspaceTypes?: WorkspaceType[];
+  fields: { fieldName: string; description: string; default?: string }[];
 }
 
 export type ZnsTemplateConfigs = {
   [key in PluginZaloOaZNSTemplateId]: ZnsTemplateConfig;
-}
+};
 
 export interface ZaloOaGmfGroupSetting {
   isAdminNotificationEnabled?: boolean;
@@ -80,5 +81,5 @@ export interface ZaloOaGmfGroup extends ZaloOaGmfGroupSetting {
   group_link: string;
   group_description: string;
   total_member: number;
-  status: 'enabled' | 'disabled';
+  status: "enabled" | "disabled";
 }
