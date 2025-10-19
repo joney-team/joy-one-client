@@ -19,8 +19,7 @@ import { IconHome, IconLifebuoy, IconRefresh } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, useEffect } from "react";
 import { IconErrored } from "./icons";
-import * as Sentry from "@sentry/nextjs";
-import { useLang } from "@/modules/lang/lang-context";
+import * as Sentry from "@sentry/react";
 
 interface ErrorBoundaryProps {
   error: any;

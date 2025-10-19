@@ -1,8 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
-import * as Sentry from "@sentry/nextjs";
 
 const ErrorBoundary = dynamic(() => import("@/components/error-boundary"), { ssr: false });
 
