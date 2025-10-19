@@ -28,47 +28,47 @@ import { Errored } from "./errored";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 
-interface EventListProps {
+interface EventListProps extends StackProps {
   ref?: string;
   userId?: string;
   type?: EventType | EventType[];
   showTitle?: boolean;
-  props?: StackProps;
   empty?: ReactNode;
   fetching?: ReactNode;
-  id?: string;
-  my?: number;
 }
 
-export const EventList: FC<EventListProps> = (props) => {
-  const id =
-    props.id ||
-    `list-event-${JSON.stringify({ ref: props.ref, userId: props.userId, type: props.type })}`;
+export const EventList: FC<EventListProps> = ({
+  ref,
+  userId,
+  type,
+  showTitle,
+  empty,
+  fetching,
+  ...rest
+}) => {
+  const id = rest.id || `list-event-${JSON.stringify({ ref: ref, userId: userId, type: type })}`;
 
   const events = useList<EventEntity>({
     id: id,
     limit: 5,
-    fetch: async (query) =>
-      getEvents({ ...query, ref: props.ref, userId: props.userId, type: props.type }),
+    fetch: async (query) => getEvents({ ...query, ref: ref, userId: userId, type: type }),
     isIgnoreEventActionType: true,
     events: {
       types: Object.values(EventType),
       condition: (event) => {
-        return (
-          event.ref === props.ref || (event.relatedEntities || []).some((v) => v.id === props.ref)
-        );
+        return event.ref === ref || (event.relatedEntities || []).some((v) => v.id === ref);
       },
     },
   });
 
-  const my = typeof props.my === "number" ? props.my : 30;
+  const my = typeof rest.my === "number" ? rest.my : 30;
 
-  if (props.fetching && !events.isInitialized) return props.fetching;
-  if (events.isEmpty) return props.empty || null;
+  if (fetching && !events.isInitialized) return fetching;
+  if (events.isEmpty) return empty || null;
 
   return (
-    <Stack my={my} {...props.props}>
-      {props.showTitle && <Text fz={16}>{t("timeline")}</Text>}
+    <Stack my={my} {...rest}>
+      {showTitle && <Text fz={16}>{t("timeline")}</Text>}
 
       <Errored error={events.error} visible={events.isHasError} />
 

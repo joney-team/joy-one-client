@@ -303,13 +303,7 @@ const UserActivity: FC<{ user: UserPublicInformation }> = (props) => {
 
   return (
     <Stack>
-      <EventList
-        my={10}
-        ref={user._id}
-        empty={<Empty />}
-        id={`user-activity-${user._id}`}
-        fetching={<Skeleton height={50} />}
-      />
+      <EventList my={10} userId={user._id} empty={<Empty />} fetching={<Skeleton height={50} />} />
     </Stack>
   );
 };

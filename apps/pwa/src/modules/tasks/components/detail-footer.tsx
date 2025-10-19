@@ -28,7 +28,7 @@ export const DetailFooter: FC<DetailFooterProps> = (props) => {
         </Group>
 
         <Stack pl={0}>
-          <EventList ref={task._id} props={{ my: 15, mb: 30 }} />
+          <EventList ref={task._id} my={15} mb={30} />
         </Stack>
       </Stack>
 
