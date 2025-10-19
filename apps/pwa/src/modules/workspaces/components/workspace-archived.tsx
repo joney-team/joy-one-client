@@ -1,4 +1,4 @@
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { t } from "@/modules/lang/lang-service";
 import { WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
 import { Center, em, Stack, Text, Title } from "@mantine/core";
@@ -17,7 +17,7 @@ export const WorkspaceArchived: FC = () => {
       <Image
         src={
           workspace.userMember.workspace.logo
-            ? renderLink(workspace.userMember.workspace.logo)
+            ? renderFileUrl(workspace.userMember.workspace.logo)
             : "/symbol.png"
         }
         w={workspace.userMember.workspace.logo ? 130 : 50}

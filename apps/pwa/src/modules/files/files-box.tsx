@@ -4,7 +4,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { detectFileType, getFiles, onUploadFile, removeFile } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { t } from "@/modules/lang/lang-service";
 import { AppEntity } from "@/types";
@@ -253,7 +253,7 @@ export const FileBoxCard: FC<{
       <Stack w="100%" mih="100%" gap={5}>
         <Stack mih="100%" style={{ position: "relative" }}>
           {(function () {
-            const url = file instanceof File ? URL.createObjectURL(file) : renderLink(file.url);
+            const url = file instanceof File ? URL.createObjectURL(file) : renderFileUrl(file.url);
 
             if (fileType === FileType.PHOTO)
               return (

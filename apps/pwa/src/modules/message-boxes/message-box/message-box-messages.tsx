@@ -5,9 +5,9 @@ import { Renderer } from "@/components/renderer";
 import { eventsEmitter, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { detectFileType } from "@/modules/files/file-service";
-import { FileSrcCard } from "@/modules/files/file-src-card";
+import { FileCard } from "@/modules/files/file-card";
 import { FileType } from "@/modules/files/file-types";
-import { parseFile } from "@/modules/files/files-utils";
+import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
 import { getDateFormat, getTimeFormat, renderTime, t } from "@/modules/lang/lang-service";
 import { getMessages } from "@/modules/message-boxes/message-boxes-service";
 import {
@@ -53,7 +53,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
         await Promise.all(
           (msg.attachments || []).map(async (a) => {
             if (a.url && detectFileType(a.url) === FileType.PHOTO) {
-              await loadImage(a.url);
+              await loadImage(renderFileUrl(a.url));
             }
           })
         );
@@ -176,7 +176,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
           const isOnlyOneMessageSession = isFirstSession && isLastSession;
           const needToShowClientAvatar = isFirstSession && prevMsg?.type !== msg.type;
 
-          const radius = "20px";
+          const radius = "12px";
           const cornorRadius = "3px";
 
           const getBorderRadius = () => {
@@ -308,11 +308,15 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                             {(msg.attachments || []).map((att, i) => {
                               const file = parseFile(att.url || "");
                               return (
-                                <FileSrcCard
+                                <FileCard
                                   src={att.raw || att.url}
                                   key={`${msg._id}-${i}-file`}
-                                  size={file.type === FileType.PHOTO ? "large" : "medium"}
+                                  type={file.type === FileType.PHOTO ? "preview" : undefined}
                                   viewable
+                                  thumbnail={{
+                                    mih: 100,
+                                    mah: 100,
+                                  }}
                                 />
                               );
                             })}

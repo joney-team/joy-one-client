@@ -3,7 +3,7 @@ import { Image } from "@/components/image";
 import { useLayout } from "@/layout/layout-context";
 import { downloadFileFromURL, removeFile } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
-import { parseFile, renderLink } from "@/modules/files/files-utils";
+import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
 import { num, t } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
@@ -40,7 +40,7 @@ export const ModalFileGallery: FC = () => {
   const layout = useLayout();
   const head = 60;
   const activeFile = props?.files[index];
-  const fileSize = useFileSize(renderLink(activeFile?.url));
+  const fileSize = useFileSize(renderFileUrl(activeFile?.url));
   const disabled = props?.disabled || props?.readonly;
 
   OnModalFileGallery = (p) => {
@@ -103,7 +103,7 @@ export const ModalFileGallery: FC = () => {
     await onActionLoad({
       name: t("file_downloading"),
       process: () =>
-        downloadFileFromURL(renderLink(activeFile.url), activeFile.fileName || _file.name),
+        downloadFileFromURL(renderFileUrl(activeFile.url), activeFile.fileName || _file.name),
     });
   };
 
@@ -189,7 +189,7 @@ export const ModalFileGallery: FC = () => {
           if (_file.type === FileType.PHOTO)
             return (
               <Image
-                src={renderLink(activeFile.url)}
+                src={renderFileUrl(activeFile.url)}
                 w="100%"
                 h="100%"
                 maw="100%"
@@ -211,7 +211,7 @@ export const ModalFileGallery: FC = () => {
                 {t("cannot_display_file")}
               </Text>
 
-              <Anchor href={renderLink(activeFile.url)} target="__blank" c="white" ta="center">
+              <Anchor href={renderFileUrl(activeFile.url)} target="__blank" c="white" ta="center">
                 <Button rightSection={<IconBrowser strokeWidth={1.5} />}>
                   {t("open_with_browser")}
                 </Button>

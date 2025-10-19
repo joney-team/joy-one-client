@@ -1,7 +1,7 @@
 "use client";
 
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { PluginMetaPageEntity } from "@/modules/plugins/meta-pages/meta-pages-types";
@@ -112,7 +112,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
 
   const Icon = getIcon();
   const initials = getInitials();
-  const src = renderLink(getSrc()) || null;
+  const src = renderFileUrl(getSrc()) || null;
 
   return (
     <Indicator

@@ -5,7 +5,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { useLayout } from "@/layout/layout-context";
 import { getCustomer, renderGener } from "@/modules/customers/customer-service";
 import { CustomerEntity, CustomerShortInfo } from "@/modules/customers/customer-types";
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { num, renderDateTime, t } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
 import { getOrderById } from "@/modules/orders/orders-service";
@@ -222,7 +222,7 @@ export const ModalPrinter: FC = () => {
                     {printSettings.showLogo && !!workspace.userMember.workspace.logo && (
                       <img
                         className="logo"
-                        src={renderLink(workspace.userMember.workspace.logo)}
+                        src={renderFileUrl(workspace.userMember.workspace.logo)}
                         alt=""
                       />
                     )}

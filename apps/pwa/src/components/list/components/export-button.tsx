@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import {
   getDateTimeFormat,
   numCurrencyRound,
@@ -47,7 +47,7 @@ export const ExportButton: FC<ListContext> = (props) => {
       };
     if (item.number) return { value: item.number, type: Number, format: "#,##0" };
     if (item.date) return { value: renderDateTime(item.date) };
-    if (item.imageUrl) return { value: renderLink(item.imageUrl) };
+    if (item.imageUrl) return { value: renderFileUrl(item.imageUrl) };
     return { value: "" };
   };
 

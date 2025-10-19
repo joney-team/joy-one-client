@@ -23,7 +23,7 @@ import {
 } from "@mantine/dropzone";
 import { IconPaperclip, IconPhoto, IconSend2 } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
-import { FileSrcCard } from "@/modules/files/file-src-card";
+import { FileCard } from "@/modules/files/file-card";
 import { UseCommentBox } from "../types";
 import { onError } from "@/utils/exceptions.utils";
 
@@ -124,7 +124,7 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
                 {files.length > 0 && (
                   <Group gap={10}>
                     {files.map((file, key) => (
-                      <FileSrcCard
+                      <FileCard
                         key={key}
                         src={file}
                         onRemove={() => setFiles((f) => f.filter((f) => f !== file))}

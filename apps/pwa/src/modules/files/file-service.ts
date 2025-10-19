@@ -243,3 +243,11 @@ export async function getFileSizeFromUrl(url: string): Promise<number | null> {
     return null;
   }
 }
+
+export function detectFileIdFromUrl(url: string): string | null {
+  if (url.startsWith("jof://")) {
+    return url.replace("jof://", "").split("/").pop()?.split(".")[0] || null;
+  }
+
+  return null;
+}

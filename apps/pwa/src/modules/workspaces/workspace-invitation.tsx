@@ -4,7 +4,7 @@ import { Image } from "@/components/image";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -142,7 +142,7 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
             <Card withBorder shadow="none" p={10} my={16}>
               <Group>
                 <Avatar
-                  src={invite.logo ? renderLink(invite.logo) : "/symbol.png"}
+                  src={invite.logo ? renderFileUrl(invite.logo) : "/symbol.png"}
                   size={60}
                   color={invite.appColor}
                   radius={10}

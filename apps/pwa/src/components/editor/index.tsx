@@ -10,7 +10,7 @@ import StarterKit from "@tiptap/starter-kit";
 
 import { onUploadFile } from "@/modules/files/file-service";
 import { FileType, UploadFileOptions } from "@/modules/files/file-types";
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
@@ -57,7 +57,7 @@ function InsertImageControl() {
               editor?.commands.insertContent({
                 type: "image",
                 attrs: {
-                  src: renderLink(file.relativePath),
+                  src: renderFileUrl(file.relativePath),
                   style: "width: 500px; height: auto;",
                 },
               });
@@ -100,7 +100,7 @@ export const Editor: FC<EditorProps> = (props) => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const _file = await onUploadFile({ file, ...props.uploadFileOptions });
-      editor?.commands.setImage({ src: renderLink(_file.relativePath) });
+      editor?.commands.setImage({ src: renderFileUrl(_file.relativePath) });
     }
   };
 

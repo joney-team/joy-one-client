@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { eventsEmitter } from "@/modules/events/event-service";
 import { uploadFile } from "@/modules/files/file-service";
-import { FileSrcCard } from "@/modules/files/file-src-card";
+import { FileCard } from "@/modules/files/file-card";
 import { FileType } from "@/modules/files/file-types";
 import { parseFile } from "@/modules/files/files-utils";
 import { t } from "@/modules/lang/lang-service";
@@ -114,9 +114,9 @@ export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
 
             <ScrollArea.Autosize mah={130}>
               {files.length > 0 && (
-                <Group gap={10}>
+                <Group gap={10} px={8}>
                   {files.map((file, key) => (
-                    <FileSrcCard
+                    <FileCard
                       src={file}
                       key={key}
                       onRemove={() => setFiles((f) => f.filter((f) => f !== file))}

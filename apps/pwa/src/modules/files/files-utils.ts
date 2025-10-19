@@ -29,7 +29,7 @@ export const fileExtensions: {
   [FileType.UNKNOWN]: [],
 };
 
-export const renderLink = (raw?: string | null) => {
+export const renderFileUrl = (raw?: string | null) => {
   if (!raw || typeof raw !== "string") return "";
   if (resource.images.includes(raw.trim())) return raw;
 

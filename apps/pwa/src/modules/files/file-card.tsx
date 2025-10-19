@@ -1,169 +1,179 @@
-"use client";
-
-import { getFileTypeIcon } from "@/modules/files/file-service";
-import { FileEntity, FileType } from "@/modules/files/file-types";
-import { formatBytes } from "@/utils/file.utils";
+import { Renderer } from "@/components/renderer";
 import {
-  Box,
+  detectFileIdFromUrl,
+  detectFileType,
+  getFileSizeFromUrl,
+} from "@/modules/files/file-service";
+import { FileEntity, FileType } from "@/modules/files/file-types";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { t } from "@/modules/lang/lang-service";
+import { formatBytes, getFileName } from "@/utils/file.utils";
+import {
+  ActionIcon,
+  Avatar,
+  AvatarProps,
   Card,
-  Center,
-  em,
+  CardProps,
   Group,
   Stack,
   Text,
-  ThemeIcon,
-  useMantineTheme,
 } from "@mantine/core";
-import { IconCircleCheck, IconFile, IconVideo } from "@tabler/icons-react";
-import { FC, Fragment, useRef } from "react";
-import { Image } from "../../components/image";
+import {
+  IconDownload,
+  IconEye,
+  IconFile,
+  IconFileExcel,
+  IconFileWord,
+  IconMusic,
+  IconPdf,
+  IconPhoto,
+  IconPresentationAnalytics,
+  IconVideo,
+  IconX,
+} from "@tabler/icons-react";
+import { FC, useEffect, useState } from "react";
+import { renderFileUrl } from "./files-utils";
+import { api, apiTools } from "../apis";
 
-export interface FileCardProps {
-  file: FileEntity;
-  isActive?: boolean;
-  onClick?: (file: FileEntity) => void;
-  disabled?: boolean;
-  onDoubleClick?: (file: FileEntity) => void;
+interface FileCardProps extends CardProps {
+  src: File | string;
+  viewable?: boolean;
+  onRemove?: () => void;
+  thumbnail?: AvatarProps;
+  type?: "common" | "preview";
 }
 
-export const FileCard: FC<FileCardProps> = (props) => {
-  const { file } = props;
-  const theme = useMantineTheme();
-  const Icon = getFileTypeIcon(file.type);
-  const fileType = file.type;
-  const isDoubleClick = useRef<boolean>(false);
+export const FileCard: FC<FileCardProps> = ({
+  src,
+  viewable,
+  onRemove,
+  type = "common",
+  thumbnail,
+  ...rest
+}) => {
+  const fileUri =
+    typeof src === "string"
+      ? renderFileUrl(src)
+      : src instanceof File
+      ? URL.createObjectURL(src)
+      : "";
+
+  const [calculatedFileSize, setCalculatedFileSize] = useState<number | null>(null);
+  const [file, setFile] = useState<FileEntity | null>();
+  const fileSize = file?.size ?? calculatedFileSize;
+
+  const initialize = async () => {
+    try {
+      if (typeof src === "string") {
+        const fileId = detectFileIdFromUrl(src);
+        if (fileId) {
+          const _file = await api.get(`/files/${fileId}/info`);
+          setFile(_file);
+        } else {
+          const size = await getFileSizeFromUrl(fileUri);
+          setCalculatedFileSize(size);
+        }
+      } else {
+        setCalculatedFileSize((src as File).size);
+      }
+    } catch {}
+  };
+
+  const getIconFile = () => {
+    const fileType = detectFileType(src);
+    if (fileType === FileType.PHOTO) return IconPhoto;
+    if (fileType === FileType.VIDEO) return IconVideo;
+    if (fileType === FileType.AUDIO) return IconMusic;
+    if (fileType === FileType.PDF) return IconPdf;
+    if (fileType === FileType.MS_WORD) return IconFileWord;
+    if (fileType === FileType.MS_EXCEL) return IconFileExcel;
+    if (fileType === FileType.MS_POWERPOINT) return IconPresentationAnalytics;
+    return IconFile;
+  };
+
+  const Icon = getIconFile();
+
+  const onViewModal = () => {
+    OnModalFileGallery({ files: [{ url: fileUri, ...file }], readonly: true });
+  };
+
+  useEffect(() => {
+    initialize().catch(() => null);
+  }, []);
+
+  const Stat: FC<{ embbedAvatar?: boolean }> = (props) => {
+    return (
+      <Group gap={8} wrap="nowrap">
+        <Avatar
+          src={props.embbedAvatar ? fileUri : undefined}
+          w={40}
+          h={40}
+          radius={6}
+          onClick={onViewModal}
+          style={{ cursor: "pointer" }}
+        >
+          <Icon size={20} strokeWidth={1.5} />
+        </Avatar>
+
+        <Stack gap={0} flex={1}>
+          <Text fz={12}>{file?.fileName ?? t(getFileName(src, 4))}</Text>
+          <Text fz={10} c="gray.6">
+            {fileSize !== null ? formatBytes(fileSize) : t("unknown_file_size")}
+          </Text>
+        </Stack>
+
+        <Group gap={0} wrap="nowrap">
+          <Renderer visible={!!viewable}>
+            <ActionIcon variant="subtle" color="gray.6" onClick={onViewModal}>
+              <IconEye size={16} />
+            </ActionIcon>
+          </Renderer>
+
+          <Renderer visible={!!viewable}>
+            <ActionIcon
+              variant="subtle"
+              color="gray.6"
+              onClick={() => window.open(src as string, "_blank")}
+            >
+              <IconDownload size={16} />
+            </ActionIcon>
+          </Renderer>
+
+          <Renderer visible={!!onRemove}>
+            <ActionIcon variant="subtle" color="gray.6" onClick={onRemove}>
+              <IconX size={13} />
+            </ActionIcon>
+          </Renderer>
+        </Group>
+      </Group>
+    );
+  };
+
+  if (type === "preview") {
+    return (
+      <Card withBorder shadow="none" p={0} w={300} {...rest}>
+        <Avatar
+          src={fileUri}
+          radius={8}
+          onClick={onViewModal}
+          style={{ cursor: "pointer" }}
+          mih={168}
+          w="100%"
+          {...thumbnail}
+        >
+          <Icon size={20} strokeWidth={1.5} />
+        </Avatar>
+
+        <Stack p={8} w="100%">
+          <Stat />
+        </Stack>
+      </Card>
+    );
+  }
 
   return (
-    <Card
-      p={5}
-      key={file._id}
-      withBorder
-      radius={5}
-      bg={props.disabled ? "gray.1" : "white"}
-      onClick={() => {
-        if (props.disabled) return;
-        if (props.onDoubleClick) {
-          setTimeout(() => {
-            if (isDoubleClick.current) return;
-            props.onClick?.(file);
-          }, 200);
-        } else {
-          props.onClick?.(file);
-        }
-      }}
-      onDoubleClick={() => {
-        isDoubleClick.current = true;
-        setTimeout(() => {
-          isDoubleClick.current = false;
-        }, 200);
-        props.onDoubleClick?.(file);
-      }}
-      style={{
-        userSelect: "none",
-        maxWidth: "100%",
-        borderColor: props.isActive ? theme.colors["primary"][6] : undefined,
-        cursor: props.disabled ? "default" : "pointer",
-        position: "relative",
-        filter: props.disabled ? `grayscale(1)` : undefined,
-      }}
-    >
-      <Stack gap={5}>
-        {(function () {
-          const url = file instanceof File ? URL.createObjectURL(file) : file.url;
-          const extention = file.fileName.split(".").pop()?.toLowerCase();
-
-          if (extention === "svg" || extention === "eps") {
-            return (
-              <object data={url} type="image/svg+xml" height={100}>
-                <img src={url} />
-              </object>
-            );
-          }
-
-          if (fileType === FileType.PHOTO) {
-            return <Image src={url} w="100%" fit="contain" bg="gray.1" h={100} />;
-          }
-
-          if (fileType === FileType.VIDEO)
-            return (
-              <Fragment>
-                <video
-                  src={url}
-                  style={{
-                    width: "100px",
-                    height: "100%",
-                    backgroundColor: "#f1f1f1",
-                  }}
-                  autoPlay={false}
-                />
-
-                <Center
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    zIndex: 2,
-                    width: "100%",
-                    height: 100,
-                    backgroundColor: "#f1f1f1",
-                  }}
-                >
-                  <ThemeIcon color="gray" variant="transparent" size="lg">
-                    <IconVideo strokeWidth={1.2} />
-                  </ThemeIcon>
-                </Center>
-              </Fragment>
-            );
-
-          return (
-            <Stack
-              style={{
-                height: 100,
-                backgroundColor: "#f1f1f1",
-              }}
-            >
-              <ThemeIcon color="gray" variant="transparent" size="lg">
-                <IconFile strokeWidth={1.2} />
-              </ThemeIcon>
-            </Stack>
-          );
-        })()}
-
-        <Group gap={5} justify="space-between" wrap="nowrap">
-          <Group gap={5} wrap="nowrap" flex={1}>
-            <ThemeIcon size="xs" variant="light" color="gray">
-              <Icon size="0.8em" />
-            </ThemeIcon>
-            <Text maw={100} fz={em(10)} truncate="start">
-              {file.fileName}
-            </Text>
-          </Group>
-          <Text w="max-content" ta="right" fz={em(10)} c="gray">
-            {formatBytes(file.size)}
-          </Text>
-        </Group>
-      </Stack>
-
-      {props.isActive && (
-        <Box
-          style={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-          }}
-        >
-          <Center
-            style={{
-              background: "white",
-              width: 20,
-              height: 20,
-              borderRadius: "50%",
-            }}
-          >
-            <IconCircleCheck color={theme.colors["primary"][6]} />
-          </Center>
-        </Box>
-      )}
+    <Card withBorder shadow="none" p={3} maw="100%" {...rest}>
+      <Stat embbedAvatar />
     </Card>
   );
 };

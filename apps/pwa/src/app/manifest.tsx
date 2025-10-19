@@ -1,4 +1,4 @@
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { getWorkspaceMetadata } from "@/modules/workspaces/utils";
 import { isExtendedApp } from "@/service";
 import { MetadataRoute } from "next";
@@ -21,7 +21,7 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
       theme_color: "#ffffff",
       icons: [
         {
-          src: renderLink(metadata.appIcon)!,
+          src: renderFileUrl(metadata.appIcon)!,
           sizes: "any",
           type: "image/png",
         },

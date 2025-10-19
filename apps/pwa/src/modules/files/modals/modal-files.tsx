@@ -6,7 +6,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { WayPoint } from "@/components/way-point";
 import { configs } from "@/configs/layout.config";
 import { useLayout } from "@/layout/layout-context";
-import { FileCard } from "@/modules/files/file-card";
+import { InternalFileCard } from "@/modules/files/internal-file-card";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { num, t } from "@/modules/lang/lang-service";
@@ -98,7 +98,7 @@ export const ModalFiles: FC = () => {
             <SimpleGrid cols={viewport.view === "mobile" ? 2 : viewport.view === "tablet" ? 4 : 6}>
               {files.data.map((file, index) => {
                 return (
-                  <FileCard
+                  <InternalFileCard
                     file={file}
                     key={file._id}
                     isActive={_selectedFiles.includes(file._id)}

@@ -1,7 +1,7 @@
 "use client";
 
 import { FileType } from "@/modules/files/file-types";
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { t } from "@/modules/lang/lang-service";
 import { ActionIcon, Box, Card, Center, em, Image, Stack, ThemeIcon } from "@mantine/core";
@@ -32,7 +32,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
   const disabled = props.onlyRead || !props.onChange;
   const w = props.w || props.size || 100;
   const h = props.h || props.size || 100;
-  const src = props.src instanceof File ? URL.createObjectURL(props.src) : renderLink(props.src);
+  const src = props.src instanceof File ? URL.createObjectURL(props.src) : renderFileUrl(props.src);
   const Icon = props.icon || IconPhoto;
   const size = typeof h === "number" ? h * 0.5 : h;
   const openRef = useRef<() => void>(null);

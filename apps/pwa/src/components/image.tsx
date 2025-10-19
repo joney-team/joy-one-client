@@ -1,6 +1,6 @@
 "use client";
 
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { Center, ImageProps, Image as MantineImage, Stack } from "@mantine/core";
 import { FC, useState } from "react";
 import { Loading } from "./loading";
@@ -27,7 +27,7 @@ export const Image: FC<Props> = (props) => {
 
         <MantineImage
           {..._props}
-          src={renderLink(props.src)}
+          src={renderFileUrl(props.src)}
           alt={props.alt}
           style={{
             maxWidth: "100%",
@@ -45,7 +45,7 @@ export const Image: FC<Props> = (props) => {
     <Center maw="100%" mah="100%">
       <MantineImage
         {..._props}
-        src={renderLink(props.src)}
+        src={renderFileUrl(props.src)}
         alt={props.alt}
         style={{
           maxWidth: "100%",

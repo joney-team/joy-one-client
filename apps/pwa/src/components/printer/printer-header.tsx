@@ -1,4 +1,4 @@
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { t } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { type FC } from "react";
@@ -12,7 +12,11 @@ export const PrinterHeader: FC<PrinterComponentProps> = ({ settings }) => {
   return (
     <div className={styles.PrinterHeader}>
       {settings.showLogo && !!workspace.userMember.workspace.logo && (
-        <img className={styles.Logo} src={renderLink(workspace.userMember.workspace.logo)} alt="" />
+        <img
+          className={styles.Logo}
+          src={renderFileUrl(workspace.userMember.workspace.logo)}
+          alt=""
+        />
       )}
 
       <div className={styles.PrinterHeaderMetadata}>

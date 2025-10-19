@@ -3,7 +3,7 @@
 import { type FC } from "react";
 import { Avatar } from "@/components/avatar";
 import { Renderer } from "@/components/renderer";
-import { FileSrcCard } from "@/modules/files/file-src-card";
+import { FileCard } from "@/modules/files/file-card";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CommentEntity } from "@/modules/comments/comment-types";
 import { getDateFormat } from "@/modules/lang/lang-service";
@@ -114,7 +114,7 @@ export const Comment: FC<Comment> = (comment) => {
                 <SimpleGrid cols={comment.attachments!.length === 1 ? 1 : 2} spacing={8}>
                   {comment.attachments!.map((att, i) => {
                     return (
-                      <FileSrcCard
+                      <FileCard
                         src={att.raw || att.url}
                         key={`${comment._id}-${i}-file`}
                         viewable

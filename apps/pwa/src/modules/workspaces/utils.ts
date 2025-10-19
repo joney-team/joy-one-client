@@ -3,14 +3,14 @@ import type { AppMetadata, WorkSlot } from "@/types";
 import { defaultMetadata } from "@/configs/metadata.config";
 import dayjs from "dayjs";
 import { apiServerSide } from "../apis/server";
-import { renderLink } from "../files/files-utils";
+import { renderFileUrl } from "../files/files-utils";
 import type { WorkspaceEntity } from "./workspaces-types";
 
 export function isInWorkSlots(slots?: WorkSlot[], date?: Date) {
   if (!slots || slots.length === 0) return true;
   const _date = date ? new Date(date) : new Date();
 
-  const matchedSlot = slots.find(slot => {
+  const matchedSlot = slots.find((slot) => {
     const slotStartDate = dayjs().hour(slot.startHour).minute(slot.startMin).toDate();
     const slotEndDate = dayjs().hour(slot.endHour).minute(slot.endMin).toDate();
     const isSameDay = slotStartDate.getDay() === _date.getDay();
@@ -21,19 +21,19 @@ export function isInWorkSlots(slots?: WorkSlot[], date?: Date) {
     const targetSeconds = 60 * 60 * _date.getHours() + 60 * _date.getMinutes();
 
     return startTimeSeconds <= targetSeconds && targetSeconds <= endTimeSeconds;
-  })
+  });
 
   return !!matchedSlot;
 }
 
-export function encodeWorkspace(params: { workspaceCode: string, code: string, entity: string }) {
+export function encodeWorkspace(params: { workspaceCode: string; code: string; entity: string }) {
   return `${params.workspaceCode}${params.code}${params.entity}`;
 }
 
 export function decodeWorkspace(input: string, plainCode?: string) {
   // Validate input
-  if (typeof input !== 'string' || input.length === 0) {
-    throw new Error('Input must be a non-empty string.');
+  if (typeof input !== "string" || input.length === 0) {
+    throw new Error("Input must be a non-empty string.");
   }
 
   // Regex to match code
@@ -41,7 +41,7 @@ export function decodeWorkspace(input: string, plainCode?: string) {
   const match = input.match(regex);
 
   if (!match) {
-    throw new Error('Invalid code format.');
+    throw new Error("Invalid code format.");
   }
 
   // Extract workspace code, code, and entity
@@ -53,51 +53,53 @@ export function decodeWorkspace(input: string, plainCode?: string) {
 }
 
 export function renderEntityCode(workspaceCode?: string, plainCode?: string) {
-  if (!workspaceCode) return plainCode || '';
-  if (plainCode) return plainCode || '';
+  if (!workspaceCode) return plainCode || "";
+  if (plainCode) return plainCode || "";
 
   try {
     const decoded = decodeWorkspace(workspaceCode);
     return `#${decoded.workspaceCode}${decoded.code}`;
   } catch (error) {
-    return workspaceCode || '';
+    return workspaceCode || "";
   }
 }
 
 let metadatas: { [metdataKey: string]: AppMetadata } = {};
 
-export async function getWorkspaceMetadata(args: {
-  host?: string;
-  workspaceId?: string;
-}) {
+export async function getWorkspaceMetadata(args: { host?: string; workspaceId?: string }) {
   const metadataKey = args.workspaceId || args.host;
 
   if (!metadataKey) return defaultMetadata;
   if (metadataKey && metadatas[metadataKey]) return metadatas[metadataKey];
 
-  const url = args.workspaceId ? `/workspaces/ids/${args.workspaceId}`
+  const url = args.workspaceId
+    ? `/workspaces/ids/${args.workspaceId}`
     : `/workspaces/domains/${args.host}`;
 
-  const workspace = await apiServerSide.get<WorkspaceEntity>(url)
-    .catch((error) => {
-      console.error(`[${new Date().toLocaleTimeString('vi')}] getWorkspaceMetadata error`, error.message);
-      return null;
-    });
+  const workspace = await apiServerSide.get<WorkspaceEntity>(url).catch((error) => {
+    console.error(
+      `[${new Date().toLocaleTimeString("vi")}] getWorkspaceMetadata error`,
+      error.message
+    );
+    return null;
+  });
 
   if (metadataKey && workspace) {
     const metadata: AppMetadata = {
       ...defaultMetadata,
-      title: workspace.appName || 'JoyOne',
-      siteName: workspace.appName || 'JoyOne',
-      favicon: renderLink(workspace.appIcon) || '/favicon.ico',
+      title: workspace.appName || "JoyOne",
+      siteName: workspace.appName || "JoyOne",
+      favicon: renderFileUrl(workspace.appIcon) || "/favicon.ico",
       webURL: `https://${workspace.appDomain}`,
       appColor: workspace.appColor,
       appColorShape: workspace.appColorShape,
       appName: workspace.appName,
       workspaceId: workspace._id,
       isExtended: true,
-      thumbnailURL: renderLink(workspace.cover || workspace.appIcon || defaultMetadata.thumbnailURL),
-      appIcon: renderLink(workspace.appIcon || defaultMetadata.appIcon),
+      thumbnailURL: renderFileUrl(
+        workspace.cover || workspace.appIcon || defaultMetadata.thumbnailURL
+      ),
+      appIcon: renderFileUrl(workspace.appIcon || defaultMetadata.appIcon),
     };
 
     return metadata;

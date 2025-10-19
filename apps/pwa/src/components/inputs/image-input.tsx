@@ -1,6 +1,6 @@
 import { onUploadFile } from "@/modules/files/file-service";
 import { FileType } from "@/modules/files/file-types";
-import { renderLink } from "@/modules/files/files-utils";
+import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
 import { t } from "@/modules/lang/lang-service";
@@ -101,7 +101,7 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
         >
           {ableView && (
             <Image
-              src={renderLink(value)}
+              src={renderFileUrl(value)}
               h="100%"
               w="100%"
               fit="cover"
