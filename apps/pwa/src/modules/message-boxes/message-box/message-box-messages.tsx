@@ -286,9 +286,11 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                           >
                             {(msg.attachments || []).map((att, i) => {
                               const file = parseFile(att.url || "");
+                              if (!att.url) return null;
+
                               return (
                                 <FileCard
-                                  src={att.raw || att.url}
+                                  src={att.url}
                                   key={`${msg._id}-${i}-file`}
                                   type={file.type === FileType.PHOTO ? "preview" : undefined}
                                   viewable

@@ -60,7 +60,9 @@ export const FileCard: FC<FileCardProps> = ({
 
   const [calculatedFileSize, setCalculatedFileSize] = useState<number | null>(null);
   const [file, setFile] = useState<FileEntity | null>();
+
   const fileSize = file?.size ?? calculatedFileSize;
+  const filename = file?.fileName ?? t(getFileName(fileUri));
 
   const initialize = async () => {
     try {
@@ -76,7 +78,9 @@ export const FileCard: FC<FileCardProps> = ({
       } else {
         setCalculatedFileSize((src as File).size);
       }
-    } catch {}
+    } catch (error) {
+      console.warn(`Error when initializing file card > ${error}`);
+    }
   };
 
   const getIconFile = () => {
@@ -116,7 +120,9 @@ export const FileCard: FC<FileCardProps> = ({
         </Avatar>
 
         <Stack gap={0} flex={1}>
-          <Text fz={12}>{file?.fileName ?? t(getFileName(src, 4))}</Text>
+          <Text fz={12} truncate maw={100}>
+            {filename}
+          </Text>
           <Text fz={10} c="gray.6">
             {fileSize !== null ? formatBytes(fileSize) : t("unknown_file_size")}
           </Text>
