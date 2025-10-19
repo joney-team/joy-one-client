@@ -1,18 +1,17 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { eventsEmitter, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { detectFileType } from "@/modules/files/file-service";
 import { FileCard } from "@/modules/files/file-card";
 import { FileType } from "@/modules/files/file-types";
-import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
+import { parseFile } from "@/modules/files/files-utils";
 import { getDateFormat, getTimeFormat, renderTime, t } from "@/modules/lang/lang-service";
 import { getMessages } from "@/modules/message-boxes/message-boxes-service";
 import {
   MessageBoxEntity,
-  MessageEntity,
   MessageResource,
   MessageStatus,
   MessageType,
@@ -21,9 +20,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { loadImage } from "@/utils/asset.utils";
 import { StringUtils } from "@/utils/string.utils";
-import { useList } from "@/components/list/use-list";
 import {
   Anchor,
   Card,
@@ -47,20 +44,6 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
   const colorScheme = useColorScheme();
   const messageRef = useRef<HTMLDivElement>(null);
 
-  const loadImages = async (data: MessageEntity[]) => {
-    await Promise.all(
-      data.map(async (msg) => {
-        await Promise.all(
-          (msg.attachments || []).map(async (a) => {
-            if (a.url && detectFileType(a.url) === FileType.PHOTO) {
-              await loadImage(renderFileUrl(a.url));
-            }
-          })
-        );
-      })
-    ).catch(() => false);
-  };
-
   const messages = useList({
     autoFetch: false,
     fetch: (q) =>
@@ -68,9 +51,6 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
         ...q,
         boxId: props.box._id,
         getAll: true,
-      }).then(async (res) => {
-        await loadImages(res.data);
-        return res;
       }),
   });
 
@@ -109,9 +89,8 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
           messageRef.current.scrollHeight - messageRef.current.scrollTop <=
             messageRef.current.clientHeight + 100;
 
-        messages.fetch(true, { isSilient: true }).then(async (res) => {
+        messages.fetch(true, { isSilient: true }).then(() => {
           if (!isAtBottom) return;
-          if (res) await loadImages(res.data);
           scrollToBottom("smooth", 200);
         });
       }
