@@ -3,9 +3,10 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from "@sentry/nextjs";
+import config from "@joy-one-client/config";
 
 Sentry.init({
-  dsn: "https://73c47d7433184a648c959aed0875411a@glitchtip.joyone.vn/2",
+  dsn: config.SENTRY_DSN,
 
   // Add optional integrations for additional features
   integrations: [Sentry.replayIntegration()],
