@@ -18,7 +18,9 @@ export function onActionLoad<T = any>(args: {
 }): Promise<T> {
   const global = getGlobal();
   const metadata = global._metadata as AppMetadata;
-  const color = metadata?.appColor ? `${metadata.appColor}.${metadata.appColorShape || 6}` : args.color || "primary";
+  const color = metadata?.appColor
+    ? `${metadata.appColor}.${metadata.appColorShape || 6}`
+    : args.color || "primary";
   const isShowCompleted = typeof args.isShowCompleted === "boolean" ? args.isShowCompleted : true;
 
   return new Promise(async (resolve, reject) => {
@@ -104,6 +106,9 @@ export function onArchive<T = any>(args: {
           .process()
           .then((res) => args.onArchived?.(res))
           .catch(onError);
+        resolve();
+      },
+      onClose: () => {
         resolve();
       },
       onCancel: () => {
