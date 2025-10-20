@@ -2,7 +2,7 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { t } from "@/modules/lang/lang-service";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { alpha, Stack, StackProps, Text } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import { FC, LegacyRef } from "react";
@@ -59,8 +59,10 @@ export const Empty: FC<EmptyProps> = (props) => {
       {Icon ? <Icon width={50} color={_color} /> : <BoxIllustration width={45} />}
 
       <Text fz="xs" fw={300} c={_color}>
-        {StringUtils.capitalizeFirstLetter(message)}
+        {String.capitalizeFirstLetter(message)}
       </Text>
+
+      {props.children}
     </Stack>
   );
 };

@@ -19,7 +19,7 @@ import { getTaskEntity, getTaskPriorityColor } from "@/modules/tasks/tasks-servi
 import { ReorderTaskPotision, TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { capitalize, StringUtils } from "@/utils/string.utils";
+import { capitalize, String } from "@/utils/string.utils";
 import {
   ActionIcon,
   Button,
@@ -235,7 +235,7 @@ export const ListTaskRow: FC<{
                   truncate="end"
                   maw={650}
                 >
-                  {StringUtils.limitCharacters(task.name, props.limitName || 100)}
+                  {String.limitCharacters(task.name, props.limitName || 100)}
                 </Text>
               )}
             </Group>

@@ -13,7 +13,7 @@ import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { useList } from "@/components/list/use-list";
 import { WidgetProps } from "@/widgets/types";
 import { Card, Group, Skeleton, Stack, Table, Text, ThemeIcon } from "@mantine/core";
@@ -101,7 +101,7 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
               <Table.Tr>
                 <Table.Th>{t("member")}</Table.Th>
                 <Table.Th>
-                  {StringUtils.capitalizeFirstLetter(`${t("total")} ${t("assigned_tasks")}`)}
+                  {String.capitalizeFirstLetter(`${t("total")} ${t("assigned_tasks")}`)}
                 </Table.Th>
                 <Table.Th>{t("tasks_completed_rate")}</Table.Th>
                 <Table.Th>{t("time_trackings")}</Table.Th>

@@ -19,7 +19,7 @@ import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { objSelect } from "@/utils/object.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { useList } from "@/components/list/use-list";
 import {
   ActionIcon,
@@ -237,7 +237,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                 return (
                   <Group>
                     <Tooltip
-                      label={StringUtils.capitalizeFirstLetter(
+                      label={String.capitalizeFirstLetter(
                         `${t("add")} ${t("task")} ${t("need_complete")}`
                       )}
                     >

@@ -8,7 +8,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { workspaceModuleConfigs } from "@/modules/workspaces/workspace-modules";
 import { getDefaultWorkspaceView, getNavigationGroups } from "@/modules/workspaces/workspace-view";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import {
   ActionIcon,
   Badge,
@@ -115,7 +115,7 @@ export const AppNavigation: FC = () => {
               >
                 <Avatar workspace={workspace.userMember.workspace} size={30} />
                 <Text fw={600}>
-                  {StringUtils.limitCharacters(workspace.userMember.workspace.name || "", 12)}
+                  {String.limitCharacters(workspace.userMember.workspace.name || "", 12)}
                 </Text>
               </Group>
             }

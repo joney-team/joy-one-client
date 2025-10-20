@@ -16,7 +16,7 @@ import { updateReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { Anchor, Badge, Card, Group, Stack, Table, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {
   IconCashRegister,
@@ -233,7 +233,7 @@ export const LoanReceiptCard: FC<{
                   <Text
                     ta="right"
                     dangerouslySetInnerHTML={{
-                      __html: StringUtils.replaceLineBreaksToHTML(receipt.note || "--"),
+                      __html: String.replaceLineBreaksToHTML(receipt.note || "--"),
                     }}
                   />
                 </HoverToEdit>

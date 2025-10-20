@@ -11,7 +11,7 @@ import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-ta
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { getTaskEntites, getTaskProgress } from "@/modules/tasks/tasks-service";
 import { useColor } from "@/modules/theme/use-color";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { ActionIcon, alpha, Box, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import {
@@ -161,7 +161,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
                       </Tooltip>
                     )}
 
-                    <Tooltip label={StringUtils.capitalizeFirstLetter(`${t("add")} ${t("tasks")}`)}>
+                    <Tooltip label={String.capitalizeFirstLetter(`${t("add")} ${t("tasks")}`)}>
                       <QuickCreateTaskInput tagFolderId={props.tagFolder?._id}>
                         <ActionIcon
                           size="sm"

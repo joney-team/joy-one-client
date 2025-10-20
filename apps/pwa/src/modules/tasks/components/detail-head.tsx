@@ -10,7 +10,7 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { getRelatedTasks, getTaskEntity, updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
-import { capitalize, StringUtils } from "@/utils/string.utils";
+import { capitalize, String } from "@/utils/string.utils";
 import config from "@joy-one-client/config";
 import { ActionIcon, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconChevronDown, IconChevronUp, IconShare2, IconStack2, IconX } from "@tabler/icons-react";
@@ -121,7 +121,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
                 px={3}
                 onClick={() => tasks.open(parentTask)}
               >
-                {StringUtils.limitCharacters(parentTask.name, viewport.view === "mobile" ? 15 : 30)}
+                {String.limitCharacters(parentTask.name, viewport.view === "mobile" ? 15 : 30)}
               </Button>
             </Fragment>
           )}

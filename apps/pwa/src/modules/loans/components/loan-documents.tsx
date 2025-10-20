@@ -22,7 +22,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import {
   Anchor,
   Badge,
@@ -78,7 +78,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
   const onReject = async () => {
     OnModalPrompt({
-      title: StringUtils.capitalizeFirstLetter(`${t("reject")} ${t("loan")}`),
+      title: String.capitalizeFirstLetter(`${t("reject")} ${t("loan")}`),
       message: t("enter_reject_reason"),
       onSubmit: (reason) => rejectLoan(loan.id, { reason }),
       icon: IconClipboard,

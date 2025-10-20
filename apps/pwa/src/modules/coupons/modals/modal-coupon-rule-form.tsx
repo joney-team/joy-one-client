@@ -19,7 +19,7 @@ import {
 import { t } from "@/modules/lang/lang-service";
 import { ProductType } from "@/modules/products/products-types";
 import { onError } from "@/utils/exceptions.utils";
-import { capitalize, StringUtils } from "@/utils/string.utils";
+import { capitalize, String } from "@/utils/string.utils";
 import {
   ActionIcon,
   Box,
@@ -114,7 +114,7 @@ export const ModalCouponRuleForm: FC = () => {
     <Modal
       title={
         <ModalTitle
-          title={StringUtils.capitalizeFirstLetter(
+          title={String.capitalizeFirstLetter(
             `${t(props?.rule ? "update" : "create")} ${t("coupon_rules")}`
           )}
           icon={IconNotes}

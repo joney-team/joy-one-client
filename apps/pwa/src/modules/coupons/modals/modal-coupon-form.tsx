@@ -10,7 +10,7 @@ import { getCustomers } from "@/modules/customers/customer-service";
 import { t } from "@/modules/lang/lang-service";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import {
   Card,
   Group,
@@ -86,7 +86,7 @@ export const ModalCouponForm: FC = () => {
     <Modal
       title={
         <ModalTitle
-          title={StringUtils.capitalizeFirstLetter(
+          title={String.capitalizeFirstLetter(
             `${t(props?.coupon ? "update" : "create")} ${t("coupon")}`
           )}
           icon={IconNotes}
@@ -132,7 +132,7 @@ export const ModalCouponForm: FC = () => {
             {...form.getInputProps("quantity")}
           />
 
-          <InputWrapper label={StringUtils.capitalizeFirstLetter(`${t("settings")} ${t("limit")}`)}>
+          <InputWrapper label={String.capitalizeFirstLetter(`${t("settings")} ${t("limit")}`)}>
             <Card withBorder p={8}>
               <Stack gap={10}>
                 <SearchSelectInput

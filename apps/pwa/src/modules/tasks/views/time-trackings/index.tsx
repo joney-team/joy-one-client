@@ -22,7 +22,7 @@ import {
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { objSelect } from "@/utils/object.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import {
   ActionIcon,
   Card,
@@ -263,7 +263,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
               return (
                 <Group>
                   <Tooltip
-                    label={StringUtils.capitalizeFirstLetter(`${t("add")} ${t("time_trackings")}`)}
+                    label={String.capitalizeFirstLetter(`${t("add")} ${t("time_trackings")}`)}
                   >
                     <ActionIcon
                       variant="subtle"

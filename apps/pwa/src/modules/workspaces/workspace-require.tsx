@@ -14,7 +14,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceTypeIcon } from "@/modules/workspaces/workspaces-service";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onError } from "@/utils/exceptions.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import {
   Anchor,
   Card,
@@ -330,7 +330,7 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
             onChange={(e) =>
               form.setFieldValue(
                 "code",
-                StringUtils.toSlug(e.currentTarget.value).split("-")[0].toUpperCase()
+                String.toSlug(e.currentTarget.value).split("-")[0].toUpperCase()
               )
             }
           />

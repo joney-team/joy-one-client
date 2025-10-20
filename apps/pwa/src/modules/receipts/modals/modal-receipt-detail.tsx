@@ -12,7 +12,7 @@ interface ModalPromptProps {
 }
 
 export const ReceiptDetailModal: FC<ModalPromptProps> = (props) => {
-  return <ReceiptDetail id={props.id} />;
+  return <ReceiptDetail receiptId={props.id} />;
 };
 
 export const OnReceiptDetailModal = (props: ModalPromptProps) => {

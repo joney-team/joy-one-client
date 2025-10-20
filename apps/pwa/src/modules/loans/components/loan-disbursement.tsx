@@ -21,7 +21,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import {
   Blockquote,
@@ -201,10 +201,9 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 };
 
                 const kyc = props.kyc.versions[props.kyc.versions.length - 1];
-                const description = `${StringUtils.removeAccents(kyc.cidFullName).replace(
-                  / /g,
-                  ""
-                )} ${kyc.cidNumber} ${renderEntityCode(loan.code)}`;
+                const description = `${String.removeAccents(kyc.cidFullName).replace(/ /g, "")} ${
+                  kyc.cidNumber
+                } ${renderEntityCode(loan.code)}`;
 
                 const qrCode = getStaticQrCode(bank, bankAccount, {
                   amount: loan.amount,

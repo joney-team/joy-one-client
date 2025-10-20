@@ -11,7 +11,7 @@ import {
   setHoursMinutes,
   timeInputValue,
 } from "@/utils/dateTime.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import {
   ActionIcon,
   Card,
@@ -296,7 +296,7 @@ export const TimeTrackingGroupByUser: FC<{
                           </ThemeIcon>
 
                           <Text fz={14}>
-                            {StringUtils.capitalizeFirstLetter(
+                            {String.capitalizeFirstLetter(
                               dayjs(t.startAt * 1000).format(`dd ${getDateFormat()}`)
                             )}
                           </Text>

@@ -16,7 +16,7 @@ import { ReorderTaskPotision, TaskEntity } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { renderEntityCode } from "@/modules/workspaces/utils";
-import { capitalize, StringUtils } from "@/utils/string.utils";
+import { capitalize, String } from "@/utils/string.utils";
 import {
   ActionIcon,
   Badge,
@@ -165,7 +165,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                 <Tooltip label={task.name} disabled={task.name.length < 60} maw="70dvw" multiline>
                   <Stack style={{ cursor: "pointer" }} onClick={goDetail} gap={5} flex={1}>
                     <Text fz={em(15)} fw={500}>
-                      {StringUtils.limitCharacters(task.name, 60)}
+                      {String.limitCharacters(task.name, 60)}
                     </Text>
                   </Stack>
                 </Tooltip>

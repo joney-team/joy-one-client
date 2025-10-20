@@ -23,16 +23,21 @@ import {
 } from "@mantine/core";
 import { FC } from "react";
 
-import { OnModalDisburesementReceipt } from "@/modules/receipts/modals/modal-disburesement-receipt";
+import { Avatar } from "@/components/avatar";
+import { Button } from "@/components/buttons/button";
+import { HoverToEdit } from "@/components/hover-to-edit";
+import { ModalTitle } from "@/components/modal-title";
+import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
+import { Renderer } from "@/components/renderer";
 import { InputModalType } from "@/modals/modal-input";
-import { OnModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 import { PrintButton } from "@/modals/modal-printer";
-import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
-import { useColor } from "@/modules/theme/use-color";
-import { AppEntity } from "@/types";
+import { FilesBox } from "@/modules/files/files-box";
 import { num, renderDate, renderDateTime, t } from "@/modules/lang/lang-service";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
+import { OnModalDisburesementReceipt } from "@/modules/receipts/modals/modal-disburesement-receipt";
+import { OnModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
+import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
 import {
   archiveReceipt,
   receiptPaymentMethodOptions,
@@ -40,26 +45,20 @@ import {
   receiptTypeColors,
   receiptTypeIcons,
 } from "@/modules/receipts/receipts-service";
+import { useColor } from "@/modules/theme/use-color";
+import { UserCard } from "@/modules/users/components/user-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { AppEntity } from "@/types";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { modals } from "@mantine/modals";
 import { IconArchive, IconCashRegister, IconCheck } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import Link from "next/link";
-import { Avatar } from "@/components/avatar";
-import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
-import { Button } from "@/components/buttons/button";
-import { FilesBox } from "@/modules/files/files-box";
-import { HoverToEdit } from "@/components/hover-to-edit";
-import { ModalTitle } from "@/components/modal-title";
-import { Renderer } from "@/components/renderer";
-import { UserCard } from "@/modules/users/components/user-card";
-import { api } from "../apis";
 
 interface ReceiptCardProps {
   receipt: ReceiptEntity;
@@ -69,9 +68,10 @@ interface ReceiptCardProps {
   onUpdate?: (dto: UpdateReceiptDto) => Promise<void>;
   isShowPrint?: boolean;
   isShowImage?: boolean;
+  isOpenModal?: boolean;
 }
 
-export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
+export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props }) => {
   const { receipt } = props;
   const workspace = useWorkspace();
 
@@ -114,35 +114,38 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
       <Stack h="100%" flex={1}>
         <Stack gap={8} flex={1}>
           <Group justify="space-between" align="center">
-            <Anchor td="none" onClick={() => OnReceiptDetailModal({ id: receipt.id })}>
-              <Group flex={1} gap={8}>
-                <Tooltip
-                  label={t(
-                    receipt.type === ReceiptType.INCOME ? "income_receipt" : "expense_receipt"
-                  )}
-                >
-                  <ThemeIcon size="lg" variant="light" color={receiptTypeColor} radius={100}>
-                    <ReceiptTypeIcon size={20} />
-                  </ThemeIcon>
-                </Tooltip>
+            <Group
+              flex={1}
+              gap={8}
+              className={isOpenModal ? "clickable" : undefined}
+              onClick={() => isOpenModal && OnReceiptDetailModal({ id: receipt.id })}
+            >
+              <Tooltip
+                label={t(
+                  receipt.type === ReceiptType.INCOME ? "income_receipt" : "expense_receipt"
+                )}
+              >
+                <ThemeIcon size="lg" variant="light" color={receiptTypeColor} radius={100}>
+                  <ReceiptTypeIcon size={20} />
+                </ThemeIcon>
+              </Tooltip>
 
-                <Stack gap={0}>
-                  <Text c={receiptTypeColor} fw={700} fz={em(13)}>
-                    {renderEntityCode(receipt.code)}
+              <Stack gap={0}>
+                <Text c={receiptTypeColor} fw={700} fz={em(13)}>
+                  {renderEntityCode(receipt.code)}
+                </Text>
+
+                <Group gap={5}>
+                  <Text fz={em(10)} c="dark">
+                    {renderDateTime(receipt.createdAt, true)}
                   </Text>
 
-                  <Group gap={5}>
-                    <Text fz={em(10)} c="dark">
-                      {renderDateTime(receipt.createdAt, true)}
-                    </Text>
-
-                    <Text fz={em(8)} c="gray">
-                      {dayjs(receipt.createdAt * 1000).fromNow()}
-                    </Text>
-                  </Group>
-                </Stack>
-              </Group>
-            </Anchor>
+                  <Text fz={em(8)} c="gray">
+                    {dayjs(receipt.createdAt * 1000).fromNow()}
+                  </Text>
+                </Group>
+              </Stack>
+            </Group>
 
             <Group gap={10}>
               {!props.hideCustomer && props.receipt.relatedCustomer && (
@@ -256,7 +259,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
                     <Text
                       ta="right"
                       dangerouslySetInnerHTML={{
-                        __html: StringUtils.replaceLineBreaksToHTML(receipt.note || "--"),
+                        __html: String.replaceLineBreaksToHTML(receipt.note || "--"),
                       }}
                     />
                   </HoverToEdit>
@@ -499,18 +502,6 @@ export const ReceiptCard: FC<ReceiptCardProps> = (props) => {
             <Renderer visible={isAbleToPrint}>
               <PrintButton receipt={receipt} bankQrCode={bankQrCode} label={t("print_receipt")} />
             </Renderer>
-
-            {receipt.status === ReceiptStatus.PAID &&
-              workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE) && (
-                <Button
-                  size="xs"
-                  color="teal"
-                  leftIcon={IconCashRegister}
-                  onClick={() => api.post(`/plugins/e-invoices`, { receiptId: receipt.id })}
-                >
-                  {t("export_entity", { entity: t("e_invoice") })}
-                </Button>
-              )}
 
             {receipt.status !== ReceiptStatus.PAID && (
               <Button

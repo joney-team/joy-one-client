@@ -3,7 +3,7 @@ import { OnModalLoanPackageForm } from "@/modules/loans/modals/modal-loan-packag
 import { num, t } from "@/modules/lang/lang-service";
 import { loanPackageTypeColors, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { Anchor, Badge, Card, Group, SimpleGrid, Stack, Text, TextProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -33,14 +33,20 @@ export const WorkspacetSettingLoans: FC = () => {
                     label="Tài sản"
                     value={pkg.assetTypes
                       .map((v) =>
-                        StringUtils.capitalizeFirstLetter(`${t(`loan_asset_type_${v}`)}`.replace("Đăng ký", "").trim())
+                        String.capitalizeFirstLetter(
+                          `${t(`loan_asset_type_${v}`)}`.replace("Đăng ký", "").trim()
+                        )
                       )
                       .join(", ")}
                   />
 
                   <RowInfo
                     label="Loại"
-                    value={<Badge color={loanPackageTypeColors[pkg.type]}>{t(`loan_package_${pkg.type}`)}</Badge>}
+                    value={
+                      <Badge color={loanPackageTypeColors[pkg.type]}>
+                        {t(`loan_package_${pkg.type}`)}
+                      </Badge>
+                    }
                   />
 
                   <RowInfo label="Hạn vay" value={`${num(totalMonth)} tháng`} />

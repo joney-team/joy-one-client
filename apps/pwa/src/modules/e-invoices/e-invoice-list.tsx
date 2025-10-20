@@ -22,7 +22,7 @@ export const EInvoiceList: FC = () => {
   return (
     <Stack p={16}>
       <List<PluginEInvoicesEntity>
-        id="rps"
+        id="eis"
         name="eInvoices"
         limit={18}
         icon={IconFileInvoice}

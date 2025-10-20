@@ -1,5 +1,9 @@
 import { BaseMongoEntity } from "@/types";
-import { PluginEInvoicesProvider, PluginEInvoiceTemplates } from "./plugin-e-invoices.types";
+import {
+  PluginEInvoicesProvider,
+  PluginEInvoicesProviderInformation,
+  PluginEInvoiceTemplates,
+} from "./plugin-e-invoices.types";
 
 export enum PluginEInvoicesProviderStatus {
   ACTIVE = "ACTIVE",
@@ -22,5 +26,7 @@ export interface PluginEInvoicesEntity extends BaseMongoEntity {
   invoiceData: Record<string, unknown>;
   providerData: Record<string, unknown>;
   url?: string;
-  provider: Pick<PluginEInvoicesProviderEntity, "_id" | "provider">;
+  provider: Pick<PluginEInvoicesProviderEntity, "_id" | "provider"> &
+    Pick<PluginEInvoicesProviderInformation, "name" | "logo">;
+  isCancelled?: boolean;
 }

@@ -9,7 +9,7 @@ import { useLayout } from "@/layout/layout-context";
 import { t } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { getTaskEntity } from "@/modules/tasks/tasks-service";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { em, Group, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";
@@ -88,7 +88,7 @@ export const ModalCreateTask: FC = () => {
                   close();
                 }}
               >
-                {StringUtils.limitCharacters(parentTask.name, layout.view === "mobile" ? 15 : 30)}
+                {String.limitCharacters(parentTask.name, layout.view === "mobile" ? 15 : 30)}
               </Button>
             )}
 

@@ -3,7 +3,7 @@
 import { useLayout } from "@/layout/layout-context";
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { alpha, Group, Text, ThemeIcon } from "@mantine/core";
 import { Icon, IconBackground } from "@tabler/icons-react";
 import { FC } from "react";
@@ -40,7 +40,7 @@ export const Archived: FC<ArchivedProps> = (props) => {
       </ThemeIcon>
 
       <Text fz="xs" c={_color}>
-        {StringUtils.capitalizeFirstLetter(message)}
+        {String.capitalizeFirstLetter(message)}
       </Text>
     </Group>
   );

@@ -4,7 +4,7 @@ import { EntitySource } from "@/types";
 import { createCustomer, isCustomerPhoneExisted } from "@/modules/customers/customer-service";
 import { CustomerDto } from "@/modules/customers/customer-types";
 import { ImportLoanDto } from "@/modules/loans/loan-dtos";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { ActionIcon, Card, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { IconFileImport, IconFileTypeJs, IconX } from "@tabler/icons-react";
@@ -34,7 +34,9 @@ export const WorkspaceSettingImportLoans: FC = () => {
         const id = c.data.find((d: any) => d.Id)?.Id;
         const phone = c.data.find((d: any) => d.Mobile && !d.Mobile.includes("*"))?.Mobile;
         const address = c.data.find((d: any) => d.Address && !d.Address.includes("*"))?.Address;
-        const createdAt = c.data.find((d: any) => d.CreatedTime && !d.CreatedTime.includes("*"))?.CreatedTime;
+        const createdAt = c.data.find(
+          (d: any) => d.CreatedTime && !d.CreatedTime.includes("*")
+        )?.CreatedTime;
 
         if (id && phone && address) {
           const data: CustomerDto = {
@@ -44,7 +46,9 @@ export const WorkspaceSettingImportLoans: FC = () => {
             location: {
               address,
             },
-            createdAt: createdAt ? +((createdAt as string).match(/Date\((\d+)\)/)?.[1] ?? 0) : undefined,
+            createdAt: createdAt
+              ? +((createdAt as string).match(/Date\((\d+)\)/)?.[1] ?? 0)
+              : undefined,
             source: EntitySource.IMPORT,
           };
 
@@ -85,7 +89,9 @@ export const WorkspaceSettingImportLoans: FC = () => {
       },
     };
 
-    const customerDtos = customersFile ? await customersFile.text().then(JSON.parse).then(normalizeCustomerDtos) : null;
+    const customerDtos = customersFile
+      ? await customersFile.text().then(JSON.parse).then(normalizeCustomerDtos)
+      : null;
     if (customerDtos) {
       for (const dto of customerDtos) {
         const isExisted = await isCustomerPhoneExisted(dto.phone);
@@ -173,7 +179,7 @@ const DropzoneCard: FC<{
             </Text>
             {file ? (
               <Text c="dimmed" fz={13}>
-                {StringUtils.limitCharacters(file.name, 20)}
+                {String.limitCharacters(file.name, 20)}
               </Text>
             ) : (
               <Text c="dimmed" fz={13}>

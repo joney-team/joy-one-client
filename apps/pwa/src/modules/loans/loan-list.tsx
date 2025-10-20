@@ -43,7 +43,7 @@ import { FC, Fragment } from "react";
 import { useColor } from "../theme/use-color";
 import { AppEntity } from "@/types";
 import { OnModalPrompt } from "@/modals/modal-prompt";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { api } from "../apis";
 import { useLocations } from "../locations/locations-context";
 import { CustomerKycEntity } from "../customer-kycs/customer-kycs-types";
@@ -354,7 +354,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
           available: (data) => data.every((v) => [LoanStatus.PENDING].includes(v.status)),
           handler: (data, ctx) =>
             OnModalPrompt({
-              title: StringUtils.capitalizeFirstLetter(`${t("reject")} ${t("loan")}`),
+              title: String.capitalizeFirstLetter(`${t("reject")} ${t("loan")}`),
               message: t("enter_reject_reason"),
               onSubmit: async (reason) => {
                 await api.post(`/loans/bulk-reject`, {

@@ -14,7 +14,7 @@ import {
 } from "@/modules/customer-kycs/customer-kycs-types";
 import { FileType } from "@/modules/files/file-types";
 import { renderDateTime, t } from "@/modules/lang/lang-service";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import {
   Anchor,
   Badge,
@@ -96,7 +96,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
   const onReject = () => {
     OnModalPrompt({
-      title: StringUtils.capitalizeFirstLetter(`${t("reject")} ${t("customer-kyc")}`),
+      title: String.capitalizeFirstLetter(`${t("reject")} ${t("customer-kyc")}`),
       message: t("enter_reject_reason"),
       onSubmit: (reason) => rejectCustomerKyc(customer._id, { reason }),
       icon: IconUserScan,

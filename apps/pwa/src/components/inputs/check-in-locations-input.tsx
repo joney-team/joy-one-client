@@ -6,7 +6,7 @@ import { CheckInLocation } from "@/modules/hrm-timekeepings/hrm-timekeepings-typ
 import { t } from "@/modules/lang/lang-service";
 import { calculateDistance, getGeolocation } from "@/modules/locations/locations-service";
 import { onActionLoad } from "@/utils/actions";
-import { capitalize, StringUtils } from "@/utils/string.utils";
+import { capitalize, String } from "@/utils/string.utils";
 import {
   ActionIcon,
   Card,
@@ -111,8 +111,8 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                     </Text>
                     <Text c="gray" fz={em(12)} fw={500}>
                       {t("coordinates")}:{" "}
-                      {StringUtils.limitCharacters(location.coordinates.lat.toString(), 15)}/
-                      {StringUtils.limitCharacters(location.coordinates.lng.toString(), 15)}
+                      {String.limitCharacters(location.coordinates.lat.toString(), 15)}/
+                      {String.limitCharacters(location.coordinates.lng.toString(), 15)}
                     </Text>
                   </Stack>
 

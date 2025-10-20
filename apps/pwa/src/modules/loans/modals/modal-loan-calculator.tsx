@@ -13,7 +13,7 @@ import {
 import { LoanAssetType, LoanPaymentPlanResult } from "@/modules/loans/loans-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import {
   Anchor,
   Badge,
@@ -273,7 +273,7 @@ export const ModalLoanCalculator: FC = () => {
                   label="Tài sản"
                   value={loanPackage.assetTypes
                     .map((v) =>
-                      StringUtils.capitalizeFirstLetter(
+                      String.capitalizeFirstLetter(
                         `${t(`loan_asset_type_${v}`)}`.replace("Đăng ký", "").trim()
                       )
                     )

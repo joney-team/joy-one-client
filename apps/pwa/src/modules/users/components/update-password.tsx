@@ -7,7 +7,7 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { t } from "@/modules/lang/lang-service";
 import { updatePassword } from "@/modules/users/users-service";
 import { UpdateUserPasswordDto } from "@/modules/users/users-types";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { Card, Group, PasswordInput, SimpleGrid, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconLock } from "@tabler/icons-react";
@@ -52,7 +52,7 @@ export const UpdatePassword: FC = () => {
         {auth.user.isPasswordProvided && (
           <PasswordInput
             label={t("current_password")}
-            placeholder={StringUtils.convertToTitleCase(
+            placeholder={String.convertToTitleCase(
               `${t("enter")} ${t("current_password")}`.toLowerCase()
             )}
             {...form.getInputProps("password")}
@@ -70,7 +70,7 @@ export const UpdatePassword: FC = () => {
 
           <PasswordInput
             label={t("confirm_password")}
-            placeholder={StringUtils.convertToTitleCase(
+            placeholder={String.convertToTitleCase(
               `${t("enter")} ${t("confirm_password")}`.toLowerCase()
             )}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}

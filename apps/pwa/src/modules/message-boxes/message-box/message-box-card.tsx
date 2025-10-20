@@ -18,7 +18,7 @@ import {
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { forceDate } from "@/utils/dateTime.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { useList } from "@/components/list/use-list";
 import { Badge, Card, Group, Image, Indicator, Stack, Text, Tooltip } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
@@ -119,7 +119,7 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
           <TextOverflow fz={12}>
             {(function () {
               if (!latestMessage) return null;
-              if (latestMessage.text) return StringUtils.limitCharacters(latestMessage.text, 72);
+              if (latestMessage.text) return String.limitCharacters(latestMessage.text, 72);
               if (latestMessage.attachments?.[0]) {
                 if (latestMessage.attachments[0].type === MessageAttachmentType.STICKER) {
                   return t("sent_sticker");

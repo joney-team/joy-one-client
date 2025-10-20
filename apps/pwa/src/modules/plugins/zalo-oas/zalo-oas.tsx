@@ -12,7 +12,7 @@ import { PluginZaloOaStatus, ZnsTemplateConfig } from "@/modules/plugins/zalo-oa
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { ActionIcon, Badge, Card, Group, SimpleGrid, Stack, Text, Tooltip } from "@mantine/core";
 import {
   IconLinkOff,
@@ -63,7 +63,7 @@ export const PluginZaloOAs: FC = () => {
 
                     <Tooltip label={oa.info.description} multiline withArrow>
                       <Text c="gray" fz={13}>
-                        {StringUtils.limitCharacters(oa.info.description || "", 90)}
+                        {String.limitCharacters(oa.info.description || "", 90)}
                       </Text>
                     </Tooltip>
 

@@ -20,7 +20,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import {
   Anchor,
   Card,
@@ -274,7 +274,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                           <Text
                             style={{ wordBreak: "break-word" }}
                             dangerouslySetInnerHTML={{
-                              __html: StringUtils.replaceLineBreaksToHTML(msg.text || ""),
+                              __html: String.replaceLineBreaksToHTML(msg.text || ""),
                             }}
                           />
                         </Renderer>

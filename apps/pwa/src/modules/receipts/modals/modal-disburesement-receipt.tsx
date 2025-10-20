@@ -12,7 +12,7 @@ import {
   ReceiptType,
 } from "@/modules/receipts/receipts-types";
 import { onError } from "@/utils/exceptions.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { Group, Stack, Text, em } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconTag } from "@tabler/icons-react";
@@ -52,7 +52,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
       </Text>
       {receipt.note ? (
         <Text
-          dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(receipt.note) }}
+          dangerouslySetInnerHTML={{ __html: String.replaceLineBreaksToHTML(receipt.note) }}
           fw={700}
         />
       ) : (

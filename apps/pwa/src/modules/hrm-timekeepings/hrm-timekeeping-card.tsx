@@ -34,7 +34,7 @@ import { renderDateTime, t } from "@/modules/lang/lang-service";
 import { UserCard } from "@/modules/users/components/user-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { useList } from "@/components/list/use-list";
 
 interface HrmTimekeepingCardProps {
@@ -113,7 +113,7 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
                 <Text
                   fz={em(15)}
                   dangerouslySetInnerHTML={{
-                    __html: StringUtils.replaceLineBreaksToHTML(timekeeping.note),
+                    __html: String.replaceLineBreaksToHTML(timekeeping.note),
                   }}
                 />
               </Group>

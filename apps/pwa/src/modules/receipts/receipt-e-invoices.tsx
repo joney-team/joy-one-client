@@ -1,0 +1,149 @@
+import { Button } from "@/components/buttons/button";
+import { Empty } from "@/components/empty";
+import { ResponseList } from "@/types";
+import { Badge, Card, Center, Group, Image, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
+import { IconArchive, IconCashRegister, IconEye } from "@tabler/icons-react";
+import { useMemo, type FC } from "react";
+import { api } from "../apis";
+import { useQuery } from "../apis/use-query";
+import { EventType } from "../events/event-types";
+import { renderDateTime, t } from "../lang/lang-service";
+import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
+import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
+import { useWorkspace } from "../workspaces/workspace-context";
+import { ReceiptEntity, ReceiptStatus } from "./receipts-types";
+import { modals, openConfirmModal } from "@mantine/modals";
+import { ModalTitle } from "@/components/modal-title";
+import { onActionLoad } from "@/utils/actions";
+import { CopyText } from "@/components/copy-text";
+import { String } from "@/utils/string.utils";
+
+interface ReceiptEInvoicesProps {
+  receipt: Pick<ReceiptEntity, "id" | "status">;
+}
+
+export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
+  const workspace = useWorkspace();
+
+  const { data, isLoading, refetch } = useQuery<ResponseList<PluginEInvoicesEntity>>({
+    route: `/plugins/e-invoices`,
+    params: {
+      receiptId: receipt.id,
+    },
+    refetchEvents: [EventType.E_INVOICE_CREATED, EventType.E_INVOICE_REMOVED],
+  });
+
+  const onArchive = (invoice: PluginEInvoicesEntity) => {
+    openConfirmModal({
+      modalId: `cancel-e-invoice-${invoice._id}`,
+      title: (
+        <ModalTitle
+          title={t("cancel_entity", { entity: t("invoice") })}
+          color="red"
+          icon={IconArchive}
+        />
+      ),
+      children: t("cancel_confirmation_msg", { entity: t("invoice") }),
+      color: "red",
+      onConfirm: () => {
+        modals.close(`cancel-e-invoice-${invoice._id}`);
+        onActionLoad({
+          process: () => api.delete(`/plugins/e-invoices/${invoice._id}/cancel`),
+          onFinished: () => {
+            refetch();
+          },
+        });
+      },
+      labels: { confirm: t("cancel"), cancel: t("cancel") },
+      confirmProps: { color: "red" },
+    });
+  };
+
+  const cta = useMemo(() => {
+    if (
+      !isLoading ||
+      receipt.status !== ReceiptStatus.PAID ||
+      !workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE)
+    )
+      return null;
+
+    return (
+      <Center>
+        <Button
+          mt={16}
+          size="xs"
+          leftIcon={IconCashRegister}
+          onClick={() => api.post(`/plugins/e-invoices`, { receiptId: receipt.id })}
+        >
+          {t("export_entity", { entity: t("e_invoice") })}
+        </Button>
+      </Center>
+    );
+  }, [receipt.status]);
+
+  if (!workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE)) return null;
+
+  return (
+    <Stack gap={8}>
+      <Text fw={600} fz={14}>
+        {t("eInvoices")}
+      </Text>
+
+      {isLoading && <Skeleton height={100} />}
+
+      {data?.data.map((invoice) => {
+        return (
+          <Card withBorder shadow="none" key={invoice._id}>
+            <Group justify="space-between">
+              <Group wrap="nowrap">
+                <Image src={invoice.provider.logo} h={40} w={100} fit="contain" />
+                <Stack gap={6}>
+                  <Text fz={14} fw={600}>
+                    {invoice.provider.name}
+                  </Text>
+
+                  <Text fz={14} truncate maw={200}>
+                    {renderDateTime(invoice.createdAt)}
+                  </Text>
+
+                  <CopyText text={invoice.invoiceId} fz={14} truncate maw={200}>
+                    ID: {String.limitCharacters(invoice.invoiceId, 10)}
+                  </CopyText>
+                </Stack>
+              </Group>
+
+              {invoice.isCancelled ? (
+                <Badge color="red" variant="light">
+                  {t("cancelled")}
+                </Badge>
+              ) : (
+                <Group>
+                  <Button
+                    size="xs"
+                    color="gray"
+                    leftIcon={IconArchive}
+                    variant="light"
+                    onClick={() => onArchive(invoice)}
+                  >
+                    {t("cancel")}
+                  </Button>
+
+                  <Button
+                    size="xs"
+                    leftIcon={IconEye}
+                    variant="light"
+                    onClick={() => window.open(invoice.url, "_blank")}
+                  >
+                    {t("view_entity", { entity: t("invoice") })}
+                  </Button>
+                </Group>
+              )}
+            </Group>
+          </Card>
+        );
+      })}
+
+      {data?.count === 0 ? <Empty>{cta}</Empty> : cta}
+    </Stack>
+  );
+};

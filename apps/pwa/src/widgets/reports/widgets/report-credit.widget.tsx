@@ -16,7 +16,7 @@ import { FC } from "react";
 import { ReportWidgetsContext } from "../types";
 import { getWorkspaceMemberByIds } from "@/modules/workspace-members/workspace-members-service";
 import writeXlsxFile from "write-excel-file";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { onError } from "@/utils/exceptions.utils";
 
 interface CreditReportItem {
@@ -82,7 +82,9 @@ const exportReport = async (receipts: ReceiptEntity[]): Promise<CreditReport> =>
   ].filter(Boolean) as string[];
 
   const customerIds = [
-    ...new Set([...(receipts.map((v) => v.relatedCustomerId).filter(Boolean) || [])].filter(Boolean)),
+    ...new Set(
+      [...(receipts.map((v) => v.relatedCustomerId).filter(Boolean) || [])].filter(Boolean)
+    ),
   ].filter(Boolean) as string[];
 
   const customers = await Promise.all(customerIds.map((v) => getCustomer(v)));
@@ -226,7 +228,10 @@ const exportReport = async (receipts: ReceiptEntity[]): Promise<CreditReport> =>
         } as { [key in LoanPackageType]: number }
       ),
     },
-    advancePayment: reports.reduce((acc, item) => acc + (item.isAvancedPayment ? item.receipt.amount : 0), 0),
+    advancePayment: reports.reduce(
+      (acc, item) => acc + (item.isAvancedPayment ? item.receipt.amount : 0),
+      0
+    ),
     amount: reports.reduce((acc, item) => acc + item.total, 0),
   };
 
@@ -239,7 +244,10 @@ const exportReport = async (receipts: ReceiptEntity[]): Promise<CreditReport> =>
 export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props) => {
   const workspace = useWorkspace();
   const theme = useMantineTheme();
-  const parsedPrimaryColor = parseThemeColor({ color: workspace.userMember.workspace.appColor || "primary", theme });
+  const parsedPrimaryColor = parseThemeColor({
+    color: workspace.userMember.workspace.appColor || "primary",
+    theme,
+  });
   const parsedRedColor = parseThemeColor({ color: "red", theme });
 
   const packageTypes = Object.values(LoanPackageType);
@@ -332,7 +340,11 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
             type: Number,
             format: numberFormat,
             color:
-              receipt.amount > 0 ? parsedPrimaryColor.value : receipt.amount < 0 ? parsedRedColor.value : undefined,
+              receipt.amount > 0
+                ? parsedPrimaryColor.value
+                : receipt.amount < 0
+                ? parsedRedColor.value
+                : undefined,
           },
         ];
       });
@@ -436,7 +448,11 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
             format: numberFormat,
             ...headStyle,
             backgroundColor:
-              _total > 0 ? parsedPrimaryColor.value : _total < 0 ? parsedRedColor.value : parsedPrimaryColor.value,
+              _total > 0
+                ? parsedPrimaryColor.value
+                : _total < 0
+                ? parsedRedColor.value
+                : parsedPrimaryColor.value,
           };
         }),
         ...packageTypes.map((type) => {
@@ -448,7 +464,11 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
             format: numberFormat,
             ...headStyle,
             backgroundColor:
-              _total > 0 ? parsedPrimaryColor.value : _total < 0 ? parsedRedColor.value : parsedPrimaryColor.value,
+              _total > 0
+                ? parsedPrimaryColor.value
+                : _total < 0
+                ? parsedRedColor.value
+                : parsedPrimaryColor.value,
           };
         }),
         ...packageTypes.map((type) => {
@@ -460,7 +480,11 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
             format: numberFormat,
             ...headStyle,
             backgroundColor:
-              _total > 0 ? parsedPrimaryColor.value : _total < 0 ? parsedRedColor.value : parsedPrimaryColor.value,
+              _total > 0
+                ? parsedPrimaryColor.value
+                : _total < 0
+                ? parsedRedColor.value
+                : parsedPrimaryColor.value,
           };
         }),
         {
@@ -508,12 +532,15 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
       const startAt = receipts[0]?.paidAt;
       const endAt = receipts[receipts.length - 1]?.paidAt;
 
-      const name = StringUtils.capitalizeFirstLetter(
-        `${t("reports")} ${t("income_expense")} ${t("from")} ${renderDate(startAt).replace(/\//g, "-")} ${t(
-          "to"
-        )} ${renderDate(endAt).replace(/\//g, "-")}`
+      const name = String.capitalizeFirstLetter(
+        `${t("reports")} ${t("income_expense")} ${t("from")} ${renderDate(startAt).replace(
+          /\//g,
+          "-"
+        )} ${t("to")} ${renderDate(endAt).replace(/\//g, "-")}`
       );
-      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;

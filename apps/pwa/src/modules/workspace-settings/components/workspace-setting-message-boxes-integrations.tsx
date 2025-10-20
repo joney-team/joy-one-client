@@ -8,7 +8,7 @@ import { renderDateTime, renderFromNow, t } from "@/modules/lang/lang-service";
 import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { capitalize, StringUtils } from "@/utils/string.utils";
+import { capitalize, String } from "@/utils/string.utils";
 import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { IconClock, IconMessage, IconPlus } from "@tabler/icons-react";
@@ -114,7 +114,7 @@ const AiIntegrationNode = () => {
                 <Fragment>
                   <Tooltip label={aiPlugin.providerName}>
                     <Text fz={16} fw={500} truncate="end">
-                      {StringUtils.limitCharacters(aiPlugin.providerName, 20)}
+                      {String.limitCharacters(aiPlugin.providerName, 20)}
                     </Text>
                   </Tooltip>
                   <Text fz={10} c="gray.6" truncate="end">

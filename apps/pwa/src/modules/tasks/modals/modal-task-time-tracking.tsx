@@ -20,7 +20,7 @@ import {
   timeInputValue,
 } from "@/utils/dateTime.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import {
   ActionIcon,
   Card,
@@ -93,14 +93,10 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
   const onSubmit = async () => {
     try {
       if (!name)
-        throw new Error(
-          StringUtils.capitalizeFirstLetter(`${t("please")} ${t("enter_task_name")}`)
-        );
+        throw new Error(String.capitalizeFirstLetter(`${t("please")} ${t("enter_task_name")}`));
 
       if (!slot)
-        throw new Error(
-          StringUtils.capitalizeFirstLetter(`${t("please")} ${t("select")} ${t("time")}`)
-        );
+        throw new Error(String.capitalizeFirstLetter(`${t("please")} ${t("select")} ${t("time")}`));
 
       const time = new Date(date);
       const startAt = time.setHours(
@@ -182,7 +178,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
       <ContentEditable
         mt={3}
         autoFocus
-        placeholder={StringUtils.capitalizeFirstLetter(`${t("enter_task_name")}`)}
+        placeholder={String.capitalizeFirstLetter(`${t("enter_task_name")}`)}
         placeHolderFontSize={layout.view === "mobile" ? 12 : 18}
         fz={layout.view === "mobile" ? 18 : 25}
         fw={500}
@@ -402,7 +398,7 @@ export const ModalTaskTimeTracking: FC = () => {
       onClose={close}
       title={
         <ModalTitle
-          title={StringUtils.capitalizeFirstLetter(`${t("add")} ${t("time_trackings")}`)}
+          title={String.capitalizeFirstLetter(`${t("add")} ${t("time_trackings")}`)}
           icon={IconStopwatch}
           color={tagFolder?.color}
         />

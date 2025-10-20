@@ -20,7 +20,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { LayoutContext } from "../../layout/layout-context";
-import { StringUtils } from "../../utils/string.utils";
+import { String } from "../../utils/string.utils";
 import { getLocaleConfig } from "../lang/lang-service";
 import { zIndexes } from "@joy-one-client/config/layout";
 
@@ -147,6 +147,13 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
       Modal: Modal.extend({
         defaultProps: {
           zIndex: zIndexes.commonModals,
+          styles: {
+            header: {
+              paddingTop: 10,
+              paddingBottom: 10,
+              minHeight: "unset",
+            },
+          },
         },
       }),
     },
@@ -156,7 +163,7 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
 export const optionsFilter: OptionsFilter = ({ options, search }) => {
   const splittedSearch = search.toLowerCase().trim().split(" ");
   return (options as ComboboxItem[]).filter((option) => {
-    const words = StringUtils.removeAccents(option.label).toLowerCase().trim().split(" ");
+    const words = String.removeAccents(option.label).toLowerCase().trim().split(" ");
     return splittedSearch.every((searchWord) => words.some((word) => word.includes(searchWord)));
   });
 };

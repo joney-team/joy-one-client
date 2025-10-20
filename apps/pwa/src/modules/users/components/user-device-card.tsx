@@ -4,7 +4,7 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { DeviceEntity } from "@/modules/devices/devices-types";
 import { renderDate, t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { StringUtils } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import { Badge, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import {
   IconDeviceDesktop,
@@ -56,7 +56,7 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
 
           {device.identifyId && (
             <Text fz={em(12)} c="gray" truncate="end" maw={200}>
-              ID: {StringUtils.compact(device.identifyId, 5, 5)}
+              ID: {String.compact(device.identifyId, 5, 5)}
             </Text>
           )}
 

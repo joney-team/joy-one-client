@@ -4,7 +4,7 @@ import { UseFormReturnType } from "@mantine/form";
 import { NotificationData, notifications } from "@mantine/notifications";
 import { IconInfoCircle, IconMoodCry } from "@tabler/icons-react";
 import { AxiosError } from "axios";
-import { StringUtils } from "./string.utils";
+import { String } from "./string.utils";
 
 export const onError = (
   error: any,
@@ -26,9 +26,7 @@ export const onError = (
       notifications.update({
         id: notification,
         message: (
-          <Text
-            dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(message) }}
-          />
+          <Text dangerouslySetInnerHTML={{ __html: String.replaceLineBreaksToHTML(message) }} />
         ),
         color: "red",
         loading: false,
@@ -39,9 +37,7 @@ export const onError = (
       notifications.update({
         ...notification,
         message: (
-          <Text
-            dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(message) }}
-          />
+          <Text dangerouslySetInnerHTML={{ __html: String.replaceLineBreaksToHTML(message) }} />
         ),
         color: "red",
         loading: false,
@@ -53,7 +49,7 @@ export const onError = (
     notifications.show({
       title: t("action_failed"),
       message: (
-        <Text dangerouslySetInnerHTML={{ __html: StringUtils.replaceLineBreaksToHTML(message) }} />
+        <Text dangerouslySetInnerHTML={{ __html: String.replaceLineBreaksToHTML(message) }} />
       ),
       color: "red",
       icon: <IconMoodCry strokeWidth={1.5} size={18} />,
