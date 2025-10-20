@@ -249,7 +249,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                     disabled={!isAbleToUpdate}
                     input={{
                       type: InputModalType.TEXTAREA,
-                      value: receipt.note || "--",
+                      value: receipt.note,
                       onDone: (v) => {
                         if (!isAbleToUpdate || !props.onUpdate) return;
                         props.onUpdate({ ...receipt, note: v });
