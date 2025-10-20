@@ -1,8 +1,13 @@
 import { Button } from "@/components/buttons/button";
+import { CopyText } from "@/components/copy-text";
 import { Empty } from "@/components/empty";
+import { ModalTitle } from "@/components/modal-title";
 import { ResponseList } from "@/types";
-import { Badge, Card, Center, Group, Image, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
-import { IconArchive, IconCashRegister, IconEye } from "@tabler/icons-react";
+import { onActionLoad } from "@/utils/actions";
+import { String } from "@/utils/string.utils";
+import { Badge, Card, Center, Group, Image, Skeleton, Stack, Text } from "@mantine/core";
+import { modals, openConfirmModal } from "@mantine/modals";
+import { IconArchive, IconEye, IconFileInvoice } from "@tabler/icons-react";
 import { useMemo, type FC } from "react";
 import { api } from "../apis";
 import { useQuery } from "../apis/use-query";
@@ -12,11 +17,6 @@ import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.e
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { ReceiptEntity, ReceiptStatus } from "./receipts-types";
-import { modals, openConfirmModal } from "@mantine/modals";
-import { ModalTitle } from "@/components/modal-title";
-import { onActionLoad } from "@/utils/actions";
-import { CopyText } from "@/components/copy-text";
-import { String } from "@/utils/string.utils";
 
 interface ReceiptEInvoicesProps {
   receipt: Pick<ReceiptEntity, "id" | "status">;
@@ -60,11 +60,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
   };
 
   const cta = useMemo(() => {
-    if (
-      !isLoading ||
-      receipt.status !== ReceiptStatus.PAID ||
-      !workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE)
-    )
+    if (!isLoading || !workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE))
       return null;
 
     return (
@@ -72,7 +68,8 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
         <Button
           mt={16}
           size="xs"
-          leftIcon={IconCashRegister}
+          leftIcon={IconFileInvoice}
+          disabled={receipt.status !== ReceiptStatus.PAID}
           onClick={() => api.post(`/plugins/e-invoices`, { receiptId: receipt.id })}
         >
           {t("export_entity", { entity: t("e_invoice") })}
@@ -96,13 +93,13 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
           <Card withBorder shadow="none" key={invoice._id}>
             <Group justify="space-between">
               <Group wrap="nowrap">
-                <Image src={invoice.provider.logo} h={40} w={100} fit="contain" />
+                <Image src={invoice.provider.logo} h={40} w={80} fit="contain" />
                 <Stack gap={6}>
                   <Text fz={14} fw={600}>
                     {invoice.provider.name}
                   </Text>
 
-                  <Text fz={14} truncate maw={200}>
+                  <Text fz={12} truncate maw={200}>
                     {renderDateTime(invoice.createdAt)}
                   </Text>
 

@@ -136,7 +136,7 @@ export const ReceiptDetail: FC<{
           <Button
             fw={400}
             variant="outline"
-            color="red"
+            color="gray"
             onClick={() =>
               onArchive({
                 process: () => archiveReceipt(receipt.id),
