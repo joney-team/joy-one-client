@@ -1,9 +1,10 @@
 import { useRouter } from "@/hooks/use-router";
 import { onArchive } from "@/utils/actions";
 import { t } from "@/modules/lang/lang-service";
-import { Button, Center, Text } from "@mantine/core";
+import { Center, Text } from "@mantine/core";
 import { IconArchive } from "@tabler/icons-react";
 import { FC } from "react";
+import { Button } from "./button";
 
 interface ButtonArchiveProps {
   enabled?: boolean;
@@ -18,17 +19,18 @@ interface ButtonArchiveProps {
 
 export const ButtonArchive: FC<ButtonArchiveProps> = (props) => {
   const router = useRouter();
-  const goBackWhenArchived = typeof props.goBackWhenArchived === "boolean" ? props.goBackWhenArchived : true;
+  const goBackWhenArchived =
+    typeof props.goBackWhenArchived === "boolean" ? props.goBackWhenArchived : true;
 
   if (props.enabled === false) return null;
 
   return (
     <Center mt={props.mt}>
       <Button
-        h={25}
-        variant="subtle"
-        color="gray.5"
-        leftSection={<IconArchive strokeWidth={1.3} size={16} style={{ marginRight: -5 }} />}
+        size="xs"
+        color="gray"
+        variant="light"
+        leftIcon={IconArchive}
         onClick={() => {
           if (props.onClick) return props.onClick();
           if (props.process)

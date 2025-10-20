@@ -3,9 +3,15 @@
 import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
-import { Button as ButtonMantine, ButtonProps as ButtonPropsMantine } from "@mantine/core";
+import {
+  Button as ButtonMantine,
+  ButtonProps as ButtonPropsMantine,
+  MantineSize,
+} from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
-import React, { FC, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
+
+type ButtonSize = MantineSize | `compact-${MantineSize}` | (string & {});
 
 export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
   id?: string;
@@ -25,6 +31,35 @@ export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
   visible?: boolean;
   label?: string;
 }
+
+const defaultIconSizes: Partial<Record<ButtonSize, number>> = {
+  xs: 16,
+  "compact-xs": 16,
+  sm: 18,
+  "compact-sm": 18,
+  default: 20,
+};
+
+const defaultIconSpacings: Partial<Record<ButtonSize, number>> = {
+  xs: -3,
+  "compact-xs": -8,
+  sm: -5,
+  "compact-sm": -5,
+  default: -3,
+};
+
+const defaultFontSizes: Partial<Record<ButtonSize, number>> = {
+  xs: 13,
+  "compact-xs": 12,
+  sm: 13,
+  "compact-sm": 13,
+  default: 14,
+};
+
+const defaultSconStrokeWidth: Partial<Record<ButtonSize, number>> = {
+  xs: 1.8,
+  default: 1.6,
+};
 
 export const Button: FC<ButtonProps> = (props) => {
   const {
@@ -70,50 +105,25 @@ export const Button: FC<ButtonProps> = (props) => {
   const miw = props.miw || (action || props.type === "submit" ? 180 : props.miw);
   const radius = props.radius;
 
-  const defaultIconSpacings = {
-    xs: -3,
-    "compact-xs": -8,
-    "compact-sm": -5,
-    default: -3,
-  };
+  const iconSpacing = useMemo(() => {
+    if (typeof propsIconSpacing === "number") return propsIconSpacing;
+    return defaultIconSpacings[props.size || "default"];
+  }, [propsIconSpacing, props.size]);
 
-  const iconSpacing =
-    typeof propsIconSpacing === "number"
-      ? propsIconSize
-      : (defaultIconSpacings as any)[props.size || ""] || defaultIconSpacings["default"];
+  const iconSize = useMemo(() => {
+    if (typeof props.iconSize === "number") return props.iconSize;
+    return defaultIconSizes[props.size || "default"];
+  }, [props.iconSize, props.size]);
 
-  const defaultIconSizes = {
-    xs: 16,
-    "compact-xs": 16,
-    "compact-sm": 18,
-    default: 20,
-  };
+  const fontSize = useMemo(() => {
+    if (typeof props.fz !== "undefined") return props.fz;
+    return defaultFontSizes[props.size || "default"];
+  }, [props.fz, props.size]);
 
-  const iconSize =
-    typeof props.iconSize === "number"
-      ? props.iconSize
-      : (defaultIconSizes as any)[props.size || ""] || defaultIconSizes["default"];
-
-  const defaultFontSizes = {
-    xs: 13,
-    "compact-xs": 12,
-    "compact-sm": 13,
-    default: 14,
-  };
-
-  const fontSize =
-    typeof props.fz !== "undefined"
-      ? props.fz
-      : (defaultFontSizes as any)[props.size || ""] || defaultFontSizes["default"];
-
-  const defaultSconStrokeWidth = {
-    xs: 2,
-    default: 1.6,
-  };
-  const iconStrokeWidth =
-    typeof propsIconStrokeWidth === "number"
-      ? propsIconStrokeWidth
-      : (defaultSconStrokeWidth as any)[props.size || ""] || defaultSconStrokeWidth["default"];
+  const iconStrokeWidth = useMemo(() => {
+    if (typeof propsIconStrokeWidth === "number") return propsIconStrokeWidth;
+    return defaultSconStrokeWidth[props.size || "default"];
+  }, [propsIconStrokeWidth, props.size]);
 
   const getColor = (c?: string) => {
     if (c === "joyone") return "primary";

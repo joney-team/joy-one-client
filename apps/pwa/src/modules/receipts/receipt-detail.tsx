@@ -122,7 +122,7 @@ export const ReceiptDetail: FC<{
           workspace.hasPermission(WorkspacePermission.RECEIPTS_REVERT_PAYMENT) && (
             <Button
               fw={400}
-              variant="outline"
+              variant="light"
               color="gray"
               onClick={onRevertPayment}
               leftIcon={IconReload}
@@ -135,7 +135,7 @@ export const ReceiptDetail: FC<{
         {!receipt.isArchived && workspace.hasPermission(WorkspacePermission.RECEIPTS_ARCHIVE) && (
           <Button
             fw={400}
-            variant="outline"
+            variant="light"
             color="gray"
             onClick={() =>
               onArchive({

@@ -118,8 +118,8 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
                   <Button
                     size="xs"
                     color="gray"
-                    leftIcon={IconArchive}
                     variant="light"
+                    leftIcon={IconArchive}
                     onClick={() => onArchive(invoice)}
                   >
                     {t("cancel")}
