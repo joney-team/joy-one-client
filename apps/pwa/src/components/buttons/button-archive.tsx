@@ -7,11 +7,11 @@ import { FC } from "react";
 import { Button } from "./button";
 
 interface ButtonArchiveProps {
+  process: () => Promise<any> | any;
   enabled?: boolean;
   mt?: number;
   name?: string;
   onClick?: () => void;
-  process?: () => Promise<any> | any;
   onArchived?: () => void;
   goBackWhenArchived?: boolean;
   label?: string;
