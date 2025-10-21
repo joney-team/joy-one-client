@@ -39,7 +39,10 @@ export const getLocaleConfig = () => {
   return global._localeConfig || ({} as LocaleConfig);
 };
 
-export const t = (key: string, params?: Record<string, number | string>): string => {
+export const t = (
+  key: string,
+  params?: Record<string, number | string | null | undefined>
+): string => {
   if (isServer()) return key;
 
   if (!key || typeof key !== "string") return "";
@@ -50,8 +53,10 @@ export const t = (key: string, params?: Record<string, number | string>): string
   let sentence = dictionary[key] || key;
 
   if (params && typeof params === "object") {
-    Object.entries(params).map((item) => {
-      sentence = sentence.replace(new RegExp(`{${item[0]}}`, "g"), String(item[1]));
+    Object.entries(params).map(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        sentence = sentence.replace(new RegExp(`{${key}}`, "g"), String(value));
+      }
     });
   }
 
