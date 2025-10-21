@@ -17,7 +17,6 @@ import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor
 import { eInvoicesProviderStatuses } from "./plugin-e-invoices.config";
 import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 import {
-  PluginEInvoicesProviderInformations,
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
@@ -32,12 +31,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
   onRefetch,
 }) => {
   const workspace = useWorkspace();
-  const providerConfigs = useQuery<PluginEInvoicesProviderInformations>({
-    route: "/plugins/e-invoices/providers/informations",
-    networkMode: "offlineFirst",
-  });
 
-  const providerConfig = providerConfigs.data?.[provider.provider];
   const status = eInvoicesProviderStatuses[provider.status];
   const [templates, setTemplates] = useState(provider.templates);
 
@@ -66,17 +60,15 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
     syncTemplates();
   }, [templates]);
 
-  if (!providerConfig) return null;
-
   return (
     <Stack>
       <Card>
         <Group gap={20} align="start">
-          <Image src={providerConfig.logo} w={120} h={40} />
+          <Image src={provider.logo} w={120} h={40} />
           <Stack gap={5} flex={1}>
             <Group align="center">
               <Text fw={600} fz={20}>
-                {providerConfig.name}
+                {provider.name}
               </Text>
 
               <Badge color={status.color} variant="light">

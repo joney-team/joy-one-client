@@ -11,7 +11,7 @@ import { IconFileInvoice } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useMemo } from "react";
 import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 import {
-  PluginEInvoicesProvider,
+  PluginEInvoicesProviderType,
   PluginEInvoicesProviderDto,
   PluginEInvoicesProviderInformations,
 } from "./plugin-e-invoices.types";
@@ -33,7 +33,7 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
   const form = useForm<Partial<PluginEInvoicesProviderDto>>({
     initialValues: {},
     validate: {
-      provider: (v: PluginEInvoicesProvider | undefined) => {
+      type: (v: PluginEInvoicesProviderType | undefined) => {
         if (!v) return t("must_be_provided");
       },
     },
@@ -42,8 +42,8 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
   useEffect(() => {
     if (providerConfigs.data) {
       form.setInitialValues({
-        provider: provider?.provider ?? PluginEInvoicesProvider.MATBAO,
-        providerAuth: {},
+        type: provider?.type ?? PluginEInvoicesProviderType.MATBAO,
+        auth: {},
         templates: provider?.templates ?? {},
       });
       form.reset();
@@ -51,33 +51,33 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
   }, [providerConfigs.data, provider]);
 
   const providerForm = useMemo(() => {
-    if (!form.values.provider || mode === "update_provider") return null;
+    if (!form.values.type || mode === "update_provider") return null;
 
     if (
-      [PluginEInvoicesProvider.MATBAO, PluginEInvoicesProvider.MATBAO_BETA].includes(
-        form.values.provider
+      [PluginEInvoicesProviderType.MATBAO, PluginEInvoicesProviderType.MATBAO_DEMO].includes(
+        form.values.type
       )
     ) {
       return (
         <Fragment>
-          <TextInput {...form.getInputProps("providerAuth.MST")} label={t("tax_code")} />
-          <TextInput {...form.getInputProps("providerAuth.TDNhap")} label={t("sign_in_username")} />
-          <PasswordInput {...form.getInputProps("providerAuth.MKhau")} label={t("password")} />
+          <TextInput {...form.getInputProps("auth.MST")} label={t("tax_code")} />
+          <TextInput {...form.getInputProps("auth.TDNhap")} label={t("sign_in_username")} />
+          <PasswordInput {...form.getInputProps("auth.MKhau")} label={t("password")} />
         </Fragment>
       );
     }
-  }, [mode, form.values.provider]);
+  }, [mode, form.values.type]);
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      if (!values.provider || !providerConfigs.data) return;
+      if (!values.type || !providerConfigs.data) return;
 
       const payload = {
         ...values,
-        providerAuth: mode === "create" || mode === "update_auth" ? values.providerAuth : undefined,
+        auth: mode === "create" || mode === "update_auth" ? values.auth : undefined,
         templates:
           mode === "create"
-            ? providerConfigs.data[values.provider].defaultTemplates ?? {}
+            ? providerConfigs.data[values.type].defaultTemplates ?? {}
             : provider?.templates ?? {},
       };
 
@@ -105,7 +105,7 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
             label: info.name,
             value: provider,
           }))}
-          {...form.getInputProps("provider")}
+          {...form.getInputProps("type")}
           disabled={provider && mode === "update_auth"}
         />
 

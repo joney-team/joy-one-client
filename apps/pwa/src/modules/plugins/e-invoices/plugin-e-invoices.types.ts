@@ -1,8 +1,8 @@
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 
-export enum PluginEInvoicesProvider {
+export enum PluginEInvoicesProviderType {
   MATBAO = "MATBAO",
-  MATBAO_BETA = "MATBAO_BETA",
+  MATBAO_DEMO = "MATBAO_DEMO",
 }
 
 export enum PluginEInvoiceTemplateType {
@@ -42,8 +42,8 @@ export type MatBaoAuth = {
 export type PluginEInvoicesProviderAuth = Partial<MatBaoAuth>;
 
 export interface PluginEInvoicesProviderDto {
-  provider: PluginEInvoicesProvider;
-  providerAuth: PluginEInvoicesProviderAuth;
+  type: PluginEInvoicesProviderType;
+  auth: PluginEInvoicesProviderAuth;
   templates: Partial<PluginEInvoiceTemplates>;
   status: PluginEInvoicesProviderStatus;
 }
@@ -69,6 +69,6 @@ export interface PluginEInvoicesProviderInformation {
 }
 
 export type PluginEInvoicesProviderInformations = Record<
-  PluginEInvoicesProvider,
+  PluginEInvoicesProviderType,
   PluginEInvoicesProviderInformation
 >;

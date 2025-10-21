@@ -1,6 +1,6 @@
 import { BaseMongoEntity } from "@/types";
 import {
-  PluginEInvoicesProvider,
+  PluginEInvoicesProviderType,
   PluginEInvoicesProviderInformation,
   PluginEInvoiceTemplates,
 } from "./plugin-e-invoices.types";
@@ -12,8 +12,10 @@ export enum PluginEInvoicesProviderStatus {
 }
 
 export interface PluginEInvoicesProviderEntity extends BaseMongoEntity {
-  provider: PluginEInvoicesProvider;
-  providerAuth: string;
+  name: string;
+  logo: string;
+  type: PluginEInvoicesProviderType;
+  auth: string;
   templates: PluginEInvoiceTemplates;
   status: PluginEInvoicesProviderStatus;
 }
@@ -26,7 +28,7 @@ export interface PluginEInvoicesEntity extends BaseMongoEntity {
   invoiceData: Record<string, unknown>;
   providerData: Record<string, unknown>;
   url?: string;
-  provider: Pick<PluginEInvoicesProviderEntity, "_id" | "provider"> &
+  provider: Pick<PluginEInvoicesProviderEntity, "_id" | "type"> &
     Pick<PluginEInvoicesProviderInformation, "name" | "logo">;
   isCancelled?: boolean;
 }
