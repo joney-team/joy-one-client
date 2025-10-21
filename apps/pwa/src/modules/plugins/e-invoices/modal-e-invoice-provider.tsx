@@ -101,9 +101,9 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
       <Stack>
         <Select
           label={t("provider")}
-          data={Object.entries(providerConfigs.data ?? {}).map(([provider, info]) => ({
+          data={Object.entries(providerConfigs.data ?? {}).map(([type, info]) => ({
             label: info.name,
-            value: provider,
+            value: type,
           }))}
           {...form.getInputProps("type")}
           disabled={provider && mode === "update_auth"}
