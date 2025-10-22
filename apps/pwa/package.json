@@ -8,6 +8,7 @@
     "build": "next build",
     "typescript": "tsc",
     "prestart": "node scripts/prepare.js",
+    "sourcemaps:upload": "sentry-cli sourcemaps upload --release $(node -p 'require(\"./package.json\").version') .next",
     "ws:apps:dev": "NEXT_PUBLIC_EXTENDED_APP=true next dev",
     "ws:apps:build": "NEXT_PUBLIC_EXTENDED_APP=true next build",
     "ws:apps:start": "NEXT_PUBLIC_EXTENDED_APP=true next start"

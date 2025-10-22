@@ -1,0 +1,7 @@
+[defaults]
+url=https://glitchtip.joyone.vn/
+org=joy-one
+project=joy-one-pwa
+
+[auth]
+token=9ff86516cb932350462cb8dcd9bcb0a3266ef8065e16428a4fbb8d2edf593716

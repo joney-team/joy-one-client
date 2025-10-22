@@ -19,8 +19,9 @@ import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
 import config from "@joy-one-client/config";
+import packageJson from "../package.json";
 
-if (!config.isDevelopment) Sentry.init({ dsn: config.SENTRY_DSN });
+if (!config.isDevelopment) Sentry.init({ dsn: config.SENTRY_DSN, release: packageJson.version });
 
 const LangProvider = dynamic(() => import("@/modules/lang/lang-provider"));
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
