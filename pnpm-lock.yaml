@@ -258,6 +258,9 @@ importers:
       postcss-simple-vars:
         specifier: ^7.0.1
         version: 7.0.1(postcss@8.5.6)
+      sentry-cli:
+        specifier: ^0.0.0
+        version: 0.0.0
       typescript:
         specifier: ^5.8.3
         version: 5.9.2
@@ -3793,6 +3796,9 @@ packages:
     resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
     engines: {node: '>=10'}
     hasBin: true
+
+  sentry-cli@0.0.0:
+    resolution: {integrity: sha512-mqF5tmyoLRyNae/Vpdb0/+OGdDzvXnFFgbEni0cjymiuRcjns0eFG8hB4s3rPd8ngwQ7kE1o2k18cZBulrIlkA==}
 
   server-only@0.0.1:
     resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
@@ -8539,6 +8545,8 @@ snapshots:
 
   semver@7.7.2:
     optional: true
+
+  sentry-cli@0.0.0: {}
 
   server-only@0.0.1: {}
 
