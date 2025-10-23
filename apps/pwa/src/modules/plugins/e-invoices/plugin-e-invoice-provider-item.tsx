@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Image } from "@/components/image";
@@ -7,10 +9,11 @@ import { useQuery } from "@/modules/apis/use-query";
 import { t } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
+import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
-import { Badge, Card, Group, Stack, Text } from "@mantine/core";
+import { ActionIcon, Badge, Card, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { IconArchive, IconEdit, IconRefresh } from "@tabler/icons-react";
+import { IconArchive, IconEdit, IconFileInvoice, IconRefresh } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
 import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor";
@@ -20,6 +23,7 @@ import {
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
+import { OnModalCheckEInvoice } from "./modal-check-e-invoice";
 
 interface PluginEInvoiceProviderItemProps {
   provider: PluginEInvoicesProviderEntity;
@@ -81,19 +85,6 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 variant="outline"
                 color="gray"
                 size="xs"
-                leftIcon={IconRefresh}
-                onClick={async () => {
-                  await api.post(`/plugins/e-invoices/providers/${provider._id}/healthcheck`);
-                  await onRefetch();
-                }}
-              >
-                {t("healthcheck")}
-              </Button>
-
-              <Button
-                variant="outline"
-                color="gray"
-                size="xs"
                 leftIcon={IconEdit}
                 onClick={() => {
                   OnModalEInvoiceProvider({
@@ -122,15 +113,40 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 {t("change_auth")}
               </Button>
 
-              <Button
-                variant="outline"
-                color="gray"
-                size="xs"
-                leftIcon={IconArchive}
-                onClick={archive}
-              >
-                {t("archive")}
-              </Button>
+              <Tooltip label={t("healthcheck")}>
+                <ActionIcon
+                  variant="light"
+                  color="gray"
+                  size={30}
+                  onClick={async () =>
+                    onActionLoad({
+                      process: async () => {
+                        await api.post(`/plugins/e-invoices/providers/${provider._id}/healthcheck`);
+                        await onRefetch();
+                      },
+                    })
+                  }
+                >
+                  <IconRefresh size={18} />
+                </ActionIcon>
+              </Tooltip>
+
+              <Tooltip label={t("check_invoice")}>
+                <ActionIcon
+                  variant="light"
+                  color="gray"
+                  size={30}
+                  onClick={() => OnModalCheckEInvoice()}
+                >
+                  <IconFileInvoice size={18} />
+                </ActionIcon>
+              </Tooltip>
+
+              <Tooltip label={t("archive")}>
+                <ActionIcon variant="light" color="gray" size={30} onClick={archive}>
+                  <IconArchive size={18} />
+                </ActionIcon>
+              </Tooltip>
             </Group>
           </Stack>
         </Group>

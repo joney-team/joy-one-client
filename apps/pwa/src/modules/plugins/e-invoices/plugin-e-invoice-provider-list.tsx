@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";

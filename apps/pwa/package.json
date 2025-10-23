@@ -48,6 +48,7 @@
     "@tiptap/pm": "^3.0.9",
     "@tiptap/react": "^3.0.9",
     "@tiptap/starter-kit": "^3.0.9",
+    "@uiw/react-json-view": "2.0.0-alpha.39",
     "@xyflow/react": "^12.6.4",
     "axios": "^1.11.0",
     "barcode-detector": "^2.3.1",
