@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { CopyText } from "@/components/copy-text";
 import { Image } from "@/components/image";
 import { SessionTitle } from "@/components/session-title";
 import { api } from "@/modules/apis";
@@ -21,6 +20,7 @@ import {
   IconTemplate,
 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
+import { OnModalCheckEInvoice } from "./modal-check-e-invoice";
 import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
 import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor";
 import { eInvoicesProviderStatuses } from "./plugin-e-invoices.config";
@@ -29,7 +29,6 @@ import {
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
-import { OnModalCheckEInvoice } from "./modal-check-e-invoice";
 
 interface PluginEInvoiceProviderItemProps {
   provider: PluginEInvoicesProviderEntity;
@@ -173,52 +172,34 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
         </Group>
       </Card>
 
-      <Group align="start" wrap="nowrap">
-        <Stack flex={1}>
-          {Object.values(PluginEInvoiceTemplateType).map((type) => {
-            if (
-              (type === PluginEInvoiceTemplateType.LOAN_INCOME_RECEIPT &&
-                workspace.type !== WorkspaceType.CREDIT) ||
-              !variables
-            )
-              return null;
+      <Stack flex={1}>
+        {Object.values(PluginEInvoiceTemplateType).map((type) => {
+          if (
+            (type === PluginEInvoiceTemplateType.LOAN_INCOME_RECEIPT &&
+              workspace.type !== WorkspaceType.CREDIT) ||
+            !variables
+          )
+            return null;
 
-            return (
-              <Stack key={type} gap={5}>
-                <SessionTitle
-                  name={t("template_entity", { entity: t(`e_invoice_template_type_${type}`) })}
+          return (
+            <Stack key={type} gap={5}>
+              <SessionTitle
+                name={t("template_entity", { entity: t(`e_invoice_template_type_${type}`) })}
+              />
+              <Card style={{ overflow: "visible" }}>
+                <PluginEInvoiceTemplateEditor
+                  type={type}
+                  template={templates[type]}
+                  variables={variables}
+                  onChange={(template) => {
+                    setTemplates({ ...templates, [type]: template });
+                  }}
                 />
-                <Card>
-                  <PluginEInvoiceTemplateEditor
-                    type={type}
-                    template={templates[type]}
-                    variables={variables}
-                    onChange={(template) => {
-                      setTemplates({ ...templates, [type]: template });
-                    }}
-                  />
-                </Card>
-              </Stack>
-            );
-          })}
-        </Stack>
-
-        <Stack gap={5}>
-          <SessionTitle name={t("variable_list")} />
-          <Card>
-            <Stack>
-              {Object.entries(variables ?? {}).map(([key]) => (
-                <Stack key={key} gap={5}>
-                  <CopyText fw={600} text={key} />
-                  <Text fz={14} c="gray">
-                    {t(`e_invoice_variable_${key}`)}
-                  </Text>
-                </Stack>
-              ))}
+              </Card>
             </Stack>
-          </Card>
-        </Stack>
-      </Group>
+          );
+        })}
+      </Stack>
     </Stack>
   );
 };

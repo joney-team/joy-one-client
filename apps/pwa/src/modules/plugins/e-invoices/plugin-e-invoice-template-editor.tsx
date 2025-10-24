@@ -149,7 +149,13 @@ const TemplateField: FC<{
 
           {fieldVariable && fieldVariable.childVariables && (
             <Stack pl={26}>
-              <Card shadow="none" withBorder={false} bg="gray.0" p={10}>
+              <Card
+                shadow="none"
+                withBorder={false}
+                bg="gray.0"
+                p={10}
+                style={{ overflow: "visible" }}
+              >
                 <Stack gap={10}>
                   {children.map((child, index) => {
                     return (
