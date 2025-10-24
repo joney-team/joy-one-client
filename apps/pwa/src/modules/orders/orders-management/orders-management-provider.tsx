@@ -9,7 +9,7 @@ import { ProductComboEntity } from "@/modules/product-combos/product-combos-enti
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
 import { ResponseList } from "@/types";
 import { onArchive } from "@/utils/actions";
-import { timeToSeconds } from "@joy-one-client/utils/date-time";
+import { timeToSeconds } from "@joy-one-client/utils/date-time.legacy";
 import { readLocalStorageValue, useLocalStorage, UseStorageOptions } from "@mantine/hooks";
 import { useSearchParams } from "next/navigation";
 import { PropsWithChildren, useEffect, useMemo, useState, type FC } from "react";

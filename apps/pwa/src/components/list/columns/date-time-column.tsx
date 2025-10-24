@@ -1,7 +1,7 @@
+import { getClientLocale } from "@/modules/lang/lang-service";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconClock } from "@tabler/icons-react";
-import dayjs from "dayjs";
-import { renderDate, renderTime } from "@/modules/lang/lang-service";
 import { Column } from "../types";
 
 export interface DateTimeColumnArgs extends Omit<Column, "render"> {
@@ -18,24 +18,26 @@ export const DateTimeColumn = (args?: DateTimeColumnArgs): Column => {
     name: args?.name || "time",
     w: args?.w || 150,
     render: ({ value }) => {
-      if (!value) return args?.emptyText || "-";
+      if (!value || !DateTime.isValid(value)) return args?.emptyText || "-";
+      const locale = getClientLocale();
+
       return (
         <Stack gap={0}>
-          <Text c="var(--mantine-color-text)">{renderDate(value)}</Text>
+          <Text c="var(--mantine-color-text)">{DateTime.formatDate(value, { locale })}</Text>
           {!args?.hideTime && (
             <Group gap={3}>
               <ThemeIcon variant="transparent" color="var(--mantine-color-dimmed)" size="xs">
                 <IconClock strokeWidth={1.5} />
               </ThemeIcon>
               <Text fz={14} c="var(--mantine-color-dimmed)">
-                {renderTime(value)}
+                {DateTime.formatTime(value, { locale })}
               </Text>
             </Group>
           )}
 
           {args?.isFromNow && (
             <Text fz={10} c="var(--mantine-color-dimmed)">
-              {dayjs(value * 1000).fromNow()}
+              {DateTime.fromNow(value)}
             </Text>
           )}
         </Stack>

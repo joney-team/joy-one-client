@@ -5,7 +5,7 @@ import { Menu, MenuDropdown, Text } from "@mantine/core";
 import { OnModalDatePicker } from "@/modals/modal-date-picker";
 import { renderDate, t } from "@/modules/lang/lang-service";
 import { Period } from "@/types";
-import { timeToSeconds } from "@joy-one-client/utils/date-time";
+import { timeToSeconds } from "@joy-one-client/utils/date-time.legacy";
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
 import { Group } from "@mantine/core";
 import {
