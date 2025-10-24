@@ -85,27 +85,33 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const _initializeMeta = async () => {
-    await new Promise((resolve) => {
-      const action = async () => {
-        const global = getGlobal();
-        if (global.FBInitialized) return resolve(true);
+    await new Promise((resolve, reject) => {
+      const action = async (retry: number) => {
+        try {
+          const global = getGlobal();
+          if (global.FBInitialized) return resolve(true);
 
-        const FB = global.FB;
-        const isInitialized = !!global.FBInitialized;
-        if (isInitialized || !global.FB) {
+          const FB = global.FB;
+          const isInitialized = !!global.FBInitialized;
+          if (isInitialized || !global.FB || !global._appConfig) {
+            await wait(1000);
+            action(0);
+          } else {
+            FB.init({
+              appId: global._appConfig.metaAppId,
+              version: global._appConfig.metaAppVersion,
+              xfbml: true,
+            });
+            resolve(true);
+          }
+        } catch (error) {
+          if (retry > 3) return reject(error);
           await wait(1000);
-          action();
-        } else {
-          FB.init({
-            appId: global._appConfig.metaAppId,
-            version: global._appConfig.metaAppVersion,
-            xfbml: true,
-          });
-          resolve(true);
+          action(retry + 1);
         }
       };
 
-      action();
+      action(0);
     });
   };
 
