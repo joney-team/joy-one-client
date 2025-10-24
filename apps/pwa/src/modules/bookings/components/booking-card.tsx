@@ -13,7 +13,7 @@ import { OnModalCancelBooking } from "@/modules/bookings/modals/modal-cancel-boo
 import { OnModalUpdateBooking } from "@/modules/bookings/modals/modal-update-booking";
 import { renderFromNow, renderTime, t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { capitalize } from "@/utils/string.utils";
 import {
   ActionIcon,
@@ -72,8 +72,8 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
   const color = useColor();
 
   const [_, setNow] = useState(new Date());
-  const startTime = DateTimeUtils.secondsToTime(booking.startTime)!;
-  const endTime = DateTimeUtils.secondsToTime(booking.endTime)!;
+  const startTime = DateTime.secondsToTime(booking.startTime)!;
+  const endTime = DateTime.secondsToTime(booking.endTime)!;
 
   const [opened, setOpened] = useState(false);
   const ref = useClickOutside(() => setOpened(false));
@@ -311,7 +311,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                   <IconClock size={16} strokeWidth={1.5} />
                 </ThemeIcon>
                 <Text fz={13} fw={500}>
-                  {DateTimeUtils.toHHMM(booking.endTime - booking.startTime)}
+                  {DateTime.toHHMM(booking.endTime - booking.startTime)}
                 </Text>
               </Group>
             </Stack>

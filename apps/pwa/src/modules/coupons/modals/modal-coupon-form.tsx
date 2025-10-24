@@ -8,7 +8,7 @@ import { createCoupon, getCouponRules } from "@/modules/coupons/coupon-service";
 import { CouponDto, CouponEntity } from "@/modules/coupons/coupon-types";
 import { getCustomers } from "@/modules/customers/customer-service";
 import { t } from "@/modules/lang/lang-service";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import {
@@ -152,8 +152,8 @@ export const ModalCouponForm: FC = () => {
                 <DateTimePicker
                   label={t("expire_at")}
                   {...form.getInputProps("expiredAt")}
-                  value={DateTimeUtils.secondsToTime(form.values.expiredAt)}
-                  onChange={(v) => form.setFieldValue("expiredAt", DateTimeUtils.timeToSeconds(v))}
+                  value={DateTime.secondsToTime(form.values.expiredAt)}
+                  onChange={(v) => form.setFieldValue("expiredAt", DateTime.timeToSeconds(v))}
                 />
               </Stack>
             </Card>

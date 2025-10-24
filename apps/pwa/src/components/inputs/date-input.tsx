@@ -2,7 +2,7 @@
 
 import { type FC, type ReactNode } from "react";
 import { getDateFormat } from "@/modules/lang/lang-service";
-import { DateTimeUtils, forceDate } from "@/utils/dateTime.utils";
+import { DateTime, forceDate } from "@/utils/date-time.utils";
 import {
   DateInput as MantineDateInput,
   DateInputProps as MantineDateInputProps,
@@ -30,7 +30,7 @@ export const DateInput: FC<DateInputProps> = (props) => {
       placeholder={getDateFormat()}
       onChange={(e) => {
         if (!e) return onChange?.(null);
-        onChange?.(DateTimeUtils.timeToSeconds(e));
+        onChange?.(DateTime.timeToSeconds(e));
       }}
       clearable={props.clearable ?? true}
     />

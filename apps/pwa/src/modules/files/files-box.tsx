@@ -8,7 +8,7 @@ import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { t } from "@/modules/lang/lang-service";
 import { AppEntity } from "@/types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { useList } from "@/components/list/use-list";
 import {
   ActionIcon,
@@ -340,7 +340,7 @@ export const FileBoxCard: FC<{
                     type: detectFileType(file.name),
                     url: URL.createObjectURL(file),
                     _id: "",
-                    createdAt: DateTimeUtils.timeToSeconds(),
+                    createdAt: DateTime.timeToSeconds(),
                     relativePath: "",
                     size: file.size,
                     path: "",

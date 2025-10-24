@@ -2,7 +2,7 @@ import { Period } from "@/types";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { t } from "@/modules/lang/lang-service";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { Card, Center, Group, Indicator, NumberInput, Stack, Text } from "@mantine/core";
 import { DatePicker, DatePickerProps, DatesRangeValue } from "@mantine/dates";
@@ -23,7 +23,7 @@ interface ModalDatePickerProps {
 const dayRenderer: DatePickerProps["renderDay"] = (date) => {
   const day = new Date(date).getDate();
 
-  if (DateTimeUtils.isToday(date))
+  if (DateTime.isToday(date))
     return (
       <Indicator size={6} color="green" offset={-5}>
         <div>{day}</div>
@@ -49,7 +49,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
               value={range}
               onChange={(range) => {
                 if (range[0]) {
-                  const _range = DateTimeUtils.getStartEndOfWeek(
+                  const _range = DateTime.getStartEndOfWeek(
                     new Date(range[0]).getTime() + 1000 * 60
                   );
                   setRange([new Date(_range.start), new Date(_range.end)]);
@@ -99,7 +99,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
               level="year"
               monthsListFormat="MMMM"
               onMonthSelect={(e) => {
-                const rangeOfMonth = DateTimeUtils.getStartEndOfMonth(new Date(e));
+                const rangeOfMonth = DateTime.getStartEndOfMonth(new Date(e));
                 props.onRangeSelected?.([new Date(rangeOfMonth.start), new Date(rangeOfMonth.end)]);
                 modals.close("date-picker");
               }}
@@ -167,7 +167,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                   const input = document.getElementById("year-input") as HTMLInputElement;
                   const value = +input.value;
                   if (value < min || value > max) throw new Error(t("invalid_year"));
-                  const range = DateTimeUtils.getStartEndOfYear(new Date(value, 1, 0, 0, 0));
+                  const range = DateTime.getStartEndOfYear(new Date(value, 1, 0, 0, 0));
                   props.onRangeSelected?.([new Date(range.start), new Date(range.end)]);
                   modals.close("date-picker");
                 } catch (error) {

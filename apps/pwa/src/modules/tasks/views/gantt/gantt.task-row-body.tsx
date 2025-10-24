@@ -7,7 +7,7 @@ import { useTask } from "@/modules/tasks/hooks/use-task";
 import { getTaskProgress, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import {
   ActionIcon,
   alpha,
@@ -64,19 +64,19 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
     if (!isResizing) return;
     try {
       const selectedDate = gantt.dates[Math.floor(mouse.x / gantt.state.columnSize)];
-      const rangeDate = DateTimeUtils.getStartEndOfDay(selectedDate);
+      const rangeDate = DateTime.getStartEndOfDay(selectedDate);
 
       if (isResizing === "left") {
         ctx.onUpdate({
           ...task,
-          startDate: DateTimeUtils.timeToSeconds(rangeDate.start),
+          startDate: DateTime.timeToSeconds(rangeDate.start),
         });
       }
 
       if (isResizing === "right") {
         ctx.onUpdate({
           ...task,
-          dueDate: DateTimeUtils.timeToSeconds(rangeDate.end),
+          dueDate: DateTime.timeToSeconds(rangeDate.end),
         });
       }
     } catch (error) {
@@ -94,10 +94,10 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
 
     const selectedDate = gantt.dates[Math.floor(x / dateWidth)];
     if (!selectedDate) return;
-    const rangeDate = DateTimeUtils.getStartEndOfDay(selectedDate);
+    const rangeDate = DateTime.getStartEndOfDay(selectedDate);
 
-    const startDateInSecs = DateTimeUtils.timeToSeconds(rangeDate.start);
-    const dueDateInSecs = DateTimeUtils.timeToSeconds(rangeDate.end);
+    const startDateInSecs = DateTime.timeToSeconds(rangeDate.start);
+    const dueDateInSecs = DateTime.timeToSeconds(rangeDate.end);
 
     let startDate = task.startDate;
     let dueDate = task.dueDate;
@@ -172,8 +172,8 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
 
       ctx.onUpdate({
         ...task,
-        startDate: DateTimeUtils.timeToSeconds(startDate),
-        dueDate: DateTimeUtils.timeToSeconds(dueDate),
+        startDate: DateTime.timeToSeconds(startDate),
+        dueDate: DateTime.timeToSeconds(dueDate),
       });
 
       close();

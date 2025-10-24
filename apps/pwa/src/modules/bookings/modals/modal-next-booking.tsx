@@ -8,7 +8,7 @@ import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { Period } from "@/types";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingStatus } from "../booking-types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { useDisclosure, useForceUpdate } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
@@ -41,7 +41,7 @@ export const ModalNextBooking: FC = () => {
     default: [],
     fetch: async () => {
       return getBookings({
-        timeRangeStartTime: `${Period.DATE}-${DateTimeUtils.timeToSeconds()}`,
+        timeRangeStartTime: `${Period.DATE}-${DateTime.timeToSeconds()}`,
       }).then((r) =>
         r.data.filter(
           (b) =>

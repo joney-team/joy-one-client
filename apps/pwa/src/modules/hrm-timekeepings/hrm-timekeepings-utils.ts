@@ -1,59 +1,65 @@
 import { WorkSlot } from "@/types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { WorkspaceMemberWorkingTimeType } from "@/modules/workspace-members/workspace-members-types";
-import { HrmTimekeepingEntity, HrmTimekeepingsRules, HrmTimekeepingType } from "./hrm-timekeepings-types";
+import {
+  HrmTimekeepingEntity,
+  HrmTimekeepingsRules,
+  HrmTimekeepingType,
+} from "./hrm-timekeepings-types";
 import dayjs from "dayjs";
 import { sortWorkSlots } from "../workspace-settings/workspace-settings-service";
 
 export interface HrmCalculateTimekeepingsArgs {
-  timekeepings: HrmTimekeepingEntity[],
-  workSlots?: WorkSlot[] | undefined,
-  rules?: HrmTimekeepingsRules,
-  workTimeType?: WorkspaceMemberWorkingTimeType,
+  timekeepings: HrmTimekeepingEntity[];
+  workSlots?: WorkSlot[] | undefined;
+  rules?: HrmTimekeepingsRules;
+  workTimeType?: WorkspaceMemberWorkingTimeType;
 }
 
 export interface HrmCalculateTimeLog {
-  isMain?: boolean,
-  workSlotGroupId: string,
-  start: number,
-  end: number,
-  duration: number,
-  startDeviation: number,
-  endDeviation: number
+  isMain?: boolean;
+  workSlotGroupId: string;
+  start: number;
+  end: number;
+  duration: number;
+  startDeviation: number;
+  endDeviation: number;
 }
 
 export interface HrmCalculateTimekeepingsResult {
-  timeLogs: HrmCalculateTimeLog[],
-  totalWorkingTime: number,
-  lateTime: number,
-  overTime: number,
+  timeLogs: HrmCalculateTimeLog[];
+  totalWorkingTime: number;
+  lateTime: number;
+  overTime: number;
 }
 
 export interface HrmCalculateTimekeepingsArgs {
-  timekeepings: HrmTimekeepingEntity[],
-  workSlots?: WorkSlot[] | undefined,
-  rules?: HrmTimekeepingsRules,
-  workTimeType?: WorkspaceMemberWorkingTimeType,
+  timekeepings: HrmTimekeepingEntity[];
+  workSlots?: WorkSlot[] | undefined;
+  rules?: HrmTimekeepingsRules;
+  workTimeType?: WorkspaceMemberWorkingTimeType;
 }
 
 export interface HrmCalculateTimeLog {
-  isMain?: boolean,
-  workSlotGroupId: string,
-  start: number,
-  end: number,
-  duration: number,
-  startDeviation: number,
-  endDeviation: number
+  isMain?: boolean;
+  workSlotGroupId: string;
+  start: number;
+  end: number;
+  duration: number;
+  startDeviation: number;
+  endDeviation: number;
 }
 
 export interface HrmCalculateTimekeepingsResult {
-  timeLogs: HrmCalculateTimeLog[],
-  totalWorkingTime: number,
-  lateTime: number,
-  overTime: number,
+  timeLogs: HrmCalculateTimeLog[];
+  totalWorkingTime: number;
+  lateTime: number;
+  overTime: number;
 }
 
-export function calculateTimekeepings(args: HrmCalculateTimekeepingsArgs): HrmCalculateTimekeepingsResult {
+export function calculateTimekeepings(
+  args: HrmCalculateTimekeepingsArgs
+): HrmCalculateTimekeepingsResult {
   const workTimeType = args.workTimeType || WorkspaceMemberWorkingTimeType.FULLTIME;
   const timekeepings = [...args.timekeepings].sort((a, b) => a.time - b.time);
   const workSlots = args.workSlots || [];
@@ -65,50 +71,63 @@ export function calculateTimekeepings(args: HrmCalculateTimekeepingsArgs): HrmCa
 
   // Group timekeepings by check in and check out (Nhóm các phiên chấm công theo cặp Check In và Check Out)
   const groupTimekeepings = timekeepings.reduce((out, item, index) => {
-    if (out.find(v => !!v.find(k => k._id === item._id))) return out;
+    if (out.find((v) => !!v.find((k) => k._id === item._id))) return out;
     const nextTimekeeping = timekeepings[index + 1];
     if (
-      nextTimekeeping
-      && item.type === HrmTimekeepingType.CHECK_IN
-      && nextTimekeeping.type === HrmTimekeepingType.CHECK_OUT
+      nextTimekeeping &&
+      item.type === HrmTimekeepingType.CHECK_IN &&
+      nextTimekeeping.type === HrmTimekeepingType.CHECK_OUT
     ) {
       out.push([item, nextTimekeeping]);
     }
     return out;
-  }, [] as (HrmTimekeepingEntity[])[]);
+  }, [] as HrmTimekeepingEntity[][]);
 
   const isAbleToCalculate = groupTimekeepings.length >= 1;
 
   if (isAbleToCalculate) {
     if (workTimeType === WorkspaceMemberWorkingTimeType.FULLTIME && workSlots.length > 0) {
-      const date = dayjs(timekeepings[0].time * 1000).hour(0).minute(0).second(0);
+      const date = dayjs(timekeepings[0].time * 1000)
+        .hour(0)
+        .minute(0)
+        .second(0);
 
-      const _workSlots = sortWorkSlots(workSlots.filter((slot) => slot.dayWeek === date.day()))
+      const _workSlots = sortWorkSlots(workSlots.filter((slot) => slot.dayWeek === date.day()));
 
       const userWorkSlots = [] as {
-        workSlotId: string,
-        workSlotGroupId: string,
-        start: number,
-        end: number,
-        duration: number,
-        startDeviation: number,
-        endDeviation: number
+        workSlotId: string;
+        workSlotGroupId: string;
+        start: number;
+        end: number;
+        duration: number;
+        startDeviation: number;
+        endDeviation: number;
       }[];
 
       const groupOfWorkSlots: {
         [groupId: string]: {
-          start: number,
-          end: number,
-          duration: number,
-          slots: WorkSlot[]
-        }
+          start: number;
+          end: number;
+          duration: number;
+          slots: WorkSlot[];
+        };
       } = new Array(3).fill(0).reduce((out, _, index) => {
         const groupId = index.toString();
-        const slots = _workSlots.filter((slot) => (slot.groupId || "0") === groupId)
+        const slots = _workSlots.filter((slot) => (slot.groupId || "0") === groupId);
 
         if (slots.length > 0) {
-          const start = DateTimeUtils.timeToSeconds(dayjs(timekeepings[0].time * 1000).add(slots[0].startHour, 'hour').add(slots[0].startMin, 'minute').toDate());
-          const end = DateTimeUtils.timeToSeconds(dayjs(timekeepings[0].time * 1000).add(slots[slots.length - 1].endHour, 'hour').add(slots[slots.length - 1].endMin, 'minute').toDate());
+          const start = DateTime.timeToSeconds(
+            dayjs(timekeepings[0].time * 1000)
+              .add(slots[0].startHour, "hour")
+              .add(slots[0].startMin, "minute")
+              .toDate()
+          );
+          const end = DateTime.timeToSeconds(
+            dayjs(timekeepings[0].time * 1000)
+              .add(slots[slots.length - 1].endHour, "hour")
+              .add(slots[slots.length - 1].endMin, "minute")
+              .toDate()
+          );
           const duration = end - start;
 
           out[groupId] = {
@@ -126,7 +145,9 @@ export function calculateTimekeepings(args: HrmCalculateTimekeepingsArgs): HrmCa
         const group = groupOfWorkSlots[groupId];
         const prevGroup = groupOfWorkSlots[(+groupId - 1).toString()];
         const groupDistanceStart = Math.abs(group.start - groupTimekeepings[0][0].time);
-        const prevGroupDistanceStart = prevGroup ? Math.abs(prevGroup.start - groupTimekeepings[0][0].time) : 0;
+        const prevGroupDistanceStart = prevGroup
+          ? Math.abs(prevGroup.start - groupTimekeepings[0][0].time)
+          : 0;
 
         if (prevGroup && groupDistanceStart < prevGroupDistanceStart) return groupId;
         return out;
@@ -134,7 +155,9 @@ export function calculateTimekeepings(args: HrmCalculateTimekeepingsArgs): HrmCa
 
       // Calculate time log each work slot group (Tính thời gian làm việc thuộc từng khung giờ làm việc)
       groupTimekeepings.map((timekeepings) => {
-        let rangeTimes: { start: number, end: number }[] = [{ start: timekeepings[0].time, end: timekeepings[1].time }];
+        let rangeTimes: { start: number; end: number }[] = [
+          { start: timekeepings[0].time, end: timekeepings[1].time },
+        ];
 
         Object.keys(groupOfWorkSlots).map((groupId) => {
           const group = groupOfWorkSlots[groupId];
@@ -143,17 +166,31 @@ export function calculateTimekeepings(args: HrmCalculateTimekeepingsArgs): HrmCa
           if (+groupId >= +mainGroupId) {
             group.slots.map((slot) => {
               rangeTimes.map((range, index) => {
-                const slotStart = DateTimeUtils.timeToSeconds(dayjs(timekeepings[0].time * 1000).add(slot.startHour, 'hour').add(slot.startMin, 'minute').toDate());
-                const slotEnd = DateTimeUtils.timeToSeconds(dayjs(timekeepings[0].time * 1000).add(slot.endHour, 'hour').add(slot.endMin, 'minute').toDate());
+                const slotStart = DateTime.timeToSeconds(
+                  dayjs(timekeepings[0].time * 1000)
+                    .add(slot.startHour, "hour")
+                    .add(slot.startMin, "minute")
+                    .toDate()
+                );
+                const slotEnd = DateTime.timeToSeconds(
+                  dayjs(timekeepings[0].time * 1000)
+                    .add(slot.endHour, "hour")
+                    .add(slot.endMin, "minute")
+                    .toDate()
+                );
 
-                const interect = DateTimeUtils.getIntersect({
-                  start: slotStart,
-                  end: slotEnd,
-                }, range);
+                const interect = DateTime.getIntersect(
+                  {
+                    start: slotStart,
+                    end: slotEnd,
+                  },
+                  range
+                );
                 if (interect) {
                   let _ranges = rangeTimes.filter((_, i) => i !== index);
-                  const remainRange = DateTimeUtils.rangeSlice(range, interect)
-                    .filter(r => r.start >= slotEnd)
+                  const remainRange = DateTime.rangeSlice(range, interect).filter(
+                    (r) => r.start >= slotEnd
+                  );
 
                   _ranges = [..._ranges, ...remainRange];
                   rangeTimes = _ranges;
@@ -161,9 +198,9 @@ export function calculateTimekeepings(args: HrmCalculateTimekeepingsArgs): HrmCa
                   userWorkSlots.push({
                     workSlotId: slot.id,
                     workSlotGroupId: slot.groupId || "0",
-                    ...interect
+                    ...interect,
                   });
-                };
+                }
               });
             });
           }
@@ -196,7 +233,11 @@ export function calculateTimekeepings(args: HrmCalculateTimekeepingsArgs): HrmCa
 
         // Latetime
         lateTime = mainTimeLog.startDeviation > 0 ? Math.abs(mainTimeLog.startDeviation) : 0;
-        if (lateTime > 0 && args.rules?.acceptLatenessUpToMins && lateTime <= args.rules.acceptLatenessUpToMins * 60) {
+        if (
+          lateTime > 0 &&
+          args.rules?.acceptLatenessUpToMins &&
+          lateTime <= args.rules.acceptLatenessUpToMins * 60
+        ) {
           totalWorkingTime += lateTime;
         }
 
@@ -210,8 +251,11 @@ export function calculateTimekeepings(args: HrmCalculateTimekeepingsArgs): HrmCa
           return out + group.duration;
         }, 0);
 
-        if (args.rules?.acceptOverTimeAtLeastMins && _overtime >= args.rules.acceptOverTimeAtLeastMins * 60) {
-          overTime = _overtime
+        if (
+          args.rules?.acceptOverTimeAtLeastMins &&
+          _overtime >= args.rules.acceptOverTimeAtLeastMins * 60
+        ) {
+          overTime = _overtime;
         }
       }
     }
@@ -229,7 +273,7 @@ export function calculateTimekeepings(args: HrmCalculateTimekeepingsArgs): HrmCa
           startDeviation: 0,
           endDeviation: 0,
           workSlotGroupId: "0",
-        })
+        });
       });
 
       totalWorkingTime = timeLogs.reduce((out, v) => out + v.duration, 0);

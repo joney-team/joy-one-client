@@ -12,7 +12,7 @@ import { num, t } from "@/modules/lang/lang-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { Badge, Card, Group, SimpleGrid, Stack, Table, Text } from "@mantine/core";
 import { FC } from "react";
 import { UserCard } from "@/modules/users/components/user-card";
@@ -63,15 +63,15 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
                   <Stack gap={0}>
                     <Text>
                       <strong>Giờ công: </strong>
-                      {num(DateTimeUtils.calculateWorkHours(summary.totalWorkingTime))} giờ
+                      {num(DateTime.calculateWorkHours(summary.totalWorkingTime))} giờ
                     </Text>
                     <Text c={summary.totalOvertime > 0 ? "primary" : "dark"}>
                       <strong>OT: </strong>
-                      {num(DateTimeUtils.calculateWorkHours(summary.totalOvertime))} giờ
+                      {num(DateTime.calculateWorkHours(summary.totalOvertime))} giờ
                     </Text>
                     <Text c={summary.totalLateTime > 0 ? "red" : "dark"}>
                       <strong>Đi trễ: </strong>
-                      {num(DateTimeUtils.calculateWorkHours(summary.totalLateTime))} giờ
+                      {num(DateTime.calculateWorkHours(summary.totalLateTime))} giờ
                     </Text>
                   </Stack>
                 </Group>
@@ -117,7 +117,7 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
                 >
                   <Group justify="end">
                     {summary.totalLateTime > 0 && (
-                      <Badge color="red">{DateTimeUtils.toHHMM(summary.totalLateTime)}</Badge>
+                      <Badge color="red">{DateTime.toHHMM(summary.totalLateTime)}</Badge>
                     )}
 
                     <Text>{num(summary.totalLateTime, { type: "hours" })}</Text>
@@ -132,7 +132,7 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
                   <Group justify="end">
                     {summary.totalOvertime > 0 && (
                       <Badge color={color("primary")}>
-                        {DateTimeUtils.toHHMM(summary.totalOvertime)}
+                        {DateTime.toHHMM(summary.totalOvertime)}
                       </Badge>
                     )}
 
@@ -143,7 +143,7 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
                 <Table.Td ta="right">
                   <Group justify="end">
                     {summary.totalWorkingTime > 0 && (
-                      <Badge color="green">{DateTimeUtils.toHHMM(summary.totalWorkingTime)}</Badge>
+                      <Badge color="green">{DateTime.toHHMM(summary.totalWorkingTime)}</Badge>
                     )}
 
                     <Text>{num(summary.totalWorkingTime, { type: "hours" })}</Text>
@@ -175,7 +175,7 @@ const useTimekeepingsSummary = (
     if (pointedTimekeepingIds.includes(v._id)) return;
 
     const _timekeepings = timekeepings.filter((t) =>
-      DateTimeUtils.isMatchDay(new Date(t.time * 1000), v.time * 1000)
+      DateTime.isMatchDay(new Date(t.time * 1000), v.time * 1000)
     );
 
     pointedTimekeepingIds = [..._timekeepings.map((v) => v._id), v._id, ...pointedTimekeepingIds];

@@ -27,7 +27,7 @@ import {
   isInWorkSlot,
   useWorkDaySlots,
 } from "@/modules/workspace-settings/workspace-settings-service";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { ObjectUtils } from "@/utils/object.utils";
 import { useList } from "@/components/list/use-list";
 import {
@@ -93,9 +93,9 @@ export const BookingList: FC = () => {
 
       return getBookings(
         ObjectUtils.cleanObj({
-          rangeStartTime: `${DateTimeUtils.timeToSeconds(
-            query.startTime
-          )}-${DateTimeUtils.timeToSeconds(query.endTime)}`,
+          rangeStartTime: `${DateTime.timeToSeconds(query.startTime)}-${DateTime.timeToSeconds(
+            query.endTime
+          )}`,
           assigneeUserIds: query.assigneeUserIds.length > 0 ? query.assigneeUserIds : undefined,
           status: query.status || bookingActiveStatus,
           getAll: true,
@@ -142,7 +142,7 @@ export const BookingList: FC = () => {
     if (isToday) {
       bookings.removeParams(["date"]);
     } else {
-      bookings.setParams({ date: DateTimeUtils.timeToSeconds(date) });
+      bookings.setParams({ date: DateTime.timeToSeconds(date) });
     }
   };
 
@@ -151,7 +151,7 @@ export const BookingList: FC = () => {
     if (dayjs(nextDate).isSame(new Date(), "day")) {
       bookings.removeParams(["date"]);
     } else {
-      bookings.setParams({ date: DateTimeUtils.timeToSeconds(nextDate) });
+      bookings.setParams({ date: DateTime.timeToSeconds(nextDate) });
     }
   };
 
@@ -160,7 +160,7 @@ export const BookingList: FC = () => {
     if (dayjs(previousDate).isSame(new Date(), "day")) {
       bookings.removeParams(["date"]);
     } else {
-      bookings.setParams({ date: DateTimeUtils.timeToSeconds(previousDate) });
+      bookings.setParams({ date: DateTime.timeToSeconds(previousDate) });
     }
   };
 

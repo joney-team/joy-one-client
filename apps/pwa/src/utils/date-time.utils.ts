@@ -1,7 +1,7 @@
 import { Period } from "@/types";
 import { renderDate, t } from "@/modules/lang/lang-service";
 
-export class DateTimeUtils {
+export class DateTime {
   static addDays(now: Date, days: number): Date {
     const newDate = new Date(now.valueOf());
     newDate.setDate(newDate.getDate() + days);
@@ -9,49 +9,44 @@ export class DateTimeUtils {
   }
 
   static timeToSeconds(time: any = Date.now()): number {
-    time = new Date(time)
-    return +Math.floor(time.getTime() / 1000).toFixed(0)
+    time = new Date(time);
+    return +Math.floor(time.getTime() / 1000).toFixed(0);
   }
 
   static secondsToTime(time?: any) {
-    if (!time) return
+    if (!time) return;
     try {
-      return new Date(time * 1000)
+      return new Date(time * 1000);
     } catch (error) {
-      return
+      return;
     }
   }
 
   static formatToShow(date: any, isShowTime = true, locale?: string) {
-    if (!date) return '--'
-    const time = new Date(date)
-    let hours = time.getHours()
-    let min: any = time.getMinutes()
-    min = min < 10 ? `0${min}` : min
-    if (!isShowTime) return `${time.toLocaleDateString(locale)}`
-    return `${hours}:${min} ${time.toLocaleDateString(locale)}`
+    if (!date) return "--";
+    const time = new Date(date);
+    let hours = time.getHours();
+    let min: any = time.getMinutes();
+    min = min < 10 ? `0${min}` : min;
+    if (!isShowTime) return `${time.toLocaleDateString(locale)}`;
+    return `${hours}:${min} ${time.toLocaleDateString(locale)}`;
   }
 
   static countdown(endTime: any, startTime = Date.now()) {
-    if (
-      !endTime ||
-      new Date(endTime).getTime() <= new Date(startTime).getTime()
-    )
+    if (!endTime || new Date(endTime).getTime() <= new Date(startTime).getTime())
       return {
         days: 0,
         hours: 0,
         minutes: 0,
         seconds: 0,
         isExpired: true,
-      }
-    const distance = Math.abs(new Date(endTime).getTime() - startTime)
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24))
-    const hours = Math.floor(
-      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    )
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000)
-    return { days, hours, minutes, seconds, isExpired: false }
+      };
+    const distance = Math.abs(new Date(endTime).getTime() - startTime);
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    return { days, hours, minutes, seconds, isExpired: false };
   }
 
   static getRangeHour(
@@ -83,95 +78,105 @@ export class DateTimeUtils {
       | 23,
     rangeOf: 4 | 8 | 12
   ): number {
-    const rangeLength = 24 / rangeOf
-    const calculateHour = (v: number) => (v > 23 ? v - 23 : v)
+    const rangeLength = 24 / rangeOf;
+    const calculateHour = (v: number) => (v > 23 ? v - 23 : v);
 
     for (let i = 1; i <= rangeLength; i++) {
-      let currentValue = calculateHour(start + (i - 1) * rangeOf)
-      let nextValue = calculateHour(start + i * rangeOf)
-      if (currentValue <= currentHour && nextValue > currentHour) return i
+      let currentValue = calculateHour(start + (i - 1) * rangeOf);
+      let nextValue = calculateHour(start + i * rangeOf);
+      if (currentValue <= currentHour && nextValue > currentHour) return i;
     }
 
-    console.warn('Cannot find any range of hours')
-    return 1
+    console.warn("Cannot find any range of hours");
+    return 1;
   }
 
   static getMonday(date: any) {
-    const d = new Date(date)
+    const d = new Date(date);
     var day = d.getDay(),
-      diff = d.getDate() - day + (day == 0 ? -6 : 1) // adjust when day is sunday
-    return new Date(d.setDate(diff))
+      diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+    return new Date(d.setDate(diff));
   }
 
   static getStartEndOfDay(time: any) {
-    const inputTime = new Date(time)
+    const inputTime = new Date(time);
     return {
       start: new Date(inputTime.setHours(0, 0, 0, 0)).getTime(),
       end: new Date(inputTime.setHours(23, 59, 59, 999)).getTime(),
-    }
+    };
   }
 
   static getStartEndOfWeek(time: any) {
-    const firstDay = this.getMonday(time)
-    const lastDay = new Date(new Date(firstDay).getTime() + 6 * 24 * 60 * 60 * 1000)
+    const firstDay = this.getMonday(time);
+    const lastDay = new Date(new Date(firstDay).getTime() + 6 * 24 * 60 * 60 * 1000);
 
     return {
       start: this.getStartEndOfDay(firstDay).start,
       end: this.getStartEndOfDay(lastDay).end,
-    }
+    };
   }
 
   static getStartEndOfMonth(time: any) {
-    const date = new Date(time)
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1)
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+    const date = new Date(time);
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
     return {
       start: this.getStartEndOfDay(firstDay).start,
       end: this.getStartEndOfDay(lastDay).end,
-    }
+    };
   }
 
   static getStartEndOfYear(time: any) {
-    const date = new Date(time)
-    const firstDay = new Date(date.getFullYear(), 0, 1)
-    const lastDay = new Date(date.getFullYear(), 11, 31)
+    const date = new Date(time);
+    const firstDay = new Date(date.getFullYear(), 0, 1);
+    const lastDay = new Date(date.getFullYear(), 11, 31);
     return {
       start: this.getStartEndOfDay(firstDay).start,
       end: this.getStartEndOfDay(lastDay).end,
-    }
+    };
   }
 
-  static getStartEndOf(time: any, type: 'DAY' | 'WEEK' | 'MONTH' | 'YEAR') {
-    if (type === 'DAY') return this.getStartEndOfDay(time)
-    if (type === 'WEEK') return this.getStartEndOfWeek(time)
-    if (type === 'MONTH') return this.getStartEndOfMonth(time)
-    if (type === 'YEAR') return this.getStartEndOfYear(time)
-    throw Error('Type is not supported')
+  static getStartEndOf(time: any, type: "DAY" | "WEEK" | "MONTH" | "YEAR") {
+    if (type === "DAY") return this.getStartEndOfDay(time);
+    if (type === "WEEK") return this.getStartEndOfWeek(time);
+    if (type === "MONTH") return this.getStartEndOfMonth(time);
+    if (type === "YEAR") return this.getStartEndOfYear(time);
+    throw Error("Type is not supported");
   }
 
   static addLeadingZero(str: number) {
-    return ('0' + str).slice(-2)
+    return ("0" + str).slice(-2);
   }
 
   static isToday(date: any, now?: any) {
     const _date = new Date(date);
     const today = now ? new Date(now) : new Date();
-    return _date.getDate() === today.getDate() && _date.getMonth() === today.getMonth() && _date.getFullYear() === today.getFullYear();
+    return (
+      _date.getDate() === today.getDate() &&
+      _date.getMonth() === today.getMonth() &&
+      _date.getFullYear() === today.getFullYear()
+    );
   }
 
   static isTomorrow(date: any, now?: any) {
     const _date = new Date(date);
     const today = now ? new Date(now) : new Date();
-    return _date.getDate() === today.getDate() + 1 && _date.getMonth() === today.getMonth() && _date.getFullYear() === today.getFullYear();
+    return (
+      _date.getDate() === today.getDate() + 1 &&
+      _date.getMonth() === today.getMonth() &&
+      _date.getFullYear() === today.getFullYear()
+    );
   }
 
   static isMatchDay(date: any, _compareDate?: any) {
     const _date = new Date(date);
     const compareDate = _compareDate ? new Date(_compareDate) : new Date();
-    return _date.getDate() === compareDate.getDate()
-      && _date.getMonth() === compareDate.getMonth()
-      && _date.getFullYear() === compareDate.getFullYear();
+    return (
+      _date.getDate() === compareDate.getDate() &&
+      _date.getMonth() === compareDate.getMonth() &&
+      _date.getFullYear() === compareDate.getFullYear()
+    );
   }
 
   static isMatchWeekDay(date: any, _compareDate?: any) {
@@ -190,23 +195,23 @@ export class DateTimeUtils {
   static renderDate(date: any, period: Period, defaultValue?: string) {
     const _date = date ? new Date(date) : new Date();
 
-    if (!date) return defaultValue || t('time')
+    if (!date) return defaultValue || t("time");
 
     if (period === Period.MONTH) {
-      return _date.getMonth() + 1 + '/' + _date.getFullYear();
+      return _date.getMonth() + 1 + "/" + _date.getFullYear();
     }
 
     if (period === Period.WEEK) {
-      const range = DateTimeUtils.getStartEndOfWeek(_date);
+      const range = DateTime.getStartEndOfWeek(_date);
       return `${renderDate(range.start)} - ${renderDate(range.end)}`;
     }
 
     if (period === Period.YEAR) {
-      const range = DateTimeUtils.getStartEndOfYear(_date);
+      const range = DateTime.getStartEndOfYear(_date);
       return `${new Date(range.start).getFullYear()}`;
     }
 
-    if (DateTimeUtils.isToday(_date)) return t('today');
+    if (DateTime.isToday(_date)) return t("today");
     return renderDate(_date);
   }
 
@@ -218,10 +223,8 @@ export class DateTimeUtils {
     const minutes = Math.floor(secNum / 60) % 60;
     const seconds = secNum % 60;
 
-    return [hours, minutes, seconds]
-      .map((val) => val.toString().padStart(2, "0"))
-      .join(":")
-  };
+    return [hours, minutes, seconds].map((val) => val.toString().padStart(2, "0")).join(":");
+  }
 
   static toHHMM(input: number) {
     let secs = typeof input === "number" ? input : 0;
@@ -230,9 +233,7 @@ export class DateTimeUtils {
     const hours = Math.floor(secNum / 3600);
     const minutes = Math.floor(secNum / 60) % 60;
 
-    return [hours, minutes]
-      .map((val) => val.toString().padStart(2, "0"))
-      .join(":")
+    return [hours, minutes].map((val) => val.toString().padStart(2, "0")).join(":");
   }
 
   static calculateWorkHours(seconds: number): number {
@@ -241,7 +242,7 @@ export class DateTimeUtils {
     const minutes = remainingSeconds / 60; // Tính số phút còn lại
 
     // Tính tổng số giờ công dưới dạng số thập phân
-    const workHours = hours + (minutes / 60);
+    const workHours = hours + minutes / 60;
     return parseFloat(workHours.toFixed(2)); // Làm tròn tới 2 chữ số thập phân
   }
 
@@ -252,13 +253,16 @@ export class DateTimeUtils {
     return between;
   }
 
-  static getIntersect(fixedTime: { start: number, end: number }, time: { start: number, end: number }): ({
-    start: number,
-    end: number,
-    duration: number,
-    startDeviation: number,
-    endDeviation: number,
-  } | null) {
+  static getIntersect(
+    fixedTime: { start: number; end: number },
+    time: { start: number; end: number }
+  ): {
+    start: number;
+    end: number;
+    duration: number;
+    startDeviation: number;
+    endDeviation: number;
+  } | null {
     if (fixedTime.start >= time.end || fixedTime.end <= time.start) return null;
 
     const start = Math.max(fixedTime.start, time.start);
@@ -274,11 +278,11 @@ export class DateTimeUtils {
       duration,
       startDeviation,
       endDeviation,
-    }
+    };
   }
 
-  static rangeSlice(time: { start: number, end: number }, slice: { start: number, end: number }) {
-    const remainTimes = [] as { start: number, end: number }[];
+  static rangeSlice(time: { start: number; end: number }, slice: { start: number; end: number }) {
+    const remainTimes = [] as { start: number; end: number }[];
 
     if (time.start < slice.start) {
       remainTimes.push({ start: time.start, end: slice.start });
@@ -293,29 +297,32 @@ export class DateTimeUtils {
 }
 
 export const isSeconds = (value: any) => {
-  return typeof value === 'number' && (+value).toString().length <= 10;
-}
+  return typeof value === "number" && (+value).toString().length <= 10;
+};
 
 export const parseToTime = (value: any) => {
   if (!value) return null;
   if (isSeconds(value)) return new Date(value * 1000);
   return new Date(value);
-}
+};
 
 export const timeInputValue = (value: any) => {
-  if (!value) return '';
+  if (!value) return "";
   let time = isSeconds(value) ? new Date(value * 1000) : new Date(value);
-  return `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`;
-}
+  return `${time.getHours().toString().padStart(2, "0")}:${time
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}`;
+};
 
 export const setHoursMinutes = (time: number, hours: number | string, minutes: number | string) => {
   const _time = isSeconds(time) ? new Date(time * 1000) : new Date(time);
   _time.setHours(+hours);
   _time.setMinutes(+minutes);
-  return DateTimeUtils.timeToSeconds(_time);
-}
+  return DateTime.timeToSeconds(_time);
+};
 
-export function parseTimeInput(input: string): { hours: number; minutes: number, seconds: number } {
+export function parseTimeInput(input: string): { hours: number; minutes: number; seconds: number } {
   try {
     const hourPattern = /(\d+)\s*h/;
     const minutePattern = /(\d+)\s*m/;
@@ -342,7 +349,7 @@ export function decodeTimeInput(seconds: number) {
   if (hours) input.push(`${hours}h`);
   if (minutes) input.push(`${minutes}m`);
 
-  return { hours, minutes, input: input.join(' ') };
+  return { hours, minutes, input: input.join(" ") };
 }
 
 export function findNearestTimeSlot(now = new Date()) {
@@ -369,7 +376,9 @@ export function findNearestTimeSlot(now = new Date()) {
   // Chuyển đổi mốc thời gian từ phút thành định dạng hh:mm
   const hours = Math.floor(nearestSlot / 60);
   const minutes = nearestSlot % 60;
-  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}`;
 
   return formattedTime;
 }

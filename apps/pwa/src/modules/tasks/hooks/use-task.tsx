@@ -1,6 +1,6 @@
 "use client";
 
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { useList } from "@/components/list/use-list";
 import { useEffect, useState } from "react";
@@ -102,7 +102,7 @@ export const useTask = (id: string, initTask?: TaskEntity, isSkipLoadSubTasks = 
   const themeColor = color(tagFolder?.color || "primary");
   const isOutdated =
     !!task?.dueDate &&
-    task.dueDate < DateTimeUtils.timeToSeconds() &&
+    task.dueDate < DateTime.timeToSeconds() &&
     task.status !== DefaultTaskStatusId.CLOSED;
 
   const nextStatus = async () => {

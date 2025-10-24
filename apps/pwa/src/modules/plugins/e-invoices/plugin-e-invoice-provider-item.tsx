@@ -13,7 +13,13 @@ import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { ActionIcon, Badge, Card, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { IconArchive, IconEdit, IconFileInvoice, IconRefresh } from "@tabler/icons-react";
+import {
+  IconArchive,
+  IconEdit,
+  IconFileInvoice,
+  IconRefresh,
+  IconTemplate,
+} from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
 import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor";
@@ -53,11 +59,20 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
         })
         .catch(onError);
     }
-  }, 1000);
+  }, 2000);
 
   const archive = async () => {
     await api.delete(`/plugins/e-invoices/providers/${provider._id}`);
     await onRefetch();
+  };
+
+  const resetTemplates = async () => {
+    onActionLoad({
+      process: async () => {
+        await api.post(`/plugins/e-invoices/providers/${provider._id}/reset-templates`);
+        await onRefetch();
+      },
+    });
   };
 
   useEffect(() => {
@@ -128,6 +143,12 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                   }
                 >
                   <IconRefresh size={18} />
+                </ActionIcon>
+              </Tooltip>
+
+              <Tooltip label={t("reset_templates")}>
+                <ActionIcon variant="light" color="gray" size={30} onClick={resetTemplates}>
+                  <IconTemplate size={18} />
                 </ActionIcon>
               </Tooltip>
 

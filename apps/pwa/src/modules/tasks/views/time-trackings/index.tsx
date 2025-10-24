@@ -20,7 +20,7 @@ import {
   WorkspaceMemberInfo,
 } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { objSelect } from "@/utils/object.utils";
 import { String } from "@/utils/string.utils";
 import {
@@ -49,10 +49,10 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
     let _query = { ...query };
 
     const date = _query.date ? new Date(+_query.date * 1000) : new Date();
-    const range = DateTimeUtils.getStartEndOfMonth(date);
+    const range = DateTime.getStartEndOfMonth(date);
 
-    const fromTrackingTime = DateTimeUtils.timeToSeconds(range.start);
-    const toTrackingTime = DateTimeUtils.timeToSeconds(range.end);
+    const fromTrackingTime = DateTime.timeToSeconds(range.start);
+    const toTrackingTime = DateTime.timeToSeconds(range.end);
 
     return {
       ..._query,
@@ -94,7 +94,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
       tasks.removeParams(["date"]);
     } else {
       tasks.setParams({
-        date: DateTimeUtils.timeToSeconds(date) + 60 * 60 * 24,
+        date: DateTime.timeToSeconds(date) + 60 * 60 * 24,
       });
     }
   };
@@ -244,7 +244,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
                       </Stack>
                       <Divider orientation="vertical" />
                       <Text fz={12} fw={700}>
-                        {DateTimeUtils.toHHMM(totalTime)}
+                        {DateTime.toHHMM(totalTime)}
                       </Text>
                     </Group>
                   </Card>
@@ -319,7 +319,7 @@ const TaskRow: FC<{
   task: TaskEntity;
   date: Date;
 }> = ({ task, date }) => {
-  const now = DateTimeUtils.timeToSeconds();
+  const now = DateTime.timeToSeconds();
   const workspace = useWorkspace();
   const hover = useHover();
   const forceUpdate = useForceUpdate();
@@ -387,13 +387,13 @@ const TaskRow: FC<{
                   <Avatar user={user} size={16} hideOnlineStatus />
                   <Renderer visible={!!!isHasInProgressTimeTracking}>
                     <Text fz={12} fw={500}>
-                      {DateTimeUtils.toHHMM(totalTime)}
+                      {DateTime.toHHMM(totalTime)}
                     </Text>
                   </Renderer>
 
                   <Renderer visible={!!isHasInProgressTimeTracking}>
                     <Text fz={12} c="orange" fw={500}>
-                      {DateTimeUtils.toHHMMSS(totalTime)}
+                      {DateTime.toHHMMSS(totalTime)}
                     </Text>
                   </Renderer>
                 </Group>

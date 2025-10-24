@@ -7,7 +7,7 @@ import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { t } from "@/modules/lang/lang-service";
 import { Period, ResponseList, StorageKey } from "@/types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { Group, SimpleGrid, Stack } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { IconAnalyze, IconClipboardList } from "@tabler/icons-react";
@@ -29,7 +29,7 @@ export const DashboardBookings: FC = () => {
     route: "/bookings",
     isSkip: !workspace.hasPermission(WorkspacePermission.BOOKING_VIEW),
     params: {
-      timeRangeStartTime: `${Period.DATE}-${DateTimeUtils.timeToSeconds()}`,
+      timeRangeStartTime: `${Period.DATE}-${DateTime.timeToSeconds()}`,
       getAll: true,
     },
     refetchEvents: [

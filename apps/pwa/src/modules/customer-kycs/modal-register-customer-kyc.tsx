@@ -11,7 +11,7 @@ import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { optionsFilter } from "@/modules/theme/generator";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import {
   Card,
@@ -255,20 +255,20 @@ export const ModalRegisterCustomerKyc: FC = () => {
               <DateInput
                 label={t("birthday")}
                 valueFormat={getDateFormat()}
-                value={DateTimeUtils.secondsToTime(form.values.cidBirthday)}
+                value={DateTime.secondsToTime(form.values.cidBirthday)}
                 onChange={(date) => {
                   if (!date) return;
-                  form.setFieldValue("cidBirthday", DateTimeUtils.timeToSeconds(date));
+                  form.setFieldValue("cidBirthday", DateTime.timeToSeconds(date));
                 }}
               />
 
               <DateInput
                 label={t("issuedDate")}
                 valueFormat={getDateFormat()}
-                value={DateTimeUtils.secondsToTime(form.values.cidCreatedAt)}
+                value={DateTime.secondsToTime(form.values.cidCreatedAt)}
                 onChange={(date) => {
                   if (!date) return;
-                  form.setFieldValue("cidCreatedAt", DateTimeUtils.timeToSeconds(date));
+                  form.setFieldValue("cidCreatedAt", DateTime.timeToSeconds(date));
                 }}
               />
             </SimpleGrid>

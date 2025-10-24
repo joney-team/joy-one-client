@@ -21,7 +21,7 @@ import { calculateTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepin
 import { num, t } from "@/modules/lang/lang-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { useList } from "@/components/list/use-list";
 import {
   Badge,
@@ -90,11 +90,11 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
   const lastTimekeeping = timekeepings.data[timekeepings.data.length - 1];
   const isWorking =
     lastTimekeeping &&
-    DateTimeUtils.isToday(lastTimekeeping.time * 1000) &&
+    DateTime.isToday(lastTimekeeping.time * 1000) &&
     lastTimekeeping.type === HrmTimekeepingType.CHECK_IN;
   const isForgotCheckOut =
     lastTimekeeping &&
-    !DateTimeUtils.isToday(lastTimekeeping.time * 1000) &&
+    !DateTime.isToday(lastTimekeeping.time * 1000) &&
     lastTimekeeping.type !== HrmTimekeepingType.CHECK_OUT;
 
   const isEmpty = timekeepings.count === 0 && !timekeepings.isFetching && !timekeepings.error;
@@ -157,9 +157,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                     <Text fw={700}>{t("hrm_timekeepings_working_time")}:</Text>
                     <Text>{num(calculated.totalWorkingTime, { type: "hours" })}</Text>
                     {calculated.totalWorkingTime > 0 && (
-                      <Badge color="green">
-                        {DateTimeUtils.toHHMM(calculated.totalWorkingTime)}
-                      </Badge>
+                      <Badge color="green">{DateTime.toHHMM(calculated.totalWorkingTime)}</Badge>
                     )}
                   </Group>
 
@@ -168,7 +166,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                       <Text fw={700}>{t("hrm_timekeepings_overtime")}:</Text>
                       <Text>{num(calculated.overTime, { type: "hours" })}</Text>
                       {calculated.overTime > 0 && (
-                        <Badge color="green">{DateTimeUtils.toHHMM(calculated.overTime)}</Badge>
+                        <Badge color="green">{DateTime.toHHMM(calculated.overTime)}</Badge>
                       )}
                     </Group>
                   )}
@@ -178,7 +176,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                       <Text fw={700}>{t("hrm_timekeepings_late")}:</Text>
                       <Text>{num(calculated.lateTime, { type: "hours" })}</Text>
                       {calculated.lateTime > 0 && (
-                        <Badge color="red">{DateTimeUtils.toHHMM(calculated.lateTime)}</Badge>
+                        <Badge color="red">{DateTime.toHHMM(calculated.lateTime)}</Badge>
                       )}
                     </Group>
                   )}

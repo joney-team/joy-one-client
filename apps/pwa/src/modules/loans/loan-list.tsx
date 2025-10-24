@@ -23,7 +23,7 @@ import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { ReportsContext, useReports } from "@/modules/reports/reports-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { round } from "@/utils/number.utils";
 import { Anchor, Badge, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
 import {
@@ -56,7 +56,7 @@ interface LoanListProps {
 
 export const LoanList: FC<LoanListProps> = (props) => {
   const workspace = useWorkspace();
-  const now = DateTimeUtils.timeToSeconds(DateTimeUtils.getStartEndOfDay(new Date()).end);
+  const now = DateTime.timeToSeconds(DateTime.getStartEndOfDay(new Date()).end);
   const color = useColor();
   const location = useLocations();
 

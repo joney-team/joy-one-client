@@ -14,7 +14,7 @@ import { t } from "@/modules/lang/lang-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import {
   ActionIcon,
   Card,
@@ -85,7 +85,7 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
         }}
         renderDay={(date) => {
           const groupByUsers = [...timekeepings]
-            .filter((v) => DateTimeUtils.isMatchDay(date, new Date(v.time * 1000)))
+            .filter((v) => DateTime.isMatchDay(date, new Date(v.time * 1000)))
             .sort((a, b) => a.time - b.time)
             .reduce((out, item) => {
               const isExisted = out.find((v) => v.userId === item.userId);
@@ -121,7 +121,7 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
                     {
                       ...v.timekeepings[v.timekeepings.length - 1],
                       type: HrmTimekeepingType.CHECK_OUT,
-                      time: DateTimeUtils.timeToSeconds(),
+                      time: DateTime.timeToSeconds(),
                     },
                   ],
                   workSlots: workspace.settings.wSlots,
@@ -129,11 +129,11 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
                   workTimeType: userInfo.workingTimeType,
                 });
 
-                const isToday = DateTimeUtils.isToday(date);
+                const isToday = DateTime.isToday(date);
                 const isWorking =
                   isToday &&
                   v.timekeepings[v.timekeepings.length - 1].type === HrmTimekeepingType.CHECK_IN;
-                const range = DateTimeUtils.getStartEndOfDay(date);
+                const range = DateTime.getStartEndOfDay(date);
                 const isPendingApproval = v.timekeepings.some(
                   (v) => v.status === HrmTimekeepingStatus.PENDING
                 );
@@ -175,8 +175,8 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
                       OnModalListTimekeepings({
                         query: {
                           userId: v.userId,
-                          fromTime: DateTimeUtils.timeToSeconds(range.start),
-                          toTime: DateTimeUtils.timeToSeconds(range.end),
+                          fromTime: DateTime.timeToSeconds(range.start),
+                          toTime: DateTime.timeToSeconds(range.end),
                         },
                         captured: true,
                       })
@@ -190,7 +190,7 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
                       )}
                       <Stack gap={0}>
                         <Text c={isWorking ? "orange" : "dark"} ta="center" fz={em(10)} fw={700}>
-                          {DateTimeUtils.toHHMM(
+                          {DateTime.toHHMM(
                             isWorking ? nowCalculate.totalWorkingTime : calculated.totalWorkingTime
                           )}
                         </Text>

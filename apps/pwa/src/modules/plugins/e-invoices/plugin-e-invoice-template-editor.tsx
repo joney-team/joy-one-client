@@ -1,11 +1,13 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
+import { FormulaInput } from "@/components/inputs/formual-input/formula-input";
 import { t } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import {
   ActionIcon,
   Card,
   Group,
-  NumberInput,
   SegmentedControl,
   Select,
   Stack,
@@ -13,7 +15,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
-import { FC, Fragment } from "react";
+import { FC } from "react";
 import { v4 as uuidv4 } from "uuid";
 import {
   PluginEInvoiceTemplate,
@@ -25,13 +27,15 @@ import {
 const getInitField = (): PluginEInvoiceTemplateField => ({
   id: uuidv4(),
   type: "input",
+  fieldName: "",
+  value: "",
 });
 
 const TemplateField: FC<{
   templateType: PluginEInvoiceTemplateType;
   index: number;
-  field: Partial<PluginEInvoiceTemplateField>;
-  onChange: (field: Partial<PluginEInvoiceTemplateField>) => void;
+  field: PluginEInvoiceTemplateField;
+  onChange: (field: PluginEInvoiceTemplateField) => void;
   variables: PluginEInvoiceTemplateVariables | null;
   onRemove: () => void;
 }> = (props) => {
@@ -39,7 +43,9 @@ const TemplateField: FC<{
   const fieldType = props.field.type ?? "variable";
   const fieldVariableName = props.field.variable ?? "";
 
-  const availableVariables = Object.entries(props.variables ?? {}).reduce((acc, [key, value]) => {
+  const availableVariables = Object.entries(
+    props.variables ?? {}
+  ).reduce<PluginEInvoiceTemplateVariables>((acc, [key, value]) => {
     if (value.templateTypes && !value.templateTypes?.includes(props.templateType)) {
       return acc;
     }
@@ -52,7 +58,7 @@ const TemplateField: FC<{
       ...acc,
       [key]: value,
     };
-  }, {} as PluginEInvoiceTemplateVariables);
+  }, {});
 
   const fieldVariable = availableVariables[fieldVariableName];
   const children = props.field.children ?? [];
@@ -72,7 +78,7 @@ const TemplateField: FC<{
   };
 
   return (
-    <Card shadow="none" withBorder p={10}>
+    <Card shadow="none" withBorder p={10} style={{ overflow: "visible" }}>
       <Group wrap="nowrap">
         <Stack flex={1} gap={10}>
           <Group wrap="nowrap" flex={1} gap={10}>
@@ -112,7 +118,7 @@ const TemplateField: FC<{
               }}
             />
 
-            {fieldType === "variable" && (
+            {fieldType === "variable" ? (
               <Select
                 flex={1}
                 placeholder={t("variable")}
@@ -125,50 +131,19 @@ const TemplateField: FC<{
                   props.onChange({ ...props.field, variable: value });
                 }}
               />
-            )}
-
-            {fieldType === "input" && (
-              <Fragment>
-                <SegmentedControl
-                  data={[
-                    {
-                      value: "text",
-                      label: t("text"),
-                    },
-                    {
-                      value: "number",
-                      label: t("number"),
-                    },
-                  ]}
-                  value={props.field.inputType ?? "text"}
-                  onChange={(value) => {
-                    props.onChange({
-                      ...props.field,
-                      inputType: value as PluginEInvoiceTemplateField["inputType"],
-                    });
-                  }}
-                />
-
-                {props.field.inputType === "number" ? (
-                  <NumberInput
-                    flex={1}
-                    placeholder={t("value")}
-                    value={props.field.value ?? ""}
-                    onChange={(e) => {
-                      props.onChange({ ...props.field, value: e });
-                    }}
-                  />
-                ) : (
-                  <TextInput
-                    flex={1}
-                    placeholder={t("value")}
-                    value={props.field.value ?? ""}
-                    onChange={(e) => {
-                      props.onChange({ ...props.field, value: e.target.value });
-                    }}
-                  />
-                )}
-              </Fragment>
+            ) : (
+              <FormulaInput
+                key={props.field.id}
+                value={String(props.field.value ?? "")}
+                onChange={(e) => {
+                  props.onChange({ ...props.field, value: e });
+                }}
+                variables={Object.entries(availableVariables).map(([key, value]) => ({
+                  name: key,
+                  description: t(`e_invoice_variable_${key}`),
+                  isNumerical: value.isNumerical,
+                }))}
+              />
             )}
           </Group>
 
@@ -183,7 +158,10 @@ const TemplateField: FC<{
                         index={index}
                         key={props.index.toString() + index.toString()}
                         field={child}
-                        variables={fieldVariable.childVariables as PluginEInvoiceTemplateVariables}
+                        variables={{
+                          ...fieldVariable.childVariables,
+                          ...props.variables,
+                        }}
                         onRemove={() => onChildRemove(child.id)}
                         onChange={(field) => {
                           onChildChange(child.id, field);

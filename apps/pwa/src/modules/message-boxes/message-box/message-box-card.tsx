@@ -17,7 +17,7 @@ import {
 } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
-import { forceDate } from "@/utils/dateTime.utils";
+import { forceDate } from "@/utils/date-time.utils";
 import { String } from "@/utils/string.utils";
 import { useList } from "@/components/list/use-list";
 import { Badge, Card, Group, Image, Indicator, Stack, Text, Tooltip } from "@mantine/core";

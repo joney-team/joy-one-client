@@ -1,10 +1,10 @@
 import { Gender, ResponseList } from "@/types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { api } from "../apis";
 import { CustomerKycDto, CustomerKycEntity, RejectCustomerKycDto } from "./customer-kycs-types";
 
 export async function getCustomerKycs(query?: any) {
-  return api.get<ResponseList<CustomerKycEntity>>('/customer-kycs', { params: query });
+  return api.get<ResponseList<CustomerKycEntity>>("/customer-kycs", { params: query });
 }
 
 export async function getCustomerKyc(customerId: string) {
@@ -25,19 +25,19 @@ export async function rejectCustomerKyc(customerId: string, dto: RejectCustomerK
 
 export const parseCidDate = (d: string) => {
   if (!d) return null;
-  const [date, month, year] = [+d.slice(0, 2), +d.slice(2, 4), +d.slice(4, 8)]
-  return DateTimeUtils.timeToSeconds(new Date(year, month - 1, date))
-}
+  const [date, month, year] = [+d.slice(0, 2), +d.slice(2, 4), +d.slice(4, 8)];
+  return DateTime.timeToSeconds(new Date(year, month - 1, date));
+};
 
 export const decodeCid = (cid: string) => {
   const [cidNumber, _, cidFullName, cidBirthday, cidGender, address, cidCreatedAt] = (
-    cid || ''
-  ).split('|')
+    cid || ""
+  ).split("|");
 
   const genderMatching: { [key: string]: Gender } = {
     Nam: Gender.MALE,
     Nữ: Gender.FEMALE,
-  }
+  };
 
   return {
     cidNumber,
@@ -46,5 +46,5 @@ export const decodeCid = (cid: string) => {
     cidGender: genderMatching[cidGender] || Gender.OTHER,
     address,
     cidCreatedAt: parseCidDate(cidCreatedAt),
-  }
-}
+  };
+};

@@ -51,7 +51,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
@@ -81,7 +81,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
   const bank = banks.find((v) => workspace.settings.bankAccount?.bankId === v.id);
   const bankAccount = workspace.settings.bankAccount;
   const totalAmount = receipt.amount + (receipt.tipAmount || 0);
-  const isExpired = receipt.expireAt && receipt.expireAt < DateTimeUtils.timeToSeconds();
+  const isExpired = receipt.expireAt && receipt.expireAt < DateTime.timeToSeconds();
 
   const isAbleToPrint =
     !!receipt.relatedOrderId && receipt.type === ReceiptType.INCOME && !receipt.isArchived;

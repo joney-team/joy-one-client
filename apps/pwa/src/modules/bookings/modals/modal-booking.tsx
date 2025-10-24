@@ -37,7 +37,7 @@ import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
 import dayjs from "dayjs";
@@ -82,9 +82,9 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
 
   const fetchRelatedBookings = async () => {
     const bookings = await getBookings({
-      rangeStartTime: `${DateTimeUtils.timeToSeconds(
-        bookingQuery.start
-      )}-${DateTimeUtils.timeToSeconds(bookingQuery.end)}`,
+      rangeStartTime: `${DateTime.timeToSeconds(bookingQuery.start)}-${DateTime.timeToSeconds(
+        bookingQuery.end
+      )}`,
       assigneeUserIds: assigneeUsers.map((v) => v.userId),
     });
 
@@ -120,8 +120,8 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
         customerId: customer._id,
         note,
         assigneeUserIds: assigneeUsers.map((v) => v.userId),
-        startTime: DateTimeUtils.timeToSeconds(creatingData.start),
-        endTime: DateTimeUtils.timeToSeconds(creatingData.end),
+        startTime: DateTime.timeToSeconds(creatingData.start),
+        endTime: DateTime.timeToSeconds(creatingData.end),
         status: BookingStatus.JUST_CREATED,
       };
 

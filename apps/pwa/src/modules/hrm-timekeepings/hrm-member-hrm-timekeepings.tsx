@@ -15,7 +15,7 @@ import {
   HrmTimekeepingEntity,
   HrmTimekeepingStatus,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { useList } from "@/components/list/use-list";
 import { ActionIcon, Card, Group, SimpleGrid, Skeleton, Stack, Text, em } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight, IconClipboardList } from "@tabler/icons-react";
@@ -28,10 +28,10 @@ export const HrmMemberTimekeepings: FC = () => {
     let _query = { ...query };
 
     const date = _query.date ? new Date(+_query.date * 1000) : new Date();
-    const range = DateTimeUtils.getStartEndOfMonth(date);
+    const range = DateTime.getStartEndOfMonth(date);
 
-    const fromTime = DateTimeUtils.timeToSeconds(range.start);
-    const toTime = DateTimeUtils.timeToSeconds(range.end);
+    const fromTime = DateTime.timeToSeconds(range.start);
+    const toTime = DateTime.timeToSeconds(range.end);
 
     return {
       fromTime,

@@ -16,7 +16,7 @@ import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-membe
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { ObjectUtils } from "@/utils/object.utils";
 import { useList } from "@/components/list/use-list";
 import { Group, Loader, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
@@ -57,10 +57,10 @@ export const ReportWidgets: FC = () => {
         : targetPeriod;
 
     const date = _query.date ? new Date(+_query.date * 1000) : new Date();
-    const range = DateTimeUtils.getRange(date, targetPeriod);
+    const range = DateTime.getRange(date, targetPeriod);
 
-    let fromTime = DateTimeUtils.timeToSeconds(range.start);
-    let toTime = DateTimeUtils.timeToSeconds(range.end > Date.now() ? Date.now() : range.end);
+    let fromTime = DateTime.timeToSeconds(range.start);
+    let toTime = DateTime.timeToSeconds(range.end > Date.now() ? Date.now() : range.end);
 
     if (prev) {
       const distance = toTime - fromTime;
@@ -177,14 +177,14 @@ export const ReportWidgets: FC = () => {
               onSelected:
                 period === Period.DATE
                   ? (date) => {
-                      report.setParams({ date: DateTimeUtils.timeToSeconds(date) });
+                      report.setParams({ date: DateTime.timeToSeconds(date) });
                     }
                   : undefined,
               onRangeSelected:
                 period !== Period.DATE
                   ? (range) => {
                       if (range) {
-                        report.setParams({ date: DateTimeUtils.timeToSeconds(range[0]) });
+                        report.setParams({ date: DateTime.timeToSeconds(range[0]) });
                       }
                     }
                   : undefined,

@@ -20,7 +20,7 @@ import {
   useWorkDaySlots,
 } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onFormError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
 import {
@@ -97,8 +97,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         note: values.note,
         customerId: values.customer?._id,
         assigneeUserIds: values.assigneeUsers?.map((v) => v.userId) ?? [],
-        startTime: DateTimeUtils.timeToSeconds(values.startTime),
-        endTime: DateTimeUtils.timeToSeconds(values.endTime),
+        startTime: DateTime.timeToSeconds(values.startTime),
+        endTime: DateTime.timeToSeconds(values.endTime),
         status: BookingStatus.JUST_CREATED,
       };
 

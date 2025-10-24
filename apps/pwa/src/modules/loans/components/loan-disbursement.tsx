@@ -19,7 +19,7 @@ import { ReceiptPaymentMethod, ReceiptType } from "@/modules/receipts/receipts-t
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
@@ -60,7 +60,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [isCustomFulfilledAt, setIsCustomFulfilledAt] = useState(false);
-  const [fulfilledAt, setFulfilledAt] = useState<number | null>(DateTimeUtils.timeToSeconds());
+  const [fulfilledAt, setFulfilledAt] = useState<number | null>(DateTime.timeToSeconds());
 
   const disbursementReceiptResponse = useFetch({
     fetch: () =>
@@ -262,7 +262,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                     <DateTimePicker
                       label={t("fulfilledAt")}
                       value={fulfilledAt ? new Date(fulfilledAt * 1000) : null}
-                      onChange={(d) => setFulfilledAt(DateTimeUtils.timeToSeconds(d))}
+                      onChange={(d) => setFulfilledAt(DateTime.timeToSeconds(d))}
                     />
                   )}
                 </Stack>

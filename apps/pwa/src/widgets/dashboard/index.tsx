@@ -10,7 +10,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { Period } from "@/types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Stack } from "@mantine/core";
 import dayjs from "dayjs";
@@ -57,13 +57,13 @@ export const DashboardWidgets: FC = () => {
         const rangeResults = await Promise.all([
           exportPeriodReport({
             period: Period.DATE,
-            fromTime: DateTimeUtils.timeToSeconds(ranges.current.start),
-            toTime: DateTimeUtils.timeToSeconds(ranges.current.end),
+            fromTime: DateTime.timeToSeconds(ranges.current.start),
+            toTime: DateTime.timeToSeconds(ranges.current.end),
           }),
           exportPeriodReport({
             period: Period.DATE,
-            fromTime: DateTimeUtils.timeToSeconds(ranges.prev.start),
-            toTime: DateTimeUtils.timeToSeconds(ranges.prev.end),
+            fromTime: DateTime.timeToSeconds(ranges.prev.start),
+            toTime: DateTime.timeToSeconds(ranges.prev.end),
           }),
         ]);
 

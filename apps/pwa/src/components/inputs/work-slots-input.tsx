@@ -10,7 +10,7 @@ import {
   useWorkDaySlots,
 } from "@/modules/workspace-settings/workspace-settings-service";
 import { CalendarView } from "@/types";
-import { parseToTime } from "@/utils/dateTime.utils";
+import { parseToTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { classNames } from "@/utils/ui.utils";
 import { ActionIcon, Card, Group, Stack, Text } from "@mantine/core";

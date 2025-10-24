@@ -13,7 +13,7 @@ import {
   LoanAssetEstimationModel,
   LoanAssetType,
 } from "@/modules/loans/loans-types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import {
   ActionIcon,
   Group,
@@ -358,7 +358,7 @@ export const ModalLoanAssetEstimationForm: FC = () => {
               if (!date) return null;
               form.setFieldValue(
                 "productManufacturingDate",
-                DateTimeUtils.timeToSeconds(new Date(new Date(date).getFullYear(), 0, 1))
+                DateTime.timeToSeconds(new Date(new Date(date).getFullYear(), 0, 1))
               );
             }}
             valueFormat="YYYY"

@@ -3,7 +3,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { getDateFormat, num, t } from "@/modules/lang/lang-service";
 import { partialPaymentReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { round } from "@/utils/number.utils";
 import { Center, NumberInput, Slider, Stack, Text } from "@mantine/core";
@@ -83,11 +83,11 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
           valueFormat={getDateFormat()}
           {...form.getInputProps("nextExpireAt")}
           minDate={new Date()}
-          value={DateTimeUtils.secondsToTime(form.values.nextExpireAt)}
+          value={DateTime.secondsToTime(form.values.nextExpireAt)}
           onChange={(date) => {
             if (!date) return;
             const _date = dayjs(date).endOf("day");
-            form.setFieldValue("nextExpireAt", DateTimeUtils.timeToSeconds(_date));
+            form.setFieldValue("nextExpireAt", DateTime.timeToSeconds(_date));
           }}
         />
       )}

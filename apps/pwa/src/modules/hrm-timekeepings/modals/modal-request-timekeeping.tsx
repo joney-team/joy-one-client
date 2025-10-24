@@ -6,7 +6,7 @@ import { onSuccess } from "@/utils/actions";
 import { requestTimekeeping } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { getDateFormat, t } from "@/modules/lang/lang-service";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { Anchor, Center, SimpleGrid, Stack, Text, Textarea, em } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
@@ -45,13 +45,19 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
 
     if (values.checkInAt && values.checkInAt.split(":").length === 2) {
       checkInAt = new Date(
-        new Date(values.date!).setHours(+values.checkInAt.split(":")[0], +values.checkInAt.split(":")[1])
+        new Date(values.date!).setHours(
+          +values.checkInAt.split(":")[0],
+          +values.checkInAt.split(":")[1]
+        )
       );
     }
 
     if (values.checkOutAt && values.checkOutAt.split(":").length === 2) {
       checkOutAt = new Date(
-        new Date(values.date!).setHours(+values.checkOutAt.split(":")[0], +values.checkOutAt.split(":")[1])
+        new Date(values.date!).setHours(
+          +values.checkOutAt.split(":")[0],
+          +values.checkOutAt.split(":")[1]
+        )
       );
     }
 
@@ -70,7 +76,7 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
     try {
       if (checkInAt) {
         await requestTimekeeping({
-          time: DateTimeUtils.timeToSeconds(checkInAt),
+          time: DateTime.timeToSeconds(checkInAt),
           note: values.note!,
           type: HrmTimekeepingType.CHECK_IN,
         });
@@ -78,7 +84,7 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
 
       if (checkOutAt) {
         await requestTimekeeping({
-          time: DateTimeUtils.timeToSeconds(checkOutAt),
+          time: DateTime.timeToSeconds(checkOutAt),
           note: values.note!,
           type: HrmTimekeepingType.CHECK_OUT,
         });
@@ -106,12 +112,22 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
         {t("hrm_timekeepings_request")}
       </Text>
 
-      <DatePickerInput label={t("date")} valueFormat={getDateFormat()} {...requestForm.getInputProps("date")} />
+      <DatePickerInput
+        label={t("date")}
+        valueFormat={getDateFormat()}
+        {...requestForm.getInputProps("date")}
+      />
 
       <SimpleGrid cols={2}>
-        <TimeInput label={t("hrm_timekeepings_check_in_at")} {...requestForm.getInputProps("checkInAt")} />
+        <TimeInput
+          label={t("hrm_timekeepings_check_in_at")}
+          {...requestForm.getInputProps("checkInAt")}
+        />
 
-        <TimeInput label={t("hrm_timekeepings_check_out_at")} {...requestForm.getInputProps("checkOutAt")} />
+        <TimeInput
+          label={t("hrm_timekeepings_check_out_at")}
+          {...requestForm.getInputProps("checkOutAt")}
+        />
       </SimpleGrid>
 
       <Text c="gray" fz={em(12)}>
@@ -130,7 +146,13 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
       />
 
       <Center mt={10}>
-        <Button type="submit" rightSection={<IconCheck size={18} />} onClick={onRequest} loading={isSubmitting} action>
+        <Button
+          type="submit"
+          rightSection={<IconCheck size={18} />}
+          onClick={onRequest}
+          loading={isSubmitting}
+          action
+        >
           {t("confirm")}
         </Button>
       </Center>

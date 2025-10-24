@@ -8,7 +8,7 @@ import { currencies } from "@/configs/currency.config";
 import { getDateFormat, num, t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import {
@@ -162,7 +162,7 @@ export const ModalInput: FC = () => {
                       const date = dayjs(form.values.value * 1000)
                         .hour(+hours)
                         .minute(+mins);
-                      form.setFieldValue("value", DateTimeUtils.timeToSeconds(date.toDate()));
+                      form.setFieldValue("value", DateTime.timeToSeconds(date.toDate()));
                     }}
                   />
                 </Group>

@@ -14,7 +14,7 @@ import {
   receiptTypeIcons,
 } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptType } from "@/modules/receipts/receipts-types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
 import { Card, Center, Group, InputWrapper, NumberInput, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";

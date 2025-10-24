@@ -17,7 +17,7 @@ import { DefaultTaskStatusId, TaskEntity, TaskTimeTracking } from "@/modules/tas
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { objSelect } from "@/utils/object.utils";
 import { String } from "@/utils/string.utils";
 import { useList } from "@/components/list/use-list";
@@ -47,10 +47,10 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
     let _query = { ...query };
 
     const date = _query.date ? new Date(+_query.date * 1000) : new Date();
-    const range = DateTimeUtils.getStartEndOfMonth(date);
+    const range = DateTime.getStartEndOfMonth(date);
 
-    const fromDate = DateTimeUtils.timeToSeconds(range.start);
-    const toDate = DateTimeUtils.timeToSeconds(range.end);
+    const fromDate = DateTime.timeToSeconds(range.start);
+    const toDate = DateTime.timeToSeconds(range.end);
 
     return {
       ..._query,
@@ -227,7 +227,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                   tasks.removeParams(["date"]);
                 } else {
                   tasks.setParams({
-                    date: DateTimeUtils.timeToSeconds(range.start) + 60 * 60 * 24,
+                    date: DateTime.timeToSeconds(range.start) + 60 * 60 * 24,
                   });
                 }
               }}
@@ -245,9 +245,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                         variant="subtle"
                         radius={100}
                         color="gray"
-                        onClick={() =>
-                          OnModalCreateTask({ dueDate: DateTimeUtils.timeToSeconds(date) })
-                        }
+                        onClick={() => OnModalCreateTask({ dueDate: DateTime.timeToSeconds(date) })}
                         opacity={hovered || layout.view !== "desktop" ? 1 : 0}
                       >
                         <IconCirclePlus size={18} strokeWidth={1.5} />
@@ -322,7 +320,7 @@ const TaskRow: FC<{
 }> = ({ task, date, type }) => {
   const color = useColor();
 
-  const now = DateTimeUtils.timeToSeconds();
+  const now = DateTime.timeToSeconds();
   const workspace = useWorkspace();
   const hover = useHover();
   const forceUpdate = useForceUpdate();
@@ -396,13 +394,13 @@ const TaskRow: FC<{
                   <Avatar user={user} size={16} hideOnlineStatus />
                   <Renderer visible={!!!isHasInProgressTimeTracking}>
                     <Text fz={12} fw={500}>
-                      {DateTimeUtils.toHHMM(totalTime)}
+                      {DateTime.toHHMM(totalTime)}
                     </Text>
                   </Renderer>
 
                   <Renderer visible={!!isHasInProgressTimeTracking}>
                     <Text fz={12} c="orange" fw={500}>
-                      {DateTimeUtils.toHHMMSS(totalTime)}
+                      {DateTime.toHHMMSS(totalTime)}
                     </Text>
                   </Renderer>
                 </Group>

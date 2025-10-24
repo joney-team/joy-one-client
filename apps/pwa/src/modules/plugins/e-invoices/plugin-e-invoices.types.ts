@@ -10,17 +10,17 @@ export enum PluginEInvoiceTemplateType {
   ORDER_INCOME_RECEIPT = "ORDER_INCOME_RECEIPT",
 }
 
-export type PluginEInvoiceTemplateField = { id: string } & Partial<{
+export type PluginEInvoiceTemplateField = {
+  id: string;
   type: "input" | "variable";
-  inputType?: "text" | "number";
-  value: string | number | null;
+  value: string | null;
   fieldName: string | null;
-  variable: string | null;
-  children: Omit<PluginEInvoiceTemplateField, "children">[];
-}>;
+  variable?: string | null;
+  children?: Omit<PluginEInvoiceTemplateField, "children">[];
+};
 
 export interface PluginEInvoiceTemplate {
-  fields: Partial<PluginEInvoiceTemplateField>[];
+  fields: PluginEInvoiceTemplateField[];
 }
 
 export type PluginEInvoiceTemplates = Partial<
@@ -51,6 +51,7 @@ export interface PluginEInvoicesProviderDto {
 export interface PluginEInvoiceTemplateVariable {
   name?: string;
   description?: string;
+  isNumerical?: true;
   childVariables?: Record<string, PluginEInvoiceTemplateVariable>;
   templateTypes?: PluginEInvoiceTemplateType[];
   workspaceTypes?: WorkspaceType[];

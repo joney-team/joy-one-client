@@ -4,7 +4,7 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { getTasks, syncTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { useList } from "@/components/list/use-list";
 import { useForceUpdate, useThrottledCallback } from "@mantine/hooks";
 import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
@@ -122,7 +122,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
       return acc;
     }, undefined as TaskEntity | undefined);
 
-    if (lastedTask && lastedTask.dueDate && lastedTask.dueDate > DateTimeUtils.timeToSeconds(now)) {
+    if (lastedTask && lastedTask.dueDate && lastedTask.dueDate > DateTime.timeToSeconds(now)) {
       toDate = lastedTask.dueDate * 1000 + oneDate * ganttConfig.rangeDates;
     }
 
@@ -132,7 +132,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
       return acc;
     }, {} as TaskEntity | undefined);
 
-    if (oldedTask && oldedTask.dueDate && oldedTask.dueDate < DateTimeUtils.timeToSeconds(now)) {
+    if (oldedTask && oldedTask.dueDate && oldedTask.dueDate < DateTime.timeToSeconds(now)) {
       fromDate = oldedTask.dueDate * 1000 - oneDate * ganttConfig.rangeDates;
     }
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { ColorSchemes } from "@/components/color-schemes";
 import { useRouter } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
 import { UserRole } from "@/modules/users/users-types";
@@ -76,9 +77,13 @@ export const LayoutAdmin: FC<PropsWithChildren> = (props) => {
             <Title fz={15}>Joy One Admin</Title>
           </Group>
 
-          <ActionIcon variant="subtle" color="gray.6" onClick={auth.signOut}>
-            <IconLogout size={18} strokeWidth={1.5} />
-          </ActionIcon>
+          <Group>
+            <ColorSchemes />
+
+            <ActionIcon variant="subtle" color="gray.6" onClick={auth.signOut}>
+              <IconLogout size={18} strokeWidth={1.5} />
+            </ActionIcon>
+          </Group>
         </Group>
       </AppShell.Header>
 
@@ -102,7 +107,7 @@ export const LayoutAdmin: FC<PropsWithChildren> = (props) => {
         </Stack>
       </AppShell.Navbar>
 
-      <AppShell.Main bg="gray.0">{props.children}</AppShell.Main>
+      <AppShell.Main>{props.children}</AppShell.Main>
     </AppShell>
   );
 };

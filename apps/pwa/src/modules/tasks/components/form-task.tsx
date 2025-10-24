@@ -34,7 +34,7 @@ import { DefaultTaskStatusId, TaskEntity, TaskTimeTracking } from "@/modules/tas
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { AppEntity } from "@/types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { useList } from "@/components/list/use-list";
 import {
@@ -184,7 +184,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
   const isOutdated =
     form.values.dueDate &&
-    form.values.dueDate < DateTimeUtils.timeToSeconds() &&
+    form.values.dueDate < DateTime.timeToSeconds() &&
     props.task &&
     props.task.status !== DefaultTaskStatusId.CLOSED;
 
@@ -429,7 +429,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                       {(function () {
                         if (form.values.dueDate && form.values.startDate) {
                           if (
-                            DateTimeUtils.isMatchDay(
+                            DateTime.isMatchDay(
                               form.values.dueDate * 1000,
                               form.values.startDate * 1000
                             )

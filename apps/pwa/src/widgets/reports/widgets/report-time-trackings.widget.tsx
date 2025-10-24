@@ -12,7 +12,7 @@ import { TagType } from "@/modules/tags/tags-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { String } from "@/utils/string.utils";
 import { useList } from "@/components/list/use-list";
 import { WidgetProps } from "@/widgets/types";
@@ -110,7 +110,7 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
 
             <Table.Tbody>
               {users.map((user) => {
-                const now = DateTimeUtils.timeToSeconds();
+                const now = DateTime.timeToSeconds();
                 const relatedTasks = tasks.data.filter((t) =>
                   t.relatedUserIds?.some((u) => u === user.userId)
                 );
@@ -152,7 +152,7 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
                         : "--"}
                     </Table.Td>
                     <Table.Td>
-                      {totalTimeTrackings > 0 ? DateTimeUtils.toHHMM(totalTimeTrackings) : "--"}
+                      {totalTimeTrackings > 0 ? DateTime.toHHMM(totalTimeTrackings) : "--"}
                     </Table.Td>
                   </Table.Tr>
                 );

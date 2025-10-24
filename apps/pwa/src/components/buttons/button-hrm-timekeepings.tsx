@@ -3,7 +3,7 @@ import { EventType } from "@/modules/events/event-types";
 import { getPreviousTimeKeeping } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Group, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
@@ -52,7 +52,7 @@ export const ButtonHrmTimeKeeping: FC = () => {
   }
 
   const workTime = previousTimekeeping.data
-    ? DateTimeUtils.countdown(Date.now(), previousTimekeeping.data.time * 1000)
+    ? DateTime.countdown(Date.now(), previousTimekeeping.data.time * 1000)
     : undefined;
 
   return (

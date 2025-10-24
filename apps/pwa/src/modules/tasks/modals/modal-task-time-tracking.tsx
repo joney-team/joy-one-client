@@ -14,11 +14,11 @@ import { WorkspaceMemberInput } from "@/modules/workspace-members/components/wor
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import {
-  DateTimeUtils,
+  DateTime,
   findNearestTimeSlot,
   setHoursMinutes,
   timeInputValue,
-} from "@/utils/dateTime.utils";
+} from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import {
@@ -126,8 +126,8 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
             id: uuId(),
             userId: user.userId,
             user,
-            startAt: DateTimeUtils.timeToSeconds(startAt),
-            endAt: DateTimeUtils.timeToSeconds(endAt),
+            startAt: DateTime.timeToSeconds(startAt),
+            endAt: DateTime.timeToSeconds(endAt),
             billable,
           },
         ],
@@ -208,9 +208,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
                             <Group gap={3} ml={-3}>
                               <IconStopwatch size={16} strokeWidth={1.5} />
                               <Text fz={13} fw={500}>
-                                {DateTimeUtils.toHHMM(
-                                  (slot.endAt * 1000 - slot.startAt * 1000) / 1000
-                                )}
+                                {DateTime.toHHMM((slot.endAt * 1000 - slot.startAt * 1000) / 1000)}
                               </Text>
                             </Group>
                           ),
@@ -220,8 +218,8 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
                 }
                 onSelectSlot={(slot) => {
                   setSlot({
-                    startAt: DateTimeUtils.timeToSeconds(slot.start),
-                    endAt: DateTimeUtils.timeToSeconds(slot.end),
+                    startAt: DateTime.timeToSeconds(slot.start),
+                    endAt: DateTime.timeToSeconds(slot.end),
                   });
                 }}
                 formats={{
@@ -229,7 +227,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
                     return calendarDayJsLocalizer.format(date, "HH:mm", culture);
                   },
                   selectRangeFormat: ({ start, end }) => {
-                    return DateTimeUtils.toHHMM((end.getTime() - start.getTime()) / 1000);
+                    return DateTime.toHHMM((end.getTime() - start.getTime()) / 1000);
                   },
                   eventTimeRangeFormat: ({ start, end }) => {
                     return `${calendarDayJsLocalizer.format(

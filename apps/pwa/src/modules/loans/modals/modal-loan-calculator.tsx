@@ -12,7 +12,7 @@ import {
 } from "@/modules/loans/loans-service";
 import { LoanAssetType, LoanPaymentPlanResult } from "@/modules/loans/loans-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { String } from "@/utils/string.utils";
 import {
   Anchor,
@@ -49,7 +49,7 @@ export const ModalLoanCalculator: FC = () => {
   const [assetType, setAssetType] = useState<any>(LoanAssetType.MOTOBIKE_REGISTRATION);
   const [_packageDays, setPackageDays] = useState<any>(180);
   const [_packagePeriodDays, setPackagePeriodDays] = useState<any>(30);
-  const [startTime, setStartTime] = useState(DateTimeUtils.timeToSeconds());
+  const [startTime, setStartTime] = useState(DateTime.timeToSeconds());
 
   OnModalLoanCalculator = () => {
     open();
@@ -150,7 +150,7 @@ export const ModalLoanCalculator: FC = () => {
             flex={1}
             label={t("fulfilledAt")}
             value={startTime ? new Date(startTime * 1000) : null}
-            onChange={(d) => setStartTime(DateTimeUtils.timeToSeconds(d))}
+            onChange={(d) => setStartTime(DateTime.timeToSeconds(d))}
           />
         </Group>
 

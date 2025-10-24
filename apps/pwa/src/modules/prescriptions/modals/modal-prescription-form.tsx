@@ -23,7 +23,7 @@ import { ProductType } from "@/modules/products/products-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { onArchive } from "@/utils/actions";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import {
   ActionIcon,
@@ -292,7 +292,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
             ...form.values,
             items,
             _id: props.prescription?._id || "",
-            createdAt: DateTimeUtils.timeToSeconds(),
+            createdAt: DateTime.timeToSeconds(),
             workspaceId: workspace.userMember.workspaceId,
           }}
         />

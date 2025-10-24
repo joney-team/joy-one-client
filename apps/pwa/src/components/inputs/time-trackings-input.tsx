@@ -5,12 +5,7 @@ import { getDateFormat, t } from "@/modules/lang/lang-service";
 import { TaskTimeTracking } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import {
-  DateTimeUtils,
-  parseTimeInput,
-  setHoursMinutes,
-  timeInputValue,
-} from "@/utils/dateTime.utils";
+import { DateTime, parseTimeInput, setHoursMinutes, timeInputValue } from "@/utils/date-time.utils";
 import { String } from "@/utils/string.utils";
 import {
   ActionIcon,
@@ -100,7 +95,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
       id: uuid(),
       user: t?.user || workspace.userMember,
       userId: t?.userId || workspace.userMember.userId,
-      startAt: DateTimeUtils.timeToSeconds(),
+      startAt: DateTime.timeToSeconds(),
     };
 
     onChange?.([...(value || []), tracking]);
@@ -110,7 +105,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
     const tracking = timeTrackings.find((v) => !!!v.endAt);
     if (!tracking) return;
 
-    const now = DateTimeUtils.timeToSeconds();
+    const now = DateTime.timeToSeconds();
     const seconds = now - tracking.startAt;
     const minSeconds = 60;
 
@@ -132,7 +127,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
       <Group gap={8} flex={props.flex} onClick={open} style={{ cursor: "pointer" }}>
         <Group>
           <Renderer visible={!!!inProgressTracking}>
-            <Text>{DateTimeUtils.toHHMM(totalTime)}</Text>
+            <Text>{DateTime.toHHMM(totalTime)}</Text>
           </Renderer>
 
           <Renderer visible={!!inProgressTracking}>
@@ -184,7 +179,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
                 {t("total_time")}
               </Text>
               <Text fz={14} fw={700}>
-                {DateTimeUtils.toHHMM(totalTime)}
+                {DateTime.toHHMM(totalTime)}
               </Text>
             </Group>
 
@@ -223,7 +218,7 @@ const InProgressTimeTrackingTimmer: FC<{
   timeTracking: TaskTimeTracking;
 }> = (props) => {
   const forceUpdate = useForceUpdate();
-  const now = DateTimeUtils.timeToSeconds();
+  const now = DateTime.timeToSeconds();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -235,7 +230,7 @@ const InProgressTimeTrackingTimmer: FC<{
     };
   }, []);
 
-  return <Text w={70}>{DateTimeUtils.toHHMMSS(now - props.timeTracking.startAt)}</Text>;
+  return <Text w={70}>{DateTime.toHHMMSS(now - props.timeTracking.startAt)}</Text>;
 };
 
 export const TimeTrackingGroupByUser: FC<{
@@ -262,7 +257,7 @@ export const TimeTrackingGroupByUser: FC<{
           <Text fz={em(13)}>{props.user.name}</Text>
         </Group>
         <Text fz={em(13)} fw={500}>
-          {DateTimeUtils.toHHMM(totalTime)}
+          {DateTime.toHHMM(totalTime)}
         </Text>
       </Group>
 
@@ -277,7 +272,7 @@ export const TimeTrackingGroupByUser: FC<{
                     <Group gap={0}>
                       <Stack gap={3} align="center">
                         <Text fz={14} fw={500}>
-                          {DateTimeUtils.toHHMM(t.endAt! - t.startAt)}
+                          {DateTime.toHHMM(t.endAt! - t.startAt)}
                         </Text>
 
                         <Renderer visible={t.billable}>
@@ -360,8 +355,8 @@ export const TimeTrackingForm: FC<{
       user: workspace.userMember,
       note: "",
       billable: true,
-      startAt: DateTimeUtils.timeToSeconds(),
-      endAt: DateTimeUtils.timeToSeconds() + 60 * 15,
+      startAt: DateTime.timeToSeconds(),
+      endAt: DateTime.timeToSeconds() + 60 * 15,
     },
     onValuesChange: (values) => {
       if (props.timeTracking?.id) {

@@ -4,10 +4,26 @@ import { OnModalCaptureLocationTimekeeping } from "@/modules/hrm-timekeepings/mo
 import { useHrmTimekeeping } from "@/modules/hrm-timekeepings/hooks";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { t } from "@/modules/lang/lang-service";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
-import { ActionIcon, Group, Indicator, Popover, Skeleton, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import { DateTime } from "@/utils/date-time.utils";
+import {
+  ActionIcon,
+  Group,
+  Indicator,
+  Popover,
+  Skeleton,
+  Stack,
+  Text,
+  ThemeIcon,
+  Tooltip,
+} from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
-import { IconAnalyze, IconClockHour12, IconClockRecord, IconLogin, IconLogout } from "@tabler/icons-react";
+import {
+  IconAnalyze,
+  IconClockHour12,
+  IconClockRecord,
+  IconLogin,
+  IconLogout,
+} from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { Button } from "@/components/buttons/button";
 import { TimekeepingsIllustration } from "@/components/illustrations/timekeepings";
@@ -22,12 +38,14 @@ export const HrmTimekeepingButton: FC = () => {
 
   const prevType = timekeeping.prevTimekeeping?.type || HrmTimekeepingType.CHECK_OUT;
   const nextType =
-    prevType === HrmTimekeepingType.CHECK_IN ? HrmTimekeepingType.CHECK_OUT : HrmTimekeepingType.CHECK_IN;
+    prevType === HrmTimekeepingType.CHECK_IN
+      ? HrmTimekeepingType.CHECK_OUT
+      : HrmTimekeepingType.CHECK_IN;
   const nextColor = nextType === HrmTimekeepingType.CHECK_IN ? "primary" : "orange";
 
   const workTime =
     timekeeping.prevTimekeeping && timekeeping.prevTimekeeping.type === HrmTimekeepingType.CHECK_IN
-      ? DateTimeUtils.countdown(Date.now(), timekeeping.prevTimekeeping.time * 1000)
+      ? DateTime.countdown(Date.now(), timekeeping.prevTimekeeping.time * 1000)
       : undefined;
 
   useEffect(() => {
@@ -50,7 +68,9 @@ export const HrmTimekeepingButton: FC = () => {
             label={
               <Text fz={7} fw={900}>
                 {workTime
-                  ? `${workTime.hours.toString().padStart(2, "0")}:${workTime.minutes.toString().padStart(2, "0")}`
+                  ? `${workTime.hours.toString().padStart(2, "0")}:${workTime.minutes
+                      .toString()
+                      .padStart(2, "0")}`
                   : ""}
               </Text>
             }
@@ -130,7 +150,9 @@ export const HrmTimekeepingButton: FC = () => {
                       [HrmTimekeepingType.CHECK_OUT]: "orange.8",
                     }[timekeeping.nextType]
                   )}
-                  leftIcon={timekeeping.nextType === HrmTimekeepingType.CHECK_IN ? IconLogin : IconLogout}
+                  leftIcon={
+                    timekeeping.nextType === HrmTimekeepingType.CHECK_IN ? IconLogin : IconLogout
+                  }
                   onClick={() => {
                     setOpened(false);
                     OnModalCaptureLocationTimekeeping();

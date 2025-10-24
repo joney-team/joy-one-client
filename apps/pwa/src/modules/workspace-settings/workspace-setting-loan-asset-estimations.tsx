@@ -18,7 +18,7 @@ import {
 import { convertExcelToJson } from "@/modules/tools/tools-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
-import { DateTimeUtils } from "@/utils/dateTime.utils";
+import { DateTime } from "@/utils/date-time.utils";
 import { ActionIcon, Card, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { modals } from "@mantine/modals";
@@ -97,7 +97,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
         productImages: [],
         colorId: "",
         productManufacturingDate: rawProductManufacturingYear
-          ? DateTimeUtils.timeToSeconds(new Date(+rawProductManufacturingYear, 0, 1))
+          ? DateTime.timeToSeconds(new Date(+rawProductManufacturingYear, 0, 1))
           : undefined,
         productName: rawProductName,
       };
