@@ -34,7 +34,11 @@ export const PluginEInvoiceProviderList: FC = () => {
   if (data && data.length > 0) {
     return (
       <Container py={20} size={800}>
-        <PluginEInvoiceProviderItem provider={data[0]} onRefetch={() => refetch()} />
+        <PluginEInvoiceProviderItem
+          key={data[0].updatedAt}
+          provider={data[0]}
+          onRefetch={() => refetch()}
+        />
       </Container>
     );
   }

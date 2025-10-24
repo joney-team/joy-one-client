@@ -55,6 +55,7 @@ export interface PluginEInvoiceTemplateVariable {
   childVariables?: Record<string, PluginEInvoiceTemplateVariable>;
   templateTypes?: PluginEInvoiceTemplateType[];
   workspaceTypes?: WorkspaceType[];
+  isSelectable?: boolean;
 }
 
 export interface PluginEInvoiceTemplateVariables {

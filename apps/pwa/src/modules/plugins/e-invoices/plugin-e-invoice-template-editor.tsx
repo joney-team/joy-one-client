@@ -40,27 +40,28 @@ const TemplateField: FC<{
   onRemove: () => void;
 }> = (props) => {
   const workspace = useWorkspace();
-  const fieldType = props.field.type ?? "variable";
-  const fieldVariableName = props.field.variable ?? "";
+  const fieldType = props.field.type;
 
-  const availableVariables = Object.entries(
-    props.variables ?? {}
-  ).reduce<PluginEInvoiceTemplateVariables>((acc, [key, value]) => {
-    if (value.templateTypes && !value.templateTypes?.includes(props.templateType)) {
-      return acc;
-    }
+  const availableVariables = Object.entries(props.variables ?? {}).reduce<{
+    selectable: PluginEInvoiceTemplateVariables;
+    formula: PluginEInvoiceTemplateVariables;
+  }>(
+    (acc, [key, value]) => {
+      if (value.templateTypes && !value.templateTypes?.includes(props.templateType)) {
+        return acc;
+      }
 
-    if (value.workspaceTypes && !value.workspaceTypes?.includes(workspace.type)) {
-      return acc;
-    }
+      if (value.workspaceTypes && !value.workspaceTypes?.includes(workspace.type)) {
+        return acc;
+      }
 
-    return {
-      ...acc,
-      [key]: value,
-    };
-  }, {});
+      if (value.isSelectable) return { ...acc, selectable: { ...acc.selectable, [key]: value } };
+      return { ...acc, formula: { ...acc.formula, [key]: value } };
+    },
+    { selectable: {}, formula: {} }
+  );
 
-  const fieldVariable = availableVariables[fieldVariableName];
+  const selectedVariable = availableVariables["selectable"][props.field.variable ?? ""];
   const children = props.field.children ?? [];
 
   const onChildChange = (id: string, field: Partial<PluginEInvoiceTemplateField>) => {
@@ -104,7 +105,7 @@ const TemplateField: FC<{
                 {
                   value: "variable",
                   label: t("variable"),
-                  disabled: Object.keys(availableVariables).length === 0,
+                  disabled: Object.keys(availableVariables.selectable).length === 0,
                 },
               ]}
               value={fieldType}
@@ -122,7 +123,7 @@ const TemplateField: FC<{
               <Select
                 flex={1}
                 placeholder={t("variable")}
-                data={Object.keys(availableVariables).map((key) => ({
+                data={Object.keys(availableVariables.selectable).map((key) => ({
                   label: t(`e_invoice_variable_${key}`),
                   value: key,
                 }))}
@@ -138,7 +139,7 @@ const TemplateField: FC<{
                 onChange={(e) => {
                   props.onChange({ ...props.field, value: e });
                 }}
-                variables={Object.entries(availableVariables).map(([key, value]) => ({
+                variables={Object.entries(availableVariables.formula).map(([key, value]) => ({
                   name: key,
                   description: t(`e_invoice_variable_${key}`),
                   isNumerical: value.isNumerical,
@@ -147,7 +148,7 @@ const TemplateField: FC<{
             )}
           </Group>
 
-          {fieldVariable && fieldVariable.childVariables && (
+          {selectedVariable && selectedVariable.childVariables && (
             <Stack pl={26}>
               <Card
                 shadow="none"
@@ -165,7 +166,7 @@ const TemplateField: FC<{
                         key={props.index.toString() + index.toString()}
                         field={child}
                         variables={{
-                          ...fieldVariable.childVariables,
+                          ...selectedVariable.childVariables,
                           ...props.variables,
                         }}
                         onRemove={() => onChildRemove(child.id)}
