@@ -1,4 +1,4 @@
-import { tl } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
 
 export const required = (value: any) => {
   let isValid = true;
@@ -15,5 +15,5 @@ export const required = (value: any) => {
     isValid = false;
   }
 
-  if (!isValid) return tl("required");
+  if (!isValid) return t`Must be provided`;
 };

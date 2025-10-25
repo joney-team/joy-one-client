@@ -1,17 +1,19 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { EnumColumn } from "@/components/list/columns/enum-column";
+import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconFileInvoice } from "@tabler/icons-react";
 import { type FC } from "react";
+import { useQuery } from "../apis/use-query";
 import { EventType } from "../events/event-types";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
-import { OnReceiptDetailModal } from "../receipts/modals/modal-receipt-detail";
-import { tl } from "../lang/lang-service";
-import { useQuery } from "../apis/use-query";
 import { PluginEInvoicesProviderInformations } from "../plugins/e-invoices/plugin-e-invoices.types";
-import { EnumColumn } from "@/components/list/columns/enum-column";
+import { OnReceiptDetailModal } from "../receipts/modals/modal-receipt-detail";
 
 export const EInvoiceList: FC = () => {
   const providerConfigs = useQuery<PluginEInvoicesProviderInformations>({
@@ -47,7 +49,7 @@ export const EInvoiceList: FC = () => {
             name: "invoice",
             render: ({ data }) => (
               <Button onClick={() => window.open(data.url, "_blank")}>
-                {tl("view_entity", { entity: tl("invoice") })}
+                <Trans>View E-Invoice</Trans>
               </Button>
             ),
           },

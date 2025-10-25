@@ -1,8 +1,10 @@
-import { tl } from "@/modules/lang/lang-service";
+"use client";
+
 import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity";
 import { updateWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-service";
 import { getUserMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { onActionLoad } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 import { Card, Group, Stack, Switch, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconApiApp, IconId } from "@tabler/icons-react";
 import { FC } from "react";
@@ -62,7 +64,7 @@ export const WorkspaceApiAppCard: FC<WorkspaceApiAppCardProps> = ({ app }) => {
                 <IconAccessible size={14} />
               </ThemeIcon>
               <Text fz={12} c="gray">
-                {tl("role")}: {getUserMemberRoleLabel(app.member)}
+                {t`Role`}: {getUserMemberRoleLabel(app.member)}
               </Text>
             </Group>
           </Stack>

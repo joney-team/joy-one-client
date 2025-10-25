@@ -1,13 +1,15 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Clickable } from "@/components/clickable";
 import { BranchesIllustration } from "@/components/illustrations/branches";
 import { List } from "@/components/list";
 import { EventType } from "@/modules/events/event-types";
-import { tl, tMulti } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { OnWorkspaceBranchModal } from "@/modules/workspace-branches/modals/modal-workspace-branch";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { Trans } from "@lingui/react/macro";
 import { Stack, Text, Title } from "@mantine/core";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -62,10 +64,13 @@ export const WorkspaceBranchList: FC = () => {
                   <BranchesIllustration width={160} />
                   <Stack gap={3}>
                     <Title ta="center" order={4}>
-                      {tl("branches_desc")}
+                      <Trans>Manage the branches of the Workspace</Trans>
                     </Title>
                     <Text ta="center" fz={14} c="gray">
-                      {tl("branches_desc_2")}
+                      <Trans>
+                        The branches are independent and managed by the main office. Timekeeping is
+                        deployed according to the branch
+                      </Trans>
                     </Text>
                   </Stack>
 
@@ -75,7 +80,7 @@ export const WorkspaceBranchList: FC = () => {
                     onClick={() => OnWorkspaceBranchModal()}
                     color={color("primary")}
                   >
-                    {tMulti(["create"], ["branch"])}
+                    <Trans>Create new</Trans>
                   </Button>
                 </Stack>
               )

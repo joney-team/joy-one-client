@@ -1,6 +1,5 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { Box, Group, MantineStyleProp, Text, alpha, em } from "@mantine/core";
 import { useResizeObserver } from "@mantine/hooks";
@@ -214,7 +213,7 @@ const TabItem: FC<{
           fw={600}
           fz={em(12)}
         >
-          {tl(props.tab.name)}
+          {props.tab.name}
         </Text>
       )}
     </Group>

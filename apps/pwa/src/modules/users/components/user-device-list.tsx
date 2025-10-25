@@ -3,14 +3,14 @@
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getUserDevices } from "@/modules/devices/devices-service";
 import { useUserEventsListner } from "@/modules/events/event-service";
-import { tl } from "@/modules/lang/lang-service";
 import { onError } from "@/utils/exceptions.utils";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, SimpleGrid, Skeleton } from "@mantine/core";
 import { IconDevices, IconLogout, IconRefresh } from "@tabler/icons-react";
 import { Fragment } from "react";
@@ -41,7 +41,7 @@ export const UserDeviceList = () => {
 
   return (
     <Fragment>
-      <SessionTitle name={tl("devices")} icon={IconDevices}>
+      <SessionTitle name={t`Devices`} icon={IconDevices}>
         <Renderer visible={devices.count > 1}>
           <Group gap={8}>
             <Button
@@ -53,7 +53,7 @@ export const UserDeviceList = () => {
               leftIcon={IconLogout}
               onClick={onSignOutOtherDevices}
             >
-              {tl("sign_out_another_device")}
+              {t`Sign out another device`}
             </Button>
 
             <ActionIcon

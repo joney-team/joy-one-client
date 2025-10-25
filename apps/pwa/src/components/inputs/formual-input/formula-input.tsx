@@ -1,7 +1,7 @@
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import React, { useState, useRef, useEffect } from "react";
+import { t } from "@lingui/core/macro";
+import React, { useEffect, useRef, useState } from "react";
 
 interface Variable {
   name: string;
@@ -612,9 +612,9 @@ export const FormulaInput: React.FC<FormulaInputProps> = ({ value, onChange, var
           handleInput();
         }}
         className="formula-editor"
-        data-placeholder={tl(
-          isFormulaMode ? "formula_input_placeholder" : "formula_input_text_placeholder"
-        )}
+        data-placeholder={
+          isFormulaMode ? t`Enter formula (e.g., =@revenue - @cost)` : t`Enter text or @variable`
+        }
       />
 
       {showDropdown && filteredVariables.length > 0 && (

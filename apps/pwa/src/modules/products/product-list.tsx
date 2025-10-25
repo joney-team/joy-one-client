@@ -3,19 +3,20 @@
 import { Clickable } from "@/components/clickable";
 import { EntityImage } from "@/components/entity-image";
 import { List } from "@/components/list";
+import { CodeColumn } from "@/components/list/columns/code-column";
 import { EventType } from "@/modules/events/event-types";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { t } from "@lingui/core/macro";
 import { Badge, Stack, Text } from "@mantine/core";
 import { IconBox, IconBuildingWarehouse, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
 import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
 import { getProductIcon } from "./products-service";
-import { CodeColumn } from "@/components/list/columns/code-column";
 
 export const ProductList: FC = () => {
   return (
@@ -61,7 +62,7 @@ export const ProductList: FC = () => {
           categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
           stock: {
             w: 150,
-            name: "product_stocks",
+            name: t`Product stocks`,
             render: ({ data }) => {
               if (!data.isStockCheck) return "-";
               return (
@@ -72,7 +73,7 @@ export const ProductList: FC = () => {
                   variant={data.stock.quantity > 0 ? "light" : "outline"}
                   color={data.stock.quantity <= 0 ? "gray" : undefined}
                 >
-                  {data.stock.quantity <= 0 ? tl("out_of_stock") : num(data.stock.quantity)}
+                  {data.stock.quantity <= 0 ? t`Out of stock` : num(data.stock.quantity)}
                 </Badge>
               );
             },
@@ -101,7 +102,7 @@ export const ProductList: FC = () => {
         events={[EventType.PRODUCT_NEW, EventType.PRODUCT_UPDATE, EventType.PRODUCT_ARCHIVED]}
         actions={[
           {
-            label: "edit",
+            label: t`Edit`,
             icon: IconEdit,
             permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,
             onClick: (data) => OnProductModal({ product: data }),

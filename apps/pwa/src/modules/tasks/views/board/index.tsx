@@ -3,12 +3,12 @@
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { tl } from "@/modules/lang/lang-service";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { Trans } from "@lingui/react/macro";
 import { Card, Group, ScrollArea, Space, Stack } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
@@ -99,7 +99,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                     fz={12}
                     onClick={() => OnTaskSatusesModal()}
                   >
-                    {`${tl("add")} ${tl("status")}`}
+                    <Trans>Add status</Trans>
                   </Button>
                 </Group>
               </Card>

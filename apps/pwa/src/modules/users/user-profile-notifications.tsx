@@ -1,9 +1,9 @@
 "use client";
 
-import { onActionLoad } from "@/utils/actions";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
-import { tl } from "@/modules/lang/lang-service";
+import { onActionLoad } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconBell } from "@tabler/icons-react";
 import { type FC, useEffect } from "react";
@@ -14,7 +14,7 @@ export const UserProfileNotifications: FC = () => {
 
   useEffect(() => {
     layout.setComponents({
-      head: tl("notifications"),
+      head: t`Notifications`,
     });
   }, []);
 

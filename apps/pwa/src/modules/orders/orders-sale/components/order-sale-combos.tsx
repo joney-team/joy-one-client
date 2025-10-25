@@ -4,8 +4,10 @@ import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { ModalTitle } from "@/components/modal-title";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Badge,
   Card,
@@ -41,7 +43,9 @@ export const OrderSaleCombos: FC = () => {
 
   return (
     <Group wrap="nowrap">
-      <Text ta="left">{tl("combos")}</Text>
+      <Text ta="left">
+        <Trans>Combos</Trans>
+      </Text>
 
       <Group flex={1} justify="end">
         {availableCombos.isLoading ? (
@@ -61,7 +65,7 @@ export const OrderSaleCombos: FC = () => {
               fw={400}
               onClick={open}
             >
-              {tl("apply")} {num(orderCombos.length)}/{num(combos.length ?? 0)}
+              <Trans>Apply</Trans> {num(orderCombos.length)}/{num(combos.length ?? 0)}
             </Button>
           </Indicator>
         ) : (
@@ -72,7 +76,7 @@ export const OrderSaleCombos: FC = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle title="combos" icon={IconPackage} />}
+        title={<ModalTitle title={t`Combos`} icon={IconPackage} />}
       >
         <Stack>
           {combos.map((combo) => {
@@ -158,7 +162,7 @@ const ItemCard: FC<{
           </ThemeIcon>
         ) : (
           <Button radius={100} size="xs">
-            {tl("apply")}
+            <Trans>Apply</Trans>
           </Button>
         )}
       </Group>

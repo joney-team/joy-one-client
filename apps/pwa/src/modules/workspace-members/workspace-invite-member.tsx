@@ -4,11 +4,12 @@ import { Button } from "@/components/buttons/button";
 import { MembersIllustration } from "@/components/illustrations/members";
 import { Image } from "@/components/image";
 import { ModalTitle } from "@/components/modal-title";
-import { tl } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { regenerateWorkspaceInviteCode } from "@/modules/workspaces/workspaces-service";
 import config from "@joy-one-client/config";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -37,7 +38,7 @@ export const WorkspaceInviteMember: FC = () => {
         </Center>
 
         <Text ta="center" fz={em(15)}>
-          {tl("member_limit")}
+          <Trans>Member limit</Trans>
         </Text>
 
         {workspace.hasPermission(WorkspacePermission.WORKSPACE_BILLINGS_MANAGER) && (
@@ -49,7 +50,7 @@ export const WorkspaceInviteMember: FC = () => {
               OnModalWorkspaceSubscription();
             }}
           >
-            {tl("upgrade_now")}!
+            <Trans>Upgrade now</Trans>!
           </Button>
         )}
       </Stack>
@@ -68,7 +69,7 @@ const CreateMemberInvitationLink: FC = () => {
       <MembersIllustration width={250} />
 
       <Text fz={em(12)} fw={500} c="dark">
-        {tl("invite_member_link_desc")}
+        <Trans>Copy the link and send it to your teammates!</Trans>
       </Text>
 
       <Card p={10} withBorder shadow="none">
@@ -85,7 +86,7 @@ const CreateMemberInvitationLink: FC = () => {
             )}
           </CopyButton>
 
-          <Tooltip label={tl("regenerate_link")}>
+          <Tooltip label={t`Regenerate link`}>
             <ActionIcon
               onClick={() => regenerateWorkspaceInviteCode()}
               variant="subtle"
@@ -103,7 +104,7 @@ const CreateMemberInvitationLink: FC = () => {
 export const OnModalWorkspaceInviteMember = () => {
   return modals.open({
     modalId: "ModalWorkspaceInviteMember",
-    title: <ModalTitle title={tl("invite_members")} icon={IconUsersPlus} />,
+    title: <ModalTitle title={t`Invite members`} icon={IconUsersPlus} />,
     children: <WorkspaceInviteMember />,
     size: "lg",
   });

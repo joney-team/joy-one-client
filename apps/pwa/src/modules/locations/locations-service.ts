@@ -1,11 +1,19 @@
+"use client";
+
 import { isDevelopment } from "@/service";
 import { Coordinates } from "@/types";
 import { isServer } from "@/utils/common.utils";
+import { t } from "@lingui/core/macro";
 import { CheckInLocation } from "../hrm-timekeepings/hrm-timekeepings-types";
-import { tl } from "../lang/lang-service";
 
 export const isGeolocationSupported = () =>
   !isServer() && "navigator" in window && "geolocation" in navigator;
+
+export const locationErrorCodes: Record<number, string> = {
+  1: t`You have not granted permission or refused to access the device location information.`,
+  2: t`Failed to acquire geolocation, please try again in a few minutes.`,
+  3: t`The time allowed to acquire the geolocation was reached before the information was obtained.`,
+};
 
 export const getGeolocation = async () => {
   return new Promise<GeolocationPosition>((resolve, reject) => {
@@ -27,9 +35,9 @@ export const getGeolocation = async () => {
               // Return fake coordinates
               const location = localStorage.getItem("location");
               if (location) resolve(JSON.parse(location));
-              else reject(new Error(tl(`locations_error_code_${err.code}`)));
+              else reject(new Error(locationErrorCodes[err.code]));
             } else {
-              reject(new Error(tl(`locations_error_code_${err.code}`)));
+              reject(new Error(locationErrorCodes[err.code]));
             }
           } else {
             reject(err);
@@ -37,7 +45,7 @@ export const getGeolocation = async () => {
         }
       );
     } else {
-      reject(new Error(tl("locations_unsupported_browser")));
+      reject(new Error(t`Your browser does not support geolocation.`));
     }
   });
 };

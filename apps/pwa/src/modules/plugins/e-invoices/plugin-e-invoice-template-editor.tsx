@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/buttons/button";
 import { FormulaInput } from "@/components/inputs/formual-input/formula-input";
-import { tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -89,7 +90,7 @@ const TemplateField: FC<{
 
             <TextInput
               w={120}
-              placeholder={tl("field_name")}
+              placeholder={t`Field name`}
               value={props.field.fieldName ?? ""}
               onChange={(e) => {
                 props.onChange({ ...props.field, fieldName: e.target.value });
@@ -100,11 +101,11 @@ const TemplateField: FC<{
               data={[
                 {
                   value: "input",
-                  label: tl("manual_input"),
+                  label: t`Manual input`,
                 },
                 {
                   value: "variable",
-                  label: tl("variable"),
+                  label: t`Variable`,
                   disabled: Object.keys(availableVariables.selectable).length === 0,
                 },
               ]}
@@ -122,9 +123,9 @@ const TemplateField: FC<{
             {fieldType === "variable" ? (
               <Select
                 flex={1}
-                placeholder={tl("variable")}
+                placeholder={t`Variable`}
                 data={Object.keys(availableVariables.selectable).map((key) => ({
-                  label: tl(`e_invoice_variable_${key}`),
+                  label: key,
                   value: key,
                 }))}
                 value={props.field.variable}
@@ -141,7 +142,7 @@ const TemplateField: FC<{
                 }}
                 variables={Object.entries(availableVariables.formula).map(([key, value]) => ({
                   name: key,
-                  description: tl(`e_invoice_variable_${key}`),
+                  description: key,
                   isNumerical: value.isNumerical,
                 }))}
               />
@@ -190,7 +191,7 @@ const TemplateField: FC<{
                         });
                       }}
                     >
-                      {tl("add_entity", { entity: tl("child_field") })}
+                      <Trans>Add child field</Trans>
                     </Button>
                   </Group>
                 </Stack>
@@ -253,7 +254,7 @@ export const PluginEInvoiceTemplateEditor: FC<PluginEInvoiceTemplateEditorProps>
             });
           }}
         >
-          {tl("add_entity", { entity: tl("field") })}
+          <Trans>Add field</Trans>
         </Button>
       </Group>
     </Stack>

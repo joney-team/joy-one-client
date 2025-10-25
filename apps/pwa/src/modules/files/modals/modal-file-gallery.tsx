@@ -1,13 +1,17 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { useLayout } from "@/layout/layout-context";
 import { downloadFileFromURL, removeFile } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { formatBytes } from "@joy-one-client/utils/files";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Anchor, em, Group, Modal, SimpleGrid, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -20,7 +24,6 @@ import {
 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { useFileSize } from "../files-hooks";
-import { formatBytes } from "@joy-one-client/utils/files";
 
 interface ModalFileGalleryProps {
   files: FileEntity[] | { _id?: string; url: string; fileName?: string; type?: FileType }[];
@@ -101,7 +104,7 @@ export const ModalFileGallery: FC = () => {
   const onDownload = async () => {
     if (!activeFile || typeof activeFile === "string") return;
     await onActionLoad({
-      name: tl("file_downloading"),
+      name: t`File downloading`,
       process: () =>
         downloadFileFromURL(renderFileUrl(activeFile.url), activeFile.fileName || _file.name),
     });
@@ -208,12 +211,12 @@ export const ModalFileGallery: FC = () => {
           return (
             <Stack justify="center" align="center">
               <Text fz={em(15)} c="white">
-                {tl("cannot_display_file")}
+                {t`Cannot display file`}
               </Text>
 
               <Anchor href={renderFileUrl(activeFile.url)} target="__blank" c="white" ta="center">
                 <Button rightSection={<IconBrowser strokeWidth={1.5} />}>
-                  {tl("open_with_browser")}
+                  {t`Open with browser`}
                 </Button>
               </Anchor>
             </Stack>

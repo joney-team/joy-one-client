@@ -1,17 +1,19 @@
-import { type FC } from "react";
-import { useColor } from "@/modules/theme/use-color";
-import { OnModalWorkspaceApiApp } from "./workspace-api-app-modal";
-import { Container } from "@/components/container";
+"use client";
+
 import { Button } from "@/components/buttons/button";
+import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
 import { TeammatesIllustration } from "@/components/illustrations/teammates";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
-import { getWorkspaceApiApps } from "./workspace-api-apps-service";
+import { useColor } from "@/modules/theme/use-color";
 import { useFetch } from "@/utils/use-fetch.util";
+import { Trans } from "@lingui/react/macro";
 import { Card, Center, Grid, Skeleton, Stack, Text, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
+import { type FC } from "react";
 import { WorkspaceApiAppCard } from "./workspace-api-app-card";
+import { OnModalWorkspaceApiApp } from "./workspace-api-app-modal";
+import { getWorkspaceApiApps } from "./workspace-api-apps-service";
 
 export const WorkspaceApiAppList: FC = () => {
   const color = useColor();
@@ -37,13 +39,15 @@ export const WorkspaceApiAppList: FC = () => {
             <TeammatesIllustration width={300} />
             <Stack gap={10}>
               <Title ta="center" fz={20} c={color("primary")}>
-                {tl("workspaceSettingsApiApps")}
+                <Trans>APIs System</Trans>
               </Title>
-              <Text ta="center">{tl("workspaceSettingsApiAppsDesc")}</Text>
+              <Text ta="center">
+                <Trans>For developers, manipulate data through APIs</Trans>
+              </Text>
             </Stack>
 
             <Button action leftIcon={IconPlus} onClick={() => OnModalWorkspaceApiApp()}>
-              {tl("create_new")}
+              <Trans>Create new</Trans>
             </Button>
           </Stack>
         </Card>
@@ -62,7 +66,7 @@ export const WorkspaceApiAppList: FC = () => {
 
       <Center>
         <Button action leftIcon={IconPlus} onClick={() => OnModalWorkspaceApiApp()}>
-          {tl("create_new")}
+          <Trans>Create new</Trans>
         </Button>
       </Center>
     </Container>

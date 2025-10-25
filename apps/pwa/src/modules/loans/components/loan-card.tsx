@@ -1,15 +1,18 @@
 "use client";
 
 import { useRouter } from "@/hooks/use-router";
-import { renderDateTime, num, tl } from "@/modules/lang/lang-service";
+import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { loanStatusColors } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Anchor, Badge, Card, CardProps, em, Group, Stack, Text } from "@mantine/core";
 import { IconFileTypePdf } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
+import { loanAssetTypes, loanStatuses } from "../loans-constants";
 
 interface LoanCardProps {
   loan: LoanEntity;
@@ -44,7 +47,9 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
         {!props.hideCustomer && (
           <Fragment>
             <Group justify="space-between">
-              <Text fz={em(15)}>{tl("customer")}</Text>
+              <Text fz={em(15)}>
+                <Trans>Customer</Trans>
+              </Text>
               <Anchor fw={500} onClick={() => router.push(`/customers/${customer.code}`)}>
                 {customer.name}
               </Anchor>
@@ -53,7 +58,9 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
             {customer.phone &&
               workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
                 <Group justify="space-between">
-                  <Text fz={em(15)}>{tl("phone")}</Text>
+                  <Text fz={em(15)}>
+                    <Trans>Phone</Trans>
+                  </Text>
                   <Text fz={em(15)} fw={500}>
                     {customer.phone}
                   </Text>
@@ -63,32 +70,29 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
         )}
 
         <Group justify="space-between">
-          <Text fz={em(15)}>{tl("loan_asset_type")}</Text>
+          <Text fz={em(15)}>
+            <Trans>Loan asset type</Trans>
+          </Text>
           <Text fz={em(15)} fw={500}>
-            {tl(`loan_asset_type_${loan.assetType}`)}
+            {loanAssetTypes[loan.assetType].label()}
           </Text>
         </Group>
 
         <Group justify="space-between">
-          <Text fz={em(15)}>{tl("loan_asset_type")}</Text>
-          <Text fz={em(15)} fw={500}>
-            {tl(`loan_asset_type_${loan.assetType}`)}
+          <Text fz={em(15)}>
+            <Trans>Loan amount</Trans>
           </Text>
-        </Group>
-
-        <Group justify="space-between">
-          <Text fz={em(15)}>{tl("loan_amount")}</Text>
           <Text fz={em(15)} fw={500}>
             {num(loan.amount, { type: "money" })}
           </Text>
         </Group>
 
         <Stack align="end">
-          <Badge color={loanStatusColors[loan.status]}>{tl(`loan_status_${loan.status}`)}</Badge>
+          <Badge color={loanStatusColors[loan.status]}>{loanStatuses[loan.status].label()}</Badge>
 
           {loan.status === LoanStatus.REJECTED && (
             <Text fz={em(13)} fw={500} c="red">
-              {tl("reason")}: {loan.rejectReason || "Không rõ lý do"}
+              {t`Reason`}: {loan.rejectReason || t`Unknown`}
             </Text>
           )}
         </Stack>
@@ -98,7 +102,7 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
             <Anchor href={linkContractPdf} target="_blank" fz={14}>
               <Group gap={4}>
                 <IconFileTypePdf size={18} />
-                {tl("view_contract")}
+                <Trans>View contract</Trans>
               </Group>
             </Anchor>
           )}

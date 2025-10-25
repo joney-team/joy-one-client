@@ -1,6 +1,5 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import {
@@ -182,7 +181,7 @@ export const Button: FC<ButtonProps> = (props) => {
       }}
       color={getColor(props.color)}
     >
-      {props.label ? tl(props.label) : children}
+      {props.label ?? children}
     </ButtonMantine>
   );
 };

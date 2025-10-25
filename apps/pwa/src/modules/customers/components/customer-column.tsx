@@ -1,14 +1,16 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { Column } from "@/components/list/types";
 import { useRouter } from "@/hooks/use-router";
 import { AppEntity } from "@/types";
 import { Group, Stack, Text } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
-import { tl } from "../../lang/lang-service";
 import { searchEntity } from "../../search/search-service";
 import { WorkspacePermission } from "../../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../../workspaces/workspace-context";
 import { getCustomerByIds } from "../customer-service";
+import { t } from "@lingui/core/macro";
 
 export interface CustomerColumnArgs<Data = any> extends Omit<Column<Data>, "render"> {}
 
@@ -29,7 +31,7 @@ export function CustomerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
           <Avatar icon={IconUserSquareRounded} customer={value} size={40} radius={8} />
           <Stack gap={0}>
             <Text fz={16} fw={500}>
-              {value?.name || tl("guest")}
+              {value?.name || t`Guest`}
             </Text>
             {value?.phone &&
               workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
@@ -85,11 +87,11 @@ export function CustomerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
     exportToExcel: (customer) => {
       return [
         {
-          col: tl("name"),
+          col: t`Name`,
           text: customer.name,
         },
         {
-          col: tl("phone"),
+          col: t`Phone`,
           text: customer.phone,
         },
       ];

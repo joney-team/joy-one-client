@@ -2,22 +2,23 @@
 
 import { Button } from "@/components/buttons/button";
 import { api } from "@/modules/apis";
-import { tl } from "@/modules/lang/lang-service";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Card,
+  em,
   Group,
   PasswordInput,
   Stack,
   Stepper,
   Text,
+  TextInput,
   ThemeIcon,
   Title,
-  em,
-  TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconArrowLeft, IconCircleCheck, IconSend } from "@tabler/icons-react";
@@ -40,10 +41,10 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
     },
     validate: {
       user: (value: string) => {
-        if (!value) return tl("must_be_provided");
+        if (!value) return t`Must be provided`;
       },
       pass: (value: string) => {
-        if (!value) return tl("must_be_provided");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -54,7 +55,7 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
     }
 
     if (active === 1) {
-      if (!payload.testEmail) form.setFieldError("testEmail", "Vui lòng nhập email nhận");
+      if (!payload.testEmail) form.setFieldError("testEmail", t`Please enter the email to receive`);
       else {
         setIsSubmitting(true);
         try {
@@ -85,32 +86,34 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
 
   return (
     <Stepper active={active} onStepClick={setActive} size="xs">
-      <Stepper.Step label="Tài khoản Gmail">
+      <Stepper.Step label={t`Gmail account`}>
         <Card shadow="none" withBorder bg="var(--mantine-color-body)">
           <Stack>
-            <TextInput label="Địa chỉ Gmail" {...form.getInputProps("user")} />
+            <TextInput label={t`Gmail address`} {...form.getInputProps("user")} />
 
-            <PasswordInput label="Mật khẩu ứng dụng" {...form.getInputProps("pass")} />
+            <PasswordInput label={t`Application password`} {...form.getInputProps("pass")} />
 
             <Button type="submit" loading={isSubmitting} onClick={onSubmit}>
-              Tiếp tục
+              <Trans>Continue</Trans>
             </Button>
 
             <Anchor ta="center" c="gray" mt={5} fw={300} fz={em(14)} onClick={props.onDone}>
-              Dùng Mail mặc định
+              <Trans>Use default mail</Trans>
             </Anchor>
           </Stack>
         </Card>
       </Stepper.Step>
-      <Stepper.Step label="Gửi mẫu thữ">
+      <Stepper.Step label={t`Send test email`}>
         <Card shadow="none" withBorder bg="var(--mantine-color-body)">
           <Stack>
-            <TextInput label="Email nhận" {...form.getInputProps("testEmail")} />
+            <TextInput label={t`Email to receive`} {...form.getInputProps("testEmail")} />
 
             {isSubmitting && (
               <Text ta="center" fw={300} fz={em(14)}>
-                Bạn vui lòng kiên nhẫn chờ đợi <br /> có thể mất khoảng 1 - 2 phút để hệ thống gửi
-                thử mail.
+                <Trans>
+                  You please be patient and wait <br /> it may take 1 - 2 minutes to send the test
+                  email.
+                </Trans>
               </Text>
             )}
 
@@ -123,7 +126,7 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
                 leftSection={<IconArrowLeft strokeWidth={1.5} />}
                 fullWidth
               >
-                Trở lại
+                <Trans>Back</Trans>
               </Button>
 
               <Button
@@ -133,13 +136,13 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
                 fullWidth
                 rightSection={<IconSend strokeWidth={1.5} />}
               >
-                Gửi thử
+                <Trans>Send test</Trans>
               </Button>
             </Group>
           </Stack>
         </Card>
       </Stepper.Step>
-      <Stepper.Step label="Hoàn thành">
+      <Stepper.Step label={t`Complete`}>
         <Card shadow="none" withBorder bg="var(--mantine-color-body)" pb={20}>
           <Stack align="center">
             <ThemeIcon variant="transparent" size="xl">
@@ -147,20 +150,23 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
             </ThemeIcon>
 
             <Title mt={-10} ta="center" order={2} fw={300} c="primary">
-              Kiểm Thữ Thành Công!
+              <Trans>Test email sent successfully!</Trans>
             </Title>
 
             <Text ta="center">
-              Sau khi xác nhận hệ thống sẽ dùng địa chỉ email <strong>{form.values.user}</strong> để
-              gửi Mail cho khách hàng <br /> hoặc các thông báo hệ thống cho thành viên.
+              <Trans>
+                After confirming the system will use the email address{" "}
+                <strong>{form.values.user}</strong> to send Mail to customers <br /> or system
+                notifications to members.
+              </Trans>
             </Text>
 
             <Button mt={10} type="submit" loading={isSubmitting} onClick={onSubmit}>
-              Xác nhận áp dụng
+              <Trans>Confirm and apply</Trans>
             </Button>
 
             <Anchor c="gray" mt={10} fw={300} fz={em(14)} onClick={() => setActive(0)}>
-              Dùng tài khoản khác
+              <Trans>Use another account</Trans>
             </Anchor>
           </Stack>
         </Card>

@@ -7,36 +7,42 @@ import { Hovered } from "@/components/hovered";
 import { DueDateInput } from "@/components/inputs/due-date-input";
 import { EstimateTimeInput } from "@/components/inputs/estimate-time-input";
 import { TimeTrackingsInput } from "@/components/inputs/time-trackings-input";
-import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
-import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
-import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { onUploadFile } from "@/modules/files/file-service";
-import { num, renderDate, renderDateTime, tl } from "@/modules/lang/lang-service";
+import { num, renderDate, renderDateTime } from "@/modules/lang/lang-service";
 import { PartnersInput } from "@/modules/partners/components/partners-input";
 import { PartnerEntity } from "@/modules/partners/partners-types";
-import { useTags } from "@/modules/tags/tags-context";
 import { TagsInput } from "@/modules/tags/components/tags-input";
+import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
+import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import {
   createTask,
-  getTaskPriorityColor,
   getTaskProgress,
   getTasks,
   renderTaskStatusStyle,
   updateTasks,
 } from "@/modules/tasks/tasks-service";
-import { DefaultTaskStatusId, TaskEntity, TaskTimeTracking } from "@/modules/tasks/tasks-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import {
+  DefaultTaskStatusId,
+  TaskEntity,
+  TaskPriority,
+  TaskTimeTracking,
+} from "@/modules/tasks/tasks-types";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -79,9 +85,10 @@ import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { CustomerInput } from "../../customers/components/customer-input";
 import { FilesBox } from "../../files/files-box";
 import { useTaskFolders } from "../hooks/use-task-folders";
+import { taskPriorities } from "../task-constants";
+import { TasksDndProvider } from "../tasks-dnd-provider";
 import { ListTaskRow } from "../views/list/list.task-row";
 import { ListTaskRowHead } from "../views/list/list.task-row-head";
-import { TasksDndProvider } from "../tasks-dnd-provider";
 
 export interface TaskFormProps {
   task?: TaskEntity;
@@ -149,7 +156,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
       isSubmitting.current = true;
       forceUpdate();
 
-      if (!values.name) throw Error(tl("task_name_required"));
+      if (!values.name) throw Error(t`Task name is required`);
 
       await createTask({
         name: values.name,
@@ -257,14 +264,14 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
             fz={25}
             fw={500}
             autoFocus={!props.task}
-            placeholder={tl("enter_task_name")}
+            placeholder={t`Enter task name`}
             value={form.values.name}
             onChange={(value) => form.setFieldValue("name", value)}
             onEnter={!props.task ? () => onCreate() : undefined}
           />
 
           <SimpleGrid cols={{ md: 2 }} spacing={3} maw="100%" w={900}>
-            <FormFieldWrapper icon={IconPlaystationCircle} label={tl("status")}>
+            <FormFieldWrapper icon={IconPlaystationCircle} label={t`Status`}>
               <TaskStatusSelector
                 inputProps={{ flex: 1 }}
                 onSelect={(status) => form.setFieldValue("status", status.id)}
@@ -308,7 +315,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                           </Group>
 
                           {nextStatus && (
-                            <Tooltip label={`${tl("next_status")} ${nextStatus.name}`}>
+                            <Tooltip label={`${t`Next status`} ${nextStatus.name}`}>
                               <ActionIcon
                                 size={24}
                                 radius={5}
@@ -330,7 +337,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                         {props.task && form.values.status !== DefaultTaskStatusId.CLOSED && (
                           <Hovered>
                             {({ hovered, ref }) => (
-                              <Tooltip label={tl("task_complete")}>
+                              <Tooltip label={t`Task complete`}>
                                 <ActionIcon
                                   ref={ref}
                                   size={24}
@@ -356,7 +363,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               />
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconUser} label={tl("assignee")}>
+            <FormFieldWrapper icon={IconUser} label={t`Assignee`}>
               <FormField
                 canRemove={(form.values.assigneeUsers?.length || 0) > 0}
                 onRemove={() => form.setFieldValue("assigneeUsers", [])}
@@ -373,7 +380,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconFlag} label={tl("priority")}>
+            <FormFieldWrapper icon={IconFlag} label={t`Priority`}>
               <FormField
                 canRemove={!!form.values.priority}
                 onRemove={() => form.setFieldValue("priority", null)}
@@ -395,19 +402,23 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                             return (
                               <Group gap={1}>
                                 <ThemeIcon
-                                  color={getTaskPriorityColor(form.values.priority)}
+                                  color={
+                                    taskPriorities[form.values.priority as TaskPriority]?.color
+                                  }
                                   variant="transparent"
                                 >
                                   <IconFlagFilled size={20} />
                                 </ThemeIcon>
-                                <Text>{tl(`task_priority_${form.values.priority}`)}</Text>
+                                <Text>
+                                  {taskPriorities[form.values.priority as TaskPriority]?.label()}
+                                </Text>
                               </Group>
                             );
                           }
 
                           return (
                             <Text c="gray" fz={em(13)} px={3}>
-                              {tl("add_priority")}
+                              <Trans>Add priority</Trans>
                             </Text>
                           );
                         })()}
@@ -418,7 +429,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconCalendar} label={tl("due_date")}>
+            <FormFieldWrapper icon={IconCalendar} label={t`Due date`}>
               <FormField
                 onRemove={() => form.setValues({ ...form.values, dueDate: null, startDate: null })}
                 canRemove={!!form.values.dueDate || !!form.values.startDate}
@@ -484,7 +495,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
                         return (
                           <Text c="gray" fz={em(13)} px={3}>
-                            {tl("add_due_date")}
+                            <Trans>Add due date</Trans>
                           </Text>
                         );
                       })()}
@@ -505,7 +516,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconStopwatch} label="tasks_view_time_trackings">
+            <FormFieldWrapper icon={IconStopwatch} label={t`Time trackings`}>
               <FormField
                 canRemove={!!form.values.timeTrackings?.length}
                 onRemove={() => form.setFieldValue("timeTrackings", [])}
@@ -519,7 +530,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconHourglassHigh} label={tl("tasks_view_estimate_time")}>
+            <FormFieldWrapper icon={IconHourglassHigh} label={t`Estimate time`}>
               <FormField
                 canRemove={!!form.values.estimatedTime}
                 onRemove={() => form.setFieldValue("estimatedTime", null)}
@@ -527,13 +538,13 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                 <EstimateTimeInput
                   p={5}
                   flex={1}
-                  label={tl("tasks_view_estimate_time")}
+                  label={t`Estimate time`}
                   {...form.getInputProps("estimatedTime")}
                 />
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconUserSquareRounded} label={tl("customer")}>
+            <FormFieldWrapper icon={IconUserSquareRounded} label={t`Customer`}>
               <FormField
                 canRemove={!!form.values.relatedCustomer}
                 onRemove={() => form.setFieldValue("relatedCustomer", null)}
@@ -547,7 +558,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconTopologyStar3} label={tl("partners")}>
+            <FormFieldWrapper icon={IconTopologyStar3} label={t`Partners`}>
               <FormField
                 canRemove={!!form.values.partners?.length}
                 onRemove={() => form.setFieldValue("partners", [])}
@@ -561,7 +572,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconTags} label={tl("tags")}>
+            <FormFieldWrapper icon={IconTags} label={t`Tags`}>
               <FormField
                 canRemove={!!form.values.tags?.length}
                 onRemove={() => form.setFieldValue("tags", [])}
@@ -580,7 +591,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
             value={form.values.description}
             onChangeHTML={(v) => form.setFieldValue("description", v)}
             delay={300}
-            placeholder={tl("task_description")}
+            placeholder={t`Task description`}
             uploadFileOptions={{
               maxWidthOrHeight: 1500,
               relatedTaskId: props.task?._id,
@@ -594,7 +605,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               <IconFiles strokeWidth={1.5} size={20} />
             </ThemeIcon>
 
-            <Text fw={500}>{tl("attachments")}</Text>
+            <Text fw={500}>{t`Attachments`}</Text>
           </Group>
 
           {props.task ? (
@@ -618,7 +629,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                   <IconSubtask strokeWidth={1.5} size={20} />
                 </ThemeIcon>
 
-                <Text fw={500}>{tl("subtasks")}</Text>
+                <Text fw={500}>{t`Subtasks`}</Text>
               </Group>
 
               <Group gap={5}>
@@ -639,7 +650,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                   })
                 }
               >
-                {tl("subtasks")}
+                {t`Subtasks`}
               </Button>
             </Group>
 
@@ -683,7 +694,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               type="submit"
               action
             >
-              {tl("complete")}
+              {t`Complete`}
             </Button>
           </Center>
         </Renderer>
@@ -705,7 +716,7 @@ const FormFieldWrapper: FC<
           <props.icon strokeWidth={1.5} />
         </ThemeIcon>
         <Text c="var(--mantine-color-text)" fz={em(13)}>
-          {tl(props.label)}
+          {props.label}
         </Text>
       </Group>
 

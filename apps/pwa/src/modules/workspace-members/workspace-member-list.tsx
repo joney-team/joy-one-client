@@ -6,7 +6,6 @@ import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-selector-filter";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
@@ -24,9 +23,11 @@ import {
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
+import { t } from "@lingui/core/macro";
 import { Badge, Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconBuilding, IconLock, IconMail, IconPhone } from "@tabler/icons-react";
 import { FC } from "react";
+import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants";
 
 export const WorkspaceMemberList: FC = () => {
   const workspace = useWorkspace();
@@ -35,7 +36,7 @@ export const WorkspaceMemberList: FC = () => {
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
     return [
       ...options.map((v) => ({ label: v.label, value: v.value, data: v.data })),
-      { label: tl("main_workspace_branch"), value: "root", data: null },
+      { label: t`Main office`, value: "root", data: null },
     ];
   };
 
@@ -56,7 +57,7 @@ export const WorkspaceMemberList: FC = () => {
               >
                 <Avatar user={data} size={30} />
                 <Clickable onClick={() => OnModalUserInformation(data.userId)}>
-                  <Text>{data.name || tl("unamed")}</Text>
+                  <Text>{data.name || t`Unnamed`}</Text>
                 </Clickable>
               </Group>
             ),
@@ -114,7 +115,7 @@ export const WorkspaceMemberList: FC = () => {
                     color={color("primary")}
                     rightSection={<IconLock size={13} style={{ marginLeft: -3 }} />}
                   >
-                    {tl(`role_${WorkspaceSpecialRoleId.OWNER}`)}
+                    {workspaceSpecialRoleIds[WorkspaceSpecialRoleId.OWNER].name()}
                   </Badge>
                 );
               }
@@ -147,7 +148,7 @@ export const WorkspaceMemberList: FC = () => {
             icon: IconBuilding,
             render: ({ data }) => {
               if (data.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)) {
-                return <Badge variant="light">{tl("all_branches")}</Badge>;
+                return <Badge variant="light">{t`All branches`}</Badge>;
               }
 
               return (

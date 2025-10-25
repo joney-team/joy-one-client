@@ -21,7 +21,7 @@ import {
 } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { getClientLocale, tl } from "@/modules/lang/lang-service";
+import { getClientLocale } from "@/modules/lang/lang-service";
 import { LangState } from "@/modules/lang/lang-types";
 import { showInAppNotification } from "@/modules/notifications/notification-service";
 import { NotificationEntity } from "@/modules/notifications/notification-types";
@@ -33,13 +33,16 @@ import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
 import { isDiff, objSelect } from "@/utils/object.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { t } from "@lingui/core/macro";
 import { useMantineTheme } from "@mantine/core";
+import * as Sentry from "@sentry/react";
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getToken, onMessage } from "firebase/messaging";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { getGlobal } from "../../global";
 import { api } from "../apis";
+import { reducePhotoSize } from "../files/file-service";
 import { Context } from "./auth-context";
 import { AuthRequire } from "./auth-require";
 import {
@@ -58,8 +61,6 @@ import type {
   AuthTokenResult,
   UserAuthResult,
 } from "./auth-types";
-import { reducePhotoSize } from "../files/file-service";
-import * as Sentry from "@sentry/react";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
@@ -249,7 +250,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
         .then((permission) => permission === "granted")
         .catch(() => false);
 
-      if (!isHasPermission) throw Error(tl("notification_permission_not_allowed"));
+      if (!isHasPermission) throw Error(t`Notification permission not allowed.`);
 
       let notificationToken = "";
 
@@ -272,14 +273,14 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
           })
           .catch((error) => {
             console.error(error);
-            throw Error(tl("notification_token_not_received"));
+            throw Error(t`Not receiving notification token. Please try again.`);
           });
       }
 
       const _device = await setDeviceNotificationToken({ notificationToken });
       setDevice(_device);
     } else {
-      throw Error(tl("device_does_not_support_notifications"));
+      throw Error(t`Device does not support notifications.`);
     }
   };
 

@@ -2,14 +2,14 @@
 
 import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
-import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
+import { useList } from "@/components/list/use-list";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
+import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { getPrescriptions } from "@/modules/prescriptions/prescriptions-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { capitalize } from "@/utils/string.utils";
-import { useList } from "@/components/list/use-list";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -49,7 +49,7 @@ export const PrescriptionList: FC = () => {
           />
 
           <Badge variant="light" size="xl" fz={em(12)} style={{ borderRadius: 100 }}>
-            {tl("qty")}
+            <Trans>QTY</Trans>
             {prescriptions.isInitialized && `: ${num(prescriptions.count)}`}
           </Badge>
         </Group>
@@ -78,10 +78,10 @@ export const PrescriptionList: FC = () => {
 
                       <Stack gap={5}>
                         <Text fz={em(12)}>
-                          • {capitalize(tl("pill"))}: {prescription.items.length}
+                          • <Trans>Pill</Trans>: {prescription.items.length}
                         </Text>
                         <Text fz={em(12)}>
-                          • {capitalize(tl("days_num"))}: {totalDays}{" "}
+                          • <Trans>Days number</Trans>: {totalDays}{" "}
                         </Text>
                       </Stack>
                     </Stack>

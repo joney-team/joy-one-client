@@ -4,7 +4,6 @@ import { Avatar } from "@/components/avatar";
 import { SpeedIllustration } from "@/components/illustrations/speed";
 import { Renderer } from "@/components/renderer";
 import { useRouter } from "@/hooks/use-router";
-import { tl } from "@/modules/lang/lang-service";
 import { loanStatusColors } from "@/modules/loans/loans-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
 import { PartnerEntity } from "@/modules/partners/partners-types";
@@ -22,10 +21,11 @@ import {
 } from "@/modules/search/search-types";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import { Badge, Card, Center, Loader, rem, Stack, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { Spotlight, SpotlightActionData, SpotlightActionGroupData } from "@mantine/spotlight";
@@ -42,6 +42,8 @@ import {
   IconTopologyStar3,
 } from "@tabler/icons-react";
 import { type FC, useState } from "react";
+import { loanStatuses } from "../loans/loans-constants";
+import { productTypes } from "../products/products-constants";
 import { useTaskRouter } from "../tasks/hooks/use-task-router";
 
 export const SearchEngine: FC = () => {
@@ -80,7 +82,7 @@ export const SearchEngine: FC = () => {
 
         if (isMessageBoxesEnabled && entity === AppEntity.MESSAGE_BOXES) {
           actionGroups.push({
-            group: tl("message_boxes"),
+            group: t`Message boxes`,
             actions: data.map((box) => {
               return {
                 id: box._id,
@@ -97,7 +99,7 @@ export const SearchEngine: FC = () => {
 
         if (entity === AppEntity.POSTS) {
           actionGroups.push({
-            group: tl("posts"),
+            group: t`Posts`,
             actions: data.map((post) => {
               return {
                 id: post._id,
@@ -117,7 +119,7 @@ export const SearchEngine: FC = () => {
           const customers = data as SearchCustomer[];
 
           actionGroups.push({
-            group: tl("customers"),
+            group: t`Customers`,
             actions: customers.map((customer) => {
               return {
                 id: customer._id,
@@ -157,13 +159,13 @@ export const SearchEngine: FC = () => {
             };
 
             const existed = actionGroups.findIndex(
-              (v) => v.group === tl(`product_type_${product.type}`)
+              (v) => v.group === productTypes[product.type].label()
             );
             if (existed >= 0) {
               actionGroups[existed].actions.push(action);
             } else {
               actionGroups.push({
-                group: tl(`product_type_${product.type}`),
+                group: productTypes[product.type].label(),
                 actions: [action],
               });
             }
@@ -174,12 +176,12 @@ export const SearchEngine: FC = () => {
           const receipts = data as ReceiptEntity[];
 
           actionGroups.push({
-            group: tl("receipts"),
+            group: t`Receipts`,
             actions: receipts.map((receipt) => {
               return {
                 id: receipt.id,
                 label: `${renderEntityCode(receipt.code)}`,
-                description: [tl("receipt"), receipt.note].filter((v) => !!v).join(" - "),
+                description: [t`Receipt`, receipt.note].filter((v) => !!v).join(" - "),
                 leftSection: <ActionIcon icon={IconCashRegister} />,
                 onClick: async () => {
                   return router.push(`/receipts/${receipt.id}`);
@@ -193,7 +195,7 @@ export const SearchEngine: FC = () => {
           const tasks = data as TaskEntity[];
 
           actionGroups.push({
-            group: tl("tasks"),
+            group: t`Tasks`,
             actions: tasks.map((task) => {
               return {
                 id: task._id,
@@ -210,7 +212,7 @@ export const SearchEngine: FC = () => {
           const loans = data as SearchLoan[];
 
           actionGroups.push({
-            group: tl("loans"),
+            group: t`Loans`,
             actions: loans.map((loan) => {
               return {
                 id: loan.id!,
@@ -228,7 +230,7 @@ export const SearchEngine: FC = () => {
                 },
                 rightSection: (
                   <Badge size="xs" color={loanStatusColors[loan.status]}>
-                    {tl(`loan_status_${loan.status}`)}
+                    {loanStatuses[loan.status].label()}
                   </Badge>
                 ),
               };
@@ -240,7 +242,7 @@ export const SearchEngine: FC = () => {
           const partners = data as PartnerEntity[];
 
           actionGroups.push({
-            group: tl("partners"),
+            group: t`Partners`,
             actions: partners.map((partner) => {
               return {
                 id: partner._id,
@@ -257,7 +259,7 @@ export const SearchEngine: FC = () => {
 
         if (entity === AppEntity.WORKSPACE_MEMBERS) {
           actionGroups.push({
-            group: tl("members"),
+            group: t`Members`,
             actions: data.map((doc) => {
               return {
                 id: doc.id,
@@ -276,12 +278,12 @@ export const SearchEngine: FC = () => {
           const orders = data as OrderEntity[];
 
           actionGroups.push({
-            group: tl("orders"),
+            group: t`Orders`,
             actions: orders.map((order) => {
               return {
                 id: order.id,
                 label: `${renderEntityCode(order.code)}`,
-                description: tl("orders"),
+                description: t`Orders`,
                 leftSection: <ActionIcon icon={IconClipboardText} />,
                 onClick: async () => {
                   return router.push(`/orders/${order.code}`);
@@ -295,7 +297,7 @@ export const SearchEngine: FC = () => {
           const prescriptions = data as PrescriptionEntity[];
 
           actionGroups.push({
-            group: tl("prescriptions"),
+            group: t`Prescriptions`,
             actions: prescriptions.map((prescription) => {
               return {
                 id: prescription._id,
@@ -313,7 +315,7 @@ export const SearchEngine: FC = () => {
 
     if (matchedModules.length > 0) {
       actionGroups.push({
-        group: tl("modules"),
+        group: t`Modules`,
         actions: matchedModules.map((mod) => {
           const parent = workspace.modules.find(
             (v) => v.href === `/${mod.href.split("/")[1]}` && v.id !== mod.id
@@ -362,7 +364,7 @@ export const SearchEngine: FC = () => {
       }}
       searchProps={{
         leftSection: <IconSearch style={{ width: rem(20), height: rem(20) }} stroke={1.5} />,
-        placeholder: `${tl("search")}...`,
+        placeholder: `${t`Search`}...`,
         rightSection: (
           <Renderer visible={isSearching}>
             <Loader size={18} type="dots" color="gray" />
@@ -374,9 +376,9 @@ export const SearchEngine: FC = () => {
       filter={(_, actions) => actions}
       nothingFound={
         query.length > 0 && !isSearching ? (
-          <EmptySearch message="search_nothing" />
+          <EmptySearch message={t`No search results`} />
         ) : (
-          <EmptySearch message="type_something_to_search" />
+          <EmptySearch message={t`Type something to search`} />
         )
       }
       styles={{
@@ -395,7 +397,7 @@ const EmptySearch: FC<{ message: string }> = (props) => {
     <Stack align="center" justify="center" p={32}>
       <SpeedIllustration width={140} />
       <Text fz={12} c="gray.5" fw={300}>
-        {tl(props.message)}
+        {props.message}
       </Text>
     </Stack>
   );

@@ -2,16 +2,18 @@
 
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
-import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalShareLink } from "@/modals/modal-share-link";
-import { renderDateTime, tl } from "@/modules/lang/lang-service";
-import { useTasks } from "@/modules/tasks/tasks-context";
+import { renderDateTime } from "@/modules/lang/lang-service";
+import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useTask } from "@/modules/tasks/hooks/use-task";
+import { useTasks } from "@/modules/tasks/tasks-context";
 import { getRelatedTasks, getTaskEntity, updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
-import { capitalize, String } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
 import config from "@joy-one-client/config";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconChevronDown, IconChevronUp, IconShare2, IconStack2, IconX } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
@@ -88,7 +90,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
             }}
             render={(ctx) => {
               return (
-                <Tooltip label={capitalize(`${tl("change")} ${tl("folder")}`)}>
+                <Tooltip label={t`Change folder`}>
                   <Button
                     component="div"
                     size="compact-sm"
@@ -100,7 +102,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
                     px={3}
                     onClick={ctx.toggle}
                   >
-                    {tagFolder ? tagFolder.name : `${tl("general_tasks")}`}
+                    {tagFolder ? tagFolder.name : <Trans>General tasks</Trans>}
                   </Button>
                 </Tooltip>
               );
@@ -131,7 +133,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
       <Group justify="end" wrap="nowrap" gap={8}>
         <Renderer views={["desktop"]}>
           <Text fz={em(12)} c="var(--mantine-color-dimmed)" px={10}>
-            {tl("created_at")} {renderDateTime(task.createdAt, true)}
+            <Trans>Created at {renderDateTime(task.createdAt, true)}</Trans>
           </Text>
 
           <Button
@@ -142,7 +144,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
             leftIcon={IconShare2}
             onClick={() => OnModalShareLink({ task, url: `${config.APP_URL}/tasks/${task.code}` })}
           >
-            {tl("share")}
+            <Trans>Share</Trans>
           </Button>
         </Renderer>
 

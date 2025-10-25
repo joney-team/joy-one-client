@@ -1,10 +1,12 @@
+"use client";
+
+import { useLayout } from "@/layout/layout-context";
+import { t } from "@lingui/core/macro";
 import { Divider, Group, Popover, Stack } from "@mantine/core";
 import { IconEyeCog, IconLayoutGrid, IconTable } from "@tabler/icons-react";
 import { FC } from "react";
 import { ListContext } from "../types";
 import { ActionButton } from "./action-button";
-import { useLayout } from "@/layout/layout-context";
-import { tl } from "@/modules/lang/lang-service";
 
 export const ListFilterModes: FC<ListContext> = (ctx) => {
   const layout = useLayout();
@@ -42,7 +44,7 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
               );
             })}
 
-            <Divider label={tl("list_view_type")} />
+            <Divider label={t`View`} />
 
             <Group gap={10}>
               <ActionButton

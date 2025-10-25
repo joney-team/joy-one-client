@@ -4,20 +4,16 @@ import { ModalTitle } from "@/components/modal-title";
 import { modals } from "@mantine/modals";
 import { IconUser, IconUserPlus } from "@tabler/icons-react";
 
-import { CustomerForm, CustomerFormProps } from "@/modules/customers/components/form-customer";
 import { getView } from "@/layout/layout-service";
-import { tl } from "@/modules/lang/lang-service";
+import { CustomerForm, CustomerFormProps } from "@/modules/customers/components/form-customer";
+import { t } from "@lingui/core/macro";
 
 export const OnCustomerModal = (props?: CustomerFormProps) =>
   modals.open({
     modalId: "CustomerForm",
     title: (
       <ModalTitle
-        title={
-          props?.customer
-            ? `${tl("update")} ${tl("customer")}`
-            : `${tl("create")} ${tl("customer")}`
-        }
+        title={props?.customer ? `${t`Update customer`}` : `${t`Create customer`}`}
         icon={props?.customer ? IconUser : IconUserPlus}
       />
     ),

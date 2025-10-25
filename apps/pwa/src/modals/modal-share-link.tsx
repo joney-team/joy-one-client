@@ -1,9 +1,11 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
-import { tl } from "@/modules/lang/lang-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
+import { zIndexes } from "@joy-one-client/config/layout";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -19,7 +21,6 @@ import {
 import { useClipboard, useDisclosure } from "@mantine/hooks";
 import { IconCopy, IconShare2, IconX } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
-import { zIndexes } from "@joy-one-client/config/layout";
 
 interface ModalShareLinkState {
   task?: TaskEntity;
@@ -60,8 +61,8 @@ export const ModalSharelink: FC = () => {
 
             <Title order={3} fz={em(15)} fw={500} c={themeColor}>
               {(function () {
-                if (state.current?.task) return tl("share_this_task");
-                return tl("share");
+                if (state.current?.task) return t`Share this task`;
+                return t`Share`;
               })()}
             </Title>
           </Group>
@@ -77,7 +78,7 @@ export const ModalSharelink: FC = () => {
           <Group justify="space-between" align="end">
             <Stack gap={3} flex={1}>
               <Text fz={em(12)} fw={500}>
-                {tl("link")}
+                <Trans>Link</Trans>
               </Text>
               <Card p={5} pl={10} withBorder shadow="none">
                 <Text truncate="end">{link}</Text>
@@ -91,7 +92,7 @@ export const ModalSharelink: FC = () => {
                 variant={clipboard.copied ? "filled" : "outline"}
                 onClick={() => clipboard.copy(link)}
               >
-                {tl(clipboard.copied ? "copied" : "copy")}
+                {clipboard.copied ? <Trans>Copied</Trans> : <Trans>Copy</Trans>}
               </Button>
             </Group>
           </Group>

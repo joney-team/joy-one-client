@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { Editor } from "@/components/editor";
 import { ModalTitle } from "@/components/modal-title";
-import { ProductSelector } from "@/modules/products/components/product-selector";
 import { useFormSubmit } from "@/hooks/use-form";
 import { createCouponRule, updateCouponRule } from "@/modules/coupons/coupon-service";
 import {
@@ -16,10 +15,11 @@ import {
   DiscountType,
   FreeOnProductData,
 } from "@/modules/coupons/coupon-types";
-import { tl } from "@/modules/lang/lang-service";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 import { ProductType } from "@/modules/products/products-types";
 import { onError } from "@/utils/exceptions.utils";
-import { capitalize, String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Box,
@@ -40,6 +40,7 @@ import { useForm } from "@mantine/form";
 import { useDisclosure, useListState } from "@mantine/hooks";
 import { IconNotes, IconPlus, IconX } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
+import { couponRuleBenefitTypes, discountTypes } from "../coupon-constants";
 
 interface ModalCouponRuleFormProps {
   rule?: CouponRuleEntity;
@@ -64,7 +65,7 @@ export const ModalCouponRuleForm: FC = () => {
     } as any,
     validate: {
       name: (value: string) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -114,9 +115,7 @@ export const ModalCouponRuleForm: FC = () => {
     <Modal
       title={
         <ModalTitle
-          title={String.capitalizeFirstLetter(
-            `${tl(props?.rule ? "update" : "create")} ${tl("coupon_rules")}`
-          )}
+          title={`${props?.rule ? t`Update coupon rule` : t`Create coupon rule`}`}
           icon={IconNotes}
         />
       }
@@ -125,21 +124,21 @@ export const ModalCouponRuleForm: FC = () => {
       size={1000}
     >
       <Stack gap={16}>
-        <TextInput label={tl("name")} {...form.getInputProps("name")} />
+        <TextInput label={t`Name`} {...form.getInputProps("name")} />
 
-        <InputWrapper label={tl("description")} {...form.getInputProps("description")}>
+        <InputWrapper label={t`Description`} {...form.getInputProps("description")}>
           <Editor
             value={form.values.description}
             onChangeHTML={(v) => form.setFieldValue("description", v)}
-            placeholder={tl("description")}
+            placeholder={t`Description`}
           />
         </InputWrapper>
 
-        <InputWrapper label={tl("settings")}>
+        <InputWrapper label={t`Settings`}>
           <Card withBorder p={8} mt={5}>
             <Group>
               <Switch
-                label={tl("allow_cumulative_coupon_rule")}
+                label={t`Allow cumulative coupon rules`}
                 checked={form.values.isCumulative}
                 onChange={(v) => form.setFieldValue("isCumulative", v)}
               />
@@ -153,7 +152,7 @@ export const ModalCouponRuleForm: FC = () => {
               <Stack gap={5}>
                 <Group justify="space-between">
                   <Text fz="xs" fw={700}>
-                    {tl("rule")} {benefits.length === 1 ? "" : i + 1}
+                    {t`Rule`} {benefits.length === 1 ? "" : i + 1}
                   </Text>
 
                   <ActionIcon
@@ -186,14 +185,14 @@ export const ModalCouponRuleForm: FC = () => {
               fz={em(14)}
               onClick={() => benefitsHandler.append(initialBenefits[0])}
             >
-              {capitalize(`${tl("add")} ${tl("rule")}`)}
+              <Trans>Add rule</Trans>
             </Button>
           </Group>
         </Stack>
 
         <Group justify="center" mt={10}>
           <Button type="submit" miw={200} onClick={submit.handle} loading={submit.isSubmitting}>
-            {tl("complete")}
+            <Trans>Complete</Trans>
           </Button>
         </Group>
       </Stack>
@@ -211,10 +210,10 @@ const RuleBenfitForm: FC<{
   return (
     <Stack>
       <Select
-        label={tl("type")}
+        label={t`Type`}
         data={Object.values(CouponRuleBenefitType).map((v) => ({
           value: v,
-          label: tl(`crbt_${v}`),
+          label: couponRuleBenefitTypes[v].label(),
         }))}
         value={benefit.type}
         onChange={(v) => onChange({ ...benefit, type: v as CouponRuleBenefitType })}
@@ -227,8 +226,11 @@ const RuleBenfitForm: FC<{
           return (
             <SimpleGrid cols={{ md: 2 }}>
               <Select
-                label={tl("type")}
-                data={Object.values(DiscountType).map((v) => ({ value: v, label: tl(`cdt_${v}`) }))}
+                label={t`Type`}
+                data={Object.values(DiscountType).map((v) => ({
+                  value: v,
+                  label: discountTypes[v].label(),
+                }))}
                 value={data.type}
                 onChange={(v) =>
                   onChange({ ...benefit, data: { ...data, type: v as DiscountType, value: null } })
@@ -236,7 +238,7 @@ const RuleBenfitForm: FC<{
               />
 
               <NumberInput
-                label={tl("value")}
+                label={t`Value`}
                 hideControls
                 value={data.value}
                 onChange={(v) => onChange({ ...benefit, data: { ...data, value: v } })}
@@ -259,7 +261,7 @@ const RuleBenfitForm: FC<{
                   return (
                     <TextInput
                       flex={1}
-                      label={tl("product")}
+                      label={t`Product`}
                       value={data.product?.name}
                       onChange={() => false}
                       readOnly
@@ -271,10 +273,10 @@ const RuleBenfitForm: FC<{
 
               <SimpleGrid cols={{ md: 2 }}>
                 <Select
-                  label={tl("type")}
+                  label={t`Type`}
                   data={Object.values(DiscountType).map((v) => ({
                     value: v,
-                    label: tl(`cdt_${v}`),
+                    label: discountTypes[v].label(),
                   }))}
                   value={data.type}
                   onChange={(v) =>
@@ -286,7 +288,7 @@ const RuleBenfitForm: FC<{
                 />
 
                 <NumberInput
-                  label={tl("value")}
+                  label={t`Value`}
                   hideControls
                   value={data.value}
                   onChange={(v) => onChange({ ...benefit, data: { ...data, value: v } })}
@@ -310,7 +312,7 @@ const RuleBenfitForm: FC<{
                   return (
                     <TextInput
                       flex={1}
-                      label={tl("product")}
+                      label={t`Product`}
                       value={data.product?.name}
                       onChange={() => false}
                       readOnly
@@ -321,8 +323,8 @@ const RuleBenfitForm: FC<{
               />
 
               <NumberInput
-                label={tl("product_quantity")}
-                description={tl("coupon_rule_free_on_product_quantity_description")}
+                label={t`Product quantity`}
+                description={t`Quantity of free product, leave blank or fill in 0 if you want to be free all.`}
                 hideControls
                 value={data.quantity}
                 onChange={(v) => onChange({ ...benefit, data: { ...data, quantity: v } })}

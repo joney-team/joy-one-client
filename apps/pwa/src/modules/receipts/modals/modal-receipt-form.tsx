@@ -1,27 +1,23 @@
-import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
-import { FilesBox } from "@/modules/files/files-box";
-import { CustomerInput } from "@/modules/customers/components/customer-input";
+import { DateInput } from "@/components/inputs/date-input";
 import { ModalTitle } from "@/components/modal-title";
 import { useAuth } from "@/modules/auth/auth-context";
-import { CustomerEntity, CustomerShortInfo } from "@/modules/customers/customer-types";
+import { CustomerInput } from "@/modules/customers/components/customer-input";
+import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { onUploadFile } from "@/modules/files/file-service";
-import { getDateFormat, tl } from "@/modules/lang/lang-service";
+import { FilesBox } from "@/modules/files/files-box";
 import { LoanEntity } from "@/modules/loans/loans-types";
-import {
-  createReceipt,
-  receiptTypeColors,
-  receiptTypeIcons,
-} from "@/modules/receipts/receipts-service";
+import { createReceipt, receiptTypeColors } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptType } from "@/modules/receipts/receipts-types";
-import { DateTime } from "@/utils/date-time.utils";
+import { useColor } from "@/modules/theme/use-color";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import { Card, Center, Group, InputWrapper, NumberInput, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { DateInput } from "@/components/inputs/date-input";
+import { receiptTypes } from "../receipt-constants";
 
 interface ReceiptFormValues {
   amount: number;
@@ -59,8 +55,8 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
     },
     validate: {
       amount: (value) => {
-        if (!value) return tl("required");
-        if (value <= 0) return tl("invalid_money_amount");
+        if (!value) return t`Required`;
+        if (value <= 0) return t`Invalid money amount`;
       },
     },
   });
@@ -99,18 +95,18 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
   return (
     <Stack>
       {!props.type && (
-        <InputWrapper label={tl("type")}>
+        <InputWrapper label={t`Type`}>
           <Group pt={5} gap={10}>
-            {Object.values(ReceiptType).map((type) => {
+            {Object.entries(receiptTypes).map(([type, config]) => {
               return (
                 <Button
                   key={type}
-                  variant={form.values.type === type ? "filled" : "outline"}
-                  onClick={() => form.setFieldValue("type", type)}
-                  color={color(receiptTypeColors[type])}
-                  leftIcon={receiptTypeIcons[type]}
+                  variant={form.values.type === (type as ReceiptType) ? "filled" : "outline"}
+                  onClick={() => form.setFieldValue("type", type as ReceiptType)}
+                  color={color(config.color)}
+                  leftIcon={config.icon}
                 >
-                  {tl(`receipt_type_${type}`)}
+                  {config.label()}
                 </Button>
               );
             })}
@@ -118,17 +114,12 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
         </InputWrapper>
       )}
 
-      <NumberInput
-        label={tl("money_amount")}
-        withAsterisk
-        hideControls
-        {...form.getInputProps("amount")}
-      />
+      <NumberInput label={t`Amount`} withAsterisk hideControls {...form.getInputProps("amount")} />
 
-      <Textarea label={tl("note")} {...form.getInputProps("note")} />
+      <Textarea label={t`Note`} {...form.getInputProps("note")} />
 
       <DateInput
-        label={tl("pay_expire")}
+        label={t`Payment deadline`}
         value={form.values.expireAt}
         onChange={(date) => {
           form.setFieldValue("expireAt", date);
@@ -136,13 +127,13 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
       />
 
       <CustomerInput
-        label={tl("customer")}
+        label={t`Customer`}
         value={form.values.relatedCustomer}
         onSelect={(value) => form.setFieldValue("relatedCustomer", value)}
         disabled={!!props.relatedCustomer}
       />
 
-      <InputWrapper label={tl("files")}>
+      <InputWrapper label={t`Files`}>
         <Card p={10} withBorder mt={5}>
           <FilesBox
             onChangeRawFiles={(_files) => setReceiptFiles(_files)}
@@ -162,7 +153,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
           disabled={!form.isDirty()}
           color={color(receiptTypeColors[form.values.type])}
         >
-          {tl("complete")}
+          {t`Complete`}
         </Button>
       </Center>
     </Stack>
@@ -172,7 +163,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
 export const OnModalReceiptForm = (props?: ModalReceiptFormProps) => {
   return modals.open({
     modalId: "ModalReceiptForm",
-    title: <ModalTitle title={`${tl("create")} ${tl("receipt")}`} icon={IconCashRegister} />,
+    title: <ModalTitle title={t`Create receipt`} icon={IconCashRegister} />,
     children: <ModalReceiptForm {...props} />,
   });
 };

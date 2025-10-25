@@ -4,8 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { DateInput } from "@/components/inputs/date-input";
 import { ModalTitle } from "@/components/modal-title";
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
-import { ProductSelector } from "@/modules/products/components/product-selector";
-import { num, tl, tMulti } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import {
   multipleProductsStockIn,
   productStockRecordTypeOptions,
@@ -14,10 +13,12 @@ import {
   MultipleProductsStockInDto,
   ProductStockRecordType,
 } from "@/modules/product-stocks/product-stocks-types";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { required } from "@/utils/form.validate";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Group,
@@ -65,7 +66,7 @@ export const ModalProductStockIn: FC = () => {
       items: {
         product: required,
         quantity: (value) => {
-          if (!value || value <= 0) return tl("invalid_quantity");
+          if (!value || value <= 0) return t`Invalid quantity`;
         },
       },
     },
@@ -115,18 +116,13 @@ export const ModalProductStockIn: FC = () => {
 
   return (
     <Modal
-      title={
-        <ModalTitle
-          title={`product_stock_record_type_${ProductStockRecordType.STOCK_IN}`}
-          icon={IconBuildingWarehouse}
-        />
-      }
+      title={<ModalTitle title={t`Stock in`} icon={IconBuildingWarehouse} />}
       onClose={onClose}
       opened={opened}
       size={1000}
     >
       <Stack gap={10}>
-        <InputWrapper label={tMulti(["list"])}>
+        <InputWrapper label={t`List`}>
           <Table withTableBorder withColumnBorders withRowBorders horizontalSpacing={8}>
             <Table.Thead>
               <Table.Tr>
@@ -134,22 +130,22 @@ export const ModalProductStockIn: FC = () => {
                   #
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
-                  {tl("product")}
+                  {t`Product`}
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
-                  {tl("product_stock_code")}
+                  {t`Product stock code`}
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
-                  {tl("expire_at")}
+                  {t`Expire at`}
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
-                  {tl("note")}
+                  {t`Note`}
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
-                  {tl("quantity")}
+                  {t`Quantity`}
                 </Table.Th>
                 <Table.Th fz={12} fw={500} ta="right">
-                  {tl("costPrice")}
+                  {t`Cost price`}
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
                   {isMultiple && (
@@ -190,7 +186,7 @@ export const ModalProductStockIn: FC = () => {
                                   fw={item.product ? undefined : 300}
                                   fz={item.product ? undefined : 14}
                                 >
-                                  {item.product?.name || tMulti(["select"], ["product"])}
+                                  {item.product?.name || t`Select product`}
                                 </Text>
 
                                 {isMultiple && (
@@ -261,7 +257,7 @@ export const ModalProductStockIn: FC = () => {
 
               <Table.Tr>
                 <Table.Td colSpan={5} ta="right">
-                  {tl("total")}
+                  {t`Total`}
                 </Table.Td>
 
                 <Table.Td ta="right">
@@ -297,7 +293,7 @@ export const ModalProductStockIn: FC = () => {
             loading={form.submitting}
             onClick={onSubmit}
           >
-            {tl("complete")}
+            {t`Complete`}
           </Button>
         </Stack>
       </Stack>

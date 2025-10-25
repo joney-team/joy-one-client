@@ -1,5 +1,6 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
-import { tl } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceRoleEntity } from "@/modules/workspace-roles/workspace-roles-types";
@@ -9,6 +10,7 @@ import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Circle } from "../../../components/circle";
 import { Selector, SelectorContext } from "../../../components/selector";
+import { Trans } from "@lingui/react/macro";
 
 type WorkspaceRoleOption = Pick<WorkspaceRoleEntity, "_id" | "name" | "color">;
 
@@ -21,7 +23,7 @@ interface WorkspaceRolesSelectorProps {
 
 export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) => {
   const workspace = useWorkspace();
-  const options: WorkspaceRoleOption[] = workspace.roles.map((v) => ({ ...v, name: tl(v.name) }));
+  const options: WorkspaceRoleOption[] = workspace.roles.map((v) => ({ ...v, name: v.name }));
   const color = useColor();
 
   return (
@@ -30,9 +32,6 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
       autoCloseOnChange={false}
       staticSearch
       pinnedOptions={options}
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(mo) => {
         const _color = color(mo.color || "gray");
         return (
@@ -69,7 +68,7 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
             fw={500}
             onClick={toggle}
           >
-            {tl("select")}
+            <Trans>Select</Trans>
           </Button>
         );
       }}

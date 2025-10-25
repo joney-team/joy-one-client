@@ -3,10 +3,10 @@
 import { Group } from "@mantine/core";
 import { Fragment, memo, type FC } from "react";
 
-import { tl } from "@/modules/lang/lang-service";
-import { optionsFilter } from "@/modules/theme/generator";
-import { Select, TextInput } from "@mantine/core";
 import { useLocations } from "@/modules/locations/locations-context";
+import { optionsFilter } from "@/modules/theme/generator";
+import { t } from "@lingui/core/macro";
+import { Select, TextInput } from "@mantine/core";
 
 export const LocationForm: FC<{
   form: any;
@@ -21,7 +21,7 @@ export const LocationForm: FC<{
     <Fragment>
       <Group wrap="nowrap">
         <Select
-          label={tl("province")}
+          label={t`Province`}
           {...form.getInputProps(`${path}.provinceId`)}
           searchable
           data={vnLocations
@@ -35,7 +35,7 @@ export const LocationForm: FC<{
           withAsterisk={props.required}
         />
         <Select
-          label={tl("ward")}
+          label={t`Ward`}
           {...form.getInputProps(`${path}.wardId`)}
           searchable
           data={vnLocations
@@ -53,7 +53,7 @@ export const LocationForm: FC<{
       </Group>
 
       <TextInput
-        label={tl("address")}
+        label={t`Address`}
         {...form.getInputProps(`${path}.address`)}
         withAsterisk={props.required}
       />

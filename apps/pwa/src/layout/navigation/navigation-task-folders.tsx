@@ -1,4 +1,5 @@
-import { tl } from "@/modules/lang/lang-service";
+"use client";
+
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -15,6 +16,8 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, em, Group, Menu, rgba, Stack, Text } from "@mantine/core";
 import { IconDots, IconFolder, IconFolderOpen, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
@@ -89,11 +92,11 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
       process: async () => {
         const relatedTasks = await getTasks({ tagFolderId: tag._id, limit: 1 });
         onArchive({
-          name: tl("folder"),
+          name: t`Folder`,
           icon: IconFolder,
           children:
             relatedTasks.count > 0
-              ? `${tl("confirm_next")} ${relatedTasks.count} ${tl("remove_task_desc")}`
+              ? `${t`Are you sure you want to continue?`} ${t`${relatedTasks.count} related work will be moved to the default folder`}`
               : undefined,
           process: async () => {
             await tags.remove(tag._id).catch(onError);
@@ -149,7 +152,9 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
                   OnModalTagForm({ tag, type: TagType.TASK_FOLDER });
                 }}
               >
-                <Text>{tl("edit")}</Text>
+                <Text>
+                  <Trans>Edit</Trans>
+                </Text>
               </Menu.Item>
 
               <Menu.Item
@@ -159,7 +164,9 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
                   onRemoveTag();
                 }}
               >
-                <Text>{tl("remove")}</Text>
+                <Text>
+                  <Trans>Remove</Trans>
+                </Text>
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>

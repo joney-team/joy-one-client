@@ -1,6 +1,5 @@
 import { ResponseList } from "@/types";
 import { uploadFile } from "../files/file-service";
-import { tl } from "../lang/lang-service";
 import { ReceiptEntity } from "../receipts/receipts-types";
 import {
   LoanAssetEstimations,
@@ -11,6 +10,7 @@ import {
   LoanStatus,
 } from "./loans-types";
 
+import { t } from "@lingui/core/macro";
 import { api } from "../apis";
 import {
   CreateLoanDto,
@@ -194,10 +194,10 @@ export const loanPackageTypeColors: {
 export function renderLoanPeriod(days: number) {
   const month = Math.ceil(days / 30);
   if (days >= 30 && Number.isInteger(month)) {
-    return `${month} ${tl("months")}`;
+    return `${month} ${t`months`}`;
   }
 
-  return `${days} ${tl("days")}`;
+  return `${days} ${t`days`}`;
 }
 
 export async function loanLiquidationCalculate(id: string) {

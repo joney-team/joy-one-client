@@ -4,10 +4,12 @@ import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { ModalTitle } from "@/components/modal-title";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { promotionDescription } from "@/modules/promotions/promotions-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Card, Group, Indicator, Modal, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Icon, IconCheck, IconPackage } from "@tabler/icons-react";
@@ -37,7 +39,9 @@ export const OrderSalePromotions: FC = () => {
 
   return (
     <Group wrap="nowrap">
-      <Text ta="left">{tl("promotions")}</Text>
+      <Text ta="left">
+        <Trans>Promotions</Trans>
+      </Text>
 
       <Group flex={1} justify="end">
         {availablePromotions.isLoading ? (
@@ -57,7 +61,7 @@ export const OrderSalePromotions: FC = () => {
               fw={400}
               onClick={open}
             >
-              {tl("apply")} {num(orderPromotions.length)}/{num(promotions.length ?? 0)}
+              <Trans>Apply</Trans> {num(orderPromotions.length)}/{num(promotions.length ?? 0)}
             </Button>
           </Indicator>
         ) : (
@@ -68,7 +72,7 @@ export const OrderSalePromotions: FC = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle title="promotions" icon={IconPackage} />}
+        title={<ModalTitle title={t`Promotions`} icon={IconPackage} />}
       >
         <Stack>
           {promotions.map((promotion) => {
@@ -142,7 +146,7 @@ const PromotionCard: FC<{
           </ThemeIcon>
         ) : (
           <Button radius={100} size="xs">
-            {tl("apply")}
+            <Trans>Apply</Trans>
           </Button>
         )}
       </Group>

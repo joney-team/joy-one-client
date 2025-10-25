@@ -5,18 +5,17 @@ import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { EnumColumn } from "@/components/list/columns/enum-column";
 import { Selector } from "@/components/selector";
-import { tl } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 import { Badge, Combobox, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import { api } from "../apis";
 import { EventType } from "../events/event-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { OnPromotionModal } from "./modals/modal-promotion";
+import { promotionStatuses, promotionTypes } from "./promotions-constants";
 import {
   promotionDescription,
-  promotionRuleTypeConfigs,
-  promotionStatusConfigs,
   promotionTermsOfUseCustomerLimit,
   promotionTermsOfUseExpireAt,
 } from "./promotions-service";
@@ -34,27 +33,27 @@ export const PromostionList = () => {
             w: 400,
             options: Object.values(PromotionType).map((type) => ({
               value: type,
-              label: tl(promotionRuleTypeConfigs[type].label),
+              label: promotionTypes[type].label(),
             })),
             render: ({ data: promotion }) => {
-              const config = promotionRuleTypeConfigs[promotion.type as PromotionType];
-              if (!config)
+              const promotionType = promotionTypes[promotion.type as PromotionType];
+              if (!promotionType)
                 return (
                   <Badge color="gray" variant="light">
-                    {tl("unknown")}
+                    {t`Unknown`}
                   </Badge>
                 );
 
               return (
                 <Group gap={8} variant="light" wrap="nowrap">
-                  <Circle color={config.color} size={12} />
+                  <Circle color={promotionType.color} size={12} />
                   <Text>{promotionDescription(promotion)}</Text>
                 </Group>
               );
             },
           }),
           value: {
-            name: tl("terms_of_use"),
+            name: t`Terms of use`,
             render: ({ data: promotion }) => {
               return (
                 <Stack gap={5}>
@@ -64,22 +63,20 @@ export const PromostionList = () => {
               );
             },
           },
-          expireAt: DateTimeColumn({ name: "expireAt", defaultHidden: true, sortable: true }),
+          expireAt: DateTimeColumn({ name: t`Expire at`, defaultHidden: true, sortable: true }),
           status: EnumColumn<PromotionStatus>({
             w: 200,
             options: Object.values(PromotionStatus).map((status) => ({
               value: status,
-              label: tl(promotionStatusConfigs[status].label),
-              color: promotionStatusConfigs[status].color,
+              label: promotionStatuses[status].label(),
+              color: promotionStatuses[status].color,
             })),
             render: ({ data: promotion }) => {
               const isEditable = !promotion.expireAt || promotion.expireAt === 0;
 
               return (
                 <Tooltip
-                  label={tl(
-                    isEditable ? "click_to_change_status" : "promotion_status_not_editable"
-                  )}
+                  label={isEditable ? t`Click to change status` : t`Promotion status not editable`}
                 >
                   <Selector
                     disabled={isEditable}
@@ -87,7 +84,7 @@ export const PromostionList = () => {
                     pinnedOptions={[PromotionStatus.ACTIVE, PromotionStatus.CLOSED].map(
                       (status) => ({
                         id: status,
-                        label: tl(promotionStatusConfigs[status].label),
+                        label: promotionStatuses[status].label(),
                       })
                     )}
                     onSelect={(value) => {
@@ -99,13 +96,13 @@ export const PromostionList = () => {
                       });
                     }}
                     renderOption={(option) => {
-                      const config = promotionStatusConfigs[option.id as PromotionStatus];
-                      if (!config)
+                      const status = promotionStatuses[option.id as PromotionStatus];
+                      if (!status)
                         return (
                           <Combobox.Option value={option.id} key={option.id}>
                             <Group gap={8}>
                               <Circle color="gray" size={12} />
-                              <Text>{tl("unknown")}</Text>
+                              <Text>{t`Unknown`}</Text>
                             </Group>
                           </Combobox.Option>
                         );
@@ -113,32 +110,32 @@ export const PromostionList = () => {
                       return (
                         <Combobox.Option value={option.id} key={option.id}>
                           <Group gap={8}>
-                            <Circle color={config.color} size={12} />
-                            <Text>{tl(config.label)}</Text>
+                            <Circle color={status.color} size={12} />
+                            <Text>{status.label()}</Text>
                           </Group>
                         </Combobox.Option>
                       );
                     }}
                     target={(ctx) => {
-                      const config = promotionStatusConfigs[promotion.status as PromotionStatus];
-                      if (!config)
+                      const status = promotionStatuses[promotion.status as PromotionStatus];
+                      if (!status)
                         return (
                           <Badge
                             onClick={ctx.toggle}
                             color="gray"
                             className={isEditable ? "clickable" : "unclickable"}
                           >
-                            {tl("unknown")}
+                            {t`Unknown`}
                           </Badge>
                         );
 
                       return (
                         <Badge
                           onClick={ctx.toggle}
-                          color={config.color}
+                          color={status.color}
                           className={isEditable ? "clickable" : "unclickable"}
                         >
-                          {tl(config.label)}
+                          {status.label()}
                         </Badge>
                       );
                     }}
@@ -159,7 +156,7 @@ export const PromostionList = () => {
         ]}
         actions={[
           {
-            label: tl("edit"),
+            label: t`Edit`,
             icon: IconEdit,
             onClick: (promotion) => OnPromotionModal({ promotion }),
           },

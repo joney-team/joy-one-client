@@ -5,17 +5,17 @@ import { Empty } from "@/components/empty";
 import { SessionTitle } from "@/components/session-title";
 import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
-import { tl } from "@/modules/lang/lang-service";
 import { Period, ResponseList, StorageKey } from "@/types";
 import { DateTime } from "@/utils/date-time.utils";
+import { t } from "@lingui/core/macro";
 import { Group, SimpleGrid, Stack } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { IconAnalyze, IconClipboardList } from "@tabler/icons-react";
 import { FC } from "react";
 import { useQuery } from "../apis/use-query";
 import { EventType } from "../events/event-types";
-import { useWorkspace } from "../workspaces/workspace-context";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
+import { useWorkspace } from "../workspaces/workspace-context";
 
 export const DashboardBookings: FC = () => {
   const workspace = useWorkspace();
@@ -62,7 +62,7 @@ export const DashboardBookings: FC = () => {
 
   return (
     <Stack>
-      <SessionTitle id="dashboard-bookings" icon={IconClipboardList} name="Bookings">
+      <SessionTitle id="dashboard-bookings" icon={IconClipboardList} name={t`Bookings`}>
         <Group gap={8} wrap="nowrap">
           <ButtonSelect
             icon={IconAnalyze}
@@ -71,7 +71,7 @@ export const DashboardBookings: FC = () => {
                 ? { animation: "symbolLoader 2s linear infinite" }
                 : {}
             }
-            label={query.status === "all" ? tl("all") : tl("processing")}
+            label={query.status === "all" ? t`All` : t`Processing`}
             hideOptionLabel
             indicator={bookingData.length}
             onChange={(status) => setQuery((s: any) => ({ ...s, status: status }))}

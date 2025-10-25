@@ -3,13 +3,19 @@ import { Icon } from "@tabler/icons-react";
 import { Dispatch, SetStateAction } from "react";
 import { Locale } from "../lang/lang-types";
 import { LocationEntity } from "../locations/locations-types";
-import { WorkspaceBalance } from "../workspace-billings/workspace-billings-types";
-import { VerifyInvitaionTokenResponse, WorkspaceMember, WorkspaceMemberOnlineStatus } from "../workspace-members/workspace-members-types";
-import { WorkspacePermission, WorkspaceRoleEntity } from "../workspace-roles/workspace-roles-types";
-import { SetWorkspaceSettingsDto, WorkspaceSettingEntity, WorkspaceView } from "../workspace-settings/workspace-settings-types";
-import { WorkspaceSubscriptionEntity } from "../workspace-subscriptions/workspace-subscriptions-types";
-import { WorkspaceModule, WorkspaceModuleId, workspaceModuleConfigs } from "./workspace-modules";
 import { WorkspaceBranchEntity } from "../workspace-branches/workspace-branches-types";
+import {
+  VerifyInvitaionTokenResponse,
+  WorkspaceMember,
+  WorkspaceMemberOnlineStatus,
+} from "../workspace-members/workspace-members-types";
+import { WorkspacePermission, WorkspaceRoleEntity } from "../workspace-roles/workspace-roles-types";
+import {
+  SetWorkspaceSettingsDto,
+  WorkspaceSettingEntity,
+  WorkspaceView,
+} from "../workspace-settings/workspace-settings-types";
+import { WorkspaceModule, WorkspaceModuleId, workspaceModuleConfigs } from "./workspace-modules";
 
 export interface PluginMailerAccount {
   user: string;
@@ -36,14 +42,14 @@ export interface WorkspaceEntity extends BaseMongoEntity {
 }
 
 export enum WorkspaceType {
-  SOFTWARE = 'SOFTWARE',
-  BUSINESS = 'BUSINESS',
-  HOSPITAL = 'HOSPITAL',
-  CLINIC = 'CLINIC',
-  DENTAL = 'DENTAL',
-  SPA = 'SPA',
-  BEAUTY_SALON = 'BEAUTY_SALON',
-  CREDIT = 'CREDIT',
+  SOFTWARE = "SOFTWARE",
+  BUSINESS = "BUSINESS",
+  HOSPITAL = "HOSPITAL",
+  CLINIC = "CLINIC",
+  DENTAL = "DENTAL",
+  SPA = "SPA",
+  BEAUTY_SALON = "BEAUTY_SALON",
+  CREDIT = "CREDIT",
 }
 
 export interface WorkspaceDto {
@@ -91,13 +97,13 @@ export interface WorkspaceContext {
   availableModules: WorkspaceModule[];
   getModule: (id: WorkspaceModuleId) => WorkspaceModule;
   isCreateNew: boolean;
-  setIsCreateNew: Dispatch<SetStateAction<boolean>>
-  archive: () => Promise<void>
+  setIsCreateNew: Dispatch<SetStateAction<boolean>>;
+  archive: () => Promise<void>;
   activatedModule: WorkspaceModule | undefined;
   join: (code: string) => Promise<void>;
   ref: string;
   onlineStatus: WorkspaceMemberOnlineStatus;
-  defaultBranch?: Pick<WorkspaceBranchEntity, '_id' | 'name' | 'hotline' | 'settings'> | null;
+  defaultBranch?: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline" | "settings"> | null;
   isShouldEnableBranches: boolean;
   isShowBranches: boolean;
   currency: AppCurrency;
@@ -115,7 +121,7 @@ export interface WorkspaceMemberInvitation {
     name: string;
     avatar?: string;
     phone?: string;
-  }
+  };
   expireAt: number;
 }
 
@@ -125,12 +131,12 @@ export interface WorkspaceMemberInvitationState {
 }
 
 export interface CreateWorkspaceInviteMemberDto {
-  email?: string
+  email?: string;
 }
 
 export enum DashboardWidgetDisplayType {
-  REPORT = 'REPORT',
-  CHART = 'CHART',
+  REPORT = "REPORT",
+  CHART = "CHART",
 }
 
 export interface DashboardWidget {

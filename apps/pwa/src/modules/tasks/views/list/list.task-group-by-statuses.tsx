@@ -1,13 +1,16 @@
+"use client";
+
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
+import { num } from "@/modules/lang/lang-service";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { num, tl } from "@/modules/lang/lang-service";
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
+import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle, syncTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useList } from "@/components/list/use-list";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Button, Card, Group, Stack, Text, em } from "@mantine/core";
 import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
@@ -122,7 +125,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
               })
             }
           >
-            {tl("create")} {tl("task")}
+            <Trans>Create task</Trans>
           </Button>
         )}
       </Group>

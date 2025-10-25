@@ -1,14 +1,14 @@
 "use client";
 
+import { Avatar } from "@/components/avatar";
 import { List } from "@/components/list";
+import { EnumColumn } from "@/components/list/columns/enum-column";
+import { formatBytes } from "@joy-one-client/utils/files";
 import { Group, Stack, Text } from "@mantine/core";
 import { type FC } from "react";
 import { WorkspaceStatsEntity } from "../workspace-stats/workspace-stats.types";
-import { tl } from "../lang/lang-service";
-import { Avatar } from "@/components/avatar";
+import { workspaceTypes } from "../workspaces/workspace-constants";
 import { WorkspaceType } from "../workspaces/workspaces-types";
-import { EnumColumn } from "@/components/list/columns/enum-column";
-import { formatBytes } from "@joy-one-client/utils/files";
 
 export const AdminWorkspaces: FC = () => {
   return (
@@ -33,7 +33,7 @@ export const AdminWorkspaces: FC = () => {
             valuePath: "workspace.type",
             name: "Type",
             options: Object.values(WorkspaceType).map((type) => ({
-              label: tl(`ws_${type}`),
+              label: workspaceTypes[type].name(),
               value: type,
             })),
           }),

@@ -1,7 +1,6 @@
 "use client";
 
 import { useLayout } from "@/layout/layout-context";
-import { tl } from "@/modules/lang/lang-service";
 import { useOrderFeatureName } from "@/modules/orders/order-hooks";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
@@ -16,6 +15,8 @@ import { PrinterHeader } from "./printer-header";
 import { PrinterComponentProps, PrinterProps, PrinterSettings, PrintSize } from "./printer-types";
 
 import { classNames } from "@/utils/ui.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { PrinterBody } from "./printer-body";
 import { PrinterSettingsBar, printerSizeClasses } from "./printer-settings-bar";
 import styles from "./printer.module.css";
@@ -43,8 +44,8 @@ export const Printer: FC<PrinterProps> = (props) => {
   });
 
   const printTitle = useMemo(() => {
-    const entity = "props.receipt" in props ? "receipt" : orderFeatureName.singular;
-    return tl(`print_entity`, { entity: tl(entity).toLowerCase() });
+    const entity = "props.receipt" in props ? t`Receipt` : t`Order`;
+    return t`Print ${entity}`;
   }, [props, orderFeatureName]);
 
   const printerClass = classNames(styles.Printer, styles[settings.size]);
@@ -129,12 +130,12 @@ export const Printer: FC<PrinterProps> = (props) => {
               <Stack gap={12}>
                 <Group justify="center" mt={16}>
                   <Button miw={150} onClick={handlePrint} leftIcon={IconPrinter}>
-                    {tl("print")}
+                    <Trans>Print</Trans>
                   </Button>
                 </Group>
 
                 <Anchor ta="center" onClick={close} fz={12} c="gray">
-                  {tl("exit")}
+                  <Trans>Exit</Trans>
                 </Anchor>
               </Stack>
             </Stack>

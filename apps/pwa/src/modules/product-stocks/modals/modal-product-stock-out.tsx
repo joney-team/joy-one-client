@@ -1,8 +1,7 @@
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { ProductSelector } from "@/modules/products/components/product-selector";
-import { tl, tMulti } from "@/modules/lang/lang-service";
 import { ProductStockEntity } from "@/modules/product-stocks/product-stocks-entity";
 import {
   productStockOut,
@@ -12,8 +11,12 @@ import {
   ProductStockOutDto,
   ProductStockRecordType,
 } from "@/modules/product-stocks/product-stocks-types";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
+import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Input, InputWrapper, Modal, NumberInput, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -73,7 +76,7 @@ export const ModalProductStockOut: FC = () => {
     <Modal
       title={
         <ModalTitle
-          title={`product_stock_record_type_${ProductStockRecordType.STOCK_OUT}`}
+          title={t`Stock out`}
           icon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].icon}
           color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].color)}
         />
@@ -90,13 +93,13 @@ export const ModalProductStockOut: FC = () => {
             onSelect={(product) => form.setFieldValue("product", product)}
             target={(ctx) => {
               return (
-                <InputWrapper flex={1} label={tl("product")}>
+                <InputWrapper flex={1} label={t`Product`}>
                   <Input
                     onClick={ctx.toggle}
                     flex={1}
                     value={form.values.product?.name || ""}
                     onChange={() => false}
-                    placeholder={tMulti(["select"], ["product"])}
+                    placeholder={t`Select product`}
                     disabled={!!props.current?.stock}
                   />
                 </InputWrapper>
@@ -105,13 +108,13 @@ export const ModalProductStockOut: FC = () => {
           />
 
           <NumberInput
-            label={tl("quantity")}
+            label={t`Quantity`}
             {...form.getInputProps("quantity")}
             min={0}
             max={props.current?.stock ? props.current.stock.remainQuantity : undefined}
           />
 
-          <Textarea label={tl("note")} {...form.getInputProps("note")} />
+          <Textarea label={t`Note`} {...form.getInputProps("note")} />
         </Stack>
 
         <Stack align="center" mt={16}>
@@ -122,7 +125,7 @@ export const ModalProductStockOut: FC = () => {
             loading={form.submitting}
             onClick={onSubmit}
           >
-            {tl("complete")}
+            <Trans>Complete</Trans>
           </Button>
         </Stack>
       </Stack>

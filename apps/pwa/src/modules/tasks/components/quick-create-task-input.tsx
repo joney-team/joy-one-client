@@ -1,8 +1,8 @@
 "use client";
 
-import { tl, tMulti } from "@/modules/lang/lang-service";
 import { createTask } from "@/modules/tasks/tasks-service";
 import { onActionLoad } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, Popover, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
@@ -23,7 +23,7 @@ export const QuickCreateTaskInput: FC<PropsWithChildren<QuickCreateTaskInputProp
     </ActionIcon>
   );
 
-  const label = props.parentId ? tl("create_sub_task") : tMulti(["create"], ["task"]);
+  const label = props.parentId ? t`Create subtask` : t`Create task`;
 
   return (
     <Popover shadow="md" opened={opened} onChange={setOpened}>
@@ -32,7 +32,7 @@ export const QuickCreateTaskInput: FC<PropsWithChildren<QuickCreateTaskInputProp
       <Popover.Dropdown p={10}>
         <TextInput
           label={label}
-          placeholder={tl("enter_task_name")}
+          placeholder={t`Enter task name`}
           autoFocus
           onKeyUp={(e) => {
             if (e.key === "Enter") {
@@ -40,7 +40,7 @@ export const QuickCreateTaskInput: FC<PropsWithChildren<QuickCreateTaskInputProp
               e.stopPropagation();
               const value = (e.target as any).value;
               onActionLoad({
-                name: tMulti(["create"], ["task"]),
+                name: t`Create task`,
                 process: () =>
                   createTask({
                     name: value,

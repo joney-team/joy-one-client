@@ -1,10 +1,10 @@
 "use client";
 
+import { Errored } from "@/components/errored";
 import { CommentsIllustration } from "@/components/illustrations/comments";
 import { useRouter } from "@/hooks/use-router";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { tl } from "@/modules/lang/lang-service";
 import { MessageBox } from "@/modules/message-boxes/message-box";
 import { ContainerMessageBox } from "@/modules/message-boxes/message-box/message-box-container";
 import { MessageBoxHead } from "@/modules/message-boxes/message-box/message-box-head";
@@ -13,11 +13,11 @@ import { MessageBoxesContext } from "@/modules/message-boxes/message-boxes-conte
 import { MessageBoxesIntegrate } from "@/modules/message-boxes/message-boxes-integrate";
 import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
+import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { useParams } from "next/navigation";
 import { type FC, type PropsWithChildren } from "react";
 import { useQuery } from "../apis/use-query";
-import { Errored } from "@/components/errored";
 
 export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
   const workspaceLayout = useWorkspaceLayout();
@@ -119,7 +119,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
                   >
                     <CommentsIllustration width={300} />
                     <Text ta="center" c="gray" fz={12}>
-                      {tl("message_box_no_conversations")}
+                      <Trans>Select a conversation to start</Trans>
                     </Text>
                   </Stack>
                 )}

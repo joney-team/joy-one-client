@@ -4,7 +4,7 @@ import { FlexSize } from "@/components/flex-size";
 import { CommentsIllustration } from "@/components/illustrations/comments";
 import { LayoutSplit } from "@/components/layout-split";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { tl } from "@/modules/lang/lang-service";
+import { Trans } from "@lingui/react/macro";
 import { Stack, Text } from "@mantine/core";
 import { FC, useState } from "react";
 import { MessageBox } from ".";
@@ -51,7 +51,7 @@ export const ContainerMessageBox: FC = () => {
           <Stack flex={1} w="100%" justify="center" align="center">
             <CommentsIllustration width={300} />
             <Text ta="center" c="gray" fz={12}>
-              {tl("message_box_no_conversations")}
+              <Trans>Select a conversation to start</Trans>
             </Text>
           </Stack>
         );

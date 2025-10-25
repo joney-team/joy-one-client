@@ -1,9 +1,12 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { EntityImage } from "@/components/entity-image";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
 import { Renderer } from "@/components/renderer";
+import { genders } from "@/constant";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
@@ -12,14 +15,9 @@ import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDate, tl } from "@/modules/lang/lang-service";
+import { num, renderDate } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
-import {
-  archiveLoan,
-  getLoanByCode,
-  loanStatusColors,
-  updateLoanAssetData,
-} from "@/modules/loans/loans-service";
+import { archiveLoan, getLoanByCode, updateLoanAssetData } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { OnModalSignLoan } from "@/modules/loans/modals/modal-sign-loan";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -29,6 +27,8 @@ import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { formatPhoneNumber } from "@/utils/phone.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -66,6 +66,7 @@ import { LoanCustomerKyc } from "./components/loan-customer-kyc";
 import { LoanDisburesement } from "./components/loan-disbursement";
 import { LoanDocuments } from "./components/loan-documents";
 import { LoanPayments } from "./components/loan-payments";
+import { loanAssetTypes, loanStatuses } from "./loans-constants";
 
 export const LoanDetail: NextPage = () => {
   const params = useParams();
@@ -131,7 +132,7 @@ export const LoanDetail: NextPage = () => {
 
   const _updateAssetData = useDebouncedCallback((assetData) => {
     onActionLoad({
-      name: tl("update_loan_asset_data"),
+      name: t`Update asset information`,
       process: () => updateLoanAssetData(loan.data!.id, { assetData }).catch(onError),
     });
   }, 500);
@@ -256,12 +257,12 @@ export const LoanDetail: NextPage = () => {
 
             <SimpleGrid cols={{ md: 4 }}>
               <InfoCard
-                label="Ngày sinh"
+                label={t`Birhtday`}
                 content={customer.data.birthday ? renderDate(customer.data.birthday) : "--"}
               />
-              <InfoCard label="Giới tính" content={tl(customer.data.gender)} />
+              <InfoCard label={t`Gender`} content={genders[customer.data.gender].name()} />
               <InfoCard
-                label="Số điện thoại"
+                label={t`Phone`}
                 content={customer.data.phone ? formatPhoneNumber(customer.data.phone) : "--"}
                 href={`tel:${customer.data.phone}`}
                 visible={workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)}
@@ -272,27 +273,27 @@ export const LoanDetail: NextPage = () => {
                 href={`mailto:${customer.data.email}`}
               />
               <InfoCard
-                label="loan_package"
-                content={`${loan.data.package.id} / ${tl(
-                  `loan_asset_type_${loan.data.assetType}`
-                )}`}
+                label={t`Loan package`}
+                content={`${loan.data.package.id} / ${loanAssetTypes[
+                  loan.data.assetType
+                ]?.label()}`}
               />
               <InfoCard label="money_amount" content={num(loan.data.amount, { type: "money" })} />
 
               {workspace.isShouldEnableBranches && (
                 <InfoCard
-                  label="workspace_branch"
-                  content={loan.data.workspaceBranch?.name || tl("main_workspace_branch")}
+                  label={t`Workspace branch`}
+                  content={loan.data.workspaceBranch?.name || t`Main office`}
                 />
               )}
 
               <InfoCard
-                label="loan_contract"
+                label={t`Loan contract`}
                 content={
                   linkContractPdf ? (
                     <Group gap={4} align="center">
                       <IconFileTypePdf size={18} />
-                      {tl("view_contract")}
+                      <Trans>View contract</Trans>
                     </Group>
                   ) : (
                     "--"
@@ -303,12 +304,12 @@ export const LoanDetail: NextPage = () => {
 
               {linkLiquidationPdf && (
                 <InfoCard
-                  label="view_liquidation_pdf"
+                  label={t`Liquidation statement`}
                   content={
                     linkLiquidationPdf ? (
                       <Group gap={4} align="center">
                         <IconFileTypePdf size={18} />
-                        {tl("view")}
+                        <Trans>View</Trans>
                       </Group>
                     ) : (
                       "--"
@@ -319,9 +320,9 @@ export const LoanDetail: NextPage = () => {
               )}
 
               <InfoCard
-                label="status"
-                content={tl(`loan_status_${loan.data.status}`)}
-                c={loanStatusColors[loan.data.status]}
+                label={t`Status`}
+                content={loanStatuses[loan.data.status].label()}
+                c={loanStatuses[loan.data.status].color}
               />
             </SimpleGrid>
           </Stack>
@@ -335,12 +336,12 @@ export const LoanDetail: NextPage = () => {
               <Card shadow="xs" p={30}>
                 <Stack>
                   <Text c="orange" ta="center">
-                    {tl("waiting_for_signature")}
+                    <Trans>Waiting for customer to sign the contract</Trans>
                   </Text>
                   <Renderer visible={workspace.hasPermission(WorkspacePermission.LOANS_CREATOR)}>
                     <Center>
                       <Button color="orange" onClick={() => OnModalSignLoan({ loan: loan.data! })}>
-                        {tl("sign_contract")}
+                        <Trans>Sign contract</Trans>
                       </Button>
                     </Center>
                   </Renderer>
@@ -363,7 +364,7 @@ export const LoanDetail: NextPage = () => {
               }}
             >
               <Stepper.Step
-                label="Thông tin khách hàng & KYC"
+                label={t`Customer information & KYC`}
                 icon={<IconUserScan size={18} />}
                 completedIcon={<IconShieldCheckered size={18} />}
                 allowStepSelect={activeStep >= 0}
@@ -378,7 +379,7 @@ export const LoanDetail: NextPage = () => {
               />
 
               <Stepper.Step
-                label="Hồ sơ vay"
+                label={t`Loan application`}
                 icon={<IconClipboardText size={18} />}
                 completedIcon={<IconClipboardCheck size={18} />}
                 disabled={activeStep < 1}
@@ -394,7 +395,7 @@ export const LoanDetail: NextPage = () => {
               />
 
               <Stepper.Step
-                label="Giải ngân"
+                label={t`Disbursement`}
                 icon={<IconCreditCardPay size={18} />}
                 completedIcon={<IconCreditCardPay size={18} />}
                 disabled={activeStep < 2}
@@ -408,7 +409,7 @@ export const LoanDetail: NextPage = () => {
               />
 
               <Stepper.Step
-                label="Thanh toán"
+                label={t`Payment`}
                 icon={<IconAnalyze size={18} />}
                 completedIcon={<IconAnalyze size={18} />}
                 disabled={activeStep < 3}
@@ -454,14 +455,14 @@ export const LoanDetail: NextPage = () => {
                   }
                   onClick={() =>
                     onArchive({
-                      name: `Hợp đồng vay ${renderEntityCode(loan.data!.code)}`,
+                      name: `${t`Loan contract`} ${renderEntityCode(loan.data!.code)}`,
                       process: () => archiveLoan(loan.data!.id),
                       onArchived: () => router.back(),
                     })
                   }
                 >
                   <Text fz={12} fw={400}>
-                    Xoá
+                    <Trans>Delete</Trans>
                   </Text>
                 </Button>
               </Center>
@@ -504,7 +505,7 @@ const InfoCard: FC<{
   return (
     <Stack gap={0}>
       <Text fz={12} fw={500} c="gray.6">
-        {tl(props.label)}
+        {props.label}
       </Text>
       <ContentWrapper>
         {typeof props.content === "string" ? (

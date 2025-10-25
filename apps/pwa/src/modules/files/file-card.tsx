@@ -1,3 +1,5 @@
+"use client";
+
 import { Renderer } from "@/components/renderer";
 import {
   detectFileIdFromUrl,
@@ -6,8 +8,8 @@ import {
 } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { tl } from "@/modules/lang/lang-service";
 import { formatBytes, getFileName } from "@/utils/file.utils";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Avatar,
@@ -32,8 +34,8 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
+import { api } from "../apis";
 import { renderFileUrl } from "./files-utils";
-import { api, apiTools } from "../apis";
 
 interface FileCardProps extends CardProps {
   src: File | string;
@@ -62,7 +64,7 @@ export const FileCard: FC<FileCardProps> = ({
   const [file, setFile] = useState<FileEntity | null>();
 
   const fileSize = file?.size ?? calculatedFileSize;
-  const filename = file?.fileName ?? tl(getFileName(fileUri));
+  const filename = file?.fileName ?? getFileName(fileUri);
 
   const initialize = async () => {
     try {
@@ -124,7 +126,7 @@ export const FileCard: FC<FileCardProps> = ({
             {filename}
           </Text>
           <Text fz={10} c="gray.6">
-            {fileSize !== null ? formatBytes(fileSize) : tl("unknown_file_size")}
+            {fileSize !== null ? formatBytes(fileSize) : t`Unknown file size`}
           </Text>
         </Stack>
 

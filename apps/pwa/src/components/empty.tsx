@@ -1,8 +1,6 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { String } from "@/utils/string.utils";
 import { t } from "@lingui/core/macro";
 import { alpha, Stack, StackProps, Text } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
@@ -11,7 +9,6 @@ import { BoxIllustration } from "./illustrations/box";
 
 export interface EmptyProps extends StackProps {
   message?: string;
-  entity?: string;
   icon?: Icon;
   color?: string;
   visible?: boolean;
@@ -20,16 +17,7 @@ export interface EmptyProps extends StackProps {
 }
 
 export const Empty: FC<EmptyProps> = (props) => {
-  const {
-    message: messageProp,
-    entity,
-    icon,
-    color: colorProp,
-    visible,
-    ref,
-    hideBorder,
-    ...rest
-  } = props;
+  const { message: messageProp, icon, color: colorProp, visible, ref, hideBorder, ...rest } = props;
 
   const color = useColor();
 
@@ -38,11 +26,7 @@ export const Empty: FC<EmptyProps> = (props) => {
 
   if (typeof props.visible === "boolean" && !!!props.visible) return null;
 
-  const message = messageProp
-    ? tl(messageProp)
-    : entity
-    ? tl(`empty_entity`, { entity: tl(entity) })
-    : t`No data`;
+  const message = messageProp ? messageProp : t`No data`;
 
   return (
     <Stack
@@ -60,7 +44,7 @@ export const Empty: FC<EmptyProps> = (props) => {
       {Icon ? <Icon width={50} color={_color} /> : <BoxIllustration width={45} />}
 
       <Text fz="xs" fw={300} c={_color}>
-        {String.capitalizeFirstLetter(message)}
+        {message}
       </Text>
 
       {props.children}

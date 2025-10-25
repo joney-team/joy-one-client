@@ -1,6 +1,6 @@
 import { ModalTitle } from "@/components/modal-title";
+import { eventTypes } from "@/modules/events/event-constants";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { modals } from "@mantine/modals";
 import { IconForms } from "@tabler/icons-react";
 import { FormCustomField, FormCustomFieldProps } from "../components/form-custom-field";
@@ -12,8 +12,8 @@ export const OnModalCustomField = (props?: FormCustomFieldProps) => {
       <ModalTitle
         title={
           props?.customField
-            ? tl(`event_type_${EventType.CUSTOM_FIELDS_UPDATED}`)
-            : tl(`event_type_${EventType.CUSTOM_FIELDS_NEW}`)
+            ? eventTypes[EventType.CUSTOM_FIELDS_UPDATED].name()
+            : eventTypes[EventType.CUSTOM_FIELDS_NEW].name()
         }
         icon={IconForms}
       />

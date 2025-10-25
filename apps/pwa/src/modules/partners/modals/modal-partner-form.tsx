@@ -4,11 +4,11 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { onUploadFile } from "@/modules/files/file-service";
-import { tl } from "@/modules/lang/lang-service";
 import { createPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { onError } from "@/utils/exceptions.utils";
-import { Group, Modal, Stack, Text, ThemeIcon, em, TextInput } from "@mantine/core";
+import { t } from "@lingui/core/macro";
+import { em, Group, Modal, Stack, Text, TextInput, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -37,7 +37,7 @@ export const ModalParnterForm: FC = () => {
     } as any,
     validate: {
       name: (value: string) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -78,9 +78,7 @@ export const ModalParnterForm: FC = () => {
       onClose={close}
       title={
         <ModalTitle
-          title={
-            props?.partner ? `${tl("update")} ${tl("partner")}` : `${tl("create")} ${tl("partner")}`
-          }
+          title={props?.partner ? t`Update partner` : t`Create partner`}
           icon={IconTopologyStar3}
         />
       }
@@ -112,14 +110,14 @@ export const ModalParnterForm: FC = () => {
                 <ThemeIcon variant="transparent" color="dark" size="md">
                   <IconUpload size={18} strokeWidth={1.2} />
                 </ThemeIcon>
-                <Text fz={em(10)}>{tl("click_to_change")}</Text>
+                <Text fz={em(10)}>{t`Click to change`}</Text>
               </Group>
             </Group>
           </Dropzone>
         </Group>
 
-        <TextInput withAsterisk label={tl("name")} {...form.getInputProps("name")} />
-        <TextInput label={tl("phone")} {...form.getInputProps("phone")} />
+        <TextInput withAsterisk label={t`Name`} {...form.getInputProps("name")} />
+        <TextInput label={t`Phone`} {...form.getInputProps("phone")} />
         <TextInput label="Email" {...form.getInputProps("email")} />
 
         <Button
@@ -130,7 +128,7 @@ export const ModalParnterForm: FC = () => {
           disabled={!form.isDirty() && !avatar}
           type="submit"
         >
-          {tl("complete")}
+          {t`Complete`}
         </Button>
       </Stack>
     </Modal>

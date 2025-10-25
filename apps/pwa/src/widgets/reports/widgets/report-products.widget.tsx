@@ -1,17 +1,23 @@
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { Empty } from "@/components/empty";
+import { FlexSize } from "@/components/flex-size";
 import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
-import { num, tl, tMulti } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
+import { productTypes } from "@/modules/products/products-constants";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
 import { ReceiptReportItem } from "@/modules/receipts/receipts-types";
+import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WidgetProps } from "@/widgets/types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -35,8 +41,6 @@ import {
 import Link from "next/link";
 import { FC, useRef, useState } from "react";
 import { ReportWidgetsContext } from "../types";
-import { FlexSize } from "@/components/flex-size";
-import { t } from "@lingui/core/macro";
 
 export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (props) => {
   const filterState = useRef<any>({});
@@ -149,7 +153,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                     }
                   }}
                 >
-                  {tl(`product_type_${v}`)}
+                  {productTypes[v].label()}
 
                   <Circle
                     ml={10}
@@ -176,16 +180,16 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                         <Table.Thead>
                           <Table.Tr>
                             <Table.Th w={40}>#</Table.Th>
-                            <Table.Th>{tl("name")}</Table.Th>
+                            <Table.Th>{t`Name`}</Table.Th>
                             <Table.Th w={80} ta="right">
-                              {tl("qty")}
+                              {t`QTY`}
                             </Table.Th>
                             <Table.Th w={200} ta="right">
-                              {tl("revenue")}
+                              {t`Revenue`}
                             </Table.Th>
                             {workspace.hasPermission(WorkspacePermission.REPORTS_VIEW) && (
                               <Table.Th w={200} ta="right">
-                                {tl("profit")}
+                                {t`Profit`}
                               </Table.Th>
                             )}
                           </Table.Tr>
@@ -253,8 +257,9 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
           <ThemeIcon size="xs" variant="transparent">
             <IconClipboardList />
           </ThemeIcon>
-          {num(items.length)}{" "}
-          {tl("entity_related", { entity: tMulti(["receipts"], ["/"], [moduleOrder.name()]) })}
+          <Trans>
+            {num(items.length)} related to {t`Receipts`.toLowerCase()} / {moduleOrder?.name()}
+          </Trans>
           <ActionIcon variant="subtle" size="xs">
             {!isShow ? <IconChevronDown /> : <IconChevronUp />}
           </ActionIcon>
@@ -283,7 +288,7 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
 
                 {!!receipt && (
                   <Group justify="space-between">
-                    <Text fz={16}>{tl("receipt")}</Text>
+                    <Text fz={16}>{t`Receipt`}</Text>
                     <Anchor component={Link} href={`/receipts/${receipt?.data.id}`}>
                       <Text fw={700} fz={em(13)}>
                         {renderEntityCode(receipt?.data.code)}
@@ -294,7 +299,7 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
 
                 {!!product && (
                   <Group justify="space-between">
-                    <Text fz={16}>{tl("qty")}</Text>
+                    <Text fz={16}>{t`QTY`}</Text>
                     <Text fw={700} fz={em(13)}>
                       {num(product.data.qty)}
                     </Text>

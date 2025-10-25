@@ -7,7 +7,6 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import {
   Card,
-  Center,
   em,
   Group,
   NumberInput,
@@ -31,18 +30,21 @@ import { createCustomer, updateCustomer } from "../customer-service";
 
 import { Form } from "@/components/form";
 import { DateInput } from "@/components/inputs/date-input";
-import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { medicalHistoryOptions } from "@/configs/medical.config";
+import { genders } from "@/constant";
 import { useRouter } from "@/hooks/use-router";
-import { getClientLocale, tl } from "@/modules/lang/lang-service";
+import { api } from "@/modules/apis";
+import { getClientLocale } from "@/modules/lang/lang-service";
+import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Gender } from "@/types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { LocationForm } from "../../../components/location-form";
 import { Renderer } from "../../../components/renderer";
 import { CustomerRelationshipContactInput } from "./customer-relationship-contact-input";
-import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
-import { api } from "@/modules/apis";
 
 export interface CustomerFormProps {
   onDone?: (customer: CustomerEntity) => void | Promise<void>;
@@ -68,7 +70,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
     },
     validate: {
       name: (value: string) => {
-        if (!value) return tl("must_be_provided");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -126,20 +128,20 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
     <Form onSubmit={onSubmit}>
       <Stack>
         <WorkspaceBranchInput
-          label={tl("branch")}
+          label={t`Branch`}
           value={form.values.workspaceBranch}
           onChange={(branch) => form.setFieldValue("workspaceBranch", branch)}
         />
 
-        <TextInput autoFocus withAsterisk label={tl("name")} {...form.getInputProps("name")} />
+        <TextInput autoFocus withAsterisk label={t`Name`} {...form.getInputProps("name")} />
         <TextInput
-          label={tl("phone")}
+          label={t`Phone`}
           placeholder={configs.placeholders.phone}
           {...form.getInputProps("phone")}
           leftSection={<IconPhone strokeWidth={1.2} size={18} />}
         />
         <TextInput
-          label="Email"
+          label={t`Email`}
           placeholder={configs.placeholders.email}
           {...form.getInputProps("email")}
           leftSection={<IconMail strokeWidth={1.2} size={18} />}
@@ -147,7 +149,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
 
         <Renderer visible={workspace.type === WorkspaceType.CREDIT}>
           <NumberInput
-            label={tl("salary_amount")}
+            label={t`Salary amount`}
             {...form.getInputProps("salaryAmount")}
             hideControls
           />
@@ -155,17 +157,17 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
 
         <Group align="start">
           <DateInput
-            label={tl("birthday")}
+            label={t`Birthday`}
             {...form.getInputProps("birthday")}
             style={{ flex: 1 }}
             leftSection={<IconCake strokeWidth={1.2} size={18} />}
           />
 
           <Select
-            label={tl("gender")}
+            label={t`Gender`}
             searchable
             data={Object.values(Gender).map((gender) => ({
-              label: tl(gender).toString(),
+              label: genders[gender].name(),
               value: gender,
             }))}
             {...form.getInputProps("gender")}
@@ -177,7 +179,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
           <Stack gap={16}>
             <Stack gap={5}>
               <Text fz={em(11)} fw={500}>
-                Địa chỉ hiện tại
+                {t`Current address`}
               </Text>
               <Card withBorder shadow="none" p={10}>
                 <Stack gap={8}>
@@ -188,7 +190,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
 
             <Stack gap={5}>
               <Text fz={em(11)} fw={500}>
-                Địa chỉ thứ 2 (Quê quán)
+                {t`Secondary address`} ({t`Homeland`})
               </Text>
               <Card withBorder shadow="none" p={10}>
                 <Stack gap={8}>
@@ -209,7 +211,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
           )}
         >
           <TagsInput
-            label={tl("medical_history")}
+            label={t`Medical history`}
             leftSection={<IconClipboardHeart strokeWidth={1.2} size={18} />}
             style={{ flex: 1 }}
             data={medicalHistoryOptions[getClientLocale()]}
@@ -222,7 +224,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
         </Renderer>
 
         <WorkspaceMembersInput
-          label={tl("assignee")}
+          label={t`Assignee`}
           style={{ flex: 1 }}
           {...form.getInputProps("assigneeUsers")}
         />
@@ -230,7 +232,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
         <Group mt={10} justify="center" align="center">
           {props.customer && (
             <Button leftIcon={IconLocation} variant="outline" onClick={convertLocations}>
-              {tl("convert_locations")}
+              <Trans>Convert locations</Trans>
             </Button>
           )}
 
@@ -240,7 +242,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
             leftIcon={IconCheck}
             disabled={!form.isDirty()}
           >
-            {tl("complete")}
+            <Trans>Complete</Trans>
           </Button>
         </Group>
       </Stack>

@@ -2,9 +2,9 @@ import { configs } from "@/configs/layout.config";
 import { StorageKey } from "@/types";
 import { decryptData, encryptData } from "@/utils/crypto.utils";
 import config from "@joy-one-client/config";
+import { t } from "@lingui/core/macro";
 import { getGlobal } from "../../global";
 import { api } from "../apis";
-import { tl } from "../lang/lang-service";
 import {
   AuthRenewPasswordByCodeDto,
   AuthRequestRenewUserPasswordDto,
@@ -97,7 +97,7 @@ export const getRefreshToken = async () => {
 
 export const retrieveAccessToken = async (): Promise<string> => {
   const refreshToken = await getRefreshToken();
-  if (!refreshToken) throw new Error(tl("SESSION_EXPIRED"));
+  if (!refreshToken) throw new Error(t`Session expired, please login again`);
 
   const result = await api.post<AuthTokenResult>("/auth/refresh-token", { refreshToken });
   await Promise.all([saveAccessToken(result.accessToken), saveRefrehToken(result.refreshToken)]);
@@ -110,7 +110,7 @@ export const onFacebookLogin = async () => {
   return new Promise<{ accessToken: string }>((resolve, reject) => {
     FB.login(
       function (response: any) {
-        if (!response || !response.authResponse) reject(new Error(tl("connect_meta_failed")));
+        if (!response || !response.authResponse) reject(new Error(t`Failed to connect with Meta.`));
         resolve(response.authResponse);
       },
       {

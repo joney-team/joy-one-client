@@ -1,5 +1,6 @@
 "use client";
 
+import { Avatar } from "@/components/avatar";
 import { Checkbox } from "@/components/checkbox";
 import { Container } from "@/components/container";
 import { FormSession } from "@/components/form-session";
@@ -8,13 +9,16 @@ import { DateInput } from "@/components/inputs/date-input";
 import { TimeZoneInput } from "@/components/inputs/timezone-input";
 import { SessionTitle } from "@/components/session-title";
 import { configs } from "@/configs/layout.config";
+import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { localeNames, tl } from "@/modules/lang/lang-service";
+import { localeNames } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
+import { onActionLoad } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 import {
   Card,
   Divider,
@@ -27,15 +31,12 @@ import {
   TextInput,
   ThemeIcon,
 } from "@mantine/core";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCalendar, IconMail, IconPhone, IconUpload, IconUser } from "@tabler/icons-react";
 import { useEffect, type FC } from "react";
 import { UserWorkspaceSettings } from "./components/user-workspace-settings-form";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { onActionLoad } from "@/utils/actions";
-import { Avatar } from "@/components/avatar";
-import { useLayout } from "@/layout/layout-context";
 
 export const UserProfileSettings: FC = () => {
   const auth = useAuth();
@@ -46,7 +47,7 @@ export const UserProfileSettings: FC = () => {
 
   useEffect(() => {
     layout.setComponents({
-      head: tl("profile_settings"),
+      head: t`Profile settings`,
     });
   }, []);
 
@@ -71,7 +72,7 @@ export const UserProfileSettings: FC = () => {
       <Stack gap={30}>
         <Card shadow="xs">
           <Stack>
-            <FormSession title="profile" description="profile_description">
+            <FormSession title={t`Profile`} description={t`Your personal information`}>
               <Stack>
                 <Dropzone
                   accept={IMAGE_MIME_TYPE}
@@ -98,19 +99,19 @@ export const UserProfileSettings: FC = () => {
                       <ThemeIcon variant="transparent" color="dark" size="md">
                         <IconUpload strokeWidth={1.2} size={16} />
                       </ThemeIcon>
-                      <Text fz={10}>{tl("click-to-change-avatar")}</Text>
+                      <Text fz={10}>{t`Click to change avatar`}</Text>
                     </Group>
                   </Group>
                 </Dropzone>
 
                 <TextInput
                   leftSection={<IconUser size={16} />}
-                  label={tl("name")}
+                  label={t`Name`}
                   {...form.getInputProps("name")}
                 />
                 <TextInput
                   leftSection={<IconPhone size={16} />}
-                  label={tl("phone")}
+                  label={t`Phone`}
                   {...form.getInputProps("phone")}
                   placeholder="090 0000 000"
                 />
@@ -121,7 +122,7 @@ export const UserProfileSettings: FC = () => {
                   disabled={!!auth.user?.email}
                 />
                 <DateInput
-                  label={tl("birthday")}
+                  label={t`Birthday`}
                   leftSection={<IconCalendar size={16} />}
                   value={auth.user!.birthday}
                   onChange={(date) => form.setFieldValue("birthday", date)}
@@ -131,11 +132,14 @@ export const UserProfileSettings: FC = () => {
 
             <Divider opacity={0.5} my={30} />
 
-            <FormSession title="lang_region" description="lang_region_desc">
+            <FormSession
+              title={t`Language and region`}
+              description={t`Customize your language and region settings`}
+            >
               <Stack>
                 <Select
-                  label={tl("language")}
-                  description={tl("change_locale_desc")}
+                  label={t`Language`}
+                  description={t`Change your language settings`}
                   leftSection={
                     <Image src={`/lang/${form.values.settings.locale}.png`} w={16} h={16} />
                   }
@@ -147,50 +151,47 @@ export const UserProfileSettings: FC = () => {
                   onChange={(l) => lang.setLocale(l as Locale)}
                 />
 
-                <TimeZoneInput
-                  label={tl("timezone")}
-                  {...form.getInputProps("settings.timezone")}
-                />
+                <TimeZoneInput label={t`Timezone`} {...form.getInputProps("settings.timezone")} />
               </Stack>
             </FormSession>
 
             <Divider opacity={0.5} my={30} />
 
-            <FormSession title="time_settings" description="time_settings_desc">
+            <FormSession title={t`Time settings`} description={t`Time settings for your profile`}>
               <Stack gap={30}>
-                <InputWrapper label={tl("start_of_week")}>
+                <InputWrapper label={t`Start of week`}>
                   <Stack gap={10} mt={10}>
                     <Checkbox
-                      label={tl("sunday")}
+                      label={t`Sunday`}
                       checked={!!form.values.settings.isStartOfWeekSunday}
                       onChange={() => form.setFieldValue("settings.isStartOfWeekSunday", true)}
                     />
 
                     <Checkbox
-                      label={tl("monday")}
+                      label={t`Monday`}
                       checked={!!!form.values.settings.isStartOfWeekSunday}
                       onChange={() => form.setFieldValue("settings.isStartOfWeekSunday", false)}
                     />
                   </Stack>
                 </InputWrapper>
 
-                <InputWrapper label={tl("time_format")}>
+                <InputWrapper label={t`Time format`}>
                   <Stack gap={10} mt={10}>
                     <Checkbox
-                      label={tl("12_hour")}
+                      label={t`12 hour`}
                       checked={!!form.values.settings.isTwelveHour}
                       onChange={() => form.setFieldValue("settings.isTwelveHour", true)}
                     />
 
                     <Checkbox
-                      label={tl("24_hour")}
+                      label={t`24 hour`}
                       checked={!!!form.values.settings.isTwelveHour}
                       onChange={() => form.setFieldValue("settings.isTwelveHour", false)}
                     />
                   </Stack>
                 </InputWrapper>
 
-                <InputWrapper label={tl("date_format")}>
+                <InputWrapper label={t`Date format`}>
                   <Stack gap={10} mt={10}>
                     {configs.dateFormats.map((f) => {
                       return (
@@ -204,7 +205,7 @@ export const UserProfileSettings: FC = () => {
                     })}
 
                     <Checkbox
-                      label={tl("auto")}
+                      label={t`Auto`}
                       checked={
                         form.values.settings.dateFormat === "auto" ||
                         !form.values.settings.dateFormat
@@ -220,7 +221,7 @@ export const UserProfileSettings: FC = () => {
           </Stack>
         </Card>
 
-        <SessionTitle name="workspace-settings" mb={-20} />
+        <SessionTitle name={t`Workspace settings`} mb={-20} />
 
         <Card shadow="xs">
           <UserWorkspaceSettings userId={auth.user!._id} />

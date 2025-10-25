@@ -1,7 +1,8 @@
 "use client";
 
-import { num, tl } from "@/modules/lang/lang-service";
 import { UseList } from "@/components/list/use-list";
+import { num } from "@/modules/lang/lang-service";
+import { Trans } from "@lingui/react/macro";
 import { Badge, em } from "@mantine/core";
 import { FC } from "react";
 import { BaseData } from "./list/types";
@@ -13,7 +14,7 @@ export interface ListQtyProps<T extends BaseData = any> {
 export const ListQty: FC<ListQtyProps> = (props) => {
   return (
     <Badge variant="light" size="xl" fz={em(12)} style={{ borderRadius: 100 }}>
-      {tl("qty")}
+      <Trans>QTY</Trans>
       {props.list.isInitialized && `: ${num(props.list.count)}`}
     </Badge>
   );

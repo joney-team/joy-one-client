@@ -1,7 +1,8 @@
 "use client";
 
 import { CustomerRelationshipContact } from "@/modules/customers/customer-types";
-import { tl } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -48,7 +49,7 @@ export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInp
   };
 
   return (
-    <InputWrapper {..._props} label={props.label || tl("customer_relationship_contacts")}>
+    <InputWrapper {..._props} label={props.label || t`Contact relatives`}>
       <Card p={8} withBorder shadow="none">
         <Stack justify="stretch">
           {contacts.map((contact, i) => {
@@ -72,21 +73,21 @@ export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInp
                 <SimpleGrid cols={{ md: 3 }} flex={1}>
                   <TextInput
                     flex={1}
-                    placeholder={tl("name")}
+                    placeholder={t`Name`}
                     value={contact.name}
                     onChange={(e) => onChange("name", e.target.value)}
                   />
 
                   <TextInput
                     flex={1}
-                    placeholder={tl("phone")}
+                    placeholder={t`Phone`}
                     value={contact.phone}
                     onChange={(e) => onChange("phone", e.target.value)}
                   />
 
                   <TextInput
                     flex={1}
-                    placeholder={tl("relationship_type")}
+                    placeholder={t`Relationship type`}
                     value={contact.type}
                     onChange={(e) => onChange("type", e.target.value)}
                   />
@@ -110,7 +111,7 @@ export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInp
                 radius={200}
                 onClick={onAdd}
               >
-                {tl("add_contact")}
+                <Trans>Add contact</Trans>
               </Button>
             </Group>
           </Renderer>

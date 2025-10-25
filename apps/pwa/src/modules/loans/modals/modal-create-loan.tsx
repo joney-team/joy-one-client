@@ -13,7 +13,6 @@ import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { tl } from "@/modules/lang/lang-service";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import { CreateLoanDto } from "@/modules/loans/loan-dtos";
 import { createLoan, getLoans, renderLoanPeriod } from "@/modules/loans/loans-service";
@@ -24,6 +23,8 @@ import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-bra
 import { renderBankSelectOption } from "@/modules/workspaces/components/workspace-bank-information";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Card,
   em,
@@ -53,6 +54,7 @@ import {
   IconUserScan,
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, useState } from "react";
+import { loanAssetTypes } from "../loans-constants";
 
 interface ModalCreateLoanProps {
   customer?: CustomerShortInfo;
@@ -144,7 +146,7 @@ export const ModalCreateLoan: FC = () => {
 
   const loanPackages = workspace.settings?.loanSettings?.loanPackages || [];
 
-  const assetTypeOptions = loanPackages.reduce((output, p) => {
+  const assetTypeOptions: LoanAssetType[] = loanPackages.reduce((output, p) => {
     return Array.from([...(new Set([...output, ...p.assetTypes]) as any)]);
   }, [] as LoanAssetType[]);
 
@@ -206,7 +208,7 @@ export const ModalCreateLoan: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={`${tl("create")} ${tl("loan")}`} icon={IconCreditCardPay} />}
+      title={<ModalTitle title={t`Create loan`} icon={IconCreditCardPay} />}
       onClose={onClose}
       opened={opened}
       size={1000}
@@ -218,7 +220,7 @@ export const ModalCreateLoan: FC = () => {
 
           return (
             <Fragment>
-              <Session name={tl("customer")} icon={IconUser}>
+              <Session name={t`Customer`} icon={IconUser}>
                 <CustomerInput
                   value={customer}
                   onSelect={(c) => initialize({ customer: c })}
@@ -246,7 +248,7 @@ export const ModalCreateLoan: FC = () => {
                               variant="outline"
                               onClick={ctx.toggle}
                             >
-                              {tl("change")} {tl("customer").toString().toLowerCase()}
+                              <Trans>Change customer</Trans>
                             </Button>
                           </Group>
                         </Stack>
@@ -254,7 +256,7 @@ export const ModalCreateLoan: FC = () => {
 
                     return (
                       <Button leftIcon={IconPlus} variant="outline" onClick={ctx.toggle}>
-                        {tl("add")} {tl("customer_information").toString().toLowerCase()}
+                        <Trans>Add customer information</Trans>
                       </Button>
                     );
                   }}
@@ -263,13 +265,7 @@ export const ModalCreateLoan: FC = () => {
 
               <Session name="KYC" icon={IconUserScan}>
                 {(function () {
-                  if (!customer)
-                    return (
-                      <Empty
-                        hideBorder
-                        message={`${tl("need")} ${tl("customer_information").toLowerCase()}`}
-                      />
-                    );
+                  if (!customer) return <Empty hideBorder message={t`Need customer information`} />;
                   if (isFetchingCustomerKyc) return <Skeleton height={50} />;
                   if (customerKyc)
                     return (
@@ -293,37 +289,32 @@ export const ModalCreateLoan: FC = () => {
                           })
                         }
                       >
-                        {tl("add")} KYC
+                        <Trans>Add KYC</Trans>
                       </Button>
                     </Group>
                   );
                 })()}
               </Session>
 
-              <Session name={tl("loan_information")} icon={IconCreditCardPay}>
+              <Session name={t`Loan information`} icon={IconCreditCardPay}>
                 {(function () {
                   if (!customer || !customerKyc)
-                    return (
-                      <Empty
-                        hideBorder
-                        message={`${tl("need")} ${tl("customer_information")} ${tl("and")} KYC`}
-                      />
-                    );
+                    return <Empty hideBorder message={t`Need customer information and KYC`} />;
                   return (
                     <Card withBorder p={16} shadow="xs">
                       <Stack>
                         <SimpleGrid cols={{ md: 3 }}>
                           <Select
-                            label={tl("asset_type")}
+                            label={t`Asset type`}
                             data={assetTypeOptions.map((type) => ({
                               value: type,
-                              label: tl(`loan_asset_type_${type}`),
+                              label: loanAssetTypes[type].label(),
                             }))}
                             {...form.getInputProps("assetType")}
                           />
 
                           <Select
-                            label={tl("loan_period")}
+                            label={t`Loan period`}
                             data={packageDaysOptions.map((d) => ({
                               value: d.toString(),
                               label: renderLoanPeriod(d),
@@ -334,7 +325,7 @@ export const ModalCreateLoan: FC = () => {
                           />
 
                           <Select
-                            label={tl("loan_payment_periods")}
+                            label={t`Loan payment periods`}
                             data={packagePeriodDaysOptions.map((d) => ({
                               value: d.toString(),
                               label: renderLoanPeriod(d),
@@ -346,15 +337,15 @@ export const ModalCreateLoan: FC = () => {
                         </SimpleGrid>
 
                         <NumberInput
-                          label={tl("loan_amount")}
+                          label={t`Loan amount`}
                           hideControls
                           {...form.getInputProps("amount")}
                         />
 
-                        <InputWrapper label={tl("loan_payment_account")}>
+                        <InputWrapper label={t`Loan payment account`}>
                           <SimpleGrid cols={{ md: 3 }}>
                             <Select
-                              placeholder={tl("select_bank")}
+                              placeholder={t`Select bank`}
                               searchable
                               data={banks.map((v) => ({
                                 value: v.id.toString(),
@@ -371,12 +362,12 @@ export const ModalCreateLoan: FC = () => {
                             />
 
                             <TextInput
-                              placeholder={tl("bank_account_number")}
+                              placeholder={t`Bank account number`}
                               {...form.getInputProps("payment_accountNumber")}
                             />
 
                             <TextInput
-                              placeholder={tl("bank_account_name")}
+                              placeholder={t`Bank account name`}
                               {...form.getInputProps("payment_accountName")}
                             />
                           </SimpleGrid>
@@ -388,7 +379,7 @@ export const ModalCreateLoan: FC = () => {
               </Session>
 
               {form.values.assetType && !!customerKyc && (
-                <Session name={tl("loan_asset_data")} icon={IconFileDots}>
+                <Session name={t`Loan asset data`} icon={IconFileDots}>
                   <Card withBorder p={16} shadow="xs">
                     <LoanAssetDataInput
                       assetType={form.values.assetType}
@@ -400,7 +391,7 @@ export const ModalCreateLoan: FC = () => {
               )}
 
               <Renderer visible={workspace.isShouldEnableBranches}>
-                <Session name={tl("branch")} icon={IconBuildingSkyscraper}>
+                <Session name={t`Branch`} icon={IconBuildingSkyscraper}>
                   <WorkspaceBranchInput
                     value={form.values.workspaceBranch}
                     onChange={(branch) => form.setFieldValue("workspaceBranch", branch)}
@@ -416,7 +407,7 @@ export const ModalCreateLoan: FC = () => {
                   maw="100%"
                   leftIcon={IconCheck}
                 >
-                  {tl("complete")}
+                  <Trans>Submit loan</Trans>
                 </Button>
               </Group>
             </Fragment>

@@ -1,24 +1,27 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Hovered } from "@/components/hovered";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
-import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
-import { OnModalDatePicker } from "@/modals/modal-date-picker";
+import { useList } from "@/components/list/use-list";
 import { useRouter } from "@/hooks/use-router";
-import { Period } from "@/types";
+import { OnModalDatePicker } from "@/modals/modal-date-picker";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate, tl } from "@/modules/lang/lang-service";
+import { renderDate } from "@/modules/lang/lang-service";
 import { ReportEntity } from "@/modules/reports/reports-entity";
 import { exportPeriodReport } from "@/modules/reports/reports-services";
 import { RangeReport, ReportType } from "@/modules/reports/reports-types";
 import { useWorkspaceBranches } from "@/modules/workspace-branches/hooks/use-workspace-branches";
+import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
+import { Period } from "@/types";
 import { DateTime } from "@/utils/date-time.utils";
 import { ObjectUtils } from "@/utils/object.utils";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
 import { Group, Loader, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {
   IconBuildingSkyscraper,
@@ -135,17 +138,17 @@ export const ReportWidgets: FC = () => {
           value={period}
           options={[
             {
-              label: tl("date"),
+              label: t`Date`,
               icon: IconCalendar,
               value: Period.DATE,
             },
             {
-              label: tl("month"),
+              label: t`Month`,
               icon: IconCalendarMonth,
               value: Period.MONTH,
             },
             {
-              label: tl("year"),
+              label: t`Year`,
               icon: IconCalendarEvent,
               value: Period.YEAR,
             },
@@ -240,7 +243,7 @@ export const ReportWidgets: FC = () => {
                         >
                           <Group gap={5}>
                             <Text fz={12} fw={500}>
-                              {tl("members")}
+                              {t`Members`}
                             </Text>
 
                             {!isUserMemberInfosReady ? (
@@ -302,7 +305,7 @@ export const ReportWidgets: FC = () => {
                   {(hover) => {
                     const workspaceBranch = [
                       ...workspaceBranches,
-                      { _id: "root", name: tl("main_workspace_branch") },
+                      { _id: "root", name: t`Main office` },
                     ].find((v) => query.workspaceBranchIds.includes(v._id));
 
                     return (
@@ -328,7 +331,7 @@ export const ReportWidgets: FC = () => {
                         >
                           <Group gap={5}>
                             <Text fz={12} fw={500}>
-                              {tl("branch")}
+                              {t`Branch`}
                             </Text>
 
                             {!isWorkspaceBranchesReady ? (

@@ -2,9 +2,9 @@
 
 import { FC, ReactNode } from "react";
 
+import { useList } from "@/components/list/use-list";
 import { getEvents } from "@/modules/events/event-service";
 import { EventEntity, EventType, EventVariant } from "@/modules/events/event-types";
-import { useList } from "@/components/list/use-list";
 import { Badge, Group, Stack, StackProps, Text, ThemeIcon, Timeline, Tooltip } from "@mantine/core";
 import {
   IconArrowRight,
@@ -15,18 +15,20 @@ import {
   IconX,
 } from "@tabler/icons-react";
 
-import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
-import { eventVariantColors, eventVariantIcons } from "@/modules/events/event-config";
-import { tl } from "@/modules/lang/lang-service";
+import { eventTypes, eventVariants } from "@/modules/events/event-constants";
+import { taskPriorities } from "@/modules/tasks/task-constants";
 import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
+import { TaskPriority } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
+import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { Trans } from "@lingui/react/macro";
 import dayjs from "dayjs";
 import { Avatar } from "./avatar";
 import { ButtonViewMore } from "./buttons/button-view-more";
 import { Errored } from "./errored";
-import { useColor } from "@/modules/theme/use-color";
-import { useColorScheme } from "@/modules/theme/use-color-scheme";
 
 interface EventListProps extends StackProps {
   ref?: string;
@@ -68,7 +70,11 @@ export const EventList: FC<EventListProps> = ({
 
   return (
     <Stack my={my} {...rest}>
-      {showTitle && <Text fz={16}>{tl("timeline")}</Text>}
+      {showTitle && (
+        <Text fz={16}>
+          <Trans>Timeline</Trans>
+        </Text>
+      )}
 
       <Errored error={events.error} visible={events.isHasError} />
 
@@ -152,20 +158,19 @@ function renderBullet(ev: EventEntity) {
     );
   }
 
-  const variantColor = eventVariantColors[ev.variant || EventVariant.INFO];
-  const VariantIcon = eventVariantIcons[ev.variant || EventVariant.INFO];
+  const eventVariant = eventVariants[ev.variant || EventVariant.INFO];
 
   return (
     <Group
       justify="center"
       align="center"
-      bg={colorScheme === "dark" ? undefined : `${variantColor}.2`}
+      bg={colorScheme === "dark" ? undefined : `${eventVariant.color}.2`}
       w="100%"
       h="100%"
       style={{ borderRadius: "50%" }}
       flex={1}
     >
-      <VariantIcon size={18} color={color(`${variantColor}.6`)} />
+      <eventVariant.icon size={18} color={color(`${eventVariant.color}.6`)} />
     </Group>
   );
 }
@@ -187,30 +192,34 @@ function EventItemTitle(props: { event: EventEntity }) {
   const [wokspaceMembers] = useWorkspaceMembers(workspaceMembersIds);
 
   if (event.type === EventType.TASK_PRIORITY_UPDATED && event.data) {
-    const toPriority = event.data.toPriority;
-    const fromPriority = event.data.fromPriority;
+    const toPriority = event.data.toPriority as TaskPriority;
+    const fromPriority = event.data.fromPriority as TaskPriority;
 
     if (!toPriority)
       return (
         <Group gap={4}>
-          <Text fz={14}>{tl(`unset_priority`)}</Text>
+          <Text fz={14}>
+            <Trans>Unset priority</Trans>
+          </Text>
 
           <ThemeIcon size={14} radius={100} color="dark" variant="transparent">
             <IconX strokeWidth={1.5} size={14} />
           </ThemeIcon>
 
           <Group gap={0} ml={-4}>
-            <ThemeIcon color={getTaskPriorityColor(fromPriority)} variant="transparent">
+            <ThemeIcon color={taskPriorities[fromPriority].color} variant="transparent">
               <IconFlagFilled size={16} />
             </ThemeIcon>
-            <Text fz={14}>{tl(`task_priority_${fromPriority}`)}</Text>
+            <Text fz={14}>{taskPriorities[fromPriority].label()}</Text>
           </Group>
         </Group>
       );
 
     return (
       <Group gap={4}>
-        <Text fz={14}>{tl(`set_priority`)}</Text>
+        <Text fz={14}>
+          <Trans>Set priority</Trans>
+        </Text>
 
         <ThemeIcon size={14} radius={100} color="dark" variant="transparent">
           <IconArrowRight strokeWidth={1.5} size={14} />
@@ -220,7 +229,7 @@ function EventItemTitle(props: { event: EventEntity }) {
           <ThemeIcon color={getTaskPriorityColor(toPriority)} variant="transparent">
             <IconFlagFilled size={16} />
           </ThemeIcon>
-          <Text fz={14}>{tl(`task_priority_${toPriority}`)}</Text>
+          <Text fz={14}>{taskPriorities[toPriority].label()}</Text>
         </Group>
       </Group>
     );
@@ -243,7 +252,9 @@ function EventItemTitle(props: { event: EventEntity }) {
 
     return (
       <Group gap={8}>
-        <Text fz={14}>{tl(`status_changed`)}</Text>
+        <Text fz={14}>
+          <Trans>Status updated</Trans>
+        </Text>
 
         <Group gap={3}>
           <Badge variant="outline" color={fromStatusStyle.color} size="xs">
@@ -281,7 +292,9 @@ function EventItemTitle(props: { event: EventEntity }) {
     if (newAssigneeUserIds.length > 0) {
       return (
         <Group gap={8}>
-          <Text fz={14}>{tl(`assigned_to`)}</Text>
+          <Text fz={14}>
+            <Trans>Assigned to</Trans>
+          </Text>
 
           {newAssigneeUserIds.map((userId: string) => {
             const workspaceMembers = wokspaceMembers.find((m) => m.userId === userId);
@@ -299,7 +312,9 @@ function EventItemTitle(props: { event: EventEntity }) {
     if (removedAssigneeUserIds.length > 0) {
       return (
         <Group gap={8}>
-          <Text fz={14}>{tl(`unassigned_from`)}</Text>
+          <Text fz={14}>
+            <Trans>Unassigned from</Trans>
+          </Text>
 
           {removedAssigneeUserIds.map((userId: string) => {
             const userInfo = wokspaceMembers.find((m) => m.userId === userId);
@@ -316,14 +331,16 @@ function EventItemTitle(props: { event: EventEntity }) {
 
     return (
       <Group>
-        <Text fz={14}>{tl(`task_assigned`)}</Text>
+        <Text fz={14}>
+          <Trans>Task assigned</Trans>
+        </Text>
       </Group>
     );
   }
 
   return (
     <Group>
-      <Text fz={14}>{tl(`event_type_${props.event.type}`)}</Text>
+      <Text fz={14}>{eventTypes[props.event.type]?.name() ?? props.event.type}</Text>
     </Group>
   );
 }

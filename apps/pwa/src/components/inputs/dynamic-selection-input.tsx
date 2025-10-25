@@ -1,7 +1,8 @@
+import { appEntities, dynamicSelectionOperators } from "@/constant";
 import { CustomersInput } from "@/modules/customers/components/customers-input";
-import { tl } from "@/modules/lang/lang-service";
 import { ProductsInput } from "@/modules/products/components/products-input";
 import { AppEntity, DynamicSelection, DynamicSelectionOperator } from "@/types";
+import { t } from "@lingui/core/macro";
 import { Card, Group, InputWrapper, InputWrapperProps, Select } from "@mantine/core";
 
 interface DynamicSelectionInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
@@ -45,7 +46,7 @@ export const DynamicSelectionInput = ({
         <Group wrap="nowrap" align="flex-start" gap={8}>
           {!fixedEntity && (
             <Select
-              placeholder={tl("select")}
+              placeholder={t`Select`}
               value={entity}
               onChange={(selected) => {
                 if (selected) _onChange("entity", selected);
@@ -53,7 +54,7 @@ export const DynamicSelectionInput = ({
               data={Object.values(AppEntity).map((entity) => {
                 return {
                   value: entity,
-                  label: tl(`entity_${entity}`),
+                  label: appEntities[entity].name(),
                 };
               })}
             />
@@ -68,7 +69,7 @@ export const DynamicSelectionInput = ({
             data={Object.values(DynamicSelectionOperator).map((operator) => {
               return {
                 value: operator,
-                label: tl(operator.toLowerCase()),
+                label: dynamicSelectionOperators[operator].name(),
               };
             })}
           />

@@ -1,6 +1,5 @@
 import { DashboardWidgetType } from "@/widgets/dashboard/types";
 import { ReportWidgetType } from "@/widgets/reports/types";
-import { tl } from "../lang/lang-service";
 import type {
   WorkspaceView,
   WorkspaceViewComponent,
@@ -185,7 +184,7 @@ export const getNavigationGroups = (cpns: WorkspaceViewComponent[], modules: Wor
     if (cpn.type === "DIVIDER") {
       groups.push({
         id: cpn.id,
-        name: tl(cpn.dividerName!),
+        name: cpn.dividerName,
         moduleIds: [],
       });
       pointedGroupIndex = groups.length - 1;

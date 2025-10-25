@@ -1,13 +1,12 @@
 "use client";
 
+import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Checkbox, Group, Table, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconSelector } from "@tabler/icons-react";
 import { FC, useEffect, useRef } from "react";
 import { ListContext } from "../types";
 import { getSortQueryKey, getValuePath } from "../utils";
-import { useColor } from "@/modules/theme/use-color";
-import { tl } from "@/modules/lang/lang-service";
 
 export const ListTableHead: FC<ListContext & { columnId: string; colIndex: number }> = (ctx) => {
   const { columnId, colIndex, isShowMultipleSelectActions, list, selectedIds, columns } = ctx;
@@ -92,7 +91,7 @@ export const ListTableHead: FC<ListContext & { columnId: string; colIndex: numbe
           {column?.icon && <column.icon size={16} />}
 
           <Text fz={13} fw={500} flex={1} ta={column.align} c="var(--mantine-color-text)">
-            {tl(column?.name || getValuePath(columnId, column))}
+            {column?.name || getValuePath(columnId, column)}
           </Text>
 
           {column.sortable && (

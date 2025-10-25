@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { tl } from "@/modules/lang/lang-service";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { em, Group, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -28,7 +29,7 @@ export const ModalPrompt: FC<ModalPromptProps> = (props) => {
     },
     validate: {
       content: (value: string) => {
-        if (!value) return tl("must_be_provided");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -83,7 +84,7 @@ export const ModalPrompt: FC<ModalPromptProps> = (props) => {
         type="submit"
         color={props.color}
       >
-        {tl("complete")}
+        <Trans>Complete</Trans>
       </Button>
     </Stack>
   );

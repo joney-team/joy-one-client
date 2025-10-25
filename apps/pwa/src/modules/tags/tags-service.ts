@@ -1,12 +1,12 @@
 import { AppPageMetadata, ResponseList } from "@/types";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { MantineColor } from "@mantine/core";
 import { IconFolder } from "@tabler/icons-react";
 import { api } from "../apis";
-import { tl } from "../lang/lang-service";
 import { getTasks } from "../tasks/tasks-service";
 import { ReorderTagsDto, TagDto, TagEntity, TagType } from "./tags-types";
-import { MantineColor } from "@mantine/core";
 
 export async function createTag(dto: TagDto) {
   return api.post(`/tags`, dto);
@@ -44,11 +44,11 @@ export const onRemoveTaskTagFolder = (tag: TagEntity, onDone?: () => void) => {
     process: async () => {
       const relatedTasks = await getTasks({ tagFolderId: tag._id, limit: 1 });
       onArchive({
-        name: tl("folder"),
+        name: t`Folder`,
         icon: IconFolder,
         children:
           relatedTasks.count > 0
-            ? `${tl("confirm_next")} ${relatedTasks.count} ${tl("remove_task_desc")}`
+            ? `${t`Are you sure you want to continue?`} ${t`${relatedTasks.count} related work will be moved to the default folder`}`
             : undefined,
         process: async () => {
           await removeTag(tag._id).catch(onError);

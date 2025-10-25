@@ -1,10 +1,13 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
 import { api } from "@/modules/apis";
 import { useQuery } from "@/modules/apis/use-query";
-import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity, ResponseList } from "@/types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
@@ -40,12 +43,9 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       onOpen={props.onOpen}
       onClose={props.onClose}
       excludeIds={props.excludeIds}
-      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: tl("recently") }))}
+      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t`Recently` }))}
       autoCloseOnChange={false}
       onSearch={(q) => searchEntity<CategoryEntity>(AppEntity.CATEGORIES, q, { type: props.type })}
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(category) => {
         return (
           <Combobox.Option value={category._id} key={category._id}>
@@ -70,7 +70,7 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
             fw={500}
             onClick={toggle}
           >
-            {tl("select")}
+            <Trans>Select</Trans>
           </Button>
         );
       }}

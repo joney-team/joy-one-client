@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { Form } from "@/components/form";
 import { ModalTitle } from "@/components/modal-title";
-import { tl } from "@/modules/lang/lang-service";
 import { FormBankAccount } from "@/modules/plugins/banks/form-bank-account";
 import {
   createWorkspaceBranch,
@@ -13,6 +12,7 @@ import {
   WorkspaceBranchDto,
   WorkspaceBranchEntity,
 } from "@/modules/workspace-branches/workspace-branches-types";
+import { t } from "@lingui/core/macro";
 import { Stack, Tabs, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -52,22 +52,17 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
       <Stack>
         <Tabs defaultValue="info" variant="outline">
           <Tabs.List>
-            <Tabs.Tab value="info">Thông tin</Tabs.Tab>
-            <Tabs.Tab value="bank">Ngân hàng</Tabs.Tab>
+            <Tabs.Tab value="info">{t`Information`}</Tabs.Tab>
+            <Tabs.Tab value="bank">{t`Bank`}</Tabs.Tab>
           </Tabs.List>
 
           <Tabs.Panel value="info">
             <Stack py={16}>
-              <TextInput
-                withAsterisk
-                label={tl("name")}
-                {...form.getInputProps("name")}
-                autoFocus
-              />
+              <TextInput withAsterisk label={t`Name`} {...form.getInputProps("name")} autoFocus />
 
-              <TextInput label={tl("hotline")} {...form.getInputProps("hotline")} />
+              <TextInput label={t`Hotline`} {...form.getInputProps("hotline")} />
 
-              <TextInput label={tl("address")} {...form.getInputProps("location.address")} />
+              <TextInput label={t`Address`} {...form.getInputProps("location.address")} />
             </Stack>
           </Tabs.Panel>
 
@@ -89,7 +84,7 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
             onClick={onSubmit}
             type="submit"
           >
-            {tl(branch ? "edit" : "create")}
+            {branch ? t`Edit` : t`Create`}
           </Button>
         </Stack>
       </Stack>
@@ -101,7 +96,7 @@ export const OnWorkspaceBranchModal = (branch?: WorkspaceBranchEntity) => {
   return modals.open({
     title: (
       <ModalTitle
-        title={`${tl(branch ? "edit" : "create")} ${tl("workspace_branch")}`}
+        title={branch ? t`Edit workspace branch` : t`Create new workspace branch`}
         icon={IconBuilding}
       />
     ),

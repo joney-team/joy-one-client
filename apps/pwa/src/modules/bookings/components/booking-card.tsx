@@ -5,16 +5,16 @@ import {
   completeBooking,
   getBookingStatusColor,
   inProgressBooking,
-  triggerRemindBooking,
 } from "@/modules/bookings/booking-service";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { OnModalBookingDetail } from "@/modules/bookings/modals/modal-booking-detail";
 import { OnModalCancelBooking } from "@/modules/bookings/modals/modal-cancel-booking";
 import { OnModalUpdateBooking } from "@/modules/bookings/modals/modal-update-booking";
-import { renderFromNow, renderTime, tl } from "@/modules/lang/lang-service";
+import { renderFromNow, renderTime } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { DateTime } from "@/utils/date-time.utils";
-import { capitalize } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -39,14 +39,14 @@ import {
   IconDots,
   IconPencil,
   IconPhone,
-  IconSend,
   IconUserCheck,
   IconX,
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, useEffect, useState } from "react";
-import { WorkspaceMembersInput } from "../../workspace-members/components/workspace-members-input";
 import { CustomerInput } from "../../customers/components/customer-input";
+import { WorkspaceMembersInput } from "../../workspace-members/components/workspace-members-input";
+import { bookingStatuses } from "../booking-constants";
 import { BookingEntity, BookingStatus } from "../booking-types";
 import { OnModalRescheduleBooking } from "../modals/modal-reschedule-booking";
 
@@ -124,7 +124,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           </Text>
 
           <Badge color={color(bookingColor)} size="xs" variant="light">
-            {tl(`booking_status_${booking.status}`)}
+            {bookingStatuses[booking.status].label()}
           </Badge>
         </Stack>
 
@@ -165,7 +165,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                     style={{ zIndex: 500 }}
                   >
                     <Stack>
-                      <Divider label={tl("actions")} labelPosition="left" />
+                      <Divider label={t`Actions`} labelPosition="left" />
                       {booking.customer && (
                         <Anchor
                           href={`tel:${booking.customer.phone}`}
@@ -178,13 +178,13 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                             </ThemeIcon>
 
                             <Text fz={12} fw={500}>
-                              {tl("call_customer")}
+                              {t`Call customer`}
                             </Text>
                           </Group>
                         </Anchor>
                       )}
 
-                      <Divider label={tl("status")} labelPosition="left" />
+                      <Divider label={t`Status`} labelPosition="left" />
                       <Group
                         gap={10}
                         style={{ cursor: "pointer", userSelect: "none" }}
@@ -198,7 +198,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {tl(`booking_status_${BookingStatus.CHECK_IN}`)}
+                          {bookingStatuses[BookingStatus.CHECK_IN].label()}
                         </Text>
                       </Group>
 
@@ -215,7 +215,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {tl(`booking_status_${BookingStatus.IN_PROGRESS}`)}
+                          {bookingStatuses[BookingStatus.IN_PROGRESS].label()}
                         </Text>
                       </Group>
 
@@ -232,7 +232,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {tl(`booking_status_${BookingStatus.COMPLETED}`)}
+                          {bookingStatuses[BookingStatus.COMPLETED].label()}
                         </Text>
                       </Group>
 
@@ -249,11 +249,11 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {capitalize(`${tl("cancel")} ${tl("booking")}`)}
+                          <Trans>Cancel booking</Trans>
                         </Text>
                       </Group>
 
-                      <Divider label={tl("update")} labelPosition="left" />
+                      <Divider label={t`Update`} labelPosition="left" />
 
                       <Group
                         gap={10}
@@ -268,7 +268,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {capitalize(`${tl("update")} ${tl("informations")}`)}
+                          <Trans>Update information</Trans>
                         </Text>
                       </Group>
 
@@ -285,7 +285,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {tl("reschedule_booking")}
+                          <Trans>Reschedule booking</Trans>
                         </Text>
                       </Group>
                     </Stack>
@@ -303,7 +303,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
 
             <Stack gap={0} align="start">
               <Text fz={10} c="gray">
-                {tl("duration")}
+                {t`Duration`}
               </Text>
 
               <Group gap={0} mt={-3}>
@@ -320,14 +320,14 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           <Group align="start" mt={12}>
             {booking.customer && !hideCustomerInfo && (
               <Group flex={1}>
-                <CustomerInput label={tl("customer")} value={booking.customer} disabled />
+                <CustomerInput label={t`Customer`} value={booking.customer} disabled />
               </Group>
             )}
 
             {booking.assigneeUsers && booking.assigneeUsers.length > 0 && (
               <Group flex={1}>
                 <WorkspaceMembersInput
-                  label={tl("attendees")}
+                  label={t`Attendees`}
                   value={booking.assigneeUsers}
                   collapsed={memberCollapsed}
                   disabled
@@ -337,7 +337,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           </Group>
 
           {booking.status === BookingStatus.CANCELLED && booking.reasonForCancellation && (
-            <Blockquote cite={tl("cancel_reason")} color="red" p={8} fz={13}>
+            <Blockquote cite={t`Cancel reason`} color="red" p={8} fz={13}>
               {booking.reasonForCancellation}
             </Blockquote>
           )}

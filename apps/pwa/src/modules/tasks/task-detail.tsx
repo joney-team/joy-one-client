@@ -5,13 +5,13 @@ import { useRouter } from "@/hooks/use-router";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { CommentBox } from "@/modules/comments/comment-box";
-import { tl } from "@/modules/lang/lang-service";
 import { TaskForm } from "@/modules/tasks/components/form-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskByCode, getTaskEntity, getTaskEntityByCode } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import {
   Card,
   Container,
@@ -186,7 +186,7 @@ const TaskCodeButton: FC<{ task: TaskEntity }> = (props) => {
     <Group style={{ position: "relative" }}>
       <CopyButton value={task.code}>
         {({ copied, copy }) => (
-          <Tooltip label={tl("copy_code")}>
+          <Tooltip label={t`Copy code`}>
             <Group>
               <Card
                 withBorder

@@ -1,4 +1,3 @@
-import { tMulti } from "../lang/lang-service";
 import { WorkspaceType } from "../workspaces/workspaces-types";
 import { WorkspacePermission } from "./workspace-roles-types";
 
@@ -22,7 +21,6 @@ export enum PermissionGroupKey {
 }
 
 export interface PermissionGroup {
-  name?: string;
   workspaceTypes?: WorkspaceType[];
   permissions: { value: WorkspacePermission; dependentPermissions?: WorkspacePermission[] }[];
 }
@@ -176,7 +174,6 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.ORDERS]: {
-    name: tMulti(["orders"], ["/"], ["tickets"]),
     permissions: [
       { value: WorkspacePermission.ORDERS_VIEW },
       {

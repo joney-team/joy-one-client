@@ -1,20 +1,21 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalListTimekeepings } from "@/modules/hrm-timekeepings/modals/modal-timekeeping-list";
-import { OnModalCaptureTimekeeping } from "@/modules/hrm-timekeepings/modals/modal-request-timekeeping";
 import {
   HrmTimekeepingEntity,
   HrmTimekeepingStatus,
   HrmTimekeepingType,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { calculateTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
-import { tl } from "@/modules/lang/lang-service";
+import { OnModalCaptureTimekeeping } from "@/modules/hrm-timekeepings/modals/modal-request-timekeeping";
+import { OnModalListTimekeepings } from "@/modules/hrm-timekeepings/modals/modal-timekeeping-list";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -70,7 +71,9 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
           if (props.showAddButton && !isOutOfRange && (hoverd || layout.view !== "desktop"))
             return (
               <Group>
-                <Tooltip label={tl("hrm_timekeepings_request")}>
+                <Tooltip
+                  label={t({ message: "Request Check-in/out", comment: "HRM Timekeepings" })}
+                >
                   <ActionIcon
                     variant="subtle"
                     radius={100}
@@ -232,16 +235,22 @@ export const TimekeepingsCalendarExplain: FC = () => {
     <Fragment>
       <Group gap={5}>
         <Circle size={8} bg="red.8" />
-        <Text fz={em(12)}>{tl(`hrm_timekeepings_late`)}</Text>
+        <Text fz={em(12)}>
+          <Trans>Late</Trans>
+        </Text>
       </Group>
       <Group gap={5}>
         <Circle size={8} bg="orange.5" />
-        <Text fz={em(12)}>{tl(`hrm_timekeepings_early_leave`)}</Text>
+        <Text fz={em(12)}>
+          <Trans>Early leave</Trans>
+        </Text>
       </Group>
 
       <Group gap={5}>
         <Circle size={8} bg="primary" />
-        <Text fz={em(12)}>{tl(`hrm_timekeepings_overtime`)}</Text>
+        <Text fz={em(12)}>
+          <Trans>Overtime</Trans>
+        </Text>
       </Group>
 
       <Group gap={5}>
@@ -251,12 +260,16 @@ export const TimekeepingsCalendarExplain: FC = () => {
           color={theme.colors.orange[6]}
           className="animRotate"
         />
-        <Text fz={em(12)}>{tl(`hrm_timekeepings_working`)}</Text>
+        <Text fz={em(12)}>
+          <Trans>Working</Trans>
+        </Text>
       </Group>
 
       <Group gap={5}>
         <IconAnalyzeOff strokeWidth={1.5} size={16} color={theme.colors.gray[6]} />
-        <Text fz={em(12)}>{tl(`hrm_timekeepings_temporary_off`)}</Text>
+        <Text fz={em(12)}>
+          <Trans>Temporary off</Trans>
+        </Text>
       </Group>
     </Fragment>
   );

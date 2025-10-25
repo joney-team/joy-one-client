@@ -1,8 +1,8 @@
-import { FC } from "react";
-import { ButtonProps, Button } from "./button";
-import { IconArrowDown } from "@tabler/icons-react";
+import { Trans } from "@lingui/react/macro";
 import { Center, em, MantineSize } from "@mantine/core";
-import { tl } from "@/modules/lang/lang-service";
+import { IconArrowDown } from "@tabler/icons-react";
+import { FC } from "react";
+import { Button, ButtonProps } from "./button";
 
 export interface ButtonViewMoreProps extends ButtonProps {
   mt?: number;
@@ -33,7 +33,7 @@ export const ButtonViewMore: FC<ButtonViewMoreProps> = (props) => {
         rightIcon={IconArrowDown}
         {..._props}
       >
-        {tl("view_more")}
+        <Trans>View more</Trans>
       </Button>
     </Center>
   );

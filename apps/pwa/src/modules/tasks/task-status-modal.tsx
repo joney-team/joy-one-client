@@ -4,13 +4,13 @@ import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
+import { num } from "@/modules/lang/lang-service";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
-import { onArchive } from "@/utils/actions";
-import { num, tl } from "@/modules/lang/lang-service";
 import { getTasks, renderTaskStatusStyle, updateTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskStatus } from "@/modules/tasks/tasks-types";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
@@ -20,6 +20,8 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -62,7 +64,7 @@ export const TaskSatusesModal: FC<TaskSatusesModalProps> = (props) => {
 
   return (
     <Stack gap={10}>
-      <Divider label={tl("pending_statuses_group")} labelPosition="left" />
+      <Divider label={t`Pending statuses group`} labelPosition="left" />
       <StatusCard status={workspace.settings.taskStatuses[0]} disabledOrder />
 
       <DndContext
@@ -96,7 +98,7 @@ export const TaskSatusesModal: FC<TaskSatusesModalProps> = (props) => {
 
       <Space />
 
-      <Divider label={tl("completed_statuses_group")} labelPosition="left" />
+      <Divider label={t`Completed statuses group`} labelPosition="left" />
 
       <StatusCard
         status={workspace.settings.taskStatuses[workspace.settings.taskStatuses.length - 1]}
@@ -160,11 +162,11 @@ export const CreateStatusForm: FC = () => {
             autoFocus
             value={name}
             onChange={(v) => setName(v.toUpperCase())}
-            placeholder={tl("enter_name")}
+            placeholder={t`Enter name`}
           />
         ) : (
           <Title fz={em(15)} fw={400} flex={1} onClick={() => setIsActivated(true)} c="gray">
-            {tl("add")} {tl("status").toLowerCase()}
+            <Trans>Add Status</Trans>
           </Title>
         )}
 
@@ -178,7 +180,7 @@ export const CreateStatusForm: FC = () => {
                 fz={em(14)}
                 onClick={() => onSubmit()}
               >
-                {tl("save")}
+                {t`Save`}
               </Button>
             )}
 
@@ -225,15 +227,19 @@ export const StatusCard: FC<{
     );
 
     onArchive({
-      name: tl("task_status"),
+      name: t`Task status`,
       children: (
         <Stack gap={8}>
           <Text>
-            {tl("task_status_remove_confirm")} <strong>{styled.name}</strong>?
+            <Trans>
+              Are you sure you want to delete the status <strong>{styled.name}</strong>?
+            </Trans>
           </Text>
           <Text>
-            <strong>{num(relatedTasks.length)}</strong> {tl("task_status_remove_confirm_desc")}{" "}
-            <strong>{statusStyle.name}</strong>
+            <Trans>
+              <strong>{num(relatedTasks.length)}</strong> related tasks will be transferred to
+              status <strong>{statusStyle.name}</strong>
+            </Trans>
           </Text>
         </Stack>
       ),
@@ -324,7 +330,7 @@ export const ColorInput: FC<
         <Stack gap={10} p={10} ref={props.ref}>
           <Group justify="space-between">
             <Text fz={em(13)} fw={500} c="gray">
-              {tl("select_color")}
+              {t`Select color`}
             </Text>
 
             <ActionIcon onClick={() => setOpened(false)} variant="subtle" size="sm" color="gray">
@@ -370,6 +376,6 @@ export const ColorInput: FC<
 export const OnTaskSatusesModal = (props?: TaskSatusesModalProps) =>
   modals.open({
     modalId: "TaskSatusesModal",
-    title: <ModalTitle title={tl("task_statuses")} icon={IconSettings} />,
+    title: <ModalTitle title={t`Task statuses`} icon={IconSettings} />,
     children: <TaskSatusesModal {...props} />,
   });

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { DueDateInput } from "@/components/inputs/due-date-input";
-import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
+import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
@@ -12,11 +12,13 @@ import { useTask } from "@/modules/tasks/hooks/use-task";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
-import { ReorderTaskPotision, TaskEntity } from "@/modules/tasks/tasks-types";
+import { ReorderTaskPotision, TaskEntity, TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { renderEntityCode } from "@/modules/workspaces/utils";
-import { capitalize, String } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -46,6 +48,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
+import { taskPriorities } from "../../task-constants";
 import { getTaskDragId, useDndTasks, useTaskDrag, useTaskDrop } from "../../tasks-dnd-provider";
 
 interface BoardTaskCardProps {
@@ -127,7 +130,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
 
                   <Group gap={0} wrap="nowrap">
                     {!task.parentId && (
-                      <Tooltip label={tl("create_sub_task")}>
+                      <Tooltip label={t`Create subtask`}>
                         <ActionIcon
                           variant="subtle"
                           color="gray.6"
@@ -145,7 +148,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                     )}
 
                     {ctx.isAbleToNextStatus && !props.showStatus && (
-                      <Tooltip label={tl("next_status")}>
+                      <Tooltip label={t`Next status`}>
                         <ActionIcon
                           variant="subtle"
                           color={taskStatusStyle.color}
@@ -173,7 +176,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
 
               <Stack gap={0}>
                 {props.showStatus && (
-                  <CtaSection icon={IconPlaystationCircle} label={tl("status")}>
+                  <CtaSection icon={IconPlaystationCircle} label={t`Status`}>
                     <Group gap={0}>
                       <TaskStatusOptions
                         task={task}
@@ -218,7 +221,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                   }}
                   target={(selector) => {
                     return (
-                      <CtaSection icon={IconTags} label={tl("tags")} onClick={selector.toggle}>
+                      <CtaSection icon={IconTags} label={t`Tags`} onClick={selector.toggle}>
                         <Group
                           gap={3}
                           flex={1}
@@ -238,7 +241,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                               fz={13}
                               fw={400}
                             >
-                              {capitalize(`${tl("add")} ${tl("tag")}`)}
+                              <Trans>Add tag</Trans>
                             </Button>
                           )}
                         </Group>
@@ -251,7 +254,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                   icon={IconCalendar}
                   onRemove={() => ctx.onUpdate({ ...task, dueDate: null, startDate: null })}
                   canRemove={!!task.dueDate || !!task.startDate}
-                  label={tl("due_date")}
+                  label={t`Due date`}
                 >
                   <Menu shadow="xs">
                     <Menu.Target>
@@ -278,7 +281,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                               fz={13}
                               fw={400}
                             >
-                              {tl("add_due_date")}
+                              <Trans>Add due date</Trans>
                             </Button>
                           );
                         })()}
@@ -305,7 +308,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                       <CtaSection
                         icon={task.priority ? IconFlagFilled : IconFlag}
                         iconColor={task.priority ? getTaskPriorityColor(task.priority) : undefined}
-                        label={tl("priority")}
+                        label={t`Priority`}
                         canRemove={!!task.priority}
                         onRemove={() => ctx.onUpdate({ ...task, priority: null })}
                         onClick={selector.toggle}
@@ -315,7 +318,9 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                             if (task.priority) {
                               return (
                                 <Group gap={1}>
-                                  <Text>{tl(`task_priority_${task.priority}`)}</Text>
+                                  <Text>
+                                    {taskPriorities[task.priority as TaskPriority]?.label()}
+                                  </Text>
                                 </Group>
                               );
                             }
@@ -331,7 +336,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                                 fz={13}
                                 fw={400}
                               >
-                                {tl("add_priority")}
+                                <Trans>Add priority</Trans>
                               </Button>
                             );
                           })()}
@@ -341,7 +346,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                   }}
                 />
 
-                <CtaSection icon={IconUser} label={tl("assignee")}>
+                <CtaSection icon={IconUser} label={t`Assignee`}>
                   <WorkspaceMembersInput
                     collapsed
                     value={task.assigneeUsers}
@@ -354,7 +359,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                 {ctx.subTasks.length > 0 && (
                   <CtaSection
                     icon={IconSubtask}
-                    label={tl("subtasks")}
+                    label={t`Subtasks`}
                     applyCollapse
                     isCollapsed={isShowSubTasks}
                   >
@@ -366,7 +371,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                         variant="subtle"
                         onClick={() => setIsShowSubTasks((s) => !s)}
                       >
-                        {tl("subtasks_count", { count: num(ctx.subTasks.length) })}
+                        <Trans>{num(ctx.subTasks.length)} subtasks</Trans>
                       </Button>
                       <Group flex={1} justify="end" gap={5}>
                         <Text fz={em(10)}>{num(ctx.progress.percent, { roundPrecision: 0 })}%</Text>

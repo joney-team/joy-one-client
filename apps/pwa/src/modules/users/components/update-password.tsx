@@ -1,13 +1,12 @@
 "use client";
 
-import { useFormSubmit } from "@/hooks/use-form";
 import { Button } from "@/components/buttons/button";
-import { onSuccess } from "@/utils/actions";
+import { useFormSubmit } from "@/hooks/use-form";
 import { useAuth } from "@/modules/auth/auth-context";
-import { tl } from "@/modules/lang/lang-service";
 import { updatePassword } from "@/modules/users/users-service";
 import { UpdateUserPasswordDto } from "@/modules/users/users-types";
-import { String } from "@/utils/string.utils";
+import { onSuccess } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 import { Card, Group, PasswordInput, SimpleGrid, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconLock } from "@tabler/icons-react";
@@ -20,16 +19,16 @@ export const UpdatePassword: FC = () => {
     validate: {
       password: auth.user.isPasswordProvided
         ? (v) => {
-            if (!v) return tl("must_be_provided");
+            if (!v) return t`Must be provided`;
           }
         : undefined,
       plainPassword: (v) => {
-        if (!v) return tl("must_be_provided");
-        if (v.length < 6) return tl("password_length", { length: 6 });
+        if (!v) return t`Must be provided`;
+        if (v.length < 6) return t`Password must contain at least ${6} characters`;
       },
       confirmPassword: (v, values) => {
-        if (!v) return tl("must_be_provided");
-        if (v !== values.plainPassword) return tl("password_not_match");
+        if (!v) return t`Must be provided`;
+        if (v !== values.plainPassword) return t`Password not match`;
       },
     },
   });
@@ -41,7 +40,7 @@ export const UpdatePassword: FC = () => {
         plainPassword: values.plainPassword,
       }),
     onSuccess: async (_, _form) => {
-      onSuccess({ message: tl("password_updated") });
+      onSuccess({ message: t`Password updated` });
       _form.reset();
     },
   });
@@ -51,10 +50,8 @@ export const UpdatePassword: FC = () => {
       <Stack>
         {auth.user.isPasswordProvided && (
           <PasswordInput
-            label={tl("current_password")}
-            placeholder={String.convertToTitleCase(
-              `${tl("enter")} ${tl("current_password")}`.toLowerCase()
-            )}
+            label={t`Current password`}
+            placeholder={t`Enter your current password`}
             {...form.getInputProps("password")}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
           />
@@ -62,17 +59,15 @@ export const UpdatePassword: FC = () => {
 
         <SimpleGrid cols={{ md: 2 }}>
           <PasswordInput
-            label={tl(auth.user.isPasswordProvided ? "new_password" : "password")}
-            placeholder={tl("password_length", { length: 6 }) as string}
+            label={auth.user.isPasswordProvided ? t`New password` : t`Password`}
+            placeholder={t`Password must contain at least ${6} characters`}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
             {...form.getInputProps("plainPassword")}
           />
 
           <PasswordInput
-            label={tl("confirm_password")}
-            placeholder={String.convertToTitleCase(
-              `${tl("enter")} ${tl("confirm_password")}`.toLowerCase()
-            )}
+            label={t`Confirm password`}
+            placeholder={t`Enter your confirm password`}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
             {...form.getInputProps("confirmPassword")}
           />
@@ -80,7 +75,7 @@ export const UpdatePassword: FC = () => {
 
         <Group justify="center" mt={10}>
           <Button onClick={submitting.handle} disabled={!form.isDirty()}>
-            {tl("update")}
+            {t`Update`}
           </Button>
         </Group>
       </Stack>

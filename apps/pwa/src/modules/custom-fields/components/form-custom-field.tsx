@@ -4,7 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Form } from "@/components/form";
 import { api } from "@/modules/apis";
-import { tl } from "@/modules/lang/lang-service";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import {
   Center,
@@ -19,6 +18,10 @@ import { useForm } from "@mantine/form";
 import { useCallback, type FC } from "react";
 import { CustomFieldEntity, CustomFieldType } from "../custom-field-types";
 import { AppEntity } from "@/types";
+import { t } from "@lingui/core/macro";
+import { customFieldTypes } from "../custom-field-constants";
+import { appEntities } from "@/constant";
+import { Trans } from "@lingui/react/macro";
 
 export interface FormCustomFieldProps {
   customField?: CustomFieldEntity;
@@ -54,14 +57,14 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
     },
     validate: {
       label: (value) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
       type: (value) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
       entities: (value) => {
-        if (!value) return tl("required");
-        if (value.length === 0) return tl("required");
+        if (!value) return t`Must be provided`;
+        if (value.length === 0) return t`Must be provided`;
       },
     },
   });
@@ -95,28 +98,28 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
   return (
     <Form onSubmit={onSubmit}>
       <Stack>
-        <TextInput autoFocus label={tl("name")} {...form.getInputProps("label")} />
+        <TextInput autoFocus label={t`Name`} {...form.getInputProps("label")} />
 
-        <TextInput label={tl("placeholder")} {...form.getInputProps("placeholder")} />
+        <TextInput label={t`Placeholder`} {...form.getInputProps("placeholder")} />
 
-        <TextInput label={`Key (${tl("optional")})`} {...form.getInputProps("key")} />
+        <TextInput label={`Key (${t`optional`})`} {...form.getInputProps("key")} />
 
         <Textarea
-          label={`${tl("description")} (${tl("optional")})`}
+          label={`${t`Description`} (${t`optional`})`}
           {...form.getInputProps("description")}
         />
 
         <Select
-          label={tl("type")}
+          label={t`Type`}
           {...form.getInputProps("type")}
           data={supportedTypes.map((type) => ({
-            label: tl(`custom_field_type_${type}`),
+            label: customFieldTypes[type].label(),
             value: type,
           }))}
         />
 
         <MultiSelect
-          label={tl("apply")}
+          label={t`Apply`}
           {...form.getInputProps("entities")}
           data={[
             AppEntity.PRODUCTS,
@@ -129,16 +132,16 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
             AppEntity.LOANS,
             AppEntity.ORDERS,
           ].map((entity) => ({
-            label: tl(`entity_${entity}`),
+            label: appEntities[entity].name(),
             value: entity,
           }))}
         />
 
-        <NumberInput label={tl("sort_order")} {...form.getInputProps("order")} />
+        <NumberInput label={t`Sort order`} {...form.getInputProps("order")} />
 
         <Center>
           <Button loading={form.submitting} type="submit">
-            {tl("save")}
+            <Trans>Save</Trans>
           </Button>
         </Center>
 

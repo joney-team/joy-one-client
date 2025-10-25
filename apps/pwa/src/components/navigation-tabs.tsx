@@ -2,7 +2,6 @@
 
 import { useRouter } from "@/hooks/use-router";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { ButtonProps, Group, ScrollArea } from "@mantine/core";
@@ -87,13 +86,13 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
                     leftIcon={tab.icon}
                     onClick={() => props.onChange?.(tab.id!)}
                   >
-                    {tl(tab.name)}
+                    {tab.name}
                     {tab.rightSection}
                   </Button>
                 ) : (
                   <Link href={tab.id}>
                     <Button {...buttonProps} leftIcon={tab.icon}>
-                      {tl(tab.name)}
+                      {tab.name}
                       {tab.rightSection}
                     </Button>
                   </Link>

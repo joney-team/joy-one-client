@@ -1,14 +1,16 @@
+"use client";
+
+import { t } from "@lingui/core/macro";
 import { Group, InputWrapper, Switch } from "@mantine/core";
 import { FC } from "react";
 import { CustomFieldInputProps } from "../components/builder-custom-fields";
-import { tl } from "@/modules/lang/lang-service";
 
 export const CustomFieldSwitchInput: FC<CustomFieldInputProps> = (props) => {
   return (
     <InputWrapper label={props.customField.label} description={props.customField.description}>
       <Group pt={8}>
         <Switch
-          label={tl("switch_label")}
+          label={t`Yes/No`}
           checked={props.value}
           onChange={(event) => props.onChange(event.target.checked)}
         />

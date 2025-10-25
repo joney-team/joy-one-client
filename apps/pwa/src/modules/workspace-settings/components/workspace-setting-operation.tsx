@@ -1,11 +1,14 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
 import { renderSlotTime } from "@/components/inputs/work-slot-settings-input";
 import { Renderer } from "@/components/renderer";
 import { currencies } from "@/configs/currency.config";
+import { appEntities } from "@/constant";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
+import { receiptPaymentMethods } from "@/modules/receipts/receipt-constants";
 import { ReceiptPaymentMethod } from "@/modules/receipts/receipts-types";
 import { searchGetAvailableEntities } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
@@ -17,6 +20,7 @@ import {
 } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
+import { t } from "@lingui/core/macro";
 import {
   Badge,
   Card,
@@ -53,7 +57,10 @@ export const WorkspaceOperationSettings: FC = () => {
 
   return (
     <Stack py={16}>
-      <FormSession title="work_slots" description="work-slot-desc">
+      <FormSession
+        title={t`Work slots`}
+        description={t`Working time slots applied to the booking, timekeeping, and other features.`}
+      >
         <Renderer visible={workDaySlots.length > 0}>
           <Group gap={8}>
             {workDaySlots.map((stat) => {
@@ -106,16 +113,16 @@ export const WorkspaceOperationSettings: FC = () => {
             variant="outline"
             onClick={() => OnModalWorkspaceSettingsWorkSlots()}
           >
-            {workDaySlots.length > 0 ? tl("edit") : tl("add")}
+            {workDaySlots.length > 0 ? t`Edit` : t`Add`}
           </Button>
         </Group>
       </FormSession>
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title="tickets">
+      <FormSession title={t`Orders`}>
         <Switch
-          label={tl("ticket_partial_payment")}
+          label={t`Allow multiple payments (Installment or Deposit)`}
           defaultChecked={workspace.settings.allowPayTicketMultipleTimes}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -129,9 +136,9 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title="payment">
+      <FormSession title={t`Payment`}>
         <Select
-          label={tl("currency")}
+          label={t`Currency`}
           defaultValue={workspace.settings.currencyCode}
           data={currencies.map((c) => ({ value: c.code, label: c.name })) || []}
           onChange={(value) => {
@@ -143,13 +150,13 @@ export const WorkspaceOperationSettings: FC = () => {
         />
 
         <Select
-          label={tl("receipt_payment_method_default")}
+          label={t`Default payment method`}
           defaultValue={
             workspace.settings.receiptPaymentMethodDefault || Object.values(ReceiptPaymentMethod)[0]
           }
           data={Object.values(ReceiptPaymentMethod).map((value) => ({
             value,
-            label: tl(`payment_method_${value}`),
+            label: receiptPaymentMethods[value].label(),
           }))}
           onChange={(value) => {
             setWorkspaceSettings({
@@ -161,7 +168,7 @@ export const WorkspaceOperationSettings: FC = () => {
         />
 
         <Switch
-          label={tl("receipt_image_required")}
+          label={t`Receipt image required`}
           defaultChecked={workspace.settings.receiptImagesRequired}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -173,7 +180,7 @@ export const WorkspaceOperationSettings: FC = () => {
         />
 
         <Switch
-          label={tl("allow_tip")}
+          label={t`Allow tip`}
           defaultChecked={workspace.settings.allowTip}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -187,11 +194,11 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title="bookings">
+      <FormSession title={t`Bookings`}>
         <Stack gap={5}>
           <Group>
             <NumberInput
-              label={tl("remind_bookings_label")}
+              label={t`Remind customers before the appointment n (days)`}
               defaultValue={workspace.settings.bookingsAutoRemindCustomerBookingBeforeDays}
               onBlur={(value) => {
                 setWorkspaceSettings({
@@ -202,7 +209,7 @@ export const WorkspaceOperationSettings: FC = () => {
             />
 
             <TimeInput
-              label={tl("remind_booking_time")}
+              label={t`Reminder time`}
               defaultValue={workspace.settings.bookingsAutoRemindCustomerBookingTime}
               onBlur={(value) => {
                 setWorkspaceSettings({
@@ -213,12 +220,12 @@ export const WorkspaceOperationSettings: FC = () => {
             />
           </Group>
           <Text fz={em(12)} c="gray">
-            {tl("remind_bookings_description")}
+            {t`Leave blank or fill in 0 if you do not want to remind the customer. <br /> The reminder will be sent via Zalo OA, SMS and Email if these services are enabled.`}
           </Text>
         </Stack>
 
         <Switch
-          label={tl("allow_duplicate_bookings")}
+          label={t`Allow duplicate bookings`}
           defaultChecked={workspace.settings.allowDuplicateBookings}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -232,8 +239,8 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title="search">
-        <InputWrapper label={tl("search_available_entities_label")}>
+      <FormSession title={t`Search`}>
+        <InputWrapper label={t`Available entities to search`}>
           <Card withBorder p={12} shadow="none" mt={5}>
             <SimpleGrid cols={{ md: 4 }}>
               {searchAvailableEntities.data?.map((e) => {
@@ -254,7 +261,7 @@ export const WorkspaceOperationSettings: FC = () => {
                 return (
                   <Switch
                     key={e}
-                    label={tl(`entity_${e}`)}
+                    label={appEntities[e].name()}
                     defaultChecked={isAvailable}
                     onChange={toggle}
                   />
@@ -267,9 +274,9 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title="security">
+      <FormSession title={t`Security`}>
         <Switch
-          label={tl("auth_session_restricted")}
+          label={t`Require re-login when logging out`}
           defaultChecked={workspace.settings.isAuthSessionRestricted}
           onChange={(e) => {
             setWorkspaceSettings({

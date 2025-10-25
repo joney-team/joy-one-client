@@ -5,7 +5,6 @@ import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
 import { ModalTitle } from "@/components/modal-title";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { archiveReceipt, getReceipt, updateReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptStatus, UpdateReceiptDto } from "@/modules/receipts/receipts-types";
@@ -14,6 +13,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { useFetch } from "@/utils/use-fetch.util";
+import { t } from "@lingui/core/macro";
 import { Badge, Center, Group, Skeleton, Stack } from "@mantine/core";
 import { modals, openConfirmModal } from "@mantine/modals";
 import { IconArchive, IconRefresh, IconReload } from "@tabler/icons-react";
@@ -68,18 +68,18 @@ export const ReceiptDetail: FC<{
     if (!receipt) return;
 
     openConfirmModal({
-      title: <ModalTitle color="red" title={tl("confirmation")} icon={IconRefresh} />,
-      children: tl("event_type_" + EventType.RECEIPT_REVERT_PAYMENT),
+      title: <ModalTitle color="red" title={t`Confirm`} icon={IconRefresh} />,
+      children: t`Are you sure you want to revert the payment?`,
       color: "red",
       onConfirm: () =>
         onActionLoad({
-          name: tl("event_type_" + EventType.RECEIPT_REVERT_PAYMENT),
+          name: t`Revert Payment`,
           process: async () => {
             await api.post(`/receipts/${receipt.id}/revert-payment`);
             await detail.fetch();
           },
         }),
-      labels: { confirm: tl("confirm"), cancel: tl("cancel") },
+      labels: { confirm: t`Confirm`, cancel: t`Cancel` },
       confirmProps: { color: "red" },
     });
   };
@@ -99,7 +99,7 @@ export const ReceiptDetail: FC<{
         {receipt.isArchived && (
           <Center>
             <Badge size="lg" color="red">
-              {tl("archived_entity", { entity: tl("receipt") })}
+              {t`Archived`}
             </Badge>
           </Center>
         )}
@@ -128,7 +128,7 @@ export const ReceiptDetail: FC<{
               leftIcon={IconReload}
               size="compact-sm"
             >
-              {tl("revert_payment")}
+              {t`Revert Payment`}
             </Button>
           )}
 
@@ -148,7 +148,7 @@ export const ReceiptDetail: FC<{
             leftIcon={IconArchive}
             size="compact-sm"
           >
-            {tl("archive")}
+            {t`Archive`}
           </Button>
         )}
       </Group>

@@ -3,11 +3,12 @@
 import { Button } from "@/components/buttons/button";
 import { useAuth } from "@/modules/auth/auth-context";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { PasswordInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconLock, IconMail, IconUser } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
-import { tl } from "@/modules/lang/lang-service";
 
 export const FormRegister: FC = () => {
   const auth = useAuth();
@@ -21,14 +22,14 @@ export const FormRegister: FC = () => {
     },
     validate: {
       name: (v: string) => {
-        if (!v) return tl("must_be_provided");
+        if (!v) return t`Must be provided`;
       },
       email: (v: string) => {
-        if (!v) return tl("must_be_provided");
+        if (!v) return t`Must be provided`;
       },
       plainPassword: (v: string) => {
-        if (!v) return tl("must_be_provided");
-        if (v.length < 6) return tl("password_length", { length: 6 });
+        if (!v) return t`Must be provided`;
+        if (v.length < 6) return t`Password must contain at least ${6} characters`;
       },
     },
   });
@@ -54,16 +55,16 @@ export const FormRegister: FC = () => {
     <form onSubmit={onSubmit}>
       <Stack>
         <TextInput
-          label={tl("name")}
+          label={t`Name`}
           autoFocus
           size="md"
           leftSection={<IconUser strokeWidth={1.5} size={18} />}
-          placeholder="Jason Tran"
+          placeholder={t`Enter your name`}
           {...form.getInputProps("name")}
         />
 
         <TextInput
-          label="Email"
+          label={t`Email`}
           size="md"
           leftSection={<IconMail strokeWidth={1.5} size={18} />}
           placeholder="example@gmail.com"
@@ -71,15 +72,15 @@ export const FormRegister: FC = () => {
         />
 
         <PasswordInput
-          label={tl("password")}
+          label={t`Password`}
           size="md"
-          placeholder={tl("password_length", { length: 6 }) as string}
+          placeholder={t`Password must contain at least ${6} characters`}
           leftSection={<IconLock strokeWidth={1.5} size={18} />}
           {...form.getInputProps("plainPassword")}
         />
 
         <Button mt={16} loading={isSubmitting} type="submit" h={42}>
-          {tl("register")}
+          <Trans>Register</Trans>
         </Button>
       </Stack>
     </form>

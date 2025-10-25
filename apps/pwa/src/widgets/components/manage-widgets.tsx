@@ -1,13 +1,13 @@
 "use client";
 
 import { ModalTitle } from "@/components/modal-title";
-import { tl, tMulti } from "@/modules/lang/lang-service";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Card, Group, Modal, Stack, Text, TextInput, Tooltip } from "@mantine/core";
 import { IconBox, IconMinus, IconPlus, IconPuzzle, IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Widget, WidgetModule, WidgetModules } from "../types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 
 interface ManageWidgetsProps<WidgetContextType = any, WidgetType = string> {
   widgets: Widget<WidgetType>[];
@@ -27,11 +27,11 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
     <Modal
       opened={props.opened}
       onClose={props.onClose}
-      title={<ModalTitle title="manage-widgets" icon={IconPuzzle} />}
+      title={<ModalTitle title={t`Manage widgets`} icon={IconPuzzle} />}
     >
       <Stack>
         <TextInput
-          placeholder={tl("search")}
+          placeholder={t`Search`}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<IconSearch size={16} />}
@@ -49,7 +49,7 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
           const isHideByWorkspaceType =
             mod.config.workspaceTypes && !mod.config.workspaceTypes.includes(workspace.type);
           const isHideBySearch =
-            search.length > 0 && !tl(mod.config.name).toLowerCase().includes(search.toLowerCase());
+            search.length > 0 && !mod.config.name().toLowerCase().includes(search.toLowerCase());
 
           if (isHideByWorkspaceType || isHideBySearch) return null;
 
@@ -73,18 +73,18 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
               <Group justify="space-between">
                 <Group gap={10}>
                   <Icon strokeWidth={1.5} />
-                  <Text>{tl(mod.config.name)}</Text>
+                  <Text>{mod.config.name()}</Text>
                 </Group>
 
                 <Group>
                   {isSelected ? (
-                    <Tooltip label={tMulti(["remove"], ["widget"])}>
+                    <Tooltip label={t`Remove widget`}>
                       <ActionIcon variant="light" color="gray">
                         <IconMinus size={16} />
                       </ActionIcon>
                     </Tooltip>
                   ) : (
-                    <Tooltip label={tMulti(["add"], ["widget"])}>
+                    <Tooltip label={t`Add widget`}>
                       <ActionIcon>
                         <IconPlus size={16} />
                       </ActionIcon>

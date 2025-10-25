@@ -1,12 +1,13 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { tl } from "@/modules/lang/lang-service";
 import { searchArray, searchEntity } from "@/modules/search/search-service";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -30,7 +31,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
   const listRoute = isFullAccess ? "/workspace-branches" : undefined;
   const rootOption = {
     _id: "root",
-    name: tl("main_workspace_branch"),
+    name: t`Main office`,
   };
 
   return (
@@ -52,9 +53,6 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
             : undefined
           : workspace.userMember.workspaceBranches
       }
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(item) => {
         return (
           <Combobox.Option value={item._id} key={item._id}>
@@ -82,7 +80,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
             fw={500}
             onClick={toggle}
           >
-            {tl("select")}
+            <Trans>Select</Trans>
           </Button>
         );
       }}

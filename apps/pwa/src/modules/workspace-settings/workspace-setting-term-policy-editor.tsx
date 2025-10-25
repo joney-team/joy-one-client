@@ -1,12 +1,14 @@
-import { tl } from "@/modules/lang/lang-service";
+"use client";
+
+import { useRouter } from "@/hooks/use-router";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, Box, Card, Group, Stack, Title } from "@mantine/core";
-import { FC, useEffect, useState } from "react";
-import { Editor } from "../../components/editor";
+import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { ActionIcon, Card, Group, Stack, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconChevronLeft } from "@tabler/icons-react";
-import { useRouter } from "@/hooks/use-router";
-import { onError } from "@/utils/exceptions.utils";
+import { FC, useEffect, useState } from "react";
+import { Editor } from "../../components/editor";
 
 interface WorkspaceSettingTermsPoliciesEditorProps {
   doc: `terms-of-service` | `privacy-policy`;
@@ -17,6 +19,11 @@ export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPolici
 ) => {
   const workspace = useWorkspace();
   const router = useRouter();
+
+  const docNames = {
+    "terms-of-service": () => t`Terms of service`,
+    "privacy-policy": () => t`Privacy policy`,
+  };
 
   const key = props.doc === "privacy-policy" ? "privacyPolicy" : "termsOfService";
   const [value, setValue] = useState((workspace.settings as any)?.[key]);
@@ -45,7 +52,7 @@ export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPolici
             </Group>
 
             <Title flex={1} ta="center" size={25} fw={500}>
-              {tl(props.doc)}
+              {docNames[props.doc]()}
             </Title>
             <Group flex={1} />
           </Group>
@@ -53,7 +60,7 @@ export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPolici
           <Editor
             value={value}
             onChangeHTML={setValue}
-            placeholder={tl("type-content-placeholder")}
+            placeholder={t`Enter content`}
             delay={300}
           />
         </Stack>

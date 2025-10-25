@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { tl } from "@/modules/lang/lang-service";
 import { OnModalZaloOaSendZns } from "@/modules/plugins/zalo-oas/modals/modal-zalo-oa-send-zns";
 import { updatePluginZalo } from "@/modules/plugins/zalo-oas/zalo-oas-service";
 import {
@@ -9,9 +8,11 @@ import {
   PluginZaloOaZNSTemplateId,
   ZnsTemplateConfig,
 } from "@/modules/plugins/zalo-oas/zalo-oas-types";
+import { t } from "@lingui/core/macro";
 import { Card, em, Group, Stack, Switch, Table, Text, TextInput, ThemeIcon } from "@mantine/core";
 import { IconTemplate } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { pluginZaloOaZNSTemplateIds } from "../zalo-oas-constants";
 
 export const ZaloOaZnsTemplateConfig: FC<{
   templateId: PluginZaloOaZNSTemplateId;
@@ -35,7 +36,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
               <IconTemplate size={18} />
             </ThemeIcon>
             <Text fz={em(15)} fw={500}>
-              {tl(`zns_${props.templateId}`)}
+              {pluginZaloOaZNSTemplateIds[props.templateId].name()}
             </Text>
           </Group>
 
@@ -56,7 +57,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
 
         <Stack gap={5}>
           <Text fz={em(13)} fw={500}>
-            {tl("params")}
+            {t`Params`}
           </Text>
           <Table withTableBorder>
             <Table.Tbody>
@@ -66,9 +67,9 @@ export const ZaloOaZnsTemplateConfig: FC<{
                     <Table.Td fw={500}>{item.fieldName}</Table.Td>
                     <Table.Td>
                       <Stack gap={2}>
-                        <Text fz={em(15)}>{tl(item.description)}</Text>
+                        <Text fz={em(15)}>{item.description}</Text>
                         <Text fz={em(11)}>
-                          {tl("example")}: {item.default}
+                          {t`Example`}: {item.default}
                         </Text>
                       </Stack>
                     </Table.Td>
@@ -82,7 +83,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
         <Group align="end" gap={8}>
           <TextInput
             flex={1}
-            placeholder="Template ID"
+            placeholder={t`Template ID`}
             defaultValue={oa.znsTemplateIds?.[props.templateId]}
             onChange={(e) =>
               updatePluginZalo(oa._id, {
@@ -99,7 +100,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
             onClick={() => OnModalZaloOaSendZns(props)}
             disabled={!oa.znsTemplateIds?.[props.templateId] || !isActive}
           >
-            {tl("send_zns")}
+            {t`Send ZNS`}
           </Button>
         </Group>
       </Stack>

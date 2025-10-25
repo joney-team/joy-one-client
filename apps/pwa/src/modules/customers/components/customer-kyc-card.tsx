@@ -13,7 +13,7 @@ import {
   CustomerKycStatus,
 } from "@/modules/customer-kycs/customer-kycs-types";
 import { FileType } from "@/modules/files/file-types";
-import { renderDateTime, tl } from "@/modules/lang/lang-service";
+import { renderDateTime } from "@/modules/lang/lang-service";
 import { String } from "@/utils/string.utils";
 import {
   Anchor,
@@ -39,6 +39,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Renderer } from "../../../components/renderer";
 import { useLocations } from "@/modules/locations/locations-context";
+import { t } from "@lingui/core/macro";
 
 interface CustomerKycCardProps {
   kyc: CustomerKycEntity;
@@ -65,19 +66,19 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
         {
           url: lastVersion.frontOfCidImage,
           _id: "1",
-          fileName: tl("frontOfCidImage"),
+          fileName: t`Front of CID`,
           type: FileType.PHOTO,
         },
         {
           url: lastVersion.backOfCidImage,
           _id: "2",
-          fileName: tl("backOfCidImage"),
+          fileName: t`Back of CID`,
           type: FileType.PHOTO,
         },
         {
           url: lastVersion.portraitImage,
           _id: "3",
-          fileName: tl("portraitImage"),
+          fileName: t`Portrait image`,
           type: FileType.PHOTO,
         },
       ],
@@ -86,7 +87,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
   const onApprove = async () => {
     await onActionLoad({
-      name: tl("approve"),
+      name: t`Approve`,
       process: async () => {
         const _kyc = await approveCustomerKyc(customer._id);
         props.onApproved?.(_kyc);
@@ -96,12 +97,12 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
   const onReject = () => {
     OnModalPrompt({
-      title: String.capitalizeFirstLetter(`${tl("reject")} ${tl("customer-kyc")}`),
-      message: tl("enter_reject_reason"),
+      title: String.capitalizeFirstLetter(`${t`Reject`} ${t`Customer KYC`}`),
+      message: t`Enter reject reason`,
       onSubmit: (reason) => rejectCustomerKyc(customer._id, { reason }),
       icon: IconUserScan,
       color: "red",
-      suggestions: [tl("wrong_information"), tl("info_does_not_match_img"), tl("img_is_blurry")],
+      suggestions: [t`Wrong information`, t`Info does not match image`, t`Image is blurry`],
     });
   };
 
@@ -112,14 +113,14 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
         <Renderer visible={!props.hideCustomer}>
           <Group justify="space-between">
-            <Text fz={em(15)}>{tl("customer")}</Text>
+            <Text fz={em(15)}>{t`Customer`}</Text>
             <Anchor fw={500} onClick={() => router.push(`/customers/${customer.code}`)}>
               {customer.name}
             </Anchor>
           </Group>
 
           <Group justify="space-between">
-            <Text fz={em(15)}>{tl("phone")}</Text>
+            <Text fz={em(15)}>{t`Phone`}</Text>
             <Text fz={em(15)} fw={500}>
               {customer.phone || "--"}
             </Text>
@@ -128,7 +129,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
         {lastVersion.cidNumber && (
           <Group justify="space-between">
-            <Text fz={em(15)}>{tl("cidNumber")}</Text>
+            <Text fz={em(15)}>{t`CID number`}</Text>
             <Text fz={em(15)} fw={500}>
               {lastVersion.cidNumber}
             </Text>
@@ -137,7 +138,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
         {lastVersion.cidFullName && (
           <Group justify="space-between" wrap="nowrap">
-            <Text fz={em(15)}>{tl("cidFullName")}</Text>
+            <Text fz={em(15)}>{t`Full name`}</Text>
             <Text fz={em(15)} fw={500} ta="right">
               {lastVersion.cidFullName}
             </Text>
@@ -146,7 +147,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
         {lastVersion.cidVnLocation && Object.keys(lastVersion.cidVnLocation).length > 0 && (
           <Group justify="space-between">
-            <Text fz={em(15)}>{tl("address")}</Text>
+            <Text fz={em(15)}>{t`Address`}</Text>
             <Text fz={em(15)} fw={500}>
               {renderLocation(lastVersion.cidVnLocation, { shortProvine: true, shortWard: true })}
             </Text>
@@ -157,17 +158,17 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
         <SimpleGrid cols={{ md: 3 }}>
           <Stack gap={5}>
-            <Text fz={em(13)}>{tl("frontOfCidImage")}</Text>
+            <Text fz={em(13)}>{t`Front of CID`}</Text>
             <EntityImage w="100%" src={lastVersion.frontOfCidImage} onView={() => onView(0)} />
           </Stack>
 
           <Stack gap={5}>
-            <Text fz={em(13)}>{tl("backOfCidImage")}</Text>
+            <Text fz={em(13)}>{t`Back of CID`}</Text>
             <EntityImage w="100%" src={lastVersion.backOfCidImage} onView={() => onView(1)} />
           </Stack>
 
           <Stack gap={5}>
-            <Text fz={em(13)}>{tl("portraitImage")}</Text>
+            <Text fz={em(13)}>{t`Portrait image`}</Text>
             <EntityImage w="100%" src={lastVersion.portraitImage} onView={() => onView(2)} />
           </Stack>
         </SimpleGrid>
@@ -176,17 +177,17 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
           if (kyc.status === CustomerKycStatus.APPROVED)
             return (
               <Stack align="end">
-                <Badge color="green">{tl("approved")}</Badge>
+                <Badge color="green">{t`Approved`}</Badge>
               </Stack>
             );
 
           if (kyc.status === CustomerKycStatus.REJECTED)
             return (
               <Stack align="end" gap={5}>
-                <Badge color="red">{tl("rejected")}</Badge>
+                <Badge color="red">{t`Rejected`}</Badge>
 
                 <Text fz={em(13)} fw={500} c="red">
-                  {tl("reason")}: {lastVersion.rejectReason || tl("unknown_reason")}
+                  {t`Reason`}: {lastVersion.rejectReason || t`Unknown reason`}
                 </Text>
               </Stack>
             );
@@ -196,11 +197,11 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
           return (
             <Group justify="end">
               <Button leftIcon={IconCheck} onClick={onApprove}>
-                {tl("approve")}
+                {t`Approve`}
               </Button>
 
               <Button variant="outline" color="gray" onClick={onReject}>
-                {tl("reject")}
+                {t`Reject`}
               </Button>
             </Group>
           );

@@ -1,14 +1,15 @@
 import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { useList } from "@/components/list/use-list";
 import { SessionLoader } from "@/components/session-loader";
-import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { EventType } from "@/modules/events/event-types";
-import { num, tl } from "@/modules/lang/lang-service";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { IconCalendar, IconEye, IconLayoutNavbarCollapse } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
@@ -64,7 +65,7 @@ export const CustomerBookings: FC<CustomerBookingsProps> = (props) => {
 
   return (
     <Stack className="customer-bookings" gap={10}>
-      <SessionTitle name="Bookings" icon={IconCalendar}>
+      <SessionTitle name={t`Bookings`} icon={IconCalendar}>
         <Renderer visible={total > 1 || (total === 1 && bookings.count === 0)}>
           <Group gap={0} onClick={() => setIsCollapsed((s) => !s)} style={{ cursor: "pointer" }}>
             <ActionIcon variant="transparent" color={isCollapsed ? "gray" : "primary"}>
@@ -76,7 +77,7 @@ export const CustomerBookings: FC<CustomerBookingsProps> = (props) => {
             </ActionIcon>
 
             <Text fz={12} c={isCollapsed ? "gray" : "primary"} fw={400}>
-              {isCollapsed ? `${tl("view_all")} (${num(total)})` : tl("collapse")}
+              {isCollapsed ? <Trans>View all ({total})</Trans> : <Trans>Collapse</Trans>}
             </Text>
           </Group>
         </Renderer>

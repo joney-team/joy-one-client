@@ -1,28 +1,33 @@
 "use client";
 
-import { Checkbox } from "@/components/checkbox";
 import { Button } from "@/components/buttons/button";
-import { FilesBox } from "@/modules/files/files-box";
+import { Checkbox } from "@/components/checkbox";
 import { DocumentsIllustration } from "@/components/illustrations/documents";
 import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
-import { ReceiptCard } from "@/modules/receipts/receipt-card";
+import { api } from "@/modules/apis";
 import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
 import { onUploadFiles } from "@/modules/files/file-service";
-import { num, tl } from "@/modules/lang/lang-service";
+import { FilesBox } from "@/modules/files/files-box";
+import { num } from "@/modules/lang/lang-service";
 import { fulfillLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanReceiptData, LoanStatus } from "@/modules/loans/loans-types";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { BankAccount } from "@/modules/plugins/banks/banks.types";
+import { ReceiptCard } from "@/modules/receipts/receipt-card";
+import { receiptPaymentMethods } from "@/modules/receipts/receipt-constants";
 import { getPaymentMethodIcon, getReceipts } from "@/modules/receipts/receipts-service";
 import { ReceiptPaymentMethod, ReceiptType } from "@/modules/receipts/receipts-types";
+import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Blockquote,
   Card,
@@ -38,8 +43,6 @@ import {
 import { DateTimePicker } from "@mantine/dates";
 import { FC, Fragment, useState } from "react";
 import { LoanRowInfo } from "./loan-row-info";
-import { useColor } from "@/modules/theme/use-color";
-import { api } from "@/modules/apis";
 
 interface LoanDisburesementProps {
   loan: LoanEntity;
@@ -129,7 +132,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
           <DocumentsIllustration width={150} />
           <Loader color="gray.5" size="xs" type="dots" />
           <Text c="gray.5" ta="center">
-            {tl("loan_waiting_for_fulfill")}
+            <Trans>Waiting for disbursement</Trans>
           </Text>
         </Stack>
       </Card>
@@ -141,7 +144,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
       <Card shadow="xs" maw="100%" w={700}>
         <Stack>
           <Text fw={500} fz={em(14)} mb={-8} ta="center">
-            {tl("payment_method")}
+            <Trans>Payment method</Trans>
           </Text>
 
           <Group gap={10} justify="center">
@@ -157,7 +160,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                   color="blue"
                   onClick={() => setPaymentMethod(method)}
                 >
-                  {tl(`payment_method_${method}`)}
+                  {receiptPaymentMethods[method].label()}
                 </Button>
               );
             })}
@@ -166,7 +169,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
           <Card withBorder shadow="none" p={16}>
             <Stack>
               <LoanRowInfo
-                label={tl("loan_amount")}
+                label={t`Loan amount`}
                 value={num(loan.amount, { type: "money" })}
                 copy
               />
@@ -181,7 +184,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 ) {
                   return (
                     <Blockquote color="orange" p={10}>
-                      Hồ sơ vay không có thông tin tài khoản ngân hàng
+                      <Trans>Loan application does not have bank account information</Trans>
                     </Blockquote>
                   );
                 }
@@ -213,17 +216,17 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 return (
                   <Fragment>
                     <LoanRowInfo
-                      label={tl("bank_account_name")}
+                      label={t`Bank account name`}
                       value={loan.payment.accountName}
                       copy
                     />
                     <LoanRowInfo
-                      label={tl("bank_account_number")}
+                      label={t`Bank account number`}
                       value={loan.payment.accountNumber}
                       copy
                     />
-                    <LoanRowInfo label={tl("bank_name")} value={bank.shortName} copy />
-                    <LoanRowInfo label={tl("bank_transaction_content")} value={description} copy />
+                    <LoanRowInfo label={t`Bank name`} value={bank.shortName} copy />
+                    <LoanRowInfo label={t`Bank transaction content`} value={description} copy />
 
                     {loan.status === LoanStatus.APPROVED && !!qrCode && (
                       <Fragment>
@@ -236,7 +239,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
               })()}
 
               <InputWrapper
-                label={tl("receipts_images")}
+                label={t`Receipts images`}
                 withAsterisk
                 styles={{
                   label: {
@@ -252,7 +255,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 <Stack gap={4}>
                   <Center>
                     <Checkbox
-                      label={tl("custom_fulfilled_at")}
+                      label={t`Custom fulfilled at`}
                       checked={isCustomFulfilledAt}
                       onChange={() => setIsCustomFulfilledAt(!isCustomFulfilledAt)}
                     />
@@ -260,7 +263,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
 
                   {isCustomFulfilledAt && (
                     <DateTimePicker
-                      label={tl("fulfilledAt")}
+                      label={t`Fulfilled at`}
                       value={fulfilledAt ? new Date(fulfilledAt * 1000) : null}
                       onChange={(d) => setFulfilledAt(DateTime.timeToSeconds(d))}
                     />
@@ -275,12 +278,12 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
       <Group justify="center">
         {workspace.hasPermission(WorkspacePermission.LOANS_APPROVED_REVERTED) && (
           <Button variant="outline" color="gray" onClick={onRevertApproval} disabled={isSubmitting}>
-            {tl("revert_approval")}
+            {t`Revert approval`}
           </Button>
         )}
 
         <Button type="submit" onClick={onSubmit} miw={200} loading={isSubmitting}>
-          {tl("loan-disbursement")}
+          {t`Loan disbursement`}
         </Button>
       </Group>
     </Stack>

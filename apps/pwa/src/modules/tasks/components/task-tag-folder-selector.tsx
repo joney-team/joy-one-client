@@ -1,11 +1,10 @@
 "use client";
 
-import { AppEntity } from "@/types";
 import { Button } from "@/components/buttons/button";
-import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
-import { getTags } from "@/modules/tags/tags-service";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { AppEntity } from "@/types";
+import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
@@ -24,9 +23,6 @@ export const TaskTagFolderSelector: FC<TaskTagFolderSelectorProps> = (props) => 
       listRoute="/tags"
       listParams={{ type: TagType.TASK_FOLDER }}
       onSearch={(q) => searchEntity<TagEntity>(AppEntity.TAGS, q, { type: TagType.TASK_FOLDER })}
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(tag) => {
         return (
           <Combobox.Option value={tag._id} key={tag._id}>
@@ -51,7 +47,7 @@ export const TaskTagFolderSelector: FC<TaskTagFolderSelectorProps> = (props) => 
             fw={500}
             onClick={toggle}
           >
-            {tl("select")}
+            <Trans>Select</Trans>
           </Button>
         );
       }}

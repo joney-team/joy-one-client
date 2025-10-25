@@ -1,4 +1,3 @@
-import { tl } from "@/modules/lang/lang-service";
 import { ResponseList } from "@/types";
 import {
   Icon,
@@ -18,6 +17,7 @@ import {
 import EventEmitter from "events";
 import { v4 as uuid } from "uuid";
 import { api } from "../apis";
+import { defaultTaskStatusIds } from "./task-constants";
 import {
   DefaultTaskStatusId,
   TaskDto,
@@ -102,8 +102,9 @@ export function renderTaskStatusStyle(statusId: string, workspaceStatuses: TaskS
     status.icon && TaskIcons[status.icon]
       ? TaskIcons[status.icon]
       : TaskIcons[DefaultTaskStatusIcons[statusId]] || TaskIcons["IconCircleFilled"];
-  let name: string = status.name || tl(`dts_${status.id}`);
-  let color = status.color || DefaultTaskStatusColors[status.id] || "gray";
+  let name: string = status.name || defaultTaskStatusIds[statusId as DefaultTaskStatusId]?.label();
+  let color =
+    status.color || defaultTaskStatusIds[status.id as DefaultTaskStatusId]?.color || "gray";
 
   return {
     icon,

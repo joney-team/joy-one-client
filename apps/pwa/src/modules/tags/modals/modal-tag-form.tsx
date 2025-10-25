@@ -3,16 +3,17 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { configs } from "@/configs/layout.config";
-import { tl } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { onError } from "@/utils/exceptions.utils";
-import { capitalize } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, ColorInput, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
-import { IconCheck, IconFolderPlus, IconTag, IconX } from "@tabler/icons-react";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { FC, useEffect, useRef, useState } from "react";
+import { tagTypes } from "../tags-constants";
 
 interface ModalTagFormProps {
   onDone?: (tag: TagEntity) => void | Promise<void>;
@@ -34,7 +35,7 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
     },
     validate: {
       name: (value: string) => {
-        if (!value) return tl("must_be_provided");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -74,22 +75,22 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
         <TextInput
           withAsterisk
           ref={inputNameRef}
-          label={tl("name")}
+          label={t`Name`}
           {...form.getInputProps("name")}
         />
 
         <Select
-          label={tl("type")}
+          label={t`Type`}
           disabled={!!props.type}
           data={Object.values(TagType).map((type) => ({
-            label: tl(`tag_type_${type}`),
+            label: tagTypes[type].label(),
             value: type,
           }))}
           {...form.getInputProps("type")}
         />
 
         <ColorInput
-          label={tl("color")}
+          label={t`Color`}
           {...form.getInputProps("color")}
           format="hex"
           swatches={configs.swatches}
@@ -114,7 +115,7 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
           disabled={!form.isDirty()}
           type="submit"
         >
-          {tl("complete")}
+          <Trans>Complete</Trans>
         </Button>
       </Stack>
     </form>
@@ -122,18 +123,12 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
 };
 
 export const OnModalTagForm = (props: ModalTagFormProps) => {
-  let icon = IconTag;
-  if (props.type === TagType.TASK_FOLDER) icon = IconFolderPlus;
-  const typeName = `${tl(`tag_type_${props.type}`)}`.toLowerCase();
-
   return modals.open({
     modalId: "ModalTagForm",
     title: (
       <ModalTitle
-        title={capitalize(
-          props.tag ? `${tl("update")} ${typeName}` : `${tl("create")} ${typeName}`
-        )}
-        icon={icon}
+        title={props.tag ? t`Update tag` : t`Create tag`}
+        icon={props.type ? tagTypes[props.type].icon : undefined}
       />
     ),
     children: <ModalTagForm {...props} />,

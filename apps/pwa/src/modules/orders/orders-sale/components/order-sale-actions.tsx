@@ -2,7 +2,7 @@
 
 import { Printer } from "@/components/printer/printer";
 import { useLayout } from "@/layout/layout-context";
-import { tl } from "@/modules/lang/lang-service";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Menu } from "@mantine/core";
 import { IconCirclePlus, IconDots, IconPrinter, IconTrash } from "@tabler/icons-react";
 import { Fragment, type FC } from "react";
@@ -40,11 +40,11 @@ export const OrderSaleActions: FC = () => {
                 onClick={orderSale.removeOrder}
                 leftSection={<IconTrash size={20} strokeWidth={1.5} />}
               >
-                {tl("archive")}
+                <Trans>Archive</Trans>
               </Menu.Item>
 
               <Menu.Item leftSection={<IconPrinter size={20} strokeWidth={1.5} />}>
-                {tl("print")}
+                <Trans>Print</Trans>
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>

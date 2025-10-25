@@ -4,8 +4,8 @@ import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
 import { useQuery } from "@/modules/apis/use-query";
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import { Trans } from "@lingui/react/macro";
 import { Card, Skeleton, Stack, Text, Title } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -49,10 +49,14 @@ export const PluginEInvoiceProviderList: FC = () => {
         <Stack align="center" py={20}>
           <Stack gap={8}>
             <Title ta="center" order={2} fw={300} c={color("primary")}>
-              {tl("eInvoices")}
+              <Trans>E-Invoices</Trans>
             </Title>
 
-            <Text ta="center">{tl("eInvoices_desc")}</Text>
+            <Text ta="center">
+              <Trans>
+                Integrate with E-Invoices services: <strong>MatBao</strong>, ...
+              </Trans>
+            </Text>
           </Stack>
 
           <Button
@@ -61,7 +65,7 @@ export const PluginEInvoiceProviderList: FC = () => {
             rightIcon={IconArrowRight}
             onClick={() => OnModalEInvoiceProvider({ mode: "create", onDone: () => refetch() })}
           >
-            {tl("start_now")}
+            <Trans>Start now</Trans>
           </Button>
         </Stack>
       </Card>

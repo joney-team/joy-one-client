@@ -1,4 +1,4 @@
-import { tl } from "../lang/lang-service";
+import { t } from "@lingui/core/macro";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { WorkspaceType } from "../workspaces/workspaces-types";
 
@@ -15,13 +15,13 @@ export const useOrderFeatureName = () => {
     ].includes(workspace.type)
   ) {
     return {
-      singular: tl("ticket"),
-      plural: tl("tickets"),
+      singular: t`Ticket`,
+      plural: t`Tickets`,
     };
   }
 
   return {
-    singular: tl("order"),
-    plural: tl("orders"),
+    singular: t`Order`,
+    plural: t`Orders`,
   };
 };

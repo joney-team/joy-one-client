@@ -1,26 +1,26 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
 import { Avatar } from "@/components/avatar";
-import { Calendar } from "@/components/calendar";
 import { Button } from "@/components/buttons/button";
+import { Calendar } from "@/components/calendar";
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { onReconnected, useEventsListener } from "@/modules/events/event-service";
+import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
+import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity, TaskTimeTracking } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
 import { objSelect } from "@/utils/object.utils";
-import { String } from "@/utils/string.utils";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -163,7 +163,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                   >
                     <Group gap={5}>
                       <Text fz={12} fw={500}>
-                        {tl("members")}
+                        <Trans>Members</Trans>
                       </Text>
 
                       {!isAssigneesReady ? (
@@ -236,11 +236,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
 
                 return (
                   <Group>
-                    <Tooltip
-                      label={String.capitalizeFirstLetter(
-                        `${tl("add")} ${tl("task")} ${tl("need_complete")}`
-                      )}
-                    >
+                    <Tooltip label={t`Add task need to complete`}>
                       <ActionIcon
                         variant="subtle"
                         radius={100}
@@ -271,7 +267,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                   <Stack w="100%" px={5} pb={5} gap={10}>
                     <Renderer visible={createdTasks.length > 0}>
                       <Text fz={10} mb={-5}>
-                        • {tl("created")}
+                        • <Trans>Created</Trans>
                       </Text>
                       <Stack gap={5}>
                         {createdTasks.map((task) => (
@@ -282,7 +278,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
 
                     <Renderer visible={dueDateTasks.length > 0}>
                       <Text fz={10} mb={-5}>
-                        • {tl("due_date")}
+                        • <Trans>Due date</Trans>
                       </Text>
                       <Stack gap={5}>
                         {dueDateTasks.map((task) => (
@@ -293,7 +289,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
 
                     <Renderer visible={closedTasks.length > 0}>
                       <Text fz={10} mb={-5}>
-                        • {tl("task_closed")}
+                        • <Trans>Task closed</Trans>
                       </Text>
                       <Stack gap={5}>
                         {closedTasks.map((task) => (

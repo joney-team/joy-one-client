@@ -1,24 +1,27 @@
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { Errored } from "@/components/errored";
 import { ModalTitle } from "@/components/modal-title";
+import { customerFormStatuses } from "@/modules/customer-forms/customer-form-constants";
 import {
-  customerFormStatusConfigs,
   getCustomerForm,
   updateCustomerForm,
 } from "@/modules/customer-forms/customer-form-service";
 import { CustomerFormStatus } from "@/modules/customer-forms/customer-form-types";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
+import { useLocations } from "@/modules/locations/locations-context";
+import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Anchor, Grid, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconMessageUser } from "@tabler/icons-react";
 import { FC } from "react";
 import { InputModalType, OnModalInput } from "../../../modals/modal-input";
-import { useLocations } from "@/modules/locations/locations-context";
 
 interface CustomerFormModalProps {
   _id: string;
@@ -77,7 +80,7 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
   const onCancel = async () => {
     OnModalInput({
       type: InputModalType.TEXTAREA,
-      title: tl("cancel_reason"),
+      title: t`Cancel reason`,
       color: "red",
       required: true,
       onDone: async (value) => {
@@ -96,47 +99,47 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
 
   return (
     <Stack>
-      <RowInfo label={tl("name")} value={customerForm.data.name} />
+      <RowInfo label={t`Name`} value={customerForm.data.name} />
       <RowInfo
-        label={tl("phone")}
+        label={t`Phone`}
         value={
           <Anchor className="anchor" href={`tel:${customerForm.data.phone}`}>
             {customerForm.data.phone}
           </Anchor>
         }
       />
-      <RowInfo label={tl("location")} value={renderLocation(customerForm.data.vnLocation)} />
+      <RowInfo label={t`Location`} value={renderLocation(customerForm.data.vnLocation)} />
 
       {(function () {
         if (customerForm.data.status === CustomerFormStatus.PENDING) {
           return (
             <Group justify="center" mt={12}>
               <Button variant="outline" color="gray" onClick={onCancel}>
-                {tl("cancel")}
+                <Trans>Cancel</Trans>
               </Button>
 
               <Button action rightIcon={IconCheck} onClick={onComplete}>
-                {tl("complete")}
+                <Trans>Complete</Trans>
               </Button>
             </Group>
           );
         }
 
-        const status = customerFormStatusConfigs[customerForm.data.status];
+        const status = customerFormStatuses[customerForm.data.status];
 
         return (
           <RowInfo
-            label={tl("status")}
+            label={t`Status`}
             value={
               <Stack gap={5}>
                 <Group gap={8}>
                   <Circle size={12} color={color(status.color)} />
-                  {tl(status.label)}
+                  {status.label()}
                 </Group>
 
                 {customerForm.data.cancelReason && (
                   <Text c="red">
-                    {tl("reason")}: {customerForm.data.cancelReason}
+                    {t`Reason`}: {customerForm.data.cancelReason}
                   </Text>
                 )}
               </Stack>
@@ -151,7 +154,7 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
 export const OnCustomerFormModal: (props: CustomerFormModalProps) => void = (props) => {
   return modals.open({
     modalId: "CustomerFormModal",
-    title: <ModalTitle title={tl("customerForms")} icon={IconMessageUser} />,
+    title: <ModalTitle title={t`Customer forms`} icon={IconMessageUser} />,
     children: <CustomerFormModal {...props} />,
   });
 };

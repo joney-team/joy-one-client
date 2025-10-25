@@ -1,6 +1,6 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, InputWrapperProps, Text } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -46,7 +46,7 @@ export const ProductsInput: FC<ProductsInputProps> = (props) => {
           >
             {_value.length === 0 && (
               <Text fz={11} c="gray" fw={400}>
-                {tl("select_entity", { entity: tl("products_services") })}
+                <Trans>Select products/services</Trans>
               </Text>
             )}
 

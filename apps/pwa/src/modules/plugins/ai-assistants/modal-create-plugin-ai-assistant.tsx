@@ -1,9 +1,7 @@
-import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Image } from "@/components/image";
 import { ModalTitle } from "@/components/modal-title";
-import { tl } from "@/modules/lang/lang-service";
 import {
   createPluginAiAssistant,
   removePluginAiAssistant,
@@ -13,7 +11,9 @@ import {
   PluginAiAssistantEntity,
   PluginAiAssistantProvider,
 } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-types";
+import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import {
   Card,
   Group,
@@ -75,10 +75,10 @@ export const ModalCreatePluginAiAssistant: FC<{
       enabled: typeof plugin?.enabled === "boolean" ? plugin.enabled : true,
     },
     validate: {
-      provider: (value) => (value.length > 0 ? null : tl("required")),
+      provider: (value) => (value.length > 0 ? null : t`Required`),
       apiKey: (value, values) => {
         if (values.provider !== plugin?.provider) {
-          return value.length > 0 ? null : tl("required");
+          return value.length > 0 ? null : t`Required`;
         }
 
         return null;
@@ -109,7 +109,7 @@ export const ModalCreatePluginAiAssistant: FC<{
 
   return (
     <Stack>
-      <InputWrapper label={tl("provider")}>
+      <InputWrapper label={t`Provider`}>
         <SimpleGrid cols={2} mt={8}>
           {Object.keys(pluginAiAssistantProviders).map((providerKey) => {
             const provider = pluginAiAssistantProviders[providerKey as PluginAiAssistantProvider];
@@ -164,7 +164,7 @@ export const ModalCreatePluginAiAssistant: FC<{
                       fz={12}
                       onClick={() => window.open(provider.appLink, "_blank")}
                     >
-                      {tl("open_app")}
+                      {t`Open app`}
                     </Button>
 
                     <Button
@@ -175,7 +175,7 @@ export const ModalCreatePluginAiAssistant: FC<{
                       fz={12}
                       onClick={() => window.open(provider.docsLink, "_blank")}
                     >
-                      {tl("docs")}
+                      {t`Docs`}
                     </Button>
                   </Group>
                 </Stack>
@@ -187,16 +187,16 @@ export const ModalCreatePluginAiAssistant: FC<{
 
       {plugin && plugin.provider === form.values.provider ? (
         <TextInput
-          label={tl("apiKey")}
+          label={t`API Key`}
           leftSection={<IconKey size={16} strokeWidth={1.5} />}
           value="••••••••••••••••••••••"
           readOnly
         />
       ) : (
         <PasswordInput
-          label={tl("apiKey")}
+          label={t`API Key`}
           leftSection={<IconKey size={16} strokeWidth={1.5} />}
-          placeholder={tl("provide_api_key")}
+          placeholder={t`Provide API key`}
           {...form.getInputProps("apiKey")}
         />
       )}
@@ -209,13 +209,13 @@ export const ModalCreatePluginAiAssistant: FC<{
           loading={loading}
           color="violet.9"
         >
-          {tl(plugin ? "save" : "connect")}
+          {plugin ? t`Save` : t`Connect`}
         </Button>
 
         {plugin && (
           <ButtonArchive
-            label="disconect"
-            name="ai_assistant"
+            label={t`Disconect`}
+            name={t`AI Assistant`}
             goBackWhenArchived={false}
             process={async () => {
               await removePluginAiAssistant(plugin._id);
@@ -231,7 +231,7 @@ export const ModalCreatePluginAiAssistant: FC<{
 export const OnModalCreatePluginAiAssistant = (plugin?: PluginAiAssistantEntity) => {
   return modals.open({
     modalId: "PluginAiAssistantModal",
-    title: <ModalTitle title="ai_assistant" icon={IconAi} color="violet.9" />,
+    title: <ModalTitle title={t`AI assistant`} icon={IconAi} color="violet.9" />,
     children: <ModalCreatePluginAiAssistant plugin={plugin} />,
     size: "600px",
   });

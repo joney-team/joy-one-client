@@ -1,9 +1,12 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
 import { useQuery } from "@/modules/apis/use-query";
-import { tl } from "@/modules/lang/lang-service";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { PasswordInput, Select, Skeleton, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -11,9 +14,9 @@ import { IconFileInvoice } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useMemo } from "react";
 import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 import {
-  PluginEInvoicesProviderType,
   PluginEInvoicesProviderDto,
   PluginEInvoicesProviderInformations,
+  PluginEInvoicesProviderType,
 } from "./plugin-e-invoices.types";
 
 type ModalEInvoiceProviderProps = ({} | { provider: PluginEInvoicesProviderEntity }) & {
@@ -34,7 +37,7 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
     initialValues: {},
     validate: {
       type: (v: PluginEInvoicesProviderType | undefined) => {
-        if (!v) return tl("must_be_provided");
+        if (!v) return t`Must be provided`;
       },
     },
   });
@@ -60,9 +63,9 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
     ) {
       return (
         <Fragment>
-          <TextInput {...form.getInputProps("auth.MST")} label={tl("tax_code")} />
-          <TextInput {...form.getInputProps("auth.TDNhap")} label={tl("sign_in_username")} />
-          <PasswordInput {...form.getInputProps("auth.MKhau")} label={tl("password")} />
+          <TextInput {...form.getInputProps("auth.MST")} label={t`Tax code`} />
+          <TextInput {...form.getInputProps("auth.TDNhap")} label={t`Sign in username`} />
+          <PasswordInput {...form.getInputProps("auth.MKhau")} label={t`Password`} />
         </Fragment>
       );
     }
@@ -100,7 +103,7 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
     <form onSubmit={onSubmit}>
       <Stack>
         <Select
-          label={tl("provider")}
+          label={t`Provider`}
           data={Object.entries(providerConfigs.data ?? {}).map(([type, info]) => ({
             label: info.name,
             value: type,
@@ -112,7 +115,7 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
         {providerForm}
 
         <Button loading={form.submitting} type="submit">
-          {tl(provider ? "update" : "complete")}
+          {provider ? <Trans>Update</Trans> : <Trans>Complete</Trans>}
         </Button>
       </Stack>
     </form>
@@ -126,9 +129,7 @@ export const OnModalEInvoiceProvider = (props: ModalEInvoiceProviderProps) => {
     modalId: "OnModalEInvoiceProvider",
     title: (
       <ModalTitle
-        title={tl(provider ? "edit_entity" : "add_entity", {
-          entity: tl("workspacePluginsEInvoiceProvider"),
-        })}
+        title={t`${provider ? t`Edit` : t`Add`} E-invoices provider`}
         icon={IconFileInvoice}
       />
     ),

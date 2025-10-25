@@ -1,10 +1,13 @@
+"use client";
+
 import { useRouter } from "@/hooks/use-router";
+import { num } from "@/modules/lang/lang-service";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { num, tl } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Badge,
@@ -116,10 +119,10 @@ export const ProductCard: FC<
                 </ThemeIcon>
 
                 <Text fz={em(15)} c="dark" fw={500}>
-                  {tl("HSD")}:{" "}
+                  {t`Expire in`}:{" "}
                   {product.combosExpireInDays && product.combosExpireInDays > 0
-                    ? `${num(product.combosExpireInDays)} ${tl("days")}`
-                    : tl("unlimited")}
+                    ? `${num(product.combosExpireInDays)} ${t`days`}`
+                    : t`Unlimited`}
                 </Text>
               </Group>
             </Renderer>
@@ -141,7 +144,7 @@ export const ProductCard: FC<
                   <IconStack size={18} />
                 </ThemeIcon>
                 <Text fz={em(15)} fw={500}>
-                  {num(product.supplies.length)} {tl("consumables")}
+                  {num(product.supplies.length)} {t`Consumables`}
                 </Text>
               </Group>
             )}
@@ -153,7 +156,7 @@ export const ProductCard: FC<
                 </ThemeIcon>
 
                 <Text fz={em(15)} c="dark" fw={500}>
-                  {tl("voucherAmount")}: {num(product.voucherAmount, { type: "money" })}
+                  {t`Voucher amount`}: {num(product.voucherAmount, { type: "money" })}
                 </Text>
               </Group>
 
@@ -164,7 +167,7 @@ export const ProductCard: FC<
 
                 <Stack gap={3}>
                   <Text fz={em(15)} c="dark" fw={500}>
-                    {tl("terms_of_use")}:
+                    {t`Terms of use`}:
                   </Text>
 
                   <Renderer
@@ -173,7 +176,7 @@ export const ProductCard: FC<
                     }
                   >
                     <Text fw={500} fz={em(13)} c="gray">
-                      • {`${tl("include_products")}:`}
+                      • {`${t`Include products`}:`}
                     </Text>
                     {product.voucherIncludeProducts?.map((product) => {
                       return (
@@ -190,7 +193,7 @@ export const ProductCard: FC<
                     }
                   >
                     <Text fw={500} fz={em(13)} c="gray">
-                      • {`${tl("exclude_products")}:`}
+                      • {`${t`Exclude products`}:`}
                     </Text>
                     {product.voucherExcludeProducts?.map((product) => {
                       return (
@@ -210,7 +213,7 @@ export const ProductCard: FC<
                     }
                   >
                     <Text fw={500} fz={em(13)} c="gray">
-                      • {`${tl("apply_all_products")}`}
+                      • {`${t`Apply all products`}`}
                     </Text>
                   </Renderer>
                 </Stack>
@@ -229,7 +232,7 @@ export const ProductCard: FC<
                 fz={10}
                 px={8}
               >
-                {product.stock.quantity <= 0 ? tl("out_of_stock") : num(product.stock.quantity)}
+                {product.stock.quantity <= 0 ? t`Out of stock` : num(product.stock.quantity)}
               </Badge>
             </Group>
           )}

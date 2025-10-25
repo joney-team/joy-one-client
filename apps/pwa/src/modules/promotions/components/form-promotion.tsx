@@ -1,18 +1,21 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { DateTimeInput } from "@/components/inputs/date-time-input";
 import { DynamicSelectionInput } from "@/components/inputs/dynamic-selection-input";
 import { ImageInput } from "@/components/inputs/image-input";
 import { api } from "@/modules/apis";
-import { tl } from "@/modules/lang/lang-service";
+import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
+import { CustomField, CustomFieldValue } from "@/modules/custom-fields/custom-field-types";
 import { AppEntity, DynamicSelection, DynamicSelectionOperator } from "@/types";
 import { onFormError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import { Center, NumberInput, Select, SimpleGrid, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { type FC } from "react";
-import { promotionRuleTypeConfigs, promotionRuleValueConfig } from "../promotions-service";
+import { promotionTypes } from "../promotions-constants";
+import { promotionRuleTypeConfigs } from "../promotions-service";
 import { PromotionDto, PromotionEntity, PromotionStatus, PromotionType } from "../promotions-types";
-import { CustomField, CustomFieldValue } from "@/modules/custom-fields/custom-field-types";
-import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 
 export interface FormPromotionProps {
   promotion?: PromotionEntity;
@@ -56,10 +59,10 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
     },
     validate: {
       name: (value) => {
-        if (!value) return tl("name_is_required");
+        if (!value) return t`Must be provided`;
       },
       value: (value) => {
-        if (!value) return tl("value_is_required");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -107,24 +110,24 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
     }
   });
 
-  const ruleValueConfig = promotionRuleValueConfig[form.values.type];
+  const ruleValueConfig = promotionTypes[form.values.type];
 
   return (
     <form onSubmit={onSubmit}>
       <Stack>
-        <TextInput label={tl("name")} {...form.getInputProps("name")} />
-        <Textarea label={tl("description")} {...form.getInputProps("description")} />
-        <ImageInput label={tl("image")} {...form.getInputProps("image")} h={150} />
+        <TextInput label={t`Name`} {...form.getInputProps("name")} />
+        <Textarea label={t`Description`} {...form.getInputProps("description")} />
+        <ImageInput label={t`Image`} {...form.getInputProps("image")} h={150} />
 
         <SimpleGrid cols={2}>
           <Select
-            label={tl("type")}
+            label={t`Type`}
             {...form.getInputProps("type")}
             data={Object.values(PromotionType).map((type) => {
               const config = promotionRuleTypeConfigs[type];
               return {
                 value: type,
-                label: tl(config.label),
+                label: promotionTypes[type].label(),
               };
             })}
             onChange={(value) => {
@@ -134,7 +137,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
           />
 
           <NumberInput
-            label={tl(ruleValueConfig.label)}
+            label={ruleValueConfig.label()}
             {...form.getInputProps("value")}
             min={ruleValueConfig.min}
             max={ruleValueConfig.max}
@@ -142,9 +145,9 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
         </SimpleGrid>
 
         <NumberInput
-          label={tl("limit_per_customer")}
+          label={t`Limit per customer`}
           {...form.getInputProps("limitPerCustomer")}
-          placeholder={tl("leave_empty_if_no_limit")}
+          placeholder={t`Leave empty if no limit`}
         />
 
         {/* <DynamicSelectionInput
@@ -155,13 +158,13 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
         /> */}
 
         <DynamicSelectionInput
-          label={tl("customers_limit_rule")}
-          description={tl("leave_empty_if_no_limit")}
+          label={t`Customers limit rule`}
+          description={t`Leave empty if no limit`}
           fixedEntity={AppEntity.CUSTOMERS}
           {...form.getInputProps("customersSelection")}
         />
 
-        <DateTimeInput label={tl("expireAt")} {...form.getInputProps("expireAt")} />
+        <DateTimeInput label={t`Expire at`} {...form.getInputProps("expireAt")} />
 
         <BuilderCustomFields
           entity={AppEntity.PROMOTIONS}
@@ -171,7 +174,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
 
         <Center>
           <Button type="submit" loading={form.submitting}>
-            {tl(props.promotion ? "save" : "create")}
+            {props.promotion ? t`Save` : t`Create`}
           </Button>
         </Center>
       </Stack>

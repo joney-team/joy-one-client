@@ -1,6 +1,7 @@
 "use client";
 
 import { CommentsIllustration } from "@/components/illustrations/comments";
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { Comment } from "@/modules/comments/comment-box/components/comment";
@@ -8,8 +9,7 @@ import { createComment, getComments } from "@/modules/comments/comment-service";
 import { CommentEntity } from "@/modules/comments/comment-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
-import { useList } from "@/components/list/use-list";
+import { Trans } from "@lingui/react/macro";
 import { em, Group, ScrollArea, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { IconMessages } from "@tabler/icons-react";
@@ -97,7 +97,7 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
         </ThemeIcon>
 
         <Text fz={em(16)} fw={500}>
-          {tl("comments")}
+          <Trans>Comments</Trans>
         </Text>
       </Group>
 
@@ -160,7 +160,7 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
             >
               <CommentsIllustration width={150} />
               <Text c="gray" fz={12}>
-                {tl("no_comments")}
+                <Trans>No comments</Trans>
               </Text>
             </Stack>
           </Renderer>

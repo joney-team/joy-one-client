@@ -1,9 +1,9 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Input, InputWrapper, InputWrapperProps } from "@mantine/core";
-import { type FC } from "react";
 import { IconX } from "@tabler/icons-react";
+import { type FC } from "react";
 import { ProductEntity } from "../products-types";
 import { ProductSelector } from "./product-selector";
 
@@ -23,11 +23,11 @@ export const ProductInput: FC<ProductInputProps> = (props) => {
       onSelect={(value) => onChange?.(value)}
       target={(ctx) => {
         return (
-          <InputWrapper {...rest} label={rest.label || tl("product")}>
+          <InputWrapper {...rest} label={rest.label || t`Product`}>
             <Input
               value={value?.name ?? ""}
               flex={1}
-              placeholder={tl("select_entity", { entity: tl("product") })}
+              placeholder={t`Select product`}
               readOnly
               onClick={ctx.toggle}
               rightSectionPointerEvents="all"

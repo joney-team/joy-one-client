@@ -1,19 +1,21 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { getDateFormat, num, tl } from "@/modules/lang/lang-service";
+import { getDateFormat, num } from "@/modules/lang/lang-service";
 import { partialPaymentReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { round } from "@/utils/number.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Center, NumberInput, Slider, Stack, Text } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconCircleHalf2 } from "@tabler/icons-react";
+import dayjs from "dayjs";
 import { FC, useState } from "react";
 import { OnModalPayReceipt } from "./modal-pay-receipt";
-import dayjs from "dayjs";
 
 interface ModalPartialPaymentProps {
   onDone?: (receipts: ReceiptEntity[]) => void | Promise<void>;
@@ -30,11 +32,11 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
     } as any,
     validate: {
       amount: (value) => {
-        if (value <= 0) return tl("validate_min_amount", { min: 5000 });
+        if (value <= 0) return t`Minimum amount is ${5000}`;
       },
       nextExpireAt: (value) => {
         if (props.receipt.expireAt && (!value || value <= props.receipt.expireAt)) {
-          return tl("invalid_time");
+          return t`Invalid time`;
         }
       },
     },
@@ -57,7 +59,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
   return (
     <Stack>
       <NumberInput
-        label={tl("money_amount")}
+        label={t`Amount`}
         min={5000}
         max={props.receipt.amount}
         hideControls
@@ -79,7 +81,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
 
       {props.receipt.expireAt && (
         <DateInput
-          label={tl("next_pay_date")}
+          label={t`Next payment deadline`}
           valueFormat={getDateFormat()}
           {...form.getInputProps("nextExpireAt")}
           minDate={new Date()}
@@ -93,7 +95,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
       )}
 
       <Text ta="center">
-        {tl("remain_money_amount")}: {num(remainAmount, { type: "money" })}
+        <Trans>Remaining amount</Trans>: {num(remainAmount, { type: "money" })}
       </Text>
 
       <Center>
@@ -105,7 +107,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
           disabled={!form.isDirty()}
           type="submit"
         >
-          {tl("complete")}
+          <Trans>Complete</Trans>
         </Button>
       </Center>
     </Stack>
@@ -115,7 +117,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
 export const OnModalPartialPayment = (props: ModalPartialPaymentProps) => {
   return modals.open({
     modalId: "ModalPartialPayment",
-    title: <ModalTitle title={tl("partial_payment")} icon={IconCircleHalf2} />,
+    title: <ModalTitle title={t`Partial Payment`} icon={IconCircleHalf2} />,
     children: <ModalPartialPayment {...props} />,
   });
 };

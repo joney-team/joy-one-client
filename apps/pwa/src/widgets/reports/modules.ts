@@ -1,13 +1,13 @@
-import { Period } from "@/types";
-import { tl } from "@/modules/lang/lang-service";
 import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
 } from "@/modules/reports/reports-utils";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
+import { Period } from "@/types";
 import { DateTime } from "@/utils/date-time.utils";
 import { numberWidget, numberWidgetlayoutConfig } from "@/widgets/common/number.widget";
 import { EWidgetModules } from "@/widgets/types";
+import { t } from "@lingui/core/macro";
 import {
   IconBusinessplan,
   IconCashRegister,
@@ -31,7 +31,7 @@ import { ReportTimeTrackingsWidget } from "./widgets/report-time-trackings.widge
 export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgetsContext> = {
   [ReportWidgetType.REVENUE]: {
     config: {
-      name: "revenue",
+      name: () => t`Revenue`,
       icon: IconCashRegister,
       defaultState: {
         style: "dark-content",
@@ -51,7 +51,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   },
   [ReportWidgetType.REVENUE_AVERAGE]: {
     config: {
-      name: "revenue_average",
+      name: () => t`Revenue average`,
       icon: IconCashRegister,
       layout: numberWidgetlayoutConfig,
     },
@@ -70,7 +70,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   },
   [ReportWidgetType.REVENUE_CHART]: {
     config: {
-      name: "revenue_chart",
+      name: () => t`Revenue chart`,
       icon: IconChartBar,
       layout: chartWidgetlayoutConfig,
     },
@@ -89,12 +89,12 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
           };
         }),
       unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
-      renderSeries: () => [{ name: "value", label: tl("revenue"), color: "primary.6" }],
+      renderSeries: () => [{ name: "value", label: t`Revenue`, color: "primary.6" }],
     }),
   },
   [ReportWidgetType.NEW_CUSTOMERS_CHART]: {
     config: {
-      name: "new_customers",
+      name: () => t`New customers`,
       icon: IconChartBar,
       layout: chartWidgetlayoutConfig,
     },
@@ -112,12 +112,12 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
             value: v.customers.total,
           };
         }),
-      renderSeries: () => [{ name: "value", label: tl("new_customers"), color: "primary.6" }],
+      renderSeries: () => [{ name: "value", label: t`New customers`, color: "primary.6" }],
     }),
   },
   [ReportWidgetType.NEW_CUSTOMERS]: {
     config: {
-      name: "new_customers",
+      name: () => t`New customers`,
       icon: IconUsersPlus,
       layout: numberWidgetlayoutConfig,
     },
@@ -129,7 +129,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   },
   [ReportWidgetType.TASKS]: {
     config: {
-      name: "tasks",
+      name: () => t`Tasks`,
       icon: IconStack2,
       layout: numberWidgetlayoutConfig,
     },
@@ -141,7 +141,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   },
   [ReportWidgetType.TASKS_COMPLETED_RATES]: {
     config: {
-      name: "tasks_completed_rate",
+      name: () => t`Tasks completed rate`,
       icon: IconStack2,
       layout: numberWidgetlayoutConfig,
     },
@@ -161,7 +161,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   },
   [ReportWidgetType.LIST_PRODUCTS_SERVICE]: {
     config: {
-      name: "products_services",
+      name: () => t`Products services`,
       icon: IconStack,
       layout: {
         initH: 18,
@@ -174,7 +174,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   },
   [ReportWidgetType.TASK_TIME_TRACKINGS]: {
     config: {
-      name: "tasks_time_trackings",
+      name: () => t`Tasks time trackings`,
       icon: IconStopwatch,
       layout: {
         initH: 12,
@@ -188,7 +188,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   [ReportWidgetType.LOANS_RECEIPTS]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: "credit_report_title",
+      name: () => t`Credit report title`,
       icon: IconReport,
       layout: {
         initH: 3,
@@ -202,7 +202,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   [ReportWidgetType.LOANS_NEW_CHART]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: "loans_new_and_fulfilled_chart",
+      name: () => t`Loans new and fulfilled chart`,
       icon: IconChartLine,
       layout: chartWidgetlayoutConfig,
     },
@@ -222,16 +222,16 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
           };
         }),
       renderSeries: () => [
-        { name: "value", label: tl("new_loan_contracts"), color: "blue.6" },
-        { name: "fulfilled", label: tl("loans_fulfilled"), color: "primary.6" },
+        { name: "value", label: t`New loan contracts`, color: "blue.6" },
+        { name: "fulfilled", label: t`Loans fulfilled`, color: "primary.6" },
       ],
-      unit: () => tl("loans"),
+      unit: () => t`Loans`,
     }),
   },
   [ReportWidgetType.LOANS_FULFILLED_AMOUNT_CHART]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: "loans_fulfilled_amount_chart",
+      name: () => t`Loans fulfilled amount chart`,
       icon: IconChartLine,
       layout: chartWidgetlayoutConfig,
     },
@@ -253,13 +253,13 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
           };
         }),
       unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
-      renderSeries: () => [{ name: "value", label: tl("money_amount"), color: "primary.6" }],
+      renderSeries: () => [{ name: "value", label: t`Money amount`, color: "primary.6" }],
     }),
   },
   [ReportWidgetType.LOANS_FULFILLED]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: "loans_fulfilled",
+      name: () => t`Loans fulfilled`,
       icon: IconCreditCardPay,
       layout: numberWidgetlayoutConfig,
     },
@@ -273,7 +273,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   [ReportWidgetType.LOANS_FEE]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: "report_loans_fee",
+      name: () => t`Report loans fee`,
       icon: IconBusinessplan,
       layout: numberWidgetlayoutConfig,
     },
@@ -286,7 +286,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   [ReportWidgetType.LOANS_CAPITAL]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: "report_loans_capital",
+      name: () => t`Report loans capital`,
       icon: IconCreativeCommonsSa,
       layout: numberWidgetlayoutConfig,
     },
@@ -300,7 +300,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   [ReportWidgetType.LOANS_EXPENSE]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: "report_loans_expense",
+      name: () => t`Report loans expense`,
       icon: IconReportMoney,
       layout: numberWidgetlayoutConfig,
     },
@@ -314,7 +314,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   [ReportWidgetType.LOANS_NEW_CUSTOMERS_AND_FULFILLED]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: "Số khách mới đã giải ngân",
+      name: () => t`New customers and fulfilled`,
       icon: IconUsersPlus,
       layout: numberWidgetlayoutConfig,
     },
@@ -332,7 +332,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   [ReportWidgetType.LOANS_FULFILLED_NEW]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: "Số hồ sơ vay giải ngân là KH mới",
+      name: () => t`New customers and fulfilled`,
       icon: IconUsersPlus,
       layout: numberWidgetlayoutConfig,
     },

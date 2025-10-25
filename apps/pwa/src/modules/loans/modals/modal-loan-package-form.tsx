@@ -3,10 +3,10 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { useFormSubmit } from "@/hooks/use-form";
-import { tl } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { LoanAssetType, LoanPackage, LoanPackageType } from "@/modules/loans/loans-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Card,
@@ -27,6 +27,7 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCoins, IconPlus, IconX } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
+import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
 
 interface ModalLoanPackageFormProps {
   loanPackage?: LoanPackage;
@@ -105,7 +106,7 @@ export const ModalLoanPackageForm: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={tl("loan_package")} icon={IconCoins} />}
+      title={<ModalTitle title={t`Loan package`} icon={IconCoins} />}
       onClose={onClose}
       opened={opened}
       size="xl"
@@ -113,9 +114,9 @@ export const ModalLoanPackageForm: FC = () => {
       <Stack gap={16}>
         <TextInput
           withAsterisk
-          label="Mã gói vay"
-          description="Mã gói vay phải có ít nhất 3 ký tự, không chứa khoảng trắng"
-          placeholder="Nhập mã gói vay"
+          label={t`Loan package code`}
+          description={t`Loan package code must be at least 3 characters, no spaces`}
+          placeholder={t`Enter loan package code`}
           {...form.getInputProps("id")}
           onChange={(e) => form.setFieldValue("id", e.target.value.toUpperCase().trim())}
         />
@@ -127,21 +128,21 @@ export const ModalLoanPackageForm: FC = () => {
             value={form.values.type}
             data={Object.values(LoanPackageType).map((type) => ({
               value: type,
-              label: tl(`loan_package_${type}`),
+              label: loanPackageTypes[type].label(),
             }))}
             {...form.getInputProps("type")}
           />
 
           <Select
-            label="Thời gian vay"
-            placeholder="Chọn thời gian vay"
+            label={t`Loan period`}
+            placeholder={t`Select loan period`}
             data={[
-              { label: "1 tháng", value: "30" },
-              { label: "2 tháng", value: "60" },
-              { label: "3 tháng", value: "90" },
-              { label: "6 tháng", value: "180" },
-              { label: "9 tháng", value: "270" },
-              { label: "12 tháng", value: "360" },
+              { label: t`1 month`, value: "30" },
+              { label: t`2 months`, value: "60" },
+              { label: t`3 months`, value: "90" },
+              { label: t`6 months`, value: "180" },
+              { label: t`9 months`, value: "270" },
+              { label: t`12 months`, value: "360" },
             ]}
             {...form.getInputProps("days")}
             value={form.values.days?.toString()}
@@ -149,31 +150,31 @@ export const ModalLoanPackageForm: FC = () => {
           />
 
           <NumberInput
-            label="Phí (CPV)"
-            placeholder="Nhập phí vay"
+            label={t`Contract fee`}
+            placeholder={t`Enter contract fee`}
             {...form.getInputProps("contractFee")}
-            rightSection={<Text>đ</Text>}
+            rightSection={<Text>{workspace.settings.currencyCode}</Text>}
           />
         </SimpleGrid>
 
         <MultiSelect
-          label="Loại tài sản"
-          placeholder="Chọn loại tài sản"
+          label={t`Asset types`}
+          placeholder={t`Select asset types`}
           value={form.values.assetTypes}
           data={Object.values(LoanAssetType).map((type) => ({
             value: type,
-            label: tl(`loan_asset_type_${type}`),
+            label: loanAssetTypes[type].label(),
           }))}
           {...form.getInputProps("assetTypes")}
         />
 
         <MultiSelect
-          label="Kỳ thanh toán cho phép chọn"
-          placeholder="Chọn tài sản"
+          label={t`Payment period options`}
+          placeholder={t`Select payment period options`}
           data={[
-            { label: "10 ngày", value: "10" },
-            { label: "15 ngày", value: "15" },
-            { label: "30 ngày (1 tháng)", value: "30" },
+            { label: t`10 days`, value: "10" },
+            { label: t`15 days`, value: "15" },
+            { label: t`30 days (1 month)`, value: "30" },
           ]}
           {...form.getInputProps("periodDaysOptions")}
           value={form.values.periodDaysOptions.map((v) => v.toString())}
@@ -199,14 +200,14 @@ export const ModalLoanPackageForm: FC = () => {
                 const totalPercent = capitalRates.reduce((a, b) => a + b, 0);
                 const error =
                   totalPercent > 0 && totalPercent !== 100
-                    ? "Tổng tỷ lệ trả gốc phải bằng 100% hoặc 0%"
+                    ? t`The total capital rate must be 100% or 0%`
                     : undefined;
 
                 return (
                   <InputWrapper
                     key={i}
-                    label={`Tỷ lệ trả gốc ở mỗi kỳ ${days} ngày`}
-                    description="Để trống nếu tỷ lệ trả gốc ở mỗi kỳ giống nhau"
+                    label={t`Capital rate for each period ${days} days`}
+                    description={t`Leave blank if the capital rate for each period is the same`}
                     error={error}
                   >
                     <Group mt={8} mb={error ? 5 : 0}>
@@ -224,7 +225,7 @@ export const ModalLoanPackageForm: FC = () => {
                           <Card key={j} p={5} withBorder>
                             <Group gap={3} justify="stretch" maw={120} wrap="nowrap">
                               <Text w={40} fz={em(12)} pl={3}>
-                                Kỳ {j + 1}
+                                {t`Period`} {j + 1}
                               </Text>
                               <NumberInput
                                 key={i}
@@ -248,7 +249,7 @@ export const ModalLoanPackageForm: FC = () => {
             </Fragment>
           )}
 
-        <InputWrapper label="Phạt trả chậm">
+        <InputWrapper label={t`Late interest`}>
           <Stack gap={10} mt={5}>
             <SimpleGrid cols={{ md: 3 }}>
               {form.values.lateInterestRates.map((v, i) => {
@@ -257,7 +258,7 @@ export const ModalLoanPackageForm: FC = () => {
                     <Group wrap="nowrap" gap={5} align="start">
                       <NumberInput
                         mt={-5}
-                        label="Số ngày chậm"
+                        label={t`Late days`}
                         value={v.lateDays}
                         onChange={(e) => {
                           let _lateInterestRates = [...form.values.lateInterestRates];
@@ -270,7 +271,7 @@ export const ModalLoanPackageForm: FC = () => {
 
                       <NumberInput
                         mt={-5}
-                        label="Tỷ lệ phạt"
+                        label={t`Late interest rate`}
                         min={0}
                         flex={1}
                         value={v.rate}
@@ -312,7 +313,7 @@ export const ModalLoanPackageForm: FC = () => {
                     form.setFieldValue("lateInterestRates", _lateInterestRates);
                   }}
                 >
-                  Thêm
+                  {t`Add`}
                 </Button>
               </Group>
             </SimpleGrid>
@@ -320,15 +321,15 @@ export const ModalLoanPackageForm: FC = () => {
         </InputWrapper>
 
         <NumberInput
-          label="Phí tất toán hợp đồng, tính trên tổng dư nợ còn lại (0 - 100)"
+          label={t`Liquidation fee rate, calculated on the remaining debt (0 - 100)`}
           rightSection={<Text>%</Text>}
           {...form.getInputProps("liquidationFeeRate")}
         />
 
-        <Textarea label="Mô tả" {...form.getInputProps("description")} />
+        <Textarea label={t`Description`} {...form.getInputProps("description")} />
 
         <Button onClick={submitting.handle} loading={submitting.isSubmitting} mt={10}>
-          {tl(props?.loanPackage ? "update" : "create")}
+          {props?.loanPackage ? t`Update` : t`Create`}
         </Button>
       </Stack>
     </Modal>

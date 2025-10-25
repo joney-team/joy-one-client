@@ -9,7 +9,6 @@ import { OnModalBooking } from "@/modules/bookings/modals/modal-booking";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { tl } from "@/modules/lang/lang-service";
 import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { setCustomerToMessageBox } from "@/modules/message-boxes/message-boxes-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -33,6 +32,8 @@ import { useMessageBoxes } from "../message-boxes-context";
 import { MessageBoxMetadataBookings } from "./message-box-metadata-bookings";
 import { MessageBoxMetadataLoans } from "./message-box-metadata-loans";
 import { AccordionItem } from "./message-box-metadata-types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 
 const accordionItems: AccordionItem[] = [
   {
@@ -107,7 +108,7 @@ export const MetadataMessageBox: FC = () => {
               </ActionIcon>
             )}
 
-            <Tooltip label={tl("unlink")}>
+            <Tooltip label={t`Unlink`}>
               <ActionIcon
                 variant="light"
                 color="gray"
@@ -194,7 +195,7 @@ export const MetadataMessageBox: FC = () => {
         renderValue={(ctx) => {
           return (
             <Button leftIcon={IconLinkPlus} variant="outline" radius={100} onClick={ctx.toggle}>
-              {tl("msg_box_link_customer")}
+              <Trans>Link customer</Trans>
             </Button>
           );
         }}

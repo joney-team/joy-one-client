@@ -4,9 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
 import { configs } from "@/configs/layout.config";
 import { useAuth } from "@/modules/auth/auth-context";
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import {
@@ -19,14 +17,17 @@ import {
   WorkspaceMember,
   WorkspaceMemberWorkingTimeType,
 } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
+import { workspaceSpecialRoleIds } from "@/modules/workspace-roles/workspace-roles-constants";
 import {
   WorkspacePermission,
   WorkspaceSpecialRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
-import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
 import { Badge, Center, ColorInput, Select, Skeleton, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -78,7 +79,10 @@ const UserWorkspaceSettingsForm: FC<
 
   return (
     <Stack p={16}>
-      <FormSession title="workspace_display_name" description="workspace_display_name_desc">
+      <FormSession
+        title={t`Display name in Workspace`}
+        description={t`Nickname or full name, used internally in Workspace. Leave blank if using default account name.`}
+      >
         <TextInput {...form.getInputProps("displayName")} disabled={!isAbleToUpdate} />
       </FormSession>
 
@@ -91,7 +95,7 @@ const UserWorkspaceSettingsForm: FC<
         />
       </FormSession>
 
-      <FormSession title="workingTimeType">
+      <FormSession title={t`Working time type`}>
         <Select
           value={form.values.workingTimeType}
           data={Object.values(WorkspaceMemberWorkingTimeType).map((type) => ({
@@ -103,14 +107,14 @@ const UserWorkspaceSettingsForm: FC<
         />
       </FormSession>
 
-      <FormSession title="member_roles">
+      <FormSession title={t`Member roles`}>
         {isOwner ? (
           <Badge
             variant="light"
             color={color("primary")}
             rightSection={<IconLock size={13} style={{ marginLeft: -3 }} />}
           >
-            {tl(`role_${WorkspaceSpecialRoleId.OWNER}`)}
+            {workspaceSpecialRoleIds[WorkspaceSpecialRoleId.OWNER].name()}
           </Badge>
         ) : workspace.hasPermission(WorkspacePermission.WORKSPACE_ROLES_MANAGER) ? (
           <WorkspaceRolesInput
@@ -128,9 +132,9 @@ const UserWorkspaceSettingsForm: FC<
       </FormSession>
 
       {workspace.isShouldEnableBranches && (
-        <FormSession title="branches">
+        <FormSession title={t`Branches`}>
           {isMainWorkspaceAccessable ? (
-            <Badge variant="light">{tl("all_branches")}</Badge>
+            <Badge variant="light">{t`All branches`}</Badge>
           ) : (
             <WorkspaceBranchesInput
               key={userMember.userId}
@@ -168,7 +172,7 @@ const UserWorkspaceSettingsForm: FC<
               }
             >
               <Text fz={12} fw={400}>
-                {tl("remove")}
+                {t`Remove`}
               </Text>
             </Button>
           </Center>

@@ -1,6 +1,5 @@
 "use client";
 
-import { type FC } from "react";
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
@@ -10,16 +9,10 @@ import { StatusColumn } from "@/components/list/columns/status-column";
 import { OnModalPrinter } from "@/modals/modal-printer";
 import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
 import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
-import {
-  receiptPaymentMethodOptions,
-  receiptStatusOptions,
-  receiptTypeOptions,
-} from "@/modules/receipts/receipts-service";
 import {
   ReceiptEntity,
   ReceiptPaymentMethod,
@@ -30,6 +23,8 @@ import { UserColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { AppEntity } from "@/types";
+import { t } from "@lingui/core/macro";
 import { Stack } from "@mantine/core";
 import {
   IconArrowsDoubleSwNe,
@@ -38,8 +33,9 @@ import {
   IconCreditCard,
   IconPrinter,
 } from "@tabler/icons-react";
+import { type FC } from "react";
 import { WorkspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
-import { AppEntity } from "@/types";
+import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
 
 export const ReceiptList: FC = () => {
   const workspace = useWorkspace();
@@ -79,37 +75,37 @@ export const ReceiptList: FC = () => {
             icon: IconArrowsDoubleSwNe,
             w: 110,
             options: Object.values(ReceiptType).map((type) => ({
-              label: tl(`receipt_type_${type}`),
+              label: receiptTypes[type].label(),
+              color: receiptTypes[type].color,
+              icon: receiptTypes[type].icon,
               value: type,
-              color: receiptTypeOptions[type].color,
-              icon: receiptTypeOptions[type].icon,
             })),
           }),
           relatedCustomerId: CustomerColumn({
-            name: "customer",
+            name: t`Customer`,
             valuePath: "relatedCustomer",
           }),
           cashierUserId: UserColumn({
-            name: "cashierUser",
+            name: t`Cashier`,
             valuePath: "cashierUser",
             optionalValuePath: "disbursementUser",
           }),
           status: StatusColumn({
             w: 180,
             options: Object.values(ReceiptStatus).map((status) => ({
-              label: tl(`receipt_status_${status}`),
+              label: receiptStatuses[status].label(),
               value: status,
-              color: receiptStatusOptions[status].color,
+              color: receiptStatuses[status].color,
             })),
           }),
           paymentMethod: EnumColumn({
             icon: IconCreditCard,
             w: 180,
             options: Object.values(ReceiptPaymentMethod).map((paymentMethod) => ({
-              label: tl(`payment_method_${paymentMethod}`),
+              label: receiptPaymentMethods[paymentMethod].label(),
               value: paymentMethod,
-              color: receiptPaymentMethodOptions[paymentMethod].color,
-              icon: receiptPaymentMethodOptions[paymentMethod].icon,
+              color: receiptPaymentMethods[paymentMethod].color,
+              icon: receiptPaymentMethods[paymentMethod].icon,
             })),
           }),
           amount: NumberColumn({ align: "right", sortable: true, type: "money" }),
@@ -117,7 +113,7 @@ export const ReceiptList: FC = () => {
         filterModes={[
           {
             param: "today",
-            name: tl("today_entity", { entity: tl("receipts") }),
+            name: t`Today receipts`,
             icon: IconCalendarDown,
             replaceFilterKeys: ["createdAt", "paidAt"],
             params: () => ({ today: true }),
@@ -134,7 +130,7 @@ export const ReceiptList: FC = () => {
         ]}
         actions={[
           {
-            label: "print",
+            label: t`Print`,
             icon: IconPrinter,
             disabled: (data) => {
               const bankQrCode =

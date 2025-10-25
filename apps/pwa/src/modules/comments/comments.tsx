@@ -35,6 +35,7 @@ import { useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
 import { type FC, Fragment, useEffect, useState } from "react";
+import { t } from "@lingui/core/macro";
 
 interface CommentsProps {
   customer?: CustomerEntity;
@@ -158,7 +159,7 @@ export const Comments: FC<CommentsProps> = (props) => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle icon={IconMessage} title="Bình luận" />}
+        title={<ModalTitle icon={IconMessage} title={t`Comments`} />}
         yOffset={10}
         styles={{
           inner: {

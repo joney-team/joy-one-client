@@ -14,7 +14,7 @@ export interface WidgetLayoutConfig {
 }
 
 export interface WidgetConfig {
-  name: string;
+  name: () => string;
   defaultState?: any;
   permissions?: WorkspacePermission[];
   workspaceTypes?: WorkspaceType[];
@@ -30,28 +30,31 @@ export interface Widget<Type = string> {
 }
 
 export interface WidgetProps<ContextType = any, WidgetType = string> {
-  id: string,
-  ctx: ContextType,
-  widgetsContext: WidgetsContext<ContextType, WidgetType>,
+  id: string;
+  ctx: ContextType;
+  widgetsContext: WidgetsContext<ContextType, WidgetType>;
 }
 
 export interface WidgetModule<ContextType = any> {
-  config: WidgetConfig
-  component: WidgetComponent<ContextType>
+  config: WidgetConfig;
+  component: WidgetComponent<ContextType>;
 }
 
-export interface WidgetComponent<ContextType = any, WidgetType = string> extends FC<WidgetProps<ContextType, WidgetType> & {
-  widget: Widget<WidgetType>,
-  config: WidgetConfig,
-}> { }
+export interface WidgetComponent<ContextType = any, WidgetType = string>
+  extends FC<
+    WidgetProps<ContextType, WidgetType> & {
+      widget: Widget<WidgetType>;
+      config: WidgetConfig;
+    }
+  > {}
 
 export type WidgetModules<ContextType = any, WidgetType = string> = {
   [key in WidgetType extends string ? WidgetType : string]: WidgetModule<ContextType>;
-}
+};
 
 export type EWidgetModules<T extends string | number | symbol, ContextType = any> = {
   [key in T]: WidgetModule<ContextType>;
-}
+};
 
 export interface WidgetsProps<ContextType = object, WidgetType = string> {
   id: string;

@@ -1,5 +1,5 @@
 import { Period } from "@/types";
-import { renderDateTime, tl } from "@/modules/lang/lang-service";
+import { renderDateTime } from "@/modules/lang/lang-service";
 import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
@@ -20,12 +20,13 @@ import { chartWidget, chartWidgetlayoutConfig } from "../common/chart.widget";
 import { numberWidget } from "../common/number.widget";
 import { EWidgetModules } from "../types";
 import { DashboardWidgetsContext, DashboardWidgetType } from "./types";
+import { t } from "@lingui/core/macro";
 
 export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, DashboardWidgetsContext> =
   {
     [DashboardWidgetType.TODAY_REVENUE]: {
       config: {
-        name: "today_revenue",
+        name: () => t`Today revenue`,
         icon: IconCashRegister,
         defaultState: {
           style: "dark-content",
@@ -48,15 +49,13 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         },
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? tl("last_updated_at", {
-                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
-              })
+            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
             : null,
       }),
     },
     [DashboardWidgetType.TODAY_NEW_CUSTOMERS]: {
       config: {
-        name: "today_new_customers",
+        name: () => t`Today new customers`,
         icon: IconUsersPlus,
       },
       component: numberWidget({
@@ -72,7 +71,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
     },
     [DashboardWidgetType.TODAY_BOOKINGS]: {
       config: {
-        name: "today_bookings",
+        name: () => t`Today bookings`,
         icon: IconCalendar,
       },
       component: numberWidget({
@@ -87,7 +86,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
     },
     [DashboardWidgetType.REVENUE_CHART]: {
       config: {
-        name: "revenue_chart",
+        name: () => t`Revenue chart`,
         icon: IconChartLine,
         layout: chartWidgetlayoutConfig,
       },
@@ -107,14 +106,14 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
         renderSeries: () => [
-          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: tl("this_month"), color: "primary.6" },
+          { name: "prevValue", label: t`Last month`, color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: t`This month`, color: "primary.6" },
         ],
       }),
     },
     [DashboardWidgetType.NEW_CUSTOMERS_CHART]: {
       config: {
-        name: "new_customers",
+        name: () => t`New customers chart`,
         icon: IconUsersPlus,
         layout: chartWidgetlayoutConfig,
       },
@@ -130,14 +129,14 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             };
           }),
         renderSeries: () => [
-          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: tl("this_month"), color: "primary.6" },
+          { name: "prevValue", label: t`Last month`, color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: t`This month`, color: "primary.6" },
         ],
       }),
     },
     [DashboardWidgetType.BOOKINGS_CHART]: {
       config: {
-        name: "bookings_chart",
+        name: () => t`Bookings chart`,
         icon: IconChartLine,
         layout: chartWidgetlayoutConfig,
       },
@@ -153,8 +152,8 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             };
           }),
         renderSeries: () => [
-          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: tl("this_month"), color: "primary.6" },
+          { name: "prevValue", label: t`Last month`, color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: t`This month`, color: "primary.6" },
         ],
       }),
     },
@@ -162,7 +161,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
     // ============================ Start Loans ============================
     [DashboardWidgetType.LOANS_ACTIVATED_CONTRACTS]: {
       config: {
-        name: "loans_activated_contracts",
+        name: () => t`Loans activated contracts`,
         icon: IconNotes,
         workspaceTypes: [WorkspaceType.CREDIT],
       },
@@ -175,15 +174,13 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? tl("last_updated_at", {
-                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
-              })
+            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
             : null,
       }),
     },
     [DashboardWidgetType.LOANS_OVERDUE_CONTRACTS]: {
       config: {
-        name: "loans_overdue_contracts",
+        name: () => t`Loans overdue contracts`,
         icon: IconNotes,
         workspaceTypes: [WorkspaceType.CREDIT],
         defaultState: { color: "red" },
@@ -197,15 +194,13 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? tl("last_updated_at", {
-                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
-              })
+            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
             : null,
       }),
     },
     [DashboardWidgetType.LOANS_PENDING_CONTRACTS]: {
       config: {
-        name: "loans_pending_contracts",
+        name: () => t`Loans pending contracts`,
         icon: IconNotes,
         workspaceTypes: [WorkspaceType.CREDIT],
         defaultState: { color: "blue" },
@@ -219,15 +214,13 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? tl("last_updated_at", {
-                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
-              })
+            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
             : null,
       }),
     },
     [DashboardWidgetType.LOANS_DEBT_TOTAL]: {
       config: {
-        name: "loans_debt_total",
+        name: () => t`Loans debt total`,
         icon: IconBusinessplan,
         workspaceTypes: [WorkspaceType.CREDIT],
       },
@@ -237,15 +230,13 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         renderValue: (ctx) => ctx.realtimeReport.data?.data.loans?.debt?.total || 0,
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? tl("last_updated_at", {
-                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
-              })
+            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
             : null,
       }),
     },
     [DashboardWidgetType.LOANS_DEBT_NOT_DUE_YET]: {
       config: {
-        name: "loans_debt_not_due_yet",
+        name: () => t`Loans debt not due yet`,
         icon: IconBusinessplan,
         workspaceTypes: [WorkspaceType.CREDIT],
         defaultState: { color: "blue" },
@@ -256,15 +247,13 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         renderValue: (ctx) => ctx.realtimeReport.data?.data.loans?.debt?.notDueYet || 0,
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? tl("last_updated_at", {
-                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
-              })
+            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
             : null,
       }),
     },
     [DashboardWidgetType.LOANS_DEBT_OVERDUE]: {
       config: {
-        name: "loans_debt_overdue",
+        name: () => t`Loans debt overdue`,
         icon: IconBusinessplan,
         workspaceTypes: [WorkspaceType.CREDIT],
         defaultState: { color: "red" },
@@ -279,15 +268,13 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? tl("last_updated_at", {
-                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
-              })
+            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
             : null,
       }),
     },
     [DashboardWidgetType.LOANS_NEW_CONTRACTS_CHART]: {
       config: {
-        name: "loans_new_contracts_chart",
+        name: () => t`Loans new contracts chart`,
         icon: IconChartLine,
         workspaceTypes: [WorkspaceType.CREDIT],
         layout: chartWidgetlayoutConfig,
@@ -304,14 +291,14 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             };
           }),
         renderSeries: () => [
-          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: tl("this_month"), color: "primary.6" },
+          { name: "prevValue", label: t`Last month`, color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: t`This month`, color: "primary.6" },
         ],
       }),
     },
     [DashboardWidgetType.LOANS_FULFILLED_AMOUNT_CHART]: {
       config: {
-        name: "loans_fulfilled_amount_chart",
+        name: () => t`Loans fulfilled amount chart`,
         icon: IconChartLine,
         workspaceTypes: [WorkspaceType.CREDIT],
         layout: chartWidgetlayoutConfig,
@@ -335,8 +322,8 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
         renderSeries: () => [
-          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: tl("this_month"), color: "primary.6" },
+          { name: "prevValue", label: t`Last month`, color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: t`This month`, color: "primary.6" },
         ],
       }),
     },
@@ -345,7 +332,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
     // ============================ Start Tasks ============================
     [DashboardWidgetType.TASKS_CHART]: {
       config: {
-        name: "tasks_chart",
+        name: () => t`Tasks chart`,
         icon: IconChartLine,
         layout: chartWidgetlayoutConfig,
       },
@@ -361,14 +348,14 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             };
           }),
         renderSeries: () => [
-          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: tl("this_month"), color: "primary.6" },
+          { name: "prevValue", label: t`Last month`, color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: t`This month`, color: "primary.6" },
         ],
       }),
     },
     [DashboardWidgetType.TASKS_COMPLETED_RATE_CHART]: {
       config: {
-        name: "tasks_completed_rate",
+        name: () => t`Tasks completed rate chart`,
         icon: IconChartLine,
         layout: chartWidgetlayoutConfig,
       },
@@ -395,14 +382,14 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             };
           }),
         renderSeries: () => [
-          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: tl("this_month"), color: "primary.6" },
+          { name: "prevValue", label: t`Last month`, color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: t`This month`, color: "primary.6" },
         ],
       }),
     },
     [DashboardWidgetType.TASKS_TODO]: {
       config: {
-        name: "todo_tasks",
+        name: () => t`Todo tasks`,
         icon: IconStack2,
       },
       component: numberWidget({
@@ -413,7 +400,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
     },
     [DashboardWidgetType.TASKS_PROCESSING]: {
       config: {
-        name: "processing_tasks",
+        name: () => t`Processing tasks`,
         icon: IconStack2,
         defaultState: { color: "orange" },
       },

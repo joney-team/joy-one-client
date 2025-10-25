@@ -1,7 +1,8 @@
 "use client";
 
+import { calendarViews } from "@/constant";
+import { useColor } from "@/modules/theme/use-color";
 import { CalendarView } from "@/types";
-import { tl } from "@/modules/lang/lang-service";
 import { ActionIcon, Button, Card, Group, Tooltip } from "@mantine/core";
 import {
   IconCalendar,
@@ -12,9 +13,8 @@ import {
   IconCalendarWeekFilled,
 } from "@tabler/icons-react";
 import { FC } from "react";
-import { useColor } from "@/modules/theme/use-color";
 
-const viewIcons = {
+const viewConfigs = {
   [CalendarView.DAY]: {
     normal: IconCalendar,
     active: IconCalendarFilled,
@@ -39,7 +39,8 @@ export const CalendarViewSelector: FC<{
   return (
     <Card bg="var(--mantine-color-default-hover)" p={3} shadow="none">
       <Group gap={3}>
-        {Object.entries(viewIcons).map(([key, value]) => {
+        {Object.entries(viewConfigs).map(([key, value]) => {
+          const view = key as CalendarView;
           const isActive = props.view === key;
           const Icon = isActive ? value.active : value.normal;
 
@@ -56,13 +57,13 @@ export const CalendarViewSelector: FC<{
                 tt="capitalize"
                 px={8}
               >
-                {tl(key)}
+                {calendarViews[view].name()}
               </Button>
             );
           }
 
           return (
-            <Tooltip key={key} label={tl(key)} tt="capitalize">
+            <Tooltip key={key} label={calendarViews[view].name()}>
               <ActionIcon
                 variant={isActive ? "filled" : "subtle"}
                 color={color(isActive ? "primary" : "gray")}

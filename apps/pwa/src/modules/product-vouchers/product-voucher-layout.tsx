@@ -1,5 +1,5 @@
 import { useRouter } from "@/hooks/use-router";
-import { tl } from "@/modules/lang/lang-service";
+import { Trans } from "@lingui/react/macro";
 import { em, Stack, Tabs } from "@mantine/core";
 import { FC, PropsWithChildren } from "react";
 
@@ -11,11 +11,11 @@ export const ProductVoucherLayout: FC<PropsWithChildren> = (props) => {
       <Tabs value={router.pathname} onChange={(p) => router.replace(p!)}>
         <Tabs.List>
           <Tabs.Tab tt="capitalize" fz={em(14)} value="/vouchers">
-            {tl("vouchers")}
+            <Trans>Vouchers</Trans>
           </Tabs.Tab>
 
           <Tabs.Tab tt="capitalize" fz={em(14)} value="/vouchers/released">
-            {tl("customer_vouchers")}
+            <Trans>Released vouchers</Trans>
           </Tabs.Tab>
         </Tabs.List>
       </Tabs>

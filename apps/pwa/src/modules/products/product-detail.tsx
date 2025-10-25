@@ -10,11 +10,10 @@ import { NumberColumn } from "@/components/list/columns/number-column";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { num, tl, tMulti } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
 import { OnModalProductStockOut } from "@/modules/product-stocks/modals/modal-product-stock-out";
-import { productStockRecordTypeOptions } from "@/modules/product-stocks/product-stocks-service";
 import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { ProductColumn } from "@/modules/products/components/product-column";
@@ -24,10 +23,10 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
 import { useFetch } from "@/utils/use-fetch.util";
+import { t } from "@lingui/core/macro";
 import { Anchor, Skeleton, Stack, Text } from "@mantine/core";
 import {
   IconArrowLeftRight,
-  IconArrowUpRight,
   IconBox,
   IconBuildingWarehouse,
   IconClipboardText,
@@ -35,6 +34,7 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { type FC, Fragment, useEffect } from "react";
+import { productStockRecordTypes } from "../product-stocks/product-stocks-constants";
 import {
   ProductStockEntity,
   ProductStockRecordEntity,
@@ -129,8 +129,8 @@ export const ProductDetail: FC = () => {
                   events={events}
                   actions={[
                     {
-                      label: tl(`product_stock_record_type_${ProductStockRecordType.STOCK_OUT}`),
-                      icon: IconArrowUpRight,
+                      label: productStockRecordTypes[ProductStockRecordType.STOCK_OUT].label(),
+                      icon: productStockRecordTypes[ProductStockRecordType.STOCK_OUT].icon,
                       onClick: (data) => OnModalProductStockOut({ stock: data }),
                       disabled: (data) => data.remainQuantity <= 0,
                     },
@@ -148,19 +148,19 @@ export const ProductDetail: FC = () => {
                     type: EnumColumn({
                       icon: IconBox,
                       options: Object.values(ProductStockRecordType).map((type) => ({
-                        label: tl(`product_stock_record_type_${type}`),
+                        label: productStockRecordTypes[type].label(),
                         value: type,
-                        color: productStockRecordTypeOptions[type].color,
-                        icon: productStockRecordTypeOptions[type].icon,
+                        color: productStockRecordTypes[type].color,
+                        icon: productStockRecordTypes[type].icon,
                       })),
                     }),
-                    stockCode: { name: "product_stock_code" },
+                    stockCode: { name: t`Stock code` },
                     createdByUserId: UserColumn({
-                      name: "member",
+                      name: t`Member`,
                       valuePath: "createdByUser",
                     }),
                     relatedOrderId: {
-                      name: "order",
+                      name: t`Order`,
                       icon: IconClipboardText,
                       render: ({ data }) => {
                         if (!data.relatedOrderId) return "-";
@@ -178,11 +178,9 @@ export const ProductDetail: FC = () => {
                     },
                     relatedProductId: ProductColumn({
                       valuePath: "relatedProduct",
-                      name: tl("entity_related", {
-                        entity: tMulti(["products"], ["/"], ["services"]),
-                      }),
+                      name: t`Products/Services related`,
                     }),
-                    quantity: NumberColumn({ name: "quantity" }),
+                    quantity: NumberColumn({ name: t`Quantity` }),
                     note: { defaultHidden: true },
                   }}
                   events={events}

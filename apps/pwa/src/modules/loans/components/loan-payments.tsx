@@ -4,8 +4,10 @@ import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Renderer } from "@/components/renderer";
+import { api } from "@/modules/apis";
+import { eventTypes } from "@/modules/events/event-constants";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate, tl, tMulti } from "@/modules/lang/lang-service";
+import { renderDate } from "@/modules/lang/lang-service";
 import { healthCheckLoan, revertLiquidationLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
@@ -13,8 +15,12 @@ import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form
 import { getReceipts } from "@/modules/receipts/receipts-service";
 import { ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
 import { useColor } from "@/modules/theme/use-color";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { useFetch, UseFetch } from "@/utils/use-fetch.util";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Card, Center, Group, Skeleton, Stack, Table, Text } from "@mantine/core";
 import { openConfirmModal } from "@mantine/modals";
 import {
@@ -26,9 +32,6 @@ import {
 import { FC, Fragment } from "react";
 import { LoanReceiptCard } from "./loan-receipt-card";
 import { LoanRowInfo } from "./loan-row-info";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { api } from "@/modules/apis";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 
 interface LoanPaymentsProps {
   loan: UseFetch<LoanEntity>;
@@ -70,15 +73,15 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
   const onRevertFulfill = async () => {
     if (!loan || !hasPermission(WorkspacePermission.LOANS_FULFILLED_REVERTED)) return;
     openConfirmModal({
-      title: <ModalTitle color="red" title={tl("confirm")} icon={IconRefresh} />,
-      children: "Bạn có chắc chắn muốn hoàn tác thanh toán này?",
+      title: <ModalTitle color="red" title={t`Confirm`} icon={IconRefresh} />,
+      children: t`Are you sure you want to revert the payment?`,
       color: "red",
       onConfirm: () =>
         onActionLoad({
-          name: tl("event_type_" + EventType.LOANS_FULFILLED_REVERTED),
+          name: eventTypes[EventType.LOANS_FULFILLED_REVERTED].name(),
           process: () => api.post(`/loans/${loan.id}/revert-fulfilled`),
         }),
-      labels: { confirm: "Tiếp tục", cancel: "Hủy" },
+      labels: { confirm: t`Continue`, cancel: t`Cancel` },
       confirmProps: { color: "red" },
     });
   };
@@ -86,15 +89,15 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
   const onRevertLiquidation = async () => {
     if (!loan) return;
     openConfirmModal({
-      title: <ModalTitle color="red" title={tl("confirm")} icon={IconRefresh} />,
-      children: "Bạn có chắc chắn muốn hoàn tác thanh toán này?",
+      title: <ModalTitle color="red" title={t`Confirm`} icon={IconRefresh} />,
+      children: t`Are you sure you want to revert the liquidation?`,
       color: "red",
       onConfirm: () =>
         onActionLoad({
-          name: tl("event_type_" + EventType.LOANS_REVERT_LIQUIDATION),
+          name: eventTypes[EventType.LOANS_REVERT_LIQUIDATION].name(),
           process: () => revertLiquidationLoan(loan.id),
         }),
-      labels: { confirm: "Tiếp tục", cancel: "Hủy" },
+      labels: { confirm: t`Continue`, cancel: t`Cancel` },
       confirmProps: { color: "red" },
     });
   };
@@ -111,7 +114,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
             leftIcon={IconBrandSpeedtest}
             onClick={() => OnModalLoanLiquidation(loan)}
           >
-            {tl("liquidation")}
+            <Trans>Liquidation</Trans>
           </Button>
         </Renderer>
 
@@ -122,13 +125,13 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           }
         >
           <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertFulfill}>
-            {tl(`permission_${WorkspacePermission.LOANS_FULFILLED_REVERTED}`)}
+            {t`Revert fulfilled`}
           </Button>
         </Renderer>
 
         <Renderer visible={!!liquidationReceipt && loan.status !== LoanStatus.COMPLETED}>
           <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertLiquidation}>
-            {tl("revert_liquidation")}
+            {t`Revert liquidation`}
           </Button>
         </Renderer>
 
@@ -138,7 +141,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           leftIcon={IconCircleDashedCheck}
           onClick={() => healthCheckLoan(loan.id)}
         >
-          {tl("check")}
+          {t`Check`}
         </Button>
       </Fragment>
     );
@@ -160,13 +163,13 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th w={100} ta="center">
-                    {tl("period")}
+                    {t`Period`}
                   </Table.Th>
-                  <Table.Th w={250}>{tl("time")}</Table.Th>
-                  <Table.Th>Thu lãi</Table.Th>
-                  <Table.Th>Thu gốc</Table.Th>
-                  <Table.Th>{tl("total")}</Table.Th>
-                  <Table.Th>{tl("receipts")}</Table.Th>
+                  <Table.Th w={250}>{t`Time`}</Table.Th>
+                  <Table.Th>{t`Interest`}</Table.Th>
+                  <Table.Th>{t`Principal`}</Table.Th>
+                  <Table.Th>{t`Total`}</Table.Th>
+                  <Table.Th>{t`Receipts`}</Table.Th>
                 </Table.Tr>
               </Table.Thead>
 
@@ -188,10 +191,10 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                       <Table.Td>
                         <Stack gap={8}>
                           <Text>
-                            {tl("from")}: {renderDate(paymentPeriod.startTime)}
+                            <Trans>From</Trans>: {renderDate(paymentPeriod.startTime)}
                           </Text>
                           <Text>
-                            {tl("to")}: {renderDate(paymentPeriod.endTime)}
+                            <Trans>To</Trans>: {renderDate(paymentPeriod.endTime)}
                           </Text>
                         </Stack>
                       </Table.Td>
@@ -251,7 +254,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                                 })
                               }
                             >
-                              {tMulti(["add"], ["receipt"])}
+                              <Trans>Add receipt</Trans>
                             </Button>
                           </Group>
                         </Stack>
@@ -263,7 +266,9 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                 {!!liquidationReceipt && (
                   <Table.Tr>
                     <Table.Td colSpan={2}>
-                      <Text ta="center">{tl("liquidation")}</Text>
+                      <Text ta="center">
+                        <Trans>Liquidation</Trans>
+                      </Text>
                     </Table.Td>
 
                     <Table.Td>
@@ -337,7 +342,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
 
                   <Stack px={16}>
                     <LoanRowInfo
-                      label="Thu lãi"
+                      label={t`Interest`}
                       value={
                         <NumberCurrencyFormatter
                           value={paymentPeriod.totalAmount - paymentPeriod.capitalAmount}
@@ -345,11 +350,11 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                       }
                     />
                     <LoanRowInfo
-                      label="Thu gốc"
+                      label={t`Principal`}
                       value={<NumberCurrencyFormatter value={paymentPeriod.capitalAmount} />}
                     />
                     <LoanRowInfo
-                      label="Tổng"
+                      label={t`Total`}
                       value={<NumberCurrencyFormatter value={paymentPeriod.totalAmount} />}
                     />
 
@@ -387,7 +392,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                             })
                           }
                         >
-                          {tMulti(["add"], ["receipt"])}
+                          <Trans>Add receipt</Trans>
                         </Button>
                       </Center>
                     </Stack>
@@ -407,7 +412,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                   OnModalLoanLiquidation(loan);
                 }}
               >
-                {tl("liquidation")}
+                <Trans>Liquidation</Trans>
               </Button>
             </Center>
           </Renderer>

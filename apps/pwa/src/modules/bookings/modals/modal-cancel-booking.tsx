@@ -4,6 +4,7 @@ import { cancelBooking } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { t } from "@lingui/core/macro";
 import { Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -20,7 +21,7 @@ export const ModalCancelBooking: FC<ModalCancelBookingProps> = (props) => {
   const form = useForm({
     validate: {
       reasonForCancellation: (value) => {
-        if (!value) return "Vui lòng nhập lý do huỷ booking";
+        if (!value) return t`Please enter the reason for cancellation`;
       },
     },
   });
@@ -38,10 +39,14 @@ export const ModalCancelBooking: FC<ModalCancelBookingProps> = (props) => {
 
   return (
     <Stack>
-      <Textarea withAsterisk label="Lý do huỷ" {...form.getInputProps("reasonForCancellation")} />
+      <Textarea
+        withAsterisk
+        label={t`Reason for cancellation`}
+        {...form.getInputProps("reasonForCancellation")}
+      />
 
       <Button loading={isSubmitting} onClick={onSubmit} color="red" type="submit">
-        Xác nhận huỷ
+        {t`Confirm cancellation`}
       </Button>
     </Stack>
   );
@@ -50,7 +55,7 @@ export const ModalCancelBooking: FC<ModalCancelBookingProps> = (props) => {
 export const OnModalCancelBooking = (props: ModalCancelBookingProps) => {
   return modals.open({
     modalId: "cancel-booking",
-    title: <ModalTitle color="red" title="Huỷ hẹn" icon={IconCalendarMinus} />,
+    title: <ModalTitle color="red" title={t`Cancel booking`} icon={IconCalendarMinus} />,
     children: <ModalCancelBooking {...props} />,
     zIndex: zIndexes.commonModals,
   });

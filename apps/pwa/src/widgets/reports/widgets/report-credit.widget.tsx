@@ -1,25 +1,28 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { SessionTitle } from "@/components/session-title";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { renderDate, tl } from "@/modules/lang/lang-service";
+import { renderDate } from "@/modules/lang/lang-service";
+import { loanPackageTypes } from "@/modules/loans/loans-constants";
 import { getLoanByCode } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanPackageType, LoanReceiptData } from "@/modules/loans/loans-types";
 import { getReceipts, isPartialPayment } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptStatus } from "@/modules/receipts/receipts-types";
+import { getWorkspaceMemberByIds } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onError } from "@/utils/exceptions.utils";
+import { String } from "@/utils/string.utils";
 import { WidgetProps } from "@/widgets/types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Card, Group, parseThemeColor, Stack, useMantineTheme } from "@mantine/core";
 import { IconFileExcel, IconReportAnalytics } from "@tabler/icons-react";
 import { FC } from "react";
-import { ReportWidgetsContext } from "../types";
-import { getWorkspaceMemberByIds } from "@/modules/workspace-members/workspace-members-service";
 import writeXlsxFile from "write-excel-file";
-import { String } from "@/utils/string.utils";
-import { onError } from "@/utils/exceptions.utils";
-import { Trans } from "@lingui/react/macro";
-import { t } from "@lingui/core/macro";
+import { ReportWidgetsContext } from "../types";
 
 interface CreditReportItem {
   time: number;
@@ -354,49 +357,49 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
       const headers = [
         [
           {
-            value: tl("time"),
+            value: t`Time`,
             rowSpan: 2,
             ...headStyle,
           },
           {
-            value: tl("customer"),
+            value: t`Customer`,
             rowSpan: 2,
             ...headStyle,
           },
           {
-            value: tl("member"),
+            value: t`Member`,
             rowSpan: 2,
             ...headStyle,
           },
           {
-            value: "Thu lãi",
+            value: t`Interest income`,
             span: packageTypes.length,
             align: "center",
             ...headStyle,
           },
           ...new Array(packageTypes.length - 1).fill(null),
           {
-            value: "Thu gốc",
+            value: t`Principal income`,
             span: packageTypes.length,
             align: "center",
             ...headStyle,
           },
           ...new Array(packageTypes.length - 1).fill(null),
           {
-            value: "Chi gốc",
+            value: t`Principal expense`,
             span: packageTypes.length,
             align: "center",
             ...headStyle,
           },
           ...new Array(packageTypes.length - 1).fill(null),
           {
-            value: "Tạm ứng",
+            value: t`Advance payment`,
             rowSpan: 2,
             ...headStyle,
             align: "right",
           },
           {
-            value: "Hoá đơn",
+            value: t`Receipt`,
             rowSpan: 2,
             align: "right",
             ...headStyle,
@@ -408,21 +411,21 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
           null,
           ...packageTypes.map((type) => {
             return {
-              value: tl(`loan_package_${type}`),
+              value: loanPackageTypes[type].label(),
               align: "center",
               ...headStyle,
             };
           }),
           ...packageTypes.map((type) => {
             return {
-              value: tl(`loan_package_${type}`),
+              value: loanPackageTypes[type].label(),
               align: "center",
               ...headStyle,
             };
           }),
           ...packageTypes.map((type) => {
             return {
-              value: tl(`loan_package_${type}`),
+              value: loanPackageTypes[type].label(),
               align: "center",
               ...headStyle,
             };
@@ -434,7 +437,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
 
       const totalRow = [
         {
-          value: tl("total"),
+          value: t`Total`,
           align: "right",
           span: 3,
           ...headStyle,
@@ -535,10 +538,10 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
       const endAt = receipts[receipts.length - 1]?.paidAt;
 
       const name = String.capitalizeFirstLetter(
-        `${tl("reports")} ${tl("income_expense")} ${tl("from")} ${renderDate(startAt).replace(
+        `${t`Reports`} ${t`Income expense`} ${t`From`} ${renderDate(startAt).replace(
           /\//g,
           "-"
-        )} ${tl("to")} ${renderDate(endAt).replace(/\//g, "-")}`
+        )} ${t`To`} ${renderDate(endAt).replace(/\//g, "-")}`
       );
       const blob = new Blob([buffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -560,7 +563,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
   return (
     <Card withBorder={false} shadow="xs" p={16} w="100%" h="100%">
       <Stack justify="center" h="100%">
-        <SessionTitle name={t`Statistics of income and expenditure`} icon={IconReportAnalytics}>
+        <SessionTitle name={t`Report income and expenditure`} icon={IconReportAnalytics}>
           <Group justify="end" flex={1}>
             <Button leftIcon={IconFileExcel} onClick={exportExcel} fz={12}>
               <Trans>Export</Trans> Excel

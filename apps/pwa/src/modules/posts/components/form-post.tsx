@@ -13,6 +13,8 @@ import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-servic
 import { CustomField } from "@/modules/custom-fields/custom-field-types";
 import { AppEntity } from "@/types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -33,7 +35,7 @@ import { IconCheck, IconEye } from "@tabler/icons-react";
 import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
 import { api } from "../../apis";
-import { renderDateTime, tl } from "../../lang/lang-service";
+import { renderDateTime } from "../../lang/lang-service";
 import { PostEntity } from "../posts-types";
 
 interface FormPostProps {
@@ -110,7 +112,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onPreview = () => {
     modals.open({
-      title: <ModalTitle title={tl("preview")} icon={IconEye} />,
+      title: <ModalTitle title={t`Preview`} icon={IconEye} />,
       fullScreen: true,
       children: (
         <Group>
@@ -128,10 +130,18 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       <Card shadow="sm">
         <Group justify="space-between">
           <Stack gap={4}>
-            {post ? <Badge>{tl("published")}</Badge> : <Badge color="gray">{tl("draft")}</Badge>}
+            {post ? (
+              <Badge>
+                <Trans>Published</Trans>
+              </Badge>
+            ) : (
+              <Badge color="gray">
+                <Trans>Draft</Trans>
+              </Badge>
+            )}
             {post?.updatedAt && (
               <Text fz={12} c="gray">
-                {tl("updatedAt")}: {renderDateTime(post.updatedAt)}
+                <Trans>Updated at</Trans>: {renderDateTime(post.updatedAt)}
               </Text>
             )}
           </Stack>
@@ -148,7 +158,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               leftIcon={IconCheck}
               radius={150}
             >
-              {post ? tl("update") : tl("post_publish")}
+              {post ? <Trans>Update</Trans> : <Trans>Publish</Trans>}
             </Button>
           </Group>
         </Group>
@@ -174,7 +184,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
                       form.setFieldValue("title", value);
                       autoGenerateSlug(value);
                     }}
-                    placeholder={tl("enter_title")}
+                    placeholder={t`Enter title`}
                     fz={25}
                   />
                 </InputWrapper>
@@ -182,7 +192,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
               <Editor
                 isAlwayShowToolbar
-                placeholder={tl("enter_content")}
+                placeholder={t`Enter content`}
                 props={{
                   styles: {
                     root: {
@@ -211,7 +221,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
             <Stack>
               <TextInput label="Slug" {...form.getInputProps("slug")} />
 
-              <InputWrapper label={tl("post_thumbnail")}>
+              <InputWrapper label={t`Post thumbnail`}>
                 <ImageInput
                   value={form.values.thumbnail || post?.thumbnail}
                   onChange={(value) => form.setFieldValue("thumbnail", value)}
@@ -221,8 +231,8 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               </InputWrapper>
 
               <Textarea
-                label={tl("excerpt")}
-                placeholder={tl("enter_excerpt")}
+                label={t`Excerpt`}
+                placeholder={t`Enter excerpt`}
                 value={form.values.excerpt}
                 onChange={(e) => form.setFieldValue("excerpt", e.target.value)}
               />

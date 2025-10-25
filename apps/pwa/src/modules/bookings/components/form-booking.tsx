@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { FormSessionIcon } from "@/components/form-session";
 import { TimeInput } from "@/components/inputs/time-input";
-import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import {
   createBooking,
   rescheduleBooking,
@@ -12,8 +11,9 @@ import {
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { getDateFormat, tl } from "@/modules/lang/lang-service";
+import { getDateFormat } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import {
   isInWorkSlot,
@@ -23,6 +23,8 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
 import { onFormError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Blockquote,
   Card,
@@ -32,10 +34,10 @@ import {
   Stack,
   Text,
   Textarea,
-  ThemeIcon,
-  Tooltip,
   TextInput,
+  ThemeIcon,
   Title,
+  Tooltip,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
@@ -140,15 +142,15 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
   return (
     <Stack pt={16} gap={30}>
-      <FormSessionIcon icon={IconReservedLine} description="title">
+      <FormSessionIcon icon={IconReservedLine} description={t`Title`}>
         {type === "RESCHEDULE" ? (
           <Title order={5} fw={500}>
-            {getBookingTitle(form.values) || tl("title")}
+            {getBookingTitle(form.values) || t`Title`}
           </Title>
         ) : (
           <TextInput
             {...form.getInputProps("title")}
-            placeholder={getBookingTitle(form.values) || tl("title")}
+            placeholder={getBookingTitle(form.values) || t`Title`}
           />
         )}
       </FormSessionIcon>
@@ -222,7 +224,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
         <Stack>
           <Group flex={1}>
-            <Tooltip label={tl("select_date")}>
+            <Tooltip label={t`Select date`}>
               <Group flex={1}>
                 <DateInput
                   flex={1}
@@ -261,7 +263,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
               </Group>
             </Tooltip>
 
-            <Tooltip label={tl("startTime")}>
+            <Tooltip label={t`Start time`}>
               <Group>
                 <TimeInput
                   value={form.values.startTime}
@@ -278,7 +280,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
               </Group>
             </Tooltip>
 
-            <Tooltip label={tl("endTime")}>
+            <Tooltip label={t`End time`}>
               <Group>
                 <TimeInput
                   value={form.values.endTime}
@@ -298,7 +300,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
           <Group wrap="nowrap" gap={5}>
             <Text fz={12} flex={1}>
-              {tl("suggest_time")}
+              {t`Suggest time`}
             </Text>
 
             {[15, 30, 45, 60].map((v) => {
@@ -324,7 +326,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                     );
                   }}
                 >
-                  {v === 60 ? tl("one_hour") : tl("minutes", { count: v })}
+                  {v === 60 ? t`One hour` : `${v} ${t`mins`}`}
                 </Button>
               );
             })}
@@ -335,7 +337,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       <FormSessionIcon icon={IconNotebook} description="details" visible={type !== "RESCHEDULE"}>
         <Textarea
           {...form.getInputProps("note")}
-          placeholder={capitalize(`${tl("enter")} ${tl("details")} (${tl("optional")})`)}
+          placeholder={capitalize(`${t`Enter`} ${t`Details`} (${t`Optional`})`)}
           minRows={4}
           autosize
           readOnly={type === "RESCHEDULE"}
@@ -346,13 +348,13 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         <Stack gap={8}>
           {form.values.startTime && !isInWorkspaceWorkSlots && (
             <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
-              {tl("out_of_work_slots")}
+              <Trans>Out of work slots</Trans>
             </Blockquote>
           )}
 
           {form.values.startTime && isPassed && (
             <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
-              {tl("booking_time_passed")}
+              <Trans>You are booking in the past</Trans>
             </Blockquote>
           )}
 
@@ -360,7 +362,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
             form.values.endTime &&
             dayjs(form.values.endTime).isBefore(dayjs(form.values.startTime)) && (
               <Blockquote color="red" p={8} fz={14} fw={500} mt={5}>
-                {tl("end_time_before_start_time")}
+                <Trans>End time must be after start time</Trans>
               </Blockquote>
             )}
         </Stack>
@@ -369,13 +371,17 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       <Group justify="center">
         {props.onCancel && !form.submitting && (
           <Button variant="outline" color="gray" onClick={props.onCancel}>
-            {tl("cancel")}
+            <Trans>Cancel</Trans>
           </Button>
         )}
 
         <Button onClick={onSubmit} leftIcon={IconCheck} action loading={form.submitting}>
-          {tl(
-            type === "CREATE" ? "confirm" : type === "RESCHEDULE" ? "reschedule_booking" : "save"
+          {type === "CREATE" ? (
+            <Trans>Confirm</Trans>
+          ) : type === "RESCHEDULE" ? (
+            <Trans>Reschedule booking</Trans>
+          ) : (
+            <Trans>Save</Trans>
           )}
         </Button>
       </Group>

@@ -1,12 +1,13 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
-import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Blockquote, Center, Modal, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconBuildingSkyscraper } from "@tabler/icons-react";
@@ -86,24 +87,24 @@ export const ModalUpdateWorkspaceBranch: FC = () => {
     <Modal
       opened={opened}
       onClose={close}
-      title={<ModalTitle title="move_workspace_branch" icon={IconBuildingSkyscraper} />}
+      title={<ModalTitle title={t`Move workspace branch`} icon={IconBuildingSkyscraper} />}
     >
       <Stack align="stretch">
         {entity === AppEntity.LOANS && (
           <Blockquote variant="light" color="orange" p={16} py={8} fz={14}>
-            {tl("update_workspace_branch_description_loans")}
+            <Trans>All receipts of the payment plans will also be moved to the new branch</Trans>
           </Blockquote>
         )}
 
         <Blockquote variant="light" color="gray" p={16} py={8} fz={14}>
-          {tl("leave_blank_to_use_main_branch")}
+          <Trans>Leave blank to use main branch</Trans>
         </Blockquote>
 
         <WorkspaceBranchInput value={branch} onChange={(v) => setBranch(v)} />
 
         <Center>
           <Button action onClick={onSubmit}>
-            {tl("confirm")}
+            <Trans>Confirm</Trans>
           </Button>
         </Center>
       </Stack>

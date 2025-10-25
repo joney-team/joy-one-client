@@ -11,9 +11,9 @@ import { Button } from "@/components/buttons/button";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { SessionTitle } from "@/components/session-title";
 import { BookingEntity } from "@/modules/bookings/booking-types";
-import { tl } from "@/modules/lang/lang-service";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
+import { t } from "@lingui/core/macro";
 
 interface ModalBookingDetailProps {
   booking: BookingEntity;
@@ -56,13 +56,13 @@ export const ModalBookingDetail: FC = () => {
               </ThemeIcon>
 
               <Title fz={em(20)} fw={700} c={color("primary")} ta="center">
-                {tl("booking_information")}
+                {t`Booking information`}
               </Title>
             </Stack>
 
             {props?.booking.customer && (
               <Fragment>
-                <SessionTitle mb={-10} name={tl("customer")} icon={IconUser} />
+                <SessionTitle mb={-10} name={t`Customer`} icon={IconUser} />
                 <CustomerCard
                   customer={props?.booking.customer}
                   withBorder
@@ -72,7 +72,7 @@ export const ModalBookingDetail: FC = () => {
               </Fragment>
             )}
 
-            <SessionTitle mb={-10} name={tl("booking")} icon={IconCalendar} />
+            <SessionTitle mb={-10} name={t`Booking`} icon={IconCalendar} />
 
             <BookingCard
               booking={props?.booking}
@@ -86,12 +86,12 @@ export const ModalBookingDetail: FC = () => {
             <Stack justify="center" align="center" mt={10}>
               {props.booking.customer && (
                 <Button leftIcon={IconEye} radius={100} onClick={onViewDetail}>
-                  {tl("customer_detail")}
+                  {t`Customer detail`}
                 </Button>
               )}
 
               <Anchor c="gray" fz={em(14)} onClick={onClose}>
-                {tl("close")}
+                {t`Close`}
               </Anchor>
             </Stack>
           </Stack>

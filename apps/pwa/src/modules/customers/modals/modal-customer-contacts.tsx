@@ -5,10 +5,11 @@ import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { setCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
 import { CustomerContactEntity } from "@/modules/customer-contacts/customer-contacts.types";
-import { tl } from "@/modules/lang/lang-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -65,7 +66,7 @@ export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => 
               <Text fz={em(12)}>{index + 1}.</Text>
               <Stack gap={10} flex={1} mt={-5}>
                 <TextInput
-                  label={tl("name")}
+                  label={t`Name`}
                   value={c.name}
                   onChange={(e) => {
                     if (!isEditable) return;
@@ -73,7 +74,7 @@ export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => 
                   }}
                 />
 
-                <InputWrapper label={tl("phones")}>
+                <InputWrapper label={t`Phones`}>
                   <Stack gap={10}>
                     {phones.map((p, i) => {
                       return (
@@ -160,12 +161,12 @@ export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => 
               handlers.append({ name: "", phones: [] });
             }}
           >
-            {tl("add_contact")}
+            <Trans>Add contact</Trans>
           </Button>
         </Group>
 
         <Button onClick={onSave} leftIcon={IconCheck}>
-          {tl("save")}
+          <Trans>Save</Trans>
         </Button>
       </Renderer>
     </Stack>
@@ -175,7 +176,7 @@ export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => 
 export const OnModalCustomerContacts = (props: ModalCustomerContactsProps) => {
   return modals.open({
     modalId: "ModalCustomerContacts",
-    title: <ModalTitle title={tl("contacts")} icon={IconAddressBook} />,
+    title: <ModalTitle title={t`Contacts`} icon={IconAddressBook} />,
     children: <ModalCustomerContacts {...props} />,
   });
 };

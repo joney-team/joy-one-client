@@ -12,17 +12,17 @@ import { onUploadFile } from "@/modules/files/file-service";
 import { FileType, UploadFileOptions } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import { Trans } from "@lingui/react/macro";
 import { alpha, Box, Group, Loader, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { RichTextEditor, RichTextEditorProps, useRichTextEditorContext } from "@mantine/tiptap";
 import { IconPhoto, IconUpload } from "@tabler/icons-react";
 import { Extensions, JSONContent, useEditor } from "@tiptap/react";
+import { BubbleMenu } from "@tiptap/react/menus";
 import { ClipboardEventHandler, FC, useState } from "react";
 import { ImageResize } from "./image-resize";
-import { BubbleMenu } from "@tiptap/react/menus";
 
 interface EditorProps {
   value?: string | JSONContent | undefined | null;
@@ -225,7 +225,9 @@ export const Editor: FC<EditorProps> = (props) => {
               <IconUpload />
             </ThemeIcon>
 
-            <Text c="white">{tl("drop_img_here")}</Text>
+            <Text c="white">
+              <Trans>Drop image here</Trans>
+            </Text>
           </Group>
         </Dropzone.Accept>
       </Box>

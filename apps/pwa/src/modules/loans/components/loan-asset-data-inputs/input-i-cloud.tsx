@@ -1,15 +1,15 @@
 "use client";
 
 import { EntityImages } from "@/components/entity-images";
+import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { api } from "@/modules/apis";
-import { tl } from "@/modules/lang/lang-service";
 import { LoanAssetType } from "@/modules/loans/loans-types";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, InputWrapper, SimpleGrid, TextInput, Tooltip } from "@mantine/core";
 import { IconCursorText, IconLockPlus } from "@tabler/icons-react";
+import dayjs from "dayjs";
 import { type FC, Fragment } from "react";
 import { LoanAssetDataInputProps } from ".";
-import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import dayjs from "dayjs";
 
 export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (props) => {
   const retreiveDeviceKey = async () => {
@@ -32,7 +32,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
     <Fragment>
       <SimpleGrid cols={{ md: 2 }}>
         <TextInput
-          label={tl("device_name")}
+          label={t`Device name`}
           value={props.value?.deviceName || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), deviceName: event.currentTarget.value })
@@ -41,7 +41,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
         />
 
         <TextInput
-          label={tl("asset_type")}
+          label={t`Asset type`}
           value={props.value?.assetType || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), assetType: event.currentTarget.value })
@@ -50,7 +50,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
         />
 
         <TextInput
-          label="IMEIL"
+          label={t`IMEIL`}
           value={props.value?.imeil || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), imeil: event.currentTarget.value })
@@ -59,7 +59,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
         />
 
         <TextInput
-          label="Serial"
+          label={t`Serial`}
           value={props.value?.serial || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), serial: event.currentTarget.value })
@@ -68,7 +68,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
         />
 
         <TextInput
-          label={tl("device_storage")}
+          label={t`Device storage`}
           value={props.value?.storage || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), storage: event.currentTarget.value })
@@ -80,7 +80,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
           <Group align="end" gap={5}>
             <TextInput
               flex={1}
-              label={tl("device_key")}
+              label={t`Device key`}
               value={props.value?.deviceSecretKey || ""}
               readOnly
               onChange={(event) =>
@@ -90,12 +90,12 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
                 })
               }
             />
-            <Tooltip label={tl("enter_device_key")}>
+            <Tooltip label={t`Enter device key`}>
               <ActionIcon size={34} variant="outline" color="gray" onClick={onInputDeviceKey}>
                 <IconCursorText size={18} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label={tl("generate_device_key")}>
+            <Tooltip label={t`Generate device key`}>
               <ActionIcon size={34} variant="outline" color="gray" onClick={retreiveDeviceKey}>
                 <IconLockPlus size={18} />
               </ActionIcon>
@@ -104,9 +104,9 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
         )}
       </SimpleGrid>
 
-      <InputWrapper label={tl("asset_imgs")}>
+      <InputWrapper label={t`Asset images`}>
         <EntityImages
-          name={tl("asset_imgs")}
+          name={t`Asset images`}
           images={props.value?.images}
           onChange={(images) => props.onChange?.({ ...(props.value as any), images })}
           disabled={props.disabled}

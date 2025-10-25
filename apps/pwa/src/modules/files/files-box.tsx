@@ -1,15 +1,15 @@
 "use client";
 
+import { useList } from "@/components/list/use-list";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { detectFileType, getFiles, onUploadFile, removeFile } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { tl } from "@/modules/lang/lang-service";
 import { AppEntity } from "@/types";
 import { DateTime } from "@/utils/date-time.utils";
-import { useList } from "@/components/list/use-list";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   BoxProps,
@@ -205,7 +205,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
                   <IconUpload strokeWidth={1.5} size={18} />
                 </ThemeIcon>
                 <Text c="gray.5" fz={em(13)} fw={300}>
-                  {props.placeholder || tl("drop_file_here")}
+                  {props.placeholder ?? <Trans>Drop files here</Trans>}
                 </Text>
               </Group>
             </Dropzone.Accept>
@@ -216,7 +216,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
                   <IconUpload strokeWidth={1.5} size={18} />
                 </ThemeIcon>
                 <Text c="gray.5" fz={em(13)} fw={300}>
-                  {props.placeholder || tl("drop_file_here_or_click")}
+                  {props.placeholder ?? <Trans>Drop or click to choose file</Trans>}
                 </Text>
               </Group>
             </Dropzone.Idle>

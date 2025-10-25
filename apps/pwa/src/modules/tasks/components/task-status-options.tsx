@@ -1,12 +1,12 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
-import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
+import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity, TaskStatus } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, em, Group, Menu, TextInput } from "@mantine/core";
 import { IconCheck, IconSettings } from "@tabler/icons-react";
 import { FC, MouseEventHandler, useState } from "react";
@@ -46,7 +46,7 @@ export const TaskStatusOptions: FC<TaskStatusOptionsProps> = (props) => {
                 border: "none",
               },
             }}
-            placeholder={tl("search")}
+            placeholder={t`Search`}
             rightSection={
               <ActionIcon
                 variant="subtle"

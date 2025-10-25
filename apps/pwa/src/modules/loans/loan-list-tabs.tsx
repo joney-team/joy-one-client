@@ -2,9 +2,9 @@
 
 import { NavigationTabs } from "@/components/navigation-tabs";
 import { useRouter } from "@/hooks/use-router";
-import { tl } from "@/modules/lang/lang-service";
 import { renderLoanList } from "@/modules/loans/loan-list";
 import { LoanStatus } from "@/modules/loans/loans-types";
+import { t } from "@lingui/core/macro";
 import { Stack } from "@mantine/core";
 import {
   IconAnalyze,
@@ -23,7 +23,7 @@ export const LoanListTabs: FC = () => {
     {
       value: "active",
       icon: IconPlayerRecord,
-      label: tl("active"),
+      label: t`Active`,
       isShowCount: true,
       components: renderLoanList({
         strictStatus: [LoanStatus.FULFILLED],
@@ -33,7 +33,7 @@ export const LoanListTabs: FC = () => {
     {
       value: "processing",
       icon: IconAnalyze,
-      label: tl("processing"),
+      label: t`Processing`,
       isShowCount: true,
       components: renderLoanList({
         strictStatus: [LoanStatus.PENDING_SIGN, LoanStatus.PENDING, LoanStatus.APPROVED],
@@ -43,7 +43,7 @@ export const LoanListTabs: FC = () => {
     },
     {
       value: "overdue",
-      label: tl("overdue"),
+      label: t`Overdue`,
       isShowCount: true,
       icon: IconClockExclamation,
       components: renderLoanList({
@@ -54,7 +54,7 @@ export const LoanListTabs: FC = () => {
     },
     {
       value: "all",
-      label: tl("all"),
+      label: t`All`,
       icon: IconStack2,
       components: renderLoanList(),
     },

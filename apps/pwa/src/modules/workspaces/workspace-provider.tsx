@@ -1,6 +1,5 @@
 "use client";
 
-import * as Sentry from "@sentry/react";
 import { useApp } from "@/app.context";
 import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
 import { Fullscreen } from "@/components/fullscreen";
@@ -13,7 +12,6 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { getWorkspaceAuthSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
 import {
   getMyWorkspaceMembers,
@@ -49,7 +47,9 @@ import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
+import { t } from "@lingui/core/macro";
 import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
+import * as Sentry from "@sentry/react";
 import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
@@ -57,11 +57,7 @@ import { api } from "../apis";
 import { useQuery } from "../apis/use-query";
 import { useLang } from "../lang/lang-context";
 import { Context } from "./workspace-context";
-import {
-  getWorkspaceModuleName,
-  workspaceModuleConfigs,
-  WorkspaceModuleId,
-} from "./workspace-modules";
+import { workspaceModuleConfigs, WorkspaceModuleId } from "./workspace-modules";
 import { WorkspaceRequire } from "./workspace-require";
 import { getDefaultWorkspaceView } from "./workspace-view";
 import {
@@ -216,7 +212,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
           }
         })
         .catch((error) => {
-          const message = error.response?.data?.message || tl("invalid_invitation");
+          const message = error.response?.data?.message || t`Invalid invitation`;
           _setInvitationState({ error: message });
         });
     }

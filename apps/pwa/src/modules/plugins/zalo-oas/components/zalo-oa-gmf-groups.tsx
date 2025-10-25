@@ -1,14 +1,17 @@
-import { api } from "@/modules/apis";
-import { ResponseList } from "@/types";
+"use client";
+
+import { Empty } from "@/components/empty";
 import { useList } from "@/components/list/use-list";
+import { api } from "@/modules/apis";
+import { EventType } from "@/modules/events/event-types";
+import { num } from "@/modules/lang/lang-service";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { ResponseList } from "@/types";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Anchor, Card, Group, Stack, Switch, Text } from "@mantine/core";
+import { IconExternalLink } from "@tabler/icons-react";
 import { type FC } from "react";
 import { ZaloOaGmfGroup } from "../zalo-oas-types";
-import { Empty } from "@/components/empty";
-import { num, tl } from "@/modules/lang/lang-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { EventType } from "@/modules/events/event-types";
-import { IconExternalLink } from "@tabler/icons-react";
 
 export const ZaloOaGmfGroups: FC = () => {
   const workspace = useWorkspace();
@@ -36,7 +39,7 @@ export const ZaloOaGmfGroups: FC = () => {
                 </Anchor>
 
                 <Text fz={12} c="gray">
-                  {num(item.total_member)} {tl("members")}
+                  {num(item.total_member)} {t`Members`}
                 </Text>
               </Group>
 
@@ -53,7 +56,7 @@ export const ZaloOaGmfGroups: FC = () => {
                     },
                   });
                 }}
-                label={tl("admin_notifications_switch")}
+                label={t`Enable/Disable notifications for admin`}
               />
             </Stack>
           </Card>

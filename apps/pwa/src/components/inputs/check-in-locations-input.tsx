@@ -1,12 +1,13 @@
 "use client";
 
-import { Coordinates } from "@/types";
 import { OnModalCheckInLocationForm } from "@/modals/modal-check-in-location-form";
 import { CheckInLocation } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { tl } from "@/modules/lang/lang-service";
 import { calculateDistance, getGeolocation } from "@/modules/locations/locations-service";
+import { Coordinates } from "@/types";
 import { onActionLoad } from "@/utils/actions";
-import { capitalize, String } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -40,7 +41,7 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
         {locations.map((location, index) => {
           const check = async () => {
             onActionLoad({
-              name: tl("check_location"),
+              name: t`Check location`,
               icon: IconGps,
               process: () => getGeolocation(),
               onFinished: (res, id) => {
@@ -53,8 +54,8 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                 if (distance <= location.radius) {
                   notifications.update({
                     id,
-                    title: tl("arrived_location", { location: location.name }),
-                    message: tl("timekeepings_arrived_location_desc"),
+                    title: t`Arrived location ${location.name}`,
+                    message: t`This location can check in`,
                     icon: <IconMapCheck strokeWidth={1.5} size={18} />,
                     color: "primary",
                     autoClose: 3000,
@@ -62,8 +63,8 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                 } else {
                   notifications.update({
                     id,
-                    title: tl("outside_check_in_location"),
-                    message: tl("outside_check_in_location_desc"),
+                    title: t`Outside check in location`,
+                    message: t`This location cannot check in`,
                     icon: <IconX strokeWidth={1.5} size={18} />,
                     color: "red",
                     autoClose: 3000,
@@ -110,7 +111,7 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                       {location.name}
                     </Text>
                     <Text c="gray" fz={em(12)} fw={500}>
-                      {tl("coordinates")}:{" "}
+                      {t`Coordinates`}:{" "}
                       {String.limitCharacters(location.coordinates.lat.toString(), 15)}/
                       {String.limitCharacters(location.coordinates.lng.toString(), 15)}
                     </Text>
@@ -118,13 +119,13 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
 
                   <Switch
                     checked={!location.disabled}
-                    label={tl("on_off_activate")}
+                    label={t`On/Off activate`}
                     onChange={toggleDisable}
                     mb={5}
                   />
 
                   <NumberInput
-                    label={tl("radius", { unit: tl("meter") })}
+                    label={t`Radius (meter)`}
                     value={location.radius}
                     onChange={(e) => changeRadius(+e)}
                     min={0}
@@ -162,7 +163,7 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
               leftSection={<IconPlus size={16} style={{ marginRight: -8 }} />}
               fz={em(13)}
             >
-              {capitalize(`${tl("add")} ${tl("location")}`)}
+              <Trans>Add location</Trans>
             </Button>
           </Group>
         )}

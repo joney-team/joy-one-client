@@ -1,9 +1,8 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
-import { useRouter } from "@/hooks/use-router";
 import { Avatar } from "@/components/avatar";
-import { tl } from "@/modules/lang/lang-service";
+import { ModalTitle } from "@/components/modal-title";
+import { useRouter } from "@/hooks/use-router";
 import {
   closeMesssageBox,
   messageBoxPlatformImages,
@@ -14,7 +13,10 @@ import {
 } from "@/modules/message-boxes/message-boxes-service";
 import { MessageBoxStatus } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
+import { useColor } from "@/modules/theme/use-color";
+import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { onActionLoad, onArchive } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Badge, Group, Image, Stack, Text, Title, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import {
@@ -26,8 +28,7 @@ import {
   IconUserSquareRounded,
 } from "@tabler/icons-react";
 import { FC } from "react";
-import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
-import { ModalTitle } from "@/components/modal-title";
+import { messageBoxStatuses } from "../message-boxes-contants";
 import { useMessageBoxes } from "../message-boxes-context";
 
 export const MessageBoxHead: FC = () => {
@@ -43,22 +44,22 @@ export const MessageBoxHead: FC = () => {
 
   const onClose = async () => {
     modals.openConfirmModal({
-      title: <ModalTitle title={tl("confirm")} icon={IconCircleCheck} />,
-      children: tl("message_box_closed_confirm"),
+      title: <ModalTitle title={t`Confirm`} icon={IconCircleCheck} />,
+      children: t`Are you sure you want to mark as done?`,
       onConfirm: async () => {
         if (!box) return;
         return closeMesssageBox(box._id);
       },
       labels: {
-        cancel: tl("cancel"),
-        confirm: tl("confirm"),
+        cancel: t`Cancel`,
+        confirm: t`Confirm`,
       },
     });
   };
 
   const onRemove = async () => {
     onArchive({
-      name: tl("message_boxes"),
+      name: t`Message boxes`,
       process: async () => {
         if (!box) return;
         await removeMessageBox(box._id);
@@ -80,7 +81,7 @@ export const MessageBoxHead: FC = () => {
         />
 
         <Stack gap={3}>
-          <Title fz={18}>{box?.senderName || box?.customer?.name || tl("guest")}</Title>
+          <Title fz={18}>{box?.senderName || box?.customer?.name || t`Guest`}</Title>
 
           {plugin && (
             <Group gap={4}>
@@ -94,13 +95,13 @@ export const MessageBoxHead: FC = () => {
       </Group>
 
       <Group gap={8}>
-        <Tooltip label={tl("assignee")}>
+        <Tooltip label={t`Assignee`}>
           <Group>
             <WorkspaceMemberInput
               value={box.assigneeUser}
               onChange={(u) => {
                 onActionLoad({
-                  name: tl("assign_assignee"),
+                  name: t`Assign assignee`,
                   icon: IconUser,
                   process: async () => {
                     return setAssigneeToMessageBox(box._id, u?.userId);
@@ -116,7 +117,7 @@ export const MessageBoxHead: FC = () => {
 
           if (box.status === MessageBoxStatus.IN_PROGRESS)
             return (
-              <Tooltip label={tl("message_box_closed")}>
+              <Tooltip label={t`Message box closed`}>
                 <ActionIcon color="green" onClick={onClose}>
                   <IconCheck size={20} />
                 </ActionIcon>
@@ -125,12 +126,10 @@ export const MessageBoxHead: FC = () => {
 
           const statusColor = messageBoxStatusColors[box.status];
 
-          return <Badge color={color(statusColor)}>{tl(`msg_boxes_status_${box.status}`)}</Badge>;
+          return <Badge color={color(statusColor)}>{messageBoxStatuses[box.status].label()}</Badge>;
         })()}
 
-        <Tooltip
-          label={`${tl(isAiAssistantEnabled ? "disable" : "enable")} ${tl("ai-assistants")}`}
-        >
+        <Tooltip label={`${isAiAssistantEnabled ? t`Disable` : t`Enable`} ${t`AI assistants`}`}>
           <ActionIcon
             variant={isAiAssistantEnabled ? "filled" : "outline"}
             color="violet.9"

@@ -1,10 +1,9 @@
 "use client";
 
-import { useFormSubmit } from "@/hooks/use-form";
 import { Button } from "@/components/buttons/button";
-import { FilesBox } from "@/modules/files/files-box";
 import { ModalTitle } from "@/components/modal-title";
-import { tl } from "@/modules/lang/lang-service";
+import { useFormSubmit } from "@/hooks/use-form";
+import { FilesBox } from "@/modules/files/files-box";
 import { useLoans } from "@/modules/loans/loans-context";
 import {
   LoanAssetEstimation,
@@ -14,6 +13,7 @@ import {
   LoanAssetType,
 } from "@/modules/loans/loans-types";
 import { DateTime } from "@/utils/date-time.utils";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Group,
@@ -31,6 +31,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCoins, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { InputModalType, OnModalInput } from "../../../modals/modal-input";
+import { loanAssetTypes } from "../loans-constants";
 
 interface ModalLoanAssetEstimationFormProps {
   estimation?: LoanAssetEstimation;
@@ -117,7 +118,7 @@ export const ModalLoanAssetEstimationForm: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={tl("loan-asset-estimations")} icon={IconCoins} />}
+      title={<ModalTitle title={t`Loan asset estimations`} icon={IconCoins} />}
       onClose={onClose}
       opened={opened}
       size="xl"
@@ -125,12 +126,12 @@ export const ModalLoanAssetEstimationForm: FC = () => {
       <Stack gap={16}>
         <SimpleGrid cols={{ md: 2 }}>
           <Select
-            label="Tài sản"
-            placeholder="Chọn tài sản"
+            label={t`Asset`}
+            placeholder={t`Select asset`}
             data={[LoanAssetType.MOTOBIKE_REGISTRATION, LoanAssetType.CAR_REGISTRATION].map(
               (type) => ({
                 value: type,
-                label: tl(`loan_asset_type_estimation_${type}`).replace("Đăng ký", ""),
+                label: loanAssetTypes[type].label(),
               })
             )}
             {...form.getInputProps("assetType")}
@@ -141,8 +142,8 @@ export const ModalLoanAssetEstimationForm: FC = () => {
             <Select
               withAsterisk
               flex={1}
-              label="Nhãn hiệu"
-              placeholder="Chọn nhãn hiệu"
+              label={t`Brand`}
+              placeholder={t`Select brand`}
               data={loans.assetEstimations.brands
                 .filter((v) => v.assetType === form.values.assetType)
                 .map((brand) => ({ value: brand.id, label: brand.name }))}
@@ -158,9 +159,9 @@ export const ModalLoanAssetEstimationForm: FC = () => {
                 disabled={!form.values.brandId}
                 onClick={() =>
                   OnModalInput({
-                    title: "Cập nhật nhãn hiệu",
+                    title: t`Update brand`,
                     type: InputModalType.TEXT,
-                    label: "Tên nhãn hiệu",
+                    label: t`Brand name`,
                     value: loans.assetEstimations.brands.find((v) => v.id === form.values.brandId)
                       ?.name,
                     onDone: (value: string) => {
@@ -185,9 +186,9 @@ export const ModalLoanAssetEstimationForm: FC = () => {
                 disabled={!form.values.assetType}
                 onClick={() =>
                   OnModalInput({
-                    title: "Tạo mới nhãn hiệu",
+                    title: t`Create brand`,
                     type: InputModalType.TEXT,
-                    label: "Tên nhãn hiệu",
+                    label: t`Brand name`,
                     onDone: (value: string) => {
                       const brand: LoanAssetEstimationBrand = {
                         assetType: form.values.assetType,
@@ -211,8 +212,8 @@ export const ModalLoanAssetEstimationForm: FC = () => {
           <Group align="start" gap={10} wrap="nowrap">
             <Select
               flex={1}
-              label="Dòng / Mẫu"
-              placeholder="Chọn Dòng"
+              label={t`Model`}
+              placeholder={t`Select model`}
               data={loans.assetEstimations.models
                 .filter((v) => v.brandId === form.values.brandId)
                 .map((model) => ({ value: model.id, label: model.name }))}
@@ -228,9 +229,9 @@ export const ModalLoanAssetEstimationForm: FC = () => {
                 disabled={!form.values.modelId}
                 onClick={() =>
                   OnModalInput({
-                    title: "Cập nhật dòng / mẫu",
+                    title: t`Update model`,
                     type: InputModalType.TEXT,
-                    label: "Tên dòng / mẫu",
+                    label: t`Model name`,
                     value: loans.assetEstimations.models.find((v) => v.id === form.values.modelId)
                       ?.name,
                     onDone: (value: string) => {
@@ -255,9 +256,9 @@ export const ModalLoanAssetEstimationForm: FC = () => {
                 disabled={!form.values.brandId}
                 onClick={() =>
                   OnModalInput({
-                    title: "Tạo mới dòng/mẫu",
+                    title: t`Create model`,
                     type: InputModalType.TEXT,
-                    label: "Tên dòng/mẫu",
+                    label: t`Model name`,
                     onDone: (value: string) => {
                       const model: LoanAssetEstimationModel = {
                         id: loans.assetEstimations.models.length.toString(),
@@ -281,8 +282,8 @@ export const ModalLoanAssetEstimationForm: FC = () => {
           <Group align="end" gap={10}>
             <Select
               flex={1}
-              label="Màu sắc"
-              placeholder="Chọn màu"
+              label={t`Color`}
+              placeholder={t`Select color`}
               data={loans.assetEstimations.colors
                 .filter((v) => v.brandId === form.values.brandId)
                 .map((color) => ({ value: color.id, label: color.name }))}
@@ -297,9 +298,9 @@ export const ModalLoanAssetEstimationForm: FC = () => {
               disabled={!form.values.colorId}
               onClick={() =>
                 OnModalInput({
-                  title: "Cập nhật màu",
+                  title: t`Update color`,
                   type: InputModalType.TEXT,
-                  label: "Tên màu",
+                  label: t`Color name`,
                   value: loans.assetEstimations.colors.find((v) => v.id === form.values.colorId)
                     ?.name,
                   onDone: (value: string) => {
@@ -324,9 +325,9 @@ export const ModalLoanAssetEstimationForm: FC = () => {
               disabled={!form.values.brandId}
               onClick={() =>
                 OnModalInput({
-                  title: "Tạo mới màu sắc",
+                  title: t`Create color`,
                   type: InputModalType.TEXT,
-                  label: "Tên màu sắc",
+                  label: t`Color name`,
                   onDone: (value: string) => {
                     const color: LoanAssetEstimationColor = {
                       id: loans.assetEstimations.colors.length.toString(),
@@ -347,7 +348,7 @@ export const ModalLoanAssetEstimationForm: FC = () => {
           </Group>
 
           <DatePickerInput
-            label="Năm sản xuất"
+            label={t`Product manufacturing year`}
             level="decade"
             value={
               form.values.productManufacturingDate
@@ -364,22 +365,22 @@ export const ModalLoanAssetEstimationForm: FC = () => {
             valueFormat="YYYY"
           />
 
-          <TextInput label="Tên sản phẩm" {...form.getInputProps("productName")} />
+          <TextInput label={t`Product name`} {...form.getInputProps("productName")} />
         </SimpleGrid>
 
         <NumberInput
           withAsterisk
-          label="Định giá"
+          label={t`Estimate price`}
           hideControls
           {...form.getInputProps("estimatePrice")}
         />
 
-        <InputWrapper label="Hình ảnh sản phẩm">
+        <InputWrapper label={t`Product images`}>
           <FilesBox query={{ ref: `loan-asset-estimations-${form.values.id}` }} autoUpload />
         </InputWrapper>
 
         <Button onClick={submitting.handle} loading={submitting.isSubmitting} mt={10}>
-          {tl(props?.estimation ? "update" : "create")}
+          {props?.estimation ? t`Update` : t`Create`}
         </Button>
       </Stack>
     </Modal>

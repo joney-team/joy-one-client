@@ -12,7 +12,8 @@ import { updateCustomer } from "../customer-service";
 import { CustomerShortInfo } from "../customer-types";
 
 import { useRouter } from "@/hooks/use-router";
-import { tl } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 
 interface ModalCustomerPlainCodeFormProps {
   customer: CustomerShortInfo;
@@ -61,7 +62,7 @@ export const ModalCustomerPlainCodeForm: FC<ModalCustomerPlainCodeFormProps> = (
         leftSection={<IconCheck strokeWidth={1.2} />}
         disabled={!form.isDirty()}
       >
-        {tl("complete")}
+        <Trans>Complete</Trans>
       </Button>
     </Stack>
   );
@@ -70,6 +71,6 @@ export const ModalCustomerPlainCodeForm: FC<ModalCustomerPlainCodeFormProps> = (
 export const OnModalCustomerPlainCodeForm = (props: ModalCustomerPlainCodeFormProps) =>
   modals.open({
     modalId: "ModalCustomerPlainCodeForm",
-    title: <ModalTitle title="Nhập mã khách hàng" icon={IconId} />,
+    title: <ModalTitle title={t`Enter customer plain code`} icon={IconId} />,
     children: <ModalCustomerPlainCodeForm {...props} />,
   });

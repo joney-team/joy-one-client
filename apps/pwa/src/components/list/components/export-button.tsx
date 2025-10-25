@@ -4,16 +4,13 @@ import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
 import { renderFileUrl } from "@/modules/files/files-utils";
-import {
-  getDateTimeFormat,
-  numCurrencyRound,
-  renderDateTime,
-  tl,
-} from "@/modules/lang/lang-service";
+import { getDateTimeFormat, numCurrencyRound, renderDateTime } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ResponseList } from "@/types";
+import { onActionLoad } from "@/utils/actions";
 import { downloadJSON } from "@joy-one-client/utils/files";
+import { t } from "@lingui/core/macro";
 import { Center, Modal, parseThemeColor, Select, Stack, useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDownload, IconFileExport } from "@tabler/icons-react";
@@ -23,7 +20,6 @@ import writeXlsxFile, { Row } from "write-excel-file";
 import { ExportToExcelItem, ListContext } from "../types";
 import { getIn, getValuePath } from "../utils";
 import { ActionButton } from "./action-button";
-import { onActionLoad } from "@/utils/actions";
 
 export enum ExportType {
   EXCEL = "Excel",
@@ -61,11 +57,11 @@ export const ExportButton: FC<ListContext> = (props) => {
             })
             .then((res) => res.data);
 
-          if (data.length === 0) throw new Error(tl("NO_DATA_TO_EXPORT"));
+          if (data.length === 0) throw new Error(t`No data to export`);
 
-          const filename = `[${workspace.userMember.workspace.code}] ${tl(
-            props.name || "data"
-          )} ${dayjs().format(getDateTimeFormat()).replace(/:/g, "-").replace(/\//g, "-")}`;
+          const filename = `[${workspace.userMember.workspace.code}] ${
+            props.name || t`Data`
+          } ${dayjs().format(getDateTimeFormat()).replace(/:/g, "-").replace(/\//g, "-")}`;
 
           if (exportType === ExportType.JSON) {
             return downloadJSON(data, `${filename}.json`);
@@ -83,16 +79,16 @@ export const ExportButton: FC<ListContext> = (props) => {
                 const tempExport = column.exportToExcel(data[0][col.id], data[0]);
                 if (Array.isArray(tempExport)) {
                   tempExport.forEach((item) => {
-                    headers.push({ value: tl(item.col) });
+                    headers.push({ value: item.col });
                   });
                 } else {
-                  headers.push({ value: tl(column.name || col.id) });
+                  headers.push({ value: column.name || col.id });
                 }
                 continue;
               }
 
               // Automation
-              headers.push({ value: tl(column.name || col.id) });
+              headers.push({ value: column.name || col.id });
             }
 
             const rows: Row[] = await Promise.all(
@@ -119,7 +115,7 @@ export const ExportButton: FC<ListContext> = (props) => {
                       });
                     } else {
                       const indexOfCol = headers.findIndex(
-                        (v) => v?.value === tl(column.name || columnSetting.id)
+                        (v) => v?.value === column.name || columnSetting.id
                       );
                       cols[indexOfCol] = renderExportItem(tempExport);
                     }
@@ -129,7 +125,7 @@ export const ExportButton: FC<ListContext> = (props) => {
 
                   // Automation
                   const indexOfCol = headers.findIndex(
-                    (v) => v?.value === tl(column.name || columnSetting.id)
+                    (v) => v?.value === column.name || columnSetting.id
                   );
                   cols[indexOfCol] = { value };
                 }
@@ -196,16 +192,16 @@ export const ExportButton: FC<ListContext> = (props) => {
 
   return (
     <Fragment>
-      <ActionButton icon={IconFileExport} tooltip="export-data" onClick={open} />
+      <ActionButton icon={IconFileExport} tooltip={t`Export data`} onClick={open} />
 
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle title="export-data" icon={IconFileExport} />}
+        title={<ModalTitle title={t`Export data`} icon={IconFileExport} />}
       >
         <Stack>
           <Select
-            label={tl("export-type")}
+            label={t`Export type`}
             value={exportType}
             onChange={(value) => setExportType(value as ExportType)}
             data={[
@@ -215,7 +211,7 @@ export const ExportButton: FC<ListContext> = (props) => {
           />
 
           <Center mt={16}>
-            <Button action leftIcon={IconDownload} onClick={onExport} label="export" />
+            <Button action leftIcon={IconDownload} onClick={onExport} label={t`Export`} />
           </Center>
         </Stack>
       </Modal>

@@ -2,13 +2,13 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { tl } from "@/modules/lang/lang-service";
 import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
+import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
@@ -35,9 +35,6 @@ export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
       {...rest}
       onSearch={(q) => searchEntity<PartnerEntity>(AppEntity.PARTNERS, q)}
       listRoute="/partners"
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(item) => {
         return (
           <Combobox.Option value={item._id} key={item._id}>
@@ -73,7 +70,7 @@ export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
             fw={500}
             onClick={toggle}
           >
-            {tl("select")}
+            <Trans>Select</Trans>
           </Button>
         );
       }}

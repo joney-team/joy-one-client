@@ -32,7 +32,7 @@ const Page: NextPage = () => {
             size="xs"
             radius={100}
           >
-            <Trans id="invite_members">Invite members</Trans>
+            <Trans>Invite members</Trans>
           </Button>
         </Renderer>
 

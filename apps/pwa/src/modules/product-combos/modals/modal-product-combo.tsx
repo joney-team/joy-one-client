@@ -1,13 +1,13 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { Errored } from "@/components/errored";
 import { ModalTitle } from "@/components/modal-title";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
+import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { getOrderById } from "@/modules/orders/orders-service";
+import { OnModalProductComboUsing } from "@/modules/product-combos/modals/modal-product-combo-using";
 import { ProductComboHistoryEntity } from "@/modules/product-combos/product-combos-entity";
 import {
   getProductCombo,
@@ -15,8 +15,11 @@ import {
   revertProductComboHistory,
 } from "@/modules/product-combos/product-combos-service";
 import { productTypeOptions } from "@/modules/products/products-service";
+import { useColor } from "@/modules/theme/use-color";
 import { onActionLoad } from "@/utils/actions";
 import { useFetch } from "@/utils/use-fetch.util";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -31,7 +34,6 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { IconPackage, IconPlus, IconTrash } from "@tabler/icons-react";
 import { FC, useRef } from "react";
-import { OnModalProductComboUsing } from "@/modules/product-combos/modals/modal-product-combo-using";
 
 export interface ProductComboModalProps {
   id: string;
@@ -66,7 +68,7 @@ export const ModalProductCombo: FC = () => {
     <Modal
       opened={opened}
       onClose={close}
-      title={<ModalTitle title="product_combos_name" icon={IconPackage} />}
+      title={<ModalTitle title={t`Combo`} icon={IconPackage} />}
       size="xl"
     >
       {(function () {
@@ -109,10 +111,18 @@ export const ModalProductCombo: FC = () => {
             >
               <Table.Thead>
                 <Table.Tr>
-                  <Table.Th>{tl("time")}</Table.Th>
-                  <Table.Th>{tl("order")}</Table.Th>
-                  <Table.Th>{tl("note")}</Table.Th>
-                  <Table.Th>{tl("history")}</Table.Th>
+                  <Table.Th>
+                    <Trans>Time</Trans>
+                  </Table.Th>
+                  <Table.Th>
+                    <Trans>Order</Trans>
+                  </Table.Th>
+                  <Table.Th>
+                    <Trans>Note</Trans>
+                  </Table.Th>
+                  <Table.Th>
+                    <Trans>History</Trans>
+                  </Table.Th>
                   <Table.Th w={50}>
                     <ActionIcon
                       variant="subtle"

@@ -1,10 +1,14 @@
-import { useColor } from "@/modules/theme/use-color";
-import { useLayout } from "@/layout/layout-context";
-import { OnModalCaptureLocationTimekeeping } from "@/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping";
+"use client";
+
+import { Button } from "@/components/buttons/button";
+import { TimekeepingsIllustration } from "@/components/illustrations/timekeepings";
 import { useHrmTimekeeping } from "@/modules/hrm-timekeepings/hooks";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { tl } from "@/modules/lang/lang-service";
+import { OnModalCaptureLocationTimekeeping } from "@/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping";
+import { useColor } from "@/modules/theme/use-color";
 import { DateTime } from "@/utils/date-time.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Group,
@@ -17,21 +21,13 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
-import {
-  IconAnalyze,
-  IconClockHour12,
-  IconClockRecord,
-  IconLogin,
-  IconLogout,
-} from "@tabler/icons-react";
+import { IconAnalyze, IconClockHour12, IconClockRecord } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
-import { Button } from "@/components/buttons/button";
-import { TimekeepingsIllustration } from "@/components/illustrations/timekeepings";
+import { hrmTimekeepingTypes } from "./hrm-timekeepings-constants";
 
 export const HrmTimekeepingButton: FC = () => {
   const timekeeping = useHrmTimekeeping();
   const forceUpdate = useForceUpdate();
-  const layout = useLayout();
 
   const [opened, setOpened] = useState(false);
   const color = useColor();
@@ -60,7 +56,7 @@ export const HrmTimekeepingButton: FC = () => {
   return (
     <Popover width={400} shadow="xs" opened={opened} onChange={setOpened}>
       <Popover.Target>
-        <Tooltip disabled={!!workTime} label={workTime ? `` : tl("timekeepings")}>
+        <Tooltip disabled={!!workTime} label={workTime ? `` : t`Timekeepings`}>
           <Indicator
             color={color(nextColor)}
             position="top-center"
@@ -113,7 +109,7 @@ export const HrmTimekeepingButton: FC = () => {
               <TimekeepingsIllustration width={180} color={nextColor} />
 
               <Text ta="center" fw={600}>
-                {tl(`hrm_timekeepings_working_time`)}
+                <Trans>Working time</Trans>
               </Text>
 
               {workTime && (
@@ -144,21 +140,14 @@ export const HrmTimekeepingButton: FC = () => {
                 <Button
                   action
                   radius={100}
-                  color={color(
-                    {
-                      [HrmTimekeepingType.CHECK_IN]: "primary",
-                      [HrmTimekeepingType.CHECK_OUT]: "orange.8",
-                    }[timekeeping.nextType]
-                  )}
-                  leftIcon={
-                    timekeeping.nextType === HrmTimekeepingType.CHECK_IN ? IconLogin : IconLogout
-                  }
+                  color={color(hrmTimekeepingTypes[timekeeping.nextType].color)}
+                  leftIcon={hrmTimekeepingTypes[timekeeping.nextType].icon}
                   onClick={() => {
                     setOpened(false);
                     OnModalCaptureLocationTimekeeping();
                   }}
                 >
-                  {tl(`hrm_timekeepings_${timekeeping.nextType.toLowerCase()}`)}
+                  {hrmTimekeepingTypes[timekeeping.nextType].name()}
                 </Button>
               </Group>
             </Stack>

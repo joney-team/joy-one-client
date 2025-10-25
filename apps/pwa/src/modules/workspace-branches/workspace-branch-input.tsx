@@ -1,10 +1,12 @@
-import { tl } from "@/modules/lang/lang-service";
+"use client";
+
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, Input, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconChevronDown, IconX } from "@tabler/icons-react";
 import { FC } from "react";
-import { WorkspaceBranchSelector } from "./workspace-branch-selector";
 import { useWorkspace } from "../workspaces/workspace-context";
+import { WorkspaceBranchSelector } from "./workspace-branch-selector";
 
 interface WorkspaceBranchInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline" | "settings"> | null;
@@ -42,7 +44,7 @@ export const WorkspaceBranchInput: FC<WorkspaceBranchInputProps> = (props) => {
               <Input
                 w="100%"
                 className="AppSelectInput"
-                placeholder={tl("select_branch")}
+                placeholder={t`Select branch`}
                 value={value?.name || ""}
                 onChange={() => {}}
                 readOnly

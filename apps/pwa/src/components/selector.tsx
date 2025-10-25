@@ -1,14 +1,15 @@
 "use client";
 
+import { useList } from "@/components/list/use-list";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useLayout } from "@/layout/layout-context";
 import { api } from "@/modules/apis";
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Center,
   Combobox,
@@ -297,7 +298,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                 setSearch(event.currentTarget.value);
                 _onSearch(event.currentTarget.value);
               }}
-              placeholder={props.searchPlaceholder || tl("search")}
+              placeholder={props.searchPlaceholder || t`Search`}
               rightSection={
                 <Group gap={5} wrap="nowrap">
                   {searching && <Loader size={14} type="dots" color="gray" />}
@@ -340,7 +341,11 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                       <IconBackground strokeWidth={1.1} size={18} />
                     </ThemeIcon>
                     <Text c="gray.5" fz={12}>
-                      {tl(searching ? "type_something_to_search" : "no_results")}
+                      {searching ? (
+                        <Trans>Type something to search</Trans>
+                      ) : (
+                        <Trans>No results</Trans>
+                      )}
                     </Text>
                   </Group>
                 </Combobox.Empty>
@@ -362,7 +367,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                       </Group>
 
                       <Text fz={12} c="gray.5">
-                        {tl("create_new")}
+                        <Trans>Create new</Trans>
                       </Text>
                     </Group>
                   </Combobox.Option>

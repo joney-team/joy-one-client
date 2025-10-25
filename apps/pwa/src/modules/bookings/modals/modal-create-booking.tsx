@@ -1,14 +1,14 @@
-import { BookingForm, BookingFormProps } from "../components/form-booking";
 import { ModalTitle } from "@/components/modal-title";
-import { tl } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
 import { modals } from "@mantine/modals";
 import { IconCalendar } from "@tabler/icons-react";
+import { BookingForm, BookingFormProps } from "../components/form-booking";
 
 export const OnModalCreateBooking = (props?: Omit<BookingFormProps, "onFinished">) => {
   return modals.open({
     title: (
       <ModalTitle
-        title={props?.reschedule ? tl("reschedule_booking") : tl("create_booking")}
+        title={props?.reschedule ? t`Reschedule booking` : t`Create booking`}
         icon={IconCalendar}
       />
     ),

@@ -22,6 +22,7 @@ import { FC, Fragment } from "react";
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Image } from "@/components/image";
+import { useList } from "@/components/list/use-list";
 import { getFiles } from "@/modules/files/file-service";
 import { FileEntity } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
@@ -30,12 +31,13 @@ import {
   rejectTimekeeping,
   removeTimekeeping,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
-import { renderDateTime, tl } from "@/modules/lang/lang-service";
+import { renderDateTime } from "@/modules/lang/lang-service";
 import { UserCard } from "@/modules/users/components/user-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { String } from "@/utils/string.utils";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 
 interface HrmTimekeepingCardProps {
   timekeeping: HrmTimekeepingEntity;
@@ -129,7 +131,7 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
                       size="xs"
                       onClick={() => approveTimekeeping(timekeeping._id)}
                     >
-                      {tl("approve")}
+                      <Trans>Approve</Trans>
                     </Button>
 
                     <Button
@@ -140,11 +142,13 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
                       size="xs"
                       onClick={() => rejectTimekeeping(timekeeping._id, {})}
                     >
-                      {tl("reject")}
+                      <Trans>Reject</Trans>
                     </Button>
                   </Fragment>
                 ) : (
-                  <Badge color="orange">{tl("waiting_approval")}</Badge>
+                  <Badge color="orange">
+                    <Trans>Waiting approval</Trans>
+                  </Badge>
                 )}
               </Group>
             )}
@@ -159,7 +163,7 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
                       <IconCameraSelfie strokeWidth={1.5} size={18} />
                     </ThemeIcon>
                     <Text ta="center" fz={em(8)} c="gray">
-                      {tl("no_images")}
+                      <Trans>No images</Trans>
                     </Text>
                   </Stack>
                 </Card>
@@ -183,12 +187,17 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
         </Group>
 
         {timekeeping.status === HrmTimekeepingStatus.REJECTED && (
-          <Badge color="red">{tl("rejected")}</Badge>
+          <Badge color="red">
+            <Trans>Rejected</Trans>
+          </Badge>
         )}
 
         {workspace.hasPermission(WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP) &&
           timekeeping.status !== HrmTimekeepingStatus.PENDING && (
-            <ButtonArchive name="timekeepings" process={() => removeTimekeeping(timekeeping._id)} />
+            <ButtonArchive
+              name={t`timekeeping`}
+              process={() => removeTimekeeping(timekeeping._id)}
+            />
           )}
       </Stack>
     </Card>

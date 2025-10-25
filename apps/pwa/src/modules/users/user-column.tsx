@@ -5,12 +5,10 @@ import { Column } from "@/components/list/types";
 import { AppEntity } from "@/types";
 import { Group, Stack, Text } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
-import { tl } from "../lang/lang-service";
 import { searchEntity } from "../search/search-service";
 import {
   getUserMemberRoleLabel,
   getWorkspaceMemberByIds,
-  getWorkspaceMemberList,
 } from "../workspace-members/workspace-members-service";
 import { WorkspaceMemberInfo } from "../workspace-members/workspace-members-types";
 import { OnModalUserInformation } from "./modals/modal-user-information";

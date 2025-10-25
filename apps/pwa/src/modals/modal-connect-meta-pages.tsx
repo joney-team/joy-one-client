@@ -7,13 +7,13 @@ import { Renderer } from "@/components/renderer";
 import { useRouter } from "@/hooks/use-router";
 import { api } from "@/modules/apis";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
-import { tl } from "@/modules/lang/lang-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
 import { PluginMetaPageInfo } from "@/modules/plugins/meta-pages/meta-pages-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
+import { Trans } from "@lingui/react/macro";
 import { Anchor, Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -94,10 +94,13 @@ export const ConnectMetaPagesModal: FC = () => {
                 return (
                   <Stack gap={8}>
                     <Title ta="center" c={color("primary")} fz={em(25)}>
-                      {tl("connect_success")}
+                      <Trans>Connect success</Trans>
                     </Title>
                     <Text ta="center" fz={em(16)}>
-                      {tl("connect_success_msg")}
+                      <Trans>
+                        Now you can use the <strong>Messages</strong> feature to communicate with
+                        customers on Facebook.
+                      </Trans>
                     </Text>
                   </Stack>
                 );
@@ -108,19 +111,19 @@ export const ConnectMetaPagesModal: FC = () => {
                   <Fragment>
                     <Stack gap={8}>
                       <Title ta="center" c={color("dark")} fz={em(25)}>
-                        {tl("connect_meta_failed")}
+                        <Trans>Failed to connect with Meta.</Trans>
                       </Title>
                       <Text ta="center" fz={em(16)}>
-                        {tl("please_try_again_later")}
+                        <Trans>Please try again later.</Trans>
                       </Text>
                     </Stack>
 
                     <Button onClick={onRetry} mt={20} leftIcon={IconRefresh} size="md" radius={200}>
-                      {tl("retry_now")}
+                      <Trans>Retry now</Trans>
                     </Button>
 
                     <Anchor c="gray" fz={em(12)} onClick={close}>
-                      {tl("skip_for_now")}
+                      <Trans>Skip for now</Trans>
                     </Anchor>
                   </Fragment>
                 );
@@ -129,10 +132,13 @@ export const ConnectMetaPagesModal: FC = () => {
               return (
                 <Stack gap={8}>
                   <Title ta="center" c={color("primary")} fz={em(25)}>
-                    {tl("connect_meta_page")}
+                    <Trans>Connect Meta page</Trans>
                   </Title>
                   <Text ta="center" fz={em(16)}>
-                    {tl("auto_connect_meta_page")}
+                    <Trans>
+                      The system is automatically connecting to your Facebook pages. Please wait for
+                      a moment.
+                    </Trans>
                   </Text>
                 </Stack>
               );
@@ -182,11 +188,11 @@ export const ConnectMetaPagesModal: FC = () => {
                   size="md"
                   radius={200}
                 >
-                  {`${tl("open")} ${tl("messages")}`}
+                  <Trans>Open messages</Trans>
                 </Button>
 
                 <Anchor c="gray" fz={em(12)} onClick={close}>
-                  {tl("skip_for_now")}
+                  <Trans>Skip for now</Trans>
                 </Anchor>
               </Fragment>
             )}
@@ -195,19 +201,19 @@ export const ConnectMetaPagesModal: FC = () => {
           <Renderer visible={dto.pages.length === 0}>
             <Stack gap={8}>
               <Title ta="center" c={color("primary")} fz={em(25)}>
-                {tl("connect_meta_failed")}
+                <Trans>Failed to connect with Meta.</Trans>
               </Title>
               <Text ta="center" fz={em(16)}>
-                {tl("connect_zero_meta_pages")}
+                <Trans>Please try again later.</Trans>
               </Text>
             </Stack>
 
             <Button onClick={onRetry} mt={20} leftIcon={IconRefresh} size="md" radius={200}>
-              {tl("reconnect")}
+              <Trans>Retry now</Trans>
             </Button>
 
             <Anchor c="gray" fz={em(12)} onClick={close}>
-              {tl("skip_for_now")}
+              <Trans>Skip for now</Trans>
             </Anchor>
           </Renderer>
         </Stack>

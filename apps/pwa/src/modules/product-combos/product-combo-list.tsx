@@ -1,18 +1,20 @@
 "use client";
 
-import { type FC } from "react";
 import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { StatusColumn } from "@/components/list/columns/status-column";
 import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
-import { num, tl, tMulti } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { OnModalProductCombo } from "@/modules/product-combos/modals/modal-product-combo";
 import { productComboStatusOptions } from "@/modules/product-combos/product-combos-service";
 import { ProductComboStatus } from "@/modules/product-combos/product-combos-types";
 import { useColor } from "@/modules/theme/use-color";
+import { t } from "@lingui/core/macro";
 import { Badge, Group, Stack, Text } from "@mantine/core";
 import { IconHistory, IconPackage } from "@tabler/icons-react";
+import { type FC } from "react";
+import { productComboStatuses } from "./product-combos-constants";
 import { ProductComboEntity } from "./product-combos-entity";
 
 export const ProductComboList: FC = () => {
@@ -23,7 +25,7 @@ export const ProductComboList: FC = () => {
       <List<ProductComboEntity>
         id="cbs"
         icon={IconPackage}
-        name={tMulti(["list"], ["combos"])}
+        name={t`List combos`}
         route="/product-combos"
         columns={{
           customerId: CustomerColumn({ valuePath: "customer" }),
@@ -65,15 +67,15 @@ export const ProductComboList: FC = () => {
           },
           status: StatusColumn({
             options: Object.values(ProductComboStatus).map((status) => ({
-              label: tl(`product_combo_status_${status}`),
+              label: productComboStatuses[status].label(),
               value: status,
-              color: productComboStatusOptions[status].color,
+              color: productComboStatuses[status].color,
             })),
           }),
         }}
         actions={[
           {
-            label: "history",
+            label: t`History`,
             icon: IconHistory,
             onClick: (data) => OnModalProductCombo({ id: data.id }),
           },

@@ -2,28 +2,27 @@
 
 import { Avatar } from "@/components/avatar";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
-import { tl } from "@/modules/lang/lang-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getWorkspaceTypeIcon } from "@/modules/workspaces/workspaces-service";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import {
   Anchor,
   Group,
   InputWrapper,
   LoadingOverlay,
-  Select,
   SimpleGrid,
   Stack,
   Text,
-  ThemeIcon,
   TextInput,
+  ThemeIcon,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { IconUpload } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { workspaceTypes } from "../workspace-constants";
 import { WorkspaceTypeItem } from "./workpsace-type-item";
 
 let timeout: NodeJS.Timeout;
@@ -86,7 +85,7 @@ export const WorkspaceInformation: FC = () => {
               <ThemeIcon variant="transparent" color="dark" size="md">
                 <IconUpload strokeWidth={1.2} />
               </ThemeIcon>
-              <Text fz={12}>{tl("click_to_change")}</Text>
+              <Text fz={12}>{t`Click to change`}</Text>
             </Group>
           </Group>
         </Dropzone>
@@ -94,20 +93,20 @@ export const WorkspaceInformation: FC = () => {
         <TextInput label="Tên" {...form.getInputProps("name")} placeholder="Gold Dental" />
 
         <SimpleGrid cols={{ md: 2 }}>
-          <TextInput label={tl("phone")} {...form.getInputProps("phone")} placeholder="090888888" />
+          <TextInput label={t`Phone`} {...form.getInputProps("phone")} placeholder="090888888" />
           <TextInput label="Hotline" {...form.getInputProps("hotline")} placeholder="19008088" />
         </SimpleGrid>
 
-        <TextInput label={tl("address")} {...form.getInputProps("location.address")} />
+        <TextInput label={t`Address`} {...form.getInputProps("location.address")} />
 
-        <InputWrapper label={tl("workspace_type")} {...form.getInputProps("type")}>
+        <InputWrapper label={t`Workspace type`} {...form.getInputProps("type")}>
           <Group gap={10} pt={5}>
             {Object.values(WorkspaceType).map((type) => {
               return (
                 <WorkspaceTypeItem
                   key={type}
-                  icon={getWorkspaceTypeIcon(type)}
-                  label={tl(`ws_${type}`).toString()}
+                  icon={workspaceTypes[type].icon}
+                  label={workspaceTypes[type].name()}
                   isActive={form.values.type === type}
                   onClick={() => form.setFieldValue("type", type)}
                 />
@@ -137,7 +136,7 @@ export const WorkspaceInformation: FC = () => {
           )}
           {workspace.userMember?.workspace?.location && (
             <Text fz={12}>
-              {tl("address")}: {workspace.userMember.workspace.location?.address}
+              {t`Address`}: {workspace.userMember.workspace.location?.address}
             </Text>
           )}
         </Stack>

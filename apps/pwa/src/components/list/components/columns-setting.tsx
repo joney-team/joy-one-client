@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { BaseData } from "@/components/list/types";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -9,10 +9,9 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { ActionIcon, Group, Menu, MenuDropdown, Stack, ThemeIcon } from "@mantine/core";
 import { IconColumns3, IconDotsVertical, IconEye, IconEyeOff } from "@tabler/icons-react";
-import { ListContext, Column } from "../types";
+import { type FC } from "react";
+import { Column, ListContext } from "../types";
 import { ActionButton } from "./action-button";
-import { tl } from "@/modules/lang/lang-service";
-import { BaseData } from "@/components/list/types";
 
 export const ColsSettings: FC<ListContext> = (ctx) => {
   if (ctx.viewState.view !== "table") return null;
@@ -132,7 +131,7 @@ function ColumnItem<T = any>(props: {
           <IconDotsVertical size={16} />
         </ThemeIcon>
 
-        {tl(column.name || columnKey)}
+        {column.name || columnKey}
       </Group>
 
       <ActionIcon variant="subtle" size="sm" color="gray" onClick={toggleVisible}>

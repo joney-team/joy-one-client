@@ -1,5 +1,7 @@
+"use client";
+
 import { Renderer } from "@/components/renderer";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { resizeArrayForSparkline } from "@/utils/chart.utils";
@@ -116,7 +118,7 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
             <Tooltip label={tooltip} disabled={!tooltip}>
               <Stack gap={2}>
                 <Text c={contentColor} fz={11} fw={400}>
-                  {tl(name)}
+                  {name()}
                 </Text>
                 <Group h={20} align="center">
                   {isLoading ? (

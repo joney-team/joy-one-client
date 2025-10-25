@@ -5,13 +5,14 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Renderer } from "@/components/renderer";
-import { getColorShape } from "@/modules/theme/generator";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
-import { tl } from "@/modules/lang/lang-service";
+import { getColorShape } from "@/modules/theme/generator";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { getDnsRecordName, getMainDomain, isDomain } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Card,
   Center,
@@ -22,8 +23,8 @@ import {
   Slider,
   Stack,
   Text,
-  ThemeIcon,
   TextInput,
+  ThemeIcon,
   useMantineTheme,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
@@ -48,7 +49,7 @@ export const WorkspaceAppSettings: FC = () => {
     validate: {
       appDomain: (value: string) => {
         if (value && !value.includes("localhost") && !/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(value))
-          return tl("invalid_domain");
+          return t`Invalid domain`;
       },
     },
   });
@@ -110,14 +111,14 @@ export const WorkspaceAppSettings: FC = () => {
                 <ThemeIcon variant="transparent" color="dark" size="md">
                   <IconUpload strokeWidth={1.2} />
                 </ThemeIcon>
-                <Text fz={12}>{tl("change_app_icon")}</Text>
+                <Text fz={12}>{t`Change app icon`}</Text>
               </Group>
             </Group>
           </Dropzone>
 
-          <TextInput label={tl("name")} {...form.getInputProps("appName")} />
+          <TextInput label={t`Name`} {...form.getInputProps("appName")} />
 
-          <InputWrapper label={tl("theme_color")}>
+          <InputWrapper label={t`Theme color`}>
             <Card p={10} mt={3} withBorder shadow="none">
               <Stack>
                 <Group gap={10}>
@@ -154,7 +155,7 @@ export const WorkspaceAppSettings: FC = () => {
 
                 <Stack pb={5} gap={5}>
                   <Text fz={12} c="gray">
-                    {tl("color_shape")}
+                    {t`Color shape`}
                   </Text>
                   <Slider
                     w={200}
@@ -175,7 +176,7 @@ export const WorkspaceAppSettings: FC = () => {
 
         <Stack>
           <TextInput
-            label={tl("domain")}
+            label={t`Domain`}
             placeholder={`workspace.example.com`}
             {...form.getInputProps("appDomain")}
             onChange={(e) => {
@@ -192,11 +193,16 @@ export const WorkspaceAppSettings: FC = () => {
               <Card withBorder shadow="none">
                 <Stack gap={3}>
                   <Text fz={16}>
-                    {tl("register_dns_domain")}{" "}
-                    <strong>{getMainDomain(form.values.appDomain)}</strong>
+                    <Trans>
+                      You need to create a DNS Record with domain{" "}
+                      <strong>{getMainDomain(form.values.appDomain)}</strong>
+                    </Trans>
                   </Text>
                   <Group>
-                    <Text fz={16}>Type:</Text>
+                    <Text fz={16}>
+                      <Trans>Type</Trans>
+                      {":"}
+                    </Text>
                     <CopyText text="A">
                       <Text fz={16} fw={700}>
                         A
@@ -205,7 +211,10 @@ export const WorkspaceAppSettings: FC = () => {
                   </Group>
 
                   <Group>
-                    <Text fz={16}>Name:</Text>
+                    <Text fz={16}>
+                      <Trans>Name</Trans>
+                      {":"}
+                    </Text>
                     <CopyText text={getDnsRecordName(form.values.appDomain)}>
                       <Text fz={16} fw={700}>
                         {getDnsRecordName(form.values.appDomain)}
@@ -214,7 +223,10 @@ export const WorkspaceAppSettings: FC = () => {
                   </Group>
 
                   <Group>
-                    <Text fz={16}>IPv4 address:</Text>
+                    <Text fz={16}>
+                      <Trans>IPv4 address</Trans>
+                      {":"}
+                    </Text>
                     <CopyText text={app.config.workspaceDomainIP}>
                       <Text fz={16} fw={700}>
                         {app.config.workspaceDomainIP}
@@ -229,7 +241,7 @@ export const WorkspaceAppSettings: FC = () => {
                       rightIcon={IconExternalLink}
                       onClick={() => window.open(`https://${form.values.appDomain}`, "_blank")}
                     >
-                      {tl("open_app")}
+                      <Trans>Open app</Trans>
                     </Button>
                   </Group>
                 </Stack>
@@ -241,7 +253,7 @@ export const WorkspaceAppSettings: FC = () => {
 
       <Center>
         <Button type="submit" onClick={onSubmit} loading={isSubmitting} miw={150}>
-          {tl("update")}
+          <Trans>Update</Trans>
         </Button>
       </Center>
     </Stack>

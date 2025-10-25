@@ -3,14 +3,15 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
-import { tl } from "@/modules/lang/lang-service";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Stack, TextInput } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconFileInvoice } from "@tabler/icons-react";
-import { FC, useState } from "react";
 import JsonView from "@uiw/react-json-view";
+import { FC, useState } from "react";
 
 const ModalCheckEInvoice: FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,13 +37,13 @@ const ModalCheckEInvoice: FC = () => {
     <form onSubmit={onSubmit}>
       <Stack>
         <TextInput
-          label={tl("receipt_code")}
+          label={t`Receipt code`}
           value={receiptCode}
           onChange={(e) => setReceiptCode(e.target.value)}
         />
 
         <Button loading={isSubmitting} type="submit">
-          {tl("check_invoice")}
+          <Trans>Check invoice</Trans>
         </Button>
 
         {Object.keys(eInvoiceData).length > 0 && <JsonView value={eInvoiceData} />}
@@ -54,7 +55,7 @@ const ModalCheckEInvoice: FC = () => {
 export const OnModalCheckEInvoice = () => {
   modals.open({
     modalId: "OnModalCheckEInvoice",
-    title: <ModalTitle title={tl("check_invoice")} icon={IconFileInvoice} />,
+    title: <ModalTitle title={t`Check invoice`} icon={IconFileInvoice} />,
     children: <ModalCheckEInvoice />,
   });
 };

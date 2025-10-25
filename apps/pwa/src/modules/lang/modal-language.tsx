@@ -1,8 +1,11 @@
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { Image } from "@/components/image";
 import { useLang } from "@/modules/lang/lang-context";
-import { localeNames, tl } from "@/modules/lang/lang-service";
+import { localeNames } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
+import { useColor } from "@/modules/theme/use-color";
+import { Trans } from "@lingui/react/macro";
 import { Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLanguage, IconWorld } from "@tabler/icons-react";
@@ -31,7 +34,7 @@ export const ModalLang: FC = () => {
           </ThemeIcon>
 
           <Title ta="center" fz={em(18)} fw={500} c={color("primary")}>
-            {tl("select_language")}
+            <Trans>Select language</Trans>
           </Title>
         </Group>
 
@@ -69,7 +72,7 @@ export const ModalLang: FC = () => {
               <IconLanguage strokeWidth={1.5} size={30} />
             </ThemeIcon>
             <Text fz={em(15)} fw={500}>
-              {tl("use_device_language")}
+              <Trans>Use device language</Trans>
             </Text>
           </Group>
         </Card>

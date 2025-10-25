@@ -3,7 +3,8 @@
 import { List } from "@/components/list";
 import { NumberColumn } from "@/components/list/columns/number-column";
 import { EventType } from "@/modules/events/event-types";
-import { num, tl, tMulti } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
@@ -18,7 +19,7 @@ export const ProductComboSetup: FC = () => {
       <List<ProductEntity>
         id="cbsetup"
         icon={IconSettings}
-        name={tMulti(["list"], ["combos"])}
+        name={t`List combos`}
         route="/products"
         params={{ type: ProductType.COMBO }}
         creatable={{
@@ -29,7 +30,7 @@ export const ProductComboSetup: FC = () => {
           name: {},
           unit: {},
           combos: {
-            name: `${tl("products")}/${tl("services")}`,
+            name: `${t`Products`}/${t`Services`}`,
             render: ({ value }) => {
               if (!value) return null;
 
@@ -52,12 +53,12 @@ export const ProductComboSetup: FC = () => {
               );
             },
           },
-          price: NumberColumn({ type: "money", name: tl("price"), sortable: true }),
+          price: NumberColumn({ type: "money", name: t`Price`, sortable: true }),
         }}
         card={(props) => <ProductCard product={props.data} />}
         actions={[
           {
-            label: "edit",
+            label: t`Edit`,
             icon: IconEditCircle,
             onClick: (data) => OnProductModal({ type: data.type, product: data }),
           },

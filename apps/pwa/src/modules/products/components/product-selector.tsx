@@ -3,11 +3,11 @@
 import { Button } from "@/components/buttons/button";
 import { EntityImage } from "@/components/entity-image";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
-import { tl } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
+import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
@@ -39,9 +39,6 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
           return res;
         })
       }
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(product) => {
         const Icon = getProductIcon(product.type);
 
@@ -75,7 +72,7 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
             fw={500}
             onClick={toggle}
           >
-            {tl("add")}
+            <Trans>Add</Trans>
           </Button>
         );
       }}

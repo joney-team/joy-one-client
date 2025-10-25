@@ -1,5 +1,6 @@
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 import {
   IMAGE_MIME_TYPE,
   MS_EXCEL_MIME_TYPE,
@@ -18,7 +19,6 @@ import {
 } from "@tabler/icons-react";
 import imageCompression, { Options } from "browser-image-compression";
 import { apiTools } from "../apis";
-import { tl } from "../lang/lang-service";
 import { FileEntity, FileType, UploadFile } from "./file-types";
 import { parseFile } from "./files-utils";
 
@@ -111,7 +111,7 @@ export async function onUploadFiles(
   onUploaded?: (files: FileEntity[]) => Promise<void> | void
 ) {
   return onActionLoad<FileEntity[]>({
-    name: tl("upload_files"),
+    name: t`Upload files`,
     icon: IconUpload,
     process: async () => {
       let _files: FileEntity[] = [];
@@ -132,7 +132,7 @@ export async function onUploadFile(
   onUploaded?: (file: FileEntity) => Promise<void> | void
 ) {
   return onActionLoad<FileEntity>({
-    name: tl("upload_files"),
+    name: t`Upload file`,
     icon: IconUpload,
     process: async () => {
       const res = await uploadFile(file);

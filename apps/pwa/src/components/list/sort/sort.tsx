@@ -1,13 +1,13 @@
+import { useLayout } from "@/layout/layout-context";
+import { useColor } from "@/modules/theme/use-color";
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, Menu, Text } from "@mantine/core";
 import { IconArrowDown, IconArrowsDownUp, IconArrowUp } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { ActionButton } from "../components/action-button";
 import { ListContext } from "../types";
-import { getSortQueryKey, getColumnLabel } from "../utils";
-import { useColor } from "@/modules/theme/use-color";
-import { useLayout } from "@/layout/layout-context";
-import { tl } from "@/modules/lang/lang-service";
+import { getColumnLabel, getSortQueryKey } from "../utils";
 
 export const Sort: FC<ListContext> = (props) => {
   const { columns, list, columnSettings } = props;
@@ -30,7 +30,7 @@ export const Sort: FC<ListContext> = (props) => {
         <Group>
           <ActionButton
             icon={IconArrowsDownUp}
-            label={layout.view === "mobile" ? null : tl("sort")}
+            label={layout.view === "mobile" ? null : t`Sort`}
             quantity={sorting.length}
             onClear={sorting.length > 0 ? onReset : undefined}
             active={sorting.length > 0}
@@ -53,7 +53,7 @@ export const Sort: FC<ListContext> = (props) => {
             <Fragment key={columnSetting.id}>
               <Group justify="space-between" gap={8} py={8} px={4}>
                 <Text flex={1} pl={4} fz={14}>
-                  {tl(getColumnLabel(columnSetting.id, column))}
+                  {getColumnLabel(columnSetting.id, column)}
                 </Text>
 
                 <Group gap={2}>

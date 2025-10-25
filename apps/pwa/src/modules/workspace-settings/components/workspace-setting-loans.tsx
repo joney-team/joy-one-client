@@ -1,9 +1,12 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
-import { OnModalLoanPackageForm } from "@/modules/loans/modals/modal-loan-package-form";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
+import { loanAssetTypes, loanPackageTypes } from "@/modules/loans/loans-constants";
 import { loanPackageTypeColors, renderLoanPeriod } from "@/modules/loans/loans-service";
+import { OnModalLoanPackageForm } from "@/modules/loans/modals/modal-loan-package-form";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
 import { Anchor, Badge, Card, Group, SimpleGrid, Stack, Text, TextProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -30,36 +33,33 @@ export const WorkspacetSettingLoans: FC = () => {
                   <Anchor fw={600}>{pkg.id}</Anchor>
 
                   <RowInfo
-                    label="Tài sản"
-                    value={pkg.assetTypes
-                      .map((v) =>
-                        String.capitalizeFirstLetter(
-                          `${tl(`loan_asset_type_${v}`)}`.replace("Đăng ký", "").trim()
-                        )
-                      )
-                      .join(", ")}
+                    label={t`Asset types`}
+                    value={pkg.assetTypes.map((v) => loanAssetTypes[v].label()).join(", ")}
                   />
 
                   <RowInfo
-                    label="Loại"
+                    label={t`Loan package type`}
                     value={
                       <Badge color={loanPackageTypeColors[pkg.type]}>
-                        {tl(`loan_package_${pkg.type}`)}
+                        {loanPackageTypes[pkg.type].label()}
                       </Badge>
                     }
                   />
 
-                  <RowInfo label="Hạn vay" value={`${num(totalMonth)} tháng`} />
-                  <RowInfo label="Phí (CPV)" value={num(pkg.contractFee, { type: "money" })} />
+                  <RowInfo label={t`Loan period`} value={t`${num(totalMonth)} months`} />
+                  <RowInfo
+                    label={t`Contract fee`}
+                    value={num(pkg.contractFee, { type: "money" })}
+                  />
 
                   <RowInfo
-                    label="Kỳ thanh toán"
+                    label={t`Payment period`}
                     value={pkg.periodDaysOptions.map((v) => renderLoanPeriod(v)).join(", ")}
                   />
 
                   <RowInfo
-                    label="Phí tất toán"
-                    value={pkg.liquidationFeeRate ? `${num(pkg.liquidationFeeRate)}%` : "Không có"}
+                    label={t`Liquidation fee rate`}
+                    value={pkg.liquidationFeeRate ? `${num(pkg.liquidationFeeRate)}%` : t`No`}
                   />
                 </Stack>
               </Stack>
@@ -69,7 +69,7 @@ export const WorkspacetSettingLoans: FC = () => {
 
         <Group>
           <Button onClick={() => OnModalLoanPackageForm({})} variant="subtle" leftIcon={IconPlus}>
-            Thêm gói vay
+            {t`Add loan package`}
           </Button>
         </Group>
       </SimpleGrid>

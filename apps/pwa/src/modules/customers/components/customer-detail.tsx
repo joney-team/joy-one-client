@@ -32,10 +32,11 @@ import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
 import { CustomerKyc } from "@/modules/customers/components/customer-kyc-list";
-import { tl } from "@/modules/lang/lang-service";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 
 export const CustomerDetail = () => {
   const workspace = useWorkspace();
@@ -71,7 +72,7 @@ export const CustomerDetail = () => {
                 onClick={() => OnModalCreateBooking({ customer })}
                 size="xs"
               >
-                {tl("booking")}
+                <Trans>Booking</Trans>
               </Button>
             )}
 
@@ -81,7 +82,7 @@ export const CustomerDetail = () => {
               onClick={() => OnModalCreateTask({ customer })}
               size="xs"
             >
-              {tl("task")}
+              <Trans>Task</Trans>
             </Button>
           </Fragment>
         ),
@@ -105,7 +106,7 @@ export const CustomerDetail = () => {
     );
 
   if (detail.error || !customer) return <Errored error={detail.error} />;
-  if (customer.isArchived) return <Archived entity="customer" />;
+  if (customer.isArchived) return <Archived entity={t`customer`} />;
 
   return (
     <Fragment>
@@ -114,7 +115,7 @@ export const CustomerDetail = () => {
 
         <Renderer visible={workspace.isModuleActive("customerKYCs")}>
           <Stack gap={10}>
-            <SessionTitle name={tl("customerKYCs")} icon={IconUserScan} />
+            <SessionTitle name="KYC" icon={IconUserScan} />
             <CustomerKyc customer={customer} />
           </Stack>
         </Renderer>
@@ -128,7 +129,7 @@ export const CustomerDetail = () => {
         </Renderer>
 
         <Stack gap={10}>
-          <SessionTitle name={tl("imgs_docs")} icon={IconFiles} />
+          <SessionTitle name={t`Images & Documents`} icon={IconFiles} />
 
           <FilesBox
             query={{ relatedCustomerId: customer._id }}
@@ -140,7 +141,7 @@ export const CustomerDetail = () => {
         <EventList ref={customer._id} />
 
         <ButtonArchive
-          name="customer"
+          name={t`customer`}
           enabled={
             !customer.isArchived && workspace.hasPermission(WorkspacePermission.CUSTOMERS_ARCHIVE)
           }

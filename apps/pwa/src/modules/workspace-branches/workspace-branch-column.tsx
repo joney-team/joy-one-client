@@ -4,17 +4,17 @@ import { Hovered } from "@/components/hovered";
 import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-selector-filter";
 import { Column } from "@/components/list/types";
 import { AppEntity } from "@/types";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, Text, Tooltip } from "@mantine/core";
 import { IconBuildingSkyscraper, IconFileExport } from "@tabler/icons-react";
-import { tl } from "../lang/lang-service";
 import { searchEntity } from "../search/search-service";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
-import { getWorkspaceBranchByIds } from "./workspace-branches-service";
 import {
   OnModalUpdateWorkspaceBranch,
   permissionRequireds,
 } from "./modals/modal-update-workspace-branch";
+import { getWorkspaceBranchByIds } from "./workspace-branches-service";
 
 type WorkspaceBranchColumnData = any;
 
@@ -30,7 +30,7 @@ export const WorkspaceBranchColumn = (
   const permissionRequired = permissionRequireds[args.entity];
   const isEditable = permissionRequired && workspace.hasPermission(permissionRequired);
 
-  const rootOption = { label: tl("main_workspace_branch"), value: "root", data: null };
+  const rootOption = { label: t`Main office`, value: "root", data: null };
 
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
     return [...options.map((v) => ({ label: v.label, value: v.value, data: v.data })), rootOption];
@@ -42,9 +42,7 @@ export const WorkspaceBranchColumn = (
     name: "branch",
     render: ({ data }) => {
       const id = data.id || data._id;
-      const branchName = data.workspaceBranch
-        ? data.workspaceBranch.name
-        : tl("main_workspace_branch");
+      const branchName = data.workspaceBranch ? data.workspaceBranch.name : t`Main office`;
 
       return (
         <Hovered disabled={!isEditable}>
@@ -77,7 +75,7 @@ export const WorkspaceBranchColumn = (
       );
     },
     exportToExcel: (_, loan) => {
-      if (!loan.workspaceBranch) return tl("main_workspace_branch");
+      if (!loan.workspaceBranch) return t`Main office`;
       return loan.workspaceBranch.name;
     },
     disabled: !workspace.isShouldEnableBranches,

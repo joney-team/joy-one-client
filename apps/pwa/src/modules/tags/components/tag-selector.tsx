@@ -3,12 +3,12 @@
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { Selector, SelectorProps } from "@/components/selector";
-import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { interactTag } from "@/modules/tags/tags-service";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { AppEntity } from "@/types";
+import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -32,9 +32,6 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
       listParams={{ type: props.type }}
       autoCloseOnChange={false}
       onSearch={(q) => searchEntity<TagEntity>(AppEntity.TAGS, q, { type: props.type })}
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(tag) => {
         return (
           <Combobox.Option value={tag._id} key={tag._id}>
@@ -60,7 +57,7 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
             fw={500}
             onClick={toggle}
           >
-            {tl("select")}
+            <Trans>Select</Trans>
           </Button>
         );
       }}

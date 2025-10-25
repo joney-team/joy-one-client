@@ -1,11 +1,14 @@
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { Avatar } from "@/components/avatar";
-import { Container } from "@/components/container";
 import { Button } from "@/components/buttons/button";
+import { Container } from "@/components/container";
 import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
-import { tl } from "@/modules/lang/lang-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { IconAi, IconCirclesRelation, IconLinkPlus, IconPencil } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -29,10 +32,15 @@ export const AiAssistantList: FC = () => {
             </Group>
 
             <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-              {tl("connect")} <strong>{tl("ai_assistant")}</strong>
+              <Trans>
+                Connect <strong>{t`AI Assistant`}</strong>
+              </Trans>
             </Title>
 
-            <Text ta="center">{tl("ai_assistant_desc")}</Text>
+            <Text ta="center">
+              • <Trans>Automatically reply to customer messages</Trans> <br />•{" "}
+              <Trans>Integrate with LLM models</Trans>
+            </Text>
 
             <Button
               mt={10}
@@ -40,7 +48,7 @@ export const AiAssistantList: FC = () => {
               onClick={() => OnModalCreatePluginAiAssistant()}
               leftIcon={IconLinkPlus}
             >
-              {tl("connect")}
+              <Trans>Connect</Trans>
             </Button>
           </Stack>
         </Card>
@@ -62,7 +70,7 @@ export const AiAssistantList: FC = () => {
                 <Stack gap={3} flex={1}>
                   <Text fw={600}>{plugin.providerName}</Text>
                   <Text c="gray" fz={12}>
-                    {tl("provider")}: {tl(`ai_assistant_${plugin.provider}`)}
+                    <Trans>Provider</Trans>: {t`AI Assistant ${plugin.provider}`}
                   </Text>
                 </Stack>
 

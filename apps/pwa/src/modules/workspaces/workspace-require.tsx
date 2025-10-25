@@ -7,14 +7,14 @@ import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { uploadFile } from "@/modules/files/file-service";
 import { useLang } from "@/modules/lang/lang-context";
-import { tl } from "@/modules/lang/lang-service";
 import { LocationEntity } from "@/modules/locations/locations-types";
 import { WorkspaceTypeItem } from "@/modules/workspaces/components/workpsace-type-item";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getWorkspaceTypeIcon } from "@/modules/workspaces/workspaces-service";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Card,
@@ -38,6 +38,7 @@ import { ChangeEventHandler, FC, useEffect, useState } from "react";
 import { useApp } from "../../app.context";
 import { api } from "../apis";
 import { getUserMemberRoleLabel } from "../workspace-members/workspace-members-service";
+import { workspaceTypes } from "./workspace-constants";
 
 export const WorkspaceRequire: FC = () => {
   const workspace = useWorkspace();
@@ -87,16 +88,19 @@ export const WorkspaceRequire: FC = () => {
 
           {member ? (
             <Text ta="center" fz={em(15)} fw={500}>
-              {tl("preparing_workspace_msg")}
+              <Trans>Preparing everything for you. Please wait for a moment</Trans>.
             </Text>
           ) : (
             <Text ta="center" fz={em(15)} fw={500}>
-              {tl("guest_user_msg", { workspace: app.metadata.appName || "Workspace" })}
+              <Trans>
+                You are not a member of {app.metadata.appName || "Workspace"}. Please contact the
+                administrator for support
+              </Trans>
             </Text>
           )}
 
           <Button mt={5} variant="transparent" color="gray" onClick={() => auth.signOut()} fz={11}>
-            {tl("use_another_account")}
+            <Trans>Use another account</Trans>
           </Button>
         </Stack>
       </Container>
@@ -113,7 +117,7 @@ export const WorkspaceRequire: FC = () => {
         <Stack mih={layout.height} align="center" justify="center" gap={30} py={16}>
           <Image src="/images/workspace.png" w="100%" />
           <Title fw={500} fz={30}>
-            {tl("new_workspace")}
+            <Trans>New workspace</Trans>
           </Title>
 
           <Button
@@ -123,16 +127,18 @@ export const WorkspaceRequire: FC = () => {
             radius={100}
             size="lg"
           >
-            {tl("start_now")}
+            <Trans>Start now</Trans>
           </Button>
 
-          <Divider label={tl("or")} w="80%" />
+          <Divider label={t`Or`} w="80%" />
 
-          <Text ta="center">{tl("join_workspace", { email: auth.user?.email })}</Text>
+          <Text ta="center">
+            <Trans>Join workspace</Trans> {auth.user?.email}
+          </Text>
 
           <Center>
             <Anchor onClick={() => auth.signOut()} fz={11} fw={700} c="gray">
-              {tl("logout")}
+              <Trans>Logout</Trans>
             </Anchor>
           </Center>
         </Stack>
@@ -144,14 +150,18 @@ export const WorkspaceRequire: FC = () => {
       <Stack mih={layout.height} py={16} justify="center">
         <Stack gap={5}>
           <Title ta="center" fw={500} fz={30}>
-            {tl("select")} Workspace
+            <Trans>Select</Trans> Workspace
           </Title>
           <Text ta="center" fz="xs" c="gray">
-            {tl("company")} / {tl("company_branch")}
+            <Trans>Company</Trans> / <Trans>Company branch</Trans>
           </Text>
 
           <Stack mt={30}>
-            {availabelUserMembers.length === 0 && <Text>{tl("not_have_workspace_msg")}</Text>}
+            {availabelUserMembers.length === 0 && (
+              <Text>
+                <Trans>You don't have any workspace</Trans>
+              </Text>
+            )}
 
             {availabelUserMembers.map((userMember) => {
               if (!userMember.workspaceId) return null;
@@ -205,12 +215,12 @@ export const WorkspaceRequire: FC = () => {
                 leftSection={<IconPlus strokeWidth={1.2} />}
                 type="submit"
               >
-                {tl("create_new_workspace")}
+                <Trans>Create new workspace</Trans>
               </Button>
             </Center>
 
             <Anchor ta="center" onClick={() => auth.signOut()} fz={11} fw={700} c="gray">
-              {tl("logout")}
+              <Trans>Logout</Trans>
             </Anchor>
           </Stack>
         </Stack>
@@ -241,14 +251,14 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
     },
     validate: {
       name: (value: string) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
       code: (value: string) => {
-        if (!value) return tl("required");
-        if (!/^[A-Z0-9]+$/.test(value)) return tl("invalid_workspace_code");
+        if (!value) return t`Must be provided`;
+        if (!/^[A-Z0-9]+$/.test(value)) return t`Invalid workspace code`;
       },
       type: (value: WorkspaceType) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -289,10 +299,10 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
 
       <Stack gap={3}>
         <Title ta="center" fw={500} fz={30}>
-          {tl("create")} Workspace
+          {t`Create`} Workspace
         </Title>
         <Text ta="center" fz="xs" c="gray">
-          {tl("company")} / {tl("company_branch")}
+          {t`Company`} / {t`Company branch`}
         </Text>
       </Stack>
 
@@ -300,7 +310,7 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
         <Group align="start">
           <TextInput
             flex={1}
-            label={tl("name")}
+            label={t`Name`}
             placeholder="Gold Dental"
             {...form.getInputProps("name")}
             onChange={onChangeName}
@@ -309,9 +319,11 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
           <TextInput
             label={
               <Group gap={5}>
-                {tl("code")}
+                {t`Code`}
 
-                <Tooltip label={tl("workspace_code_explain")}>
+                <Tooltip
+                  label={t`The Workspace code is unique and used to quickly identify the Workspace and data related to the Workspace`}
+                >
                   <IconInfoCircle size={16} strokeWidth={1.5} />
                 </Tooltip>
               </Group>
@@ -337,8 +349,8 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
         </Group>
 
         <InputWrapper
-          label={tl("workspace_type")}
-          description={tl("workspace_type_desc")}
+          label={t`Workspace type`}
+          description={t`For each type of Workspace, Joy One will arrange the interface and features to fit. But you can customize them in Settings Menu`}
           {...form.getInputProps("type")}
         >
           <Group pt={10} className="unselectable">
@@ -346,8 +358,8 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
               return (
                 <WorkspaceTypeItem
                   key={type}
-                  icon={getWorkspaceTypeIcon(type)}
-                  label={tl(`ws_${type}`).toString()}
+                  icon={workspaceTypes[type].icon}
+                  label={workspaceTypes[type].name()}
                   isActive={form.values.type === type}
                   onClick={() => form.setFieldValue("type", type)}
                 />
@@ -359,11 +371,11 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
 
       <Stack align="center" mt={16}>
         <Button onClick={onSubmit} loading={isSubmitting} action leftIcon={IconCheck} radius={100}>
-          {tl("complete")}
+          <Trans>Complete</Trans>
         </Button>
 
         <Anchor onClick={props.onDone} fz={11} fw={700} c="gray">
-          {tl("exit")}
+          <Trans>Exit</Trans>
         </Anchor>
       </Stack>
     </Stack>

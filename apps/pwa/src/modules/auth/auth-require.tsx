@@ -10,10 +10,10 @@ import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useColor } from "@/modules/theme/use-color";
+import { Trans } from "@lingui/react/macro";
 import { Card, Divider, em, Group, ScrollArea, Stack, Text, Title } from "@mantine/core";
 import { FC, Fragment, useEffect, useState } from "react";
 import { useApp } from "../../app.context";
-import { tl } from "@/modules/lang/lang-service";
 import { FormForgotPassword } from "./components/form-forgot-password";
 import { FormRegister } from "./components/form-register";
 import { FormSignIn } from "./components/form-sign-in";
@@ -92,11 +92,13 @@ export const AuthRequire: FC = () => {
                   return (
                     <Group gap={8}>
                       <Renderer views={["desktop", "tablet"]}>
-                        <Text fz={em(14)}>{tl("you_not_have_account")}</Text>
+                        <Text fz={em(14)}>
+                          <Trans>You don't have an account?</Trans>
+                        </Text>
                       </Renderer>
 
                       <Button size="xs" onClick={() => setAuthType("register")}>
-                        {tl("register")}
+                        <Trans>Register</Trans>
                       </Button>
                     </Group>
                   );
@@ -105,11 +107,13 @@ export const AuthRequire: FC = () => {
                   return (
                     <Group gap={8}>
                       <Renderer views={["desktop", "tablet"]}>
-                        <Text fz={em(14)}>{tl("you_have_account")}</Text>
+                        <Text fz={em(14)}>
+                          <Trans>You have an account?</Trans>
+                        </Text>
                       </Renderer>
 
                       <Button size="xs" onClick={() => setAuthType("signin")}>
-                        {tl("login")}
+                        <Trans>Login</Trans>
                       </Button>
                     </Group>
                   );
@@ -117,11 +121,13 @@ export const AuthRequire: FC = () => {
                 return (
                   <Group gap={8}>
                     <Renderer views={["desktop", "tablet"]}>
-                      <Text fz={em(14)}>{tl("back_to_login")}</Text>
+                      <Text fz={em(14)}>
+                        <Trans>Back to login</Trans>
+                      </Text>
                     </Renderer>
 
                     <Button size="xs" onClick={() => setAuthType("signin")}>
-                      {tl("login")}
+                      <Trans>Login</Trans>
                     </Button>
                   </Group>
                 );
@@ -155,9 +161,9 @@ export const AuthRequire: FC = () => {
                   c="var(--mantine-color-bright)"
                 >
                   {(function () {
-                    if (authType === "forgot-password") return `${tl("forgot_password")}?`;
-                    if (authType === "signin") return tl("hello");
-                    return tl("register_new_account");
+                    if (authType === "forgot-password") return <Trans>Forgot password?</Trans>;
+                    if (authType === "signin") return <Trans>Hello!</Trans>;
+                    return <Trans>Register new account</Trans>;
                   })()}
                 </Title>
 
@@ -173,7 +179,7 @@ export const AuthRequire: FC = () => {
                         <FormRegister />
                       )}
 
-                      <Divider label={tl("or")} labelPosition="center" />
+                      <Divider label={<Trans>Or</Trans>} labelPosition="center" />
 
                       {authProviders.map((authProvider) => {
                         return (
@@ -189,7 +195,7 @@ export const AuthRequire: FC = () => {
                               borderColor: color({ light: "gray.3", dark: "gray.7" }),
                             }}
                           >
-                            {tl("continue_with")} {authProvider.name}
+                            <Trans>Continue with</Trans> {authProvider.name}
                           </Button>
                         );
                       })}

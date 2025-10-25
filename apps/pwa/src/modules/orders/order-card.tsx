@@ -1,18 +1,15 @@
 "use client";
 
 import { OnModalPrinter } from "@/modals/modal-printer";
-import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
+import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
-import {
-  onPayOrder,
-  orderPaymentStatusOptions,
-  updateOrder,
-} from "@/modules/orders/orders-service";
+import { onPayOrder, updateOrder } from "@/modules/orders/orders-service";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 import { Anchor, Card, CardProps, Group, Stack, Table, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCashRegister, IconEdit, IconPrinter } from "@tabler/icons-react";
@@ -24,6 +21,7 @@ import { Renderer } from "../../components/renderer";
 import { CustomerInput } from "../customers/components/customer-input";
 import { WorkspaceMemberInput } from "../workspace-members/components/workspace-member-input";
 import { WorkspaceMembersInput } from "../workspace-members/components/workspace-members-input";
+import { orderPaymentStatuses } from "./orders-constants";
 import {
   normalizeEntityToOrder,
   normalizeOrderForSubmission,
@@ -78,12 +76,12 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                 <Card px={8} py={3} withBorder shadow="none" bg="transparent">
                   <Group gap={8}>
                     <Circle
-                      color={color(orderPaymentStatusOptions[order.paymentStatus].color)}
+                      color={color(orderPaymentStatuses[order.paymentStatus].color)}
                       size={10}
                     />
 
                     <Text fz={14} fw={500}>
-                      {tl(`order_payment_status_${order.paymentStatus}`)}
+                      {orderPaymentStatuses[order.paymentStatus].label()}
                     </Text>
                   </Group>
                 </Card>
@@ -92,7 +90,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
               <Group align="start">
                 <Renderer visible={!props.hideCustomer}>
                   <CustomerInput
-                    label={tl("customer")}
+                    label={t`Customer`}
                     disabled={!isAbleToEdit}
                     value={order.relatedCustomer}
                     clearable
@@ -106,7 +104,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                 </Renderer>
 
                 <WorkspaceMemberInput
-                  label={tl("main_assignee")}
+                  label={t`Main assignee`}
                   value={order.assigneeUsers?.[0]}
                   disabled={!isAbleToEdit}
                   clearable
@@ -169,7 +167,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
               <Table.Tr>
                 <Table.Td colSpan={2} ta="right">
-                  {tl("subtotal")}
+                  {t`Subtotal`}
                 </Table.Td>
                 <Table.Td ta="right">
                   {num(
@@ -181,7 +179,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
               <Table.Tr>
                 <Table.Td colSpan={2} ta="right">
-                  {tl("discount")}
+                  {t`Discount`}
                 </Table.Td>
                 <Table.Td ta="right">
                   {num(
@@ -193,7 +191,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
               <Table.Tr>
                 <Table.Td colSpan={2} ta="right" fw={600}>
-                  {tl("total")}
+                  {t`Total`}
                 </Table.Td>
                 <Table.Td ta="right" fw={600}>
                   {num(order.totalAmount, { type: "money" })}
@@ -207,7 +205,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
           <Group>
             {order.paymentStatus === OrderPaymentStatus.PROCESSING && (
               <Button leftIcon={IconCashRegister} onClick={() => onPayOrder(order)}>
-                {tl("pay")}
+                {t`Pay`}
               </Button>
             )}
 
@@ -216,7 +214,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
               onClick={() => OnModalPrinter({ order, customer: order.relatedCustomer })}
               variant="outline"
             >
-              {tl("print")}
+              {t`Print`}
             </Button>
           </Group>
 
@@ -230,7 +228,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
               color="gray"
               fw={400}
             >
-              {tl("edit")}
+              {t`Edit`}
             </Button>
           </Group>
         </Stack>

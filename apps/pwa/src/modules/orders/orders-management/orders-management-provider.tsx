@@ -4,12 +4,12 @@ import { useRouter } from "@/hooks/use-router";
 import { useQuery } from "@/modules/apis/use-query";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { tl, tMulti } from "@/modules/lang/lang-service";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
 import { ResponseList } from "@/types";
 import { onArchive } from "@/utils/actions";
 import { timeToSeconds } from "@joy-one-client/utils/date-time.legacy";
+import { t } from "@lingui/core/macro";
 import { readLocalStorageValue, useLocalStorage, UseStorageOptions } from "@mantine/hooks";
 import { useSearchParams } from "next/navigation";
 import { PropsWithChildren, useEffect, useMemo, useState, type FC } from "react";
@@ -145,7 +145,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     if (!activeOrder) return;
 
     onArchive({
-      name: activeOrder.code ? tMulti(["order"], [`#${activeOrder.code}`]) : tl("order"),
+      name: activeOrder.code ? `${t`Order`} #${activeOrder.code}` : t`Order`,
       process: () => {
         if (!activeOrder.isSaved) return Promise.resolve();
         return archiveOrder(activeOrder.id);

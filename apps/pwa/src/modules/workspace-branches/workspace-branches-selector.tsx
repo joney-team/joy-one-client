@@ -1,8 +1,10 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
-import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { AppEntity } from "@/types";
+import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -18,9 +20,6 @@ export const WorkspaceBranchesSelector: FC<WorkspaceBranchesSelectorProps> = (pr
       {...props}
       onSearch={(q) => searchEntity(AppEntity.WORKSPACE_BRANCHES, q)}
       listRoute="/workspace-branches"
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(item) => {
         return (
           <Combobox.Option value={item._id} key={item._id}>
@@ -48,7 +47,7 @@ export const WorkspaceBranchesSelector: FC<WorkspaceBranchesSelectorProps> = (pr
             fw={500}
             onClick={toggle}
           >
-            {tl("select")}
+            <Trans>Select</Trans>
           </Button>
         );
       }}

@@ -2,16 +2,18 @@
 
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
+import { useList } from "@/components/list/use-list";
 import { ModalTitle } from "@/components/modal-title";
 import { WayPoint } from "@/components/way-point";
 import { configs } from "@/configs/layout.config";
 import { useLayout } from "@/layout/layout-context";
-import { InternalFileCard } from "@/modules/files/internal-file-card";
 import { FileEntity, FileType } from "@/modules/files/file-types";
+import { InternalFileCard } from "@/modules/files/internal-file-card";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Box, Card, em, Group, Modal, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { useDisclosure } from "@mantine/hooks";
@@ -85,7 +87,7 @@ export const ModalFiles: FC = () => {
       zIndex={300}
       opened={opened}
       onClose={close}
-      title={<ModalTitle title={tl("files")} icon={IconPhotoSquareRounded} />}
+      title={<ModalTitle title={t`Files`} icon={IconPhotoSquareRounded} />}
       fullScreen={viewport.view === "mobile"}
     >
       <Stack>
@@ -147,7 +149,9 @@ export const ModalFiles: FC = () => {
                 <ThemeIcon variant="transparent" color="dark">
                   <IconUpload strokeWidth={1.5} />
                 </ThemeIcon>
-                <Text fz={em(13)}>{tl("drop_file_here_or_click")}</Text>
+                <Text fz={em(13)}>
+                  <Trans>Drop or click to choose file</Trans>
+                </Text>
               </Group>
             </Card>
           </Dropzone>
@@ -161,7 +165,7 @@ export const ModalFiles: FC = () => {
             leftIcon={IconCheck}
           >
             <Group>
-              {tl("complete")}
+              <Trans>Complete</Trans>
               {selectedFiles.length > 0 && (
                 <Circle color="white" c="primary" label={num(selectedFiles.length)} />
               )}

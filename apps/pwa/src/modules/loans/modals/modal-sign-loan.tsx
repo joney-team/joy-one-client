@@ -4,11 +4,12 @@ import { Button } from "@/components/buttons/button";
 import { SignatureInput } from "@/components/inputs/signature-input";
 import { ModalTitle } from "@/components/modal-title";
 import { onUploadFile } from "@/modules/files/file-service";
-import { tl } from "@/modules/lang/lang-service";
 import { signLoan } from "@/modules/loans/loans-service";
 import { LoanEntity } from "@/modules/loans/loans-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Center, Modal, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCreditCardPay } from "@tabler/icons-react";
@@ -47,7 +48,7 @@ export const ModalSignLoan: FC = () => {
     <Modal
       title={
         <ModalTitle
-          title={`Ký khoản vay #${renderEntityCode(props?.loan.code)}`}
+          title={t`Sign loan #${renderEntityCode(props?.loan.code)}`}
           icon={IconCreditCardPay}
         />
       }
@@ -60,7 +61,7 @@ export const ModalSignLoan: FC = () => {
 
         <Center>
           <Button disabled={!signature} onClick={onSubmit}>
-            {tl("sign_contract")}
+            <Trans>Sign contract</Trans>
           </Button>
         </Center>
       </Stack>

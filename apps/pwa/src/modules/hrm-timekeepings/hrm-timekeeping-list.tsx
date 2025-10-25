@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ButtonSelect } from "@/components/buttons/button-select";
@@ -13,12 +15,13 @@ import {
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-calendar";
 import { HrmTimekeepingsSummary } from "@/modules/hrm-timekeepings/hrm-timekeepings-summary";
 import { OnModalListTimekeepings } from "@/modules/hrm-timekeepings/modals/modal-timekeeping-list";
-import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Card,
   Center,
@@ -113,14 +116,14 @@ export const HrmTimekeepingList: FC = () => {
             </Center>
 
             <Title tt="capitalize" fw={500} fz={em(25)} c="primary">
-              {tl("time_keeping_setup")}
+              <Trans>Timekeeping setup</Trans>
             </Title>
             <Center>
               <Button
                 rightSection={<IconArrowRight size={18} />}
                 onClick={() => router.push("/WorkspaceSettings/hrm-timekeepings")}
               >
-                {tl("start_now")}
+                <Trans>Start now</Trans>
               </Button>
             </Center>
           </Stack>
@@ -184,7 +187,7 @@ export const HrmTimekeepingList: FC = () => {
                   >
                     <Group gap={5}>
                       <Text fz={12} fw={500}>
-                        {tl("members")}
+                        <Trans>Members</Trans>
                       </Text>
 
                       {!isAssigneesReady ? (
@@ -241,7 +244,7 @@ export const HrmTimekeepingList: FC = () => {
             workspace.hasPermission(WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP) && (
               <ButtonSelect
                 icon={IconClipboardList}
-                label={tl("hrm_timekeepings_approval")}
+                label={t`Approval Timekeeping`}
                 isActive={pendingTimekeepings.count > 0}
                 quantity={pendingTimekeepings.count}
                 activeColor="orange"
@@ -249,7 +252,7 @@ export const HrmTimekeepingList: FC = () => {
                   if (pendingTimekeepings.count <= 0) return;
                   return OnModalListTimekeepings({
                     query: { status: HrmTimekeepingStatus.PENDING },
-                    title: tl("hrm_timekeepings_approval"),
+                    title: t`Approval Timekeeping`,
                   });
                 }}
               />
@@ -283,7 +286,7 @@ export const HrmTimekeepingList: FC = () => {
 
       {timekeepings.isHasData && (
         <Stack gap={8}>
-          <SessionTitle name={tl("total_summary")} icon={IconUsers} />
+          <SessionTitle name={t`Total summary`} icon={IconUsers} />
 
           <HrmTimekeepingsSummary timekeepings={timekeepings.data} />
         </Stack>

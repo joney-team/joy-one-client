@@ -1,12 +1,13 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { num, tl } from "@/modules/lang/lang-service";
+import { InputModalType, OnModalInput } from "@/modals/modal-input";
+import { num } from "@/modules/lang/lang-service";
+import { Trans } from "@lingui/react/macro";
 import { Group, Skeleton, Text } from "@mantine/core";
 import { IconCoin, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
-import { InputModalType, OnModalInput } from "@/modals/modal-input";
 
 export const OrderSaleDiscounts: FC = () => {
   const orderSale = userOrdersManagement();
@@ -32,7 +33,9 @@ export const OrderSaleDiscounts: FC = () => {
   return (
     <Group justify="space-between">
       <Group gap={5}>
-        <Text>{tl("discounts")}</Text>
+        <Text>
+          <Trans>Discount</Trans>
+        </Text>
 
         {directDiscount > 0 ? (
           <Button
@@ -42,7 +45,7 @@ export const OrderSaleDiscounts: FC = () => {
             component="div"
             onClick={onDirectDiscount}
           >
-            {tl("direct")}: {num(directDiscount, { type: "money" })}
+            <Trans>Direct</Trans>: {num(directDiscount, { type: "money" })}
           </Button>
         ) : (
           <Button
@@ -52,7 +55,7 @@ export const OrderSaleDiscounts: FC = () => {
             variant="subtle"
             onClick={onDirectDiscount}
           >
-            {tl("direct_discount")}
+            <Trans>Direct discount</Trans>
           </Button>
         )}
       </Group>

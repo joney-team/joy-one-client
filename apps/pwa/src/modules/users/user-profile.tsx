@@ -10,9 +10,10 @@ import { Container } from "@/components/container";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
-import { tl } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Divider, Group, Space, Stack, Text, ThemeIcon, em, rem } from "@mantine/core";
 import {
   Icon,
@@ -40,7 +41,7 @@ export const Profile: FC = () => {
 
   useEffect(() => {
     layout.setComponents({
-      head: tl("profile"),
+      head: t`Profile`,
     });
   }, []);
 
@@ -79,16 +80,12 @@ export const Profile: FC = () => {
           {workspace.isHrmTimekeepingAvailable && (
             <NavItem
               icon={IconClockCheck}
-              name={tl("hrm_timekeepings_history")}
+              name={t`Timekeeping History`}
               href="/workspace/hrm/user-timekeepings"
             />
           )}
-          <NavItem
-            icon={IconNotification}
-            name={tl("notifications")}
-            href="/profile/notifications"
-          />
-          <NavItem icon={IconShieldLock} name={tl("secure")} href="/profile/secure" />
+          <NavItem icon={IconNotification} name={t`Notifications`} href="/profile/notifications" />
+          <NavItem icon={IconShieldLock} name={t`Secure`} href="/profile/secure" />
         </Stack>
 
         <Space />
@@ -125,15 +122,15 @@ export const Profile: FC = () => {
 
         <Stack gap={10}>
           <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
-            <NavItem icon={IconSettings} name={tl("settings")} href="/workspace-settings" />
+            <NavItem icon={IconSettings} name={t`Settings`} href="/workspace-settings" />
           </Renderer>
 
           <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
-            <NavItem icon={IconLayout} name={tl("modules")} href="/WorkspaceSettings/modules" />
+            <NavItem icon={IconLayout} name={t`Modules`} href="/WorkspaceSettings/modules" />
           </Renderer>
 
           <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
-            <NavItem icon={IconPuzzle} name={tl("plugins")} href="/workspace-settings/plugins" />
+            <NavItem icon={IconPuzzle} name={t`Plugins`} href="/workspace-settings/plugins" />
           </Renderer>
         </Stack>
 
@@ -151,7 +148,7 @@ export const Profile: FC = () => {
               fz={em(14)}
               onClick={() => workspace.leave()}
             >
-              {tl("switch")} workspace
+              {t`Switch`} workspace
             </Button>
           )}
 
@@ -165,7 +162,7 @@ export const Profile: FC = () => {
             fz={em(14)}
             onClick={auth.signOut}
           >
-            {tl("sign_out")}
+            {t`Sign out`}
           </Button>
         </Group>
 
@@ -177,7 +174,7 @@ export const Profile: FC = () => {
               <IconVersions size={20} strokeWidth={1.5} />
             </ThemeIcon>
             <Text ta="center" fz={rem(13)} c="gray">
-              {tl("version")} {app.config.version}
+              <Trans>Version {app.config.version}</Trans>
             </Text>
           </Group>
         </Stack>

@@ -1,11 +1,14 @@
+"use client";
+
+import { EntityImage } from "@/components/entity-image";
 import { getCouponCode } from "@/modules/coupons/coupon-service";
 import { CouponEntity } from "@/modules/coupons/coupon-types";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
+import { Trans } from "@lingui/react/macro";
 import { Card, CardProps, em, Group, Stack, Text } from "@mantine/core";
 import { IconTicket } from "@tabler/icons-react";
 import { FC } from "react";
 import { CouponBenefits } from "./coupon-benefits";
-import { EntityImage } from "@/components/entity-image";
 
 interface CouponCardProps {
   coupon: CouponEntity;
@@ -28,17 +31,17 @@ export const CouponCard: FC<CouponCardProps> = (props) => {
 
           {!props.hideQuantity && (
             <Text fw={500} fz={em(13)} c="gray">
-              • {tl("quantity")}: {num(coupon.quantity)}
+              • <Trans>Quantity</Trans>: {num(coupon.quantity)}
             </Text>
           )}
           {!props.hideCode && (
             <Text fw={500} fz={em(13)} c="gray">
-              • {tl("code")}: {getCouponCode(coupon) || "--"}
+              • <Trans>Code</Trans>: {getCouponCode(coupon) || "--"}
             </Text>
           )}
           {!props.hideCustomer && !!coupon.customer && (
             <Text fw={500} fz={em(13)} c="gray">
-              • {tl("customer")}: {coupon.customer?.name || "--"}
+              • <Trans>Customer</Trans>: {coupon.customer?.name || "--"}
             </Text>
           )}
 

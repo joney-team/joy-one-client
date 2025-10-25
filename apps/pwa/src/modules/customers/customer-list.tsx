@@ -1,22 +1,23 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
+import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { EnumColumn } from "@/components/list/columns/enum-column";
+import { genders } from "@/constant";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity, Gender } from "@/types";
 import { Stack } from "@mantine/core";
 import { IconGenderBigender, IconMail, IconPhone, IconUserSquare } from "@tabler/icons-react";
 import { type FC } from "react";
 import { WorkspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
-import { customerGenderOptions } from "./customer-service";
-import { CustomerEntity } from "./customer-types";
 import { useWorkspace } from "../workspaces/workspace-context";
-import { Clickable } from "@/components/clickable";
+import { CustomerEntity } from "./customer-types";
 
 export const CustomerList: FC = () => {
   const workspace = useWorkspace();
@@ -40,10 +41,10 @@ export const CustomerList: FC = () => {
           gender: EnumColumn({
             icon: IconGenderBigender,
             options: Object.values(Gender).map((gender) => ({
-              label: tl(`gender_${gender}`),
+              label: genders[gender].name(),
               value: gender,
-              color: customerGenderOptions[gender].color,
-              icon: customerGenderOptions[gender].icon,
+              color: genders[gender].color,
+              icon: genders[gender].icon,
             })),
           }),
           name: {

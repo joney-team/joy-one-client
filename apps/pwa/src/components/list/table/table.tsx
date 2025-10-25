@@ -2,15 +2,14 @@
 
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { BaseData } from "@/components/list/types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ActionIcon, Checkbox, Group, Loader, Menu, Table, Text } from "@mantine/core";
 import { IconDotsVertical } from "@tabler/icons-react";
+import Link from "next/link";
 import { ListContext } from "../types";
 import { getIn, getListDataId, getValuePath } from "../utils";
 import { ListTableHead } from "./table-head";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { tl } from "@/modules/lang/lang-service";
-import { BaseData } from "@/components/list/types";
-import Link from "next/link";
 
 export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
   const actions = ctx.actions || [];
@@ -117,7 +116,7 @@ export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
                               leftSection={<action.icon size={16} />}
                               disabled={isDisabled}
                             >
-                              {tl(action.label)}
+                              {action.label}
                             </Menu.Item>
                           );
 
@@ -129,7 +128,7 @@ export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
                               href={action.href(item)}
                               leftSection={<action.icon size={16} />}
                             >
-                              {tl(action.label)}
+                              {action.label}
                             </Menu.Item>
                           );
                       })}

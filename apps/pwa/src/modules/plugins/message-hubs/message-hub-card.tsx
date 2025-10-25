@@ -1,13 +1,13 @@
-import { configs } from "@/configs/layout.config";
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { EntityImage } from "@/components/entity-image";
 import { Renderer } from "@/components/renderer";
-import { onArchive } from "@/utils/actions";
+import { configs } from "@/configs/layout.config";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { uploadFile } from "@/modules/files/file-service";
-import { localeNames, tl } from "@/modules/lang/lang-service";
+import { localeNames } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
 import {
   removePluginMessageHub,
@@ -17,7 +17,9 @@ import {
   ChannelWidgetWelcomeInput,
   PluginMessageHubEntity,
 } from "@/modules/plugins/message-hubs/message-hubs-types";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onArchive } from "@/utils/actions";
 import { isDiff } from "@/utils/object.utils";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
@@ -27,6 +29,8 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -118,7 +122,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
   const onChangeName = () => {
     OnModalInput({
       type: InputModalType.TEXT,
-      title: tl("change_name"),
+      title: t`Change name`,
       icon: IconMessage,
       value: messageHub.name,
       onDone: (name) => {
@@ -146,7 +150,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
             </ThemeIcon>
             <Text fw={600}>{messageHub.name}</Text>
 
-            <Tooltip label={tl("change_name")}>
+            <Tooltip label={t`Change name`}>
               <ActionIcon size="sm" color="gray" variant="subtle" onClick={onChangeName}>
                 <IconEdit strokeWidth={1.5} />
               </ActionIcon>
@@ -161,7 +165,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
               window.open(messageHub.direct.src, "_blank");
             }}
           >
-            {tl("open_chat_box")}
+            <Trans>Open chat box</Trans>
           </Button>
         </Group>
 
@@ -169,7 +173,9 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
           <ThemeIcon size="sm" variant="transparent" color="dark">
             <IconSitemap />
           </ThemeIcon>
-          <Text fz={em(15)}>{tl("message_hub_script_desc")}</Text>
+          <Text fz={em(15)}>
+            <Trans>Copy the script and paste it into your website.</Trans>
+          </Text>
         </Group>
 
         <CopyButton value={messageHub.script.html}>
@@ -195,7 +201,9 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
           <ThemeIcon size="sm" variant="transparent" color="dark">
             <IconBrush />
           </ThemeIcon>
-          <Text fz={em(15)}>{tl("customize-ui")}</Text>
+          <Text fz={em(15)}>
+            <Trans>Customize UI</Trans>
+          </Text>
         </Group>
 
         <SimpleGrid cols={{ md: 2 }}>
@@ -208,7 +216,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
               />
             </InputWrapper>
 
-            <InputWrapper label={tl("chat_icon")}>
+            <InputWrapper label={t`Chat icon`}>
               <EntityImage
                 fit="contain"
                 src={widgetSettings.chatIcon}
@@ -219,13 +227,13 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
 
           <Stack>
             <TextInput
-              label={tl("brand_name")}
+              label={t`Brand name`}
               value={widgetSettings.brandName}
               onChange={(e) => setWidgetSettings({ ...widgetSettings, brandName: e.target.value })}
             />
 
             <ColorInput
-              label={tl("color")}
+              label={t`Color`}
               format="hex"
               swatches={configs.swatches}
               value={widgetSettings.color}
@@ -234,30 +242,28 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
           </Stack>
 
           <TextInput
-            label={tl("welcome_message")}
+            label={t`Welcome message`}
             value={widgetSettings.welcomMessage}
-            placeholder={tl("welcome_message_placeholder", {
-              workspaceName: workspace.userMember.workspace.name,
-            })}
+            placeholder={`${t`Welcome to`} ${workspace.userMember.workspace.name}`}
             onChange={(e) =>
               setWidgetSettings({ ...widgetSettings, welcomMessage: e.target.value })
             }
           />
 
           <TextInput
-            label={tl("welcomSubMessage")}
+            label={t`Welcome sub message`}
             value={widgetSettings.welcomSubMessage}
-            placeholder={tl("welcomSubMessage_placeholder")}
+            placeholder={t`You need advice! Start chatting with us now.`}
             onChange={(e) =>
               setWidgetSettings({ ...widgetSettings, welcomSubMessage: e.target.value })
             }
           />
 
           <Select
-            label={tl("message_hub_position")}
+            label={t`Message hub position`}
             data={[
-              { value: "left", label: tl("left") },
-              { value: "right", label: tl("right") },
+              { value: "left", label: t`Left` },
+              { value: "right", label: t`Right` },
             ]}
             value={widgetSettings.position}
             onChange={(position) =>
@@ -266,7 +272,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
           />
 
           <Select
-            label={tl("language")}
+            label={t`Language`}
             data={Object.values(Locale).map((v) => ({
               label: localeNames[v],
               value: v,
@@ -290,7 +296,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
             onClick={onRemove}
             fw={400}
           >
-            {tl("remove")}
+            <Trans>Remove</Trans>
           </Button>
         </Center>
       </Stack>
@@ -336,7 +342,7 @@ const WelcomInputs: FC<{
   );
 
   return (
-    <InputWrapper label={tl("message_hubs_welcomeInputs")}>
+    <InputWrapper label={t`Data that customers need to provide before starting a conversation`}>
       <DndContext
         sensors={sensors}
         onDragEnd={(e) => {
@@ -375,7 +381,7 @@ const WelcomInputs: FC<{
               fz={em(14)}
               onClick={addWelcomeInput}
             >
-              {tl("add_input")}
+              <Trans>Add input</Trans>
             </Button>
           </Group>
         </Stack>
@@ -423,7 +429,7 @@ const WelcomInput: FC<{
               </ThemeIcon>
             </Group>
             <Text fz={em(12)} fw={600}>
-              {tl("input")}
+              <Trans>Input</Trans>
             </Text>
           </Group>
 
@@ -435,14 +441,14 @@ const WelcomInput: FC<{
         <Grid gutter={10}>
           <Grid.Col span={{ md: isDynamicInput ? 4 : 6 }}>
             <Select
-              label={tl("msg_hub_input_type")}
+              label={t`Data type`}
               value={input.type}
               data={[
-                { label: tl("name"), value: "name" },
-                { label: tl("phone"), value: "phone" },
-                { label: "Email", value: "email" },
-                { label: tl("text"), value: "text" },
-                { label: tl("number"), value: "number" },
+                { label: t`Name`, value: "name" },
+                { label: t`Phone`, value: "phone" },
+                { label: t`Email`, value: "email" },
+                { label: t`Text`, value: "text" },
+                { label: t`Number`, value: "number" },
               ]}
               onChange={(type) => _onChange("type", type)}
             />
@@ -451,7 +457,7 @@ const WelcomInput: FC<{
           <Renderer visible={isDynamicInput}>
             <Grid.Col span={{ md: 4 }}>
               <TextInput
-                label={tl("input_name")}
+                label={t`Input name`}
                 value={input.fieldName}
                 onChange={(e) => _onChange("fieldName", e.target.value)}
               />
@@ -460,7 +466,7 @@ const WelcomInput: FC<{
 
           <Grid.Col span={{ md: isDynamicInput ? 4 : 6 }}>
             <TextInput
-              label={tl("input_label")}
+              label={t`Input label`}
               value={input.label}
               onChange={(e) => _onChange("label", e.target.value)}
             />
@@ -468,7 +474,7 @@ const WelcomInput: FC<{
 
           <Grid.Col span={{ md: 12 }}>
             <TextInput
-              label={tl("input_desc")}
+              label={t`Input description`}
               value={input.description}
               onChange={(e) => _onChange("description", e.target.value)}
             />

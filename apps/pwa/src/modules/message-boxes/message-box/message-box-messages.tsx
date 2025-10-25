@@ -8,7 +8,7 @@ import { EventType } from "@/modules/events/event-types";
 import { FileCard } from "@/modules/files/file-card";
 import { FileType } from "@/modules/files/file-types";
 import { parseFile } from "@/modules/files/files-utils";
-import { getDateFormat, getTimeFormat, renderTime, tl } from "@/modules/lang/lang-service";
+import { getDateFormat, getTimeFormat, renderTime } from "@/modules/lang/lang-service";
 import { getMessages } from "@/modules/message-boxes/message-boxes-service";
 import {
   MessageBoxEntity,
@@ -21,6 +21,7 @@ import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
 import {
   Anchor,
   Card,
@@ -181,7 +182,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
             const isSameWeek = dayjs(msg.createdAt * 1000).isSame(dayjs(), "week");
 
             if (isToday) return renderTime(msg.createdAt);
-            if (isYesterday) return `${tl("yesterday")} ${renderTime(msg.createdAt)}`;
+            if (isYesterday) return `${t`Yesterday`} ${renderTime(msg.createdAt)}`;
             if (isSameWeek) return dayjs(msg.createdAt * 1000).format("dddd HH:mm");
             return dayjs(msg.createdAt * 1000).format(`MMM ${getDateFormat()} ${getTimeFormat()}`);
           };
@@ -224,7 +225,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
 
                     <Renderer visible={!isFirstSession && needToShowDivider}>
                       <Text fz={12} c="gray.6">
-                        {tl("minutes_ago", { minutes: timeBtw })}
+                        {t`${timeBtw} minutes ago`}
                       </Text>
                     </Renderer>
                   </Renderer>
@@ -242,7 +243,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                           }}
                         >
                           {msg.resource === MessageResource.AI_ASSISTANT
-                            ? tl("ai_assistant")
+                            ? t`AI assistant`
                             : senderMember?.name || ""}
                         </Anchor>
 
@@ -316,7 +317,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                               </ThemeIcon>
 
                               <Text c="red" fz={em(10)} ta="center">
-                                {tl("send_msg_failed")}
+                                {t`Send message failed`}
                               </Text>
                             </Group>
                           </Group>
@@ -334,17 +335,12 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                             </ThemeIcon>
 
                             <Text fz={em(10)} ta="center" c="gray">
-                              {tl("msg_sending")}
+                              {t`Message sending`}
                             </Text>
                           </Group>
                         );
                       }
                     })()}
-
-                    {/* <Renderer visible={ENV === 'development'}>
-                    {msg.id && <Text fz={em(10)} ta="center" c="gray">#{msg.id}</Text>}
-                    {msg.resource && <Text fz={em(10)} ta="center" c="gray">{msg.resource}</Text>}
-                  </Renderer> */}
                   </Renderer>
                 </Stack>
               </Group>

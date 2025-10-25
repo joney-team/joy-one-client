@@ -1,8 +1,7 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { String } from "@/utils/string.utils";
+import { Trans } from "@lingui/react/macro";
 import { alpha, Group, Text, ThemeIcon } from "@mantine/core";
 import { Icon, IconBackground } from "@tabler/icons-react";
 import { FC } from "react";
@@ -21,8 +20,6 @@ export const Archived: FC<ArchivedProps> = (props) => {
 
   if (props.enabled === false) return null;
 
-  const message = tl(`archived_entity`, { entity: tl(props.entity) });
-
   return (
     <Group
       justify="center"
@@ -39,7 +36,7 @@ export const Archived: FC<ArchivedProps> = (props) => {
       </ThemeIcon>
 
       <Text fz="xs" c={_color}>
-        {String.capitalizeFirstLetter(message)}
+        <Trans>Archived {props.entity}</Trans>
       </Text>
     </Group>
   );

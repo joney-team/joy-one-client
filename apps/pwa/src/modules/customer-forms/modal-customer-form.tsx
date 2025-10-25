@@ -1,10 +1,12 @@
-import { useColor } from "@/modules/theme/use-color";
+"use client";
+
 import { ModalTitle } from "@/components/modal-title";
+import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
-import config from "@joy-one-client/config";
-import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import config from "@joy-one-client/config";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, CopyButton, Group, Input, InputWrapper, Stack, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCopy, IconCopyCheck, IconMessageUser, IconX } from "@tabler/icons-react";
@@ -37,16 +39,16 @@ const ModalCustomerForm: FC = () => {
         }}
         target={(ctx) => {
           return (
-            <InputWrapper onClick={ctx.toggle} label={tl("workspace_branch")} w="100%">
+            <InputWrapper onClick={ctx.toggle} label={t`Workspace branch`} w="100%">
               <Group gap={8}>
                 <Input
                   flex={1}
                   className="AppSelectInput"
-                  value={ctx.value?.name || tl("main_workspace_branch")}
+                  value={ctx.value?.name || t`Main office`}
                   readOnly
                 />
                 {workspaceBranch && (
-                  <Tooltip label={tl("main_workspace_branch")}>
+                  <Tooltip label={t`Main office`}>
                     <ActionIcon
                       variant="outline"
                       pos="relative"
@@ -71,7 +73,7 @@ const ModalCustomerForm: FC = () => {
 
       <CopyButton value={link}>
         {({ copied, copy }) => (
-          <InputWrapper onClick={copy} label={tl("customer_form_link")}>
+          <InputWrapper onClick={copy} label={t`Link customer form`}>
             <Input
               className="AppSelectInput"
               value={link}
@@ -97,7 +99,7 @@ const ModalCustomerForm: FC = () => {
 export const OnModalCustomerForm: () => void = () => {
   return modals.open({
     modalId: "OpenCustomerFormModal",
-    title: <ModalTitle title="link_form" icon={IconMessageUser} />,
+    title: <ModalTitle title={t`Customer form link`} icon={IconMessageUser} />,
     children: <ModalCustomerForm />,
   });
 };

@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
-import { tl } from "@/modules/lang/lang-service";
 import {
   PluginZaloOaZNSTemplateId,
   ZnsTemplateConfig,
@@ -11,6 +10,7 @@ import {
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { isPhoneNumber } from "@/utils/phone.utils";
+import { t } from "@lingui/core/macro";
 import { Checkbox, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -36,13 +36,13 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
     validate: {
       ...props.config.fields.reduce((acc, item) => {
         acc[item.fieldName] = (value: string) => {
-          if (!value) return tl("required");
+          if (!value) return t`Must be provided`;
         };
         return acc;
       }, {} as any),
       phoneNumber: (value: string) => {
-        if (!value) return tl("required");
-        if (!isPhoneNumber(value)) return tl("invalid_phone_number");
+        if (!value) return t`Must be provided`;
+        if (!isPhoneNumber(value)) return t`Invalid phone number`;
       },
     },
   });
@@ -62,8 +62,8 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
 
       notifications.show({
         icon: <IconPuzzle size={18} strokeWidth={1.5} />,
-        title: tl("success"),
-        message: tl("zns_sent"),
+        title: t`Success`,
+        message: t`ZNS sent`,
         color: color("primary"),
       });
     } catch (error) {
@@ -80,19 +80,19 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
           <TextInput
             key={index}
             value={form.values[item.fieldName]}
-            label={tl(item.description)}
+            label={item.description}
             description={item.fieldName}
             {...form.getInputProps(item.fieldName)}
           />
         );
       })}
 
-      <TextInput withAsterisk label={tl("phone")} {...form.getInputProps("phoneNumber")} />
+      <TextInput withAsterisk label={t`Phone number`} {...form.getInputProps("phoneNumber")} />
 
       <Stack>
         <Checkbox
           size="sm"
-          label={tl("zns_testing")}
+          label={t`ZNS testing`}
           checked={isTesting}
           onChange={() => setIsTesting(!isTesting)}
           styles={{
@@ -109,7 +109,7 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
         disabled={!form.isDirty()}
         type="submit"
       >
-        {tl("send")}
+        {t`Send`}
       </Button>
     </Stack>
   );
@@ -118,7 +118,7 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
 export const OnModalZaloOaSendZns = (props: ModalZaloOaSendZnsProps) => {
   return modals.open({
     modalId: "ModalZaloOaSendZns",
-    title: <ModalTitle title={tl("send_zns")} icon={IconPuzzle} />,
+    title: <ModalTitle title={t`Send ZNS`} icon={IconPuzzle} />,
     children: <ModalZaloOaSendZns {...props} />,
   });
 };

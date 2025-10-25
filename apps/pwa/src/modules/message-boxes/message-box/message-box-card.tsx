@@ -1,14 +1,14 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { useList } from "@/components/list/use-list";
 import { TextOverflow } from "@/components/text-overflow";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { renderDateTime, renderTime, tl } from "@/modules/lang/lang-service";
+import { renderDateTime, renderTime } from "@/modules/lang/lang-service";
 import {
   getMessages,
   messageBoxPlatformImages,
-  messageBoxStatusColors,
 } from "@/modules/message-boxes/message-boxes-service";
 import {
   MessageAttachmentType,
@@ -19,11 +19,12 @@ import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { forceDate } from "@/utils/date-time.utils";
 import { String } from "@/utils/string.utils";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
 import { Badge, Card, Group, Image, Indicator, Stack, Text, Tooltip } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC } from "react";
+import { messageBoxStatuses } from "../message-boxes-contants";
 import { useMessageBoxes } from "../message-boxes-context";
 interface CardMessageBoxProps {
   box: MessageBoxEntity;
@@ -56,8 +57,7 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
   });
 
   const latestMessage = newLatestMessage.data[0] || box.latestMessage;
-
-  const statusColor = color(messageBoxStatusColors[box.status || MessageBoxStatus.CLOSED]);
+  const messageBoxStatus = messageBoxStatuses[box.status || MessageBoxStatus.CLOSED];
 
   return (
     <Card
@@ -101,7 +101,7 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
         <Stack gap={5} flex={1} mt={-3}>
           <Group justify="space-between" w="100%" wrap="nowrap">
             <TextOverflow fw={600} truncate="end" flex={1}>
-              {props.box.senderName || props.box.customer?.name || tl("guest")}
+              {props.box.senderName || props.box.customer?.name || t`Guest`}
             </TextOverflow>
 
             {latestMessage && (
@@ -122,26 +122,26 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
               if (latestMessage.text) return String.limitCharacters(latestMessage.text, 72);
               if (latestMessage.attachments?.[0]) {
                 if (latestMessage.attachments[0].type === MessageAttachmentType.STICKER) {
-                  return tl("sent_sticker");
+                  return t`Sent sticker`;
                 }
 
                 if (latestMessage.attachments[0].type === MessageAttachmentType.IMAGE) {
-                  return tl("sent_image");
+                  return t`Sent image`;
                 }
 
-                return tl("sent_file_length", { length: latestMessage.attachments.length });
+                return t`Sent ${latestMessage.attachments.length} attached files`;
               }
             })()}
           </TextOverflow>
 
           <Group mt={5} gap={5} justify="space-between" w="100%">
-            <Badge size="xs" color={statusColor} variant="light">
-              {tl(`msg_boxes_status_${box.status}`)}
+            <Badge size="xs" color={messageBoxStatus.color} variant="light">
+              {messageBoxStatus.label()}
             </Badge>
 
             {isAiAssistantEnabled && (
               <Badge size="xs" color={color("violet.9")} variant="light">
-                {tl("ai-assistants")}
+                {t`AI assistants`}
               </Badge>
             )}
           </Group>

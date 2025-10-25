@@ -1,13 +1,15 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
-import { onArchive } from "@/utils/actions";
-import { tl } from "@/modules/lang/lang-service";
 import { disconnectPluginMetaPage } from "@/modules/plugins/meta-pages/meta-pages-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
+import config from "@joy-one-client/config";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Card,
@@ -26,7 +28,6 @@ import { FC } from "react";
 import { Avatar } from "../avatar";
 import { Button } from "../buttons/button";
 import { Image } from "../image";
-import config from "@joy-one-client/config";
 
 export const PluginMetaPages: FC = () => {
   const workspace = useWorkspace();
@@ -48,13 +49,18 @@ export const PluginMetaPages: FC = () => {
         </Group>
 
         <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-          {tl("connect")} <strong>Fanpage Facebook</strong>
+          <Trans>
+            Connect <strong>Fanpage Facebook</strong>
+          </Trans>
         </Title>
 
-        <Text ta="center">{tl("meta_pages_desc")}</Text>
+        <Text ta="center">
+          • <Trans>Interact with customers via Messenger</Trans> <br />•{" "}
+          <Trans>Easy & quick setup</Trans>
+        </Text>
 
         <Button mt={10} action onClick={plugins.onConnectMetaPages} leftIcon={IconLinkPlus}>
-          {tl("connect")}
+          <Trans>Connect</Trans>
         </Button>
       </Stack>
     );
@@ -82,12 +88,12 @@ export const PluginMetaPages: FC = () => {
                   onClick={() =>
                     onArchive({
                       icon: IconPuzzle,
-                      title: capitalize(`${tl("disconnect")} ${page.name}`),
+                      title: capitalize(`${t`Disconect`} ${page.name}`),
                       process: () => disconnectPluginMetaPage(page._id).catch(onError),
                     })
                   }
                 >
-                  {tl("disconect")}
+                  <Trans>Disconect</Trans>
                 </Anchor>
               </Group>
             </Card>
@@ -100,7 +106,7 @@ export const PluginMetaPages: FC = () => {
             onClick={plugins.onConnectMetaPages}
             rightSection={<IconLinkPlus strokeWidth={1.5} />}
           >
-            {tl("connect_more")}
+            <Trans>Connect more</Trans>
           </Button>
         </Center>
       </SimpleGrid>

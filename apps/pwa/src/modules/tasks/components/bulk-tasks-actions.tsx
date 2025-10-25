@@ -2,20 +2,21 @@
 
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
+import { useLayout } from "@/layout/layout-context";
+import { num } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
+import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { useLayout } from "@/layout/layout-context";
-import { num, tl } from "@/modules/lang/lang-service";
-import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskEntites, getTaskEntity, updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskPriority, TaskStatus } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
-import { capitalize } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Center, Divider, Group, Menu, Text, Tooltip } from "@mantine/core";
 import {
   IconDots,
@@ -126,7 +127,7 @@ export const BulkTasksActions: FC = () => {
               {num(tasks.selectedTaskIds.length)}
             </Text>
             <Text c="white" fz={14} fw={600}>
-              {tl("selected")}
+              <Trans>Selected</Trans>
             </Text>
           </Group>
 
@@ -139,7 +140,7 @@ export const BulkTasksActions: FC = () => {
               onSelect={changeStatus}
               render={(ctx) => {
                 return (
-                  <Tooltip label={capitalize(`${tl("change")} ${tl("status")}`)}>
+                  <Tooltip label={t`Change status`}>
                     <Button
                       onClick={ctx.toggle}
                       leftIcon={IconPlaystationCircle}
@@ -151,7 +152,7 @@ export const BulkTasksActions: FC = () => {
                       radius={100}
                       fz={12}
                     >
-                      {tl("status")}
+                      <Trans>Status</Trans>
                     </Button>
                   </Tooltip>
                 );
@@ -173,7 +174,7 @@ export const BulkTasksActions: FC = () => {
                     fz={12}
                     onClick={ctx.toggle}
                   >
-                    {tl("assign_task")}
+                    <Trans>Assign task</Trans>
                   </Button>
                 );
               }}
@@ -185,7 +186,7 @@ export const BulkTasksActions: FC = () => {
               onSelect={setTag}
               target={(ctx) => {
                 return (
-                  <Tooltip label={tl("set_tag")}>
+                  <Tooltip label={t`Set tag`}>
                     <Button
                       onClick={ctx.toggle}
                       leftIcon={IconTags}
@@ -197,7 +198,7 @@ export const BulkTasksActions: FC = () => {
                       radius={100}
                       fz={12}
                     >
-                      {tl("tags")}
+                      <Trans>Tags</Trans>
                     </Button>
                   </Tooltip>
                 );
@@ -208,7 +209,7 @@ export const BulkTasksActions: FC = () => {
               onSelect={changeFolder}
               render={(ctx) => {
                 return (
-                  <Tooltip label={capitalize(`${tl("change")} ${tl("folder")}`)}>
+                  <Tooltip label={t`Change folder`}>
                     <Button
                       leftIcon={IconFolder}
                       iconSize={18}
@@ -220,7 +221,7 @@ export const BulkTasksActions: FC = () => {
                       fz={12}
                       onClick={ctx.toggle}
                     >
-                      {tl("move")}
+                      <Trans>Move</Trans>
                     </Button>
                   </Tooltip>
                 );
@@ -231,7 +232,7 @@ export const BulkTasksActions: FC = () => {
               onSelect={changePriority}
               render={(ctx) => {
                 return (
-                  <Tooltip label={tl("set_priority")}>
+                  <Tooltip label={t`Set priority`}>
                     <Button
                       leftIcon={IconFlagFilled}
                       iconSize={18}
@@ -243,7 +244,7 @@ export const BulkTasksActions: FC = () => {
                       fz={12}
                       onClick={ctx.toggle}
                     >
-                      {tl("priority")}
+                      <Trans>Priority</Trans>
                     </Button>
                   </Tooltip>
                 );
@@ -261,10 +262,10 @@ export const BulkTasksActions: FC = () => {
               fz={12}
               onClick={removeAll}
             >
-              {tl("remove")}
+              <Trans>Remove</Trans>
             </Button>
 
-            <Tooltip label={tl("unselect_all")}>
+            <Tooltip label={t`Unselect all`}>
               <ActionIcon
                 color="gray"
                 variant="subtle"
@@ -286,7 +287,7 @@ export const BulkTasksActions: FC = () => {
 
               <Menu.Dropdown>
                 <Menu.Item leftSection={<IconTrash size={18} />} onClick={removeAll}>
-                  {tl("remove_all")}
+                  <Trans>Remove all</Trans>
                 </Menu.Item>
 
                 <TaskStatusSelector
@@ -297,7 +298,7 @@ export const BulkTasksActions: FC = () => {
                         leftSection={<IconPlaystationCircle size={18} />}
                         onClick={ctx.toggle}
                       >
-                        {capitalize(`${tl("change")} ${tl("status")}`)}
+                        <Trans>Change status</Trans>
                       </Menu.Item>
                     );
                   }}
@@ -308,7 +309,7 @@ export const BulkTasksActions: FC = () => {
                   target={(ctx) => {
                     return (
                       <Menu.Item leftSection={<IconUsersPlus size={18} />} onClick={ctx.toggle}>
-                        {tl("assign_task")}
+                        <Trans>Assign task</Trans>
                       </Menu.Item>
                     );
                   }}
@@ -319,7 +320,7 @@ export const BulkTasksActions: FC = () => {
                   render={(ctx) => {
                     return (
                       <Menu.Item leftSection={<IconFolder size={18} />} onClick={ctx.toggle}>
-                        {tl("move")}
+                        <Trans>Move</Trans>
                       </Menu.Item>
                     );
                   }}
@@ -330,7 +331,7 @@ export const BulkTasksActions: FC = () => {
                   render={(ctx) => {
                     return (
                       <Menu.Item leftSection={<IconFlagFilled size={18} />} onClick={ctx.toggle}>
-                        {tl("set_priority")}
+                        <Trans>Set priority</Trans>
                       </Menu.Item>
                     );
                   }}
@@ -340,7 +341,7 @@ export const BulkTasksActions: FC = () => {
                   leftSection={<IconX size={18} />}
                   onClick={() => tasks.removeSelectedTasks()}
                 >
-                  {tl("unselect_all")}
+                  <Trans>Unselect all</Trans>
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>

@@ -6,7 +6,7 @@ import { useLayout } from "@/layout/layout-context";
 import { getCustomer, renderGener } from "@/modules/customers/customer-service";
 import { CustomerEntity, CustomerShortInfo } from "@/modules/customers/customer-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
+import { getClientLocale, num } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { BankQrCode } from "@/modules/plugins/banks/banks.types";
@@ -16,8 +16,11 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { loadImage } from "@/utils/asset.utils";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { capitalize, uppercase } from "@/utils/string.utils";
+import { uppercase } from "@/utils/string.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { DateTime } from "@joy-one-client/utils/date-time";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -62,9 +65,9 @@ export enum PrintSize {
 
 function printSizeLabel(size?: PrintSize) {
   return {
-    [PrintSize.LARGE]: "large",
-    [PrintSize.MEDIUM]: "medium",
-    [PrintSize.SMALL]: "small",
+    [PrintSize.LARGE]: t`Large`,
+    [PrintSize.MEDIUM]: t`Medium`,
+    [PrintSize.SMALL]: t`Small`,
   }[size || PrintSize.MEDIUM];
 }
 
@@ -176,11 +179,10 @@ export const ModalPrinter: FC = () => {
   };
 
   function getTitle() {
-    if (props?.receipt) return `${tl("print")} ${tl("receipt")}`;
-    if (props?.order) return `${tl("print")} ${tl("order")}`;
-    if (props?.prescription) return `${tl("print")} ${tl("prescription")}`;
-
-    return `${tl("print")}`;
+    if (props?.receipt) return t`Print receipt`;
+    if (props?.order) return t`Print order`;
+    if (props?.prescription) return t`Print prescription`;
+    return t`Print`;
   }
 
   return (
@@ -240,13 +242,24 @@ export const ModalPrinter: FC = () => {
                             return null;
 
                           if (printSettings.size === PrintSize.SMALL)
-                            return <p>ĐC: {workspace.userMember.workspace.location?.address}</p>;
+                            return (
+                              <p>
+                                <Trans>ADD</Trans>:{" "}
+                                {workspace.userMember.workspace.location?.address}
+                              </p>
+                            );
 
-                          return <p>ĐC: {workspace.userMember.workspace.location?.address}</p>;
+                          return (
+                            <p>
+                              <Trans>ADD</Trans>: {workspace.userMember.workspace.location?.address}
+                            </p>
+                          );
                         })()}
 
                         {workspace.userMember.workspace.hotline && (
-                          <p>Hotline: {workspace.userMember.workspace.hotline}</p>
+                          <p>
+                            <Trans>Hotline</Trans>: {workspace.userMember.workspace.hotline}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -268,7 +281,7 @@ export const ModalPrinter: FC = () => {
                       return (
                         <div className="printer-body">
                           <div className="printer-body-head">
-                            <h2>{uppercase(tl(receipt ? "receipt" : "order"))}</h2>
+                            <h2>{uppercase(receipt ? t`Receipt` : t`Order`)}</h2>
 
                             <div className="printer-head-metadata">
                               <div>
@@ -278,18 +291,23 @@ export const ModalPrinter: FC = () => {
                           </div>
 
                           <p className="text-smaller time">
-                            {tl("printed_at")} <strong>{renderDateTime(new Date())}</strong>
+                            {t`Printed at`}{" "}
+                            <strong>
+                              {DateTime.format(new Date(), { locale: getClientLocale() })}
+                            </strong>
                           </p>
 
                           <table>
                             <thead>
                               <tr>
-                                <th className="ta-left">{tl("detail")}</th>
-                                <th className="ta-right">{tl("QTY")}</th>
+                                <th className="ta-left">{t`Detail`}</th>
+                                <th className="ta-right">{t`QTY`}</th>
                                 <th className="ta-right">
-                                  {printSettings.size === PrintSize.SMALL
-                                    ? tl("print_total_short")
-                                    : tl("print_total_long")}
+                                  {printSettings.size === PrintSize.SMALL ? (
+                                    <Trans id="TotalShorten">Total</Trans>
+                                  ) : (
+                                    <Trans id="TotalLong">Total</Trans>
+                                  )}
                                 </th>
                               </tr>
                             </thead>
@@ -314,7 +332,7 @@ export const ModalPrinter: FC = () => {
                               {subTotalPrice !== order.totalAmount && (
                                 <tr>
                                   <td className="ta-right" colSpan={2}>
-                                    {tl("subtotal")}
+                                    <Trans>Subtotal</Trans>
                                   </td>
                                   <td className="ta-right">{renderMoney(subTotalPrice)}</td>
                                 </tr>
@@ -323,7 +341,7 @@ export const ModalPrinter: FC = () => {
                               {totalDiscount > 0 && (
                                 <tr>
                                   <td className="ta-right" colSpan={2} style={{ width: 90 }}>
-                                    {tl("discount")}
+                                    <Trans>Discount</Trans>
                                   </td>
                                   <td className="ta-right">{renderMoney(totalDiscount)}</td>
                                 </tr>
@@ -332,7 +350,7 @@ export const ModalPrinter: FC = () => {
                               {!!receipt?.tipAmount && receipt.tipAmount > 0 && (
                                 <tr>
                                   <td className="ta-right" colSpan={2}>
-                                    TIP
+                                    <Trans>Tip</Trans>
                                   </td>
                                   <td className="ta-right">{renderMoney(receipt.tipAmount)}</td>
                                 </tr>
@@ -342,7 +360,7 @@ export const ModalPrinter: FC = () => {
                                 <Fragment>
                                   <tr>
                                     <td className="ta-right" colSpan={2}>
-                                      {tl("payment")}
+                                      <Trans>Payment</Trans>
                                     </td>
                                     <td className="ta-right">
                                       {renderMoney(receipt?.amount || order.totalAmount)}
@@ -351,7 +369,7 @@ export const ModalPrinter: FC = () => {
 
                                   <tr>
                                     <td className="ta-right" colSpan={2}>
-                                      {tl("remaining")}
+                                      <Trans>Remaining</Trans>
                                     </td>
                                     <td className="ta-right">
                                       <strong>
@@ -362,7 +380,7 @@ export const ModalPrinter: FC = () => {
 
                                   <tr>
                                     <td className="ta-right" colSpan={2}>
-                                      {tl("total_short")}
+                                      <Trans id="TotalShorten">Total</Trans>
                                     </td>
                                     <td className="ta-right">
                                       <strong>{renderMoney(totalAmount)}</strong>
@@ -373,7 +391,7 @@ export const ModalPrinter: FC = () => {
                                 <Fragment>
                                   <tr>
                                     <td className="ta-right" colSpan={2}>
-                                      {tl("total_short")}
+                                      <Trans id="TotalShorten">Total</Trans>
                                     </td>
                                     <td className="ta-right">
                                       <strong>{renderMoney(totalAmount)}</strong>
@@ -385,7 +403,7 @@ export const ModalPrinter: FC = () => {
                               {!!receipt?.giveAmount && (
                                 <tr>
                                   <td className="ta-right" colSpan={2}>
-                                    {tl("money_given_short")}
+                                    <Trans>Money given</Trans>
                                   </td>
                                   <td className="ta-right">{renderMoney(receipt.giveAmount)}</td>
                                 </tr>
@@ -396,14 +414,15 @@ export const ModalPrinter: FC = () => {
                           <div className="printer-metadata ta-center">
                             {order.relatedCustomer && printSettings.showCustomer && (
                               <div>
-                                {tl("customer")} <br />{" "}
+                                <Trans>Customer</Trans> <br />{" "}
                                 <strong>{order.relatedCustomer.name}</strong>
                               </div>
                             )}
 
                             {receipt?.cashierUser && printSettings.showCashier && (
                               <div>
-                                {tl("cashier")} <br /> <strong>{receipt.cashierUser.name}</strong>
+                                <Trans>Cashier</Trans> <br />{" "}
+                                <strong>{receipt.cashierUser.name}</strong>
                               </div>
                             )}
                           </div>
@@ -427,25 +446,26 @@ export const ModalPrinter: FC = () => {
                       return (
                         <div className="printer-body">
                           <div className="printer-body-head justify-center">
-                            <h1 className="ta-center">{tl("prescription_title")}</h1>
+                            <h1 className="ta-center">
+                              <Trans>Prescription</Trans>
+                            </h1>
                           </div>
 
                           {customer && (
                             <div className="flex flex-wrap space-between">
                               {customer.name && (
                                 <p>
-                                  {tl("full_name")}: <strong>{customer.name}</strong>
+                                  {t`Full name`}: <strong>{customer.name}</strong>
                                 </p>
                               )}
                               {customer.birthday && (
                                 <p>
-                                  {tl("birthday")}:{" "}
-                                  {new Date(customer.birthday * 1000).getFullYear()}
+                                  {t`Birthday`}: {new Date(customer.birthday * 1000).getFullYear()}
                                 </p>
                               )}
                               {customer.gender && (
                                 <p>
-                                  {tl("gender")}: {renderGener(customer.gender)}
+                                  {t`Gender`}: {renderGener(customer.gender)}
                                 </p>
                               )}
                               {prescription.name && (
@@ -485,19 +505,19 @@ export const ModalPrinter: FC = () => {
                                         </p>
                                         <div className="flex gap-1">
                                           <p className="text-smaller">
-                                            {tl("morning")}: {renderQty(item.qty.morning)}
+                                            {t`Morning`}: {renderQty(item.qty.morning)}
                                           </p>
                                           <p className="text-smaller">
-                                            {tl("noon")}: {renderQty(item.qty.noon)}
+                                            {t`Noon`}: {renderQty(item.qty.noon)}
                                           </p>
                                           <p className="text-smaller">
-                                            {tl("afternoon")}: {renderQty(item.qty.afternoon)}
+                                            {t`Afternoon`}: {renderQty(item.qty.afternoon)}
                                           </p>
                                         </div>
 
                                         {item.note && (
                                           <p className="text-smaller">
-                                            {tl("usage")}: <strong>{item.note}</strong>
+                                            {t`Usage`}: <strong>{item.note}</strong>
                                           </p>
                                         )}
                                       </div>
@@ -517,11 +537,11 @@ export const ModalPrinter: FC = () => {
 
                           <div className="flex column">
                             <p>
-                              {tl("days_num")}: <strong>{totalDays}</strong>
+                              {t`Days number`}: <strong>{totalDays}</strong>
                             </p>
                             {!!prescription.note && (
                               <p>
-                                {tl("advice")}: <strong>{prescription.note}</strong>
+                                {t`Advice`}: <strong>{prescription.note}</strong>
                               </p>
                             )}
                           </div>
@@ -532,7 +552,7 @@ export const ModalPrinter: FC = () => {
 
                   {printSettings.showThanks && (
                     <div className="printer-footer">
-                      <p className="ta-center">{tl("thanks_customer")}</p>
+                      <p className="ta-center">{t`Thank you!`}</p>
                     </div>
                   )}
                 </div>
@@ -551,7 +571,7 @@ export const ModalPrinter: FC = () => {
                 />
 
                 <Switch
-                  label={tl("address")}
+                  label={t`Address`}
                   defaultChecked={printSettings.showAddress}
                   onChange={(e) => {
                     const _checked = e.target.checked;
@@ -560,7 +580,7 @@ export const ModalPrinter: FC = () => {
                 />
 
                 <Switch
-                  label={tl("cashier")}
+                  label={t`Cashier`}
                   defaultChecked={printSettings.showCashier}
                   onChange={(e) => {
                     const _checked = e.target.checked;
@@ -569,7 +589,7 @@ export const ModalPrinter: FC = () => {
                 />
 
                 <Switch
-                  label={tl("show_currency")}
+                  label={t`Show currency`}
                   defaultChecked={printSettings.showCurrency}
                   onChange={(e) => {
                     const _checked = e.target.checked;
@@ -578,7 +598,7 @@ export const ModalPrinter: FC = () => {
                 />
 
                 <Switch
-                  label={capitalize(`${tl("show")} ${tl("customer")}`)}
+                  label={t`Show customer`}
                   defaultChecked={printSettings.showCustomer}
                   onChange={(e) => {
                     const _checked = e.target.checked;
@@ -588,7 +608,7 @@ export const ModalPrinter: FC = () => {
 
                 {props.bankQrCode && (
                   <Switch
-                    label={tl("payment_code")}
+                    label={t`Payment code`}
                     defaultChecked={printSettings.showBankQrCode}
                     onChange={(e) => {
                       const _checked = e.target.checked;
@@ -615,7 +635,7 @@ export const ModalPrinter: FC = () => {
                           changePrintSettings({ ...printSettings, size: _size });
                         }}
                       >
-                        {tl(printSizeLabel(_size))}
+                        {printSizeLabel(_size)}
                       </Button>
                     );
                   })}
@@ -630,12 +650,12 @@ export const ModalPrinter: FC = () => {
                 type="submit"
                 leftSection={<IconPrinter size={18} />}
               >
-                {tl("quick_print")}
+                {t`Quick print`}
               </Button>
             </Group>
 
             <Anchor ta="center" onClick={close} fz={12} c="gray">
-              {tl("exit")}
+              {t`Exit`}
             </Anchor>
           </Stack>
         );
@@ -650,7 +670,7 @@ export const PrintButton: FC<PrinterProps> = (props) => {
   return (
     <Card p={0} withBorder shadow="none" radius={100} style={{ borderColor: theme.colors.gray[4] }}>
       <Group gap={0} justify="space-around">
-        <Tooltip label={tl("quick_print")}>
+        <Tooltip label={t`Quick print`}>
           <Center>
             <Button
               color="gray"
@@ -660,14 +680,14 @@ export const PrintButton: FC<PrinterProps> = (props) => {
               leftIcon={IconPrinter}
               fz={13}
             >
-              {props.label || tl("quick_print")}
+              {props.label || t`Quick print`}
             </Button>
           </Center>
         </Tooltip>
 
         <Divider orientation="vertical" />
 
-        <Tooltip label={tl("settings_and_preview")}>
+        <Tooltip label={t`Settings and preview`}>
           <ActionIcon
             color="gray"
             w={40}

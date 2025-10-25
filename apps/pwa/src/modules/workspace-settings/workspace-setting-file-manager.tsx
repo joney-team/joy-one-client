@@ -1,16 +1,16 @@
+"use client";
+
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
+import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { EnumColumn } from "@/components/list/columns/enum-column";
 import { formatBytes } from "@joy-one-client/utils/files";
 import { ActionIcon, Image, Stack } from "@mantine/core";
 import { IconFile } from "@tabler/icons-react";
 import { type FC } from "react";
-import { fileTypeIcons } from "../files/file-service";
 import { FileEntity, FileType } from "../files/file-types";
+import { fileTypes } from "../files/files-constants";
 import { OnModalFileGallery } from "../files/modals/modal-file-gallery";
-import { tl } from "../lang/lang-service";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { UserColumn } from "../users/user-column";
 
 export const WorkspaceFileManager: FC = () => {
   return (
@@ -63,8 +63,8 @@ export const WorkspaceFileManager: FC = () => {
           type: EnumColumn<FileType>({
             w: 160,
             options: Object.values(FileType).map((type) => ({
-              icon: fileTypeIcons[type],
-              label: tl(`file_type_${type}`),
+              icon: fileTypes[type].icon,
+              label: fileTypes[type].label(),
               value: type,
             })),
           }),

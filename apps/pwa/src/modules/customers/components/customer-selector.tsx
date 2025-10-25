@@ -3,9 +3,9 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
+import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -20,9 +20,6 @@ export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
       {...props}
       listRoute="/customers"
       onSearch={(q) => searchEntity<CustomerShortInfo>(AppEntity.CUSTOMERS, q)}
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name", "phone", "email", "code"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(item) => {
         return (
           <Combobox.Option value={item._id} key={item._id}>
@@ -56,7 +53,7 @@ export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
             fw={500}
             onClick={toggle}
           >
-            {tl("select")}
+            <Trans>Select</Trans>
           </Button>
         );
       }}

@@ -1,5 +1,5 @@
 import { Empty } from "@/components/empty";
-import { tl } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
 import { IconArrowDown } from "@tabler/icons-react";
 import { FC } from "react";
 import { useTaskDrop } from "../../tasks-dnd-provider";
@@ -22,10 +22,9 @@ export const ListTaskStatusDropper: FC<{
   return (
     <Empty
       ref={droppable.setNodeRef}
-      entity="tasks"
       color={droppable.isOver ? "primary.4" : undefined}
       icon={droppable.isOver ? IconArrowDown : undefined}
-      message={droppable.isOver ? tl("drop_entity_here", { entity: tl("tasks") }) : ""}
+      message={droppable.isOver ? t`Drop task here` : undefined}
     />
   );
 };

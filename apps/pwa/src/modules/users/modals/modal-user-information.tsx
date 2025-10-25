@@ -5,12 +5,13 @@ import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
+import { UseList, useList } from "@/components/list/use-list";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate, renderFromNow, tl } from "@/modules/lang/lang-service";
+import { renderDate, renderFromNow } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
 import { getUserPublicInformation } from "@/modules/users/users-service";
@@ -21,7 +22,8 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { UseList, useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -149,13 +151,13 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
                   variant={isOnline ? "filled" : "light"}
                   radius={4}
                 >
-                  {isOnline ? tl("online") : tl("offline")}
+                  {isOnline ? t`Online` : t`Offline`}
                 </Badge>
               </Group>
 
               {!!user.lastSignInAt && !isOnline && (
                 <Text c="gray" fz={10}>
-                  {tl("lastSignInAt")} {renderFromNow(user.lastSignInAt)}
+                  <Trans>Last sign in at {renderFromNow(user.lastSignInAt)}</Trans>
                 </Text>
               )}
             </Stack>
@@ -168,7 +170,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
           <SimpleGrid cols={{ md: 3 }}>
             {!!member?.memberDisplayName && (
               <ShortInfoSession
-                label="display_name"
+                label={t`Display name`}
                 value={member?.memberDisplayName}
                 icon={IconUser}
               />
@@ -176,14 +178,14 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
             {!!mutualWorkspace && member && (
               <ShortInfoSession
-                label="member_role"
+                label={t`Member role`}
                 value={getUserMemberRoleLabel(member)}
                 icon={IconAccessible}
               />
             )}
 
             <ShortInfoSession
-              label="email"
+              label={t`Email`}
               value={user.email}
               icon={IconMail}
               href={`mailto:${user.email}`}
@@ -191,7 +193,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
             {!!user.phone && (
               <ShortInfoSession
-                label="phone"
+                label={t`Phone`}
                 value={user.phone}
                 icon={IconPhone}
                 href={`tel:${user.phone}`}
@@ -209,7 +211,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
             {!!user.birthday && (
               <ShortInfoSession
-                label="birthday"
+                label={t`Birthday`}
                 value={renderDate(user.birthday)}
                 icon={IconCake}
               />
@@ -221,12 +223,12 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
       <Tabs value={tab} onChange={(t) => setTab(t || "activity")}>
         <Tabs.List>
           <Tabs.Tab value="activity" fz={14} fw={500} h={30} px={16 * 2}>
-            {tl("activity")}
+            <Trans>Activity</Trans>
           </Tabs.Tab>
 
           {!isMe && (
             <Tabs.Tab value="mutual_workspaces" fz={14} fw={500} h={30} px={16 * 2}>
-              {tl("mutual_workspaces")}
+              <Trans>Mutual workspaces</Trans>
 
               <Text component="span" ml={3} fz={14} c="gray">
                 ({user.mutualWorkspaces.length})
@@ -235,7 +237,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
           )}
 
           <Tabs.Tab value="bookings" fz={14} fw={500} h={30} px={16 * 2}>
-            {tl("bookings")}
+            <Trans>Bookings</Trans>
 
             <Text component="span" ml={3} fz={14} c="gray">
               ({bookings.count})
@@ -244,7 +246,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
           {!!member && (
             <Tabs.Tab value="workspace-settings" fz={14} fw={500} h={30} px={16 * 2}>
-              {tl("workspace-settings")}
+              <Trans>Workspace settings</Trans>
             </Tabs.Tab>
           )}
         </Tabs.List>
@@ -364,7 +366,7 @@ const ShortInfoSession: FC<{
   return (
     <Stack gap={0}>
       <Text fz={14} fw={600} c="dark">
-        {tl(label)}
+        {label}
       </Text>
       {render(
         <Group gap={5} wrap="nowrap">

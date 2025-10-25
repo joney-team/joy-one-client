@@ -1,17 +1,17 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
-import { tl } from "@/modules/lang/lang-service";
-import { usePlugins } from "@/modules/plugins/plugins-context";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { Card, em, Grid, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
-import { IconCirclesRelation, IconPlus } from "@tabler/icons-react";
-import { FC } from "react";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { PluginMetaPages } from "@/components/plugins/plugin-meta-pages";
+import { usePlugins } from "@/modules/plugins/plugins-context";
 import { PluginZaloOAs } from "@/modules/plugins/zalo-oas/zalo-oas";
+import { useColor } from "@/modules/theme/use-color";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { Trans } from "@lingui/react/macro";
+import { Card, em, Grid, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import { IconCirclesRelation, IconPlus } from "@tabler/icons-react";
+import { FC } from "react";
 
 export const MessageBoxesIntegrate: FC = () => {
   const color = useColor();
@@ -22,10 +22,13 @@ export const MessageBoxesIntegrate: FC = () => {
     <Stack p={20} py={30}>
       <Stack gap={8}>
         <Title ta="center" c={color("primary")} fz={em(25)}>
-          {tl("msg_boxes_intro_title")}
+          <Trans>Connect with Social channels</Trans>
         </Title>
         <Text ta="center" fz={em(15)}>
-          {tl("msg_boxes_intro_desc")}
+          <Trans>
+            Integrate channels like Zalo, Facebook, Websites, ... to centralize all customer
+            messages in one place.
+          </Trans>
         </Text>
       </Stack>
 
@@ -54,10 +57,14 @@ export const MessageBoxesIntegrate: FC = () => {
               </Group>
 
               <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-                {tl("message-hubs")}
+                <Trans>Message Hubs</Trans>
               </Title>
 
-              <Text ta="center">{tl("message-hubs-description")}</Text>
+              <Text ta="center">
+                <Trans>
+                  Integrate ChatBox into your website <br /> Easy & quick setup
+                </Trans>
+              </Text>
 
               <Button
                 mt={10}
@@ -65,7 +72,7 @@ export const MessageBoxesIntegrate: FC = () => {
                 leftIcon={IconPlus}
                 onClick={plugins.onCreateMessageHub}
               >
-                {tl("create_new")}
+                <Trans>Create new</Trans>
               </Button>
             </Stack>
           </Card>

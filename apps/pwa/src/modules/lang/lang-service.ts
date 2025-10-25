@@ -2,9 +2,9 @@ import { defaultDateFormats } from "@/configs/lang.config";
 import { StorageKey } from "@/types";
 import { isServer } from "@/utils/common.utils";
 import { round } from "@/utils/number.utils";
+import { t } from "@lingui/core/macro";
 import { getCookie } from "cookies-next/client";
 import dayjs from "dayjs";
-import ReactHtmlParser from "html-react-parser";
 import { getGlobal } from "../../global";
 import { Dictionary, LangState, Locale, LocaleConfig } from "./lang-types";
 
@@ -37,35 +37,6 @@ export const getLocaleConfig = () => {
   if (isServer()) return {} as LocaleConfig;
   const global = getGlobal();
   return global._localeConfig || ({} as LocaleConfig);
-};
-
-export const tl = (
-  key: string,
-  params?: Record<string, number | string | null | undefined>
-): string => {
-  if (isServer()) return key;
-
-  if (!key || typeof key !== "string") return "";
-
-  const global = getGlobal();
-  const dictionary: Dictionary = global._dictionary || {};
-
-  let sentence = dictionary[key] || key;
-
-  if (params && typeof params === "object") {
-    Object.entries(params).map(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        sentence = sentence.replace(new RegExp(`{${key}}`, "g"), String(value));
-      }
-    });
-  }
-
-  if (/<\/?[a-z][\s\S]*>/.test(sentence)) return ReactHtmlParser(sentence) as string;
-  return sentence;
-};
-
-export const tMulti = (...keys: [string, any?][]) => {
-  return keys.map((key) => tl(key[0], key[1])).join(" ");
 };
 
 export const hours = (seconds: number) => {
@@ -124,8 +95,8 @@ export const num = (
       if (typeof roundPrecision === "number") _value = round(+value, roundPrecision);
     } else if (_args.type === "hours") {
       const _val = hours(_value);
-      if (_val === 1) return `${_val} ${tl("hr")}`;
-      return `${_val} ${tl("hrs")}`;
+      if (_val === 1) return `${_val} ${t`hour`}`;
+      return `${_val} ${t`hours`}`;
     }
     return (+_value).toLocaleString(getClientLocale());
   };
@@ -205,7 +176,7 @@ export const forceTime = (date: Date | number) => {
 export const renderFromNow = (date: Date | number) => {
   const _date = dayjs(forceTime(date));
   const isTomorrow = _date.isSame(dayjs().add(1, "day"), "day");
-  if (isTomorrow) return tl("tomorrow");
+  if (isTomorrow) return t`Tomorrow`;
   return _date.fromNow();
 };
 

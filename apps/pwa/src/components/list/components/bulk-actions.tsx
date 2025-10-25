@@ -1,11 +1,14 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
+import { num } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Center, Divider, Group, Text, Tooltip } from "@mantine/core";
 import { IconStack2, IconTrash, IconX } from "@tabler/icons-react";
 import { FC } from "react";
 import { ListContext } from "../types";
-import { num } from "@/modules/lang/lang-service";
-import { tl } from "@/modules/lang/lang-service";
 
 export const BulkActions: FC<ListContext> = (ctx) => {
   if (ctx.availableMultipleSelectActions.length === 0 || ctx.selectedIds.length === 0) return null;
@@ -32,7 +35,7 @@ export const BulkActions: FC<ListContext> = (ctx) => {
               {num(ctx.selectedIds.length)}
             </Text>
             <Text c="white" fz={14} fw={600}>
-              {tl("selected")}
+              <Trans>Selected</Trans>
             </Text>
           </Group>
 
@@ -83,11 +86,11 @@ export const BulkActions: FC<ListContext> = (ctx) => {
                     })
                 }
               >
-                {tl("remove")}
+                <Trans>Remove</Trans>
               </Button>
             )}
 
-            <Tooltip label={tl("unselect_all")}>
+            <Tooltip label={t`Unselect all`}>
               <ActionIcon
                 color="gray"
                 variant="subtle"

@@ -5,12 +5,13 @@ import { useList } from "@/components/list/use-list";
 import { ScrollArea } from "@/components/scroll-area";
 import { api } from "@/modules/apis";
 import { useQuery } from "@/modules/apis/use-query";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity } from "@/modules/products/products-types";
 import { SearchCustomer, SearchProduct, SearchResult } from "@/modules/search/search-types";
 import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
+import { t } from "@lingui/core/macro";
 import { Card, Group, Popover, Stack, Text, TextInput } from "@mantine/core";
 import { useClickOutside, useThrottledValue } from "@mantine/hooks";
 import { IconSearch, IconUserSquareRounded } from "@tabler/icons-react";
@@ -102,7 +103,7 @@ export const OrderSaleSearchBox: FC = () => {
             <TextInput
               miw={searchBoxWidth}
               value={searchText}
-              placeholder={tl("order_sale_search_placeholder")}
+              placeholder={t`Search products / services / customers`}
               onClick={() => {
                 if (!isOpened) setIsOpened(true);
               }}

@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { tl } from "@/modules/lang/lang-service";
 import { createWorkspaceSdk } from "@/modules/workspace-sdks/workspace-sdks-service";
 import { WorkspaceSdkEntity } from "@/modules/workspace-sdks/workspace-sdks-types";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import { Modal, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -30,7 +30,7 @@ export const ModalWorkspaceSdkForm: FC = () => {
     } as any,
     validate: {
       name: (value: string) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -60,11 +60,11 @@ export const ModalWorkspaceSdkForm: FC = () => {
     <Modal
       opened={opened}
       onClose={close}
-      title={<ModalTitle title={props?.sdk ? "Cập nhật SDK" : "Thêm SDK"} icon={IconPuzzle} />}
+      title={<ModalTitle title={props?.sdk ? t`Update SDK` : t`Create SDK`} icon={IconPuzzle} />}
       zIndex={400}
     >
       <Stack>
-        <TextInput withAsterisk label="Tên" {...form.getInputProps("name")} />
+        <TextInput withAsterisk label={t`Name`} {...form.getInputProps("name")} />
 
         <Button
           mt={10}
@@ -73,7 +73,7 @@ export const ModalWorkspaceSdkForm: FC = () => {
           leftSection={<IconCheck strokeWidth={1.2} />}
           type="submit"
         >
-          {tl("complete")}
+          {t`Complete`}
         </Button>
       </Stack>
     </Modal>

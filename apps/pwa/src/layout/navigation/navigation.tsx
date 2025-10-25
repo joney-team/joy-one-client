@@ -3,12 +3,12 @@
 import { Avatar } from "@/components/avatar";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { workspaceModuleConfigs } from "@/modules/workspaces/workspace-modules";
 import { getDefaultWorkspaceView, getNavigationGroups } from "@/modules/workspaces/workspace-view";
 import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Badge,
@@ -126,7 +126,7 @@ export const AppNavigation: FC = () => {
                   <Fragment key={group.id}>
                     <Divider
                       tt="capitalize"
-                      label={group.name || tl("general")}
+                      label={group.name || t`General`}
                       labelPosition="left"
                     />
 

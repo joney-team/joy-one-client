@@ -2,12 +2,12 @@
 
 import { Button } from "@/components/buttons/button";
 import { onError, onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import { Anchor, Center, em, PasswordInput, PinInput, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconLock, IconMail } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";
-import { tl } from "@/modules/lang/lang-service";
 import { renewPassword, requestRenewPassword, verifyRenewPasswordCode } from "../auth-service";
 
 export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
@@ -23,12 +23,12 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
     },
     validate: {
       email: (v: string) => {
-        if (!v) return tl("must_be_provided");
+        if (!v) return t`Must be provided`;
       },
       plainPassword: (v: string) => {
         if (!isVerified) return null;
-        if (!v) return tl("must_be_provided");
-        if (v.length < 6) return tl("password_length", { length: 6 });
+        if (!v) return t`Must be provided`;
+        if (v.length < 6) return t`Password must contain at least ${6} characters`;
       },
     },
   });
@@ -47,16 +47,16 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
         setIsSent(true);
         notifications.show({
           autoClose: true,
-          title: `${tl("notification")}`,
-          message: tl("sent_verification_code"),
+          title: t`Notification`,
+          message: t`Verification code sent to your email.`,
           icon: <IconMail strokeWidth={1.5} size={18} />,
         });
       } else {
         await renewPassword(values);
         notifications.show({
           autoClose: true,
-          title: tl("success"),
-          message: tl("change_password_success"),
+          title: t`Success`,
+          message: t`Password changed successfully.`,
           icon: <IconLock strokeWidth={1.5} size={18} />,
         });
         props.onFinish();
@@ -84,18 +84,18 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
           if (isVerified) {
             return (
               <Fragment>
-                <Text ta="center">{tl("enter_new_password")}</Text>
+                <Text ta="center">{t`Enter new password`}</Text>
 
                 <PasswordInput
-                  label={tl("new_password")}
+                  label={t`New password`}
                   size="md"
-                  placeholder={tl("password_length", { length: 6 }) as string}
+                  placeholder={t`Password must contain at least ${6} characters` as string}
                   leftSection={<IconLock strokeWidth={1.5} size={18} />}
                   {...form.getInputProps("plainPassword")}
                 />
 
                 <Button mt={16} loading={isSubmitting} type="submit" h={42}>
-                  {tl("change_password")}
+                  {t`Change password`}
                 </Button>
               </Fragment>
             );
@@ -104,14 +104,14 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
           if (isSent)
             return (
               <Fragment>
-                <Text ta="center">{tl("forgot_password_msg")}</Text>
+                <Text ta="center">{t`Forgot password message`}</Text>
 
                 <Center>
                   <PinInput length={6} oneTimeCode onComplete={onVerify} size="md" type="number" />
                 </Center>
 
                 <Anchor ta="center" onClick={() => onSubmit()} mt={16} fz={em(14)}>
-                  {tl("resend_verification_code")}
+                  {t`Resend verification code`}
                 </Anchor>
               </Fragment>
             );
@@ -121,14 +121,14 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
               <TextInput
                 label="Email"
                 size="md"
-                placeholder={tl("enter_your_email") as string}
+                placeholder={t`Enter your email` as string}
                 {...form.getInputProps("email")}
                 leftSection={<IconMail strokeWidth={1.5} size={18} />}
                 autoFocus
               />
 
               <Button mt={16} loading={isSubmitting} type="submit">
-                {tl("next")}
+                {t`Next`}
               </Button>
             </Fragment>
           );

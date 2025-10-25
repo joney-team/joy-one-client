@@ -8,11 +8,11 @@ import { IconCheck, IconGps, IconMapPin } from "@tabler/icons-react";
 import { FC, useState } from "react";
 
 import { CheckInLocation } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { tl } from "@/modules/lang/lang-service";
 import { getGeolocation } from "@/modules/locations/locations-service";
 import { onActionLoad } from "@/utils/actions";
-import { useDisclosure } from "@mantine/hooks";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { t } from "@lingui/core/macro";
+import { useDisclosure } from "@mantine/hooks";
 
 interface ModalCheckInLocationFormProps {
   checkInLocation?: CheckInLocation;
@@ -33,7 +33,7 @@ export const ModalCheckInLocationForm: FC = () => {
     },
     validate: {
       name: (value: string) => {
-        if (!value) return tl("required");
+        if (!value) return t`Required`;
       },
     },
   });
@@ -60,24 +60,23 @@ export const ModalCheckInLocationForm: FC = () => {
     <Modal
       opened={opened}
       onClose={close}
-      title={<ModalTitle title={tl("check_in_location")} icon={IconMapPin} />}
+      title={<ModalTitle title={t`Check location`} icon={IconMapPin} />}
       yOffset={16}
       zIndex={zIndexes.commonModals}
     >
       <Stack>
         <TextInput
           withAsterisk
-          label={tl("name")}
+          label={t`Name`}
           {...form.getInputProps("name")}
-          placeholder={tl("check_in_location_placeholder")}
+          placeholder={t`Main office, Branch 1, ...`}
         />
 
         <Group wrap="nowrap" gap={10} align="end">
-          <NumberInput label="Latitue" {...form.getInputProps("coordinates.lat")} />
+          <NumberInput label={t`Latitue`} {...form.getInputProps("coordinates.lat")} />
+          <NumberInput label={t`Longitude`} {...form.getInputProps("coordinates.lng")} />
 
-          <NumberInput label="Longitude" {...form.getInputProps("coordinates.lng")} />
-
-          <Tooltip label={tl("positioning")} zIndex={zIndexes.commonModals + 1}>
+          <Tooltip label={t`Positioning`} zIndex={zIndexes.commonModals + 1}>
             <ActionIcon
               w={36}
               h={36}
@@ -99,10 +98,7 @@ export const ModalCheckInLocationForm: FC = () => {
           </Tooltip>
         </Group>
 
-        <NumberInput
-          label={tl("radius", { unit: tl("meter") })}
-          {...form.getInputProps("radius")}
-        />
+        <NumberInput label={t`Radius (meter)`} {...form.getInputProps("radius")} />
 
         <Button
           mt={10}
@@ -111,7 +107,7 @@ export const ModalCheckInLocationForm: FC = () => {
           leftSection={<IconCheck strokeWidth={1.2} />}
           disabled={!form.isDirty()}
         >
-          {tl("complete")}
+          {t`Complete`}
         </Button>
       </Stack>
     </Modal>

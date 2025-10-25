@@ -1,6 +1,8 @@
+"use client";
+
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
+import { Trans } from "@lingui/react/macro";
 import { Center, em, Stack, Text, Title } from "@mantine/core";
 import { FC } from "react";
 import { Button } from "../../../components/buttons/button";
@@ -26,17 +28,22 @@ export const WorkspaceArchived: FC = () => {
 
       <Stack gap={3}>
         <Title ta="center" order={3}>
-          {tl("workspace_archived")}
+          <Trans>Workspace archived</Trans>
         </Title>
         <Text fz={em(15)} ta="center">
-          {tl(isOwner || !ownerName ? "workspace_archived_desc" : "workspace_archived_desc", {
-            ownerName,
-          })}
+          {isOwner || !ownerName ? (
+            <Trans>
+              This workspace is no longer active. Please contact <strong>{ownerName}</strong> to
+              reactivate
+            </Trans>
+          ) : (
+            <Trans>This workspace is no longer active. Please contact support to reactivate</Trans>
+          )}
         </Text>
 
         <Center mt={10}>
           <Button miw={120} variant="subtle" onClick={() => workspace.leave()}>
-            {tl("exit")}
+            <Trans>Exit</Trans>
           </Button>
         </Center>
       </Stack>

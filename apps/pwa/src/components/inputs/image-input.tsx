@@ -3,7 +3,9 @@ import { FileType } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
-import { tl } from "@/modules/lang/lang-service";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Box,
@@ -20,8 +22,6 @@ import { IconEye, IconPencil, IconPhoto, IconUpload } from "@tabler/icons-react"
 import { useRef, useState, type FC } from "react";
 import { Button } from "../buttons/button";
 import { Renderer } from "../renderer";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 
 interface ImageInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: string;
@@ -174,7 +174,7 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
                   fz={14}
                   iconSpacing={-8}
                 >
-                  {tl(value ? "change" : "upload")}
+                  {value ? t`Change` : t`Upload`}
                 </Button>
               </Renderer>
             </Stack>

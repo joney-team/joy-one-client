@@ -1,11 +1,12 @@
 "use client";
 
 import { Renderer } from "@/components/renderer";
-import { tl } from "@/modules/lang/lang-service";
 import { OnModalWorkspaceInviteMember } from "@/modules/workspace-members/workspace-invite-member";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { isExtendedApp } from "@/service";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Divider,
@@ -89,7 +90,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
         {props.leftSection}
 
         <Text fz={14} c="var(--mantine-color-text)" fw={500}>
-          {tl(props.label)}
+          {props.label}
         </Text>
       </Group>
     );
@@ -174,7 +175,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                   <IconSettings size={em(22)} strokeWidth={1.6} />
                 </ThemeIcon>
               }
-              label="workspace-settings"
+              label={t`Workspace settings`}
             />
 
             <NavigationItem
@@ -184,7 +185,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                   <IconLayout size={em(22)} strokeWidth={1.6} />
                 </ThemeIcon>
               }
-              label="modules"
+              label={t`Modules`}
             />
 
             <NavigationItem
@@ -194,7 +195,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                   <IconPuzzle size={em(22)} strokeWidth={1.6} />
                 </ThemeIcon>
               }
-              label="plugins"
+              label={t`Plugins`}
             />
 
             <NavigationItem
@@ -204,7 +205,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                   <IconWorld size={em(22)} strokeWidth={1.6} />
                 </ThemeIcon>
               }
-              label="custom_domain"
+              label={t`Custom domain`}
             />
           </Renderer>
 
@@ -218,7 +219,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                   <IconUsers size={em(22)} strokeWidth={1.6} />
                 </ThemeIcon>
               }
-              label="members"
+              label={t`Members`}
             />
           </Renderer>
 
@@ -227,7 +228,9 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
           >
             <Divider my={16} opacity={0.5} />
 
-            <Label>{tl("members")}</Label>
+            <Label>
+              <Trans>Members</Trans>
+            </Label>
 
             <NavigationItem
               href={`/members`}
@@ -236,7 +239,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                   <IconUsers size={em(22)} strokeWidth={1.6} />
                 </ThemeIcon>
               }
-              label="members"
+              label={t`Members`}
             />
 
             <NavigationItem
@@ -246,7 +249,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                 </ThemeIcon>
               }
               onClick={() => OnModalWorkspaceInviteMember()}
-              label="invite_members"
+              label={t`Invite members`}
             />
           </Renderer>
 
@@ -258,7 +261,9 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
           >
             <Divider my={16} opacity={0.5} />
 
-            <Label>{tl("branches")}</Label>
+            <Label>
+              <Trans>Branches</Trans>
+            </Label>
 
             {workspace.userMember.workspaceBranches.map((branch) => {
               return (
@@ -277,7 +282,9 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
 
           <Renderer visible={!isExtendedApp()}>
             <Divider my={16} opacity={0.5} />
-            <Label>{tl("switch_workspace")}</Label>
+            <Label>
+              <Trans>Switch workspace</Trans>
+            </Label>
 
             {workspace.userMembers
               .filter((userMember) => userMember.workspace._id !== workspace.userMember.workspaceId)
@@ -313,7 +320,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                 workspace.setIsCreateNew(true);
                 workspace.leave();
               }}
-              label="create_new_workspace"
+              label={t`Create new Workspace`}
             />
           </Renderer>
         </Stack>

@@ -2,9 +2,11 @@
 
 import { useAuth } from "@/modules/auth/auth-context";
 import { DeviceEntity } from "@/modules/devices/devices-types";
-import { renderDate, tl } from "@/modules/lang/lang-service";
+import { renderDate } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Badge, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import {
   IconDeviceDesktop,
@@ -43,13 +45,13 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
         <Stack gap={5} mt={-3}>
           <Group>
             <Text>
-              {ua.device.model || tl("unknow_device")}
+              {ua.device.model || t`Unknown device`}
               {ua.device.vendor ? ` - ${ua.device.vendor}` : ""}
             </Text>
 
             {auth.device._id === device._id && (
               <Badge size="xs" color={color("primary")}>
-                {tl("this_device")}
+                {t`This device`}
               </Badge>
             )}
           </Group>
@@ -74,8 +76,10 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
           )}
 
           <Text fz={em(12)} c="gray">
-            {tl("active_at")} {dayjs(device.lastActiveAt * 1000).fromNow()} (
-            {renderDate(device.lastActiveAt * 1000)})
+            <Trans>
+              Active at {dayjs(device.lastActiveAt * 1000).fromNow()}(
+              {renderDate(device.lastActiveAt * 1000)})
+            </Trans>
           </Text>
         </Stack>
       </Group>

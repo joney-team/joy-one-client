@@ -1,3 +1,5 @@
+"use client";
+
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
@@ -5,19 +7,20 @@ import { NumberColumn } from "@/components/list/columns/number-column";
 import { StatusColumn } from "@/components/list/columns/status-column";
 import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { OrderCard } from "@/modules/orders/order-card";
-import { onPayOrder, orderPaymentStatusOptions } from "@/modules/orders/orders-service";
+import { onPayOrder } from "@/modules/orders/orders-service";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
 import { UserColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Stack, Tooltip } from "@mantine/core";
 import { IconCalendarDown, IconCashRegister, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
 import { OrderEntity } from "./order-entity";
 import { OrderItemsColumn } from "./order-items-columns";
+import { orderPaymentStatuses } from "./orders-constants";
 
 export const OrderList: FC = () => {
   const workspace = useWorkspace();
@@ -48,14 +51,14 @@ export const OrderList: FC = () => {
           paymentStatus: StatusColumn({
             w: 200,
             options: Object.values(OrderPaymentStatus).map((status) => ({
-              label: tl(`order_payment_status_${status}`),
+              label: orderPaymentStatuses[status].label(),
+              color: orderPaymentStatuses[status].color,
               value: status,
-              color: orderPaymentStatusOptions[status].color,
             })),
             rightSection: (order) => {
               if (order.paymentStatus === OrderPaymentStatus.PROCESSING) {
                 return (
-                  <Tooltip label={tl("pay")}>
+                  <Tooltip label={t`Pay`}>
                     <ActionIcon onClick={() => onPayOrder(order)}>
                       <IconCashRegister size={16} />
                     </ActionIcon>
@@ -68,7 +71,7 @@ export const OrderList: FC = () => {
         filterModes={[
           {
             param: "today",
-            name: tl("today_entity", { entity: mod.name() }),
+            name: t`Orders today`,
             icon: IconCalendarDown,
             replaceFilterKeys: ["createdAt"],
             params: () => ({
@@ -88,7 +91,7 @@ export const OrderList: FC = () => {
         }}
         actions={[
           {
-            label: "edit",
+            label: t`Edit`,
             icon: IconEdit,
             href: (data) => `/orders/sale?code=${data.code}`,
           },

@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/buttons/button";
 import { useQuery } from "@/modules/apis/use-query";
-import { tl } from "@/modules/lang/lang-service";
 import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity, ResponseList } from "@/types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
@@ -30,10 +31,7 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
     <Selector
       excludeIds={props.excludeIds}
       onSearch={(q) => searchEntity<PrescriptionEntity>(AppEntity.PRESCRIPTIONS, q)}
-      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: tl("recently") }))}
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
+      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t`Recently` }))}
       renderOption={(prescription) => {
         return (
           <Combobox.Option value={prescription._id} key={prescription._id}>
@@ -57,7 +55,7 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
             fw={500}
             onClick={toggle}
           >
-            {tl("select")}
+            <Trans>Select</Trans>
           </Button>
         );
       }}

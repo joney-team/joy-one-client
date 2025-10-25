@@ -1,8 +1,11 @@
+"use client";
+
 import { Image } from "@/components/image";
 import { ModalTitle } from "@/components/modal-title";
-import { tl } from "@/modules/lang/lang-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { connectPluginZalo } from "@/modules/plugins/zalo-oas/zalo-oas-service";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Card, Group, Stack, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconPuzzle } from "@tabler/icons-react";
@@ -29,7 +32,9 @@ const ModalConnectPlugins: FC = () => {
       >
         <Group>
           <Image w={40} src="/images/plugins-meta-pages.svg" />
-          <Text>{tl("meta_pages")}</Text>
+          <Text>
+            <Trans>Meta pages</Trans>
+          </Text>
         </Group>
       </Card>
 
@@ -44,7 +49,7 @@ const ModalConnectPlugins: FC = () => {
       >
         <Group>
           <Image w={40} src="/images/plugins-zalo-oa.svg" />
-          <Text>{tl("zalo_oas")}</Text>
+          <Text>Zalo OAs</Text>
         </Group>
       </Card>
 
@@ -60,7 +65,7 @@ const ModalConnectPlugins: FC = () => {
       >
         <Group>
           <Image w={40} src="/images/plugins-message-hubs.svg" />
-          <Text>{tl("message-hubs")}</Text>
+          <Text>Message Hub</Text>
         </Group>
       </Card>
     </Stack>
@@ -70,6 +75,6 @@ const ModalConnectPlugins: FC = () => {
 export const OnModalConnectPlugins = () =>
   modals.open({
     modalId: "ModalConnectPlugins",
-    title: <ModalTitle title={tl("connect_more_platforms")} icon={IconPuzzle} />,
+    title: <ModalTitle title={t`Connect more platforms`} icon={IconPuzzle} />,
     children: <ModalConnectPlugins />,
   });

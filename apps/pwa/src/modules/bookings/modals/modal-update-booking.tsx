@@ -1,12 +1,13 @@
-import { BookingForm } from "../components/form-booking";
 import { ModalTitle } from "@/components/modal-title";
-import { BookingEntity } from "../booking-types";
+import { t } from "@lingui/core/macro";
 import { modals } from "@mantine/modals";
 import { IconCalendar } from "@tabler/icons-react";
+import { BookingEntity } from "../booking-types";
+import { BookingForm } from "../components/form-booking";
 
 export const OnModalUpdateBooking = (booking: BookingEntity) => {
   return modals.open({
-    title: <ModalTitle title="update_booking" icon={IconCalendar} />,
+    title: <ModalTitle title={t`Update booking`} icon={IconCalendar} />,
     modalId: "UpdateBooking",
     size: 500,
     children: (

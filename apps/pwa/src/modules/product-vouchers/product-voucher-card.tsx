@@ -1,8 +1,10 @@
-import { renderDate, num, tl } from "@/modules/lang/lang-service";
-import { productVoucherStatusColor } from "@/modules/product-vouchers/product-vouchers-service";
+"use client";
+
+import { num, renderDate } from "@/modules/lang/lang-service";
 import { ProductVoucherEntity } from "@/modules/product-vouchers/product-vouchers-types";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
+import { t } from "@lingui/core/macro";
 import {
   Badge,
   Card,
@@ -16,6 +18,7 @@ import {
 import { FC } from "react";
 import { EntityImage } from "../../components/entity-image";
 import { Renderer } from "../../components/renderer";
+import { productVoucherStatuses } from "./product-vouchers-constants";
 
 interface ProductVoucherCardProps extends PolymorphicComponentProps<"div", CardProps> {
   voucher: ProductVoucherEntity;
@@ -37,19 +40,24 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
         <Stack gap={3} flex={1}>
           <Text fw={500}>{voucher.productVoucher.name}</Text>
 
-          <Badge color={productVoucherStatusColor[voucher.status]} size="xs" variant="light" mb={5}>
-            {tl(voucher.status.toLowerCase())}
+          <Badge
+            color={productVoucherStatuses[voucher.status].color}
+            size="xs"
+            variant="light"
+            mb={5}
+          >
+            {productVoucherStatuses[voucher.status].label()}
           </Badge>
 
           <Text fw={500} fz={em(13)} c="gray">
-            • {tl("voucherAmount")}: {num(voucher.remainAmount, { type: "money" })}/
+            • {t`Voucher amount`}: {num(voucher.remainAmount, { type: "money" })}/
             {num(voucher.amount, { type: "money" })}
           </Text>
 
           <Renderer visible={!!voucher.productVoucher.voucherExpireInDays}>
             <Text fw={500} fz={em(13)} c="gray">
               •{" "}
-              {`${tl("HSD")}: ${renderDate(
+              {`${t`Expire date`}: ${renderDate(
                 voucher.createdAt + voucher.productVoucher.voucherExpireInDays! * 60 * 60 * 24
               )}`}
             </Text>
@@ -57,7 +65,7 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
 
           <Renderer visible={!!!props.hideCustomer}>
             <Text fw={500} fz={em(13)} c="gray">
-              • {`${tl("customer")}: ${voucher.customer.name}`}
+              • {`${t`Customer`}: ${voucher.customer.name}`}
             </Text>
           </Renderer>
 
@@ -68,7 +76,7 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
             }
           >
             <Text fw={500} fz={em(13)} c="gray">
-              • {`${tl("include_products")}:`}
+              • {`${t`Include products`}:`}
             </Text>
             {voucher.productVoucher.voucherIncludeProducts?.map((product) => {
               return (
@@ -86,7 +94,7 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
             }
           >
             <Text fw={500} fz={em(13)} c="gray">
-              • {`${tl("exclude_products")}:`}
+              • {`${t`Exclude products`}:`}
             </Text>
             {voucher.productVoucher.voucherExcludeProducts?.map((product) => {
               return (
@@ -106,7 +114,7 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
             }
           >
             <Text fw={500} fz={em(13)} c="gray">
-              • {`${tl("apply_all_products")}`}
+              • {`${t`Apply all products`}`}
             </Text>
           </Renderer>
         </Stack>

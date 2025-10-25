@@ -1,14 +1,13 @@
 "use client";
 
+import { EntityImage } from "@/components/entity-image";
 import { Selector, SelectorProps } from "@/components/selector";
-import { PostEntity } from "../posts-types";
-import { FC } from "react";
-import { ActionIcon, Combobox, Group, Input, Text } from "@mantine/core";
-import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
+import { ActionIcon, Combobox, Group, Input, Text } from "@mantine/core";
 import { IconNews, IconX } from "@tabler/icons-react";
-import { EntityImage } from "@/components/entity-image";
+import { FC } from "react";
+import { PostEntity } from "../posts-types";
 
 export interface PostSelectorProps
   extends Omit<
@@ -46,7 +45,6 @@ export const PostSelector: FC<PostSelectorProps> = (props) => {
             readOnly
             value={props.value?.title || ""}
             onClick={ctx.toggle}
-            placeholder={tl("select_entity", { entity: tl("post") })}
             rightSectionPointerEvents="all"
             rightSection={
               props.value ? (

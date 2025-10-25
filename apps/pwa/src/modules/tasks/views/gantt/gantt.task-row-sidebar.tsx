@@ -4,7 +4,7 @@ import { ContentEditable } from "@/components/content-editable/content-editable"
 import { formatDuration, QuickEstimateTimeInput } from "@/components/inputs/estimate-time-input";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
@@ -15,6 +15,7 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskEntity } from "@/modules/tasks/tasks-service";
 import { ReorderTaskPotision } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Box, Button, em, Group, rgba, ThemeIcon, Title, Tooltip } from "@mantine/core";
 import { useDebouncedCallback, useHover, useMergedRef } from "@mantine/hooks";
 import {
@@ -272,7 +273,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
 
         <SidebarRowSticky visible={hover.hovered}>
           {!task.parentId && (
-            <Tooltip label={tl("create_sub_task")}>
+            <Tooltip label={t`Create subtask`}>
               <Group>
                 <QuickCreateTaskInput parentId={task._id} tagFolderId={task.tagFolderId}>
                   <ActionIcon
@@ -288,7 +289,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
             </Tooltip>
           )}
 
-          <Tooltip label={tl("tag")}>
+          <Tooltip label={t`Tag`}>
             <Group>
               <TagSelector
                 type={TagType.TASK}
@@ -311,7 +312,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
           </Tooltip>
 
           <Tooltip
-            label={`${tl("tasks_view_estimate_time")}${
+            label={`${t`Estimate time`}${
               task.estimatedTime ? `: ${formatDuration(task.estimatedTime)}` : ""
             }`}
           >
@@ -329,7 +330,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
             </Group>
           </Tooltip>
 
-          <Tooltip label={tl("edit_task_name")}>
+          <Tooltip label={t`Edit task name`}>
             <ActionIcon
               variant="subtle"
               color="gray.6"
@@ -344,7 +345,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
             </ActionIcon>
           </Tooltip>
 
-          <Tooltip label={tl("scroll_to_task")}>
+          <Tooltip label={t`Scroll to task`}>
             <ActionIcon
               variant="transparent"
               size="sm"

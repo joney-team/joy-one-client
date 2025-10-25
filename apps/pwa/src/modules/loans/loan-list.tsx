@@ -3,28 +3,31 @@
 import { Circle } from "@/components/circle";
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
-import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
-import { LoanCard } from "@/modules/loans/components/loan-card";
 import { Renderer } from "@/components/renderer";
-import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
-import { OnModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
+import { OnModalPrompt } from "@/modals/modal-prompt";
+import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDate, tl } from "@/modules/lang/lang-service";
+import { num, renderDate } from "@/modules/lang/lang-service";
+import { LoanCard } from "@/modules/loans/components/loan-card";
 import {
   archiveLoans,
-  getLoans,
   loanPackageTypeColors,
   loanStatusColors,
   renderLoanPeriod,
 } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
+import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { ReportsContext, useReports } from "@/modules/reports/reports-context";
+import { OnModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
+import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { AppEntity } from "@/types";
 import { DateTime } from "@/utils/date-time.utils";
 import { round } from "@/utils/number.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Anchor, Badge, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
 import {
   IconBan,
@@ -40,13 +43,10 @@ import {
 } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, Fragment } from "react";
-import { useColor } from "../theme/use-color";
-import { AppEntity } from "@/types";
-import { OnModalPrompt } from "@/modals/modal-prompt";
-import { String } from "@/utils/string.utils";
 import { api } from "../apis";
 import { useLocations } from "../locations/locations-context";
-import { CustomerKycEntity } from "../customer-kycs/customer-kycs-types";
+import { useColor } from "../theme/use-color";
+import { loanAssetTypes, loanStatuses } from "./loans-constants";
 
 interface LoanListProps {
   strictStatus?: LoanStatus[];
@@ -87,13 +87,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
               <Fragment>
                 <Renderer visible={loan.isLiquidated}>
                   <Badge variant="light" color="violet" size="xs">
-                    {tl("liquidation")}
+                    <Trans>Liquidation</Trans>
                   </Badge>
                 </Renderer>
 
                 <Renderer visible={loan.isHasLateInterestReceipt}>
                   <Badge variant="light" color="orange" size="xs">
-                    {tl("has_late_interest")}
+                    <Trans>Has late interest</Trans>
                   </Badge>
                 </Renderer>
               </Fragment>
@@ -142,7 +142,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
               <Stack gap={5} w="100%">
                 <Group justify="space-between">
                   <Group gap={5}>
-                    <Text fw={500}>{tl(`loan_asset_type_${loan.assetType}`)}</Text>
+                    <Text fw={500}>{loanAssetTypes[loan.assetType].label()}</Text>
                     <Badge
                       size="sm"
                       variant="light"
@@ -158,7 +158,9 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 </Group>
 
                 <Group justify="space-between">
-                  <Text c="gray">{tl(`money_amount`)}</Text>
+                  <Text c="gray">
+                    <Trans>Money amount</Trans>
+                  </Text>
                   <Text ta="right">{num(loan.amount, { type: "money" })}</Text>
                 </Group>
 
@@ -169,7 +171,9 @@ export const LoanList: FC<LoanListProps> = (props) => {
 
                   return (
                     <Group justify="space-between">
-                      <Text c="gray">{tl(`time`)}</Text>
+                      <Text c="gray">
+                        <Trans>Time</Trans>
+                      </Text>
                       <Text ta="right">
                         {renderDate(startPeriod?.endTime)} - {renderDate(endPeriod?.endTime)}
                       </Text>
@@ -179,11 +183,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
 
                 {linkContractPdf && (
                   <Group justify="space-between">
-                    <Text c="gray">{tl(`loan_contract`)}</Text>
+                    <Text c="gray">
+                      <Trans>Loan contract</Trans>
+                    </Text>
                     <Anchor href={linkContractPdf} target="_blank" ta="right" fz={14}>
                       <Group gap={4} justify="right">
                         <IconFileTypePdf size={18} />
-                        {tl("open_file")}
+                        <Trans>Open file</Trans>
                       </Group>
                     </Anchor>
                   </Group>
@@ -202,18 +208,18 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 col: "Địa chỉ cũ",
                 text: location.renderVnLocation(loan.metadata?.cidLocation) || "-",
               },
-              { col: tl("loan_package"), text: loan.package.id, width: 20 },
+              { col: t`Loan package`, text: loan.package.id, width: 20 },
               {
-                col: tl("loan_asset_type"),
-                text: tl(`loan_asset_type_${loan.assetType}`),
+                col: t`Loan asset type`,
+                text: loanAssetTypes[loan.assetType].label(),
                 width: 20,
               },
-              { col: tl("loan_amount"), money: loan.amount, width: 30 },
+              { col: t`Loan amount`, money: loan.amount, width: 30 },
             ];
           },
         },
         nextReceiptAt: {
-          name: "loan_next_receipt_at",
+          name: t`Next receipt at`,
           sortable: true,
           render: ({ value, data: loan }) => {
             const warningReceiptBeforeDays =
@@ -230,7 +236,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             const renderNextReceipt = () => {
               if (!loan.nextReceiptAt) return "--";
               const isToday = dayjs(loan.nextReceiptAt * 1000).isSame(dayjs(), "day");
-              if (isToday) return tl("today");
+              if (isToday) return t`Today`;
               return dayjs(loan.nextReceiptAt * 1000).from(now * 1000);
             };
 
@@ -260,7 +266,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             : {
                 staticSelector: {
                   options: Object.values(LoanStatus).map((s) => ({
-                    label: tl(`loan_status_${s}`),
+                    label: loanStatuses[s].label(),
                     value: s,
                     activeColor: loanStatusColors[s],
                     render: () => {
@@ -271,7 +277,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                           <Circle color={color(loanStatusColors[s])} size={8} />
 
                           <Text fz={14} fw={500}>
-                            {tl(`loan_status_${s}`)}
+                            {loanStatuses[s].label()}
                           </Text>
                         </Group>
                       );
@@ -293,7 +299,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                     style={{ borderRadius: 100 }}
                     color={loanStatusColors[loan.status]}
                   >
-                    {tl(`loan_status_${loan.status}`)}
+                    {loanStatuses[loan.status].label()}
                   </Badge>
                 </Group>
 
@@ -304,7 +310,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                     LoanStatus.OVERDUE,
                   ].includes(loan.status)}
                 >
-                  <Tooltip label={`Tiến độ thanh toán ${round(percent, 1)}%`}>
+                  <Tooltip label={`${t`Payment progress`} ${round(percent, 1)}%`}>
                     <Group gap={4} wrap="nowrap">
                       {loan.paymentProgress?.map((r) => {
                         const isPaid = r.isCompleted;
@@ -337,7 +343,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
       }}
       bulkActions={[
         {
-          label: "move_workspace_branch",
+          label: t`Change branch`,
           icon: IconBuildingSkyscraper,
           permission: WorkspacePermission.LOANS_UPDATE_WORKSPACE_BRANCH,
           handler: (data, ctx) =>
@@ -348,14 +354,14 @@ export const LoanList: FC<LoanListProps> = (props) => {
             }),
         },
         {
-          label: "reject",
+          label: t`Reject`,
           icon: IconBan,
           permission: WorkspacePermission.LOANS_APPROVE,
           available: (data) => data.every((v) => [LoanStatus.PENDING].includes(v.status)),
           handler: (data, ctx) =>
             OnModalPrompt({
-              title: String.capitalizeFirstLetter(`${tl("reject")} ${tl("loan")}`),
-              message: tl("enter_reject_reason"),
+              title: t`Reject`,
+              message: t`Enter reject reason`,
               onSubmit: async (reason) => {
                 await api.post(`/loans/bulk-reject`, {
                   loanIds: data.map((v) => v.id),
@@ -365,15 +371,11 @@ export const LoanList: FC<LoanListProps> = (props) => {
               },
               icon: IconClipboard,
               color: "red",
-              suggestions: [
-                tl("wrong_information"),
-                tl("info_does_not_match_img"),
-                tl("img_is_blurry"),
-              ],
+              suggestions: [t`Wrong information`, t`Info does not match img`, t`Img is blurry`],
             }),
         },
         {
-          label: "loan_revert_rejected",
+          label: t`Loan revert rejected`,
           icon: IconRefresh,
           permission: WorkspacePermission.LOANS_APPROVE,
           available: (data) => data.every((v) => [LoanStatus.REJECTED].includes(v.status)),

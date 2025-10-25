@@ -1,8 +1,8 @@
 import { AppPageMetadata, Gender, ResponseList } from "@/types";
+import { t } from "@lingui/core/macro";
 import { Icon, IconGenderBigender, IconGenderFemale, IconGenderMale } from "@tabler/icons-react";
 import { api } from "../apis";
 import { apiServerSide } from "../apis/server";
-import { tl } from "../lang/lang-service";
 import { getReceipts } from "../receipts/receipts-service";
 import { ReceiptStatus } from "../receipts/receipts-types";
 import { AssignCustomerDto, CustomerDto, CustomerEntity } from "./customer-types";
@@ -53,7 +53,7 @@ export async function archiveCustomer(_id: string) {
   });
 
   if (pendingReceipts.count > 0) {
-    throw new Error(tl("CUSTOMER_HAS_PENDING_RECEIPTS"));
+    throw new Error(t`Customer has pending receipts`);
   }
 
   return api.delete(`/customers/${_id}`);

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import {
   PluginEInvoicesProviderStatus,
   PluginEInvoiceTemplateType,
@@ -6,20 +7,20 @@ import {
 export const eInvoicesProviderStatuses: Record<
   PluginEInvoicesProviderStatus,
   {
-    name: string;
+    name: () => string;
     color: string;
   }
 > = {
   [PluginEInvoicesProviderStatus.ACTIVE]: {
-    name: "active",
+    name: () => t`Active`,
     color: "green",
   },
   [PluginEInvoicesProviderStatus.AUTH_FAILED]: {
-    name: "auth_failed",
+    name: () => t`Auth failed`,
     color: "red",
   },
   [PluginEInvoicesProviderStatus.INACTIVE]: {
-    name: "inactive",
+    name: () => t`Inactive`,
     color: "gray",
   },
 };

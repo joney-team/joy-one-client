@@ -1,22 +1,23 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { FilesBox } from "@/modules/files/files-box";
 import { ModalTitle } from "@/components/modal-title";
-import { UserCard } from "@/modules/users/components/user-card";
-import { tl } from "@/modules/lang/lang-service";
+import { FilesBox } from "@/modules/files/files-box";
 import { disburseReceipt, getPaymentMethodIcon } from "@/modules/receipts/receipts-service";
 import {
   ReceiptEntity,
   ReceiptPaymentMethod,
   ReceiptType,
 } from "@/modules/receipts/receipts-types";
+import { UserCard } from "@/modules/users/components/user-card";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
 import { Group, Stack, Text, em } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconTag } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { receiptPaymentMethods } from "../receipt-constants";
 
 interface ModalDisburesementReceiptProps {
   receipt: ReceiptEntity;
@@ -39,7 +40,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
   return (
     <Stack gap={30}>
       <Text mb={-20} fw={500} fz={em(14)}>
-        Đề xuất bởi
+        {t`Proposed by`}
       </Text>
       {receipt.cashierUser && (
         <Group>
@@ -48,7 +49,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
       )}
 
       <Text mb={-20} fw={500} fz={em(14)}>
-        Nội dung
+        {t`Content`}
       </Text>
       {receipt.note ? (
         <Text
@@ -56,23 +57,23 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
           fw={700}
         />
       ) : (
-        <Text fz={em(12)}>Không có nội dung</Text>
+        <Text fz={em(12)}>{t`No content`}</Text>
       )}
 
       <Text mb={-20} fw={500} fz={em(14)}>
-        Hình ảnh / tài liệu
+        {t`Images / Documents`}
       </Text>
       <Group>
         <FilesBox
           disabled
           query={{ relatedReceiptId: receipt.id }}
           filesWrapperProps={{ justify: "end" }}
-          empty={<Text fz={em(12)}>Không có hình ảnh</Text>}
+          empty={<Text fz={em(12)}>{t`No images`}</Text>}
         />
       </Group>
 
       <Text mb={-20} fw={500} fz={em(14)}>
-        Phương thức thanh toán
+        {t`Payment Method`}
       </Text>
       <Group gap={10}>
         {Object.values(ReceiptPaymentMethod).map((method) => {
@@ -86,7 +87,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
               onClick={() => setPaymentMethod(method)}
               color="dark"
             >
-              {tl(`payment_method_${method}`)}
+              {receiptPaymentMethods[method].label()}
             </Button>
           );
         })}
@@ -98,7 +99,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
         type="submit"
         color={color}
       >
-        Duyệt
+        {t`Approve`}
       </Button>
     </Stack>
   );
@@ -109,7 +110,7 @@ export const OnModalDisburesementReceipt = (props: ModalDisburesementReceiptProp
     modalId: "ModalDisburesementReceipt",
     title: (
       <ModalTitle
-        title="Duyệt hoá đơn"
+        title={t`Approve Receipt`}
         icon={IconTag}
         color={props.receipt.type === ReceiptType.EXPENSE ? "red" : "primary"}
       />

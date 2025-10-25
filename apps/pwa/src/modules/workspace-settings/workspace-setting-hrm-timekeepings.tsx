@@ -1,14 +1,16 @@
-import { type FC } from "react";
+"use client";
+
 import { Container } from "@/components/container";
 import { CheckInLocationsInput } from "@/components/inputs/check-in-locations-input";
 import { HrmTimekeepingsRules } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { tl } from "@/modules/lang/lang-service";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import { Card, InputWrapper, NumberInput, Stack, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
+import { type FC } from "react";
 
 export const WorkspaceSettingHrmTimekeepings: FC = () => {
   const workspace = useWorkspace();
@@ -33,28 +35,28 @@ export const WorkspaceSettingHrmTimekeepings: FC = () => {
       <Card shadow="xs">
         <Stack>
           <NumberInput
-            label={tl("acceptLatenessUpToMins", { mins: "n" })}
-            description={tl("acceptLatenessUpToMinsDesc")}
+            label={t`Accept lateness up to ${"n"} minutes`}
+            description={t`Leave blank if you want to deduct directly into working time`}
             {...form.getInputProps("acceptLatenessUpToMins")}
           />
 
           <NumberInput
-            label={tl("acceptOverTimeAtLeastMins")}
-            description={tl("acceptOverTimeAtLeastMinsDesc")}
+            label={t`Start calculating OT from n (minutes) after the official working time`}
+            description={t`Leave blank if you don't want to calculate overtime`}
             {...form.getInputProps("acceptOverTimeAtLeastMins")}
           />
 
-          <InputWrapper label={tl("on_off_settings")}>
+          <InputWrapper label={t`On/Off settings`}>
             <Switch
               mt={8}
-              label={tl("hrm_timekeepings_require_photo")}
+              label={t`Require photo when checking in/out`}
               defaultChecked={workspace.settings.hrmTimeKeepingsRules?.requirePhoto}
               {...form.getInputProps("requirePhoto")}
             />
           </InputWrapper>
 
           <CheckInLocationsInput
-            label={tl("limit_check_in_position")}
+            label={t`Limit check-in position`}
             editable
             {...form.getInputProps("acceptLocations")}
           />

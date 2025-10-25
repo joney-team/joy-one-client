@@ -8,7 +8,8 @@ import {
   DiscountType,
   FreeOnProductData,
 } from "@/modules/coupons/coupon-types";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
+import { Trans } from "@lingui/react/macro";
 import { em, Text, TextProps } from "@mantine/core";
 import { FC, Fragment } from "react";
 
@@ -28,9 +29,11 @@ export const CouponBenefits: FC<CouponBenefitsProps> = (props) => {
           return (
             <Text key={i} fw={500} fz={em(13)} c="gray" {..._props}>
               •{" "}
-              {tl("discount_on_total", {
-                value: `${num(data.value)}${data.type === DiscountType.PERCENT ? "%" : ""}`.trim(),
-              })}
+              <Trans>
+                Discount{" "}
+                {`${num(data.value)}${data.type === DiscountType.PERCENT ? "%" : ""}`.trim()} on
+                total bill
+              </Trans>
             </Text>
           );
         }
@@ -40,9 +43,11 @@ export const CouponBenefits: FC<CouponBenefitsProps> = (props) => {
           return (
             <Text key={i} fw={500} fz={em(13)} c="gray" {..._props}>
               •{" "}
-              {tl("discount_on_product", {
-                value: `${num(data.value)}${data.type === DiscountType.PERCENT ? "%" : ""}`.trim(),
-              })}
+              <Trans>
+                Discount{" "}
+                {`${num(data.value)}${data.type === DiscountType.PERCENT ? "%" : ""}`.trim()} on
+                product {data.product?.name}
+              </Trans>
             </Text>
           );
         }
@@ -53,18 +58,16 @@ export const CouponBenefits: FC<CouponBenefitsProps> = (props) => {
             return (
               <Text key={i} fw={500} fz={em(13)} c="gray" {..._props}>
                 •{" "}
-                {tl("free_on_product_limit", {
-                  product: data.product?.name,
-                  quantity: data.quantity,
-                  unit: data.product?.unit,
-                })}
+                <Trans>
+                  Free {data.product?.name} maximum x{data.quantity} {data.product?.unit}
+                </Trans>
               </Text>
             );
           }
 
           return (
             <Text key={i} fw={500} fz={em(13)} c="gray" {..._props}>
-              • {tl("free_on_product", { product: data.product?.name })}
+              • <Trans>Free {data.product?.name}</Trans>
             </Text>
           );
         }

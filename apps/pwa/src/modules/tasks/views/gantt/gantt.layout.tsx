@@ -1,10 +1,14 @@
-import { useColor } from "@/modules/theme/use-color";
-import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
+"use client";
+
+import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
-import { getClientLocale, tl } from "@/modules/lang/lang-service";
+import { getClientLocale } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
+import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
+import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
+import { useColor } from "@/modules/theme/use-color";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   em,
@@ -31,12 +35,10 @@ import { FC, PropsWithChildren, useEffect } from "react";
 import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
 import { getWeeksFromRange } from "./gantt.utils";
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 
 export const SidebarHead: FC = () => {
   const forceUpdate = useForceUpdate();
   const gantt = useGantt();
-  const layout = useLayout();
   const workspaceLayout = useWorkspaceLayout();
 
   useEffect(() => {
@@ -61,11 +63,11 @@ export const SidebarHead: FC = () => {
         borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
       }}
     >
-      <Text fz={em(13)}>{tl("name")}</Text>
+      <Text fz={em(13)}>{t`Name`}</Text>
 
       <Group gap={5}>
         <Tooltip
-          label={tl(gantt.state.isHideEstimateTime ? "show_estimate_time" : "hide_estimate_time")}
+          label={gantt.state.isHideEstimateTime ? t`Show estimate time` : t`Hide estimate time`}
         >
           <ActionIcon
             variant="subtle"
@@ -86,7 +88,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={tl("task_status_color_visible")}>
+        <Tooltip label={t`Show task color by status`}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -103,7 +105,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={tl("scroll_today")}>
+        <Tooltip label={t`Scroll to today`}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -116,7 +118,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={tl("create_folder")}>
+        <Tooltip label={t`Create folder`}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -127,7 +129,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={tl("create_task")}>
+        <Tooltip label={t`Create task`}>
           <QuickCreateTaskInput>
             <ActionIcon component="div" variant="subtle" size="sm" color="gray">
               <IconPlus size={16} />

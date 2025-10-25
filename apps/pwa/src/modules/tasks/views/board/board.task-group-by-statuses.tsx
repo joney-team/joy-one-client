@@ -1,18 +1,22 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
-import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { useLayout } from "@/layout/layout-context";
+import { num } from "@/modules/lang/lang-service";
+import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
+import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
-import { num, tl } from "@/modules/lang/lang-service";
-import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle, syncTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { capitalize } from "@/utils/string.utils";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Group,
@@ -30,7 +34,6 @@ import { FC } from "react";
 import { useDndTasks } from "../../tasks-dnd-provider";
 import { BoardTaskCard, ChangeStatusDrop } from "./board.task-card";
 import { viewBoardConfig } from "./config";
-import { useColor } from "@/modules/theme/use-color";
 
 interface BoardTaskGroupByStatusesProps {
   statusId: string;
@@ -135,7 +138,7 @@ export const BoardTaskGroupByStatuses: FC<BoardTaskGroupByStatusesProps> = (prop
 
           <Group justify="end" gap={0}>
             <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
-              <Tooltip label={capitalize(`${tl("update")} ${tl("task_status")}`)}>
+              <Tooltip label={t`Update task status`}>
                 <ActionIcon
                   variant="subtle"
                   size="sm"
@@ -218,7 +221,7 @@ export const BoardTaskGroupByStatuses: FC<BoardTaskGroupByStatusesProps> = (prop
                     iconSpacing={-6}
                     onClick={() => OnModalCreateTask({ status: status.id })}
                   >
-                    {tl("create")} {tl("task")}
+                    <Trans>Create task</Trans>
                   </Button>
                 </Group>
               </Renderer>

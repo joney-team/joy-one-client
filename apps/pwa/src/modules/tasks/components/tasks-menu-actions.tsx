@@ -1,29 +1,28 @@
 "use client";
 
-import { type FC } from "react";
-import { useColor } from "@/modules/theme/use-color";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ButtonPlus } from "@/components/buttons/button-plus";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Renderer } from "@/components/renderer";
+import { useLayout } from "@/layout/layout-context";
 import { PartnerSelector } from "@/modules/partners/components/partner-selector";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
-import { TaskTag } from "@/modules/tasks/components/task-tag";
-import { useLayout } from "@/layout/layout-context";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
-import { tl } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { TaskTag } from "@/modules/tasks/components/task-tag";
+import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTaskHistories } from "@/modules/tasks/task-history-context";
+import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskPriorityColor } from "@/modules/tasks/tasks-service";
 import { TaskPriority } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Card, Group, Loader, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import {
@@ -40,6 +39,8 @@ import {
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
+import { type FC } from "react";
+import { taskPriorities } from "../task-constants";
 
 export const TaskMenuActions: FC = () => {
   const workspace = useWorkspace();
@@ -90,7 +91,7 @@ export const TaskMenuActions: FC = () => {
         {layout.view === "mobile" && (
           <ButtonSelect
             icon={IconFolder}
-            label={tl("folder")}
+            label={t`Folder`}
             autoHideLabel
             value={tasks.tagFolder?._id}
             options={tasks.tagFolders.map((tagFolder) => ({
@@ -107,7 +108,7 @@ export const TaskMenuActions: FC = () => {
         {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
           <ButtonSelect
             icon={IconSettings}
-            label={tl("settings")}
+            label={t`Settings`}
             iconStrokeWidth={1.8}
             onClick={() => OnTaskSatusesModal()}
           />
@@ -162,7 +163,7 @@ export const TaskMenuActions: FC = () => {
                 >
                   <Group gap={5}>
                     <Text fz={12} fw={500}>
-                      {tl("assignee")}
+                      {t`Assignee`}
                     </Text>
 
                     {!isAssigneesReady ? (
@@ -265,7 +266,7 @@ export const TaskMenuActions: FC = () => {
                 >
                   <Group gap={5}>
                     <Text fz={12} fw={500}>
-                      {tl("partners")}
+                      {t`Partners`}
                     </Text>
 
                     {/* TODO: display partners */}
@@ -344,7 +345,7 @@ export const TaskMenuActions: FC = () => {
                 >
                   <Group gap={5}>
                     <Text fz={12} fw={500}>
-                      {tl("tags")}
+                      {t`Tags`}
                     </Text>
                     <Renderer visible={!!isHasTag}>
                       <Group gap={3} wrap="nowrap">
@@ -396,14 +397,14 @@ export const TaskMenuActions: FC = () => {
 
         <ButtonSelect
           icon={IconFlagFilled}
-          label={tl("priority")}
+          label={t`Priority`}
           autoHideLabel
           value={tasks.state.priority}
           options={Object.values(TaskPriority)
             .reverse()
             .map((priority) => ({
               value: priority,
-              label: tl(`task_priority_${priority}`),
+              label: taskPriorities[priority as TaskPriority]?.label() || "",
               icon: IconFlagFilled,
               activeColor: getTaskPriorityColor(priority),
             }))}
@@ -413,7 +414,7 @@ export const TaskMenuActions: FC = () => {
 
         <ButtonSelect
           icon={IconCircleCheck}
-          label={tasks.state.showClosed ? tl("hide_closed") : tl("show_closed")}
+          label={tasks.state.showClosed ? t`Hide closed` : t`Show closed`}
           isActive={tasks.state.showClosed}
           iconStrokeWidth={1.8}
           onClick={() => {
@@ -435,7 +436,7 @@ export const TaskMenuActions: FC = () => {
             style={{ borderColor: color("gray.5") }}
           >
             <Group gap={0}>
-              <Tooltip label={tl("undo")}>
+              <Tooltip label={t`Undo`}>
                 <ActionIcon
                   disabled={!isAbleToUndo}
                   variant="subtle"
@@ -449,7 +450,7 @@ export const TaskMenuActions: FC = () => {
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={tl("redo")}>
+              <Tooltip label={t`Redo`}>
                 <ActionIcon
                   disabled={!isAbleToRedo}
                   variant="subtle"

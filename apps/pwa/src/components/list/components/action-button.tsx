@@ -1,9 +1,8 @@
+import { num } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Badge, Button, Group, Text, Tooltip } from "@mantine/core";
 import { Icon, IconX } from "@tabler/icons-react";
 import { FC, MouseEventHandler, PropsWithChildren } from "react";
-import { useColor } from "@/modules/theme/use-color";
-import { num } from "@/modules/lang/lang-service";
-import { tl } from "@/modules/lang/lang-service";
 
 interface ActionButtonProps {
   icon?: Icon;
@@ -41,7 +40,7 @@ export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
   const Icon = active && activeIcon ? activeIcon : icon;
 
   return (
-    <Tooltip label={tl(tooltip || "")} disabled={!!!tooltip}>
+    <Tooltip label={tooltip} disabled={!!!tooltip}>
       <Button
         variant="outline"
         px={8}
@@ -75,7 +74,7 @@ export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
           )}
           {label && (
             <Text fz={12} fw={500}>
-              {tl(label)}
+              {label}
             </Text>
           )}
 

@@ -1,21 +1,22 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
+import { Button } from "@/components/buttons/button";
+import { ButtonArchive } from "@/components/buttons/button-archive";
+import { Form } from "@/components/form";
+import { api } from "@/modules/apis";
+import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
+import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
+import { CustomField } from "@/modules/custom-fields/custom-field-types";
+import { onUploadFile } from "@/modules/files/file-service";
+import { AppEntity } from "@/types";
+import { onError, onFormError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import { Center, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, type FC } from "react";
-import { CategoryDto, CategoryEntity, CategoryType } from "../category-types";
-import { Button } from "@/components/buttons/button";
-import { onUploadFile } from "@/modules/files/file-service";
-import { api } from "@/modules/apis";
-import { onError, onFormError } from "@/utils/exceptions.utils";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { Form } from "@/components/form";
-import { ButtonArchive } from "@/components/buttons/button-archive";
-import { CustomField } from "@/modules/custom-fields/custom-field-types";
-import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
-import { AppEntity } from "@/types";
-import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
+import { useCallback, type FC } from "react";
+import { categoryTypes } from "../category-constants";
+import { CategoryDto, CategoryEntity, CategoryType } from "../category-types";
 
 export interface FormCategoryProps {
   category?: CategoryEntity;
@@ -42,10 +43,10 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
     },
     validate: {
       name: (value) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
       type: (value) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -105,7 +106,7 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
     <Form onSubmit={onSubmit} autoFocus={!props.category}>
       <Stack>
         <TextInput
-          label={tl("name")}
+          label={t`Name`}
           {...form.getInputProps("name")}
           onChange={(e) => {
             form.setFieldValue("name", e.target.value);
@@ -113,14 +114,14 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
           }}
         />
 
-        <TextInput label={tl("slug")} {...form.getInputProps("slug")} />
+        <TextInput label={t`Slug`} {...form.getInputProps("slug")} />
 
         <Select
-          label={tl("type")}
+          label={t`Type`}
           {...form.getInputProps("type")}
           readOnly={!!props.type}
           data={Object.values(CategoryType).map((type) => ({
-            label: tl(`category_type_${type}`),
+            label: categoryTypes[type].label(),
             value: type,
           }))}
         />
@@ -133,7 +134,7 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
 
         <Center>
           <Button loading={form.submitting} type="submit">
-            {tl("save")}
+            {t`Save`}
           </Button>
         </Center>
 

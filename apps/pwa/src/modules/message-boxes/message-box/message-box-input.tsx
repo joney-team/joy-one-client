@@ -2,17 +2,17 @@
 
 import { Button } from "@/components/buttons/button";
 import { eventsEmitter } from "@/modules/events/event-service";
-import { uploadFile } from "@/modules/files/file-service";
 import { FileCard } from "@/modules/files/file-card";
+import { uploadFile } from "@/modules/files/file-service";
 import { FileType } from "@/modules/files/file-types";
 import { parseFile } from "@/modules/files/files-utils";
-import { tl } from "@/modules/lang/lang-service";
 import {
   sendFileMessage,
   sendImageMessage,
   sendTextMessage,
 } from "@/modules/message-boxes/message-boxes-service";
 import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, em, Group, ScrollArea, Stack, Text, Textarea, Title } from "@mantine/core";
 import {
   Dropzone,
@@ -102,7 +102,7 @@ export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
               autosize
               maxRows={5}
               minRows={1}
-              placeholder={tl("type_and_press_enter")}
+              placeholder={t`Type and press [enter]`}
               variant="unstyled"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
@@ -175,7 +175,7 @@ export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
                 loading={isSubmitting.current}
                 onClick={onSubmit}
               >
-                {tl("send")}
+                {t`Send`}
               </Button>
             </Group>
           </Stack>
@@ -206,11 +206,11 @@ export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
               >
                 <Stack justify="center" align="center" w="100%" gap={3}>
                   <Title ta="center" order={4} fw={500}>
-                    {tl("preview")}
+                    {t`Preview`}
                   </Title>
 
                   <Text ta="center" fz={14} c="gray.6">
-                    {tl("drop_file_preview")}
+                    {t`Drop file to preview`}
                   </Text>
                 </Stack>
               </Group>

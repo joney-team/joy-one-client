@@ -1,13 +1,14 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
 import { formatDuration } from "@/components/inputs/estimate-time-input";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { getTaskProgress, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   alpha,
@@ -240,7 +241,7 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
 
               <Tooltip
                 tt="capitalize"
-                label={tl("dnd")}
+                label={t`Drag and drop`}
                 opened
                 position={props.index === 0 ? "bottom" : "top"}
                 openDelay={500}

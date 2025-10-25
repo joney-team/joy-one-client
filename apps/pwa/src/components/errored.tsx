@@ -1,6 +1,6 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
 import { Box, Group, Text, ThemeIcon } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { FC } from "react";
@@ -36,7 +36,7 @@ export const Errored: FC<ErroredProps> = (props) => {
         )}
 
         <Text ta={props.centered ? "center" : "left"} fz="xs" c="gray.6">
-          {props.error instanceof Error ? props.error.message : props.error || tl("error_unknown")}
+          {props.error instanceof Error ? props.error.message : props.error || t`Unknown error`}
         </Text>
       </Group>
     </Box>

@@ -1,6 +1,6 @@
 import { ModalTitle } from "@/components/modal-title";
+import { eventTypes } from "@/modules/events/event-constants";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { modals } from "@mantine/modals";
 import { IconCategory } from "@tabler/icons-react";
 import { FormCategory, FormCategoryProps } from "../components/form-category";
@@ -12,8 +12,8 @@ export const OnModalCategory = (props?: FormCategoryProps) => {
       <ModalTitle
         title={
           props?.category
-            ? tl(`event_type_${EventType.CATEGORY_UPDATED}`)
-            : tl(`event_type_${EventType.CATEGORY_NEW}`)
+            ? eventTypes[EventType.CATEGORY_UPDATED].name()
+            : eventTypes[EventType.CATEGORY_NEW].name()
         }
         icon={IconCategory}
       />

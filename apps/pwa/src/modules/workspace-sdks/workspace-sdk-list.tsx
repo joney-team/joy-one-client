@@ -1,14 +1,16 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
-import { tl } from "@/modules/lang/lang-service";
-import { OnModalWorkspaceSdkForm } from "./modals/modal-workspace-sdk-form";
-import { getWorkspaceSdks, removeWorkspaceSdk } from "./workspace-sdks-service";
-import { WorkspaceSdkEntity } from "./workspace-sdks-types";
-import { onArchive } from "@/utils/actions";
 import { useList } from "@/components/list/use-list";
+import { onArchive } from "@/utils/actions";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Stack, Text } from "@mantine/core";
 import { IconPlus, IconPuzzle, IconTrash } from "@tabler/icons-react";
 import { FC } from "react";
+import { OnModalWorkspaceSdkForm } from "./modals/modal-workspace-sdk-form";
+import { getWorkspaceSdks, removeWorkspaceSdk } from "./workspace-sdks-service";
+import { WorkspaceSdkEntity } from "./workspace-sdks-types";
 
 export const WorkspaceSdkList: FC = () => {
   const sdks = useList<WorkspaceSdkEntity>({
@@ -24,12 +26,16 @@ export const WorkspaceSdkList: FC = () => {
               <Group justify="space-between">
                 <Stack>
                   <Group>
-                    <Text fw={600}>{tl("name")}</Text>
+                    <Text fw={600}>
+                      <Trans>Name</Trans>
+                    </Text>
                     <Text>{sdk.name}</Text>
                   </Group>
                   <CopyText text={sdk.key}>
                     <Group>
-                      <Text fw={600}>Secret Key</Text>
+                      <Text fw={600}>
+                        <Trans>Secret Key</Trans>
+                      </Text>
                       <Text>••••••••••••••</Text>
                     </Group>
                   </CopyText>
@@ -64,7 +70,7 @@ export const WorkspaceSdkList: FC = () => {
             OnModalWorkspaceSdkForm({ onFinish: () => sdks.fetch(true, { isSilient: true }) })
           }
         >
-          {tl("create")} SDK
+          <Trans>Create SDK</Trans>
         </Button>
       </Group>
     </Stack>

@@ -1,6 +1,7 @@
 import { ResponseList } from "@/types";
+import { t } from "@lingui/core/macro";
 import { api } from "../apis";
-import { tl } from "../lang/lang-service";
+import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants";
 import { WorkspaceSpecialRoleId } from "../workspace-roles/workspace-roles-types";
 import {
   UpdateWorkspaceMemberDto,
@@ -49,7 +50,8 @@ export async function getWorkspaceMemberOnlineStatus() {
 }
 
 export function getUserMemberRoleLabel(userMember: Pick<WorkspaceMember, "memberId" | "roles">) {
-  if (!userMember.memberId) return tl("guest");
-  if (userMember.roles.length === 0) return tl(`role_${WorkspaceSpecialRoleId.MEMBER}`);
-  return userMember.roles.map((v) => tl(v.name)).join(", ");
+  if (!userMember.memberId) return t`Guest`;
+  if (userMember.roles.length === 0)
+    return workspaceSpecialRoleIds[WorkspaceSpecialRoleId.MEMBER].name();
+  return userMember.roles.map((v) => v.name).join(", ");
 }

@@ -3,10 +3,12 @@
 import { Menu, MenuDropdown, Text } from "@mantine/core";
 
 import { OnModalDatePicker } from "@/modals/modal-date-picker";
-import { renderDate, tl } from "@/modules/lang/lang-service";
+import { renderDate } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
 import { Period } from "@/types";
 import { timeToSeconds } from "@joy-one-client/utils/date-time.legacy";
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
+import { t } from "@lingui/core/macro";
 import { Group } from "@mantine/core";
 import {
   IconCalendar,
@@ -17,7 +19,6 @@ import {
 import dayjs from "dayjs";
 import { FC, useMemo } from "react";
 import { FilterProps } from "./types";
-import { useColor } from "@/modules/theme/use-color";
 
 export interface TimeRangeFilterConfig {}
 
@@ -57,7 +58,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
 
   const options = [
     {
-      label: tl("date"),
+      label: t`Date`,
       icon: IconCalendar,
       value: Period.DATE,
       onClick: () =>
@@ -72,7 +73,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         }),
     },
     {
-      label: tl("month"),
+      label: t`Month`,
       icon: IconCalendarMonth,
       value: Period.MONTH,
       onClick: () =>
@@ -88,7 +89,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         }),
     },
     {
-      label: tl("year"),
+      label: t`Year`,
       icon: IconCalendarEvent,
       value: Period.YEAR,
       onClick: () =>
@@ -104,7 +105,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         }),
     },
     {
-      label: tl("time_range"),
+      label: t`Time range`,
       icon: IconCalendarDot,
       value: "Range",
       onClick: () =>

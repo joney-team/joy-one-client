@@ -1,7 +1,7 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, Popover, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
@@ -24,9 +24,7 @@ export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
   const color = useColor();
 
   const placeholder =
-    typeof config === "object" && config.placeholder
-      ? config.placeholder
-      : "type-content-placeholder";
+    typeof config === "object" && config.placeholder ? config.placeholder : t`Enter content`;
 
   return (
     <Popover opened={opened} onClose={() => setOpened(false)} onDismiss={() => setOpened(false)}>
@@ -54,7 +52,7 @@ export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
 
       <Popover.Dropdown p={10}>
         <TextInput
-          placeholder={tl(placeholder)}
+          placeholder={placeholder}
           autoFocus
           onKeyUp={(e) => {
             if (e.key === "Enter") {

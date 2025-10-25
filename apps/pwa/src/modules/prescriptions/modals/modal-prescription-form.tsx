@@ -3,12 +3,11 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
-import { PrescriptionSelector } from "@/modules/prescriptions/components/prescription-selector";
-import { ProductSelector } from "@/modules/products/components/product-selector";
 import { getView } from "@/layout/layout-service";
+import { PrintButton } from "@/modals/modal-printer";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { tl } from "@/modules/lang/lang-service";
+import { PrescriptionSelector } from "@/modules/prescriptions/components/prescription-selector";
 import {
   createPrescription,
   removePrescription,
@@ -19,24 +18,27 @@ import {
   PrescriptionEntity,
   PrescriptionItem,
 } from "@/modules/prescriptions/prescriptions-types";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 import { ProductType } from "@/modules/products/products-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
 import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
+import { zIndexes } from "@joy-one-client/config/layout";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Badge,
   Card,
   Center,
+  em,
   Group,
   InputWrapper,
   NumberInput,
   Stack,
   Text,
   Textarea,
-  em,
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -51,8 +53,6 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { PrintButton } from "@/modals/modal-printer";
-import { zIndexes } from "@joy-one-client/config/layout";
 
 interface ModalPrescriptionFormProps {
   prescription?: PrescriptionEntity;
@@ -60,7 +60,7 @@ interface ModalPrescriptionFormProps {
   notUseTemplate?: boolean;
 }
 
-const itemNotes = ["take_after_eating", "take_before_eating"];
+const itemNotes = [t`Take after eating`, t`Take before eating`];
 
 export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => {
   const workspace = useWorkspace();
@@ -70,10 +70,10 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 
   const defaultItem: PrescriptionItem = {
     name: "",
-    unit: tl("pill"),
+    unit: t`Pill`,
     days: 1,
     qty: { morning: 0, afternoon: 0, noon: 0 },
-    note: tl(itemNotes[0]),
+    note: itemNotes[0],
   };
 
   const [items, handler] = useListState<PrescriptionItem>(
@@ -88,7 +88,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
     },
     validate: {
       name: (value) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -113,13 +113,13 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
   return (
     <Stack pb={10}>
       <TextInput
-        label={tl("prescription_name")}
+        label={t`Prescription name`}
         withAsterisk
-        placeholder={tl("prescription_name_placeholder")}
+        placeholder={t`Ex: Prescription 1, Treatment of leukemia...`}
         {...form.getInputProps("name")}
       />
 
-      <InputWrapper label={tl("list")} withAsterisk>
+      <InputWrapper label={t`List`} withAsterisk>
         <Stack>
           {items.map((item, index) => {
             return (
@@ -148,7 +148,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                               onChange={() => false}
                               flex={1}
                               onClick={ctx.toggle}
-                              placeholder={tl("pill_name")}
+                              placeholder={t`Enter pill name`}
                               rightSection={
                                 <ActionIcon variant="transparent" color="gray" onClick={ctx.toggle}>
                                   <IconSearch size={18} />
@@ -175,7 +175,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 
                     <Group gap={8} wrap="nowrap">
                       <TextInput
-                        label={tl("unit")}
+                        label={t`Unit`}
                         maw={100}
                         value={item.unit}
                         onChange={(e) =>
@@ -184,14 +184,14 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                       />
 
                       <NumberInput
-                        label={tl("days_num")}
+                        label={t`Days number`}
                         value={item.days}
                         onChange={(e) => handler.setItem(index, { ...item, days: +e })}
                         maw={100}
                       />
 
                       <NumberInput
-                        label={tl("morning")}
+                        label={t`Morning`}
                         value={item.qty.morning}
                         onChange={(e) =>
                           handler.setItem(index, { ...item, qty: { ...item.qty, morning: +e } })
@@ -200,7 +200,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                       />
 
                       <NumberInput
-                        label={tl("noon")}
+                        label={t`Noon`}
                         value={item.qty.noon}
                         onChange={(e) =>
                           handler.setItem(index, { ...item, qty: { ...item.qty, noon: +e } })
@@ -209,7 +209,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                       />
 
                       <NumberInput
-                        label={tl("afternoon")}
+                        label={t`Afternoon`}
                         value={item.qty.afternoon}
                         onChange={(e) =>
                           handler.setItem(index, { ...item, qty: { ...item.qty, afternoon: +e } })
@@ -219,18 +219,18 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                     </Group>
 
                     <TextInput
-                      label={tl("usage")}
+                      label={t`Usage`}
                       value={item.note}
                       onChange={(e) =>
                         handler.setItem(index, { ...item, note: e.currentTarget.value })
                       }
                       flex={1}
-                      placeholder={tl("usage_placeholder")}
+                      placeholder={t`Ex: Take after eating, take before eating...`}
                     />
 
                     <Group gap={5}>
                       {itemNotes.map((note, i) => {
-                        const value = tl(note);
+                        const value = note;
                         return (
                           <Badge
                             key={i}
@@ -266,16 +266,16 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                 },
               }}
             >
-              {tl("add_pill")}
+              {t`Add pill`}
             </Button>
           </Center>
         </Stack>
       </InputWrapper>
 
       <Textarea
-        label={tl("advice")}
+        label={t`Advice`}
         {...form.getInputProps("note")}
-        placeholder={tl("advice_placeholder")}
+        placeholder={t`Ex: Take after eating, take before eating...`}
       />
 
       <Group mt={10} justify="center" gap={10}>
@@ -312,7 +312,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                   variant="outline"
                   radius={200}
                 >
-                  {tl("select_prescription_template")}
+                  {t`Select prescription template`}
                 </Button>
               );
             }}
@@ -328,7 +328,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
             maw="100%"
             radius={200}
           >
-            {tl("save_prescription_template")}
+            {t`Save prescription template`}
           </Button>
         )}
       </Group>
@@ -342,14 +342,14 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
             leftSection={<IconArchive strokeWidth={1.3} size={16} style={{ marginRight: -5 }} />}
             onClick={() =>
               onArchive({
-                name: tl("prescription"),
+                name: t`Prescription`,
                 process: () => removePrescription(props.prescription!._id),
                 onArchived: () => modals.close("ModalPrescriptionForm"),
               })
             }
           >
             <Text fz={12} fw={400}>
-              {tl("delete")}
+              {t`Delete`}
             </Text>
           </Button>
         </Center>
@@ -361,7 +361,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 export const OnModalPrescriptionForm = (props: ModalPrescriptionFormProps) => {
   return modals.open({
     modalId: "ModalPrescriptionForm",
-    title: <ModalTitle title={tl("prescription")} icon={IconPill} />,
+    title: <ModalTitle title={t`Prescription`} icon={IconPill} />,
     children: <ModalPrescriptionForm {...props} />,
     size: "xl",
     fullScreen: getView() === "mobile",

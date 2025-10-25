@@ -3,9 +3,11 @@
 import { useList } from "@/components/list/use-list";
 import { useLayout } from "@/layout/layout-context";
 import { api } from "@/modules/apis";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { shiftSelect } from "@joy-one-client/utils/array";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -18,6 +20,7 @@ import {
   Text,
 } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
+import { IconRefresh } from "@tabler/icons-react";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Empty } from "../empty";
 import { Errored } from "../errored";
@@ -34,7 +37,6 @@ import { Sort } from "./sort/sort";
 import ListTable from "./table/table";
 import { BaseData, ListContext, ListProps, ListViewState } from "./types";
 import { getListDataId } from "./utils";
-import { IconRefresh } from "@tabler/icons-react";
 
 export function List<T extends BaseData>(props: ListProps<T>) {
   const forceUpdate = useForceUpdate();
@@ -237,7 +239,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
                     <props.icon size={22} color="var(--mantine-color-bright)" strokeWidth={1.5} />
                   )}
                   <Text fw={500} fz={14} c="var(--mantine-color-bright)">
-                    {tl(props.name || "list")}
+                    {props.name ?? t`List`}
                   </Text>
 
                   <Group gap={3}>
@@ -263,7 +265,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
                         variant="light"
                         onClick={() => list.fetch(true, { isSilient: false })}
                       >
-                        {tl("list_new_data", { count: num(list.newDataCount) })}
+                        <Trans>+{num(list.newDataCount)} new one</Trans>
                       </Badge>
                     )}
                   </Group>

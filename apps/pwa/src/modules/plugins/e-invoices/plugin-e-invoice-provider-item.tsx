@@ -5,11 +5,12 @@ import { Image } from "@/components/image";
 import { SessionTitle } from "@/components/session-title";
 import { api } from "@/modules/apis";
 import { useQuery } from "@/modules/apis/use-query";
-import { tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Badge, Card, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
@@ -23,7 +24,7 @@ import { FC, useEffect, useState } from "react";
 import { OnModalCheckEInvoice } from "./modal-check-e-invoice";
 import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
 import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor";
-import { eInvoicesProviderStatuses } from "./plugin-e-invoices.config";
+import { eInvoicesProviderStatuses } from "./plugin-e-invoices-constants";
 import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 import {
   PluginEInvoiceTemplateType,
@@ -90,7 +91,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
               </Text>
 
               <Badge color={status.color} variant="light">
-                {tl(status.name)}
+                {status.name()}
               </Badge>
             </Group>
 
@@ -108,7 +109,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                   });
                 }}
               >
-                {tl("change_provider")}
+                <Trans>Change provider</Trans>
               </Button>
 
               <Button
@@ -124,10 +125,10 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                   });
                 }}
               >
-                {tl("change_auth")}
+                <Trans>Change auth</Trans>
               </Button>
 
-              <Tooltip label={tl("healthcheck")}>
+              <Tooltip label={t`Healthcheck`}>
                 <ActionIcon
                   variant="light"
                   color="gray"
@@ -145,13 +146,13 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={tl("reset_templates")}>
+              <Tooltip label={t`Reset templates`}>
                 <ActionIcon variant="light" color="gray" size={30} onClick={resetTemplates}>
                   <IconTemplate size={18} />
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={tl("check_invoice")}>
+              <Tooltip label={t`Check invoice`}>
                 <ActionIcon
                   variant="light"
                   color="gray"
@@ -162,7 +163,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={tl("archive")}>
+              <Tooltip label={t`Archive`}>
                 <ActionIcon variant="light" color="gray" size={30} onClick={archive}>
                   <IconArchive size={18} />
                 </ActionIcon>
@@ -183,9 +184,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
 
           return (
             <Stack key={type} gap={5}>
-              <SessionTitle
-                name={tl("template_entity", { entity: tl(`e_invoice_template_type_${type}`) })}
-              />
+              <SessionTitle name={t`Template ${t`E-Invoice`}`} />
               <Card style={{ overflow: "visible" }}>
                 <PluginEInvoiceTemplateEditor
                   type={type}

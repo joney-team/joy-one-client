@@ -1,10 +1,11 @@
-import { type FC } from "react";
-import { WorkspacetSettingLoans } from "@/modules/workspace-settings/components/workspace-setting-loans";
 import { Container } from "@/components/container";
 import { SessionTitle } from "@/components/session-title";
+import { WorkspaceSettingImportLoans } from "@/modules/workspace-settings/components/workspace-setting-import-loans";
+import { WorkspacetSettingLoans } from "@/modules/workspace-settings/components/workspace-setting-loans";
+import { t } from "@lingui/core/macro";
 import { Card, Stack } from "@mantine/core";
 import { IconCreditCardPay, IconFileImport, IconReportMoney } from "@tabler/icons-react";
-import { WorkspaceSettingImportLoans } from "@/modules/workspace-settings/components/workspace-setting-import-loans";
+import { type FC } from "react";
 import { WorkspaceSettingCreditOperation } from "./components/workspace-setting-credit-operation";
 
 export const WorkspaceSettingCredit: FC = () => {
@@ -12,21 +13,21 @@ export const WorkspaceSettingCredit: FC = () => {
     <Container p={16}>
       <Stack gap={30}>
         <Stack gap={8}>
-          <SessionTitle name="Tín dụng" icon={IconReportMoney} />
+          <SessionTitle name={t`Credit`} icon={IconReportMoney} />
           <Card shadow="xs">
             <WorkspaceSettingCreditOperation />
           </Card>
         </Stack>
 
         <Stack gap={8}>
-          <SessionTitle name="Nhập dữ liệu hồ sơ vay" icon={IconFileImport} />
+          <SessionTitle name={t`Import loan data`} icon={IconFileImport} />
           <Card shadow="xs">
             <WorkspaceSettingImportLoans />
           </Card>
         </Stack>
 
         <Stack gap={8}>
-          <SessionTitle name="Gói vay" icon={IconCreditCardPay} />
+          <SessionTitle name={t`Loan package`} icon={IconCreditCardPay} />
           <Card shadow="xs">
             <WorkspacetSettingLoans />
           </Card>

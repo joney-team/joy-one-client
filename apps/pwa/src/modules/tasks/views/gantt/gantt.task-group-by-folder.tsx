@@ -3,7 +3,7 @@
 import { Hovered } from "@/components/hovered";
 import { formatDuration } from "@/components/inputs/estimate-time-input";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity } from "@/modules/tags/tags-types";
@@ -11,7 +11,7 @@ import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-ta
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { getTaskEntites, getTaskProgress } from "@/modules/tasks/tasks-service";
 import { useColor } from "@/modules/theme/use-color";
-import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, alpha, Box, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import {
@@ -78,7 +78,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
 
   const folderId = tagFolder?._id || "root";
   const folderState = gantt.foldersState[folderId];
-  const folderName = tagFolder?.name || tl("general_tasks");
+  const folderName = tagFolder?.name || t`General tasks`;
   const folderColor = tagFolder?.color || color("primary");
 
   const isCollapsed = !!folderState?.isCollapsed;
@@ -146,7 +146,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
 
                   <SidebarRowSticky>
                     {!!props.tagFolder && (
-                      <Tooltip label={tl("update_information")}>
+                      <Tooltip label={t`Update information`}>
                         <ActionIcon
                           size="sm"
                           variant="subtle"
@@ -161,7 +161,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
                       </Tooltip>
                     )}
 
-                    <Tooltip label={String.capitalizeFirstLetter(`${tl("add")} ${tl("tasks")}`)}>
+                    <Tooltip label={t`Add tasks`}>
                       <QuickCreateTaskInput tagFolderId={props.tagFolder?._id}>
                         <ActionIcon
                           size="sm"

@@ -4,20 +4,21 @@ import { Avatar } from "@/components/avatar";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { WayPoint } from "@/components/way-point";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { getMessageBoxes } from "@/modules/message-boxes/message-boxes-service";
 import { MessageBoxStatus } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
 import { Box, Group, rgba, ScrollArea, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyze, IconPuzzle } from "@tabler/icons-react";
 import { CardMessageBox } from "./message-box/message-box-card";
+import { messageBoxStatuses } from "./message-boxes-contants";
 import { MessageBoxesIntegrate } from "./message-boxes-integrate";
 
 export const MessageBoxList = () => {
@@ -62,11 +63,11 @@ export const MessageBoxList = () => {
       <Group gap={5} p={8}>
         <ButtonSelect
           icon={IconAnalyze}
-          label={tl("status")}
+          label={t`Status`}
           autoHideLabel
           value={boxes.params.status}
           options={Object.values(MessageBoxStatus).map((st) => ({
-            label: tl(`msg_boxes_status_${st}`),
+            label: messageBoxStatuses[st as MessageBoxStatus].label(),
             value: st,
           }))}
           onClear={() => boxes.removeParams(["status"])}
@@ -75,7 +76,7 @@ export const MessageBoxList = () => {
 
         <ButtonSelect
           icon={IconPuzzle}
-          label={tl("platform")}
+          label={t`Platform`}
           autoHideLabel
           value={boxes.params.platformId}
           options={[
@@ -102,7 +103,7 @@ export const MessageBoxList = () => {
 
       <ScrollArea flex={1} viewportProps={{ id: "message-boxes-list" }}>
         <Stack gap={12} pb={8} px={12}>
-          <Empty message={tl("no_msg")} visible={boxes.isEmpty} />
+          <Empty message={t`No messages`} visible={boxes.isEmpty} />
           <Errored error={boxes.error} visible={boxes.isHasError} />
 
           {boxes.isHasData &&

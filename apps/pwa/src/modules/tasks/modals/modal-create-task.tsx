@@ -1,20 +1,21 @@
 "use client";
 
-import { useRouter } from "@/hooks/use-router";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
-import { TaskForm, TaskFormProps } from "@/modules/tasks/components/form-task";
+import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { tl } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
+import { TaskForm, TaskFormProps } from "@/modules/tasks/components/form-task";
 import { getTaskEntity } from "@/modules/tasks/tasks-service";
 import { String } from "@/utils/string.utils";
+import { zIndexes } from "@joy-one-client/config/layout";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { em, Group, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";
 import { FC, useRef } from "react";
-import { zIndexes } from "@joy-one-client/config/layout";
 
 export let OnModalCreateTask: (props?: TaskFormProps) => void = () => {};
 
@@ -44,10 +45,7 @@ export const ModalCreateTask: FC = () => {
       onClose={close}
       opened={opened}
       title={
-        <ModalTitle
-          title={props.current?.task ? tl("task") : `${tl("create")} ${tl("task")}`}
-          icon={IconStackPush}
-        />
+        <ModalTitle title={props.current?.task ? t`Task` : t`Create task`} icon={IconStackPush} />
       }
       fullScreen={layout.view === "mobile"}
       size={830}
@@ -95,7 +93,7 @@ export const ModalCreateTask: FC = () => {
             <Text>/</Text>
 
             <Text px={8} fz={em(14)} fw={300}>
-              {tl("new_task")}
+              <Trans>New Task</Trans>
             </Text>
           </Group>
         </Renderer>

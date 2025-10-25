@@ -3,8 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { ModalTitle } from "@/components/modal-title";
-import { tl } from "@/modules/lang/lang-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { permissionGroups } from "@/modules/workspace-roles/workspace-roles-config";
 import {
   createWorkspaceRole,
@@ -17,7 +15,9 @@ import {
   WorkspaceSpecialRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError, onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import {
   Card,
   Divider,
@@ -26,14 +26,15 @@ import {
   Stack,
   Switch,
   Textarea,
-  ThemeIcon,
   TextInput,
+  ThemeIcon,
   Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconAccessible, IconCheck, IconLock } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { workspaceSpecialRoleIds } from "../workspace-roles-constants";
 
 interface ModalWorkspaceRoleFormProps {
   roleId?: string;
@@ -59,13 +60,13 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 
     if (!isAbleToEdit)
       return {
-        name: tl(`role_${props.roleId}`),
+        name: workspaceSpecialRoleIds[props.roleId as WorkspaceSpecialRoleId]?.name(),
         permissions: Object.values(WorkspacePermission),
       };
 
     if (props.roleId === WorkspaceSpecialRoleId.MEMBER) {
       return {
-        name: tl(`role_${WorkspaceSpecialRoleId.MEMBER}`),
+        name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.MEMBER]?.name(),
         permissions: workspace.settings.memberPermissions || [],
         description: "",
       };
@@ -82,7 +83,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
     initialValues: getInitialDto(),
     validate: {
       name: (value: string) => {
-        if (!value) return tl("must_be_provided");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -124,7 +125,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
   return (
     <Stack>
       <TextInput
-        label={tl("name")}
+        label={t`Name`}
         withAsterisk
         disabled={!isAbleToEdit || props.roleId === WorkspaceSpecialRoleId.MEMBER}
         {...form.getInputProps("name")}
@@ -132,13 +133,13 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 
       {isAbleToEdit && props.roleId !== WorkspaceSpecialRoleId.MEMBER && (
         <Textarea
-          label={tl("description")}
+          label={t`Description`}
           {...form.getInputProps("description")}
           style={{ minHeight: 80 }}
         />
       )}
 
-      <InputWrapper label={tl("grant_permissions")}>
+      <InputWrapper label={t`Grant permissions`}>
         <Stack mt={10}>
           {Object.entries(permissionGroups)
             .filter(
@@ -167,7 +168,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
               return (
                 <Card key={groupKey} withBorder p={10} shadow="none">
                   <Stack>
-                    <Divider label={tl(group.name || groupKey)} labelPosition="left" />
+                    <Divider label={groupKey} labelPosition="left" />
 
                     {group.permissions.map((permission, i) => {
                       const dependentPermissions = allPermissions.filter(
@@ -200,7 +201,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
                         >
                           <Switch
                             key={permission.value}
-                            label={tl(`permission_${permission.value}`)}
+                            label={permission.value}
                             color={isHasDependentPermissions ? "orange" : undefined}
                             checked={isChecked}
                             onClick={onToggle}
@@ -208,11 +209,9 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 
                           {isHasDependentPermissions && (
                             <Tooltip
-                              label={tl("dependent_permissions", {
-                                permissions: dependentPermissions
-                                  .map((p) => tl(`permission_${p.value}`))
-                                  .join(", "),
-                              })}
+                              label={t`Dependent permissions: ${dependentPermissions
+                                .map((p) => p.value)
+                                .join(", ")}`}
                             >
                               <ThemeIcon size={16} variant="light" color="gray">
                                 <IconLock />
@@ -238,7 +237,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
           disabled={!form.isDirty()}
           action
         >
-          {tl(props.roleId ? "update" : "create")}
+          {props.roleId ? t`Update` : t`Create`}
         </Button>
       )}
 
@@ -257,7 +256,7 @@ export const OnModalRoleForm = (props?: ModalWorkspaceRoleFormProps) => {
     modalId: "ModalRoleForm",
     title: (
       <ModalTitle
-        title={`${tl(props?.roleId ? "update" : "create")} ${tl("member_role")}`}
+        title={`${props?.roleId ? t`Update role` : t`Create role`}`}
         icon={IconAccessible}
       />
     ),

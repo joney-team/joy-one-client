@@ -1,9 +1,11 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { Trans } from "@lingui/react/macro";
 import { Group, Image, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { IconCirclesRelation, IconLinkPlus } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -24,13 +26,18 @@ export const ZaloOasOnboarding: FC = () => {
         </Group>
 
         <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-          {tl("connect")} <strong>Zalo OAs</strong>
+          <Trans>
+            Connect <strong>Zalo OAs</strong>
+          </Trans>
         </Title>
 
-        <Text ta="center">{tl("connect_zalo_oa_desc")}</Text>
+        <Text ta="center">
+          • <Trans>Manage customer interaction via Zalo OA</Trans> <br /> •{" "}
+          <Trans>Send reminder messages to customers</Trans>
+        </Text>
 
         <Button mt={10} type="submit" onClick={() => connectPluginZalo()} leftIcon={IconLinkPlus}>
-          {tl("connect")}
+          <Trans>Connect</Trans>
         </Button>
       </Stack>
     </Container>

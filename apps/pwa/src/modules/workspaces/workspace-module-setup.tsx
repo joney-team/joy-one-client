@@ -3,7 +3,6 @@
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceViewComponent } from "@/modules/workspace-settings/workspace-settings-types";
 import { WorkspaceModuleSelector } from "@/modules/workspaces/components/workspace-module-selector";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -16,6 +15,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Badge,
@@ -58,8 +58,8 @@ export const WorkspaceModuleSetup: FC = () => {
   const onAddDivier = () => {
     OnModalInput({
       type: InputModalType.TEXT,
-      title: tl("divider"),
-      label: tl("name"),
+      title: t`Divider`,
+      label: t`Name`,
       icon: IconSeparator,
       onDone: (v) => {
         handleComponents.append({ id: uuid(), moduleId: v, type: "DIVIDER", dividerName: v });
@@ -72,7 +72,7 @@ export const WorkspaceModuleSetup: FC = () => {
 
   useEffect(() => {
     layout.setComponents({
-      head: tl("modules"),
+      head: t`Modules`,
     });
 
     setTimeout(() => (isUpdateAble.current = true), 200);
@@ -100,17 +100,17 @@ export const WorkspaceModuleSetup: FC = () => {
               <IconLayout size={20} />
             </ThemeIcon>
 
-            <Text fw={600}>{tl("navigator")}</Text>
+            <Text fw={600}>{t`Navigator`}</Text>
           </Group>
 
           <Group gap={3}>
-            <Tooltip label={tl("reset_default")}>
+            <Tooltip label={t`Reset default`}>
               <ActionIcon variant="subtle" color="dark" onClick={onReset}>
                 <IconRefresh strokeWidth={1.5} size={18} />
               </ActionIcon>
             </Tooltip>
 
-            <Tooltip label={`${tl("add")} ${tl("divider")}`}>
+            <Tooltip label={t`Add divider`}>
               <ActionIcon variant="subtle" color="dark" onClick={onAddDivier}>
                 <IconPlus strokeWidth={1.5} size={18} />
               </ActionIcon>
@@ -126,7 +126,7 @@ export const WorkspaceModuleSetup: FC = () => {
               }}
               target={(ctx) => {
                 return (
-                  <Tooltip label={`${tl("add")} ${tl("modules")}`}>
+                  <Tooltip label={t`Add modules`}>
                     <ActionIcon variant="subtle" color="dark" onClick={ctx.toggle}>
                       <IconLibraryPlus strokeWidth={1.5} size={18} />
                     </ActionIcon>
@@ -229,13 +229,7 @@ const ComponentItem: FC<{
             </Renderer>
           </Group>
         ) : (
-          <Divider
-            w="100%"
-            label={tl(cpn.dividerName!)}
-            labelPosition="left"
-            tt="capitalize"
-            py={10}
-          />
+          <Divider w="100%" label={cpn.dividerName} labelPosition="left" tt="capitalize" py={10} />
         )}
       </Group>
 

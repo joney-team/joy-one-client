@@ -1,10 +1,13 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { tl, tMulti } from "@/modules/lang/lang-service";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { useProductCombo } from "@/modules/product-combos/product-combos-service";
 import { UseProductComboDto } from "@/modules/product-combos/product-combos-types";
 import { onFormError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Center, Modal, NumberInput, Stack, Table, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -64,7 +67,7 @@ export const ModalProductComboUsing: FC = () => {
       key={propsRef.current?.combo.id}
       opened={opened}
       onClose={close}
-      title={<ModalTitle title={tMulti(["add"], ["history"])} icon={IconPackage} />}
+      title={<ModalTitle title={t`Add combo history`} icon={IconPackage} />}
       size="lg"
       yOffset={80}
     >
@@ -72,8 +75,8 @@ export const ModalProductComboUsing: FC = () => {
         <Table withTableBorder withRowBorders withColumnBorders striped>
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>{tl("product")}</Table.Th>
-              <Table.Th>{tl("quantity")}</Table.Th>
+              <Table.Th>{t`Product`}</Table.Th>
+              <Table.Th>{t`Quantity`}</Table.Th>
             </Table.Tr>
           </Table.Thead>
 
@@ -96,11 +99,11 @@ export const ModalProductComboUsing: FC = () => {
           </Table.Tbody>
         </Table>
 
-        <Textarea label={tl("note")} {...form.getInputProps("note")} />
+        <Textarea label={t`Note`} {...form.getInputProps("note")} />
 
         <Center>
           <Button action onClick={onSubmit} loading={form.submitting}>
-            {tl("add")}
+            <Trans>Add</Trans>
           </Button>
         </Center>
       </Stack>

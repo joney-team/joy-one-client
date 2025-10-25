@@ -5,6 +5,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
 import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
 import { Badge, Card, Center, Group, Image, Skeleton, Stack, Text } from "@mantine/core";
 import { modals, openConfirmModal } from "@mantine/modals";
 import { IconArchive, IconEye, IconFileInvoice } from "@tabler/icons-react";
@@ -12,7 +13,7 @@ import { useMemo, type FC } from "react";
 import { api } from "../apis";
 import { useQuery } from "../apis/use-query";
 import { EventType } from "../events/event-types";
-import { renderDateTime, tl } from "../lang/lang-service";
+import { renderDateTime } from "../lang/lang-service";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
@@ -36,14 +37,8 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
   const onArchive = (invoice: PluginEInvoicesEntity) => {
     openConfirmModal({
       modalId: `cancel-e-invoice-${invoice._id}`,
-      title: (
-        <ModalTitle
-          title={tl("cancel_entity", { entity: tl("invoice") })}
-          color="red"
-          icon={IconArchive}
-        />
-      ),
-      children: tl("cancel_confirmation_msg", { entity: tl("invoice") }),
+      title: <ModalTitle title={t`Cancel E-Invoice`} color="red" icon={IconArchive} />,
+      children: t`Are you sure you want to cancel the e-invoice? This action cannot be undone. The e-invoice will be deleted.`,
       color: "red",
       onConfirm: () => {
         modals.close(`cancel-e-invoice-${invoice._id}`);
@@ -54,7 +49,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
           },
         });
       },
-      labels: { confirm: tl("cancel"), cancel: tl("cancel") },
+      labels: { confirm: t`Confirm Cancel`, cancel: t`Keep` },
       confirmProps: { color: "red" },
     });
   };
@@ -72,7 +67,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
           disabled={receipt.status !== ReceiptStatus.PAID}
           onClick={() => api.post(`/plugins/e-invoices`, { receiptId: receipt.id })}
         >
-          {tl("export_entity", { entity: tl("e_invoice") })}
+          {t`Export E-Invoice`}
         </Button>
       </Center>
     );
@@ -83,7 +78,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
   return (
     <Stack gap={8}>
       <Text fw={600} fz={14}>
-        {tl("eInvoices")}
+        {t`E-Invoices`}
       </Text>
 
       {isLoading && <Skeleton height={100} />}
@@ -111,7 +106,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
 
               {invoice.isCancelled ? (
                 <Badge color="red" variant="light">
-                  {tl("cancelled")}
+                  {t`Cancelled`}
                 </Badge>
               ) : (
                 <Group>
@@ -122,7 +117,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
                     leftIcon={IconArchive}
                     onClick={() => onArchive(invoice)}
                   >
-                    {tl("cancel")}
+                    {t`Cancel`}
                   </Button>
 
                   <Button
@@ -131,7 +126,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
                     variant="light"
                     onClick={() => window.open(invoice.url, "_blank")}
                   >
-                    {tl("view_entity", { entity: tl("invoice") })}
+                    {t`View Invoice`}
                   </Button>
                 </Group>
               )}

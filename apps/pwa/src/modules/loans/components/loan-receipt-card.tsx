@@ -1,22 +1,24 @@
 "use client";
 
-import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Button } from "@/components/buttons/button";
 import { HoverToEdit } from "@/components/hover-to-edit";
+import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Renderer } from "@/components/renderer";
 import { TooltipIcon } from "@/components/tooltip-icon";
 import { InputModalType } from "@/modals/modal-input";
+import { num, renderDate } from "@/modules/lang/lang-service";
+import { useInspectLoanReceipt } from "@/modules/loans/hooks/use-inspect-loan-receipt";
+import { LoanEntity } from "@/modules/loans/loans-types";
 import { OnModalPartialPayment } from "@/modules/receipts/modals/modal-partial-payment";
 import { OnModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
-import { num, renderDate, tl } from "@/modules/lang/lang-service";
-import { useInspectLoanReceipt } from "@/modules/loans/hooks/use-inspect-loan-receipt";
-import { LoanEntity } from "@/modules/loans/loans-types";
 import { updateReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Anchor, Badge, Card, Group, Stack, Table, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {
   IconCashRegister,
@@ -71,13 +73,13 @@ export const LoanReceiptCard: FC<{
 
           {data?.lateInterest && (
             <Badge color="red" variant="light">
-              {tl("loan_late_interest_receipt")}
+              <Trans>Late interest</Trans>
             </Badge>
           )}
 
           {isPartialPayment && (
             <Badge color="orange" variant="light">
-              Chia hoá đơn
+              <Trans>Partial payment</Trans>
             </Badge>
           )}
         </Group>
@@ -85,7 +87,9 @@ export const LoanReceiptCard: FC<{
         <Table horizontalSpacing={0}>
           <Table.Tbody>
             <Table.Tr>
-              <Table.Td>{tl("pay_expire")}</Table.Td>
+              <Table.Td>
+                <Trans>Pay expire</Trans>
+              </Table.Td>
 
               <Table.Td ta="right" c={isExpired ? "red" : "gray"}>
                 {renderDate(receipt.expireAt)}
@@ -94,14 +98,16 @@ export const LoanReceiptCard: FC<{
 
             {linkReceiptPdf && (
               <Table.Tr>
-                <Table.Td>File hoá đơn</Table.Td>
+                <Table.Td>
+                  <Trans>Receipt file</Trans>
+                </Table.Td>
 
                 <Table.Td ta="right" c={isExpired ? "red" : "gray"}>
                   {linkReceiptPdf ? (
                     <Anchor fz={14} fw={500} href={linkReceiptPdf} target="_blank">
                       <Group gap={4} align="center" justify="end">
                         <IconFileTypePdf size={18} />
-                        {tl("view")}
+                        <Trans>View</Trans>
                       </Group>
                     </Anchor>
                   ) : (
@@ -114,7 +120,9 @@ export const LoanReceiptCard: FC<{
             {isShowExplain && !data.liquidationCalculated && (
               <Fragment>
                 <Table.Tr>
-                  <Table.Td>Thu lãi</Table.Td>
+                  <Table.Td>
+                    <Trans>Interest</Trans>
+                  </Table.Td>
 
                   <Table.Td ta="right">
                     <NumberCurrencyFormatter value={fee} />
@@ -122,7 +130,9 @@ export const LoanReceiptCard: FC<{
                 </Table.Tr>
 
                 <Table.Tr>
-                  <Table.Td>Thu gốc</Table.Td>
+                  <Table.Td>
+                    <Trans>Principal</Trans>
+                  </Table.Td>
 
                   <Table.Td ta="right">
                     <NumberCurrencyFormatter value={capital} />
@@ -134,7 +144,9 @@ export const LoanReceiptCard: FC<{
             {data.liquidationCalculated && (
               <Fragment>
                 <Table.Tr>
-                  <Table.Td>{tl("remainCapitalAmount")}</Table.Td>
+                  <Table.Td>
+                    <Trans>Remain capital amount</Trans>
+                  </Table.Td>
                   <Table.Td ta="right">
                     {num(data.liquidationCalculated.remainCapitalAmount, { type: "money" })}
                   </Table.Td>
@@ -147,20 +159,26 @@ export const LoanReceiptCard: FC<{
                       <Table withTableBorder withColumnBorders>
                         <Table.Tbody>
                           <Table.Tr>
-                            <Table.Td>Kỳ tính lãi</Table.Td>
+                            <Table.Td>
+                              <Trans>Interest period</Trans>
+                            </Table.Td>
                             <Table.Td fw={700}>
                               {data.liquidationCalculated.period} (
                               {renderDate(data.liquidationCalculated.periodStartAt)})
                             </Table.Td>
                           </Table.Tr>
                           <Table.Tr>
-                            <Table.Td>Số ngày tính lãi</Table.Td>
+                            <Table.Td>
+                              <Trans>Interest days</Trans>
+                            </Table.Td>
                             <Table.Td fw={700}>
                               {num(data.liquidationCalculated.periodFeeDays)}
                             </Table.Td>
                           </Table.Tr>
                           <Table.Tr>
-                            <Table.Td>Lãi mỗi ngày</Table.Td>
+                            <Table.Td>
+                              <Trans>Interest per day</Trans>
+                            </Table.Td>
                             <Table.Td fw={700}>
                               {num(data.liquidationCalculated.periodFeePerDay)}
                             </Table.Td>
@@ -171,7 +189,9 @@ export const LoanReceiptCard: FC<{
                   }
                 >
                   <Table.Tr>
-                    <Table.Td>{tl("periodFeeAmount")}</Table.Td>
+                    <Table.Td>
+                      <Trans>Period fee amount</Trans>
+                    </Table.Td>
 
                     <Table.Td ta="right">
                       {num(data.liquidationCalculated.periodFeeAmount, { type: "money" })}
@@ -181,7 +201,7 @@ export const LoanReceiptCard: FC<{
 
                 <Table.Tr>
                   <Table.Td>
-                    {tl("remainCapitalAmountFee")} (
+                    <Trans>Remain capital amount fee</Trans> (
                     {num(data.liquidationCalculated.remainCapitalAmountFeePercent)}%)
                   </Table.Td>
                   <Table.Td ta="right">
@@ -190,7 +210,9 @@ export const LoanReceiptCard: FC<{
                 </Table.Tr>
 
                 <Table.Tr>
-                  <Table.Td>{tl("loan_receipt_late_interest")}</Table.Td>
+                  <Table.Td>
+                    <Trans>Late interest fee</Trans>
+                  </Table.Td>
                   <Table.Td ta="right">
                     {num(data.liquidationCalculated.lateInterestAmount, { type: "money" })}
                   </Table.Td>
@@ -201,13 +223,17 @@ export const LoanReceiptCard: FC<{
             {data.lateInterest && (
               <Fragment>
                 <Table.Tr>
-                  <Table.Td>Số ngày chậm trả</Table.Td>
+                  <Table.Td>
+                    <Trans>Late interest fee days</Trans>
+                  </Table.Td>
 
                   <Table.Td ta="right">{num(data.lateInterest.days)}</Table.Td>
                 </Table.Tr>
 
                 <Table.Tr>
-                  <Table.Td>Tỷ lệ phạt</Table.Td>
+                  <Table.Td>
+                    <Trans>Late interest fee rate</Trans>
+                  </Table.Td>
 
                   <Table.Td ta="right">{num(data.lateInterest.rate)}%</Table.Td>
                 </Table.Tr>
@@ -215,7 +241,9 @@ export const LoanReceiptCard: FC<{
             )}
 
             <Table.Tr>
-              <Table.Td>{tl("note")}</Table.Td>
+              <Table.Td>
+                <Trans>Note</Trans>
+              </Table.Td>
 
               <Table.Td ta="right">
                 <HoverToEdit
@@ -241,13 +269,15 @@ export const LoanReceiptCard: FC<{
             </Table.Tr>
 
             <Table.Tr>
-              <Table.Td>{tl("total")}</Table.Td>
+              <Table.Td>
+                <Trans>Total</Trans>
+              </Table.Td>
 
               <Table.Td ta="right" fw={600}>
                 <Group gap={5} justify="end">
                   <TooltipIcon
                     icon={IconInfoCircle}
-                    label={tl("entity_updated", { entity: tl("money_amount") })}
+                    label={t`Update amount`}
                     disabled={!receipt.dataChanged?.amount}
                     color="orange"
                   />
@@ -278,7 +308,7 @@ export const LoanReceiptCard: FC<{
               <Stack align="center">
                 {isExpired && (
                   <Badge color="red" variant="light">
-                    {tl("expired")}
+                    <Trans>Expired</Trans>
                   </Badge>
                 )}
 
@@ -288,7 +318,7 @@ export const LoanReceiptCard: FC<{
                     leftIcon={IconCashRegister}
                     disabled={!isAbleToPay}
                   >
-                    {tl("pay")}
+                    <Trans>Pay</Trans>
                   </Button>
                 </Group>
 
@@ -303,7 +333,7 @@ export const LoanReceiptCard: FC<{
                       <ThemeIcon color="gray" size="xs" variant="transparent">
                         <IconCircleHalf2 />
                       </ThemeIcon>
-                      {tl("partial_payment")}
+                      <Trans>Partial payment</Trans>
                     </Group>
                   </Anchor>
                 </Renderer>
@@ -315,7 +345,7 @@ export const LoanReceiptCard: FC<{
             return (
               <Group justify="center">
                 <Badge color="green" variant="light">
-                  Đã thanh toán
+                  <Trans>Paid</Trans>
                 </Badge>
               </Group>
             );

@@ -1,11 +1,11 @@
-import { ReceiptDetail } from "@/modules/receipts/receipt-detail";
 import { ModalTitle } from "@/components/modal-title";
-import { tl } from "@/modules/lang/lang-service";
+import { ReceiptDetail } from "@/modules/receipts/receipt-detail";
+import { zIndexes } from "@joy-one-client/config/layout";
+import { t } from "@lingui/core/macro";
+import { ActionIcon, Group } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconExternalLink } from "@tabler/icons-react";
 import { FC } from "react";
-import { ActionIcon, Group } from "@mantine/core";
-import { zIndexes } from "@joy-one-client/config/layout";
 
 interface ModalPromptProps {
   id: string;
@@ -21,7 +21,7 @@ export const OnReceiptDetailModal = (props: ModalPromptProps) => {
     zIndex: zIndexes.commonModals,
     title: (
       <ModalTitle
-        title={tl("receipt")}
+        title={t`Receipt`}
         icon={IconCashRegister}
         rightSection={
           <Group>

@@ -4,11 +4,12 @@ import { useRouter } from "@/hooks/use-router";
 import { OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
-import { onReconnected, useEventsListener } from "@/modules/events/event-service";
+import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { getClientLocale, tl } from "@/modules/lang/lang-service";
+import { getClientLocale } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onErrorLog } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import { parseThemeColor, useMantineTheme } from "@mantine/core";
 import { IconMessage } from "@tabler/icons-react";
 import { type FC, type PropsWithChildren, useEffect, useState } from "react";
@@ -20,9 +21,9 @@ import { PluginMessageHubEntity } from "./message-hubs/message-hubs-types";
 import { getPluginMetaPages, getPluginMetaPagesInfo } from "./meta-pages/meta-pages-service";
 import { PluginMetaPageEntity } from "./meta-pages/meta-pages-types";
 import { Context } from "./plugins-context";
+import { Plugin } from "./plugins-types";
 import { getPluginZaloOas, getZnsTemplateConfigs } from "./zalo-oas/zalo-oas-service";
 import { PluginZaloOaEntity, ZnsTemplateConfigs } from "./zalo-oas/zalo-oas-types";
-import { Plugin } from "./plugins-types";
 
 const PluginsProvider: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
@@ -85,7 +86,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
   const onCreateMessageHub = () => {
     OnModalInput({
       type: InputModalType.TEXT,
-      title: tl("enter_name"),
+      title: t`Enter name`,
       icon: IconMessage,
       value: workspace.userMember.name,
       onDone: async (name) => {
@@ -98,16 +99,14 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
             brandLogo: workspace.userMember.workspace.logo,
             locale: workspace.userMember.workspace.locale || getClientLocale(),
             position: "right",
-            welcomMessage: tl("welcome_message_placeholder", {
-              workspaceName: workspace.userMember.workspace.name,
-            }),
-            welcomSubMessage: tl("welcomSubMessage_placeholder"),
+            welcomMessage: t`Welcome to ${workspace.userMember.workspace.name}`,
+            welcomSubMessage: t`You need advice! Start chatting with us now.`,
             welcomeInputs: [
               {
                 id: uuid(),
                 type: "name",
-                label: tl("input_name_label_placeholder"),
-                description: tl("input_name_desc_placeholder"),
+                label: t`Your name`,
+                description: `Let us call you by your most affectionate name!`,
                 isRequired: true,
               },
             ],

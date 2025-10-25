@@ -5,7 +5,6 @@ import { Renderer } from "@/components/renderer";
 import { calendarDayJsLocalizer } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
 import { useLang } from "@/modules/lang/lang-context";
-import { tl } from "@/modules/lang/lang-service";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { createTask } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
@@ -20,7 +19,8 @@ import {
   timeInputValue,
 } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -92,13 +92,9 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
 
   const onSubmit = async () => {
     try {
-      if (!name)
-        throw new Error(String.capitalizeFirstLetter(`${tl("please")} ${tl("enter_task_name")}`));
+      if (!name) throw new Error(t`Please enter task name`);
 
-      if (!slot)
-        throw new Error(
-          String.capitalizeFirstLetter(`${tl("please")} ${tl("select")} ${tl("time")}`)
-        );
+      if (!slot) throw new Error(t`Please select time`);
 
       const time = new Date(date);
       const startAt = time.setHours(
@@ -115,7 +111,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
       );
 
       if (startAt > endAt) {
-        throw new Error(tl("start_time_must_be_before_end_time"));
+        throw new Error(t`Start time must be before end time`);
       }
 
       const result = await createTask({
@@ -172,7 +168,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
           <Text>/</Text>
 
           <Text px={8} fz={em(14)} fw={300}>
-            {tl("new_task")}
+            <Trans>New task</Trans>
           </Text>
         </Group>
       )}
@@ -180,7 +176,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
       <ContentEditable
         mt={3}
         autoFocus
-        placeholder={String.capitalizeFirstLetter(`${tl("enter_task_name")}`)}
+        placeholder={t`Enter task name`}
         placeHolderFontSize={layout.view === "mobile" ? 12 : 18}
         fz={layout.view === "mobile" ? 18 : 25}
         fw={500}
@@ -189,7 +185,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
       />
 
       <Renderer views={["desktop", "tablet"]}>
-        <InputWrapper label={tl("time")}>
+        <InputWrapper label={t`Time`}>
           <Card withBorder shadow="none" p={0}>
             <ScrollArea h={450} viewportRef={viewport}>
               <Calendar
@@ -259,7 +255,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         </InputWrapper>
       </Renderer>
 
-      <InputWrapper label={tl("time")}>
+      <InputWrapper label={t`Time`}>
         <Group gap={10} wrap="nowrap">
           <DateInput
             valueFormat={lang.config.dateFormat}
@@ -340,7 +336,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
 
       <Group justify="space-between">
         <Switch
-          label={tl("mark_as_billable")}
+          label={t`Mark as billable`}
           checked={billable}
           onChange={(e) => setBillable(e.target.checked)}
           onLabel={<IconCurrencyDollar size={16} strokeWidth={2} />}
@@ -370,7 +366,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         mt={10}
         color={color(tasks.tagFolder?.color || "primary")}
       >
-        {tl("add")}
+        {t`Add`}
       </Button>
     </Stack>
   );
@@ -397,11 +393,7 @@ export const ModalTaskTimeTracking: FC = () => {
       opened={opened}
       onClose={close}
       title={
-        <ModalTitle
-          title={String.capitalizeFirstLetter(`${tl("add")} ${tl("time_trackings")}`)}
-          icon={IconStopwatch}
-          color={tagFolder?.color}
-        />
+        <ModalTitle title={t`Add time trackings`} icon={IconStopwatch} color={tagFolder?.color} />
       }
       size={460}
     >

@@ -6,17 +6,18 @@ import { EntityImage } from "@/components/entity-image";
 import { QuantityInput } from "@/components/inputs/quantity-input";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
+import { ProductSelector } from "@/modules/products/components/product-selector";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Badge, Card, Group, NumberInput, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconBox, IconNote, IconPlus, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
 import { OrderItem } from "../../orders-management/orders-management-types";
-import { ProductSelector } from "@/modules/products/components/product-selector";
 
 export const OrderSaleItemComponent: FC<{
   index: number;
@@ -29,8 +30,8 @@ export const OrderSaleItemComponent: FC<{
 
   const onChangeNote = () => {
     OnModalInput({
-      title: `${tl(item.note ? "edit" : "add")} ${tl("note")}`,
-      label: tl("note").toString(),
+      title: item.note ? t`Edit note` : t`Add note`,
+      label: t`Note`,
       value: item.note,
       type: InputModalType.TEXTAREA,
       onDone: (value) => onUpdate({ ...item, note: value }),
@@ -62,7 +63,7 @@ export const OrderSaleItemComponent: FC<{
               )}
 
               <Text fz={12} c={color("blue")}>
-                {item.note || tl("note")}
+                {item.note || t`Note`}
               </Text>
             </Group>
 
@@ -72,8 +73,8 @@ export const OrderSaleItemComponent: FC<{
               onChange={(value) => onUpdate({ ...item, assigneeUsers: value })}
               tooltipLabel={
                 item.product.type === ProductType.PRODUCT
-                  ? tl("assignee_products_revenue").toString()
-                  : tl("assignee_services_revenue").toString()
+                  ? t`Assignee products revenue`
+                  : t`Assignee services revenue`
               }
             />
           </Group>
@@ -143,7 +144,7 @@ export const OrderSaleItemComponent: FC<{
               )}
 
               <Text fz={12} c={color("blue")}>
-                {item.note || tl("note")}
+                {item.note || t`Note`}
               </Text>
             </Group>
           </Stack>
@@ -156,8 +157,8 @@ export const OrderSaleItemComponent: FC<{
             onChange={(value) => onUpdate({ ...item, assigneeUsers: value })}
             tooltipLabel={
               item.product.type === ProductType.PRODUCT
-                ? tl("assignee_products_revenue").toString()
-                : tl("assignee_services_revenue").toString()
+                ? t`Assignee products revenue`
+                : t`Assignee services revenue`
             }
           />
 
@@ -240,7 +241,7 @@ export const OrderSaleItems: FC = () => {
       <Stack gap={0}>
         {orderSale.activeOrder.items.length === 0 && (
           <Stack justify="center" align="center">
-            <Empty message="add_product_to_order" hideBorder />
+            <Empty message={t`Add product/service to order`} hideBorder />
           </Stack>
         )}
 
@@ -252,7 +253,7 @@ export const OrderSaleItems: FC = () => {
               target={(ctx) => {
                 return (
                   <Button leftIcon={IconPlus} variant="outline" color="gray" onClick={ctx.toggle}>
-                    {tl("add_entity", { entity: tl("products_services") })}
+                    {t`Add product/service to order`}
                   </Button>
                 );
               }}

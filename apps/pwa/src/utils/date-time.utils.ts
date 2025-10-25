@@ -1,5 +1,6 @@
+import { renderDate } from "@/modules/lang/lang-service";
 import { Period } from "@/types";
-import { renderDate, tl } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
 
 export class DateTime {
   static addDays(now: Date, days: number): Date {
@@ -195,7 +196,7 @@ export class DateTime {
   static renderDate(date: any, period: Period, defaultValue?: string) {
     const _date = date ? new Date(date) : new Date();
 
-    if (!date) return defaultValue || tl("time");
+    if (!date) return defaultValue || t`Time`;
 
     if (period === Period.MONTH) {
       return _date.getMonth() + 1 + "/" + _date.getFullYear();
@@ -211,7 +212,7 @@ export class DateTime {
       return `${new Date(range.start).getFullYear()}`;
     }
 
-    if (DateTime.isToday(_date)) return tl("today");
+    if (DateTime.isToday(_date)) return t`Today`;
     return renderDate(_date);
   }
 

@@ -7,7 +7,7 @@ import { Anchor, em, PasswordInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconLock, IconMail } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
-import { tl } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
 
 export const FormSignIn: FC<{ onForgotPassword: () => void }> = (props) => {
   const auth = useAuth();
@@ -20,10 +20,10 @@ export const FormSignIn: FC<{ onForgotPassword: () => void }> = (props) => {
     },
     validate: {
       email: (v: string) => {
-        if (!v) return tl("must_be_provided");
+        if (!v) return t`Must be provided`;
       },
       plainPassword: (v: string) => {
-        if (!v) return tl("must_be_provided");
+        if (!v) return t`Must be provided`;
       },
     },
   });
@@ -51,26 +51,26 @@ export const FormSignIn: FC<{ onForgotPassword: () => void }> = (props) => {
         <TextInput
           label="Email"
           size="md"
-          placeholder={tl("enter_your_email") as string}
+          placeholder={t`Enter your email`}
           {...form.getInputProps("email")}
           leftSection={<IconMail strokeWidth={1.5} size={18} />}
           autoFocus
         />
 
         <PasswordInput
-          label={tl("password")}
+          label={t`Password`}
           size="md"
           {...form.getInputProps("plainPassword")}
-          placeholder={tl("enter_your_password") as string}
+          placeholder={t`Enter your password`}
           leftSection={<IconLock strokeWidth={1.5} size={18} />}
         />
 
         <Button mt={16} loading={isSubmitting} type="submit" h={42}>
-          {tl("login")}
+          {t`Login`}
         </Button>
 
         <Anchor onClick={props.onForgotPassword} ta="center" mt={16} fz={em(14)}>
-          {tl("forgot_password")}?
+          {t`Forgot password`}?
         </Anchor>
       </Stack>
     </form>

@@ -1,21 +1,22 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
-import { WorkSlot } from "@/types";
 import { useLayout } from "@/layout/layout-context";
 import {
   HrmTimekeepingEntity,
   HrmTimekeepingsRules,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { calculateTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
+import { UserCard } from "@/modules/users/components/user-card";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { WorkSlot } from "@/types";
 import { DateTime } from "@/utils/date-time.utils";
+import { Trans } from "@lingui/react/macro";
 import { Badge, Card, Group, SimpleGrid, Stack, Table, Text } from "@mantine/core";
 import { FC } from "react";
-import { UserCard } from "@/modules/users/components/user-card";
 
 interface HrmTimekeepingsSummaryProps {
   timekeepings: HrmTimekeepingEntity[];
@@ -87,10 +88,18 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
       <Table striped>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>{tl("members")}</Table.Th>
-            <Table.Th ta="right">{tl("hrm_timekeepings_late")}</Table.Th>
-            <Table.Th ta="right">{tl("hrm_timekeepings_overtime")}</Table.Th>
-            <Table.Th ta="right">{tl("hrm_timekeepings_working_time")}</Table.Th>
+            <Table.Th>
+              <Trans>Members</Trans>
+            </Table.Th>
+            <Table.Th ta="right">
+              <Trans>Late</Trans>
+            </Table.Th>
+            <Table.Th ta="right">
+              <Trans>Overtime</Trans>
+            </Table.Th>
+            <Table.Th ta="right">
+              <Trans>Working</Trans>
+            </Table.Th>
           </Table.Tr>
         </Table.Thead>
 

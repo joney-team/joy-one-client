@@ -1,24 +1,26 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
+import { Avatar } from "@/components/avatar";
+import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows";
+import { Image } from "@/components/image";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins";
+import { renderDateTime, renderFromNow } from "@/modules/lang/lang-service";
+import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service";
+import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types";
 import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
-import { renderDateTime, renderFromNow, tl } from "@/modules/lang/lang-service";
 import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service";
+import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins";
 import { usePlugins } from "@/modules/plugins/plugins-context";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { capitalize, String } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { IconClock, IconMessage, IconPlus } from "@tabler/icons-react";
 import { Handle, Position, ReactFlow } from "@xyflow/react";
 import { FC, Fragment } from "react";
-import { Avatar } from "@/components/avatar";
-import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows";
-import { Image } from "@/components/image";
-import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service";
-import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types";
 
 const cardRootSize = {
   width: 300,
@@ -70,7 +72,7 @@ const RootNode = () => {
               </Text>
             </Tooltip>
             <Text fz={12} c="gray.6" truncate="end">
-              {tl("workspace")}
+              Workspace
             </Text>
           </Stack>
         </Group>
@@ -118,7 +120,7 @@ const AiIntegrationNode = () => {
                     </Text>
                   </Tooltip>
                   <Text fz={10} c="gray.6" truncate="end">
-                    {tl("ai_assistant")}
+                    {t`AI assistant`}
                   </Text>
                 </Fragment>
               ) : (
@@ -126,9 +128,9 @@ const AiIntegrationNode = () => {
                   <ActionIcon variant="transparent" color="dark">
                     <IconPlus size={16} />
                   </ActionIcon>
-                  <Text fz={14} fw={500} truncate="end">{`${tl("connect")} ${tl(
-                    "ai-assistants"
-                  )}`}</Text>
+                  <Text fz={14} fw={500} truncate="end">
+                    <Trans>Connect {t`AI assistant`}</Trans>
+                  </Text>
                 </Group>
               )}
             </Stack>
@@ -208,15 +210,13 @@ const PluginNode = (props: any) => {
           <Stack gap={0}>
             <Tooltip label={name} disabled={!name || name.length < 15}>
               <Text fz={16} fw={500} truncate="end" maw={150}>
-                {name || tl("plugin")}
+                {name || t`Plugin`}
               </Text>
             </Tooltip>
 
             {!!plugin.lastInteractionAt && (
               <Tooltip
-                label={capitalize(
-                  `${tl("last_interaction_at")}: ${renderDateTime(plugin.lastInteractionAt)}`
-                )}
+                label={`${t`Last interaction at`}: ${renderDateTime(plugin.lastInteractionAt)}`}
               >
                 <Text fz={10} fw={500} c="gray" truncate="end">
                   <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "}
@@ -259,7 +259,7 @@ const PlusPluginNode = (props: any) => {
             <IconPlus size={20} strokeWidth={1.5} />
           </ActionIcon>
           <Text fz={14} fw={500} truncate="end">
-            {isHasPlugin ? tl("connect_more") : tl("connect_platform")}
+            {isHasPlugin ? t`Connect more` : t`Connect platform`}
           </Text>
         </Group>
       </Card>

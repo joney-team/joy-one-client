@@ -1,5 +1,6 @@
 import { NavigationTabs } from "@/components/navigation-tabs";
 import { useTasks } from "@/modules/tasks/tasks-context";
+import { t } from "@lingui/core/macro";
 import {
   Icon,
   IconCalendar,
@@ -16,28 +17,28 @@ import { TaskView } from "./types";
 const allTaskViews: {
   [key in TaskView]: {
     icon: Icon;
-    name: string;
+    name: () => string;
   };
 } = {
   [TaskView.LIST]: {
     icon: IconList,
-    name: "list",
+    name: () => t`List`,
   },
   [TaskView.BOARD]: {
     icon: IconLayoutKanban,
-    name: "board",
+    name: () => t`Board`,
   },
   [TaskView.GANTT]: {
     icon: IconMist,
-    name: "gantt",
+    name: () => t`Gantt`,
   },
   [TaskView.TIME_TRACKINGS]: {
     icon: IconStopwatch,
-    name: "time_trackings",
+    name: () => t`Time trackings`,
   },
   [TaskView.CALENDAR]: {
     icon: IconCalendar,
-    name: "calendar",
+    name: () => t`Calendar`,
   },
 };
 
@@ -70,7 +71,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
         activeTab={view}
         tabs={views.map((key) => ({
           id: key,
-          name: `tasks_view_${allTaskViews[key as TaskView]?.name}`,
+          name: allTaskViews[key as TaskView]?.name(),
           icon: allTaskViews[key as TaskView]?.icon,
         }))}
         onChange={(view) => setView(view as TaskView)}

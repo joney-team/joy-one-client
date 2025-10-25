@@ -1,13 +1,12 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
 import { useLayout } from "@/layout/layout-context";
-import { tl } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
+import { zIndexes } from "@joy-one-client/config/layout";
+import { Trans } from "@lingui/react/macro";
 import { Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconResize } from "@tabler/icons-react";
 import { FC } from "react";
-import { zIndexes } from "@joy-one-client/config/layout";
-import { Trans } from "@lingui/react/macro";
 
 const OverlayResizing: FC = () => {
   const layout = useLayout();

@@ -4,7 +4,6 @@ import { type AppRouter, useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
 import { OnCustomerModal } from "@/modules/customers/customer-modal";
-import { tl } from "@/modules/lang/lang-service";
 import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { OnModalLoanCalculator } from "@/modules/loans/modals/modal-loan-calculator";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
@@ -13,6 +12,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, Menu } from "@mantine/core";
 import {
   Icon,
@@ -139,7 +139,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
           onClick={() => OnModalLoanCalculator()}
           leftIcon={IconCalculator}
         >
-          {tl("loan-calculator")}
+          {t`Loan calculator`}
         </Button>
       )}
 
@@ -148,7 +148,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
           <Menu.Target>
             <Group>
               <Button id="create-credit" size="xs" leftIcon={IconCirclePlus} isGradient>
-                {tl("shortcut_new")}
+                {t`Quick action`}
               </Button>
             </Group>
           </Menu.Target>

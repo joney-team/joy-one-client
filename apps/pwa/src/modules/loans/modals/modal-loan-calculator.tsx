@@ -1,19 +1,15 @@
 "use client";
 
-import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { ModalTitle } from "@/components/modal-title";
+import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { onReconnected } from "@/modules/events/event-service";
-import { renderDate, num, tl } from "@/modules/lang/lang-service";
+import { num, renderDate } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
-import {
-  getLoanPaymentPlan,
-  loanPackageTypeColors,
-  renderLoanPeriod,
-} from "@/modules/loans/loans-service";
+import { getLoanPaymentPlan, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { LoanAssetType, LoanPaymentPlanResult } from "@/modules/loans/loans-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
-import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
 import {
   Anchor,
   Badge,
@@ -34,6 +30,7 @@ import { DateTimePicker } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCalculator } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";
+import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
 
 export let OnModalLoanCalculator: () => any = () => {};
 
@@ -61,7 +58,7 @@ export const ModalLoanCalculator: FC = () => {
 
   const loanPackages = workspace.settings?.loanSettings?.loanPackages || [];
 
-  const assetTypeOptions = loanPackages.reduce((output, p) => {
+  const assetTypeOptions: LoanAssetType[] = loanPackages.reduce((output, p) => {
     return Array.from([...(new Set([...output, ...p.assetTypes]) as any)]);
   }, [] as LoanAssetType[]);
 
@@ -130,7 +127,7 @@ export const ModalLoanCalculator: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={tl("loan-calculator")} icon={IconCalculator} />}
+      title={<ModalTitle title={t`Loan package calculator`} icon={IconCalculator} />}
       onClose={onClose}
       opened={opened}
       size={1000}
@@ -139,8 +136,8 @@ export const ModalLoanCalculator: FC = () => {
         <Group>
           <NumberInput
             flex={1}
-            label="Số tiền vay"
-            placeholder="Nhập số tiền vay"
+            label={t`Loan amount`}
+            placeholder={t`Enter loan amount`}
             hideControls
             value={amount}
             onChange={(value) => setAmount(+value)}
@@ -148,7 +145,7 @@ export const ModalLoanCalculator: FC = () => {
 
           <DateTimePicker
             flex={1}
-            label={tl("fulfilledAt")}
+            label={t`Fulfill at`}
             value={startTime ? new Date(startTime * 1000) : null}
             onChange={(d) => setStartTime(DateTime.timeToSeconds(d))}
           />
@@ -156,10 +153,10 @@ export const ModalLoanCalculator: FC = () => {
 
         <SimpleGrid cols={{ md: 3 }}>
           <Select
-            label="Loại tài sản"
+            label={t`Asset type`}
             data={assetTypeOptions.map((type) => ({
               value: type,
-              label: tl(`loan_asset_type_${type}`),
+              label: loanAssetTypes[type].label(),
             }))}
             value={assetType}
             onChange={(e) => {
@@ -170,7 +167,7 @@ export const ModalLoanCalculator: FC = () => {
           />
 
           <Select
-            label="Thời hạn vay"
+            label={t`Loan period`}
             data={packageDaysOptions.map((d) => ({
               value: d.toString(),
               label: renderLoanPeriod(d),
@@ -183,7 +180,7 @@ export const ModalLoanCalculator: FC = () => {
           />
 
           <Select
-            label="Kỳ hạn thanh toán"
+            label={t`Payment period`}
             data={loanPackage?.periodDaysOptions.map((d) => ({
               value: d.toString(),
               label: renderLoanPeriod(d),
@@ -198,16 +195,16 @@ export const ModalLoanCalculator: FC = () => {
         {calculating && <Skeleton height={200} />}
 
         {paymentPeriods.length > 0 && (
-          <InputWrapper label="Các kỳ thanh toán">
+          <InputWrapper label={t`Payment periods`}>
             <Table withTableBorder striped withColumnBorders withRowBorders>
               <Table.Thead>
                 <Table.Tr>
-                  <Table.Th>Kỳ</Table.Th>
-                  <Table.Th>Thời gian</Table.Th>
-                  <Table.Th>TT Tiền gốc</Table.Th>
-                  <Table.Th>Gốc còn lại</Table.Th>
-                  <Table.Th>Lãi</Table.Th>
-                  <Table.Th ta="right">Số tiền thanh toán</Table.Th>
+                  <Table.Th>{t`Period`}</Table.Th>
+                  <Table.Th>{t`Time`}</Table.Th>
+                  <Table.Th>{t`Principal amount`}</Table.Th>
+                  <Table.Th>{t`Remaining principal`}</Table.Th>
+                  <Table.Th>{t`Interest`}</Table.Th>
+                  <Table.Th ta="right">{t`Payment amount`}</Table.Th>
                 </Table.Tr>
               </Table.Thead>
 
@@ -215,7 +212,7 @@ export const ModalLoanCalculator: FC = () => {
                 {paymentPeriods.map((p, i) => {
                   return (
                     <Table.Tr key={i}>
-                      <Table.Td>{p.period === 0 ? `Thu phí` : p.period}</Table.Td>
+                      <Table.Td>{p.period === 0 ? t`Fee` : p.period}</Table.Td>
 
                       <Table.Td>
                         {(function () {
@@ -249,7 +246,7 @@ export const ModalLoanCalculator: FC = () => {
 
                 <Table.Tr>
                   <Table.Td colSpan={5} ta="left">
-                    Tổng
+                    {t`Total`}
                   </Table.Td>
                   <Table.Td fw={700} ta="right">
                     {num(
@@ -264,33 +261,30 @@ export const ModalLoanCalculator: FC = () => {
         )}
 
         {loanPackage && (
-          <InputWrapper label="Gói vay">
+          <InputWrapper label={t`Loan package`}>
             <Card withBorder shadow="none" p={8} maw="100%" w={350}>
               <Stack gap={5}>
                 <Anchor fw={600}>{loanPackage.id}</Anchor>
 
                 <RowInfo
-                  label="Tài sản"
-                  value={loanPackage.assetTypes
-                    .map((v) =>
-                      String.capitalizeFirstLetter(
-                        `${tl(`loan_asset_type_${v}`)}`.replace("Đăng ký", "").trim()
-                      )
-                    )
-                    .join(", ")}
+                  label={t`Asset types`}
+                  value={loanPackage.assetTypes.map((v) => loanAssetTypes[v].label()).join(", ")}
                 />
 
                 <RowInfo
-                  label="Loại"
+                  label={t`Loan package type`}
                   value={
-                    <Badge color={loanPackageTypeColors[loanPackage.type]}>
-                      {tl(`loan_package_${loanPackage.type}`)}
+                    <Badge color={loanPackageTypes[loanPackage.type].color}>
+                      {loanPackageTypes[loanPackage.type].label()}
                     </Badge>
                   }
                 />
 
-                <RowInfo label="Hạn vay" value={`${num(loanPackage.days / 30)} tháng`} />
-                <RowInfo label="Phí (CPV)" value={num(loanPackage.contractFee)} />
+                <RowInfo
+                  label={t`Loan period`}
+                  value={`${num(loanPackage.days / 30)} ${t`months`}`}
+                />
+                <RowInfo label={t`Contract fee`} value={num(loanPackage.contractFee)} />
               </Stack>
             </Card>
           </InputWrapper>

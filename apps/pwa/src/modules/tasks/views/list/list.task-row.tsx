@@ -7,7 +7,7 @@ import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
-import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
+import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
@@ -15,11 +15,12 @@ import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { getTaskEntity, getTaskPriorityColor } from "@/modules/tasks/tasks-service";
+import { getTaskEntity } from "@/modules/tasks/tasks-service";
 import { ReorderTaskPotision, TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { capitalize, String } from "@/utils/string.utils";
+import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Button,
@@ -47,6 +48,7 @@ import {
   IconTagPlus,
 } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
+import { taskPriorities } from "../../task-constants";
 import { getTaskDragId, useDndTasks, useTaskDrag } from "../../tasks-dnd-provider";
 import { ListTaskRowDropper } from "./list.task-row-dropper";
 
@@ -287,7 +289,7 @@ export const ListTaskRow: FC<{
                 }}
               >
                 <Renderer visible={!task.parentId}>
-                  <Tooltip label={tl("create_sub_task")}>
+                  <Tooltip label={t`Create subtask`}>
                     <ActionIcon
                       variant="subtle"
                       color="gray.6"
@@ -303,7 +305,7 @@ export const ListTaskRow: FC<{
                 </Renderer>
 
                 <Renderer visible={allowEditName}>
-                  <Tooltip label={tl("edit_task_name")}>
+                  <Tooltip label={t`Edit task name`}>
                     <ActionIcon
                       variant="subtle"
                       color="gray.6"
@@ -331,7 +333,7 @@ export const ListTaskRow: FC<{
                   onClose={() => setForceHover(false)}
                   target={(selector) => {
                     return (
-                      <Tooltip label={capitalize(`${tl("add")} ${tl("tags")}`)}>
+                      <Tooltip label={t`Add tags`}>
                         <ActionIcon
                           variant="subtle"
                           color="gray.6"
@@ -414,9 +416,9 @@ export const ListTaskRow: FC<{
                 .reverse()
                 .map((priority) => ({
                   value: priority,
-                  label: tl(`task_priority_${priority}`),
+                  label: taskPriorities[priority].label(),
                   icon: IconFlagFilled,
-                  activeColor: getTaskPriorityColor(priority),
+                  activeColor: taskPriorities[priority].color,
                 }))}
               onChange={(value) => {
                 ctx.onUpdate({ ...task, priority: value as any });

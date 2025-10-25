@@ -1,14 +1,14 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
+import { Trans } from "@lingui/react/macro";
 import { Box, Card, em, Stack, Title } from "@mantine/core";
 import { FC, Fragment, memo, PropsWithChildren } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
+import { TasksDndProvider } from "../../tasks-dnd-provider";
 import { ListTaskGroupByFolder } from "./list.task-group-by-folder";
 import { ListTaskGroupByStatuses } from "./list.task-group-by-statuses";
-import { TasksDndProvider } from "../../tasks-dnd-provider";
 
 export const TasksListView: FC<PropsWithChildren> = memo((props) => {
   const { state, tagFolder, statuses, tagFolders } = useTasks();
@@ -70,7 +70,7 @@ export const TasksListView: FC<PropsWithChildren> = memo((props) => {
                 />
                 <Stack gap={16}>
                   <Title fz={em(15)} fw={600}>
-                    {tl("general_tasks")}
+                    <Trans>General tasks</Trans>
                   </Title>
                   <ListTaskGroupByFolder pure />
                 </Stack>

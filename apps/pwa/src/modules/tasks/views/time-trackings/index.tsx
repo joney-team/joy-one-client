@@ -7,7 +7,6 @@ import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { OnModalTaskTimeTracking } from "@/modules/tasks/modals/modal-task-time-tracking";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
@@ -22,7 +21,8 @@ import {
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
 import { objSelect } from "@/utils/object.utils";
-import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -160,7 +160,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
                   >
                     <Group gap={5}>
                       <Text fz={12} fw={500}>
-                        {tl("members")}
+                        <Trans>Members</Trans>
                       </Text>
 
                       {!isAssigneesReady ? (
@@ -262,9 +262,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
             renderDayHead={(date, hovered, isOutOfRange) => {
               return (
                 <Group>
-                  <Tooltip
-                    label={String.capitalizeFirstLetter(`${tl("add")} ${tl("time_trackings")}`)}
-                  >
+                  <Tooltip label={t`Add time trackings`}>
                     <ActionIcon
                       variant="subtle"
                       radius={100}

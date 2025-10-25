@@ -1,7 +1,9 @@
+"use client";
+
 import { useQuery } from "@/modules/apis/use-query";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { AppEntity, ResponseList } from "@/types";
+import { t } from "@lingui/core/macro";
 import { Card, InputWrapper, SimpleGrid, Switch } from "@mantine/core";
 import { FC, Fragment, ReactNode } from "react";
 import { CustomField, CustomFieldEntity, CustomFieldType } from "../custom-field-types";
@@ -81,7 +83,7 @@ export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
       })}
 
       {switchCustomFields.length > 0 && (
-        <InputWrapper label={tl("switch_custom_fields")}>
+        <InputWrapper label={t`Setup`}>
           <Card shadow="none" withBorder p={12}>
             <SimpleGrid>
               {switchCustomFields.map((customField) => {

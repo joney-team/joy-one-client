@@ -5,27 +5,29 @@ import { ButtonSelect } from "@/components/buttons/button-select";
 import { ContentEditHover } from "@/components/content-edit-hover";
 import { Empty } from "@/components/empty";
 import { ModalTitle } from "@/components/modal-title";
-import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { OnModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loan-asset-estimation-form";
 import { useRouter } from "@/hooks/use-router";
-import { num, tl } from "@/modules/lang/lang-service";
+import { InputModalType, OnModalInput } from "@/modals/modal-input";
+import { num } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import {
   LoanAssetEstimation,
   LoanAssetEstimations,
   LoanAssetType,
 } from "@/modules/loans/loans-types";
+import { OnModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loan-asset-estimation-form";
 import { convertExcelToJson } from "@/modules/tools/tools-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
 import { DateTime } from "@/utils/date-time.utils";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Card, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { modals } from "@mantine/modals";
 import { IconFile, IconFilter, IconPencil, IconPlus, IconX } from "@tabler/icons-react";
+import { useSearchParams } from "next/navigation";
 import { FC, useMemo, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
-import { useSearchParams } from "next/navigation";
+import { loanAssetTypes } from "../loans/loans-constants";
 
 export const WorkspaceSettingLoanAssetEstimations: FC = () => {
   const loans = useLoans();
@@ -171,12 +173,12 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
       <Group>
         <ButtonSelect
           icon={IconFilter}
-          label={tl("asset_type")}
+          label={t`Asset type`}
           iconStrokeWidth={1.8}
           value={searchs.get("assetType")}
           options={[LoanAssetType.CAR_REGISTRATION, LoanAssetType.MOTOBIKE_REGISTRATION].map(
             (v) => ({
-              label: tl(`loan_asset_type_estimation_${v}`),
+              label: loanAssetTypes[v].label(),
               value: v,
             })
           )}
@@ -188,7 +190,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
 
         <ButtonSelect
           icon={IconFilter}
-          label={tl("brand_name")}
+          label={t`Brand name`}
           iconStrokeWidth={1.8}
           value={searchs.get("brandId")}
           options={loans.assetEstimations.brands
@@ -205,7 +207,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
 
         <ButtonSelect
           icon={IconFilter}
-          label={tl("asset_model")}
+          label={t`Asset model`}
           iconStrokeWidth={1.8}
           value={searchs.get("modelId")}
           options={loans.assetEstimations.models
@@ -228,19 +230,19 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
         hasMore={isAbleToLoadMore}
       >
         {loans.assetEstimations.estimations.length === 0 ? (
-          <Empty message="Chưa có định giá" />
+          <Empty message={t`No asset estimation`} />
         ) : (
           <Card p={0} shadow="xs">
             <Table>
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th>#</Table.Th>
-                  <Table.Th>Loại</Table.Th>
-                  <Table.Th>Nhãn hiệu</Table.Th>
-                  <Table.Th>Dòng/Mẫu</Table.Th>
-                  <Table.Th>Tên</Table.Th>
-                  <Table.Th>NSX</Table.Th>
-                  <Table.Th>Giá thẩm định</Table.Th>
+                  <Table.Th>{t`Type`}</Table.Th>
+                  <Table.Th>{t`Brand`}</Table.Th>
+                  <Table.Th>{t`Model`}</Table.Th>
+                  <Table.Th>{t`Name`}</Table.Th>
+                  <Table.Th>{t`Manufacturing year`}</Table.Th>
+                  <Table.Th>{t`Estimation price`}</Table.Th>
                   <Table.Th></Table.Th>
                 </Table.Tr>
               </Table.Thead>
@@ -250,9 +252,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                   return (
                     <Table.Tr key={estimation.id}>
                       <Table.Td>{index + 1}</Table.Td>
-                      <Table.Td>
-                        {tl(`loan_asset_type_estimation_${estimation.assetType}`)}
-                      </Table.Td>
+                      <Table.Td>{loanAssetTypes[estimation.assetType].label()}</Table.Td>
                       <Table.Td>
                         {
                           loans.assetEstimations.brands.find(
@@ -290,7 +290,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                           </ContentEditHover>
 
                           {assetEstimationPriceSpreadRate > 0 && (
-                            <Tooltip label="Giá hiển thị cho người dùng">
+                            <Tooltip label={t`Display price for users`}>
                               <Text fz={em(13)} c="gray">
                                 {num(estimation.estimatePrice * assetEstimationPriceSpreadRate, {
                                   type: "money",

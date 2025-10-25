@@ -1,19 +1,23 @@
+"use client";
+
+import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { useList } from "@/components/list/use-list";
 import { SessionLoader } from "@/components/session-loader";
-import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
-import { useList } from "@/components/list/use-list";
+import { BoardTaskCard } from "@/modules/tasks/views/board/board.task-card";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { IconEye, IconLayoutNavbarCollapse, IconStack2 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
-import { SessionTitle } from "../../components/session-title";
 import { Renderer } from "../../components/renderer";
-import { BoardTaskCard } from "@/modules/tasks/views/board/board.task-card";
+import { SessionTitle } from "../../components/session-title";
 
 interface CustomerTasksProps {
   customer: CustomerEntity;
@@ -60,7 +64,7 @@ export const CustomerTasks: FC<CustomerTasksProps> = (props) => {
 
   return (
     <Stack gap={10}>
-      <SessionTitle name={`Tasks`} icon={IconStack2}>
+      <SessionTitle name={t`Tasks`} icon={IconStack2}>
         <Renderer visible={total > 1 || (total === 1 && tasks.count === 0)}>
           <Group gap={0} onClick={() => setIsCollapsed((s) => !s)} style={{ cursor: "pointer" }}>
             <ActionIcon variant="transparent" color={isCollapsed ? "gray" : "primary"}>
@@ -72,7 +76,7 @@ export const CustomerTasks: FC<CustomerTasksProps> = (props) => {
             </ActionIcon>
 
             <Text fz={12} c={isCollapsed ? "gray" : "primary"} fw={400}>
-              {isCollapsed ? `Xem tất cả (${total})` : "Thu gọn"}
+              {isCollapsed ? <Trans>View all ({total})</Trans> : <Trans>Collapse</Trans>}
             </Text>
           </Group>
         </Renderer>

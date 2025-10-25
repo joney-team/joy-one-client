@@ -1,4 +1,3 @@
-import { tl } from "@/modules/lang/lang-service";
 import { Card, Group, Text } from "@mantine/core";
 import { Node } from "@xyflow/react";
 
@@ -12,7 +11,7 @@ interface GroupNode {
   spacing?: number;
 }
 
-export const GroupNode = (props: any) => {
+const GroupNode = (props: any) => {
   const { bg, title } = props.data as GroupNode;
 
   return (
@@ -36,7 +35,7 @@ export const GroupNode = (props: any) => {
         bg={bg || "transparent"}
       >
         <Text fz={14} fw={500} truncate="end">
-          {tl(title)}
+          {title}
         </Text>
       </Card>
     </Group>

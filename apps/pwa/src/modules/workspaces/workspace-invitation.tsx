@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { IconErrored } from "@/components/icons";
 import { Image } from "@/components/image";
@@ -5,7 +7,6 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceInviteInformation } from "@/modules/workspaces/workspaces-service";
@@ -13,6 +14,7 @@ import { WorkspaceInviteInformation } from "@/modules/workspaces/workspaces-type
 import { getAvatarInitials } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { primaryColors } from "@joy-one-client/config/colors";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Avatar,
@@ -32,6 +34,7 @@ import { IconHeartHandshake } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, Fragment, useEffect } from "react";
 import { Pattern } from "../../components/pattern";
+import { workspaceTypes } from "./workspace-constants";
 
 export interface WorkspaceInvitationProps {
   inviteCode: string;
@@ -73,16 +76,18 @@ const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
               <IconErrored width={400} />
             </Group>
             <Title ta="center" fz={25}>
-              {tl("error_msg")}
+              <Trans>Oops! Something went wrong...</Trans>
             </Title>
             <Text c="gray" ta="center" fz={16}>
-              {tl("error_invite_workspace")}
+              <Trans>The workspace is not available</Trans>
             </Text>
 
-            <Button onClick={() => inviteInformation.fetch()}>{tl("retry_now")}</Button>
+            <Button onClick={() => inviteInformation.fetch()}>
+              <Trans>Retry now</Trans>
+            </Button>
 
             <Button variant="subtle" size="xs" component={Link} href="/" color="gray">
-              {tl("leave")}
+              <Trans>Leave</Trans>
             </Button>
           </Stack>
         )}
@@ -135,9 +140,11 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
           <Stack align="center">
             <Image src="/images/welcome.png" w={150} />
             <Title ta="center">
-              {tl("welcome")} {auth.user?.name}
+              <Trans>Welcome {auth.user?.name}</Trans>
             </Title>
-            <Text ta="center">{tl("invite_workspace_desc")}</Text>
+            <Text ta="center">
+              <Trans>You have been invited to join workspace</Trans>.
+            </Text>
 
             <Card withBorder shadow="none" p={10} my={16}>
               <Group>
@@ -153,13 +160,19 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
                 <Stack gap={3} pr={10}>
                   <Text fw={700}>{invite.name}</Text>
                   <Text fz={12} c="gray">
-                    {tl(`ws_${invite.type}`)}
+                    {workspaceTypes[invite.type].name()}
                   </Text>
                 </Stack>
               </Group>
             </Card>
 
-            <Text ta="center">{tl("invite_workspace_desc_1")}</Text>
+            <Text ta="center">
+              <Trans>
+                Let's build value together, create opportunities and develop strongly on the success
+                journey of you
+              </Trans>
+              .
+            </Text>
 
             <Stack align="center" mt={16}>
               <Button
@@ -171,11 +184,11 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
                 size="lg"
                 tt="uppercase"
               >
-                {tl("join_now")}
+                <Trans>Join now</Trans>
               </Button>
 
               <Anchor component={Link} href="/" c="gray.5" fz={em(14)}>
-                {tl("leave")}
+                <Trans>Leave</Trans>
               </Anchor>
             </Stack>
           </Stack>

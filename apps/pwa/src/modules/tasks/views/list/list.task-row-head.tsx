@@ -1,4 +1,6 @@
-import { tl } from "@/modules/lang/lang-service";
+"use client";
+
+import { Trans } from "@lingui/react/macro";
 import { Group, Text } from "@mantine/core";
 import { FC } from "react";
 
@@ -6,20 +8,20 @@ export const ListTaskRowHead: FC = () => {
   return (
     <Group justify="space-between" gap={5}>
       <Text flex={1} px={10} fz={13} fw={500} c="gray">
-        {tl("name")}
+        <Trans>Name</Trans>
       </Text>
 
       <Text px={10} w={150} ta="left" fz={13} fw={500} c="gray">
-        {tl("assignee")}
+        <Trans>Assignee</Trans>
       </Text>
       <Text px={10} w={200} ta="left" fz={13} fw={500} c="gray">
-        {tl("customer")}
+        <Trans>Customer</Trans>
       </Text>
       <Text px={10} w={150} ta="left" fz={13} fw={500} c="gray">
-        {tl("due_date")}
+        <Trans>Due date</Trans>
       </Text>
       <Text px={10} w={70} ta="left" fz={13} fw={500} c="gray">
-        {tl("priority")}
+        <Trans>Priority</Trans>
       </Text>
     </Group>
   );

@@ -2,11 +2,13 @@
 
 import { CalendarEvent, calendarProps } from "@/configs/calendar.config";
 import { configs } from "@/configs/layout.config";
-import { useColor } from "@/modules/theme/use-color";
-import { WorkSlot } from "@/types";
 import { useLayout } from "@/layout/layout-context";
 import { useLang } from "@/modules/lang/lang-context";
-import { getLangState, tl } from "@/modules/lang/lang-service";
+import { getLangState } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
+import { WorkSlot } from "@/types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Card,
@@ -167,14 +169,17 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
           close();
           setPointedSlot(null);
         }}
-        title={<ModalTitle title={tl("work_slots")} icon={IconClock} />}
+        title={<ModalTitle title={t`Work schedule`} icon={IconClock} />}
         zIndex={300}
         yOffset={100}
         size="lg"
       >
         {pointedSlot && (
           <Stack mt={16}>
-            <FormSession title="time-frame" description="time-frame-desc">
+            <FormSession
+              title={t`Time frame`}
+              description={t`Working time frame, activities are performed in these time frames`}
+            >
               <Stack gap={0}>
                 <Group>
                   <Text fw={600}>
@@ -218,7 +223,10 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
 
             <Divider opacity={0.5} my={10} />
 
-            <FormSession title="working-shift" description="working-shift-desc">
+            <FormSession
+              title={t`Working shift`}
+              description={t`Applied to staff working in shifts`}
+            >
               <Group>
                 {new Array(3).fill(0).map((_, index) => {
                   const groupId = index.toString();
@@ -232,7 +240,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
                       variant={isActive ? "filled" : "outline"}
                       onClick={onSelect}
                     >
-                      {tl("shift")} {index + 1}
+                      {t`Shift`} {index + 1}
                     </Button>
                   );
                 })}
@@ -264,7 +272,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
                   close();
                 }}
               >
-                {isPointedSlotNew ? tl("add") : tl("save")}
+                {isPointedSlotNew ? t`Add` : t`Save`}
               </Button>
             </Center>
 
@@ -283,7 +291,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
                 close();
               }}
             >
-              {tl("remove")}
+              <Trans>Remove</Trans>
             </Anchor>
           </Stack>
         )}

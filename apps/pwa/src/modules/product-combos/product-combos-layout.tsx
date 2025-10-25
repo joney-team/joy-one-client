@@ -5,6 +5,7 @@ import { NavigationTabs } from "@/components/navigation-tabs";
 import { useRouter } from "@/hooks/use-router";
 import { EventType } from "@/modules/events/event-types";
 import { ProductType } from "@/modules/products/products-types";
+import { t } from "@lingui/core/macro";
 import { Skeleton, Stack } from "@mantine/core";
 import { IconPackage, IconSettings } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren } from "react";
@@ -54,12 +55,12 @@ export const ProductComboLayout: FC<PropsWithChildren> = (props) => {
         tabs={[
           {
             id: "combos",
-            name: "combos",
+            name: t`Combos`,
             icon: IconPackage,
           },
           {
             id: "setup",
-            name: "configuration",
+            name: t`Configuration`,
             icon: IconSettings,
           },
         ]}

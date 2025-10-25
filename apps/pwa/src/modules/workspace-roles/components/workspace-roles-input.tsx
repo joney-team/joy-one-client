@@ -1,12 +1,11 @@
 "use client";
 
+import { Hovered } from "@/components/hovered";
 import { useColor } from "@/modules/theme/use-color";
-import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceRoleEntity } from "@/modules/workspace-roles/workspace-roles-types";
 import { ActionIcon, Badge, Group, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { Hovered } from "@/components/hovered";
 import { WorkspaceRolesSelector } from "./workspace-roles-selector";
 
 type WorkspaceRoleOption = Pick<WorkspaceRoleEntity, "_id" | "name" | "color">;
@@ -89,7 +88,7 @@ export const WorkspaceRolesInput: FC<WorkspaceRolesInputProps> = (props) => {
                                   )
                                 }
                               >
-                                {tl(v.name)}
+                                {v.name}
                               </Badge>
                             );
                           }}

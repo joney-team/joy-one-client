@@ -1,35 +1,38 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
-import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Button } from "@/components/buttons/button";
 import { CalendarViewSelector } from "@/components/calendar-view-selector";
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { Selector } from "@/components/selector";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { calendarProps } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalCreateBooking } from "./modals/modal-create-booking";
-import { CalendarView } from "@/types";
 import {
   bookingActiveStatus,
   getBookings,
   getBookingStatusColor,
 } from "@/modules/bookings/booking-service";
-import { BookingEntity, BookingStatus } from "./booking-types";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { getDateFormat, tl } from "@/modules/lang/lang-service";
+import { getDateFormat } from "@/modules/lang/lang-service";
+import { useColor } from "@/modules/theme/use-color";
+import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import {
   isInWorkSlot,
   useWorkDaySlots,
 } from "@/modules/workspace-settings/workspace-settings-service";
+import { CalendarView } from "@/types";
 import { DateTime } from "@/utils/date-time.utils";
 import { ObjectUtils } from "@/utils/object.utils";
-import { useList } from "@/components/list/use-list";
+import { zIndexes } from "@joy-one-client/config/layout";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -55,9 +58,9 @@ import {
 import dayjs from "dayjs";
 import { type FC, useEffect, useRef, useState } from "react";
 import { Calendar } from "react-big-calendar";
-import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { useColor } from "@/modules/theme/use-color";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { bookingStatuses } from "./booking-constants";
+import { BookingEntity, BookingStatus } from "./booking-types";
+import { OnModalCreateBooking } from "./modals/modal-create-booking";
 
 const normalizeQuery = (query: any) => {
   const date = query.date ? dayjs(+query.date * 1000).toDate() : new Date();
@@ -269,7 +272,7 @@ export const BookingList: FC = () => {
                             <Loader size={13} type="dots" color="gray" />
                           ) : selectedAssignees.length === 0 ? (
                             <Text fz={11} c="gray" fw={500}>
-                              {tl("attendees")}
+                              <Trans>Attendees</Trans>
                             </Text>
                           ) : (
                             <Group gap={5}>
@@ -294,19 +297,19 @@ export const BookingList: FC = () => {
                   pinnedOptions={[
                     {
                       id: "default",
-                      label: tl("active"),
+                      label: t`Active`,
                     },
                     {
                       id: BookingStatus.COMPLETED,
-                      label: tl(`booking_status_${BookingStatus.COMPLETED}`),
+                      label: bookingStatuses[BookingStatus.COMPLETED].label(),
                     },
                     {
                       id: BookingStatus.RESCHEDULED,
-                      label: tl(`booking_status_${BookingStatus.RESCHEDULED}`),
+                      label: bookingStatuses[BookingStatus.RESCHEDULED].label(),
                     },
                     {
                       id: BookingStatus.CANCELLED,
-                      label: tl(`booking_status_${BookingStatus.CANCELLED}`),
+                      label: bookingStatuses[BookingStatus.CANCELLED].label(),
                     },
                   ]}
                   renderOption={(option) => {
@@ -332,8 +335,8 @@ export const BookingList: FC = () => {
                       ? "primary"
                       : getBookingStatusColor(query.status as BookingStatus);
                     const statusLabel = !query.status
-                      ? tl("active")
-                      : tl(`booking_status_${query.status}`);
+                      ? t`Active`
+                      : bookingStatuses[query.status as BookingStatus].label();
 
                     return (
                       <Card
@@ -360,7 +363,7 @@ export const BookingList: FC = () => {
                 />
 
                 <Renderer visible={isCanResetFilter}>
-                  <Tooltip label={tl("reset_filter")}>
+                  <Tooltip label={t`Reset filter`}>
                     <ActionIcon
                       variant="subtle"
                       color={color("gray")}
@@ -388,7 +391,7 @@ export const BookingList: FC = () => {
                   variant="light"
                   onClick={() => setDate(new Date())}
                 >
-                  {tl(query.view === CalendarView.DAY ? "today" : "this_week")}
+                  {query.view === CalendarView.DAY ? t`Today` : t`This week`}
                 </Button>
               )}
 
@@ -397,14 +400,14 @@ export const BookingList: FC = () => {
                 onChange={(view) => bookings.setParams({ view })}
               />
 
-              <Tooltip label={tl("select_booking_slots_to_create_booking_desc")}>
+              <Tooltip label={t`You can drag and drop to select a time slot in the calendar.`}>
                 <Button
                   size="compact-sm"
                   h={30}
                   leftIcon={IconPlus}
                   onClick={() => OnModalCreateBooking()}
                 >
-                  {tl("create_booking")}
+                  <Trans>Create booking</Trans>
                 </Button>
               </Tooltip>
             </Group>

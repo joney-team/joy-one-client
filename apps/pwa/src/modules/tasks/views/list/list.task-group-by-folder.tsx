@@ -1,8 +1,10 @@
-import { useColor } from "@/modules/theme/use-color";
-import { tl } from "@/modules/lang/lang-service";
+"use client";
+
 import { TagEntity } from "@/modules/tags/tags-types";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
+import { t } from "@lingui/core/macro";
 import { Box, Card, em, Stack, Title } from "@mantine/core";
 import { FC } from "react";
 import { ListTaskGroupByStatuses } from "./list.task-group-by-statuses";
@@ -14,7 +16,7 @@ interface ListTaskGroupByFolderProps {
 
 export const ListTaskGroupByFolder: FC<ListTaskGroupByFolderProps> = (props) => {
   const { tagFolder } = props;
-  const name = tagFolder ? tagFolder.name : tl("general_tasks");
+  const name = tagFolder ? tagFolder.name : t`General tasks`;
   const color = useColor();
   const { state, statuses } = useTasks();
 

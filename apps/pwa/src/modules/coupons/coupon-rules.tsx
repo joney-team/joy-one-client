@@ -1,12 +1,15 @@
+"use client";
+
 import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
-import { OnModalCouponRuleForm } from "@/modules/coupons/modals/modal-coupon-rule-form";
+import { useList } from "@/components/list/use-list";
 import { getCouponRules } from "@/modules/coupons/coupon-service";
+import { OnModalCouponRuleForm } from "@/modules/coupons/modals/modal-coupon-rule-form";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useList } from "@/components/list/use-list";
+import { Trans } from "@lingui/react/macro";
 import { Badge, em, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import { FC } from "react";
 import InfiniteScroll from "react-infinite-scroller";
@@ -38,7 +41,7 @@ export const CouponRules: FC = () => {
           />
 
           <Badge variant="light" size="xl" fz={em(12)} style={{ borderRadius: 100 }}>
-            {tl("qty")}
+            <Trans>QTY</Trans>
             {rules.isInitialized && `: ${num(rules.count)}`}
           </Badge>
         </Group>

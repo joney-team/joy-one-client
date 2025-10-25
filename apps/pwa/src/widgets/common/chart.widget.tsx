@@ -1,7 +1,9 @@
+"use client";
+
 import { FlexSize } from "@/components/flex-size";
 import { useColor } from "@/modules/theme/use-color";
-import { tl } from "@/modules/lang/lang-service";
 import type { WidgetComponent, WidgetLayoutConfig } from "@/widgets/types";
+import { t } from "@lingui/core/macro";
 import { Card, em, Group, LoadingOverlay, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
@@ -51,12 +53,12 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
                 <Icon size={em(25)} strokeWidth={1.5} color={color("primary")} />
               </ThemeIcon>
               <Text fz={em(15)} fw={400}>
-                {tl(name)}
+                {name()}
               </Text>
             </Group>
             {unit && (
               <Text fz={em(12)} fw={400}>
-                {tl("unit")}: {tl(unit.full)}
+                {t`Unit`}: {unit?.full}
               </Text>
             )}
           </Group>
@@ -76,7 +78,7 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
                       value: v.label,
                     }))}
                     curveType="monotone"
-                    unit={unit?.short ? tl(unit.short) : undefined}
+                    unit={unit?.short ? unit.short : undefined}
                     tooltipAnimationDuration={200}
                     referenceLines={
                       mean !== 0

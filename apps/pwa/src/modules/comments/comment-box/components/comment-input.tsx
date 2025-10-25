@@ -1,6 +1,10 @@
+"use client";
+
+import { FileCard } from "@/modules/files/file-card";
 import { uploadFile } from "@/modules/files/file-service";
-import { tl } from "@/modules/lang/lang-service";
 import { detectMessageAttachmentType } from "@/modules/message-boxes/message-boxes-service";
+import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Button,
@@ -23,9 +27,8 @@ import {
 } from "@mantine/dropzone";
 import { IconPaperclip, IconPhoto, IconSend2 } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
-import { FileCard } from "@/modules/files/file-card";
 import { UseCommentBox } from "../types";
-import { onError } from "@/utils/exceptions.utils";
+import { Trans } from "@lingui/react/macro";
 
 export const CommentInput: FC<UseCommentBox> = (ctx) => {
   const textInputRef = useRef<HTMLTextAreaElement>(null);
@@ -110,7 +113,7 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
                 autosize
                 maxRows={2}
                 minRows={1}
-                placeholder={tl("type_and_press_enter")}
+                placeholder={t`Type and press [enter]`}
                 variant="unstyled"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -181,7 +184,7 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
                   loading={isSubmiting}
                   onClick={onSubmit}
                 >
-                  {tl("send")}
+                  {t`Send`}
                 </Button>
               </Group>
             </Stack>
@@ -213,11 +216,11 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
               >
                 <Stack justify="center" align="center" w="100%" gap={3}>
                   <Title ta="center" order={4} fw={500}>
-                    {tl("preview")}
+                    <Trans>Preview</Trans>
                   </Title>
 
                   <Text ta="center" fz={14} c="gray.6">
-                    {tl("drop_file_preview")}
+                    <Trans>Drop file to preview</Trans>
                   </Text>
                 </Stack>
               </Group>

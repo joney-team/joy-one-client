@@ -1,9 +1,9 @@
 "use client";
 
 import { useAuth } from "@/modules/auth/auth-context";
-import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { isExtendedApp } from "@/service";
+import { Trans } from "@lingui/react/macro";
 import { Anchor, Stack, Text, Title } from "@mantine/core";
 import { FC } from "react";
 import { GoWorkIllustration } from "../../../components/illustrations/go-work";
@@ -27,15 +27,15 @@ export const WorkspaceRequireBranches: FC = () => {
       <GoWorkIllustration width={150} />
       <Stack gap={10}>
         <Title c={color("primary")} tt="capitalize" order={4} ta="center">
-          {tl("workspace_waiting_for_assign_branches")}
+          <Trans>Assigning a working branch</Trans>
         </Title>
         <Text c="gray" fz={16} ta="center">
-          {tl("workspace_waiting_for_assign_branches_desc")}
+          <Trans>You did a great job. Please relax and wait a moment!</Trans>
         </Text>
       </Stack>
 
       <Anchor ta="center" onClick={onLeave} fz={12} c="gray">
-        {tl("leave")}
+        <Trans>Leave</Trans>
       </Anchor>
     </Stack>
   );

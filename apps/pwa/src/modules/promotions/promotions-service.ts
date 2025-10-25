@@ -1,7 +1,8 @@
 import { DynamicSelectionOperator } from "@/types";
+import { t } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
 import { Icon, IconDiscount, IconFreeRights } from "@tabler/icons-react";
-import { num, renderDateTime, tl } from "../lang/lang-service";
+import { num, renderDateTime } from "../lang/lang-service";
 import { PromotionEntity, PromotionStatus, PromotionType } from "./promotions-types";
 
 export const promotionRuleTypeConfigs: Record<
@@ -66,15 +67,11 @@ export const promotionStatusConfigs: Record<
 
 export const promotionDescription = (promotion: PromotionEntity) => {
   if (promotion.type === PromotionType.DISCOUNT_RATE) {
-    return tl("promotion_discount", {
-      value: num(promotion.value) + "%",
-    });
+    return t`Promotion discount` + ": " + num(promotion.value) + "%";
   }
 
   if (promotion.type === PromotionType.DISCOUNT_AMOUNT) {
-    return tl("promotion_discount", {
-      value: num(promotion.value, { type: "money" }),
-    });
+    return t`Promotion discount` + ": " + num(promotion.value, { type: "money" });
   }
 
   return "";
@@ -82,12 +79,12 @@ export const promotionDescription = (promotion: PromotionEntity) => {
 
 export const promotionTermsOfUseCustomerLimit = (promotion: PromotionEntity) => {
   if (!promotion.customersSelection || promotion.customersSelection.value.length === 0) {
-    return tl("unlimited_customers");
+    return t`Unlimited customers`;
   }
 
   if (promotion.customersSelection.operator === DynamicSelectionOperator.INCLUDES) {
     return (
-      tl("includes_customers") +
+      t`Includes customers` +
       ": " +
       promotion.customersSelection.value.map((c) => c.name).join(", ")
     );
@@ -95,7 +92,7 @@ export const promotionTermsOfUseCustomerLimit = (promotion: PromotionEntity) => 
 
   if (promotion.customersSelection.operator === DynamicSelectionOperator.EXCLUDES) {
     return (
-      tl("excludes_customers") +
+      t`Excludes customers` +
       ": " +
       promotion.customersSelection.value.map((c) => c.name).join(", ")
     );
@@ -103,9 +100,7 @@ export const promotionTermsOfUseCustomerLimit = (promotion: PromotionEntity) => 
 };
 
 export const promotionTermsOfUseExpireAt = (promotion: PromotionEntity) => {
-  return `${tl("expireAt")}: ${
-    promotion.expireAt && promotion.expireAt > 0
-      ? renderDateTime(promotion.expireAt)
-      : tl("unlimited")
+  return `${t`Expire at`}: ${
+    promotion.expireAt && promotion.expireAt > 0 ? renderDateTime(promotion.expireAt) : t`Unlimited`
   }`;
 };

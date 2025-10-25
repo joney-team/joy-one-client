@@ -1,10 +1,11 @@
 "use client";
 
 import { configs } from "@/configs/layout.config";
-import { num, tl } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { tasksEmitter, updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskHistory } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { Trans } from "@lingui/react/macro";
 import { Button, Group, Stack, Text } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -35,7 +36,9 @@ const TaskHistoriesProvider: FC<PropsWithChildren> = (props) => {
       autoClose: 5000,
       message: (
         <Stack gap={5}>
-          <Text fz={13}>{tl("task_archive_undo_msg", { count: num(_history.tasks.length) })}</Text>
+          <Text fz={13}>
+            <Trans>You have deleted {num(_history.tasks.length)} tasks. Do you want to undo?</Trans>
+          </Text>
           <Group>
             <Button
               color="dark"
@@ -45,7 +48,7 @@ const TaskHistoriesProvider: FC<PropsWithChildren> = (props) => {
                 notifications.hide(id);
               }}
             >
-              {tl("undo")}
+              <Trans>Undo</Trans>
             </Button>
           </Group>
         </Stack>

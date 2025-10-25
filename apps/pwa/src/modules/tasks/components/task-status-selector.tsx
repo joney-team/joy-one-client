@@ -1,6 +1,5 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
 import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { TaskStatus } from "@/modules/tasks/tasks-types";
@@ -32,9 +31,6 @@ export const TaskStatusSelector: FC<TaskStatusSelectorProps> = (props) => {
     <Selector
       {...props.inputProps}
       pinnedOptions={taskStatuses}
-      searchPlaceholder={`${tl("search_with", {
-        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(status) => {
         return (
           <Combobox.Option value={status.id} key={status.id}>

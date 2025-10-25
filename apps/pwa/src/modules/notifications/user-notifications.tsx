@@ -7,7 +7,6 @@ import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import {
   cleanNotifications,
   getNotificationStat,
@@ -21,6 +20,8 @@ import {
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { classNames } from "@/utils/ui.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Drawer, Group, Indicator, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
@@ -40,10 +41,10 @@ const EmptyNotification: FC<{ visible: boolean }> = ({ visible }) => {
     <Stack align="center" justify="center" gap={5} py={30} px={15} mih={layout.height * 0.7}>
       <ChillIllustration width={200} />
       <Text fw={500} ta="center" mt={15} fz={16}>
-        {tl("no_notifications")}
+        <Trans>Inbox Zero</Trans>
       </Text>
       <Text c="gray" ta="center" fz={13}>
-        {tl("no_notifications_desc")}
+        <Trans>Congratulations! You cleared your important notifications 🎉</Trans>
       </Text>
     </Stack>
   );
@@ -81,17 +82,11 @@ export const UserNotifications: FC = () => {
   const onClean = () => {
     modals.openConfirmModal({
       modalId: "ModalCleanNotification",
-      title: (
-        <ModalTitle
-          color="primary"
-          title={`${tl("clean")} ${tl("notifications")}`}
-          icon={IconBrush}
-        />
-      ),
-      children: tl("clean_notification_msg"),
+      title: <ModalTitle color="primary" title={t`Clean notifications`} icon={IconBrush} />,
+      children: t`Are you sure you want to clean up the notifications? This action cannot be undone.`,
       color: color("primary"),
       onConfirm: async () => cleanNotifications().then(close).catch(onError),
-      labels: { confirm: tl("clean"), cancel: tl("cancel") },
+      labels: { confirm: t`Clean`, cancel: t`Cancel` },
       onCancel: () => modals.close("ModalCleanNotification"),
       confirmProps: { color: color("primary") },
     });
@@ -152,7 +147,7 @@ export const UserNotifications: FC = () => {
                   <IconBell />
                 </ThemeIcon>
                 <Text fw={700} c={color("primary")}>
-                  {tl("notifications")}
+                  {t`Notifications`}
                 </Text>
 
                 {notifications.count > 0 && (
@@ -168,7 +163,7 @@ export const UserNotifications: FC = () => {
                       style={{ borderWidth: 0.5 }}
                     >
                       <Text fw={500} fz={em(13)}>
-                        {tl("clean")}
+                        {t`Clean`}
                       </Text>
                     </Button>
                   </Group>

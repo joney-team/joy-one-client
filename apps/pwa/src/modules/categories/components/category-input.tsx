@@ -1,11 +1,11 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Input, InputWrapperProps } from "@mantine/core";
-import { type FC } from "react";
-import { CategorySelector } from "./category-selector";
-import { CategoryEntity, CategoryType } from "../category-types";
 import { IconPlus, IconX } from "@tabler/icons-react";
+import { type FC } from "react";
+import { CategoryEntity, CategoryType } from "../category-types";
+import { CategorySelector } from "./category-selector";
 import { QuickCreateCategory } from "./quick-create-category";
 
 interface CategoryInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
@@ -22,7 +22,7 @@ export const CategoryInput: FC<CategoryInputProps> = (props) => {
     <CategorySelector
       {...rest}
       type={props.type || props.value?.type}
-      label={tl("category")}
+      label={t`Category`}
       excludeIds={value ? [value._id] : undefined}
       onSelect={onChange}
       createable={false}
@@ -31,7 +31,7 @@ export const CategoryInput: FC<CategoryInputProps> = (props) => {
           <Input
             value={value?.name ?? ""}
             flex={1}
-            placeholder={tl("select_category")}
+            placeholder={t`Select category`}
             readOnly
             onClick={ctx.toggle}
             rightSectionPointerEvents="all"

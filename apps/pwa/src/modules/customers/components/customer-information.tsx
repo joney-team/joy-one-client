@@ -8,7 +8,7 @@ import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-custom
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/modal-customer-relationship-contacts";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
-import { getDateFormat, num, tl } from "@/modules/lang/lang-service";
+import { getDateFormat, num } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -54,6 +54,8 @@ import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
 import { assignCustomer, renderGener, renderGenerIcon, updateCustomer } from "../customer-service";
 import { CustomerLocations } from "./customer-locations";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 
 interface CustomerInformationsProps {
   customer: CustomerEntity;
@@ -208,7 +210,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         <IconAddressBook strokeWidth={1.5} size={18} />
                       </ThemeIcon>
                       <Text fz={em(15)}>
-                        {tl("contacts")}: {num(contacts.data?.contacts.length)}
+                        {t`Contacts`}: {num(contacts.data?.contacts.length)}
                       </Text>
                     </Group>
                   </Anchor>
@@ -225,8 +227,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         <IconAddressBook strokeWidth={1.5} size={18} />
                       </ThemeIcon>
                       <Text fz={em(15)}>
-                        {tl("customer_relationship_contacts")}:{" "}
-                        {num(customer.relationshipContacts?.length)}
+                        {t`Contact relatives`}: {num(customer.relationshipContacts?.length)}
                       </Text>
                     </Group>
                   </Anchor>
@@ -318,7 +319,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                           <IconPlus size={13} />
                         </ThemeIcon>
                         <Text c="gray" fz={12}>
-                          {tl("tag")}
+                          <Trans>Tag</Trans>
                         </Text>
                       </Group>
                     </Popover.Target>
@@ -371,7 +372,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                           </Center>
 
                           <Text fz={10} fw={500}>
-                            {tl("add")}
+                            <Trans>Add</Trans>
                           </Text>
                         </Group>
                       </Stack>
@@ -390,7 +391,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                     <IconPlus size={13} />
                   </ThemeIcon>
                   <Text c="gray" fz={12}>
-                    {tl("tag")}
+                    <Trans>Tag</Trans>
                   </Text>
                 </Group>
               )}

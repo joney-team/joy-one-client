@@ -1,15 +1,16 @@
 "use client";
 
 import { OnModalRoleForm } from "@/modules/workspace-roles/modals/modal-workspace-role-form";
-import { tl } from "@/modules/lang/lang-service";
 import {
   WorkspacePermission,
   WorkspaceSpecialRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconPencil } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
+import { workspaceSpecialRoleIds } from "../workspace-roles-constants";
 
 interface WorkspaceRoleCardProps {
   id: any;
@@ -22,7 +23,8 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
   );
 
   const role = workspace.roles.find((role) => role._id === props.id);
-  const roleName = tl(role?.name || `role_${props.id}`);
+  const roleName =
+    role?.name || workspaceSpecialRoleIds[props.id as WorkspaceSpecialRoleId]?.name();
   const permissions =
     (props.id === WorkspaceSpecialRoleId.MEMBER
       ? workspace.settings.memberPermissions
@@ -56,10 +58,11 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
               return (
                 <Fragment>
                   <Text fz={em(12)} c="gray">
-                    • {tl("role_access_all")}
+                    • {t`Has access to all functions of the system`}
                   </Text>
                   <Text fz={em(12)} c="gray">
-                    • {tl("role_owner_desc")}
+                    •{" "}
+                    {t`Cannot be deleted, cannot be assigned to other members, can only be transferred`}
                   </Text>
                 </Fragment>
               );
@@ -69,10 +72,10 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
               return (
                 <Fragment>
                   <Text fz={em(12)} c="gray">
-                    • {tl("role_access_all")}
+                    • {t`Has access to all functions of the system`}
                   </Text>
                   <Text fz={em(12)} c="gray">
-                    • {tl("role_admin_desc")}
+                    • {t`Cannot be deleted, can be assigned to other members`}
                   </Text>
                 </Fragment>
               );
@@ -82,11 +85,11 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
               return (
                 <Fragment>
                   <Text fz={em(12)} c="gray">
-                    • {tl("role_default")}
+                    • {t`Default role when not specified`}
                   </Text>
 
                   <Text fz={em(12)} c="gray">
-                    • {tl("grant_permissions")} {permissionCounts}/
+                    • {t`Grant permissions`} {permissionCounts}/
                     {Object.keys(WorkspacePermission).length}
                   </Text>
                 </Fragment>
@@ -103,7 +106,7 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
                   )}
 
                   <Text fz={em(12)} c="gray">
-                    • {tl("grant_permissions")} {permissionCounts}/
+                    • {t`Grant permissions`} {permissionCounts}/
                     {Object.keys(WorkspacePermission).length}
                   </Text>
                 </Fragment>

@@ -1,17 +1,17 @@
 "use client";
 
+import { Clickable } from "@/components/clickable";
 import { EnumColumn } from "@/components/list/columns/enum-column";
 import { List } from "@/components/list/list";
 import { Stack, Text } from "@mantine/core";
 import { IconCategory, IconEdit, IconOutlet } from "@tabler/icons-react";
 import { type FC } from "react";
 import { EventType } from "../events/event-types";
-import { tl } from "../lang/lang-service";
-import { categoryTypeConfigs } from "./category-service";
+import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
+import { categoryTypes } from "./category-constants";
 import { CategoryEntity, CategoryType } from "./category-types";
 import { OnModalCategory } from "./modals/modal-category";
-import { Clickable } from "@/components/clickable";
-import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
+import { t } from "@lingui/core/macro";
 
 export const CategoryList: FC = () => {
   return (
@@ -38,15 +38,15 @@ export const CategoryList: FC = () => {
           type: EnumColumn({
             w: 200,
             options: Object.values(CategoryType).map((type) => ({
-              label: tl(`category_type_${type}`),
               value: type,
-              color: categoryTypeConfigs[type]?.color,
+              label: categoryTypes[type].label(),
+              color: categoryTypes[type].color,
             })),
           }),
         }}
         actions={[
           {
-            label: "edit",
+            label: t`Edit`,
             icon: IconEdit,
             onClick: (data) => {
               OnModalCategory({ category: data });

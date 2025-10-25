@@ -4,7 +4,6 @@ import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { StatusColumn } from "@/components/list/columns/status-column";
 import { EventType } from "@/modules/events/event-types";
-import { tl } from "@/modules/lang/lang-service";
 import { OnModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
 import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -14,9 +13,11 @@ import { IconBuildingSkyscraper, IconLink } from "@tabler/icons-react";
 import { type FC } from "react";
 import { OnCustomerFormModal } from "../customers/modals/modal-customer-form";
 import { CustomerFormEntity } from "./customer-form-entity";
-import { customerFormStatusConfigs, multiArchiveCustomerForm } from "./customer-form-service";
+import { multiArchiveCustomerForm } from "./customer-form-service";
 import { OnModalCustomerForm } from "./modal-customer-form";
 import { useLocations } from "../locations/locations-context";
+import { t } from "@lingui/core/macro";
+import { customerFormStatuses } from "./customer-form-constants";
 
 export const CustomerFormList: FC = () => {
   const { renderVnLocation: renderLocation } = useLocations();
@@ -27,7 +28,7 @@ export const CustomerFormList: FC = () => {
         route="/customer-forms"
         creatable={{
           onCreate: () => OnModalCustomerForm(),
-          label: tl("link_form"),
+          label: t`Link form`,
           icon: IconLink,
         }}
         columns={{
@@ -54,9 +55,9 @@ export const CustomerFormList: FC = () => {
           }),
           status: StatusColumn({
             w: 200,
-            options: Object.entries(customerFormStatusConfigs).map(([key, value]) => ({
+            options: Object.entries(customerFormStatuses).map(([key, value]) => ({
               value: key,
-              label: tl(value.label),
+              label: value.label(),
               color: value.color,
             })),
           }),
@@ -68,7 +69,7 @@ export const CustomerFormList: FC = () => {
         ]}
         bulkActions={[
           {
-            label: "move_workspace_branch",
+            label: t`Move branch`,
             icon: IconBuildingSkyscraper,
             permission: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
             handler: (data, ctx) =>

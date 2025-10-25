@@ -1,8 +1,8 @@
 "use client";
 
-import { tl } from "@/modules/lang/lang-service";
 import { updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Group,
@@ -64,7 +64,7 @@ export function formatDuration(seconds: number) {
 
 export const EstimateTimeInput: FC<EstimateTimeInputProps> = (props) => {
   const { value, onChange, label, ...rest } = props;
-  const placeholder = rest.placeholder || tl("select");
+  const placeholder = rest.placeholder || t`Select`;
   const [opened, setOpened] = useState(false);
 
   return (
@@ -87,8 +87,8 @@ export const EstimateTimeInput: FC<EstimateTimeInputProps> = (props) => {
             <TextInput
               miw={300}
               autoFocus
-              label={label ? tl(label as string) : undefined}
-              placeholder={tl("estimate_time_input_placeholder")}
+              label={label}
+              placeholder={t`Enter number of days, hours, minutes (e.g. 2d 4h 30m)`}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   const value = (e.target as HTMLInputElement).value;
@@ -121,16 +121,14 @@ export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInput
     </ActionIcon>
   );
 
-  const label = tl("tasks_view_estimate_time");
-
   return (
     <Popover shadow="md" opened={opened} onChange={setOpened}>
       <Popover.Target>{children}</Popover.Target>
 
       <Popover.Dropdown p={10}>
         <TextInput
-          label={label}
-          placeholder={tl("estimate_time_input_placeholder")}
+          label={t`Estimate time`}
+          placeholder={t`Enter number of days, hours, minutes (e.g. 2d 4h 30m)`}
           autoFocus
           miw={260}
           onKeyUp={(e) => {

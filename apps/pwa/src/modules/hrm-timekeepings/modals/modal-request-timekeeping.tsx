@@ -2,12 +2,14 @@
 
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
-import { onSuccess } from "@/utils/actions";
 import { requestTimekeeping } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { getDateFormat, tl } from "@/modules/lang/lang-service";
+import { getDateFormat } from "@/modules/lang/lang-service";
+import { onSuccess } from "@/utils/actions";
 import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Anchor, Center, SimpleGrid, Stack, Text, Textarea, em } from "@mantine/core";
 import { DatePickerInput, TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
@@ -34,7 +36,7 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
     },
     validate: {
       date: (value) => {
-        if (!value) return tl("required");
+        if (!value) return t`Must be provided`;
       },
     },
   });
@@ -62,12 +64,15 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
     }
 
     if (!values.checkInAt && !values.checkOutAt) {
-      requestForm.setFieldError("checkInAt", tl("check_in_or_out_date_required"));
+      requestForm.setFieldError(
+        "checkInAt",
+        t`Need to select at least one of the check-in or check-out times`
+      );
       return;
     }
 
     if (checkInAt && checkOutAt && checkInAt >= checkOutAt) {
-      requestForm.setFieldError("checkInAt", tl("invalid_check_in_time"));
+      requestForm.setFieldError("checkInAt", t`Check-in time must be before check-out time`);
       return;
     }
 
@@ -92,8 +97,8 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
 
       onClose();
       onSuccess({
-        title: tl("requested_title"),
-        message: tl("requested_desc"),
+        title: t`Requested Timekeeping`,
+        message: t`Please wait for the Timekeeping to be approved`,
       });
     } catch (error) {
       onError(error);
@@ -109,34 +114,32 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
       </Center>
 
       <Text ta="center" fw={500} fz={em(22)} c="primary" tt="uppercase">
-        {tl("hrm_timekeepings_request")}
+        {t`Request Timekeeping`}
       </Text>
 
       <DatePickerInput
-        label={tl("date")}
+        label={t`Date`}
         valueFormat={getDateFormat()}
         {...requestForm.getInputProps("date")}
       />
 
       <SimpleGrid cols={2}>
-        <TimeInput
-          label={tl("hrm_timekeepings_check_in_at")}
-          {...requestForm.getInputProps("checkInAt")}
-        />
+        <TimeInput label={t`Check-in at`} {...requestForm.getInputProps("checkInAt")} />
 
-        <TimeInput
-          label={tl("hrm_timekeepings_check_out_at")}
-          {...requestForm.getInputProps("checkOutAt")}
-        />
+        <TimeInput label={t`Check-out at`} {...requestForm.getInputProps("checkOutAt")} />
       </SimpleGrid>
 
       <Text c="gray" fz={em(12)}>
-        • {tl("hrm_timekeepings_request_desc")}
+        •{" "}
+        <Trans>
+          Can leave one of the check-in or check-out times blank if you have already checked in/out
+          before
+        </Trans>
       </Text>
 
       <Textarea
-        label={tl("hrm_timekeepings_request_note")}
-        placeholder={tl("hrm_timekeepings_request_note_placeholder")}
+        label={t`Note for the approver`}
+        placeholder={t`For example: Late, Early leave, ...`}
         {...requestForm.getInputProps("note")}
         styles={{
           input: {
@@ -153,12 +156,12 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
           loading={isSubmitting}
           action
         >
-          {tl("confirm")}
+          <Trans>Confirm</Trans>
         </Button>
       </Center>
 
       <Anchor ta="center" c="gray" fz={em(13)} onClick={onClose}>
-        {tl("leave")}
+        <Trans>Leave</Trans>
       </Anchor>
     </Stack>
   );

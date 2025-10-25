@@ -1,19 +1,22 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { useList } from "@/components/list/use-list";
 import { SessionTitle } from "@/components/session-title";
-import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
-import { useColor, useGradient } from "@/modules/theme/use-color";
+import { num, renderDateTime } from "@/modules/lang/lang-service";
+import { useGradient } from "@/modules/theme/use-color";
 import { OnModalWorkspaceBillingDeposit } from "@/modules/workspace-billings/modals/modal-workspace-billing-deposit";
 import { calculateWorkspaceSubscriptionBillings } from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
 import { CalculateWorkspaceSubscriptionBillingResponse } from "@/modules/workspace-subscriptions/workspace-subscriptions-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -33,19 +36,13 @@ import {
   IconReportMoney,
 } from "@tabler/icons-react";
 import { type FC, useEffect, useState } from "react";
-import {
-  getWorkspaceBillings,
-  getWorkspaceBillingStatusLabel,
-  getWorkspaceBillingTypeColor,
-  getWorkspaceBillingTypeLabel,
-} from "./workspace-billings-service";
+import { workspaceBillingStatuses, workspaceBillingTypes } from "./workspace-billings-contants";
+import { getWorkspaceBillings } from "./workspace-billings-service";
 import { WorkspaceBillingStatus } from "./workspace-billings-types";
 
 export const WorkspaceBillingList: FC = () => {
   const workspace = useWorkspace();
-  const router = useRouter();
   const layout = useLayout();
-  const color = useColor();
   const gradient = useGradient();
 
   const [subscriptionCalculated, setSubscriptionCalculated] =
@@ -64,14 +61,14 @@ export const WorkspaceBillingList: FC = () => {
 
   useEffect(() => {
     layout.setComponents({
-      head: tl("ws_sub_billings"),
+      head: t`Subscription / billings`,
       navigation: (
         <Button
           radius={100}
           leftIcon={IconArrowDown}
           onClick={() => OnModalWorkspaceBillingDeposit()}
         >
-          {tl("deposit")}
+          {t`Deposit`}
         </Button>
       ),
     });
@@ -120,7 +117,7 @@ export const WorkspaceBillingList: FC = () => {
                 <IconCashRegister size={40} strokeWidth={0.9} color="white" />
                 <Stack gap={0}>
                   <Text c="white" fz={12} fw={300}>
-                    {tl("balance")}
+                    <Trans>Balance</Trans>
                   </Text>
                   <Text c="white" fw={700} fz={16}>
                     {num(billings.report?.balance || 0)}
@@ -144,7 +141,7 @@ export const WorkspaceBillingList: FC = () => {
                 <IconReceipt size={40} strokeWidth={0.9} />
                 <Stack gap={0}>
                   <Text c="dark" fz={12} fw={300}>
-                    {tl("pendingPayment")}
+                    <Trans>Pending payment</Trans>
                   </Text>
                   <Text
                     c={(billings.report?.pendingPayment || 0) !== 0 ? "orange" : "dark"}
@@ -160,7 +157,7 @@ export const WorkspaceBillingList: FC = () => {
         </SimpleGrid>
 
         <Stack gap={10}>
-          <SessionTitle name={tl("ws_billings")} icon={IconReportMoney} />
+          <SessionTitle name={t`Billings`} icon={IconReportMoney} />
 
           {billings.isHasData && (
             <SimpleGrid cols={{ md: 1 }}>
@@ -173,23 +170,23 @@ export const WorkspaceBillingList: FC = () => {
                           {renderDateTime(billing.createdAt, true)}
                         </Text>
                         <Group gap={8}>
-                          <Text>{getWorkspaceBillingTypeLabel(billing.type)}</Text>
+                          <Text>{workspaceBillingTypes[billing.type].label()}</Text>
                           {billing.status !== WorkspaceBillingStatus.PAID && (
                             <Badge size="xs" ta="right" color={"orange"}>
-                              {getWorkspaceBillingStatusLabel(billing.status)}
+                              {workspaceBillingStatuses[billing.status].label()}
                             </Badge>
                           )}
                         </Group>
                       </Stack>
 
                       <Stack justify="end" miw={100} gap={3}>
-                        <Text fw={700} ta="right" c={getWorkspaceBillingTypeColor(billing.type)}>
+                        <Text fw={700} ta="right" c={workspaceBillingTypes[billing.type].color}>
                           {billing.amount > 0 ? "+" : ""}
                           {num(billing.amount)}
                         </Text>
 
                         <Text fz={em(10)} ta="right" c="gray">
-                          {tl("balance_at_billing_time")}: {num(billing.balance)}
+                          {t`Balance at billing time`}: {num(billing.balance)}
                         </Text>
                       </Stack>
                     </Group>
