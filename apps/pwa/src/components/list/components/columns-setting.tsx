@@ -1,3 +1,5 @@
+"use client";
+
 import { BaseData } from "@/components/list/types";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
@@ -7,6 +9,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, Menu, MenuDropdown, Stack, ThemeIcon } from "@mantine/core";
 import { IconColumns3, IconDotsVertical, IconEye, IconEyeOff } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -21,7 +24,7 @@ export const ColsSettings: FC<ListContext> = (ctx) => {
       <Menu.Target>
         <Group>
           <ActionButton
-            label="cols"
+            label={t`Columns`}
             icon={IconColumns3}
             quantity={ctx.columnSettings.filter((v) => v.isVisible).length}
             quantityColor="gray"

@@ -63,7 +63,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
   return (
     <List<LoanEntity>
       id={`loans-list-${(props.strictStatus || ["all"]).join("-")}`}
-      name="loans"
+      name={t`Loans`}
       limit={16}
       icon={IconCreditCardPay}
       route="/loans"
@@ -101,13 +101,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
           },
         }),
         createdAt: DateTimeColumn({
-          name: "createdAt",
+          name: t`'Created at`,
           sortable: true,
           defaultHidden: true,
           isHasFilter: true,
         }),
         fulfilledAt: DateTimeColumn({
-          name: "fulfilledAt",
+          name: t`Fulfilled at`,
           sortable: true,
           defaultHidden: true,
           isHasFilter: true,
@@ -117,7 +117,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
         customerId: CustomerColumn({ valuePath: "customer" }),
         packageId: {
           icon: IconCoins,
-          name: "loan_package",
+          name: t`Loan package`,
           filter: {
             staticSelector: {
               options: (workspace.settings.loanSettings?.loanPackages || []).map((s) => ({
@@ -260,6 +260,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
         },
         status: {
           w: 250,
+          name: t`Status`,
           icon: IconCircle,
           filter: props.strictStatus
             ? undefined

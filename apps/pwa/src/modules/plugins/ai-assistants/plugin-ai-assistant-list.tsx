@@ -32,9 +32,7 @@ export const AiAssistantList: FC = () => {
             </Group>
 
             <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-              <Trans>
-                Connect <strong>{t`AI Assistant`}</strong>
-              </Trans>
+              {t`Connect ${t`AI Assistant`}`}
             </Title>
 
             <Text ta="center">

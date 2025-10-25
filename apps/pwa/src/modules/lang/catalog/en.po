@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/modules/loans/loan-list.tsx:104
+msgid "'Created at"
+msgstr "'Created at"
+
 #. placeholder {0}: provider ? t`Edit` : t`Add`
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:132
 msgid "{0} E-invoices provider"
@@ -117,6 +121,7 @@ msgstr "Access faster with standalone app"
 msgid "Action failed"
 msgstr "Action failed"
 
+#: src/components/list/components/bulk-actions.tsx:66
 #: src/modules/bookings/components/booking-card.tsx:168
 msgid "Actions"
 msgstr "Actions"
@@ -331,12 +336,12 @@ msgid "AI assistant"
 msgstr "AI assistant"
 
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:218
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:36
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
 msgid "AI Assistant"
 msgstr "AI Assistant"
 
 #. placeholder {0}: plugin.provider
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:73
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:71
 msgid "AI Assistant {0}"
 msgstr "AI Assistant {0}"
 
@@ -718,7 +723,7 @@ msgstr "Auto"
 msgid "Auto reply messages according to the script"
 msgstr "Auto reply messages according to the script"
 
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:41
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:39
 msgid "Automatically reply to customer messages"
 msgstr "Automatically reply to customer messages"
 
@@ -1025,7 +1030,7 @@ msgstr "Change app icon"
 msgid "Change auth"
 msgstr "Change auth"
 
-#: src/modules/loans/loan-list.tsx:346
+#: src/modules/loans/loan-list.tsx:347
 msgid "Change branch"
 msgstr "Change branch"
 
@@ -1207,6 +1212,10 @@ msgstr "Color name"
 msgid "Color shape"
 msgstr "Color shape"
 
+#: src/components/list/components/columns-setting.tsx:27
+msgid "Columns"
+msgstr "Columns"
+
 #: src/modules/product-combos/modals/modal-product-combo.tsx:71
 #: src/modules/products/components/form-product.tsx:64
 #: src/modules/products/products-constants.tsx:7
@@ -1339,27 +1348,22 @@ msgstr "Confirm password"
 msgid "Congratulations! You cleared your important notifications 🎉"
 msgstr "Congratulations! You cleared your important notifications 🎉"
 
-#: src/components/plugins/plugin-meta-pages.tsx:63
+#: src/components/plugins/plugin-meta-pages.tsx:61
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:212
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:51
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:49
 #: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:40
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:425
 msgid "Connect"
 msgstr "Connect"
 
+#. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { Button } from "@/components/buttons/button"; import { Container } from "@/components/container"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core"; import { IconAi, IconCirclesRelation, IconLinkPlus, IconPencil } from "@tabler/icons-react"; import { type FC } from "react"; export const AiAssistantList: FC = () => { const plugins = usePlugins(); const workspace = useWorkspace(); const color = useColor(); if (plugins.aiAssistants.length === 0) { return ( <Container size="sm" p={16}> <Card shadow="xs"> <Stack align="center" py={20}> <Group gap={30} mb={20}> <Avatar workspace={workspace.userMember.workspace} size={55} /> <ThemeIcon variant="transparent" size="lg" color="dark"> <IconCirclesRelation size={50} /> </ThemeIcon> <Avatar src="/images/ai-assistants.png" size={55} /> </Group> <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}> {t`Connect ${t`AI Assistant`}`} </Title> <Text ta="center"> • <Trans>Automatically reply to customer messages</Trans> <br />•{" "} <Trans>Integrate with LLM models</Trans> </Text> <Button mt={10} action onClick={() => OnModalCreatePluginAiAssistant()} leftIcon={IconLinkPlus} > <Trans>Connect</Trans> </Button> </Stack> </Card> </Container> ); } return ( <Container size="xs" p={16}> <Stack> {plugins.aiAssistants.map((plugin) => { return ( <Card key={plugin._id} shadow="sm"> <Group align="start"> <ThemeIcon size={60} variant="light"> <IconAi size={40} strokeWidth={1.2} /> </ThemeIcon> <Stack gap={3} flex={1}> <Text fw={600}>{plugin.providerName}</Text> <Text c="gray" fz={12}> <Trans>Provider</Trans>: {t`AI Assistant ${plugin.provider}`} </Text> </Stack> <Stack> <ActionIcon variant="subtle" color="gray" onClick={() => OnModalCreatePluginAiAssistant(plugin)} > <IconPencil size={16} /> </ActionIcon> </Stack> </Group> </Card> ); })} </Stack> </Container> ); }; 
 #. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows"; import { Image } from "@/components/image"; import { useLayout } from "@/layout/layout-context"; import { renderDateTime, renderFromNow } from "@/modules/lang/lang-service"; import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service"; import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service"; import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { String } from "@/utils/string.utils"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core"; import { useElementSize } from "@mantine/hooks"; import { IconClock, IconMessage, IconPlus } from "@tabler/icons-react"; import { Handle, Position, ReactFlow } from "@xyflow/react"; import { FC, Fragment } from "react"; const cardRootSize = { width: 300, height: 110, }; const cardSize = { width: 260, height: 65, }; const cardAiSize = { width: 320, height: 80, }; const RootNode = () => { const workspace = useWorkspace(); const color = useColor(); return ( <Fragment> <Handle type="target" position={Position.Left} /> <Card withBorder shadow="none" p={0} style={{ cursor: "default", borderColor: color("primary"), }} > <Group gap={10} px={16} py={10} w={cardRootSize.width} h={cardRootSize.height} wrap="nowrap" > <Avatar workspace={workspace.userMember.workspace} radius={8} size={70} /> <Stack gap={0}> <Tooltip label={workspace.userMember.workspace.name} disabled={workspace.userMember.workspace.name.length < 10} > <Text fz={25} fw={500} truncate="end" maw={160}> {workspace.userMember.workspace.name} </Text> </Tooltip> <Text fz={12} c="gray.6" truncate="end"> Workspace </Text> </Stack> </Group> </Card> <Handle type="target" position={Position.Right} /> </Fragment> ); }; const AiIntegrationNode = () => { const plugins = usePlugins(); const aiPlugin = plugins.aiAssistants[0]; return ( <Fragment> <Handle type="source" position={Position.Left} /> <Card withBorder shadow="none" w={cardAiSize.width} h={cardAiSize.height} p={0} style={{ borderStyle: aiPlugin ? "solid" : "dashed", }} > <Group gap={10} align="center" wrap="nowrap" h={cardAiSize.height} px={16}> <Group gap={10} flex={1} style={{ cursor: "pointer", }} onClick={() => OnModalCreatePluginAiAssistant(aiPlugin)} > <Image src="/images/ai-assistants.png" w={40} h={40} /> <Stack gap={0} flex={1}> {aiPlugin ? ( <Fragment> <Tooltip label={aiPlugin.providerName}> <Text fz={16} fw={500} truncate="end"> {String.limitCharacters(aiPlugin.providerName, 20)} </Text> </Tooltip> <Text fz={10} c="gray.6" truncate="end"> {t`AI assistant`} </Text> </Fragment> ) : ( <Group wrap="nowrap" gap={0}> <ActionIcon variant="transparent" color="dark"> <IconPlus size={16} /> </ActionIcon> <Text fz={14} fw={500} truncate="end"> <Trans>Connect {t`AI assistant`}</Trans> </Text> </Group> )} </Stack> </Group> {aiPlugin && ( <Switch style={{ cursor: "pointer", }} checked={aiPlugin?.enabled} onChange={() => false} onClick={(e) => { e.stopPropagation(); e.preventDefault(); updatePluginAiAssistant(aiPlugin._id, { enabled: !aiPlugin.enabled }); }} /> )} </Group> </Card> </Fragment> ); }; const PluginNode = (props: any) => { const { plugin, name, type } = props.data; const platformType = type === "metaPages" ? MessageBoxPlatformType.META_PAGE : type === "zalaOAs" ? MessageBoxPlatformType.ZALO : MessageBoxPlatformType.MESSAGE_HUB; const PluginAvatar: FC = ( { metaPages: () => <Avatar color="primary" pluginMetaPage={plugin} size={30} />, zalaOAs: () => <Avatar color="primary" pluginZaloOa={plugin} size={30} />, messageHubs: () => ( <Avatar icon={IconMessage} src="/images/plugins-message-hubs.png" size={30} /> ), } as any )[type]; return ( <Fragment> <Handle type="source" position={Position.Right} /> <Card withBorder shadow="none" w={cardSize.width} h={cardSize.height} p={0} style={{ cursor: "default" }} > <Group gap={10} align="center" w={cardSize.width} h={cardSize.height} p={16} wrap="nowrap"> <Indicator label={<Image src={messageBoxPlatformImages[platformType]} w={16} h={16} />} radius={8} color="var(--mantine-color-body)" position="bottom-end" offset={5} styles={{ indicator: { paddingInline: 0, width: 20, height: 20, transform: "translate(50%, 80%)", zIndex: 10, }, }} > <PluginAvatar /> </Indicator> <Stack gap={0}> <Tooltip label={name} disabled={!name || name.length < 15}> <Text fz={16} fw={500} truncate="end" maw={150}> {name || t`Plugin`} </Text> </Tooltip> {!!plugin.lastInteractionAt && ( <Tooltip label={`${t`Last interaction at`}: ${renderDateTime(plugin.lastInteractionAt)}`} > <Text fz={10} fw={500} c="gray" truncate="end"> <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "} {renderFromNow(plugin.lastInteractionAt)} </Text> </Tooltip> )} </Stack> </Group> </Card> </Fragment> ); }; const PlusPluginNode = (props: any) => { const { isHasPlugin } = props.data; return ( <Fragment> <Handle type="source" position={Position.Right} /> <Card withBorder shadow="none" p={0} h={cardSize.height} w={cardSize.width} style={{ cursor: "pointer", borderStyle: "dashed" }} onClick={() => OnModalConnectPlugins()} > <Group gap={10} align="center" h={cardSize.height} w={cardSize.width} p={16} wrap="nowrap" bg="var(--mantine-color-body)" > <ActionIcon size={30} radius={100} variant="subtle" color="dark"> <IconPlus size={20} strokeWidth={1.5} /> </ActionIcon> <Text fz={14} fw={500} truncate="end"> {isHasPlugin ? t`Connect more` : t`Connect platform`} </Text> </Group> </Card> </Fragment> ); }; export const WorkspaceSettingMessageBoxesIntegrations: FC = () => { const layout = useLayout(); const sized = useElementSize(); const plugins = usePlugins(); const aiPlugin = plugins.aiAssistants[0]; const distanceFromRoot = 100; const rootPosition = { x: sized.width * 0.5 - cardRootSize.width / 2, y: sized.height / 2 - cardRootSize.height / 2, }; const pluginsGroup = groupNodes({ group: { x: 0, y: 0, id: "plugins", title: "message_source", spacing: 16, }, nodes: [ ...plugins.metaPages.map((m) => ({ id: m._id, type: "plugin", data: { name: m.name, plugin: m, type: "metaPages" }, position: { x: 0, y: 0 }, ...cardSize, })), ...plugins.zaloOas.map((m) => ({ id: m._id, type: "plugin", data: { name: m.info.name, plugin: m, type: "zalaOAs" }, position: { x: 0, y: 0 }, ...cardSize, })), ...plugins.messageHubs.map((m) => ({ id: m._id, type: "plugin", data: { name: m.name, plugin: m, type: "messageHubs" }, position: { x: 0, y: 0 }, ...cardSize, })), { id: "plus", type: "plus", position: { x: 0, y: 0 }, ...cardSize, data: {}, }, ], }); const nodes = [ { id: "root", position: rootPosition, type: "root", data: {}, }, ...moveNodes(pluginsGroup.nodes, { x: rootPosition.x - distanceFromRoot - cardSize.width, y: sized.height / 2 - pluginsGroup.group.height / 2, }), // Ai Integration { id: "ai", type: "ai", position: { x: rootPosition.x + distanceFromRoot * 0.5 + cardAiSize.width, y: sized.height / 2 - cardAiSize.height / 2, }, data: {}, }, ]; // Edges const edges = [ // Plugin -> Root ...pluginsGroup.childNodes.map((p) => ({ id: `${p.id}-root`, source: p.id, target: "root", animated: true, })), // Ai -> Root { id: "ai-root", source: "ai", target: "root", animated: !aiPlugin || aiPlugin.enabled }, ]; return ( <Card ref={sized.ref} w="100%" h={layout.height - 200} p={0} bg="gray.0" shadow="none"> <ReactFlow nodes={nodes} edges={edges} nodeTypes={{ ...defaultNodeTypes, root: RootNode, plugin: PluginNode, plus: PlusPluginNode, ai: AiIntegrationNode, }} nodesDraggable={false} zoomOnDoubleClick={false} zoomOnPinch={false} zoomOnScroll={false} maxZoom={1} minZoom={1} /> </Card> ); }; 
+#. placeholder {0}: "use client"; import { disconnectPluginMetaPage } from "@/modules/plugins/meta-pages/meta-pages-service"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onArchive } from "@/utils/actions"; import { onError } from "@/utils/exceptions.utils"; import { capitalize } from "@/utils/string.utils"; import config from "@joy-one-client/config"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { Anchor, Card, Center, Group, SimpleGrid, Skeleton, Stack, Text, ThemeIcon, Title, em, } from "@mantine/core"; import { IconCirclesRelation, IconLinkPlus, IconPuzzle } from "@tabler/icons-react"; import { FC } from "react"; import { Avatar } from "../avatar"; import { Button } from "../buttons/button"; import { Image } from "../image"; export const PluginMetaPages: FC = () => { const workspace = useWorkspace(); const plugins = usePlugins(); const color = useColor(); if (!plugins.isInitialized) return <Skeleton height={150} />; if (plugins.metaPages.length === 0) return ( <Stack align="center" py={20}> <Group gap={30} mb={20}> <Avatar workspace={workspace.userMember.workspace} size={55} /> <ThemeIcon variant="transparent" size="lg" color="dark"> <IconCirclesRelation size={50} /> </ThemeIcon> <Image w={55} src="/images/plugins-meta-pages.svg" /> </Group> <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}> {t`Connect ${t`Fanpage Facebook`}`} </Title> <Text ta="center"> • <Trans>Interact with customers via Messenger</Trans> <br />•{" "} <Trans>Easy & quick setup</Trans> </Text> <Button mt={10} action onClick={plugins.onConnectMetaPages} leftIcon={IconLinkPlus}> <Trans>Connect</Trans> </Button> </Stack> ); return ( <Stack gap={30}> <SimpleGrid cols={{ md: 2 }}> {plugins.metaPages.map((page) => { return ( <Card key={page._id} shadow="none" withBorder> <Group justify="space-between"> <Group> <Avatar pluginMetaPage={page} /> <Stack gap={0}> <Text>{page.name}</Text> <Text fz={12}>#{page.id}</Text> {config.ENV === "development" && <Text fz={12}>#{page._id}</Text>} </Stack> </Group> <Anchor c="gray" fw={500} fz={em(12)} onClick={() => onArchive({ icon: IconPuzzle, title: capitalize(`${t`Disconect`} ${page.name}`), process: () => disconnectPluginMetaPage(page._id).catch(onError), }) } > <Trans>Disconect</Trans> </Anchor> </Group> </Card> ); })} <Center> <Button type="submit" onClick={plugins.onConnectMetaPages} rightSection={<IconLinkPlus strokeWidth={1.5} />} > <Trans>Connect more</Trans> </Button> </Center> </SimpleGrid> </Stack> ); }; 
+#: src/components/plugins/plugin-meta-pages.tsx:52
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:132
 msgid "Connect {0}"
 msgstr "Connect {0}"
-
-#. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { Button } from "@/components/buttons/button"; import { Container } from "@/components/container"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core"; import { IconAi, IconCirclesRelation, IconLinkPlus, IconPencil } from "@tabler/icons-react"; import { type FC } from "react"; export const AiAssistantList: FC = () => { const plugins = usePlugins(); const workspace = useWorkspace(); const color = useColor(); if (plugins.aiAssistants.length === 0) { return ( <Container size="sm" p={16}> <Card shadow="xs"> <Stack align="center" py={20}> <Group gap={30} mb={20}> <Avatar workspace={workspace.userMember.workspace} size={55} /> <ThemeIcon variant="transparent" size="lg" color="dark"> <IconCirclesRelation size={50} /> </ThemeIcon> <Avatar src="/images/ai-assistants.png" size={55} /> </Group> <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}> <Trans> Connect <strong>{t`AI Assistant`}</strong> </Trans> </Title> <Text ta="center"> • <Trans>Automatically reply to customer messages</Trans> <br />•{" "} <Trans>Integrate with LLM models</Trans> </Text> <Button mt={10} action onClick={() => OnModalCreatePluginAiAssistant()} leftIcon={IconLinkPlus} > <Trans>Connect</Trans> </Button> </Stack> </Card> </Container> ); } return ( <Container size="xs" p={16}> <Stack> {plugins.aiAssistants.map((plugin) => { return ( <Card key={plugin._id} shadow="sm"> <Group align="start"> <ThemeIcon size={60} variant="light"> <IconAi size={40} strokeWidth={1.2} /> </ThemeIcon> <Stack gap={3} flex={1}> <Text fw={600}>{plugin.providerName}</Text> <Text c="gray" fz={12}> <Trans>Provider</Trans>: {t`AI Assistant ${plugin.provider}`} </Text> </Stack> <Stack> <ActionIcon variant="subtle" color="gray" onClick={() => OnModalCreatePluginAiAssistant(plugin)} > <IconPencil size={16} /> </ActionIcon> </Stack> </Group> </Card> ); })} </Stack> </Container> ); }; 
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
-msgid "Connect <0>{0}</0>"
-msgstr "Connect <0>{0}</0>"
-
-#: src/components/plugins/plugin-meta-pages.tsx:52
-msgid "Connect <0>Fanpage Facebook</0>"
-msgstr "Connect <0>Fanpage Facebook</0>"
 
 #: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:29
 msgid "Connect <0>Zalo OAs</0>"
@@ -1369,7 +1373,7 @@ msgstr "Connect <0>Zalo OAs</0>"
 msgid "Connect Meta page"
 msgstr "Connect Meta page"
 
-#: src/components/plugins/plugin-meta-pages.tsx:109
+#: src/components/plugins/plugin-meta-pages.tsx:107
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:262
 msgid "Connect more"
 msgstr "Connect more"
@@ -1498,6 +1502,7 @@ msgstr "Coupon used"
 msgid "Coupons"
 msgstr "Coupons"
 
+#: src/components/list/components/create-button.tsx:46
 #: src/modules/bookings/modals/modal-booking.tsx:359
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:383
 #: src/modules/loans/modals/modal-loan-package-form.tsx:332
@@ -1590,13 +1595,10 @@ msgstr "Create new loan contract"
 msgid "Create new product"
 msgstr "Create new product"
 
+#: src/layout/navigation/navigation-drawer.tsx:323
 #: src/modules/workspaces/workspace-require.tsx:218
 msgid "Create new workspace"
 msgstr "Create new workspace"
-
-#: src/layout/navigation/navigation-drawer.tsx:323
-msgid "Create new Workspace"
-msgstr "Create new Workspace"
 
 #: src/modules/events/event-constants.ts:150
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:99
@@ -1677,8 +1679,8 @@ msgid "Credit"
 msgstr "Credit"
 
 #: src/widgets/reports/modules.ts:191
-msgid "Credit report title"
-msgstr "Credit report title"
+msgid "Credit report"
+msgstr "Credit report"
 
 #: src/modules/workspaces/workspace-modules.tsx:305
 msgid "Credit settings"
@@ -1997,8 +1999,8 @@ msgstr "Disable"
 msgid "Disbursement"
 msgstr "Disbursement"
 
-#: src/components/plugins/plugin-meta-pages.tsx:91
-#: src/components/plugins/plugin-meta-pages.tsx:96
+#: src/components/plugins/plugin-meta-pages.tsx:89
+#: src/components/plugins/plugin-meta-pages.tsx:94
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:217
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:117
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:122
@@ -2160,7 +2162,7 @@ msgstr "E-Invoices"
 msgid "Early leave"
 msgstr "Early leave"
 
-#: src/components/plugins/plugin-meta-pages.tsx:59
+#: src/components/plugins/plugin-meta-pages.tsx:57
 msgid "Easy & quick setup"
 msgstr "Easy & quick setup"
 
@@ -2315,7 +2317,7 @@ msgstr "Enter product supplies"
 
 #: src/modules/customers/components/customer-kyc-card.tsx:101
 #: src/modules/loans/components/loan-documents.tsx:83
-#: src/modules/loans/loan-list.tsx:364
+#: src/modules/loans/loan-list.tsx:365
 msgid "Enter reject reason"
 msgstr "Enter reject reason"
 
@@ -2486,6 +2488,10 @@ msgstr "Failed to acquire geolocation, please try again in a few minutes."
 msgid "Failed to connect with Meta."
 msgstr "Failed to connect with Meta."
 
+#: src/components/plugins/plugin-meta-pages.tsx:52
+msgid "Fanpage Facebook"
+msgstr "Fanpage Facebook"
+
 #: src/modules/loans/modals/modal-loan-calculator.tsx:215
 msgid "Fee"
 msgstr "Fee"
@@ -2604,6 +2610,7 @@ msgid "Fulfilled"
 msgstr "Fulfilled"
 
 #: src/modules/loans/components/loan-disbursement.tsx:266
+#: src/modules/loans/loan-list.tsx:110
 msgid "Fulfilled at"
 msgstr "Fulfilled at"
 
@@ -2662,6 +2669,7 @@ msgstr "GMF groups"
 msgid "Grant permissions"
 msgstr "Grant permissions"
 
+#: src/components/list/components/filter-modes.tsx:64
 #: src/components/list/components/toggle-view.tsx:32
 msgid "Grid"
 msgstr "Grid"
@@ -2774,7 +2782,7 @@ msgid "IMEIL"
 msgstr "IMEIL"
 
 #: src/modules/loans/components/loan-documents.tsx:87
-#: src/modules/loans/loan-list.tsx:374
+#: src/modules/loans/loan-list.tsx:375
 msgid "Img is blurry"
 msgstr "Img is blurry"
 
@@ -2832,7 +2840,7 @@ msgid "Info does not match image"
 msgstr "Info does not match image"
 
 #: src/modules/loans/components/loan-documents.tsx:87
-#: src/modules/loans/loan-list.tsx:374
+#: src/modules/loans/loan-list.tsx:375
 msgid "Info does not match img"
 msgstr "Info does not match img"
 
@@ -2902,7 +2910,7 @@ msgstr "Integrate with E-Invoices services: <0>MatBao</0>, ..."
 msgid "Integrate with E-Invoices services: MatBao, ..."
 msgstr "Integrate with E-Invoices services: MatBao, ..."
 
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:42
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:40
 msgid "Integrate with LLM models"
 msgstr "Integrate with LLM models"
 
@@ -2910,7 +2918,7 @@ msgstr "Integrate with LLM models"
 msgid "Integrate Zalo OA, manage customer interactions."
 msgstr "Integrate Zalo OA, manage customer interactions."
 
-#: src/components/plugins/plugin-meta-pages.tsx:58
+#: src/components/plugins/plugin-meta-pages.tsx:56
 msgid "Interact with customers via Messenger"
 msgstr "Interact with customers via Messenger"
 
@@ -3320,6 +3328,7 @@ msgstr "Loan liquidation"
 
 #: src/modules/loans/components/loan-documents.tsx:107
 #: src/modules/loans/loan-detail.tsx:276
+#: src/modules/loans/loan-list.tsx:120
 #: src/modules/loans/loan-list.tsx:211
 #: src/modules/loans/modals/modal-loan-calculator.tsx:264
 #: src/modules/loans/modals/modal-loan-package-form.tsx:109
@@ -3389,11 +3398,12 @@ msgstr "Loan receipt remind"
 msgid "Loan rejected reverted"
 msgstr "Loan rejected reverted"
 
-#: src/modules/loans/loan-list.tsx:378
+#: src/modules/loans/loan-list.tsx:379
 msgid "Loan revert rejected"
 msgstr "Loan revert rejected"
 
 #: src/constant.ts:17
+#: src/modules/loans/loan-list.tsx:66
 #: src/modules/search/search-engine.tsx:215
 #: src/modules/workspaces/workspace-modules.tsx:223
 #: src/widgets/reports/modules.ts:228
@@ -4476,7 +4486,7 @@ msgstr "Payment period options"
 msgid "Payment periods"
 msgstr "Payment periods"
 
-#: src/modules/loans/loan-list.tsx:313
+#: src/modules/loans/loan-list.tsx:314
 msgid "Payment progress"
 msgstr "Payment progress"
 
@@ -4899,7 +4909,7 @@ msgid "Provide API key"
 msgstr "Provide API key"
 
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:112
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:73
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:71
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:106
 msgid "Provider"
 msgstr "Provider"
@@ -5084,8 +5094,8 @@ msgstr "Registration number"
 #: src/modules/customers/components/customer-kyc-card.tsx:204
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:145
 #: src/modules/loans/components/loan-documents.tsx:195
-#: src/modules/loans/loan-list.tsx:357
-#: src/modules/loans/loan-list.tsx:363
+#: src/modules/loans/loan-list.tsx:358
+#: src/modules/loans/loan-list.tsx:364
 #: src/modules/receipts/receipt-card.tsx:466
 msgid "Reject"
 msgstr "Reject"
@@ -5831,6 +5841,7 @@ msgstr "Start time must be before end time"
 #: src/modules/bookings/components/booking-card.tsx:187
 #: src/modules/customers/modals/modal-customer-form.tsx:132
 #: src/modules/loans/loan-detail.tsx:323
+#: src/modules/loans/loan-list.tsx:263
 #: src/modules/message-boxes/message-boxes.tsx:66
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:155
 #: src/modules/tasks/components/form-task.tsx:274
@@ -5946,6 +5957,7 @@ msgstr "Sync tags"
 msgid "System mode"
 msgstr "System mode"
 
+#: src/components/list/components/filter-modes.tsx:52
 #: src/components/list/components/toggle-view.tsx:16
 msgid "Table"
 msgstr "Table"
@@ -7001,7 +7013,7 @@ msgstr "Workspaces"
 
 #: src/modules/customers/components/customer-kyc-card.tsx:105
 #: src/modules/loans/components/loan-documents.tsx:87
-#: src/modules/loans/loan-list.tsx:374
+#: src/modules/loans/loan-list.tsx:375
 msgid "Wrong information"
 msgstr "Wrong information"
 

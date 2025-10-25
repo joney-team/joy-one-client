@@ -320,7 +320,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                 workspace.setIsCreateNew(true);
                 workspace.leave();
               }}
-              label={t`Create new Workspace`}
+              label={t`Create new workspace`}
             />
           </Renderer>
         </Stack>

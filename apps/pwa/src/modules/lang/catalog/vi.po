@@ -13,6 +13,10 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
+#: src/modules/loans/loan-list.tsx:104
+msgid "'Created at"
+msgstr ""
+
 #. placeholder {0}: provider ? t`Edit` : t`Add`
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:132
 msgid "{0} E-invoices provider"
@@ -39,7 +43,7 @@ msgstr "{0} công việc liên quan sẽ được chuyển đến thư mục m�
 #. placeholder {0}: num(ctx.subTasks.length)
 #: src/modules/tasks/views/board/board.task-card.tsx:374
 msgid "{0} subtasks"
-msgstr ""
+msgstr "{0} công việc con"
 
 #: src/modules/message-boxes/message-box/message-box-messages.tsx:228
 msgid "{timeBtw} minutes ago"
@@ -102,12 +106,12 @@ msgstr "9 tháng"
 
 #: src/modules/product-combos/product-combos-onboarding.tsx:24
 msgid "A combo is a shopping method that combines multiple products into a single package to stimulate consumption and increase order value"
-msgstr ""
+msgstr "Combo là phương thức mua sắm kết hợp nhiều sản phẩm thành một gói để kích thích tiêu dùng và tăng giá trị đơn hàng"
 
 #. placeholder {0}: "n"
 #: src/modules/workspace-settings/workspace-setting-hrm-timekeepings.tsx:38
 msgid "Accept lateness up to {0} minutes"
-msgstr ""
+msgstr "Chấp nhận trễ tối đa {0} phút"
 
 #: src/modules/dashboard/dashboard-suggestions.tsx:198
 msgid "Access faster with standalone app"
@@ -115,8 +119,9 @@ msgstr "Truy cập nhanh hơn với ứng dụng độc lập"
 
 #: src/utils/exceptions.utils.tsx:50
 msgid "Action failed"
-msgstr ""
+msgstr "Thao tác thất bại"
 
+#: src/components/list/components/bulk-actions.tsx:66
 #: src/modules/bookings/components/booking-card.tsx:168
 msgid "Actions"
 msgstr "Hành động"
@@ -136,11 +141,11 @@ msgstr "Đang hoạt động"
 #. placeholder {1}: renderDate(device.lastActiveAt * 1000)
 #: src/modules/users/components/user-device-card.tsx:79
 msgid "Active at {0}({1})"
-msgstr ""
+msgstr "Hoạt động lúc {0}({1})"
 
 #: src/modules/tasks/components/detail-footer.tsx:29
 msgid "Activities"
-msgstr ""
+msgstr "Hoạt động"
 
 #: src/modules/users/modals/modal-user-information.tsx:226
 msgid "Activity"
@@ -161,14 +166,13 @@ msgid "Add"
 msgstr "Thêm"
 
 #: src/components/printer/printer-header.tsx:29
-#: src/modals/modal-printer.tsx:247
-#: src/modals/modal-printer.tsx:254
+#: src/modals/modal-printer.tsx:247 src/modals/modal-printer.tsx:254
 msgid "ADD"
 msgstr "ĐC"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:194
 msgid "Add child field"
-msgstr ""
+msgstr "Thêm trường con"
 
 #: src/modules/product-combos/modals/modal-product-combo-using.tsx:70
 msgid "Add combo history"
@@ -189,24 +193,24 @@ msgstr "Thêm người thân khách hàng"
 
 #: src/modules/workspaces/workspace-module-setup.tsx:113
 msgid "Add divider"
-msgstr ""
+msgstr "Thêm đường phân cách"
 
 #: src/modules/tasks/components/form-task.tsx:498
 #: src/modules/tasks/views/board/board.task-card.tsx:284
 msgid "Add due date"
-msgstr ""
+msgstr "Thêm hạn hoàn thành"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:257
 msgid "Add field"
-msgstr ""
+msgstr "Thêm trường"
 
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:132
 msgid "Add info"
-msgstr ""
+msgstr "Thêm thông tin"
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:384
 msgid "Add input"
-msgstr ""
+msgstr "Thêm trường nhập liệu"
 
 #: src/modules/loans/modals/modal-create-loan.tsx:292
 msgid "Add KYC"
@@ -214,7 +218,7 @@ msgstr "Thêm KYC"
 
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:72
 msgid "Add loan package"
-msgstr ""
+msgstr "Thêm gói vay"
 
 #: src/components/inputs/check-in-locations-input.tsx:166
 msgid "Add location"
@@ -222,7 +226,7 @@ msgstr "Thêm vị trí"
 
 #: src/modules/workspaces/workspace-module-setup.tsx:129
 msgid "Add modules"
-msgstr ""
+msgstr "Thêm chức năng"
 
 #: src/modules/orders/orders-sale/components/order-sale-items.tsx:33
 msgid "Add note"
@@ -230,12 +234,12 @@ msgstr "Thêm ghi chú"
 
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:269
 msgid "Add pill"
-msgstr ""
+msgstr "Thêm thuốc"
 
 #: src/modules/tasks/components/form-task.tsx:421
 #: src/modules/tasks/views/board/board.task-card.tsx:339
 msgid "Add priority"
-msgstr ""
+msgstr "Thêm độ ưu tiên"
 
 #: src/modules/products/components/form-product.tsx:428
 msgid "Add product supplies"
@@ -257,7 +261,7 @@ msgstr "Thêm quy tắc"
 
 #: src/modules/tasks/views/board/index.tsx:102
 msgid "Add status"
-msgstr ""
+msgstr "Thêm trạng thái"
 
 #: src/modules/tasks/task-status-modal.tsx:169
 msgid "Add Status"
@@ -265,20 +269,20 @@ msgstr "Thêm trạng thái"
 
 #: src/modules/tasks/views/board/board.task-card.tsx:244
 msgid "Add tag"
-msgstr ""
+msgstr "Thêm thẻ"
 
 #: src/modules/tags/components/tags-input.tsx:56
 #: src/modules/tasks/views/list/list.task-row.tsx:336
 msgid "Add tags"
-msgstr ""
+msgstr "Thêm thẻ"
 
 #: src/modules/tasks/views/calendar/index.tsx:239
 msgid "Add task need to complete"
-msgstr ""
+msgstr "Thêm công việc cần hoàn thành"
 
 #: src/modules/tasks/views/gantt/gantt.task-group-by-folder.tsx:164
 msgid "Add tasks"
-msgstr ""
+msgstr "Thêm công việc"
 
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:396
 #: src/modules/tasks/views/time-trackings/index.tsx:265
@@ -287,7 +291,7 @@ msgstr "Thêm thời gian làm việc"
 
 #: src/widgets/components/manage-widgets.tsx:87
 msgid "Add widget"
-msgstr ""
+msgstr "Thêm widget"
 
 #: src/components/location-form.tsx:56
 #: src/components/printer/printer-settings-bar.tsx:39
@@ -302,11 +306,11 @@ msgstr "Địa chỉ"
 
 #: src/modules/workspace-roles/workspace-roles-constants.ts:6
 msgid "Admin"
-msgstr ""
+msgstr "Quản trị viên"
 
 #: src/widgets/reports/widgets/report-credit.widget.tsx:396
 msgid "Advance payment"
-msgstr ""
+msgstr "Thanh toán trước"
 
 #: src/modals/modal-printer.tsx:544
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:276
@@ -316,7 +320,7 @@ msgstr "Lời khuyên"
 #. placeholder {0}: form.values.user
 #: src/modules/plugins/mailer/plugin-mailer-form.tsx:157
 msgid "After confirming the system will use the email address <0>{0}</0> to send Mail to customers <1/> or system notifications to members."
-msgstr ""
+msgstr "Sau khi xác nhận hệ thống sẽ sử dụng địa chỉ email <0>{0}</0> để gửi Mail cho khách hàng <1/> hoặc thông báo hệ thống đến thành viên."
 
 #: src/modals/modal-printer.tsx:514
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:212
@@ -331,14 +335,14 @@ msgid "AI assistant"
 msgstr "Trợ lý AI"
 
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:218
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:36
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
 msgid "AI Assistant"
 msgstr "Trợ lý AI"
 
 #. placeholder {0}: plugin.provider
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:73
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:71
 msgid "AI Assistant {0}"
-msgstr ""
+msgstr "Trợ lý AI {0}"
 
 #: src/modules/events/event-constants.ts:147
 msgid "AI assistant created"
@@ -359,14 +363,14 @@ msgstr "Trợ lý AI"
 
 #: src/modules/workspaces/workspace-modules.tsx:434
 msgid "AI Assistants"
-msgstr "AI Assistants"
+msgstr "Trợ lý AI"
 
 #: src/modules/dashboard/dashboard-bookings.tsx:74
 #: src/modules/loans/loan-list-tabs.tsx:57
 msgid "All"
 msgstr "Tất cả"
 
-#. placeholder {0}: import { ContentEditable } from "@/components/content-editable/content-editable"; import { useRouter } from "@/hooks/use-router"; import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form"; import { useTags } from "@/modules/tags/tags-context"; import { onRemoveTaskTagFolder } from "@/modules/tags/tags-service"; import { TagType } from "@/modules/tags/tags-types"; import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector"; import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, alpha, Card, Group, Menu, Text, Tooltip } from "@mantine/core"; import { useDebouncedCallback, useHover } from "@mantine/hooks"; import { IconDots, IconFolder, IconLogout2, IconPencil, IconTrash } from "@tabler/icons-react"; import { FC } from "react"; export const WorkspaceHeaderTasksBreadcrumbs: FC = () => { const router = useRouter(); const tagFolders = useTaskFolders(); const hover = useHover(); const tags = useTags(); const onChangeTaskFolderName = useDebouncedCallback((name: string) => { if (!tagFolders.tagFolder) return; tags.update(tagFolders.tagFolder._id, { ...tagFolders.tagFolder, name }); }, 500); if (!router.pathname.startsWith("/tasks")) return null; return ( <Group gap={8}> <TaskTagFolderSelector excludeIds={[tagFolders.tagFolder?._id || ""]} onSelect={(tag) => { if (tag) tagFolders.openFolder(tag); else tagFolders.exitFolder(); }} render={(ctx) => { return ( <Group gap={0}> <Card p={3} withBorder={false} shadow="none" ref={hover.ref} bg={ hover.hovered ? tagFolders.tagFolder ? alpha(tagFolders.tagFolder?.color || "dark", 0.1) : "gray.1" : undefined } > <Group gap={0}> <Tooltip label={<Trans>Select folder</Trans>} position="right"> <ActionIcon variant="subtle" color={tagFolders.tagFolder?.color || "dark"} onClick={ctx.toggle} style={{ cursor: "pointer" }} > <IconFolder size={18} strokeWidth={2} /> </ActionIcon> </Tooltip> {!!tagFolders.tagFolder ? ( <Group pr={8}> <ContentEditable fz={13} fw={500} value={tagFolders.tagFolder.name} onChange={(value) => { if (!value || typeof value !== "string") return; onChangeTaskFolderName(value); }} /> </Group> ) : ( <Text fz={13} fw={500} pr={5} style={{ cursor: "default" }}> <Trans>All {t`Tasks`}</Trans> </Text> )} </Group> </Card> {tagFolders.tagFolder && ( <Menu> <Menu.Target> <ActionIcon variant="subtle" color="dark"> <IconDots strokeWidth={1.5} size={16} /> </ActionIcon> </Menu.Target> <Menu.Dropdown> <Menu.Item leftSection={<IconLogout2 strokeWidth={2} size={18} />} onClick={(e) => { e.stopPropagation(); tagFolders.exitFolder(); }} > <Text fz={14}> <Trans>Exit</Trans> </Text> </Menu.Item> <Menu.Item leftSection={<IconPencil strokeWidth={2} size={18} />} onClick={(e) => { e.stopPropagation(); OnModalTagForm({ tag: tagFolders.tagFolder!, type: TagType.TASK_FOLDER }); }} > <Text fz={14}> <Trans>Edit</Trans> </Text> </Menu.Item> <Menu.Item leftSection={<IconTrash strokeWidth={2} size={18} />} onClick={(e) => { e.stopPropagation(); onRemoveTaskTagFolder(tagFolders.tagFolder!, () => { tagFolders.exitFolder(); }); }} > <Text fz={14}> <Trans>Remove</Trans> </Text> </Menu.Item> </Menu.Dropdown> </Menu> )} </Group> ); }} /> </Group> ); }; 
+#. placeholder {0}: import { ContentEditable } from "@/components/content-editable/content-editable"; import { useRouter } from "@/hooks/use-router"; import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form"; import { useTags } from "@/modules/tags/tags-context"; import { onRemoveTaskTagFolder } from "@/modules/tags/tags-service"; import { TagType } from "@/modules/tags/tags-types"; import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector"; import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, alpha, Card, Group, Menu, Text, Tooltip } from "@mantine/core"; import { useDebouncedCallback, useHover } from "@mantine/hooks"; import { IconDots, IconFolder, IconLogout2, IconPencil, IconTrash } from "@tabler/icons-react"; import { FC } from "react"; export const WorkspaceHeaderTasksBreadcrumbs: FC = () => { const router = useRouter(); const tagFolders = useTaskFolders(); const hover = useHover(); const tags = useTags(); const onChangeTaskFolderName = useDebouncedCallback((name: string) => { if (!tagFolders.tagFolder) return; tags.update(tagFolders.tagFolder._id, { ...tagFolders.tagFolder, name }); }, 500); if (!router.pathname.startsWith("/tasks")) return null; return ( <Group gap={8}> <TaskTagFolderSelector excludeIds={[tagFolders.tagFolder?._id || ""]} onSelect={(tag) => { if (tag) tagFolders.openFolder(tag); else tagFolders.exitFolder(); }} render={(ctx) => { return ( <Group gap={0}> <Card p={3} withBorder={false} shadow="none" ref={hover.ref} bg={ hover.hovered ? tagFolders.tagFolder ? alpha(tagFolders.tagFolder?.color || "dark", 0.1) : "gray.1" : undefined } > <Group gap={0}> <Tooltip label={<Trans>Select folder</Trans>} position="right"> <ActionIcon variant="subtle" color={tagFolders.tagFolder?.color || "dark"} onClick={ctx.toggle} style={{ cursor: "pointer" }} > <IconFolder size={18} strokeWidth={2} /> </ActionIcon> </Tooltip> {!!tagFolders.tagFolder ? ( <Group pr={8}> <ContentEditable fz={13} fw={500} value={tagFolders.tagFolder.name} onChange={(value) => { if (!value || typeof value !== "string") return; onChangeTaskFolderName(value); }} /> </Group> ) : ( <Text fz={13} fw={500} pr={5} style={{ cursor: "default" }}> <Trans>All {t`Tasks`}</Trans> </Text> )} </Group> </Card> {tagFolders.tagFolder && ( <Menu> <Menu.Target> <ActionIcon variant="subtle" color="dark"> <IconDots strokeWidth={1.5} size={16} /> </ActionIcon> </Menu.Target> <Menu.Dropdown> <Menu.Item leftSection={<IconLogout2 strokeWidth={2} size={18} />} onClick={(e) => { e.stopPropagation(); tagFolders.exitFolder(); }} > <Text fz={14}> <Trans>Exit</Trans> </Text> </Menu.Item> <Menu.Item leftSection={<IconPencil strokeWidth={2} size={18} />} onClick={(e) => { e.stopPropagation(); OnModalTagForm({ tag: tagFolders.tagFolder!, type: TagType.TASK_FOLDER }); }} > <Text fz={14}> <Trans>Edit</Trans> </Text> </Menu.Item> <Menu.Item leftSection={<IconTrash strokeWidth={2} size={18} />} onClick={(e) => { e.stopPropagation(); onRemoveTaskTagFolder(tagFolders.tagFolder!, () => { tagFolders.exitFolder(); }); }} > <Text fz={14}> <Trans>Remove</Trans> </Text> </Menu.Item> </Menu.Dropdown> </Menu> )} </Group> ); }} /> </Group> ); };
 #: src/layout/header/header-tasks-breadcrumbs.tsx:79
 msgid "All {0}"
 msgstr "Tất cả {0}"
@@ -423,7 +427,6 @@ msgstr "Tên khác hiển thị trên ticket, hóa đơn gửi cho khách hàng.
 
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:125
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
 msgid "API App"
 msgstr "Ứng dụng API"
 
@@ -441,7 +444,7 @@ msgstr "Cập nhật App APIs"
 
 #: src/modules/workspaces/workspace-modules.tsx:332
 msgid "API Apps"
-msgstr "API Apps"
+msgstr "Ứng dụng API"
 
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:190
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:197
@@ -450,7 +453,7 @@ msgstr "Mã API"
 
 #: src/modules/workspace-api-apps/workspace-api-app-list.tsx:42
 msgid "APIs System"
-msgstr ""
+msgstr "Hệ thống API"
 
 #: src/modules/workspaces/workspace-modules.tsx:285
 #: src/modules/workspaces/workspace.tsx:57
@@ -459,7 +462,7 @@ msgstr "Cài đặt App"
 
 #: src/modules/plugins/mailer/plugin-mailer-form.tsx:94
 msgid "Application password"
-msgstr ""
+msgstr "Mật khẩu ứng dụng"
 
 #: src/components/inputs/work-slot-settings-input.tsx:228
 msgid "Applied to staff working in shifts"
@@ -476,7 +479,7 @@ msgstr "Áp dụng"
 #: src/modules/product-vouchers/product-voucher-card.tsx:117
 #: src/modules/products/components/product-card.tsx:216
 msgid "Apply all products"
-msgstr ""
+msgstr "Áp dụng tất cả sản phẩm"
 
 #: src/modules/hrm-timekeepings/hrm-timekeeping-list.tsx:247
 #: src/modules/hrm-timekeepings/hrm-timekeeping-list.tsx:255
@@ -518,8 +521,7 @@ msgstr "Đã duyệt"
 #: src/components/buttons/button-archive.tsx:48
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:43
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:166
-#: src/modules/receipts/receipt-detail.tsx:151
-#: src/utils/actions.tsx:105
+#: src/modules/receipts/receipt-detail.tsx:151 src/utils/actions.tsx:105
 msgid "Archive"
 msgstr "Xoá"
 
@@ -692,7 +694,7 @@ msgstr "Tại thời điểm ký khoản vay"
 
 #: src/modules/tasks/components/form-task.tsx:608
 msgid "Attachments"
-msgstr ""
+msgstr "Tệp đính kèm"
 
 #: src/modules/bookings/booking-list.tsx:275
 #: src/modules/bookings/components/booking-card.tsx:330
@@ -703,11 +705,11 @@ msgstr "Tham gia"
 
 #: src/modules/files/files-constants.ts:17
 msgid "Audio"
-msgstr ""
+msgstr "Âm thanh"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:19
 msgid "Auth failed"
-msgstr ""
+msgstr "Xác thực thất bại"
 
 #: src/components/printer/printer-settings-bar.tsx:75
 #: src/modules/users/user-profile-settings.tsx:208
@@ -718,9 +720,9 @@ msgstr "Tự động"
 msgid "Auto reply messages according to the script"
 msgstr "Trả lời tin nhắn tự động theo kịch bản"
 
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:41
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:39
 msgid "Automatically reply to customer messages"
-msgstr ""
+msgstr "Tự động trả lời tin nhắn khách hàng"
 
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:243
 msgid "Available entities to search"
@@ -728,7 +730,7 @@ msgstr "Các dữ liệu có thể tìm kiếm"
 
 #: src/modules/plugins/mailer/plugin-mailer-form.tsx:129
 msgid "Back"
-msgstr ""
+msgstr "Trở lại"
 
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:177
 #: src/modules/customers/components/customer-kyc-card.tsx:75
@@ -746,11 +748,11 @@ msgstr "Quay lại đăng nhập"
 
 #: src/modules/workspace-billings/workspace-billing-list.tsx:120
 msgid "Balance"
-msgstr ""
+msgstr "Số dư"
 
 #: src/modules/workspace-billings/workspace-billing-list.tsx:189
 msgid "Balance at billing time"
-msgstr ""
+msgstr "Số dư tại thời điểm thanh toán"
 
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:56
 msgid "Bank"
@@ -861,7 +863,7 @@ msgstr "Lịch hẹn"
 
 #: src/widgets/dashboard/modules.ts:139
 msgid "Bookings chart"
-msgstr ""
+msgstr "Biểu đồ lịch hẹn"
 
 #: src/modules/customers/components/form-customer.tsx:131
 #: src/modules/loans/modals/modal-create-loan.tsx:394
@@ -923,8 +925,7 @@ msgstr "Có thể để trống 1 trong 2 thời gian check-in hoặc check-out 
 #: src/modules/notifications/user-notifications.tsx:89
 #: src/modules/receipts/receipt-card.tsx:459
 #: src/modules/receipts/receipt-detail.tsx:82
-#: src/modules/receipts/receipt-e-invoices.tsx:120
-#: src/utils/actions.tsx:105
+#: src/modules/receipts/receipt-e-invoices.tsx:120 src/utils/actions.tsx:105
 msgid "Cancel"
 msgstr "Hủy"
 
@@ -950,11 +951,11 @@ msgstr "Đã hủy"
 
 #: src/modules/workspace-roles/components/workspace-role-card.tsx:78
 msgid "Cannot be deleted, can be assigned to other members"
-msgstr ""
+msgstr "Không thể xóa, có thể gán cho thành viên khác"
 
 #: src/modules/workspace-roles/components/workspace-role-card.tsx:65
 msgid "Cannot be deleted, cannot be assigned to other members, can only be transferred"
-msgstr ""
+msgstr "Không thể xóa, không thể gán cho thành viên khác, chỉ có thể chuyển nhượng"
 
 #: src/modules/files/modals/modal-file-gallery.tsx:214
 msgid "Cannot display file"
@@ -974,22 +975,20 @@ msgstr "Tiền mặt"
 
 #: src/modules/workspace-billings/workspace-billings-contants.ts:10
 msgid "Cashback"
-msgstr ""
+msgstr "Hoàn tiền"
 
 #: src/modules/events/event-constants.ts:102
 msgid "Cashback created"
 msgstr "Hoàn tiền"
 
 #: src/components/printer/printer-settings-bar.tsx:48
-#: src/modals/modal-printer.tsx:424
-#: src/modals/modal-printer.tsx:583
+#: src/modals/modal-printer.tsx:424 src/modals/modal-printer.tsx:583
 #: src/modules/receipts/receipt-card.tsx:301
 #: src/modules/receipts/receipt-list.tsx:89
 msgid "Cashier"
 msgstr "Người thu tiền"
 
-#: src/constant.ts:28
-#: src/modules/products/components/form-product.tsx:310
+#: src/constant.ts:28 src/modules/products/components/form-product.tsx:310
 #: src/modules/workspaces/workspace-modules.tsx:351
 msgid "Categories"
 msgstr "Danh mục"
@@ -1019,13 +1018,13 @@ msgstr "Thay đổi"
 
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:114
 msgid "Change app icon"
-msgstr ""
+msgstr "Thay đổi biểu tượng ứng dụng"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:128
 msgid "Change auth"
-msgstr ""
+msgstr "Thay đổi xác thực"
 
-#: src/modules/loans/loan-list.tsx:346
+#: src/modules/loans/loan-list.tsx:347
 msgid "Change branch"
 msgstr "Thay đổi chi nhánh"
 
@@ -1036,7 +1035,7 @@ msgstr "Thay đổi khách hàng"
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:212
 #: src/modules/tasks/components/detail-head.tsx:93
 msgid "Change folder"
-msgstr ""
+msgstr "Thay đổi thư mục"
 
 #: src/modules/events/event-constants.ts:165
 msgid "Change loan workspace branch"
@@ -1045,7 +1044,7 @@ msgstr "Thay đổi chi nhánh của hồ sơ vay"
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:125
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:153
 msgid "Change name"
-msgstr ""
+msgstr "Thay đổi tên"
 
 #: src/modules/auth/components/form-forgot-password.tsx:98
 msgid "Change password"
@@ -1053,7 +1052,7 @@ msgstr "Đổi mật khẩu"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:112
 msgid "Change provider"
-msgstr ""
+msgstr "Đổi nhà cung cấp"
 
 #: src/modules/events/event-constants.ts:166
 msgid "Change receipt workspace branch"
@@ -1062,7 +1061,7 @@ msgstr "Thay đổi chi nhánh của hoá đơn"
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:143
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:301
 msgid "Change status"
-msgstr ""
+msgstr "Đổi trạng thái"
 
 #: src/modules/users/user-profile-settings.tsx:142
 msgid "Change your language settings"
@@ -1070,7 +1069,7 @@ msgstr "Thay đổi cài đặt ngôn ngữ"
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:219
 msgid "Chat icon"
-msgstr ""
+msgstr "Biểu tượng Chat"
 
 #: src/modules/loans/components/loan-payments.tsx:144
 msgid "Check"
@@ -1163,7 +1162,7 @@ msgstr "Nhấp để thay đổi ảnh đại diện"
 
 #: src/modules/promotions/promostion-list.tsx:79
 msgid "Click to change status"
-msgstr ""
+msgstr "Click để thay đổi trạng thái"
 
 #: src/modules/workspaces/workspace-constants.tsx:19
 msgid "Clinic"
@@ -1205,6 +1204,10 @@ msgstr "Tên màu"
 
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:158
 msgid "Color shape"
+msgstr "Khối màu"
+
+#: src/components/list/components/columns-setting.tsx:27
+msgid "Columns"
 msgstr ""
 
 #: src/modules/product-combos/modals/modal-product-combo.tsx:71
@@ -1240,8 +1243,7 @@ msgstr "Bỏ ghim bình luận"
 msgid "Comment updated"
 msgstr "Cập nhật bình luận"
 
-#: src/constant.ts:19
-#: src/modules/comments/comment-box/index.tsx:100
+#: src/constant.ts:19 src/modules/comments/comment-box/index.tsx:100
 #: src/modules/comments/comments.tsx:162
 msgid "Comments"
 msgstr "Bình luận"
@@ -1249,16 +1251,15 @@ msgstr "Bình luận"
 #: src/modules/workspaces/workspace-require.tsx:156
 #: src/modules/workspaces/workspace-require.tsx:305
 msgid "Company"
-msgstr ""
+msgstr "Công ty"
 
 #: src/modules/workspaces/workspace-require.tsx:156
 #: src/modules/workspaces/workspace-require.tsx:305
 msgid "Company branch"
-msgstr ""
+msgstr "Chi nhánh"
 
 #: src/modals/modal-check-in-location-form.tsx:110
-#: src/modals/modal-input.tsx:263
-#: src/modals/modal-prompt.tsx:87
+#: src/modals/modal-input.tsx:263 src/modals/modal-prompt.tsx:87
 #: src/modules/coupons/modals/modal-coupon-form.tsx:162
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:195
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:323
@@ -1288,8 +1289,7 @@ msgstr "Hoàn thành hồ sơ vay"
 #: src/modules/bookings/booking-constants.tsx:9
 #: src/modules/customer-forms/customer-form-constants.tsx:17
 #: src/modules/loans/loans-constants.tsx:20
-#: src/modules/orders/orders-constants.tsx:10
-#: src/utils/actions.tsx:51
+#: src/modules/orders/orders-constants.tsx:10 src/utils/actions.tsx:51
 msgid "Completed"
 msgstr "Đã hoàn thành"
 
@@ -1317,7 +1317,7 @@ msgstr "Xác nhận"
 
 #: src/modules/plugins/mailer/plugin-mailer-form.tsx:165
 msgid "Confirm and apply"
-msgstr ""
+msgstr "Xác nhập và áp dụng"
 
 #: src/modules/receipts/receipt-e-invoices.tsx:52
 msgid "Confirm Cancel"
@@ -1329,37 +1329,32 @@ msgstr "Xác nhận hủy"
 
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:481
 msgid "Confirm paid"
-msgstr ""
+msgstr "Xác nhận đã thanh toán"
 
 #: src/modules/users/components/update-password.tsx:69
 msgid "Confirm password"
-msgstr ""
+msgstr "Xác nhận mật khẩu"
 
 #: src/modules/notifications/user-notifications.tsx:47
 msgid "Congratulations! You cleared your important notifications 🎉"
-msgstr "Chúc mừng! Bạn đã xóa hết thông báo quan trọng 🎉"
+msgstr "Chúc mừng! Bạn đã dọn sạch các thông báo quan trọng 🎉"
 
-#: src/components/plugins/plugin-meta-pages.tsx:63
+#: src/components/plugins/plugin-meta-pages.tsx:61
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:212
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:51
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:49
 #: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:40
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:425
 msgid "Connect"
 msgstr "Kết nối"
 
-#. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows"; import { Image } from "@/components/image"; import { useLayout } from "@/layout/layout-context"; import { renderDateTime, renderFromNow } from "@/modules/lang/lang-service"; import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service"; import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service"; import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { String } from "@/utils/string.utils"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core"; import { useElementSize } from "@mantine/hooks"; import { IconClock, IconMessage, IconPlus } from "@tabler/icons-react"; import { Handle, Position, ReactFlow } from "@xyflow/react"; import { FC, Fragment } from "react"; const cardRootSize = { width: 300, height: 110, }; const cardSize = { width: 260, height: 65, }; const cardAiSize = { width: 320, height: 80, }; const RootNode = () => { const workspace = useWorkspace(); const color = useColor(); return ( <Fragment> <Handle type="target" position={Position.Left} /> <Card withBorder shadow="none" p={0} style={{ cursor: "default", borderColor: color("primary"), }} > <Group gap={10} px={16} py={10} w={cardRootSize.width} h={cardRootSize.height} wrap="nowrap" > <Avatar workspace={workspace.userMember.workspace} radius={8} size={70} /> <Stack gap={0}> <Tooltip label={workspace.userMember.workspace.name} disabled={workspace.userMember.workspace.name.length < 10} > <Text fz={25} fw={500} truncate="end" maw={160}> {workspace.userMember.workspace.name} </Text> </Tooltip> <Text fz={12} c="gray.6" truncate="end"> Workspace </Text> </Stack> </Group> </Card> <Handle type="target" position={Position.Right} /> </Fragment> ); }; const AiIntegrationNode = () => { const plugins = usePlugins(); const aiPlugin = plugins.aiAssistants[0]; return ( <Fragment> <Handle type="source" position={Position.Left} /> <Card withBorder shadow="none" w={cardAiSize.width} h={cardAiSize.height} p={0} style={{ borderStyle: aiPlugin ? "solid" : "dashed", }} > <Group gap={10} align="center" wrap="nowrap" h={cardAiSize.height} px={16}> <Group gap={10} flex={1} style={{ cursor: "pointer", }} onClick={() => OnModalCreatePluginAiAssistant(aiPlugin)} > <Image src="/images/ai-assistants.png" w={40} h={40} /> <Stack gap={0} flex={1}> {aiPlugin ? ( <Fragment> <Tooltip label={aiPlugin.providerName}> <Text fz={16} fw={500} truncate="end"> {String.limitCharacters(aiPlugin.providerName, 20)} </Text> </Tooltip> <Text fz={10} c="gray.6" truncate="end"> {t`AI assistant`} </Text> </Fragment> ) : ( <Group wrap="nowrap" gap={0}> <ActionIcon variant="transparent" color="dark"> <IconPlus size={16} /> </ActionIcon> <Text fz={14} fw={500} truncate="end"> <Trans>Connect {t`AI assistant`}</Trans> </Text> </Group> )} </Stack> </Group> {aiPlugin && ( <Switch style={{ cursor: "pointer", }} checked={aiPlugin?.enabled} onChange={() => false} onClick={(e) => { e.stopPropagation(); e.preventDefault(); updatePluginAiAssistant(aiPlugin._id, { enabled: !aiPlugin.enabled }); }} /> )} </Group> </Card> </Fragment> ); }; const PluginNode = (props: any) => { const { plugin, name, type } = props.data; const platformType = type === "metaPages" ? MessageBoxPlatformType.META_PAGE : type === "zalaOAs" ? MessageBoxPlatformType.ZALO : MessageBoxPlatformType.MESSAGE_HUB; const PluginAvatar: FC = ( { metaPages: () => <Avatar color="primary" pluginMetaPage={plugin} size={30} />, zalaOAs: () => <Avatar color="primary" pluginZaloOa={plugin} size={30} />, messageHubs: () => ( <Avatar icon={IconMessage} src="/images/plugins-message-hubs.png" size={30} /> ), } as any )[type]; return ( <Fragment> <Handle type="source" position={Position.Right} /> <Card withBorder shadow="none" w={cardSize.width} h={cardSize.height} p={0} style={{ cursor: "default" }} > <Group gap={10} align="center" w={cardSize.width} h={cardSize.height} p={16} wrap="nowrap"> <Indicator label={<Image src={messageBoxPlatformImages[platformType]} w={16} h={16} />} radius={8} color="var(--mantine-color-body)" position="bottom-end" offset={5} styles={{ indicator: { paddingInline: 0, width: 20, height: 20, transform: "translate(50%, 80%)", zIndex: 10, }, }} > <PluginAvatar /> </Indicator> <Stack gap={0}> <Tooltip label={name} disabled={!name || name.length < 15}> <Text fz={16} fw={500} truncate="end" maw={150}> {name || t`Plugin`} </Text> </Tooltip> {!!plugin.lastInteractionAt && ( <Tooltip label={`${t`Last interaction at`}: ${renderDateTime(plugin.lastInteractionAt)}`} > <Text fz={10} fw={500} c="gray" truncate="end"> <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "} {renderFromNow(plugin.lastInteractionAt)} </Text> </Tooltip> )} </Stack> </Group> </Card> </Fragment> ); }; const PlusPluginNode = (props: any) => { const { isHasPlugin } = props.data; return ( <Fragment> <Handle type="source" position={Position.Right} /> <Card withBorder shadow="none" p={0} h={cardSize.height} w={cardSize.width} style={{ cursor: "pointer", borderStyle: "dashed" }} onClick={() => OnModalConnectPlugins()} > <Group gap={10} align="center" h={cardSize.height} w={cardSize.width} p={16} wrap="nowrap" bg="var(--mantine-color-body)" > <ActionIcon size={30} radius={100} variant="subtle" color="dark"> <IconPlus size={20} strokeWidth={1.5} /> </ActionIcon> <Text fz={14} fw={500} truncate="end"> {isHasPlugin ? t`Connect more` : t`Connect platform`} </Text> </Group> </Card> </Fragment> ); }; export const WorkspaceSettingMessageBoxesIntegrations: FC = () => { const layout = useLayout(); const sized = useElementSize(); const plugins = usePlugins(); const aiPlugin = plugins.aiAssistants[0]; const distanceFromRoot = 100; const rootPosition = { x: sized.width * 0.5 - cardRootSize.width / 2, y: sized.height / 2 - cardRootSize.height / 2, }; const pluginsGroup = groupNodes({ group: { x: 0, y: 0, id: "plugins", title: "message_source", spacing: 16, }, nodes: [ ...plugins.metaPages.map((m) => ({ id: m._id, type: "plugin", data: { name: m.name, plugin: m, type: "metaPages" }, position: { x: 0, y: 0 }, ...cardSize, })), ...plugins.zaloOas.map((m) => ({ id: m._id, type: "plugin", data: { name: m.info.name, plugin: m, type: "zalaOAs" }, position: { x: 0, y: 0 }, ...cardSize, })), ...plugins.messageHubs.map((m) => ({ id: m._id, type: "plugin", data: { name: m.name, plugin: m, type: "messageHubs" }, position: { x: 0, y: 0 }, ...cardSize, })), { id: "plus", type: "plus", position: { x: 0, y: 0 }, ...cardSize, data: {}, }, ], }); const nodes = [ { id: "root", position: rootPosition, type: "root", data: {}, }, ...moveNodes(pluginsGroup.nodes, { x: rootPosition.x - distanceFromRoot - cardSize.width, y: sized.height / 2 - pluginsGroup.group.height / 2, }), // Ai Integration { id: "ai", type: "ai", position: { x: rootPosition.x + distanceFromRoot * 0.5 + cardAiSize.width, y: sized.height / 2 - cardAiSize.height / 2, }, data: {}, }, ]; // Edges const edges = [ // Plugin -> Root ...pluginsGroup.childNodes.map((p) => ({ id: `${p.id}-root`, source: p.id, target: "root", animated: true, })), // Ai -> Root { id: "ai-root", source: "ai", target: "root", animated: !aiPlugin || aiPlugin.enabled }, ]; return ( <Card ref={sized.ref} w="100%" h={layout.height - 200} p={0} bg="gray.0" shadow="none"> <ReactFlow nodes={nodes} edges={edges} nodeTypes={{ ...defaultNodeTypes, root: RootNode, plugin: PluginNode, plus: PlusPluginNode, ai: AiIntegrationNode, }} nodesDraggable={false} zoomOnDoubleClick={false} zoomOnPinch={false} zoomOnScroll={false} maxZoom={1} minZoom={1} /> </Card> ); }; 
+#. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { Button } from "@/components/buttons/button"; import { Container } from "@/components/container"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core"; import { IconAi, IconCirclesRelation, IconLinkPlus, IconPencil } from "@tabler/icons-react"; import { type FC } from "react"; export const AiAssistantList: FC = () => { const plugins = usePlugins(); const workspace = useWorkspace(); const color = useColor(); if (plugins.aiAssistants.length === 0) { return ( <Container size="sm" p={16}> <Card shadow="xs"> <Stack align="center" py={20}> <Group gap={30} mb={20}> <Avatar workspace={workspace.userMember.workspace} size={55} /> <ThemeIcon variant="transparent" size="lg" color="dark"> <IconCirclesRelation size={50} /> </ThemeIcon> <Avatar src="/images/ai-assistants.png" size={55} /> </Group> <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}> {t`Connect ${t`AI Assistant`}`} </Title> <Text ta="center"> • <Trans>Automatically reply to customer messages</Trans> <br />•{" "} <Trans>Integrate with LLM models</Trans> </Text> <Button mt={10} action onClick={() => OnModalCreatePluginAiAssistant()} leftIcon={IconLinkPlus} > <Trans>Connect</Trans> </Button> </Stack> </Card> </Container> ); } return ( <Container size="xs" p={16}> <Stack> {plugins.aiAssistants.map((plugin) => { return ( <Card key={plugin._id} shadow="sm"> <Group align="start"> <ThemeIcon size={60} variant="light"> <IconAi size={40} strokeWidth={1.2} /> </ThemeIcon> <Stack gap={3} flex={1}> <Text fw={600}>{plugin.providerName}</Text> <Text c="gray" fz={12}> <Trans>Provider</Trans>: {t`AI Assistant ${plugin.provider}`} </Text> </Stack> <Stack> <ActionIcon variant="subtle" color="gray" onClick={() => OnModalCreatePluginAiAssistant(plugin)} > <IconPencil size={16} /> </ActionIcon> </Stack> </Group> </Card> ); })} </Stack> </Container> ); };
+#. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows"; import { Image } from "@/components/image"; import { useLayout } from "@/layout/layout-context"; import { renderDateTime, renderFromNow } from "@/modules/lang/lang-service"; import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service"; import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service"; import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { String } from "@/utils/string.utils"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core"; import { useElementSize } from "@mantine/hooks"; import { IconClock, IconMessage, IconPlus } from "@tabler/icons-react"; import { Handle, Position, ReactFlow } from "@xyflow/react"; import { FC, Fragment } from "react"; const cardRootSize = { width: 300, height: 110, }; const cardSize = { width: 260, height: 65, }; const cardAiSize = { width: 320, height: 80, }; const RootNode = () => { const workspace = useWorkspace(); const color = useColor(); return ( <Fragment> <Handle type="target" position={Position.Left} /> <Card withBorder shadow="none" p={0} style={{ cursor: "default", borderColor: color("primary"), }} > <Group gap={10} px={16} py={10} w={cardRootSize.width} h={cardRootSize.height} wrap="nowrap" > <Avatar workspace={workspace.userMember.workspace} radius={8} size={70} /> <Stack gap={0}> <Tooltip label={workspace.userMember.workspace.name} disabled={workspace.userMember.workspace.name.length < 10} > <Text fz={25} fw={500} truncate="end" maw={160}> {workspace.userMember.workspace.name} </Text> </Tooltip> <Text fz={12} c="gray.6" truncate="end"> Workspace </Text> </Stack> </Group> </Card> <Handle type="target" position={Position.Right} /> </Fragment> ); }; const AiIntegrationNode = () => { const plugins = usePlugins(); const aiPlugin = plugins.aiAssistants[0]; return ( <Fragment> <Handle type="source" position={Position.Left} /> <Card withBorder shadow="none" w={cardAiSize.width} h={cardAiSize.height} p={0} style={{ borderStyle: aiPlugin ? "solid" : "dashed", }} > <Group gap={10} align="center" wrap="nowrap" h={cardAiSize.height} px={16}> <Group gap={10} flex={1} style={{ cursor: "pointer", }} onClick={() => OnModalCreatePluginAiAssistant(aiPlugin)} > <Image src="/images/ai-assistants.png" w={40} h={40} /> <Stack gap={0} flex={1}> {aiPlugin ? ( <Fragment> <Tooltip label={aiPlugin.providerName}> <Text fz={16} fw={500} truncate="end"> {String.limitCharacters(aiPlugin.providerName, 20)} </Text> </Tooltip> <Text fz={10} c="gray.6" truncate="end"> {t`AI assistant`} </Text> </Fragment> ) : ( <Group wrap="nowrap" gap={0}> <ActionIcon variant="transparent" color="dark"> <IconPlus size={16} /> </ActionIcon> <Text fz={14} fw={500} truncate="end"> <Trans>Connect {t`AI assistant`}</Trans> </Text> </Group> )} </Stack> </Group> {aiPlugin && ( <Switch style={{ cursor: "pointer", }} checked={aiPlugin?.enabled} onChange={() => false} onClick={(e) => { e.stopPropagation(); e.preventDefault(); updatePluginAiAssistant(aiPlugin._id, { enabled: !aiPlugin.enabled }); }} /> )} </Group> </Card> </Fragment> ); }; const PluginNode = (props: any) => { const { plugin, name, type } = props.data; const platformType = type === "metaPages" ? MessageBoxPlatformType.META_PAGE : type === "zalaOAs" ? MessageBoxPlatformType.ZALO : MessageBoxPlatformType.MESSAGE_HUB; const PluginAvatar: FC = ( { metaPages: () => <Avatar color="primary" pluginMetaPage={plugin} size={30} />, zalaOAs: () => <Avatar color="primary" pluginZaloOa={plugin} size={30} />, messageHubs: () => ( <Avatar icon={IconMessage} src="/images/plugins-message-hubs.png" size={30} /> ), } as any )[type]; return ( <Fragment> <Handle type="source" position={Position.Right} /> <Card withBorder shadow="none" w={cardSize.width} h={cardSize.height} p={0} style={{ cursor: "default" }} > <Group gap={10} align="center" w={cardSize.width} h={cardSize.height} p={16} wrap="nowrap"> <Indicator label={<Image src={messageBoxPlatformImages[platformType]} w={16} h={16} />} radius={8} color="var(--mantine-color-body)" position="bottom-end" offset={5} styles={{ indicator: { paddingInline: 0, width: 20, height: 20, transform: "translate(50%, 80%)", zIndex: 10, }, }} > <PluginAvatar /> </Indicator> <Stack gap={0}> <Tooltip label={name} disabled={!name || name.length < 15}> <Text fz={16} fw={500} truncate="end" maw={150}> {name || t`Plugin`} </Text> </Tooltip> {!!plugin.lastInteractionAt && ( <Tooltip label={`${t`Last interaction at`}: ${renderDateTime(plugin.lastInteractionAt)}`} > <Text fz={10} fw={500} c="gray" truncate="end"> <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "} {renderFromNow(plugin.lastInteractionAt)} </Text> </Tooltip> )} </Stack> </Group> </Card> </Fragment> ); }; const PlusPluginNode = (props: any) => { const { isHasPlugin } = props.data; return ( <Fragment> <Handle type="source" position={Position.Right} /> <Card withBorder shadow="none" p={0} h={cardSize.height} w={cardSize.width} style={{ cursor: "pointer", borderStyle: "dashed" }} onClick={() => OnModalConnectPlugins()} > <Group gap={10} align="center" h={cardSize.height} w={cardSize.width} p={16} wrap="nowrap" bg="var(--mantine-color-body)" > <ActionIcon size={30} radius={100} variant="subtle" color="dark"> <IconPlus size={20} strokeWidth={1.5} /> </ActionIcon> <Text fz={14} fw={500} truncate="end"> {isHasPlugin ? t`Connect more` : t`Connect platform`} </Text> </Group> </Card> </Fragment> ); }; export const WorkspaceSettingMessageBoxesIntegrations: FC = () => { const layout = useLayout(); const sized = useElementSize(); const plugins = usePlugins(); const aiPlugin = plugins.aiAssistants[0]; const distanceFromRoot = 100; const rootPosition = { x: sized.width * 0.5 - cardRootSize.width / 2, y: sized.height / 2 - cardRootSize.height / 2, }; const pluginsGroup = groupNodes({ group: { x: 0, y: 0, id: "plugins", title: "message_source", spacing: 16, }, nodes: [ ...plugins.metaPages.map((m) => ({ id: m._id, type: "plugin", data: { name: m.name, plugin: m, type: "metaPages" }, position: { x: 0, y: 0 }, ...cardSize, })), ...plugins.zaloOas.map((m) => ({ id: m._id, type: "plugin", data: { name: m.info.name, plugin: m, type: "zalaOAs" }, position: { x: 0, y: 0 }, ...cardSize, })), ...plugins.messageHubs.map((m) => ({ id: m._id, type: "plugin", data: { name: m.name, plugin: m, type: "messageHubs" }, position: { x: 0, y: 0 }, ...cardSize, })), { id: "plus", type: "plus", position: { x: 0, y: 0 }, ...cardSize, data: {}, }, ], }); const nodes = [ { id: "root", position: rootPosition, type: "root", data: {}, }, ...moveNodes(pluginsGroup.nodes, { x: rootPosition.x - distanceFromRoot - cardSize.width, y: sized.height / 2 - pluginsGroup.group.height / 2, }), // Ai Integration { id: "ai", type: "ai", position: { x: rootPosition.x + distanceFromRoot * 0.5 + cardAiSize.width, y: sized.height / 2 - cardAiSize.height / 2, }, data: {}, }, ]; // Edges const edges = [ // Plugin -> Root ...pluginsGroup.childNodes.map((p) => ({ id: `${p.id}-root`, source: p.id, target: "root", animated: true, })), // Ai -> Root { id: "ai-root", source: "ai", target: "root", animated: !aiPlugin || aiPlugin.enabled }, ]; return ( <Card ref={sized.ref} w="100%" h={layout.height - 200} p={0} bg="gray.0" shadow="none"> <ReactFlow nodes={nodes} edges={edges} nodeTypes={{ ...defaultNodeTypes, root: RootNode, plugin: PluginNode, plus: PlusPluginNode, ai: AiIntegrationNode, }} nodesDraggable={false} zoomOnDoubleClick={false} zoomOnPinch={false} zoomOnScroll={false} maxZoom={1} minZoom={1} /> </Card> ); };
+#. placeholder {0}: "use client"; import { disconnectPluginMetaPage } from "@/modules/plugins/meta-pages/meta-pages-service"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onArchive } from "@/utils/actions"; import { onError } from "@/utils/exceptions.utils"; import { capitalize } from "@/utils/string.utils"; import config from "@joy-one-client/config"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { Anchor, Card, Center, Group, SimpleGrid, Skeleton, Stack, Text, ThemeIcon, Title, em, } from "@mantine/core"; import { IconCirclesRelation, IconLinkPlus, IconPuzzle } from "@tabler/icons-react"; import { FC } from "react"; import { Avatar } from "../avatar"; import { Button } from "../buttons/button"; import { Image } from "../image"; export const PluginMetaPages: FC = () => { const workspace = useWorkspace(); const plugins = usePlugins(); const color = useColor(); if (!plugins.isInitialized) return <Skeleton height={150} />; if (plugins.metaPages.length === 0) return ( <Stack align="center" py={20}> <Group gap={30} mb={20}> <Avatar workspace={workspace.userMember.workspace} size={55} /> <ThemeIcon variant="transparent" size="lg" color="dark"> <IconCirclesRelation size={50} /> </ThemeIcon> <Image w={55} src="/images/plugins-meta-pages.svg" /> </Group> <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}> {t`Connect ${t`Fanpage Facebook`}`} </Title> <Text ta="center"> • <Trans>Interact with customers via Messenger</Trans> <br />•{" "} <Trans>Easy & quick setup</Trans> </Text> <Button mt={10} action onClick={plugins.onConnectMetaPages} leftIcon={IconLinkPlus}> <Trans>Connect</Trans> </Button> </Stack> ); return ( <Stack gap={30}> <SimpleGrid cols={{ md: 2 }}> {plugins.metaPages.map((page) => { return ( <Card key={page._id} shadow="none" withBorder> <Group justify="space-between"> <Group> <Avatar pluginMetaPage={page} /> <Stack gap={0}> <Text>{page.name}</Text> <Text fz={12}>#{page.id}</Text> {config.ENV === "development" && <Text fz={12}>#{page._id}</Text>} </Stack> </Group> <Anchor c="gray" fw={500} fz={em(12)} onClick={() => onArchive({ icon: IconPuzzle, title: capitalize(`${t`Disconect`} ${page.name}`), process: () => disconnectPluginMetaPage(page._id).catch(onError), }) } > <Trans>Disconect</Trans> </Anchor> </Group> </Card> ); })} <Center> <Button type="submit" onClick={plugins.onConnectMetaPages} rightSection={<IconLinkPlus strokeWidth={1.5} />} > <Trans>Connect more</Trans> </Button> </Center> </SimpleGrid> </Stack> ); };
+#: src/components/plugins/plugin-meta-pages.tsx:52
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:132
 msgid "Connect {0}"
-msgstr ""
-
-#. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { Button } from "@/components/buttons/button"; import { Container } from "@/components/container"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core"; import { IconAi, IconCirclesRelation, IconLinkPlus, IconPencil } from "@tabler/icons-react"; import { type FC } from "react"; export const AiAssistantList: FC = () => { const plugins = usePlugins(); const workspace = useWorkspace(); const color = useColor(); if (plugins.aiAssistants.length === 0) { return ( <Container size="sm" p={16}> <Card shadow="xs"> <Stack align="center" py={20}> <Group gap={30} mb={20}> <Avatar workspace={workspace.userMember.workspace} size={55} /> <ThemeIcon variant="transparent" size="lg" color="dark"> <IconCirclesRelation size={50} /> </ThemeIcon> <Avatar src="/images/ai-assistants.png" size={55} /> </Group> <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}> <Trans> Connect <strong>{t`AI Assistant`}</strong> </Trans> </Title> <Text ta="center"> • <Trans>Automatically reply to customer messages</Trans> <br />•{" "} <Trans>Integrate with LLM models</Trans> </Text> <Button mt={10} action onClick={() => OnModalCreatePluginAiAssistant()} leftIcon={IconLinkPlus} > <Trans>Connect</Trans> </Button> </Stack> </Card> </Container> ); } return ( <Container size="xs" p={16}> <Stack> {plugins.aiAssistants.map((plugin) => { return ( <Card key={plugin._id} shadow="sm"> <Group align="start"> <ThemeIcon size={60} variant="light"> <IconAi size={40} strokeWidth={1.2} /> </ThemeIcon> <Stack gap={3} flex={1}> <Text fw={600}>{plugin.providerName}</Text> <Text c="gray" fz={12}> <Trans>Provider</Trans>: {t`AI Assistant ${plugin.provider}`} </Text> </Stack> <Stack> <ActionIcon variant="subtle" color="gray" onClick={() => OnModalCreatePluginAiAssistant(plugin)} > <IconPencil size={16} /> </ActionIcon> </Stack> </Group> </Card> ); })} </Stack> </Container> ); }; 
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
-msgid "Connect <0>{0}</0>"
-msgstr ""
-
-#: src/components/plugins/plugin-meta-pages.tsx:52
-msgid "Connect <0>Fanpage Facebook</0>"
-msgstr "Kết nối <0>Fanpage Facebook</0>"
+msgstr "Kết nối {0}"
 
 #: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:29
 msgid "Connect <0>Zalo OAs</0>"
@@ -1369,7 +1364,7 @@ msgstr ""
 msgid "Connect Meta page"
 msgstr "Kết nối trang Meta"
 
-#: src/components/plugins/plugin-meta-pages.tsx:109
+#: src/components/plugins/plugin-meta-pages.tsx:107
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:262
 msgid "Connect more"
 msgstr "Kết nối thêm"
@@ -1451,7 +1446,7 @@ msgstr "Sao chép"
 
 #: src/modules/tasks/task-detail.tsx:189
 msgid "Copy code"
-msgstr ""
+msgstr "Sao chép code"
 
 #: src/modules/workspace-members/workspace-invite-member.tsx:72
 msgid "Copy the link and send it to your teammates!"
@@ -1459,7 +1454,7 @@ msgstr "Sao chép liên kết và gửi cho đồng nghiệp của bạn!"
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:177
 msgid "Copy the script and paste it into your website."
-msgstr ""
+msgstr "Sao chép tập lệnh và dán vào trang web của bạn."
 
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:148
 msgid "Cost price"
@@ -1467,7 +1462,7 @@ msgstr "Giá vốn"
 
 #: src/modules/orders/orders-constants.tsx:20
 msgid "Coupon"
-msgstr ""
+msgstr "Coupon"
 
 #: src/modules/events/event-constants.ts:122
 msgid "Coupon archived"
@@ -1498,6 +1493,7 @@ msgstr "Đã sử dụng coupon"
 msgid "Coupons"
 msgstr "Coupon"
 
+#: src/components/list/components/create-button.tsx:46
 #: src/modules/bookings/modals/modal-booking.tsx:359
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:383
 #: src/modules/loans/modals/modal-loan-package-form.tsx:332
@@ -1508,7 +1504,7 @@ msgstr "Coupon"
 msgid "Create"
 msgstr "Tạo"
 
-#. placeholder {0}: "use client"; import { api } from "@/modules/apis"; import { onActionLoad } from "@/utils/actions"; import { t } from "@lingui/core/macro"; import { ActionIcon, Group, Popover, TextInput } from "@mantine/core"; import { IconPlus } from "@tabler/icons-react"; import { FC, PropsWithChildren, useState } from "react"; import { CategoryEntity, CategoryType } from "../category-types"; interface QuickCreateCategoryProps { type?: CategoryType; onCreated?: (category: CategoryEntity) => void; } export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>> = (props) => { const [opened, setOpened] = useState(false); const children = props.children ? ( <Group onClick={() => setOpened((s) => !s)}>{props.children}</Group> ) : ( <ActionIcon onClick={() => setOpened((s) => !s)}> <IconPlus size={16} strokeWidth={1.5} /> </ActionIcon> ); const label = t`Create ${t`Category`}`; return ( <Popover shadow="md" opened={opened} onChange={setOpened}> <Popover.Target>{children}</Popover.Target> <Popover.Dropdown p={10}> <TextInput label={label} placeholder={t`Enter ${t`Category`.toLowerCase()} name`} autoFocus onKeyUp={(e) => { if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); const value = (e.target as any).value; onActionLoad({ name: t`Create ${t`Category`}`, process: async () => { const category = await api.post<CategoryEntity>("/categories", { name: value, type: props.type, }); props.onCreated?.(category); }, }); setOpened(false); } }} /> </Popover.Dropdown> </Popover> ); }; 
+#. placeholder {0}: "use client"; import { api } from "@/modules/apis"; import { onActionLoad } from "@/utils/actions"; import { t } from "@lingui/core/macro"; import { ActionIcon, Group, Popover, TextInput } from "@mantine/core"; import { IconPlus } from "@tabler/icons-react"; import { FC, PropsWithChildren, useState } from "react"; import { CategoryEntity, CategoryType } from "../category-types"; interface QuickCreateCategoryProps { type?: CategoryType; onCreated?: (category: CategoryEntity) => void; } export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>> = (props) => { const [opened, setOpened] = useState(false); const children = props.children ? ( <Group onClick={() => setOpened((s) => !s)}>{props.children}</Group> ) : ( <ActionIcon onClick={() => setOpened((s) => !s)}> <IconPlus size={16} strokeWidth={1.5} /> </ActionIcon> ); const label = t`Create ${t`Category`}`; return ( <Popover shadow="md" opened={opened} onChange={setOpened}> <Popover.Target>{children}</Popover.Target> <Popover.Dropdown p={10}> <TextInput label={label} placeholder={t`Enter ${t`Category`.toLowerCase()} name`} autoFocus onKeyUp={(e) => { if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); const value = (e.target as any).value; onActionLoad({ name: t`Create ${t`Category`}`, process: async () => { const category = await api.post<CategoryEntity>("/categories", { name: value, type: props.type, }); props.onCreated?.(category); }, }); setOpened(false); } }} /> </Popover.Dropdown> </Popover> ); };
 #: src/modules/categories/components/quick-create-category.tsx:27
 #: src/modules/categories/components/quick-create-category.tsx:44
 msgid "Create {0}"
@@ -1534,7 +1530,7 @@ msgstr "Tạo màu sắc"
 
 #: src/modules/product-combos/product-combos-onboarding.tsx:36
 msgid "Create combos"
-msgstr ""
+msgstr "Tạo combos"
 
 #: src/modules/coupons/modals/modal-coupon-form.tsx:88
 msgid "Create coupon"
@@ -1577,7 +1573,7 @@ msgstr "Tạo mẫu"
 msgid "Create new"
 msgstr "Tạo mới"
 
-#. placeholder {0}: "use client"; import { ButtonArchive } from "@/components/buttons/button-archive"; import { Form } from "@/components/form"; import { FormSession } from "@/components/form-session"; import { ModalTitle } from "@/components/modal-title"; import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos"; import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity"; import { archiveWorkspaceApiApp, createWorkspaceApiApp, resetWorkspaceApiAppSecretKey, updateWorkspaceApiApp, } from "@/modules/workspace-api-apps/workspace-api-apps-service"; import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input"; import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types"; import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input"; import { WorkspacePermission, WorkspaceRoleEntity, WorkspaceSpecialRoleId, } from "@/modules/workspace-roles/workspace-roles-types"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onActionLoad } from "@/utils/actions"; import { onFormError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { ActionIcon, Badge, Button, Center, CopyButton, Group, PasswordInput, Stack, TextInput, Tooltip, } from "@mantine/core"; import { useForm } from "@mantine/form"; import { useDisclosure } from "@mantine/hooks"; import { modals } from "@mantine/modals"; import { IconApiApp, IconCheck, IconCopy, IconEye, IconEyeOff, IconRefresh, } from "@tabler/icons-react"; import { FC, Fragment, useState } from "react"; import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants"; interface ModalWorkspaceApiAppProps { app?: IWorkspaceApiApp; } const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => { const workspace = useWorkspace(); const secretKeyVisible = useDisclosure(false); const [app, setApp] = useState<IWorkspaceApiApp | null>(props.app || null); const [secretKey, setSecretKey] = useState(app?.secretKey || ""); const getInitialValues = (_app?: IWorkspaceApiApp) => { return { name: _app?.member.name || "", roles: _app?.member.roles || [ { _id: WorkspaceSpecialRoleId.ADMIN, name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name(), }, ], workspaceBranches: _app?.member.workspaceBranches || [], }; }; const form = useForm<{ name: string; roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[]; workspaceBranches: Pick<WorkspaceBranchEntity, "_id" | "name">[]; }>({ initialValues: getInitialValues(props.app), validate: { name: (value) => (value?.trim() ? null : t`Should not be empty`), }, }); const roles = workspace.roles.filter((v) => form.values.roles.some((v2) => v2._id === v._id)); const isMainWorkspaceAccessable = roles.some((v) => v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS) ); const onResetKey = () => { if (!app?._id) return; onActionLoad({ process: () => resetWorkspaceApiAppSecretKey(app._id), onFinished: (result) => { setSecretKey(result.secretKey); }, }); }; const onSubmit = form.onSubmit(async (data) => { try { const payload: WorkspaceApiAppDto = { name: data.name, enabled: app ? app.enabled : true, roleIds: data.roles.map((v) => v._id), workspaceBranchIds: data.workspaceBranches.map((v) => v._id), }; if (app) { const _app = await updateWorkspaceApiApp(app._id, payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setApp(_app); } else { const _app = await createWorkspaceApiApp(payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setSecretKey(_app.secretKey); modals.updateModal({ modalId: "ModalWorkspaceApiApp", title: <ModalTitle title={t`Information about ${t`API App`}`} icon={IconApiApp} />, }); setApp(_app); } } catch (error) { onFormError(form, error); } }); return ( <Form onSubmit={onSubmit}> <Stack gap={30} pt={16}> {!!app && ( <Fragment> <FormSession title="ID"> <CopyButton value={app._id}> {({ copied, copy }) => ( <TextInput value={app._id} readOnly rightSection={ <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> } /> )} </CopyButton> </FormSession> <FormSession title={t`Secret key`} description={t`Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised`} > <CopyButton value={secretKey}> {({ copied, copy }) => ( <PasswordInput value={secretKey} readOnly visible={secretKeyVisible[0]} styles={{ innerInput: { paddingRight: 100, }, section: { width: 100, }, }} rightSection={ <Group wrap="nowrap" gap={0}> <Tooltip label={t`Reset secret key`}> <ActionIcon onClick={onResetKey} variant="subtle"> <IconRefresh size={16} /> </ActionIcon> </Tooltip> <ActionIcon onClick={secretKeyVisible[1].toggle} variant="subtle"> {secretKeyVisible[0] ? <IconEyeOff size={16} /> : <IconEye size={16} />} </ActionIcon> <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> </Group> } /> )} </CopyButton> </FormSession> </Fragment> )} <FormSession title={t`Name`}> <TextInput {...form.getInputProps("name")} /> </FormSession> <FormSession title={t`Roles`}> <WorkspaceRolesInput value={form.values.roles} onChange={(roles) => form.setFieldValue("roles", roles)} /> </FormSession> <FormSession title={t`Branches`}> {isMainWorkspaceAccessable ? ( <Badge variant="light">{t`All branches`}</Badge> ) : ( <WorkspaceBranchesInput key={app?.member.userId} value={form.values.workspaceBranches} onChange={(branches) => { form.setFieldValue("workspaceBranches", branches); }} /> )} </FormSession> <Stack gap={16} mt={16}> <Center> <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}> {app ? t`Save changes` : t`Create new`} </Button> </Center> {!!app && ( <ButtonArchive process={() => archiveWorkspaceApiApp(app._id)} goBackWhenArchived={false} onArchived={() => { modals.close("ModalWorkspaceApiApp"); }} /> )} </Stack> </Stack> </Form> ); }; export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => { return modals.open({ modalId: "ModalWorkspaceApiApp", title: ( <ModalTitle title={app ? t`Information about ${t`API App`}` : t`Create new ${t`API App`}`} icon={IconApiApp} /> ), children: <ModalWorkspaceApiApp app={app} />, size: "xl", }); }; 
+#. placeholder {0}: "use client"; import { ButtonArchive } from "@/components/buttons/button-archive"; import { Form } from "@/components/form"; import { FormSession } from "@/components/form-session"; import { ModalTitle } from "@/components/modal-title"; import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos"; import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity"; import { archiveWorkspaceApiApp, createWorkspaceApiApp, resetWorkspaceApiAppSecretKey, updateWorkspaceApiApp, } from "@/modules/workspace-api-apps/workspace-api-apps-service"; import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input"; import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types"; import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input"; import { WorkspacePermission, WorkspaceRoleEntity, WorkspaceSpecialRoleId, } from "@/modules/workspace-roles/workspace-roles-types"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onActionLoad } from "@/utils/actions"; import { onFormError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { ActionIcon, Badge, Button, Center, CopyButton, Group, PasswordInput, Stack, TextInput, Tooltip, } from "@mantine/core"; import { useForm } from "@mantine/form"; import { useDisclosure } from "@mantine/hooks"; import { modals } from "@mantine/modals"; import { IconApiApp, IconCheck, IconCopy, IconEye, IconEyeOff, IconRefresh, } from "@tabler/icons-react"; import { FC, Fragment, useState } from "react"; import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants"; interface ModalWorkspaceApiAppProps { app?: IWorkspaceApiApp; } const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => { const workspace = useWorkspace(); const secretKeyVisible = useDisclosure(false); const [app, setApp] = useState<IWorkspaceApiApp | null>(props.app || null); const [secretKey, setSecretKey] = useState(app?.secretKey || ""); const getInitialValues = (_app?: IWorkspaceApiApp) => { return { name: _app?.member.name || "", roles: _app?.member.roles || [ { _id: WorkspaceSpecialRoleId.ADMIN, name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name(), }, ], workspaceBranches: _app?.member.workspaceBranches || [], }; }; const form = useForm<{ name: string; roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[]; workspaceBranches: Pick<WorkspaceBranchEntity, "_id" | "name">[]; }>({ initialValues: getInitialValues(props.app), validate: { name: (value) => (value?.trim() ? null : t`Should not be empty`), }, }); const roles = workspace.roles.filter((v) => form.values.roles.some((v2) => v2._id === v._id)); const isMainWorkspaceAccessable = roles.some((v) => v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS) ); const onResetKey = () => { if (!app?._id) return; onActionLoad({ process: () => resetWorkspaceApiAppSecretKey(app._id), onFinished: (result) => { setSecretKey(result.secretKey); }, }); }; const onSubmit = form.onSubmit(async (data) => { try { const payload: WorkspaceApiAppDto = { name: data.name, enabled: app ? app.enabled : true, roleIds: data.roles.map((v) => v._id), workspaceBranchIds: data.workspaceBranches.map((v) => v._id), }; if (app) { const _app = await updateWorkspaceApiApp(app._id, payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setApp(_app); } else { const _app = await createWorkspaceApiApp(payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setSecretKey(_app.secretKey); modals.updateModal({ modalId: "ModalWorkspaceApiApp", title: <ModalTitle title={t`Information about ${t`API App`}`} icon={IconApiApp} />, }); setApp(_app); } } catch (error) { onFormError(form, error); } }); return ( <Form onSubmit={onSubmit}> <Stack gap={30} pt={16}> {!!app && ( <Fragment> <FormSession title="ID"> <CopyButton value={app._id}> {({ copied, copy }) => ( <TextInput value={app._id} readOnly rightSection={ <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> } /> )} </CopyButton> </FormSession> <FormSession title={t`Secret key`} description={t`Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised`} > <CopyButton value={secretKey}> {({ copied, copy }) => ( <PasswordInput value={secretKey} readOnly visible={secretKeyVisible[0]} styles={{ innerInput: { paddingRight: 100, }, section: { width: 100, }, }} rightSection={ <Group wrap="nowrap" gap={0}> <Tooltip label={t`Reset secret key`}> <ActionIcon onClick={onResetKey} variant="subtle"> <IconRefresh size={16} /> </ActionIcon> </Tooltip> <ActionIcon onClick={secretKeyVisible[1].toggle} variant="subtle"> {secretKeyVisible[0] ? <IconEyeOff size={16} /> : <IconEye size={16} />} </ActionIcon> <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> </Group> } /> )} </CopyButton> </FormSession> </Fragment> )} <FormSession title={t`Name`}> <TextInput {...form.getInputProps("name")} /> </FormSession> <FormSession title={t`Roles`}> <WorkspaceRolesInput value={form.values.roles} onChange={(roles) => form.setFieldValue("roles", roles)} /> </FormSession> <FormSession title={t`Branches`}> {isMainWorkspaceAccessable ? ( <Badge variant="light">{t`All branches`}</Badge> ) : ( <WorkspaceBranchesInput key={app?.member.userId} value={form.values.workspaceBranches} onChange={(branches) => { form.setFieldValue("workspaceBranches", branches); }} /> )} </FormSession> <Stack gap={16} mt={16}> <Center> <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}> {app ? t`Save changes` : t`Create new`} </Button> </Center> {!!app && ( <ButtonArchive process={() => archiveWorkspaceApiApp(app._id)} goBackWhenArchived={false} onArchived={() => { modals.close("ModalWorkspaceApiApp"); }} /> )} </Stack> </Stack> </Form> ); }; export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => { return modals.open({ modalId: "ModalWorkspaceApiApp", title: ( <ModalTitle title={app ? t`Information about ${t`API App`}` : t`Create new ${t`API App`}`} icon={IconApiApp} /> ), children: <ModalWorkspaceApiApp app={app} />, size: "xl", }); };
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
 msgid "Create new {0}"
 msgstr "Tạo {0} mới"
@@ -1590,13 +1586,10 @@ msgstr "Tạo hợp đồng vay mới"
 msgid "Create new product"
 msgstr "Tạo sản phẩm mới"
 
+#: src/layout/navigation/navigation-drawer.tsx:323
 #: src/modules/workspaces/workspace-require.tsx:218
 msgid "Create new workspace"
-msgstr ""
-
-#: src/layout/navigation/navigation-drawer.tsx:323
-msgid "Create new Workspace"
-msgstr "Tạo Workspace mới"
+msgstr "Tạo workspace mới"
 
 #: src/modules/events/event-constants.ts:150
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:99
@@ -1606,7 +1599,7 @@ msgstr "Tạo chi nhánh mới"
 #: src/modules/orders/orders-sale/orders-sale.tsx:46
 #: src/modules/orders/orders-sale/orders-sale.tsx:97
 msgid "Create order"
-msgstr ""
+msgstr "Tạo đơn hàng"
 
 #: src/modules/events/event-constants.ts:59
 #: src/modules/partners/modals/modal-partner-form.tsx:81
@@ -1628,19 +1621,19 @@ msgstr "Tạo hoá đơn"
 
 #: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:259
 msgid "Create role"
-msgstr ""
+msgstr "Tạo vai trò"
 
 #: src/modules/workspace-sdks/modals/modal-workspace-sdk-form.tsx:63
 #: src/modules/workspace-sdks/workspace-sdk-list.tsx:73
 msgid "Create SDK"
-msgstr ""
+msgstr "Tạo SDK"
 
 #: src/modules/tasks/components/quick-create-task-input.tsx:26
 #: src/modules/tasks/views/board/board.task-card.tsx:133
 #: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:276
 #: src/modules/tasks/views/list/list.task-row.tsx:292
 msgid "Create subtask"
-msgstr ""
+msgstr "Tạo công việc con"
 
 #: src/modules/tags/modals/modal-tag-form.tsx:130
 msgid "Create tag"
@@ -1659,12 +1652,12 @@ msgstr "Tạo công việc"
 
 #: src/modules/tasks/views/calendar/index.tsx:270
 msgid "Created"
-msgstr ""
+msgstr "Đã tạo"
 
 #. placeholder {0}: renderDateTime(task.createdAt, true)
 #: src/modules/tasks/components/detail-head.tsx:136
 msgid "Created at {0}"
-msgstr ""
+msgstr "Đã tạo lúc {0}"
 
 #: src/modules/events/event-constants.ts:152
 msgid "Created order"
@@ -1677,8 +1670,8 @@ msgid "Credit"
 msgstr "Tín dụng"
 
 #: src/widgets/reports/modules.ts:191
-msgid "Credit report title"
-msgstr ""
+msgid "Credit report"
+msgstr "Báo cáo tín dụng"
 
 #: src/modules/workspaces/workspace-modules.tsx:305
 msgid "Credit settings"
@@ -1791,8 +1784,7 @@ msgstr "Cập nhật form khách hàng"
 msgid "Customer forms"
 msgstr "Form khách hàng"
 
-#: src/constant.ts:8
-#: src/modules/workspaces/workspace-modules.tsx:136
+#: src/constant.ts:8 src/modules/workspaces/workspace-modules.tsx:136
 msgid "Customer Forms"
 msgstr "Form khách hàng"
 
@@ -1817,15 +1809,14 @@ msgstr "KYC khách hàng"
 msgid "Customer updated"
 msgstr "Cập nhật khách hàng"
 
-#: src/constant.ts:7
-#: src/modules/search/search-engine.tsx:122
+#: src/constant.ts:7 src/modules/search/search-engine.tsx:122
 #: src/modules/workspaces/workspace-modules.tsx:130
 msgid "Customers"
 msgstr "Khách hàng"
 
 #: src/modules/promotions/components/form-promotion.tsx:161
 msgid "Customers limit rule"
-msgstr ""
+msgstr "Quy tắc giới hạn khách hàng"
 
 #: src/modules/workspaces/workspace-modules.tsx:315
 msgid "Customize the features needed on the navigation bar"
@@ -1833,7 +1824,7 @@ msgstr "Tuỳ chỉnh ẩn/hiện các tính năng cần thiết trên thanh đi
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:205
 msgid "Customize UI"
-msgstr ""
+msgstr "Tùy chỉnh giao diện"
 
 #: src/modules/users/user-profile-settings.tsx:137
 msgid "Customize your language and region settings"
@@ -1857,11 +1848,11 @@ msgstr "Dữ liệu"
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:345
 msgid "Data that customers need to provide before starting a conversation"
-msgstr ""
+msgstr "Dữ liệu mà khách hàng cần cung cấp trước khi bắt đầu cuộc trò chuyện"
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:444
 msgid "Data type"
-msgstr ""
+msgstr "Loại dữ liệu"
 
 #: src/components/list/filters/time-range-filter.tsx:61
 #: src/modules/custom-fields/custom-field-constants.tsx:8
@@ -1949,8 +1940,7 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: src/components/printer/printer-body.tsx:39
-#: src/modals/modal-printer.tsx:303
+#: src/components/printer/printer-body.tsx:39 src/modals/modal-printer.tsx:303
 msgid "Detail"
 msgstr ""
 
@@ -1997,16 +1987,15 @@ msgstr ""
 msgid "Disbursement"
 msgstr ""
 
-#: src/components/plugins/plugin-meta-pages.tsx:91
-#: src/components/plugins/plugin-meta-pages.tsx:96
+#: src/components/plugins/plugin-meta-pages.tsx:89
+#: src/components/plugins/plugin-meta-pages.tsx:94
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:217
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:117
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:122
 msgid "Disconect"
 msgstr ""
 
-#: src/components/printer/printer-body.tsx:75
-#: src/modals/modal-printer.tsx:344
+#: src/components/printer/printer-body.tsx:75 src/modals/modal-printer.tsx:344
 #: src/modules/orders/order-card.tsx:182
 #: src/modules/orders/orders-sale/components/order-sale-discounts.tsx:37
 msgid "Discount"
@@ -2160,15 +2149,14 @@ msgstr "HĐĐT"
 msgid "Early leave"
 msgstr ""
 
-#: src/components/plugins/plugin-meta-pages.tsx:59
+#: src/components/plugins/plugin-meta-pages.tsx:57
 msgid "Easy & quick setup"
 msgstr ""
 
 #: src/layout/header/header-tasks-breadcrumbs.tsx:114
 #: src/layout/navigation/navigation-task-folders.tsx:156
 #: src/modules/categories/category-list.tsx:49
-#: src/modules/orders/order-card.tsx:231
-#: src/modules/orders/order-list.tsx:94
+#: src/modules/orders/order-card.tsx:231 src/modules/orders/order-list.tsx:94
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:46
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:132
 #: src/modules/product-combos/product-combo-setup.tsx:61
@@ -2298,123 +2286,123 @@ msgstr "Nhập tên"
 
 #: src/modules/auth/components/form-forgot-password.tsx:87
 msgid "Enter new password"
-msgstr ""
+msgstr "Nhập mật khẩu mới"
 
 #: src/components/inputs/estimate-time-input.tsx:91
 #: src/components/inputs/estimate-time-input.tsx:131
 msgid "Enter number of days, hours, minutes (e.g. 2d 4h 30m)"
-msgstr ""
+msgstr "Nhập số ngày, giờ, phút (ví dụ: 2 ngày 4 giờ 30 phút)"
 
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:151
 msgid "Enter pill name"
-msgstr ""
+msgstr "Nhập tên thuốc"
 
 #: src/modules/products/components/form-product.tsx:363
 msgid "Enter product supplies"
-msgstr ""
+msgstr "Nhập nguồn cung cấp sản phẩm"
 
 #: src/modules/customers/components/customer-kyc-card.tsx:101
 #: src/modules/loans/components/loan-documents.tsx:83
-#: src/modules/loans/loan-list.tsx:364
+#: src/modules/loans/loan-list.tsx:365
 msgid "Enter reject reason"
-msgstr ""
+msgstr "Nhập lý do từ chối"
 
 #: src/modules/tasks/components/form-task.tsx:267
 #: src/modules/tasks/components/quick-create-task-input.tsx:35
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:179
 msgid "Enter task name"
-msgstr ""
+msgstr "Nhập tên tác vụ"
 
 #: src/components/inputs/formual-input/formula-input.tsx:616
 msgid "Enter text or @variable"
-msgstr ""
+msgstr "Nhập văn bản hoặc @biến"
 
 #: src/modules/products/components/form-product.tsx:518
 msgid "Enter the expiration date, leave blank or fill in 0 if not applicable"
-msgstr ""
+msgstr "Nhập ngày hết hạn, để trống hoặc điền số 0 nếu không áp dụng"
 
 #: src/components/inputs/time-trackings-input.tsx:400
 msgid "Enter time (ex 3h 30m) or start timer"
-msgstr ""
+msgstr "Nhập thời gian (ví dụ 3 giờ 30 phút) hoặc bắt đầu hẹn giờ"
 
 #: src/modules/posts/components/form-post.tsx:187
 msgid "Enter title"
-msgstr ""
+msgstr "Nhập tiêu đề"
 
 #: src/modules/users/components/update-password.tsx:70
 msgid "Enter your confirm password"
-msgstr ""
+msgstr "Nhập xác nhận mật khẩu"
 
 #: src/modules/users/components/update-password.tsx:54
 msgid "Enter your current password"
-msgstr ""
+msgstr "Nhật mật khẩu hiện tại"
 
 #: src/modules/auth/components/form-forgot-password.tsx:124
 #: src/modules/auth/components/form-sign-in.tsx:54
 msgid "Enter your email"
-msgstr ""
+msgstr "Nhập địa chỉ email"
 
 #: src/modules/auth/components/form-register.tsx:62
 msgid "Enter your name"
-msgstr ""
+msgstr "Nhập tên của bạn"
 
 #: src/modules/auth/components/form-sign-in.tsx:64
 msgid "Enter your password"
-msgstr ""
+msgstr "Nhập mật khẩu của bạn"
 
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:373
 msgid "Estimate price"
-msgstr ""
+msgstr "Giá ước tính"
 
 #: src/components/inputs/estimate-time-input.tsx:130
 #: src/modules/tasks/components/form-task.tsx:533
 #: src/modules/tasks/components/form-task.tsx:541
 #: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:315
 msgid "Estimate time"
-msgstr ""
+msgstr "Thời gian ước tính"
 
 #: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:245
 msgid "Estimation price"
-msgstr ""
+msgstr "Giá ước tính"
 
 #: src/modules/products/components/form-product.tsx:351
 msgid "Ex: Enter 10 -> Warn when stock is below 10, leave blank or fill in 0 to turn off the warning"
-msgstr ""
+msgstr "VD: Nhập 10 -> Cảnh báo khi hàng tồn kho dưới 10, để trống hoặc điền 0 để tắt cảnh báo"
 
 #: src/modules/products/components/form-product.tsx:344
 msgid "Ex: Enter 7 -> Warn 7 days before expiration, leave blank or fill in 0 to turn off the warning"
-msgstr ""
+msgstr "VD: Nhập 7 -> Cảnh báo 7 ngày trước khi hết hạn, để trống hoặc điền 0 để tắt cảnh báo"
 
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:118
 msgid "Ex: Prescription 1, Treatment of leukemia..."
-msgstr ""
+msgstr "VD: Đơn thuốc 1, Điều trị bệnh bạch cầu..."
 
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:228
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:278
 msgid "Ex: Take after eating, take before eating..."
-msgstr ""
+msgstr "VD: Uống sau khi ăn, uống trước khi ăn..."
 
 #: src/modules/plugins/zalo-oas/components/zalo-oa-zns-template-config.tsx:72
 msgid "Example"
-msgstr ""
+msgstr "Ví dụ"
 
 #: src/modules/posts/components/form-post.tsx:234
 msgid "Excerpt"
-msgstr ""
+msgstr "Trích đoạn"
 
 #: src/modules/product-vouchers/product-voucher-card.tsx:97
 #: src/modules/products/components/form-product.tsx:556
 #: src/modules/products/components/product-card.tsx:196
 msgid "Exclude products"
-msgstr ""
+msgstr "Loại trừ sản phẩm/dịch vụ"
 
 #: src/constant.ts:40
 msgid "Excludes"
-msgstr ""
+msgstr "Loại trừ"
 
 #: src/modules/promotions/promotions-service.ts:95
 msgid "Excludes customers"
-msgstr ""
+msgstr "Loại trừ khách hàng"
 
 #: src/components/printer/printer.tsx:138
 #: src/layout/header/header-tasks-breadcrumbs.tsx:102
@@ -2424,11 +2412,11 @@ msgstr ""
 #: src/modules/workspaces/components/workspace-archived.tsx:46
 #: src/modules/workspaces/workspace-require.tsx:378
 msgid "Exit"
-msgstr ""
+msgstr "Thoát"
 
 #: src/modules/receipts/receipt-constants.tsx:23
 msgid "Expense"
-msgstr ""
+msgstr "Chi"
 
 #: src/modules/coupons/modals/modal-coupon-form.tsx:150
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:139
@@ -2436,19 +2424,19 @@ msgstr ""
 #: src/modules/promotions/promostion-list.tsx:66
 #: src/modules/promotions/promotions-service.ts:103
 msgid "Expire at"
-msgstr ""
+msgstr "Hết hạn lúc"
 
 #: src/modules/product-vouchers/product-voucher-card.tsx:60
 msgid "Expire date"
-msgstr ""
+msgstr "Ngày hết hạn"
 
 #: src/modules/products/components/product-card.tsx:122
 msgid "Expire in"
-msgstr ""
+msgstr "Thời hạn"
 
 #: src/modules/products/components/form-product.tsx:517
 msgid "Expire in days"
-msgstr ""
+msgstr "Hết hạn trong (n) ngày"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:311
 #: src/modules/message-boxes/message-boxes-contants.tsx:12
@@ -2456,7 +2444,7 @@ msgstr ""
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:11
 #: src/modules/promotions/promotions-constants.ts:24
 msgid "Expired"
-msgstr ""
+msgstr "Hết hạn"
 
 #: src/components/list/components/export-button.tsx:214
 #: src/widgets/reports/widgets/report-credit.widget.tsx:569
@@ -2466,49 +2454,53 @@ msgstr "Xuất"
 #: src/components/list/components/export-button.tsx:195
 #: src/components/list/components/export-button.tsx:200
 msgid "Export data"
-msgstr ""
+msgstr "Xuất dữ liệu"
 
 #: src/modules/receipts/receipt-e-invoices.tsx:70
 msgid "Export E-Invoice"
-msgstr ""
+msgstr "Xuất hóa đơn điện tử"
 
 #: src/components/list/components/export-button.tsx:204
 msgid "Export type"
-msgstr ""
+msgstr "Loại xuất"
 
 #: src/modules/locations/locations-service.ts:14
 msgid "Failed to acquire geolocation, please try again in a few minutes."
-msgstr ""
+msgstr "Không xác định được vị trí địa lý, vui lòng thử lại sau vài phút."
 
 #: src/modals/modal-connect-meta-pages.tsx:114
 #: src/modals/modal-connect-meta-pages.tsx:204
 #: src/modules/auth/auth-service.ts:113
 msgid "Failed to connect with Meta."
-msgstr ""
+msgstr "Không thể kết nối với Meta"
+
+#: src/components/plugins/plugin-meta-pages.tsx:52
+msgid "Fanpage Facebook"
+msgstr "Fanpage Facebook"
 
 #: src/modules/loans/modals/modal-loan-calculator.tsx:215
 msgid "Fee"
-msgstr ""
+msgstr "Phí"
 
 #: src/constant.ts:52
 msgid "Female"
-msgstr ""
+msgstr "Nữ"
 
 #: src/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping.tsx:158
 msgid "Fetching location"
-msgstr ""
+msgstr "Nạp dữ liệu vị trí"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:93
 msgid "Field name"
-msgstr ""
+msgstr "Tên trường"
 
 #: src/modules/custom-fields/custom-field-constants.tsx:12
 msgid "File"
-msgstr ""
+msgstr "Tệp"
 
 #: src/modules/files/modals/modal-file-gallery.tsx:107
 msgid "File downloading"
-msgstr ""
+msgstr "Đang tải file"
 
 #: src/modules/workspaces/workspace-modules.tsx:369
 msgid "File manager"
@@ -2517,11 +2509,11 @@ msgstr "Quản lí tệp tin"
 #: src/modules/files/modals/modal-files.tsx:90
 #: src/modules/receipts/modals/modal-receipt-form.tsx:136
 msgid "Files"
-msgstr ""
+msgstr "Tệp tin"
 
 #: src/components/list/filters/index.tsx:137
 msgid "Filter"
-msgstr ""
+msgstr "Lọc"
 
 #: src/modules/loans/loans-constants.tsx:27
 msgid "Fixed capital"
@@ -2604,6 +2596,7 @@ msgid "Fulfilled"
 msgstr ""
 
 #: src/modules/loans/components/loan-disbursement.tsx:266
+#: src/modules/loans/loan-list.tsx:110
 msgid "Fulfilled at"
 msgstr ""
 
@@ -2662,6 +2655,7 @@ msgstr ""
 msgid "Grant permissions"
 msgstr ""
 
+#: src/components/list/components/filter-modes.tsx:64
 #: src/components/list/components/toggle-view.tsx:32
 msgid "Grid"
 msgstr ""
@@ -2774,7 +2768,7 @@ msgid "IMEIL"
 msgstr ""
 
 #: src/modules/loans/components/loan-documents.tsx:87
-#: src/modules/loans/loan-list.tsx:374
+#: src/modules/loans/loan-list.tsx:375
 msgid "Img is blurry"
 msgstr ""
 
@@ -2832,7 +2826,7 @@ msgid "Info does not match image"
 msgstr ""
 
 #: src/modules/loans/components/loan-documents.tsx:87
-#: src/modules/loans/loan-list.tsx:374
+#: src/modules/loans/loan-list.tsx:375
 msgid "Info does not match img"
 msgstr ""
 
@@ -2840,7 +2834,7 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-#. placeholder {0}: "use client"; import { ButtonArchive } from "@/components/buttons/button-archive"; import { Form } from "@/components/form"; import { FormSession } from "@/components/form-session"; import { ModalTitle } from "@/components/modal-title"; import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos"; import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity"; import { archiveWorkspaceApiApp, createWorkspaceApiApp, resetWorkspaceApiAppSecretKey, updateWorkspaceApiApp, } from "@/modules/workspace-api-apps/workspace-api-apps-service"; import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input"; import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types"; import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input"; import { WorkspacePermission, WorkspaceRoleEntity, WorkspaceSpecialRoleId, } from "@/modules/workspace-roles/workspace-roles-types"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onActionLoad } from "@/utils/actions"; import { onFormError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { ActionIcon, Badge, Button, Center, CopyButton, Group, PasswordInput, Stack, TextInput, Tooltip, } from "@mantine/core"; import { useForm } from "@mantine/form"; import { useDisclosure } from "@mantine/hooks"; import { modals } from "@mantine/modals"; import { IconApiApp, IconCheck, IconCopy, IconEye, IconEyeOff, IconRefresh, } from "@tabler/icons-react"; import { FC, Fragment, useState } from "react"; import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants"; interface ModalWorkspaceApiAppProps { app?: IWorkspaceApiApp; } const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => { const workspace = useWorkspace(); const secretKeyVisible = useDisclosure(false); const [app, setApp] = useState<IWorkspaceApiApp | null>(props.app || null); const [secretKey, setSecretKey] = useState(app?.secretKey || ""); const getInitialValues = (_app?: IWorkspaceApiApp) => { return { name: _app?.member.name || "", roles: _app?.member.roles || [ { _id: WorkspaceSpecialRoleId.ADMIN, name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name(), }, ], workspaceBranches: _app?.member.workspaceBranches || [], }; }; const form = useForm<{ name: string; roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[]; workspaceBranches: Pick<WorkspaceBranchEntity, "_id" | "name">[]; }>({ initialValues: getInitialValues(props.app), validate: { name: (value) => (value?.trim() ? null : t`Should not be empty`), }, }); const roles = workspace.roles.filter((v) => form.values.roles.some((v2) => v2._id === v._id)); const isMainWorkspaceAccessable = roles.some((v) => v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS) ); const onResetKey = () => { if (!app?._id) return; onActionLoad({ process: () => resetWorkspaceApiAppSecretKey(app._id), onFinished: (result) => { setSecretKey(result.secretKey); }, }); }; const onSubmit = form.onSubmit(async (data) => { try { const payload: WorkspaceApiAppDto = { name: data.name, enabled: app ? app.enabled : true, roleIds: data.roles.map((v) => v._id), workspaceBranchIds: data.workspaceBranches.map((v) => v._id), }; if (app) { const _app = await updateWorkspaceApiApp(app._id, payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setApp(_app); } else { const _app = await createWorkspaceApiApp(payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setSecretKey(_app.secretKey); modals.updateModal({ modalId: "ModalWorkspaceApiApp", title: <ModalTitle title={t`Information about ${t`API App`}`} icon={IconApiApp} />, }); setApp(_app); } } catch (error) { onFormError(form, error); } }); return ( <Form onSubmit={onSubmit}> <Stack gap={30} pt={16}> {!!app && ( <Fragment> <FormSession title="ID"> <CopyButton value={app._id}> {({ copied, copy }) => ( <TextInput value={app._id} readOnly rightSection={ <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> } /> )} </CopyButton> </FormSession> <FormSession title={t`Secret key`} description={t`Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised`} > <CopyButton value={secretKey}> {({ copied, copy }) => ( <PasswordInput value={secretKey} readOnly visible={secretKeyVisible[0]} styles={{ innerInput: { paddingRight: 100, }, section: { width: 100, }, }} rightSection={ <Group wrap="nowrap" gap={0}> <Tooltip label={t`Reset secret key`}> <ActionIcon onClick={onResetKey} variant="subtle"> <IconRefresh size={16} /> </ActionIcon> </Tooltip> <ActionIcon onClick={secretKeyVisible[1].toggle} variant="subtle"> {secretKeyVisible[0] ? <IconEyeOff size={16} /> : <IconEye size={16} />} </ActionIcon> <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> </Group> } /> )} </CopyButton> </FormSession> </Fragment> )} <FormSession title={t`Name`}> <TextInput {...form.getInputProps("name")} /> </FormSession> <FormSession title={t`Roles`}> <WorkspaceRolesInput value={form.values.roles} onChange={(roles) => form.setFieldValue("roles", roles)} /> </FormSession> <FormSession title={t`Branches`}> {isMainWorkspaceAccessable ? ( <Badge variant="light">{t`All branches`}</Badge> ) : ( <WorkspaceBranchesInput key={app?.member.userId} value={form.values.workspaceBranches} onChange={(branches) => { form.setFieldValue("workspaceBranches", branches); }} /> )} </FormSession> <Stack gap={16} mt={16}> <Center> <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}> {app ? t`Save changes` : t`Create new`} </Button> </Center> {!!app && ( <ButtonArchive process={() => archiveWorkspaceApiApp(app._id)} goBackWhenArchived={false} onArchived={() => { modals.close("ModalWorkspaceApiApp"); }} /> )} </Stack> </Stack> </Form> ); }; export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => { return modals.open({ modalId: "ModalWorkspaceApiApp", title: ( <ModalTitle title={app ? t`Information about ${t`API App`}` : t`Create new ${t`API App`}`} icon={IconApiApp} /> ), children: <ModalWorkspaceApiApp app={app} />, size: "xl", }); }; 
+#. placeholder {0}: "use client"; import { ButtonArchive } from "@/components/buttons/button-archive"; import { Form } from "@/components/form"; import { FormSession } from "@/components/form-session"; import { ModalTitle } from "@/components/modal-title"; import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos"; import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity"; import { archiveWorkspaceApiApp, createWorkspaceApiApp, resetWorkspaceApiAppSecretKey, updateWorkspaceApiApp, } from "@/modules/workspace-api-apps/workspace-api-apps-service"; import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input"; import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types"; import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input"; import { WorkspacePermission, WorkspaceRoleEntity, WorkspaceSpecialRoleId, } from "@/modules/workspace-roles/workspace-roles-types"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onActionLoad } from "@/utils/actions"; import { onFormError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { ActionIcon, Badge, Button, Center, CopyButton, Group, PasswordInput, Stack, TextInput, Tooltip, } from "@mantine/core"; import { useForm } from "@mantine/form"; import { useDisclosure } from "@mantine/hooks"; import { modals } from "@mantine/modals"; import { IconApiApp, IconCheck, IconCopy, IconEye, IconEyeOff, IconRefresh, } from "@tabler/icons-react"; import { FC, Fragment, useState } from "react"; import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants"; interface ModalWorkspaceApiAppProps { app?: IWorkspaceApiApp; } const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => { const workspace = useWorkspace(); const secretKeyVisible = useDisclosure(false); const [app, setApp] = useState<IWorkspaceApiApp | null>(props.app || null); const [secretKey, setSecretKey] = useState(app?.secretKey || ""); const getInitialValues = (_app?: IWorkspaceApiApp) => { return { name: _app?.member.name || "", roles: _app?.member.roles || [ { _id: WorkspaceSpecialRoleId.ADMIN, name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name(), }, ], workspaceBranches: _app?.member.workspaceBranches || [], }; }; const form = useForm<{ name: string; roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[]; workspaceBranches: Pick<WorkspaceBranchEntity, "_id" | "name">[]; }>({ initialValues: getInitialValues(props.app), validate: { name: (value) => (value?.trim() ? null : t`Should not be empty`), }, }); const roles = workspace.roles.filter((v) => form.values.roles.some((v2) => v2._id === v._id)); const isMainWorkspaceAccessable = roles.some((v) => v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS) ); const onResetKey = () => { if (!app?._id) return; onActionLoad({ process: () => resetWorkspaceApiAppSecretKey(app._id), onFinished: (result) => { setSecretKey(result.secretKey); }, }); }; const onSubmit = form.onSubmit(async (data) => { try { const payload: WorkspaceApiAppDto = { name: data.name, enabled: app ? app.enabled : true, roleIds: data.roles.map((v) => v._id), workspaceBranchIds: data.workspaceBranches.map((v) => v._id), }; if (app) { const _app = await updateWorkspaceApiApp(app._id, payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setApp(_app); } else { const _app = await createWorkspaceApiApp(payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setSecretKey(_app.secretKey); modals.updateModal({ modalId: "ModalWorkspaceApiApp", title: <ModalTitle title={t`Information about ${t`API App`}`} icon={IconApiApp} />, }); setApp(_app); } } catch (error) { onFormError(form, error); } }); return ( <Form onSubmit={onSubmit}> <Stack gap={30} pt={16}> {!!app && ( <Fragment> <FormSession title="ID"> <CopyButton value={app._id}> {({ copied, copy }) => ( <TextInput value={app._id} readOnly rightSection={ <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> } /> )} </CopyButton> </FormSession> <FormSession title={t`Secret key`} description={t`Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised`} > <CopyButton value={secretKey}> {({ copied, copy }) => ( <PasswordInput value={secretKey} readOnly visible={secretKeyVisible[0]} styles={{ innerInput: { paddingRight: 100, }, section: { width: 100, }, }} rightSection={ <Group wrap="nowrap" gap={0}> <Tooltip label={t`Reset secret key`}> <ActionIcon onClick={onResetKey} variant="subtle"> <IconRefresh size={16} /> </ActionIcon> </Tooltip> <ActionIcon onClick={secretKeyVisible[1].toggle} variant="subtle"> {secretKeyVisible[0] ? <IconEyeOff size={16} /> : <IconEye size={16} />} </ActionIcon> <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> </Group> } /> )} </CopyButton> </FormSession> </Fragment> )} <FormSession title={t`Name`}> <TextInput {...form.getInputProps("name")} /> </FormSession> <FormSession title={t`Roles`}> <WorkspaceRolesInput value={form.values.roles} onChange={(roles) => form.setFieldValue("roles", roles)} /> </FormSession> <FormSession title={t`Branches`}> {isMainWorkspaceAccessable ? ( <Badge variant="light">{t`All branches`}</Badge> ) : ( <WorkspaceBranchesInput key={app?.member.userId} value={form.values.workspaceBranches} onChange={(branches) => { form.setFieldValue("workspaceBranches", branches); }} /> )} </FormSession> <Stack gap={16} mt={16}> <Center> <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}> {app ? t`Save changes` : t`Create new`} </Button> </Center> {!!app && ( <ButtonArchive process={() => archiveWorkspaceApiApp(app._id)} goBackWhenArchived={false} onArchived={() => { modals.close("ModalWorkspaceApiApp"); }} /> )} </Stack> </Stack> </Form> ); }; export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => { return modals.open({ modalId: "ModalWorkspaceApiApp", title: ( <ModalTitle title={app ? t`Information about ${t`API App`}` : t`Create new ${t`API App`}`} icon={IconApiApp} /> ), children: <ModalWorkspaceApiApp app={app} />, size: "xl", }); };
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:125
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
 msgid "Information about {0}"
@@ -2902,7 +2896,7 @@ msgstr ""
 msgid "Integrate with E-Invoices services: MatBao, ..."
 msgstr "Tích hợp với các dịch vụ HDDT Mắt Bão, ..."
 
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:42
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:40
 msgid "Integrate with LLM models"
 msgstr ""
 
@@ -2910,7 +2904,7 @@ msgstr ""
 msgid "Integrate Zalo OA, manage customer interactions."
 msgstr "Tích hợp Zalo OA, quản lí tương tác với khách hàng."
 
-#: src/components/plugins/plugin-meta-pages.tsx:58
+#: src/components/plugins/plugin-meta-pages.tsx:56
 msgid "Interact with customers via Messenger"
 msgstr ""
 
@@ -3056,12 +3050,9 @@ msgstr ""
 msgid "Last interaction at"
 msgstr ""
 
-#: src/widgets/dashboard/modules.ts:109
-#: src/widgets/dashboard/modules.ts:132
-#: src/widgets/dashboard/modules.ts:155
-#: src/widgets/dashboard/modules.ts:294
-#: src/widgets/dashboard/modules.ts:325
-#: src/widgets/dashboard/modules.ts:351
+#: src/widgets/dashboard/modules.ts:109 src/widgets/dashboard/modules.ts:132
+#: src/widgets/dashboard/modules.ts:155 src/widgets/dashboard/modules.ts:294
+#: src/widgets/dashboard/modules.ts:325 src/widgets/dashboard/modules.ts:351
 #: src/widgets/dashboard/modules.ts:385
 msgid "Last month"
 msgstr ""
@@ -3072,12 +3063,9 @@ msgid "Last sign in at {0}"
 msgstr ""
 
 #. placeholder {0}: renderDateTime(ctx.realtimeReport.data?.updatedAt)
-#: src/widgets/dashboard/modules.ts:52
-#: src/widgets/dashboard/modules.ts:177
-#: src/widgets/dashboard/modules.ts:197
-#: src/widgets/dashboard/modules.ts:217
-#: src/widgets/dashboard/modules.ts:233
-#: src/widgets/dashboard/modules.ts:250
+#: src/widgets/dashboard/modules.ts:52 src/widgets/dashboard/modules.ts:177
+#: src/widgets/dashboard/modules.ts:197 src/widgets/dashboard/modules.ts:217
+#: src/widgets/dashboard/modules.ts:233 src/widgets/dashboard/modules.ts:250
 #: src/widgets/dashboard/modules.ts:271
 msgid "Last updated at {0}"
 msgstr ""
@@ -3283,8 +3271,7 @@ msgstr ""
 msgid "Loan calculator"
 msgstr ""
 
-#: src/modules/loans/loan-detail.tsx:291
-#: src/modules/loans/loan-detail.tsx:458
+#: src/modules/loans/loan-detail.tsx:291 src/modules/loans/loan-detail.tsx:458
 #: src/modules/loans/loan-list.tsx:187
 msgid "Loan contract"
 msgstr ""
@@ -3319,7 +3306,7 @@ msgid "Loan liquidation"
 msgstr ""
 
 #: src/modules/loans/components/loan-documents.tsx:107
-#: src/modules/loans/loan-detail.tsx:276
+#: src/modules/loans/loan-detail.tsx:276 src/modules/loans/loan-list.tsx:120
 #: src/modules/loans/loan-list.tsx:211
 #: src/modules/loans/modals/modal-loan-calculator.tsx:264
 #: src/modules/loans/modals/modal-loan-package-form.tsx:109
@@ -3389,11 +3376,11 @@ msgstr ""
 msgid "Loan rejected reverted"
 msgstr ""
 
-#: src/modules/loans/loan-list.tsx:378
+#: src/modules/loans/loan-list.tsx:379
 msgid "Loan revert rejected"
 msgstr ""
 
-#: src/constant.ts:17
+#: src/constant.ts:17 src/modules/loans/loan-list.tsx:66
 #: src/modules/search/search-engine.tsx:215
 #: src/modules/workspaces/workspace-modules.tsx:223
 #: src/widgets/reports/modules.ts:228
@@ -3420,13 +3407,11 @@ msgstr ""
 msgid "Loans debt total"
 msgstr ""
 
-#: src/widgets/reports/modules.ts:226
-#: src/widgets/reports/modules.ts:262
+#: src/widgets/reports/modules.ts:226 src/widgets/reports/modules.ts:262
 msgid "Loans fulfilled"
 msgstr ""
 
-#: src/widgets/dashboard/modules.ts:301
-#: src/widgets/reports/modules.ts:234
+#: src/widgets/dashboard/modules.ts:301 src/widgets/reports/modules.ts:234
 msgid "Loans fulfilled amount chart"
 msgstr ""
 
@@ -3463,8 +3448,7 @@ msgstr ""
 msgid "Location not supported"
 msgstr ""
 
-#: src/modules/auth/auth-require.tsx:116
-#: src/modules/auth/auth-require.tsx:130
+#: src/modules/auth/auth-require.tsx:116 src/modules/auth/auth-require.tsx:130
 #: src/modules/auth/components/form-sign-in.tsx:69
 msgid "Login"
 msgstr ""
@@ -3540,8 +3524,7 @@ msgstr "Quản lý các chi nhánh của Workspace"
 msgid "Manage the settings of the Workspace"
 msgstr "Quản lí cài đặt Workspace"
 
-#: src/widgets/components/manage-widgets.tsx:30
-#: src/widgets/index.tsx:297
+#: src/widgets/components/manage-widgets.tsx:30 src/widgets/index.tsx:297
 msgid "Manage widgets"
 msgstr ""
 
@@ -3592,8 +3575,7 @@ msgid "Medical history"
 msgstr ""
 
 #: src/components/printer/printer-settings-bar.tsx:17
-#: src/modals/modal-printer.tsx:69
-#: src/modules/tasks/task-constants.tsx:17
+#: src/modals/modal-printer.tsx:69 src/modules/tasks/task-constants.tsx:17
 msgid "Medium"
 msgstr ""
 
@@ -3681,8 +3663,7 @@ msgstr ""
 msgid "Message boxes"
 msgstr ""
 
-#: src/constant.ts:25
-#: src/modules/workspaces/workspace-modules.tsx:155
+#: src/constant.ts:25 src/modules/workspaces/workspace-modules.tsx:155
 msgid "Message Boxes"
 msgstr "Tin nhắn"
 
@@ -3791,8 +3772,7 @@ msgstr "Chức năng"
 msgid "Monday"
 msgstr ""
 
-#: src/modules/loans/loan-list.tsx:162
-#: src/widgets/reports/modules.ts:256
+#: src/modules/loans/loan-list.tsx:162 src/widgets/reports/modules.ts:256
 msgid "Money amount"
 msgstr ""
 
@@ -3805,8 +3785,7 @@ msgstr ""
 msgid "Money given"
 msgstr ""
 
-#: src/components/list/filters/time-range-filter.tsx:76
-#: src/constant.ts:35
+#: src/components/list/filters/time-range-filter.tsx:76 src/constant.ts:35
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:402
 #: src/widgets/reports/index.tsx:146
 msgid "Month"
@@ -3975,14 +3954,12 @@ msgstr ""
 msgid "New customer form"
 msgstr ""
 
-#: src/widgets/reports/modules.ts:97
-#: src/widgets/reports/modules.ts:115
+#: src/widgets/reports/modules.ts:97 src/widgets/reports/modules.ts:115
 #: src/widgets/reports/modules.ts:120
 msgid "New customers"
 msgstr ""
 
-#: src/widgets/reports/modules.ts:317
-#: src/widgets/reports/modules.ts:335
+#: src/widgets/reports/modules.ts:317 src/widgets/reports/modules.ts:335
 msgid "New customers and fulfilled"
 msgstr ""
 
@@ -4255,10 +4232,8 @@ msgid "Or"
 msgstr ""
 
 #: src/components/printer/printer-body.tsx:23
-#: src/components/printer/printer.tsx:47
-#: src/modals/modal-printer.tsx:284
+#: src/components/printer/printer.tsx:47 src/modals/modal-printer.tsx:284
 #: src/modules/orders/order-hooks.tsx:24
-#: src/modules/orders/orders-management/orders-management-provider.tsx:148
 #: src/modules/orders/orders-management/orders-management-provider.tsx:148
 #: src/modules/product-combos/modals/modal-product-combo.tsx:118
 #: src/modules/products/product-detail.tsx:163
@@ -4275,8 +4250,7 @@ msgstr ""
 msgid "Order synced"
 msgstr ""
 
-#: src/constant.ts:20
-#: src/modules/orders/order-hooks.tsx:25
+#: src/constant.ts:20 src/modules/orders/order-hooks.tsx:25
 #: src/modules/search/search-engine.tsx:281
 #: src/modules/search/search-engine.tsx:286
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:123
@@ -4360,8 +4334,7 @@ msgstr ""
 msgid "Partial Payment"
 msgstr ""
 
-#: src/constant.ts:9
-#: src/modules/search/search-engine.tsx:245
+#: src/constant.ts:9 src/modules/search/search-engine.tsx:245
 #: src/modules/tasks/components/form-task.tsx:561
 #: src/modules/tasks/components/tasks-menu-actions.tsx:269
 #: src/modules/workspaces/workspace-modules.tsx:188
@@ -4398,8 +4371,7 @@ msgid "Password updated"
 msgstr ""
 
 #: src/modules/loans/components/loan-receipt-card.tsx:321
-#: src/modules/orders/order-card.tsx:208
-#: src/modules/orders/order-list.tsx:61
+#: src/modules/orders/order-card.tsx:208 src/modules/orders/order-list.tsx:61
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:102
 #: src/modules/receipts/receipt-card.tsx:508
 msgid "Pay"
@@ -4419,8 +4391,7 @@ msgstr ""
 msgid "Pay successful"
 msgstr ""
 
-#: src/components/printer/printer-body.tsx:94
-#: src/modals/modal-printer.tsx:363
+#: src/components/printer/printer-body.tsx:94 src/modals/modal-printer.tsx:363
 #: src/modules/loans/loan-detail.tsx:412
 #: src/modules/workspace-billings/workspace-billings-contants.ts:9
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:139
@@ -4476,7 +4447,7 @@ msgstr ""
 msgid "Payment periods"
 msgstr ""
 
-#: src/modules/loans/loan-list.tsx:313
+#: src/modules/loans/loan-list.tsx:314
 msgid "Payment progress"
 msgstr ""
 
@@ -4633,8 +4604,7 @@ msgstr ""
 msgid "Post updated"
 msgstr ""
 
-#: src/constant.ts:27
-#: src/modules/categories/category-constants.ts:8
+#: src/constant.ts:27 src/modules/categories/category-constants.ts:8
 #: src/modules/search/search-engine.tsx:102
 #: src/modules/workspaces/workspace-modules.tsx:92
 msgid "Posts"
@@ -4666,8 +4636,7 @@ msgstr ""
 msgid "Prescription updated"
 msgstr ""
 
-#: src/constant.ts:16
-#: src/modules/search/search-engine.tsx:300
+#: src/constant.ts:16 src/modules/search/search-engine.tsx:300
 #: src/modules/workspaces/workspace-modules.tsx:194
 msgid "Prescriptions"
 msgstr "Đơn thuốc"
@@ -4700,8 +4669,7 @@ msgstr ""
 msgid "Principal income"
 msgstr ""
 
-#: src/components/printer/printer.tsx:133
-#: src/modals/modal-printer.tsx:185
+#: src/components/printer/printer.tsx:133 src/modals/modal-printer.tsx:185
 #: src/modules/orders/order-card.tsx:217
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:47
 #: src/modules/receipts/receipt-list.tsx:133
@@ -4729,8 +4697,7 @@ msgstr ""
 msgid "Print Receipt"
 msgstr ""
 
-#: src/components/printer/printer-body.tsx:33
-#: src/modals/modal-printer.tsx:294
+#: src/components/printer/printer-body.tsx:33 src/modals/modal-printer.tsx:294
 msgid "Printed at"
 msgstr ""
 
@@ -4749,8 +4716,7 @@ msgstr ""
 
 #: src/modules/dashboard/dashboard-bookings.tsx:74
 #: src/modules/loans/loan-list-tabs.tsx:36
-#: src/modules/orders/orders-constants.tsx:9
-#: src/utils/actions.tsx:30
+#: src/modules/orders/orders-constants.tsx:9 src/utils/actions.tsx:30
 msgid "Processing"
 msgstr ""
 
@@ -4818,8 +4784,7 @@ msgstr ""
 msgid "Product Vouchers"
 msgstr ""
 
-#: src/constant.ts:11
-#: src/modules/categories/category-constants.ts:7
+#: src/constant.ts:11 src/modules/categories/category-constants.ts:7
 #: src/modules/product-combos/product-combo-setup.tsx:33
 #: src/modules/products/components/form-product.tsx:183
 #: src/modules/products/components/form-product.tsx:442
@@ -4899,7 +4864,7 @@ msgid "Provide API key"
 msgstr ""
 
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:112
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:73
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:71
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:106
 msgid "Provider"
 msgstr ""
@@ -4917,10 +4882,8 @@ msgstr ""
 msgid "Published"
 msgstr ""
 
-#: src/components/list-qty.tsx:17
-#: src/components/printer/printer-body.tsx:40
-#: src/modals/modal-printer.tsx:304
-#: src/modules/coupons/coupon-list.tsx:46
+#: src/components/list-qty.tsx:17 src/components/printer/printer-body.tsx:40
+#: src/modals/modal-printer.tsx:304 src/modules/coupons/coupon-list.tsx:46
 #: src/modules/coupons/coupon-rules.tsx:44
 #: src/modules/customer-kycs/customer-kyc-list.tsx:54
 #: src/modules/prescriptions/prescription-list.tsx:52
@@ -4951,8 +4914,7 @@ msgstr ""
 msgid "Quick action"
 msgstr ""
 
-#: src/modals/modal-printer.tsx:653
-#: src/modals/modal-printer.tsx:673
+#: src/modals/modal-printer.tsx:653 src/modals/modal-printer.tsx:673
 #: src/modals/modal-printer.tsx:683
 msgid "Quick print"
 msgstr ""
@@ -4989,8 +4951,7 @@ msgstr ""
 msgid "Reason for cancellation"
 msgstr ""
 
-#: src/components/printer/printer.tsx:47
-#: src/modals/modal-printer.tsx:284
+#: src/components/printer/printer.tsx:47 src/modals/modal-printer.tsx:284
 #: src/modules/receipts/modals/modal-receipt-detail.tsx:24
 #: src/modules/receipts/receipt-card.tsx:269
 #: src/modules/search/search-engine.tsx:184
@@ -5027,8 +4988,7 @@ msgstr ""
 msgid "Receipt unarchived"
 msgstr ""
 
-#: src/constant.ts:13
-#: src/modules/loans/components/loan-payments.tsx:172
+#: src/constant.ts:13 src/modules/loans/components/loan-payments.tsx:172
 #: src/modules/search/search-engine.tsx:179
 #: src/modules/workspaces/workspace-modules.tsx:209
 #: src/widgets/reports/widgets/report-products.widget.tsx:261
@@ -5084,8 +5044,7 @@ msgstr ""
 #: src/modules/customers/components/customer-kyc-card.tsx:204
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:145
 #: src/modules/loans/components/loan-documents.tsx:195
-#: src/modules/loans/loan-list.tsx:357
-#: src/modules/loans/loan-list.tsx:363
+#: src/modules/loans/loan-list.tsx:358 src/modules/loans/loan-list.tsx:364
 #: src/modules/receipts/receipt-card.tsx:466
 msgid "Reject"
 msgstr ""
@@ -5130,8 +5089,7 @@ msgstr ""
 msgid "Remain capital amount fee"
 msgstr ""
 
-#: src/components/printer/printer-body.tsx:101
-#: src/modals/modal-printer.tsx:372
+#: src/components/printer/printer-body.tsx:101 src/modals/modal-printer.tsx:372
 msgid "Remaining"
 msgstr ""
 
@@ -5155,10 +5113,8 @@ msgstr ""
 #: src/components/list/components/bulk-actions.tsx:89
 #: src/layout/header/header-tasks-breadcrumbs.tsx:128
 #: src/layout/navigation/navigation-task-folders.tsx:168
-#: src/modals/modal-date-picker.tsx:86
-#: src/modals/modal-date-picker.tsx:139
-#: src/modals/modal-date-picker.tsx:191
-#: src/modals/modal-date-picker.tsx:242
+#: src/modals/modal-date-picker.tsx:86 src/modals/modal-date-picker.tsx:139
+#: src/modals/modal-date-picker.tsx:191 src/modals/modal-date-picker.tsx:242
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:299
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:265
 #: src/modules/users/components/user-workspace-settings-form.tsx:175
@@ -5240,8 +5196,7 @@ msgstr ""
 msgid "Require re-login when logging out"
 msgstr ""
 
-#: src/modals/modal-check-in-location-form.tsx:36
-#: src/modals/modal-input.tsx:86
+#: src/modals/modal-check-in-location-form.tsx:36 src/modals/modal-input.tsx:86
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:78
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:81
 #: src/modules/receipts/modals/modal-receipt-form.tsx:58
@@ -5305,8 +5260,7 @@ msgstr ""
 msgid "Retry now"
 msgstr ""
 
-#: src/widgets/reports/modules.ts:34
-#: src/widgets/reports/modules.ts:92
+#: src/widgets/reports/modules.ts:34 src/widgets/reports/modules.ts:92
 #: src/widgets/reports/widgets/report-products.widget.tsx:188
 msgid "Revenue"
 msgstr ""
@@ -5315,8 +5269,7 @@ msgstr ""
 msgid "Revenue average"
 msgstr ""
 
-#: src/widgets/dashboard/modules.ts:89
-#: src/widgets/reports/modules.ts:73
+#: src/widgets/dashboard/modules.ts:89 src/widgets/reports/modules.ts:73
 msgid "Revenue chart"
 msgstr ""
 
@@ -5410,8 +5363,7 @@ msgstr ""
 msgid "Scroll to today"
 msgstr ""
 
-#: src/components/selector.tsx:301
-#: src/layout/header/header-workspace.tsx:72
+#: src/components/selector.tsx:301 src/layout/header/header-workspace.tsx:72
 #: src/layout/header/header-workspace.tsx:158
 #: src/modules/search/search-engine.tsx:367
 #: src/modules/tasks/components/task-status-options.tsx:49
@@ -5452,10 +5404,8 @@ msgstr ""
 
 #: src/components/inputs/dynamic-selection-input.tsx:49
 #: src/components/inputs/estimate-time-input.tsx:67
-#: src/modals/modal-date-picker.tsx:74
-#: src/modals/modal-date-picker.tsx:127
-#: src/modals/modal-date-picker.tsx:179
-#: src/modals/modal-date-picker.tsx:230
+#: src/modals/modal-date-picker.tsx:74 src/modals/modal-date-picker.tsx:127
+#: src/modals/modal-date-picker.tsx:179 src/modals/modal-date-picker.tsx:230
 #: src/modules/categories/components/category-selector.tsx:73
 #: src/modules/custom-fields/custom-field-constants.tsx:9
 #: src/modules/customers/components/customer-selector.tsx:56
@@ -5830,7 +5780,7 @@ msgstr ""
 
 #: src/modules/bookings/components/booking-card.tsx:187
 #: src/modules/customers/modals/modal-customer-form.tsx:132
-#: src/modules/loans/loan-detail.tsx:323
+#: src/modules/loans/loan-detail.tsx:323 src/modules/loans/loan-list.tsx:263
 #: src/modules/message-boxes/message-boxes.tsx:66
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:155
 #: src/modules/tasks/components/form-task.tsx:274
@@ -5896,8 +5846,7 @@ msgstr ""
 msgid "Subtasks"
 msgstr ""
 
-#: src/components/printer/printer-body.tsx:66
-#: src/modals/modal-printer.tsx:335
+#: src/components/printer/printer-body.tsx:66 src/modals/modal-printer.tsx:335
 #: src/modules/orders/order-card.tsx:170
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:193
 msgid "Subtotal"
@@ -5946,6 +5895,7 @@ msgstr ""
 msgid "System mode"
 msgstr "Chế độ hệ thống"
 
+#: src/components/list/components/filter-modes.tsx:52
 #: src/components/list/components/toggle-view.tsx:16
 msgid "Table"
 msgstr ""
@@ -5968,8 +5918,7 @@ msgstr ""
 msgid "Tag"
 msgstr ""
 
-#: src/constant.ts:18
-#: src/modules/tasks/components/bulk-tasks-actions.tsx:201
+#: src/constant.ts:18 src/modules/tasks/components/bulk-tasks-actions.tsx:201
 #: src/modules/tasks/components/form-task.tsx:575
 #: src/modules/tasks/components/tasks-menu-actions.tsx:348
 #: src/modules/tasks/views/board/board.task-card.tsx:224
@@ -6003,8 +5952,7 @@ msgstr ""
 msgid "Task"
 msgstr ""
 
-#: src/components/event-list.tsx:335
-#: src/modules/events/event-constants.ts:138
+#: src/components/event-list.tsx:335 src/modules/events/event-constants.ts:138
 msgid "Task assigned"
 msgstr ""
 
@@ -6040,8 +5988,7 @@ msgstr ""
 msgid "Task synced"
 msgstr ""
 
-#: src/constant.ts:10
-#: src/layout/header/header-tasks-breadcrumbs.tsx:79
+#: src/constant.ts:10 src/layout/header/header-tasks-breadcrumbs.tsx:79
 #: src/modules/customers/customer-tasks.tsx:67
 #: src/modules/search/search-engine.tsx:198
 #: src/modules/workspaces/workspace-modules.tsx:198
@@ -6075,7 +6022,7 @@ msgstr ""
 msgid "Tax code"
 msgstr ""
 
-#. placeholder {0}: "use client"; import { Button } from "@/components/buttons/button"; import { Image } from "@/components/image"; import { SessionTitle } from "@/components/session-title"; import { api } from "@/modules/apis"; import { useQuery } from "@/modules/apis/use-query"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { WorkspaceType } from "@/modules/workspaces/workspaces-types"; import { onActionLoad } from "@/utils/actions"; import { onError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Badge, Card, Group, Stack, Text, Tooltip } from "@mantine/core"; import { useDebouncedCallback } from "@mantine/hooks"; import { IconArchive, IconEdit, IconFileInvoice, IconRefresh, IconTemplate, } from "@tabler/icons-react"; import { FC, useEffect, useState } from "react"; import { OnModalCheckEInvoice } from "./modal-check-e-invoice"; import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider"; import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor"; import { eInvoicesProviderStatuses } from "./plugin-e-invoices-constants"; import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities"; import { PluginEInvoiceTemplateType, PluginEInvoiceTemplateVariables, } from "./plugin-e-invoices.types"; interface PluginEInvoiceProviderItemProps { provider: PluginEInvoicesProviderEntity; onRefetch: () => Promise<unknown>; } export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = ({ provider, onRefetch, }) => { const workspace = useWorkspace(); const status = eInvoicesProviderStatuses[provider.status]; const [templates, setTemplates] = useState(provider.templates); const { data: variables } = useQuery<PluginEInvoiceTemplateVariables>({ route: "/plugins/e-invoices/templates/variables", refetchWhenReconnected: true, }); const syncTemplates = useDebouncedCallback(() => { if (JSON.stringify(templates) !== JSON.stringify(provider.templates)) { api .put(`/plugins/e-invoices/providers/${provider._id}`, { ...provider, templates, }) .catch(onError); } }, 2000); const archive = async () => { await api.delete(`/plugins/e-invoices/providers/${provider._id}`); await onRefetch(); }; const resetTemplates = async () => { onActionLoad({ process: async () => { await api.post(`/plugins/e-invoices/providers/${provider._id}/reset-templates`); await onRefetch(); }, }); }; useEffect(() => { syncTemplates(); }, [templates]); return ( <Stack> <Card> <Group gap={20} align="start"> <Image src={provider.logo} w={120} h={40} /> <Stack gap={5} flex={1}> <Group align="center"> <Text fw={600} fz={20}> {provider.name} </Text> <Badge color={status.color} variant="light"> {status.name()} </Badge> </Group> <Group gap={8}> <Button variant="outline" color="gray" size="xs" leftIcon={IconEdit} onClick={() => { OnModalEInvoiceProvider({ onDone: () => onRefetch(), provider, mode: "update_provider", }); }} > <Trans>Change provider</Trans> </Button> <Button variant="outline" color="gray" size="xs" leftIcon={IconEdit} onClick={() => { OnModalEInvoiceProvider({ onDone: () => onRefetch(), provider, mode: "update_auth", }); }} > <Trans>Change auth</Trans> </Button> <Tooltip label={t`Healthcheck`}> <ActionIcon variant="light" color="gray" size={30} onClick={async () => onActionLoad({ process: async () => { await api.post(`/plugins/e-invoices/providers/${provider._id}/healthcheck`); await onRefetch(); }, }) } > <IconRefresh size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Reset templates`}> <ActionIcon variant="light" color="gray" size={30} onClick={resetTemplates}> <IconTemplate size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Check invoice`}> <ActionIcon variant="light" color="gray" size={30} onClick={() => OnModalCheckEInvoice()} > <IconFileInvoice size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Archive`}> <ActionIcon variant="light" color="gray" size={30} onClick={archive}> <IconArchive size={18} /> </ActionIcon> </Tooltip> </Group> </Stack> </Group> </Card> <Stack flex={1}> {Object.values(PluginEInvoiceTemplateType).map((type) => { if ( (type === PluginEInvoiceTemplateType.LOAN_INCOME_RECEIPT && workspace.type !== WorkspaceType.CREDIT) || !variables ) return null; return ( <Stack key={type} gap={5}> <SessionTitle name={t`Template ${t`E-Invoice`}`} /> <Card style={{ overflow: "visible" }}> <PluginEInvoiceTemplateEditor type={type} template={templates[type]} variables={variables} onChange={(template) => { setTemplates({ ...templates, [type]: template }); }} /> </Card> </Stack> ); })} </Stack> </Stack> ); }; 
+#. placeholder {0}: "use client"; import { Button } from "@/components/buttons/button"; import { Image } from "@/components/image"; import { SessionTitle } from "@/components/session-title"; import { api } from "@/modules/apis"; import { useQuery } from "@/modules/apis/use-query"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { WorkspaceType } from "@/modules/workspaces/workspaces-types"; import { onActionLoad } from "@/utils/actions"; import { onError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Badge, Card, Group, Stack, Text, Tooltip } from "@mantine/core"; import { useDebouncedCallback } from "@mantine/hooks"; import { IconArchive, IconEdit, IconFileInvoice, IconRefresh, IconTemplate, } from "@tabler/icons-react"; import { FC, useEffect, useState } from "react"; import { OnModalCheckEInvoice } from "./modal-check-e-invoice"; import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider"; import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor"; import { eInvoicesProviderStatuses } from "./plugin-e-invoices-constants"; import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities"; import { PluginEInvoiceTemplateType, PluginEInvoiceTemplateVariables, } from "./plugin-e-invoices.types"; interface PluginEInvoiceProviderItemProps { provider: PluginEInvoicesProviderEntity; onRefetch: () => Promise<unknown>; } export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = ({ provider, onRefetch, }) => { const workspace = useWorkspace(); const status = eInvoicesProviderStatuses[provider.status]; const [templates, setTemplates] = useState(provider.templates); const { data: variables } = useQuery<PluginEInvoiceTemplateVariables>({ route: "/plugins/e-invoices/templates/variables", refetchWhenReconnected: true, }); const syncTemplates = useDebouncedCallback(() => { if (JSON.stringify(templates) !== JSON.stringify(provider.templates)) { api .put(`/plugins/e-invoices/providers/${provider._id}`, { ...provider, templates, }) .catch(onError); } }, 2000); const archive = async () => { await api.delete(`/plugins/e-invoices/providers/${provider._id}`); await onRefetch(); }; const resetTemplates = async () => { onActionLoad({ process: async () => { await api.post(`/plugins/e-invoices/providers/${provider._id}/reset-templates`); await onRefetch(); }, }); }; useEffect(() => { syncTemplates(); }, [templates]); return ( <Stack> <Card> <Group gap={20} align="start"> <Image src={provider.logo} w={120} h={40} /> <Stack gap={5} flex={1}> <Group align="center"> <Text fw={600} fz={20}> {provider.name} </Text> <Badge color={status.color} variant="light"> {status.name()} </Badge> </Group> <Group gap={8}> <Button variant="outline" color="gray" size="xs" leftIcon={IconEdit} onClick={() => { OnModalEInvoiceProvider({ onDone: () => onRefetch(), provider, mode: "update_provider", }); }} > <Trans>Change provider</Trans> </Button> <Button variant="outline" color="gray" size="xs" leftIcon={IconEdit} onClick={() => { OnModalEInvoiceProvider({ onDone: () => onRefetch(), provider, mode: "update_auth", }); }} > <Trans>Change auth</Trans> </Button> <Tooltip label={t`Healthcheck`}> <ActionIcon variant="light" color="gray" size={30} onClick={async () => onActionLoad({ process: async () => { await api.post(`/plugins/e-invoices/providers/${provider._id}/healthcheck`); await onRefetch(); }, }) } > <IconRefresh size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Reset templates`}> <ActionIcon variant="light" color="gray" size={30} onClick={resetTemplates}> <IconTemplate size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Check invoice`}> <ActionIcon variant="light" color="gray" size={30} onClick={() => OnModalCheckEInvoice()} > <IconFileInvoice size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Archive`}> <ActionIcon variant="light" color="gray" size={30} onClick={archive}> <IconArchive size={18} /> </ActionIcon> </Tooltip> </Group> </Stack> </Group> </Card> <Stack flex={1}> {Object.values(PluginEInvoiceTemplateType).map((type) => { if ( (type === PluginEInvoiceTemplateType.LOAN_INCOME_RECEIPT && workspace.type !== WorkspaceType.CREDIT) || !variables ) return null; return ( <Stack key={type} gap={5}> <SessionTitle name={t`Template ${t`E-Invoice`}`} /> <Card style={{ overflow: "visible" }}> <PluginEInvoiceTemplateEditor type={type} template={templates[type]} variables={variables} onChange={(template) => { setTemplates({ ...templates, [type]: template }); }} /> </Card> </Stack> ); })} </Stack> </Stack> ); };
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:187
 msgid "Template {0}"
 msgstr ""
@@ -6178,12 +6125,9 @@ msgstr ""
 msgid "This location cannot check in"
 msgstr ""
 
-#: src/widgets/dashboard/modules.ts:110
-#: src/widgets/dashboard/modules.ts:133
-#: src/widgets/dashboard/modules.ts:156
-#: src/widgets/dashboard/modules.ts:295
-#: src/widgets/dashboard/modules.ts:326
-#: src/widgets/dashboard/modules.ts:352
+#: src/widgets/dashboard/modules.ts:110 src/widgets/dashboard/modules.ts:133
+#: src/widgets/dashboard/modules.ts:156 src/widgets/dashboard/modules.ts:295
+#: src/widgets/dashboard/modules.ts:326 src/widgets/dashboard/modules.ts:352
 #: src/widgets/dashboard/modules.ts:386
 msgid "This month"
 msgstr ""
@@ -6310,11 +6254,9 @@ msgstr ""
 msgid "To not miss important information"
 msgstr ""
 
-#: src/components/calendar.tsx:116
-#: src/components/inputs/due-date-input.tsx:189
+#: src/components/calendar.tsx:116 src/components/inputs/due-date-input.tsx:189
 #: src/modules/bookings/booking-list.tsx:394
-#: src/modules/loans/loan-list.tsx:239
-#: src/utils/date-time.utils.ts:215
+#: src/modules/loans/loan-list.tsx:239 src/utils/date-time.utils.ts:215
 msgid "Today"
 msgstr "Hôm nay"
 
@@ -6362,16 +6304,13 @@ msgid "Total"
 msgstr ""
 
 #. js-lingui-explicit-id
-#: src/components/printer/printer-body.tsx:43
-#: src/modals/modal-printer.tsx:307
-#: src/modals/modal-printer.tsx:383
-#: src/modals/modal-printer.tsx:394
+#: src/components/printer/printer-body.tsx:43 src/modals/modal-printer.tsx:307
+#: src/modals/modal-printer.tsx:383 src/modals/modal-printer.tsx:394
 msgid "TotalShorten"
 msgstr "T.Tiền"
 
 #. js-lingui-explicit-id
-#: src/components/printer/printer-body.tsx:44
-#: src/modals/modal-printer.tsx:309
+#: src/components/printer/printer-body.tsx:44 src/modals/modal-printer.tsx:309
 msgid "TotalLong"
 msgstr "Thành tiền"
 
@@ -6440,8 +6379,7 @@ msgstr ""
 msgid "Type and press [enter]"
 msgstr ""
 
-#: src/components/selector.tsx:345
-#: src/modules/search/search-engine.tsx:381
+#: src/components/selector.tsx:345 src/modules/search/search-engine.tsx:381
 msgid "Type something to search"
 msgstr ""
 
@@ -7001,7 +6939,7 @@ msgstr ""
 
 #: src/modules/customers/components/customer-kyc-card.tsx:105
 #: src/modules/loans/components/loan-documents.tsx:87
-#: src/modules/loans/loan-list.tsx:374
+#: src/modules/loans/loan-list.tsx:375
 msgid "Wrong information"
 msgstr ""
 

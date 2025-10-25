@@ -2,11 +2,12 @@ import { Button } from "@/components/buttons/button";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { t } from "@lingui/core/macro";
 import { ActionIcon, ActionIconProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
+import Link from "next/link";
 import { FC } from "react";
 import { ListContext } from "../types";
-import Link from "next/link";
 
 export const CreateButton: FC<ListContext> = (props) => {
   const layout = useLayout();
@@ -42,7 +43,7 @@ export const CreateButton: FC<ListContext> = (props) => {
       leftIcon={props.creatable.icon || IconPlus}
       iconSize={16}
       size="compact-sm"
-      label={props.creatable.label || "create"}
+      label={props.creatable.label || t`Create`}
       {...baseProps}
     />
   );

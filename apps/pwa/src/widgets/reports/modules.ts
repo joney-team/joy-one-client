@@ -188,7 +188,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   [ReportWidgetType.LOANS_RECEIPTS]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: () => t`Credit report title`,
+      name: () => t`Credit report`,
       icon: IconReport,
       layout: {
         initH: 3,

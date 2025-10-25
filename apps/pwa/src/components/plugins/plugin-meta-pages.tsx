@@ -49,9 +49,7 @@ export const PluginMetaPages: FC = () => {
         </Group>
 
         <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-          <Trans>
-            Connect <strong>Fanpage Facebook</strong>
-          </Trans>
+          {t`Connect ${t`Fanpage Facebook`}`}
         </Title>
 
         <Text ta="center">

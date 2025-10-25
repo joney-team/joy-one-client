@@ -49,7 +49,7 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
             <Group gap={10}>
               <ActionButton
                 icon={IconTable}
-                label="table"
+                label={t`Table`}
                 active={ctx.viewState.view === "table"}
                 onClick={() =>
                   ctx.setViewState({
@@ -61,7 +61,7 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
 
               <ActionButton
                 icon={IconLayoutGrid}
-                label="grid"
+                label={t`Grid`}
                 active={ctx.viewState.view === "grid"}
                 onClick={() =>
                   ctx.setViewState({

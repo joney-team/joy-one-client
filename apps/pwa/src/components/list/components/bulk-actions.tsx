@@ -35,7 +35,7 @@ export const BulkActions: FC<ListContext> = (ctx) => {
               {num(ctx.selectedIds.length)}
             </Text>
             <Text c="white" fz={14} fw={600}>
-              <Trans>Selected</Trans>
+              {t`Selected`}
             </Text>
           </Group>
 
@@ -63,7 +63,7 @@ export const BulkActions: FC<ListContext> = (ctx) => {
                     variant="transparent"
                     radius={100}
                     fz={12}
-                    label={action?.label || "actions"}
+                    label={action?.label || t`Actions`}
                   />
                 );
               })}
