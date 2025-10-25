@@ -39,7 +39,7 @@ export const WorkspaceBranchColumn = (
   return {
     w: args?.w,
     icon: IconBuildingSkyscraper,
-    name: "branch",
+    name: t`Branch`,
     render: ({ data }) => {
       const id = data.id || data._id;
       const branchName = data.workspaceBranch ? data.workspaceBranch.name : t`Main office`;

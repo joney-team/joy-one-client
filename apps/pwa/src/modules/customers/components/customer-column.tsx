@@ -17,7 +17,7 @@ export interface CustomerColumnArgs<Data = any> extends Omit<Column<Data>, "rend
 export function CustomerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
   return {
     icon: IconUserSquareRounded,
-    name: args?.name || "customer",
+    name: args?.name || t`Customer`,
     render: ({ value }) => {
       const router = useRouter();
       const workspace = useWorkspace();

@@ -13,10 +13,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/modules/loans/loan-list.tsx:104
-msgid "'Created at"
-msgstr "'Created at"
-
 #. placeholder {0}: provider ? t`Edit` : t`Add`
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:132
 msgid "{0} E-invoices provider"
@@ -871,6 +867,7 @@ msgstr "Bookings chart"
 #: src/modules/customers/components/form-customer.tsx:131
 #: src/modules/loans/modals/modal-create-loan.tsx:394
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:290
+#: src/modules/workspace-branches/workspace-branch-column.tsx:42
 #: src/widgets/reports/index.tsx:334
 msgid "Branch"
 msgstr "Branch"
@@ -1185,6 +1182,7 @@ msgstr "Close"
 msgid "Closed"
 msgstr "Closed"
 
+#: src/components/list/columns/code-column.tsx:22
 #: src/modules/coupons/coupon-card.tsx:39
 #: src/modules/coupons/modals/modal-coupon-form.tsx:123
 #: src/modules/products/components/form-product.tsx:247
@@ -1663,6 +1661,10 @@ msgstr "Create task"
 msgid "Created"
 msgstr "Created"
 
+#: src/modules/loans/loan-list.tsx:104
+msgid "Created at"
+msgstr "Created at"
+
 #. placeholder {0}: renderDateTime(task.createdAt, true)
 #: src/modules/tasks/components/detail-head.tsx:136
 msgid "Created at {0}"
@@ -1737,6 +1739,7 @@ msgstr "customer"
 #: src/modules/bookings/modals/modal-booking.tsx:241
 #: src/modules/coupons/coupon-card.tsx:44
 #: src/modules/coupons/modals/modal-coupon-form.tsx:136
+#: src/modules/customers/components/customer-column.tsx:20
 #: src/modules/customers/components/customer-kyc-card.tsx:116
 #: src/modules/loans/components/loan-card.tsx:51
 #: src/modules/loans/modals/modal-create-loan.tsx:223

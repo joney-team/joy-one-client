@@ -101,7 +101,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
           },
         }),
         createdAt: DateTimeColumn({
-          name: t`'Created at`,
+          name: t`Created at`,
           sortable: true,
           defaultHidden: true,
           isHasFilter: true,
