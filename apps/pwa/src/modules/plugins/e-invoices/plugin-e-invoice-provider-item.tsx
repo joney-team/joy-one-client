@@ -5,7 +5,7 @@ import { Image } from "@/components/image";
 import { SessionTitle } from "@/components/session-title";
 import { api } from "@/modules/apis";
 import { useQuery } from "@/modules/apis/use-query";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onActionLoad } from "@/utils/actions";
@@ -90,7 +90,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
               </Text>
 
               <Badge color={status.color} variant="light">
-                {t(status.name)}
+                {tl(status.name)}
               </Badge>
             </Group>
 
@@ -108,7 +108,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                   });
                 }}
               >
-                {t("change_provider")}
+                {tl("change_provider")}
               </Button>
 
               <Button
@@ -124,10 +124,10 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                   });
                 }}
               >
-                {t("change_auth")}
+                {tl("change_auth")}
               </Button>
 
-              <Tooltip label={t("healthcheck")}>
+              <Tooltip label={tl("healthcheck")}>
                 <ActionIcon
                   variant="light"
                   color="gray"
@@ -145,13 +145,13 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={t("reset_templates")}>
+              <Tooltip label={tl("reset_templates")}>
                 <ActionIcon variant="light" color="gray" size={30} onClick={resetTemplates}>
                   <IconTemplate size={18} />
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={t("check_invoice")}>
+              <Tooltip label={tl("check_invoice")}>
                 <ActionIcon
                   variant="light"
                   color="gray"
@@ -162,7 +162,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={t("archive")}>
+              <Tooltip label={tl("archive")}>
                 <ActionIcon variant="light" color="gray" size={30} onClick={archive}>
                   <IconArchive size={18} />
                 </ActionIcon>
@@ -184,7 +184,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
           return (
             <Stack key={type} gap={5}>
               <SessionTitle
-                name={t("template_entity", { entity: t(`e_invoice_template_type_${type}`) })}
+                name={tl("template_entity", { entity: tl(`e_invoice_template_type_${type}`) })}
               />
               <Card style={{ overflow: "visible" }}>
                 <PluginEInvoiceTemplateEditor

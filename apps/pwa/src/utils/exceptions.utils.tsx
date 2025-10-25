@@ -1,4 +1,4 @@
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { rem, Text } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 import { NotificationData, notifications } from "@mantine/notifications";
@@ -11,7 +11,7 @@ export const onError = (
   notification?: NotificationData | string,
   throwError?: boolean
 ) => {
-  let message: string = t("INTERNAL_SERVER_ERROR");
+  let message: string = tl("INTERNAL_SERVER_ERROR");
 
   if (error instanceof AxiosError) {
     message = error.response?.data?.message || error.message;
@@ -47,7 +47,7 @@ export const onError = (
     }
   } else {
     notifications.show({
-      title: t("action_failed"),
+      title: tl("action_failed"),
       message: (
         <Text dangerouslySetInnerHTML={{ __html: String.replaceLineBreaksToHTML(message) }} />
       ),
@@ -62,7 +62,7 @@ export const onError = (
 
 export const onInfo = (msg: string) => {
   return notifications.show({
-    title: t("notification"),
+    title: tl("notification"),
     message: msg,
     color: "blue",
     icon: <IconInfoCircle style={{ width: rem(20), height: rem(20) }} />,

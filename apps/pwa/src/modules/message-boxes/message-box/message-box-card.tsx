@@ -4,7 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { TextOverflow } from "@/components/text-overflow";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { renderDateTime, renderTime, t } from "@/modules/lang/lang-service";
+import { renderDateTime, renderTime, tl } from "@/modules/lang/lang-service";
 import {
   getMessages,
   messageBoxPlatformImages,
@@ -101,7 +101,7 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
         <Stack gap={5} flex={1} mt={-3}>
           <Group justify="space-between" w="100%" wrap="nowrap">
             <TextOverflow fw={600} truncate="end" flex={1}>
-              {props.box.senderName || props.box.customer?.name || t("guest")}
+              {props.box.senderName || props.box.customer?.name || tl("guest")}
             </TextOverflow>
 
             {latestMessage && (
@@ -122,26 +122,26 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
               if (latestMessage.text) return String.limitCharacters(latestMessage.text, 72);
               if (latestMessage.attachments?.[0]) {
                 if (latestMessage.attachments[0].type === MessageAttachmentType.STICKER) {
-                  return t("sent_sticker");
+                  return tl("sent_sticker");
                 }
 
                 if (latestMessage.attachments[0].type === MessageAttachmentType.IMAGE) {
-                  return t("sent_image");
+                  return tl("sent_image");
                 }
 
-                return t("sent_file_length", { length: latestMessage.attachments.length });
+                return tl("sent_file_length", { length: latestMessage.attachments.length });
               }
             })()}
           </TextOverflow>
 
           <Group mt={5} gap={5} justify="space-between" w="100%">
             <Badge size="xs" color={statusColor} variant="light">
-              {t(`msg_boxes_status_${box.status}`)}
+              {tl(`msg_boxes_status_${box.status}`)}
             </Badge>
 
             {isAiAssistantEnabled && (
               <Badge size="xs" color={color("violet.9")} variant="light">
-                {t("ai-assistants")}
+                {tl("ai-assistants")}
               </Badge>
             )}
           </Group>

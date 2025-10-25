@@ -6,7 +6,7 @@ import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
 import { TeammatesIllustration } from "@/components/illustrations/teammates";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { getWorkspaceApiApps } from "./workspace-api-apps-service";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Card, Center, Grid, Skeleton, Stack, Text, Title } from "@mantine/core";
@@ -37,13 +37,13 @@ export const WorkspaceApiAppList: FC = () => {
             <TeammatesIllustration width={300} />
             <Stack gap={10}>
               <Title ta="center" fz={20} c={color("primary")}>
-                {t("workspaceSettingsApiApps")}
+                {tl("workspaceSettingsApiApps")}
               </Title>
-              <Text ta="center">{t("workspaceSettingsApiAppsDesc")}</Text>
+              <Text ta="center">{tl("workspaceSettingsApiAppsDesc")}</Text>
             </Stack>
 
             <Button action leftIcon={IconPlus} onClick={() => OnModalWorkspaceApiApp()}>
-              {t("create_new")}
+              {tl("create_new")}
             </Button>
           </Stack>
         </Card>
@@ -62,7 +62,7 @@ export const WorkspaceApiAppList: FC = () => {
 
       <Center>
         <Button action leftIcon={IconPlus} onClick={() => OnModalWorkspaceApiApp()}>
-          {t("create_new")}
+          {tl("create_new")}
         </Button>
       </Center>
     </Container>

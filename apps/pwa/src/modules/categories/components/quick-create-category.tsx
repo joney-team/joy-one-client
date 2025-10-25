@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/modules/apis";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
 import { ActionIcon, Group, Popover, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
@@ -24,7 +24,7 @@ export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>
     </ActionIcon>
   );
 
-  const label = t("create_entity", { entity: t("category") });
+  const label = tl("create_entity", { entity: tl("category") });
 
   return (
     <Popover shadow="md" opened={opened} onChange={setOpened}>
@@ -33,7 +33,7 @@ export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>
       <Popover.Dropdown p={10}>
         <TextInput
           label={label}
-          placeholder={t("enter_entity_name", { entity: t("category") })}
+          placeholder={tl("enter_entity_name", { entity: tl("category") })}
           autoFocus
           onKeyUp={(e) => {
             if (e.key === "Enter") {
@@ -41,7 +41,7 @@ export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>
               e.stopPropagation();
               const value = (e.target as any).value;
               onActionLoad({
-                name: t("create_entity", { entity: t("category") }),
+                name: tl("create_entity", { entity: tl("category") }),
                 process: async () => {
                   const category = await api.post<CategoryEntity>("/categories", {
                     name: value,

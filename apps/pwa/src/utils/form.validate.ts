@@ -1,9 +1,9 @@
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 
 export const required = (value: any) => {
   let isValid = true;
 
-  if (typeof value === null || typeof value === 'undefined') {
+  if (typeof value === null || typeof value === "undefined") {
     isValid = false;
   }
 
@@ -11,9 +11,9 @@ export const required = (value: any) => {
     isValid = false;
   }
 
-  if (typeof value === 'string' && value.trim() === '') {
+  if (typeof value === "string" && value.trim() === "") {
     isValid = false;
   }
 
-  if (!isValid) return t('required');
-}
+  if (!isValid) return tl("required");
+};

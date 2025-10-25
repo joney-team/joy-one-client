@@ -6,7 +6,7 @@ import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { StatusColumn } from "@/components/list/columns/status-column";
 import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
-import { num, t, tMulti } from "@/modules/lang/lang-service";
+import { num, tl, tMulti } from "@/modules/lang/lang-service";
 import { OnModalProductCombo } from "@/modules/product-combos/modals/modal-product-combo";
 import { productComboStatusOptions } from "@/modules/product-combos/product-combos-service";
 import { ProductComboStatus } from "@/modules/product-combos/product-combos-types";
@@ -65,7 +65,7 @@ export const ProductComboList: FC = () => {
           },
           status: StatusColumn({
             options: Object.values(ProductComboStatus).map((status) => ({
-              label: t(`product_combo_status_${status}`),
+              label: tl(`product_combo_status_${status}`),
               value: status,
               color: productComboStatusOptions[status].color,
             })),

@@ -1,5 +1,5 @@
 import { Period } from "@/types";
-import { renderDateTime, t } from "@/modules/lang/lang-service";
+import { renderDateTime, tl } from "@/modules/lang/lang-service";
 import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
@@ -48,7 +48,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         },
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t("last_updated_at", { dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt) })
+            ? tl("last_updated_at", {
+                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
+              })
             : null,
       }),
     },
@@ -105,8 +107,8 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
         renderSeries: () => [
-          { name: "prevValue", label: t("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: t("this_month"), color: "primary.6" },
+          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: tl("this_month"), color: "primary.6" },
         ],
       }),
     },
@@ -128,8 +130,8 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             };
           }),
         renderSeries: () => [
-          { name: "prevValue", label: t("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: t("this_month"), color: "primary.6" },
+          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: tl("this_month"), color: "primary.6" },
         ],
       }),
     },
@@ -151,8 +153,8 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             };
           }),
         renderSeries: () => [
-          { name: "prevValue", label: t("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: t("this_month"), color: "primary.6" },
+          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: tl("this_month"), color: "primary.6" },
         ],
       }),
     },
@@ -173,7 +175,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t("last_updated_at", { dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt) })
+            ? tl("last_updated_at", {
+                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
+              })
             : null,
       }),
     },
@@ -193,7 +197,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t("last_updated_at", { dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt) })
+            ? tl("last_updated_at", {
+                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
+              })
             : null,
       }),
     },
@@ -213,7 +219,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t("last_updated_at", { dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt) })
+            ? tl("last_updated_at", {
+                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
+              })
             : null,
       }),
     },
@@ -229,7 +237,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         renderValue: (ctx) => ctx.realtimeReport.data?.data.loans?.debt?.total || 0,
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t("last_updated_at", { dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt) })
+            ? tl("last_updated_at", {
+                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
+              })
             : null,
       }),
     },
@@ -246,7 +256,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         renderValue: (ctx) => ctx.realtimeReport.data?.data.loans?.debt?.notDueYet || 0,
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t("last_updated_at", { dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt) })
+            ? tl("last_updated_at", {
+                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
+              })
             : null,
       }),
     },
@@ -267,7 +279,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t("last_updated_at", { dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt) })
+            ? tl("last_updated_at", {
+                dateTime: renderDateTime(ctx.realtimeReport.data?.updatedAt),
+              })
             : null,
       }),
     },
@@ -290,8 +304,8 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             };
           }),
         renderSeries: () => [
-          { name: "prevValue", label: t("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: t("this_month"), color: "primary.6" },
+          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: tl("this_month"), color: "primary.6" },
         ],
       }),
     },
@@ -321,8 +335,8 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
         renderSeries: () => [
-          { name: "prevValue", label: t("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: t("this_month"), color: "primary.6" },
+          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: tl("this_month"), color: "primary.6" },
         ],
       }),
     },
@@ -347,8 +361,8 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             };
           }),
         renderSeries: () => [
-          { name: "prevValue", label: t("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: t("this_month"), color: "primary.6" },
+          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: tl("this_month"), color: "primary.6" },
         ],
       }),
     },
@@ -381,8 +395,8 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             };
           }),
         renderSeries: () => [
-          { name: "prevValue", label: t("last_month"), color: "gray.4", strokeDasharray: "2 2" },
-          { name: "value", label: t("this_month"), color: "primary.6" },
+          { name: "prevValue", label: tl("last_month"), color: "gray.4", strokeDasharray: "2 2" },
+          { name: "value", label: tl("this_month"), color: "primary.6" },
         ],
       }),
     },

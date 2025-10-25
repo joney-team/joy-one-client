@@ -2,10 +2,9 @@
 
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getWorkspaceModuleName, WorkspaceModule } from "@/modules/workspaces/workspace-modules";
+import { WorkspaceModule } from "@/modules/workspaces/workspace-modules";
 import { Card, Group, Text, ThemeIcon } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconChevronRight } from "@tabler/icons-react";
@@ -59,13 +58,13 @@ export const WorkspaceHeaderBreadcrumbs: FC = () => {
         parentModules.map((mo) => {
           return (
             <Fragment key={mo.id}>
-              <BreadcrumbItem m={mo} />
+              <BreadcrumbItem mod={mo} />
               <BreadcrumbDivider enabled={!!activatedModule} />
             </Fragment>
           );
         })}
 
-      {!!activatedModule && <BreadcrumbItem m={activatedModule} />}
+      {!!activatedModule && <BreadcrumbItem mod={activatedModule} />}
 
       {layout.components.head && (
         <Fragment>
@@ -84,25 +83,24 @@ export const WorkspaceHeaderBreadcrumbs: FC = () => {
   );
 };
 
-const BreadcrumbItem: FC<{ m: WorkspaceModule }> = ({ m }) => {
+const BreadcrumbItem: FC<{ mod: WorkspaceModule }> = ({ mod }) => {
   const hover = useHover();
   const router = useRouter();
   const color = useColor();
-  const workspace = useWorkspace();
 
   return (
-    <Link href={m.href} style={{ textDecoration: "none" }}>
+    <Link href={mod.href} style={{ textDecoration: "none" }}>
       <Card
         withBorder={false}
         shadow="none"
         ref={hover.ref}
         bg={color(hover.hovered ? "var(--mantine-color-default-hover)" : "transparent")}
-        onClick={() => router.push(m.href)}
+        onClick={() => router.push(mod.href)}
         p={2}
       >
         <Group gap={0}>
           <Text fz={13} fw={500} px={4}>
-            {t(getWorkspaceModuleName(m.id, workspace.userMember?.workspace))}
+            {mod.name()}
           </Text>
         </Group>
       </Card>

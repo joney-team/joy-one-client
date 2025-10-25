@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { ModalTitle } from "@/components/modal-title";
 import { useAuth } from "@/modules/auth/auth-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { transferOwner } from "@/modules/workspace-roles/workspace-roles-service";
 import { onError } from "@/utils/exceptions.utils";
@@ -29,7 +29,7 @@ export const ModalTransferWorkspaceOwner: FC = () => {
       <Card p={10} withBorder>
         <Stack align="center">
           <Text fz={em(13)} fw={500} ta="center">
-            {t("select_member")}
+            {tl("select_member")}
           </Text>
           <WorkspaceMembersInput
             excludeIds={[auth.user._id]}
@@ -43,7 +43,7 @@ export const ModalTransferWorkspaceOwner: FC = () => {
 
       <Center mt={10}>
         <Button radius={100} onClick={onSubmit}>
-          {t("confirm")}
+          {tl("confirm")}
         </Button>
       </Center>
     </Stack>
@@ -53,6 +53,6 @@ export const ModalTransferWorkspaceOwner: FC = () => {
 export const OnModalTransferOwner = () =>
   modals.open({
     modalId: "ModalWorkspaceMember",
-    title: <ModalTitle title={t("transfer_ownership")} icon={IconUser} />,
+    title: <ModalTitle title={tl("transfer_ownership")} icon={IconUser} />,
     children: <ModalTransferWorkspaceOwner />,
   });

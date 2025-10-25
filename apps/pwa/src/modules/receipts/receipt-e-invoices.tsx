@@ -12,7 +12,7 @@ import { useMemo, type FC } from "react";
 import { api } from "../apis";
 import { useQuery } from "../apis/use-query";
 import { EventType } from "../events/event-types";
-import { renderDateTime, t } from "../lang/lang-service";
+import { renderDateTime, tl } from "../lang/lang-service";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
@@ -38,12 +38,12 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
       modalId: `cancel-e-invoice-${invoice._id}`,
       title: (
         <ModalTitle
-          title={t("cancel_entity", { entity: t("invoice") })}
+          title={tl("cancel_entity", { entity: tl("invoice") })}
           color="red"
           icon={IconArchive}
         />
       ),
-      children: t("cancel_confirmation_msg", { entity: t("invoice") }),
+      children: tl("cancel_confirmation_msg", { entity: tl("invoice") }),
       color: "red",
       onConfirm: () => {
         modals.close(`cancel-e-invoice-${invoice._id}`);
@@ -54,7 +54,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
           },
         });
       },
-      labels: { confirm: t("cancel"), cancel: t("cancel") },
+      labels: { confirm: tl("cancel"), cancel: tl("cancel") },
       confirmProps: { color: "red" },
     });
   };
@@ -72,7 +72,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
           disabled={receipt.status !== ReceiptStatus.PAID}
           onClick={() => api.post(`/plugins/e-invoices`, { receiptId: receipt.id })}
         >
-          {t("export_entity", { entity: t("e_invoice") })}
+          {tl("export_entity", { entity: tl("e_invoice") })}
         </Button>
       </Center>
     );
@@ -83,7 +83,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
   return (
     <Stack gap={8}>
       <Text fw={600} fz={14}>
-        {t("eInvoices")}
+        {tl("eInvoices")}
       </Text>
 
       {isLoading && <Skeleton height={100} />}
@@ -111,7 +111,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
 
               {invoice.isCancelled ? (
                 <Badge color="red" variant="light">
-                  {t("cancelled")}
+                  {tl("cancelled")}
                 </Badge>
               ) : (
                 <Group>
@@ -122,7 +122,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
                     leftIcon={IconArchive}
                     onClick={() => onArchive(invoice)}
                   >
-                    {t("cancel")}
+                    {tl("cancel")}
                   </Button>
 
                   <Button
@@ -131,7 +131,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
                     variant="light"
                     onClick={() => window.open(invoice.url, "_blank")}
                   >
-                    {t("view_entity", { entity: t("invoice") })}
+                    {tl("view_entity", { entity: tl("invoice") })}
                   </Button>
                 </Group>
               )}

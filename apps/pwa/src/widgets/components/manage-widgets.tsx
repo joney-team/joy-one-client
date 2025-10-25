@@ -1,7 +1,7 @@
 "use client";
 
 import { ModalTitle } from "@/components/modal-title";
-import { t, tMulti } from "@/modules/lang/lang-service";
+import { tl, tMulti } from "@/modules/lang/lang-service";
 import { ActionIcon, Card, Group, Modal, Stack, Text, TextInput, Tooltip } from "@mantine/core";
 import { IconBox, IconMinus, IconPlus, IconPuzzle, IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
@@ -31,7 +31,7 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
     >
       <Stack>
         <TextInput
-          placeholder={t("search")}
+          placeholder={tl("search")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSection={<IconSearch size={16} />}
@@ -49,7 +49,7 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
           const isHideByWorkspaceType =
             mod.config.workspaceTypes && !mod.config.workspaceTypes.includes(workspace.type);
           const isHideBySearch =
-            search.length > 0 && !t(mod.config.name).toLowerCase().includes(search.toLowerCase());
+            search.length > 0 && !tl(mod.config.name).toLowerCase().includes(search.toLowerCase());
 
           if (isHideByWorkspaceType || isHideBySearch) return null;
 
@@ -73,7 +73,7 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
               <Group justify="space-between">
                 <Group gap={10}>
                   <Icon strokeWidth={1.5} />
-                  <Text>{t(mod.config.name)}</Text>
+                  <Text>{tl(mod.config.name)}</Text>
                 </Group>
 
                 <Group>

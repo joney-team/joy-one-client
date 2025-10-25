@@ -8,7 +8,7 @@ import { ListContext } from "../types";
 import { getIn, getListDataId, getValuePath } from "../utils";
 import { ListTableHead } from "./table-head";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { BaseData } from "@/components/list/types";
 import Link from "next/link";
 
@@ -117,7 +117,7 @@ export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
                               leftSection={<action.icon size={16} />}
                               disabled={isDisabled}
                             >
-                              {t(action.label)}
+                              {tl(action.label)}
                             </Menu.Item>
                           );
 
@@ -129,7 +129,7 @@ export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
                               href={action.href(item)}
                               leftSection={<action.icon size={16} />}
                             >
-                              {t(action.label)}
+                              {tl(action.label)}
                             </Menu.Item>
                           );
                       })}

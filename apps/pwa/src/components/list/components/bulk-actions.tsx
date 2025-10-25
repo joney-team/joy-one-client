@@ -5,12 +5,14 @@ import { IconStack2, IconTrash, IconX } from "@tabler/icons-react";
 import { FC } from "react";
 import { ListContext } from "../types";
 import { num } from "@/modules/lang/lang-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 
 export const BulkActions: FC<ListContext> = (ctx) => {
   if (ctx.availableMultipleSelectActions.length === 0 || ctx.selectedIds.length === 0) return null;
 
-  const selectedItems = ctx.list.data.filter((i: any) => ctx.selectedIds.includes(i.id || i._id || ""));
+  const selectedItems = ctx.list.data.filter((i: any) =>
+    ctx.selectedIds.includes(i.id || i._id || "")
+  );
 
   return (
     <Group
@@ -30,7 +32,7 @@ export const BulkActions: FC<ListContext> = (ctx) => {
               {num(ctx.selectedIds.length)}
             </Text>
             <Text c="white" fz={14} fw={600}>
-              {t("selected")}
+              {tl("selected")}
             </Text>
           </Group>
 
@@ -81,12 +83,17 @@ export const BulkActions: FC<ListContext> = (ctx) => {
                     })
                 }
               >
-                {t("remove")}
+                {tl("remove")}
               </Button>
             )}
 
-            <Tooltip label={t("unselect_all")}>
-              <ActionIcon color="gray" variant="subtle" radius={100} onClick={() => ctx.unselectAll()}>
+            <Tooltip label={tl("unselect_all")}>
+              <ActionIcon
+                color="gray"
+                variant="subtle"
+                radius={100}
+                onClick={() => ctx.unselectAll()}
+              >
                 <IconX size={18} />
               </ActionIcon>
             </Tooltip>

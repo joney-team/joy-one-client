@@ -8,7 +8,7 @@ import { IconCheck, IconGps, IconMapPin } from "@tabler/icons-react";
 import { FC, useState } from "react";
 
 import { CheckInLocation } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { getGeolocation } from "@/modules/locations/locations-service";
 import { onActionLoad } from "@/utils/actions";
 import { useDisclosure } from "@mantine/hooks";
@@ -33,7 +33,7 @@ export const ModalCheckInLocationForm: FC = () => {
     },
     validate: {
       name: (value: string) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
     },
   });
@@ -60,16 +60,16 @@ export const ModalCheckInLocationForm: FC = () => {
     <Modal
       opened={opened}
       onClose={close}
-      title={<ModalTitle title={t("check_in_location")} icon={IconMapPin} />}
+      title={<ModalTitle title={tl("check_in_location")} icon={IconMapPin} />}
       yOffset={16}
       zIndex={zIndexes.commonModals}
     >
       <Stack>
         <TextInput
           withAsterisk
-          label={t("name")}
+          label={tl("name")}
           {...form.getInputProps("name")}
-          placeholder={t("check_in_location_placeholder")}
+          placeholder={tl("check_in_location_placeholder")}
         />
 
         <Group wrap="nowrap" gap={10} align="end">
@@ -77,7 +77,7 @@ export const ModalCheckInLocationForm: FC = () => {
 
           <NumberInput label="Longitude" {...form.getInputProps("coordinates.lng")} />
 
-          <Tooltip label={t("positioning")} zIndex={zIndexes.commonModals + 1}>
+          <Tooltip label={tl("positioning")} zIndex={zIndexes.commonModals + 1}>
             <ActionIcon
               w={36}
               h={36}
@@ -99,7 +99,10 @@ export const ModalCheckInLocationForm: FC = () => {
           </Tooltip>
         </Group>
 
-        <NumberInput label={t("radius", { unit: t("meter") })} {...form.getInputProps("radius")} />
+        <NumberInput
+          label={tl("radius", { unit: tl("meter") })}
+          {...form.getInputProps("radius")}
+        />
 
         <Button
           mt={10}
@@ -108,7 +111,7 @@ export const ModalCheckInLocationForm: FC = () => {
           leftSection={<IconCheck strokeWidth={1.2} />}
           disabled={!form.isDirty()}
         >
-          {t("complete")}
+          {tl("complete")}
         </Button>
       </Stack>
     </Modal>

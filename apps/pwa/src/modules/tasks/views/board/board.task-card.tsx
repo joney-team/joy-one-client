@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { DueDateInput } from "@/components/inputs/due-date-input";
-import { num, renderDateTime, t } from "@/modules/lang/lang-service";
+import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
@@ -127,7 +127,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
 
                   <Group gap={0} wrap="nowrap">
                     {!task.parentId && (
-                      <Tooltip label={t("create_sub_task")}>
+                      <Tooltip label={tl("create_sub_task")}>
                         <ActionIcon
                           variant="subtle"
                           color="gray.6"
@@ -145,7 +145,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                     )}
 
                     {ctx.isAbleToNextStatus && !props.showStatus && (
-                      <Tooltip label={t("next_status")}>
+                      <Tooltip label={tl("next_status")}>
                         <ActionIcon
                           variant="subtle"
                           color={taskStatusStyle.color}
@@ -173,7 +173,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
 
               <Stack gap={0}>
                 {props.showStatus && (
-                  <CtaSection icon={IconPlaystationCircle} label={t("status")}>
+                  <CtaSection icon={IconPlaystationCircle} label={tl("status")}>
                     <Group gap={0}>
                       <TaskStatusOptions
                         task={task}
@@ -218,7 +218,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                   }}
                   target={(selector) => {
                     return (
-                      <CtaSection icon={IconTags} label={t("tags")} onClick={selector.toggle}>
+                      <CtaSection icon={IconTags} label={tl("tags")} onClick={selector.toggle}>
                         <Group
                           gap={3}
                           flex={1}
@@ -238,7 +238,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                               fz={13}
                               fw={400}
                             >
-                              {capitalize(`${t("add")} ${t("tag")}`)}
+                              {capitalize(`${tl("add")} ${tl("tag")}`)}
                             </Button>
                           )}
                         </Group>
@@ -251,7 +251,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                   icon={IconCalendar}
                   onRemove={() => ctx.onUpdate({ ...task, dueDate: null, startDate: null })}
                   canRemove={!!task.dueDate || !!task.startDate}
-                  label={t("due_date")}
+                  label={tl("due_date")}
                 >
                   <Menu shadow="xs">
                     <Menu.Target>
@@ -278,7 +278,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                               fz={13}
                               fw={400}
                             >
-                              {t("add_due_date")}
+                              {tl("add_due_date")}
                             </Button>
                           );
                         })()}
@@ -305,7 +305,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                       <CtaSection
                         icon={task.priority ? IconFlagFilled : IconFlag}
                         iconColor={task.priority ? getTaskPriorityColor(task.priority) : undefined}
-                        label={t("priority")}
+                        label={tl("priority")}
                         canRemove={!!task.priority}
                         onRemove={() => ctx.onUpdate({ ...task, priority: null })}
                         onClick={selector.toggle}
@@ -315,7 +315,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                             if (task.priority) {
                               return (
                                 <Group gap={1}>
-                                  <Text>{t(`task_priority_${task.priority}`)}</Text>
+                                  <Text>{tl(`task_priority_${task.priority}`)}</Text>
                                 </Group>
                               );
                             }
@@ -331,7 +331,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                                 fz={13}
                                 fw={400}
                               >
-                                {t("add_priority")}
+                                {tl("add_priority")}
                               </Button>
                             );
                           })()}
@@ -341,7 +341,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                   }}
                 />
 
-                <CtaSection icon={IconUser} label={t("assignee")}>
+                <CtaSection icon={IconUser} label={tl("assignee")}>
                   <WorkspaceMembersInput
                     collapsed
                     value={task.assigneeUsers}
@@ -354,7 +354,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                 {ctx.subTasks.length > 0 && (
                   <CtaSection
                     icon={IconSubtask}
-                    label={t("subtasks")}
+                    label={tl("subtasks")}
                     applyCollapse
                     isCollapsed={isShowSubTasks}
                   >
@@ -366,7 +366,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                         variant="subtle"
                         onClick={() => setIsShowSubTasks((s) => !s)}
                       >
-                        {t("subtasks_count", { count: num(ctx.subTasks.length) })}
+                        {tl("subtasks_count", { count: num(ctx.subTasks.length) })}
                       </Button>
                       <Group flex={1} justify="end" gap={5}>
                         <Text fz={em(10)}>{num(ctx.progress.percent, { roundPrecision: 0 })}%</Text>

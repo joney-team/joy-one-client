@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { Group, Skeleton, Text } from "@mantine/core";
 import { IconCoin, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -32,7 +32,7 @@ export const OrderSaleDiscounts: FC = () => {
   return (
     <Group justify="space-between">
       <Group gap={5}>
-        <Text>{t("discounts")}</Text>
+        <Text>{tl("discounts")}</Text>
 
         {directDiscount > 0 ? (
           <Button
@@ -42,7 +42,7 @@ export const OrderSaleDiscounts: FC = () => {
             component="div"
             onClick={onDirectDiscount}
           >
-            {t("direct")}: {num(directDiscount, { type: "money" })}
+            {tl("direct")}: {num(directDiscount, { type: "money" })}
           </Button>
         ) : (
           <Button
@@ -52,7 +52,7 @@ export const OrderSaleDiscounts: FC = () => {
             variant="subtle"
             onClick={onDirectDiscount}
           >
-            {t("direct_discount")}
+            {tl("direct_discount")}
           </Button>
         )}
       </Group>

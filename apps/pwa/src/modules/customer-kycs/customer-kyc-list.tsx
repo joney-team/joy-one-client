@@ -4,7 +4,7 @@ import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useList } from "@/components/list/use-list";
 import { Badge, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyzeFilled } from "@tabler/icons-react";
@@ -38,7 +38,7 @@ export const CustomerKycList: FC = () => {
             onClear={() => kycs.removeParams(["status"])}
             value={kycs.params.status}
             options={Object.values(CustomerKycStatus).map((status) => ({
-              label: t(status.toLowerCase()),
+              label: tl(status.toLowerCase()),
               value: status,
             }))}
             onChange={(tagIds) => kycs.setParams({ status: tagIds })}
@@ -47,7 +47,7 @@ export const CustomerKycList: FC = () => {
 
         <Group gap={8}>
           <Badge variant="light" style={{ borderRadius: 100 }}>
-            {t("qty")}
+            {tl("qty")}
             {kycs.isInitialized && `: ${num(kycs.count)}`}
           </Badge>
         </Group>

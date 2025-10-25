@@ -13,7 +13,7 @@ import {
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-calendar";
 import { HrmTimekeepingsSummary } from "@/modules/hrm-timekeepings/hrm-timekeepings-summary";
 import { OnModalListTimekeepings } from "@/modules/hrm-timekeepings/modals/modal-timekeeping-list";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -113,14 +113,14 @@ export const HrmTimekeepingList: FC = () => {
             </Center>
 
             <Title tt="capitalize" fw={500} fz={em(25)} c="primary">
-              {t("time_keeping_setup")}
+              {tl("time_keeping_setup")}
             </Title>
             <Center>
               <Button
                 rightSection={<IconArrowRight size={18} />}
                 onClick={() => router.push("/WorkspaceSettings/hrm-timekeepings")}
               >
-                {t("start_now")}
+                {tl("start_now")}
               </Button>
             </Center>
           </Stack>
@@ -184,7 +184,7 @@ export const HrmTimekeepingList: FC = () => {
                   >
                     <Group gap={5}>
                       <Text fz={12} fw={500}>
-                        {t("members")}
+                        {tl("members")}
                       </Text>
 
                       {!isAssigneesReady ? (
@@ -241,7 +241,7 @@ export const HrmTimekeepingList: FC = () => {
             workspace.hasPermission(WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP) && (
               <ButtonSelect
                 icon={IconClipboardList}
-                label={t("hrm_timekeepings_approval")}
+                label={tl("hrm_timekeepings_approval")}
                 isActive={pendingTimekeepings.count > 0}
                 quantity={pendingTimekeepings.count}
                 activeColor="orange"
@@ -249,7 +249,7 @@ export const HrmTimekeepingList: FC = () => {
                   if (pendingTimekeepings.count <= 0) return;
                   return OnModalListTimekeepings({
                     query: { status: HrmTimekeepingStatus.PENDING },
-                    title: t("hrm_timekeepings_approval"),
+                    title: tl("hrm_timekeepings_approval"),
                   });
                 }}
               />
@@ -283,7 +283,7 @@ export const HrmTimekeepingList: FC = () => {
 
       {timekeepings.isHasData && (
         <Stack gap={8}>
-          <SessionTitle name={t("total_summary")} icon={IconUsers} />
+          <SessionTitle name={tl("total_summary")} icon={IconUsers} />
 
           <HrmTimekeepingsSummary timekeepings={timekeepings.data} />
         </Stack>

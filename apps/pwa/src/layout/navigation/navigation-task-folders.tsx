@@ -1,4 +1,4 @@
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -8,7 +8,12 @@ import { useColor } from "@/modules/theme/use-color";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { ActionIcon, em, Group, Menu, rgba, Stack, Text } from "@mantine/core";
 import { IconDots, IconFolder, IconFolderOpen, IconPencil, IconTrash } from "@tabler/icons-react";
@@ -46,7 +51,10 @@ export const WorkspaceNavigationTaskFolders: FC = () => {
     >
       <Stack w="100%" py={5} px={10} pl={16}>
         <Stack gap={5}>
-          <SortableContext items={taskFolderTags.map((v) => v._id)} strategy={verticalListSortingStrategy}>
+          <SortableContext
+            items={taskFolderTags.map((v) => v._id)}
+            strategy={verticalListSortingStrategy}
+          >
             {taskFolderTags.map((tag) => {
               return <TaskFolderNavigationItem key={tag._id} tag={tag} />;
             })}
@@ -81,10 +89,12 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
       process: async () => {
         const relatedTasks = await getTasks({ tagFolderId: tag._id, limit: 1 });
         onArchive({
-          name: t("folder"),
+          name: tl("folder"),
           icon: IconFolder,
           children:
-            relatedTasks.count > 0 ? `${t("confirm_next")} ${relatedTasks.count} ${t("remove_task_desc")}` : undefined,
+            relatedTasks.count > 0
+              ? `${tl("confirm_next")} ${relatedTasks.count} ${tl("remove_task_desc")}`
+              : undefined,
           process: async () => {
             await tags.remove(tag._id).catch(onError);
           },
@@ -102,7 +112,8 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
         onMouseLeave={() => setIsHovered(false)}
         style={{
           cursor: "pointer",
-          backgroundColor: isActive || isHovered ? rgba(tag.color || color("dark.2"), 0.1) : "transparent",
+          backgroundColor:
+            isActive || isHovered ? rgba(tag.color || color("dark.2"), 0.1) : "transparent",
           borderRadius: 8,
           ...style,
         }}
@@ -138,7 +149,7 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
                   OnModalTagForm({ tag, type: TagType.TASK_FOLDER });
                 }}
               >
-                <Text>{t("edit")}</Text>
+                <Text>{tl("edit")}</Text>
               </Menu.Item>
 
               <Menu.Item
@@ -148,7 +159,7 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
                   onRemoveTag();
                 }}
               >
-                <Text>{t("remove")}</Text>
+                <Text>{tl("remove")}</Text>
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>

@@ -3,7 +3,7 @@
 import { Menu, MenuDropdown, Text } from "@mantine/core";
 
 import { OnModalDatePicker } from "@/modals/modal-date-picker";
-import { renderDate, t } from "@/modules/lang/lang-service";
+import { renderDate, tl } from "@/modules/lang/lang-service";
 import { Period } from "@/types";
 import { timeToSeconds } from "@joy-one-client/utils/date-time.legacy";
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
@@ -57,7 +57,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
 
   const options = [
     {
-      label: t("date"),
+      label: tl("date"),
       icon: IconCalendar,
       value: Period.DATE,
       onClick: () =>
@@ -72,7 +72,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         }),
     },
     {
-      label: t("month"),
+      label: tl("month"),
       icon: IconCalendarMonth,
       value: Period.MONTH,
       onClick: () =>
@@ -88,7 +88,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         }),
     },
     {
-      label: t("year"),
+      label: tl("year"),
       icon: IconCalendarEvent,
       value: Period.YEAR,
       onClick: () =>
@@ -104,7 +104,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         }),
     },
     {
-      label: t("time_range"),
+      label: tl("time_range"),
       icon: IconCalendarDot,
       value: "Range",
       onClick: () =>

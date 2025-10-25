@@ -1,6 +1,6 @@
 import { Button } from "@/components/buttons/button";
 import { OnModalLoanPackageForm } from "@/modules/loans/modals/modal-loan-package-form";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { loanPackageTypeColors, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { String } from "@/utils/string.utils";
@@ -34,7 +34,7 @@ export const WorkspacetSettingLoans: FC = () => {
                     value={pkg.assetTypes
                       .map((v) =>
                         String.capitalizeFirstLetter(
-                          `${t(`loan_asset_type_${v}`)}`.replace("Đăng ký", "").trim()
+                          `${tl(`loan_asset_type_${v}`)}`.replace("Đăng ký", "").trim()
                         )
                       )
                       .join(", ")}
@@ -44,7 +44,7 @@ export const WorkspacetSettingLoans: FC = () => {
                     label="Loại"
                     value={
                       <Badge color={loanPackageTypeColors[pkg.type]}>
-                        {t(`loan_package_${pkg.type}`)}
+                        {tl(`loan_package_${pkg.type}`)}
                       </Badge>
                     }
                   />

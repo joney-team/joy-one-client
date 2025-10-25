@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceRoleEntity } from "@/modules/workspace-roles/workspace-roles-types";
 import { ActionIcon, Badge, Group, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
@@ -89,7 +89,7 @@ export const WorkspaceRolesInput: FC<WorkspaceRolesInputProps> = (props) => {
                                   )
                                 }
                               >
-                                {t(v.name)}
+                                {tl(v.name)}
                               </Badge>
                             );
                           }}

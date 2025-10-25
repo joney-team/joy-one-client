@@ -2,7 +2,7 @@
 
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { EventList } from "@/components/event-list";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -24,7 +24,7 @@ export const DetailFooter: FC<DetailFooterProps> = (props) => {
             <IconTimelineEvent strokeWidth={1.5} size={20} />
           </ThemeIcon>
 
-          <Text fw={500}>{t("activities")}</Text>
+          <Text fw={500}>{tl("activities")}</Text>
         </Group>
 
         <Stack pl={0}>

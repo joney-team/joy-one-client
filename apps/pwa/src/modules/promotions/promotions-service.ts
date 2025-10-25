@@ -1,16 +1,19 @@
 import { DynamicSelectionOperator } from "@/types";
 import { MantineColor } from "@mantine/core";
 import { Icon, IconDiscount, IconFreeRights } from "@tabler/icons-react";
-import { num, renderDateTime, t } from "../lang/lang-service";
+import { num, renderDateTime, tl } from "../lang/lang-service";
 import { PromotionEntity, PromotionStatus, PromotionType } from "./promotions-types";
 
-export const promotionRuleTypeConfigs: Record<PromotionType, {
-  label: string;
-  icon: Icon;
-  color: MantineColor;
-}> = {
+export const promotionRuleTypeConfigs: Record<
+  PromotionType,
+  {
+    label: string;
+    icon: Icon;
+    color: MantineColor;
+  }
+> = {
   [PromotionType.DISCOUNT_RATE]: {
-    label: 'discount_rate',
+    label: "discount_rate",
     icon: IconDiscount,
     color: "indigo",
   },
@@ -21,11 +24,14 @@ export const promotionRuleTypeConfigs: Record<PromotionType, {
   },
 };
 
-export const promotionRuleValueConfig: Record<PromotionType, {
-  label: string;
-  min?: number;
-  max?: number;
-}> = {
+export const promotionRuleValueConfig: Record<
+  PromotionType,
+  {
+    label: string;
+    min?: number;
+    max?: number;
+  }
+> = {
   [PromotionType.DISCOUNT_RATE]: {
     label: "rate",
     min: 0,
@@ -37,10 +43,13 @@ export const promotionRuleValueConfig: Record<PromotionType, {
   },
 };
 
-export const promotionStatusConfigs: Record<PromotionStatus, {
-  label: string;
-  color: MantineColor;
-}> = {
+export const promotionStatusConfigs: Record<
+  PromotionStatus,
+  {
+    label: string;
+    color: MantineColor;
+  }
+> = {
   [PromotionStatus.ACTIVE]: {
     label: "active",
     color: "green",
@@ -57,34 +66,46 @@ export const promotionStatusConfigs: Record<PromotionStatus, {
 
 export const promotionDescription = (promotion: PromotionEntity) => {
   if (promotion.type === PromotionType.DISCOUNT_RATE) {
-    return t('promotion_discount', {
-      value: num(promotion.value) + '%',
+    return tl("promotion_discount", {
+      value: num(promotion.value) + "%",
     });
   }
 
   if (promotion.type === PromotionType.DISCOUNT_AMOUNT) {
-    return t('promotion_discount', {
+    return tl("promotion_discount", {
       value: num(promotion.value, { type: "money" }),
     });
   }
 
-  return '';
-}
+  return "";
+};
 
 export const promotionTermsOfUseCustomerLimit = (promotion: PromotionEntity) => {
   if (!promotion.customersSelection || promotion.customersSelection.value.length === 0) {
-    return t('unlimited_customers');
+    return tl("unlimited_customers");
   }
 
   if (promotion.customersSelection.operator === DynamicSelectionOperator.INCLUDES) {
-    return t('includes_customers') + ': ' + promotion.customersSelection.value.map((c) => c.name).join(', ');
+    return (
+      tl("includes_customers") +
+      ": " +
+      promotion.customersSelection.value.map((c) => c.name).join(", ")
+    );
   }
 
   if (promotion.customersSelection.operator === DynamicSelectionOperator.EXCLUDES) {
-    return t('excludes_customers') + ': ' + promotion.customersSelection.value.map((c) => c.name).join(', ');
+    return (
+      tl("excludes_customers") +
+      ": " +
+      promotion.customersSelection.value.map((c) => c.name).join(", ")
+    );
   }
-}
+};
 
 export const promotionTermsOfUseExpireAt = (promotion: PromotionEntity) => {
-  return `${t('expireAt')}: ${promotion.expireAt && promotion.expireAt > 0 ? renderDateTime(promotion.expireAt) : t('unlimited')}`;
-}
+  return `${tl("expireAt")}: ${
+    promotion.expireAt && promotion.expireAt > 0
+      ? renderDateTime(promotion.expireAt)
+      : tl("unlimited")
+  }`;
+};

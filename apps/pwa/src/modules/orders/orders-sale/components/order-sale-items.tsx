@@ -6,7 +6,7 @@ import { EntityImage } from "@/components/entity-image";
 import { QuantityInput } from "@/components/inputs/quantity-input";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
 import { useColor } from "@/modules/theme/use-color";
@@ -29,8 +29,8 @@ export const OrderSaleItemComponent: FC<{
 
   const onChangeNote = () => {
     OnModalInput({
-      title: `${t(item.note ? "edit" : "add")} ${t("note")}`,
-      label: t("note").toString(),
+      title: `${tl(item.note ? "edit" : "add")} ${tl("note")}`,
+      label: tl("note").toString(),
       value: item.note,
       type: InputModalType.TEXTAREA,
       onDone: (value) => onUpdate({ ...item, note: value }),
@@ -62,7 +62,7 @@ export const OrderSaleItemComponent: FC<{
               )}
 
               <Text fz={12} c={color("blue")}>
-                {item.note || t("note")}
+                {item.note || tl("note")}
               </Text>
             </Group>
 
@@ -72,8 +72,8 @@ export const OrderSaleItemComponent: FC<{
               onChange={(value) => onUpdate({ ...item, assigneeUsers: value })}
               tooltipLabel={
                 item.product.type === ProductType.PRODUCT
-                  ? t("assignee_products_revenue").toString()
-                  : t("assignee_services_revenue").toString()
+                  ? tl("assignee_products_revenue").toString()
+                  : tl("assignee_services_revenue").toString()
               }
             />
           </Group>
@@ -143,7 +143,7 @@ export const OrderSaleItemComponent: FC<{
               )}
 
               <Text fz={12} c={color("blue")}>
-                {item.note || t("note")}
+                {item.note || tl("note")}
               </Text>
             </Group>
           </Stack>
@@ -156,8 +156,8 @@ export const OrderSaleItemComponent: FC<{
             onChange={(value) => onUpdate({ ...item, assigneeUsers: value })}
             tooltipLabel={
               item.product.type === ProductType.PRODUCT
-                ? t("assignee_products_revenue").toString()
-                : t("assignee_services_revenue").toString()
+                ? tl("assignee_products_revenue").toString()
+                : tl("assignee_services_revenue").toString()
             }
           />
 
@@ -252,7 +252,7 @@ export const OrderSaleItems: FC = () => {
               target={(ctx) => {
                 return (
                   <Button leftIcon={IconPlus} variant="outline" color="gray" onClick={ctx.toggle}>
-                    {t("add_entity", { entity: t("products_services") })}
+                    {tl("add_entity", { entity: tl("products_services") })}
                   </Button>
                 );
               }}

@@ -4,7 +4,7 @@ import { List } from "@/components/list";
 import { Group, Stack, Text } from "@mantine/core";
 import { type FC } from "react";
 import { WorkspaceStatsEntity } from "../workspace-stats/workspace-stats.types";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 import { Avatar } from "@/components/avatar";
 import { WorkspaceType } from "../workspaces/workspaces-types";
 import { EnumColumn } from "@/components/list/columns/enum-column";
@@ -33,7 +33,7 @@ export const AdminWorkspaces: FC = () => {
             valuePath: "workspace.type",
             name: "Type",
             options: Object.values(WorkspaceType).map((type) => ({
-              label: t(`ws_${type}`),
+              label: tl(`ws_${type}`),
               value: type,
             })),
           }),

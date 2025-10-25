@@ -2,7 +2,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { ModalTitle } from "@/components/modal-title";
 import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
 import config from "@joy-one-client/config";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ActionIcon, CopyButton, Group, Input, InputWrapper, Stack, Tooltip } from "@mantine/core";
@@ -37,16 +37,16 @@ const ModalCustomerForm: FC = () => {
         }}
         target={(ctx) => {
           return (
-            <InputWrapper onClick={ctx.toggle} label={t("workspace_branch")} w="100%">
+            <InputWrapper onClick={ctx.toggle} label={tl("workspace_branch")} w="100%">
               <Group gap={8}>
                 <Input
                   flex={1}
                   className="AppSelectInput"
-                  value={ctx.value?.name || t("main_workspace_branch")}
+                  value={ctx.value?.name || tl("main_workspace_branch")}
                   readOnly
                 />
                 {workspaceBranch && (
-                  <Tooltip label={t("main_workspace_branch")}>
+                  <Tooltip label={tl("main_workspace_branch")}>
                     <ActionIcon
                       variant="outline"
                       pos="relative"
@@ -71,7 +71,7 @@ const ModalCustomerForm: FC = () => {
 
       <CopyButton value={link}>
         {({ copied, copy }) => (
-          <InputWrapper onClick={copy} label={t("customer_form_link")}>
+          <InputWrapper onClick={copy} label={tl("customer_form_link")}>
             <Input
               className="AppSelectInput"
               value={link}

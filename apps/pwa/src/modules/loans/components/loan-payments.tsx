@@ -5,7 +5,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Renderer } from "@/components/renderer";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate, t, tMulti } from "@/modules/lang/lang-service";
+import { renderDate, tl, tMulti } from "@/modules/lang/lang-service";
 import { healthCheckLoan, revertLiquidationLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
@@ -70,12 +70,12 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
   const onRevertFulfill = async () => {
     if (!loan || !hasPermission(WorkspacePermission.LOANS_FULFILLED_REVERTED)) return;
     openConfirmModal({
-      title: <ModalTitle color="red" title={t("confirm")} icon={IconRefresh} />,
+      title: <ModalTitle color="red" title={tl("confirm")} icon={IconRefresh} />,
       children: "Bạn có chắc chắn muốn hoàn tác thanh toán này?",
       color: "red",
       onConfirm: () =>
         onActionLoad({
-          name: t("event_type_" + EventType.LOANS_FULFILLED_REVERTED),
+          name: tl("event_type_" + EventType.LOANS_FULFILLED_REVERTED),
           process: () => api.post(`/loans/${loan.id}/revert-fulfilled`),
         }),
       labels: { confirm: "Tiếp tục", cancel: "Hủy" },
@@ -86,12 +86,12 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
   const onRevertLiquidation = async () => {
     if (!loan) return;
     openConfirmModal({
-      title: <ModalTitle color="red" title={t("confirm")} icon={IconRefresh} />,
+      title: <ModalTitle color="red" title={tl("confirm")} icon={IconRefresh} />,
       children: "Bạn có chắc chắn muốn hoàn tác thanh toán này?",
       color: "red",
       onConfirm: () =>
         onActionLoad({
-          name: t("event_type_" + EventType.LOANS_REVERT_LIQUIDATION),
+          name: tl("event_type_" + EventType.LOANS_REVERT_LIQUIDATION),
           process: () => revertLiquidationLoan(loan.id),
         }),
       labels: { confirm: "Tiếp tục", cancel: "Hủy" },
@@ -111,7 +111,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
             leftIcon={IconBrandSpeedtest}
             onClick={() => OnModalLoanLiquidation(loan)}
           >
-            {t("liquidation")}
+            {tl("liquidation")}
           </Button>
         </Renderer>
 
@@ -122,13 +122,13 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           }
         >
           <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertFulfill}>
-            {t(`permission_${WorkspacePermission.LOANS_FULFILLED_REVERTED}`)}
+            {tl(`permission_${WorkspacePermission.LOANS_FULFILLED_REVERTED}`)}
           </Button>
         </Renderer>
 
         <Renderer visible={!!liquidationReceipt && loan.status !== LoanStatus.COMPLETED}>
           <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertLiquidation}>
-            {t("revert_liquidation")}
+            {tl("revert_liquidation")}
           </Button>
         </Renderer>
 
@@ -138,7 +138,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           leftIcon={IconCircleDashedCheck}
           onClick={() => healthCheckLoan(loan.id)}
         >
-          {t("check")}
+          {tl("check")}
         </Button>
       </Fragment>
     );
@@ -160,13 +160,13 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th w={100} ta="center">
-                    {t("period")}
+                    {tl("period")}
                   </Table.Th>
-                  <Table.Th w={250}>{t("time")}</Table.Th>
+                  <Table.Th w={250}>{tl("time")}</Table.Th>
                   <Table.Th>Thu lãi</Table.Th>
                   <Table.Th>Thu gốc</Table.Th>
-                  <Table.Th>{t("total")}</Table.Th>
-                  <Table.Th>{t("receipts")}</Table.Th>
+                  <Table.Th>{tl("total")}</Table.Th>
+                  <Table.Th>{tl("receipts")}</Table.Th>
                 </Table.Tr>
               </Table.Thead>
 
@@ -188,10 +188,10 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                       <Table.Td>
                         <Stack gap={8}>
                           <Text>
-                            {t("from")}: {renderDate(paymentPeriod.startTime)}
+                            {tl("from")}: {renderDate(paymentPeriod.startTime)}
                           </Text>
                           <Text>
-                            {t("to")}: {renderDate(paymentPeriod.endTime)}
+                            {tl("to")}: {renderDate(paymentPeriod.endTime)}
                           </Text>
                         </Stack>
                       </Table.Td>
@@ -263,7 +263,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                 {!!liquidationReceipt && (
                   <Table.Tr>
                     <Table.Td colSpan={2}>
-                      <Text ta="center">{t("liquidation")}</Text>
+                      <Text ta="center">{tl("liquidation")}</Text>
                     </Table.Td>
 
                     <Table.Td>
@@ -407,7 +407,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                   OnModalLoanLiquidation(loan);
                 }}
               >
-                {t("liquidation")}
+                {tl("liquidation")}
               </Button>
             </Center>
           </Renderer>

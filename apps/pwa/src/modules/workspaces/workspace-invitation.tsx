@@ -5,7 +5,7 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceInviteInformation } from "@/modules/workspaces/workspaces-service";
@@ -73,16 +73,16 @@ const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
               <IconErrored width={400} />
             </Group>
             <Title ta="center" fz={25}>
-              {t("error_msg")}
+              {tl("error_msg")}
             </Title>
             <Text c="gray" ta="center" fz={16}>
-              {t("error_invite_workspace")}
+              {tl("error_invite_workspace")}
             </Text>
 
-            <Button onClick={() => inviteInformation.fetch()}>{t("retry_now")}</Button>
+            <Button onClick={() => inviteInformation.fetch()}>{tl("retry_now")}</Button>
 
             <Button variant="subtle" size="xs" component={Link} href="/" color="gray">
-              {t("leave")}
+              {tl("leave")}
             </Button>
           </Stack>
         )}
@@ -135,9 +135,9 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
           <Stack align="center">
             <Image src="/images/welcome.png" w={150} />
             <Title ta="center">
-              {t("welcome")} {auth.user?.name}
+              {tl("welcome")} {auth.user?.name}
             </Title>
-            <Text ta="center">{t("invite_workspace_desc")}</Text>
+            <Text ta="center">{tl("invite_workspace_desc")}</Text>
 
             <Card withBorder shadow="none" p={10} my={16}>
               <Group>
@@ -153,13 +153,13 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
                 <Stack gap={3} pr={10}>
                   <Text fw={700}>{invite.name}</Text>
                   <Text fz={12} c="gray">
-                    {t(`ws_${invite.type}`)}
+                    {tl(`ws_${invite.type}`)}
                   </Text>
                 </Stack>
               </Group>
             </Card>
 
-            <Text ta="center">{t("invite_workspace_desc_1")}</Text>
+            <Text ta="center">{tl("invite_workspace_desc_1")}</Text>
 
             <Stack align="center" mt={16}>
               <Button
@@ -171,11 +171,11 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
                 size="lg"
                 tt="uppercase"
               >
-                {t("join_now")}
+                {tl("join_now")}
               </Button>
 
               <Anchor component={Link} href="/" c="gray.5" fz={em(14)}>
-                {t("leave")}
+                {tl("leave")}
               </Anchor>
             </Stack>
           </Stack>

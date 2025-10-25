@@ -1,7 +1,7 @@
 "use client";
 
 import { Renderer } from "@/components/renderer";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { capitalize } from "@/utils/string.utils";
@@ -54,7 +54,7 @@ export const TagsInput: FC<TagsInputProps> = (props) => {
                 </ThemeIcon>
 
                 <Text c="gray" fz={em(13)}>
-                  {capitalize(`${t("add")} ${t("tags")}`)}
+                  {capitalize(`${tl("add")} ${tl("tags")}`)}
                 </Text>
               </Group>
             </Renderer>

@@ -5,7 +5,7 @@ import { Empty } from "@/components/empty";
 import { SessionTitle } from "@/components/session-title";
 import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Period, ResponseList, StorageKey } from "@/types";
 import { DateTime } from "@/utils/date-time.utils";
 import { Group, SimpleGrid, Stack } from "@mantine/core";
@@ -71,7 +71,7 @@ export const DashboardBookings: FC = () => {
                 ? { animation: "symbolLoader 2s linear infinite" }
                 : {}
             }
-            label={query.status === "all" ? t("all") : t("processing")}
+            label={query.status === "all" ? tl("all") : tl("processing")}
             hideOptionLabel
             indicator={bookingData.length}
             onChange={(status) => setQuery((s: any) => ({ ...s, status: status }))}

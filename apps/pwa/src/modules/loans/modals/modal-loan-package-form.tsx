@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { useFormSubmit } from "@/hooks/use-form";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { LoanAssetType, LoanPackage, LoanPackageType } from "@/modules/loans/loans-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -105,7 +105,7 @@ export const ModalLoanPackageForm: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={t("loan_package")} icon={IconCoins} />}
+      title={<ModalTitle title={tl("loan_package")} icon={IconCoins} />}
       onClose={onClose}
       opened={opened}
       size="xl"
@@ -127,7 +127,7 @@ export const ModalLoanPackageForm: FC = () => {
             value={form.values.type}
             data={Object.values(LoanPackageType).map((type) => ({
               value: type,
-              label: t(`loan_package_${type}`),
+              label: tl(`loan_package_${type}`),
             }))}
             {...form.getInputProps("type")}
           />
@@ -162,7 +162,7 @@ export const ModalLoanPackageForm: FC = () => {
           value={form.values.assetTypes}
           data={Object.values(LoanAssetType).map((type) => ({
             value: type,
-            label: t(`loan_asset_type_${type}`),
+            label: tl(`loan_asset_type_${type}`),
           }))}
           {...form.getInputProps("assetTypes")}
         />
@@ -328,7 +328,7 @@ export const ModalLoanPackageForm: FC = () => {
         <Textarea label="Mô tả" {...form.getInputProps("description")} />
 
         <Button onClick={submitting.handle} loading={submitting.isSubmitting} mt={10}>
-          {t(props?.loanPackage ? "update" : "create")}
+          {tl(props?.loanPackage ? "update" : "create")}
         </Button>
       </Stack>
     </Modal>

@@ -4,7 +4,7 @@ import { CommentsIllustration } from "@/components/illustrations/comments";
 import { useRouter } from "@/hooks/use-router";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { MessageBox } from "@/modules/message-boxes/message-box";
 import { ContainerMessageBox } from "@/modules/message-boxes/message-box/message-box-container";
 import { MessageBoxHead } from "@/modules/message-boxes/message-box/message-box-head";
@@ -119,7 +119,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
                   >
                     <CommentsIllustration width={300} />
                     <Text ta="center" c="gray" fz={12}>
-                      {t("message_box_no_conversations")}
+                      {tl("message_box_no_conversations")}
                     </Text>
                   </Stack>
                 )}

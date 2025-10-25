@@ -1,6 +1,6 @@
 import { Image } from "@/components/image";
 import { ModalTitle } from "@/components/modal-title";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { connectPluginZalo } from "@/modules/plugins/zalo-oas/zalo-oas-service";
 import { Card, Group, Stack, Text } from "@mantine/core";
@@ -29,7 +29,7 @@ const ModalConnectPlugins: FC = () => {
       >
         <Group>
           <Image w={40} src="/images/plugins-meta-pages.svg" />
-          <Text>{t("meta_pages")}</Text>
+          <Text>{tl("meta_pages")}</Text>
         </Group>
       </Card>
 
@@ -44,7 +44,7 @@ const ModalConnectPlugins: FC = () => {
       >
         <Group>
           <Image w={40} src="/images/plugins-zalo-oa.svg" />
-          <Text>{t("zalo_oas")}</Text>
+          <Text>{tl("zalo_oas")}</Text>
         </Group>
       </Card>
 
@@ -60,7 +60,7 @@ const ModalConnectPlugins: FC = () => {
       >
         <Group>
           <Image w={40} src="/images/plugins-message-hubs.svg" />
-          <Text>{t("message-hubs")}</Text>
+          <Text>{tl("message-hubs")}</Text>
         </Group>
       </Card>
     </Stack>
@@ -70,6 +70,6 @@ const ModalConnectPlugins: FC = () => {
 export const OnModalConnectPlugins = () =>
   modals.open({
     modalId: "ModalConnectPlugins",
-    title: <ModalTitle title={t("connect_more_platforms")} icon={IconPuzzle} />,
+    title: <ModalTitle title={tl("connect_more_platforms")} icon={IconPuzzle} />,
     children: <ModalConnectPlugins />,
   });

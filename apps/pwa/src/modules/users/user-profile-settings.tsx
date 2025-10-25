@@ -13,7 +13,7 @@ import { getSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { localeNames, t } from "@/modules/lang/lang-service";
+import { localeNames, tl } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
 import {
   Card,
@@ -46,7 +46,7 @@ export const UserProfileSettings: FC = () => {
 
   useEffect(() => {
     layout.setComponents({
-      head: t("profile_settings"),
+      head: tl("profile_settings"),
     });
   }, []);
 
@@ -98,19 +98,19 @@ export const UserProfileSettings: FC = () => {
                       <ThemeIcon variant="transparent" color="dark" size="md">
                         <IconUpload strokeWidth={1.2} size={16} />
                       </ThemeIcon>
-                      <Text fz={10}>{t("click-to-change-avatar")}</Text>
+                      <Text fz={10}>{tl("click-to-change-avatar")}</Text>
                     </Group>
                   </Group>
                 </Dropzone>
 
                 <TextInput
                   leftSection={<IconUser size={16} />}
-                  label={t("name")}
+                  label={tl("name")}
                   {...form.getInputProps("name")}
                 />
                 <TextInput
                   leftSection={<IconPhone size={16} />}
-                  label={t("phone")}
+                  label={tl("phone")}
                   {...form.getInputProps("phone")}
                   placeholder="090 0000 000"
                 />
@@ -121,7 +121,7 @@ export const UserProfileSettings: FC = () => {
                   disabled={!!auth.user?.email}
                 />
                 <DateInput
-                  label={t("birthday")}
+                  label={tl("birthday")}
                   leftSection={<IconCalendar size={16} />}
                   value={auth.user!.birthday}
                   onChange={(date) => form.setFieldValue("birthday", date)}
@@ -134,8 +134,8 @@ export const UserProfileSettings: FC = () => {
             <FormSession title="lang_region" description="lang_region_desc">
               <Stack>
                 <Select
-                  label={t("language")}
-                  description={t("change_locale_desc")}
+                  label={tl("language")}
+                  description={tl("change_locale_desc")}
                   leftSection={
                     <Image src={`/lang/${form.values.settings.locale}.png`} w={16} h={16} />
                   }
@@ -147,7 +147,10 @@ export const UserProfileSettings: FC = () => {
                   onChange={(l) => lang.setLocale(l as Locale)}
                 />
 
-                <TimeZoneInput label={t("timezone")} {...form.getInputProps("settings.timezone")} />
+                <TimeZoneInput
+                  label={tl("timezone")}
+                  {...form.getInputProps("settings.timezone")}
+                />
               </Stack>
             </FormSession>
 
@@ -155,39 +158,39 @@ export const UserProfileSettings: FC = () => {
 
             <FormSession title="time_settings" description="time_settings_desc">
               <Stack gap={30}>
-                <InputWrapper label={t("start_of_week")}>
+                <InputWrapper label={tl("start_of_week")}>
                   <Stack gap={10} mt={10}>
                     <Checkbox
-                      label={t("sunday")}
+                      label={tl("sunday")}
                       checked={!!form.values.settings.isStartOfWeekSunday}
                       onChange={() => form.setFieldValue("settings.isStartOfWeekSunday", true)}
                     />
 
                     <Checkbox
-                      label={t("monday")}
+                      label={tl("monday")}
                       checked={!!!form.values.settings.isStartOfWeekSunday}
                       onChange={() => form.setFieldValue("settings.isStartOfWeekSunday", false)}
                     />
                   </Stack>
                 </InputWrapper>
 
-                <InputWrapper label={t("time_format")}>
+                <InputWrapper label={tl("time_format")}>
                   <Stack gap={10} mt={10}>
                     <Checkbox
-                      label={t("12_hour")}
+                      label={tl("12_hour")}
                       checked={!!form.values.settings.isTwelveHour}
                       onChange={() => form.setFieldValue("settings.isTwelveHour", true)}
                     />
 
                     <Checkbox
-                      label={t("24_hour")}
+                      label={tl("24_hour")}
                       checked={!!!form.values.settings.isTwelveHour}
                       onChange={() => form.setFieldValue("settings.isTwelveHour", false)}
                     />
                   </Stack>
                 </InputWrapper>
 
-                <InputWrapper label={t("date_format")}>
+                <InputWrapper label={tl("date_format")}>
                   <Stack gap={10} mt={10}>
                     {configs.dateFormats.map((f) => {
                       return (
@@ -201,7 +204,7 @@ export const UserProfileSettings: FC = () => {
                     })}
 
                     <Checkbox
-                      label={t("auto")}
+                      label={tl("auto")}
                       checked={
                         form.values.settings.dateFormat === "auto" ||
                         !form.values.settings.dateFormat

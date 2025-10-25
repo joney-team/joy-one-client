@@ -1,5 +1,5 @@
 import { Button } from "@/components/buttons/button";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { AppEntity } from "@/types";
@@ -18,8 +18,8 @@ export const WorkspaceBranchesSelector: FC<WorkspaceBranchesSelectorProps> = (pr
       {...props}
       onSearch={(q) => searchEntity(AppEntity.WORKSPACE_BRANCHES, q)}
       listRoute="/workspace-branches"
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(item) => {
         return (
@@ -48,7 +48,7 @@ export const WorkspaceBranchesSelector: FC<WorkspaceBranchesSelectorProps> = (pr
             fw={500}
             onClick={toggle}
           >
-            {t("select")}
+            {tl("select")}
           </Button>
         );
       }}

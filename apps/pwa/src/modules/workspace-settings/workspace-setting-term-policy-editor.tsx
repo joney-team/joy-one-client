@@ -1,4 +1,4 @@
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ActionIcon, Box, Card, Group, Stack, Title } from "@mantine/core";
 import { FC, useEffect, useState } from "react";
@@ -45,7 +45,7 @@ export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPolici
             </Group>
 
             <Title flex={1} ta="center" size={25} fw={500}>
-              {t(props.doc)}
+              {tl(props.doc)}
             </Title>
             <Group flex={1} />
           </Group>
@@ -53,7 +53,7 @@ export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPolici
           <Editor
             value={value}
             onChangeHTML={setValue}
-            placeholder={t("type-content-placeholder")}
+            placeholder={tl("type-content-placeholder")}
             delay={300}
           />
         </Stack>

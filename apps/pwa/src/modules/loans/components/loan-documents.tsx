@@ -8,7 +8,7 @@ import { SessionTitle } from "@/components/session-title";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { FileType } from "@/modules/files/file-types";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import {
   approveLoan,
   rejectLoan,
@@ -61,14 +61,14 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
   const onUpdateAmount = useDebouncedCallback(async (value: any) => {
     onActionLoad({
-      name: t("update_loan_amount"),
+      name: tl("update_loan_amount"),
       process: () => updateLoanAmount(loan.id, { amount: +value }).catch(onError),
     });
   }, 300);
 
   const onUpdatePackagePeriodDays = useDebouncedCallback(async (v: any) => {
     onActionLoad({
-      name: t("update_loan_payment_period"),
+      name: tl("update_loan_payment_period"),
       process: () =>
         updateLoanPackage(loan.id, { packagePeriodDays: +v, packageId: loan.package.id }).catch(
           onError
@@ -78,18 +78,18 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
   const onReject = async () => {
     OnModalPrompt({
-      title: String.capitalizeFirstLetter(`${t("reject")} ${t("loan")}`),
-      message: t("enter_reject_reason"),
+      title: String.capitalizeFirstLetter(`${tl("reject")} ${tl("loan")}`),
+      message: tl("enter_reject_reason"),
       onSubmit: (reason) => rejectLoan(loan.id, { reason }),
       icon: IconClipboard,
       color: "red",
-      suggestions: [t("wrong_information"), t("info_does_not_match_img"), t("img_is_blurry")],
+      suggestions: [tl("wrong_information"), tl("info_does_not_match_img"), tl("img_is_blurry")],
     });
   };
 
   const onApprove = async () => {
     await onActionLoad({
-      name: t("approve"),
+      name: tl("approve"),
       icon: IconClipboardCheck,
       process: async () => {
         await approveLoan(loan.id);
@@ -99,21 +99,21 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
   return (
     <Stack gap={30}>
-      <SessionTitle mb={-20} name={t("loan")} icon={IconNotes} />
+      <SessionTitle mb={-20} name={tl("loan")} icon={IconNotes} />
 
       <Card className="LoanDetailDoc" shadow="xs">
         <Stack>
-          <LoanRowInfo label={t("loan_package")} value={loan.package.id} />
+          <LoanRowInfo label={tl("loan_package")} value={loan.package.id} />
 
           <LoanRowInfo
-            label={t("loan_asset_type")}
-            value={t(`loan_asset_type_${loan.assetType}`)}
+            label={tl("loan_asset_type")}
+            value={tl(`loan_asset_type_${loan.assetType}`)}
           />
 
-          <LoanRowInfo label={t("loan_period")} value={renderLoanPeriod(loan.package.days)} />
+          <LoanRowInfo label={tl("loan_period")} value={renderLoanPeriod(loan.package.days)} />
 
           <LoanRowInfo
-            label={t("loan_amount")}
+            label={tl("loan_amount")}
             value={
               ableToUpdate ? (
                 <NumberInput
@@ -128,7 +128,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
           />
 
           <LoanRowInfo
-            label={t("loan_payment_periods")}
+            label={tl("loan_payment_periods")}
             value={
               ableToUpdate ? (
                 <Select
@@ -145,15 +145,15 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
             }
           />
 
-          <LoanRowInfo label={t("signature")} value={<SignareCard url={loan.signature} />} />
+          <LoanRowInfo label={tl("signature")} value={<SignareCard url={loan.signature} />} />
 
           <LoanRowInfo
-            label={t("loan_coord")}
-            description={t("loan_coord_desc")}
+            label={tl("loan_coord")}
+            description={tl("loan_coord_desc")}
             value={
               loan.coord ? (
                 <Anchor href={getGoogleMapLinkCoord(loan.coord)} target="_blank">
-                  {t("view_on_google_map")}
+                  {tl("view_on_google_map")}
                 </Anchor>
               ) : (
                 "--"
@@ -163,15 +163,15 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
           {loan.status === LoanStatus.REJECTED && (
             <Stack align="center" gap={5} mt={16}>
-              <Badge color="red">{t("rejected")}</Badge>
+              <Badge color="red">{tl("rejected")}</Badge>
 
-              {loan.rejectReason && <Text c="red">{t(loan.rejectReason)}</Text>}
+              {loan.rejectReason && <Text c="red">{tl(loan.rejectReason)}</Text>}
             </Stack>
           )}
         </Stack>
       </Card>
 
-      <SessionTitle mb={-20} name={t("loan_asset_data")} icon={IconClipboardText} />
+      <SessionTitle mb={-20} name={tl("loan_asset_data")} icon={IconClipboardText} />
       <Card shadow="xs">
         <LoanAssetDataInput
           loanId={loan.id}
@@ -190,11 +190,11 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
       >
         <Group justify="center">
           <Button onClick={onApprove} leftIcon={IconCheck}>
-            {t("approve")}
+            {tl("approve")}
           </Button>
 
           <Button variant="outline" color="gray" onClick={onReject}>
-            {t("reject")}
+            {tl("reject")}
           </Button>
         </Group>
       </Renderer>
@@ -234,7 +234,7 @@ export const SignareCard: FC<{ url: string }> = (props) => {
               }}
               onClick={() => {
                 OnModalFileGallery({
-                  files: [{ url, fileName: t("signature"), type: FileType.PHOTO }],
+                  files: [{ url, fileName: tl("signature"), type: FileType.PHOTO }],
                   disabled: true,
                   background: "white",
                 });

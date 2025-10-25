@@ -1,7 +1,7 @@
 import { Renderer } from "@/components/renderer";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle, syncTasks } from "@/modules/tasks/tasks-service";
@@ -122,7 +122,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
               })
             }
           >
-            {t("create")} {t("task")}
+            {tl("create")} {tl("task")}
           </Button>
         )}
       </Group>

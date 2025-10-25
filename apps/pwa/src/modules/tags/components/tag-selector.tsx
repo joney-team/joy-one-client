@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { Selector, SelectorProps } from "@/components/selector";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { interactTag } from "@/modules/tags/tags-service";
@@ -32,8 +32,8 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
       listParams={{ type: props.type }}
       autoCloseOnChange={false}
       onSearch={(q) => searchEntity<TagEntity>(AppEntity.TAGS, q, { type: props.type })}
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(tag) => {
         return (
@@ -60,7 +60,7 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
             fw={500}
             onClick={toggle}
           >
-            {t("select")}
+            {tl("select")}
           </Button>
         );
       }}

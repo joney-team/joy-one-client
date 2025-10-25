@@ -4,7 +4,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins";
 import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
-import { renderDateTime, renderFromNow, t } from "@/modules/lang/lang-service";
+import { renderDateTime, renderFromNow, tl } from "@/modules/lang/lang-service";
 import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -70,7 +70,7 @@ const RootNode = () => {
               </Text>
             </Tooltip>
             <Text fz={12} c="gray.6" truncate="end">
-              {t("workspace")}
+              {tl("workspace")}
             </Text>
           </Stack>
         </Group>
@@ -118,7 +118,7 @@ const AiIntegrationNode = () => {
                     </Text>
                   </Tooltip>
                   <Text fz={10} c="gray.6" truncate="end">
-                    {t("ai_assistant")}
+                    {tl("ai_assistant")}
                   </Text>
                 </Fragment>
               ) : (
@@ -126,7 +126,7 @@ const AiIntegrationNode = () => {
                   <ActionIcon variant="transparent" color="dark">
                     <IconPlus size={16} />
                   </ActionIcon>
-                  <Text fz={14} fw={500} truncate="end">{`${t("connect")} ${t(
+                  <Text fz={14} fw={500} truncate="end">{`${tl("connect")} ${tl(
                     "ai-assistants"
                   )}`}</Text>
                 </Group>
@@ -208,14 +208,14 @@ const PluginNode = (props: any) => {
           <Stack gap={0}>
             <Tooltip label={name} disabled={!name || name.length < 15}>
               <Text fz={16} fw={500} truncate="end" maw={150}>
-                {name || t("plugin")}
+                {name || tl("plugin")}
               </Text>
             </Tooltip>
 
             {!!plugin.lastInteractionAt && (
               <Tooltip
                 label={capitalize(
-                  `${t("last_interaction_at")}: ${renderDateTime(plugin.lastInteractionAt)}`
+                  `${tl("last_interaction_at")}: ${renderDateTime(plugin.lastInteractionAt)}`
                 )}
               >
                 <Text fz={10} fw={500} c="gray" truncate="end">
@@ -259,7 +259,7 @@ const PlusPluginNode = (props: any) => {
             <IconPlus size={20} strokeWidth={1.5} />
           </ActionIcon>
           <Text fz={14} fw={500} truncate="end">
-            {isHasPlugin ? t("connect_more") : t("connect_platform")}
+            {isHasPlugin ? tl("connect_more") : tl("connect_platform")}
           </Text>
         </Group>
       </Card>

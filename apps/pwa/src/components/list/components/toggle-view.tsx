@@ -3,7 +3,7 @@ import { IconLayoutGrid, IconTable } from "@tabler/icons-react";
 import { FC } from "react";
 import { ListContext } from "../types";
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 
 export const ToggleView: FC<ListContext> = (props) => {
   const color = useColor();
@@ -13,7 +13,7 @@ export const ToggleView: FC<ListContext> = (props) => {
   return (
     <Card p={0} shadow="none" withBorder>
       <Group gap={0}>
-        <Tooltip label={t("table")}>
+        <Tooltip label={tl("table")}>
           <ActionIcon
             variant={props.viewState.view === "table" ? "filled" : "subtle"}
             color={props.viewState.view === "table" ? color("primary") : color("dimmed")}
@@ -29,7 +29,7 @@ export const ToggleView: FC<ListContext> = (props) => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t("grid")}>
+        <Tooltip label={tl("grid")}>
           <ActionIcon
             variant={props.viewState.view === "grid" ? "filled" : "subtle"}
             color={props.viewState.view === "grid" ? color("primary") : color("dimmed")}

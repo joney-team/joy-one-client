@@ -5,7 +5,7 @@ import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
 import { ModalTitle } from "@/components/modal-title";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { archiveReceipt, getReceipt, updateReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptStatus, UpdateReceiptDto } from "@/modules/receipts/receipts-types";
@@ -68,18 +68,18 @@ export const ReceiptDetail: FC<{
     if (!receipt) return;
 
     openConfirmModal({
-      title: <ModalTitle color="red" title={t("confirmation")} icon={IconRefresh} />,
-      children: t("event_type_" + EventType.RECEIPT_REVERT_PAYMENT),
+      title: <ModalTitle color="red" title={tl("confirmation")} icon={IconRefresh} />,
+      children: tl("event_type_" + EventType.RECEIPT_REVERT_PAYMENT),
       color: "red",
       onConfirm: () =>
         onActionLoad({
-          name: t("event_type_" + EventType.RECEIPT_REVERT_PAYMENT),
+          name: tl("event_type_" + EventType.RECEIPT_REVERT_PAYMENT),
           process: async () => {
             await api.post(`/receipts/${receipt.id}/revert-payment`);
             await detail.fetch();
           },
         }),
-      labels: { confirm: t("confirm"), cancel: t("cancel") },
+      labels: { confirm: tl("confirm"), cancel: tl("cancel") },
       confirmProps: { color: "red" },
     });
   };
@@ -99,7 +99,7 @@ export const ReceiptDetail: FC<{
         {receipt.isArchived && (
           <Center>
             <Badge size="lg" color="red">
-              {t("archived_entity", { entity: t("receipt") })}
+              {tl("archived_entity", { entity: tl("receipt") })}
             </Badge>
           </Center>
         )}
@@ -128,7 +128,7 @@ export const ReceiptDetail: FC<{
               leftIcon={IconReload}
               size="compact-sm"
             >
-              {t("revert_payment")}
+              {tl("revert_payment")}
             </Button>
           )}
 
@@ -148,7 +148,7 @@ export const ReceiptDetail: FC<{
             leftIcon={IconArchive}
             size="compact-sm"
           >
-            {t("archive")}
+            {tl("archive")}
           </Button>
         )}
       </Group>

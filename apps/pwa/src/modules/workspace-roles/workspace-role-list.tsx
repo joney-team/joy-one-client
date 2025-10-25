@@ -3,7 +3,7 @@ import { Container } from "@/components/container";
 import { Button } from "@/components/buttons/button";
 import { WorkspaceRoleCard } from "@/modules/workspace-roles/components/workspace-role-card";
 import { OnModalRoleForm } from "@/modules/workspace-roles/modals/modal-workspace-role-form";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Group, Stack } from "@mantine/core";
@@ -23,7 +23,7 @@ export const WorkspaceRoleList: FC = () => {
             size="xs"
             radius={100}
           >
-            {t("create_new")}
+            {tl("create_new")}
           </Button>
         </Group>
 

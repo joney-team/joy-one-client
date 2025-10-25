@@ -1,7 +1,7 @@
 "use client";
 
 import { useLang } from "@/modules/lang/lang-context";
-import { getDateFormat, t } from "@/modules/lang/lang-service";
+import { getDateFormat, tl } from "@/modules/lang/lang-service";
 import { TaskTimeTracking } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -170,13 +170,13 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
         opened={opened}
         onClose={close}
         size={500}
-        title={<ModalTitle title={t("time_trackings")} icon={IconStopwatch} />}
+        title={<ModalTitle title={tl("time_trackings")} icon={IconStopwatch} />}
       >
         <Stack gap={30}>
           <Stack gap={8}>
             <Group justify="space-between">
               <Text fz={14} fw={500}>
-                {t("total_time")}
+                {tl("total_time")}
               </Text>
               <Text fz={14} fw={700}>
                 {DateTime.toHHMM(totalTime)}
@@ -199,7 +199,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
             <Stack gap={8}>
               <Group justify="space-between">
                 <Text fz={14} fw={500}>
-                  {t("all_time_trackings")}
+                  {tl("all_time_trackings")}
                 </Text>
               </Group>
 
@@ -396,7 +396,7 @@ export const TimeTrackingForm: FC<{
             <TextInput
               flex={1}
               ref={timeTrackingRef}
-              placeholder={t("time_tracking_input_placeholder")}
+              placeholder={tl("time_tracking_input_placeholder")}
               styles={{
                 input: { border: "none" },
               }}
@@ -429,7 +429,7 @@ export const TimeTrackingForm: FC<{
       <Card.Section withBorder p="sm">
         <Stack gap={5} mt={-8}>
           <Renderer visible={!!!props.timeTracking}>
-            <InputWrapper label={t("time")}>
+            <InputWrapper label={tl("time")}>
               <Group gap={10} wrap="nowrap">
                 <DateInput
                   clearable={false}
@@ -510,7 +510,7 @@ export const TimeTrackingForm: FC<{
           </Renderer>
 
           <TextInput
-            label={t("note")}
+            label={tl("note")}
             {...form.getInputProps("note")}
             value={form.values.note || ""}
           />
@@ -520,7 +520,7 @@ export const TimeTrackingForm: FC<{
       <Card.Section p="sm" bg="gray.0">
         <Group justify="space-between">
           <Switch
-            label={t("mark_as_billable")}
+            label={tl("mark_as_billable")}
             checked={form.values.billable}
             onChange={(e) => form.setFieldValue("billable", e.target.checked)}
             onLabel={<IconCurrencyDollar size={16} strokeWidth={2} />}
@@ -530,7 +530,7 @@ export const TimeTrackingForm: FC<{
 
           <Renderer visible={!!!props.timeTracking}>
             <Button onClick={onSubmit} leftIcon={IconPlus}>
-              {t("add")}
+              {tl("add")}
             </Button>
           </Renderer>
         </Group>

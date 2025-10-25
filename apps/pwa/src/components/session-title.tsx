@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Group, Text, ThemeIcon } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import { FC, PropsWithChildren } from "react";
@@ -31,7 +31,7 @@ export const SessionTitle: FC<PropsWithChildren<SessionTitleProps>> = (props) =>
           </ThemeIcon>
         )}
 
-        <Text fw={500}>{t(props.name)}</Text>
+        <Text fw={500}>{tl(props.name)}</Text>
       </Group>
 
       {props.children}

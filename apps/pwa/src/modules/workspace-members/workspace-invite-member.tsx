@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { MembersIllustration } from "@/components/illustrations/members";
 import { Image } from "@/components/image";
 import { ModalTitle } from "@/components/modal-title";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { regenerateWorkspaceInviteCode } from "@/modules/workspaces/workspaces-service";
@@ -37,7 +37,7 @@ export const WorkspaceInviteMember: FC = () => {
         </Center>
 
         <Text ta="center" fz={em(15)}>
-          {t("member_limit")}
+          {tl("member_limit")}
         </Text>
 
         {workspace.hasPermission(WorkspacePermission.WORKSPACE_BILLINGS_MANAGER) && (
@@ -49,7 +49,7 @@ export const WorkspaceInviteMember: FC = () => {
               OnModalWorkspaceSubscription();
             }}
           >
-            {t("upgrade_now")}!
+            {tl("upgrade_now")}!
           </Button>
         )}
       </Stack>
@@ -68,7 +68,7 @@ const CreateMemberInvitationLink: FC = () => {
       <MembersIllustration width={250} />
 
       <Text fz={em(12)} fw={500} c="dark">
-        {t("invite_member_link_desc")}
+        {tl("invite_member_link_desc")}
       </Text>
 
       <Card p={10} withBorder shadow="none">
@@ -85,7 +85,7 @@ const CreateMemberInvitationLink: FC = () => {
             )}
           </CopyButton>
 
-          <Tooltip label={t("regenerate_link")}>
+          <Tooltip label={tl("regenerate_link")}>
             <ActionIcon
               onClick={() => regenerateWorkspaceInviteCode()}
               variant="subtle"
@@ -103,7 +103,7 @@ const CreateMemberInvitationLink: FC = () => {
 export const OnModalWorkspaceInviteMember = () => {
   return modals.open({
     modalId: "ModalWorkspaceInviteMember",
-    title: <ModalTitle title={t("invite_members")} icon={IconUsersPlus} />,
+    title: <ModalTitle title={tl("invite_members")} icon={IconUsersPlus} />,
     children: <WorkspaceInviteMember />,
     size: "lg",
   });

@@ -1,6 +1,6 @@
 "use client";
 
-import { t, tMulti } from "@/modules/lang/lang-service";
+import { tl, tMulti } from "@/modules/lang/lang-service";
 import { createTask } from "@/modules/tasks/tasks-service";
 import { onActionLoad } from "@/utils/actions";
 import { ActionIcon, Group, Popover, TextInput } from "@mantine/core";
@@ -23,7 +23,7 @@ export const QuickCreateTaskInput: FC<PropsWithChildren<QuickCreateTaskInputProp
     </ActionIcon>
   );
 
-  const label = props.parentId ? t("create_sub_task") : tMulti(["create"], ["task"]);
+  const label = props.parentId ? tl("create_sub_task") : tMulti(["create"], ["task"]);
 
   return (
     <Popover shadow="md" opened={opened} onChange={setOpened}>
@@ -32,7 +32,7 @@ export const QuickCreateTaskInput: FC<PropsWithChildren<QuickCreateTaskInputProp
       <Popover.Dropdown p={10}>
         <TextInput
           label={label}
-          placeholder={t("enter_task_name")}
+          placeholder={tl("enter_task_name")}
           autoFocus
           onKeyUp={(e) => {
             if (e.key === "Enter") {

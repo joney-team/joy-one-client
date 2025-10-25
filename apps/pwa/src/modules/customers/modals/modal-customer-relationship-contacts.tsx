@@ -4,7 +4,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { updateCustomer } from "../customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Center, Stack } from "@mantine/core";
@@ -45,7 +45,7 @@ export const ModalCustomerRelationshipContacts: FC<ModalCustomerRelationshipCont
       <Renderer visible={isEditable}>
         <Center>
           <Button onClick={onSave} leftIcon={IconCheck} type="submit">
-            {t("save")}
+            {tl("save")}
           </Button>
         </Center>
       </Renderer>
@@ -58,7 +58,7 @@ export const OnModalCustomerRelationshipContacts = (
 ) => {
   return modals.open({
     modalId: "ModalCustomerRelationshipContacts",
-    title: <ModalTitle title={t("customer_relationship_contacts")} icon={IconAddressBook} />,
+    title: <ModalTitle title={tl("customer_relationship_contacts")} icon={IconAddressBook} />,
     children: <ModalCustomerRelationshipContacts {...props} />,
     size: 800,
   });

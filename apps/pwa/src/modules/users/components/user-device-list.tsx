@@ -8,7 +8,7 @@ import { SessionTitle } from "@/components/session-title";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getUserDevices } from "@/modules/devices/devices-service";
 import { useUserEventsListner } from "@/modules/events/event-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { onError } from "@/utils/exceptions.utils";
 import { useList } from "@/components/list/use-list";
 import { ActionIcon, Group, SimpleGrid, Skeleton } from "@mantine/core";
@@ -41,7 +41,7 @@ export const UserDeviceList = () => {
 
   return (
     <Fragment>
-      <SessionTitle name={t("devices")} icon={IconDevices}>
+      <SessionTitle name={tl("devices")} icon={IconDevices}>
         <Renderer visible={devices.count > 1}>
           <Group gap={8}>
             <Button
@@ -53,7 +53,7 @@ export const UserDeviceList = () => {
               leftIcon={IconLogout}
               onClick={onSignOutOtherDevices}
             >
-              {t("sign_out_another_device")}
+              {tl("sign_out_another_device")}
             </Button>
 
             <ActionIcon

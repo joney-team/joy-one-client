@@ -4,7 +4,7 @@ import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle, syncTasks } from "@/modules/tasks/tasks-service";
@@ -135,7 +135,7 @@ export const BoardTaskGroupByStatuses: FC<BoardTaskGroupByStatusesProps> = (prop
 
           <Group justify="end" gap={0}>
             <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
-              <Tooltip label={capitalize(`${t("update")} ${t("task_status")}`)}>
+              <Tooltip label={capitalize(`${tl("update")} ${tl("task_status")}`)}>
                 <ActionIcon
                   variant="subtle"
                   size="sm"
@@ -218,7 +218,7 @@ export const BoardTaskGroupByStatuses: FC<BoardTaskGroupByStatusesProps> = (prop
                     iconSpacing={-6}
                     onClick={() => OnModalCreateTask({ status: status.id })}
                   >
-                    {t("create")} {t("task")}
+                    {tl("create")} {tl("task")}
                   </Button>
                 </Group>
               </Renderer>

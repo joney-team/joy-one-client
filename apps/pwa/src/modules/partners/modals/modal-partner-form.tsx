@@ -4,7 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { onUploadFile } from "@/modules/files/file-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { createPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { onError } from "@/utils/exceptions.utils";
@@ -37,7 +37,7 @@ export const ModalParnterForm: FC = () => {
     } as any,
     validate: {
       name: (value: string) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
     },
   });
@@ -79,7 +79,7 @@ export const ModalParnterForm: FC = () => {
       title={
         <ModalTitle
           title={
-            props?.partner ? `${t("update")} ${t("partner")}` : `${t("create")} ${t("partner")}`
+            props?.partner ? `${tl("update")} ${tl("partner")}` : `${tl("create")} ${tl("partner")}`
           }
           icon={IconTopologyStar3}
         />
@@ -112,14 +112,14 @@ export const ModalParnterForm: FC = () => {
                 <ThemeIcon variant="transparent" color="dark" size="md">
                   <IconUpload size={18} strokeWidth={1.2} />
                 </ThemeIcon>
-                <Text fz={em(10)}>{t("click_to_change")}</Text>
+                <Text fz={em(10)}>{tl("click_to_change")}</Text>
               </Group>
             </Group>
           </Dropzone>
         </Group>
 
-        <TextInput withAsterisk label={t("name")} {...form.getInputProps("name")} />
-        <TextInput label={t("phone")} {...form.getInputProps("phone")} />
+        <TextInput withAsterisk label={tl("name")} {...form.getInputProps("name")} />
+        <TextInput label={tl("phone")} {...form.getInputProps("phone")} />
         <TextInput label="Email" {...form.getInputProps("email")} />
 
         <Button
@@ -130,7 +130,7 @@ export const ModalParnterForm: FC = () => {
           disabled={!form.isDirty() && !avatar}
           type="submit"
         >
-          {t("complete")}
+          {tl("complete")}
         </Button>
       </Stack>
     </Modal>

@@ -3,7 +3,7 @@
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { ModalTitle } from "@/components/modal-title";
 import { onReconnected } from "@/modules/events/event-service";
-import { renderDate, num, t } from "@/modules/lang/lang-service";
+import { renderDate, num, tl } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import {
   getLoanPaymentPlan,
@@ -130,7 +130,7 @@ export const ModalLoanCalculator: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={t("loan-calculator")} icon={IconCalculator} />}
+      title={<ModalTitle title={tl("loan-calculator")} icon={IconCalculator} />}
       onClose={onClose}
       opened={opened}
       size={1000}
@@ -148,7 +148,7 @@ export const ModalLoanCalculator: FC = () => {
 
           <DateTimePicker
             flex={1}
-            label={t("fulfilledAt")}
+            label={tl("fulfilledAt")}
             value={startTime ? new Date(startTime * 1000) : null}
             onChange={(d) => setStartTime(DateTime.timeToSeconds(d))}
           />
@@ -159,7 +159,7 @@ export const ModalLoanCalculator: FC = () => {
             label="Loại tài sản"
             data={assetTypeOptions.map((type) => ({
               value: type,
-              label: t(`loan_asset_type_${type}`),
+              label: tl(`loan_asset_type_${type}`),
             }))}
             value={assetType}
             onChange={(e) => {
@@ -274,7 +274,7 @@ export const ModalLoanCalculator: FC = () => {
                   value={loanPackage.assetTypes
                     .map((v) =>
                       String.capitalizeFirstLetter(
-                        `${t(`loan_asset_type_${v}`)}`.replace("Đăng ký", "").trim()
+                        `${tl(`loan_asset_type_${v}`)}`.replace("Đăng ký", "").trim()
                       )
                     )
                     .join(", ")}
@@ -284,7 +284,7 @@ export const ModalLoanCalculator: FC = () => {
                   label="Loại"
                   value={
                     <Badge color={loanPackageTypeColors[loanPackage.type]}>
-                      {t(`loan_package_${loanPackage.type}`)}
+                      {tl(`loan_package_${loanPackage.type}`)}
                     </Badge>
                   }
                 />

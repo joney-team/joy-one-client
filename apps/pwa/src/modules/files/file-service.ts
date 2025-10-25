@@ -18,7 +18,7 @@ import {
 } from "@tabler/icons-react";
 import imageCompression, { Options } from "browser-image-compression";
 import { apiTools } from "../apis";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 import { FileEntity, FileType, UploadFile } from "./file-types";
 import { parseFile } from "./files-utils";
 
@@ -111,7 +111,7 @@ export async function onUploadFiles(
   onUploaded?: (files: FileEntity[]) => Promise<void> | void
 ) {
   return onActionLoad<FileEntity[]>({
-    name: t("upload_files"),
+    name: tl("upload_files"),
     icon: IconUpload,
     process: async () => {
       let _files: FileEntity[] = [];
@@ -132,7 +132,7 @@ export async function onUploadFile(
   onUploaded?: (file: FileEntity) => Promise<void> | void
 ) {
   return onActionLoad<FileEntity>({
-    name: t("upload_files"),
+    name: tl("upload_files"),
     icon: IconUpload,
     process: async () => {
       const res = await uploadFile(file);

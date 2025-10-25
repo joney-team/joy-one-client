@@ -4,7 +4,7 @@ import { Renderer } from "@/components/renderer";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { WorkspaceNavigationTaskFolders } from "@/layout/navigation/navigation-task-folders";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagType } from "@/modules/tags/tags-types";
@@ -225,7 +225,7 @@ export const WorkspaceNavigationMenu: FC<{
                         onClick={() => OnModalCreateTask()}
                       >
                         <Text tt="capitalize" fz={em(14)}>
-                          {t("create")} {t("task")}
+                          {tl("create")} {tl("task")}
                         </Text>
                       </Menu.Item>
 
@@ -239,7 +239,7 @@ export const WorkspaceNavigationMenu: FC<{
                         }
                       >
                         <Text tt="capitalize" fz={em(14)}>
-                          {t("create")} {t("folder")}
+                          {tl("create")} {tl("folder")}
                         </Text>
                       </Menu.Item>
                     </MenuDropdown>

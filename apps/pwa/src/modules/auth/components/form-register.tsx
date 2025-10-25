@@ -7,7 +7,7 @@ import { PasswordInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconLock, IconMail, IconUser } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 
 export const FormRegister: FC = () => {
   const auth = useAuth();
@@ -21,14 +21,14 @@ export const FormRegister: FC = () => {
     },
     validate: {
       name: (v: string) => {
-        if (!v) return t("must_be_provided");
+        if (!v) return tl("must_be_provided");
       },
       email: (v: string) => {
-        if (!v) return t("must_be_provided");
+        if (!v) return tl("must_be_provided");
       },
       plainPassword: (v: string) => {
-        if (!v) return t("must_be_provided");
-        if (v.length < 6) return t("password_length", { length: 6 });
+        if (!v) return tl("must_be_provided");
+        if (v.length < 6) return tl("password_length", { length: 6 });
       },
     },
   });
@@ -54,7 +54,7 @@ export const FormRegister: FC = () => {
     <form onSubmit={onSubmit}>
       <Stack>
         <TextInput
-          label={t("name")}
+          label={tl("name")}
           autoFocus
           size="md"
           leftSection={<IconUser strokeWidth={1.5} size={18} />}
@@ -71,15 +71,15 @@ export const FormRegister: FC = () => {
         />
 
         <PasswordInput
-          label={t("password")}
+          label={tl("password")}
           size="md"
-          placeholder={t("password_length", { length: 6 }) as string}
+          placeholder={tl("password_length", { length: 6 }) as string}
           leftSection={<IconLock strokeWidth={1.5} size={18} />}
           {...form.getInputProps("plainPassword")}
         />
 
         <Button mt={16} loading={isSubmitting} type="submit" h={42}>
-          {t("register")}
+          {tl("register")}
         </Button>
       </Stack>
     </form>

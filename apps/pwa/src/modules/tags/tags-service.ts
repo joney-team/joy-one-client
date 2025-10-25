@@ -3,7 +3,7 @@ import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { IconFolder } from "@tabler/icons-react";
 import { api } from "../apis";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 import { getTasks } from "../tasks/tasks-service";
 import { ReorderTagsDto, TagDto, TagEntity, TagType } from "./tags-types";
 import { MantineColor } from "@mantine/core";
@@ -35,7 +35,7 @@ export async function getTagMetadata(slug: string): Promise<AppPageMetadata> {
 export async function interactTag(tagId: string) {
   try {
     await api.post(`/tags/${tagId}/interact`);
-  } catch (error) { }
+  } catch (error) {}
 }
 
 export const onRemoveTaskTagFolder = (tag: TagEntity, onDone?: () => void) => {
@@ -44,18 +44,20 @@ export const onRemoveTaskTagFolder = (tag: TagEntity, onDone?: () => void) => {
     process: async () => {
       const relatedTasks = await getTasks({ tagFolderId: tag._id, limit: 1 });
       onArchive({
-        name: t('folder'),
+        name: tl("folder"),
         icon: IconFolder,
-        children: relatedTasks.count > 0 ? `${t('confirm_next')} ${relatedTasks.count} ${t('remove_task_desc')}` : undefined,
+        children:
+          relatedTasks.count > 0
+            ? `${tl("confirm_next")} ${relatedTasks.count} ${tl("remove_task_desc")}`
+            : undefined,
         process: async () => {
-          await removeTag(tag._id)
-            .catch(onError)
+          await removeTag(tag._id).catch(onError);
           onDone?.();
         },
-      })
+      });
     },
-  })
-}
+  });
+};
 
 export const tagTypeConfigs: Record<TagType, { color: MantineColor }> = {
   [TagType.CUSTOMER]: { color: "blue" },

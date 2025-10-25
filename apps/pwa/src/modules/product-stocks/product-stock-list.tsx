@@ -2,7 +2,7 @@ import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { NumberColumn } from "@/components/list/columns/number-column";
 import { EventType } from "@/modules/events/event-types";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
 import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
 import { ProductColumn } from "@/modules/products/components/product-column";
@@ -30,14 +30,14 @@ export const ProductStockList: FC = () => {
               if (value.minPrice && value.maxPrice) {
                 return (
                   <Text>
-                    {t("sale_price")}: {num(value.minPrice, { type: "money" })} -{" "}
+                    {tl("sale_price")}: {num(value.minPrice, { type: "money" })} -{" "}
                     {num(value.maxPrice, { type: "money" })}
                   </Text>
                 );
               }
               return (
                 <Text>
-                  {t("sale_price")}: {num(value.price, { type: "money" })}
+                  {tl("sale_price")}: {num(value.price, { type: "money" })}
                 </Text>
               );
             },

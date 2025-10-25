@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import {
@@ -64,7 +64,7 @@ export function formatDuration(seconds: number) {
 
 export const EstimateTimeInput: FC<EstimateTimeInputProps> = (props) => {
   const { value, onChange, label, ...rest } = props;
-  const placeholder = rest.placeholder || t("select");
+  const placeholder = rest.placeholder || tl("select");
   const [opened, setOpened] = useState(false);
 
   return (
@@ -87,8 +87,8 @@ export const EstimateTimeInput: FC<EstimateTimeInputProps> = (props) => {
             <TextInput
               miw={300}
               autoFocus
-              label={label ? t(label as string) : undefined}
-              placeholder={t("estimate_time_input_placeholder")}
+              label={label ? tl(label as string) : undefined}
+              placeholder={tl("estimate_time_input_placeholder")}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   const value = (e.target as HTMLInputElement).value;
@@ -121,7 +121,7 @@ export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInput
     </ActionIcon>
   );
 
-  const label = t("tasks_view_estimate_time");
+  const label = tl("tasks_view_estimate_time");
 
   return (
     <Popover shadow="md" opened={opened} onChange={setOpened}>
@@ -130,7 +130,7 @@ export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInput
       <Popover.Dropdown p={10}>
         <TextInput
           label={label}
-          placeholder={t("estimate_time_input_placeholder")}
+          placeholder={tl("estimate_time_input_placeholder")}
           autoFocus
           miw={260}
           onKeyUp={(e) => {

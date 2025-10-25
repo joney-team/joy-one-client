@@ -1,7 +1,7 @@
 "use client";
 
 import { useLang } from "@/modules/lang/lang-context";
-import { localeNames, t } from "@/modules/lang/lang-service";
+import { localeNames, tl } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
 import { Anchor, Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -27,7 +27,7 @@ export const ButtonLanguage: FC = () => {
           <ThemeIcon variant="transparent" color="gray">
             <IconWorld size={16} strokeWidth={1.5} />
           </ThemeIcon>
-          {t("locale_name")}
+          {tl("locale_name")}
         </Group>
       </Anchor>
 
@@ -39,7 +39,7 @@ export const ButtonLanguage: FC = () => {
             </ThemeIcon>
 
             <Title ta="center" fz={em(20)} fw={500} c={color("primary")}>
-              {t("select_language")}
+              {tl("select_language")}
             </Title>
           </Group>
 
@@ -69,7 +69,7 @@ export const ButtonLanguage: FC = () => {
                 <IconLanguage strokeWidth={1.5} size={30} />
               </ThemeIcon>
               <Text fz={em(15)} fw={500}>
-                {t("use_device_language")}
+                {tl("use_device_language")}
               </Text>
             </Group>
           </Card>

@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
 import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
@@ -46,7 +46,7 @@ export const TaskStatusOptions: FC<TaskStatusOptionsProps> = (props) => {
                 border: "none",
               },
             }}
-            placeholder={t("search")}
+            placeholder={tl("search")}
             rightSection={
               <ActionIcon
                 variant="subtle"

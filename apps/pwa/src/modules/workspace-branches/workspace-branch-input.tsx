@@ -1,4 +1,4 @@
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { ActionIcon, Group, Input, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconChevronDown, IconX } from "@tabler/icons-react";
@@ -42,7 +42,7 @@ export const WorkspaceBranchInput: FC<WorkspaceBranchInputProps> = (props) => {
               <Input
                 w="100%"
                 className="AppSelectInput"
-                placeholder={t("select_branch")}
+                placeholder={tl("select_branch")}
                 value={value?.name || ""}
                 onChange={() => {}}
                 readOnly

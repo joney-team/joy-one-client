@@ -20,14 +20,14 @@ import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
 import config from "@joy-one-client/config";
 import packageJson from "../package.json";
+import LangProvider from "@/modules/lang/lang-provider";
 
 if (!config.isDevelopment) {
   Sentry.init({ dsn: config.SENTRY_DSN, release: packageJson.version });
 }
 
-const LangProvider = dynamic(() => import("@/modules/lang/lang-provider"));
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
-const Providers = dynamic(() => import("@/app.providers"));
+const ModuleProviders = dynamic(() => import("@/app.module-providers"));
 
 export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => {
   const global = getGlobal();
@@ -126,20 +126,20 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   );
 
   return (
-    <QueryProvider>
-      <LocationsProvider>
-        <AppContext.Provider value={context}>
-          <LayoutProvider>
-            <LangProvider>
-              <Providers>
+    <LangProvider>
+      <QueryProvider>
+        <LocationsProvider>
+          <AppContext.Provider value={context}>
+            <LayoutProvider>
+              <ModuleProviders>
                 {props.children}
                 <AppLoading />
                 <GeneralAnalytics />
-              </Providers>
-            </LangProvider>
-          </LayoutProvider>
-        </AppContext.Provider>
-      </LocationsProvider>
-    </QueryProvider>
+              </ModuleProviders>
+            </LayoutProvider>
+          </AppContext.Provider>
+        </LocationsProvider>
+      </QueryProvider>
+    </LangProvider>
   );
 };

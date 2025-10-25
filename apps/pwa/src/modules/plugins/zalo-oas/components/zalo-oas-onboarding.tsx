@@ -1,7 +1,7 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Group, Image, Stack, Text, ThemeIcon, Title } from "@mantine/core";
@@ -24,13 +24,13 @@ export const ZaloOasOnboarding: FC = () => {
         </Group>
 
         <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-          {t("connect")} <strong>Zalo OAs</strong>
+          {tl("connect")} <strong>Zalo OAs</strong>
         </Title>
 
-        <Text ta="center">{t("connect_zalo_oa_desc")}</Text>
+        <Text ta="center">{tl("connect_zalo_oa_desc")}</Text>
 
         <Button mt={10} type="submit" onClick={() => connectPluginZalo()} leftIcon={IconLinkPlus}>
-          {t("connect")}
+          {tl("connect")}
         </Button>
       </Stack>
     </Container>

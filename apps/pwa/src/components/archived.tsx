@@ -1,7 +1,6 @@
 "use client";
 
-import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { String } from "@/utils/string.utils";
 import { alpha, Group, Text, ThemeIcon } from "@mantine/core";
@@ -22,7 +21,7 @@ export const Archived: FC<ArchivedProps> = (props) => {
 
   if (props.enabled === false) return null;
 
-  const message = t(`archived_entity`, { entity: t(props.entity) });
+  const message = tl(`archived_entity`, { entity: tl(props.entity) });
 
   return (
     <Group

@@ -5,7 +5,7 @@ import { Empty } from "@/components/empty";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { getPrescriptions } from "@/modules/prescriptions/prescriptions-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { capitalize } from "@/utils/string.utils";
@@ -49,7 +49,7 @@ export const PrescriptionList: FC = () => {
           />
 
           <Badge variant="light" size="xl" fz={em(12)} style={{ borderRadius: 100 }}>
-            {t("qty")}
+            {tl("qty")}
             {prescriptions.isInitialized && `: ${num(prescriptions.count)}`}
           </Badge>
         </Group>
@@ -78,10 +78,10 @@ export const PrescriptionList: FC = () => {
 
                       <Stack gap={5}>
                         <Text fz={em(12)}>
-                          • {capitalize(t("pill"))}: {prescription.items.length}
+                          • {capitalize(tl("pill"))}: {prescription.items.length}
                         </Text>
                         <Text fz={em(12)}>
-                          • {capitalize(t("days_num"))}: {totalDays}{" "}
+                          • {capitalize(tl("days_num"))}: {totalDays}{" "}
                         </Text>
                       </Stack>
                     </Stack>

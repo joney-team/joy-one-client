@@ -7,7 +7,7 @@ import { useRouter } from "@/hooks/use-router";
 import { Period } from "@/types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate, t } from "@/modules/lang/lang-service";
+import { renderDate, tl } from "@/modules/lang/lang-service";
 import { ReportEntity } from "@/modules/reports/reports-entity";
 import { exportPeriodReport } from "@/modules/reports/reports-services";
 import { RangeReport, ReportType } from "@/modules/reports/reports-types";
@@ -135,17 +135,17 @@ export const ReportWidgets: FC = () => {
           value={period}
           options={[
             {
-              label: t("date"),
+              label: tl("date"),
               icon: IconCalendar,
               value: Period.DATE,
             },
             {
-              label: t("month"),
+              label: tl("month"),
               icon: IconCalendarMonth,
               value: Period.MONTH,
             },
             {
-              label: t("year"),
+              label: tl("year"),
               icon: IconCalendarEvent,
               value: Period.YEAR,
             },
@@ -240,7 +240,7 @@ export const ReportWidgets: FC = () => {
                         >
                           <Group gap={5}>
                             <Text fz={12} fw={500}>
-                              {t("members")}
+                              {tl("members")}
                             </Text>
 
                             {!isUserMemberInfosReady ? (
@@ -302,7 +302,7 @@ export const ReportWidgets: FC = () => {
                   {(hover) => {
                     const workspaceBranch = [
                       ...workspaceBranches,
-                      { _id: "root", name: t("main_workspace_branch") },
+                      { _id: "root", name: tl("main_workspace_branch") },
                     ].find((v) => query.workspaceBranchIds.includes(v._id));
 
                     return (
@@ -328,7 +328,7 @@ export const ReportWidgets: FC = () => {
                         >
                           <Group gap={5}>
                             <Text fz={12} fw={500}>
-                              {t("branch")}
+                              {tl("branch")}
                             </Text>
 
                             {!isWorkspaceBranchesReady ? (

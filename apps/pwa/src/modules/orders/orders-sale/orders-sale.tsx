@@ -5,7 +5,7 @@ import OverlayLoading from "@/components/overlay-loading";
 import { useRouter } from "@/hooks/use-router";
 import { workspaceLayoutConfig } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Group, Stack, Title } from "@mantine/core";
 import { IconList, IconPlus } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -32,7 +32,7 @@ export const OrdersSaleContent = () => {
         ) : (
           <Stack flex={1} h="100%" justify="center" align="center">
             <Title fw={400} ta="center">
-              {t("order_sale_title")}
+              {tl("order_sale_title")}
             </Title>
             <Group justify="center" align="center">
               <Button
@@ -41,10 +41,10 @@ export const OrdersSaleContent = () => {
                 onClick={() => router.push("/orders")}
                 leftIcon={IconList}
               >
-                {t("list")}
+                {tl("list")}
               </Button>
               <Button onClick={() => addOrder()} leftIcon={IconPlus}>
-                {t("create_entity", { entity: t("order") })}
+                {tl("create_entity", { entity: tl("order") })}
               </Button>
             </Group>
           </Stack>
@@ -83,7 +83,7 @@ export const OrdersSaleContent = () => {
       ) : (
         <Stack flex={1} h="100%" justify="center" align="center">
           <Title fw={400} ta="center">
-            {t("order_sale_title")}
+            {tl("order_sale_title")}
           </Title>
           <Group justify="center" align="center">
             <Button
@@ -92,10 +92,10 @@ export const OrdersSaleContent = () => {
               onClick={() => router.push("/orders")}
               leftIcon={IconList}
             >
-              {t("list")}
+              {tl("list")}
             </Button>
             <Button onClick={() => addOrder()} leftIcon={IconPlus}>
-              {t("create_entity", { entity: t("order") })}
+              {tl("create_entity", { entity: tl("order") })}
             </Button>
           </Group>
         </Stack>

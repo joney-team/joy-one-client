@@ -1,5 +1,5 @@
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { type FC } from "react";
 import { PrinterComponentProps } from "./printer-types";
@@ -24,13 +24,13 @@ export const PrinterHeader: FC<PrinterComponentProps> = ({ settings }) => {
         <div className={styles.WorkspaceInformation}>
           {!!workspace.userMember.workspace.location?.address && settings.showAddress && (
             <div>
-              {t("address_short")}: {workspace.userMember.workspace.location?.address}
+              {tl("address_short")}: {workspace.userMember.workspace.location?.address}
             </div>
           )}
 
           {workspace.userMember.workspace.hotline && (
             <div>
-              {t("hotline")}: {workspace.userMember.workspace.hotline}
+              {tl("hotline")}: {workspace.userMember.workspace.hotline}
             </div>
           )}
         </div>

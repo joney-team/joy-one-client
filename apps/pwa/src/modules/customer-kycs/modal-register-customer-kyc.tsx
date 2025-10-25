@@ -7,7 +7,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { useFormSubmit } from "@/hooks/use-form";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { onUploadFile } from "@/modules/files/file-service";
-import { getDateFormat, t } from "@/modules/lang/lang-service";
+import { getDateFormat, tl } from "@/modules/lang/lang-service";
 import { optionsFilter } from "@/modules/theme/generator";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
@@ -64,34 +64,34 @@ export const ModalRegisterCustomerKyc: FC = () => {
     } as any,
     validate: {
       cidNumber: (value: string) => {
-        if (!value) return t("required");
-        if (value.length !== 12) return t("invalid_cid_number");
+        if (!value) return tl("required");
+        if (value.length !== 12) return tl("invalid_cid_number");
       },
       cidFullName: (value: string) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
       cidVnLocation: (value: any) => {
-        if (!value.provinceId) return t("required");
-        if (!value.wardId) return t("required");
-        if (!value.address) return t("required");
+        if (!value.provinceId) return tl("required");
+        if (!value.wardId) return tl("required");
+        if (!value.address) return tl("required");
       },
       cidGender: (value: string) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
       cidBirthday: (value: number) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
       cidCreatedAt: (value: number) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
       frontOfCidImage: (value: File) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
       backOfCidImage: (value: File) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
       portraitImage: (value: File) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
     },
   });
@@ -150,17 +150,17 @@ export const ModalRegisterCustomerKyc: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={t("customer-kyc")} icon={IconUserScan} />}
+      title={<ModalTitle title={tl("customer-kyc")} icon={IconUserScan} />}
       onClose={onClose}
       opened={opened}
       yOffset={20}
       size="xl"
     >
       <Stack gap={16}>
-        <Session name={t("cidImgs")} icon={IconCards}>
+        <Session name={tl("cidImgs")} icon={IconCards}>
           <Stack gap={10}>
             <SimpleGrid cols={{ md: 2 }}>
-              <InputWrapper label={t("frontOfCidImage")}>
+              <InputWrapper label={tl("frontOfCidImage")}>
                 <EntityImage
                   w="100%"
                   src={form.values.frontOfCidImage}
@@ -171,7 +171,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
                 />
               </InputWrapper>
 
-              <InputWrapper label={t("backOfCidImage")}>
+              <InputWrapper label={tl("backOfCidImage")}>
                 <EntityImage
                   w="100%"
                   src={form.values.backOfCidImage}
@@ -182,7 +182,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
               </InputWrapper>
             </SimpleGrid>
 
-            <InputWrapper label={t("portraitImage")}>
+            <InputWrapper label={tl("portraitImage")}>
               <EntityImage
                 w="100%"
                 src={form.values.portraitImage}
@@ -194,7 +194,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
           </Stack>
         </Session>
 
-        <Session name={t("cidInfos")} icon={IconInfoCircle}>
+        <Session name={tl("cidInfos")} icon={IconInfoCircle}>
           <Stack>
             <Group>
               <Button
@@ -214,7 +214,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
                 variant="light"
                 fz={em(14)}
               >
-                {t("scan_qr_code")}
+                {tl("scan_qr_code")}
               </Button>
 
               <Button
@@ -223,7 +223,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
                 leftIcon={IconTextScan2}
                 onClick={() =>
                   OnModalInput({
-                    title: t("enter_code_string"),
+                    title: tl("enter_code_string"),
                     type: InputModalType.TEXT,
                     onDone(value) {
                       const cid = decodeCid(value);
@@ -237,23 +237,23 @@ export const ModalRegisterCustomerKyc: FC = () => {
                 variant="light"
                 fz={em(14)}
               >
-                {t("enter_code_string")}
+                {tl("enter_code_string")}
               </Button>
             </Group>
 
-            <TextInput label={t("cidNumber")} {...form.getInputProps("cidNumber")} />
+            <TextInput label={tl("cidNumber")} {...form.getInputProps("cidNumber")} />
 
             <SimpleGrid cols={{ md: 2 }}>
-              <TextInput label={t("full_name")} {...form.getInputProps("cidFullName")} />
+              <TextInput label={tl("full_name")} {...form.getInputProps("cidFullName")} />
 
               <Select
-                label={t("gender")}
+                label={tl("gender")}
                 {...form.getInputProps("cidGender")}
-                data={Object.values(Gender).map((v) => ({ value: v, label: t(v) }))}
+                data={Object.values(Gender).map((v) => ({ value: v, label: tl(v) }))}
               />
 
               <DateInput
-                label={t("birthday")}
+                label={tl("birthday")}
                 valueFormat={getDateFormat()}
                 value={DateTime.secondsToTime(form.values.cidBirthday)}
                 onChange={(date) => {
@@ -263,7 +263,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
               />
 
               <DateInput
-                label={t("issuedDate")}
+                label={tl("issuedDate")}
                 valueFormat={getDateFormat()}
                 value={DateTime.secondsToTime(form.values.cidCreatedAt)}
                 onChange={(date) => {
@@ -273,12 +273,12 @@ export const ModalRegisterCustomerKyc: FC = () => {
               />
             </SimpleGrid>
 
-            <InputWrapper label={t("cidMainLocation")}>
+            <InputWrapper label={tl("cidMainLocation")}>
               <Card p={8} withBorder>
                 <Stack>
                   <SimpleGrid cols={{ base: 1, md: 2 }}>
                     <Select
-                      label={t("province")}
+                      label={tl("province")}
                       {...form.getInputProps(`cidVnLocation.provinceId`)}
                       searchable
                       data={vnLocations
@@ -292,7 +292,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
                     />
 
                     <Select
-                      label={t("ward")}
+                      label={tl("ward")}
                       {...form.getInputProps("cidVnLocation.wardId")}
                       searchable
                       data={vnLocations
@@ -309,7 +309,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
                   </SimpleGrid>
 
                   <TextInput
-                    label={t("address")}
+                    label={tl("address")}
                     {...form.getInputProps("cidVnLocation.address")}
                   />
                 </Stack>
@@ -320,7 +320,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
 
         <Group mt={10} justify="center">
           <Button onClick={submit.handle} type="submit" miw={300} maw="100%">
-            {t("complete")}
+            {tl("complete")}
           </Button>
         </Group>
       </Stack>

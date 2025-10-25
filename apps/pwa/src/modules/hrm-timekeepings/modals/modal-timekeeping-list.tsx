@@ -18,7 +18,7 @@ import {
   HrmTimekeepingType,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { calculateTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
@@ -131,7 +131,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                         className="animRotate"
                       />
                       <Text fz={em(15)} c="orange">
-                        {t("working")}
+                        {tl("working")}
                       </Text>
                     </Group>
                   </Center>
@@ -144,7 +144,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                     <Group gap={5}>
                       <IconMoodSad strokeWidth={1.5} size={18} color={theme.colors.gray[6]} />
                       <Text fz={em(15)} c="gray">
-                        {t("hrm_timekeepings_not_check_out")}
+                        {tl("hrm_timekeepings_not_check_out")}
                       </Text>
                     </Group>
                   </Center>
@@ -154,7 +154,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
               return (
                 <SimpleGrid cols={1} spacing={5}>
                   <Group gap={10}>
-                    <Text fw={700}>{t("hrm_timekeepings_working_time")}:</Text>
+                    <Text fw={700}>{tl("hrm_timekeepings_working_time")}:</Text>
                     <Text>{num(calculated.totalWorkingTime, { type: "hours" })}</Text>
                     {calculated.totalWorkingTime > 0 && (
                       <Badge color="green">{DateTime.toHHMM(calculated.totalWorkingTime)}</Badge>
@@ -163,7 +163,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
 
                   {calculated.overTime > 0 && (
                     <Group gap={10}>
-                      <Text fw={700}>{t("hrm_timekeepings_overtime")}:</Text>
+                      <Text fw={700}>{tl("hrm_timekeepings_overtime")}:</Text>
                       <Text>{num(calculated.overTime, { type: "hours" })}</Text>
                       {calculated.overTime > 0 && (
                         <Badge color="green">{DateTime.toHHMM(calculated.overTime)}</Badge>
@@ -173,7 +173,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
 
                   {calculated.lateTime > 0 && (
                     <Group gap={10}>
-                      <Text fw={700}>{t("hrm_timekeepings_late")}:</Text>
+                      <Text fw={700}>{tl("hrm_timekeepings_late")}:</Text>
                       <Text>{num(calculated.lateTime, { type: "hours" })}</Text>
                       {calculated.lateTime > 0 && (
                         <Badge color="red">{DateTime.toHHMM(calculated.lateTime)}</Badge>
@@ -192,7 +192,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
           {pendingTimekeepings.length > 0 && (
             <Group justify="space-between" wrap="nowrap">
               <Text>
-                {t("hrm_timekeepings_approval_count", { count: num(pendingTimekeepings.length) })}
+                {tl("hrm_timekeepings_approval_count", { count: num(pendingTimekeepings.length) })}
               </Text>
 
               <Button
@@ -202,7 +202,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                 radius={100}
                 leftIcon={IconListCheck}
               >
-                {t("approve_all")}
+                {tl("approve_all")}
               </Button>
             </Group>
           )}
@@ -229,7 +229,7 @@ export const OnModalListTimekeepings = (props: ModalTImekeepingListProps) => {
   return modals.open({
     modalId: "ModalListTimekeepings",
     title: (
-      <ModalTitle title={props.title || t("hrm_timekeepings_history")} icon={IconClockCheck} />
+      <ModalTitle title={props.title || tl("hrm_timekeepings_history")} icon={IconClockCheck} />
     ),
     children: <ModalTImekeepingList {...props} />,
     size: "lg",

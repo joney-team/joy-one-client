@@ -4,7 +4,7 @@ import { type AppRouter, useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
 import { OnCustomerModal } from "@/modules/customers/customer-modal";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { OnModalLoanCalculator } from "@/modules/loans/modals/modal-loan-calculator";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
@@ -109,7 +109,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
                   leftSection={<shortcut.icon size={18} />}
                   onClick={() => shortcut.onClick(router)}
                 >
-                  {mod.name}
+                  {mod.name()}
                 </Menu.Item>
               );
             }
@@ -120,7 +120,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
                 component={Link}
                 href={shortcut.href}
               >
-                {mod.name}
+                {mod.name()}
               </Menu.Item>
             );
           })}
@@ -139,7 +139,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
           onClick={() => OnModalLoanCalculator()}
           leftIcon={IconCalculator}
         >
-          {t("loan-calculator")}
+          {tl("loan-calculator")}
         </Button>
       )}
 
@@ -148,7 +148,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
           <Menu.Target>
             <Group>
               <Button id="create-credit" size="xs" leftIcon={IconCirclePlus} isGradient>
-                {t("shortcut_new")}
+                {tl("shortcut_new")}
               </Button>
             </Group>
           </Menu.Target>
@@ -165,7 +165,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
                     leftSection={<shortcut.icon size={18} />}
                     onClick={() => shortcut.onClick(router)}
                   >
-                    {mod.name}
+                    {mod.name()}
                   </Menu.Item>
                 );
               }
@@ -176,7 +176,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
                   component={Link}
                   href={shortcut.href}
                 >
-                  {mod.name}
+                  {mod.name()}
                 </Menu.Item>
               );
             })}

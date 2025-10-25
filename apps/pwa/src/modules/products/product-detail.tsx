@@ -10,7 +10,7 @@ import { NumberColumn } from "@/components/list/columns/number-column";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { num, t, tMulti } from "@/modules/lang/lang-service";
+import { num, tl, tMulti } from "@/modules/lang/lang-service";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
 import { OnModalProductStockOut } from "@/modules/product-stocks/modals/modal-product-stock-out";
@@ -129,7 +129,7 @@ export const ProductDetail: FC = () => {
                   events={events}
                   actions={[
                     {
-                      label: t(`product_stock_record_type_${ProductStockRecordType.STOCK_OUT}`),
+                      label: tl(`product_stock_record_type_${ProductStockRecordType.STOCK_OUT}`),
                       icon: IconArrowUpRight,
                       onClick: (data) => OnModalProductStockOut({ stock: data }),
                       disabled: (data) => data.remainQuantity <= 0,
@@ -148,7 +148,7 @@ export const ProductDetail: FC = () => {
                     type: EnumColumn({
                       icon: IconBox,
                       options: Object.values(ProductStockRecordType).map((type) => ({
-                        label: t(`product_stock_record_type_${type}`),
+                        label: tl(`product_stock_record_type_${type}`),
                         value: type,
                         color: productStockRecordTypeOptions[type].color,
                         icon: productStockRecordTypeOptions[type].icon,
@@ -178,7 +178,7 @@ export const ProductDetail: FC = () => {
                     },
                     relatedProductId: ProductColumn({
                       valuePath: "relatedProduct",
-                      name: t("entity_related", {
+                      name: tl("entity_related", {
                         entity: tMulti(["products"], ["/"], ["services"]),
                       }),
                     }),

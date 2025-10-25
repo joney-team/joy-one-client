@@ -3,7 +3,7 @@ import { FileType } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import {
   ActionIcon,
   Box,
@@ -174,7 +174,7 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
                   fz={14}
                   iconSpacing={-8}
                 >
-                  {t(value ? "change" : "upload")}
+                  {tl(value ? "change" : "upload")}
                 </Button>
               </Renderer>
             </Stack>

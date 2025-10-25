@@ -2,7 +2,7 @@
 
 import { Column } from "@/components/list/types";
 import { getCustomerByIds } from "@/modules/customers/customer-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
 import { IconCategory } from "@tabler/icons-react";
@@ -50,7 +50,7 @@ export function CategoryColumn<T = any>(args?: CategoryColumnArgs<T>): Column {
     exportToExcel: (data) => {
       return [
         {
-          col: t("name"),
+          col: tl("name"),
           text: data.name,
         },
       ];

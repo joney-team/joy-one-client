@@ -12,7 +12,7 @@ import { updateCustomer } from "../customer-service";
 import { CustomerShortInfo } from "../customer-types";
 
 import { useRouter } from "@/hooks/use-router";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 
 interface ModalCustomerPlainCodeFormProps {
   customer: CustomerShortInfo;
@@ -61,7 +61,7 @@ export const ModalCustomerPlainCodeForm: FC<ModalCustomerPlainCodeFormProps> = (
         leftSection={<IconCheck strokeWidth={1.2} />}
         disabled={!form.isDirty()}
       >
-        {t("complete")}
+        {tl("complete")}
       </Button>
     </Stack>
   );

@@ -2,7 +2,7 @@
 
 import { Circle } from "@/components/circle";
 import FlexContainer from "@/components/flex-container/flex-container";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { scrollToElementById } from "@joy-one-client/utils/scrollToElementById";
 import { ActionIcon, Box, Divider, Group, Stack, Text } from "@mantine/core";

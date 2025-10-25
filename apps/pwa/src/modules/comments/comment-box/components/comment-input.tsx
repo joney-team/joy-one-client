@@ -1,5 +1,5 @@
 import { uploadFile } from "@/modules/files/file-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { detectMessageAttachmentType } from "@/modules/message-boxes/message-boxes-service";
 import {
   ActionIcon,
@@ -110,7 +110,7 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
                 autosize
                 maxRows={2}
                 minRows={1}
-                placeholder={t("type_and_press_enter")}
+                placeholder={tl("type_and_press_enter")}
                 variant="unstyled"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -181,7 +181,7 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
                   loading={isSubmiting}
                   onClick={onSubmit}
                 >
-                  {t("send")}
+                  {tl("send")}
                 </Button>
               </Group>
             </Stack>
@@ -213,11 +213,11 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
               >
                 <Stack justify="center" align="center" w="100%" gap={3}>
                   <Title ta="center" order={4} fw={500}>
-                    {t("preview")}
+                    {tl("preview")}
                   </Title>
 
                   <Text ta="center" fz={14} c="gray.6">
-                    {t("drop_file_preview")}
+                    {tl("drop_file_preview")}
                   </Text>
                 </Stack>
               </Group>

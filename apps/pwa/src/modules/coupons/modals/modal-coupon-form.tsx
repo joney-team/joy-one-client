@@ -7,7 +7,7 @@ import { useFormSubmit } from "@/hooks/use-form";
 import { createCoupon, getCouponRules } from "@/modules/coupons/coupon-service";
 import { CouponDto, CouponEntity } from "@/modules/coupons/coupon-types";
 import { getCustomers } from "@/modules/customers/customer-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
@@ -48,10 +48,10 @@ export const ModalCouponForm: FC = () => {
     } as any,
     validate: {
       quantity: (value: string) => {
-        if (typeof value !== "number") return t("required");
+        if (typeof value !== "number") return tl("required");
       },
       rule: (value: string) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
     },
   });
@@ -87,7 +87,7 @@ export const ModalCouponForm: FC = () => {
       title={
         <ModalTitle
           title={String.capitalizeFirstLetter(
-            `${t(props?.coupon ? "update" : "create")} ${t("coupon")}`
+            `${tl(props?.coupon ? "update" : "create")} ${tl("coupon")}`
           )}
           icon={IconNotes}
         />
@@ -99,7 +99,7 @@ export const ModalCouponForm: FC = () => {
         <SimpleGrid cols={{ md: 1 }}>
           <SearchSelectInput
             withAsterisk
-            label={t("coupon_rule")}
+            label={tl("coupon_rule")}
             {...form.getInputProps("rule")}
             value={form.values.rule?._id}
             onChange={(v) => form.setFieldValue("rule", v?.data)}
@@ -123,20 +123,20 @@ export const ModalCouponForm: FC = () => {
 
           {!!form.values.rule && <CouponBenefits benefits={form.values.rule.benefits} />}
 
-          <TextInput label={t("code")} {...form.getInputProps("code")} />
+          <TextInput label={tl("code")} {...form.getInputProps("code")} />
 
           <NumberInput
             withAsterisk
-            label={t("quantity")}
-            description={t("coupon_quantity_description")}
+            label={tl("quantity")}
+            description={tl("coupon_quantity_description")}
             {...form.getInputProps("quantity")}
           />
 
-          <InputWrapper label={String.capitalizeFirstLetter(`${t("settings")} ${t("limit")}`)}>
+          <InputWrapper label={String.capitalizeFirstLetter(`${tl("settings")} ${tl("limit")}`)}>
             <Card withBorder p={8}>
               <Stack gap={10}>
                 <SearchSelectInput
-                  label={t("customer")}
+                  label={tl("customer")}
                   onSearch={(q) =>
                     getCustomers({ q }).then(({ data }) =>
                       data.map((r) => ({
@@ -150,7 +150,7 @@ export const ModalCouponForm: FC = () => {
                 />
 
                 <DateTimePicker
-                  label={t("expire_at")}
+                  label={tl("expire_at")}
                   {...form.getInputProps("expiredAt")}
                   value={DateTime.secondsToTime(form.values.expiredAt)}
                   onChange={(v) => form.setFieldValue("expiredAt", DateTime.timeToSeconds(v))}
@@ -162,7 +162,7 @@ export const ModalCouponForm: FC = () => {
 
         <Group justify="center" mt={10}>
           <Button type="submit" miw={200} onClick={submit.handle} loading={submit.isSubmitting}>
-            {t("complete")}
+            {tl("complete")}
           </Button>
         </Group>
       </Stack>

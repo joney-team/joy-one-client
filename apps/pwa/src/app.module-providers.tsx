@@ -24,7 +24,7 @@ import { useApp } from "./app.context";
 import { useRouteRule } from "./hooks/use-router";
 import Modals from "./modals";
 
-const AppProviders: FC<PropsWithChildren> = (props) => {
+const AppModuleProviders: FC<PropsWithChildren> = (props) => {
   const app = useApp();
   const lang = useLang();
   const layout = useLayout();
@@ -64,4 +64,4 @@ const AppProviders: FC<PropsWithChildren> = (props) => {
   );
 };
 
-export default AppProviders;
+export default AppModuleProviders;

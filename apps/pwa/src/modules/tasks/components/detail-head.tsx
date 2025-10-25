@@ -5,7 +5,7 @@ import { Renderer } from "@/components/renderer";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalShareLink } from "@/modals/modal-share-link";
-import { renderDateTime, t } from "@/modules/lang/lang-service";
+import { renderDateTime, tl } from "@/modules/lang/lang-service";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { getRelatedTasks, getTaskEntity, updateTasks } from "@/modules/tasks/tasks-service";
@@ -88,7 +88,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
             }}
             render={(ctx) => {
               return (
-                <Tooltip label={capitalize(`${t("change")} ${t("folder")}`)}>
+                <Tooltip label={capitalize(`${tl("change")} ${tl("folder")}`)}>
                   <Button
                     component="div"
                     size="compact-sm"
@@ -100,7 +100,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
                     px={3}
                     onClick={ctx.toggle}
                   >
-                    {tagFolder ? tagFolder.name : `${t("general_tasks")}`}
+                    {tagFolder ? tagFolder.name : `${tl("general_tasks")}`}
                   </Button>
                 </Tooltip>
               );
@@ -131,7 +131,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
       <Group justify="end" wrap="nowrap" gap={8}>
         <Renderer views={["desktop"]}>
           <Text fz={em(12)} c="var(--mantine-color-dimmed)" px={10}>
-            {t("created_at")} {renderDateTime(task.createdAt, true)}
+            {tl("created_at")} {renderDateTime(task.createdAt, true)}
           </Text>
 
           <Button
@@ -142,7 +142,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
             leftIcon={IconShare2}
             onClick={() => OnModalShareLink({ task, url: `${config.APP_URL}/tasks/${task.code}` })}
           >
-            {t("share")}
+            {tl("share")}
           </Button>
         </Renderer>
 

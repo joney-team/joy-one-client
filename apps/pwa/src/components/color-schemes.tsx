@@ -1,8 +1,8 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Menu, useMantineColorScheme } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
 import { IconAutomation, IconMoon, IconSun } from "@tabler/icons-react";
@@ -33,7 +33,7 @@ export const ColorSchemes: FC = () => {
           leftSection={<IconSun size={18} />}
           onClick={() => setColorScheme("light")}
         >
-          {t("light-mode")}
+          <Trans>Light mode</Trans>
         </Menu.Item>
 
         <Menu.Item
@@ -41,7 +41,7 @@ export const ColorSchemes: FC = () => {
           leftSection={<IconMoon size={18} />}
           onClick={() => setColorScheme("dark")}
         >
-          {t("dark-mode")}
+          <Trans>Dark mode</Trans>
         </Menu.Item>
 
         <Menu.Item
@@ -49,7 +49,7 @@ export const ColorSchemes: FC = () => {
           leftSection={<IconAutomation size={18} />}
           onClick={() => clearColorScheme()}
         >
-          {t("system-mode")}
+          <Trans>System mode</Trans>
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

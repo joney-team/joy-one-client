@@ -3,7 +3,7 @@ import { Avatar } from "@/components/avatar";
 import { Container } from "@/components/container";
 import { Button } from "@/components/buttons/button";
 import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ActionIcon, Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
@@ -29,10 +29,10 @@ export const AiAssistantList: FC = () => {
             </Group>
 
             <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-              {t("connect")} <strong>{t("ai_assistant")}</strong>
+              {tl("connect")} <strong>{tl("ai_assistant")}</strong>
             </Title>
 
-            <Text ta="center">{t("ai_assistant_desc")}</Text>
+            <Text ta="center">{tl("ai_assistant_desc")}</Text>
 
             <Button
               mt={10}
@@ -40,7 +40,7 @@ export const AiAssistantList: FC = () => {
               onClick={() => OnModalCreatePluginAiAssistant()}
               leftIcon={IconLinkPlus}
             >
-              {t("connect")}
+              {tl("connect")}
             </Button>
           </Stack>
         </Card>
@@ -62,7 +62,7 @@ export const AiAssistantList: FC = () => {
                 <Stack gap={3} flex={1}>
                   <Text fw={600}>{plugin.providerName}</Text>
                   <Text c="gray" fz={12}>
-                    {t("provider")}: {t(`ai_assistant_${plugin.provider}`)}
+                    {tl("provider")}: {tl(`ai_assistant_${plugin.provider}`)}
                   </Text>
                 </Stack>
 

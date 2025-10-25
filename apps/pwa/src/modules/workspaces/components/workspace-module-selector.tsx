@@ -1,16 +1,16 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { t } from "@/modules/lang/lang-service";
+import { SelectOption, Selector, SelectorContext } from "@/components/selector";
 import { searchArray } from "@/modules/search/search-service";
-import { WorkspaceModule } from "@/modules/workspaces/workspace-modules";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { WorkspaceModule } from "@/modules/workspaces/workspace-modules";
+import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { SelectOption, Selector, SelectorContext } from "@/components/selector";
 
-type WorkspaceModuleOption = WorkspaceModule & SelectOption & { name: string };
+type WorkspaceModuleOption = WorkspaceModule & SelectOption & { plainName: string };
 
 interface WorkspaceModuleSelectorProps {
   restrictDisplay?: ("navigation" | "spotlight")[];
@@ -22,7 +22,7 @@ interface WorkspaceModuleSelectorProps {
 export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props) => {
   const workspace = useWorkspace();
   const options: WorkspaceModuleOption[] = workspace.availableModules
-    .map((v) => ({ ...v, name: t(v.id) }))
+    .map((v) => ({ ...v, plainName: v.name() }))
     .filter(
       (v) =>
         !props.excludeIds?.includes(v.id) &&
@@ -36,9 +36,6 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
       autoCloseOnChange={false}
       excludeIds={props.excludeIds}
       pinnedOptions={options}
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
-      })}`}
       renderOption={(mo) => {
         return (
           <Combobox.Option value={mo.id} key={mo.id}>
@@ -47,7 +44,7 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
                 <mo.icon strokeWidth={1.5} size={26} />
               </ThemeIcon>
 
-              <Text>{mo.name}</Text>
+              <Text>{mo.name()}</Text>
             </Group>
           </Combobox.Option>
         );
@@ -66,7 +63,7 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
             fw={500}
             onClick={toggle}
           >
-            {t("select")}
+            <Trans>Select</Trans>
           </Button>
         );
       }}
@@ -74,7 +71,7 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
         if (!e) return;
         props.onSelect(e);
       }}
-      onSearch={(q) => searchArray<WorkspaceModuleOption>(options, ["name"], q)}
+      onSearch={(q) => searchArray<WorkspaceModuleOption>(options, ["plainName"], q)}
     />
   );
 };

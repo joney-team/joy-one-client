@@ -2,7 +2,7 @@
 
 import { AppEntity } from "@/types";
 import { Button } from "@/components/buttons/button";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { getTags } from "@/modules/tags/tags-service";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -24,8 +24,8 @@ export const TaskTagFolderSelector: FC<TaskTagFolderSelectorProps> = (props) => 
       listRoute="/tags"
       listParams={{ type: TagType.TASK_FOLDER }}
       onSearch={(q) => searchEntity<TagEntity>(AppEntity.TAGS, q, { type: TagType.TASK_FOLDER })}
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(tag) => {
         return (
@@ -51,7 +51,7 @@ export const TaskTagFolderSelector: FC<TaskTagFolderSelectorProps> = (props) => 
             fw={500}
             onClick={toggle}
           >
-            {t("select")}
+            {tl("select")}
           </Button>
         );
       }}

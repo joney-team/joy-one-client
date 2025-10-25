@@ -12,7 +12,7 @@ import {
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { getDateFormat, t } from "@/modules/lang/lang-service";
+import { getDateFormat, tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import {
@@ -143,12 +143,12 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       <FormSessionIcon icon={IconReservedLine} description="title">
         {type === "RESCHEDULE" ? (
           <Title order={5} fw={500}>
-            {getBookingTitle(form.values) || t("title")}
+            {getBookingTitle(form.values) || tl("title")}
           </Title>
         ) : (
           <TextInput
             {...form.getInputProps("title")}
-            placeholder={getBookingTitle(form.values) || t("title")}
+            placeholder={getBookingTitle(form.values) || tl("title")}
           />
         )}
       </FormSessionIcon>
@@ -222,7 +222,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
         <Stack>
           <Group flex={1}>
-            <Tooltip label={t("select_date")}>
+            <Tooltip label={tl("select_date")}>
               <Group flex={1}>
                 <DateInput
                   flex={1}
@@ -261,7 +261,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
               </Group>
             </Tooltip>
 
-            <Tooltip label={t("startTime")}>
+            <Tooltip label={tl("startTime")}>
               <Group>
                 <TimeInput
                   value={form.values.startTime}
@@ -278,7 +278,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
               </Group>
             </Tooltip>
 
-            <Tooltip label={t("endTime")}>
+            <Tooltip label={tl("endTime")}>
               <Group>
                 <TimeInput
                   value={form.values.endTime}
@@ -298,7 +298,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
           <Group wrap="nowrap" gap={5}>
             <Text fz={12} flex={1}>
-              {t("suggest_time")}
+              {tl("suggest_time")}
             </Text>
 
             {[15, 30, 45, 60].map((v) => {
@@ -324,7 +324,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                     );
                   }}
                 >
-                  {v === 60 ? t("one_hour") : t("minutes", { count: v })}
+                  {v === 60 ? tl("one_hour") : tl("minutes", { count: v })}
                 </Button>
               );
             })}
@@ -335,7 +335,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       <FormSessionIcon icon={IconNotebook} description="details" visible={type !== "RESCHEDULE"}>
         <Textarea
           {...form.getInputProps("note")}
-          placeholder={capitalize(`${t("enter")} ${t("details")} (${t("optional")})`)}
+          placeholder={capitalize(`${tl("enter")} ${tl("details")} (${tl("optional")})`)}
           minRows={4}
           autosize
           readOnly={type === "RESCHEDULE"}
@@ -346,13 +346,13 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         <Stack gap={8}>
           {form.values.startTime && !isInWorkspaceWorkSlots && (
             <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
-              {t("out_of_work_slots")}
+              {tl("out_of_work_slots")}
             </Blockquote>
           )}
 
           {form.values.startTime && isPassed && (
             <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
-              {t("booking_time_passed")}
+              {tl("booking_time_passed")}
             </Blockquote>
           )}
 
@@ -360,7 +360,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
             form.values.endTime &&
             dayjs(form.values.endTime).isBefore(dayjs(form.values.startTime)) && (
               <Blockquote color="red" p={8} fz={14} fw={500} mt={5}>
-                {t("end_time_before_start_time")}
+                {tl("end_time_before_start_time")}
               </Blockquote>
             )}
         </Stack>
@@ -369,12 +369,14 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       <Group justify="center">
         {props.onCancel && !form.submitting && (
           <Button variant="outline" color="gray" onClick={props.onCancel}>
-            {t("cancel")}
+            {tl("cancel")}
           </Button>
         )}
 
         <Button onClick={onSubmit} leftIcon={IconCheck} action loading={form.submitting}>
-          {t(type === "CREATE" ? "confirm" : type === "RESCHEDULE" ? "reschedule_booking" : "save")}
+          {tl(
+            type === "CREATE" ? "confirm" : type === "RESCHEDULE" ? "reschedule_booking" : "save"
+          )}
         </Button>
       </Group>
     </Stack>

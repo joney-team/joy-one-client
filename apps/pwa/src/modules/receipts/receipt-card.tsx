@@ -32,7 +32,7 @@ import { Renderer } from "@/components/renderer";
 import { InputModalType } from "@/modals/modal-input";
 import { PrintButton } from "@/modals/modal-printer";
 import { FilesBox } from "@/modules/files/files-box";
-import { num, renderDate, renderDateTime, t } from "@/modules/lang/lang-service";
+import { num, renderDate, renderDateTime, tl } from "@/modules/lang/lang-service";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnModalDisburesementReceipt } from "@/modules/receipts/modals/modal-disburesement-receipt";
@@ -121,7 +121,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               onClick={() => isOpenModal && OnReceiptDetailModal({ id: receipt.id })}
             >
               <Tooltip
-                label={t(
+                label={tl(
                   receipt.type === ReceiptType.INCOME ? "income_receipt" : "expense_receipt"
                 )}
               >
@@ -185,7 +185,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {receipt.relatedLoanCode && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t("loan")}
+                    {tl("loan")}
                   </Table.Th>
                   <Table.Td ta="right">
                     <Group h={20} justify="end">
@@ -206,7 +206,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {receipt.relatedOrderId && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t("order")}
+                    {tl("order")}
                   </Table.Th>
                   <Table.Td ta="right">
                     <Group h={20} justify="end">
@@ -231,7 +231,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               <Renderer visible={!!receipt.expireAt && receipt.status === ReceiptStatus.PENDING}>
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t("due_date")}
+                    {tl("due_date")}
                   </Table.Th>
                   <Table.Td ta="right" c={isExpired ? "red" : undefined}>
                     {renderDate(receipt.expireAt)}
@@ -241,7 +241,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
 
               <Table.Tr>
                 <Table.Th fz={13} fw={500} ta="left">
-                  {t("content")}
+                  {tl("content")}
                 </Table.Th>
                 <Table.Td fw={700}>
                   <HoverToEdit
@@ -269,7 +269,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {props.isShowImage && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t("receipt")}
+                    {tl("receipt")}
                   </Table.Th>
                   <Table.Td fw={700} ta="end">
                     <Group justify="end">
@@ -280,7 +280,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                           entity: AppEntity.RECEIPTS,
                           entityId: receipt.id,
                         }}
-                        empty={<Text fz={em(12)}>{t("no_files")}</Text>}
+                        empty={<Text fz={em(12)}>{tl("no_files")}</Text>}
                       />
                     </Group>
                   </Table.Td>
@@ -301,7 +301,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {!!receipt.cashierUser && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t("cashier")}
+                    {tl("cashier")}
                   </Table.Th>
                   <Table.Td fw={700}>
                     <Group justify="end">
@@ -314,7 +314,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {!!receipt.paidAt && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t("paid_at")}
+                    {tl("paid_at")}
                   </Table.Th>
                   <Table.Td fw={700} ta="right">
                     <HoverToEdit
@@ -338,7 +338,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               <Renderer visible={receipt.status === ReceiptStatus.PAID}>
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t("payment_method")}
+                    {tl("payment_method")}
                   </Table.Th>
                   <Table.Td>
                     <HoverToEdit
@@ -349,7 +349,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                         title: "payment_method",
                         value: receipt.paymentMethod,
                         options: Object.values(ReceiptPaymentMethod).map((v) => ({
-                          label: t(`payment_method_${v}`),
+                          label: tl(`payment_method_${v}`),
                           value: v,
                         })),
                         onDone: (v) => {
@@ -363,7 +363,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                           ? receiptPaymentMethodOptions[receipt.paymentMethod]
                           : undefined;
 
-                        if (!paymentMethodOption) return <Text>{t("unknown")}</Text>;
+                        if (!paymentMethodOption) return <Text>{tl("unknown")}</Text>;
 
                         return (
                           <Group gap={5}>
@@ -372,7 +372,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                               size={25}
                               strokeWidth={1.5}
                             />
-                            <Text>{t(`payment_method_${receipt.paymentMethod}`)}</Text>
+                            <Text>{tl(`payment_method_${receipt.paymentMethod}`)}</Text>
                           </Group>
                         );
                       })()}
@@ -384,7 +384,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {!!receipt.disbursementUser && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t("user_disbursement")}
+                    {tl("user_disbursement")}
                   </Table.Th>
                   <Table.Td fw={700}>
                     <Group justify="end">
@@ -396,7 +396,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
 
               <Table.Tr>
                 <Table.Th fz={13} fw={500} ta="left">
-                  {t("money_amount")}
+                  {tl("money_amount")}
                 </Table.Th>
                 <Table.Td ta="right" c={receipt.amount < 0 ? "red" : "dark"}>
                   <Stack gap={8}>
@@ -467,7 +467,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                                     }}
                                     variant="outline"
                                   >
-                                    {t("reject")}
+                                    {tl("reject")}
                                   </Button>
                                 </Group>
                               ) : (
@@ -485,7 +485,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                             size="sm"
                             variant="outline"
                           >
-                            {t(`receipt_status_${receipt.status}`)}
+                            {tl(`receipt_status_${receipt.status}`)}
                           </Badge>
                         );
                       })()}
@@ -500,7 +500,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
         {!receipt.isArchived && (
           <Group justify="end">
             <Renderer visible={isAbleToPrint}>
-              <PrintButton receipt={receipt} bankQrCode={bankQrCode} label={t("print_receipt")} />
+              <PrintButton receipt={receipt} bankQrCode={bankQrCode} label={tl("print_receipt")} />
             </Renderer>
 
             {receipt.status !== ReceiptStatus.PAID && (
@@ -509,7 +509,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                 leftIcon={IconCashRegister}
                 onClick={() => OnModalPayReceipt({ receipt: receipt })}
               >
-                {t("pay")}
+                {tl("pay")}
               </Button>
             )}
           </Group>

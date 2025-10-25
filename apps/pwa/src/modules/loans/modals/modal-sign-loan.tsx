@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { SignatureInput } from "@/components/inputs/signature-input";
 import { ModalTitle } from "@/components/modal-title";
 import { onUploadFile } from "@/modules/files/file-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { signLoan } from "@/modules/loans/loans-service";
 import { LoanEntity } from "@/modules/loans/loans-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -60,7 +60,7 @@ export const ModalSignLoan: FC = () => {
 
         <Center>
           <Button disabled={!signature} onClick={onSubmit}>
-            {t("sign_contract")}
+            {tl("sign_contract")}
           </Button>
         </Center>
       </Stack>

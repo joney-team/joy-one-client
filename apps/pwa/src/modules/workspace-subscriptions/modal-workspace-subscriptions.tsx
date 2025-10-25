@@ -17,7 +17,7 @@ import {
 } from "@/modules/bank-transactions/bank-transaction-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate, num, t } from "@/modules/lang/lang-service";
+import { renderDate, num, tl } from "@/modules/lang/lang-service";
 import { getSubscriptions } from "@/modules/subscriptions/subscriptions-service";
 import { SubscriptionEntity } from "@/modules/subscriptions/subscriptions-types";
 import { getBillingBankAccount } from "@/modules/workspace-billings/workspace-billings-service";
@@ -397,14 +397,14 @@ export const SubscriptionCard: FC<{
               )}
             </Group>
             <Text fz={em(12)} c="gray">
-              {t("members")} / {t("month")}
+              {tl("members")} / {tl("month")}
             </Text>
           </Stack>
 
           <Stack gap={16} mt={20}>
             <Group gap={16} justify="space-between" wrap="nowrap">
               <Text fz={em(15)} fw={400}>
-                {t("max_members")}
+                {tl("max_members")}
               </Text>
               <Text fz={em(15)} fw={700}>
                 {renderSubscriptionNum(subscription.limitMembers)}
@@ -412,7 +412,7 @@ export const SubscriptionCard: FC<{
             </Group>
             <Group gap={16} justify="space-between" wrap="nowrap">
               <Text fz={em(15)} fw={400}>
-                {t("limit_storage")}
+                {tl("limit_storage")}
               </Text>
               <Text fz={em(15)} fw={700}>
                 {renderSubscriptionNum(subscription.limitStorage, (v) => formatBytes(v))}
@@ -420,7 +420,7 @@ export const SubscriptionCard: FC<{
             </Group>
             <Group gap={16} justify="space-between" wrap="nowrap">
               <Text fz={em(15)} fw={400}>
-                {t("connect")} Facebook Pages / Zalo OAs
+                {tl("connect")} Facebook Pages / Zalo OAs
               </Text>
               <Text fz={em(15)} fw={700}>
                 {renderSubscriptionNum(subscription.limitSocialConnections)}
@@ -439,7 +439,7 @@ export const SubscriptionCard: FC<{
                 variant="outline"
                 radius={100}
               >
-                {t("using_this_subscription")}
+                {tl("using_this_subscription")}
               </Button>
             ) : (
               <Button
@@ -449,7 +449,7 @@ export const SubscriptionCard: FC<{
                 radius={100}
                 onClick={() => props.onSelect?.(subscription._id)}
               >
-                {props.isUpgrade ? t("upgrade") : t("select_this_subscription")}
+                {props.isUpgrade ? tl("upgrade") : tl("select_this_subscription")}
               </Button>
             )}
           </Fragment>
@@ -462,7 +462,7 @@ export const SubscriptionCard: FC<{
 export const OnModalWorkspaceSubscription = () => {
   return modals.open({
     modalId: "ModalWorkspaceSubscription",
-    title: <ModalTitle title={t("register_subscription")} icon={IconBox} />,
+    title: <ModalTitle title={tl("register_subscription")} icon={IconBox} />,
     children: <ModalWorkspaceSubscription />,
     size: "auto",
     fullScreen: getView() === "mobile",

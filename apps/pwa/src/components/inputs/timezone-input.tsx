@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { getTimeZones } from "@/modules/times/times-service";
 import { capitalize } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
@@ -19,7 +19,7 @@ export const TimeZoneInput: FC<SelectProps> = (props) => {
       data={(timeZones.data || []).map((tz) => ({ label: tz.text, value: tz.id }))}
       onDropdownOpen={() => timeZones.fetch()}
       searchable
-      placeholder={capitalize(`${t("select")} ${t("timezone")}`)}
+      placeholder={capitalize(`${tl("select")} ${tl("timezone")}`)}
     />
   );
 };

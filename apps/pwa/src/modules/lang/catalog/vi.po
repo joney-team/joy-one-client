@@ -1,0 +1,429 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-24 23:30+0700\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.8\n"
+
+#: src/modules/workspaces/workspace-modules.tsx:434
+msgid "AI Assistants"
+msgstr "AI Assistants"
+
+#: src/modules/workspaces/workspace-modules.tsx:332
+msgid "API Apps"
+msgstr "API Apps"
+
+#: src/modules/workspaces/workspace-modules.tsx:285
+msgid "App settings"
+msgstr "Cài đặt App"
+
+#: src/modules/workspaces/workspace-modules.tsx:435
+msgid "Auto reply messages according to the script"
+msgstr "Trả lời tin nhắn tự động theo kịch bản"
+
+#: src/components/error-boundary.tsx:56
+msgid "Back to home"
+msgstr "Về trang chủ"
+
+#: src/modules/workspaces/workspace-modules.tsx:388
+msgid "Banks"
+msgstr "Ngân hàng"
+
+#: src/modules/workspaces/workspace-modules.tsx:149
+msgid "Bookings"
+msgstr "Lịch hẹn"
+
+#: src/modules/workspaces/workspace-modules.tsx:323
+msgid "Branches"
+msgstr "Chi nhánh"
+
+#: src/modules/workspaces/workspace-modules.tsx:351
+msgid "Categories"
+msgstr "Danh mục"
+
+#: src/modules/workspaces/workspace-modules.tsx:181
+msgid "Combos"
+msgstr "Combos"
+
+#: src/components/error-boundary.tsx:74
+msgid "Contact support"
+msgstr "Liên hệ hỗ trợ"
+
+#: src/modules/workspaces/workspace-modules.tsx:287
+msgid "Create an application with a custom domain, customize the application name, icon, color."
+msgstr "Tạo ứng dụng với tên miền riêng, tuỳ biến tên ứng dụng, biểu tượng, màu sắc."
+
+#: src/modules/workspace-settings/workspace-setting-message-hubs.tsx:51
+msgid "Create new"
+msgstr "Tạo mới"
+
+#: src/modules/workspaces/workspace-modules.tsx:305
+msgid "Credit settings"
+msgstr "Cài đặt tín dụng"
+
+#: src/modules/workspaces/workspace-modules.tsx:360
+msgid "Custom fields"
+msgstr "Trường tùy chỉnh"
+
+#: src/modules/workspaces/workspace-modules.tsx:136
+msgid "Customer Forms"
+msgstr "Form khách hàng"
+
+#: src/modules/workspaces/workspace-modules.tsx:130
+msgid "Customers"
+msgstr "Khách hàng"
+
+#: src/modules/workspaces/workspace-modules.tsx:315
+msgid "Customize the features needed on the navigation bar"
+msgstr "Tuỳ chỉnh ẩn/hiện các tính năng cần thiết trên thanh điều hướng"
+
+#: src/components/color-schemes.tsx:44
+msgid "Dark mode"
+msgstr "Chế độ tối"
+
+#: src/modules/workspaces/workspace-modules.tsx:84
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: src/modules/workspaces/workspace-modules.tsx:266
+msgid "Documents"
+msgstr "Documents"
+
+#: src/components/entity-images.tsx:83
+msgid "Drop file here or click"
+msgstr "Kéo thả tệp hoặc nhấp vào đây"
+
+#: src/modules/workspaces/workspace-modules.tsx:215
+#: src/modules/workspaces/workspace-modules.tsx:443
+msgid "E-Invoices"
+msgstr "HĐĐT"
+
+#: src/widgets/reports/widgets/report-credit.widget.tsx:566
+msgid "Export"
+msgstr "Xuất"
+
+#: src/modules/workspaces/workspace-modules.tsx:369
+msgid "File manager"
+msgstr "Quản lí tệp tin"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:65
+msgid "Folder"
+msgstr "Thư mục"
+
+#: src/modules/workspaces/workspace-modules.tsx:333
+msgid "For developers, manipulate data through APIs"
+msgstr "Dành cho nhà phát triển, thao tác với dữ liệu thông qua APIs"
+
+#: src/modules/workspaces/workspace-modules.tsx:247
+msgid "General Settings"
+msgstr "Cài đặt chung"
+
+#: src/modules/workspaces/workspace-modules.tsx:417
+msgid "Identify brand through Email. Help you take better care of customers through Email."
+msgstr "Nhận diện thương hiệu thông qua Email. Giúp bạn chăm sóc khách hàng qua Email tốt hơn."
+
+#: src/modules/workspaces/workspace-modules.tsx:389
+msgid "Integrate bank accounts to receive and pay money."
+msgstr "Tích hợp tài khoản ngân hàng nhận tiền, thanh toán."
+
+#: src/modules/workspaces/workspace-modules.tsx:426
+msgid "Integrate ChatBox into your website."
+msgstr "Tích hợp ChatBox vào website của bạn."
+
+#: src/modules/workspaces/workspace-modules.tsx:407
+msgid "Integrate Fanpage Facebook, manage Messenger messages."
+msgstr "Tích hợp Fanpage Facebook, quản lí tin nhắn Messenger."
+
+#: src/modules/workspaces/workspace-modules.tsx:380
+msgid "Integrate other services / utilities"
+msgstr "Tích hợp các dịch vụ / tiện ích khác"
+
+#: src/modules/workspaces/workspace-modules.tsx:444
+msgid "Integrate with E-Invoices services: MatBao, ..."
+msgstr "Tích hợp với các dịch vụ HDDT Mắt Bão, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:398
+msgid "Integrate Zalo OA, manage customer interactions."
+msgstr "Tích hợp Zalo OA, quản lí tương tác với khách hàng."
+
+#. js-lingui-explicit-id
+#: src/app/members/page-content.tsx:35
+msgid "invite_members"
+msgstr "Mời thành viên"
+
+#: src/modules/workspaces/workspace-modules.tsx:143
+msgid "KYCs"
+msgstr "KYCs"
+
+#: src/components/color-schemes.tsx:36
+msgid "Light mode"
+msgstr "Chế độ sáng"
+
+#: src/modules/workspaces/workspace-modules.tsx:229
+msgid "Loan Asset Estimations"
+msgstr "Định giá tài sản"
+
+#: src/modules/workspaces/workspace-modules.tsx:223
+msgid "Loans"
+msgstr "Hồ sơ vay"
+
+#: src/modules/workspaces/workspace-modules.tsx:415
+msgid "Mailer"
+msgstr "Mailer"
+
+#: src/modules/workspaces/workspace-modules.tsx:361
+msgid "Manage custom fields for objects: product, service, post, ..."
+msgstr "Quản lí trường tùy chỉnh cho các đối tượng: sản phẩm, dịch vụ, bài viết, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:296
+msgid "Manage member roles and access permissions"
+msgstr "Quản lý vai trò, quyền truy cập của thành viên"
+
+#: src/modules/workspaces/workspace-modules.tsx:352
+msgid "Manage product, service, post, ..."
+msgstr "Quản lí danh mục sản phẩm, dịch vụ, bài viết, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:324
+msgid "Manage the branches of the Workspace"
+msgstr "Quản lý các chi nhánh của Workspace"
+
+#: src/modules/workspaces/workspace-modules.tsx:239
+msgid "Manage the settings of the Workspace"
+msgstr "Quản lí cài đặt Workspace"
+
+#: src/modules/workspaces/workspace-modules.tsx:454
+msgid "Manage your profile settings"
+msgstr "Quản lí thông tin tài khoản"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:104
+msgid "Member"
+msgstr "Thành viên"
+
+#: src/modules/workspaces/workspace-modules.tsx:116
+msgid "Members"
+msgstr "Thành viên"
+
+#: src/modules/workspaces/workspace-modules.tsx:155
+msgid "Message Boxes"
+msgstr "Tin nhắn"
+
+#: src/modules/workspaces/workspace-modules.tsx:425
+msgid "Message Hubs"
+msgstr "Message Hubs"
+
+#: src/modules/workspaces/workspace-modules.tsx:341
+msgid "Messages settings"
+msgstr "Cài đặt tin nhắn"
+
+#: src/modules/workspaces/workspace-modules.tsx:406
+msgid "Meta Pages"
+msgstr "Meta Pages"
+
+#: src/modules/workspaces/workspace-modules.tsx:314
+msgid "Modules"
+msgstr "Chức năng"
+
+#: src/modules/workspaces/workspace-modules.tsx:99
+msgid "New Post"
+msgstr "Bài viết mới"
+
+#: src/components/empty.tsx:45
+msgid "No data"
+msgstr "Không có dữ liệu"
+
+#: src/components/entity-images.tsx:75
+msgid "No Images"
+msgstr "Không có hình ảnh"
+
+#: src/components/error-boundary.tsx:41
+msgid "Oops! Something went wrong..."
+msgstr "Chúng tôi xin lỗi vì sự bất tiện này, đội ngũ kỹ thuật của chúng tôi đã ghi nhận và sẽ sớm xử lý. Nếu cần gấp, vui lòng liên hệ với chúng tôi."
+
+#: src/modules/workspaces/workspace-modules.tsx:256
+msgid "Operation settings"
+msgstr "Cài đặt vận hành"
+
+#: src/modules/workspaces/workspace-modules.tsx:203
+msgid "Orders"
+msgstr "Đơn hàng"
+
+#: src/modules/workspaces/workspace-modules.tsx:188
+msgid "Partners"
+msgstr "Đối tác"
+
+#: src/modules/workspaces/workspace-modules.tsx:379
+msgid "Plugins"
+msgstr "Plugins"
+
+#: src/modules/workspaces/workspace-modules.tsx:92
+msgid "Posts"
+msgstr "Bài viết"
+
+#: src/modules/workspaces/workspace-modules.tsx:194
+msgid "Prescriptions"
+msgstr "Đơn thuốc"
+
+#: src/modules/workspaces/workspace-modules.tsx:163
+msgid "Products"
+msgstr "Sản phẩm/Dịch vụ"
+
+#: src/widgets/reports/widgets/report-products.widget.tsx:112
+msgid "Products & services"
+msgstr "Sản phẩm & dịch vụ"
+
+#: src/modules/workspaces/workspace-modules.tsx:453
+msgid "Profile Settings"
+msgstr "Cài đặt tài khoản"
+
+#: src/modules/workspaces/workspace-modules.tsx:107
+msgid "Promotions"
+msgstr "Khuyến mãi"
+
+#: src/components/overlay-resizing.tsx:48
+msgid "Rearranging the interface."
+msgstr "Đang sắp xếp lại giao diện."
+
+#: src/modules/workspaces/workspace-modules.tsx:209
+msgid "Receipts"
+msgstr "Hoá đơn"
+
+#: src/modules/workspaces/workspace-modules.tsx:463
+msgid "Reports"
+msgstr "Báo cáo"
+
+#: src/components/error-boundary.tsx:65
+msgid "Reset"
+msgstr "Đặt lại"
+
+#: src/components/overlay-resizing.tsx:44
+msgid "Resizing"
+msgstr "Đang thay đổi kích thước"
+
+#: src/modules/workspaces/workspace-modules.tsx:295
+msgid "Roles"
+msgstr "Phân quyền"
+
+#: src/layout/header/header-workspace.tsx:72
+#: src/layout/header/header-workspace.tsx:158
+msgid "Search"
+msgstr "Tìm kiếm"
+
+#: src/modules/workspaces/components/workspace-module-selector.tsx:66
+msgid "Select"
+msgstr "Chọn"
+
+#: src/modules/workspaces/workspace-modules.tsx:169
+msgid "Services"
+msgstr "Dịch vụ"
+
+#: src/modules/workspaces/workspace-modules.tsx:306
+msgid "Set loan package, interest, late payment penalty, ..."
+msgstr "Thiết lập gói vay, lãi, phạt trả chậm, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:248
+msgid "Set name, address, Hotline, Workspace type, ..."
+msgstr "Cài đặt tên, địa chỉ, Hotline, loại hình workspace, ..."
+
+#: src/modules/workspace-settings/workspace-setting-message-hubs.tsx:47
+msgid "Setup nhanh gọn và dễ dàng"
+msgstr "Setup nhanh gọn và dễ dàng"
+
+#: src/widgets/reports/widgets/report-credit.widget.tsx:563
+msgid "Statistics of income and expenditure"
+msgstr "Thống kê thu chi"
+
+#: src/modules/workspaces/workspace-modules.tsx:175
+msgid "Stocks"
+msgstr "Kho"
+
+#: src/modules/workspaces/workspace-modules.tsx:343
+msgid "Summarize customer messages from various channels: Zalo, Facebook, Landing Page, ..."
+msgstr "Tổng hợp tin nhắn của khách hàng từ các kênh: Zalo, Facebook, Landing Page, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:370
+msgid "Summarize images / documents / files, ..."
+msgstr "Tổng hợp hình ảnh / tài liệu / tệp tin, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:277
+msgid "Support GPS Check-in, summarize working hours, late, overtime and support salary calculation."
+msgstr "Hỗ trợ chấm công GPS, tổng hợp giờ làm việc, giờ trễ, giờ tăng ca và hỗ trợ tính lương."
+
+#: src/components/color-schemes.tsx:52
+msgid "System mode"
+msgstr "Chế độ hệ thống"
+
+#: src/modules/workspaces/workspace-modules.tsx:198
+msgid "Tasks"
+msgstr "Công việc"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:110
+msgid "Tasks completed rate"
+msgstr "Tỷ lệ hoàn thành công việc"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:61
+msgid "Tasks time trackings"
+msgstr "Theo dõi thời gian công việc"
+
+#: src/modules/workspaces/workspace-modules.tsx:267
+msgid "Terms of use, privacy policy, user manual, ..."
+msgstr "Điều khoản sử dụng, chính sách bảo mật, hướng dẫn sử dụng, ..."
+
+#: src/modules/workspace-settings/workspace-setting-message-hubs.tsx:46
+msgid "Tích hợp ChatBox vào website của bạn"
+msgstr "Tích hợp ChatBox vào website của bạn"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:113
+msgid "Time trackings"
+msgstr "Theo dõi thời gian"
+
+#: src/modules/workspaces/workspace-modules.tsx:122
+msgid "Timekeepings"
+msgstr "Chấm công"
+
+#: src/modules/workspaces/workspace-modules.tsx:275
+msgid "Timekeepings settings"
+msgstr "Cài đặt chấm công"
+
+#: src/components/calendar.tsx:116
+msgid "Today"
+msgstr "Hôm nay"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:107
+msgid "Total assigned tasks"
+msgstr "Tổng công việc được giao"
+
+#: src/app/members/page-content.tsx:66
+msgid "Transfer ownership"
+msgstr "Chuyển quyền sở hữu"
+
+#: src/components/entity-image.tsx:155
+msgid "Upload"
+msgstr "Tải lên"
+
+#: src/modules/workspaces/workspace-modules.tsx:464
+msgid "View reports and analytics"
+msgstr "Xem báo cáo và phân tích"
+
+#: src/components/error-boundary.tsx:44
+msgid "We apologize for the inconvenience, our technical team has noted it and will handle it soon. If it is urgent, please contact us."
+msgstr "Chúng tôi xin lỗi vì sự bất tiện này, đội ngũ kỹ thuật của chúng tôi đã ghi nhận và sẽ sớm xử lý. Nếu cần gấp, vui lòng liên hệ với chúng tôi."
+
+#: src/modules/workspaces/workspace-modules.tsx:258
+msgid "Working time, invoice, service voucher, payment method, search settings, ..."
+msgstr "Thời gian làm việc, hóa đơn, phiếu dịch vụ, phương thức thanh toán, cài đặt tìm kiếm, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:238
+msgid "Workspace Settings"
+msgstr "Cài đặt Workspace"
+
+#: src/modules/workspaces/workspace-modules.tsx:397
+msgid "Zalo OAs"
+msgstr "Zalo OAs"

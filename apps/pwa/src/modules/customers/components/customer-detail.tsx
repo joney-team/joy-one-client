@@ -32,7 +32,7 @@ import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
 import { CustomerKyc } from "@/modules/customers/components/customer-kyc-list";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -71,7 +71,7 @@ export const CustomerDetail = () => {
                 onClick={() => OnModalCreateBooking({ customer })}
                 size="xs"
               >
-                {t("booking")}
+                {tl("booking")}
               </Button>
             )}
 
@@ -81,7 +81,7 @@ export const CustomerDetail = () => {
               onClick={() => OnModalCreateTask({ customer })}
               size="xs"
             >
-              {t("task")}
+              {tl("task")}
             </Button>
           </Fragment>
         ),
@@ -114,7 +114,7 @@ export const CustomerDetail = () => {
 
         <Renderer visible={workspace.isModuleActive("customerKYCs")}>
           <Stack gap={10}>
-            <SessionTitle name={t("customerKYCs")} icon={IconUserScan} />
+            <SessionTitle name={tl("customerKYCs")} icon={IconUserScan} />
             <CustomerKyc customer={customer} />
           </Stack>
         </Renderer>
@@ -128,7 +128,7 @@ export const CustomerDetail = () => {
         </Renderer>
 
         <Stack gap={10}>
-          <SessionTitle name={t("imgs_docs")} icon={IconFiles} />
+          <SessionTitle name={tl("imgs_docs")} icon={IconFiles} />
 
           <FilesBox
             query={{ relatedCustomerId: customer._id }}

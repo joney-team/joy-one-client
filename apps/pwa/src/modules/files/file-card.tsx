@@ -6,7 +6,7 @@ import {
 } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { formatBytes, getFileName } from "@/utils/file.utils";
 import {
   ActionIcon,
@@ -62,7 +62,7 @@ export const FileCard: FC<FileCardProps> = ({
   const [file, setFile] = useState<FileEntity | null>();
 
   const fileSize = file?.size ?? calculatedFileSize;
-  const filename = file?.fileName ?? t(getFileName(fileUri));
+  const filename = file?.fileName ?? tl(getFileName(fileUri));
 
   const initialize = async () => {
     try {
@@ -124,7 +124,7 @@ export const FileCard: FC<FileCardProps> = ({
             {filename}
           </Text>
           <Text fz={10} c="gray.6">
-            {fileSize !== null ? formatBytes(fileSize) : t("unknown_file_size")}
+            {fileSize !== null ? formatBytes(fileSize) : tl("unknown_file_size")}
           </Text>
         </Stack>
 

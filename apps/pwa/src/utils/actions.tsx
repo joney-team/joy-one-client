@@ -1,6 +1,6 @@
 import { type AppMetadata } from "@/types";
 import { ModalTitle } from "@/components/modal-title";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { onError } from "@/utils/exceptions.utils";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
@@ -25,8 +25,8 @@ export function onActionLoad<T = any>(args: {
 
   return new Promise(async (resolve, reject) => {
     const id = notifications.show({
-      title: args.name || t("processing"),
-      message: t("waiting"),
+      title: args.name || tl("processing"),
+      message: tl("waiting"),
       color,
       icon: args.icon ? <args.icon strokeWidth={1.6} size={20} /> : undefined,
       autoClose: false,
@@ -46,7 +46,7 @@ export function onActionLoad<T = any>(args: {
           id,
           color,
           icon: <IconCheck strokeWidth={1.5} size={18} />,
-          message: t("completed"),
+          message: tl("completed"),
           autoClose: 1000,
           loading: false,
         });
@@ -67,7 +67,7 @@ export function onActionLoad<T = any>(args: {
 
 export function onSuccess(args: { title?: string; message: string }) {
   notifications.show({
-    title: args.title || t("success"),
+    title: args.title || tl("success"),
     message: args.message,
     color: "green",
     icon: <IconCheck strokeWidth={1.5} size={18} />,
@@ -92,14 +92,14 @@ export function onArchive<T = any>(args: {
       modalId,
       title: (
         <ModalTitle
-          title={args.title || `${t("remove")} ${t(args.name || "data")}`}
+          title={args.title || `${tl("remove")} ${tl(args.name || "data")}`}
           color={color}
           icon={args.icon || IconArchive}
         />
       ),
-      children: args.children || t("archive_confirmation_msg"),
+      children: args.children || tl("archive_confirmation_msg"),
       color: color,
-      labels: { confirm: t("archive"), cancel: t("cancel") },
+      labels: { confirm: tl("archive"), cancel: tl("cancel") },
       confirmProps: { color },
       onConfirm: async () => {
         await args

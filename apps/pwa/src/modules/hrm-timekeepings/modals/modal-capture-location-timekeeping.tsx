@@ -16,7 +16,7 @@ import {
   HrmTimekeepingStatus,
   HrmTimekeepingType,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { renderDateTime, t } from "@/modules/lang/lang-service";
+import { renderDateTime, tl } from "@/modules/lang/lang-service";
 import {
   findAvailableLocationToCheckIn,
   getGeolocation,
@@ -60,7 +60,7 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
   const onLocation = async () => {
     try {
       if (!checkInLocation || !geolocation.data || !file)
-        throw Error(t("hrm_timekeepings_not_enough_condition"));
+        throw Error(tl("hrm_timekeepings_not_enough_condition"));
 
       const coordinates = {
         lat: geolocation.data.coords.latitude,
@@ -94,28 +94,28 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
 
         <Text ta="center" c={color(timekeepingColor)} fw={500} fz={em(22)}>
           {timekeeping.type === HrmTimekeepingType.CHECK_IN
-            ? t("hrm_timekeepings_check_in_success")
-            : t("hrm_timekeepings_check_out_success")}
+            ? tl("hrm_timekeepings_check_in_success")
+            : tl("hrm_timekeepings_check_out_success")}
         </Text>
 
         {timekeeping.status === HrmTimekeepingStatus.PENDING ? (
-          <Text ta="center">{t("hrm_timekeepings_pending_approval")}</Text>
+          <Text ta="center">{tl("hrm_timekeepings_pending_approval")}</Text>
         ) : (
           <Fragment>
             {timekeeping.type === HrmTimekeepingType.CHECK_IN ? (
               <Text ta="center" c="dark">
-                {t("hrm_timekeepings_complete_msg", { name: workspace.userMember.name })}
+                {tl("hrm_timekeepings_complete_msg", { name: workspace.userMember.name })}
               </Text>
             ) : (
               <Text ta="center" c="dark">
-                {t("hrm_timekeepings_complete_msg_out", { name: workspace.userMember.name })}
+                {tl("hrm_timekeepings_complete_msg_out", { name: workspace.userMember.name })}
               </Text>
             )}
           </Fragment>
         )}
 
         <Anchor ta="center" c="gray" fz={em(13)} onClick={onClose}>
-          {t("leave")}
+          {tl("leave")}
         </Anchor>
       </Stack>
     );
@@ -145,13 +145,15 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
 
       {(function () {
         if (prevTimekeeping.isFetching) return <Loading />;
-        if (geolocation.isFetching) return <Loading message={t("fetching_location")} />;
+        if (geolocation.isFetching) return <Loading message={tl("fetching_location")} />;
 
         if (prevTimekeeping.error || !geolocation.data)
           return <Errored hideIcon error={prevTimekeeping.error || geolocation.error} />;
 
         if (!checkInLocation)
-          return <Errored centered hideIcon error={t("hrm_timekeepings_location_not_supported")} />;
+          return (
+            <Errored centered hideIcon error={tl("hrm_timekeepings_location_not_supported")} />
+          );
 
         const prevType = prevTimekeeping.data?.type || HrmTimekeepingType.CHECK_OUT;
         const nextType =
@@ -163,22 +165,22 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
           <Fragment>
             <Text ta="center" fw={500} fz={em(25)} c={color(nextColor)} tt="uppercase">
               {nextType === HrmTimekeepingType.CHECK_IN
-                ? t("hrm_timekeepings_check_in")
-                : t("hrm_timekeepings_check_out")}
+                ? tl("hrm_timekeepings_check_in")
+                : tl("hrm_timekeepings_check_out")}
             </Text>
 
             <Stack gap={0}>
               {prevTimekeeping.data &&
                 prevTimekeeping.data.type === HrmTimekeepingType.CHECK_IN && (
                   <Text ta="center" c="dark">
-                    {t("hrm_timekeepings_checked_in_at")}{" "}
+                    {tl("hrm_timekeepings_checked_in_at")}{" "}
                     <strong>{renderDateTime(prevTimekeeping.data.time)}</strong>
                   </Text>
                 )}
 
               {checkInLocation && (
                 <Text ta="center" c="dark">
-                  {t("location")} <strong>{checkInLocation.name}</strong>
+                  {tl("location")} <strong>{checkInLocation.name}</strong>
                 </Text>
               )}
             </Stack>
@@ -203,7 +205,7 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
                           onClick={onTakePhoto}
                           mt={10}
                         >
-                          {t("take_photo_again")}
+                          {tl("take_photo_again")}
                         </Button>
 
                         <Button
@@ -214,7 +216,7 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
                           onClick={onLocation}
                           mt={10}
                         >
-                          {t("complete")}
+                          {tl("complete")}
                         </Button>
                       </Group>
                     </Fragment>
@@ -230,7 +232,7 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
                       leftIcon={IconCameraSelfie}
                       color={nextColor}
                     >
-                      {t("take_photo")}
+                      {tl("take_photo")}
                     </Button>
                   </Center>
                 );
@@ -247,7 +249,7 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
                       onClick={() => geolocation.fetch({ isSilient: true })}
                       color={nextColor}
                     >
-                      {t("retry")}
+                      {tl("retry")}
                     </Button>
                   </Center>
                 </Fragment>
@@ -258,7 +260,7 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
       })()}
 
       <Anchor ta="center" c="gray" fz={em(13)} onClick={onClose}>
-        {t("leave")}
+        {tl("leave")}
       </Anchor>
     </Stack>
   );

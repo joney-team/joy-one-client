@@ -1,18 +1,18 @@
-import { type FC } from "react";
-import { useColor } from "@/modules/theme/use-color";
 import { Avatar } from "@/components/avatar";
-import { Container } from "@/components/container";
 import { Button } from "@/components/buttons/button";
 import { ButtonPlus } from "@/components/buttons/button-plus";
+import { Container } from "@/components/container";
 import { Image } from "@/components/image";
 import { LazyLoad } from "@/components/lazy-load";
-import { MessageHubCard } from "@/modules/plugins/message-hubs/message-hub-card";
 import { SessionTitle } from "@/components/session-title";
-import { t } from "@/modules/lang/lang-service";
+import { MessageHubCard } from "@/modules/plugins/message-hubs/message-hub-card";
 import { usePlugins } from "@/modules/plugins/plugins-context";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { Trans } from "@lingui/react/macro";
 import { Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { IconCirclesRelation, IconMessage, IconPlus } from "@tabler/icons-react";
+import { type FC } from "react";
 
 export function getColorScheme(key: string) {
   return document.documentElement.getAttribute(key);
@@ -39,13 +39,16 @@ export const WorkspaceSettingMessageHubs: FC = () => {
             </Group>
 
             <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-              {t("message-hubs")}
+              Message Hub
             </Title>
 
-            <Text ta="center">{t("message-hubs-description")}</Text>
+            <Text ta="center">
+              • <Trans>Tích hợp ChatBox vào website của bạn</Trans> <br />•{" "}
+              <Trans>Setup nhanh gọn và dễ dàng</Trans>
+            </Text>
 
             <Button mt={10} type="submit" leftIcon={IconPlus} onClick={plugins.onCreateMessageHub}>
-              {t("create_new")}
+              <Trans>Create new</Trans>
             </Button>
           </Stack>
         </Card>
@@ -56,7 +59,7 @@ export const WorkspaceSettingMessageHubs: FC = () => {
   return (
     <Container p={16}>
       <Stack>
-        <SessionTitle icon={IconMessage} name={t("message-hubs")} iconColor="primary">
+        <SessionTitle icon={IconMessage} name="Message Hubs" iconColor="primary">
           <ButtonPlus onClick={plugins.onCreateMessageHub} size="sm" iconSize={16} />
         </SessionTitle>
 

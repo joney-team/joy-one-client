@@ -1,5 +1,5 @@
 import { Button } from "@/components/buttons/button";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceRoleEntity } from "@/modules/workspace-roles/workspace-roles-types";
@@ -21,7 +21,7 @@ interface WorkspaceRolesSelectorProps {
 
 export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) => {
   const workspace = useWorkspace();
-  const options: WorkspaceRoleOption[] = workspace.roles.map((v) => ({ ...v, name: t(v.name) }));
+  const options: WorkspaceRoleOption[] = workspace.roles.map((v) => ({ ...v, name: tl(v.name) }));
   const color = useColor();
 
   return (
@@ -30,8 +30,8 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
       autoCloseOnChange={false}
       staticSearch
       pinnedOptions={options}
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(mo) => {
         const _color = color(mo.color || "gray");
@@ -69,7 +69,7 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
             fw={500}
             onClick={toggle}
           >
-            {t("select")}
+            {tl("select")}
           </Button>
         );
       }}

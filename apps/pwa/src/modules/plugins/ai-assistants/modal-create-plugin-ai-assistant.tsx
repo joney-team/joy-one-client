@@ -3,7 +3,7 @@ import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Image } from "@/components/image";
 import { ModalTitle } from "@/components/modal-title";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import {
   createPluginAiAssistant,
   removePluginAiAssistant,
@@ -75,10 +75,10 @@ export const ModalCreatePluginAiAssistant: FC<{
       enabled: typeof plugin?.enabled === "boolean" ? plugin.enabled : true,
     },
     validate: {
-      provider: (value) => (value.length > 0 ? null : t("required")),
+      provider: (value) => (value.length > 0 ? null : tl("required")),
       apiKey: (value, values) => {
         if (values.provider !== plugin?.provider) {
-          return value.length > 0 ? null : t("required");
+          return value.length > 0 ? null : tl("required");
         }
 
         return null;
@@ -109,7 +109,7 @@ export const ModalCreatePluginAiAssistant: FC<{
 
   return (
     <Stack>
-      <InputWrapper label={t("provider")}>
+      <InputWrapper label={tl("provider")}>
         <SimpleGrid cols={2} mt={8}>
           {Object.keys(pluginAiAssistantProviders).map((providerKey) => {
             const provider = pluginAiAssistantProviders[providerKey as PluginAiAssistantProvider];
@@ -164,7 +164,7 @@ export const ModalCreatePluginAiAssistant: FC<{
                       fz={12}
                       onClick={() => window.open(provider.appLink, "_blank")}
                     >
-                      {t("open_app")}
+                      {tl("open_app")}
                     </Button>
 
                     <Button
@@ -175,7 +175,7 @@ export const ModalCreatePluginAiAssistant: FC<{
                       fz={12}
                       onClick={() => window.open(provider.docsLink, "_blank")}
                     >
-                      {t("docs")}
+                      {tl("docs")}
                     </Button>
                   </Group>
                 </Stack>
@@ -187,16 +187,16 @@ export const ModalCreatePluginAiAssistant: FC<{
 
       {plugin && plugin.provider === form.values.provider ? (
         <TextInput
-          label={t("apiKey")}
+          label={tl("apiKey")}
           leftSection={<IconKey size={16} strokeWidth={1.5} />}
           value="••••••••••••••••••••••"
           readOnly
         />
       ) : (
         <PasswordInput
-          label={t("apiKey")}
+          label={tl("apiKey")}
           leftSection={<IconKey size={16} strokeWidth={1.5} />}
-          placeholder={t("provide_api_key")}
+          placeholder={tl("provide_api_key")}
           {...form.getInputProps("apiKey")}
         />
       )}
@@ -209,7 +209,7 @@ export const ModalCreatePluginAiAssistant: FC<{
           loading={loading}
           color="violet.9"
         >
-          {t(plugin ? "save" : "connect")}
+          {tl(plugin ? "save" : "connect")}
         </Button>
 
         {plugin && (

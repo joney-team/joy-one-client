@@ -5,7 +5,7 @@ import { Renderer } from "@/components/renderer";
 import { calendarDayJsLocalizer } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
 import { useLang } from "@/modules/lang/lang-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { createTask } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
@@ -93,10 +93,12 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
   const onSubmit = async () => {
     try {
       if (!name)
-        throw new Error(String.capitalizeFirstLetter(`${t("please")} ${t("enter_task_name")}`));
+        throw new Error(String.capitalizeFirstLetter(`${tl("please")} ${tl("enter_task_name")}`));
 
       if (!slot)
-        throw new Error(String.capitalizeFirstLetter(`${t("please")} ${t("select")} ${t("time")}`));
+        throw new Error(
+          String.capitalizeFirstLetter(`${tl("please")} ${tl("select")} ${tl("time")}`)
+        );
 
       const time = new Date(date);
       const startAt = time.setHours(
@@ -113,7 +115,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
       );
 
       if (startAt > endAt) {
-        throw new Error(t("start_time_must_be_before_end_time"));
+        throw new Error(tl("start_time_must_be_before_end_time"));
       }
 
       const result = await createTask({
@@ -170,7 +172,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
           <Text>/</Text>
 
           <Text px={8} fz={em(14)} fw={300}>
-            {t("new_task")}
+            {tl("new_task")}
           </Text>
         </Group>
       )}
@@ -178,7 +180,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
       <ContentEditable
         mt={3}
         autoFocus
-        placeholder={String.capitalizeFirstLetter(`${t("enter_task_name")}`)}
+        placeholder={String.capitalizeFirstLetter(`${tl("enter_task_name")}`)}
         placeHolderFontSize={layout.view === "mobile" ? 12 : 18}
         fz={layout.view === "mobile" ? 18 : 25}
         fw={500}
@@ -187,7 +189,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
       />
 
       <Renderer views={["desktop", "tablet"]}>
-        <InputWrapper label={t("time")}>
+        <InputWrapper label={tl("time")}>
           <Card withBorder shadow="none" p={0}>
             <ScrollArea h={450} viewportRef={viewport}>
               <Calendar
@@ -257,7 +259,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         </InputWrapper>
       </Renderer>
 
-      <InputWrapper label={t("time")}>
+      <InputWrapper label={tl("time")}>
         <Group gap={10} wrap="nowrap">
           <DateInput
             valueFormat={lang.config.dateFormat}
@@ -338,7 +340,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
 
       <Group justify="space-between">
         <Switch
-          label={t("mark_as_billable")}
+          label={tl("mark_as_billable")}
           checked={billable}
           onChange={(e) => setBillable(e.target.checked)}
           onLabel={<IconCurrencyDollar size={16} strokeWidth={2} />}
@@ -368,7 +370,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         mt={10}
         color={color(tasks.tagFolder?.color || "primary")}
       >
-        {t("add")}
+        {tl("add")}
       </Button>
     </Stack>
   );
@@ -396,7 +398,7 @@ export const ModalTaskTimeTracking: FC = () => {
       onClose={close}
       title={
         <ModalTitle
-          title={String.capitalizeFirstLetter(`${t("add")} ${t("time_trackings")}`)}
+          title={String.capitalizeFirstLetter(`${tl("add")} ${tl("time_trackings")}`)}
           icon={IconStopwatch}
           color={tagFolder?.color}
         />

@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { FilesBox } from "@/modules/files/files-box";
 import { ModalTitle } from "@/components/modal-title";
 import { UserCard } from "@/modules/users/components/user-card";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { disburseReceipt, getPaymentMethodIcon } from "@/modules/receipts/receipts-service";
 import {
   ReceiptEntity,
@@ -86,7 +86,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
               onClick={() => setPaymentMethod(method)}
               color="dark"
             >
-              {t(`payment_method_${method}`)}
+              {tl(`payment_method_${method}`)}
             </Button>
           );
         })}

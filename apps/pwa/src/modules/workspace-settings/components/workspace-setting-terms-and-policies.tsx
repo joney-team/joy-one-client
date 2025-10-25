@@ -1,4 +1,4 @@
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { ActionIcon, Anchor, Card, Group, SimpleGrid, Text } from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
 import Link from "next/link";
@@ -13,7 +13,7 @@ export const WorkspaceTermsAndPolicies: FC = () => {
         <Anchor key={doc} component={Link} href={`/docs/${doc}`}>
           <Card withBorder shadow="none">
             <Group justify="space-between">
-              <Text>{t(doc)}</Text>
+              <Text>{tl(doc)}</Text>
 
               <ActionIcon variant="subtle" color="gray">
                 <IconEye strokeWidth={1.2} />

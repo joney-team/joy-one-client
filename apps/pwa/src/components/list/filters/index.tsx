@@ -2,7 +2,7 @@
 
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Group } from "@mantine/core";
 import { IconFilter, IconFilterFilled, IconRefresh } from "@tabler/icons-react";
 import { FC, MouseEventHandler } from "react";
@@ -38,7 +38,7 @@ export const FilterItem: FC<
     return (
       <ActionButton
         icon={column.icon || IconFilter}
-        label={t(column.name || colKey)}
+        label={tl(column.name || colKey)}
         onClear={onClear || (isHasValue ? onReset : undefined)}
         onClick={onClick}
         quantity={quantity}
@@ -109,7 +109,7 @@ export const FilterBar: FC<ListContext> = (ctx) => {
 
       <ActionButton
         icon={IconRefresh}
-        label={t("clear_filter")}
+        label={tl("clear_filter")}
         onClick={onReset}
         borderStyle="dashed"
         disabled={filterCount === 0}
@@ -134,7 +134,7 @@ export const Filter: FC<ListContext> = (ctx) => {
     <ActionButton
       icon={IconFilter}
       activeIcon={IconFilterFilled}
-      label={layout.view !== "mobile" ? t("filter") : ""}
+      label={layout.view !== "mobile" ? tl("filter") : ""}
       onClick={() =>
         ctx.setViewState({ ...ctx.viewState, isFilterVisible: !ctx.viewState.isFilterVisible })
       }

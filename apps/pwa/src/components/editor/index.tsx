@@ -12,7 +12,7 @@ import { onUploadFile } from "@/modules/files/file-service";
 import { FileType, UploadFileOptions } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { alpha, Box, Group, Loader, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
@@ -225,7 +225,7 @@ export const Editor: FC<EditorProps> = (props) => {
               <IconUpload />
             </ThemeIcon>
 
-            <Text c="white">{t("drop_img_here")}</Text>
+            <Text c="white">{tl("drop_img_here")}</Text>
           </Group>
         </Dropzone.Accept>
       </Box>

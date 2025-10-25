@@ -1,0 +1,429 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2025-10-24 23:30+0700\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/modules/workspaces/workspace-modules.tsx:434
+msgid "AI Assistants"
+msgstr "AI Assistants"
+
+#: src/modules/workspaces/workspace-modules.tsx:332
+msgid "API Apps"
+msgstr "API Apps"
+
+#: src/modules/workspaces/workspace-modules.tsx:285
+msgid "App settings"
+msgstr "App settings"
+
+#: src/modules/workspaces/workspace-modules.tsx:435
+msgid "Auto reply messages according to the script"
+msgstr "Auto reply messages according to the script"
+
+#: src/components/error-boundary.tsx:56
+msgid "Back to home"
+msgstr "Back to home"
+
+#: src/modules/workspaces/workspace-modules.tsx:388
+msgid "Banks"
+msgstr "Banks"
+
+#: src/modules/workspaces/workspace-modules.tsx:149
+msgid "Bookings"
+msgstr "Bookings"
+
+#: src/modules/workspaces/workspace-modules.tsx:323
+msgid "Branches"
+msgstr "Branches"
+
+#: src/modules/workspaces/workspace-modules.tsx:351
+msgid "Categories"
+msgstr "Categories"
+
+#: src/modules/workspaces/workspace-modules.tsx:181
+msgid "Combos"
+msgstr "Combos"
+
+#: src/components/error-boundary.tsx:74
+msgid "Contact support"
+msgstr "Contact support"
+
+#: src/modules/workspaces/workspace-modules.tsx:287
+msgid "Create an application with a custom domain, customize the application name, icon, color."
+msgstr "Create an application with a custom domain, customize the application name, icon, color."
+
+#: src/modules/workspace-settings/workspace-setting-message-hubs.tsx:51
+msgid "Create new"
+msgstr "Create new"
+
+#: src/modules/workspaces/workspace-modules.tsx:305
+msgid "Credit settings"
+msgstr "Credit settings"
+
+#: src/modules/workspaces/workspace-modules.tsx:360
+msgid "Custom fields"
+msgstr "Custom fields"
+
+#: src/modules/workspaces/workspace-modules.tsx:136
+msgid "Customer Forms"
+msgstr "Customer Forms"
+
+#: src/modules/workspaces/workspace-modules.tsx:130
+msgid "Customers"
+msgstr "Customers"
+
+#: src/modules/workspaces/workspace-modules.tsx:315
+msgid "Customize the features needed on the navigation bar"
+msgstr "Customize the features needed on the navigation bar"
+
+#: src/components/color-schemes.tsx:44
+msgid "Dark mode"
+msgstr "Dark mode"
+
+#: src/modules/workspaces/workspace-modules.tsx:84
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: src/modules/workspaces/workspace-modules.tsx:266
+msgid "Documents"
+msgstr "Documents"
+
+#: src/components/entity-images.tsx:83
+msgid "Drop file here or click"
+msgstr "Drop file here or click"
+
+#: src/modules/workspaces/workspace-modules.tsx:215
+#: src/modules/workspaces/workspace-modules.tsx:443
+msgid "E-Invoices"
+msgstr "E-Invoices"
+
+#: src/widgets/reports/widgets/report-credit.widget.tsx:566
+msgid "Export"
+msgstr "Export"
+
+#: src/modules/workspaces/workspace-modules.tsx:369
+msgid "File manager"
+msgstr "File manager"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:65
+msgid "Folder"
+msgstr "Folder"
+
+#: src/modules/workspaces/workspace-modules.tsx:333
+msgid "For developers, manipulate data through APIs"
+msgstr "For developers, manipulate data through APIs"
+
+#: src/modules/workspaces/workspace-modules.tsx:247
+msgid "General Settings"
+msgstr "General Settings"
+
+#: src/modules/workspaces/workspace-modules.tsx:417
+msgid "Identify brand through Email. Help you take better care of customers through Email."
+msgstr "Identify brand through Email. Help you take better care of customers through Email."
+
+#: src/modules/workspaces/workspace-modules.tsx:389
+msgid "Integrate bank accounts to receive and pay money."
+msgstr "Integrate bank accounts to receive and pay money."
+
+#: src/modules/workspaces/workspace-modules.tsx:426
+msgid "Integrate ChatBox into your website."
+msgstr "Integrate ChatBox into your website."
+
+#: src/modules/workspaces/workspace-modules.tsx:407
+msgid "Integrate Fanpage Facebook, manage Messenger messages."
+msgstr "Integrate Fanpage Facebook, manage Messenger messages."
+
+#: src/modules/workspaces/workspace-modules.tsx:380
+msgid "Integrate other services / utilities"
+msgstr "Integrate other services / utilities"
+
+#: src/modules/workspaces/workspace-modules.tsx:444
+msgid "Integrate with E-Invoices services: MatBao, ..."
+msgstr "Integrate with E-Invoices services: MatBao, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:398
+msgid "Integrate Zalo OA, manage customer interactions."
+msgstr "Integrate Zalo OA, manage customer interactions."
+
+#. js-lingui-explicit-id
+#: src/app/members/page-content.tsx:35
+msgid "invite_members"
+msgstr "Invite members"
+
+#: src/modules/workspaces/workspace-modules.tsx:143
+msgid "KYCs"
+msgstr "KYCs"
+
+#: src/components/color-schemes.tsx:36
+msgid "Light mode"
+msgstr "Light mode"
+
+#: src/modules/workspaces/workspace-modules.tsx:229
+msgid "Loan Asset Estimations"
+msgstr "Loan Asset Estimations"
+
+#: src/modules/workspaces/workspace-modules.tsx:223
+msgid "Loans"
+msgstr "Loans"
+
+#: src/modules/workspaces/workspace-modules.tsx:415
+msgid "Mailer"
+msgstr "Mailer"
+
+#: src/modules/workspaces/workspace-modules.tsx:361
+msgid "Manage custom fields for objects: product, service, post, ..."
+msgstr "Manage custom fields for objects: product, service, post, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:296
+msgid "Manage member roles and access permissions"
+msgstr "Manage member roles and access permissions"
+
+#: src/modules/workspaces/workspace-modules.tsx:352
+msgid "Manage product, service, post, ..."
+msgstr "Manage product, service, post, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:324
+msgid "Manage the branches of the Workspace"
+msgstr "Manage the branches of the Workspace"
+
+#: src/modules/workspaces/workspace-modules.tsx:239
+msgid "Manage the settings of the Workspace"
+msgstr "Manage the settings of the Workspace"
+
+#: src/modules/workspaces/workspace-modules.tsx:454
+msgid "Manage your profile settings"
+msgstr "Manage your profile settings"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:104
+msgid "Member"
+msgstr "Member"
+
+#: src/modules/workspaces/workspace-modules.tsx:116
+msgid "Members"
+msgstr "Members"
+
+#: src/modules/workspaces/workspace-modules.tsx:155
+msgid "Message Boxes"
+msgstr "Message Boxes"
+
+#: src/modules/workspaces/workspace-modules.tsx:425
+msgid "Message Hubs"
+msgstr "Message Hubs"
+
+#: src/modules/workspaces/workspace-modules.tsx:341
+msgid "Messages settings"
+msgstr "Messages settings"
+
+#: src/modules/workspaces/workspace-modules.tsx:406
+msgid "Meta Pages"
+msgstr "Meta Pages"
+
+#: src/modules/workspaces/workspace-modules.tsx:314
+msgid "Modules"
+msgstr "Modules"
+
+#: src/modules/workspaces/workspace-modules.tsx:99
+msgid "New Post"
+msgstr "New Post"
+
+#: src/components/empty.tsx:45
+msgid "No data"
+msgstr "No data"
+
+#: src/components/entity-images.tsx:75
+msgid "No Images"
+msgstr "No Images"
+
+#: src/components/error-boundary.tsx:41
+msgid "Oops! Something went wrong..."
+msgstr "Oops! Something went wrong..."
+
+#: src/modules/workspaces/workspace-modules.tsx:256
+msgid "Operation settings"
+msgstr "Operation settings"
+
+#: src/modules/workspaces/workspace-modules.tsx:203
+msgid "Orders"
+msgstr "Orders"
+
+#: src/modules/workspaces/workspace-modules.tsx:188
+msgid "Partners"
+msgstr "Partners"
+
+#: src/modules/workspaces/workspace-modules.tsx:379
+msgid "Plugins"
+msgstr "Plugins"
+
+#: src/modules/workspaces/workspace-modules.tsx:92
+msgid "Posts"
+msgstr "Posts"
+
+#: src/modules/workspaces/workspace-modules.tsx:194
+msgid "Prescriptions"
+msgstr "Prescriptions"
+
+#: src/modules/workspaces/workspace-modules.tsx:163
+msgid "Products"
+msgstr "Products"
+
+#: src/widgets/reports/widgets/report-products.widget.tsx:112
+msgid "Products & services"
+msgstr "Products & services"
+
+#: src/modules/workspaces/workspace-modules.tsx:453
+msgid "Profile Settings"
+msgstr "Profile Settings"
+
+#: src/modules/workspaces/workspace-modules.tsx:107
+msgid "Promotions"
+msgstr "Promotions"
+
+#: src/components/overlay-resizing.tsx:48
+msgid "Rearranging the interface."
+msgstr "Rearranging the interface."
+
+#: src/modules/workspaces/workspace-modules.tsx:209
+msgid "Receipts"
+msgstr "Receipts"
+
+#: src/modules/workspaces/workspace-modules.tsx:463
+msgid "Reports"
+msgstr "Reports"
+
+#: src/components/error-boundary.tsx:65
+msgid "Reset"
+msgstr "Reset"
+
+#: src/components/overlay-resizing.tsx:44
+msgid "Resizing"
+msgstr "Resizing"
+
+#: src/modules/workspaces/workspace-modules.tsx:295
+msgid "Roles"
+msgstr "Roles"
+
+#: src/layout/header/header-workspace.tsx:72
+#: src/layout/header/header-workspace.tsx:158
+msgid "Search"
+msgstr "Search"
+
+#: src/modules/workspaces/components/workspace-module-selector.tsx:66
+msgid "Select"
+msgstr "Select"
+
+#: src/modules/workspaces/workspace-modules.tsx:169
+msgid "Services"
+msgstr "Services"
+
+#: src/modules/workspaces/workspace-modules.tsx:306
+msgid "Set loan package, interest, late payment penalty, ..."
+msgstr "Set loan package, interest, late payment penalty, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:248
+msgid "Set name, address, Hotline, Workspace type, ..."
+msgstr "Set name, address, Hotline, Workspace type, ..."
+
+#: src/modules/workspace-settings/workspace-setting-message-hubs.tsx:47
+msgid "Setup nhanh gọn và dễ dàng"
+msgstr "Setup nhanh gọn và dễ dàng"
+
+#: src/widgets/reports/widgets/report-credit.widget.tsx:563
+msgid "Statistics of income and expenditure"
+msgstr "Statistics of income and expenditure"
+
+#: src/modules/workspaces/workspace-modules.tsx:175
+msgid "Stocks"
+msgstr "Stocks"
+
+#: src/modules/workspaces/workspace-modules.tsx:343
+msgid "Summarize customer messages from various channels: Zalo, Facebook, Landing Page, ..."
+msgstr "Summarize customer messages from various channels: Zalo, Facebook, Landing Page, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:370
+msgid "Summarize images / documents / files, ..."
+msgstr "Summarize images / documents / files, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:277
+msgid "Support GPS Check-in, summarize working hours, late, overtime and support salary calculation."
+msgstr "Support GPS Check-in, summarize working hours, late, overtime and support salary calculation."
+
+#: src/components/color-schemes.tsx:52
+msgid "System mode"
+msgstr "System mode"
+
+#: src/modules/workspaces/workspace-modules.tsx:198
+msgid "Tasks"
+msgstr "Tasks"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:110
+msgid "Tasks completed rate"
+msgstr "Tasks completed rate"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:61
+msgid "Tasks time trackings"
+msgstr "Tasks time trackings"
+
+#: src/modules/workspaces/workspace-modules.tsx:267
+msgid "Terms of use, privacy policy, user manual, ..."
+msgstr "Terms of use, privacy policy, user manual, ..."
+
+#: src/modules/workspace-settings/workspace-setting-message-hubs.tsx:46
+msgid "Tích hợp ChatBox vào website của bạn"
+msgstr "Tích hợp ChatBox vào website của bạn"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:113
+msgid "Time trackings"
+msgstr "Time trackings"
+
+#: src/modules/workspaces/workspace-modules.tsx:122
+msgid "Timekeepings"
+msgstr "Timekeepings"
+
+#: src/modules/workspaces/workspace-modules.tsx:275
+msgid "Timekeepings settings"
+msgstr "Timekeepings settings"
+
+#: src/components/calendar.tsx:116
+msgid "Today"
+msgstr "Today"
+
+#: src/widgets/reports/widgets/report-time-trackings.widget.tsx:107
+msgid "Total assigned tasks"
+msgstr "Total assigned tasks"
+
+#: src/app/members/page-content.tsx:66
+msgid "Transfer ownership"
+msgstr "Transfer ownership"
+
+#: src/components/entity-image.tsx:155
+msgid "Upload"
+msgstr "Upload"
+
+#: src/modules/workspaces/workspace-modules.tsx:464
+msgid "View reports and analytics"
+msgstr "View reports and analytics"
+
+#: src/components/error-boundary.tsx:44
+msgid "We apologize for the inconvenience, our technical team has noted it and will handle it soon. If it is urgent, please contact us."
+msgstr "We apologize for the inconvenience, our technical team has noted it and will handle it soon. If it is urgent, please contact us."
+
+#: src/modules/workspaces/workspace-modules.tsx:258
+msgid "Working time, invoice, service voucher, payment method, search settings, ..."
+msgstr "Working time, invoice, service voucher, payment method, search settings, ..."
+
+#: src/modules/workspaces/workspace-modules.tsx:238
+msgid "Workspace Settings"
+msgstr "Workspace Settings"
+
+#: src/modules/workspaces/workspace-modules.tsx:397
+msgid "Zalo OAs"
+msgstr "Zalo OAs"

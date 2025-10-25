@@ -1,7 +1,7 @@
 "use client";
 
 import { configs } from "@/configs/layout.config";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { tasksEmitter, updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskHistory } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -35,7 +35,7 @@ const TaskHistoriesProvider: FC<PropsWithChildren> = (props) => {
       autoClose: 5000,
       message: (
         <Stack gap={5}>
-          <Text fz={13}>{t("task_archive_undo_msg", { count: num(_history.tasks.length) })}</Text>
+          <Text fz={13}>{tl("task_archive_undo_msg", { count: num(_history.tasks.length) })}</Text>
           <Group>
             <Button
               color="dark"
@@ -45,7 +45,7 @@ const TaskHistoriesProvider: FC<PropsWithChildren> = (props) => {
                 notifications.hide(id);
               }}
             >
-              {t("undo")}
+              {tl("undo")}
             </Button>
           </Group>
         </Stack>

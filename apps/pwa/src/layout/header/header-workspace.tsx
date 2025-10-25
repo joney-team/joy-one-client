@@ -7,10 +7,10 @@ import { configs } from "@/configs/layout.config";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { HrmTimekeepingButton } from "@/modules/hrm-timekeepings/hrm-timekeeping-button";
-import { t } from "@/modules/lang/lang-service";
 import { UserNotifications } from "@/modules/notifications/user-notifications";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -31,7 +31,7 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import { FC, memo } from "react";
-import { workspaceLayoutConfig, useWorkspaceLayout } from "../hooks/use-workspace-layout";
+import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 import { WorkspaceHeaderAccount } from "./header-account";
 import { WorkspaceHeaderBreadcrumbs } from "./header-breadcrumbs";
 import { WorkspaceHeaderShortcuts } from "./header-shortcuts";
@@ -69,7 +69,7 @@ export const HeaderWorkspace: FC = memo(() => {
             </ActionIcon>
 
             <Text ta="left" flex={1} fw={300} fz={rem(12)}>
-              {t("search")}
+              <Trans>Search</Trans>
             </Text>
           </Group>
         </Renderer>
@@ -155,7 +155,7 @@ export const HeaderWorkspace: FC = memo(() => {
               </ThemeIcon>
 
               <Text c="gray.6" fz={13} pr={10}>
-                {t("search")}...
+                <Trans>Search</Trans>...
               </Text>
 
               <Group gap={3} opacity={0.5} fz={8} py={5} pr={16}>

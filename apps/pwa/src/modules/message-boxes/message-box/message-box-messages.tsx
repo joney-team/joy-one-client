@@ -8,7 +8,7 @@ import { EventType } from "@/modules/events/event-types";
 import { FileCard } from "@/modules/files/file-card";
 import { FileType } from "@/modules/files/file-types";
 import { parseFile } from "@/modules/files/files-utils";
-import { getDateFormat, getTimeFormat, renderTime, t } from "@/modules/lang/lang-service";
+import { getDateFormat, getTimeFormat, renderTime, tl } from "@/modules/lang/lang-service";
 import { getMessages } from "@/modules/message-boxes/message-boxes-service";
 import {
   MessageBoxEntity,
@@ -181,7 +181,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
             const isSameWeek = dayjs(msg.createdAt * 1000).isSame(dayjs(), "week");
 
             if (isToday) return renderTime(msg.createdAt);
-            if (isYesterday) return `${t("yesterday")} ${renderTime(msg.createdAt)}`;
+            if (isYesterday) return `${tl("yesterday")} ${renderTime(msg.createdAt)}`;
             if (isSameWeek) return dayjs(msg.createdAt * 1000).format("dddd HH:mm");
             return dayjs(msg.createdAt * 1000).format(`MMM ${getDateFormat()} ${getTimeFormat()}`);
           };
@@ -224,7 +224,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
 
                     <Renderer visible={!isFirstSession && needToShowDivider}>
                       <Text fz={12} c="gray.6">
-                        {t("minutes_ago", { minutes: timeBtw })}
+                        {tl("minutes_ago", { minutes: timeBtw })}
                       </Text>
                     </Renderer>
                   </Renderer>
@@ -242,7 +242,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                           }}
                         >
                           {msg.resource === MessageResource.AI_ASSISTANT
-                            ? t("ai_assistant")
+                            ? tl("ai_assistant")
                             : senderMember?.name || ""}
                         </Anchor>
 
@@ -316,7 +316,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                               </ThemeIcon>
 
                               <Text c="red" fz={em(10)} ta="center">
-                                {t("send_msg_failed")}
+                                {tl("send_msg_failed")}
                               </Text>
                             </Group>
                           </Group>
@@ -334,7 +334,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                             </ThemeIcon>
 
                             <Text fz={em(10)} ta="center" c="gray">
-                              {t("msg_sending")}
+                              {tl("msg_sending")}
                             </Text>
                           </Group>
                         );

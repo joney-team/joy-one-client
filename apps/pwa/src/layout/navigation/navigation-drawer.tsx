@@ -1,7 +1,7 @@
 "use client";
 
 import { Renderer } from "@/components/renderer";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnModalWorkspaceInviteMember } from "@/modules/workspace-members/workspace-invite-member";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -89,7 +89,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
         {props.leftSection}
 
         <Text fz={14} c="var(--mantine-color-text)" fw={500}>
-          {t(props.label)}
+          {tl(props.label)}
         </Text>
       </Group>
     );
@@ -227,7 +227,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
           >
             <Divider my={16} opacity={0.5} />
 
-            <Label>{t("members")}</Label>
+            <Label>{tl("members")}</Label>
 
             <NavigationItem
               href={`/members`}
@@ -258,7 +258,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
           >
             <Divider my={16} opacity={0.5} />
 
-            <Label>{t("branches")}</Label>
+            <Label>{tl("branches")}</Label>
 
             {workspace.userMember.workspaceBranches.map((branch) => {
               return (
@@ -277,7 +277,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
 
           <Renderer visible={!isExtendedApp()}>
             <Divider my={16} opacity={0.5} />
-            <Label>{t("switch_workspace")}</Label>
+            <Label>{tl("switch_workspace")}</Label>
 
             {workspace.userMembers
               .filter((userMember) => userMember.workspace._id !== workspace.userMember.workspaceId)

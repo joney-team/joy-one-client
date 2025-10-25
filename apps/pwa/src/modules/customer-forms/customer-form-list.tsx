@@ -4,7 +4,7 @@ import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { StatusColumn } from "@/components/list/columns/status-column";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
 import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -27,7 +27,7 @@ export const CustomerFormList: FC = () => {
         route="/customer-forms"
         creatable={{
           onCreate: () => OnModalCustomerForm(),
-          label: t("link_form"),
+          label: tl("link_form"),
           icon: IconLink,
         }}
         columns={{
@@ -56,7 +56,7 @@ export const CustomerFormList: FC = () => {
             w: 200,
             options: Object.entries(customerFormStatusConfigs).map(([key, value]) => ({
               value: key,
-              label: t(value.label),
+              label: tl(value.label),
               color: value.color,
             })),
           }),

@@ -8,7 +8,7 @@ import { Renderer } from "@/components/renderer";
 import { WayPoint } from "@/components/way-point";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { getMessageBoxes } from "@/modules/message-boxes/message-boxes-service";
 import { MessageBoxStatus } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
@@ -62,11 +62,11 @@ export const MessageBoxList = () => {
       <Group gap={5} p={8}>
         <ButtonSelect
           icon={IconAnalyze}
-          label={t("status")}
+          label={tl("status")}
           autoHideLabel
           value={boxes.params.status}
           options={Object.values(MessageBoxStatus).map((st) => ({
-            label: t(`msg_boxes_status_${st}`),
+            label: tl(`msg_boxes_status_${st}`),
             value: st,
           }))}
           onClear={() => boxes.removeParams(["status"])}
@@ -75,7 +75,7 @@ export const MessageBoxList = () => {
 
         <ButtonSelect
           icon={IconPuzzle}
-          label={t("platform")}
+          label={tl("platform")}
           autoHideLabel
           value={boxes.params.platformId}
           options={[
@@ -102,7 +102,7 @@ export const MessageBoxList = () => {
 
       <ScrollArea flex={1} viewportProps={{ id: "message-boxes-list" }}>
         <Stack gap={12} pb={8} px={12}>
-          <Empty message={t("no_msg")} visible={boxes.isEmpty} />
+          <Empty message={tl("no_msg")} visible={boxes.isEmpty} />
           <Errored error={boxes.error} visible={boxes.isHasError} />
 
           {boxes.isHasData &&

@@ -2,11 +2,12 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconResize } from "@tabler/icons-react";
 import { FC } from "react";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { Trans } from "@lingui/react/macro";
 
 const OverlayResizing: FC = () => {
   const layout = useLayout();
@@ -40,11 +41,11 @@ const OverlayResizing: FC = () => {
 
       <Stack gap={0}>
         <Text ta="center" c={color("primary")}>
-          {t("resizing")}
+          <Trans>Resizing</Trans>
         </Text>
 
         <Text ta="center" fz={12} c="gray">
-          {t("resizing_msg")}
+          <Trans>Rearranging the interface.</Trans>
         </Text>
       </Stack>
     </Stack>

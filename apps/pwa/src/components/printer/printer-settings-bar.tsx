@@ -1,4 +1,4 @@
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { capitalize } from "@joy-one-client/utils/string";
 import { Button, Group, SimpleGrid, Stack, Switch, ThemeIcon } from "@mantine/core";
 import { IconDimensions } from "@tabler/icons-react";
@@ -35,7 +35,7 @@ export const PrinterSettingsBar: FC<PrinterSettingsBarProps> = ({ settings, setS
         />
 
         <Switch
-          label={t("address")}
+          label={tl("address")}
           defaultChecked={settings.showAddress}
           onChange={(e) => {
             const _checked = e.target.checked;
@@ -44,7 +44,7 @@ export const PrinterSettingsBar: FC<PrinterSettingsBarProps> = ({ settings, setS
         />
 
         <Switch
-          label={t("cashier")}
+          label={tl("cashier")}
           defaultChecked={settings.showCashier}
           onChange={(e) => {
             const _checked = e.target.checked;
@@ -53,7 +53,7 @@ export const PrinterSettingsBar: FC<PrinterSettingsBarProps> = ({ settings, setS
         />
 
         <Switch
-          label={t("show_currency")}
+          label={tl("show_currency")}
           defaultChecked={settings.showCurrency}
           onChange={(e) => {
             const _checked = e.target.checked;
@@ -62,7 +62,7 @@ export const PrinterSettingsBar: FC<PrinterSettingsBarProps> = ({ settings, setS
         />
 
         <Switch
-          label={t("customer")}
+          label={tl("customer")}
           defaultChecked={settings.showCustomer}
           onChange={(e) => {
             const _checked = e.target.checked;
@@ -71,7 +71,7 @@ export const PrinterSettingsBar: FC<PrinterSettingsBarProps> = ({ settings, setS
         />
 
         <Switch
-          label={t("auto")}
+          label={tl("auto")}
           defaultChecked={settings.autoTrigger}
           onChange={(e) => {
             const _checked = e.target.checked;
@@ -80,7 +80,7 @@ export const PrinterSettingsBar: FC<PrinterSettingsBarProps> = ({ settings, setS
         />
 
         <Switch
-          label={t("payment_code")}
+          label={tl("payment_code")}
           defaultChecked={settings.showBankQrCode}
           onChange={(e) => {
             const _checked = e.target.checked;
@@ -105,7 +105,7 @@ export const PrinterSettingsBar: FC<PrinterSettingsBarProps> = ({ settings, setS
               fw={400}
               onClick={() => setSettings({ size: _size })}
             >
-              {t(printerSizeClasses[_size].label)}
+              {tl(printerSizeClasses[_size].label)}
             </Button>
           );
         })}

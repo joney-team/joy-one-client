@@ -9,7 +9,7 @@ import { useLayout } from "@/layout/layout-context";
 import { InternalFileCard } from "@/modules/files/internal-file-card";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useList } from "@/components/list/use-list";
 import { Box, Card, em, Group, Modal, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -85,7 +85,7 @@ export const ModalFiles: FC = () => {
       zIndex={300}
       opened={opened}
       onClose={close}
-      title={<ModalTitle title={t("files")} icon={IconPhotoSquareRounded} />}
+      title={<ModalTitle title={tl("files")} icon={IconPhotoSquareRounded} />}
       fullScreen={viewport.view === "mobile"}
     >
       <Stack>
@@ -147,7 +147,7 @@ export const ModalFiles: FC = () => {
                 <ThemeIcon variant="transparent" color="dark">
                   <IconUpload strokeWidth={1.5} />
                 </ThemeIcon>
-                <Text fz={em(13)}>{t("drop_file_here_or_click")}</Text>
+                <Text fz={em(13)}>{tl("drop_file_here_or_click")}</Text>
               </Group>
             </Card>
           </Dropzone>
@@ -161,7 +161,7 @@ export const ModalFiles: FC = () => {
             leftIcon={IconCheck}
           >
             <Group>
-              {t("complete")}
+              {tl("complete")}
               {selectedFiles.length > 0 && (
                 <Circle color="white" c="primary" label={num(selectedFiles.length)} />
               )}

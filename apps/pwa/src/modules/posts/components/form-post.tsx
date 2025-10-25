@@ -33,7 +33,7 @@ import { IconCheck, IconEye } from "@tabler/icons-react";
 import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
 import { api } from "../../apis";
-import { renderDateTime, t } from "../../lang/lang-service";
+import { renderDateTime, tl } from "../../lang/lang-service";
 import { PostEntity } from "../posts-types";
 
 interface FormPostProps {
@@ -110,7 +110,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onPreview = () => {
     modals.open({
-      title: <ModalTitle title={t("preview")} icon={IconEye} />,
+      title: <ModalTitle title={tl("preview")} icon={IconEye} />,
       fullScreen: true,
       children: (
         <Group>
@@ -128,10 +128,10 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       <Card shadow="sm">
         <Group justify="space-between">
           <Stack gap={4}>
-            {post ? <Badge>{t("published")}</Badge> : <Badge color="gray">{t("draft")}</Badge>}
+            {post ? <Badge>{tl("published")}</Badge> : <Badge color="gray">{tl("draft")}</Badge>}
             {post?.updatedAt && (
               <Text fz={12} c="gray">
-                {t("updatedAt")}: {renderDateTime(post.updatedAt)}
+                {tl("updatedAt")}: {renderDateTime(post.updatedAt)}
               </Text>
             )}
           </Stack>
@@ -148,7 +148,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               leftIcon={IconCheck}
               radius={150}
             >
-              {post ? t("update") : t("post_publish")}
+              {post ? tl("update") : tl("post_publish")}
             </Button>
           </Group>
         </Group>
@@ -174,7 +174,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
                       form.setFieldValue("title", value);
                       autoGenerateSlug(value);
                     }}
-                    placeholder={t("enter_title")}
+                    placeholder={tl("enter_title")}
                     fz={25}
                   />
                 </InputWrapper>
@@ -182,7 +182,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
               <Editor
                 isAlwayShowToolbar
-                placeholder={t("enter_content")}
+                placeholder={tl("enter_content")}
                 props={{
                   styles: {
                     root: {
@@ -211,7 +211,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
             <Stack>
               <TextInput label="Slug" {...form.getInputProps("slug")} />
 
-              <InputWrapper label={t("post_thumbnail")}>
+              <InputWrapper label={tl("post_thumbnail")}>
                 <ImageInput
                   value={form.values.thumbnail || post?.thumbnail}
                   onChange={(value) => form.setFieldValue("thumbnail", value)}
@@ -221,8 +221,8 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               </InputWrapper>
 
               <Textarea
-                label={t("excerpt")}
-                placeholder={t("enter_excerpt")}
+                label={tl("excerpt")}
+                placeholder={tl("enter_excerpt")}
                 value={form.values.excerpt}
                 onChange={(e) => form.setFieldValue("excerpt", e.target.value)}
               />

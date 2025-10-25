@@ -2,11 +2,16 @@
 
 import { NavigationTabs } from "@/components/navigation-tabs";
 import { useRouter } from "@/hooks/use-router";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { renderLoanList } from "@/modules/loans/loan-list";
 import { LoanStatus } from "@/modules/loans/loans-types";
 import { Stack } from "@mantine/core";
-import { IconAnalyze, IconClockExclamation, IconPlayerRecord, IconStack2 } from "@tabler/icons-react";
+import {
+  IconAnalyze,
+  IconClockExclamation,
+  IconPlayerRecord,
+  IconStack2,
+} from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
 import { FC } from "react";
 
@@ -18,7 +23,7 @@ export const LoanListTabs: FC = () => {
     {
       value: "active",
       icon: IconPlayerRecord,
-      label: t("active"),
+      label: tl("active"),
       isShowCount: true,
       components: renderLoanList({
         strictStatus: [LoanStatus.FULFILLED],
@@ -28,7 +33,7 @@ export const LoanListTabs: FC = () => {
     {
       value: "processing",
       icon: IconAnalyze,
-      label: t("processing"),
+      label: tl("processing"),
       isShowCount: true,
       components: renderLoanList({
         strictStatus: [LoanStatus.PENDING_SIGN, LoanStatus.PENDING, LoanStatus.APPROVED],
@@ -38,7 +43,7 @@ export const LoanListTabs: FC = () => {
     },
     {
       value: "overdue",
-      label: t("overdue"),
+      label: tl("overdue"),
       isShowCount: true,
       icon: IconClockExclamation,
       components: renderLoanList({
@@ -49,7 +54,7 @@ export const LoanListTabs: FC = () => {
     },
     {
       value: "all",
-      label: t("all"),
+      label: tl("all"),
       icon: IconStack2,
       components: renderLoanList(),
     },

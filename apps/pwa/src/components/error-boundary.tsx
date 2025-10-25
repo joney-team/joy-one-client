@@ -2,8 +2,8 @@
 
 import { configs } from "@/configs/layout.config";
 import LangProvider from "@/modules/lang/lang-provider";
-import { t } from "@/modules/lang/lang-service";
 import { primaryColors } from "@joy-one-client/config/colors";
+import { Trans } from "@lingui/react/macro";
 import {
   Button,
   Container,
@@ -15,11 +15,11 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import * as Sentry from "@sentry/react";
 import { IconHome, IconLifebuoy, IconRefresh } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, useEffect } from "react";
 import { IconErrored } from "./icons";
-import * as Sentry from "@sentry/react";
 
 interface ErrorBoundaryProps {
   error: any;
@@ -38,9 +38,14 @@ const Content: FC<ErrorBoundaryProps> = (props) => {
       <Stack align="center" justify="center" mih="100dvh">
         <IconErrored width={300} />
         <Title fz={22} ta="center">
-          {t("error_msg")}
+          <Trans>Oops! Something went wrong...</Trans>
         </Title>
-        <Text ta="center">{t("error_msg_desc")}</Text>
+        <Text ta="center">
+          <Trans>
+            We apologize for the inconvenience, our technical team has noted it and will handle it
+            soon. If it is urgent, please contact us.
+          </Trans>
+        </Text>
         <Group mt={16} justify="center">
           {!isHome && (
             <Button
@@ -48,7 +53,7 @@ const Content: FC<ErrorBoundaryProps> = (props) => {
               onClick={() => window.location.replace("/")}
               leftSection={<IconHome size={20} style={{ marginRight: -5 }} />}
             >
-              {t("back_to_home")}
+              <Trans>Back to home</Trans>
             </Button>
           )}
 
@@ -57,7 +62,7 @@ const Content: FC<ErrorBoundaryProps> = (props) => {
             onClick={() => props.reset()}
             leftSection={<IconRefresh size={20} style={{ marginRight: -5 }} />}
           >
-            {t("reset")}
+            <Trans>Reset</Trans>
           </Button>
 
           <Button
@@ -66,7 +71,7 @@ const Content: FC<ErrorBoundaryProps> = (props) => {
             target="_blank"
             leftSection={<IconLifebuoy size={20} style={{ marginRight: -5 }} />}
           >
-            {t("contact_support")}
+            <Trans>Contact support</Trans>
           </Button>
         </Group>
       </Stack>

@@ -6,7 +6,7 @@ import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-selector-filter";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
@@ -35,7 +35,7 @@ export const WorkspaceMemberList: FC = () => {
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
     return [
       ...options.map((v) => ({ label: v.label, value: v.value, data: v.data })),
-      { label: t("main_workspace_branch"), value: "root", data: null },
+      { label: tl("main_workspace_branch"), value: "root", data: null },
     ];
   };
 
@@ -56,7 +56,7 @@ export const WorkspaceMemberList: FC = () => {
               >
                 <Avatar user={data} size={30} />
                 <Clickable onClick={() => OnModalUserInformation(data.userId)}>
-                  <Text>{data.name || t("unamed")}</Text>
+                  <Text>{data.name || tl("unamed")}</Text>
                 </Clickable>
               </Group>
             ),
@@ -114,7 +114,7 @@ export const WorkspaceMemberList: FC = () => {
                     color={color("primary")}
                     rightSection={<IconLock size={13} style={{ marginLeft: -3 }} />}
                   >
-                    {t(`role_${WorkspaceSpecialRoleId.OWNER}`)}
+                    {tl(`role_${WorkspaceSpecialRoleId.OWNER}`)}
                   </Badge>
                 );
               }
@@ -147,7 +147,7 @@ export const WorkspaceMemberList: FC = () => {
             icon: IconBuilding,
             render: ({ data }) => {
               if (data.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)) {
-                return <Badge variant="light">{t("all_branches")}</Badge>;
+                return <Badge variant="light">{tl("all_branches")}</Badge>;
               }
 
               return (

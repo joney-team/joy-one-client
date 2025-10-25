@@ -3,7 +3,7 @@
 import { useColor } from "@/modules/theme/use-color";
 import { useRouter } from "@/hooks/use-router";
 import { Avatar } from "@/components/avatar";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import {
   closeMesssageBox,
   messageBoxPlatformImages,
@@ -43,22 +43,22 @@ export const MessageBoxHead: FC = () => {
 
   const onClose = async () => {
     modals.openConfirmModal({
-      title: <ModalTitle title={t("confirm")} icon={IconCircleCheck} />,
-      children: t("message_box_closed_confirm"),
+      title: <ModalTitle title={tl("confirm")} icon={IconCircleCheck} />,
+      children: tl("message_box_closed_confirm"),
       onConfirm: async () => {
         if (!box) return;
         return closeMesssageBox(box._id);
       },
       labels: {
-        cancel: t("cancel"),
-        confirm: t("confirm"),
+        cancel: tl("cancel"),
+        confirm: tl("confirm"),
       },
     });
   };
 
   const onRemove = async () => {
     onArchive({
-      name: t("message_boxes"),
+      name: tl("message_boxes"),
       process: async () => {
         if (!box) return;
         await removeMessageBox(box._id);
@@ -80,7 +80,7 @@ export const MessageBoxHead: FC = () => {
         />
 
         <Stack gap={3}>
-          <Title fz={18}>{box?.senderName || box?.customer?.name || t("guest")}</Title>
+          <Title fz={18}>{box?.senderName || box?.customer?.name || tl("guest")}</Title>
 
           {plugin && (
             <Group gap={4}>
@@ -94,13 +94,13 @@ export const MessageBoxHead: FC = () => {
       </Group>
 
       <Group gap={8}>
-        <Tooltip label={t("assignee")}>
+        <Tooltip label={tl("assignee")}>
           <Group>
             <WorkspaceMemberInput
               value={box.assigneeUser}
               onChange={(u) => {
                 onActionLoad({
-                  name: t("assign_assignee"),
+                  name: tl("assign_assignee"),
                   icon: IconUser,
                   process: async () => {
                     return setAssigneeToMessageBox(box._id, u?.userId);
@@ -116,7 +116,7 @@ export const MessageBoxHead: FC = () => {
 
           if (box.status === MessageBoxStatus.IN_PROGRESS)
             return (
-              <Tooltip label={t("message_box_closed")}>
+              <Tooltip label={tl("message_box_closed")}>
                 <ActionIcon color="green" onClick={onClose}>
                   <IconCheck size={20} />
                 </ActionIcon>
@@ -125,10 +125,12 @@ export const MessageBoxHead: FC = () => {
 
           const statusColor = messageBoxStatusColors[box.status];
 
-          return <Badge color={color(statusColor)}>{t(`msg_boxes_status_${box.status}`)}</Badge>;
+          return <Badge color={color(statusColor)}>{tl(`msg_boxes_status_${box.status}`)}</Badge>;
         })()}
 
-        <Tooltip label={`${t(isAiAssistantEnabled ? "disable" : "enable")} ${t("ai-assistants")}`}>
+        <Tooltip
+          label={`${tl(isAiAssistantEnabled ? "disable" : "enable")} ${tl("ai-assistants")}`}
+        >
           <ActionIcon
             variant={isAiAssistantEnabled ? "filled" : "outline"}
             color="violet.9"

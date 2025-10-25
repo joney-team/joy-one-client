@@ -3,7 +3,7 @@
 import { useList } from "@/components/list/use-list";
 import { useLayout } from "@/layout/layout-context";
 import { api } from "@/modules/apis";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { shiftSelect } from "@joy-one-client/utils/array";
 import {
@@ -237,7 +237,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
                     <props.icon size={22} color="var(--mantine-color-bright)" strokeWidth={1.5} />
                   )}
                   <Text fw={500} fz={14} c="var(--mantine-color-bright)">
-                    {t(props.name || "list")}
+                    {tl(props.name || "list")}
                   </Text>
 
                   <Group gap={3}>
@@ -263,7 +263,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
                         variant="light"
                         onClick={() => list.fetch(true, { isSilient: false })}
                       >
-                        {t("list_new_data", { count: num(list.newDataCount) })}
+                        {tl("list_new_data", { count: num(list.newDataCount) })}
                       </Badge>
                     )}
                   </Group>

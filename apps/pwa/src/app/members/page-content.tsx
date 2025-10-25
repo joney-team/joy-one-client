@@ -2,19 +2,19 @@
 
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
-import { WorkspaceMemberList } from "@/modules/workspace-members/workspace-member-list";
-import { OnModalTransferOwner } from "@/modules/workspaces/modals/modal-transfer-workspace-owner";
+import { useRouter } from "@/hooks/use-router";
 import { OnModalWorkspaceInviteMember } from "@/modules/workspace-members/workspace-invite-member";
-import { t } from "@/modules/lang/lang-service";
+import { WorkspaceMemberList } from "@/modules/workspace-members/workspace-member-list";
 import {
   WorkspacePermission,
   WorkspaceSpecialRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
+import { OnModalTransferOwner } from "@/modules/workspaces/modals/modal-transfer-workspace-owner";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { Trans } from "@lingui/react/macro";
 import { Group, Stack } from "@mantine/core";
 import { IconTransfer, IconUsersPlus } from "@tabler/icons-react";
 import { NextPage } from "next";
-import { useRouter } from "@/hooks/use-router";
 
 const Page: NextPage = () => {
   const workspace = useWorkspace();
@@ -32,7 +32,7 @@ const Page: NextPage = () => {
             size="xs"
             radius={100}
           >
-            {t("invite_members")}
+            <Trans id="invite_members">Invite members</Trans>
           </Button>
         </Renderer>
 
@@ -48,7 +48,7 @@ const Page: NextPage = () => {
             size="xs"
             radius={100}
           >
-            {modSettingRoles.name}
+            {modSettingRoles.name()}
           </Button>
         </Renderer>
 
@@ -63,7 +63,7 @@ const Page: NextPage = () => {
             size="xs"
             radius={100}
           >
-            {t("transfer_ownership")}
+            <Trans>Transfer ownership</Trans>
           </Button>
         </Renderer>
       </Group>

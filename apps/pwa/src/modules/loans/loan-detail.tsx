@@ -12,7 +12,7 @@ import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDate, t } from "@/modules/lang/lang-service";
+import { num, renderDate, tl } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import {
   archiveLoan,
@@ -131,7 +131,7 @@ export const LoanDetail: NextPage = () => {
 
   const _updateAssetData = useDebouncedCallback((assetData) => {
     onActionLoad({
-      name: t("update_loan_asset_data"),
+      name: tl("update_loan_asset_data"),
       process: () => updateLoanAssetData(loan.data!.id, { assetData }).catch(onError),
     });
   }, 500);
@@ -259,7 +259,7 @@ export const LoanDetail: NextPage = () => {
                 label="Ngày sinh"
                 content={customer.data.birthday ? renderDate(customer.data.birthday) : "--"}
               />
-              <InfoCard label="Giới tính" content={t(customer.data.gender)} />
+              <InfoCard label="Giới tính" content={tl(customer.data.gender)} />
               <InfoCard
                 label="Số điện thoại"
                 content={customer.data.phone ? formatPhoneNumber(customer.data.phone) : "--"}
@@ -273,14 +273,16 @@ export const LoanDetail: NextPage = () => {
               />
               <InfoCard
                 label="loan_package"
-                content={`${loan.data.package.id} / ${t(`loan_asset_type_${loan.data.assetType}`)}`}
+                content={`${loan.data.package.id} / ${tl(
+                  `loan_asset_type_${loan.data.assetType}`
+                )}`}
               />
               <InfoCard label="money_amount" content={num(loan.data.amount, { type: "money" })} />
 
               {workspace.isShouldEnableBranches && (
                 <InfoCard
                   label="workspace_branch"
-                  content={loan.data.workspaceBranch?.name || t("main_workspace_branch")}
+                  content={loan.data.workspaceBranch?.name || tl("main_workspace_branch")}
                 />
               )}
 
@@ -290,7 +292,7 @@ export const LoanDetail: NextPage = () => {
                   linkContractPdf ? (
                     <Group gap={4} align="center">
                       <IconFileTypePdf size={18} />
-                      {t("view_contract")}
+                      {tl("view_contract")}
                     </Group>
                   ) : (
                     "--"
@@ -306,7 +308,7 @@ export const LoanDetail: NextPage = () => {
                     linkLiquidationPdf ? (
                       <Group gap={4} align="center">
                         <IconFileTypePdf size={18} />
-                        {t("view")}
+                        {tl("view")}
                       </Group>
                     ) : (
                       "--"
@@ -318,7 +320,7 @@ export const LoanDetail: NextPage = () => {
 
               <InfoCard
                 label="status"
-                content={t(`loan_status_${loan.data.status}`)}
+                content={tl(`loan_status_${loan.data.status}`)}
                 c={loanStatusColors[loan.data.status]}
               />
             </SimpleGrid>
@@ -333,12 +335,12 @@ export const LoanDetail: NextPage = () => {
               <Card shadow="xs" p={30}>
                 <Stack>
                   <Text c="orange" ta="center">
-                    {t("waiting_for_signature")}
+                    {tl("waiting_for_signature")}
                   </Text>
                   <Renderer visible={workspace.hasPermission(WorkspacePermission.LOANS_CREATOR)}>
                     <Center>
                       <Button color="orange" onClick={() => OnModalSignLoan({ loan: loan.data! })}>
-                        {t("sign_contract")}
+                        {tl("sign_contract")}
                       </Button>
                     </Center>
                   </Renderer>
@@ -502,7 +504,7 @@ const InfoCard: FC<{
   return (
     <Stack gap={0}>
       <Text fz={12} fw={500} c="gray.6">
-        {t(props.label)}
+        {tl(props.label)}
       </Text>
       <ContentWrapper>
         {typeof props.content === "string" ? (

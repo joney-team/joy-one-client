@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Group, Popover, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
@@ -54,7 +54,7 @@ export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
 
       <Popover.Dropdown p={10}>
         <TextInput
-          placeholder={t(placeholder)}
+          placeholder={tl(placeholder)}
           autoFocus
           onKeyUp={(e) => {
             if (e.key === "Enter") {

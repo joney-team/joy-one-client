@@ -9,7 +9,7 @@ import { InputModalType } from "@/modals/modal-input";
 import { OnModalPartialPayment } from "@/modules/receipts/modals/modal-partial-payment";
 import { OnModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
-import { num, renderDate, t } from "@/modules/lang/lang-service";
+import { num, renderDate, tl } from "@/modules/lang/lang-service";
 import { useInspectLoanReceipt } from "@/modules/loans/hooks/use-inspect-loan-receipt";
 import { LoanEntity } from "@/modules/loans/loans-types";
 import { updateReceipt } from "@/modules/receipts/receipts-service";
@@ -71,7 +71,7 @@ export const LoanReceiptCard: FC<{
 
           {data?.lateInterest && (
             <Badge color="red" variant="light">
-              {t("loan_late_interest_receipt")}
+              {tl("loan_late_interest_receipt")}
             </Badge>
           )}
 
@@ -85,7 +85,7 @@ export const LoanReceiptCard: FC<{
         <Table horizontalSpacing={0}>
           <Table.Tbody>
             <Table.Tr>
-              <Table.Td>{t("pay_expire")}</Table.Td>
+              <Table.Td>{tl("pay_expire")}</Table.Td>
 
               <Table.Td ta="right" c={isExpired ? "red" : "gray"}>
                 {renderDate(receipt.expireAt)}
@@ -101,7 +101,7 @@ export const LoanReceiptCard: FC<{
                     <Anchor fz={14} fw={500} href={linkReceiptPdf} target="_blank">
                       <Group gap={4} align="center" justify="end">
                         <IconFileTypePdf size={18} />
-                        {t("view")}
+                        {tl("view")}
                       </Group>
                     </Anchor>
                   ) : (
@@ -134,7 +134,7 @@ export const LoanReceiptCard: FC<{
             {data.liquidationCalculated && (
               <Fragment>
                 <Table.Tr>
-                  <Table.Td>{t("remainCapitalAmount")}</Table.Td>
+                  <Table.Td>{tl("remainCapitalAmount")}</Table.Td>
                   <Table.Td ta="right">
                     {num(data.liquidationCalculated.remainCapitalAmount, { type: "money" })}
                   </Table.Td>
@@ -171,7 +171,7 @@ export const LoanReceiptCard: FC<{
                   }
                 >
                   <Table.Tr>
-                    <Table.Td>{t("periodFeeAmount")}</Table.Td>
+                    <Table.Td>{tl("periodFeeAmount")}</Table.Td>
 
                     <Table.Td ta="right">
                       {num(data.liquidationCalculated.periodFeeAmount, { type: "money" })}
@@ -181,7 +181,7 @@ export const LoanReceiptCard: FC<{
 
                 <Table.Tr>
                   <Table.Td>
-                    {t("remainCapitalAmountFee")} (
+                    {tl("remainCapitalAmountFee")} (
                     {num(data.liquidationCalculated.remainCapitalAmountFeePercent)}%)
                   </Table.Td>
                   <Table.Td ta="right">
@@ -190,7 +190,7 @@ export const LoanReceiptCard: FC<{
                 </Table.Tr>
 
                 <Table.Tr>
-                  <Table.Td>{t("loan_receipt_late_interest")}</Table.Td>
+                  <Table.Td>{tl("loan_receipt_late_interest")}</Table.Td>
                   <Table.Td ta="right">
                     {num(data.liquidationCalculated.lateInterestAmount, { type: "money" })}
                   </Table.Td>
@@ -215,7 +215,7 @@ export const LoanReceiptCard: FC<{
             )}
 
             <Table.Tr>
-              <Table.Td>{t("note")}</Table.Td>
+              <Table.Td>{tl("note")}</Table.Td>
 
               <Table.Td ta="right">
                 <HoverToEdit
@@ -241,13 +241,13 @@ export const LoanReceiptCard: FC<{
             </Table.Tr>
 
             <Table.Tr>
-              <Table.Td>{t("total")}</Table.Td>
+              <Table.Td>{tl("total")}</Table.Td>
 
               <Table.Td ta="right" fw={600}>
                 <Group gap={5} justify="end">
                   <TooltipIcon
                     icon={IconInfoCircle}
-                    label={t("entity_updated", { entity: t("money_amount") })}
+                    label={tl("entity_updated", { entity: tl("money_amount") })}
                     disabled={!receipt.dataChanged?.amount}
                     color="orange"
                   />
@@ -278,7 +278,7 @@ export const LoanReceiptCard: FC<{
               <Stack align="center">
                 {isExpired && (
                   <Badge color="red" variant="light">
-                    {t("expired")}
+                    {tl("expired")}
                   </Badge>
                 )}
 
@@ -288,7 +288,7 @@ export const LoanReceiptCard: FC<{
                     leftIcon={IconCashRegister}
                     disabled={!isAbleToPay}
                   >
-                    {t("pay")}
+                    {tl("pay")}
                   </Button>
                 </Group>
 
@@ -303,7 +303,7 @@ export const LoanReceiptCard: FC<{
                       <ThemeIcon color="gray" size="xs" variant="transparent">
                         <IconCircleHalf2 />
                       </ThemeIcon>
-                      {t("partial_payment")}
+                      {tl("partial_payment")}
                     </Group>
                   </Anchor>
                 </Renderer>

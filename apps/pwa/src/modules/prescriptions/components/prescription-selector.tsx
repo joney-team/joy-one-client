@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { useQuery } from "@/modules/apis/use-query";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity, ResponseList } from "@/types";
@@ -30,9 +30,9 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
     <Selector
       excludeIds={props.excludeIds}
       onSearch={(q) => searchEntity<PrescriptionEntity>(AppEntity.PRESCRIPTIONS, q)}
-      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: tl("recently") }))}
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(prescription) => {
         return (
@@ -57,7 +57,7 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
             fw={500}
             onClick={toggle}
           >
-            {t("select")}
+            {tl("select")}
           </Button>
         );
       }}

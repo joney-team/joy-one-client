@@ -7,7 +7,7 @@ import { Renderer } from "@/components/renderer";
 import { useRouter } from "@/hooks/use-router";
 import { api } from "@/modules/apis";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
 import { PluginMetaPageInfo } from "@/modules/plugins/meta-pages/meta-pages-types";
 import { useColor } from "@/modules/theme/use-color";
@@ -94,10 +94,10 @@ export const ConnectMetaPagesModal: FC = () => {
                 return (
                   <Stack gap={8}>
                     <Title ta="center" c={color("primary")} fz={em(25)}>
-                      {t("connect_success")}
+                      {tl("connect_success")}
                     </Title>
                     <Text ta="center" fz={em(16)}>
-                      {t("connect_success_msg")}
+                      {tl("connect_success_msg")}
                     </Text>
                   </Stack>
                 );
@@ -108,19 +108,19 @@ export const ConnectMetaPagesModal: FC = () => {
                   <Fragment>
                     <Stack gap={8}>
                       <Title ta="center" c={color("dark")} fz={em(25)}>
-                        {t("connect_meta_failed")}
+                        {tl("connect_meta_failed")}
                       </Title>
                       <Text ta="center" fz={em(16)}>
-                        {t("please_try_again_later")}
+                        {tl("please_try_again_later")}
                       </Text>
                     </Stack>
 
                     <Button onClick={onRetry} mt={20} leftIcon={IconRefresh} size="md" radius={200}>
-                      {t("retry_now")}
+                      {tl("retry_now")}
                     </Button>
 
                     <Anchor c="gray" fz={em(12)} onClick={close}>
-                      {t("skip_for_now")}
+                      {tl("skip_for_now")}
                     </Anchor>
                   </Fragment>
                 );
@@ -129,10 +129,10 @@ export const ConnectMetaPagesModal: FC = () => {
               return (
                 <Stack gap={8}>
                   <Title ta="center" c={color("primary")} fz={em(25)}>
-                    {t("connect_meta_page")}
+                    {tl("connect_meta_page")}
                   </Title>
                   <Text ta="center" fz={em(16)}>
-                    {t("auto_connect_meta_page")}
+                    {tl("auto_connect_meta_page")}
                   </Text>
                 </Stack>
               );
@@ -182,11 +182,11 @@ export const ConnectMetaPagesModal: FC = () => {
                   size="md"
                   radius={200}
                 >
-                  {`${t("open")} ${t("messages")}`}
+                  {`${tl("open")} ${tl("messages")}`}
                 </Button>
 
                 <Anchor c="gray" fz={em(12)} onClick={close}>
-                  {t("skip_for_now")}
+                  {tl("skip_for_now")}
                 </Anchor>
               </Fragment>
             )}
@@ -195,19 +195,19 @@ export const ConnectMetaPagesModal: FC = () => {
           <Renderer visible={dto.pages.length === 0}>
             <Stack gap={8}>
               <Title ta="center" c={color("primary")} fz={em(25)}>
-                {t("connect_meta_failed")}
+                {tl("connect_meta_failed")}
               </Title>
               <Text ta="center" fz={em(16)}>
-                {t("connect_zero_meta_pages")}
+                {tl("connect_zero_meta_pages")}
               </Text>
             </Stack>
 
             <Button onClick={onRetry} mt={20} leftIcon={IconRefresh} size="md" radius={200}>
-              {t("reconnect")}
+              {tl("reconnect")}
             </Button>
 
             <Anchor c="gray" fz={em(12)} onClick={close}>
-              {t("skip_for_now")}
+              {tl("skip_for_now")}
             </Anchor>
           </Renderer>
         </Stack>

@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { configs } from "@/configs/layout.config";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { onError } from "@/utils/exceptions.utils";
@@ -34,7 +34,7 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
     },
     validate: {
       name: (value: string) => {
-        if (!value) return t("must_be_provided");
+        if (!value) return tl("must_be_provided");
       },
     },
   });
@@ -74,22 +74,22 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
         <TextInput
           withAsterisk
           ref={inputNameRef}
-          label={t("name")}
+          label={tl("name")}
           {...form.getInputProps("name")}
         />
 
         <Select
-          label={t("type")}
+          label={tl("type")}
           disabled={!!props.type}
           data={Object.values(TagType).map((type) => ({
-            label: t(`tag_type_${type}`),
+            label: tl(`tag_type_${type}`),
             value: type,
           }))}
           {...form.getInputProps("type")}
         />
 
         <ColorInput
-          label={t("color")}
+          label={tl("color")}
           {...form.getInputProps("color")}
           format="hex"
           swatches={configs.swatches}
@@ -114,7 +114,7 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
           disabled={!form.isDirty()}
           type="submit"
         >
-          {t("complete")}
+          {tl("complete")}
         </Button>
       </Stack>
     </form>
@@ -124,13 +124,15 @@ export const ModalTagForm: FC<ModalTagFormProps> = (props) => {
 export const OnModalTagForm = (props: ModalTagFormProps) => {
   let icon = IconTag;
   if (props.type === TagType.TASK_FOLDER) icon = IconFolderPlus;
-  const typeName = `${t(`tag_type_${props.type}`)}`.toLowerCase();
+  const typeName = `${tl(`tag_type_${props.type}`)}`.toLowerCase();
 
   return modals.open({
     modalId: "ModalTagForm",
     title: (
       <ModalTitle
-        title={capitalize(props.tag ? `${t("update")} ${typeName}` : `${t("create")} ${typeName}`)}
+        title={capitalize(
+          props.tag ? `${tl("update")} ${typeName}` : `${tl("create")} ${typeName}`
+        )}
         icon={icon}
       />
     ),

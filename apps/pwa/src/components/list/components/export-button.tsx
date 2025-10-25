@@ -8,7 +8,7 @@ import {
   getDateTimeFormat,
   numCurrencyRound,
   renderDateTime,
-  t,
+  tl,
 } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -61,9 +61,9 @@ export const ExportButton: FC<ListContext> = (props) => {
             })
             .then((res) => res.data);
 
-          if (data.length === 0) throw new Error(t("NO_DATA_TO_EXPORT"));
+          if (data.length === 0) throw new Error(tl("NO_DATA_TO_EXPORT"));
 
-          const filename = `[${workspace.userMember.workspace.code}] ${t(
+          const filename = `[${workspace.userMember.workspace.code}] ${tl(
             props.name || "data"
           )} ${dayjs().format(getDateTimeFormat()).replace(/:/g, "-").replace(/\//g, "-")}`;
 
@@ -83,16 +83,16 @@ export const ExportButton: FC<ListContext> = (props) => {
                 const tempExport = column.exportToExcel(data[0][col.id], data[0]);
                 if (Array.isArray(tempExport)) {
                   tempExport.forEach((item) => {
-                    headers.push({ value: t(item.col) });
+                    headers.push({ value: tl(item.col) });
                   });
                 } else {
-                  headers.push({ value: t(column.name || col.id) });
+                  headers.push({ value: tl(column.name || col.id) });
                 }
                 continue;
               }
 
               // Automation
-              headers.push({ value: t(column.name || col.id) });
+              headers.push({ value: tl(column.name || col.id) });
             }
 
             const rows: Row[] = await Promise.all(
@@ -119,7 +119,7 @@ export const ExportButton: FC<ListContext> = (props) => {
                       });
                     } else {
                       const indexOfCol = headers.findIndex(
-                        (v) => v?.value === t(column.name || columnSetting.id)
+                        (v) => v?.value === tl(column.name || columnSetting.id)
                       );
                       cols[indexOfCol] = renderExportItem(tempExport);
                     }
@@ -129,7 +129,7 @@ export const ExportButton: FC<ListContext> = (props) => {
 
                   // Automation
                   const indexOfCol = headers.findIndex(
-                    (v) => v?.value === t(column.name || columnSetting.id)
+                    (v) => v?.value === tl(column.name || columnSetting.id)
                   );
                   cols[indexOfCol] = { value };
                 }
@@ -205,7 +205,7 @@ export const ExportButton: FC<ListContext> = (props) => {
       >
         <Stack>
           <Select
-            label={t("export-type")}
+            label={tl("export-type")}
             value={exportType}
             onChange={(value) => setExportType(value as ExportType)}
             data={[

@@ -1,6 +1,6 @@
 import { FC, Fragment } from "react";
 import { PrinterComponentProps, PrintSize } from "./printer-types";
-import { num, renderDateTime, t } from "@/modules/lang/lang-service";
+import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
 
 import styles from "./printer.module.css";
 
@@ -17,7 +17,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
     return (
       <div className={styles.PrinterBody}>
         <div className={styles.PrinterBodyHead}>
-          <div className={styles.Heading}>{t("order")}</div>
+          <div className={styles.Heading}>{tl("order")}</div>
 
           <div className={styles.PrinterHeadMetadata}>
             <div>
@@ -27,16 +27,18 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
         </div>
 
         <div className={styles.TextSmaller}>
-          {t("printed_at")} <strong>{renderDateTime(new Date())}</strong>
+          {tl("printed_at")} <strong>{renderDateTime(new Date())}</strong>
         </div>
 
         <table className={styles.Table}>
           <thead>
             <tr>
-              <th className={styles.TaLeft}>{t("detail")}</th>
-              <th className={styles.TaRight}>{t("QTY")}</th>
+              <th className={styles.TaLeft}>{tl("detail")}</th>
+              <th className={styles.TaRight}>{tl("QTY")}</th>
               <th className={styles.TaRight}>
-                {settings.size === PrintSize.SMALL ? t("print_total_short") : t("print_total_long")}
+                {settings.size === PrintSize.SMALL
+                  ? tl("print_total_short")
+                  : tl("print_total_long")}
               </th>
             </tr>
           </thead>
@@ -58,7 +60,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
             {subTotalPrice !== order.totalAmount && (
               <tr>
                 <td className={styles.TaRight} colSpan={2}>
-                  {t("subtotal")}
+                  {tl("subtotal")}
                 </td>
                 <td className={styles.TaRight}>{renderMoney(subTotalPrice)}</td>
               </tr>
@@ -67,7 +69,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
             {totalDiscount > 0 && (
               <tr>
                 <td className={styles.TaRight} colSpan={2} style={{ width: 90 }}>
-                  {t("discount")}
+                  {tl("discount")}
                 </td>
                 <td className={styles.TaRight}>{renderMoney(totalDiscount)}</td>
               </tr>
@@ -86,14 +88,14 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
               <Fragment>
                 <tr>
                   <td className={styles.TaRight} colSpan={2}>
-                    {t("payment")}
+                    {tl("payment")}
                   </td>
                   <td className={styles.TaRight}>{renderMoney(order.totalAmount)}</td>
                 </tr>
 
                 <tr>
                   <td className={styles.TaRight} colSpan={2}>
-                    {t("remaining")}
+                    {tl("remaining")}
                   </td>
                   <td className={styles.TaRight}>
                     <strong>{renderMoney(order.totalAmount - order.paidAmount)}</strong>
@@ -102,7 +104,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
 
                 <tr>
                   <td className={styles.TaRight} colSpan={2}>
-                    {t("total_short")}
+                    {tl("total_short")}
                   </td>
                   <td className={styles.TaRight}>
                     <strong>{renderMoney(totalAmount)}</strong>
@@ -112,7 +114,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
             ) : (
               <tr>
                 <td className={styles.TaRight} colSpan={2}>
-                  {t("total_short")}
+                  {tl("total_short")}
                 </td>
                 <td className={styles.TaRight}>
                   <strong>{renderMoney(totalAmount)}</strong>
@@ -125,7 +127,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
         <div className={styles.PrinterMetadata}>
           {order.relatedCustomer && settings.showCustomer && (
             <div>
-              {t("customer")} <br /> <strong>{order.relatedCustomer.name}</strong>
+              {tl("customer")} <br /> <strong>{order.relatedCustomer.name}</strong>
             </div>
           )}
         </div>

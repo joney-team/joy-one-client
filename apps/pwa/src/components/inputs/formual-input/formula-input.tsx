@@ -1,4 +1,4 @@
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import React, { useState, useRef, useEffect } from "react";
@@ -612,7 +612,7 @@ export const FormulaInput: React.FC<FormulaInputProps> = ({ value, onChange, var
           handleInput();
         }}
         className="formula-editor"
-        data-placeholder={t(
+        data-placeholder={tl(
           isFormulaMode ? "formula_input_placeholder" : "formula_input_text_placeholder"
         )}
       />

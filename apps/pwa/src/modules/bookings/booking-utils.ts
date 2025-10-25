@@ -1,5 +1,5 @@
 import { DateTime } from "@/utils/date-time.utils";
-import { getClientLocale, t } from "../lang/lang-service";
+import { getClientLocale, tl } from "../lang/lang-service";
 import { BookingEntity } from "./booking-types";
 
 export function getBookingDate(dateInSeconds: number, original?: boolean) {

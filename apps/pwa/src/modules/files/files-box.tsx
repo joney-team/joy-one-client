@@ -6,7 +6,7 @@ import { detectFileType, getFiles, onUploadFile, removeFile } from "@/modules/fi
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { AppEntity } from "@/types";
 import { DateTime } from "@/utils/date-time.utils";
 import { useList } from "@/components/list/use-list";
@@ -205,7 +205,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
                   <IconUpload strokeWidth={1.5} size={18} />
                 </ThemeIcon>
                 <Text c="gray.5" fz={em(13)} fw={300}>
-                  {props.placeholder || t("drop_file_here")}
+                  {props.placeholder || tl("drop_file_here")}
                 </Text>
               </Group>
             </Dropzone.Accept>
@@ -216,7 +216,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
                   <IconUpload strokeWidth={1.5} size={18} />
                 </ThemeIcon>
                 <Text c="gray.5" fz={em(13)} fw={300}>
-                  {props.placeholder || t("drop_file_here_or_click")}
+                  {props.placeholder || tl("drop_file_here_or_click")}
                 </Text>
               </Group>
             </Dropzone.Idle>

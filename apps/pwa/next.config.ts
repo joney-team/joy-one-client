@@ -7,9 +7,24 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_EXTENDED_APP: process.env["NEXT_PUBLIC_EXTENDED_APP"],
   },
   experimental: {
+    swcPlugins: [["@lingui/swc-plugin", {}]],
     optimizePackageImports: ["@tabler/icons-react", "@mantine/core", "@mantine/hooks"],
   },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.po$/,
+      use: {
+        loader: "@lingui/loader",
+      },
+    });
+  },
   turbopack: {
+    rules: {
+      "*.po": {
+        loaders: ["@lingui/loader"],
+        as: "*.js",
+      },
+    },
     resolveExtensions: [
       ".ts",
       ".tsx",

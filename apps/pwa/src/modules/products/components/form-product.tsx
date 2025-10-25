@@ -10,7 +10,7 @@ import { CategoryType } from "@/modules/categories/category-types";
 import { CategoryInput } from "@/modules/categories/components/category-input";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { ProductSelector } from "@/modules/products/components/product-selector";
 import { archiveProduct, createProduct, updateProduct } from "@/modules/products/products-service";
 import {
@@ -86,7 +86,7 @@ const FormProductCombo: FC<{
           return (
             <TextInput
               flex={1}
-              label={t("product")}
+              label={tl("product")}
               value={combo.product?.name}
               readOnly
               onClick={ctx.toggle}
@@ -96,7 +96,7 @@ const FormProductCombo: FC<{
       />
 
       <NumberInput
-        label={t("quantity")}
+        label={tl("quantity")}
         value={combo.quantity}
         min={1}
         maw={100}
@@ -129,45 +129,45 @@ export const FormProduct: FC<
     initialValues: {
       ...product,
       type,
-      unit: product?.unit || t(defaultUnitPerType[type] || "") || "",
+      unit: product?.unit || tl(defaultUnitPerType[type] || "") || "",
       isRangePrice: typeof product?.minPrice === "number",
     } as any,
     validate: {
       name: (value: string) => {
-        if (!value) return t("must_be_provided");
+        if (!value) return tl("must_be_provided");
       },
       unit: (value: string) => {
-        if (!value) return t("must_be_provided");
+        if (!value) return tl("must_be_provided");
       },
       price: (value: number, values: any) => {
-        if (typeof value !== "number") return t("must_be_provided");
-        if (value < 0) return t("validate_min_amount", { min: 0 });
+        if (typeof value !== "number") return tl("must_be_provided");
+        if (value < 0) return tl("validate_min_amount", { min: 0 });
 
         if (values.isRangePrice) {
           if (values.minPrice && values.minPrice > value)
-            return t("validate_range_price_with_default_price");
+            return tl("validate_range_price_with_default_price");
           if (values.maxPrice && values.maxPrice < value)
-            return t("validate_range_price_with_default_price");
+            return tl("validate_range_price_with_default_price");
         }
       },
       minPrice: (value: number, values: any) => {
         if (values.isRangePrice) {
-          if (typeof value !== "number") return t("must_be_provided");
+          if (typeof value !== "number") return tl("must_be_provided");
           if (values.maxPrice && values.maxPrice < value)
-            return t("validate_min_price_with_max_price");
+            return tl("validate_min_price_with_max_price");
         }
       },
       maxPrice: (value: number, values: any) => {
         if (values.isRangePrice) {
-          if (typeof value !== "number") return t("must_be_provided");
+          if (typeof value !== "number") return tl("must_be_provided");
           if (values.minPrice && values.minPrice > value)
-            return t("validate_max_price_with_min_price");
+            return tl("validate_max_price_with_min_price");
         }
       },
       voucherAmount: (value: number) => {
         if (type === ProductType.VOUCHER) {
-          if (typeof value !== "number") return t("must_be_provided");
-          if (value < 0) return t("validate_min_amount", { min: 0 });
+          if (typeof value !== "number") return tl("must_be_provided");
+          if (value < 0) return tl("validate_min_amount", { min: 0 });
         }
       },
     },
@@ -179,7 +179,7 @@ export const FormProduct: FC<
       // Validate
       if (type === ProductType.COMBO) {
         if (combos.length === 0)
-          throw new Error(`${t("must_be_provided")} ${t("products")}/${t("services")}`);
+          throw new Error(`${tl("must_be_provided")} ${tl("products")}/${tl("services")}`);
       }
 
       const { customFields, ...rest } = values;
@@ -218,19 +218,19 @@ export const FormProduct: FC<
             <Tabs.Tab value={FormProductTab.SETTING} fw={500}>
               <Group align="center" gap={5}>
                 <IconSettings size={16} strokeWidth={1.5} />
-                {t("settings")}
+                {tl("settings")}
               </Group>
             </Tabs.Tab>
             <Tabs.Tab value={FormProductTab.POST} fw={500}>
               <Group align="center" gap={5}>
                 <IconNews size={16} strokeWidth={1.5} />
-                {t("post")}
+                {tl("post")}
               </Group>
             </Tabs.Tab>
             <Tabs.Tab value={FormProductTab.ANALYTICS} fw={500} disabled={!product?._id}>
               <Group align="center" gap={5}>
                 <IconChartBar size={16} strokeWidth={1.5} />
-                {t("analytics")}
+                {tl("analytics")}
               </Group>
             </Tabs.Tab>
           </Tabs.List>
@@ -240,22 +240,22 @@ export const FormProduct: FC<
               <Stack>
                 <ImageInput {...form.getInputProps("image")} w={150} h={150} />
 
-                <TextInput withAsterisk label={t("name")} {...form.getInputProps("name")} />
-                <TextInput withAsterisk label={t("unit")} {...form.getInputProps("unit")} />
+                <TextInput withAsterisk label={tl("name")} {...form.getInputProps("name")} />
+                <TextInput withAsterisk label={tl("unit")} {...form.getInputProps("unit")} />
 
-                <TextInput label={t("code")} {...form.getInputProps("code")} />
+                <TextInput label={tl("code")} {...form.getInputProps("code")} />
 
                 <Renderer visible={type === ProductType.PRODUCT}>
                   <NumberInput
-                    label={t("min_per_use")}
-                    description={t("default_is", { value: 1 })}
+                    label={tl("min_per_use")}
+                    description={tl("default_is", { value: 1 })}
                     {...form.getInputProps("defaultQtyPerUse")}
                     hideControls
                   />
                 </Renderer>
 
                 <Switch
-                  label={t("range_price")}
+                  label={tl("range_price")}
                   checked={form.values.isRangePrice}
                   onChange={(e) => form.setFieldValue("isRangePrice", e.target.checked)}
                 />
@@ -264,14 +264,14 @@ export const FormProduct: FC<
                   <Group wrap="nowrap" align="start">
                     <NumberInput
                       withAsterisk
-                      label={t("min_price")}
+                      label={tl("min_price")}
                       flex={1}
                       hideControls
                       {...form.getInputProps("minPrice")}
                     />
                     <NumberInput
                       withAsterisk
-                      label={t("max_price")}
+                      label={tl("max_price")}
                       onBlur={() => {
                         if (
                           typeof form.values.maxPrice === "number" &&
@@ -290,7 +290,7 @@ export const FormProduct: FC<
                 </Renderer>
 
                 <NumberInput
-                  label={t("default_price")}
+                  label={tl("default_price")}
                   withAsterisk
                   hideControls
                   {...form.getInputProps("price")}
@@ -299,14 +299,14 @@ export const FormProduct: FC<
                 <Renderer visible={type === ProductType.VOUCHER}>
                   <NumberInput
                     withAsterisk
-                    label={t("voucherAmount")}
+                    label={tl("voucherAmount")}
                     hideControls
                     {...form.getInputProps("voucherAmount")}
                   />
                 </Renderer>
 
                 <CategoryInput
-                  label={t("categories")}
+                  label={tl("categories")}
                   {...form.getInputProps("category")}
                   type={CategoryType.PRODUCTS}
                 />
@@ -314,16 +314,16 @@ export const FormProduct: FC<
 
               <Stack>
                 <Stack>
-                  <Divider mb={-10} label={t("settings")} labelPosition="left" fw={700} />
+                  <Divider mb={-10} label={tl("settings")} labelPosition="left" fw={700} />
 
                   <TextInput
-                    label={t("display_name")}
-                    description={t("product_display_name_desc")}
+                    label={tl("display_name")}
+                    description={tl("product_display_name_desc")}
                     {...form.getInputProps("displayName")}
                   />
 
                   <Switch
-                    label={t("product_hide_ticket")}
+                    label={tl("product_hide_ticket")}
                     checked={form.values.isHiddenInReceiptWhenNoPrice}
                     styles={{ label: { fontSize: 14 } }}
                     {...form.getInputProps("isHiddenInReceiptWhenNoPrice")}
@@ -331,7 +331,7 @@ export const FormProduct: FC<
 
                   <Renderer visible={type === ProductType.PRODUCT}>
                     <Switch
-                      label={t("product_stock_check")}
+                      label={tl("product_stock_check")}
                       checked={form.values.isStockCheck}
                       styles={{ label: { fontSize: 14 } }}
                       {...form.getInputProps("isStockCheck")}
@@ -339,15 +339,15 @@ export const FormProduct: FC<
 
                     <Renderer visible={form.values.isStockCheck}>
                       <NumberInput
-                        label={t("label_warning_out_of_date")}
-                        description={t("label_warning_out_of_date_desc")}
+                        label={tl("label_warning_out_of_date")}
+                        description={tl("label_warning_out_of_date_desc")}
                         hideControls
                         {...form.getInputProps("warningOutOfDateBeforeDays")}
                       />
 
                       <NumberInput
-                        label={t("label_warning_out_of_stock")}
-                        description={t("label_warning_out_of_stock_desc")}
+                        label={tl("label_warning_out_of_stock")}
+                        description={tl("label_warning_out_of_stock_desc")}
                         {...form.getInputProps("warningOutOfStockQty")}
                         hideControls
                       />
@@ -357,9 +357,14 @@ export const FormProduct: FC<
 
                 <Renderer visible={[ProductType.PRODUCT, ProductType.SERVICE].includes(type)}>
                   <Stack>
-                    <Divider mb={-10} label={t("product_supplies")} labelPosition="left" fw={700} />
+                    <Divider
+                      mb={-10}
+                      label={tl("product_supplies")}
+                      labelPosition="left"
+                      fw={700}
+                    />
                     <Text fz={em(10)} c="gray">
-                      {t("enter_product_supplies")}
+                      {tl("enter_product_supplies")}
                     </Text>
 
                     <Stack gap={10}>
@@ -380,7 +385,7 @@ export const FormProduct: FC<
                                 <NumberInput
                                   maw={100}
                                   size="xs"
-                                  placeholder={t("amount")}
+                                  placeholder={tl("amount")}
                                   min={0}
                                   value={supply.quantity}
                                   onChange={(e) =>
@@ -424,7 +429,7 @@ export const FormProduct: FC<
                                 fz={em(14)}
                                 fw={500}
                               >
-                                {t("add")} {t("product_supplies")}
+                                {tl("add")} {tl("product_supplies")}
                               </Button>
                             );
                           }}
@@ -438,7 +443,7 @@ export const FormProduct: FC<
                   <Stack>
                     <Divider
                       mb={-10}
-                      label={`${t("products")} / ${t("services")}`}
+                      label={`${tl("products")} / ${tl("services")}`}
                       labelPosition="left"
                       fw={700}
                     />
@@ -493,7 +498,7 @@ export const FormProduct: FC<
                                 fw={500}
                                 onClick={ctx.toggle}
                               >
-                                {t("add")} {`${t("products")} / ${t("services")}`.toLowerCase()}
+                                {tl("add")} {`${tl("products")} / ${tl("services")}`.toLowerCase()}
                               </Button>
                             );
                           }}
@@ -507,20 +512,20 @@ export const FormProduct: FC<
                   <Stack>
                     <Divider
                       mb={-10}
-                      label={`${t("voucher_config")}`}
+                      label={`${tl("voucher_config")}`}
                       labelPosition="left"
                       fw={700}
                     />
 
                     <NumberInput
-                      label={t("expireInDays")}
-                      description={t("expireInDays_desc")}
+                      label={tl("expireInDays")}
+                      description={tl("expireInDays_desc")}
                       {...form.getInputProps("voucherExpireInDays")}
                     />
 
                     <Divider
                       mb={-10}
-                      label={`${t("include_products")}`}
+                      label={`${tl("include_products")}`}
                       labelPosition="left"
                       fw={700}
                     />
@@ -554,7 +559,7 @@ export const FormProduct: FC<
 
                     <Divider
                       mb={-10}
-                      label={`${t("exclude_products")}`}
+                      label={`${tl("exclude_products")}`}
                       labelPosition="left"
                       fw={700}
                     />
@@ -592,7 +597,7 @@ export const FormProduct: FC<
                   before={
                     <Divider
                       mb={-10}
-                      label={`${t("custom_fields")}`}
+                      label={`${tl("custom_fields")}`}
                       labelPosition="left"
                       fw={700}
                     />
@@ -608,7 +613,7 @@ export const FormProduct: FC<
           <Tabs.Panel value={FormProductTab.POST} pt={16}>
             <Editor
               isAlwayShowToolbar
-              placeholder={t("enter_content")}
+              placeholder={tl("enter_content")}
               value={form.values.content}
               onChangeHTML={(value) => form.setFieldValue("content", value)}
             />
@@ -623,7 +628,7 @@ export const FormProduct: FC<
       {[FormProductTab.SETTING, FormProductTab.POST].includes(tab) && (
         <Stack mt={25} align="center" justify="center" gap={10}>
           <Button loading={isSubmitting} onClick={onSubmit} leftIcon={IconCheck} type="submit">
-            {t(product ? "update" : "create_new")}
+            {tl(product ? "update" : "create_new")}
           </Button>
 
           {product?._id && (

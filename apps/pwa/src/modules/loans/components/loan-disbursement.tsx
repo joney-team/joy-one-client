@@ -9,7 +9,7 @@ import { Loading } from "@/components/loading";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
 import { onUploadFiles } from "@/modules/files/file-service";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { fulfillLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanReceiptData, LoanStatus } from "@/modules/loans/loans-types";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
@@ -129,7 +129,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
           <DocumentsIllustration width={150} />
           <Loader color="gray.5" size="xs" type="dots" />
           <Text c="gray.5" ta="center">
-            {t("loan_waiting_for_fulfill")}
+            {tl("loan_waiting_for_fulfill")}
           </Text>
         </Stack>
       </Card>
@@ -141,7 +141,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
       <Card shadow="xs" maw="100%" w={700}>
         <Stack>
           <Text fw={500} fz={em(14)} mb={-8} ta="center">
-            {t("payment_method")}
+            {tl("payment_method")}
           </Text>
 
           <Group gap={10} justify="center">
@@ -157,7 +157,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                   color="blue"
                   onClick={() => setPaymentMethod(method)}
                 >
-                  {t(`payment_method_${method}`)}
+                  {tl(`payment_method_${method}`)}
                 </Button>
               );
             })}
@@ -166,7 +166,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
           <Card withBorder shadow="none" p={16}>
             <Stack>
               <LoanRowInfo
-                label={t("loan_amount")}
+                label={tl("loan_amount")}
                 value={num(loan.amount, { type: "money" })}
                 copy
               />
@@ -213,17 +213,17 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 return (
                   <Fragment>
                     <LoanRowInfo
-                      label={t("bank_account_name")}
+                      label={tl("bank_account_name")}
                       value={loan.payment.accountName}
                       copy
                     />
                     <LoanRowInfo
-                      label={t("bank_account_number")}
+                      label={tl("bank_account_number")}
                       value={loan.payment.accountNumber}
                       copy
                     />
-                    <LoanRowInfo label={t("bank_name")} value={bank.shortName} copy />
-                    <LoanRowInfo label={t("bank_transaction_content")} value={description} copy />
+                    <LoanRowInfo label={tl("bank_name")} value={bank.shortName} copy />
+                    <LoanRowInfo label={tl("bank_transaction_content")} value={description} copy />
 
                     {loan.status === LoanStatus.APPROVED && !!qrCode && (
                       <Fragment>
@@ -236,7 +236,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
               })()}
 
               <InputWrapper
-                label={t("receipts_images")}
+                label={tl("receipts_images")}
                 withAsterisk
                 styles={{
                   label: {
@@ -252,7 +252,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 <Stack gap={4}>
                   <Center>
                     <Checkbox
-                      label={t("custom_fulfilled_at")}
+                      label={tl("custom_fulfilled_at")}
                       checked={isCustomFulfilledAt}
                       onChange={() => setIsCustomFulfilledAt(!isCustomFulfilledAt)}
                     />
@@ -260,7 +260,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
 
                   {isCustomFulfilledAt && (
                     <DateTimePicker
-                      label={t("fulfilledAt")}
+                      label={tl("fulfilledAt")}
                       value={fulfilledAt ? new Date(fulfilledAt * 1000) : null}
                       onChange={(d) => setFulfilledAt(DateTime.timeToSeconds(d))}
                     />
@@ -275,12 +275,12 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
       <Group justify="center">
         {workspace.hasPermission(WorkspacePermission.LOANS_APPROVED_REVERTED) && (
           <Button variant="outline" color="gray" onClick={onRevertApproval} disabled={isSubmitting}>
-            {t("revert_approval")}
+            {tl("revert_approval")}
           </Button>
         )}
 
         <Button type="submit" onClick={onSubmit} miw={200} loading={isSubmitting}>
-          {t("loan-disbursement")}
+          {tl("loan-disbursement")}
         </Button>
       </Group>
     </Stack>

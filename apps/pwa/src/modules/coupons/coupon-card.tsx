@@ -1,6 +1,6 @@
 import { getCouponCode } from "@/modules/coupons/coupon-service";
 import { CouponEntity } from "@/modules/coupons/coupon-types";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { Card, CardProps, em, Group, Stack, Text } from "@mantine/core";
 import { IconTicket } from "@tabler/icons-react";
 import { FC } from "react";
@@ -28,17 +28,17 @@ export const CouponCard: FC<CouponCardProps> = (props) => {
 
           {!props.hideQuantity && (
             <Text fw={500} fz={em(13)} c="gray">
-              • {t("quantity")}: {num(coupon.quantity)}
+              • {tl("quantity")}: {num(coupon.quantity)}
             </Text>
           )}
           {!props.hideCode && (
             <Text fw={500} fz={em(13)} c="gray">
-              • {t("code")}: {getCouponCode(coupon) || "--"}
+              • {tl("code")}: {getCouponCode(coupon) || "--"}
             </Text>
           )}
           {!props.hideCustomer && !!coupon.customer && (
             <Text fw={500} fz={em(13)} c="gray">
-              • {t("customer")}: {coupon.customer?.name || "--"}
+              • {tl("customer")}: {coupon.customer?.name || "--"}
             </Text>
           )}
 

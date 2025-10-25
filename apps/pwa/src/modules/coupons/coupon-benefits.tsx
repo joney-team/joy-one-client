@@ -8,7 +8,7 @@ import {
   DiscountType,
   FreeOnProductData,
 } from "@/modules/coupons/coupon-types";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { em, Text, TextProps } from "@mantine/core";
 import { FC, Fragment } from "react";
 
@@ -28,7 +28,7 @@ export const CouponBenefits: FC<CouponBenefitsProps> = (props) => {
           return (
             <Text key={i} fw={500} fz={em(13)} c="gray" {..._props}>
               •{" "}
-              {t("discount_on_total", {
+              {tl("discount_on_total", {
                 value: `${num(data.value)}${data.type === DiscountType.PERCENT ? "%" : ""}`.trim(),
               })}
             </Text>
@@ -40,7 +40,7 @@ export const CouponBenefits: FC<CouponBenefitsProps> = (props) => {
           return (
             <Text key={i} fw={500} fz={em(13)} c="gray" {..._props}>
               •{" "}
-              {t("discount_on_product", {
+              {tl("discount_on_product", {
                 value: `${num(data.value)}${data.type === DiscountType.PERCENT ? "%" : ""}`.trim(),
               })}
             </Text>
@@ -53,7 +53,7 @@ export const CouponBenefits: FC<CouponBenefitsProps> = (props) => {
             return (
               <Text key={i} fw={500} fz={em(13)} c="gray" {..._props}>
                 •{" "}
-                {t("free_on_product_limit", {
+                {tl("free_on_product_limit", {
                   product: data.product?.name,
                   quantity: data.quantity,
                   unit: data.product?.unit,
@@ -64,7 +64,7 @@ export const CouponBenefits: FC<CouponBenefitsProps> = (props) => {
 
           return (
             <Text key={i} fw={500} fz={em(13)} c="gray" {..._props}>
-              • {t("free_on_product", { product: data.product?.name })}
+              • {tl("free_on_product", { product: data.product?.name })}
             </Text>
           );
         }

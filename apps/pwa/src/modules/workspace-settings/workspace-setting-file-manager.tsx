@@ -8,7 +8,7 @@ import { type FC } from "react";
 import { fileTypeIcons } from "../files/file-service";
 import { FileEntity, FileType } from "../files/file-types";
 import { OnModalFileGallery } from "../files/modals/modal-file-gallery";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { UserColumn } from "../users/user-column";
 
@@ -64,7 +64,7 @@ export const WorkspaceFileManager: FC = () => {
             w: 160,
             options: Object.values(FileType).map((type) => ({
               icon: fileTypeIcons[type],
-              label: t(`file_type_${type}`),
+              label: tl(`file_type_${type}`),
               value: type,
             })),
           }),

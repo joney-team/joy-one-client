@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
@@ -99,7 +99,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                     fz={12}
                     onClick={() => OnTaskSatusesModal()}
                   >
-                    {`${t("add")} ${t("status")}`}
+                    {`${tl("add")} ${tl("status")}`}
                   </Button>
                 </Group>
               </Card>

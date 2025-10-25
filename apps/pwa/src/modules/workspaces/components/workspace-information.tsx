@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceTypeIcon } from "@/modules/workspaces/workspaces-service";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
@@ -86,7 +86,7 @@ export const WorkspaceInformation: FC = () => {
               <ThemeIcon variant="transparent" color="dark" size="md">
                 <IconUpload strokeWidth={1.2} />
               </ThemeIcon>
-              <Text fz={12}>{t("click_to_change")}</Text>
+              <Text fz={12}>{tl("click_to_change")}</Text>
             </Group>
           </Group>
         </Dropzone>
@@ -94,20 +94,20 @@ export const WorkspaceInformation: FC = () => {
         <TextInput label="Tên" {...form.getInputProps("name")} placeholder="Gold Dental" />
 
         <SimpleGrid cols={{ md: 2 }}>
-          <TextInput label={t("phone")} {...form.getInputProps("phone")} placeholder="090888888" />
+          <TextInput label={tl("phone")} {...form.getInputProps("phone")} placeholder="090888888" />
           <TextInput label="Hotline" {...form.getInputProps("hotline")} placeholder="19008088" />
         </SimpleGrid>
 
-        <TextInput label={t("address")} {...form.getInputProps("location.address")} />
+        <TextInput label={tl("address")} {...form.getInputProps("location.address")} />
 
-        <InputWrapper label={t("workspace_type")} {...form.getInputProps("type")}>
+        <InputWrapper label={tl("workspace_type")} {...form.getInputProps("type")}>
           <Group gap={10} pt={5}>
             {Object.values(WorkspaceType).map((type) => {
               return (
                 <WorkspaceTypeItem
                   key={type}
                   icon={getWorkspaceTypeIcon(type)}
-                  label={t(`ws_${type}`).toString()}
+                  label={tl(`ws_${type}`).toString()}
                   isActive={form.values.type === type}
                   onClick={() => form.setFieldValue("type", type)}
                 />
@@ -137,7 +137,7 @@ export const WorkspaceInformation: FC = () => {
           )}
           {workspace.userMember?.workspace?.location && (
             <Text fz={12}>
-              {t("address")}: {workspace.userMember.workspace.location?.address}
+              {tl("address")}: {workspace.userMember.workspace.location?.address}
             </Text>
           )}
         </Stack>

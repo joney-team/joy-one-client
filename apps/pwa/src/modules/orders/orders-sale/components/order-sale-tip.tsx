@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Group, Skeleton, Text } from "@mantine/core";
 import { IconCoin, IconPencil, IconPlus } from "@tabler/icons-react";
@@ -34,7 +34,7 @@ export const OrderSaleTip: FC = () => {
   return (
     <Group justify="space-between" onClick={onTip} className="clickable">
       <Group gap={5}>
-        <Text>{t("TIP")}</Text>
+        <Text>{tl("TIP")}</Text>
 
         <Button
           component="div"
@@ -42,7 +42,7 @@ export const OrderSaleTip: FC = () => {
           size="compact-xs"
           variant="subtle"
         >
-          {t(tipAmount ? "edit" : "add")}
+          {tl(tipAmount ? "edit" : "add")}
         </Button>
       </Group>
 

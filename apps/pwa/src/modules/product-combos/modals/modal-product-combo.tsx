@@ -6,7 +6,7 @@ import { EntityImage } from "@/components/entity-image";
 import { Errored } from "@/components/errored";
 import { ModalTitle } from "@/components/modal-title";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDateTime, t } from "@/modules/lang/lang-service";
+import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { ProductComboHistoryEntity } from "@/modules/product-combos/product-combos-entity";
 import {
@@ -109,10 +109,10 @@ export const ModalProductCombo: FC = () => {
             >
               <Table.Thead>
                 <Table.Tr>
-                  <Table.Th>{t("time")}</Table.Th>
-                  <Table.Th>{t("order")}</Table.Th>
-                  <Table.Th>{t("note")}</Table.Th>
-                  <Table.Th>{t("history")}</Table.Th>
+                  <Table.Th>{tl("time")}</Table.Th>
+                  <Table.Th>{tl("order")}</Table.Th>
+                  <Table.Th>{tl("note")}</Table.Th>
+                  <Table.Th>{tl("history")}</Table.Th>
                   <Table.Th w={50}>
                     <ActionIcon
                       variant="subtle"

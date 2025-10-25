@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Group, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import type { FC, ReactNode } from "react";
@@ -14,11 +14,11 @@ export const FormSession: FC<{
     <Group align="start" w="100%">
       <Stack gap={3} w="30%">
         <Text fw={500} fz={14}>
-          {t(title)}
+          {tl(title)}
         </Text>
         {description && (
           <Text fz={12} c="gray">
-            {t(description)}
+            {tl(description)}
           </Text>
         )}
       </Stack>
@@ -38,7 +38,7 @@ export const FormSessionIcon: FC<{
 
   return (
     <Group align="start" w="100%">
-      <Tooltip label={t(description ?? "")} disabled={!description}>
+      <Tooltip label={tl(description ?? "")} disabled={!description}>
         <ThemeIcon variant="transparent" color="gray">
           <Icon strokeWidth={1.3} />
         </ThemeIcon>

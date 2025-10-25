@@ -1,12 +1,14 @@
 import { FlexSize } from "@/components/flex-size";
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import type { WidgetComponent, WidgetLayoutConfig } from "@/widgets/types";
 import { Card, em, Group, LoadingOverlay, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 
-const LineChart = dynamic(() => import("@mantine/charts").then((mod) => mod.LineChart), { ssr: false });
+const LineChart = dynamic(() => import("@mantine/charts").then((mod) => mod.LineChart), {
+  ssr: false,
+});
 
 export const chartWidgetlayoutConfig: WidgetLayoutConfig = {
   initW: 6,
@@ -49,12 +51,12 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
                 <Icon size={em(25)} strokeWidth={1.5} color={color("primary")} />
               </ThemeIcon>
               <Text fz={em(15)} fw={400}>
-                {t(name)}
+                {tl(name)}
               </Text>
             </Group>
             {unit && (
               <Text fz={em(12)} fw={400}>
-                {t("unit")}: {t(unit.full)}
+                {tl("unit")}: {tl(unit.full)}
               </Text>
             )}
           </Group>
@@ -74,7 +76,7 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
                       value: v.label,
                     }))}
                     curveType="monotone"
-                    unit={unit?.short ? t(unit.short) : undefined}
+                    unit={unit?.short ? tl(unit.short) : undefined}
                     tooltipAnimationDuration={200}
                     referenceLines={
                       mean !== 0

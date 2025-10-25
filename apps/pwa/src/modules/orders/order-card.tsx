@@ -1,7 +1,7 @@
 "use client";
 
 import { OnModalPrinter } from "@/modals/modal-printer";
-import { num, renderDateTime, t } from "@/modules/lang/lang-service";
+import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
 import {
   onPayOrder,
@@ -83,7 +83,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                     />
 
                     <Text fz={14} fw={500}>
-                      {t(`order_payment_status_${order.paymentStatus}`)}
+                      {tl(`order_payment_status_${order.paymentStatus}`)}
                     </Text>
                   </Group>
                 </Card>
@@ -92,7 +92,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
               <Group align="start">
                 <Renderer visible={!props.hideCustomer}>
                   <CustomerInput
-                    label={t("customer")}
+                    label={tl("customer")}
                     disabled={!isAbleToEdit}
                     value={order.relatedCustomer}
                     clearable
@@ -106,7 +106,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                 </Renderer>
 
                 <WorkspaceMemberInput
-                  label={t("main_assignee")}
+                  label={tl("main_assignee")}
                   value={order.assigneeUsers?.[0]}
                   disabled={!isAbleToEdit}
                   clearable
@@ -169,7 +169,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
               <Table.Tr>
                 <Table.Td colSpan={2} ta="right">
-                  {t("subtotal")}
+                  {tl("subtotal")}
                 </Table.Td>
                 <Table.Td ta="right">
                   {num(
@@ -181,7 +181,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
               <Table.Tr>
                 <Table.Td colSpan={2} ta="right">
-                  {t("discount")}
+                  {tl("discount")}
                 </Table.Td>
                 <Table.Td ta="right">
                   {num(
@@ -193,7 +193,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
               <Table.Tr>
                 <Table.Td colSpan={2} ta="right" fw={600}>
-                  {t("total")}
+                  {tl("total")}
                 </Table.Td>
                 <Table.Td ta="right" fw={600}>
                   {num(order.totalAmount, { type: "money" })}
@@ -207,7 +207,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
           <Group>
             {order.paymentStatus === OrderPaymentStatus.PROCESSING && (
               <Button leftIcon={IconCashRegister} onClick={() => onPayOrder(order)}>
-                {t("pay")}
+                {tl("pay")}
               </Button>
             )}
 
@@ -216,7 +216,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
               onClick={() => OnModalPrinter({ order, customer: order.relatedCustomer })}
               variant="outline"
             >
-              {t("print")}
+              {tl("print")}
             </Button>
           </Group>
 
@@ -230,7 +230,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
               color="gray"
               fw={400}
             >
-              {t("edit")}
+              {tl("edit")}
             </Button>
           </Group>
         </Stack>

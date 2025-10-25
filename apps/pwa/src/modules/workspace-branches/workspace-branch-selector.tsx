@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchArray, searchEntity } from "@/modules/search/search-service";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -30,7 +30,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
   const listRoute = isFullAccess ? "/workspace-branches" : undefined;
   const rootOption = {
     _id: "root",
-    name: t("main_workspace_branch"),
+    name: tl("main_workspace_branch"),
   };
 
   return (
@@ -52,8 +52,8 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
             : undefined
           : workspace.userMember.workspaceBranches
       }
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(item) => {
         return (
@@ -82,7 +82,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
             fw={500}
             onClick={toggle}
           >
-            {t("select")}
+            {tl("select")}
           </Button>
         );
       }}

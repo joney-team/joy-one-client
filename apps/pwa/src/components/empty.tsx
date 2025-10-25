@@ -1,8 +1,9 @@
 "use client";
 
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@/modules/lang/lang-service";
 import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
 import { alpha, Stack, StackProps, Text } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import { FC, LegacyRef } from "react";
@@ -38,10 +39,10 @@ export const Empty: FC<EmptyProps> = (props) => {
   if (typeof props.visible === "boolean" && !!!props.visible) return null;
 
   const message = messageProp
-    ? t(messageProp)
+    ? tl(messageProp)
     : entity
-    ? t(`empty_entity`, { entity: t(entity) })
-    : t("empty_data");
+    ? tl(`empty_entity`, { entity: tl(entity) })
+    : t`No data`;
 
   return (
     <Stack

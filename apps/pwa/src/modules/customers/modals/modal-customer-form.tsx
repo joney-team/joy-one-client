@@ -10,7 +10,7 @@ import {
 } from "@/modules/customer-forms/customer-form-service";
 import { CustomerFormStatus } from "@/modules/customer-forms/customer-form-types";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Anchor, Grid, Group, Skeleton, Stack, Text } from "@mantine/core";
@@ -77,7 +77,7 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
   const onCancel = async () => {
     OnModalInput({
       type: InputModalType.TEXTAREA,
-      title: t("cancel_reason"),
+      title: tl("cancel_reason"),
       color: "red",
       required: true,
       onDone: async (value) => {
@@ -96,27 +96,27 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
 
   return (
     <Stack>
-      <RowInfo label={t("name")} value={customerForm.data.name} />
+      <RowInfo label={tl("name")} value={customerForm.data.name} />
       <RowInfo
-        label={t("phone")}
+        label={tl("phone")}
         value={
           <Anchor className="anchor" href={`tel:${customerForm.data.phone}`}>
             {customerForm.data.phone}
           </Anchor>
         }
       />
-      <RowInfo label={t("location")} value={renderLocation(customerForm.data.vnLocation)} />
+      <RowInfo label={tl("location")} value={renderLocation(customerForm.data.vnLocation)} />
 
       {(function () {
         if (customerForm.data.status === CustomerFormStatus.PENDING) {
           return (
             <Group justify="center" mt={12}>
               <Button variant="outline" color="gray" onClick={onCancel}>
-                {t("cancel")}
+                {tl("cancel")}
               </Button>
 
               <Button action rightIcon={IconCheck} onClick={onComplete}>
-                {t("complete")}
+                {tl("complete")}
               </Button>
             </Group>
           );
@@ -126,17 +126,17 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
 
         return (
           <RowInfo
-            label={t("status")}
+            label={tl("status")}
             value={
               <Stack gap={5}>
                 <Group gap={8}>
                   <Circle size={12} color={color(status.color)} />
-                  {t(status.label)}
+                  {tl(status.label)}
                 </Group>
 
                 {customerForm.data.cancelReason && (
                   <Text c="red">
-                    {t("reason")}: {customerForm.data.cancelReason}
+                    {tl("reason")}: {customerForm.data.cancelReason}
                   </Text>
                 )}
               </Stack>
@@ -151,7 +151,7 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
 export const OnCustomerFormModal: (props: CustomerFormModalProps) => void = (props) => {
   return modals.open({
     modalId: "CustomerFormModal",
-    title: <ModalTitle title={t("customerForms")} icon={IconMessageUser} />,
+    title: <ModalTitle title={tl("customerForms")} icon={IconMessageUser} />,
     children: <CustomerFormModal {...props} />,
   });
 };

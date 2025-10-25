@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
 import { configs } from "@/configs/layout.config";
 import { useAuth } from "@/modules/auth/auth-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
@@ -110,7 +110,7 @@ const UserWorkspaceSettingsForm: FC<
             color={color("primary")}
             rightSection={<IconLock size={13} style={{ marginLeft: -3 }} />}
           >
-            {t(`role_${WorkspaceSpecialRoleId.OWNER}`)}
+            {tl(`role_${WorkspaceSpecialRoleId.OWNER}`)}
           </Badge>
         ) : workspace.hasPermission(WorkspacePermission.WORKSPACE_ROLES_MANAGER) ? (
           <WorkspaceRolesInput
@@ -130,7 +130,7 @@ const UserWorkspaceSettingsForm: FC<
       {workspace.isShouldEnableBranches && (
         <FormSession title="branches">
           {isMainWorkspaceAccessable ? (
-            <Badge variant="light">{t("all_branches")}</Badge>
+            <Badge variant="light">{tl("all_branches")}</Badge>
           ) : (
             <WorkspaceBranchesInput
               key={userMember.userId}
@@ -168,7 +168,7 @@ const UserWorkspaceSettingsForm: FC<
               }
             >
               <Text fz={12} fw={400}>
-                {t("remove")}
+                {tl("remove")}
               </Text>
             </Button>
           </Center>

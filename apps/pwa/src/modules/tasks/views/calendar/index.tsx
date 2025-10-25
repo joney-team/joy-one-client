@@ -10,7 +10,7 @@ import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity, TaskTimeTracking } from "@/modules/tasks/tasks-types";
@@ -163,7 +163,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                   >
                     <Group gap={5}>
                       <Text fz={12} fw={500}>
-                        {t("members")}
+                        {tl("members")}
                       </Text>
 
                       {!isAssigneesReady ? (
@@ -238,7 +238,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                   <Group>
                     <Tooltip
                       label={String.capitalizeFirstLetter(
-                        `${t("add")} ${t("task")} ${t("need_complete")}`
+                        `${tl("add")} ${tl("task")} ${tl("need_complete")}`
                       )}
                     >
                       <ActionIcon
@@ -271,7 +271,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                   <Stack w="100%" px={5} pb={5} gap={10}>
                     <Renderer visible={createdTasks.length > 0}>
                       <Text fz={10} mb={-5}>
-                        • {t("created")}
+                        • {tl("created")}
                       </Text>
                       <Stack gap={5}>
                         {createdTasks.map((task) => (
@@ -282,7 +282,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
 
                     <Renderer visible={dueDateTasks.length > 0}>
                       <Text fz={10} mb={-5}>
-                        • {t("due_date")}
+                        • {tl("due_date")}
                       </Text>
                       <Stack gap={5}>
                         {dueDateTasks.map((task) => (
@@ -293,7 +293,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
 
                     <Renderer visible={closedTasks.length > 0}>
                       <Text fz={10} mb={-5}>
-                        • {t("task_closed")}
+                        • {tl("task_closed")}
                       </Text>
                       <Stack gap={5}>
                         {closedTasks.map((task) => (

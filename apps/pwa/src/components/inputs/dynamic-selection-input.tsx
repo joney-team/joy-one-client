@@ -1,5 +1,5 @@
 import { CustomersInput } from "@/modules/customers/components/customers-input";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { ProductsInput } from "@/modules/products/components/products-input";
 import { AppEntity, DynamicSelection, DynamicSelectionOperator } from "@/types";
 import { Card, Group, InputWrapper, InputWrapperProps, Select } from "@mantine/core";
@@ -45,7 +45,7 @@ export const DynamicSelectionInput = ({
         <Group wrap="nowrap" align="flex-start" gap={8}>
           {!fixedEntity && (
             <Select
-              placeholder={t("select")}
+              placeholder={tl("select")}
               value={entity}
               onChange={(selected) => {
                 if (selected) _onChange("entity", selected);
@@ -53,7 +53,7 @@ export const DynamicSelectionInput = ({
               data={Object.values(AppEntity).map((entity) => {
                 return {
                   value: entity,
-                  label: t(`entity_${entity}`),
+                  label: tl(`entity_${entity}`),
                 };
               })}
             />
@@ -68,7 +68,7 @@ export const DynamicSelectionInput = ({
             data={Object.values(DynamicSelectionOperator).map((operator) => {
               return {
                 value: operator,
-                label: t(operator.toLowerCase()),
+                label: tl(operator.toLowerCase()),
               };
             })}
           />

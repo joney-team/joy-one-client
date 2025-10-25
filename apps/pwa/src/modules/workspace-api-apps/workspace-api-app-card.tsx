@@ -1,4 +1,4 @@
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity";
 import { updateWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-service";
 import { getUserMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
@@ -14,7 +14,12 @@ interface WorkspaceApiAppCardProps {
 
 export const WorkspaceApiAppCard: FC<WorkspaceApiAppCardProps> = ({ app }) => {
   return (
-    <Card withBorder shadow="none" className="clickable" onClick={() => OnModalWorkspaceApiApp(app)}>
+    <Card
+      withBorder
+      shadow="none"
+      className="clickable"
+      onClick={() => OnModalWorkspaceApiApp(app)}
+    >
       <Group align="start">
         <ThemeIcon size="xl" variant="light">
           <IconApiApp />
@@ -57,7 +62,7 @@ export const WorkspaceApiAppCard: FC<WorkspaceApiAppCardProps> = ({ app }) => {
                 <IconAccessible size={14} />
               </ThemeIcon>
               <Text fz={12} c="gray">
-                {t("role")}: {getUserMemberRoleLabel(app.member)}
+                {tl("role")}: {getUserMemberRoleLabel(app.member)}
               </Text>
             </Group>
           </Stack>

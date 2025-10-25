@@ -13,7 +13,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { Card, Divider, em, Group, ScrollArea, Stack, Text, Title } from "@mantine/core";
 import { FC, Fragment, useEffect, useState } from "react";
 import { useApp } from "../../app.context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { FormForgotPassword } from "./components/form-forgot-password";
 import { FormRegister } from "./components/form-register";
 import { FormSignIn } from "./components/form-sign-in";
@@ -92,11 +92,11 @@ export const AuthRequire: FC = () => {
                   return (
                     <Group gap={8}>
                       <Renderer views={["desktop", "tablet"]}>
-                        <Text fz={em(14)}>{t("you_not_have_account")}</Text>
+                        <Text fz={em(14)}>{tl("you_not_have_account")}</Text>
                       </Renderer>
 
                       <Button size="xs" onClick={() => setAuthType("register")}>
-                        {t("register")}
+                        {tl("register")}
                       </Button>
                     </Group>
                   );
@@ -105,11 +105,11 @@ export const AuthRequire: FC = () => {
                   return (
                     <Group gap={8}>
                       <Renderer views={["desktop", "tablet"]}>
-                        <Text fz={em(14)}>{t("you_have_account")}</Text>
+                        <Text fz={em(14)}>{tl("you_have_account")}</Text>
                       </Renderer>
 
                       <Button size="xs" onClick={() => setAuthType("signin")}>
-                        {t("login")}
+                        {tl("login")}
                       </Button>
                     </Group>
                   );
@@ -117,11 +117,11 @@ export const AuthRequire: FC = () => {
                 return (
                   <Group gap={8}>
                     <Renderer views={["desktop", "tablet"]}>
-                      <Text fz={em(14)}>{t("back_to_login")}</Text>
+                      <Text fz={em(14)}>{tl("back_to_login")}</Text>
                     </Renderer>
 
                     <Button size="xs" onClick={() => setAuthType("signin")}>
-                      {t("login")}
+                      {tl("login")}
                     </Button>
                   </Group>
                 );
@@ -155,9 +155,9 @@ export const AuthRequire: FC = () => {
                   c="var(--mantine-color-bright)"
                 >
                   {(function () {
-                    if (authType === "forgot-password") return `${t("forgot_password")}?`;
-                    if (authType === "signin") return t("hello");
-                    return t("register_new_account");
+                    if (authType === "forgot-password") return `${tl("forgot_password")}?`;
+                    if (authType === "signin") return tl("hello");
+                    return tl("register_new_account");
                   })()}
                 </Title>
 
@@ -173,7 +173,7 @@ export const AuthRequire: FC = () => {
                         <FormRegister />
                       )}
 
-                      <Divider label={t("or")} labelPosition="center" />
+                      <Divider label={tl("or")} labelPosition="center" />
 
                       {authProviders.map((authProvider) => {
                         return (
@@ -189,7 +189,7 @@ export const AuthRequire: FC = () => {
                               borderColor: color({ light: "gray.3", dark: "gray.7" }),
                             }}
                           >
-                            {t("continue_with")} {authProvider.name}
+                            {tl("continue_with")} {authProvider.name}
                           </Button>
                         );
                       })}

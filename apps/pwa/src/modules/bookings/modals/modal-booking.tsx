@@ -35,7 +35,7 @@ import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { getDateFormat, t } from "@/modules/lang/lang-service";
+import { getDateFormat, tl } from "@/modules/lang/lang-service";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
@@ -111,10 +111,10 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
   }, [bookingQuery, assigneeUsers]);
 
   const onSubmit = async () => {
-    if (!creatingData || !customer) throw Error(t("entity_required", { entity: t("customer") }));
+    if (!creatingData || !customer) throw Error(tl("entity_required", { entity: tl("customer") }));
 
     try {
-      if (assigneeUsers.length === 0) throw Error(t("assignee_required"));
+      if (assigneeUsers.length === 0) throw Error(tl("assignee_required"));
 
       const payload: CreateBookingDto = {
         customerId: customer._id,
@@ -161,10 +161,10 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
   if (props.booking)
     return (
       <Stack>
-        <Textarea label={t("content")} value={note} onChange={(e) => setNote(e.target.value)} />
+        <Textarea label={tl("content")} value={note} onChange={(e) => setNote(e.target.value)} />
 
         <Button leftIcon={IconCheck} onClick={onUpdate}>
-          {t("update")}
+          {tl("update")}
         </Button>
       </Stack>
     );
@@ -173,14 +173,14 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
     <Stack gap={16}>
       <Group>
         <CustomerInput
-          label={t("customer")}
+          label={tl("customer")}
           value={customer}
           disabled={!!props.customer}
           onSelect={(value) => setCustomer(value)}
         />
 
         <WorkspaceMembersInput
-          label={t("attendees")}
+          label={tl("attendees")}
           showMainResponsible
           value={assigneeUsers}
           onChange={(value) => setAssigneeUsers(value)}
@@ -189,7 +189,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
       </Group>
 
       <Text fz={12} c="gray">
-        {t("create_booking_note")}
+        {tl("create_booking_note")}
       </Text>
 
       <WorkSlotsInput
@@ -215,7 +215,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
           })}
         onCreate={(e) => {
           try {
-            if (e.conflict.events.length > 0) throw Error(t("booking_conflicted"));
+            if (e.conflict.events.length > 0) throw Error(tl("booking_conflicted"));
             setCreatingData(e);
           } catch (error) {
             onError(error);
@@ -228,7 +228,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
         onClose={() => setCreatingData(undefined)}
         title={
           <ModalTitle
-            title={t(props.reschedule ? "reschedule_booking" : "booking_information")}
+            title={tl(props.reschedule ? "reschedule_booking" : "booking_information")}
             icon={IconCalendar}
           />
         }
@@ -236,11 +236,11 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
       >
         {!!creatingData && (
           <Stack pt={16} gap={30}>
-            <FormSession title={t("customer")}>
+            <FormSession title={tl("customer")}>
               <CustomerInput value={customer} onSelect={(value) => setCustomer(value)} />
             </FormSession>
 
-            <FormSession title={t("attendees")}>
+            <FormSession title={tl("attendees")}>
               <WorkspaceMembersInput
                 showMainResponsible
                 value={assigneeUsers}
@@ -248,7 +248,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
               />
             </FormSession>
 
-            <FormSession title={t("time")}>
+            <FormSession title={tl("time")}>
               {props.reschedule && (
                 <Fragment>
                   <Card withBorder shadow="none" p={10}>
@@ -310,13 +310,13 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
 
                     {!creatingData.conflict.isInWorkspaceWorkSlots && (
                       <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
-                        {t("out_of_work_slots")}
+                        {tl("out_of_work_slots")}
                       </Blockquote>
                     )}
 
                     {creatingData.start < dayjs().toDate() && (
                       <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
-                        {t("booking_time_passed")}
+                        {tl("booking_time_passed")}
                       </Blockquote>
                     )}
                   </Stack>
@@ -324,17 +324,17 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
               </Card>
             </FormSession>
 
-            <FormSession title={t("content")}>
+            <FormSession title={tl("content")}>
               <Textarea
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder={capitalize(`${t("enter")} ${t("content")}`)}
+                placeholder={capitalize(`${tl("enter")} ${tl("content")}`)}
               />
             </FormSession>
 
             <Group justify="center" mt={16}>
               <Button onClick={onSubmit} leftIcon={IconCheck} action>
-                {t(props.reschedule ? "reschedule_booking" : "save")}
+                {tl(props.reschedule ? "reschedule_booking" : "save")}
               </Button>
             </Group>
           </Stack>
@@ -351,10 +351,10 @@ export const OnModalBooking = (props?: ModalBookingProps) => {
       <ModalTitle
         title={
           props?.booking
-            ? capitalize(`${t("update")} ${t("booking")}`)
+            ? capitalize(`${tl("update")} ${tl("booking")}`)
             : props?.reschedule
-            ? t(`reschedule_booking`)
-            : capitalize(`${t("create")} ${t("booking")}`)
+            ? tl(`reschedule_booking`)
+            : capitalize(`${tl("create")} ${tl("booking")}`)
         }
         icon={props?.reschedule ? IconCalendarTime : IconCalendar}
       />

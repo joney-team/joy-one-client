@@ -1,7 +1,7 @@
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useRouter } from "@/hooks/use-router";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { onRemoveTaskTagFolder } from "@/modules/tags/tags-service";
@@ -51,7 +51,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                 }
               >
                 <Group gap={0}>
-                  <Tooltip label={capitalize(`${t("select")} ${t("folder")}`)} position="right">
+                  <Tooltip label={capitalize(`${tl("select")} ${tl("folder")}`)} position="right">
                     <ActionIcon
                       variant="subtle"
                       color={tagFolders.tagFolder?.color || "dark"}
@@ -76,7 +76,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                     </Group>
                   ) : (
                     <Text fz={13} fw={500} pr={5} style={{ cursor: "default" }}>
-                      {capitalize(`${t("all")} ${t("tasks")}`)}
+                      {capitalize(`${tl("all")} ${tl("tasks")}`)}
                     </Text>
                   )}
                 </Group>
@@ -98,7 +98,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                         tagFolders.exitFolder();
                       }}
                     >
-                      <Text fz={14}>{t("exit")}</Text>
+                      <Text fz={14}>{tl("exit")}</Text>
                     </Menu.Item>
 
                     <Menu.Item
@@ -108,7 +108,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                         OnModalTagForm({ tag: tagFolders.tagFolder!, type: TagType.TASK_FOLDER });
                       }}
                     >
-                      <Text fz={14}>{t("edit")}</Text>
+                      <Text fz={14}>{tl("edit")}</Text>
                     </Menu.Item>
 
                     <Menu.Item
@@ -120,7 +120,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                         });
                       }}
                     >
-                      <Text fz={14}>{t("remove")}</Text>
+                      <Text fz={14}>{tl("remove")}</Text>
                     </Menu.Item>
                   </Menu.Dropdown>
                 </Menu>

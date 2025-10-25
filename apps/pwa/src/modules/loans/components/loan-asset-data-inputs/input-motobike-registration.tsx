@@ -2,7 +2,7 @@
 
 import { EntityImage } from "@/components/entity-image";
 import { EntityImages } from "@/components/entity-images";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { LoanAssetType } from "@/modules/loans/loans-types";
 import { InputWrapper, Select, SimpleGrid, TextInput } from "@mantine/core";
@@ -18,7 +18,7 @@ export const InputMotobileRegistration: FC<
     <SimpleGrid cols={{ md: 1 }}>
       <SimpleGrid cols={{ md: 3 }}>
         <Select
-          label={t("brand_name")}
+          label={tl("brand_name")}
           searchable
           data={loans.assetEstimations.brands
             .filter((v) => v.assetType === props.assetType)
@@ -29,7 +29,7 @@ export const InputMotobileRegistration: FC<
         />
 
         <Select
-          label={t("asset_model")}
+          label={tl("asset_model")}
           searchable
           data={loans.assetEstimations.models
             .filter((v) => v.brandId === props.value?.brandId)
@@ -40,7 +40,7 @@ export const InputMotobileRegistration: FC<
         />
 
         <TextInput
-          label={t("numberPlate")}
+          label={tl("numberPlate")}
           value={props.value?.numberPlate || ""}
           onChange={(e) =>
             props.onChange?.({ ...(props.value as any), numberPlate: e.target.value })
@@ -49,7 +49,7 @@ export const InputMotobileRegistration: FC<
         />
 
         <TextInput
-          label={t("frameNumber")}
+          label={tl("frameNumber")}
           value={props.value?.frameNumber || ""}
           onChange={(e) =>
             props.onChange?.({ ...(props.value as any), frameNumber: e.target.value })
@@ -58,7 +58,7 @@ export const InputMotobileRegistration: FC<
         />
 
         <TextInput
-          label={t("engineNumber")}
+          label={tl("engineNumber")}
           value={props.value?.engineNumber || ""}
           onChange={(e) =>
             props.onChange?.({ ...(props.value as any), engineNumber: e.target.value })
@@ -67,7 +67,7 @@ export const InputMotobileRegistration: FC<
         />
 
         <TextInput
-          label={t("registrationNumber")}
+          label={tl("registrationNumber")}
           value={props.value?.registrationNumber || ""}
           onChange={(e) =>
             props.onChange?.({ ...(props.value as any), registrationNumber: e.target.value })
@@ -76,7 +76,7 @@ export const InputMotobileRegistration: FC<
         />
 
         <TextInput
-          label={t("issuedDate")}
+          label={tl("issuedDate")}
           value={props.value?.issuedDate || ""}
           onChange={(e) =>
             props.onChange?.({ ...(props.value as any), issuedDate: e.target.value })
@@ -85,7 +85,7 @@ export const InputMotobileRegistration: FC<
         />
 
         <TextInput
-          label={t("productManufacturingDate")}
+          label={tl("productManufacturingDate")}
           value={props.value?.productManufacturingDate || ""}
           onChange={(e) =>
             props.onChange?.({ ...(props.value as any), productManufacturingDate: e.target.value })
@@ -95,12 +95,12 @@ export const InputMotobileRegistration: FC<
       </SimpleGrid>
 
       <SimpleGrid cols={{ md: 2 }}>
-        <InputWrapper label={t("driverLicenseImages_front")}>
+        <InputWrapper label={tl("driverLicenseImages_front")}>
           <EntityImage
             w="100%"
             h={150}
             fit="contain"
-            name={t("driverLicenseImages_front")}
+            name={tl("driverLicenseImages_front")}
             src={props.value?.driverLicenseImages?.front}
             onChange={(image) =>
               props.onChange?.({
@@ -112,12 +112,12 @@ export const InputMotobileRegistration: FC<
           />
         </InputWrapper>
 
-        <InputWrapper label={t("driverLicenseImages_back")}>
+        <InputWrapper label={tl("driverLicenseImages_back")}>
           <EntityImage
             w="100%"
             h={150}
             fit="contain"
-            name={t("driverLicenseImages_back")}
+            name={tl("driverLicenseImages_back")}
             src={props.value?.driverLicenseImages?.back}
             onChange={(image) =>
               props.onChange?.({
@@ -130,9 +130,9 @@ export const InputMotobileRegistration: FC<
         </InputWrapper>
       </SimpleGrid>
 
-      <InputWrapper label={t("asset_imgs")}>
+      <InputWrapper label={tl("asset_imgs")}>
         <EntityImages
-          name={t("asset_imgs")}
+          name={tl("asset_imgs")}
           images={props.value?.images}
           onChange={(images) => props.onChange?.({ ...(props.value as any), images })}
           disabled={props.disabled}

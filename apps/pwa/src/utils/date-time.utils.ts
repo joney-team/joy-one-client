@@ -1,5 +1,5 @@
 import { Period } from "@/types";
-import { renderDate, t } from "@/modules/lang/lang-service";
+import { renderDate, tl } from "@/modules/lang/lang-service";
 
 export class DateTime {
   static addDays(now: Date, days: number): Date {
@@ -195,7 +195,7 @@ export class DateTime {
   static renderDate(date: any, period: Period, defaultValue?: string) {
     const _date = date ? new Date(date) : new Date();
 
-    if (!date) return defaultValue || t("time");
+    if (!date) return defaultValue || tl("time");
 
     if (period === Period.MONTH) {
       return _date.getMonth() + 1 + "/" + _date.getFullYear();
@@ -211,7 +211,7 @@ export class DateTime {
       return `${new Date(range.start).getFullYear()}`;
     }
 
-    if (DateTime.isToday(_date)) return t("today");
+    if (DateTime.isToday(_date)) return tl("today");
     return renderDate(_date);
   }
 

@@ -5,7 +5,7 @@ import { Center, ImageProps, Image as MantineImage, Stack } from "@mantine/core"
 import { FC, useState } from "react";
 import { Loading } from "./loading";
 import config from "@joy-one-client/config";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 
 interface Props extends ImageProps {
   alt?: string;
@@ -23,7 +23,7 @@ export const Image: FC<Props> = (props) => {
   if (props.showLoading) {
     return (
       <Stack justify="center" align="center" maw="100%" mah="100%">
-        {props.showLoading && !loaded && <Loading message={t("img_loading")} />}
+        {props.showLoading && !loaded && <Loading message={tl("img_loading")} />}
 
         <MantineImage
           {..._props}

@@ -2,7 +2,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
-import { getClientLocale, t } from "@/modules/lang/lang-service";
+import { getClientLocale, tl } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
 import { TagType } from "@/modules/tags/tags-types";
 import {
@@ -61,11 +61,11 @@ export const SidebarHead: FC = () => {
         borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
       }}
     >
-      <Text fz={em(13)}>{t("name")}</Text>
+      <Text fz={em(13)}>{tl("name")}</Text>
 
       <Group gap={5}>
         <Tooltip
-          label={t(gantt.state.isHideEstimateTime ? "show_estimate_time" : "hide_estimate_time")}
+          label={tl(gantt.state.isHideEstimateTime ? "show_estimate_time" : "hide_estimate_time")}
         >
           <ActionIcon
             variant="subtle"
@@ -86,7 +86,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t("task_status_color_visible")}>
+        <Tooltip label={tl("task_status_color_visible")}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -103,7 +103,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t("scroll_today")}>
+        <Tooltip label={tl("scroll_today")}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -116,7 +116,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t("create_folder")}>
+        <Tooltip label={tl("create_folder")}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -127,7 +127,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t("create_task")}>
+        <Tooltip label={tl("create_task")}>
           <QuickCreateTaskInput>
             <ActionIcon component="div" variant="subtle" size="sm" color="gray">
               <IconPlus size={16} />

@@ -11,7 +11,7 @@ import { Button } from "@/components/buttons/button";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { SessionTitle } from "@/components/session-title";
 import { BookingEntity } from "@/modules/bookings/booking-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 
@@ -56,13 +56,13 @@ export const ModalBookingDetail: FC = () => {
               </ThemeIcon>
 
               <Title fz={em(20)} fw={700} c={color("primary")} ta="center">
-                {t("booking_information")}
+                {tl("booking_information")}
               </Title>
             </Stack>
 
             {props?.booking.customer && (
               <Fragment>
-                <SessionTitle mb={-10} name={t("customer")} icon={IconUser} />
+                <SessionTitle mb={-10} name={tl("customer")} icon={IconUser} />
                 <CustomerCard
                   customer={props?.booking.customer}
                   withBorder
@@ -72,7 +72,7 @@ export const ModalBookingDetail: FC = () => {
               </Fragment>
             )}
 
-            <SessionTitle mb={-10} name={t("booking")} icon={IconCalendar} />
+            <SessionTitle mb={-10} name={tl("booking")} icon={IconCalendar} />
 
             <BookingCard
               booking={props?.booking}
@@ -86,12 +86,12 @@ export const ModalBookingDetail: FC = () => {
             <Stack justify="center" align="center" mt={10}>
               {props.booking.customer && (
                 <Button leftIcon={IconEye} radius={100} onClick={onViewDetail}>
-                  {t("customer_detail")}
+                  {tl("customer_detail")}
                 </Button>
               )}
 
               <Anchor c="gray" fz={em(14)} onClick={onClose}>
-                {t("close")}
+                {tl("close")}
               </Anchor>
             </Stack>
           </Stack>

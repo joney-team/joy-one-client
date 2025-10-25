@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/modules/auth/auth-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { isExtendedApp } from "@/service";
 import { Anchor, Stack, Text, Title } from "@mantine/core";
@@ -27,15 +27,15 @@ export const WorkspaceRequireBranches: FC = () => {
       <GoWorkIllustration width={150} />
       <Stack gap={10}>
         <Title c={color("primary")} tt="capitalize" order={4} ta="center">
-          {t("workspace_waiting_for_assign_branches")}
+          {tl("workspace_waiting_for_assign_branches")}
         </Title>
         <Text c="gray" fz={16} ta="center">
-          {t("workspace_waiting_for_assign_branches_desc")}
+          {tl("workspace_waiting_for_assign_branches_desc")}
         </Text>
       </Stack>
 
       <Anchor ta="center" onClick={onLeave} fz={12} c="gray">
-        {t("leave")}
+        {tl("leave")}
       </Anchor>
     </Stack>
   );

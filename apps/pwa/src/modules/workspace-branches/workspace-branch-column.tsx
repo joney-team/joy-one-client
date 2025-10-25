@@ -6,7 +6,7 @@ import { Column } from "@/components/list/types";
 import { AppEntity } from "@/types";
 import { ActionIcon, Group, Text, Tooltip } from "@mantine/core";
 import { IconBuildingSkyscraper, IconFileExport } from "@tabler/icons-react";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 import { searchEntity } from "../search/search-service";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
@@ -30,7 +30,7 @@ export const WorkspaceBranchColumn = (
   const permissionRequired = permissionRequireds[args.entity];
   const isEditable = permissionRequired && workspace.hasPermission(permissionRequired);
 
-  const rootOption = { label: t("main_workspace_branch"), value: "root", data: null };
+  const rootOption = { label: tl("main_workspace_branch"), value: "root", data: null };
 
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
     return [...options.map((v) => ({ label: v.label, value: v.value, data: v.data })), rootOption];
@@ -44,7 +44,7 @@ export const WorkspaceBranchColumn = (
       const id = data.id || data._id;
       const branchName = data.workspaceBranch
         ? data.workspaceBranch.name
-        : t("main_workspace_branch");
+        : tl("main_workspace_branch");
 
       return (
         <Hovered disabled={!isEditable}>
@@ -77,7 +77,7 @@ export const WorkspaceBranchColumn = (
       );
     },
     exportToExcel: (_, loan) => {
-      if (!loan.workspaceBranch) return t("main_workspace_branch");
+      if (!loan.workspaceBranch) return tl("main_workspace_branch");
       return loan.workspaceBranch.name;
     },
     disabled: !workspace.isShouldEnableBranches,

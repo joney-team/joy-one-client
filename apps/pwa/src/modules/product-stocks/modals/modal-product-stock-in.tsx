@@ -5,7 +5,7 @@ import { DateInput } from "@/components/inputs/date-input";
 import { ModalTitle } from "@/components/modal-title";
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { ProductSelector } from "@/modules/products/components/product-selector";
-import { num, t, tMulti } from "@/modules/lang/lang-service";
+import { num, tl, tMulti } from "@/modules/lang/lang-service";
 import {
   multipleProductsStockIn,
   productStockRecordTypeOptions,
@@ -65,7 +65,7 @@ export const ModalProductStockIn: FC = () => {
       items: {
         product: required,
         quantity: (value) => {
-          if (!value || value <= 0) return t("invalid_quantity");
+          if (!value || value <= 0) return tl("invalid_quantity");
         },
       },
     },
@@ -134,22 +134,22 @@ export const ModalProductStockIn: FC = () => {
                   #
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
-                  {t("product")}
+                  {tl("product")}
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
-                  {t("product_stock_code")}
+                  {tl("product_stock_code")}
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
-                  {t("expire_at")}
+                  {tl("expire_at")}
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
-                  {t("note")}
+                  {tl("note")}
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
-                  {t("quantity")}
+                  {tl("quantity")}
                 </Table.Th>
                 <Table.Th fz={12} fw={500} ta="right">
-                  {t("costPrice")}
+                  {tl("costPrice")}
                 </Table.Th>
                 <Table.Th fz={12} fw={500}>
                   {isMultiple && (
@@ -261,7 +261,7 @@ export const ModalProductStockIn: FC = () => {
 
               <Table.Tr>
                 <Table.Td colSpan={5} ta="right">
-                  {t("total")}
+                  {tl("total")}
                 </Table.Td>
 
                 <Table.Td ta="right">
@@ -297,7 +297,7 @@ export const ModalProductStockIn: FC = () => {
             loading={form.submitting}
             onClick={onSubmit}
           >
-            {t("complete")}
+            {tl("complete")}
           </Button>
         </Stack>
       </Stack>

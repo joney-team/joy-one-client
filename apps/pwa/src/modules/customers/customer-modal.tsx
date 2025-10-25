@@ -6,7 +6,7 @@ import { IconUser, IconUserPlus } from "@tabler/icons-react";
 
 import { CustomerForm, CustomerFormProps } from "@/modules/customers/components/form-customer";
 import { getView } from "@/layout/layout-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 
 export const OnCustomerModal = (props?: CustomerFormProps) =>
   modals.open({
@@ -14,7 +14,9 @@ export const OnCustomerModal = (props?: CustomerFormProps) =>
     title: (
       <ModalTitle
         title={
-          props?.customer ? `${t("update")} ${t("customer")}` : `${t("create")} ${t("customer")}`
+          props?.customer
+            ? `${tl("update")} ${tl("customer")}`
+            : `${tl("create")} ${tl("customer")}`
         }
         icon={props?.customer ? IconUser : IconUserPlus}
       />

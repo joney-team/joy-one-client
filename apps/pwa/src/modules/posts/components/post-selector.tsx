@@ -4,7 +4,7 @@ import { Selector, SelectorProps } from "@/components/selector";
 import { PostEntity } from "../posts-types";
 import { FC } from "react";
 import { ActionIcon, Combobox, Group, Input, Text } from "@mantine/core";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
 import { IconNews, IconX } from "@tabler/icons-react";
@@ -46,7 +46,7 @@ export const PostSelector: FC<PostSelectorProps> = (props) => {
             readOnly
             value={props.value?.title || ""}
             onClick={ctx.toggle}
-            placeholder={t("select_entity", { entity: t("post") })}
+            placeholder={tl("select_entity", { entity: tl("post") })}
             rightSectionPointerEvents="all"
             rightSection={
               props.value ? (

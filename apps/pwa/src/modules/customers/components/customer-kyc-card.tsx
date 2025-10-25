@@ -13,7 +13,7 @@ import {
   CustomerKycStatus,
 } from "@/modules/customer-kycs/customer-kycs-types";
 import { FileType } from "@/modules/files/file-types";
-import { renderDateTime, t } from "@/modules/lang/lang-service";
+import { renderDateTime, tl } from "@/modules/lang/lang-service";
 import { String } from "@/utils/string.utils";
 import {
   Anchor,
@@ -65,19 +65,19 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
         {
           url: lastVersion.frontOfCidImage,
           _id: "1",
-          fileName: t("frontOfCidImage"),
+          fileName: tl("frontOfCidImage"),
           type: FileType.PHOTO,
         },
         {
           url: lastVersion.backOfCidImage,
           _id: "2",
-          fileName: t("backOfCidImage"),
+          fileName: tl("backOfCidImage"),
           type: FileType.PHOTO,
         },
         {
           url: lastVersion.portraitImage,
           _id: "3",
-          fileName: t("portraitImage"),
+          fileName: tl("portraitImage"),
           type: FileType.PHOTO,
         },
       ],
@@ -86,7 +86,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
   const onApprove = async () => {
     await onActionLoad({
-      name: t("approve"),
+      name: tl("approve"),
       process: async () => {
         const _kyc = await approveCustomerKyc(customer._id);
         props.onApproved?.(_kyc);
@@ -96,12 +96,12 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
   const onReject = () => {
     OnModalPrompt({
-      title: String.capitalizeFirstLetter(`${t("reject")} ${t("customer-kyc")}`),
-      message: t("enter_reject_reason"),
+      title: String.capitalizeFirstLetter(`${tl("reject")} ${tl("customer-kyc")}`),
+      message: tl("enter_reject_reason"),
       onSubmit: (reason) => rejectCustomerKyc(customer._id, { reason }),
       icon: IconUserScan,
       color: "red",
-      suggestions: [t("wrong_information"), t("info_does_not_match_img"), t("img_is_blurry")],
+      suggestions: [tl("wrong_information"), tl("info_does_not_match_img"), tl("img_is_blurry")],
     });
   };
 
@@ -112,14 +112,14 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
         <Renderer visible={!props.hideCustomer}>
           <Group justify="space-between">
-            <Text fz={em(15)}>{t("customer")}</Text>
+            <Text fz={em(15)}>{tl("customer")}</Text>
             <Anchor fw={500} onClick={() => router.push(`/customers/${customer.code}`)}>
               {customer.name}
             </Anchor>
           </Group>
 
           <Group justify="space-between">
-            <Text fz={em(15)}>{t("phone")}</Text>
+            <Text fz={em(15)}>{tl("phone")}</Text>
             <Text fz={em(15)} fw={500}>
               {customer.phone || "--"}
             </Text>
@@ -128,7 +128,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
         {lastVersion.cidNumber && (
           <Group justify="space-between">
-            <Text fz={em(15)}>{t("cidNumber")}</Text>
+            <Text fz={em(15)}>{tl("cidNumber")}</Text>
             <Text fz={em(15)} fw={500}>
               {lastVersion.cidNumber}
             </Text>
@@ -137,7 +137,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
         {lastVersion.cidFullName && (
           <Group justify="space-between" wrap="nowrap">
-            <Text fz={em(15)}>{t("cidFullName")}</Text>
+            <Text fz={em(15)}>{tl("cidFullName")}</Text>
             <Text fz={em(15)} fw={500} ta="right">
               {lastVersion.cidFullName}
             </Text>
@@ -146,7 +146,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
         {lastVersion.cidVnLocation && Object.keys(lastVersion.cidVnLocation).length > 0 && (
           <Group justify="space-between">
-            <Text fz={em(15)}>{t("address")}</Text>
+            <Text fz={em(15)}>{tl("address")}</Text>
             <Text fz={em(15)} fw={500}>
               {renderLocation(lastVersion.cidVnLocation, { shortProvine: true, shortWard: true })}
             </Text>
@@ -157,17 +157,17 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
         <SimpleGrid cols={{ md: 3 }}>
           <Stack gap={5}>
-            <Text fz={em(13)}>{t("frontOfCidImage")}</Text>
+            <Text fz={em(13)}>{tl("frontOfCidImage")}</Text>
             <EntityImage w="100%" src={lastVersion.frontOfCidImage} onView={() => onView(0)} />
           </Stack>
 
           <Stack gap={5}>
-            <Text fz={em(13)}>{t("backOfCidImage")}</Text>
+            <Text fz={em(13)}>{tl("backOfCidImage")}</Text>
             <EntityImage w="100%" src={lastVersion.backOfCidImage} onView={() => onView(1)} />
           </Stack>
 
           <Stack gap={5}>
-            <Text fz={em(13)}>{t("portraitImage")}</Text>
+            <Text fz={em(13)}>{tl("portraitImage")}</Text>
             <EntityImage w="100%" src={lastVersion.portraitImage} onView={() => onView(2)} />
           </Stack>
         </SimpleGrid>
@@ -176,17 +176,17 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
           if (kyc.status === CustomerKycStatus.APPROVED)
             return (
               <Stack align="end">
-                <Badge color="green">{t("approved")}</Badge>
+                <Badge color="green">{tl("approved")}</Badge>
               </Stack>
             );
 
           if (kyc.status === CustomerKycStatus.REJECTED)
             return (
               <Stack align="end" gap={5}>
-                <Badge color="red">{t("rejected")}</Badge>
+                <Badge color="red">{tl("rejected")}</Badge>
 
                 <Text fz={em(13)} fw={500} c="red">
-                  {t("reason")}: {lastVersion.rejectReason || t("unknown_reason")}
+                  {tl("reason")}: {lastVersion.rejectReason || tl("unknown_reason")}
                 </Text>
               </Stack>
             );
@@ -196,11 +196,11 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
           return (
             <Group justify="end">
               <Button leftIcon={IconCheck} onClick={onApprove}>
-                {t("approve")}
+                {tl("approve")}
               </Button>
 
               <Button variant="outline" color="gray" onClick={onReject}>
-                {t("reject")}
+                {tl("reject")}
               </Button>
             </Group>
           );

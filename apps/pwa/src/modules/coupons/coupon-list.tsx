@@ -4,7 +4,7 @@ import { OnModalCouponForm } from "@/modules/coupons/modals/modal-coupon-form";
 import { getCoupons } from "@/modules/coupons/coupon-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useList } from "@/components/list/use-list";
 import { Badge, em, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
@@ -40,7 +40,7 @@ export const CouponList: FC = () => {
           />
 
           <Badge variant="light" size="xl" fz={em(12)} style={{ borderRadius: 100 }}>
-            {t("qty")}
+            {tl("qty")}
             {coupons.isInitialized && `: ${num(coupons.count)}`}
           </Badge>
         </Group>

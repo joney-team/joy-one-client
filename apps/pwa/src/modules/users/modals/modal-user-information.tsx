@@ -10,7 +10,7 @@ import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate, renderFromNow, t } from "@/modules/lang/lang-service";
+import { renderDate, renderFromNow, tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
 import { getUserPublicInformation } from "@/modules/users/users-service";
@@ -149,13 +149,13 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
                   variant={isOnline ? "filled" : "light"}
                   radius={4}
                 >
-                  {isOnline ? t("online") : t("offline")}
+                  {isOnline ? tl("online") : tl("offline")}
                 </Badge>
               </Group>
 
               {!!user.lastSignInAt && !isOnline && (
                 <Text c="gray" fz={10}>
-                  {t("lastSignInAt")} {renderFromNow(user.lastSignInAt)}
+                  {tl("lastSignInAt")} {renderFromNow(user.lastSignInAt)}
                 </Text>
               )}
             </Stack>
@@ -221,12 +221,12 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
       <Tabs value={tab} onChange={(t) => setTab(t || "activity")}>
         <Tabs.List>
           <Tabs.Tab value="activity" fz={14} fw={500} h={30} px={16 * 2}>
-            {t("activity")}
+            {tl("activity")}
           </Tabs.Tab>
 
           {!isMe && (
             <Tabs.Tab value="mutual_workspaces" fz={14} fw={500} h={30} px={16 * 2}>
-              {t("mutual_workspaces")}
+              {tl("mutual_workspaces")}
 
               <Text component="span" ml={3} fz={14} c="gray">
                 ({user.mutualWorkspaces.length})
@@ -235,7 +235,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
           )}
 
           <Tabs.Tab value="bookings" fz={14} fw={500} h={30} px={16 * 2}>
-            {t("bookings")}
+            {tl("bookings")}
 
             <Text component="span" ml={3} fz={14} c="gray">
               ({bookings.count})
@@ -244,7 +244,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
           {!!member && (
             <Tabs.Tab value="workspace-settings" fz={14} fw={500} h={30} px={16 * 2}>
-              {t("workspace-settings")}
+              {tl("workspace-settings")}
             </Tabs.Tab>
           )}
         </Tabs.List>
@@ -364,7 +364,7 @@ const ShortInfoSession: FC<{
   return (
     <Stack gap={0}>
       <Text fz={14} fw={600} c="dark">
-        {t(label)}
+        {tl(label)}
       </Text>
       {render(
         <Group gap={5} wrap="nowrap">

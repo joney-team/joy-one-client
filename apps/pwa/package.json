@@ -8,6 +8,7 @@
     "build": "next build",
     "typescript": "tsc",
     "prestart": "node scripts/prepare.js",
+    "translate": "lingui extract --clean",
     "sourcemaps:upload": "sentry-cli sourcemaps upload --release $(node -p 'require(\"./package.json\").version') .next && pnpm sourcemaps:clean",
     "sourcemaps:clean": "find .next -type f -name '*.map' -delete",
     "ws:apps:dev": "NEXT_PUBLIC_EXTENDED_APP=true next dev",

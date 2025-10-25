@@ -8,7 +8,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { OnModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loan-asset-estimation-form";
 import { useRouter } from "@/hooks/use-router";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import {
   LoanAssetEstimation,
@@ -171,12 +171,12 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
       <Group>
         <ButtonSelect
           icon={IconFilter}
-          label={t("asset_type")}
+          label={tl("asset_type")}
           iconStrokeWidth={1.8}
           value={searchs.get("assetType")}
           options={[LoanAssetType.CAR_REGISTRATION, LoanAssetType.MOTOBIKE_REGISTRATION].map(
             (v) => ({
-              label: t(`loan_asset_type_estimation_${v}`),
+              label: tl(`loan_asset_type_estimation_${v}`),
               value: v,
             })
           )}
@@ -188,7 +188,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
 
         <ButtonSelect
           icon={IconFilter}
-          label={t("brand_name")}
+          label={tl("brand_name")}
           iconStrokeWidth={1.8}
           value={searchs.get("brandId")}
           options={loans.assetEstimations.brands
@@ -205,7 +205,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
 
         <ButtonSelect
           icon={IconFilter}
-          label={t("asset_model")}
+          label={tl("asset_model")}
           iconStrokeWidth={1.8}
           value={searchs.get("modelId")}
           options={loans.assetEstimations.models
@@ -250,7 +250,9 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                   return (
                     <Table.Tr key={estimation.id}>
                       <Table.Td>{index + 1}</Table.Td>
-                      <Table.Td>{t(`loan_asset_type_estimation_${estimation.assetType}`)}</Table.Td>
+                      <Table.Td>
+                        {tl(`loan_asset_type_estimation_${estimation.assetType}`)}
+                      </Table.Td>
                       <Table.Td>
                         {
                           loans.assetEstimations.brands.find(

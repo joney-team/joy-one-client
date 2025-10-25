@@ -1,8 +1,6 @@
-import { t } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getWorkspaceModuleName, WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
-import { ActionIcon, Card, Group, MantineColor, Stack, Text, ThemeIcon } from "@mantine/core";
+import { WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
+import { ActionIcon, Card, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconArrowRight } from "@tabler/icons-react";
 import Link from "next/link";
@@ -10,11 +8,7 @@ import { FC } from "react";
 import { Image } from "../../../components/image";
 
 export interface WorkspaceSettingCardProps {
-  name?: string;
-  description?: string;
   image?: string;
-  color?: MantineColor;
-  workspaceTypes?: WorkspaceType[];
   moduleId: WorkspaceModuleId;
 }
 
@@ -27,8 +21,7 @@ export const WorkspaceSettingCard: FC<WorkspaceSettingCardProps> = (props) => {
     throw new Error(`Workspace module ${props.moduleId} not found`);
   }
 
-  const name =
-    props.name || getWorkspaceModuleName(props.moduleId, workspace.userMember?.workspace);
+  const name = workspaceModule.name();
 
   return (
     <Link href={workspaceModule.href} style={{ textDecoration: "none" }} ref={hover.ref}>
@@ -37,7 +30,11 @@ export const WorkspaceSettingCard: FC<WorkspaceSettingCardProps> = (props) => {
           {props.image ? (
             <Image src={props.image} alt={name} w={45} h={45} />
           ) : (
-            <ThemeIcon size="xl" variant={hover.hovered ? "filled" : "light"} color={props.color}>
+            <ThemeIcon
+              size="xl"
+              variant={hover.hovered ? "filled" : "light"}
+              color={workspaceModule.color}
+            >
               <workspaceModule.icon
                 strokeWidth={1.5}
                 size={hover.hovered ? 28 : 25}
@@ -49,11 +46,11 @@ export const WorkspaceSettingCard: FC<WorkspaceSettingCardProps> = (props) => {
           )}
 
           <Stack gap={5} flex={1}>
-            <Text fw={600}>{t(name)}</Text>
+            <Text fw={600}>{name}</Text>
 
-            {props.description && (
+            {workspaceModule.description && (
               <Text mih={65} fz={14}>
-                {t(props.description)}
+                {workspaceModule.description()}
               </Text>
             )}
 

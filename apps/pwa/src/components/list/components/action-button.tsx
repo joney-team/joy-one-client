@@ -3,7 +3,7 @@ import { Icon, IconX } from "@tabler/icons-react";
 import { FC, MouseEventHandler, PropsWithChildren } from "react";
 import { useColor } from "@/modules/theme/use-color";
 import { num } from "@/modules/lang/lang-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 
 interface ActionButtonProps {
   icon?: Icon;
@@ -41,7 +41,7 @@ export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
   const Icon = active && activeIcon ? activeIcon : icon;
 
   return (
-    <Tooltip label={t(tooltip || "")} disabled={!!!tooltip}>
+    <Tooltip label={tl(tooltip || "")} disabled={!!!tooltip}>
       <Button
         variant="outline"
         px={8}
@@ -51,7 +51,9 @@ export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
         disabled={disabled}
         style={{
           cursor: "pointer",
-          borderColor: color(withBorder ? (active ? "primary" : "var(--mantine-color-placeholder)") : "transparent"),
+          borderColor: color(
+            withBorder ? (active ? "primary" : "var(--mantine-color-placeholder)") : "transparent"
+          ),
           borderStyle: borderStyle,
         }}
         className="unselectable"
@@ -62,14 +64,18 @@ export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
             <Icon
               size={iconSize}
               color={color(
-                disabled ? "var(--mantine-color-dimmed)" : active ? "primary" : "var(--mantine-color-dimmed)"
+                disabled
+                  ? "var(--mantine-color-dimmed)"
+                  : active
+                  ? "primary"
+                  : "var(--mantine-color-dimmed)"
               )}
               strokeWidth={1.8}
             />
           )}
           {label && (
             <Text fz={12} fw={500}>
-              {t(label)}
+              {tl(label)}
             </Text>
           )}
 

@@ -5,7 +5,7 @@ import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { EnumColumn } from "@/components/list/columns/enum-column";
 import { Selector } from "@/components/selector";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
 import { Badge, Combobox, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
@@ -34,14 +34,14 @@ export const PromostionList = () => {
             w: 400,
             options: Object.values(PromotionType).map((type) => ({
               value: type,
-              label: t(promotionRuleTypeConfigs[type].label),
+              label: tl(promotionRuleTypeConfigs[type].label),
             })),
             render: ({ data: promotion }) => {
               const config = promotionRuleTypeConfigs[promotion.type as PromotionType];
               if (!config)
                 return (
                   <Badge color="gray" variant="light">
-                    {t("unknown")}
+                    {tl("unknown")}
                   </Badge>
                 );
 
@@ -54,7 +54,7 @@ export const PromostionList = () => {
             },
           }),
           value: {
-            name: t("terms_of_use"),
+            name: tl("terms_of_use"),
             render: ({ data: promotion }) => {
               return (
                 <Stack gap={5}>
@@ -69,7 +69,7 @@ export const PromostionList = () => {
             w: 200,
             options: Object.values(PromotionStatus).map((status) => ({
               value: status,
-              label: t(promotionStatusConfigs[status].label),
+              label: tl(promotionStatusConfigs[status].label),
               color: promotionStatusConfigs[status].color,
             })),
             render: ({ data: promotion }) => {
@@ -77,7 +77,9 @@ export const PromostionList = () => {
 
               return (
                 <Tooltip
-                  label={t(isEditable ? "click_to_change_status" : "promotion_status_not_editable")}
+                  label={tl(
+                    isEditable ? "click_to_change_status" : "promotion_status_not_editable"
+                  )}
                 >
                   <Selector
                     disabled={isEditable}
@@ -85,7 +87,7 @@ export const PromostionList = () => {
                     pinnedOptions={[PromotionStatus.ACTIVE, PromotionStatus.CLOSED].map(
                       (status) => ({
                         id: status,
-                        label: t(promotionStatusConfigs[status].label),
+                        label: tl(promotionStatusConfigs[status].label),
                       })
                     )}
                     onSelect={(value) => {
@@ -103,7 +105,7 @@ export const PromostionList = () => {
                           <Combobox.Option value={option.id} key={option.id}>
                             <Group gap={8}>
                               <Circle color="gray" size={12} />
-                              <Text>{t("unknown")}</Text>
+                              <Text>{tl("unknown")}</Text>
                             </Group>
                           </Combobox.Option>
                         );
@@ -112,7 +114,7 @@ export const PromostionList = () => {
                         <Combobox.Option value={option.id} key={option.id}>
                           <Group gap={8}>
                             <Circle color={config.color} size={12} />
-                            <Text>{t(config.label)}</Text>
+                            <Text>{tl(config.label)}</Text>
                           </Group>
                         </Combobox.Option>
                       );
@@ -126,7 +128,7 @@ export const PromostionList = () => {
                             color="gray"
                             className={isEditable ? "clickable" : "unclickable"}
                           >
-                            {t("unknown")}
+                            {tl("unknown")}
                           </Badge>
                         );
 
@@ -136,7 +138,7 @@ export const PromostionList = () => {
                           color={config.color}
                           className={isEditable ? "clickable" : "unclickable"}
                         >
-                          {t(config.label)}
+                          {tl(config.label)}
                         </Badge>
                       );
                     }}
@@ -157,7 +159,7 @@ export const PromostionList = () => {
         ]}
         actions={[
           {
-            label: t("edit"),
+            label: tl("edit"),
             icon: IconEdit,
             onClick: (promotion) => OnPromotionModal({ promotion }),
           },

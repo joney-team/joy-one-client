@@ -4,7 +4,7 @@ import { WorkSlot } from "@/types";
 import { WorkSlotsSettingsInput } from "@/components/inputs/work-slot-settings-input";
 import { ModalTitle } from "@/components/modal-title";
 import { getView } from "@/layout/layout-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { em, Stack, Text } from "@mantine/core";
@@ -27,9 +27,9 @@ export const ModalWorkspaceSettingsWorkSlots: FC = () => {
   return (
     <Stack>
       <Stack gap={5}>
-        <Text fz={em(12)}>• {t("work-slot-desc-1")}</Text>
+        <Text fz={em(12)}>• {tl("work-slot-desc-1")}</Text>
 
-        <Text fz={em(12)}>• {t("work-slot-desc-2")}</Text>
+        <Text fz={em(12)}>• {tl("work-slot-desc-2")}</Text>
       </Stack>
 
       <WorkSlotsSettingsInput
@@ -46,7 +46,7 @@ export const ModalWorkspaceSettingsWorkSlots: FC = () => {
 export const OnModalWorkspaceSettingsWorkSlots = () => {
   return modals.open({
     modalId: "ModalWorkspaceSettingsWorkSlots",
-    title: <ModalTitle title={t("work_slots")} icon={IconCalendarWeek} />,
+    title: <ModalTitle title={tl("work_slots")} icon={IconCalendarWeek} />,
     children: <ModalWorkspaceSettingsWorkSlots />,
     size: "xl",
     fullScreen: getView() === "mobile",

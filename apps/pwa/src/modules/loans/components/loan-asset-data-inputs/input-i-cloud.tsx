@@ -2,7 +2,7 @@
 
 import { EntityImages } from "@/components/entity-images";
 import { api } from "@/modules/apis";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { LoanAssetType } from "@/modules/loans/loans-types";
 import { ActionIcon, Group, InputWrapper, SimpleGrid, TextInput, Tooltip } from "@mantine/core";
 import { IconCursorText, IconLockPlus } from "@tabler/icons-react";
@@ -32,7 +32,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
     <Fragment>
       <SimpleGrid cols={{ md: 2 }}>
         <TextInput
-          label={t("device_name")}
+          label={tl("device_name")}
           value={props.value?.deviceName || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), deviceName: event.currentTarget.value })
@@ -41,7 +41,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
         />
 
         <TextInput
-          label={t("asset_type")}
+          label={tl("asset_type")}
           value={props.value?.assetType || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), assetType: event.currentTarget.value })
@@ -68,7 +68,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
         />
 
         <TextInput
-          label={t("device_storage")}
+          label={tl("device_storage")}
           value={props.value?.storage || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), storage: event.currentTarget.value })
@@ -80,7 +80,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
           <Group align="end" gap={5}>
             <TextInput
               flex={1}
-              label={t("device_key")}
+              label={tl("device_key")}
               value={props.value?.deviceSecretKey || ""}
               readOnly
               onChange={(event) =>
@@ -90,12 +90,12 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
                 })
               }
             />
-            <Tooltip label={t("enter_device_key")}>
+            <Tooltip label={tl("enter_device_key")}>
               <ActionIcon size={34} variant="outline" color="gray" onClick={onInputDeviceKey}>
                 <IconCursorText size={18} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label={t("generate_device_key")}>
+            <Tooltip label={tl("generate_device_key")}>
               <ActionIcon size={34} variant="outline" color="gray" onClick={retreiveDeviceKey}>
                 <IconLockPlus size={18} />
               </ActionIcon>
@@ -104,9 +104,9 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
         )}
       </SimpleGrid>
 
-      <InputWrapper label={t("asset_imgs")}>
+      <InputWrapper label={tl("asset_imgs")}>
         <EntityImages
-          name={t("asset_imgs")}
+          name={tl("asset_imgs")}
           images={props.value?.images}
           onChange={(images) => props.onChange?.({ ...(props.value as any), images })}
           disabled={props.disabled}

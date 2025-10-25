@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Center, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, type FC } from "react";
@@ -42,10 +42,10 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
     },
     validate: {
       name: (value) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
       type: (value) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
     },
   });
@@ -105,7 +105,7 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
     <Form onSubmit={onSubmit} autoFocus={!props.category}>
       <Stack>
         <TextInput
-          label={t("name")}
+          label={tl("name")}
           {...form.getInputProps("name")}
           onChange={(e) => {
             form.setFieldValue("name", e.target.value);
@@ -113,14 +113,14 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
           }}
         />
 
-        <TextInput label={t("slug")} {...form.getInputProps("slug")} />
+        <TextInput label={tl("slug")} {...form.getInputProps("slug")} />
 
         <Select
-          label={t("type")}
+          label={tl("type")}
           {...form.getInputProps("type")}
           readOnly={!!props.type}
           data={Object.values(CategoryType).map((type) => ({
-            label: t(`category_type_${type}`),
+            label: tl(`category_type_${type}`),
             value: type,
           }))}
         />
@@ -133,7 +133,7 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
 
         <Center>
           <Button loading={form.submitting} type="submit">
-            {t("save")}
+            {tl("save")}
           </Button>
         </Center>
 

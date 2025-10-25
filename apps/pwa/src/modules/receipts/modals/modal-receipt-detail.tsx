@@ -1,6 +1,6 @@
 import { ReceiptDetail } from "@/modules/receipts/receipt-detail";
 import { ModalTitle } from "@/components/modal-title";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconExternalLink } from "@tabler/icons-react";
 import { FC } from "react";
@@ -21,7 +21,7 @@ export const OnReceiptDetailModal = (props: ModalPromptProps) => {
     zIndex: zIndexes.commonModals,
     title: (
       <ModalTitle
-        title={t("receipt")}
+        title={tl("receipt")}
         icon={IconCashRegister}
         rightSection={
           <Group>

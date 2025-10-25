@@ -30,7 +30,7 @@ import {
   rejectTimekeeping,
   removeTimekeeping,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
-import { renderDateTime, t } from "@/modules/lang/lang-service";
+import { renderDateTime, tl } from "@/modules/lang/lang-service";
 import { UserCard } from "@/modules/users/components/user-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -129,7 +129,7 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
                       size="xs"
                       onClick={() => approveTimekeeping(timekeeping._id)}
                     >
-                      {t("approve")}
+                      {tl("approve")}
                     </Button>
 
                     <Button
@@ -140,11 +140,11 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
                       size="xs"
                       onClick={() => rejectTimekeeping(timekeeping._id, {})}
                     >
-                      {t("reject")}
+                      {tl("reject")}
                     </Button>
                   </Fragment>
                 ) : (
-                  <Badge color="orange">{t("waiting_approval")}</Badge>
+                  <Badge color="orange">{tl("waiting_approval")}</Badge>
                 )}
               </Group>
             )}
@@ -159,7 +159,7 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
                       <IconCameraSelfie strokeWidth={1.5} size={18} />
                     </ThemeIcon>
                     <Text ta="center" fz={em(8)} c="gray">
-                      {t("no_images")}
+                      {tl("no_images")}
                     </Text>
                   </Stack>
                 </Card>
@@ -183,7 +183,7 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
         </Group>
 
         {timekeeping.status === HrmTimekeepingStatus.REJECTED && (
-          <Badge color="red">{t("rejected")}</Badge>
+          <Badge color="red">{tl("rejected")}</Badge>
         )}
 
         {workspace.hasPermission(WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP) &&

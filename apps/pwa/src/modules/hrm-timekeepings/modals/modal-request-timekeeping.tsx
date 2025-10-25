@@ -5,7 +5,7 @@ import { Image } from "@/components/image";
 import { onSuccess } from "@/utils/actions";
 import { requestTimekeeping } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { getDateFormat, t } from "@/modules/lang/lang-service";
+import { getDateFormat, tl } from "@/modules/lang/lang-service";
 import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { Anchor, Center, SimpleGrid, Stack, Text, Textarea, em } from "@mantine/core";
@@ -34,7 +34,7 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
     },
     validate: {
       date: (value) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
     },
   });
@@ -62,12 +62,12 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
     }
 
     if (!values.checkInAt && !values.checkOutAt) {
-      requestForm.setFieldError("checkInAt", t("check_in_or_out_date_required"));
+      requestForm.setFieldError("checkInAt", tl("check_in_or_out_date_required"));
       return;
     }
 
     if (checkInAt && checkOutAt && checkInAt >= checkOutAt) {
-      requestForm.setFieldError("checkInAt", t("invalid_check_in_time"));
+      requestForm.setFieldError("checkInAt", tl("invalid_check_in_time"));
       return;
     }
 
@@ -92,8 +92,8 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
 
       onClose();
       onSuccess({
-        title: t("requested_title"),
-        message: t("requested_desc"),
+        title: tl("requested_title"),
+        message: tl("requested_desc"),
       });
     } catch (error) {
       onError(error);
@@ -109,34 +109,34 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
       </Center>
 
       <Text ta="center" fw={500} fz={em(22)} c="primary" tt="uppercase">
-        {t("hrm_timekeepings_request")}
+        {tl("hrm_timekeepings_request")}
       </Text>
 
       <DatePickerInput
-        label={t("date")}
+        label={tl("date")}
         valueFormat={getDateFormat()}
         {...requestForm.getInputProps("date")}
       />
 
       <SimpleGrid cols={2}>
         <TimeInput
-          label={t("hrm_timekeepings_check_in_at")}
+          label={tl("hrm_timekeepings_check_in_at")}
           {...requestForm.getInputProps("checkInAt")}
         />
 
         <TimeInput
-          label={t("hrm_timekeepings_check_out_at")}
+          label={tl("hrm_timekeepings_check_out_at")}
           {...requestForm.getInputProps("checkOutAt")}
         />
       </SimpleGrid>
 
       <Text c="gray" fz={em(12)}>
-        • {t("hrm_timekeepings_request_desc")}
+        • {tl("hrm_timekeepings_request_desc")}
       </Text>
 
       <Textarea
-        label={t("hrm_timekeepings_request_note")}
-        placeholder={t("hrm_timekeepings_request_note_placeholder")}
+        label={tl("hrm_timekeepings_request_note")}
+        placeholder={tl("hrm_timekeepings_request_note_placeholder")}
         {...requestForm.getInputProps("note")}
         styles={{
           input: {
@@ -153,12 +153,12 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
           loading={isSubmitting}
           action
         >
-          {t("confirm")}
+          {tl("confirm")}
         </Button>
       </Center>
 
       <Anchor ta="center" c="gray" fz={em(13)} onClick={onClose}>
-        {t("leave")}
+        {tl("leave")}
       </Anchor>
     </Stack>
   );

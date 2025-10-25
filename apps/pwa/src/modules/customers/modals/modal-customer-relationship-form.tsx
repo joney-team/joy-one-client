@@ -1,7 +1,7 @@
 import { CustomerForm } from "@/modules/customers/components/form-customer";
 import { ModalTitle } from "@/components/modal-title";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconUser } from "@tabler/icons-react";
@@ -26,7 +26,7 @@ export const ModalCustomerRelationShipForm: FC = () => {
     <Modal
       opened={opened}
       onClose={close}
-      title={<ModalTitle icon={IconUser} title={`${t("add")} ${t("customer_relationship")}`} />}
+      title={<ModalTitle icon={IconUser} title={`${tl("add")} ${tl("customer_relationship")}`} />}
       size={800}
       yOffset={16}
       zIndex={300}

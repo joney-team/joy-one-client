@@ -1,5 +1,5 @@
 import { Period } from "@/types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
@@ -89,7 +89,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
           };
         }),
       unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
-      renderSeries: () => [{ name: "value", label: t("revenue"), color: "primary.6" }],
+      renderSeries: () => [{ name: "value", label: tl("revenue"), color: "primary.6" }],
     }),
   },
   [ReportWidgetType.NEW_CUSTOMERS_CHART]: {
@@ -112,7 +112,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
             value: v.customers.total,
           };
         }),
-      renderSeries: () => [{ name: "value", label: t("new_customers"), color: "primary.6" }],
+      renderSeries: () => [{ name: "value", label: tl("new_customers"), color: "primary.6" }],
     }),
   },
   [ReportWidgetType.NEW_CUSTOMERS]: {
@@ -222,10 +222,10 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
           };
         }),
       renderSeries: () => [
-        { name: "value", label: t("new_loan_contracts"), color: "blue.6" },
-        { name: "fulfilled", label: t("loans_fulfilled"), color: "primary.6" },
+        { name: "value", label: tl("new_loan_contracts"), color: "blue.6" },
+        { name: "fulfilled", label: tl("loans_fulfilled"), color: "primary.6" },
       ],
-      unit: () => t("loans"),
+      unit: () => tl("loans"),
     }),
   },
   [ReportWidgetType.LOANS_FULFILLED_AMOUNT_CHART]: {
@@ -253,7 +253,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
           };
         }),
       unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
-      renderSeries: () => [{ name: "value", label: t("money_amount"), color: "primary.6" }],
+      renderSeries: () => [{ name: "value", label: tl("money_amount"), color: "primary.6" }],
     }),
   },
   [ReportWidgetType.LOANS_FULFILLED]: {

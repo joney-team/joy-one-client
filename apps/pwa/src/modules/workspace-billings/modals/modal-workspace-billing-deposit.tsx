@@ -2,7 +2,10 @@ import { Button } from "@/components/buttons/button";
 import { Checkout } from "@/components/checkout";
 import { Loading } from "@/components/loading";
 import { ModalTitle } from "@/components/modal-title";
-import { createBankTransaction, getBankTransaction } from "@/modules/bank-transactions/bank-transaction-service";
+import {
+  createBankTransaction,
+  getBankTransaction,
+} from "@/modules/bank-transactions/bank-transaction-service";
 import {
   BankTransactionEntity,
   BankTransactionPaymentGateway,
@@ -11,7 +14,7 @@ import {
 } from "@/modules/bank-transactions/bank-transaction-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { onError } from "@/utils/exceptions.utils";
 import { Card, em, NumberInput, Stack, Text, Title } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -74,11 +77,15 @@ export const ModalWorkspaceBillingDeposit: FC = () => {
             return (
               <Stack p={16}>
                 <Title ta="center" c="primary" fw={340}>
-                  {t("pay_successful")}!
+                  {tl("pay_successful")}!
                 </Title>
-                <Text ta="center">{t("deposited_message")}</Text>
+                <Text ta="center">{tl("deposited_message")}</Text>
 
-                <Button type="submit" radius={100} onClick={() => modals.close("ModalWorkspaceBillingDeposit")}>
+                <Button
+                  type="submit"
+                  radius={100}
+                  onClick={() => modals.close("ModalWorkspaceBillingDeposit")}
+                >
                   Okay!
                 </Button>
               </Stack>
@@ -97,9 +104,9 @@ export const ModalWorkspaceBillingDeposit: FC = () => {
           return (
             <Stack p={16}>
               <Title ta="center" c="primary" fw={700}>
-                {t("transaction_processing")}
+                {tl("transaction_processing")}
               </Title>
-              <Loading message={t("waiting")} />
+              <Loading message={tl("waiting")} />
             </Stack>
           );
         }
@@ -107,17 +114,17 @@ export const ModalWorkspaceBillingDeposit: FC = () => {
         return (
           <Stack>
             <NumberInput
-              label={t("enter_money_amount")}
+              label={tl("enter_money_amount")}
               value={amount}
               onChange={(e) => setAmount(+e)}
               min={50000}
               hideControls
             />
 
-            <Text fz={em(13)}>{t("validate_min_money_amount", { min: num(500000) })}</Text>
+            <Text fz={em(13)}>{tl("validate_min_money_amount", { min: num(500000) })}</Text>
 
             <Button type="submit" onClick={onPayment} disabled={amount < minAmount}>
-              {t("deposit")}
+              {tl("deposit")}
             </Button>
           </Stack>
         );
@@ -129,7 +136,7 @@ export const ModalWorkspaceBillingDeposit: FC = () => {
 export const OnModalWorkspaceBillingDeposit = () => {
   return modals.open({
     modalId: "ModalWorkspaceBillingDeposit",
-    title: <ModalTitle title={t("deposit")} icon={IconReportMoney} />,
+    title: <ModalTitle title={tl("deposit")} icon={IconReportMoney} />,
     children: <ModalWorkspaceBillingDeposit />,
     size: "md",
   });

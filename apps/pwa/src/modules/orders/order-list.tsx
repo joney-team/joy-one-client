@@ -5,7 +5,7 @@ import { NumberColumn } from "@/components/list/columns/number-column";
 import { StatusColumn } from "@/components/list/columns/status-column";
 import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OrderCard } from "@/modules/orders/order-card";
 import { onPayOrder, orderPaymentStatusOptions } from "@/modules/orders/orders-service";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
@@ -29,7 +29,7 @@ export const OrderList: FC = () => {
     <Stack p={16}>
       <List<OrderEntity>
         id="ors"
-        name={mod.name}
+        name={mod.name()}
         icon={mod.icon}
         route="/orders"
         columns={{
@@ -48,14 +48,14 @@ export const OrderList: FC = () => {
           paymentStatus: StatusColumn({
             w: 200,
             options: Object.values(OrderPaymentStatus).map((status) => ({
-              label: t(`order_payment_status_${status}`),
+              label: tl(`order_payment_status_${status}`),
               value: status,
               color: orderPaymentStatusOptions[status].color,
             })),
             rightSection: (order) => {
               if (order.paymentStatus === OrderPaymentStatus.PROCESSING) {
                 return (
-                  <Tooltip label={t("pay")}>
+                  <Tooltip label={tl("pay")}>
                     <ActionIcon onClick={() => onPayOrder(order)}>
                       <IconCashRegister size={16} />
                     </ActionIcon>
@@ -68,7 +68,7 @@ export const OrderList: FC = () => {
         filterModes={[
           {
             param: "today",
-            name: t("today_entity", { entity: mod.name }),
+            name: tl("today_entity", { entity: mod.name() }),
             icon: IconCalendarDown,
             replaceFilterKeys: ["createdAt"],
             params: () => ({

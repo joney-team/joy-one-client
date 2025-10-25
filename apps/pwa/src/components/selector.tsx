@@ -3,7 +3,7 @@
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useLayout } from "@/layout/layout-context";
 import { api } from "@/modules/apis";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
@@ -297,7 +297,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                 setSearch(event.currentTarget.value);
                 _onSearch(event.currentTarget.value);
               }}
-              placeholder={props.searchPlaceholder || t("search")}
+              placeholder={props.searchPlaceholder || tl("search")}
               rightSection={
                 <Group gap={5} wrap="nowrap">
                   {searching && <Loader size={14} type="dots" color="gray" />}
@@ -340,7 +340,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                       <IconBackground strokeWidth={1.1} size={18} />
                     </ThemeIcon>
                     <Text c="gray.5" fz={12}>
-                      {t(searching ? "type_something_to_search" : "no_results")}
+                      {tl(searching ? "type_something_to_search" : "no_results")}
                     </Text>
                   </Group>
                 </Combobox.Empty>
@@ -362,7 +362,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                       </Group>
 
                       <Text fz={12} c="gray.5">
-                        {t("create_new")}
+                        {tl("create_new")}
                       </Text>
                     </Group>
                   </Combobox.Option>

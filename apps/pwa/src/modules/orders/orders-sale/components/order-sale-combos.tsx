@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { ModalTitle } from "@/components/modal-title";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import {
   Badge,
@@ -41,7 +41,7 @@ export const OrderSaleCombos: FC = () => {
 
   return (
     <Group wrap="nowrap">
-      <Text ta="left">{t("combos")}</Text>
+      <Text ta="left">{tl("combos")}</Text>
 
       <Group flex={1} justify="end">
         {availableCombos.isLoading ? (
@@ -61,7 +61,7 @@ export const OrderSaleCombos: FC = () => {
               fw={400}
               onClick={open}
             >
-              {t("apply")} {num(orderCombos.length)}/{num(combos.length ?? 0)}
+              {tl("apply")} {num(orderCombos.length)}/{num(combos.length ?? 0)}
             </Button>
           </Indicator>
         ) : (
@@ -158,7 +158,7 @@ const ItemCard: FC<{
           </ThemeIcon>
         ) : (
           <Button radius={100} size="xs">
-            {t("apply")}
+            {tl("apply")}
           </Button>
         )}
       </Group>

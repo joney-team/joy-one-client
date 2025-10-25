@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Card, em, Grid, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
@@ -22,10 +22,10 @@ export const MessageBoxesIntegrate: FC = () => {
     <Stack p={20} py={30}>
       <Stack gap={8}>
         <Title ta="center" c={color("primary")} fz={em(25)}>
-          {t("msg_boxes_intro_title")}
+          {tl("msg_boxes_intro_title")}
         </Title>
         <Text ta="center" fz={em(15)}>
-          {t("msg_boxes_intro_desc")}
+          {tl("msg_boxes_intro_desc")}
         </Text>
       </Stack>
 
@@ -54,10 +54,10 @@ export const MessageBoxesIntegrate: FC = () => {
               </Group>
 
               <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-                {t("message-hubs")}
+                {tl("message-hubs")}
               </Title>
 
-              <Text ta="center">{t("message-hubs-description")}</Text>
+              <Text ta="center">{tl("message-hubs-description")}</Text>
 
               <Button
                 mt={10}
@@ -65,7 +65,7 @@ export const MessageBoxesIntegrate: FC = () => {
                 leftIcon={IconPlus}
                 onClick={plugins.onCreateMessageHub}
               >
-                {t("create_new")}
+                {tl("create_new")}
               </Button>
             </Stack>
           </Card>

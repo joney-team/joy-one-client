@@ -4,7 +4,7 @@ import { useFormSubmit } from "@/hooks/use-form";
 import { Button } from "@/components/buttons/button";
 import { onSuccess } from "@/utils/actions";
 import { useAuth } from "@/modules/auth/auth-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { updatePassword } from "@/modules/users/users-service";
 import { UpdateUserPasswordDto } from "@/modules/users/users-types";
 import { String } from "@/utils/string.utils";
@@ -20,16 +20,16 @@ export const UpdatePassword: FC = () => {
     validate: {
       password: auth.user.isPasswordProvided
         ? (v) => {
-            if (!v) return t("must_be_provided");
+            if (!v) return tl("must_be_provided");
           }
         : undefined,
       plainPassword: (v) => {
-        if (!v) return t("must_be_provided");
-        if (v.length < 6) return t("password_length", { length: 6 });
+        if (!v) return tl("must_be_provided");
+        if (v.length < 6) return tl("password_length", { length: 6 });
       },
       confirmPassword: (v, values) => {
-        if (!v) return t("must_be_provided");
-        if (v !== values.plainPassword) return t("password_not_match");
+        if (!v) return tl("must_be_provided");
+        if (v !== values.plainPassword) return tl("password_not_match");
       },
     },
   });
@@ -41,7 +41,7 @@ export const UpdatePassword: FC = () => {
         plainPassword: values.plainPassword,
       }),
     onSuccess: async (_, _form) => {
-      onSuccess({ message: t("password_updated") });
+      onSuccess({ message: tl("password_updated") });
       _form.reset();
     },
   });
@@ -51,9 +51,9 @@ export const UpdatePassword: FC = () => {
       <Stack>
         {auth.user.isPasswordProvided && (
           <PasswordInput
-            label={t("current_password")}
+            label={tl("current_password")}
             placeholder={String.convertToTitleCase(
-              `${t("enter")} ${t("current_password")}`.toLowerCase()
+              `${tl("enter")} ${tl("current_password")}`.toLowerCase()
             )}
             {...form.getInputProps("password")}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
@@ -62,16 +62,16 @@ export const UpdatePassword: FC = () => {
 
         <SimpleGrid cols={{ md: 2 }}>
           <PasswordInput
-            label={t(auth.user.isPasswordProvided ? "new_password" : "password")}
-            placeholder={t("password_length", { length: 6 }) as string}
+            label={tl(auth.user.isPasswordProvided ? "new_password" : "password")}
+            placeholder={tl("password_length", { length: 6 }) as string}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
             {...form.getInputProps("plainPassword")}
           />
 
           <PasswordInput
-            label={t("confirm_password")}
+            label={tl("confirm_password")}
             placeholder={String.convertToTitleCase(
-              `${t("enter")} ${t("confirm_password")}`.toLowerCase()
+              `${tl("enter")} ${tl("confirm_password")}`.toLowerCase()
             )}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
             {...form.getInputProps("confirmPassword")}
@@ -80,7 +80,7 @@ export const UpdatePassword: FC = () => {
 
         <Group justify="center" mt={10}>
           <Button onClick={submitting.handle} disabled={!form.isDirty()}>
-            {t("update")}
+            {tl("update")}
           </Button>
         </Group>
       </Stack>

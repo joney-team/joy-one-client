@@ -6,8 +6,19 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkSlot } from "@/types";
 import { useLayout } from "@/layout/layout-context";
 import { useLang } from "@/modules/lang/lang-context";
-import { getLangState, t } from "@/modules/lang/lang-service";
-import { Anchor, Card, Center, Divider, em, Group, Modal, RangeSlider, Stack, Text } from "@mantine/core";
+import { getLangState, tl } from "@/modules/lang/lang-service";
+import {
+  Anchor,
+  Card,
+  Center,
+  Divider,
+  em,
+  Group,
+  Modal,
+  RangeSlider,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconClock, IconEdit, IconPlus } from "@tabler/icons-react";
 import dayjs from "dayjs";
@@ -156,7 +167,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
           close();
           setPointedSlot(null);
         }}
-        title={<ModalTitle title={t("work_slots")} icon={IconClock} />}
+        title={<ModalTitle title={tl("work_slots")} icon={IconClock} />}
         zIndex={300}
         yOffset={100}
         size="lg"
@@ -169,7 +180,8 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
                   <Text fw={600}>
                     {pointedSlot.startHour.toString().padStart(2, "0")}:
                     {pointedSlot.startMin.toString().padStart(2, "0")} -{" "}
-                    {pointedSlot.endHour.toString().padStart(2, "0")}:{pointedSlot.endMin.toString().padStart(2, "0")}
+                    {pointedSlot.endHour.toString().padStart(2, "0")}:
+                    {pointedSlot.endMin.toString().padStart(2, "0")}
                   </Text>
                 </Group>
 
@@ -220,7 +232,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
                       variant={isActive ? "filled" : "outline"}
                       onClick={onSelect}
                     >
-                      {t("shift")} {index + 1}
+                      {tl("shift")} {index + 1}
                     </Button>
                   );
                 })}
@@ -243,14 +255,16 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
                       },
                     ]);
                   } else {
-                    props.onChange?.([...slots.map((slot) => (slot.id === pointedSlot.id ? pointedSlot : slot))]);
+                    props.onChange?.([
+                      ...slots.map((slot) => (slot.id === pointedSlot.id ? pointedSlot : slot)),
+                    ]);
                   }
 
                   setPointedSlot(null);
                   close();
                 }}
               >
-                {isPointedSlotNew ? t("add") : t("save")}
+                {isPointedSlotNew ? tl("add") : tl("save")}
               </Button>
             </Center>
 
@@ -269,7 +283,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
                 close();
               }}
             >
-              {t("remove")}
+              {tl("remove")}
             </Anchor>
           </Stack>
         )}

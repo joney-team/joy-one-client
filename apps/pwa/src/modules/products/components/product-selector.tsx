@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { EntityImage } from "@/components/entity-image";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { searchEntity } from "@/modules/search/search-service";
@@ -39,8 +39,8 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
           return res;
         })
       }
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(product) => {
         const Icon = getProductIcon(product.type);
@@ -75,7 +75,7 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
             fw={500}
             onClick={toggle}
           >
-            {t("add")}
+            {tl("add")}
           </Button>
         );
       }}

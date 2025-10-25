@@ -1,6 +1,6 @@
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnModalWorkspaceSdkForm } from "./modals/modal-workspace-sdk-form";
 import { getWorkspaceSdks, removeWorkspaceSdk } from "./workspace-sdks-service";
 import { WorkspaceSdkEntity } from "./workspace-sdks-types";
@@ -24,7 +24,7 @@ export const WorkspaceSdkList: FC = () => {
               <Group justify="space-between">
                 <Stack>
                   <Group>
-                    <Text fw={600}>{t("name")}</Text>
+                    <Text fw={600}>{tl("name")}</Text>
                     <Text>{sdk.name}</Text>
                   </Group>
                   <CopyText text={sdk.key}>
@@ -64,7 +64,7 @@ export const WorkspaceSdkList: FC = () => {
             OnModalWorkspaceSdkForm({ onFinish: () => sdks.fetch(true, { isSilient: true }) })
           }
         >
-          {t("create")} SDK
+          {tl("create")} SDK
         </Button>
       </Group>
     </Stack>

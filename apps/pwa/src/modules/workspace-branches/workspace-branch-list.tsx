@@ -3,7 +3,7 @@ import { Clickable } from "@/components/clickable";
 import { BranchesIllustration } from "@/components/illustrations/branches";
 import { List } from "@/components/list";
 import { EventType } from "@/modules/events/event-types";
-import { t, tMulti } from "@/modules/lang/lang-service";
+import { tl, tMulti } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { OnWorkspaceBranchModal } from "@/modules/workspace-branches/modals/modal-workspace-branch";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -62,10 +62,10 @@ export const WorkspaceBranchList: FC = () => {
                   <BranchesIllustration width={160} />
                   <Stack gap={3}>
                     <Title ta="center" order={4}>
-                      {t("branches_desc")}
+                      {tl("branches_desc")}
                     </Title>
                     <Text ta="center" fz={14} c="gray">
-                      {t("branches_desc_2")}
+                      {tl("branches_desc_2")}
                     </Text>
                   </Stack>
 

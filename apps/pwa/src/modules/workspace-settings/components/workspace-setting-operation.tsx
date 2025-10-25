@@ -5,7 +5,7 @@ import { Renderer } from "@/components/renderer";
 import { currencies } from "@/configs/currency.config";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { ReceiptPaymentMethod } from "@/modules/receipts/receipts-types";
 import { searchGetAvailableEntities } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
@@ -106,7 +106,7 @@ export const WorkspaceOperationSettings: FC = () => {
             variant="outline"
             onClick={() => OnModalWorkspaceSettingsWorkSlots()}
           >
-            {workDaySlots.length > 0 ? t("edit") : t("add")}
+            {workDaySlots.length > 0 ? tl("edit") : tl("add")}
           </Button>
         </Group>
       </FormSession>
@@ -115,7 +115,7 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <FormSession title="tickets">
         <Switch
-          label={t("ticket_partial_payment")}
+          label={tl("ticket_partial_payment")}
           defaultChecked={workspace.settings.allowPayTicketMultipleTimes}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -131,7 +131,7 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <FormSession title="payment">
         <Select
-          label={t("currency")}
+          label={tl("currency")}
           defaultValue={workspace.settings.currencyCode}
           data={currencies.map((c) => ({ value: c.code, label: c.name })) || []}
           onChange={(value) => {
@@ -143,13 +143,13 @@ export const WorkspaceOperationSettings: FC = () => {
         />
 
         <Select
-          label={t("receipt_payment_method_default")}
+          label={tl("receipt_payment_method_default")}
           defaultValue={
             workspace.settings.receiptPaymentMethodDefault || Object.values(ReceiptPaymentMethod)[0]
           }
           data={Object.values(ReceiptPaymentMethod).map((value) => ({
             value,
-            label: t(`payment_method_${value}`),
+            label: tl(`payment_method_${value}`),
           }))}
           onChange={(value) => {
             setWorkspaceSettings({
@@ -161,7 +161,7 @@ export const WorkspaceOperationSettings: FC = () => {
         />
 
         <Switch
-          label={t("receipt_image_required")}
+          label={tl("receipt_image_required")}
           defaultChecked={workspace.settings.receiptImagesRequired}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -173,7 +173,7 @@ export const WorkspaceOperationSettings: FC = () => {
         />
 
         <Switch
-          label={t("allow_tip")}
+          label={tl("allow_tip")}
           defaultChecked={workspace.settings.allowTip}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -191,7 +191,7 @@ export const WorkspaceOperationSettings: FC = () => {
         <Stack gap={5}>
           <Group>
             <NumberInput
-              label={t("remind_bookings_label")}
+              label={tl("remind_bookings_label")}
               defaultValue={workspace.settings.bookingsAutoRemindCustomerBookingBeforeDays}
               onBlur={(value) => {
                 setWorkspaceSettings({
@@ -202,7 +202,7 @@ export const WorkspaceOperationSettings: FC = () => {
             />
 
             <TimeInput
-              label={t("remind_booking_time")}
+              label={tl("remind_booking_time")}
               defaultValue={workspace.settings.bookingsAutoRemindCustomerBookingTime}
               onBlur={(value) => {
                 setWorkspaceSettings({
@@ -213,12 +213,12 @@ export const WorkspaceOperationSettings: FC = () => {
             />
           </Group>
           <Text fz={em(12)} c="gray">
-            {t("remind_bookings_description")}
+            {tl("remind_bookings_description")}
           </Text>
         </Stack>
 
         <Switch
-          label={t("allow_duplicate_bookings")}
+          label={tl("allow_duplicate_bookings")}
           defaultChecked={workspace.settings.allowDuplicateBookings}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -233,7 +233,7 @@ export const WorkspaceOperationSettings: FC = () => {
       <Divider opacity={0.5} my={30} />
 
       <FormSession title="search">
-        <InputWrapper label={t("search_available_entities_label")}>
+        <InputWrapper label={tl("search_available_entities_label")}>
           <Card withBorder p={12} shadow="none" mt={5}>
             <SimpleGrid cols={{ md: 4 }}>
               {searchAvailableEntities.data?.map((e) => {
@@ -254,7 +254,7 @@ export const WorkspaceOperationSettings: FC = () => {
                 return (
                   <Switch
                     key={e}
-                    label={t(`entity_${e}`)}
+                    label={tl(`entity_${e}`)}
                     defaultChecked={isAvailable}
                     onChange={toggle}
                   />
@@ -269,7 +269,7 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <FormSession title="security">
         <Switch
-          label={t("auth_session_restricted")}
+          label={tl("auth_session_restricted")}
           defaultChecked={workspace.settings.isAuthSessionRestricted}
           onChange={(e) => {
             setWorkspaceSettings({

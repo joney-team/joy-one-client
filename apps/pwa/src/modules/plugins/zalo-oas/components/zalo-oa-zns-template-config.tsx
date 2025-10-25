@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnModalZaloOaSendZns } from "@/modules/plugins/zalo-oas/modals/modal-zalo-oa-send-zns";
 import { updatePluginZalo } from "@/modules/plugins/zalo-oas/zalo-oas-service";
 import {
@@ -35,7 +35,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
               <IconTemplate size={18} />
             </ThemeIcon>
             <Text fz={em(15)} fw={500}>
-              {t(`zns_${props.templateId}`)}
+              {tl(`zns_${props.templateId}`)}
             </Text>
           </Group>
 
@@ -56,7 +56,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
 
         <Stack gap={5}>
           <Text fz={em(13)} fw={500}>
-            {t("params")}
+            {tl("params")}
           </Text>
           <Table withTableBorder>
             <Table.Tbody>
@@ -66,9 +66,9 @@ export const ZaloOaZnsTemplateConfig: FC<{
                     <Table.Td fw={500}>{item.fieldName}</Table.Td>
                     <Table.Td>
                       <Stack gap={2}>
-                        <Text fz={em(15)}>{t(item.description)}</Text>
+                        <Text fz={em(15)}>{tl(item.description)}</Text>
                         <Text fz={em(11)}>
-                          {t("example")}: {item.default}
+                          {tl("example")}: {item.default}
                         </Text>
                       </Stack>
                     </Table.Td>
@@ -99,7 +99,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
             onClick={() => OnModalZaloOaSendZns(props)}
             disabled={!oa.znsTemplateIds?.[props.templateId] || !isActive}
           >
-            {t("send_zns")}
+            {tl("send_zns")}
           </Button>
         </Group>
       </Stack>

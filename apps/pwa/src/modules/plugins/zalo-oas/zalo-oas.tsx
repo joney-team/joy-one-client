@@ -1,7 +1,7 @@
 "use client";
 
 import { Container } from "@/components/container";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import {
   disconnectPluginZalo,
@@ -52,11 +52,11 @@ export const PluginZaloOAs: FC = () => {
 
                       {oa.status === PluginZaloOaStatus.ACTIVE ? (
                         <Badge size="xs" color="green">
-                          {t("active")}
+                          {tl("active")}
                         </Badge>
                       ) : (
                         <Badge size="xs" color="red">
-                          {t("inactive")}
+                          {tl("inactive")}
                         </Badge>
                       )}
                     </Group>
@@ -70,23 +70,23 @@ export const PluginZaloOAs: FC = () => {
                     <Group gap={5}>
                       {oa.info.package_name && (
                         <Badge variant="light" size="xs" color="blue">
-                          {t("package")}: {oa.info.package_name}
+                          {tl("package")}: {oa.info.package_name}
                         </Badge>
                       )}
                       {oa.isDefault && (
                         <Badge variant="light" size="xs" color="green">
-                          {t("default")}
+                          {tl("default")}
                         </Badge>
                       )}
                     </Group>
 
                     <Group gap={8} mt={8}>
-                      <Tooltip label={t("set_default")}>
+                      <Tooltip label={tl("set_default")}>
                         <ActionIcon
                           onClick={() =>
                             onActionLoad({
                               icon: IconStackFront,
-                              name: `${t("set_default")} ${oa.info.name}`,
+                              name: `${tl("set_default")} ${oa.info.name}`,
                               process: () => setDefaultPluginZalo(oa._id).catch(onError),
                             })
                           }
@@ -98,12 +98,12 @@ export const PluginZaloOAs: FC = () => {
                         </ActionIcon>
                       </Tooltip>
 
-                      <Tooltip label={t("reconnect")}>
+                      <Tooltip label={tl("reconnect")}>
                         <ActionIcon
                           onClick={() =>
                             onActionLoad({
                               icon: IconRefresh,
-                              name: `${t("reconnect")} ${oa.info.name}`,
+                              name: `${tl("reconnect")} ${oa.info.name}`,
                               process: () => reconnectPluginZalo(oa._id).catch(onError),
                             })
                           }
@@ -114,13 +114,13 @@ export const PluginZaloOAs: FC = () => {
                         </ActionIcon>
                       </Tooltip>
 
-                      <Tooltip label={`${t("disconect")} ${oa.info.name}`}>
+                      <Tooltip label={`${tl("disconect")} ${oa.info.name}`}>
                         <ActionIcon
                           onClick={() =>
                             onArchive({
                               icon: IconPuzzle,
-                              title: `${t("disconect")} ${oa.info.name}`,
-                              children: t("disconect_confirm"),
+                              title: `${tl("disconect")} ${oa.info.name}`,
+                              children: tl("disconect_confirm"),
                               process: () => disconnectPluginZalo(oa._id).catch(onError),
                             })
                           }

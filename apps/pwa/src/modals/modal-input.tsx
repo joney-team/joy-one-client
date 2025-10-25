@@ -5,7 +5,7 @@ import { Button } from "@/components/buttons/button";
 import { DateInput } from "@/components/inputs/date-input";
 import { ModalTitle } from "@/components/modal-title";
 import { currencies } from "@/configs/currency.config";
-import { getDateFormat, num, t } from "@/modules/lang/lang-service";
+import { getDateFormat, num, tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
@@ -70,7 +70,7 @@ export const ModalInput: FC = () => {
 
   const focusInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
   const currency = currencies.find((c) => c.code === workspace.settings.currencyCode);
-  const placeholder = t(props?.placeholder || props?.label || "");
+  const placeholder = tl(props?.placeholder || props?.label || "");
 
   const form = useForm({
     initialValues: {
@@ -79,11 +79,11 @@ export const ModalInput: FC = () => {
     validate: {
       value: (value: any) => {
         if (props?.type === InputModalType.NUMBER) {
-          if (value < args.min) return t("min_value", { min: args.min });
-          if (value > args.max) return t("max_value", { max: args.max });
+          if (value < args.min) return tl("min_value", { min: args.min });
+          if (value > args.max) return tl("max_value", { max: args.max });
         }
 
-        if (props?.required && !value) return t("required");
+        if (props?.required && !value) return tl("required");
       },
     },
   });
@@ -122,7 +122,7 @@ export const ModalInput: FC = () => {
       title={
         <ModalTitle
           color={props?.color}
-          title={t(props?.title || "enter_data")}
+          title={tl(props?.title || "enter_data")}
           icon={props?.icon || IconCursorText}
         />
       }
@@ -171,7 +171,7 @@ export const ModalInput: FC = () => {
 
             if (props?.type === InputModalType.MONEY) {
               return (
-                <InputWrapper label={t(props?.label || "")}>
+                <InputWrapper label={tl(props?.label || "")}>
                   <Stack>
                     {args.min && args.max && (
                       <Stack gap={0}>
@@ -212,7 +212,7 @@ export const ModalInput: FC = () => {
             if (props?.type === InputModalType.SELECT) {
               return (
                 <Select
-                  label={t(props?.label || "")}
+                  label={tl(props?.label || "")}
                   placeholder={placeholder}
                   data={props.options?.map((o) => ({ label: o.label, value: o.value })) || []}
                   {...form.getInputProps("value")}
@@ -223,7 +223,7 @@ export const ModalInput: FC = () => {
             if (props?.type === InputModalType.TEXT) {
               return (
                 <TextInput
-                  label={t(props?.label || "")}
+                  label={tl(props?.label || "")}
                   placeholder={placeholder}
                   {...form.getInputProps("value")}
                   ref={focusInputRef as any}
@@ -234,7 +234,7 @@ export const ModalInput: FC = () => {
             if (props?.type === InputModalType.NUMBER) {
               return (
                 <NumberInput
-                  label={t(props?.label || "")}
+                  label={tl(props?.label || "")}
                   placeholder={placeholder}
                   {...form.getInputProps("value")}
                   hideControls
@@ -246,7 +246,7 @@ export const ModalInput: FC = () => {
             return (
               <Textarea
                 ref={focusInputRef as any}
-                label={t(props?.label || "")}
+                label={tl(props?.label || "")}
                 placeholder={placeholder}
                 {...form.getInputProps("value")}
                 styles={{
@@ -260,12 +260,12 @@ export const ModalInput: FC = () => {
 
           <Stack align="center">
             <Button type="submit" leftIcon={IconCheck} action color={color(props?.color)}>
-              {t(props?.doneLabel || "complete")}
+              {tl(props?.doneLabel || "complete")}
             </Button>
 
             {!!props?.onClear && !!form.values.value && (
               <Anchor onClick={onClear} c="gray" fz={12}>
-                {t("clear")}
+                {tl("clear")}
               </Anchor>
             )}
           </Stack>

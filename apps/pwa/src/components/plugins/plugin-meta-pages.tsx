@@ -2,7 +2,7 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { onArchive } from "@/utils/actions";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { disconnectPluginMetaPage } from "@/modules/plugins/meta-pages/meta-pages-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -48,13 +48,13 @@ export const PluginMetaPages: FC = () => {
         </Group>
 
         <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-          {t("connect")} <strong>Fanpage Facebook</strong>
+          {tl("connect")} <strong>Fanpage Facebook</strong>
         </Title>
 
-        <Text ta="center">{t("meta_pages_desc")}</Text>
+        <Text ta="center">{tl("meta_pages_desc")}</Text>
 
         <Button mt={10} action onClick={plugins.onConnectMetaPages} leftIcon={IconLinkPlus}>
-          {t("connect")}
+          {tl("connect")}
         </Button>
       </Stack>
     );
@@ -82,12 +82,12 @@ export const PluginMetaPages: FC = () => {
                   onClick={() =>
                     onArchive({
                       icon: IconPuzzle,
-                      title: capitalize(`${t("disconnect")} ${page.name}`),
+                      title: capitalize(`${tl("disconnect")} ${page.name}`),
                       process: () => disconnectPluginMetaPage(page._id).catch(onError),
                     })
                   }
                 >
-                  {t("disconect")}
+                  {tl("disconect")}
                 </Anchor>
               </Group>
             </Card>
@@ -100,7 +100,7 @@ export const PluginMetaPages: FC = () => {
             onClick={plugins.onConnectMetaPages}
             rightSection={<IconLinkPlus strokeWidth={1.5} />}
           >
-            {t("connect_more")}
+            {tl("connect_more")}
           </Button>
         </Center>
       </SimpleGrid>

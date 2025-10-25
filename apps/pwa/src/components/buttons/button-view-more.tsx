@@ -2,12 +2,19 @@ import { FC } from "react";
 import { ButtonProps, Button } from "./button";
 import { IconArrowDown } from "@tabler/icons-react";
 import { Center, em, MantineSize } from "@mantine/core";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 
 export interface ButtonViewMoreProps extends ButtonProps {
   mt?: number;
   mb?: number;
-  size?: MantineSize | "compact-xs" | "compact-sm" | "compact-md" | "compact-lg" | "compact-xl" | undefined;
+  size?:
+    | MantineSize
+    | "compact-xs"
+    | "compact-sm"
+    | "compact-md"
+    | "compact-lg"
+    | "compact-xl"
+    | undefined;
   visible?: boolean;
 }
 
@@ -26,7 +33,7 @@ export const ButtonViewMore: FC<ButtonViewMoreProps> = (props) => {
         rightIcon={IconArrowDown}
         {..._props}
       >
-        {t("view_more")}
+        {tl("view_more")}
       </Button>
     </Center>
   );

@@ -4,7 +4,7 @@ import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Form } from "@/components/form";
 import { FormSession } from "@/components/form-session";
 import { ModalTitle } from "@/components/modal-title";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos";
 import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity";
@@ -64,7 +64,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
     return {
       name: _app?.member.name || "",
       roles: _app?.member.roles || [
-        { _id: WorkspaceSpecialRoleId.ADMIN, name: t(`role_${WorkspaceSpecialRoleId.ADMIN}`) },
+        { _id: WorkspaceSpecialRoleId.ADMIN, name: tl(`role_${WorkspaceSpecialRoleId.ADMIN}`) },
       ],
       workspaceBranches: _app?.member.workspaceBranches || [],
     };
@@ -77,7 +77,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
   }>({
     initialValues: getInitialValues(props.app),
     validate: {
-      name: (value) => (value?.trim() ? null : t("should not be empty")),
+      name: (value) => (value?.trim() ? null : tl("should not be empty")),
     },
   });
 
@@ -119,7 +119,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
         modals.updateModal({
           modalId: "ModalWorkspaceApiApp",
           title: (
-            <ModalTitle title={`${t("info_entity", { entity: t("app") })}`} icon={IconApiApp} />
+            <ModalTitle title={`${tl("info_entity", { entity: tl("app") })}`} icon={IconApiApp} />
           ),
         });
         setApp(_app);
@@ -167,7 +167,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
                     }}
                     rightSection={
                       <Group wrap="nowrap" gap={0}>
-                        <Tooltip label={t("reset_secret_key")}>
+                        <Tooltip label={tl("reset_secret_key")}>
                           <ActionIcon onClick={onResetKey} variant="subtle">
                             <IconRefresh size={16} />
                           </ActionIcon>
@@ -202,7 +202,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
 
         <FormSession title="branches">
           {isMainWorkspaceAccessable ? (
-            <Badge variant="light">{t("all_branches")}</Badge>
+            <Badge variant="light">{tl("all_branches")}</Badge>
           ) : (
             <WorkspaceBranchesInput
               key={app?.member.userId}
@@ -217,7 +217,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
         <Stack gap={16} mt={16}>
           <Center>
             <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}>
-              {t(app ? "save_changes" : "create_new")}
+              {tl(app ? "save_changes" : "create_new")}
             </Button>
           </Center>
 
@@ -241,7 +241,7 @@ export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => {
     modalId: "ModalWorkspaceApiApp",
     title: (
       <ModalTitle
-        title={`${t(app ? "info_entity" : "create_new", { entity: t("app") })}`}
+        title={`${tl(app ? "info_entity" : "create_new", { entity: tl("app") })}`}
         icon={IconApiApp}
       />
     ),

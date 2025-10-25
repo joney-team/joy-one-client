@@ -8,7 +8,7 @@ import {
   HrmTimekeepingsRules,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { calculateTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -87,10 +87,10 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
       <Table striped>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>{t("members")}</Table.Th>
-            <Table.Th ta="right">{t("hrm_timekeepings_late")}</Table.Th>
-            <Table.Th ta="right">{t("hrm_timekeepings_overtime")}</Table.Th>
-            <Table.Th ta="right">{t("hrm_timekeepings_working_time")}</Table.Th>
+            <Table.Th>{tl("members")}</Table.Th>
+            <Table.Th ta="right">{tl("hrm_timekeepings_late")}</Table.Th>
+            <Table.Th ta="right">{tl("hrm_timekeepings_overtime")}</Table.Th>
+            <Table.Th ta="right">{tl("hrm_timekeepings_working_time")}</Table.Th>
           </Table.Tr>
         </Table.Thead>
 

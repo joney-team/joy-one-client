@@ -3,7 +3,7 @@ import { useLayout } from "@/layout/layout-context";
 import { OnModalCaptureLocationTimekeeping } from "@/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping";
 import { useHrmTimekeeping } from "@/modules/hrm-timekeepings/hooks";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { DateTime } from "@/utils/date-time.utils";
 import {
   ActionIcon,
@@ -60,7 +60,7 @@ export const HrmTimekeepingButton: FC = () => {
   return (
     <Popover width={400} shadow="xs" opened={opened} onChange={setOpened}>
       <Popover.Target>
-        <Tooltip disabled={!!workTime} label={workTime ? `` : t("timekeepings")}>
+        <Tooltip disabled={!!workTime} label={workTime ? `` : tl("timekeepings")}>
           <Indicator
             color={color(nextColor)}
             position="top-center"
@@ -113,7 +113,7 @@ export const HrmTimekeepingButton: FC = () => {
               <TimekeepingsIllustration width={180} color={nextColor} />
 
               <Text ta="center" fw={600}>
-                {t(`hrm_timekeepings_working_time`)}
+                {tl(`hrm_timekeepings_working_time`)}
               </Text>
 
               {workTime && (
@@ -158,7 +158,7 @@ export const HrmTimekeepingButton: FC = () => {
                     OnModalCaptureLocationTimekeeping();
                   }}
                 >
-                  {t(`hrm_timekeepings_${timekeeping.nextType.toLowerCase()}`)}
+                  {tl(`hrm_timekeepings_${timekeeping.nextType.toLowerCase()}`)}
                 </Button>
               </Group>
             </Stack>

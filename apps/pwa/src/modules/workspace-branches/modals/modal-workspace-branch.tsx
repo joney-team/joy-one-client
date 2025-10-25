@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Form } from "@/components/form";
 import { ModalTitle } from "@/components/modal-title";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { FormBankAccount } from "@/modules/plugins/banks/form-bank-account";
 import {
   createWorkspaceBranch,
@@ -58,11 +58,16 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
 
           <Tabs.Panel value="info">
             <Stack py={16}>
-              <TextInput withAsterisk label={t("name")} {...form.getInputProps("name")} autoFocus />
+              <TextInput
+                withAsterisk
+                label={tl("name")}
+                {...form.getInputProps("name")}
+                autoFocus
+              />
 
-              <TextInput label={t("hotline")} {...form.getInputProps("hotline")} />
+              <TextInput label={tl("hotline")} {...form.getInputProps("hotline")} />
 
-              <TextInput label={t("address")} {...form.getInputProps("location.address")} />
+              <TextInput label={tl("address")} {...form.getInputProps("location.address")} />
             </Stack>
           </Tabs.Panel>
 
@@ -84,7 +89,7 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
             onClick={onSubmit}
             type="submit"
           >
-            {t(branch ? "edit" : "create")}
+            {tl(branch ? "edit" : "create")}
           </Button>
         </Stack>
       </Stack>
@@ -96,7 +101,7 @@ export const OnWorkspaceBranchModal = (branch?: WorkspaceBranchEntity) => {
   return modals.open({
     title: (
       <ModalTitle
-        title={`${t(branch ? "edit" : "create")} ${t("workspace_branch")}`}
+        title={`${tl(branch ? "edit" : "create")} ${tl("workspace_branch")}`}
         icon={IconBuilding}
       />
     ),

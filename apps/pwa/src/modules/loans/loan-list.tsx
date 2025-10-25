@@ -11,7 +11,7 @@ import { Renderer } from "@/components/renderer";
 import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { OnModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDate, t } from "@/modules/lang/lang-service";
+import { num, renderDate, tl } from "@/modules/lang/lang-service";
 import {
   archiveLoans,
   getLoans,
@@ -87,13 +87,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
               <Fragment>
                 <Renderer visible={loan.isLiquidated}>
                   <Badge variant="light" color="violet" size="xs">
-                    {t("liquidation")}
+                    {tl("liquidation")}
                   </Badge>
                 </Renderer>
 
                 <Renderer visible={loan.isHasLateInterestReceipt}>
                   <Badge variant="light" color="orange" size="xs">
-                    {t("has_late_interest")}
+                    {tl("has_late_interest")}
                   </Badge>
                 </Renderer>
               </Fragment>
@@ -142,7 +142,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
               <Stack gap={5} w="100%">
                 <Group justify="space-between">
                   <Group gap={5}>
-                    <Text fw={500}>{t(`loan_asset_type_${loan.assetType}`)}</Text>
+                    <Text fw={500}>{tl(`loan_asset_type_${loan.assetType}`)}</Text>
                     <Badge
                       size="sm"
                       variant="light"
@@ -158,7 +158,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 </Group>
 
                 <Group justify="space-between">
-                  <Text c="gray">{t(`money_amount`)}</Text>
+                  <Text c="gray">{tl(`money_amount`)}</Text>
                   <Text ta="right">{num(loan.amount, { type: "money" })}</Text>
                 </Group>
 
@@ -169,7 +169,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
 
                   return (
                     <Group justify="space-between">
-                      <Text c="gray">{t(`time`)}</Text>
+                      <Text c="gray">{tl(`time`)}</Text>
                       <Text ta="right">
                         {renderDate(startPeriod?.endTime)} - {renderDate(endPeriod?.endTime)}
                       </Text>
@@ -179,11 +179,11 @@ export const LoanList: FC<LoanListProps> = (props) => {
 
                 {linkContractPdf && (
                   <Group justify="space-between">
-                    <Text c="gray">{t(`loan_contract`)}</Text>
+                    <Text c="gray">{tl(`loan_contract`)}</Text>
                     <Anchor href={linkContractPdf} target="_blank" ta="right" fz={14}>
                       <Group gap={4} justify="right">
                         <IconFileTypePdf size={18} />
-                        {t("open_file")}
+                        {tl("open_file")}
                       </Group>
                     </Anchor>
                   </Group>
@@ -202,13 +202,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 col: "Địa chỉ cũ",
                 text: location.renderVnLocation(loan.metadata?.cidLocation) || "-",
               },
-              { col: t("loan_package"), text: loan.package.id, width: 20 },
+              { col: tl("loan_package"), text: loan.package.id, width: 20 },
               {
-                col: t("loan_asset_type"),
-                text: t(`loan_asset_type_${loan.assetType}`),
+                col: tl("loan_asset_type"),
+                text: tl(`loan_asset_type_${loan.assetType}`),
                 width: 20,
               },
-              { col: t("loan_amount"), money: loan.amount, width: 30 },
+              { col: tl("loan_amount"), money: loan.amount, width: 30 },
             ];
           },
         },
@@ -230,7 +230,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             const renderNextReceipt = () => {
               if (!loan.nextReceiptAt) return "--";
               const isToday = dayjs(loan.nextReceiptAt * 1000).isSame(dayjs(), "day");
-              if (isToday) return t("today");
+              if (isToday) return tl("today");
               return dayjs(loan.nextReceiptAt * 1000).from(now * 1000);
             };
 
@@ -260,7 +260,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             : {
                 staticSelector: {
                   options: Object.values(LoanStatus).map((s) => ({
-                    label: t(`loan_status_${s}`),
+                    label: tl(`loan_status_${s}`),
                     value: s,
                     activeColor: loanStatusColors[s],
                     render: () => {
@@ -271,7 +271,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                           <Circle color={color(loanStatusColors[s])} size={8} />
 
                           <Text fz={14} fw={500}>
-                            {t(`loan_status_${s}`)}
+                            {tl(`loan_status_${s}`)}
                           </Text>
                         </Group>
                       );
@@ -293,7 +293,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                     style={{ borderRadius: 100 }}
                     color={loanStatusColors[loan.status]}
                   >
-                    {t(`loan_status_${loan.status}`)}
+                    {tl(`loan_status_${loan.status}`)}
                   </Badge>
                 </Group>
 
@@ -354,8 +354,8 @@ export const LoanList: FC<LoanListProps> = (props) => {
           available: (data) => data.every((v) => [LoanStatus.PENDING].includes(v.status)),
           handler: (data, ctx) =>
             OnModalPrompt({
-              title: String.capitalizeFirstLetter(`${t("reject")} ${t("loan")}`),
-              message: t("enter_reject_reason"),
+              title: String.capitalizeFirstLetter(`${tl("reject")} ${tl("loan")}`),
+              message: tl("enter_reject_reason"),
               onSubmit: async (reason) => {
                 await api.post(`/loans/bulk-reject`, {
                   loanIds: data.map((v) => v.id),
@@ -366,9 +366,9 @@ export const LoanList: FC<LoanListProps> = (props) => {
               icon: IconClipboard,
               color: "red",
               suggestions: [
-                t("wrong_information"),
-                t("info_does_not_match_img"),
-                t("img_is_blurry"),
+                tl("wrong_information"),
+                tl("info_does_not_match_img"),
+                tl("img_is_blurry"),
               ],
             }),
         },

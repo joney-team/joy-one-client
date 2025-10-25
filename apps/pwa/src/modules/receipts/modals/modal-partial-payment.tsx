@@ -1,6 +1,6 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { getDateFormat, num, t } from "@/modules/lang/lang-service";
+import { getDateFormat, num, tl } from "@/modules/lang/lang-service";
 import { partialPaymentReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { DateTime } from "@/utils/date-time.utils";
@@ -30,11 +30,11 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
     } as any,
     validate: {
       amount: (value) => {
-        if (value <= 0) return t("validate_min_amount", { min: 5000 });
+        if (value <= 0) return tl("validate_min_amount", { min: 5000 });
       },
       nextExpireAt: (value) => {
         if (props.receipt.expireAt && (!value || value <= props.receipt.expireAt)) {
-          return t("invalid_time");
+          return tl("invalid_time");
         }
       },
     },
@@ -57,7 +57,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
   return (
     <Stack>
       <NumberInput
-        label={t("money_amount")}
+        label={tl("money_amount")}
         min={5000}
         max={props.receipt.amount}
         hideControls
@@ -79,7 +79,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
 
       {props.receipt.expireAt && (
         <DateInput
-          label={t("next_pay_date")}
+          label={tl("next_pay_date")}
           valueFormat={getDateFormat()}
           {...form.getInputProps("nextExpireAt")}
           minDate={new Date()}
@@ -93,7 +93,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
       )}
 
       <Text ta="center">
-        {t("remain_money_amount")}: {num(remainAmount, { type: "money" })}
+        {tl("remain_money_amount")}: {num(remainAmount, { type: "money" })}
       </Text>
 
       <Center>
@@ -105,7 +105,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
           disabled={!form.isDirty()}
           type="submit"
         >
-          {t("complete")}
+          {tl("complete")}
         </Button>
       </Center>
     </Stack>
@@ -115,7 +115,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
 export const OnModalPartialPayment = (props: ModalPartialPaymentProps) => {
   return modals.open({
     modalId: "ModalPartialPayment",
-    title: <ModalTitle title={t("partial_payment")} icon={IconCircleHalf2} />,
+    title: <ModalTitle title={tl("partial_payment")} icon={IconCircleHalf2} />,
     children: <ModalPartialPayment {...props} />,
   });
 };

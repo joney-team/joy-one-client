@@ -34,7 +34,7 @@ import { DateInput } from "@/components/inputs/date-input";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { medicalHistoryOptions } from "@/configs/medical.config";
 import { useRouter } from "@/hooks/use-router";
-import { getClientLocale, t } from "@/modules/lang/lang-service";
+import { getClientLocale, tl } from "@/modules/lang/lang-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Gender } from "@/types";
@@ -68,7 +68,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
     },
     validate: {
       name: (value: string) => {
-        if (!value) return t("must_be_provided");
+        if (!value) return tl("must_be_provided");
       },
     },
   });
@@ -126,14 +126,14 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
     <Form onSubmit={onSubmit}>
       <Stack>
         <WorkspaceBranchInput
-          label={t("branch")}
+          label={tl("branch")}
           value={form.values.workspaceBranch}
           onChange={(branch) => form.setFieldValue("workspaceBranch", branch)}
         />
 
-        <TextInput autoFocus withAsterisk label={t("name")} {...form.getInputProps("name")} />
+        <TextInput autoFocus withAsterisk label={tl("name")} {...form.getInputProps("name")} />
         <TextInput
-          label={t("phone")}
+          label={tl("phone")}
           placeholder={configs.placeholders.phone}
           {...form.getInputProps("phone")}
           leftSection={<IconPhone strokeWidth={1.2} size={18} />}
@@ -147,7 +147,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
 
         <Renderer visible={workspace.type === WorkspaceType.CREDIT}>
           <NumberInput
-            label={t("salary_amount")}
+            label={tl("salary_amount")}
             {...form.getInputProps("salaryAmount")}
             hideControls
           />
@@ -155,17 +155,17 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
 
         <Group align="start">
           <DateInput
-            label={t("birthday")}
+            label={tl("birthday")}
             {...form.getInputProps("birthday")}
             style={{ flex: 1 }}
             leftSection={<IconCake strokeWidth={1.2} size={18} />}
           />
 
           <Select
-            label={t("gender")}
+            label={tl("gender")}
             searchable
             data={Object.values(Gender).map((gender) => ({
-              label: t(gender).toString(),
+              label: tl(gender).toString(),
               value: gender,
             }))}
             {...form.getInputProps("gender")}
@@ -209,7 +209,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
           )}
         >
           <TagsInput
-            label={t("medical_history")}
+            label={tl("medical_history")}
             leftSection={<IconClipboardHeart strokeWidth={1.2} size={18} />}
             style={{ flex: 1 }}
             data={medicalHistoryOptions[getClientLocale()]}
@@ -222,7 +222,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
         </Renderer>
 
         <WorkspaceMembersInput
-          label={t("assignee")}
+          label={tl("assignee")}
           style={{ flex: 1 }}
           {...form.getInputProps("assigneeUsers")}
         />
@@ -230,7 +230,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
         <Group mt={10} justify="center" align="center">
           {props.customer && (
             <Button leftIcon={IconLocation} variant="outline" onClick={convertLocations}>
-              {t("convert_locations")}
+              {tl("convert_locations")}
             </Button>
           )}
 
@@ -240,7 +240,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
             leftIcon={IconCheck}
             disabled={!form.isDirty()}
           >
-            {t("complete")}
+            {tl("complete")}
           </Button>
         </Group>
       </Stack>

@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { Box, Card, em, Stack, Title } from "@mantine/core";
@@ -70,7 +70,7 @@ export const TasksListView: FC<PropsWithChildren> = memo((props) => {
                 />
                 <Stack gap={16}>
                   <Title fz={em(15)} fw={600}>
-                    {t("general_tasks")}
+                    {tl("general_tasks")}
                   </Title>
                   <ListTaskGroupByFolder pure />
                 </Stack>

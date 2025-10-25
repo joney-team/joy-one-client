@@ -2,7 +2,7 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import {
   ActionIcon,
@@ -60,8 +60,8 @@ export const ModalSharelink: FC = () => {
 
             <Title order={3} fz={em(15)} fw={500} c={themeColor}>
               {(function () {
-                if (state.current?.task) return t("share_this_task");
-                return t("share");
+                if (state.current?.task) return tl("share_this_task");
+                return tl("share");
               })()}
             </Title>
           </Group>
@@ -77,7 +77,7 @@ export const ModalSharelink: FC = () => {
           <Group justify="space-between" align="end">
             <Stack gap={3} flex={1}>
               <Text fz={em(12)} fw={500}>
-                {t("link")}
+                {tl("link")}
               </Text>
               <Card p={5} pl={10} withBorder shadow="none">
                 <Text truncate="end">{link}</Text>
@@ -91,7 +91,7 @@ export const ModalSharelink: FC = () => {
                 variant={clipboard.copied ? "filled" : "outline"}
                 onClick={() => clipboard.copy(link)}
               >
-                {t(clipboard.copied ? "copied" : "copy")}
+                {tl(clipboard.copied ? "copied" : "copy")}
               </Button>
             </Group>
           </Group>

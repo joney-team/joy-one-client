@@ -21,7 +21,7 @@ import {
 } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { getClientLocale, t } from "@/modules/lang/lang-service";
+import { getClientLocale, tl } from "@/modules/lang/lang-service";
 import { LangState } from "@/modules/lang/lang-types";
 import { showInAppNotification } from "@/modules/notifications/notification-service";
 import { NotificationEntity } from "@/modules/notifications/notification-types";
@@ -249,7 +249,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
         .then((permission) => permission === "granted")
         .catch(() => false);
 
-      if (!isHasPermission) throw Error(t("notification_permission_not_allowed"));
+      if (!isHasPermission) throw Error(tl("notification_permission_not_allowed"));
 
       let notificationToken = "";
 
@@ -272,14 +272,14 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
           })
           .catch((error) => {
             console.error(error);
-            throw Error(t("notification_token_not_received"));
+            throw Error(tl("notification_token_not_received"));
           });
       }
 
       const _device = await setDeviceNotificationToken({ notificationToken });
       setDevice(_device);
     } else {
-      throw Error(t("device_does_not_support_notifications"));
+      throw Error(tl("device_does_not_support_notifications"));
     }
   };
 

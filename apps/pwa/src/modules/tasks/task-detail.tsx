@@ -5,7 +5,7 @@ import { useRouter } from "@/hooks/use-router";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { CommentBox } from "@/modules/comments/comment-box";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { TaskForm } from "@/modules/tasks/components/form-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskByCode, getTaskEntity, getTaskEntityByCode } from "@/modules/tasks/tasks-service";
@@ -186,7 +186,7 @@ const TaskCodeButton: FC<{ task: TaskEntity }> = (props) => {
     <Group style={{ position: "relative" }}>
       <CopyButton value={task.code}>
         {({ copied, copy }) => (
-          <Tooltip label={t("copy_code")}>
+          <Tooltip label={tl("copy_code")}>
             <Group>
               <Card
                 withBorder

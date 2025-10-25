@@ -6,7 +6,7 @@ import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useLang } from "@/modules/lang/lang-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnModalLang } from "@/modules/lang/modal-language";
 import { getUserMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -55,14 +55,14 @@ export const WorkspaceHeaderAccount: FC = () => {
       </Menu.Target>
 
       <Menu.Dropdown miw={200} className="shadow">
-        <Menu.Label>{t("profile")}</Menu.Label>
+        <Menu.Label>{tl("profile")}</Menu.Label>
 
         <Menu.Item
           component={Link}
           href="/profile/settings"
           leftSection={<IconSettings size={20} strokeWidth={1.6} />}
         >
-          {t("profile_settings")}
+          {tl("profile_settings")}
         </Menu.Item>
 
         <Menu.Item
@@ -70,28 +70,28 @@ export const WorkspaceHeaderAccount: FC = () => {
           href="/profile/secure"
           leftSection={<IconShieldLock size={20} strokeWidth={1.6} />}
         >
-          {t("secure")}
+          {tl("secure")}
         </Menu.Item>
 
-        <Menu.Label>{t("settings")}</Menu.Label>
+        <Menu.Label>{tl("settings")}</Menu.Label>
 
         <Menu.Item
           component={Link}
           href="/profile/notifications"
           leftSection={<IconBell size={20} strokeWidth={1.6} />}
         >
-          {t("notifications")}
+          {tl("notifications")}
         </Menu.Item>
 
         <Menu.Item
           leftSection={<Image src={`/lang/${lang.locale}.png`} w={18} />}
           onClick={() => OnModalLang()}
         >
-          {t("language")}
+          {tl("language")}
         </Menu.Item>
 
         <Menu.Label>
-          {t("version")} {app.config.version}
+          {tl("version")} {app.config.version}
         </Menu.Label>
 
         <Menu.Item
@@ -100,7 +100,7 @@ export const WorkspaceHeaderAccount: FC = () => {
           c="gray.6"
           fz={13}
         >
-          {t("logout")}
+          {tl("logout")}
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

@@ -1,7 +1,7 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -91,19 +91,19 @@ export const ModalUpdateWorkspaceBranch: FC = () => {
       <Stack align="stretch">
         {entity === AppEntity.LOANS && (
           <Blockquote variant="light" color="orange" p={16} py={8} fz={14}>
-            {t("update_workspace_branch_description_loans")}
+            {tl("update_workspace_branch_description_loans")}
           </Blockquote>
         )}
 
         <Blockquote variant="light" color="gray" p={16} py={8} fz={14}>
-          {t("leave_blank_to_use_main_branch")}
+          {tl("leave_blank_to_use_main_branch")}
         </Blockquote>
 
         <WorkspaceBranchInput value={branch} onChange={(v) => setBranch(v)} />
 
         <Center>
           <Button action onClick={onSubmit}>
-            {t("confirm")}
+            {tl("confirm")}
           </Button>
         </Center>
       </Stack>

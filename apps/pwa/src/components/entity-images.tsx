@@ -1,9 +1,10 @@
 "use client";
 
 import { useLayout } from "@/layout/layout-context";
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { FileType } from "@/modules/files/file-types";
-import { t } from "@/modules/lang/lang-service";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useHover } from "@mantine/hooks";
@@ -71,7 +72,7 @@ export const EntityImages: FC<EntityImagesProps> = (props) => {
           </Group>
         </Renderer>
 
-        <Empty visible={!!props.disabled && images.length === 0} message={t("no_images")} />
+        <Empty visible={!!props.disabled && images.length === 0} message={t`No Images`} />
 
         <Renderer visible={!props.disabled}>
           <Group gap={5} justify="center" py={16} pb={isHasImage ? 5 : 15}>
@@ -79,7 +80,7 @@ export const EntityImages: FC<EntityImagesProps> = (props) => {
               <IconUpload strokeWidth={1.5} size={18} />
             </ThemeIcon>
             <Text c="gray" fz={em(13)} fw={300}>
-              {props.placeholder || t("drop_file_here_or_click")}
+              {props.placeholder || <Trans>Drop file here or click</Trans>}
             </Text>
           </Group>
         </Renderer>

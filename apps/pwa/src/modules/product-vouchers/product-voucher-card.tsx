@@ -1,9 +1,18 @@
-import { renderDate, num, t } from "@/modules/lang/lang-service";
+import { renderDate, num, tl } from "@/modules/lang/lang-service";
 import { productVoucherStatusColor } from "@/modules/product-vouchers/product-vouchers-service";
 import { ProductVoucherEntity } from "@/modules/product-vouchers/product-vouchers-types";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
-import { Badge, Card, CardProps, em, Group, PolymorphicComponentProps, Stack, Text } from "@mantine/core";
+import {
+  Badge,
+  Card,
+  CardProps,
+  em,
+  Group,
+  PolymorphicComponentProps,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { FC } from "react";
 import { EntityImage } from "../../components/entity-image";
 import { Renderer } from "../../components/renderer";
@@ -19,24 +28,28 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
   return (
     <Card withBorder shadow="none" p={8} {...props}>
       <Group align="start" gap={10}>
-        <EntityImage size={44} src={voucher.productVoucher.image} icon={getProductIcon(ProductType.VOUCHER)} />
+        <EntityImage
+          size={44}
+          src={voucher.productVoucher.image}
+          icon={getProductIcon(ProductType.VOUCHER)}
+        />
 
         <Stack gap={3} flex={1}>
           <Text fw={500}>{voucher.productVoucher.name}</Text>
 
           <Badge color={productVoucherStatusColor[voucher.status]} size="xs" variant="light" mb={5}>
-            {t(voucher.status.toLowerCase())}
+            {tl(voucher.status.toLowerCase())}
           </Badge>
 
           <Text fw={500} fz={em(13)} c="gray">
-            • {t("voucherAmount")}: {num(voucher.remainAmount, { type: "money" })}/
+            • {tl("voucherAmount")}: {num(voucher.remainAmount, { type: "money" })}/
             {num(voucher.amount, { type: "money" })}
           </Text>
 
           <Renderer visible={!!voucher.productVoucher.voucherExpireInDays}>
             <Text fw={500} fz={em(13)} c="gray">
               •{" "}
-              {`${t("HSD")}: ${renderDate(
+              {`${tl("HSD")}: ${renderDate(
                 voucher.createdAt + voucher.productVoucher.voucherExpireInDays! * 60 * 60 * 24
               )}`}
             </Text>
@@ -44,7 +57,7 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
 
           <Renderer visible={!!!props.hideCustomer}>
             <Text fw={500} fz={em(13)} c="gray">
-              • {`${t("customer")}: ${voucher.customer.name}`}
+              • {`${tl("customer")}: ${voucher.customer.name}`}
             </Text>
           </Renderer>
 
@@ -55,7 +68,7 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
             }
           >
             <Text fw={500} fz={em(13)} c="gray">
-              • {`${t("include_products")}:`}
+              • {`${tl("include_products")}:`}
             </Text>
             {voucher.productVoucher.voucherIncludeProducts?.map((product) => {
               return (
@@ -73,7 +86,7 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
             }
           >
             <Text fw={500} fz={em(13)} c="gray">
-              • {`${t("exclude_products")}:`}
+              • {`${tl("exclude_products")}:`}
             </Text>
             {voucher.productVoucher.voucherExcludeProducts?.map((product) => {
               return (
@@ -93,7 +106,7 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
             }
           >
             <Text fw={500} fz={em(13)} c="gray">
-              • {`${t("apply_all_products")}`}
+              • {`${tl("apply_all_products")}`}
             </Text>
           </Renderer>
         </Stack>

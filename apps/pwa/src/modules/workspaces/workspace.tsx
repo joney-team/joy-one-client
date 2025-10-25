@@ -6,7 +6,7 @@ import { EventList } from "@/components/event-list";
 import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -16,7 +16,13 @@ import { WorkspaceSettingCreditOperation } from "@/modules/workspace-settings/co
 import { WorkspaceTermsAndPolicies } from "@/modules/workspace-settings/components/workspace-setting-terms-and-policies";
 import { WorkspacetSettingLoans } from "@/modules/workspace-settings/components/workspace-setting-loans";
 import { Card, Stack } from "@mantine/core";
-import { IconApps, IconCreditCardPay, IconNotebook, IconReportMoney, IconSettings } from "@tabler/icons-react";
+import {
+  IconApps,
+  IconCreditCardPay,
+  IconNotebook,
+  IconReportMoney,
+  IconSettings,
+} from "@tabler/icons-react";
 import { FC } from "react";
 import { WorkspaceInformation } from "./components/workspace-information";
 
@@ -43,17 +49,17 @@ export const Workspace: FC = () => {
             </Card>
           </Renderer>
 
-          <SessionTitle mb={-20} name={t("operation-settings")} icon={IconSettings} />
+          <SessionTitle mb={-20} name={tl("operation-settings")} icon={IconSettings} />
           <Card shadow="xs">
             <WorkspaceOperationSettings />
           </Card>
 
-          <SessionTitle mb={-20} name={t("app-settings")} icon={IconApps} />
+          <SessionTitle mb={-20} name={tl("app-settings")} icon={IconApps} />
           <Card shadow="xs">
             <WorkspaceAppSettings />
           </Card>
 
-          <SessionTitle mb={-20} name={t("terms-and-policies")} icon={IconNotebook} />
+          <SessionTitle mb={-20} name={tl("terms-and-policies")} icon={IconNotebook} />
           <Card shadow="xs">
             <WorkspaceTermsAndPolicies />
           </Card>

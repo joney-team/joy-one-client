@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { ActionIcon, Input, InputWrapperProps } from "@mantine/core";
 import { type FC } from "react";
 import { CategorySelector } from "./category-selector";
@@ -22,7 +22,7 @@ export const CategoryInput: FC<CategoryInputProps> = (props) => {
     <CategorySelector
       {...rest}
       type={props.type || props.value?.type}
-      label={t("category")}
+      label={tl("category")}
       excludeIds={value ? [value._id] : undefined}
       onSelect={onChange}
       createable={false}
@@ -31,7 +31,7 @@ export const CategoryInput: FC<CategoryInputProps> = (props) => {
           <Input
             value={value?.name ?? ""}
             flex={1}
-            placeholder={t("select_category")}
+            placeholder={tl("select_category")}
             readOnly
             onClick={ctx.toggle}
             rightSectionPointerEvents="all"

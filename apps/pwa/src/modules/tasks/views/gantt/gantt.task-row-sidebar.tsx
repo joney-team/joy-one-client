@@ -4,7 +4,7 @@ import { ContentEditable } from "@/components/content-editable/content-editable"
 import { formatDuration, QuickEstimateTimeInput } from "@/components/inputs/estimate-time-input";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
@@ -272,7 +272,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
 
         <SidebarRowSticky visible={hover.hovered}>
           {!task.parentId && (
-            <Tooltip label={t("create_sub_task")}>
+            <Tooltip label={tl("create_sub_task")}>
               <Group>
                 <QuickCreateTaskInput parentId={task._id} tagFolderId={task.tagFolderId}>
                   <ActionIcon
@@ -288,7 +288,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
             </Tooltip>
           )}
 
-          <Tooltip label={t("tag")}>
+          <Tooltip label={tl("tag")}>
             <Group>
               <TagSelector
                 type={TagType.TASK}
@@ -311,7 +311,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
           </Tooltip>
 
           <Tooltip
-            label={`${t("tasks_view_estimate_time")}${
+            label={`${tl("tasks_view_estimate_time")}${
               task.estimatedTime ? `: ${formatDuration(task.estimatedTime)}` : ""
             }`}
           >
@@ -329,7 +329,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
             </Group>
           </Tooltip>
 
-          <Tooltip label={t("edit_task_name")}>
+          <Tooltip label={tl("edit_task_name")}>
             <ActionIcon
               variant="subtle"
               color="gray.6"
@@ -344,7 +344,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
             </ActionIcon>
           </Tooltip>
 
-          <Tooltip label={t("scroll_to_task")}>
+          <Tooltip label={tl("scroll_to_task")}>
             <ActionIcon
               variant="transparent"
               size="sm"

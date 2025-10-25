@@ -1,5 +1,5 @@
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { TagEntity } from "@/modules/tags/tags-types";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
@@ -14,7 +14,7 @@ interface ListTaskGroupByFolderProps {
 
 export const ListTaskGroupByFolder: FC<ListTaskGroupByFolderProps> = (props) => {
   const { tagFolder } = props;
-  const name = tagFolder ? tagFolder.name : t("general_tasks");
+  const name = tagFolder ? tagFolder.name : tl("general_tasks");
   const color = useColor();
   const { state, statuses } = useTasks();
 
@@ -26,11 +26,20 @@ export const ListTaskGroupByFolder: FC<ListTaskGroupByFolderProps> = (props) => 
         {statuses
           .filter((v) => !v.isDefault)
           .map((status) => (
-            <ListTaskGroupByStatuses key={status.id} status={status.id} hideWhenEmpty tagFolderId={tagFolder?._id} />
+            <ListTaskGroupByStatuses
+              key={status.id}
+              status={status.id}
+              hideWhenEmpty
+              tagFolderId={tagFolder?._id}
+            />
           ))}
 
         {state.showClosed && (
-          <ListTaskGroupByStatuses status={DefaultTaskStatusId.CLOSED} tagFolderId={tagFolder?._id} showEmptyMsg />
+          <ListTaskGroupByStatuses
+            status={DefaultTaskStatusId.CLOSED}
+            tagFolderId={tagFolder?._id}
+            showEmptyMsg
+          />
         )}
       </Stack>
     );

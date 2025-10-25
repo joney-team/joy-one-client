@@ -1,7 +1,7 @@
 "use client";
 
 import { CustomerRelationshipContact } from "@/modules/customers/customer-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import {
   ActionIcon,
   Card,
@@ -48,7 +48,7 @@ export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInp
   };
 
   return (
-    <InputWrapper {..._props} label={props.label || t("customer_relationship_contacts")}>
+    <InputWrapper {..._props} label={props.label || tl("customer_relationship_contacts")}>
       <Card p={8} withBorder shadow="none">
         <Stack justify="stretch">
           {contacts.map((contact, i) => {
@@ -72,21 +72,21 @@ export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInp
                 <SimpleGrid cols={{ md: 3 }} flex={1}>
                   <TextInput
                     flex={1}
-                    placeholder={t("name")}
+                    placeholder={tl("name")}
                     value={contact.name}
                     onChange={(e) => onChange("name", e.target.value)}
                   />
 
                   <TextInput
                     flex={1}
-                    placeholder={t("phone")}
+                    placeholder={tl("phone")}
                     value={contact.phone}
                     onChange={(e) => onChange("phone", e.target.value)}
                   />
 
                   <TextInput
                     flex={1}
-                    placeholder={t("relationship_type")}
+                    placeholder={tl("relationship_type")}
                     value={contact.type}
                     onChange={(e) => onChange("type", e.target.value)}
                   />
@@ -110,7 +110,7 @@ export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInp
                 radius={200}
                 onClick={onAdd}
               >
-                {t("add_contact")}
+                {tl("add_contact")}
               </Button>
             </Group>
           </Renderer>

@@ -3,7 +3,7 @@
 import { Coordinates } from "@/types";
 import { OnModalCheckInLocationForm } from "@/modals/modal-check-in-location-form";
 import { CheckInLocation } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { calculateDistance, getGeolocation } from "@/modules/locations/locations-service";
 import { onActionLoad } from "@/utils/actions";
 import { capitalize, String } from "@/utils/string.utils";
@@ -40,7 +40,7 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
         {locations.map((location, index) => {
           const check = async () => {
             onActionLoad({
-              name: t("check_location"),
+              name: tl("check_location"),
               icon: IconGps,
               process: () => getGeolocation(),
               onFinished: (res, id) => {
@@ -53,8 +53,8 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                 if (distance <= location.radius) {
                   notifications.update({
                     id,
-                    title: t("arrived_location", { location: location.name }),
-                    message: t("timekeepings_arrived_location_desc"),
+                    title: tl("arrived_location", { location: location.name }),
+                    message: tl("timekeepings_arrived_location_desc"),
                     icon: <IconMapCheck strokeWidth={1.5} size={18} />,
                     color: "primary",
                     autoClose: 3000,
@@ -62,8 +62,8 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                 } else {
                   notifications.update({
                     id,
-                    title: t("outside_check_in_location"),
-                    message: t("outside_check_in_location_desc"),
+                    title: tl("outside_check_in_location"),
+                    message: tl("outside_check_in_location_desc"),
                     icon: <IconX strokeWidth={1.5} size={18} />,
                     color: "red",
                     autoClose: 3000,
@@ -110,7 +110,7 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                       {location.name}
                     </Text>
                     <Text c="gray" fz={em(12)} fw={500}>
-                      {t("coordinates")}:{" "}
+                      {tl("coordinates")}:{" "}
                       {String.limitCharacters(location.coordinates.lat.toString(), 15)}/
                       {String.limitCharacters(location.coordinates.lng.toString(), 15)}
                     </Text>
@@ -118,13 +118,13 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
 
                   <Switch
                     checked={!location.disabled}
-                    label={t("on_off_activate")}
+                    label={tl("on_off_activate")}
                     onChange={toggleDisable}
                     mb={5}
                   />
 
                   <NumberInput
-                    label={t("radius", { unit: t("meter") })}
+                    label={tl("radius", { unit: tl("meter") })}
                     value={location.radius}
                     onChange={(e) => changeRadius(+e)}
                     min={0}
@@ -162,7 +162,7 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
               leftSection={<IconPlus size={16} style={{ marginRight: -8 }} />}
               fz={em(13)}
             >
-              {capitalize(`${t("add")} ${t("location")}`)}
+              {capitalize(`${tl("add")} ${tl("location")}`)}
             </Button>
           </Group>
         )}

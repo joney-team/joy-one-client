@@ -10,7 +10,7 @@ import {
   HrmTimekeepingType,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { calculateTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -70,7 +70,7 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
           if (props.showAddButton && !isOutOfRange && (hoverd || layout.view !== "desktop"))
             return (
               <Group>
-                <Tooltip label={t("hrm_timekeepings_request")}>
+                <Tooltip label={tl("hrm_timekeepings_request")}>
                   <ActionIcon
                     variant="subtle"
                     radius={100}
@@ -232,16 +232,16 @@ export const TimekeepingsCalendarExplain: FC = () => {
     <Fragment>
       <Group gap={5}>
         <Circle size={8} bg="red.8" />
-        <Text fz={em(12)}>{t(`hrm_timekeepings_late`)}</Text>
+        <Text fz={em(12)}>{tl(`hrm_timekeepings_late`)}</Text>
       </Group>
       <Group gap={5}>
         <Circle size={8} bg="orange.5" />
-        <Text fz={em(12)}>{t(`hrm_timekeepings_early_leave`)}</Text>
+        <Text fz={em(12)}>{tl(`hrm_timekeepings_early_leave`)}</Text>
       </Group>
 
       <Group gap={5}>
         <Circle size={8} bg="primary" />
-        <Text fz={em(12)}>{t(`hrm_timekeepings_overtime`)}</Text>
+        <Text fz={em(12)}>{tl(`hrm_timekeepings_overtime`)}</Text>
       </Group>
 
       <Group gap={5}>
@@ -251,12 +251,12 @@ export const TimekeepingsCalendarExplain: FC = () => {
           color={theme.colors.orange[6]}
           className="animRotate"
         />
-        <Text fz={em(12)}>{t(`hrm_timekeepings_working`)}</Text>
+        <Text fz={em(12)}>{tl(`hrm_timekeepings_working`)}</Text>
       </Group>
 
       <Group gap={5}>
         <IconAnalyzeOff strokeWidth={1.5} size={16} color={theme.colors.gray[6]} />
-        <Text fz={em(12)}>{t(`hrm_timekeepings_temporary_off`)}</Text>
+        <Text fz={em(12)}>{tl(`hrm_timekeepings_temporary_off`)}</Text>
       </Group>
     </Fragment>
   );

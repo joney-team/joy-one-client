@@ -1,6 +1,6 @@
 import { useRouter } from "@/hooks/use-router";
 import { onArchive } from "@/utils/actions";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Center, Text } from "@mantine/core";
 import { IconArchive } from "@tabler/icons-react";
 import { FC } from "react";
@@ -45,7 +45,7 @@ export const ButtonArchive: FC<ButtonArchiveProps> = (props) => {
         }}
       >
         <Text fz={12} fw={400}>
-          {t(props.label || "archive")}
+          {tl(props.label || "archive")}
         </Text>
       </Button>
     </Center>

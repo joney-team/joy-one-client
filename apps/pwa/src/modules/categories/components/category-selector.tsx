@@ -2,7 +2,7 @@ import { Button } from "@/components/buttons/button";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
 import { api } from "@/modules/apis";
 import { useQuery } from "@/modules/apis/use-query";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity, ResponseList } from "@/types";
 import { Combobox, em, Group, Text } from "@mantine/core";
@@ -40,11 +40,11 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       onOpen={props.onOpen}
       onClose={props.onClose}
       excludeIds={props.excludeIds}
-      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t("recently") }))}
+      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: tl("recently") }))}
       autoCloseOnChange={false}
       onSearch={(q) => searchEntity<CategoryEntity>(AppEntity.CATEGORIES, q, { type: props.type })}
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(category) => {
         return (
@@ -70,7 +70,7 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
             fw={500}
             onClick={toggle}
           >
-            {t("select")}
+            {tl("select")}
           </Button>
         );
       }}

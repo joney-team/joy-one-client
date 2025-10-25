@@ -6,7 +6,7 @@ import { EnumColumn } from "@/components/list/columns/enum-column";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity, Gender } from "@/types";
 import { Stack } from "@mantine/core";
@@ -40,7 +40,7 @@ export const CustomerList: FC = () => {
           gender: EnumColumn({
             icon: IconGenderBigender,
             options: Object.values(Gender).map((gender) => ({
-              label: t(`gender_${gender}`),
+              label: tl(`gender_${gender}`),
               value: gender,
               color: customerGenderOptions[gender].color,
               icon: customerGenderOptions[gender].icon,

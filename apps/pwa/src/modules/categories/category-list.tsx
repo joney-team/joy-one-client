@@ -6,7 +6,7 @@ import { Stack, Text } from "@mantine/core";
 import { IconCategory, IconEdit, IconOutlet } from "@tabler/icons-react";
 import { type FC } from "react";
 import { EventType } from "../events/event-types";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 import { categoryTypeConfigs } from "./category-service";
 import { CategoryEntity, CategoryType } from "./category-types";
 import { OnModalCategory } from "./modals/modal-category";
@@ -38,7 +38,7 @@ export const CategoryList: FC = () => {
           type: EnumColumn({
             w: 200,
             options: Object.values(CategoryType).map((type) => ({
-              label: t(`category_type_${type}`),
+              label: tl(`category_type_${type}`),
               value: type,
               color: categoryTypeConfigs[type]?.color,
             })),

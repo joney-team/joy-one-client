@@ -1,7 +1,7 @@
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { ComboIllustration } from "@/components/illustrations/combo";
-import { t, tMulti } from "@/modules/lang/lang-service";
+import { tl, tMulti } from "@/modules/lang/lang-service";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductType } from "@/modules/products/products-types";
 import { Card, Center, Stack, Title } from "@mantine/core";
@@ -19,7 +19,7 @@ export const ProductCombosOnboarding: FC = () => {
             </Center>
 
             <Title order={4} ta="center" fw={400} fz={18}>
-              {t("product_combos_desc")}
+              {tl("product_combos_desc")}
             </Title>
 
             <Center>

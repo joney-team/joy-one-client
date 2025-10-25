@@ -1,7 +1,7 @@
 import { Period } from "@/types";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { Card, Center, Group, Indicator, NumberInput, Stack, Text } from "@mantine/core";
@@ -59,7 +59,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
           </Card>
 
           <Text c="gray" fz={12}>
-            {t("select_week_desc")}
+            {tl("select_week_desc")}
           </Text>
 
           <Group justify="center">
@@ -70,7 +70,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                 modals.close("date-picker");
               }}
             >
-              {t("select")}
+              {tl("select")}
             </Button>
 
             {props.clearable && (
@@ -82,7 +82,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                   modals.close("date-picker");
                 }}
               >
-                {t("remove")}
+                {tl("remove")}
               </Button>
             )}
           </Group>
@@ -112,7 +112,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
           </Card>
 
           <Text c="gray" fz={12}>
-            {t("select_month_desc")}
+            {tl("select_month_desc")}
           </Text>
 
           <Group justify="center">
@@ -123,7 +123,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                 modals.close("date-picker");
               }}
             >
-              {t("select")}
+              {tl("select")}
             </Button>
 
             {props.clearable && (
@@ -135,7 +135,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                   modals.close("date-picker");
                 }}
               >
-                {t("remove")}
+                {tl("remove")}
               </Button>
             )}
           </Group>
@@ -155,7 +155,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
           />
 
           <Text c="gray" fz={12}>
-            {t("select_year_desc")}
+            {tl("select_year_desc")}
           </Text>
 
           <Group justify="center">
@@ -166,7 +166,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                   const max = new Date().getFullYear() + 100;
                   const input = document.getElementById("year-input") as HTMLInputElement;
                   const value = +input.value;
-                  if (value < min || value > max) throw new Error(t("invalid_year"));
+                  if (value < min || value > max) throw new Error(tl("invalid_year"));
                   const range = DateTime.getStartEndOfYear(new Date(value, 1, 0, 0, 0));
                   props.onRangeSelected?.([new Date(range.start), new Date(range.end)]);
                   modals.close("date-picker");
@@ -175,7 +175,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                 }
               }}
             >
-              {t("select")}
+              {tl("select")}
             </Button>
 
             {props.clearable && (
@@ -187,7 +187,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                   modals.close("date-picker");
                 }}
               >
-                {t("remove")}
+                {tl("remove")}
               </Button>
             )}
           </Group>
@@ -215,7 +215,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
         </Card>
 
         <Text c="gray" fz={12}>
-          {t("select_date_range")}
+          {tl("select_date_range")}
         </Text>
 
         <Group justify="center">
@@ -226,7 +226,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
               modals.close("date-picker");
             }}
           >
-            {t("select")}
+            {tl("select")}
           </Button>
 
           {props.clearable && (
@@ -238,7 +238,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                 modals.close("date-picker");
               }}
             >
-              {t("remove")}
+              {tl("remove")}
             </Button>
           )}
         </Group>
@@ -272,12 +272,12 @@ export const OnModalDatePicker = (props: ModalDatePickerProps) => {
       <ModalTitle
         title={
           props.period === Period.MONTH
-            ? t("select_month")
+            ? tl("select_month")
             : props.period === Period.WEEK
-            ? t("select_week")
+            ? tl("select_week")
             : props.period === Period.YEAR
-            ? t("select_year")
-            : t("select_date")
+            ? tl("select_year")
+            : tl("select_date")
         }
         icon={IconCalendar}
       />

@@ -20,7 +20,7 @@ import { BookingEntity, BookingStatus } from "./booking-types";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { getDateFormat, t } from "@/modules/lang/lang-service";
+import { getDateFormat, tl } from "@/modules/lang/lang-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import {
@@ -269,7 +269,7 @@ export const BookingList: FC = () => {
                             <Loader size={13} type="dots" color="gray" />
                           ) : selectedAssignees.length === 0 ? (
                             <Text fz={11} c="gray" fw={500}>
-                              {t("attendees")}
+                              {tl("attendees")}
                             </Text>
                           ) : (
                             <Group gap={5}>
@@ -294,19 +294,19 @@ export const BookingList: FC = () => {
                   pinnedOptions={[
                     {
                       id: "default",
-                      label: t("active"),
+                      label: tl("active"),
                     },
                     {
                       id: BookingStatus.COMPLETED,
-                      label: t(`booking_status_${BookingStatus.COMPLETED}`),
+                      label: tl(`booking_status_${BookingStatus.COMPLETED}`),
                     },
                     {
                       id: BookingStatus.RESCHEDULED,
-                      label: t(`booking_status_${BookingStatus.RESCHEDULED}`),
+                      label: tl(`booking_status_${BookingStatus.RESCHEDULED}`),
                     },
                     {
                       id: BookingStatus.CANCELLED,
-                      label: t(`booking_status_${BookingStatus.CANCELLED}`),
+                      label: tl(`booking_status_${BookingStatus.CANCELLED}`),
                     },
                   ]}
                   renderOption={(option) => {
@@ -332,8 +332,8 @@ export const BookingList: FC = () => {
                       ? "primary"
                       : getBookingStatusColor(query.status as BookingStatus);
                     const statusLabel = !query.status
-                      ? t("active")
-                      : t(`booking_status_${query.status}`);
+                      ? tl("active")
+                      : tl(`booking_status_${query.status}`);
 
                     return (
                       <Card
@@ -360,7 +360,7 @@ export const BookingList: FC = () => {
                 />
 
                 <Renderer visible={isCanResetFilter}>
-                  <Tooltip label={t("reset_filter")}>
+                  <Tooltip label={tl("reset_filter")}>
                     <ActionIcon
                       variant="subtle"
                       color={color("gray")}
@@ -388,7 +388,7 @@ export const BookingList: FC = () => {
                   variant="light"
                   onClick={() => setDate(new Date())}
                 >
-                  {t(query.view === CalendarView.DAY ? "today" : "this_week")}
+                  {tl(query.view === CalendarView.DAY ? "today" : "this_week")}
                 </Button>
               )}
 
@@ -397,14 +397,14 @@ export const BookingList: FC = () => {
                 onChange={(view) => bookings.setParams({ view })}
               />
 
-              <Tooltip label={t("select_booking_slots_to_create_booking_desc")}>
+              <Tooltip label={tl("select_booking_slots_to_create_booking_desc")}>
                 <Button
                   size="compact-sm"
                   h={30}
                   leftIcon={IconPlus}
                   onClick={() => OnModalCreateBooking()}
                 >
-                  {t("create_booking")}
+                  {tl("create_booking")}
                 </Button>
               </Tooltip>
             </Group>

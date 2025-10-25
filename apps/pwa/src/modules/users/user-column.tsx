@@ -5,7 +5,7 @@ import { Column } from "@/components/list/types";
 import { AppEntity } from "@/types";
 import { Group, Stack, Text } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 import { searchEntity } from "../search/search-service";
 import {
   getUserMemberRoleLabel,

@@ -3,7 +3,7 @@
 import { getGlobal } from "@/global";
 import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
-import { FC, PropsWithChildren, useCallback, useEffect, useRef, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { Context, LayoutComponents, LayoutContext, LayoutState } from "./layout-context";
 import { getViewSize, getViewType } from "./layout-service";
 

@@ -2,41 +2,45 @@ import { isDevelopment } from "@/service";
 import { Coordinates } from "@/types";
 import { isServer } from "@/utils/common.utils";
 import { CheckInLocation } from "../hrm-timekeepings/hrm-timekeepings-types";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 
-export const isGeolocationSupported = () => !isServer()
-  && "navigator" in window
-  && "geolocation" in navigator
+export const isGeolocationSupported = () =>
+  !isServer() && "navigator" in window && "geolocation" in navigator;
 
 export const getGeolocation = async () => {
   return new Promise<GeolocationPosition>((resolve, reject) => {
     if (isGeolocationSupported()) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        if (isDevelopment()) localStorage.setItem('location', JSON.stringify(position));
-        resolve(position)
-      }, (err) => {
-        if ([
-          GeolocationPositionError.PERMISSION_DENIED,
-          GeolocationPositionError.POSITION_UNAVAILABLE,
-          GeolocationPositionError.TIMEOUT,
-        ].includes(err.code as any)) {
-          if (isDevelopment()) {
-            // Return fake coordinates
-            const location = localStorage.getItem('location');
-            if (location) resolve(JSON.parse(location));
-            else reject(new Error(t(`locations_error_code_${err.code}`)))
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          if (isDevelopment()) localStorage.setItem("location", JSON.stringify(position));
+          resolve(position);
+        },
+        (err) => {
+          if (
+            [
+              GeolocationPositionError.PERMISSION_DENIED,
+              GeolocationPositionError.POSITION_UNAVAILABLE,
+              GeolocationPositionError.TIMEOUT,
+            ].includes(err.code as any)
+          ) {
+            if (isDevelopment()) {
+              // Return fake coordinates
+              const location = localStorage.getItem("location");
+              if (location) resolve(JSON.parse(location));
+              else reject(new Error(tl(`locations_error_code_${err.code}`)));
+            } else {
+              reject(new Error(tl(`locations_error_code_${err.code}`)));
+            }
           } else {
-            reject(new Error(t(`locations_error_code_${err.code}`)))
+            reject(err);
           }
-        } else {
-          reject(err)
         }
-      })
+      );
     } else {
-      reject(new Error(t('locations_unsupported_browser')))
+      reject(new Error(tl("locations_unsupported_browser")));
     }
-  })
-}
+  });
+};
 
 export function calculateDistance(coords: Coordinates, compareCoords: Coordinates): number {
   const { lat: lat1, lng: lon1 } = coords;
@@ -48,8 +52,10 @@ export function calculateDistance(coords: Coordinates, compareCoords: Coordinate
 
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(degreesToRadians(lat1)) * Math.cos(degreesToRadians(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    Math.cos(degreesToRadians(lat1)) *
+      Math.cos(degreesToRadians(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c;
@@ -61,11 +67,14 @@ export function degreesToRadians(degrees: number): number {
   return degrees * (Math.PI / 180);
 }
 
-export function findAvailableLocationToCheckIn(coords: Coordinates, checkInLocations: CheckInLocation[]) {
+export function findAvailableLocationToCheckIn(
+  coords: Coordinates,
+  checkInLocations: CheckInLocation[]
+) {
   return checkInLocations.find((location) => {
     const distance = calculateDistance(coords, location.coordinates);
     return distance <= location.radius && !location.disabled;
-  })
+  });
 }
 
 // export const detectEntityLocation = (address: string) => {
@@ -84,5 +93,5 @@ export function findAvailableLocationToCheckIn(coords: Coordinates, checkInLocat
 // }
 
 export const getGoogleMapLinkCoord = (coord: Coordinates) => {
-  return `https://www.google.com/maps/place/${coord.lat},${coord.lng}`
-}
+  return `https://www.google.com/maps/place/${coord.lat},${coord.lng}`;
+};

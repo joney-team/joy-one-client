@@ -11,7 +11,7 @@ import { ActionIcon, Group, Menu, MenuDropdown, Stack, ThemeIcon } from "@mantin
 import { IconColumns3, IconDotsVertical, IconEye, IconEyeOff } from "@tabler/icons-react";
 import { ListContext, Column } from "../types";
 import { ActionButton } from "./action-button";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { BaseData } from "@/components/list/types";
 
 export const ColsSettings: FC<ListContext> = (ctx) => {
@@ -132,7 +132,7 @@ function ColumnItem<T = any>(props: {
           <IconDotsVertical size={16} />
         </ThemeIcon>
 
-        {t(column.name || columnKey)}
+        {tl(column.name || columnKey)}
       </Group>
 
       <ActionIcon variant="subtle" size="sm" color="gray" onClick={toggleVisible}>

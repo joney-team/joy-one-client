@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarView } from "@/types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { ActionIcon, Button, Card, Group, Tooltip } from "@mantine/core";
 import {
   IconCalendar,
@@ -56,13 +56,13 @@ export const CalendarViewSelector: FC<{
                 tt="capitalize"
                 px={8}
               >
-                {t(key)}
+                {tl(key)}
               </Button>
             );
           }
 
           return (
-            <Tooltip key={key} label={t(key)} tt="capitalize">
+            <Tooltip key={key} label={tl(key)} tt="capitalize">
               <ActionIcon
                 variant={isActive ? "filled" : "subtle"}
                 color={color(isActive ? "primary" : "gray")}

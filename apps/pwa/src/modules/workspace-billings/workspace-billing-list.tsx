@@ -7,7 +7,7 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDateTime, t } from "@/modules/lang/lang-service";
+import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
 import { useColor, useGradient } from "@/modules/theme/use-color";
 import { OnModalWorkspaceBillingDeposit } from "@/modules/workspace-billings/modals/modal-workspace-billing-deposit";
 import { calculateWorkspaceSubscriptionBillings } from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
@@ -64,14 +64,14 @@ export const WorkspaceBillingList: FC = () => {
 
   useEffect(() => {
     layout.setComponents({
-      head: t("ws_sub_billings"),
+      head: tl("ws_sub_billings"),
       navigation: (
         <Button
           radius={100}
           leftIcon={IconArrowDown}
           onClick={() => OnModalWorkspaceBillingDeposit()}
         >
-          {t("deposit")}
+          {tl("deposit")}
         </Button>
       ),
     });
@@ -120,7 +120,7 @@ export const WorkspaceBillingList: FC = () => {
                 <IconCashRegister size={40} strokeWidth={0.9} color="white" />
                 <Stack gap={0}>
                   <Text c="white" fz={12} fw={300}>
-                    {t("balance")}
+                    {tl("balance")}
                   </Text>
                   <Text c="white" fw={700} fz={16}>
                     {num(billings.report?.balance || 0)}
@@ -144,7 +144,7 @@ export const WorkspaceBillingList: FC = () => {
                 <IconReceipt size={40} strokeWidth={0.9} />
                 <Stack gap={0}>
                   <Text c="dark" fz={12} fw={300}>
-                    {t("pendingPayment")}
+                    {tl("pendingPayment")}
                   </Text>
                   <Text
                     c={(billings.report?.pendingPayment || 0) !== 0 ? "orange" : "dark"}
@@ -160,7 +160,7 @@ export const WorkspaceBillingList: FC = () => {
         </SimpleGrid>
 
         <Stack gap={10}>
-          <SessionTitle name={t("ws_billings")} icon={IconReportMoney} />
+          <SessionTitle name={tl("ws_billings")} icon={IconReportMoney} />
 
           {billings.isHasData && (
             <SimpleGrid cols={{ md: 1 }}>
@@ -189,7 +189,7 @@ export const WorkspaceBillingList: FC = () => {
                         </Text>
 
                         <Text fz={em(10)} ta="right" c="gray">
-                          {t("balance_at_billing_time")}: {num(billing.balance)}
+                          {tl("balance_at_billing_time")}: {num(billing.balance)}
                         </Text>
                       </Stack>
                     </Group>

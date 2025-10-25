@@ -1,4 +1,4 @@
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Card, Group, Text } from "@mantine/core";
 import { Node } from "@xyflow/react";
 
@@ -36,7 +36,7 @@ export const GroupNode = (props: any) => {
         bg={bg || "transparent"}
       >
         <Text fz={14} fw={500} truncate="end">
-          {t(title)}
+          {tl(title)}
         </Text>
       </Card>
     </Group>

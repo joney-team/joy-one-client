@@ -6,7 +6,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { TaskForm, TaskFormProps } from "@/modules/tasks/components/form-task";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { getTaskEntity } from "@/modules/tasks/tasks-service";
 import { String } from "@/utils/string.utils";
@@ -45,7 +45,7 @@ export const ModalCreateTask: FC = () => {
       opened={opened}
       title={
         <ModalTitle
-          title={props.current?.task ? t("task") : `${t("create")} ${t("task")}`}
+          title={props.current?.task ? tl("task") : `${tl("create")} ${tl("task")}`}
           icon={IconStackPush}
         />
       }
@@ -95,7 +95,7 @@ export const ModalCreateTask: FC = () => {
             <Text>/</Text>
 
             <Text px={8} fz={em(14)} fw={300}>
-              {t("new_task")}
+              {tl("new_task")}
             </Text>
           </Group>
         </Renderer>

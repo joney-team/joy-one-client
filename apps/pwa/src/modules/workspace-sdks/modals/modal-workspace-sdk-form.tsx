@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { createWorkspaceSdk } from "@/modules/workspace-sdks/workspace-sdks-service";
 import { WorkspaceSdkEntity } from "@/modules/workspace-sdks/workspace-sdks-types";
 import { onError } from "@/utils/exceptions.utils";
@@ -30,7 +30,7 @@ export const ModalWorkspaceSdkForm: FC = () => {
     } as any,
     validate: {
       name: (value: string) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
     },
   });
@@ -73,7 +73,7 @@ export const ModalWorkspaceSdkForm: FC = () => {
           leftSection={<IconCheck strokeWidth={1.2} />}
           type="submit"
         >
-          {t("complete")}
+          {tl("complete")}
         </Button>
       </Stack>
     </Modal>

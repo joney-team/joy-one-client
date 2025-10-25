@@ -1,7 +1,7 @@
 import { useColor } from "@/modules/theme/use-color";
 import { Image } from "@/components/image";
 import { useLang } from "@/modules/lang/lang-context";
-import { localeNames, t } from "@/modules/lang/lang-service";
+import { localeNames, tl } from "@/modules/lang/lang-service";
 import { Locale } from "@/modules/lang/lang-types";
 import { Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -31,7 +31,7 @@ export const ModalLang: FC = () => {
           </ThemeIcon>
 
           <Title ta="center" fz={em(18)} fw={500} c={color("primary")}>
-            {t("select_language")}
+            {tl("select_language")}
           </Title>
         </Group>
 
@@ -69,7 +69,7 @@ export const ModalLang: FC = () => {
               <IconLanguage strokeWidth={1.5} size={30} />
             </ThemeIcon>
             <Text fz={em(15)} fw={500}>
-              {t("use_device_language")}
+              {tl("use_device_language")}
             </Text>
           </Group>
         </Card>

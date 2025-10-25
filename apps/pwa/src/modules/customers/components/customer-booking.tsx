@@ -7,7 +7,7 @@ import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { EventType } from "@/modules/events/event-types";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useList } from "@/components/list/use-list";
 import { ActionIcon, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { IconCalendar, IconEye, IconLayoutNavbarCollapse } from "@tabler/icons-react";
@@ -76,7 +76,7 @@ export const CustomerBookings: FC<CustomerBookingsProps> = (props) => {
             </ActionIcon>
 
             <Text fz={12} c={isCollapsed ? "gray" : "primary"} fw={400}>
-              {isCollapsed ? `${t("view_all")} (${num(total)})` : t("collapse")}
+              {isCollapsed ? `${tl("view_all")} (${num(total)})` : tl("collapse")}
             </Text>
           </Group>
         </Renderer>

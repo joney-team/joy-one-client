@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useOrderFeatureName } from "@/modules/orders/order-hooks";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
@@ -44,7 +44,7 @@ export const Printer: FC<PrinterProps> = (props) => {
 
   const printTitle = useMemo(() => {
     const entity = "props.receipt" in props ? "receipt" : orderFeatureName.singular;
-    return t(`print_entity`, { entity: t(entity).toLowerCase() });
+    return tl(`print_entity`, { entity: tl(entity).toLowerCase() });
   }, [props, orderFeatureName]);
 
   const printerClass = classNames(styles.Printer, styles[settings.size]);
@@ -129,12 +129,12 @@ export const Printer: FC<PrinterProps> = (props) => {
               <Stack gap={12}>
                 <Group justify="center" mt={16}>
                   <Button miw={150} onClick={handlePrint} leftIcon={IconPrinter}>
-                    {t("print")}
+                    {tl("print")}
                   </Button>
                 </Group>
 
                 <Anchor ta="center" onClick={close} fz={12} c="gray">
-                  {t("exit")}
+                  {tl("exit")}
                 </Anchor>
               </Stack>
             </Stack>

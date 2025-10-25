@@ -4,7 +4,7 @@ import { useLayout } from "@/layout/layout-context";
 import { downloadFileFromURL, removeFile } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
@@ -101,7 +101,7 @@ export const ModalFileGallery: FC = () => {
   const onDownload = async () => {
     if (!activeFile || typeof activeFile === "string") return;
     await onActionLoad({
-      name: t("file_downloading"),
+      name: tl("file_downloading"),
       process: () =>
         downloadFileFromURL(renderFileUrl(activeFile.url), activeFile.fileName || _file.name),
     });
@@ -208,12 +208,12 @@ export const ModalFileGallery: FC = () => {
           return (
             <Stack justify="center" align="center">
               <Text fz={em(15)} c="white">
-                {t("cannot_display_file")}
+                {tl("cannot_display_file")}
               </Text>
 
               <Anchor href={renderFileUrl(activeFile.url)} target="__blank" c="white" ta="center">
                 <Button rightSection={<IconBrowser strokeWidth={1.5} />}>
-                  {t("open_with_browser")}
+                  {tl("open_with_browser")}
                 </Button>
               </Anchor>
             </Stack>

@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { onError } from "@/utils/exceptions.utils";
 import { Stack, TextInput } from "@mantine/core";
@@ -36,13 +36,13 @@ const ModalCheckEInvoice: FC = () => {
     <form onSubmit={onSubmit}>
       <Stack>
         <TextInput
-          label={t("receipt_code")}
+          label={tl("receipt_code")}
           value={receiptCode}
           onChange={(e) => setReceiptCode(e.target.value)}
         />
 
         <Button loading={isSubmitting} type="submit">
-          {t("check_invoice")}
+          {tl("check_invoice")}
         </Button>
 
         {Object.keys(eInvoiceData).length > 0 && <JsonView value={eInvoiceData} />}
@@ -54,7 +54,7 @@ const ModalCheckEInvoice: FC = () => {
 export const OnModalCheckEInvoice = () => {
   modals.open({
     modalId: "OnModalCheckEInvoice",
-    title: <ModalTitle title={t("check_invoice")} icon={IconFileInvoice} />,
+    title: <ModalTitle title={tl("check_invoice")} icon={IconFileInvoice} />,
     children: <ModalCheckEInvoice />,
   });
 };

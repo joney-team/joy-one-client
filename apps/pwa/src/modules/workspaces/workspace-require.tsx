@@ -7,7 +7,7 @@ import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { uploadFile } from "@/modules/files/file-service";
 import { useLang } from "@/modules/lang/lang-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { LocationEntity } from "@/modules/locations/locations-types";
 import { WorkspaceTypeItem } from "@/modules/workspaces/components/workpsace-type-item";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -87,16 +87,16 @@ export const WorkspaceRequire: FC = () => {
 
           {member ? (
             <Text ta="center" fz={em(15)} fw={500}>
-              {t("preparing_workspace_msg")}
+              {tl("preparing_workspace_msg")}
             </Text>
           ) : (
             <Text ta="center" fz={em(15)} fw={500}>
-              {t("guest_user_msg", { workspace: app.metadata.appName || "Workspace" })}
+              {tl("guest_user_msg", { workspace: app.metadata.appName || "Workspace" })}
             </Text>
           )}
 
           <Button mt={5} variant="transparent" color="gray" onClick={() => auth.signOut()} fz={11}>
-            {t("use_another_account")}
+            {tl("use_another_account")}
           </Button>
         </Stack>
       </Container>
@@ -113,7 +113,7 @@ export const WorkspaceRequire: FC = () => {
         <Stack mih={layout.height} align="center" justify="center" gap={30} py={16}>
           <Image src="/images/workspace.png" w="100%" />
           <Title fw={500} fz={30}>
-            {t("new_workspace")}
+            {tl("new_workspace")}
           </Title>
 
           <Button
@@ -123,16 +123,16 @@ export const WorkspaceRequire: FC = () => {
             radius={100}
             size="lg"
           >
-            {t("start_now")}
+            {tl("start_now")}
           </Button>
 
-          <Divider label={t("or")} w="80%" />
+          <Divider label={tl("or")} w="80%" />
 
-          <Text ta="center">{t("join_workspace", { email: auth.user?.email })}</Text>
+          <Text ta="center">{tl("join_workspace", { email: auth.user?.email })}</Text>
 
           <Center>
             <Anchor onClick={() => auth.signOut()} fz={11} fw={700} c="gray">
-              {t("logout")}
+              {tl("logout")}
             </Anchor>
           </Center>
         </Stack>
@@ -144,14 +144,14 @@ export const WorkspaceRequire: FC = () => {
       <Stack mih={layout.height} py={16} justify="center">
         <Stack gap={5}>
           <Title ta="center" fw={500} fz={30}>
-            {t("select")} Workspace
+            {tl("select")} Workspace
           </Title>
           <Text ta="center" fz="xs" c="gray">
-            {t("company")} / {t("company_branch")}
+            {tl("company")} / {tl("company_branch")}
           </Text>
 
           <Stack mt={30}>
-            {availabelUserMembers.length === 0 && <Text>{t("not_have_workspace_msg")}</Text>}
+            {availabelUserMembers.length === 0 && <Text>{tl("not_have_workspace_msg")}</Text>}
 
             {availabelUserMembers.map((userMember) => {
               if (!userMember.workspaceId) return null;
@@ -205,12 +205,12 @@ export const WorkspaceRequire: FC = () => {
                 leftSection={<IconPlus strokeWidth={1.2} />}
                 type="submit"
               >
-                {t("create_new_workspace")}
+                {tl("create_new_workspace")}
               </Button>
             </Center>
 
             <Anchor ta="center" onClick={() => auth.signOut()} fz={11} fw={700} c="gray">
-              {t("logout")}
+              {tl("logout")}
             </Anchor>
           </Stack>
         </Stack>
@@ -241,14 +241,14 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
     },
     validate: {
       name: (value: string) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
       code: (value: string) => {
-        if (!value) return t("required");
-        if (!/^[A-Z0-9]+$/.test(value)) return t("invalid_workspace_code");
+        if (!value) return tl("required");
+        if (!/^[A-Z0-9]+$/.test(value)) return tl("invalid_workspace_code");
       },
       type: (value: WorkspaceType) => {
-        if (!value) return t("required");
+        if (!value) return tl("required");
       },
     },
   });
@@ -289,10 +289,10 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
 
       <Stack gap={3}>
         <Title ta="center" fw={500} fz={30}>
-          {t("create")} Workspace
+          {tl("create")} Workspace
         </Title>
         <Text ta="center" fz="xs" c="gray">
-          {t("company")} / {t("company_branch")}
+          {tl("company")} / {tl("company_branch")}
         </Text>
       </Stack>
 
@@ -300,7 +300,7 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
         <Group align="start">
           <TextInput
             flex={1}
-            label={t("name")}
+            label={tl("name")}
             placeholder="Gold Dental"
             {...form.getInputProps("name")}
             onChange={onChangeName}
@@ -309,9 +309,9 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
           <TextInput
             label={
               <Group gap={5}>
-                {t("code")}
+                {tl("code")}
 
-                <Tooltip label={t("workspace_code_explain")}>
+                <Tooltip label={tl("workspace_code_explain")}>
                   <IconInfoCircle size={16} strokeWidth={1.5} />
                 </Tooltip>
               </Group>
@@ -337,8 +337,8 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
         </Group>
 
         <InputWrapper
-          label={t("workspace_type")}
-          description={t("workspace_type_desc")}
+          label={tl("workspace_type")}
+          description={tl("workspace_type_desc")}
           {...form.getInputProps("type")}
         >
           <Group pt={10} className="unselectable">
@@ -347,7 +347,7 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
                 <WorkspaceTypeItem
                   key={type}
                   icon={getWorkspaceTypeIcon(type)}
-                  label={t(`ws_${type}`).toString()}
+                  label={tl(`ws_${type}`).toString()}
                   isActive={form.values.type === type}
                   onClick={() => form.setFieldValue("type", type)}
                 />
@@ -359,11 +359,11 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
 
       <Stack align="center" mt={16}>
         <Button onClick={onSubmit} loading={isSubmitting} action leftIcon={IconCheck} radius={100}>
-          {t("complete")}
+          {tl("complete")}
         </Button>
 
         <Anchor onClick={props.onDone} fz={11} fw={700} c="gray">
-          {t("exit")}
+          {tl("exit")}
         </Anchor>
       </Stack>
     </Stack>

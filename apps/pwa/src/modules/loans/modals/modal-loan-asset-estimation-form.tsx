@@ -4,7 +4,7 @@ import { useFormSubmit } from "@/hooks/use-form";
 import { Button } from "@/components/buttons/button";
 import { FilesBox } from "@/modules/files/files-box";
 import { ModalTitle } from "@/components/modal-title";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import {
   LoanAssetEstimation,
@@ -117,7 +117,7 @@ export const ModalLoanAssetEstimationForm: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={t("loan-asset-estimations")} icon={IconCoins} />}
+      title={<ModalTitle title={tl("loan-asset-estimations")} icon={IconCoins} />}
       onClose={onClose}
       opened={opened}
       size="xl"
@@ -130,7 +130,7 @@ export const ModalLoanAssetEstimationForm: FC = () => {
             data={[LoanAssetType.MOTOBIKE_REGISTRATION, LoanAssetType.CAR_REGISTRATION].map(
               (type) => ({
                 value: type,
-                label: t(`loan_asset_type_estimation_${type}`).replace("Đăng ký", ""),
+                label: tl(`loan_asset_type_estimation_${type}`).replace("Đăng ký", ""),
               })
             )}
             {...form.getInputProps("assetType")}
@@ -379,7 +379,7 @@ export const ModalLoanAssetEstimationForm: FC = () => {
         </InputWrapper>
 
         <Button onClick={submitting.handle} loading={submitting.isSubmitting} mt={10}>
-          {t(props?.estimation ? "update" : "create")}
+          {tl(props?.estimation ? "update" : "create")}
         </Button>
       </Stack>
     </Modal>

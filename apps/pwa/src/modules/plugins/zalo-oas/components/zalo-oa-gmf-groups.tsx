@@ -5,7 +5,7 @@ import { ActionIcon, Anchor, Card, Group, Stack, Switch, Text } from "@mantine/c
 import { type FC } from "react";
 import { ZaloOaGmfGroup } from "../zalo-oas-types";
 import { Empty } from "@/components/empty";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { EventType } from "@/modules/events/event-types";
 import { IconExternalLink } from "@tabler/icons-react";
@@ -36,7 +36,7 @@ export const ZaloOaGmfGroups: FC = () => {
                 </Anchor>
 
                 <Text fz={12} c="gray">
-                  {num(item.total_member)} {t("members")}
+                  {num(item.total_member)} {tl("members")}
                 </Text>
               </Group>
 
@@ -53,7 +53,7 @@ export const ZaloOaGmfGroups: FC = () => {
                     },
                   });
                 }}
-                label={t("admin_notifications_switch")}
+                label={tl("admin_notifications_switch")}
               />
             </Stack>
           </Card>

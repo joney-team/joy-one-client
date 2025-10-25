@@ -1,6 +1,6 @@
 import { useRouter } from "@/hooks/use-router";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -116,10 +116,10 @@ export const ProductCard: FC<
                 </ThemeIcon>
 
                 <Text fz={em(15)} c="dark" fw={500}>
-                  {t("HSD")}:{" "}
+                  {tl("HSD")}:{" "}
                   {product.combosExpireInDays && product.combosExpireInDays > 0
-                    ? `${num(product.combosExpireInDays)} ${t("days")}`
-                    : t("unlimited")}
+                    ? `${num(product.combosExpireInDays)} ${tl("days")}`
+                    : tl("unlimited")}
                 </Text>
               </Group>
             </Renderer>
@@ -141,7 +141,7 @@ export const ProductCard: FC<
                   <IconStack size={18} />
                 </ThemeIcon>
                 <Text fz={em(15)} fw={500}>
-                  {num(product.supplies.length)} {t("consumables")}
+                  {num(product.supplies.length)} {tl("consumables")}
                 </Text>
               </Group>
             )}
@@ -153,7 +153,7 @@ export const ProductCard: FC<
                 </ThemeIcon>
 
                 <Text fz={em(15)} c="dark" fw={500}>
-                  {t("voucherAmount")}: {num(product.voucherAmount, { type: "money" })}
+                  {tl("voucherAmount")}: {num(product.voucherAmount, { type: "money" })}
                 </Text>
               </Group>
 
@@ -164,7 +164,7 @@ export const ProductCard: FC<
 
                 <Stack gap={3}>
                   <Text fz={em(15)} c="dark" fw={500}>
-                    {t("terms_of_use")}:
+                    {tl("terms_of_use")}:
                   </Text>
 
                   <Renderer
@@ -173,7 +173,7 @@ export const ProductCard: FC<
                     }
                   >
                     <Text fw={500} fz={em(13)} c="gray">
-                      • {`${t("include_products")}:`}
+                      • {`${tl("include_products")}:`}
                     </Text>
                     {product.voucherIncludeProducts?.map((product) => {
                       return (
@@ -190,7 +190,7 @@ export const ProductCard: FC<
                     }
                   >
                     <Text fw={500} fz={em(13)} c="gray">
-                      • {`${t("exclude_products")}:`}
+                      • {`${tl("exclude_products")}:`}
                     </Text>
                     {product.voucherExcludeProducts?.map((product) => {
                       return (
@@ -210,7 +210,7 @@ export const ProductCard: FC<
                     }
                   >
                     <Text fw={500} fz={em(13)} c="gray">
-                      • {`${t("apply_all_products")}`}
+                      • {`${tl("apply_all_products")}`}
                     </Text>
                   </Renderer>
                 </Stack>
@@ -229,7 +229,7 @@ export const ProductCard: FC<
                 fz={10}
                 px={8}
               >
-                {product.stock.quantity <= 0 ? t("out_of_stock") : num(product.stock.quantity)}
+                {product.stock.quantity <= 0 ? tl("out_of_stock") : num(product.stock.quantity)}
               </Badge>
             </Group>
           )}

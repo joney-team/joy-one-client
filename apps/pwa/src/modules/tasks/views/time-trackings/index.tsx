@@ -7,7 +7,7 @@ import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { OnModalTaskTimeTracking } from "@/modules/tasks/modals/modal-task-time-tracking";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
@@ -160,7 +160,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
                   >
                     <Group gap={5}>
                       <Text fz={12} fw={500}>
-                        {t("members")}
+                        {tl("members")}
                       </Text>
 
                       {!isAssigneesReady ? (
@@ -263,7 +263,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
               return (
                 <Group>
                   <Tooltip
-                    label={String.capitalizeFirstLetter(`${t("add")} ${t("time_trackings")}`)}
+                    label={String.capitalizeFirstLetter(`${tl("add")} ${tl("time_trackings")}`)}
                   >
                     <ActionIcon
                       variant="subtle"

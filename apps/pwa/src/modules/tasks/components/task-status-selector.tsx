@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchArray } from "@/modules/search/search-service";
 import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { TaskStatus } from "@/modules/tasks/tasks-types";
@@ -32,8 +32,8 @@ export const TaskStatusSelector: FC<TaskStatusSelectorProps> = (props) => {
     <Selector
       {...props.inputProps}
       pinnedOptions={taskStatuses}
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(status) => {
         return (

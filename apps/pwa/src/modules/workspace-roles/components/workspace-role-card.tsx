@@ -1,7 +1,7 @@
 "use client";
 
 import { OnModalRoleForm } from "@/modules/workspace-roles/modals/modal-workspace-role-form";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import {
   WorkspacePermission,
   WorkspaceSpecialRoleId,
@@ -22,7 +22,7 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
   );
 
   const role = workspace.roles.find((role) => role._id === props.id);
-  const roleName = t(role?.name || `role_${props.id}`);
+  const roleName = tl(role?.name || `role_${props.id}`);
   const permissions =
     (props.id === WorkspaceSpecialRoleId.MEMBER
       ? workspace.settings.memberPermissions
@@ -56,10 +56,10 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
               return (
                 <Fragment>
                   <Text fz={em(12)} c="gray">
-                    • {t("role_access_all")}
+                    • {tl("role_access_all")}
                   </Text>
                   <Text fz={em(12)} c="gray">
-                    • {t("role_owner_desc")}
+                    • {tl("role_owner_desc")}
                   </Text>
                 </Fragment>
               );
@@ -69,10 +69,10 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
               return (
                 <Fragment>
                   <Text fz={em(12)} c="gray">
-                    • {t("role_access_all")}
+                    • {tl("role_access_all")}
                   </Text>
                   <Text fz={em(12)} c="gray">
-                    • {t("role_admin_desc")}
+                    • {tl("role_admin_desc")}
                   </Text>
                 </Fragment>
               );
@@ -82,11 +82,11 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
               return (
                 <Fragment>
                   <Text fz={em(12)} c="gray">
-                    • {t("role_default")}
+                    • {tl("role_default")}
                   </Text>
 
                   <Text fz={em(12)} c="gray">
-                    • {t("grant_permissions")} {permissionCounts}/
+                    • {tl("grant_permissions")} {permissionCounts}/
                     {Object.keys(WorkspacePermission).length}
                   </Text>
                 </Fragment>
@@ -103,7 +103,7 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
                   )}
 
                   <Text fz={em(12)} c="gray">
-                    • {t("grant_permissions")} {permissionCounts}/
+                    • {tl("grant_permissions")} {permissionCounts}/
                     {Object.keys(WorkspacePermission).length}
                   </Text>
                 </Fragment>

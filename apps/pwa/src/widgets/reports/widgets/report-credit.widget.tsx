@@ -2,7 +2,7 @@ import { Button } from "@/components/buttons/button";
 import { SessionTitle } from "@/components/session-title";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { renderDate, t } from "@/modules/lang/lang-service";
+import { renderDate, tl } from "@/modules/lang/lang-service";
 import { getLoanByCode } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanPackageType, LoanReceiptData } from "@/modules/loans/loans-types";
 import { getReceipts, isPartialPayment } from "@/modules/receipts/receipts-service";
@@ -18,6 +18,8 @@ import { getWorkspaceMemberByIds } from "@/modules/workspace-members/workspace-m
 import writeXlsxFile from "write-excel-file";
 import { String } from "@/utils/string.utils";
 import { onError } from "@/utils/exceptions.utils";
+import { Trans } from "@lingui/react/macro";
+import { t } from "@lingui/core/macro";
 
 interface CreditReportItem {
   time: number;
@@ -352,17 +354,17 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
       const headers = [
         [
           {
-            value: t("time"),
+            value: tl("time"),
             rowSpan: 2,
             ...headStyle,
           },
           {
-            value: t("customer"),
+            value: tl("customer"),
             rowSpan: 2,
             ...headStyle,
           },
           {
-            value: t("member"),
+            value: tl("member"),
             rowSpan: 2,
             ...headStyle,
           },
@@ -406,21 +408,21 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
           null,
           ...packageTypes.map((type) => {
             return {
-              value: t(`loan_package_${type}`),
+              value: tl(`loan_package_${type}`),
               align: "center",
               ...headStyle,
             };
           }),
           ...packageTypes.map((type) => {
             return {
-              value: t(`loan_package_${type}`),
+              value: tl(`loan_package_${type}`),
               align: "center",
               ...headStyle,
             };
           }),
           ...packageTypes.map((type) => {
             return {
-              value: t(`loan_package_${type}`),
+              value: tl(`loan_package_${type}`),
               align: "center",
               ...headStyle,
             };
@@ -432,7 +434,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
 
       const totalRow = [
         {
-          value: t("total"),
+          value: tl("total"),
           align: "right",
           span: 3,
           ...headStyle,
@@ -533,10 +535,10 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
       const endAt = receipts[receipts.length - 1]?.paidAt;
 
       const name = String.capitalizeFirstLetter(
-        `${t("reports")} ${t("income_expense")} ${t("from")} ${renderDate(startAt).replace(
+        `${tl("reports")} ${tl("income_expense")} ${tl("from")} ${renderDate(startAt).replace(
           /\//g,
           "-"
-        )} ${t("to")} ${renderDate(endAt).replace(/\//g, "-")}`
+        )} ${tl("to")} ${renderDate(endAt).replace(/\//g, "-")}`
       );
       const blob = new Blob([buffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -558,10 +560,10 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
   return (
     <Card withBorder={false} shadow="xs" p={16} w="100%" h="100%">
       <Stack justify="center" h="100%">
-        <SessionTitle name={t("credit_report_title")} icon={IconReportAnalytics}>
+        <SessionTitle name={t`Statistics of income and expenditure`} icon={IconReportAnalytics}>
           <Group justify="end" flex={1}>
             <Button leftIcon={IconFileExcel} onClick={exportExcel} fz={12}>
-              {t("export")} Excel
+              <Trans>Export</Trans> Excel
             </Button>
           </Group>
         </SessionTitle>

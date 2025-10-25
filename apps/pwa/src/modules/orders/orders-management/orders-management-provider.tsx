@@ -4,7 +4,7 @@ import { useRouter } from "@/hooks/use-router";
 import { useQuery } from "@/modules/apis/use-query";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { t, tMulti } from "@/modules/lang/lang-service";
+import { tl, tMulti } from "@/modules/lang/lang-service";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
 import { ResponseList } from "@/types";
@@ -145,7 +145,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     if (!activeOrder) return;
 
     onArchive({
-      name: activeOrder.code ? tMulti(["order"], [`#${activeOrder.code}`]) : t("order"),
+      name: activeOrder.code ? tMulti(["order"], [`#${activeOrder.code}`]) : tl("order"),
       process: () => {
         if (!activeOrder.isSaved) return Promise.resolve();
         return archiveOrder(activeOrder.id);

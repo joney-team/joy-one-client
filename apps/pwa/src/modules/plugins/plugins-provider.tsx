@@ -6,7 +6,7 @@ import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { getClientLocale, t } from "@/modules/lang/lang-service";
+import { getClientLocale, tl } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onErrorLog } from "@/utils/exceptions.utils";
 import { parseThemeColor, useMantineTheme } from "@mantine/core";
@@ -85,7 +85,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
   const onCreateMessageHub = () => {
     OnModalInput({
       type: InputModalType.TEXT,
-      title: t("enter_name"),
+      title: tl("enter_name"),
       icon: IconMessage,
       value: workspace.userMember.name,
       onDone: async (name) => {
@@ -98,16 +98,16 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
             brandLogo: workspace.userMember.workspace.logo,
             locale: workspace.userMember.workspace.locale || getClientLocale(),
             position: "right",
-            welcomMessage: t("welcome_message_placeholder", {
+            welcomMessage: tl("welcome_message_placeholder", {
               workspaceName: workspace.userMember.workspace.name,
             }),
-            welcomSubMessage: t("welcomSubMessage_placeholder"),
+            welcomSubMessage: tl("welcomSubMessage_placeholder"),
             welcomeInputs: [
               {
                 id: uuid(),
                 type: "name",
-                label: t("input_name_label_placeholder"),
-                description: t("input_name_desc_placeholder"),
+                label: tl("input_name_label_placeholder"),
+                description: tl("input_name_desc_placeholder"),
                 isRequired: true,
               },
             ],

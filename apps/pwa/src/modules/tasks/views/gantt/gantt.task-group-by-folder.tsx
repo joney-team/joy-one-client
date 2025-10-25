@@ -3,7 +3,7 @@
 import { Hovered } from "@/components/hovered";
 import { formatDuration } from "@/components/inputs/estimate-time-input";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity } from "@/modules/tags/tags-types";
@@ -78,7 +78,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
 
   const folderId = tagFolder?._id || "root";
   const folderState = gantt.foldersState[folderId];
-  const folderName = tagFolder?.name || t("general_tasks");
+  const folderName = tagFolder?.name || tl("general_tasks");
   const folderColor = tagFolder?.color || color("primary");
 
   const isCollapsed = !!folderState?.isCollapsed;
@@ -146,7 +146,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
 
                   <SidebarRowSticky>
                     {!!props.tagFolder && (
-                      <Tooltip label={t("update_information")}>
+                      <Tooltip label={tl("update_information")}>
                         <ActionIcon
                           size="sm"
                           variant="subtle"
@@ -161,7 +161,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
                       </Tooltip>
                     )}
 
-                    <Tooltip label={String.capitalizeFirstLetter(`${t("add")} ${t("tasks")}`)}>
+                    <Tooltip label={String.capitalizeFirstLetter(`${tl("add")} ${tl("tasks")}`)}>
                       <QuickCreateTaskInput tagFolderId={props.tagFolder?._id}>
                         <ActionIcon
                           size="sm"

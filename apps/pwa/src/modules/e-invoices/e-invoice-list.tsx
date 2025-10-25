@@ -8,7 +8,7 @@ import { type FC } from "react";
 import { EventType } from "../events/event-types";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { OnReceiptDetailModal } from "../receipts/modals/modal-receipt-detail";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 import { useQuery } from "../apis/use-query";
 import { PluginEInvoicesProviderInformations } from "../plugins/e-invoices/plugin-e-invoices.types";
 import { EnumColumn } from "@/components/list/columns/enum-column";
@@ -47,7 +47,7 @@ export const EInvoiceList: FC = () => {
             name: "invoice",
             render: ({ data }) => (
               <Button onClick={() => window.open(data.url, "_blank")}>
-                {t("view_entity", { entity: t("invoice") })}
+                {tl("view_entity", { entity: tl("invoice") })}
               </Button>
             ),
           },

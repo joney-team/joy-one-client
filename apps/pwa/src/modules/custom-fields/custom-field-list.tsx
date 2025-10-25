@@ -6,7 +6,7 @@ import { Badge, Group, Stack } from "@mantine/core";
 import { IconEdit, IconForms } from "@tabler/icons-react";
 import { type FC } from "react";
 import { EventType } from "../events/event-types";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 import { CustomFieldEntity, CustomFieldType } from "./custom-field-types";
 import { OnModalCustomField } from "./modals/modal-custom-field";
 
@@ -24,7 +24,7 @@ export const CustomFieldList: FC = () => {
           key: { name: "Key", filter: { text: true } },
           type: EnumColumn({
             options: Object.values(CustomFieldType).map((type) => ({
-              label: t(`custom_field_type_${type}`),
+              label: tl(`custom_field_type_${type}`),
               value: type,
             })),
           }),
@@ -35,7 +35,7 @@ export const CustomFieldList: FC = () => {
                 <Group>
                   {value?.map((entity) => (
                     <Badge variant="light" key={entity} color="gray">
-                      {t(`entity_${entity}`)}
+                      {tl(`entity_${entity}`)}
                     </Badge>
                   ))}
                 </Group>

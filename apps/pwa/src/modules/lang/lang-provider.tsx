@@ -2,12 +2,13 @@
 
 import { onReconnected } from "@/modules/events/event-service";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
+import { I18nProvider } from "@lingui/react";
 import { deleteCookie, setCookie } from "cookies-next/client";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+import dayjs from "dayjs";
+import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { getClientLocale } from "./lang-service";
 import { Dictionary, LangState, Locale, LocaleConfig } from "./lang-types";
 
-import dayjs from "dayjs";
 import "dayjs/locale/en";
 import "dayjs/locale/vi";
 
@@ -25,11 +26,17 @@ dayjs.extend(duration);
 
 import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
 import { StorageKey } from "@/types";
+import { i18n as defaultI18n } from "@lingui/core";
 import { getGlobal } from "../../global";
 import { api } from "../apis";
 import { Context } from "./lang-context";
 
+defaultI18n.load(getClientLocale(), {});
+defaultI18n.activate(getClientLocale());
+
 const LangProvider: FC<PropsWithChildren> = (props) => {
+  const i18n = useRef(defaultI18n);
+
   const [locale, _setLocale] = useState(getClientLocale());
   const [config, setConfig] = useState<LocaleConfig>({} as LocaleConfig);
   const [state, setState] = useState<LangState>({} as LangState);
@@ -38,16 +45,22 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
 
   const weekStart = state.isStartOfWeekSunday ? 0 : 1;
 
-  const fetchLocale = async (_locale: string) => {
+  const fetchLocale = async (activeLocale: string) => {
     const { config, dictionary } = await new Promise<{
       config: LocaleConfig;
       dictionary: Dictionary;
     }>((resolve) => {
-      const action = () => {
-        api
-          .get(`/lang/${_locale}`)
-          .then((res) => resolve(res))
-          .catch(() => setTimeout(action, 3000));
+      const action = async () => {
+        try {
+          await api.get(`/lang/${activeLocale}`).then((res) => resolve(res));
+          const catalog = await import(`@/modules/lang/catalog/${activeLocale}.po`);
+
+          i18n.current.load(activeLocale, catalog.messages);
+          i18n.current.activate(activeLocale);
+        } catch (error) {
+          console.warn(`FetchLocale failed`, error);
+          setTimeout(action, 3000);
+        }
       };
 
       action();
@@ -60,13 +73,13 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
     setConfig(config);
   };
 
-  const initialize = async (_locale: Locale) => {
+  const initialize = async (activeLocale: Locale) => {
     try {
-      await runWithDelay(() => fetchLocale(_locale), 1200);
+      await runWithDelay(() => fetchLocale(activeLocale), 1200);
     } catch (error) {
       console.error(error);
     } finally {
-      _setLocale(_locale);
+      _setLocale(activeLocale);
       endAppLoading("lang");
     }
   };
@@ -92,18 +105,20 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
   }, []);
 
   return (
-    <Context.Provider
-      value={{
-        locale,
-        config: config,
-        setLocale,
-        state,
-        setState,
-        weekStart,
-      }}
-    >
-      {props.children}
-    </Context.Provider>
+    <I18nProvider i18n={i18n.current}>
+      <Context.Provider
+        value={{
+          locale,
+          config: config,
+          setLocale,
+          state,
+          setState,
+          weekStart,
+        }}
+      >
+        {props.children}
+      </Context.Provider>
+    </I18nProvider>
   );
 };
 

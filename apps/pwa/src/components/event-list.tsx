@@ -17,7 +17,7 @@ import {
 
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { eventVariantColors, eventVariantIcons } from "@/modules/events/event-config";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -68,7 +68,7 @@ export const EventList: FC<EventListProps> = ({
 
   return (
     <Stack my={my} {...rest}>
-      {showTitle && <Text fz={16}>{t("timeline")}</Text>}
+      {showTitle && <Text fz={16}>{tl("timeline")}</Text>}
 
       <Errored error={events.error} visible={events.isHasError} />
 
@@ -193,7 +193,7 @@ function EventItemTitle(props: { event: EventEntity }) {
     if (!toPriority)
       return (
         <Group gap={4}>
-          <Text fz={14}>{t(`unset_priority`)}</Text>
+          <Text fz={14}>{tl(`unset_priority`)}</Text>
 
           <ThemeIcon size={14} radius={100} color="dark" variant="transparent">
             <IconX strokeWidth={1.5} size={14} />
@@ -203,14 +203,14 @@ function EventItemTitle(props: { event: EventEntity }) {
             <ThemeIcon color={getTaskPriorityColor(fromPriority)} variant="transparent">
               <IconFlagFilled size={16} />
             </ThemeIcon>
-            <Text fz={14}>{t(`task_priority_${fromPriority}`)}</Text>
+            <Text fz={14}>{tl(`task_priority_${fromPriority}`)}</Text>
           </Group>
         </Group>
       );
 
     return (
       <Group gap={4}>
-        <Text fz={14}>{t(`set_priority`)}</Text>
+        <Text fz={14}>{tl(`set_priority`)}</Text>
 
         <ThemeIcon size={14} radius={100} color="dark" variant="transparent">
           <IconArrowRight strokeWidth={1.5} size={14} />
@@ -220,7 +220,7 @@ function EventItemTitle(props: { event: EventEntity }) {
           <ThemeIcon color={getTaskPriorityColor(toPriority)} variant="transparent">
             <IconFlagFilled size={16} />
           </ThemeIcon>
-          <Text fz={14}>{t(`task_priority_${toPriority}`)}</Text>
+          <Text fz={14}>{tl(`task_priority_${toPriority}`)}</Text>
         </Group>
       </Group>
     );
@@ -243,7 +243,7 @@ function EventItemTitle(props: { event: EventEntity }) {
 
     return (
       <Group gap={8}>
-        <Text fz={14}>{t(`status_changed`)}</Text>
+        <Text fz={14}>{tl(`status_changed`)}</Text>
 
         <Group gap={3}>
           <Badge variant="outline" color={fromStatusStyle.color} size="xs">
@@ -281,7 +281,7 @@ function EventItemTitle(props: { event: EventEntity }) {
     if (newAssigneeUserIds.length > 0) {
       return (
         <Group gap={8}>
-          <Text fz={14}>{t(`assigned_to`)}</Text>
+          <Text fz={14}>{tl(`assigned_to`)}</Text>
 
           {newAssigneeUserIds.map((userId: string) => {
             const workspaceMembers = wokspaceMembers.find((m) => m.userId === userId);
@@ -299,7 +299,7 @@ function EventItemTitle(props: { event: EventEntity }) {
     if (removedAssigneeUserIds.length > 0) {
       return (
         <Group gap={8}>
-          <Text fz={14}>{t(`unassigned_from`)}</Text>
+          <Text fz={14}>{tl(`unassigned_from`)}</Text>
 
           {removedAssigneeUserIds.map((userId: string) => {
             const userInfo = wokspaceMembers.find((m) => m.userId === userId);
@@ -316,14 +316,14 @@ function EventItemTitle(props: { event: EventEntity }) {
 
     return (
       <Group>
-        <Text fz={14}>{t(`task_assigned`)}</Text>
+        <Text fz={14}>{tl(`task_assigned`)}</Text>
       </Group>
     );
   }
 
   return (
     <Group>
-      <Text fz={14}>{t(`event_type_${props.event.type}`)}</Text>
+      <Text fz={14}>{tl(`event_type_${props.event.type}`)}</Text>
     </Group>
   );
 }

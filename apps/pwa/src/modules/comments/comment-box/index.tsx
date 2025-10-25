@@ -8,7 +8,7 @@ import { createComment, getComments } from "@/modules/comments/comment-service";
 import { CommentEntity } from "@/modules/comments/comment-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useList } from "@/components/list/use-list";
 import { em, Group, ScrollArea, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
@@ -97,7 +97,7 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
         </ThemeIcon>
 
         <Text fz={em(16)} fw={500}>
-          {t("comments")}
+          {tl("comments")}
         </Text>
       </Group>
 
@@ -160,7 +160,7 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
             >
               <CommentsIllustration width={150} />
               <Text c="gray" fz={12}>
-                {t("no_comments")}
+                {tl("no_comments")}
               </Text>
             </Stack>
           </Renderer>

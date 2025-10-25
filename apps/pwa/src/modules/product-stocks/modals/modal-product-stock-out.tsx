@@ -2,7 +2,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { ProductSelector } from "@/modules/products/components/product-selector";
-import { t, tMulti } from "@/modules/lang/lang-service";
+import { tl, tMulti } from "@/modules/lang/lang-service";
 import { ProductStockEntity } from "@/modules/product-stocks/product-stocks-entity";
 import {
   productStockOut,
@@ -90,7 +90,7 @@ export const ModalProductStockOut: FC = () => {
             onSelect={(product) => form.setFieldValue("product", product)}
             target={(ctx) => {
               return (
-                <InputWrapper flex={1} label={t("product")}>
+                <InputWrapper flex={1} label={tl("product")}>
                   <Input
                     onClick={ctx.toggle}
                     flex={1}
@@ -105,13 +105,13 @@ export const ModalProductStockOut: FC = () => {
           />
 
           <NumberInput
-            label={t("quantity")}
+            label={tl("quantity")}
             {...form.getInputProps("quantity")}
             min={0}
             max={props.current?.stock ? props.current.stock.remainQuantity : undefined}
           />
 
-          <Textarea label={t("note")} {...form.getInputProps("note")} />
+          <Textarea label={tl("note")} {...form.getInputProps("note")} />
         </Stack>
 
         <Stack align="center" mt={16}>
@@ -122,7 +122,7 @@ export const ModalProductStockOut: FC = () => {
             loading={form.submitting}
             onClick={onSubmit}
           >
-            {t("complete")}
+            {tl("complete")}
           </Button>
         </Stack>
       </Stack>

@@ -10,7 +10,7 @@ import { StatusColumn } from "@/components/list/columns/status-column";
 import { OnModalPrinter } from "@/modals/modal-printer";
 import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
 import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
@@ -79,7 +79,7 @@ export const ReceiptList: FC = () => {
             icon: IconArrowsDoubleSwNe,
             w: 110,
             options: Object.values(ReceiptType).map((type) => ({
-              label: t(`receipt_type_${type}`),
+              label: tl(`receipt_type_${type}`),
               value: type,
               color: receiptTypeOptions[type].color,
               icon: receiptTypeOptions[type].icon,
@@ -97,7 +97,7 @@ export const ReceiptList: FC = () => {
           status: StatusColumn({
             w: 180,
             options: Object.values(ReceiptStatus).map((status) => ({
-              label: t(`receipt_status_${status}`),
+              label: tl(`receipt_status_${status}`),
               value: status,
               color: receiptStatusOptions[status].color,
             })),
@@ -106,7 +106,7 @@ export const ReceiptList: FC = () => {
             icon: IconCreditCard,
             w: 180,
             options: Object.values(ReceiptPaymentMethod).map((paymentMethod) => ({
-              label: t(`payment_method_${paymentMethod}`),
+              label: tl(`payment_method_${paymentMethod}`),
               value: paymentMethod,
               color: receiptPaymentMethodOptions[paymentMethod].color,
               icon: receiptPaymentMethodOptions[paymentMethod].icon,
@@ -117,7 +117,7 @@ export const ReceiptList: FC = () => {
         filterModes={[
           {
             param: "today",
-            name: t("today_entity", { entity: t("receipts") }),
+            name: tl("today_entity", { entity: tl("receipts") }),
             icon: IconCalendarDown,
             replaceFilterKeys: ["createdAt", "paidAt"],
             params: () => ({ today: true }),

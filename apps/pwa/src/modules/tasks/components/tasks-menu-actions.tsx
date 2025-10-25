@@ -14,7 +14,7 @@ import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { useTaskHistories } from "@/modules/tasks/task-history-context";
@@ -90,7 +90,7 @@ export const TaskMenuActions: FC = () => {
         {layout.view === "mobile" && (
           <ButtonSelect
             icon={IconFolder}
-            label={t("folder")}
+            label={tl("folder")}
             autoHideLabel
             value={tasks.tagFolder?._id}
             options={tasks.tagFolders.map((tagFolder) => ({
@@ -107,7 +107,7 @@ export const TaskMenuActions: FC = () => {
         {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
           <ButtonSelect
             icon={IconSettings}
-            label={t("settings")}
+            label={tl("settings")}
             iconStrokeWidth={1.8}
             onClick={() => OnTaskSatusesModal()}
           />
@@ -162,7 +162,7 @@ export const TaskMenuActions: FC = () => {
                 >
                   <Group gap={5}>
                     <Text fz={12} fw={500}>
-                      {t("assignee")}
+                      {tl("assignee")}
                     </Text>
 
                     {!isAssigneesReady ? (
@@ -265,7 +265,7 @@ export const TaskMenuActions: FC = () => {
                 >
                   <Group gap={5}>
                     <Text fz={12} fw={500}>
-                      {t("partners")}
+                      {tl("partners")}
                     </Text>
 
                     {/* TODO: display partners */}
@@ -344,7 +344,7 @@ export const TaskMenuActions: FC = () => {
                 >
                   <Group gap={5}>
                     <Text fz={12} fw={500}>
-                      {t("tags")}
+                      {tl("tags")}
                     </Text>
                     <Renderer visible={!!isHasTag}>
                       <Group gap={3} wrap="nowrap">
@@ -396,14 +396,14 @@ export const TaskMenuActions: FC = () => {
 
         <ButtonSelect
           icon={IconFlagFilled}
-          label={t("priority")}
+          label={tl("priority")}
           autoHideLabel
           value={tasks.state.priority}
           options={Object.values(TaskPriority)
             .reverse()
             .map((priority) => ({
               value: priority,
-              label: t(`task_priority_${priority}`),
+              label: tl(`task_priority_${priority}`),
               icon: IconFlagFilled,
               activeColor: getTaskPriorityColor(priority),
             }))}
@@ -413,7 +413,7 @@ export const TaskMenuActions: FC = () => {
 
         <ButtonSelect
           icon={IconCircleCheck}
-          label={tasks.state.showClosed ? t("hide_closed") : t("show_closed")}
+          label={tasks.state.showClosed ? tl("hide_closed") : tl("show_closed")}
           isActive={tasks.state.showClosed}
           iconStrokeWidth={1.8}
           onClick={() => {
@@ -435,7 +435,7 @@ export const TaskMenuActions: FC = () => {
             style={{ borderColor: color("gray.5") }}
           >
             <Group gap={0}>
-              <Tooltip label={t("undo")}>
+              <Tooltip label={tl("undo")}>
                 <ActionIcon
                   disabled={!isAbleToUndo}
                   variant="subtle"
@@ -449,7 +449,7 @@ export const TaskMenuActions: FC = () => {
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={t("redo")}>
+              <Tooltip label={tl("redo")}>
                 <ActionIcon
                   disabled={!isAbleToRedo}
                   variant="subtle"

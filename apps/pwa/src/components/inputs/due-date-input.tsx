@@ -1,6 +1,6 @@
 "use client";
 
-import { renderDate, renderDateTime, getDateTimeFormat, t } from "@/modules/lang/lang-service";
+import { renderDate, renderDateTime, getDateTimeFormat, tl } from "@/modules/lang/lang-service";
 import { DateTime } from "@/utils/date-time.utils";
 import {
   ActionIcon,
@@ -101,7 +101,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
           <Group align="end" gap={5}>
             <TextInput
               flex={1}
-              label={t("start_date")}
+              label={tl("start_date")}
               leftSection={<IconCalendar strokeWidth={1.3} />}
               value={renderDateTime(props.startDate, true)}
               styles={{
@@ -137,7 +137,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
           <Group align="end" gap={5}>
             <TextInput
               flex={1}
-              label={t("due_date")}
+              label={tl("due_date")}
               leftSection={<IconCalendar strokeWidth={1.3} />}
               value={renderDateTime(props.dueDate, true)}
               placeholder={getDateTimeFormat()}
@@ -185,7 +185,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             px={5}
           >
             <Suggestion
-              label={t("today")}
+              label={tl("today")}
               value={dayjs().format("dddd")}
               onSelect={() => {
                 onChangePointedValue(DateTime.getStartEndOfDay(new Date()).end);
@@ -193,7 +193,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t("tomorrow")}
+              label={tl("tomorrow")}
               value={renderDate(Date.now() + 1000 * 60 * 60 * 24)}
               onSelect={() => {
                 onChangePointedValue(
@@ -203,7 +203,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t("this_weekend")}
+              label={tl("this_weekend")}
               value={renderDate(DateTime.getStartEndOfWeek(Date.now()).end)}
               onSelect={() => {
                 onChangePointedValue(DateTime.getStartEndOfWeek(Date.now()).end);
@@ -211,7 +211,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t("next_weekend")}
+              label={tl("next_weekend")}
               value={renderDate(
                 DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7).end
               )}
@@ -223,7 +223,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t("range_week", { week: 2 })}
+              label={tl("range_week", { week: 2 })}
               value={renderDate(
                 DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2).end
               )}
@@ -235,7 +235,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t("range_week", { week: 4 })}
+              label={tl("range_week", { week: 4 })}
               value={renderDate(
                 DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4).end
               )}
@@ -247,7 +247,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t("range_week", { week: 8 })}
+              label={tl("range_week", { week: 8 })}
               value={renderDate(
                 DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8).end
               )}

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { api } from "@/modules/apis";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
@@ -40,10 +40,10 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
     },
     validate: {
       user: (value: string) => {
-        if (!value) return t("must_be_provided");
+        if (!value) return tl("must_be_provided");
       },
       pass: (value: string) => {
-        if (!value) return t("must_be_provided");
+        if (!value) return tl("must_be_provided");
       },
     },
   });

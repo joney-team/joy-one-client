@@ -7,7 +7,7 @@ import { UpdatePassword } from "./components/update-password";
 import { UserDeviceList } from "./components/user-device-list";
 import { SessionTitle } from "@/components/session-title";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Stack } from "@mantine/core";
 import { IconLockFilled } from "@tabler/icons-react";
 
@@ -16,7 +16,7 @@ export const UserProfileSecure: FC = () => {
 
   useEffect(() => {
     layout.setComponents({
-      head: t("secure"),
+      head: tl("secure"),
     });
   }, []);
 
@@ -24,7 +24,7 @@ export const UserProfileSecure: FC = () => {
     <Container p={16}>
       <Stack gap={30}>
         <Stack>
-          <SessionTitle name={t("update_password")} icon={IconLockFilled} />
+          <SessionTitle name={tl("update_password")} icon={IconLockFilled} />
           <UpdatePassword />
         </Stack>
 

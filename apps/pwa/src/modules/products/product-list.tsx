@@ -4,7 +4,7 @@ import { Clickable } from "@/components/clickable";
 import { EntityImage } from "@/components/entity-image";
 import { List } from "@/components/list";
 import { EventType } from "@/modules/events/event-types";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
@@ -72,7 +72,7 @@ export const ProductList: FC = () => {
                   variant={data.stock.quantity > 0 ? "light" : "outline"}
                   color={data.stock.quantity <= 0 ? "gray" : undefined}
                 >
-                  {data.stock.quantity <= 0 ? t("out_of_stock") : num(data.stock.quantity)}
+                  {data.stock.quantity <= 0 ? tl("out_of_stock") : num(data.stock.quantity)}
                 </Badge>
               );
             },

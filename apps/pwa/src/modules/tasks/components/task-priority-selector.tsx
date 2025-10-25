@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { getTaskPriorityColor } from "@/modules/tasks/tasks-service";
 import { TaskPriority } from "@/modules/tasks/tasks-types";
 import {
@@ -34,8 +34,8 @@ export const TaskPrioritySelector: FC<TaskPrioritySelectorProps> = (props) => {
     <Selector
       {...props.inputProps}
       pinnedOptions={Object.values(TaskPriority).map((priority) => ({ id: priority }))}
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(priority) => {
         const priorityColor = getTaskPriorityColor(priority.id);
@@ -46,7 +46,7 @@ export const TaskPrioritySelector: FC<TaskPrioritySelectorProps> = (props) => {
                 <IconFlagFilled size={20} />
               </ThemeIcon>
               <Stack gap={3}>
-                <Text>{t(`task_priority_${priority.id}`)}</Text>
+                <Text>{tl(`task_priority_${priority.id}`)}</Text>
               </Stack>
             </Group>
           </Combobox.Option>

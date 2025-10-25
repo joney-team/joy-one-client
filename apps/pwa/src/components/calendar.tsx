@@ -1,8 +1,10 @@
 "use client";
 
-import { CalendarView } from "@/types";
-import { renderDate, t } from "@/modules/lang/lang-service";
+import { renderDate } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { CalendarView } from "@/types";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Badge, Card, Group, SimpleGrid, Stack, Text, alpha, em } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconCalendarDown, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
@@ -11,7 +13,6 @@ import { FC, useState } from "react";
 import { Button } from "./buttons/button";
 import { CalendarViewSelector } from "./calendar-view-selector";
 import { LaunchingSoon } from "./launching-soon";
-import { useColorScheme } from "@/modules/theme/use-color-scheme";
 
 interface CalendarProps {
   initialDate?: Date;
@@ -112,7 +113,7 @@ export const Calendar: FC<CalendarProps> = (props) => {
         <Group gap={5}>
           {!dayjs(date).isSame(new Date(), view) && (
             <Button size="compact-sm" leftIcon={IconCalendarDown} variant="light" onClick={goToday}>
-              {t("today")}
+              <Trans>Today</Trans>
             </Button>
           )}
 

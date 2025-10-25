@@ -1,6 +1,6 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { t, tMulti } from "@/modules/lang/lang-service";
+import { tl, tMulti } from "@/modules/lang/lang-service";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { useProductCombo } from "@/modules/product-combos/product-combos-service";
 import { UseProductComboDto } from "@/modules/product-combos/product-combos-types";
@@ -72,8 +72,8 @@ export const ModalProductComboUsing: FC = () => {
         <Table withTableBorder withRowBorders withColumnBorders striped>
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>{t("product")}</Table.Th>
-              <Table.Th>{t("quantity")}</Table.Th>
+              <Table.Th>{tl("product")}</Table.Th>
+              <Table.Th>{tl("quantity")}</Table.Th>
             </Table.Tr>
           </Table.Thead>
 
@@ -96,11 +96,11 @@ export const ModalProductComboUsing: FC = () => {
           </Table.Tbody>
         </Table>
 
-        <Textarea label={t("note")} {...form.getInputProps("note")} />
+        <Textarea label={tl("note")} {...form.getInputProps("note")} />
 
         <Center>
           <Button action onClick={onSubmit} loading={form.submitting}>
-            {t("add")}
+            {tl("add")}
           </Button>
         </Center>
       </Stack>

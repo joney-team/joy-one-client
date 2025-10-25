@@ -3,8 +3,8 @@
 import { FileType } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { t } from "@/modules/lang/lang-service";
-import { ActionIcon, Box, Card, Center, em, Image, Stack, ThemeIcon } from "@mantine/core";
+import { Trans } from "@lingui/react/macro";
+import { ActionIcon, Box, Card, Center, Image, Stack, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useHover } from "@mantine/hooks";
 import { Icon, IconEye, IconPhoto, IconProps, IconUpload } from "@tabler/icons-react";
@@ -152,7 +152,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
 
             <Renderer visible={!disabled}>
               <Button leftIcon={IconUpload} size="xs" variant="transparent" color="white" fw={400}>
-                {t("upload")}
+                <Trans>Upload</Trans>
               </Button>
             </Renderer>
           </Stack>

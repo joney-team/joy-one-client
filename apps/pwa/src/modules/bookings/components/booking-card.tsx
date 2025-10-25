@@ -11,7 +11,7 @@ import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { OnModalBookingDetail } from "@/modules/bookings/modals/modal-booking-detail";
 import { OnModalCancelBooking } from "@/modules/bookings/modals/modal-cancel-booking";
 import { OnModalUpdateBooking } from "@/modules/bookings/modals/modal-update-booking";
-import { renderFromNow, renderTime, t } from "@/modules/lang/lang-service";
+import { renderFromNow, renderTime, tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { DateTime } from "@/utils/date-time.utils";
 import { capitalize } from "@/utils/string.utils";
@@ -124,7 +124,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           </Text>
 
           <Badge color={color(bookingColor)} size="xs" variant="light">
-            {t(`booking_status_${booking.status}`)}
+            {tl(`booking_status_${booking.status}`)}
           </Badge>
         </Stack>
 
@@ -165,7 +165,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                     style={{ zIndex: 500 }}
                   >
                     <Stack>
-                      <Divider label={t("actions")} labelPosition="left" />
+                      <Divider label={tl("actions")} labelPosition="left" />
                       {booking.customer && (
                         <Anchor
                           href={`tel:${booking.customer.phone}`}
@@ -178,13 +178,13 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                             </ThemeIcon>
 
                             <Text fz={12} fw={500}>
-                              {t("call_customer")}
+                              {tl("call_customer")}
                             </Text>
                           </Group>
                         </Anchor>
                       )}
 
-                      <Divider label={t("status")} labelPosition="left" />
+                      <Divider label={tl("status")} labelPosition="left" />
                       <Group
                         gap={10}
                         style={{ cursor: "pointer", userSelect: "none" }}
@@ -198,7 +198,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {t(`booking_status_${BookingStatus.CHECK_IN}`)}
+                          {tl(`booking_status_${BookingStatus.CHECK_IN}`)}
                         </Text>
                       </Group>
 
@@ -215,7 +215,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {t(`booking_status_${BookingStatus.IN_PROGRESS}`)}
+                          {tl(`booking_status_${BookingStatus.IN_PROGRESS}`)}
                         </Text>
                       </Group>
 
@@ -232,7 +232,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {t(`booking_status_${BookingStatus.COMPLETED}`)}
+                          {tl(`booking_status_${BookingStatus.COMPLETED}`)}
                         </Text>
                       </Group>
 
@@ -249,11 +249,11 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {capitalize(`${t("cancel")} ${t("booking")}`)}
+                          {capitalize(`${tl("cancel")} ${tl("booking")}`)}
                         </Text>
                       </Group>
 
-                      <Divider label={t("update")} labelPosition="left" />
+                      <Divider label={tl("update")} labelPosition="left" />
 
                       <Group
                         gap={10}
@@ -268,7 +268,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {capitalize(`${t("update")} ${t("informations")}`)}
+                          {capitalize(`${tl("update")} ${tl("informations")}`)}
                         </Text>
                       </Group>
 
@@ -285,7 +285,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </ThemeIcon>
 
                         <Text fz={12} fw={500}>
-                          {t("reschedule_booking")}
+                          {tl("reschedule_booking")}
                         </Text>
                       </Group>
                     </Stack>
@@ -303,7 +303,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
 
             <Stack gap={0} align="start">
               <Text fz={10} c="gray">
-                {t("duration")}
+                {tl("duration")}
               </Text>
 
               <Group gap={0} mt={-3}>
@@ -320,14 +320,14 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           <Group align="start" mt={12}>
             {booking.customer && !hideCustomerInfo && (
               <Group flex={1}>
-                <CustomerInput label={t("customer")} value={booking.customer} disabled />
+                <CustomerInput label={tl("customer")} value={booking.customer} disabled />
               </Group>
             )}
 
             {booking.assigneeUsers && booking.assigneeUsers.length > 0 && (
               <Group flex={1}>
                 <WorkspaceMembersInput
-                  label={t("attendees")}
+                  label={tl("attendees")}
                   value={booking.assigneeUsers}
                   collapsed={memberCollapsed}
                   disabled
@@ -337,7 +337,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           </Group>
 
           {booking.status === BookingStatus.CANCELLED && booking.reasonForCancellation && (
-            <Blockquote cite={t("cancel_reason")} color="red" p={8} fz={13}>
+            <Blockquote cite={tl("cancel_reason")} color="red" p={8} fz={13}>
               {booking.reasonForCancellation}
             </Blockquote>
           )}

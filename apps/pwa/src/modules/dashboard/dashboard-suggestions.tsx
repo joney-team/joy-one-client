@@ -19,7 +19,7 @@ import { IconBell, IconX } from "@tabler/icons-react";
 import { FC, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../auth/auth-context";
 import { useColor } from "../theme/use-color";
-import { t } from "../lang/lang-service";
+import { tl } from "../lang/lang-service";
 import { useLang } from "../lang/lang-context";
 import { useLocalStorage } from "@mantine/hooks";
 import { onActionLoad } from "@/utils/actions";
@@ -72,7 +72,7 @@ const SuggestionItem: FC<SuggestionItemProps> = (props) => {
 
           <Stack gap={0}>
             <Text fw={700} fz={em(15)} c="white">
-              {t(title)}
+              {tl(title)}
             </Text>
             <Stack fz={rem(12)} c="white">
               {message}
@@ -141,11 +141,11 @@ export const DashboardSuggestions: FC = () => {
       output.push({
         id: "notification",
         title: "turn_on_notification",
-        message: t("turn_on_notification_notice_1"),
+        message: tl("turn_on_notification_notice_1"),
         image: "/images/notification.png",
         onClick: () =>
           onActionLoad({
-            name: t("turn_on_notification"),
+            name: tl("turn_on_notification"),
             icon: IconBell,
             process: () => auth.registerNotification(),
           }),
@@ -162,10 +162,10 @@ export const DashboardSuggestions: FC = () => {
                 <Image src="/images/notification.png" w={100} h={100} />
                 <Stack gap={3}>
                   <Text fw={600} ta="center" fz={20} tt="uppercase">
-                    {t("turn_on_notification")}
+                    {tl("turn_on_notification")}
                   </Text>
                   <Text ta="center" fw={300}>
-                    {t("turn_on_notification_notice_2")}
+                    {tl("turn_on_notification_notice_2")}
                   </Text>
                 </Stack>
 
@@ -177,11 +177,11 @@ export const DashboardSuggestions: FC = () => {
                     onCloseModal();
                   }}
                 >
-                  {t("confirm")}
+                  {tl("confirm")}
                 </Button>
 
                 <Anchor fz={14} c="gray" onClick={() => onCloseModal(true)}>
-                  {t("skip")}
+                  {tl("skip")}
                 </Anchor>
               </Stack>
             ),
@@ -193,8 +193,8 @@ export const DashboardSuggestions: FC = () => {
     if (layout.view === "mobile" && !layout.isStandalone && !ignored.includes("install-pwa")) {
       output.push({
         id: "install-pwa",
-        title: t("install_web_app"),
-        message: t("install_web_app_notice_1"),
+        title: tl("install_web_app"),
+        message: tl("install_web_app_notice_1"),
         image: "/images/settings.png",
         onClick: () => OnInstallWebAppTutorial(),
       });

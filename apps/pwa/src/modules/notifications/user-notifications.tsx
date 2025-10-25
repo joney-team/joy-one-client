@@ -7,7 +7,7 @@ import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import {
   cleanNotifications,
   getNotificationStat,
@@ -40,10 +40,10 @@ const EmptyNotification: FC<{ visible: boolean }> = ({ visible }) => {
     <Stack align="center" justify="center" gap={5} py={30} px={15} mih={layout.height * 0.7}>
       <ChillIllustration width={200} />
       <Text fw={500} ta="center" mt={15} fz={16}>
-        {t("no_notifications")}
+        {tl("no_notifications")}
       </Text>
       <Text c="gray" ta="center" fz={13}>
-        {t("no_notifications_desc")}
+        {tl("no_notifications_desc")}
       </Text>
     </Stack>
   );
@@ -84,14 +84,14 @@ export const UserNotifications: FC = () => {
       title: (
         <ModalTitle
           color="primary"
-          title={`${t("clean")} ${t("notifications")}`}
+          title={`${tl("clean")} ${tl("notifications")}`}
           icon={IconBrush}
         />
       ),
-      children: t("clean_notification_msg"),
+      children: tl("clean_notification_msg"),
       color: color("primary"),
       onConfirm: async () => cleanNotifications().then(close).catch(onError),
-      labels: { confirm: t("clean"), cancel: t("cancel") },
+      labels: { confirm: tl("clean"), cancel: tl("cancel") },
       onCancel: () => modals.close("ModalCleanNotification"),
       confirmProps: { color: color("primary") },
     });
@@ -152,7 +152,7 @@ export const UserNotifications: FC = () => {
                   <IconBell />
                 </ThemeIcon>
                 <Text fw={700} c={color("primary")}>
-                  {t("notifications")}
+                  {tl("notifications")}
                 </Text>
 
                 {notifications.count > 0 && (
@@ -168,7 +168,7 @@ export const UserNotifications: FC = () => {
                       style={{ borderWidth: 0.5 }}
                     >
                       <Text fw={500} fz={em(13)}>
-                        {t("clean")}
+                        {tl("clean")}
                       </Text>
                     </Button>
                   </Group>

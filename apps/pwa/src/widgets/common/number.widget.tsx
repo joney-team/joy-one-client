@@ -1,5 +1,5 @@
 import { Renderer } from "@/components/renderer";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { resizeArrayForSparkline } from "@/utils/chart.utils";
@@ -21,7 +21,9 @@ import {
 import { IconInfoCircle } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 
-const Sparkline = dynamic(() => import("@mantine/charts").then((mod) => mod.Sparkline), { ssr: false });
+const Sparkline = dynamic(() => import("@mantine/charts").then((mod) => mod.Sparkline), {
+  ssr: false,
+});
 
 export const numberWidgetlayoutConfig: WidgetLayoutConfig = {
   initW: 4,
@@ -64,7 +66,9 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
     const sparkline = args.renderSparkline ? args.renderSparkline(ctx) : undefined;
     const isLoading = args.isLoading ? args.isLoading(ctx) : typeof value === "undefined";
 
-    const boxColor = args.boxColor ? args.boxColor(ctx) : widgetsContext.getState(id, "color") || "primary";
+    const boxColor = args.boxColor
+      ? args.boxColor(ctx)
+      : widgetsContext.getState(id, "color") || "primary";
     const isDarkContent = widgetsContext.getState(id, "style") === "dark-content";
     const contentColor = isDarkContent ? "white" : "var(--mantine-color-bright)";
     const iconColor = isDarkContent ? "white" : color(boxColor);
@@ -95,7 +99,12 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
         <Group h="100%" justify="space-between" wrap="nowrap" gap={0} align="center">
           <Group wrap="nowrap" gap={10}>
             {!!args.onClick ? (
-              <ActionIcon onClick={() => args.onClick?.(ctx)} color={iconColor} variant={iconVariant} size="xl">
+              <ActionIcon
+                onClick={() => args.onClick?.(ctx)}
+                color={iconColor}
+                variant={iconVariant}
+                size="xl"
+              >
                 <Icon size={30} strokeWidth={1.2} />
               </ActionIcon>
             ) : (
@@ -107,7 +116,7 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
             <Tooltip label={tooltip} disabled={!tooltip}>
               <Stack gap={2}>
                 <Text c={contentColor} fz={11} fw={400}>
-                  {t(name)}
+                  {tl(name)}
                 </Text>
                 <Group h={20} align="center">
                   {isLoading ? (
@@ -123,7 +132,10 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
           </Group>
 
           <Renderer visible={isShowSparkline}>
-            <Box onClick={() => args.onClick?.(ctx)} style={{ cursor: args.onClick ? "pointer" : undefined }}>
+            <Box
+              onClick={() => args.onClick?.(ctx)}
+              style={{ cursor: args.onClick ? "pointer" : undefined }}
+            >
               <Sparkline
                 w={50}
                 h={30}

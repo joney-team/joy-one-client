@@ -4,7 +4,7 @@ import { Circle } from "@/components/circle";
 import { Empty } from "@/components/empty";
 import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
-import { num, t, tMulti } from "@/modules/lang/lang-service";
+import { num, tl, tMulti } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
 import { ReceiptReportItem } from "@/modules/receipts/receipts-types";
@@ -26,11 +26,17 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
-import { IconChevronDown, IconChevronUp, IconClipboardList, IconReportAnalytics } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconChevronUp,
+  IconClipboardList,
+  IconReportAnalytics,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, useRef, useState } from "react";
 import { ReportWidgetsContext } from "../types";
 import { FlexSize } from "@/components/flex-size";
+import { t } from "@lingui/core/macro";
 
 export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (props) => {
   const filterState = useRef<any>({});
@@ -103,14 +109,18 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
     <Card shadow="xs" p={0} w="100%" h="100%">
       <Stack h="100%">
         <Stack px={16} pt={16}>
-          <SessionTitle name={t("products_services")} icon={IconReportAnalytics} />
+          <SessionTitle name={t`Products & services`} icon={IconReportAnalytics} />
 
           <Renderer visible={props.ctx.isFetching}>
             <Skeleton h="100%" />
           </Renderer>
         </Stack>
 
-        <Empty h="100%" hideBorder visible={!props.ctx.isFetching && Object.keys(groupByProducts).length === 0} />
+        <Empty
+          h="100%"
+          hideBorder
+          visible={!props.ctx.isFetching && Object.keys(groupByProducts).length === 0}
+        />
 
         <Renderer visible={!props.ctx.isFetching && Object.keys(groupByProducts).length > 0}>
           <Group gap={10} px={16}>
@@ -139,7 +149,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                     }
                   }}
                 >
-                  {t(`product_type_${v}`)}
+                  {tl(`product_type_${v}`)}
 
                   <Circle
                     ml={10}
@@ -166,16 +176,16 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                         <Table.Thead>
                           <Table.Tr>
                             <Table.Th w={40}>#</Table.Th>
-                            <Table.Th>{t("name")}</Table.Th>
+                            <Table.Th>{tl("name")}</Table.Th>
                             <Table.Th w={80} ta="right">
-                              {t("qty")}
+                              {tl("qty")}
                             </Table.Th>
                             <Table.Th w={200} ta="right">
-                              {t("revenue")}
+                              {tl("revenue")}
                             </Table.Th>
                             {workspace.hasPermission(WorkspacePermission.REPORTS_VIEW) && (
                               <Table.Th w={200} ta="right">
-                                {t("profit")}
+                                {tl("profit")}
                               </Table.Th>
                             )}
                           </Table.Tr>
@@ -192,7 +202,9 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                                       fw={600}
                                       c="dark"
                                       component={Link}
-                                      href={`/${productReport.productType.toLowerCase()}s/${productReport.productId}`}
+                                      href={`/${productReport.productType.toLowerCase()}s/${
+                                        productReport.productId
+                                      }`}
                                     >
                                       {productReport.productName}
                                     </Anchor>
@@ -241,7 +253,8 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
           <ThemeIcon size="xs" variant="transparent">
             <IconClipboardList />
           </ThemeIcon>
-          {num(items.length)} {t("entity_related", { entity: tMulti(["receipts"], ["/"], [moduleOrder.name]) })}
+          {num(items.length)}{" "}
+          {tl("entity_related", { entity: tMulti(["receipts"], ["/"], [moduleOrder.name()]) })}
           <ActionIcon variant="subtle" size="xs">
             {!isShow ? <IconChevronDown /> : <IconChevronUp />}
           </ActionIcon>
@@ -259,7 +272,7 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
               <Card withBorder shadow="none" p={8} key={i} maw="100%" w={220}>
                 {!!order && (
                   <Group justify="space-between">
-                    <Text fz={16}>{t(moduleOrder!.name)}</Text>
+                    <Text fz={16}>{moduleOrder?.name()}</Text>
                     <Anchor component={Link} href={`/orders/${order?.data.code}`}>
                       <Text fw={700} fz={em(13)}>
                         #{order.data.code}
@@ -270,7 +283,7 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
 
                 {!!receipt && (
                   <Group justify="space-between">
-                    <Text fz={16}>{t("receipt")}</Text>
+                    <Text fz={16}>{tl("receipt")}</Text>
                     <Anchor component={Link} href={`/receipts/${receipt?.data.id}`}>
                       <Text fw={700} fz={em(13)}>
                         {renderEntityCode(receipt?.data.code)}
@@ -281,7 +294,7 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
 
                 {!!product && (
                   <Group justify="space-between">
-                    <Text fz={16}>{t("qty")}</Text>
+                    <Text fz={16}>{tl("qty")}</Text>
                     <Text fw={700} fz={em(13)}>
                       {num(product.data.qty)}
                     </Text>

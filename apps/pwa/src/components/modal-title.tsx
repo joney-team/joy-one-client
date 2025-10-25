@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { Group, Text, ThemeIcon } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import { FC } from "react";
@@ -24,7 +24,7 @@ export const ModalTitle: FC<Props> = (props) => {
       </ThemeIcon>
 
       <Text fw="700" fz={16} c={color(props.color || "primary")}>
-        {t(props.title)}
+        {tl(props.title)}
       </Text>
 
       {props.rightSection}

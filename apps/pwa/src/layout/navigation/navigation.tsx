@@ -3,7 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { workspaceModuleConfigs } from "@/modules/workspaces/workspace-modules";
@@ -81,7 +81,7 @@ export const AppNavigation: FC = () => {
               key={v.id}
               icon={mod.icon}
               route={mod.href}
-              label={mod.name}
+              label={mod.name()}
               exact={mod.href === "/"}
             />
           );
@@ -126,21 +126,21 @@ export const AppNavigation: FC = () => {
                   <Fragment key={group.id}>
                     <Divider
                       tt="capitalize"
-                      label={group.name || t("general")}
+                      label={group.name || tl("general")}
                       labelPosition="left"
                     />
 
-                    {group.moduleIds.map((moduleId) => {
-                      const module = workspace.modules.find((v) => v.id === moduleId);
-                      if (!module) return null;
-                      const isActive = router.pathname === module.href;
+                    {group.moduleIds.map((modId) => {
+                      const mod = workspace.modules.find((v) => v.id === modId);
+                      if (!mod) return null;
+                      const isActive = router.pathname === mod.href;
                       const moduleColor = isActive ? color("primary") : "var(--mantine-color-text)";
 
                       return (
                         <Group
-                          key={moduleId}
+                          key={modId}
                           onClick={() => {
-                            router.push(module.href);
+                            router.push(mod.href);
                             mobileDrawer[1].close();
                           }}
                           variant="subtle"
@@ -153,14 +153,14 @@ export const AppNavigation: FC = () => {
                               color={moduleColor}
                               variant={isActive ? "filled" : "transparent"}
                             >
-                              <module.icon strokeWidth={isActive ? 1.8 : 1.5} size={20} />
+                              <mod.icon strokeWidth={isActive ? 1.8 : 1.5} size={20} />
                             </ThemeIcon>
 
                             <Text tt="capitalize" fw={500} c={moduleColor}>
-                              {t(module.name)}
+                              {mod.name()}
                             </Text>
 
-                            <Renderer visible={!!module.isBeta}>
+                            <Renderer visible={!!mod.isBeta}>
                               <Badge color="orange" size="xs">
                                 Beta
                               </Badge>
@@ -228,7 +228,7 @@ export const AppNavigation: FC = () => {
                       key={moduleId}
                       icon={module.icon}
                       route={module.href}
-                      label={t(module.name)}
+                      label={module.name()}
                       isBeta={module.isBeta}
                       exact={["/"].includes(module.href)}
                     />

@@ -4,18 +4,19 @@ import { Avatar } from "@/components/avatar";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { SessionTitle } from "@/components/session-title";
-import { num, t } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagType } from "@/modules/tags/tags-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { DateTime } from "@/utils/date-time.utils";
-import { String } from "@/utils/string.utils";
-import { useList } from "@/components/list/use-list";
 import { WidgetProps } from "@/widgets/types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Table, Text, ThemeIcon } from "@mantine/core";
 import { IconFolder, IconStopwatch } from "@tabler/icons-react";
 import { FC } from "react";
@@ -57,11 +58,11 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
   return (
     <Card shadow="xs" p={16} w="100%">
       <Stack>
-        <SessionTitle name={t("tasks_time_trackings")} icon={IconStopwatch}>
+        <SessionTitle name={t`Tasks time trackings`} icon={IconStopwatch}>
           <Group gap={8}>
             <ButtonSelect
               icon={IconFolder}
-              label={t("folder")}
+              label={t`Folder`}
               autoHideLabel
               activeColor={
                 tasks.params.tagFolderId
@@ -99,12 +100,18 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
           <Table withTableBorder>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>{t("member")}</Table.Th>
                 <Table.Th>
-                  {String.capitalizeFirstLetter(`${t("total")} ${t("assigned_tasks")}`)}
+                  <Trans>Member</Trans>
                 </Table.Th>
-                <Table.Th>{t("tasks_completed_rate")}</Table.Th>
-                <Table.Th>{t("time_trackings")}</Table.Th>
+                <Table.Th>
+                  <Trans>Total assigned tasks</Trans>
+                </Table.Th>
+                <Table.Th>
+                  <Trans>Tasks completed rate</Trans>
+                </Table.Th>
+                <Table.Th>
+                  <Trans>Time trackings</Trans>
+                </Table.Th>
               </Table.Tr>
             </Table.Thead>
 

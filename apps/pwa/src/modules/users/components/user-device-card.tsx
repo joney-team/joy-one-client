@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/modules/auth/auth-context";
 import { DeviceEntity } from "@/modules/devices/devices-types";
-import { renderDate, t } from "@/modules/lang/lang-service";
+import { renderDate, tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { String } from "@/utils/string.utils";
 import { Badge, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -43,13 +43,13 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
         <Stack gap={5} mt={-3}>
           <Group>
             <Text>
-              {ua.device.model || t("unknow_device")}
+              {ua.device.model || tl("unknow_device")}
               {ua.device.vendor ? ` - ${ua.device.vendor}` : ""}
             </Text>
 
             {auth.device._id === device._id && (
               <Badge size="xs" color={color("primary")}>
-                {t("this_device")}
+                {tl("this_device")}
               </Badge>
             )}
           </Group>
@@ -74,7 +74,7 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
           )}
 
           <Text fz={em(12)} c="gray">
-            {t("active_at")} {dayjs(device.lastActiveAt * 1000).fromNow()} (
+            {tl("active_at")} {dayjs(device.lastActiveAt * 1000).fromNow()} (
             {renderDate(device.lastActiveAt * 1000)})
           </Text>
         </Stack>

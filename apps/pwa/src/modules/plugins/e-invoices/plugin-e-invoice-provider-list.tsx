@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
 import { useQuery } from "@/modules/apis/use-query";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { Card, Skeleton, Stack, Text, Title } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
@@ -49,10 +49,10 @@ export const PluginEInvoiceProviderList: FC = () => {
         <Stack align="center" py={20}>
           <Stack gap={8}>
             <Title ta="center" order={2} fw={300} c={color("primary")}>
-              {t("eInvoices")}
+              {tl("eInvoices")}
             </Title>
 
-            <Text ta="center">{t("eInvoices_desc")}</Text>
+            <Text ta="center">{tl("eInvoices_desc")}</Text>
           </Stack>
 
           <Button
@@ -61,7 +61,7 @@ export const PluginEInvoiceProviderList: FC = () => {
             rightIcon={IconArrowRight}
             onClick={() => OnModalEInvoiceProvider({ mode: "create", onDone: () => refetch() })}
           >
-            {t("start_now")}
+            {tl("start_now")}
           </Button>
         </Stack>
       </Card>

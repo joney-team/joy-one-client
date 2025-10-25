@@ -3,7 +3,7 @@
 import { List } from "@/components/list";
 import { NumberColumn } from "@/components/list/columns/number-column";
 import { EventType } from "@/modules/events/event-types";
-import { num, t, tMulti } from "@/modules/lang/lang-service";
+import { num, tl, tMulti } from "@/modules/lang/lang-service";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
@@ -29,7 +29,7 @@ export const ProductComboSetup: FC = () => {
           name: {},
           unit: {},
           combos: {
-            name: `${t("products")}/${t("services")}`,
+            name: `${tl("products")}/${tl("services")}`,
             render: ({ value }) => {
               if (!value) return null;
 
@@ -52,7 +52,7 @@ export const ProductComboSetup: FC = () => {
               );
             },
           },
-          price: NumberColumn({ type: "money", name: t("price"), sortable: true }),
+          price: NumberColumn({ type: "money", name: tl("price"), sortable: true }),
         }}
         card={(props) => <ProductCard product={props.data} />}
         actions={[

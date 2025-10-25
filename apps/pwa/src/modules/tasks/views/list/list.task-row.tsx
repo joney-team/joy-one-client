@@ -7,7 +7,7 @@ import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
-import { num, renderDateTime, t } from "@/modules/lang/lang-service";
+import { num, renderDateTime, tl } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
@@ -287,7 +287,7 @@ export const ListTaskRow: FC<{
                 }}
               >
                 <Renderer visible={!task.parentId}>
-                  <Tooltip label={t("create_sub_task")}>
+                  <Tooltip label={tl("create_sub_task")}>
                     <ActionIcon
                       variant="subtle"
                       color="gray.6"
@@ -303,7 +303,7 @@ export const ListTaskRow: FC<{
                 </Renderer>
 
                 <Renderer visible={allowEditName}>
-                  <Tooltip label={t("edit_task_name")}>
+                  <Tooltip label={tl("edit_task_name")}>
                     <ActionIcon
                       variant="subtle"
                       color="gray.6"
@@ -331,7 +331,7 @@ export const ListTaskRow: FC<{
                   onClose={() => setForceHover(false)}
                   target={(selector) => {
                     return (
-                      <Tooltip label={capitalize(`${t("add")} ${t("tags")}`)}>
+                      <Tooltip label={capitalize(`${tl("add")} ${tl("tags")}`)}>
                         <ActionIcon
                           variant="subtle"
                           color="gray.6"
@@ -414,7 +414,7 @@ export const ListTaskRow: FC<{
                 .reverse()
                 .map((priority) => ({
                   value: priority,
-                  label: t(`task_priority_${priority}`),
+                  label: tl(`task_priority_${priority}`),
                   icon: IconFlagFilled,
                   activeColor: getTaskPriorityColor(priority),
                 }))}

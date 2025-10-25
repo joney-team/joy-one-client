@@ -1,5 +1,5 @@
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
 import { Center, em, Stack, Text, Title } from "@mantine/core";
 import { FC } from "react";
@@ -26,17 +26,17 @@ export const WorkspaceArchived: FC = () => {
 
       <Stack gap={3}>
         <Title ta="center" order={3}>
-          {t("workspace_archived")}
+          {tl("workspace_archived")}
         </Title>
         <Text fz={em(15)} ta="center">
-          {t(isOwner || !ownerName ? "workspace_archived_desc" : "workspace_archived_desc", {
+          {tl(isOwner || !ownerName ? "workspace_archived_desc" : "workspace_archived_desc", {
             ownerName,
           })}
         </Text>
 
         <Center mt={10}>
           <Button miw={120} variant="subtle" onClick={() => workspace.leave()}>
-            {t("exit")}
+            {tl("exit")}
           </Button>
         </Center>
       </Stack>

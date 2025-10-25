@@ -13,7 +13,7 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { getWorkspaceAuthSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
 import {
   getMyWorkspaceMembers,
@@ -216,7 +216,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
           }
         })
         .catch((error) => {
-          const message = error.response?.data?.message || t("invalid_invitation");
+          const message = error.response?.data?.message || tl("invalid_invitation");
           _setInvitationState({ error: message });
         });
     }
@@ -294,10 +294,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     return Object.entries(workspaceModuleConfigs).map(([id, mo]) => ({
       ...mo,
       id: id as WorkspaceModuleId,
-      name: getWorkspaceModuleName(
-        id as keyof typeof workspaceModuleConfigs,
-        userMember?.workspace
-      ),
     }));
   }, [userMember?.workspace, lang.locale]);
 
@@ -316,7 +312,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         mo.workspaceTypes.includes(userMember?.workspace?.type || WorkspaceType.BUSINESS);
       return ableToAccess && isAvailableType;
     });
-  }, [modules, userMember?.permissions, userMember?.workspace?.type]);
+  }, [modules, userMember?.permissions, userMember?.workspace?.type, lang.locale]);
 
   const isUserOnline = (userId: string) => {
     return !!onlineStatus.data?.[userId] || false;
@@ -489,8 +485,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     isModuleActive: (id: string) => availableModules.some((m) => m.id === id),
     modules,
     getModule: (id: WorkspaceModuleId) => modules.find((m) => m.id === id)!,
-    getModuleName: (id: WorkspaceModuleId) => getWorkspaceModuleName(id, userMember?.workspace),
-    availableModules: availableModules,
+    getModuleName: (id: WorkspaceModuleId) => workspaceModuleConfigs[id].name(),
+    availableModules,
     isCreateNew,
     setIsCreateNew,
     archive,

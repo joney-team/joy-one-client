@@ -1,5 +1,5 @@
 import { Avatar } from "@/components/avatar";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { searchEntity } from "@/modules/search/search-service";
 import { getUserMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
@@ -25,8 +25,8 @@ export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props)
       {...rest}
       autoCloseOnChange={false}
       listRoute="/workspace-members"
-      searchPlaceholder={`${t("search_with", {
-        query: ["name"].map((v) => t(v).toLowerCase()).join(", "),
+      searchPlaceholder={`${tl("search_with", {
+        query: ["name"].map((v) => tl(v).toLowerCase()).join(", "),
       })}`}
       renderOption={(user) => {
         return (

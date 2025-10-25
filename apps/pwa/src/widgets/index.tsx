@@ -12,7 +12,7 @@ import { ContextMenu } from "@/components/context-menu";
 import { Empty } from "@/components/empty";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { isDiff } from "@/utils/object.utils";
 import { IconPencil, IconPlusMinus, IconRefresh, IconTrash } from "@tabler/icons-react";
 import { Fragment, useMemo, useState } from "react";
@@ -281,7 +281,7 @@ export function Widgets<ContextType = object, WidgetType = string>(
             leftSection={<IconPencil size={16} />}
             onClick={() => setIsEditMode(!isEditMode)}
           >
-            {t(isEditMode ? "disable" : "enable")} {t("resize_widget_layout").toLowerCase()}
+            {tl(isEditMode ? "disable" : "enable")} {tl("resize_widget_layout").toLowerCase()}
           </ContextMenu.Item>
 
           <ContextMenu.Item
@@ -289,11 +289,11 @@ export function Widgets<ContextType = object, WidgetType = string>(
             leftSection={<IconPlusMinus size={16} />}
             onClick={() => setIsManageWidgetsOpened(true)}
           >
-            {t("manage-widgets")}
+            {tl("manage-widgets")}
           </ContextMenu.Item>
 
           <ContextMenu.Item fz={14} leftSection={<IconRefresh size={16} />} onClick={resetDefault}>
-            {t("reset_default")}
+            {tl("reset_default")}
           </ContextMenu.Item>
 
           {pointedWidgetId && (
@@ -303,7 +303,7 @@ export function Widgets<ContextType = object, WidgetType = string>(
               leftSection={<IconTrash size={16} />}
               onClick={() => onRemove(pointedWidgetId)}
             >
-              {t("remove")} Widget
+              {tl("remove")} Widget
             </ContextMenu.Item>
           )}
         </ContextMenu.Dropdown>

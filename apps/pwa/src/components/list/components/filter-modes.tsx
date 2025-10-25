@@ -4,7 +4,7 @@ import { FC } from "react";
 import { ListContext } from "../types";
 import { ActionButton } from "./action-button";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 
 export const ListFilterModes: FC<ListContext> = (ctx) => {
   const layout = useLayout();
@@ -42,7 +42,7 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
               );
             })}
 
-            <Divider label={t("list_view_type")} />
+            <Divider label={tl("list_view_type")} />
 
             <Group gap={10}>
               <ActionButton

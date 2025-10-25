@@ -3,7 +3,7 @@ import { DateTimeInput } from "@/components/inputs/date-time-input";
 import { DynamicSelectionInput } from "@/components/inputs/dynamic-selection-input";
 import { ImageInput } from "@/components/inputs/image-input";
 import { api } from "@/modules/apis";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { AppEntity, DynamicSelection, DynamicSelectionOperator } from "@/types";
 import { onFormError } from "@/utils/exceptions.utils";
 import { Center, NumberInput, Select, SimpleGrid, Stack, Textarea, TextInput } from "@mantine/core";
@@ -56,10 +56,10 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
     },
     validate: {
       name: (value) => {
-        if (!value) return t("name_is_required");
+        if (!value) return tl("name_is_required");
       },
       value: (value) => {
-        if (!value) return t("value_is_required");
+        if (!value) return tl("value_is_required");
       },
     },
   });
@@ -112,19 +112,19 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
   return (
     <form onSubmit={onSubmit}>
       <Stack>
-        <TextInput label={t("name")} {...form.getInputProps("name")} />
-        <Textarea label={t("description")} {...form.getInputProps("description")} />
-        <ImageInput label={t("image")} {...form.getInputProps("image")} h={150} />
+        <TextInput label={tl("name")} {...form.getInputProps("name")} />
+        <Textarea label={tl("description")} {...form.getInputProps("description")} />
+        <ImageInput label={tl("image")} {...form.getInputProps("image")} h={150} />
 
         <SimpleGrid cols={2}>
           <Select
-            label={t("type")}
+            label={tl("type")}
             {...form.getInputProps("type")}
             data={Object.values(PromotionType).map((type) => {
               const config = promotionRuleTypeConfigs[type];
               return {
                 value: type,
-                label: t(config.label),
+                label: tl(config.label),
               };
             })}
             onChange={(value) => {
@@ -134,7 +134,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
           />
 
           <NumberInput
-            label={t(ruleValueConfig.label)}
+            label={tl(ruleValueConfig.label)}
             {...form.getInputProps("value")}
             min={ruleValueConfig.min}
             max={ruleValueConfig.max}
@@ -142,9 +142,9 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
         </SimpleGrid>
 
         <NumberInput
-          label={t("limit_per_customer")}
+          label={tl("limit_per_customer")}
           {...form.getInputProps("limitPerCustomer")}
-          placeholder={t("leave_empty_if_no_limit")}
+          placeholder={tl("leave_empty_if_no_limit")}
         />
 
         {/* <DynamicSelectionInput
@@ -155,13 +155,13 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
         /> */}
 
         <DynamicSelectionInput
-          label={t("customers_limit_rule")}
-          description={t("leave_empty_if_no_limit")}
+          label={tl("customers_limit_rule")}
+          description={tl("leave_empty_if_no_limit")}
           fixedEntity={AppEntity.CUSTOMERS}
           {...form.getInputProps("customersSelection")}
         />
 
-        <DateTimeInput label={t("expireAt")} {...form.getInputProps("expireAt")} />
+        <DateTimeInput label={tl("expireAt")} {...form.getInputProps("expireAt")} />
 
         <BuilderCustomFields
           entity={AppEntity.PROMOTIONS}
@@ -171,7 +171,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
 
         <Center>
           <Button type="submit" loading={form.submitting}>
-            {t(props.promotion ? "save" : "create")}
+            {tl(props.promotion ? "save" : "create")}
           </Button>
         </Center>
       </Stack>

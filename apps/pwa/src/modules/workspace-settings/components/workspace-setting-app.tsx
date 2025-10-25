@@ -7,7 +7,7 @@ import { CopyText } from "@/components/copy-text";
 import { Renderer } from "@/components/renderer";
 import { getColorShape } from "@/modules/theme/generator";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
-import { t } from "@/modules/lang/lang-service";
+import { tl } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
@@ -48,7 +48,7 @@ export const WorkspaceAppSettings: FC = () => {
     validate: {
       appDomain: (value: string) => {
         if (value && !value.includes("localhost") && !/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(value))
-          return t("invalid_domain");
+          return tl("invalid_domain");
       },
     },
   });
@@ -110,14 +110,14 @@ export const WorkspaceAppSettings: FC = () => {
                 <ThemeIcon variant="transparent" color="dark" size="md">
                   <IconUpload strokeWidth={1.2} />
                 </ThemeIcon>
-                <Text fz={12}>{t("change_app_icon")}</Text>
+                <Text fz={12}>{tl("change_app_icon")}</Text>
               </Group>
             </Group>
           </Dropzone>
 
-          <TextInput label={t("name")} {...form.getInputProps("appName")} />
+          <TextInput label={tl("name")} {...form.getInputProps("appName")} />
 
-          <InputWrapper label={t("theme_color")}>
+          <InputWrapper label={tl("theme_color")}>
             <Card p={10} mt={3} withBorder shadow="none">
               <Stack>
                 <Group gap={10}>
@@ -154,7 +154,7 @@ export const WorkspaceAppSettings: FC = () => {
 
                 <Stack pb={5} gap={5}>
                   <Text fz={12} c="gray">
-                    {t("color_shape")}
+                    {tl("color_shape")}
                   </Text>
                   <Slider
                     w={200}
@@ -175,7 +175,7 @@ export const WorkspaceAppSettings: FC = () => {
 
         <Stack>
           <TextInput
-            label={t("domain")}
+            label={tl("domain")}
             placeholder={`workspace.example.com`}
             {...form.getInputProps("appDomain")}
             onChange={(e) => {
@@ -192,7 +192,7 @@ export const WorkspaceAppSettings: FC = () => {
               <Card withBorder shadow="none">
                 <Stack gap={3}>
                   <Text fz={16}>
-                    {t("register_dns_domain")}{" "}
+                    {tl("register_dns_domain")}{" "}
                     <strong>{getMainDomain(form.values.appDomain)}</strong>
                   </Text>
                   <Group>
@@ -229,7 +229,7 @@ export const WorkspaceAppSettings: FC = () => {
                       rightIcon={IconExternalLink}
                       onClick={() => window.open(`https://${form.values.appDomain}`, "_blank")}
                     >
-                      {t("open_app")}
+                      {tl("open_app")}
                     </Button>
                   </Group>
                 </Stack>
@@ -241,7 +241,7 @@ export const WorkspaceAppSettings: FC = () => {
 
       <Center>
         <Button type="submit" onClick={onSubmit} loading={isSubmitting} miw={150}>
-          {t("update")}
+          {tl("update")}
         </Button>
       </Center>
     </Stack>

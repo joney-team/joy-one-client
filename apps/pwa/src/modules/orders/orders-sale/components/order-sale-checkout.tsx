@@ -4,7 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { useLayout } from "@/layout/layout-context";
 import { CustomerSelector } from "@/modules/customers/components/customer-selector";
-import { num, t } from "@/modules/lang/lang-service";
+import { num, tl } from "@/modules/lang/lang-service";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { ActionIcon, Card, Divider, Group, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
 import {
@@ -40,7 +40,7 @@ export const OrderSaleCheckout: FC = () => {
       {paidAmount > 0 && (
         <Fragment>
           <Group justify="space-between">
-            <Text>{t("paid")}</Text>
+            <Text>{tl("paid")}</Text>
             <Text>{num(paidAmount, { type: "money" })}</Text>
           </Group>
         </Fragment>
@@ -48,7 +48,7 @@ export const OrderSaleCheckout: FC = () => {
 
       <Group justify="space-between">
         <Text tt="uppercase" fw={700}>
-          {t("total")}
+          {tl("total")}
         </Text>
         {orderSale.calculating.isLoading ? (
           <Skeleton h={20} w={80} visible={orderSale.calculating.isLoading} />
@@ -72,7 +72,7 @@ export const OrderSaleCheckout: FC = () => {
           variant="outline"
           color="gray"
         >
-          {t("close")}
+          {tl("close")}
         </Button>
 
         <Button
@@ -84,7 +84,7 @@ export const OrderSaleCheckout: FC = () => {
           leftIcon={IconDeviceFloppy}
           disabled={!orderSale.activeOrder.isDirty}
         >
-          {t("save")}
+          {tl("save")}
         </Button>
 
         <Button
@@ -95,7 +95,7 @@ export const OrderSaleCheckout: FC = () => {
           onClick={orderSale.payOrder}
           leftIcon={IconCashRegister}
         >
-          {t("pay")}
+          {tl("pay")}
         </Button>
       </Group>
     </Stack>
@@ -125,13 +125,13 @@ export const OrderSaleCheckout: FC = () => {
 
                       <Stack gap={0}>
                         <Text fz={10} c="gray">
-                          {t(orderSale.activeOrder?.relatedCustomer ? "customer" : "add_info")}
+                          {tl(orderSale.activeOrder?.relatedCustomer ? "customer" : "add_info")}
                         </Text>
                         <Group gap={3}>
                           <Text fz={14}>
                             {orderSale.activeOrder?.relatedCustomer?.name
                               ? orderSale.activeOrder.relatedCustomer?.name
-                              : t("customer")}
+                              : tl("customer")}
                           </Text>
 
                           <ActionIcon
@@ -161,7 +161,7 @@ export const OrderSaleCheckout: FC = () => {
                 }}
               />
 
-              <Tooltip label={t("assignee")}>
+              <Tooltip label={tl("assignee")}>
                 <Group>
                   <WorkspaceMemberInput
                     value={orderSale.activeOrder?.assigneeUsers[0]}
@@ -185,7 +185,7 @@ export const OrderSaleCheckout: FC = () => {
             )}
 
             <Group justify="space-between">
-              <Text>{t("subtotal")}</Text>
+              <Text>{tl("subtotal")}</Text>
               {orderSale.calculating.isLoading ? (
                 <Skeleton h={20} w={80} visible />
               ) : (
