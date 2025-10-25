@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
         loader: "@lingui/loader",
       },
     });
+
+    return config;
   },
   turbopack: {
     rules: {
