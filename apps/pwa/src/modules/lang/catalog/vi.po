@@ -3929,7 +3929,7 @@ msgstr "Phải được cung cấp"
 
 #: src/modules/users/modals/modal-user-information.tsx:231
 msgid "Mutual workspaces"
-msgstr "workspace chung"
+msgstr "Workspace chung"
 
 #: src/modals/modal-check-in-location-form.tsx:70
 #: src/modules/auth/components/form-register.tsx:58
@@ -4050,7 +4050,7 @@ msgstr "Voucher mới"
 
 #: src/modules/workspaces/workspace-require.tsx:120
 msgid "New workspace"
-msgstr "workspace mới"
+msgstr "Workspace mới"
 
 #: src/modules/auth/components/form-forgot-password.tsx:131
 msgid "Next"
@@ -6170,7 +6170,7 @@ msgstr "Mã Workspace là duy nhất và được dùng để nhanh chóng xác 
 
 #: src/modules/workspaces/workspace-invitation.tsx:82
 msgid "The workspace is not available"
-msgstr "workspace không có sẵn"
+msgstr "Workspace không khả dụng"
 
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:121
 msgid "Theme color"
@@ -6217,7 +6217,7 @@ msgstr "Workspace này không còn hoạt động nữa. Vui lòng liên hệ <0
 
 #: src/modules/workspaces/components/workspace-archived.tsx:40
 msgid "This workspace is no longer active. Please contact support to reactivate"
-msgstr "workspace này không còn hoạt động nữa. Vui lòng liên hệ bộ phận hỗ trợ để kích hoạt lại"
+msgstr "Workspace này không còn hoạt động nữa. Vui lòng liên hệ bộ phận hỗ trợ để kích hoạt lại"
 
 #: src/modules/workspace-settings/workspace-setting-message-hubs.tsx:46
 msgid "Tích hợp ChatBox vào website của bạn"
@@ -6941,10 +6941,6 @@ msgstr "Loại thời gian làm việc"
 msgid "Working time, invoice, service voucher, payment method, search settings, ..."
 msgstr "Thời gian làm việc, hóa đơn, phiếu dịch vụ, phương thức thanh toán, cài đặt tìm kiếm, ..."
 
-#: src/modules/workspaces/workspace.tsx:71
-msgid "Workspace"
-msgstr "workspace"
-
 #: src/modules/events/event-constants.ts:134
 #: src/modules/workspaces/components/workspace-archived.tsx:31
 msgid "Workspace archived"
@@ -7009,10 +7005,6 @@ msgstr "Loại workspace"
 #: src/modules/events/event-constants.ts:26
 msgid "Workspace updated"
 msgstr "Đã cập nhật workspace"
-
-#: src/constant.ts:22
-msgid "Workspaces"
-msgstr "workspace"
 
 #: src/modules/customers/components/customer-kyc-card.tsx:105
 #: src/modules/loans/components/loan-documents.tsx:87

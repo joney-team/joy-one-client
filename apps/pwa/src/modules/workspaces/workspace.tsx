@@ -68,7 +68,7 @@ export const Workspace: FC = () => {
 
           <ButtonArchive
             mt={16}
-            name={t`Workspace`}
+            name="Workspace"
             enabled={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}
             process={() => workspace.archive()}
           />

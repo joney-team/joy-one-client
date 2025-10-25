@@ -6941,10 +6941,6 @@ msgstr "Working time type"
 msgid "Working time, invoice, service voucher, payment method, search settings, ..."
 msgstr "Working time, invoice, service voucher, payment method, search settings, ..."
 
-#: src/modules/workspaces/workspace.tsx:71
-msgid "Workspace"
-msgstr "Workspace"
-
 #: src/modules/events/event-constants.ts:134
 #: src/modules/workspaces/components/workspace-archived.tsx:31
 msgid "Workspace archived"
@@ -7009,10 +7005,6 @@ msgstr "Workspace type"
 #: src/modules/events/event-constants.ts:26
 msgid "Workspace updated"
 msgstr "Workspace updated"
-
-#: src/constant.ts:22
-msgid "Workspaces"
-msgstr "Workspaces"
 
 #: src/modules/customers/components/customer-kyc-card.tsx:105
 #: src/modules/loans/components/loan-documents.tsx:87

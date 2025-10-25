@@ -19,7 +19,7 @@ export const appEntities: Record<AppEntity, { name: () => string }> = {
   [AppEntity.COMMENTS]: { name: () => t`Comments` },
   [AppEntity.ORDERS]: { name: () => t`Orders` },
   [AppEntity.USERS]: { name: () => t`Users` },
-  [AppEntity.WORKSPACES]: { name: () => t`Workspaces` },
+  [AppEntity.WORKSPACES]: { name: () => "Workspaces" },
   [AppEntity.WORKSPACE_BRANCHES]: { name: () => t`Workspace Branches` },
   [AppEntity.WORKSPACE_MEMBERS]: { name: () => t`Workspace Members` },
   [AppEntity.MESSAGE_BOXES]: { name: () => t`Message Boxes` },
