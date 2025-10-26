@@ -7,7 +7,7 @@ import { Group, Stack, Text } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
 import {
-  getUserMemberRoleLabel,
+  getWorkspaceMemberRoleLabel,
   getWorkspaceMemberByIds,
 } from "../workspace-members/workspace-members-service";
 import { WorkspaceMemberInfo } from "../workspace-members/workspace-members-types";
@@ -32,7 +32,7 @@ export const UserColumn = (args?: UserColumnArgs): Column => {
               {user.name}
             </Text>
             <Text fz={10} c="gray">
-              {getUserMemberRoleLabel(user)}
+              {getWorkspaceMemberRoleLabel(user)}
             </Text>
           </Stack>
         </Group>
@@ -70,7 +70,7 @@ export const UserColumn = (args?: UserColumnArgs): Column => {
                   {user.name}
                 </Text>
                 <Text fz={10} c="gray">
-                  {getUserMemberRoleLabel(user)}
+                  {getWorkspaceMemberRoleLabel(user)}
                 </Text>
               </Stack>
             </Group>

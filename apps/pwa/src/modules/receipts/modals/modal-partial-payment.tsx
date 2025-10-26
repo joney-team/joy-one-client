@@ -117,7 +117,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
 export const OnModalPartialPayment = (props: ModalPartialPaymentProps) => {
   return modals.open({
     modalId: "ModalPartialPayment",
-    title: <ModalTitle title={t`Partial Payment`} icon={IconCircleHalf2} />,
+    title: <ModalTitle title={t`Partial payment`} icon={IconCircleHalf2} />,
     children: <ModalPartialPayment {...props} />,
   });
 };

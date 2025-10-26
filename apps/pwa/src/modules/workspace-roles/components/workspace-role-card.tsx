@@ -10,7 +10,7 @@ import { t } from "@lingui/core/macro";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconPencil } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
-import { workspaceSpecialRoleIds } from "../workspace-roles-constants";
+import { getWorkspaceRoleName } from "../workspace-roles-constants";
 
 interface WorkspaceRoleCardProps {
   id: any;
@@ -23,8 +23,8 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
   );
 
   const role = workspace.roles.find((role) => role._id === props.id);
-  const roleName =
-    role?.name || workspaceSpecialRoleIds[props.id as WorkspaceSpecialRoleId]?.name();
+  const roleName = getWorkspaceRoleName(role ?? { _id: props.id, name: "" });
+
   const permissions =
     (props.id === WorkspaceSpecialRoleId.MEMBER
       ? workspace.settings.memberPermissions

@@ -3,7 +3,7 @@
 import { Avatar, AvatarProps } from "@/components/avatar";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
-import { getUserMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { ActionIcon, Card, Group, Stack, Text, em, useMantineTheme } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
@@ -79,7 +79,7 @@ export const UserCard: FC<UserCardProps> = (props) => {
               {user.name}
             </Text>
             <Text fz={em(8)} fw={500} mt={-2}>
-              {getUserMemberRoleLabel(user)}
+              {getWorkspaceMemberRoleLabel(user)}
             </Text>
           </Stack>
         )}
@@ -87,26 +87,28 @@ export const UserCard: FC<UserCardProps> = (props) => {
         {props.rightSection}
       </Group>
 
-      {typeof props.onRemove === "function" && !props.disabled && (hover.hovered || viewport.view !== "desktop") && (
-        <ActionIcon
-          color="dark.2"
-          radius={100}
-          size={em(15)}
-          style={{
-            position: "absolute",
-            right: -4,
-            top: -4,
-            border: `1.5px solid var(--mantine-color-body)`,
-          }}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (typeof props.onRemove === "function") return props.onRemove();
-          }}
-        >
-          <IconX size={7} strokeWidth={4} />
-        </ActionIcon>
-      )}
+      {typeof props.onRemove === "function" &&
+        !props.disabled &&
+        (hover.hovered || viewport.view !== "desktop") && (
+          <ActionIcon
+            color="dark.2"
+            radius={100}
+            size={em(15)}
+            style={{
+              position: "absolute",
+              right: -4,
+              top: -4,
+              border: `1.5px solid var(--mantine-color-body)`,
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (typeof props.onRemove === "function") return props.onRemove();
+            }}
+          >
+            <IconX size={7} strokeWidth={4} />
+          </ActionIcon>
+        )}
     </Card>
   );
 };

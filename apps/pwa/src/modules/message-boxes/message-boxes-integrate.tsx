@@ -3,7 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
-import { PluginMetaPages } from "@/components/plugins/plugin-meta-pages";
+import { PluginMetaPages } from "@/modules/plugins/meta-pages/plugin-meta-pages";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { PluginZaloOAs } from "@/modules/plugins/zalo-oas/zalo-oas";
 import { useColor } from "@/modules/theme/use-color";

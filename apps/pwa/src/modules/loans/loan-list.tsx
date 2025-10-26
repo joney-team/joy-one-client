@@ -372,7 +372,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
               },
               icon: IconClipboard,
               color: "red",
-              suggestions: [t`Wrong information`, t`Info does not match img`, t`Img is blurry`],
+              suggestions: [t`Wrong information`, t`Info does not match image`, t`Img is blurry`],
             }),
         },
         {

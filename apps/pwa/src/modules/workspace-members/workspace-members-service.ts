@@ -1,7 +1,10 @@
 import { ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
 import { api } from "../apis";
-import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants";
+import {
+  getWorkspaceRoleName,
+  workspaceSpecialRoleIds,
+} from "../workspace-roles/workspace-roles-constants";
 import { WorkspaceSpecialRoleId } from "../workspace-roles/workspace-roles-types";
 import {
   UpdateWorkspaceMemberDto,
@@ -49,9 +52,22 @@ export async function getWorkspaceMemberOnlineStatus() {
   return api.get<WorkspaceMemberOnlineStatus>(`/workspace-members/online-status`);
 }
 
-export function getUserMemberRoleLabel(userMember: Pick<WorkspaceMember, "memberId" | "roles">) {
+export function getWorkspaceMemberRoleLabel(
+  userMember: Pick<WorkspaceMember, "memberId" | "roles">
+) {
   if (!userMember.memberId) return t`Guest`;
-  if (userMember.roles.length === 0)
+
+  if (userMember.roles.length === 0) {
     return workspaceSpecialRoleIds[WorkspaceSpecialRoleId.MEMBER].name();
-  return userMember.roles.map((v) => v.name).join(", ");
+  }
+
+  if (userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER)) {
+    return workspaceSpecialRoleIds[WorkspaceSpecialRoleId.OWNER].name();
+  }
+
+  if (userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.ADMIN)) {
+    return workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name();
+  }
+
+  return userMember.roles.map((v) => getWorkspaceRoleName(v)).join(", ");
 }

@@ -120,7 +120,7 @@ const AiIntegrationNode = () => {
                     </Text>
                   </Tooltip>
                   <Text fz={10} c="gray.6" truncate="end">
-                    {t`AI assistant`}
+                    <Trans>AI assistant</Trans>
                   </Text>
                 </Fragment>
               ) : (
@@ -129,7 +129,7 @@ const AiIntegrationNode = () => {
                     <IconPlus size={16} />
                   </ActionIcon>
                   <Text fz={14} fw={500} truncate="end">
-                    <Trans>Connect {t`AI assistant`}</Trans>
+                    <Trans>Connect</Trans> <Trans>AI assistant</Trans>
                   </Text>
                 </Group>
               )}

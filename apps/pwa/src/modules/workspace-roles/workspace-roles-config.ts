@@ -1,34 +1,10 @@
+import { t } from "@lingui/core/macro";
 import { WorkspaceType } from "../workspaces/workspaces-types";
-import { WorkspacePermission } from "./workspace-roles-types";
+import { PermissionGroup, PermissionGroupKey, WorkspacePermission } from "./workspace-roles-types";
 
-export enum PermissionGroupKey {
-  LOANS = "loans",
-  CUSTOMERS = "customers",
-  BOOKINGS = "bookings",
-  ORDERS = "orders",
-  RECEIPTS = "receipts",
-  PRODUCTS_SERVICES = "products_services",
-  PRODUCT_STOCKS = "product_stocks",
-  PARTNERS = "partners",
-  MEMBERS = "members",
-  WORKSPACE = "workspace",
-  PRESCRIPTIONS = "prescriptions",
-  REPORTS = "reports",
-  PROMOTIONS = "promotions",
-  POSTS = "posts",
-  CATEGORIES = "categories",
-  DATA = "data",
-}
-
-export interface PermissionGroup {
-  workspaceTypes?: WorkspaceType[];
-  permissions: { value: WorkspacePermission; dependentPermissions?: WorkspacePermission[] }[];
-}
-
-export const permissionGroups: {
-  [key in PermissionGroupKey]: PermissionGroup;
-} = {
+export const permissionGroups: Record<PermissionGroupKey, PermissionGroup> = {
   [PermissionGroupKey.LOANS]: {
+    name: () => t`Loans`,
     workspaceTypes: [WorkspaceType.CREDIT],
     permissions: [
       { value: WorkspacePermission.LOANS_VIEW },
@@ -76,6 +52,7 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.CUSTOMERS]: {
+    name: () => t`Customers`,
     permissions: [
       { value: WorkspacePermission.CUSTOMERS_VIEW },
       {
@@ -113,6 +90,7 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.PROMOTIONS]: {
+    name: () => t`Promotions`,
     permissions: [
       { value: WorkspacePermission.PRODUCT_COMBOS_VIEW },
       {
@@ -125,6 +103,7 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.BOOKINGS]: {
+    name: () => t`Bookings`,
     permissions: [
       { value: WorkspacePermission.BOOKING_VIEW },
       {
@@ -137,6 +116,7 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.RECEIPTS]: {
+    name: () => t`Receipts`,
     permissions: [
       { value: WorkspacePermission.RECEIPTS_VIEW },
       {
@@ -174,6 +154,7 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.ORDERS]: {
+    name: () => t`Orders`,
     permissions: [
       { value: WorkspacePermission.ORDERS_VIEW },
       {
@@ -195,9 +176,11 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.PRODUCTS_SERVICES]: {
+    name: () => t`Products & Services`,
     permissions: [{ value: WorkspacePermission.PRODUCTS_SERVICES_WRITE }],
   },
   [PermissionGroupKey.PRODUCT_STOCKS]: {
+    name: () => t`Product stocks`,
     permissions: [
       { value: WorkspacePermission.PRODUCT_STOCK_VIEW },
       {
@@ -231,13 +214,16 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.PRESCRIPTIONS]: {
+    name: () => t`Prescriptions`,
     workspaceTypes: [WorkspaceType.CLINIC, WorkspaceType.DENTAL, WorkspaceType.HOSPITAL],
     permissions: [{ value: WorkspacePermission.PRESCRIPTIONS_WRITE }],
   },
   [PermissionGroupKey.PARTNERS]: {
+    name: () => t`Partners`,
     permissions: [{ value: WorkspacePermission.PARTNERS_WRITE }],
   },
   [PermissionGroupKey.MEMBERS]: {
+    name: () => t`Members`,
     permissions: [
       { value: WorkspacePermission.WORKSPACE_MEMBERS_VIEW },
       {
@@ -247,12 +233,14 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.WORKSPACE]: {
+    name: () => t`Workspace`,
     permissions: [
       { value: WorkspacePermission.WORKSPACE_SETTINGS },
       { value: WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS },
     ],
   },
   [PermissionGroupKey.POSTS]: {
+    name: () => t`Posts`,
     permissions: [
       { value: WorkspacePermission.POSTS_VIEW },
       {
@@ -262,6 +250,7 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.CATEGORIES]: {
+    name: () => t`Categories`,
     permissions: [
       { value: WorkspacePermission.CATEGORIES_VIEW },
       {
@@ -271,9 +260,11 @@ export const permissionGroups: {
     ],
   },
   [PermissionGroupKey.REPORTS]: {
+    name: () => t`Reports`,
     permissions: [{ value: WorkspacePermission.REPORTS_VIEW }],
   },
   [PermissionGroupKey.DATA]: {
+    name: () => t`Data`,
     permissions: [{ value: WorkspacePermission.EXPORT_DATA }],
   },
 };

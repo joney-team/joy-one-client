@@ -5,7 +5,7 @@ import { Layout, renderPage } from "@/layout/layout-page";
 import { Card } from "@mantine/core";
 
 const PluginMetaPages = renderPage(() =>
-  import("@/components/plugins/plugin-meta-pages").then((mod) => mod.PluginMetaPages)
+  import("@/modules/plugins/meta-pages/plugin-meta-pages").then((mod) => mod.PluginMetaPages)
 );
 
 const Content = () => {

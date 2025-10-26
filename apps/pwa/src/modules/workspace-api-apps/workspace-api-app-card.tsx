@@ -2,7 +2,7 @@
 
 import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity";
 import { updateWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-service";
-import { getUserMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { onActionLoad } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
 import { Card, Group, Stack, Switch, Text, ThemeIcon } from "@mantine/core";
@@ -64,7 +64,7 @@ export const WorkspaceApiAppCard: FC<WorkspaceApiAppCardProps> = ({ app }) => {
                 <IconAccessible size={14} />
               </ThemeIcon>
               <Text fz={12} c="gray">
-                {t`Role`}: {getUserMemberRoleLabel(app.member)}
+                {t`Role`}: {getWorkspaceMemberRoleLabel(app.member)}
               </Text>
             </Group>
           </Stack>

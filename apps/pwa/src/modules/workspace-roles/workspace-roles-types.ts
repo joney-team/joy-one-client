@@ -1,4 +1,5 @@
-import { BaseMongoEntity } from "@/types";
+import type { BaseMongoEntity } from "@/types";
+import { WorkspaceType } from "../workspaces/workspaces-types";
 
 export enum WorkspacePermission {
   CUSTOM_FIELDS_MANAGER = "CFSM",
@@ -114,4 +115,29 @@ export interface WorkspaceRoleEntity extends BaseMongoEntity {
 
 export interface TransferOwnerDto {
   userId: string;
+}
+
+export enum PermissionGroupKey {
+  LOANS = "loans",
+  CUSTOMERS = "customers",
+  BOOKINGS = "bookings",
+  ORDERS = "orders",
+  RECEIPTS = "receipts",
+  PRODUCTS_SERVICES = "products_services",
+  PRODUCT_STOCKS = "product_stocks",
+  PARTNERS = "partners",
+  MEMBERS = "members",
+  WORKSPACE = "workspace",
+  PRESCRIPTIONS = "prescriptions",
+  REPORTS = "reports",
+  PROMOTIONS = "promotions",
+  POSTS = "posts",
+  CATEGORIES = "categories",
+  DATA = "data",
+}
+
+export interface PermissionGroup {
+  name: () => string;
+  workspaceTypes?: WorkspaceType[];
+  permissions: { value: WorkspacePermission; dependentPermissions?: WorkspacePermission[] }[];
 }

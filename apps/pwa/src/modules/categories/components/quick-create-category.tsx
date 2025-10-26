@@ -24,7 +24,8 @@ export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>
     </ActionIcon>
   );
 
-  const label = t`Create ${t`Category`}`;
+  const entity = t`Category`;
+  const label = t`Create ${entity}`;
 
   return (
     <Popover shadow="md" opened={opened} onChange={setOpened}>
@@ -33,7 +34,7 @@ export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>
       <Popover.Dropdown p={10}>
         <TextInput
           label={label}
-          placeholder={t`Enter ${t`Category`.toLowerCase()} name`}
+          placeholder={t`Enter ${entity.toLowerCase()} name`}
           autoFocus
           onKeyUp={(e) => {
             if (e.key === "Enter") {
@@ -41,7 +42,7 @@ export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>
               e.stopPropagation();
               const value = (e.target as any).value;
               onActionLoad({
-                name: t`Create ${t`Category`}`,
+                name: t`Create ${entity}`,
                 process: async () => {
                   const category = await api.post<CategoryEntity>("/categories", {
                     name: value,

@@ -116,13 +116,14 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
         form.reset();
         setApp(_app);
       } else {
+        const entity = `API App`;
         const _app = await createWorkspaceApiApp(payload);
         form.setInitialValues(getInitialValues(_app));
         form.reset();
         setSecretKey(_app.secretKey);
         modals.updateModal({
           modalId: "ModalWorkspaceApiApp",
-          title: <ModalTitle title={t`Information about ${t`API App`}`} icon={IconApiApp} />,
+          title: <ModalTitle title={t`Update ${entity}`} icon={IconApiApp} />,
         });
         setApp(_app);
       }
@@ -242,13 +243,12 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
 };
 
 export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => {
+  const entity = `API App`;
+
   return modals.open({
     modalId: "ModalWorkspaceApiApp",
     title: (
-      <ModalTitle
-        title={app ? t`Information about ${t`API App`}` : t`Create new ${t`API App`}`}
-        icon={IconApiApp}
-      />
+      <ModalTitle title={app ? t`Update ${entity}` : t`Create new ${entity}`} icon={IconApiApp} />
     ),
     children: <ModalWorkspaceApiApp app={app} />,
     size: "xl",

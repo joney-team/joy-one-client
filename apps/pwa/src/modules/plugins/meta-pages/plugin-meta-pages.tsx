@@ -25,9 +25,9 @@ import {
 } from "@mantine/core";
 import { IconCirclesRelation, IconLinkPlus, IconPuzzle } from "@tabler/icons-react";
 import { FC } from "react";
-import { Avatar } from "../avatar";
-import { Button } from "../buttons/button";
-import { Image } from "../image";
+import { Avatar } from "../../../components/avatar";
+import { Button } from "../../../components/buttons/button";
+import { Image } from "../../../components/image";
 
 export const PluginMetaPages: FC = () => {
   const workspace = useWorkspace();
@@ -49,7 +49,7 @@ export const PluginMetaPages: FC = () => {
         </Group>
 
         <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-          {t`Connect ${t`Fanpage Facebook`}`}
+          <Trans>Connect</Trans> Fanpage Facebook
         </Title>
 
         <Text ta="center">

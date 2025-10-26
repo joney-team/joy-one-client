@@ -37,7 +37,7 @@ import { IconCheck, IconInfoCircle, IconLocation, IconPlus, IconUser } from "@ta
 import { ChangeEventHandler, FC, useEffect, useState } from "react";
 import { useApp } from "../../app.context";
 import { api } from "../apis";
-import { getUserMemberRoleLabel } from "../workspace-members/workspace-members-service";
+import { getWorkspaceMemberRoleLabel } from "../workspace-members/workspace-members-service";
 import { workspaceTypes } from "./workspace-constants";
 
 export const WorkspaceRequire: FC = () => {
@@ -189,7 +189,7 @@ export const WorkspaceRequire: FC = () => {
                         <ThemeIcon size="xs" variant="transparent" color="dark">
                           <IconUser strokeWidth={1.2} />
                         </ThemeIcon>
-                        <Text fz="xs">{getUserMemberRoleLabel(userMember)}</Text>
+                        <Text fz="xs">{getWorkspaceMemberRoleLabel(userMember)}</Text>
                       </Group>
 
                       {!!userMember.workspace.location?.address && (

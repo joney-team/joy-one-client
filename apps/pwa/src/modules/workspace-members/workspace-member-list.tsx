@@ -12,7 +12,7 @@ import { OnModalUserInformation } from "@/modules/users/modals/modal-user-inform
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
 import { getWorkspaceBranchByIds } from "@/modules/workspace-branches/workspace-branches-service";
 import {
-  getUserMemberRoleLabel,
+  getWorkspaceMemberRoleLabel,
   updateWorkspaceMember,
 } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
@@ -45,7 +45,7 @@ export const WorkspaceMemberList: FC = () => {
       <List<WorkspaceMember>
         route="/workspace-members"
         id="workspace-members"
-        name="members"
+        name={t`Members`}
         columns={{
           name: {
             render: ({ data }) => (
@@ -64,7 +64,7 @@ export const WorkspaceMemberList: FC = () => {
           },
           createdAt: DateTimeColumn({
             valuePath: "joinedAt",
-            name: "join_workspace_at",
+            name: t`Joined at`,
             isFromNow: true,
             hideTime: true,
             isHasFilter: false,
@@ -73,6 +73,7 @@ export const WorkspaceMemberList: FC = () => {
           }),
           email: {
             icon: IconMail,
+            name: t`Email`,
             w: 200,
             render: ({ data }) => {
               if (!data.email) return null;
@@ -88,6 +89,7 @@ export const WorkspaceMemberList: FC = () => {
           },
           phone: {
             icon: IconPhone,
+            name: t`Phone`,
             w: 150,
             render: ({ data }) => {
               if (!data.phone) return null;
@@ -100,7 +102,7 @@ export const WorkspaceMemberList: FC = () => {
             },
           },
           roles: {
-            name: "role",
+            name: t`Role`,
             icon: IconAccessible,
             render: ({ data }) => {
               const isOwner = data.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER);
@@ -138,13 +140,13 @@ export const WorkspaceMemberList: FC = () => {
             },
             exportToExcel: (_, data) => {
               return {
-                text: getUserMemberRoleLabel(data),
+                text: getWorkspaceMemberRoleLabel(data),
               };
             },
           },
           workspaceBranchIds: {
             w: 300,
-            name: "workspace_branch",
+            name: t`Branch`,
             icon: IconBuilding,
             render: ({ data }) => {
               if (data.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)) {
@@ -260,7 +262,7 @@ const MemberCard: FC<{ member: WorkspaceMember }> = (props) => {
             </ThemeIcon>
 
             <Text fz={12} fw={500}>
-              {getUserMemberRoleLabel(member)}
+              {getWorkspaceMemberRoleLabel(member)}
             </Text>
           </Group>
         </Stack>

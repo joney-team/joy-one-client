@@ -26,9 +26,8 @@ export const ZaloOasOnboarding: FC = () => {
         </Group>
 
         <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-          <Trans>
-            Connect <strong>Zalo OAs</strong>
-          </Trans>
+          <Trans>Connect</Trans>
+          <strong>Zalo OAs</strong>
         </Title>
 
         <Text ta="center">

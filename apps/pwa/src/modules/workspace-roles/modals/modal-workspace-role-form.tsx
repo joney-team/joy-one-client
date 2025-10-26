@@ -34,7 +34,7 @@ import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconAccessible, IconCheck, IconLock } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { workspaceSpecialRoleIds } from "../workspace-roles-constants";
+import { workspacePermissions, workspaceSpecialRoleIds } from "../workspace-roles-constants";
 
 interface ModalWorkspaceRoleFormProps {
   roleId?: string;
@@ -120,8 +120,6 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
     return [...acc, ...group.permissions];
   }, [] as { value: WorkspacePermission; dependentPermissions?: WorkspacePermission[] }[]);
 
-  console.log("permissionGroups", permissionGroups);
-
   return (
     <Stack>
       <TextInput
@@ -168,7 +166,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
               return (
                 <Card key={groupKey} withBorder p={10} shadow="none">
                   <Stack>
-                    <Divider label={groupKey} labelPosition="left" />
+                    <Divider label={group.name()} labelPosition="left" />
 
                     {group.permissions.map((permission, i) => {
                       const dependentPermissions = allPermissions.filter(
@@ -201,7 +199,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
                         >
                           <Switch
                             key={permission.value}
-                            label={permission.value}
+                            label={workspacePermissions[permission.value].name()}
                             color={isHasDependentPermissions ? "orange" : undefined}
                             checked={isChecked}
                             onClick={onToggle}

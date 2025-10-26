@@ -387,7 +387,7 @@ export const workspaceModuleConfigs = {
     restrictDisplay: ["spotlight"],
     name: () => t`Banks`,
     description: () => t`Integrate bank accounts to receive and pay money.`,
-    color: "teal",
+    color: "yellow",
   }),
   workspacePluginsZaloOas: combineModule({
     href: "/workspace-settings/plugins/zalo-oas",
@@ -396,7 +396,7 @@ export const workspaceModuleConfigs = {
     restrictDisplay: ["spotlight"],
     name: () => t`Zalo OAs`,
     description: () => t`Integrate Zalo OA, manage customer interactions.`,
-    color: "yellow",
+    color: "blue",
   }),
   workspacePluginsMetaPages: combineModule({
     href: "/workspace-settings/plugins/meta-pages",
@@ -433,7 +433,7 @@ export const workspaceModuleConfigs = {
     restrictDisplay: ["spotlight"],
     name: () => t`AI Assistants`,
     description: () => t`Auto reply messages according to the script`,
-    color: "orange",
+    color: "indigo",
   }),
   workspacePluginsEInvoices: combineModule({
     href: "/workspace-settings/plugins/e-invoices",

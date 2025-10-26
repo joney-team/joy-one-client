@@ -337,7 +337,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       <FormSessionIcon icon={IconNotebook} description="details" visible={type !== "RESCHEDULE"}>
         <Textarea
           {...form.getInputProps("note")}
-          placeholder={capitalize(`${t`Enter`} ${t`Details`} (${t`Optional`})`)}
+          placeholder={t`Enter details (Optional)`}
           minRows={4}
           autosize
           readOnly={type === "RESCHEDULE"}

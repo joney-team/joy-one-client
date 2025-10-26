@@ -109,6 +109,10 @@ msgstr "A combo is a shopping method that combines multiple products into a sing
 msgid "Accept lateness up to {0} minutes"
 msgstr "Accept lateness up to {0} minutes"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:132
+msgid "Access all branches"
+msgstr "Access all branches"
+
 #: src/modules/dashboard/dashboard-suggestions.tsx:198
 msgid "Access faster with standalone app"
 msgstr "Access faster with standalone app"
@@ -301,7 +305,7 @@ msgstr "Add widget"
 msgid "Address"
 msgstr "Address"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:6
+#: src/modules/workspace-roles/workspace-roles-constants.ts:10
 msgid "Admin"
 msgstr "Admin"
 
@@ -326,13 +330,13 @@ msgstr "Afternoon"
 
 #: src/modules/message-boxes/message-box/message-box-messages.tsx:246
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:234
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:123
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:132
 msgid "AI assistant"
 msgstr "AI assistant"
 
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:218
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
 msgid "AI Assistant"
 msgstr "AI Assistant"
 
@@ -373,8 +377,8 @@ msgid "All {0}"
 msgstr "All {0}"
 
 #: src/modules/users/components/user-workspace-settings-form.tsx:137
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:210
-#: src/modules/workspace-members/workspace-member-list.tsx:151
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:211
+#: src/modules/workspace-members/workspace-member-list.tsx:153
 msgid "All branches"
 msgstr "All branches"
 
@@ -421,12 +425,6 @@ msgstr "Analytics"
 #: src/modules/products/components/form-product.tsx:322
 msgid "Another name displayed on the ticket, invoice sent to customers. Not required"
 msgstr "Another name displayed on the ticket, invoice sent to customers. Not required"
-
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:125
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
-msgid "API App"
-msgstr "API App"
 
 #: src/modules/events/event-constants.ts:169
 msgid "API App archived"
@@ -502,6 +500,7 @@ msgid "Approve Expense"
 msgstr "Approve Expense"
 
 #: src/modules/events/event-constants.ts:116
+#: src/modules/workspace-roles/workspace-roles-constants.ts:48
 msgid "Approve loan"
 msgstr "Approve loan"
 
@@ -524,6 +523,18 @@ msgstr "Approved"
 msgid "Archive"
 msgstr "Archive"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:123
+msgid "Archive customer"
+msgstr "Archive customer"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:60
+msgid "Archive loan"
+msgstr "Archive loan"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:144
+msgid "Archive order / service ticket"
+msgstr "Archive order / service ticket"
+
 #: src/modules/events/event-constants.ts:61
 msgid "Archive partner"
 msgstr "Archive partner"
@@ -533,6 +544,7 @@ msgid "Archive product"
 msgstr "Archive product"
 
 #: src/modules/events/event-constants.ts:70
+#: src/modules/workspace-roles/workspace-roles-constants.ts:126
 msgid "Archive receipt"
 msgstr "Archive receipt"
 
@@ -645,6 +657,10 @@ msgstr "Asset types"
 #: src/modules/message-boxes/message-box/message-box-head.tsx:104
 msgid "Assign assignee"
 msgstr "Assign assignee"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:39
+msgid "Assign customer to member"
+msgstr "Assign customer to member"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:177
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:312
@@ -855,6 +871,7 @@ msgstr "Booking information"
 #: src/modules/customers/components/customer-booking.tsx:68
 #: src/modules/dashboard/dashboard-bookings.tsx:65
 #: src/modules/users/modals/modal-user-information.tsx:240
+#: src/modules/workspace-roles/workspace-roles-config.ts:106
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:197
 #: src/modules/workspaces/workspace-modules.tsx:149
 msgid "Bookings"
@@ -868,13 +885,14 @@ msgstr "Bookings chart"
 #: src/modules/loans/modals/modal-create-loan.tsx:394
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:290
 #: src/modules/workspace-branches/workspace-branch-column.tsx:42
+#: src/modules/workspace-members/workspace-member-list.tsx:149
 #: src/widgets/reports/index.tsx:334
 msgid "Branch"
 msgstr "Branch"
 
 #: src/layout/navigation/navigation-drawer.tsx:265
 #: src/modules/users/components/user-workspace-settings-form.tsx:135
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:208
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:209
 #: src/modules/workspaces/workspace-modules.tsx:323
 msgid "Branches"
 msgstr "Branches"
@@ -992,14 +1010,13 @@ msgstr "Cashier"
 
 #: src/constant.ts:28
 #: src/modules/products/components/form-product.tsx:310
+#: src/modules/workspace-roles/workspace-roles-config.ts:253
 #: src/modules/workspaces/workspace-modules.tsx:351
 msgid "Categories"
 msgstr "Categories"
 
 #: src/modules/categories/components/category-input.tsx:25
 #: src/modules/categories/components/quick-create-category.tsx:27
-#: src/modules/categories/components/quick-create-category.tsx:36
-#: src/modules/categories/components/quick-create-category.tsx:44
 msgid "Category"
 msgstr "Category"
 
@@ -1014,6 +1031,14 @@ msgstr "Category created"
 #: src/modules/events/event-constants.ts:180
 msgid "Category updated"
 msgstr "Category updated"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:75
+msgid "Censor receipts"
+msgstr "Censor receipts"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:84
+msgid "Censor timekeeping"
+msgstr "Censor timekeeping"
 
 #: src/components/inputs/image-input.tsx:177
 msgid "Change"
@@ -1040,7 +1065,12 @@ msgstr "Change customer"
 msgid "Change folder"
 msgstr "Change folder"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:174
+msgid "Change fulfilled at"
+msgstr "Change fulfilled at"
+
 #: src/modules/events/event-constants.ts:165
+#: src/modules/workspace-roles/workspace-roles-constants.ts:24
 msgid "Change loan workspace branch"
 msgstr "Change loan workspace branch"
 
@@ -1060,6 +1090,10 @@ msgstr "Change provider"
 #: src/modules/events/event-constants.ts:166
 msgid "Change receipt workspace branch"
 msgstr "Change receipt workspace branch"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:99
+msgid "Change settings"
+msgstr "Change settings"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:143
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:301
@@ -1346,32 +1380,23 @@ msgstr "Confirm password"
 msgid "Congratulations! You cleared your important notifications 🎉"
 msgstr "Congratulations! You cleared your important notifications 🎉"
 
-#: src/components/plugins/plugin-meta-pages.tsx:61
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:212
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
 #: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:49
-#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:40
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:52
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:61
+#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:29
+#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:39
+#: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:132
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:425
 msgid "Connect"
 msgstr "Connect"
-
-#. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { Button } from "@/components/buttons/button"; import { Container } from "@/components/container"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core"; import { IconAi, IconCirclesRelation, IconLinkPlus, IconPencil } from "@tabler/icons-react"; import { type FC } from "react"; export const AiAssistantList: FC = () => { const plugins = usePlugins(); const workspace = useWorkspace(); const color = useColor(); if (plugins.aiAssistants.length === 0) { return ( <Container size="sm" p={16}> <Card shadow="xs"> <Stack align="center" py={20}> <Group gap={30} mb={20}> <Avatar workspace={workspace.userMember.workspace} size={55} /> <ThemeIcon variant="transparent" size="lg" color="dark"> <IconCirclesRelation size={50} /> </ThemeIcon> <Avatar src="/images/ai-assistants.png" size={55} /> </Group> <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}> {t`Connect ${t`AI Assistant`}`} </Title> <Text ta="center"> • <Trans>Automatically reply to customer messages</Trans> <br />•{" "} <Trans>Integrate with LLM models</Trans> </Text> <Button mt={10} action onClick={() => OnModalCreatePluginAiAssistant()} leftIcon={IconLinkPlus} > <Trans>Connect</Trans> </Button> </Stack> </Card> </Container> ); } return ( <Container size="xs" p={16}> <Stack> {plugins.aiAssistants.map((plugin) => { return ( <Card key={plugin._id} shadow="sm"> <Group align="start"> <ThemeIcon size={60} variant="light"> <IconAi size={40} strokeWidth={1.2} /> </ThemeIcon> <Stack gap={3} flex={1}> <Text fw={600}>{plugin.providerName}</Text> <Text c="gray" fz={12}> <Trans>Provider</Trans>: {t`AI Assistant ${plugin.provider}`} </Text> </Stack> <Stack> <ActionIcon variant="subtle" color="gray" onClick={() => OnModalCreatePluginAiAssistant(plugin)} > <IconPencil size={16} /> </ActionIcon> </Stack> </Group> </Card> ); })} </Stack> </Container> ); }; 
-#. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows"; import { Image } from "@/components/image"; import { useLayout } from "@/layout/layout-context"; import { renderDateTime, renderFromNow } from "@/modules/lang/lang-service"; import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service"; import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service"; import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { String } from "@/utils/string.utils"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core"; import { useElementSize } from "@mantine/hooks"; import { IconClock, IconMessage, IconPlus } from "@tabler/icons-react"; import { Handle, Position, ReactFlow } from "@xyflow/react"; import { FC, Fragment } from "react"; const cardRootSize = { width: 300, height: 110, }; const cardSize = { width: 260, height: 65, }; const cardAiSize = { width: 320, height: 80, }; const RootNode = () => { const workspace = useWorkspace(); const color = useColor(); return ( <Fragment> <Handle type="target" position={Position.Left} /> <Card withBorder shadow="none" p={0} style={{ cursor: "default", borderColor: color("primary"), }} > <Group gap={10} px={16} py={10} w={cardRootSize.width} h={cardRootSize.height} wrap="nowrap" > <Avatar workspace={workspace.userMember.workspace} radius={8} size={70} /> <Stack gap={0}> <Tooltip label={workspace.userMember.workspace.name} disabled={workspace.userMember.workspace.name.length < 10} > <Text fz={25} fw={500} truncate="end" maw={160}> {workspace.userMember.workspace.name} </Text> </Tooltip> <Text fz={12} c="gray.6" truncate="end"> Workspace </Text> </Stack> </Group> </Card> <Handle type="target" position={Position.Right} /> </Fragment> ); }; const AiIntegrationNode = () => { const plugins = usePlugins(); const aiPlugin = plugins.aiAssistants[0]; return ( <Fragment> <Handle type="source" position={Position.Left} /> <Card withBorder shadow="none" w={cardAiSize.width} h={cardAiSize.height} p={0} style={{ borderStyle: aiPlugin ? "solid" : "dashed", }} > <Group gap={10} align="center" wrap="nowrap" h={cardAiSize.height} px={16}> <Group gap={10} flex={1} style={{ cursor: "pointer", }} onClick={() => OnModalCreatePluginAiAssistant(aiPlugin)} > <Image src="/images/ai-assistants.png" w={40} h={40} /> <Stack gap={0} flex={1}> {aiPlugin ? ( <Fragment> <Tooltip label={aiPlugin.providerName}> <Text fz={16} fw={500} truncate="end"> {String.limitCharacters(aiPlugin.providerName, 20)} </Text> </Tooltip> <Text fz={10} c="gray.6" truncate="end"> {t`AI assistant`} </Text> </Fragment> ) : ( <Group wrap="nowrap" gap={0}> <ActionIcon variant="transparent" color="dark"> <IconPlus size={16} /> </ActionIcon> <Text fz={14} fw={500} truncate="end"> <Trans>Connect {t`AI assistant`}</Trans> </Text> </Group> )} </Stack> </Group> {aiPlugin && ( <Switch style={{ cursor: "pointer", }} checked={aiPlugin?.enabled} onChange={() => false} onClick={(e) => { e.stopPropagation(); e.preventDefault(); updatePluginAiAssistant(aiPlugin._id, { enabled: !aiPlugin.enabled }); }} /> )} </Group> </Card> </Fragment> ); }; const PluginNode = (props: any) => { const { plugin, name, type } = props.data; const platformType = type === "metaPages" ? MessageBoxPlatformType.META_PAGE : type === "zalaOAs" ? MessageBoxPlatformType.ZALO : MessageBoxPlatformType.MESSAGE_HUB; const PluginAvatar: FC = ( { metaPages: () => <Avatar color="primary" pluginMetaPage={plugin} size={30} />, zalaOAs: () => <Avatar color="primary" pluginZaloOa={plugin} size={30} />, messageHubs: () => ( <Avatar icon={IconMessage} src="/images/plugins-message-hubs.png" size={30} /> ), } as any )[type]; return ( <Fragment> <Handle type="source" position={Position.Right} /> <Card withBorder shadow="none" w={cardSize.width} h={cardSize.height} p={0} style={{ cursor: "default" }} > <Group gap={10} align="center" w={cardSize.width} h={cardSize.height} p={16} wrap="nowrap"> <Indicator label={<Image src={messageBoxPlatformImages[platformType]} w={16} h={16} />} radius={8} color="var(--mantine-color-body)" position="bottom-end" offset={5} styles={{ indicator: { paddingInline: 0, width: 20, height: 20, transform: "translate(50%, 80%)", zIndex: 10, }, }} > <PluginAvatar /> </Indicator> <Stack gap={0}> <Tooltip label={name} disabled={!name || name.length < 15}> <Text fz={16} fw={500} truncate="end" maw={150}> {name || t`Plugin`} </Text> </Tooltip> {!!plugin.lastInteractionAt && ( <Tooltip label={`${t`Last interaction at`}: ${renderDateTime(plugin.lastInteractionAt)}`} > <Text fz={10} fw={500} c="gray" truncate="end"> <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "} {renderFromNow(plugin.lastInteractionAt)} </Text> </Tooltip> )} </Stack> </Group> </Card> </Fragment> ); }; const PlusPluginNode = (props: any) => { const { isHasPlugin } = props.data; return ( <Fragment> <Handle type="source" position={Position.Right} /> <Card withBorder shadow="none" p={0} h={cardSize.height} w={cardSize.width} style={{ cursor: "pointer", borderStyle: "dashed" }} onClick={() => OnModalConnectPlugins()} > <Group gap={10} align="center" h={cardSize.height} w={cardSize.width} p={16} wrap="nowrap" bg="var(--mantine-color-body)" > <ActionIcon size={30} radius={100} variant="subtle" color="dark"> <IconPlus size={20} strokeWidth={1.5} /> </ActionIcon> <Text fz={14} fw={500} truncate="end"> {isHasPlugin ? t`Connect more` : t`Connect platform`} </Text> </Group> </Card> </Fragment> ); }; export const WorkspaceSettingMessageBoxesIntegrations: FC = () => { const layout = useLayout(); const sized = useElementSize(); const plugins = usePlugins(); const aiPlugin = plugins.aiAssistants[0]; const distanceFromRoot = 100; const rootPosition = { x: sized.width * 0.5 - cardRootSize.width / 2, y: sized.height / 2 - cardRootSize.height / 2, }; const pluginsGroup = groupNodes({ group: { x: 0, y: 0, id: "plugins", title: "message_source", spacing: 16, }, nodes: [ ...plugins.metaPages.map((m) => ({ id: m._id, type: "plugin", data: { name: m.name, plugin: m, type: "metaPages" }, position: { x: 0, y: 0 }, ...cardSize, })), ...plugins.zaloOas.map((m) => ({ id: m._id, type: "plugin", data: { name: m.info.name, plugin: m, type: "zalaOAs" }, position: { x: 0, y: 0 }, ...cardSize, })), ...plugins.messageHubs.map((m) => ({ id: m._id, type: "plugin", data: { name: m.name, plugin: m, type: "messageHubs" }, position: { x: 0, y: 0 }, ...cardSize, })), { id: "plus", type: "plus", position: { x: 0, y: 0 }, ...cardSize, data: {}, }, ], }); const nodes = [ { id: "root", position: rootPosition, type: "root", data: {}, }, ...moveNodes(pluginsGroup.nodes, { x: rootPosition.x - distanceFromRoot - cardSize.width, y: sized.height / 2 - pluginsGroup.group.height / 2, }), // Ai Integration { id: "ai", type: "ai", position: { x: rootPosition.x + distanceFromRoot * 0.5 + cardAiSize.width, y: sized.height / 2 - cardAiSize.height / 2, }, data: {}, }, ]; // Edges const edges = [ // Plugin -> Root ...pluginsGroup.childNodes.map((p) => ({ id: `${p.id}-root`, source: p.id, target: "root", animated: true, })), // Ai -> Root { id: "ai-root", source: "ai", target: "root", animated: !aiPlugin || aiPlugin.enabled }, ]; return ( <Card ref={sized.ref} w="100%" h={layout.height - 200} p={0} bg="gray.0" shadow="none"> <ReactFlow nodes={nodes} edges={edges} nodeTypes={{ ...defaultNodeTypes, root: RootNode, plugin: PluginNode, plus: PlusPluginNode, ai: AiIntegrationNode, }} nodesDraggable={false} zoomOnDoubleClick={false} zoomOnPinch={false} zoomOnScroll={false} maxZoom={1} minZoom={1} /> </Card> ); }; 
-#. placeholder {0}: "use client"; import { disconnectPluginMetaPage } from "@/modules/plugins/meta-pages/meta-pages-service"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onArchive } from "@/utils/actions"; import { onError } from "@/utils/exceptions.utils"; import { capitalize } from "@/utils/string.utils"; import config from "@joy-one-client/config"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { Anchor, Card, Center, Group, SimpleGrid, Skeleton, Stack, Text, ThemeIcon, Title, em, } from "@mantine/core"; import { IconCirclesRelation, IconLinkPlus, IconPuzzle } from "@tabler/icons-react"; import { FC } from "react"; import { Avatar } from "../avatar"; import { Button } from "../buttons/button"; import { Image } from "../image"; export const PluginMetaPages: FC = () => { const workspace = useWorkspace(); const plugins = usePlugins(); const color = useColor(); if (!plugins.isInitialized) return <Skeleton height={150} />; if (plugins.metaPages.length === 0) return ( <Stack align="center" py={20}> <Group gap={30} mb={20}> <Avatar workspace={workspace.userMember.workspace} size={55} /> <ThemeIcon variant="transparent" size="lg" color="dark"> <IconCirclesRelation size={50} /> </ThemeIcon> <Image w={55} src="/images/plugins-meta-pages.svg" /> </Group> <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}> {t`Connect ${t`Fanpage Facebook`}`} </Title> <Text ta="center"> • <Trans>Interact with customers via Messenger</Trans> <br />•{" "} <Trans>Easy & quick setup</Trans> </Text> <Button mt={10} action onClick={plugins.onConnectMetaPages} leftIcon={IconLinkPlus}> <Trans>Connect</Trans> </Button> </Stack> ); return ( <Stack gap={30}> <SimpleGrid cols={{ md: 2 }}> {plugins.metaPages.map((page) => { return ( <Card key={page._id} shadow="none" withBorder> <Group justify="space-between"> <Group> <Avatar pluginMetaPage={page} /> <Stack gap={0}> <Text>{page.name}</Text> <Text fz={12}>#{page.id}</Text> {config.ENV === "development" && <Text fz={12}>#{page._id}</Text>} </Stack> </Group> <Anchor c="gray" fw={500} fz={em(12)} onClick={() => onArchive({ icon: IconPuzzle, title: capitalize(`${t`Disconect`} ${page.name}`), process: () => disconnectPluginMetaPage(page._id).catch(onError), }) } > <Trans>Disconect</Trans> </Anchor> </Group> </Card> ); })} <Center> <Button type="submit" onClick={plugins.onConnectMetaPages} rightSection={<IconLinkPlus strokeWidth={1.5} />} > <Trans>Connect more</Trans> </Button> </Center> </SimpleGrid> </Stack> ); }; 
-#: src/components/plugins/plugin-meta-pages.tsx:52
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
-#: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:132
-msgid "Connect {0}"
-msgstr "Connect {0}"
-
-#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:29
-msgid "Connect <0>Zalo OAs</0>"
-msgstr "Connect <0>Zalo OAs</0>"
 
 #: src/modals/modal-connect-meta-pages.tsx:135
 msgid "Connect Meta page"
 msgstr "Connect Meta page"
 
-#: src/components/plugins/plugin-meta-pages.tsx:107
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:107
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:262
 msgid "Connect more"
 msgstr "Connect more"
@@ -1506,16 +1531,15 @@ msgstr "Coupons"
 #: src/modules/loans/modals/modal-loan-package-form.tsx:332
 #: src/modules/promotions/components/form-promotion.tsx:177
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:87
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:240
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:238
 #: src/modules/workspaces/workspace-require.tsx:302
 msgid "Create"
 msgstr "Create"
 
-#. placeholder {0}: "use client"; import { api } from "@/modules/apis"; import { onActionLoad } from "@/utils/actions"; import { t } from "@lingui/core/macro"; import { ActionIcon, Group, Popover, TextInput } from "@mantine/core"; import { IconPlus } from "@tabler/icons-react"; import { FC, PropsWithChildren, useState } from "react"; import { CategoryEntity, CategoryType } from "../category-types"; interface QuickCreateCategoryProps { type?: CategoryType; onCreated?: (category: CategoryEntity) => void; } export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>> = (props) => { const [opened, setOpened] = useState(false); const children = props.children ? ( <Group onClick={() => setOpened((s) => !s)}>{props.children}</Group> ) : ( <ActionIcon onClick={() => setOpened((s) => !s)}> <IconPlus size={16} strokeWidth={1.5} /> </ActionIcon> ); const label = t`Create ${t`Category`}`; return ( <Popover shadow="md" opened={opened} onChange={setOpened}> <Popover.Target>{children}</Popover.Target> <Popover.Dropdown p={10}> <TextInput label={label} placeholder={t`Enter ${t`Category`.toLowerCase()} name`} autoFocus onKeyUp={(e) => { if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); const value = (e.target as any).value; onActionLoad({ name: t`Create ${t`Category`}`, process: async () => { const category = await api.post<CategoryEntity>("/categories", { name: value, type: props.type, }); props.onCreated?.(category); }, }); setOpened(false); } }} /> </Popover.Dropdown> </Popover> ); }; 
-#: src/modules/categories/components/quick-create-category.tsx:27
-#: src/modules/categories/components/quick-create-category.tsx:44
-msgid "Create {0}"
-msgstr "Create {0}"
+#: src/modules/categories/components/quick-create-category.tsx:28
+#: src/modules/categories/components/quick-create-category.tsx:45
+msgid "Create {entity}"
+msgstr "Create {entity}"
 
 #: src/modules/workspaces/workspace-modules.tsx:287
 msgid "Create an application with a custom domain, customize the application name, icon, color."
@@ -1548,6 +1572,7 @@ msgid "Create coupon rule"
 msgstr "Create coupon rule"
 
 #: src/modules/customers/customer-modal.tsx:16
+#: src/modules/workspace-roles/workspace-roles-constants.ts:33
 msgid "Create customer"
 msgstr "Create customer"
 
@@ -1573,17 +1598,16 @@ msgstr "Create model"
 #: src/modules/products/components/form-product.tsx:617
 #: src/modules/workspace-api-apps/workspace-api-app-list.tsx:50
 #: src/modules/workspace-api-apps/workspace-api-app-list.tsx:69
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:225
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:226
 #: src/modules/workspace-branches/workspace-branch-list.tsx:83
 #: src/modules/workspace-roles/workspace-role-list.tsx:28
 #: src/modules/workspace-settings/workspace-setting-message-hubs.tsx:51
 msgid "Create new"
 msgstr "Create new"
 
-#. placeholder {0}: "use client"; import { ButtonArchive } from "@/components/buttons/button-archive"; import { Form } from "@/components/form"; import { FormSession } from "@/components/form-session"; import { ModalTitle } from "@/components/modal-title"; import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos"; import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity"; import { archiveWorkspaceApiApp, createWorkspaceApiApp, resetWorkspaceApiAppSecretKey, updateWorkspaceApiApp, } from "@/modules/workspace-api-apps/workspace-api-apps-service"; import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input"; import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types"; import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input"; import { WorkspacePermission, WorkspaceRoleEntity, WorkspaceSpecialRoleId, } from "@/modules/workspace-roles/workspace-roles-types"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onActionLoad } from "@/utils/actions"; import { onFormError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { ActionIcon, Badge, Button, Center, CopyButton, Group, PasswordInput, Stack, TextInput, Tooltip, } from "@mantine/core"; import { useForm } from "@mantine/form"; import { useDisclosure } from "@mantine/hooks"; import { modals } from "@mantine/modals"; import { IconApiApp, IconCheck, IconCopy, IconEye, IconEyeOff, IconRefresh, } from "@tabler/icons-react"; import { FC, Fragment, useState } from "react"; import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants"; interface ModalWorkspaceApiAppProps { app?: IWorkspaceApiApp; } const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => { const workspace = useWorkspace(); const secretKeyVisible = useDisclosure(false); const [app, setApp] = useState<IWorkspaceApiApp | null>(props.app || null); const [secretKey, setSecretKey] = useState(app?.secretKey || ""); const getInitialValues = (_app?: IWorkspaceApiApp) => { return { name: _app?.member.name || "", roles: _app?.member.roles || [ { _id: WorkspaceSpecialRoleId.ADMIN, name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name(), }, ], workspaceBranches: _app?.member.workspaceBranches || [], }; }; const form = useForm<{ name: string; roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[]; workspaceBranches: Pick<WorkspaceBranchEntity, "_id" | "name">[]; }>({ initialValues: getInitialValues(props.app), validate: { name: (value) => (value?.trim() ? null : t`Should not be empty`), }, }); const roles = workspace.roles.filter((v) => form.values.roles.some((v2) => v2._id === v._id)); const isMainWorkspaceAccessable = roles.some((v) => v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS) ); const onResetKey = () => { if (!app?._id) return; onActionLoad({ process: () => resetWorkspaceApiAppSecretKey(app._id), onFinished: (result) => { setSecretKey(result.secretKey); }, }); }; const onSubmit = form.onSubmit(async (data) => { try { const payload: WorkspaceApiAppDto = { name: data.name, enabled: app ? app.enabled : true, roleIds: data.roles.map((v) => v._id), workspaceBranchIds: data.workspaceBranches.map((v) => v._id), }; if (app) { const _app = await updateWorkspaceApiApp(app._id, payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setApp(_app); } else { const _app = await createWorkspaceApiApp(payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setSecretKey(_app.secretKey); modals.updateModal({ modalId: "ModalWorkspaceApiApp", title: <ModalTitle title={t`Information about ${t`API App`}`} icon={IconApiApp} />, }); setApp(_app); } } catch (error) { onFormError(form, error); } }); return ( <Form onSubmit={onSubmit}> <Stack gap={30} pt={16}> {!!app && ( <Fragment> <FormSession title="ID"> <CopyButton value={app._id}> {({ copied, copy }) => ( <TextInput value={app._id} readOnly rightSection={ <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> } /> )} </CopyButton> </FormSession> <FormSession title={t`Secret key`} description={t`Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised`} > <CopyButton value={secretKey}> {({ copied, copy }) => ( <PasswordInput value={secretKey} readOnly visible={secretKeyVisible[0]} styles={{ innerInput: { paddingRight: 100, }, section: { width: 100, }, }} rightSection={ <Group wrap="nowrap" gap={0}> <Tooltip label={t`Reset secret key`}> <ActionIcon onClick={onResetKey} variant="subtle"> <IconRefresh size={16} /> </ActionIcon> </Tooltip> <ActionIcon onClick={secretKeyVisible[1].toggle} variant="subtle"> {secretKeyVisible[0] ? <IconEyeOff size={16} /> : <IconEye size={16} />} </ActionIcon> <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> </Group> } /> )} </CopyButton> </FormSession> </Fragment> )} <FormSession title={t`Name`}> <TextInput {...form.getInputProps("name")} /> </FormSession> <FormSession title={t`Roles`}> <WorkspaceRolesInput value={form.values.roles} onChange={(roles) => form.setFieldValue("roles", roles)} /> </FormSession> <FormSession title={t`Branches`}> {isMainWorkspaceAccessable ? ( <Badge variant="light">{t`All branches`}</Badge> ) : ( <WorkspaceBranchesInput key={app?.member.userId} value={form.values.workspaceBranches} onChange={(branches) => { form.setFieldValue("workspaceBranches", branches); }} /> )} </FormSession> <Stack gap={16} mt={16}> <Center> <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}> {app ? t`Save changes` : t`Create new`} </Button> </Center> {!!app && ( <ButtonArchive process={() => archiveWorkspaceApiApp(app._id)} goBackWhenArchived={false} onArchived={() => { modals.close("ModalWorkspaceApiApp"); }} /> )} </Stack> </Stack> </Form> ); }; export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => { return modals.open({ modalId: "ModalWorkspaceApiApp", title: ( <ModalTitle title={app ? t`Information about ${t`API App`}` : t`Create new ${t`API App`}`} icon={IconApiApp} /> ), children: <ModalWorkspaceApiApp app={app} />, size: "xl", }); }; 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
-msgid "Create new {0}"
-msgstr "Create new {0}"
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:251
+msgid "Create new {entity}"
+msgstr "Create new {entity}"
 
 #: src/modules/events/event-constants.ts:121
 msgid "Create new loan contract"
@@ -1608,6 +1632,10 @@ msgstr "Create new workspace branch"
 msgid "Create order"
 msgstr "Create order"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:138
+msgid "Create order / service ticket"
+msgstr "Create order / service ticket"
+
 #: src/modules/events/event-constants.ts:59
 #: src/modules/partners/modals/modal-partner-form.tsx:81
 msgid "Create partner"
@@ -1617,16 +1645,21 @@ msgstr "Create partner"
 msgid "Create product"
 msgstr "Create product"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:78
+msgid "Create product/service"
+msgstr "Create product/service"
+
 #: src/modules/promotions/modals/modal-promotion.tsx:19
 msgid "Create promotion"
 msgstr "Create promotion"
 
 #: src/modules/events/event-constants.ts:66
 #: src/modules/receipts/modals/modal-receipt-form.tsx:166
+#: src/modules/workspace-roles/workspace-roles-constants.ts:72
 msgid "Create receipt"
 msgstr "Create receipt"
 
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:259
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:257
 msgid "Create role"
 msgstr "Create role"
 
@@ -1656,6 +1689,10 @@ msgstr "Create tag"
 #: src/modules/tasks/views/list/list.task-group-by-statuses.tsx:128
 msgid "Create task"
 msgstr "Create task"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:54
+msgid "Create/update loan"
+msgstr "Create/update loan"
 
 #: src/modules/tasks/views/calendar/index.tsx:270
 msgid "Created"
@@ -1824,6 +1861,7 @@ msgstr "Customer updated"
 
 #: src/constant.ts:7
 #: src/modules/search/search-engine.tsx:122
+#: src/modules/workspace-roles/workspace-roles-config.ts:55
 #: src/modules/workspaces/workspace-modules.tsx:130
 msgid "Customers"
 msgstr "Customers"
@@ -1852,11 +1890,8 @@ msgstr "Dark mode"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: src/utils/actions.tsx:97
-msgid "data"
-msgstr "data"
-
 #: src/components/list/components/export-button.tsx:63
+#: src/modules/workspace-roles/workspace-roles-config.ts:267
 msgid "Data"
 msgstr "Data"
 
@@ -1930,7 +1965,7 @@ msgid "Dental"
 msgstr "Dental"
 
 #. placeholder {0}: dependentPermissions .map((p) => p.value) .join(", ")
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:212
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:210
 msgid "Dependent permissions: {0}"
 msgstr "Dependent permissions: {0}"
 
@@ -1950,7 +1985,7 @@ msgstr "Deposited message"
 #: src/modules/custom-fields/components/form-custom-field.tsx:108
 #: src/modules/loans/modals/modal-loan-package-form.tsx:329
 #: src/modules/promotions/components/form-promotion.tsx:119
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:136
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:134
 msgid "Description"
 msgstr "Description"
 
@@ -1958,10 +1993,6 @@ msgstr "Description"
 #: src/modals/modal-printer.tsx:303
 msgid "Detail"
 msgstr "Detail"
-
-#: src/modules/bookings/components/form-booking.tsx:340
-msgid "Details"
-msgstr "Details"
 
 #: src/modules/auth/auth-provider.tsx:283
 msgid "Device does not support notifications."
@@ -2002,9 +2033,9 @@ msgstr "Disable"
 msgid "Disbursement"
 msgstr "Disbursement"
 
-#: src/components/plugins/plugin-meta-pages.tsx:89
-#: src/components/plugins/plugin-meta-pages.tsx:94
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:217
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:89
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:94
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:117
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:122
 msgid "Disconect"
@@ -2165,7 +2196,7 @@ msgstr "E-Invoices"
 msgid "Early leave"
 msgstr "Early leave"
 
-#: src/components/plugins/plugin-meta-pages.tsx:57
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:57
 msgid "Easy & quick setup"
 msgstr "Easy & quick setup"
 
@@ -2205,6 +2236,7 @@ msgstr "Edit workspace branch"
 #: src/modules/customers/components/form-customer.tsx:144
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:449
 #: src/modules/users/modals/modal-user-information.tsx:188
+#: src/modules/workspace-members/workspace-member-list.tsx:76
 msgid "Email"
 msgstr "Email"
 
@@ -2238,12 +2270,8 @@ msgstr "Engine number"
 msgid "English"
 msgstr "English"
 
-#: src/modules/bookings/components/form-booking.tsx:340
-msgid "Enter"
-msgstr "Enter"
-
-#. placeholder {0}: t`Category`.toLowerCase()
-#: src/modules/categories/components/quick-create-category.tsx:36
+#. placeholder {0}: entity.toLowerCase()
+#: src/modules/categories/components/quick-create-category.tsx:37
 msgid "Enter {0} name"
 msgstr "Enter {0} name"
 
@@ -2271,6 +2299,10 @@ msgstr "Enter customer plain code"
 #: src/modals/modal-input.tsx:125
 msgid "Enter data"
 msgstr "Enter data"
+
+#: src/modules/bookings/components/form-booking.tsx:340
+msgid "Enter details (Optional)"
+msgstr "Enter details (Optional)"
 
 #: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:93
 msgid "Enter device key"
@@ -2470,8 +2502,13 @@ msgstr "Export"
 
 #: src/components/list/components/export-button.tsx:195
 #: src/components/list/components/export-button.tsx:200
+#: src/modules/workspace-roles/workspace-roles-constants.ts:159
 msgid "Export data"
 msgstr "Export data"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:207
+msgid "Export e-invoice"
+msgstr "Export e-invoice"
 
 #: src/modules/receipts/receipt-e-invoices.tsx:70
 msgid "Export E-Invoice"
@@ -2490,10 +2527,6 @@ msgstr "Failed to acquire geolocation, please try again in a few minutes."
 #: src/modules/auth/auth-service.ts:113
 msgid "Failed to connect with Meta."
 msgstr "Failed to connect with Meta."
-
-#: src/components/plugins/plugin-meta-pages.tsx:52
-msgid "Fanpage Facebook"
-msgstr "Fanpage Facebook"
 
 #: src/modules/loans/modals/modal-loan-calculator.tsx:215
 msgid "Fee"
@@ -2605,6 +2638,7 @@ msgid "Fulfill at"
 msgstr "Fulfill at"
 
 #: src/modules/events/event-constants.ts:119
+#: src/modules/workspace-roles/workspace-roles-constants.ts:51
 msgid "Fulfill loan"
 msgstr "Fulfill loan"
 
@@ -2668,7 +2702,7 @@ msgstr "GMF groups"
 
 #: src/modules/workspace-roles/components/workspace-role-card.tsx:92
 #: src/modules/workspace-roles/components/workspace-role-card.tsx:109
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:142
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:140
 msgid "Grant permissions"
 msgstr "Grant permissions"
 
@@ -2680,7 +2714,7 @@ msgstr "Grid"
 #: src/modules/customers/components/customer-column.tsx:34
 #: src/modules/message-boxes/message-box/message-box-card.tsx:104
 #: src/modules/message-boxes/message-box/message-box-head.tsx:84
-#: src/modules/workspace-members/workspace-members-service.ts:53
+#: src/modules/workspace-members/workspace-members-service.ts:58
 msgid "Guest"
 msgstr "Guest"
 
@@ -2780,10 +2814,6 @@ msgstr "Images / Documents"
 msgid "Images & Documents"
 msgstr "Images & Documents"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:53
-msgid "IMEIL"
-msgstr "IMEIL"
-
 #: src/modules/loans/components/loan-documents.tsx:87
 #: src/modules/loans/loan-list.tsx:375
 msgid "Img is blurry"
@@ -2839,23 +2869,14 @@ msgid "Info"
 msgstr "Info"
 
 #: src/modules/customers/components/customer-kyc-card.tsx:105
-msgid "Info does not match image"
-msgstr "Info does not match image"
-
 #: src/modules/loans/components/loan-documents.tsx:87
 #: src/modules/loans/loan-list.tsx:375
-msgid "Info does not match img"
-msgstr "Info does not match img"
+msgid "Info does not match image"
+msgstr "Info does not match image"
 
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:55
 msgid "Information"
 msgstr "Information"
-
-#. placeholder {0}: "use client"; import { ButtonArchive } from "@/components/buttons/button-archive"; import { Form } from "@/components/form"; import { FormSession } from "@/components/form-session"; import { ModalTitle } from "@/components/modal-title"; import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos"; import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity"; import { archiveWorkspaceApiApp, createWorkspaceApiApp, resetWorkspaceApiAppSecretKey, updateWorkspaceApiApp, } from "@/modules/workspace-api-apps/workspace-api-apps-service"; import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input"; import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types"; import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input"; import { WorkspacePermission, WorkspaceRoleEntity, WorkspaceSpecialRoleId, } from "@/modules/workspace-roles/workspace-roles-types"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onActionLoad } from "@/utils/actions"; import { onFormError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { ActionIcon, Badge, Button, Center, CopyButton, Group, PasswordInput, Stack, TextInput, Tooltip, } from "@mantine/core"; import { useForm } from "@mantine/form"; import { useDisclosure } from "@mantine/hooks"; import { modals } from "@mantine/modals"; import { IconApiApp, IconCheck, IconCopy, IconEye, IconEyeOff, IconRefresh, } from "@tabler/icons-react"; import { FC, Fragment, useState } from "react"; import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants"; interface ModalWorkspaceApiAppProps { app?: IWorkspaceApiApp; } const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => { const workspace = useWorkspace(); const secretKeyVisible = useDisclosure(false); const [app, setApp] = useState<IWorkspaceApiApp | null>(props.app || null); const [secretKey, setSecretKey] = useState(app?.secretKey || ""); const getInitialValues = (_app?: IWorkspaceApiApp) => { return { name: _app?.member.name || "", roles: _app?.member.roles || [ { _id: WorkspaceSpecialRoleId.ADMIN, name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name(), }, ], workspaceBranches: _app?.member.workspaceBranches || [], }; }; const form = useForm<{ name: string; roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[]; workspaceBranches: Pick<WorkspaceBranchEntity, "_id" | "name">[]; }>({ initialValues: getInitialValues(props.app), validate: { name: (value) => (value?.trim() ? null : t`Should not be empty`), }, }); const roles = workspace.roles.filter((v) => form.values.roles.some((v2) => v2._id === v._id)); const isMainWorkspaceAccessable = roles.some((v) => v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS) ); const onResetKey = () => { if (!app?._id) return; onActionLoad({ process: () => resetWorkspaceApiAppSecretKey(app._id), onFinished: (result) => { setSecretKey(result.secretKey); }, }); }; const onSubmit = form.onSubmit(async (data) => { try { const payload: WorkspaceApiAppDto = { name: data.name, enabled: app ? app.enabled : true, roleIds: data.roles.map((v) => v._id), workspaceBranchIds: data.workspaceBranches.map((v) => v._id), }; if (app) { const _app = await updateWorkspaceApiApp(app._id, payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setApp(_app); } else { const _app = await createWorkspaceApiApp(payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setSecretKey(_app.secretKey); modals.updateModal({ modalId: "ModalWorkspaceApiApp", title: <ModalTitle title={t`Information about ${t`API App`}`} icon={IconApiApp} />, }); setApp(_app); } } catch (error) { onFormError(form, error); } }); return ( <Form onSubmit={onSubmit}> <Stack gap={30} pt={16}> {!!app && ( <Fragment> <FormSession title="ID"> <CopyButton value={app._id}> {({ copied, copy }) => ( <TextInput value={app._id} readOnly rightSection={ <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> } /> )} </CopyButton> </FormSession> <FormSession title={t`Secret key`} description={t`Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised`} > <CopyButton value={secretKey}> {({ copied, copy }) => ( <PasswordInput value={secretKey} readOnly visible={secretKeyVisible[0]} styles={{ innerInput: { paddingRight: 100, }, section: { width: 100, }, }} rightSection={ <Group wrap="nowrap" gap={0}> <Tooltip label={t`Reset secret key`}> <ActionIcon onClick={onResetKey} variant="subtle"> <IconRefresh size={16} /> </ActionIcon> </Tooltip> <ActionIcon onClick={secretKeyVisible[1].toggle} variant="subtle"> {secretKeyVisible[0] ? <IconEyeOff size={16} /> : <IconEye size={16} />} </ActionIcon> <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> </Group> } /> )} </CopyButton> </FormSession> </Fragment> )} <FormSession title={t`Name`}> <TextInput {...form.getInputProps("name")} /> </FormSession> <FormSession title={t`Roles`}> <WorkspaceRolesInput value={form.values.roles} onChange={(roles) => form.setFieldValue("roles", roles)} /> </FormSession> <FormSession title={t`Branches`}> {isMainWorkspaceAccessable ? ( <Badge variant="light">{t`All branches`}</Badge> ) : ( <WorkspaceBranchesInput key={app?.member.userId} value={form.values.workspaceBranches} onChange={(branches) => { form.setFieldValue("workspaceBranches", branches); }} /> )} </FormSession> <Stack gap={16} mt={16}> <Center> <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}> {app ? t`Save changes` : t`Create new`} </Button> </Center> {!!app && ( <ButtonArchive process={() => archiveWorkspaceApiApp(app._id)} goBackWhenArchived={false} onArchived={() => { modals.close("ModalWorkspaceApiApp"); }} /> )} </Stack> </Stack> </Form> ); }; export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => { return modals.open({ modalId: "ModalWorkspaceApiApp", title: ( <ModalTitle title={app ? t`Information about ${t`API App`}` : t`Create new ${t`API App`}`} icon={IconApiApp} /> ), children: <ModalWorkspaceApiApp app={app} />, size: "xl", }); }; 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:125
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
-msgid "Information about {0}"
-msgstr "Information about {0}"
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:432
 msgid "Input"
@@ -2921,7 +2942,7 @@ msgstr "Integrate with LLM models"
 msgid "Integrate Zalo OA, manage customer interactions."
 msgstr "Integrate Zalo OA, manage customer interactions."
 
-#: src/components/plugins/plugin-meta-pages.tsx:56
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:56
 msgid "Interact with customers via Messenger"
 msgstr "Interact with customers via Messenger"
 
@@ -3014,6 +3035,10 @@ msgstr "Join now"
 #: src/modules/workspaces/workspace-require.tsx:136
 msgid "Join workspace"
 msgstr "Join workspace"
+
+#: src/modules/workspace-members/workspace-member-list.tsx:67
+msgid "Joined at"
+msgstr "Joined at"
 
 #: src/modules/bookings/booking-constants.tsx:5
 msgid "Just created"
@@ -3408,6 +3433,7 @@ msgstr "Loan revert rejected"
 #: src/constant.ts:17
 #: src/modules/loans/loan-list.tsx:66
 #: src/modules/search/search-engine.tsx:215
+#: src/modules/workspace-roles/workspace-roles-config.ts:7
 #: src/modules/workspaces/workspace-modules.tsx:223
 #: src/widgets/reports/modules.ts:228
 msgid "Loans"
@@ -3528,21 +3554,89 @@ msgstr "Main office, Branch 1, ..."
 msgid "Male"
 msgstr "Male"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:102
+msgid "Manage billings"
+msgstr "Manage billings"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:66
+msgid "Manage bookings"
+msgstr "Manage bookings"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:195
+msgid "Manage categories"
+msgstr "Manage categories"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:168
+msgid "Manage Combos"
+msgstr "Manage Combos"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:117
+msgid "Manage coupons"
+msgstr "Manage coupons"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:183
+msgid "Manage custom fields"
+msgstr "Manage custom fields"
+
 #: src/modules/workspaces/workspace-modules.tsx:361
 msgid "Manage custom fields for objects: product, service, post, ..."
 msgstr "Manage custom fields for objects: product, service, post, ..."
 
-#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:35
+#: src/modules/workspace-roles/workspace-roles-constants.ts:171
+msgid "Manage customer forms"
+msgstr "Manage customer forms"
+
+#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:34
 msgid "Manage customer interaction via Zalo OA"
 msgstr "Manage customer interaction via Zalo OA"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:42
+msgid "Manage customer KYC"
+msgstr "Manage customer KYC"
 
 #: src/modules/workspaces/workspace-modules.tsx:296
 msgid "Manage member roles and access permissions"
 msgstr "Manage member roles and access permissions"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:93
+msgid "Manage members"
+msgstr "Manage members"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:111
+msgid "Manage message boxes"
+msgstr "Manage message boxes"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:81
+msgid "Manage partners"
+msgstr "Manage partners"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:180
+msgid "Manage posts"
+msgstr "Manage posts"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:108
+msgid "Manage prescriptions"
+msgstr "Manage prescriptions"
+
 #: src/modules/workspaces/workspace-modules.tsx:352
 msgid "Manage product, service, post, ..."
 msgstr "Manage product, service, post, ..."
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:189
+msgid "Manage promotions"
+msgstr "Manage promotions"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:96
+msgid "Manage roles"
+msgstr "Manage roles"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:87
+msgid "Manage salaries"
+msgstr "Manage salaries"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:114
+msgid "Manage tables"
+msgstr "Manage tables"
 
 #: src/modules/workspace-branches/workspace-branch-list.tsx:67
 #: src/modules/workspaces/workspace-modules.tsx:324
@@ -3552,6 +3646,10 @@ msgstr "Manage the branches of the Workspace"
 #: src/modules/workspaces/workspace-modules.tsx:239
 msgid "Manage the settings of the Workspace"
 msgstr "Manage the settings of the Workspace"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:120
+msgid "Manage vouchers"
+msgstr "Manage vouchers"
 
 #: src/widgets/components/manage-widgets.tsx:30
 #: src/widgets/index.tsx:297
@@ -3611,7 +3709,7 @@ msgid "Medium"
 msgstr "Medium"
 
 #: src/modules/products/product-detail.tsx:159
-#: src/modules/workspace-roles/workspace-roles-constants.ts:7
+#: src/modules/workspace-roles/workspace-roles-constants.ts:11
 #: src/widgets/reports/widgets/report-credit.widget.tsx:370
 #: src/widgets/reports/widgets/report-time-trackings.widget.tsx:104
 msgid "Member"
@@ -3658,6 +3756,8 @@ msgstr "Member updated"
 #: src/modules/search/search-engine.tsx:262
 #: src/modules/tasks/views/calendar/index.tsx:166
 #: src/modules/tasks/views/time-trackings/index.tsx:163
+#: src/modules/workspace-members/workspace-member-list.tsx:48
+#: src/modules/workspace-roles/workspace-roles-config.ts:226
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:402
 #: src/modules/workspaces/workspace-modules.tsx:116
 #: src/widgets/reports/index.tsx:246
@@ -3950,9 +4050,9 @@ msgstr "Mutual workspaces"
 #: src/modules/tasks/views/gantt/gantt.layout.tsx:66
 #: src/modules/tasks/views/list/list.task-row-head.tsx:11
 #: src/modules/users/user-profile-settings.tsx:109
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:197
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:198
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:61
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:128
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:126
 #: src/modules/workspace-sdks/modals/modal-workspace-sdk-form.tsx:67
 #: src/modules/workspace-sdks/workspace-sdk-list.tsx:30
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:119
@@ -4258,10 +4358,6 @@ msgstr "Operation settings"
 msgid "optional"
 msgstr "optional"
 
-#: src/modules/bookings/components/form-booking.tsx:340
-msgid "Optional"
-msgstr "Optional"
-
 #: src/modules/auth/auth-require.tsx:182
 #: src/modules/workspaces/workspace-require.tsx:133
 msgid "Or"
@@ -4292,6 +4388,7 @@ msgstr "Order synced"
 #: src/modules/orders/order-hooks.tsx:25
 #: src/modules/search/search-engine.tsx:281
 #: src/modules/search/search-engine.tsx:286
+#: src/modules/workspace-roles/workspace-roles-config.ts:157
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:123
 #: src/modules/workspaces/workspace-modules.tsx:203
 msgid "Orders"
@@ -4341,7 +4438,7 @@ msgstr "Overdue"
 msgid "Overtime"
 msgstr "Overtime"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:5
+#: src/modules/workspace-roles/workspace-roles-constants.ts:9
 msgid "Owner"
 msgstr "Owner"
 
@@ -4377,6 +4474,7 @@ msgstr "Partial Payment"
 #: src/modules/search/search-engine.tsx:245
 #: src/modules/tasks/components/form-task.tsx:561
 #: src/modules/tasks/components/tasks-menu-actions.tsx:269
+#: src/modules/workspace-roles/workspace-roles-config.ts:222
 #: src/modules/workspaces/workspace-modules.tsx:188
 msgid "Partners"
 msgstr "Partners"
@@ -4421,6 +4519,10 @@ msgstr "Pay"
 #: src/modules/loans/components/loan-receipt-card.tsx:91
 msgid "Pay expire"
 msgstr "Pay expire"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:57
+msgid "Pay loan"
+msgstr "Pay loan"
 
 #: src/modules/events/event-constants.ts:67
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:278
@@ -4544,6 +4646,7 @@ msgstr "Period fee amount"
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:448
 #: src/modules/users/modals/modal-user-information.tsx:196
 #: src/modules/users/user-profile-settings.tsx:114
+#: src/modules/workspace-members/workspace-member-list.tsx:92
 #: src/modules/workspaces/components/workspace-information.tsx:96
 msgid "Phone"
 msgstr "Phone"
@@ -4573,7 +4676,7 @@ msgstr "Placeholder"
 msgid "Platform"
 msgstr "Platform"
 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:157
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:158
 msgid "Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised"
 msgstr "Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised"
 
@@ -4649,6 +4752,7 @@ msgstr "Post updated"
 #: src/constant.ts:27
 #: src/modules/categories/category-constants.ts:8
 #: src/modules/search/search-engine.tsx:102
+#: src/modules/workspace-roles/workspace-roles-config.ts:243
 #: src/modules/workspaces/workspace-modules.tsx:92
 msgid "Posts"
 msgstr "Posts"
@@ -4681,6 +4785,7 @@ msgstr "Prescription updated"
 
 #: src/constant.ts:16
 #: src/modules/search/search-engine.tsx:300
+#: src/modules/workspace-roles/workspace-roles-config.ts:217
 #: src/modules/workspaces/workspace-modules.tsx:194
 msgid "Prescriptions"
 msgstr "Prescriptions"
@@ -4819,6 +4924,10 @@ msgstr "Product stock code"
 msgid "Product stocks"
 msgstr "Product stocks"
 
+#: src/modules/workspace-roles/workspace-roles-config.ts:183
+msgid "Product Stocks"
+msgstr "Product Stocks"
+
 #: src/modules/products/components/form-product.tsx:361
 msgid "Product supplies"
 msgstr "Product supplies"
@@ -4844,6 +4953,10 @@ msgstr "Products"
 #: src/widgets/reports/widgets/report-products.widget.tsx:116
 msgid "Products & services"
 msgstr "Products & services"
+
+#: src/modules/workspace-roles/workspace-roles-config.ts:179
+msgid "Products & Services"
+msgstr "Products & Services"
 
 #: src/widgets/reports/modules.ts:164
 msgid "Products services"
@@ -4899,6 +5012,7 @@ msgstr "Promotion updated"
 #: src/constant.ts:29
 #: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:43
 #: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:75
+#: src/modules/workspace-roles/workspace-roles-config.ts:93
 #: src/modules/workspaces/workspace-modules.tsx:107
 msgid "Promotions"
 msgstr "Promotions"
@@ -5043,6 +5157,7 @@ msgstr "Receipt unarchived"
 #: src/constant.ts:13
 #: src/modules/loans/components/loan-payments.tsx:172
 #: src/modules/search/search-engine.tsx:179
+#: src/modules/workspace-roles/workspace-roles-config.ts:119
 #: src/modules/workspaces/workspace-modules.tsx:209
 #: src/widgets/reports/widgets/report-products.widget.tsx:261
 msgid "Receipts"
@@ -5178,14 +5293,13 @@ msgstr "Reminder time"
 msgid "Remove"
 msgstr "Remove"
 
-#. placeholder {0}: args.name || t`data`
-#: src/utils/actions.tsx:97
-msgid "Remove {0}"
-msgstr "Remove {0}"
-
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:290
 msgid "Remove all"
 msgstr "Remove all"
+
+#: src/utils/actions.tsx:97
+msgid "Remove data"
+msgstr "Remove data"
 
 #: src/modules/events/event-constants.ts:65
 msgid "Remove file"
@@ -5227,6 +5341,7 @@ msgstr "Report realtime synced"
 msgid "Report synced"
 msgstr "Report synced"
 
+#: src/modules/workspace-roles/workspace-roles-config.ts:263
 #: src/modules/workspaces/workspace-modules.tsx:463
 #: src/widgets/reports/widgets/report-credit.widget.tsx:541
 msgid "Reports"
@@ -5292,7 +5407,7 @@ msgstr "Reset default"
 msgid "Reset filter"
 msgstr "Reset filter"
 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:175
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:176
 msgid "Reset secret key"
 msgstr "Reset secret key"
 
@@ -5346,16 +5461,37 @@ msgstr "Revert fulfilled"
 msgid "Revert liquidation"
 msgstr "Revert liquidation"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:198
+msgid "Revert loan approve"
+msgstr "Revert loan approve"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:204
+msgid "Revert loan fulfill"
+msgstr "Revert loan fulfill"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:201
+msgid "Revert payment"
+msgstr "Revert payment"
+
 #: src/modules/receipts/receipt-detail.tsx:76
 #: src/modules/receipts/receipt-detail.tsx:131
 msgid "Revert Payment"
 msgstr "Revert Payment"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:153
+msgid "Revert stock in"
+msgstr "Revert stock in"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:156
+msgid "Revert stock out"
+msgstr "Revert stock out"
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:266
 msgid "Right"
 msgstr "Right"
 
 #: src/modules/workspace-api-apps/workspace-api-app-card.tsx:67
+#: src/modules/workspace-members/workspace-member-list.tsx:105
 msgid "Role"
 msgstr "Role"
 
@@ -5371,7 +5507,7 @@ msgstr "Role removed"
 msgid "Role updated"
 msgstr "Role updated"
 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:201
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:202
 #: src/modules/workspaces/workspace-modules.tsx:295
 msgid "Roles"
 msgstr "Roles"
@@ -5403,7 +5539,7 @@ msgstr "Sale price"
 msgid "Save"
 msgstr "Save"
 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:225
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:226
 msgid "Save changes"
 msgstr "Save changes"
 
@@ -5445,7 +5581,7 @@ msgstr "Search products / services / customers"
 msgid "Secondary address"
 msgstr "Secondary address"
 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:156
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:157
 msgid "Secret key"
 msgstr "Secret key"
 
@@ -5613,7 +5749,7 @@ msgstr "Send"
 msgid "Send message failed"
 msgstr "Send message failed"
 
-#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:36
+#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:35
 msgid "Send reminder messages to customers"
 msgstr "Send reminder messages to customers"
 
@@ -5867,6 +6003,7 @@ msgstr "Stock code"
 #: src/modules/events/event-constants.ts:158
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:119
 #: src/modules/product-stocks/product-stocks-constants.tsx:11
+#: src/modules/workspace-roles/workspace-roles-constants.ts:147
 msgid "Stock in"
 msgstr "Stock in"
 
@@ -5881,6 +6018,7 @@ msgstr "Stock in reverted"
 #: src/modules/events/event-constants.ts:160
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:79
 #: src/modules/product-stocks/product-stocks-constants.tsx:16
+#: src/modules/workspace-roles/workspace-roles-constants.ts:150
 msgid "Stock out"
 msgstr "Stock out"
 
@@ -6545,10 +6683,15 @@ msgstr "Unset priority"
 #: src/modules/posts/components/form-post.tsx:161
 #: src/modules/products/components/form-product.tsx:617
 #: src/modules/users/components/update-password.tsx:78
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:240
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:238
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:256
 msgid "Update"
 msgstr "Update"
+
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:126
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:251
+msgid "Update {entity}"
+msgstr "Update {entity}"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:280
 msgid "Update amount"
@@ -6583,6 +6726,10 @@ msgstr "Update coupon rule"
 msgid "Update customer"
 msgstr "Update customer"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:36
+msgid "Update customer info"
+msgstr "Update customer info"
+
 #: src/modules/bookings/components/booking-card.tsx:271
 #: src/modules/tasks/views/gantt/gantt.task-group-by-folder.tsx:149
 msgid "Update information"
@@ -6604,6 +6751,10 @@ msgstr "Update loan payment period"
 msgid "Update model"
 msgstr "Update model"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:141
+msgid "Update order / service ticket"
+msgstr "Update order / service ticket"
+
 #: src/modules/events/event-constants.ts:60
 #: src/modules/partners/modals/modal-partner-form.tsx:81
 msgid "Update partner"
@@ -6619,10 +6770,11 @@ msgid "Update product"
 msgstr "Update product"
 
 #: src/modules/events/event-constants.ts:68
+#: src/modules/workspace-roles/workspace-roles-constants.ts:129
 msgid "Update receipt"
 msgstr "Update receipt"
 
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:259
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:257
 msgid "Update role"
 msgstr "Update role"
 
@@ -6778,10 +6930,34 @@ msgstr "View"
 msgid "View all ({total})"
 msgstr "View all ({total})"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:45
+msgid "View all loans"
+msgstr "View all loans"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:63
+msgid "View bookings"
+msgstr "View bookings"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:192
+msgid "View categories"
+msgstr "View categories"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:165
+msgid "View Combos"
+msgstr "View Combos"
+
 #: src/modules/loans/components/loan-card.tsx:105
 #: src/modules/loans/loan-detail.tsx:296
 msgid "View contract"
 msgstr "View contract"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:30
+msgid "View customer phone number and contact"
+msgstr "View customer phone number and contact"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:27
+msgid "View customers"
+msgstr "View customers"
 
 #: src/modules/e-invoices/e-invoice-list.tsx:52
 msgid "View E-Invoice"
@@ -6790,6 +6966,10 @@ msgstr "View E-Invoice"
 #: src/modules/receipts/receipt-e-invoices.tsx:129
 msgid "View Invoice"
 msgstr "View Invoice"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:90
+msgid "View members"
+msgstr "View members"
 
 #: src/components/buttons/button-view-more.tsx:36
 msgid "View more"
@@ -6803,9 +6983,33 @@ msgstr "View notification list"
 msgid "View on google map"
 msgstr "View on google map"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:135
+msgid "View orders / service ticket"
+msgstr "View orders / service ticket"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:177
+msgid "View posts"
+msgstr "View posts"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:186
+msgid "View promotions"
+msgstr "View promotions"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:69
+msgid "View receipts"
+msgstr "View receipts"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:105
+msgid "View reports"
+msgstr "View reports"
+
 #: src/modules/workspaces/workspace-modules.tsx:464
 msgid "View reports and analytics"
 msgstr "View reports and analytics"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:162
+msgid "View stock"
+msgstr "View stock"
 
 #: src/modules/orders/orders-constants.tsx:21
 #: src/modules/products/components/form-product.tsx:65
@@ -6940,6 +7144,10 @@ msgstr "Working time type"
 #: src/modules/workspaces/workspace-modules.tsx:258
 msgid "Working time, invoice, service voucher, payment method, search settings, ..."
 msgstr "Working time, invoice, service voucher, payment method, search settings, ..."
+
+#: src/modules/workspace-roles/workspace-roles-config.ts:236
+msgid "Workspace"
+msgstr "Workspace"
 
 #: src/modules/events/event-constants.ts:134
 #: src/modules/workspaces/components/workspace-archived.tsx:31

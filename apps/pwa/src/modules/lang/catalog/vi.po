@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
@@ -109,6 +110,10 @@ msgstr "Combo là phương thức mua sắm kết hợp nhiều sản phẩm th�
 msgid "Accept lateness up to {0} minutes"
 msgstr "Chấp nhận trễ tối đa {0} phút"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:132
+msgid "Access all branches"
+msgstr "Truy cập tất cả các chi nhánh"
+
 #: src/modules/dashboard/dashboard-suggestions.tsx:198
 msgid "Access faster with standalone app"
 msgstr "Truy cập nhanh hơn với ứng dụng độc lập"
@@ -195,7 +200,7 @@ msgstr "Thêm đường phân cách"
 #: src/modules/tasks/components/form-task.tsx:498
 #: src/modules/tasks/views/board/board.task-card.tsx:284
 msgid "Add due date"
-msgstr "Thêm hạn hoàn thành"
+msgstr "Thêm thời hạn"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:257
 msgid "Add field"
@@ -301,13 +306,13 @@ msgstr "Thêm widget"
 msgid "Address"
 msgstr "Địa chỉ"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:6
+#: src/modules/workspace-roles/workspace-roles-constants.ts:10
 msgid "Admin"
 msgstr "Quản trị viên"
 
 #: src/widgets/reports/widgets/report-credit.widget.tsx:396
 msgid "Advance payment"
-msgstr "Thanh toán trước"
+msgstr "Ứng trước"
 
 #: src/modals/modal-printer.tsx:544
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:276
@@ -326,13 +331,13 @@ msgstr "Chiều"
 
 #: src/modules/message-boxes/message-box/message-box-messages.tsx:246
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:234
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:123
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:132
 msgid "AI assistant"
 msgstr "Trợ lý AI"
 
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:218
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
 msgid "AI Assistant"
 msgstr "Trợ lý AI"
 
@@ -373,8 +378,8 @@ msgid "All {0}"
 msgstr "Tất cả {0}"
 
 #: src/modules/users/components/user-workspace-settings-form.tsx:137
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:210
-#: src/modules/workspace-members/workspace-member-list.tsx:151
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:211
+#: src/modules/workspace-members/workspace-member-list.tsx:153
 msgid "All branches"
 msgstr "Tất cả chi nhánh"
 
@@ -421,12 +426,6 @@ msgstr "Phân tích"
 #: src/modules/products/components/form-product.tsx:322
 msgid "Another name displayed on the ticket, invoice sent to customers. Not required"
 msgstr "Tên khác hiển thị trên ticket, hóa đơn gửi cho khách hàng. Không bắt buộc"
-
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:125
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
-msgid "API App"
-msgstr "Ứng dụng API"
 
 #: src/modules/events/event-constants.ts:169
 msgid "API App archived"
@@ -502,6 +501,7 @@ msgid "Approve Expense"
 msgstr "Duyệt thanh toán"
 
 #: src/modules/events/event-constants.ts:116
+#: src/modules/workspace-roles/workspace-roles-constants.ts:48
 msgid "Approve loan"
 msgstr "Duyệt hồ sơ vay"
 
@@ -524,6 +524,18 @@ msgstr "Đã duyệt"
 msgid "Archive"
 msgstr "Xoá"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:123
+msgid "Archive customer"
+msgstr "Xoá khách hàng"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:60
+msgid "Archive loan"
+msgstr "Xoá khoản vay"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:144
+msgid "Archive order / service ticket"
+msgstr "Xoá đơn hàng/phiếu dịch vụ"
+
 #: src/modules/events/event-constants.ts:61
 msgid "Archive partner"
 msgstr "Xoá đối tác"
@@ -533,6 +545,7 @@ msgid "Archive product"
 msgstr "Xoá sản phẩm"
 
 #: src/modules/events/event-constants.ts:70
+#: src/modules/workspace-roles/workspace-roles-constants.ts:126
 msgid "Archive receipt"
 msgstr "Xoá hoá đơn"
 
@@ -645,6 +658,10 @@ msgstr "Loại tài sản"
 #: src/modules/message-boxes/message-box/message-box-head.tsx:104
 msgid "Assign assignee"
 msgstr "Phân công phụ trách"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:39
+msgid "Assign customer to member"
+msgstr "Chỉ định khách hàng cho thành viên"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:177
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:312
@@ -855,6 +872,7 @@ msgstr "Thông tin lịch hẹn"
 #: src/modules/customers/components/customer-booking.tsx:68
 #: src/modules/dashboard/dashboard-bookings.tsx:65
 #: src/modules/users/modals/modal-user-information.tsx:240
+#: src/modules/workspace-roles/workspace-roles-config.ts:106
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:197
 #: src/modules/workspaces/workspace-modules.tsx:149
 msgid "Bookings"
@@ -868,13 +886,14 @@ msgstr "Biểu đồ lịch hẹn"
 #: src/modules/loans/modals/modal-create-loan.tsx:394
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:290
 #: src/modules/workspace-branches/workspace-branch-column.tsx:42
+#: src/modules/workspace-members/workspace-member-list.tsx:149
 #: src/widgets/reports/index.tsx:334
 msgid "Branch"
 msgstr "Chi nhánh"
 
 #: src/layout/navigation/navigation-drawer.tsx:265
 #: src/modules/users/components/user-workspace-settings-form.tsx:135
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:208
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:209
 #: src/modules/workspaces/workspace-modules.tsx:323
 msgid "Branches"
 msgstr "Chi nhánh"
@@ -988,18 +1007,17 @@ msgstr "Hoàn tiền"
 #: src/modules/receipts/receipt-card.tsx:301
 #: src/modules/receipts/receipt-list.tsx:89
 msgid "Cashier"
-msgstr "Người thu tiền"
+msgstr "Người thu"
 
 #: src/constant.ts:28
 #: src/modules/products/components/form-product.tsx:310
+#: src/modules/workspace-roles/workspace-roles-config.ts:253
 #: src/modules/workspaces/workspace-modules.tsx:351
 msgid "Categories"
 msgstr "Danh mục"
 
 #: src/modules/categories/components/category-input.tsx:25
 #: src/modules/categories/components/quick-create-category.tsx:27
-#: src/modules/categories/components/quick-create-category.tsx:36
-#: src/modules/categories/components/quick-create-category.tsx:44
 msgid "Category"
 msgstr "Danh mục"
 
@@ -1014,6 +1032,14 @@ msgstr "Danh mục được tạo mới"
 #: src/modules/events/event-constants.ts:180
 msgid "Category updated"
 msgstr "Danh mục được cập nhật"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:75
+msgid "Censor receipts"
+msgstr "Kiểm duyệt hoá đơn"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:84
+msgid "Censor timekeeping"
+msgstr "Kiểm duyệt chấm công"
 
 #: src/components/inputs/image-input.tsx:177
 msgid "Change"
@@ -1040,7 +1066,12 @@ msgstr "Thay đổi khách hàng"
 msgid "Change folder"
 msgstr "Thay đổi thư mục"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:174
+msgid "Change fulfilled at"
+msgstr "Thay đổi thời gian giải ngân"
+
 #: src/modules/events/event-constants.ts:165
+#: src/modules/workspace-roles/workspace-roles-constants.ts:24
 msgid "Change loan workspace branch"
 msgstr "Thay đổi chi nhánh của hồ sơ vay"
 
@@ -1060,6 +1091,10 @@ msgstr "Đổi nhà cung cấp"
 #: src/modules/events/event-constants.ts:166
 msgid "Change receipt workspace branch"
 msgstr "Thay đổi chi nhánh của hoá đơn"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:99
+msgid "Change settings"
+msgstr "Thay đổi cài đặt"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:143
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:301
@@ -1346,32 +1381,23 @@ msgstr "Xác nhận mật khẩu"
 msgid "Congratulations! You cleared your important notifications 🎉"
 msgstr "Chúc mừng! Bạn đã dọn sạch các thông báo quan trọng 🎉"
 
-#: src/components/plugins/plugin-meta-pages.tsx:61
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:212
+#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
 #: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:49
-#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:40
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:52
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:61
+#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:29
+#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:39
+#: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:132
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:425
 msgid "Connect"
 msgstr "Kết nối"
-
-#. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { Button } from "@/components/buttons/button"; import { Container } from "@/components/container"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core"; import { IconAi, IconCirclesRelation, IconLinkPlus, IconPencil } from "@tabler/icons-react"; import { type FC } from "react"; export const AiAssistantList: FC = () => { const plugins = usePlugins(); const workspace = useWorkspace(); const color = useColor(); if (plugins.aiAssistants.length === 0) { return ( <Container size="sm" p={16}> <Card shadow="xs"> <Stack align="center" py={20}> <Group gap={30} mb={20}> <Avatar workspace={workspace.userMember.workspace} size={55} /> <ThemeIcon variant="transparent" size="lg" color="dark"> <IconCirclesRelation size={50} /> </ThemeIcon> <Avatar src="/images/ai-assistants.png" size={55} /> </Group> <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}> {t`Connect ${t`AI Assistant`}`} </Title> <Text ta="center"> • <Trans>Automatically reply to customer messages</Trans> <br />•{" "} <Trans>Integrate with LLM models</Trans> </Text> <Button mt={10} action onClick={() => OnModalCreatePluginAiAssistant()} leftIcon={IconLinkPlus} > <Trans>Connect</Trans> </Button> </Stack> </Card> </Container> ); } return ( <Container size="xs" p={16}> <Stack> {plugins.aiAssistants.map((plugin) => { return ( <Card key={plugin._id} shadow="sm"> <Group align="start"> <ThemeIcon size={60} variant="light"> <IconAi size={40} strokeWidth={1.2} /> </ThemeIcon> <Stack gap={3} flex={1}> <Text fw={600}>{plugin.providerName}</Text> <Text c="gray" fz={12}> <Trans>Provider</Trans>: {t`AI Assistant ${plugin.provider}`} </Text> </Stack> <Stack> <ActionIcon variant="subtle" color="gray" onClick={() => OnModalCreatePluginAiAssistant(plugin)} > <IconPencil size={16} /> </ActionIcon> </Stack> </Group> </Card> ); })} </Stack> </Container> ); }; 
-#. placeholder {0}: "use client"; import { Avatar } from "@/components/avatar"; import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows"; import { Image } from "@/components/image"; import { useLayout } from "@/layout/layout-context"; import { renderDateTime, renderFromNow } from "@/modules/lang/lang-service"; import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service"; import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types"; import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant"; import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service"; import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { String } from "@/utils/string.utils"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core"; import { useElementSize } from "@mantine/hooks"; import { IconClock, IconMessage, IconPlus } from "@tabler/icons-react"; import { Handle, Position, ReactFlow } from "@xyflow/react"; import { FC, Fragment } from "react"; const cardRootSize = { width: 300, height: 110, }; const cardSize = { width: 260, height: 65, }; const cardAiSize = { width: 320, height: 80, }; const RootNode = () => { const workspace = useWorkspace(); const color = useColor(); return ( <Fragment> <Handle type="target" position={Position.Left} /> <Card withBorder shadow="none" p={0} style={{ cursor: "default", borderColor: color("primary"), }} > <Group gap={10} px={16} py={10} w={cardRootSize.width} h={cardRootSize.height} wrap="nowrap" > <Avatar workspace={workspace.userMember.workspace} radius={8} size={70} /> <Stack gap={0}> <Tooltip label={workspace.userMember.workspace.name} disabled={workspace.userMember.workspace.name.length < 10} > <Text fz={25} fw={500} truncate="end" maw={160}> {workspace.userMember.workspace.name} </Text> </Tooltip> <Text fz={12} c="gray.6" truncate="end"> Workspace </Text> </Stack> </Group> </Card> <Handle type="target" position={Position.Right} /> </Fragment> ); }; const AiIntegrationNode = () => { const plugins = usePlugins(); const aiPlugin = plugins.aiAssistants[0]; return ( <Fragment> <Handle type="source" position={Position.Left} /> <Card withBorder shadow="none" w={cardAiSize.width} h={cardAiSize.height} p={0} style={{ borderStyle: aiPlugin ? "solid" : "dashed", }} > <Group gap={10} align="center" wrap="nowrap" h={cardAiSize.height} px={16}> <Group gap={10} flex={1} style={{ cursor: "pointer", }} onClick={() => OnModalCreatePluginAiAssistant(aiPlugin)} > <Image src="/images/ai-assistants.png" w={40} h={40} /> <Stack gap={0} flex={1}> {aiPlugin ? ( <Fragment> <Tooltip label={aiPlugin.providerName}> <Text fz={16} fw={500} truncate="end"> {String.limitCharacters(aiPlugin.providerName, 20)} </Text> </Tooltip> <Text fz={10} c="gray.6" truncate="end"> {t`AI assistant`} </Text> </Fragment> ) : ( <Group wrap="nowrap" gap={0}> <ActionIcon variant="transparent" color="dark"> <IconPlus size={16} /> </ActionIcon> <Text fz={14} fw={500} truncate="end"> <Trans>Connect {t`AI assistant`}</Trans> </Text> </Group> )} </Stack> </Group> {aiPlugin && ( <Switch style={{ cursor: "pointer", }} checked={aiPlugin?.enabled} onChange={() => false} onClick={(e) => { e.stopPropagation(); e.preventDefault(); updatePluginAiAssistant(aiPlugin._id, { enabled: !aiPlugin.enabled }); }} /> )} </Group> </Card> </Fragment> ); }; const PluginNode = (props: any) => { const { plugin, name, type } = props.data; const platformType = type === "metaPages" ? MessageBoxPlatformType.META_PAGE : type === "zalaOAs" ? MessageBoxPlatformType.ZALO : MessageBoxPlatformType.MESSAGE_HUB; const PluginAvatar: FC = ( { metaPages: () => <Avatar color="primary" pluginMetaPage={plugin} size={30} />, zalaOAs: () => <Avatar color="primary" pluginZaloOa={plugin} size={30} />, messageHubs: () => ( <Avatar icon={IconMessage} src="/images/plugins-message-hubs.png" size={30} /> ), } as any )[type]; return ( <Fragment> <Handle type="source" position={Position.Right} /> <Card withBorder shadow="none" w={cardSize.width} h={cardSize.height} p={0} style={{ cursor: "default" }} > <Group gap={10} align="center" w={cardSize.width} h={cardSize.height} p={16} wrap="nowrap"> <Indicator label={<Image src={messageBoxPlatformImages[platformType]} w={16} h={16} />} radius={8} color="var(--mantine-color-body)" position="bottom-end" offset={5} styles={{ indicator: { paddingInline: 0, width: 20, height: 20, transform: "translate(50%, 80%)", zIndex: 10, }, }} > <PluginAvatar /> </Indicator> <Stack gap={0}> <Tooltip label={name} disabled={!name || name.length < 15}> <Text fz={16} fw={500} truncate="end" maw={150}> {name || t`Plugin`} </Text> </Tooltip> {!!plugin.lastInteractionAt && ( <Tooltip label={`${t`Last interaction at`}: ${renderDateTime(plugin.lastInteractionAt)}`} > <Text fz={10} fw={500} c="gray" truncate="end"> <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "} {renderFromNow(plugin.lastInteractionAt)} </Text> </Tooltip> )} </Stack> </Group> </Card> </Fragment> ); }; const PlusPluginNode = (props: any) => { const { isHasPlugin } = props.data; return ( <Fragment> <Handle type="source" position={Position.Right} /> <Card withBorder shadow="none" p={0} h={cardSize.height} w={cardSize.width} style={{ cursor: "pointer", borderStyle: "dashed" }} onClick={() => OnModalConnectPlugins()} > <Group gap={10} align="center" h={cardSize.height} w={cardSize.width} p={16} wrap="nowrap" bg="var(--mantine-color-body)" > <ActionIcon size={30} radius={100} variant="subtle" color="dark"> <IconPlus size={20} strokeWidth={1.5} /> </ActionIcon> <Text fz={14} fw={500} truncate="end"> {isHasPlugin ? t`Connect more` : t`Connect platform`} </Text> </Group> </Card> </Fragment> ); }; export const WorkspaceSettingMessageBoxesIntegrations: FC = () => { const layout = useLayout(); const sized = useElementSize(); const plugins = usePlugins(); const aiPlugin = plugins.aiAssistants[0]; const distanceFromRoot = 100; const rootPosition = { x: sized.width * 0.5 - cardRootSize.width / 2, y: sized.height / 2 - cardRootSize.height / 2, }; const pluginsGroup = groupNodes({ group: { x: 0, y: 0, id: "plugins", title: "message_source", spacing: 16, }, nodes: [ ...plugins.metaPages.map((m) => ({ id: m._id, type: "plugin", data: { name: m.name, plugin: m, type: "metaPages" }, position: { x: 0, y: 0 }, ...cardSize, })), ...plugins.zaloOas.map((m) => ({ id: m._id, type: "plugin", data: { name: m.info.name, plugin: m, type: "zalaOAs" }, position: { x: 0, y: 0 }, ...cardSize, })), ...plugins.messageHubs.map((m) => ({ id: m._id, type: "plugin", data: { name: m.name, plugin: m, type: "messageHubs" }, position: { x: 0, y: 0 }, ...cardSize, })), { id: "plus", type: "plus", position: { x: 0, y: 0 }, ...cardSize, data: {}, }, ], }); const nodes = [ { id: "root", position: rootPosition, type: "root", data: {}, }, ...moveNodes(pluginsGroup.nodes, { x: rootPosition.x - distanceFromRoot - cardSize.width, y: sized.height / 2 - pluginsGroup.group.height / 2, }), // Ai Integration { id: "ai", type: "ai", position: { x: rootPosition.x + distanceFromRoot * 0.5 + cardAiSize.width, y: sized.height / 2 - cardAiSize.height / 2, }, data: {}, }, ]; // Edges const edges = [ // Plugin -> Root ...pluginsGroup.childNodes.map((p) => ({ id: `${p.id}-root`, source: p.id, target: "root", animated: true, })), // Ai -> Root { id: "ai-root", source: "ai", target: "root", animated: !aiPlugin || aiPlugin.enabled }, ]; return ( <Card ref={sized.ref} w="100%" h={layout.height - 200} p={0} bg="gray.0" shadow="none"> <ReactFlow nodes={nodes} edges={edges} nodeTypes={{ ...defaultNodeTypes, root: RootNode, plugin: PluginNode, plus: PlusPluginNode, ai: AiIntegrationNode, }} nodesDraggable={false} zoomOnDoubleClick={false} zoomOnPinch={false} zoomOnScroll={false} maxZoom={1} minZoom={1} /> </Card> ); }; 
-#. placeholder {0}: "use client"; import { disconnectPluginMetaPage } from "@/modules/plugins/meta-pages/meta-pages-service"; import { usePlugins } from "@/modules/plugins/plugins-context"; import { useColor } from "@/modules/theme/use-color"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onArchive } from "@/utils/actions"; import { onError } from "@/utils/exceptions.utils"; import { capitalize } from "@/utils/string.utils"; import config from "@joy-one-client/config"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { Anchor, Card, Center, Group, SimpleGrid, Skeleton, Stack, Text, ThemeIcon, Title, em, } from "@mantine/core"; import { IconCirclesRelation, IconLinkPlus, IconPuzzle } from "@tabler/icons-react"; import { FC } from "react"; import { Avatar } from "../avatar"; import { Button } from "../buttons/button"; import { Image } from "../image"; export const PluginMetaPages: FC = () => { const workspace = useWorkspace(); const plugins = usePlugins(); const color = useColor(); if (!plugins.isInitialized) return <Skeleton height={150} />; if (plugins.metaPages.length === 0) return ( <Stack align="center" py={20}> <Group gap={30} mb={20}> <Avatar workspace={workspace.userMember.workspace} size={55} /> <ThemeIcon variant="transparent" size="lg" color="dark"> <IconCirclesRelation size={50} /> </ThemeIcon> <Image w={55} src="/images/plugins-meta-pages.svg" /> </Group> <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}> {t`Connect ${t`Fanpage Facebook`}`} </Title> <Text ta="center"> • <Trans>Interact with customers via Messenger</Trans> <br />•{" "} <Trans>Easy & quick setup</Trans> </Text> <Button mt={10} action onClick={plugins.onConnectMetaPages} leftIcon={IconLinkPlus}> <Trans>Connect</Trans> </Button> </Stack> ); return ( <Stack gap={30}> <SimpleGrid cols={{ md: 2 }}> {plugins.metaPages.map((page) => { return ( <Card key={page._id} shadow="none" withBorder> <Group justify="space-between"> <Group> <Avatar pluginMetaPage={page} /> <Stack gap={0}> <Text>{page.name}</Text> <Text fz={12}>#{page.id}</Text> {config.ENV === "development" && <Text fz={12}>#{page._id}</Text>} </Stack> </Group> <Anchor c="gray" fw={500} fz={em(12)} onClick={() => onArchive({ icon: IconPuzzle, title: capitalize(`${t`Disconect`} ${page.name}`), process: () => disconnectPluginMetaPage(page._id).catch(onError), }) } > <Trans>Disconect</Trans> </Anchor> </Group> </Card> ); })} <Center> <Button type="submit" onClick={plugins.onConnectMetaPages} rightSection={<IconLinkPlus strokeWidth={1.5} />} > <Trans>Connect more</Trans> </Button> </Center> </SimpleGrid> </Stack> ); }; 
-#: src/components/plugins/plugin-meta-pages.tsx:52
-#: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:35
-#: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:132
-msgid "Connect {0}"
-msgstr "Kết nối {0}"
-
-#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:29
-msgid "Connect <0>Zalo OAs</0>"
-msgstr "Kết nối <0>Zalo OA</0>"
 
 #: src/modals/modal-connect-meta-pages.tsx:135
 msgid "Connect Meta page"
 msgstr "Kết nối trang Meta"
 
-#: src/components/plugins/plugin-meta-pages.tsx:107
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:107
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:262
 msgid "Connect more"
 msgstr "Kết nối thêm"
@@ -1473,7 +1499,7 @@ msgstr "Coupon"
 
 #: src/modules/events/event-constants.ts:122
 msgid "Coupon archived"
-msgstr "Xóa coupon"
+msgstr "Coupon đã xoá"
 
 #: src/modules/events/event-constants.ts:123
 #: src/modules/events/event-constants.ts:125
@@ -1494,7 +1520,7 @@ msgstr "Cập nhật coupon"
 
 #: src/modules/events/event-constants.ts:126
 msgid "Coupon used"
-msgstr "Đã sử dụng coupon"
+msgstr "Coupon đã dùng"
 
 #: src/modules/coupons/coupons-layout.tsx:14
 msgid "Coupons"
@@ -1506,16 +1532,15 @@ msgstr "Coupon"
 #: src/modules/loans/modals/modal-loan-package-form.tsx:332
 #: src/modules/promotions/components/form-promotion.tsx:177
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:87
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:240
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:238
 #: src/modules/workspaces/workspace-require.tsx:302
 msgid "Create"
 msgstr "Tạo"
 
-#. placeholder {0}: "use client"; import { api } from "@/modules/apis"; import { onActionLoad } from "@/utils/actions"; import { t } from "@lingui/core/macro"; import { ActionIcon, Group, Popover, TextInput } from "@mantine/core"; import { IconPlus } from "@tabler/icons-react"; import { FC, PropsWithChildren, useState } from "react"; import { CategoryEntity, CategoryType } from "../category-types"; interface QuickCreateCategoryProps { type?: CategoryType; onCreated?: (category: CategoryEntity) => void; } export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>> = (props) => { const [opened, setOpened] = useState(false); const children = props.children ? ( <Group onClick={() => setOpened((s) => !s)}>{props.children}</Group> ) : ( <ActionIcon onClick={() => setOpened((s) => !s)}> <IconPlus size={16} strokeWidth={1.5} /> </ActionIcon> ); const label = t`Create ${t`Category`}`; return ( <Popover shadow="md" opened={opened} onChange={setOpened}> <Popover.Target>{children}</Popover.Target> <Popover.Dropdown p={10}> <TextInput label={label} placeholder={t`Enter ${t`Category`.toLowerCase()} name`} autoFocus onKeyUp={(e) => { if (e.key === "Enter") { e.preventDefault(); e.stopPropagation(); const value = (e.target as any).value; onActionLoad({ name: t`Create ${t`Category`}`, process: async () => { const category = await api.post<CategoryEntity>("/categories", { name: value, type: props.type, }); props.onCreated?.(category); }, }); setOpened(false); } }} /> </Popover.Dropdown> </Popover> ); }; 
-#: src/modules/categories/components/quick-create-category.tsx:27
-#: src/modules/categories/components/quick-create-category.tsx:44
-msgid "Create {0}"
-msgstr "Tạo {0}"
+#: src/modules/categories/components/quick-create-category.tsx:28
+#: src/modules/categories/components/quick-create-category.tsx:45
+msgid "Create {entity}"
+msgstr "Tạo {entity}"
 
 #: src/modules/workspaces/workspace-modules.tsx:287
 msgid "Create an application with a custom domain, customize the application name, icon, color."
@@ -1548,6 +1573,7 @@ msgid "Create coupon rule"
 msgstr "Tạo quy tắc coupon"
 
 #: src/modules/customers/customer-modal.tsx:16
+#: src/modules/workspace-roles/workspace-roles-constants.ts:33
 msgid "Create customer"
 msgstr "Tạo khách hàng"
 
@@ -1573,17 +1599,16 @@ msgstr "Tạo mẫu"
 #: src/modules/products/components/form-product.tsx:617
 #: src/modules/workspace-api-apps/workspace-api-app-list.tsx:50
 #: src/modules/workspace-api-apps/workspace-api-app-list.tsx:69
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:225
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:226
 #: src/modules/workspace-branches/workspace-branch-list.tsx:83
 #: src/modules/workspace-roles/workspace-role-list.tsx:28
 #: src/modules/workspace-settings/workspace-setting-message-hubs.tsx:51
 msgid "Create new"
 msgstr "Tạo mới"
 
-#. placeholder {0}: "use client"; import { ButtonArchive } from "@/components/buttons/button-archive"; import { Form } from "@/components/form"; import { FormSession } from "@/components/form-session"; import { ModalTitle } from "@/components/modal-title"; import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos"; import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity"; import { archiveWorkspaceApiApp, createWorkspaceApiApp, resetWorkspaceApiAppSecretKey, updateWorkspaceApiApp, } from "@/modules/workspace-api-apps/workspace-api-apps-service"; import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input"; import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types"; import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input"; import { WorkspacePermission, WorkspaceRoleEntity, WorkspaceSpecialRoleId, } from "@/modules/workspace-roles/workspace-roles-types"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onActionLoad } from "@/utils/actions"; import { onFormError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { ActionIcon, Badge, Button, Center, CopyButton, Group, PasswordInput, Stack, TextInput, Tooltip, } from "@mantine/core"; import { useForm } from "@mantine/form"; import { useDisclosure } from "@mantine/hooks"; import { modals } from "@mantine/modals"; import { IconApiApp, IconCheck, IconCopy, IconEye, IconEyeOff, IconRefresh, } from "@tabler/icons-react"; import { FC, Fragment, useState } from "react"; import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants"; interface ModalWorkspaceApiAppProps { app?: IWorkspaceApiApp; } const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => { const workspace = useWorkspace(); const secretKeyVisible = useDisclosure(false); const [app, setApp] = useState<IWorkspaceApiApp | null>(props.app || null); const [secretKey, setSecretKey] = useState(app?.secretKey || ""); const getInitialValues = (_app?: IWorkspaceApiApp) => { return { name: _app?.member.name || "", roles: _app?.member.roles || [ { _id: WorkspaceSpecialRoleId.ADMIN, name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name(), }, ], workspaceBranches: _app?.member.workspaceBranches || [], }; }; const form = useForm<{ name: string; roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[]; workspaceBranches: Pick<WorkspaceBranchEntity, "_id" | "name">[]; }>({ initialValues: getInitialValues(props.app), validate: { name: (value) => (value?.trim() ? null : t`Should not be empty`), }, }); const roles = workspace.roles.filter((v) => form.values.roles.some((v2) => v2._id === v._id)); const isMainWorkspaceAccessable = roles.some((v) => v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS) ); const onResetKey = () => { if (!app?._id) return; onActionLoad({ process: () => resetWorkspaceApiAppSecretKey(app._id), onFinished: (result) => { setSecretKey(result.secretKey); }, }); }; const onSubmit = form.onSubmit(async (data) => { try { const payload: WorkspaceApiAppDto = { name: data.name, enabled: app ? app.enabled : true, roleIds: data.roles.map((v) => v._id), workspaceBranchIds: data.workspaceBranches.map((v) => v._id), }; if (app) { const _app = await updateWorkspaceApiApp(app._id, payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setApp(_app); } else { const _app = await createWorkspaceApiApp(payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setSecretKey(_app.secretKey); modals.updateModal({ modalId: "ModalWorkspaceApiApp", title: <ModalTitle title={t`Information about ${t`API App`}`} icon={IconApiApp} />, }); setApp(_app); } } catch (error) { onFormError(form, error); } }); return ( <Form onSubmit={onSubmit}> <Stack gap={30} pt={16}> {!!app && ( <Fragment> <FormSession title="ID"> <CopyButton value={app._id}> {({ copied, copy }) => ( <TextInput value={app._id} readOnly rightSection={ <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> } /> )} </CopyButton> </FormSession> <FormSession title={t`Secret key`} description={t`Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised`} > <CopyButton value={secretKey}> {({ copied, copy }) => ( <PasswordInput value={secretKey} readOnly visible={secretKeyVisible[0]} styles={{ innerInput: { paddingRight: 100, }, section: { width: 100, }, }} rightSection={ <Group wrap="nowrap" gap={0}> <Tooltip label={t`Reset secret key`}> <ActionIcon onClick={onResetKey} variant="subtle"> <IconRefresh size={16} /> </ActionIcon> </Tooltip> <ActionIcon onClick={secretKeyVisible[1].toggle} variant="subtle"> {secretKeyVisible[0] ? <IconEyeOff size={16} /> : <IconEye size={16} />} </ActionIcon> <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> </Group> } /> )} </CopyButton> </FormSession> </Fragment> )} <FormSession title={t`Name`}> <TextInput {...form.getInputProps("name")} /> </FormSession> <FormSession title={t`Roles`}> <WorkspaceRolesInput value={form.values.roles} onChange={(roles) => form.setFieldValue("roles", roles)} /> </FormSession> <FormSession title={t`Branches`}> {isMainWorkspaceAccessable ? ( <Badge variant="light">{t`All branches`}</Badge> ) : ( <WorkspaceBranchesInput key={app?.member.userId} value={form.values.workspaceBranches} onChange={(branches) => { form.setFieldValue("workspaceBranches", branches); }} /> )} </FormSession> <Stack gap={16} mt={16}> <Center> <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}> {app ? t`Save changes` : t`Create new`} </Button> </Center> {!!app && ( <ButtonArchive process={() => archiveWorkspaceApiApp(app._id)} goBackWhenArchived={false} onArchived={() => { modals.close("ModalWorkspaceApiApp"); }} /> )} </Stack> </Stack> </Form> ); }; export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => { return modals.open({ modalId: "ModalWorkspaceApiApp", title: ( <ModalTitle title={app ? t`Information about ${t`API App`}` : t`Create new ${t`API App`}`} icon={IconApiApp} /> ), children: <ModalWorkspaceApiApp app={app} />, size: "xl", }); }; 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
-msgid "Create new {0}"
-msgstr "Tạo {0} mới"
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:251
+msgid "Create new {entity}"
+msgstr ""
 
 #: src/modules/events/event-constants.ts:121
 msgid "Create new loan contract"
@@ -1608,6 +1633,10 @@ msgstr "Tạo chi nhánh mới"
 msgid "Create order"
 msgstr "Tạo đơn hàng"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:138
+msgid "Create order / service ticket"
+msgstr "Tạo phiếu đặt hàng/dịch vụ"
+
 #: src/modules/events/event-constants.ts:59
 #: src/modules/partners/modals/modal-partner-form.tsx:81
 msgid "Create partner"
@@ -1617,16 +1646,21 @@ msgstr "Tạo đối tác"
 msgid "Create product"
 msgstr "Tạo sản phẩm"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:78
+msgid "Create product/service"
+msgstr "Tạo sản phẩm/dịch vụ"
+
 #: src/modules/promotions/modals/modal-promotion.tsx:19
 msgid "Create promotion"
 msgstr "Tạo khuyến mãi"
 
 #: src/modules/events/event-constants.ts:66
 #: src/modules/receipts/modals/modal-receipt-form.tsx:166
+#: src/modules/workspace-roles/workspace-roles-constants.ts:72
 msgid "Create receipt"
 msgstr "Tạo hoá đơn"
 
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:259
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:257
 msgid "Create role"
 msgstr "Tạo vai trò"
 
@@ -1656,6 +1690,10 @@ msgstr "Tạo thẻ"
 #: src/modules/tasks/views/list/list.task-group-by-statuses.tsx:128
 msgid "Create task"
 msgstr "Tạo công việc"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:54
+msgid "Create/update loan"
+msgstr "Tạo/cập nhật khoản vay"
 
 #: src/modules/tasks/views/calendar/index.tsx:270
 msgid "Created"
@@ -1774,7 +1812,7 @@ msgstr "Thông tin liên hệ của khách hàng đã được cập nhật"
 
 #: src/modules/events/event-constants.ts:32
 msgid "Customer created"
-msgstr "Tạo khách hàng"
+msgstr "Khách hàng đã được tạo"
 
 #: src/modules/bookings/modals/modal-booking-detail.tsx:89
 msgid "Customer detail"
@@ -1824,6 +1862,7 @@ msgstr "Cập nhật khách hàng"
 
 #: src/constant.ts:7
 #: src/modules/search/search-engine.tsx:122
+#: src/modules/workspace-roles/workspace-roles-config.ts:55
 #: src/modules/workspaces/workspace-modules.tsx:130
 msgid "Customers"
 msgstr "Khách hàng"
@@ -1852,11 +1891,8 @@ msgstr "Chế độ tối"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: src/utils/actions.tsx:97
-msgid "data"
-msgstr "dữ liệu"
-
 #: src/components/list/components/export-button.tsx:63
+#: src/modules/workspace-roles/workspace-roles-config.ts:267
 msgid "Data"
 msgstr "Dữ liệu"
 
@@ -1930,7 +1966,7 @@ msgid "Dental"
 msgstr "Nha khoa"
 
 #. placeholder {0}: dependentPermissions .map((p) => p.value) .join(", ")
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:212
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:210
 msgid "Dependent permissions: {0}"
 msgstr "Quyền phụ thuộc: {0}"
 
@@ -1939,28 +1975,24 @@ msgstr "Quyền phụ thuộc: {0}"
 #: src/modules/workspace-billings/workspace-billing-list.tsx:71
 #: src/modules/workspace-billings/workspace-billings-contants.ts:11
 msgid "Deposit"
-msgstr "Tiền gửi"
+msgstr "Nạp tiền"
 
 #: src/modules/workspace-billings/modals/modal-workspace-billing-deposit.tsx:84
 msgid "Deposited message"
-msgstr "Tin nhắn đã gửi"
+msgstr "Nội dung giao dịch"
 
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:129
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:133
 #: src/modules/custom-fields/components/form-custom-field.tsx:108
 #: src/modules/loans/modals/modal-loan-package-form.tsx:329
 #: src/modules/promotions/components/form-promotion.tsx:119
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:136
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:134
 msgid "Description"
-msgstr "Sự miêu tả"
+msgstr "Mô tả"
 
 #: src/components/printer/printer-body.tsx:39
 #: src/modals/modal-printer.tsx:303
 msgid "Detail"
-msgstr "Chi tiết"
-
-#: src/modules/bookings/components/form-booking.tsx:340
-msgid "Details"
 msgstr "Chi tiết"
 
 #: src/modules/auth/auth-provider.tsx:283
@@ -1969,7 +2001,7 @@ msgstr "Thiết bị không hỗ trợ thông báo."
 
 #: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:83
 msgid "Device key"
-msgstr "Phím thiết bị"
+msgstr "Key thiết bị"
 
 #: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:35
 msgid "Device name"
@@ -1977,7 +2009,7 @@ msgstr "Tên thiết bị"
 
 #: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:71
 msgid "Device storage"
-msgstr "Lưu trữ thiết bị"
+msgstr "Dung lượng thiết bị"
 
 #: src/modules/users/components/user-device-list.tsx:44
 msgid "Devices"
@@ -1995,16 +2027,16 @@ msgstr "Giảm giá trực tiếp"
 #: src/modules/message-boxes/message-box/message-box-head.tsx:132
 #: src/widgets/index.tsx:289
 msgid "Disable"
-msgstr "Vô hiệu hóa"
+msgstr "Tắt"
 
 #: src/modules/events/event-constants.ts:69
 #: src/modules/loans/loan-detail.tsx:398
 msgid "Disbursement"
 msgstr "Giải ngân"
 
-#: src/components/plugins/plugin-meta-pages.tsx:89
-#: src/components/plugins/plugin-meta-pages.tsx:94
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:217
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:89
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:94
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:117
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:122
 msgid "Disconect"
@@ -2059,7 +2091,7 @@ msgstr "Hiển thị giá cho người dùng"
 
 #: src/modules/workspaces/workspace-module-setup.tsx:61
 msgid "Divider"
-msgstr "Dải phân cách"
+msgstr "Phân cách"
 
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:178
 msgid "Docs"
@@ -2067,11 +2099,11 @@ msgstr "Tài liệu"
 
 #: src/modules/workspaces/workspace-modules.tsx:266
 msgid "Documents"
-msgstr "Documents"
+msgstr "Tài liệu"
 
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:179
 msgid "Domain"
-msgstr "Lãnh địa"
+msgstr "Tên miền"
 
 #: src/modules/posts/components/form-post.tsx:139
 msgid "Draft"
@@ -2094,14 +2126,14 @@ msgstr "Kéo để chọn các khe thời gian. Bấm để xem chi tiết và c
 #: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:115
 #: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:120
 msgid "Driver license images back"
-msgstr "Hình ảnh giấy phép lái xe trở lại"
+msgstr "Giấy phép lái xe (mặt sau)"
 
 #: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:98
 #: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:103
 #: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:98
 #: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:103
 msgid "Driver license images front"
-msgstr "Hình ảnh giấy phép lái xe mặt trước"
+msgstr "Giấy phép lái xe (mặt trước)"
 
 #: src/components/entity-images.tsx:83
 msgid "Drop file here or click"
@@ -2148,11 +2180,11 @@ msgstr "Hóa đơn điện tử"
 
 #: src/modules/events/event-constants.ts:194
 msgid "E-invoice created"
-msgstr "Đã tạo hóa đơn điện tử"
+msgstr "HĐĐT được tạo"
 
 #: src/modules/events/event-constants.ts:195
 msgid "E-invoice removed"
-msgstr "Hóa đơn điện tử đã bị xóa"
+msgstr "HĐĐT đã xóa"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-list.tsx:52
 #: src/modules/receipts/receipt-e-invoices.tsx:81
@@ -2165,7 +2197,7 @@ msgstr "HĐĐT"
 msgid "Early leave"
 msgstr "Về sớm"
 
-#: src/components/plugins/plugin-meta-pages.tsx:57
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:57
 msgid "Easy & quick setup"
 msgstr "Thiết lập dễ dàng và nhanh chóng"
 
@@ -2182,7 +2214,7 @@ msgstr "Thiết lập dễ dàng và nhanh chóng"
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:87
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:116
 msgid "Edit"
-msgstr "Biên tập"
+msgstr "Chỉnh sửa"
 
 #: src/modules/orders/orders-sale/components/order-sale-items.tsx:33
 msgid "Edit note"
@@ -2205,12 +2237,13 @@ msgstr "Chỉnh sửa chi nhánh workspace"
 #: src/modules/customers/components/form-customer.tsx:144
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:449
 #: src/modules/users/modals/modal-user-information.tsx:188
+#: src/modules/workspace-members/workspace-member-list.tsx:76
 msgid "Email"
 msgstr "E-mail"
 
 #: src/modules/plugins/mailer/plugin-mailer-form.tsx:109
 msgid "Email to receive"
-msgstr "Email để nhận"
+msgstr "Email nhận"
 
 #: src/modules/message-boxes/message-box/message-box-head.tsx:132
 #: src/widgets/index.tsx:289
@@ -2238,12 +2271,8 @@ msgstr "Số máy"
 msgid "English"
 msgstr "Tiếng Anh"
 
-#: src/modules/bookings/components/form-booking.tsx:340
-msgid "Enter"
-msgstr "Đi vào"
-
-#. placeholder {0}: t`Category`.toLowerCase()
-#: src/modules/categories/components/quick-create-category.tsx:36
+#. placeholder {0}: entity.toLowerCase()
+#: src/modules/categories/components/quick-create-category.tsx:37
 msgid "Enter {0} name"
 msgstr "Nhập tên {0}"
 
@@ -2266,11 +2295,15 @@ msgstr "Nhập phí hợp đồng"
 
 #: src/modules/customers/modals/modal-customer-plain-code-form.tsx:74
 msgid "Enter customer plain code"
-msgstr "Nhập mã đơn giản của khách hàng"
+msgstr "Nhập mã khách hàng"
 
 #: src/modals/modal-input.tsx:125
 msgid "Enter data"
 msgstr "Nhập dữ liệu"
+
+#: src/modules/bookings/components/form-booking.tsx:340
+msgid "Enter details (Optional)"
+msgstr "Nhập nội dung (Không bắt buộc)"
 
 #: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:93
 msgid "Enter device key"
@@ -2312,7 +2345,7 @@ msgstr "Nhập số ngày, giờ, phút (ví dụ: 2d 4h 30m)"
 
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:151
 msgid "Enter pill name"
-msgstr "Nhập tên viên thuốc"
+msgstr "Nhập tên thuốc"
 
 #: src/modules/products/components/form-product.tsx:363
 msgid "Enter product supplies"
@@ -2369,7 +2402,7 @@ msgstr "Nhập mật khẩu của bạn"
 
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:373
 msgid "Estimate price"
-msgstr "Ước tính giá"
+msgstr "Định giá"
 
 #: src/components/inputs/estimate-time-input.tsx:130
 #: src/modules/tasks/components/form-task.tsx:533
@@ -2380,7 +2413,7 @@ msgstr "Ước tính thời gian"
 
 #: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:245
 msgid "Estimation price"
-msgstr "Giá ước tính"
+msgstr "Định giá"
 
 #: src/modules/products/components/form-product.tsx:351
 msgid "Ex: Enter 10 -> Warn when stock is below 10, leave blank or fill in 0 to turn off the warning"
@@ -2429,7 +2462,7 @@ msgstr "Loại trừ khách hàng"
 #: src/modules/workspaces/components/workspace-archived.tsx:46
 #: src/modules/workspaces/workspace-require.tsx:378
 msgid "Exit"
-msgstr "Ra"
+msgstr "Thoát"
 
 #: src/modules/receipts/receipt-constants.tsx:23
 msgid "Expense"
@@ -2470,8 +2503,13 @@ msgstr "Xuất"
 
 #: src/components/list/components/export-button.tsx:195
 #: src/components/list/components/export-button.tsx:200
+#: src/modules/workspace-roles/workspace-roles-constants.ts:159
 msgid "Export data"
 msgstr "Xuất dữ liệu"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:207
+msgid "Export e-invoice"
+msgstr "Xuất hóa đơn điện tử"
 
 #: src/modules/receipts/receipt-e-invoices.tsx:70
 msgid "Export E-Invoice"
@@ -2491,17 +2529,13 @@ msgstr "Không thể lấy được vị trí địa lý, vui lòng thử lại 
 msgid "Failed to connect with Meta."
 msgstr "Không thể kết nối với Meta."
 
-#: src/components/plugins/plugin-meta-pages.tsx:52
-msgid "Fanpage Facebook"
-msgstr "Trang Facebook Facebook"
-
 #: src/modules/loans/modals/modal-loan-calculator.tsx:215
 msgid "Fee"
 msgstr "Phí"
 
 #: src/constant.ts:52
 msgid "Female"
-msgstr "Nữ giới"
+msgstr "Nữ"
 
 #: src/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping.tsx:158
 msgid "Fetching location"
@@ -2602,20 +2636,21 @@ msgstr "Mặt trước của CID"
 
 #: src/modules/loans/modals/modal-loan-calculator.tsx:148
 msgid "Fulfill at"
-msgstr "Hoàn thành tại"
+msgstr "Giải ngân lúc"
 
 #: src/modules/events/event-constants.ts:119
+#: src/modules/workspace-roles/workspace-roles-constants.ts:51
 msgid "Fulfill loan"
-msgstr "Hoàn thành khoản vay"
+msgstr "Giải ngân khoản vay"
 
 #: src/modules/loans/loans-constants.tsx:17
 msgid "Fulfilled"
-msgstr "Đã hoàn thành"
+msgstr "Đã giải ngân"
 
 #: src/modules/loans/components/loan-disbursement.tsx:266
 #: src/modules/loans/loan-list.tsx:110
 msgid "Fulfilled at"
-msgstr "Hoàn thành tại"
+msgstr "Đã giải ngân lúc"
 
 #: src/modals/modal-printer.tsx:458
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:250
@@ -2664,11 +2699,11 @@ msgstr "Địa chỉ Gmail"
 
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:144
 msgid "GMF groups"
-msgstr "nhóm GMF"
+msgstr "Nhóm GMF"
 
 #: src/modules/workspace-roles/components/workspace-role-card.tsx:92
 #: src/modules/workspace-roles/components/workspace-role-card.tsx:109
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:142
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:140
 msgid "Grant permissions"
 msgstr "Cấp quyền"
 
@@ -2680,7 +2715,7 @@ msgstr "Lưới"
 #: src/modules/customers/components/customer-column.tsx:34
 #: src/modules/message-boxes/message-box/message-box-card.tsx:104
 #: src/modules/message-boxes/message-box/message-box-head.tsx:84
-#: src/modules/workspace-members/workspace-members-service.ts:53
+#: src/modules/workspace-members/workspace-members-service.ts:58
 msgid "Guest"
 msgstr "Khách mời"
 
@@ -2691,7 +2726,7 @@ msgstr "Có quyền truy cập vào tất cả các chức năng của hệ th�
 
 #: src/modules/loans/loan-list.tsx:96
 msgid "Has late interest"
-msgstr "Có lãi muộn"
+msgstr "Có lãi chậm trả"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:131
 msgid "Healthcheck"
@@ -2724,7 +2759,7 @@ msgstr "Lịch sử"
 
 #: src/modules/customers/components/form-customer.tsx:193
 msgid "Homeland"
-msgstr "Quê hương"
+msgstr "Quê quán"
 
 #: src/modules/workspaces/workspace-constants.tsx:18
 msgid "Hospital"
@@ -2734,7 +2769,7 @@ msgstr "Bệnh viện"
 #: src/modals/modal-printer.tsx:261
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:63
 msgid "Hotline"
-msgstr "Đường dây nóng"
+msgstr "Hotline"
 
 #: src/modules/lang/lang-service.ts:98
 msgid "hour"
@@ -2750,11 +2785,11 @@ msgstr "icloud"
 
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:163
 msgid "ID images"
-msgstr "hình ảnh ID"
+msgstr "Hình ảnh CCCD"
 
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:247
 msgid "ID number"
-msgstr "số CMND"
+msgstr "Số CCCD"
 
 #: src/modules/workspaces/workspace-modules.tsx:417
 msgid "Identify brand through Email. Help you take better care of customers through Email."
@@ -2780,10 +2815,6 @@ msgstr "Hình ảnh/Tài liệu"
 msgid "Images & Documents"
 msgstr "Hình ảnh và tài liệu"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:53
-msgid "IMEIL"
-msgstr "IMEIL"
-
 #: src/modules/loans/components/loan-documents.tsx:87
 #: src/modules/loans/loan-list.tsx:375
 msgid "Img is blurry"
@@ -2796,7 +2827,7 @@ msgstr "Nhập dữ liệu khoản vay"
 #: src/modules/bookings/booking-constants.tsx:7
 #: src/modules/message-boxes/message-boxes-contants.tsx:10
 msgid "In progress"
-msgstr "Đang tiến hành"
+msgstr "Đang xử lí"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:23
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:59
@@ -2807,7 +2838,7 @@ msgstr "Không hoạt động"
 
 #: src/modules/notifications/user-notifications.tsx:44
 msgid "Inbox Zero"
-msgstr "Hộp thư đến số 0"
+msgstr "Không có thông báo"
 
 #: src/modules/product-vouchers/product-voucher-card.tsx:79
 #: src/modules/products/components/product-card.tsx:179
@@ -2828,34 +2859,25 @@ msgstr "Bao gồm khách hàng"
 
 #: src/modules/receipts/receipt-constants.tsx:18
 msgid "Income"
-msgstr "Thu nhập"
+msgstr "Thu"
 
 #: src/widgets/reports/widgets/report-credit.widget.tsx:541
 msgid "Income expense"
-msgstr "Chi phí thu nhập"
+msgstr "Thu chi"
 
 #: src/modules/events/event-constants.ts:15
 msgid "Info"
 msgstr "Thông tin"
 
 #: src/modules/customers/components/customer-kyc-card.tsx:105
-msgid "Info does not match image"
-msgstr "Thông tin không khớp với hình ảnh"
-
 #: src/modules/loans/components/loan-documents.tsx:87
 #: src/modules/loans/loan-list.tsx:375
-msgid "Info does not match img"
-msgstr "Thông tin không khớp với img"
+msgid "Info does not match image"
+msgstr "Thông tin không khớp với hình ảnh"
 
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:55
 msgid "Information"
 msgstr "Thông tin"
-
-#. placeholder {0}: "use client"; import { ButtonArchive } from "@/components/buttons/button-archive"; import { Form } from "@/components/form"; import { FormSession } from "@/components/form-session"; import { ModalTitle } from "@/components/modal-title"; import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos"; import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity"; import { archiveWorkspaceApiApp, createWorkspaceApiApp, resetWorkspaceApiAppSecretKey, updateWorkspaceApiApp, } from "@/modules/workspace-api-apps/workspace-api-apps-service"; import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input"; import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types"; import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input"; import { WorkspacePermission, WorkspaceRoleEntity, WorkspaceSpecialRoleId, } from "@/modules/workspace-roles/workspace-roles-types"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { onActionLoad } from "@/utils/actions"; import { onFormError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { ActionIcon, Badge, Button, Center, CopyButton, Group, PasswordInput, Stack, TextInput, Tooltip, } from "@mantine/core"; import { useForm } from "@mantine/form"; import { useDisclosure } from "@mantine/hooks"; import { modals } from "@mantine/modals"; import { IconApiApp, IconCheck, IconCopy, IconEye, IconEyeOff, IconRefresh, } from "@tabler/icons-react"; import { FC, Fragment, useState } from "react"; import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants"; interface ModalWorkspaceApiAppProps { app?: IWorkspaceApiApp; } const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => { const workspace = useWorkspace(); const secretKeyVisible = useDisclosure(false); const [app, setApp] = useState<IWorkspaceApiApp | null>(props.app || null); const [secretKey, setSecretKey] = useState(app?.secretKey || ""); const getInitialValues = (_app?: IWorkspaceApiApp) => { return { name: _app?.member.name || "", roles: _app?.member.roles || [ { _id: WorkspaceSpecialRoleId.ADMIN, name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name(), }, ], workspaceBranches: _app?.member.workspaceBranches || [], }; }; const form = useForm<{ name: string; roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[]; workspaceBranches: Pick<WorkspaceBranchEntity, "_id" | "name">[]; }>({ initialValues: getInitialValues(props.app), validate: { name: (value) => (value?.trim() ? null : t`Should not be empty`), }, }); const roles = workspace.roles.filter((v) => form.values.roles.some((v2) => v2._id === v._id)); const isMainWorkspaceAccessable = roles.some((v) => v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS) ); const onResetKey = () => { if (!app?._id) return; onActionLoad({ process: () => resetWorkspaceApiAppSecretKey(app._id), onFinished: (result) => { setSecretKey(result.secretKey); }, }); }; const onSubmit = form.onSubmit(async (data) => { try { const payload: WorkspaceApiAppDto = { name: data.name, enabled: app ? app.enabled : true, roleIds: data.roles.map((v) => v._id), workspaceBranchIds: data.workspaceBranches.map((v) => v._id), }; if (app) { const _app = await updateWorkspaceApiApp(app._id, payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setApp(_app); } else { const _app = await createWorkspaceApiApp(payload); form.setInitialValues(getInitialValues(_app)); form.reset(); setSecretKey(_app.secretKey); modals.updateModal({ modalId: "ModalWorkspaceApiApp", title: <ModalTitle title={t`Information about ${t`API App`}`} icon={IconApiApp} />, }); setApp(_app); } } catch (error) { onFormError(form, error); } }); return ( <Form onSubmit={onSubmit}> <Stack gap={30} pt={16}> {!!app && ( <Fragment> <FormSession title="ID"> <CopyButton value={app._id}> {({ copied, copy }) => ( <TextInput value={app._id} readOnly rightSection={ <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> } /> )} </CopyButton> </FormSession> <FormSession title={t`Secret key`} description={t`Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised`} > <CopyButton value={secretKey}> {({ copied, copy }) => ( <PasswordInput value={secretKey} readOnly visible={secretKeyVisible[0]} styles={{ innerInput: { paddingRight: 100, }, section: { width: 100, }, }} rightSection={ <Group wrap="nowrap" gap={0}> <Tooltip label={t`Reset secret key`}> <ActionIcon onClick={onResetKey} variant="subtle"> <IconRefresh size={16} /> </ActionIcon> </Tooltip> <ActionIcon onClick={secretKeyVisible[1].toggle} variant="subtle"> {secretKeyVisible[0] ? <IconEyeOff size={16} /> : <IconEye size={16} />} </ActionIcon> <ActionIcon onClick={copy} variant="subtle"> {copied ? <IconCheck size={16} /> : <IconCopy size={16} />} </ActionIcon> </Group> } /> )} </CopyButton> </FormSession> </Fragment> )} <FormSession title={t`Name`}> <TextInput {...form.getInputProps("name")} /> </FormSession> <FormSession title={t`Roles`}> <WorkspaceRolesInput value={form.values.roles} onChange={(roles) => form.setFieldValue("roles", roles)} /> </FormSession> <FormSession title={t`Branches`}> {isMainWorkspaceAccessable ? ( <Badge variant="light">{t`All branches`}</Badge> ) : ( <WorkspaceBranchesInput key={app?.member.userId} value={form.values.workspaceBranches} onChange={(branches) => { form.setFieldValue("workspaceBranches", branches); }} /> )} </FormSession> <Stack gap={16} mt={16}> <Center> <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}> {app ? t`Save changes` : t`Create new`} </Button> </Center> {!!app && ( <ButtonArchive process={() => archiveWorkspaceApiApp(app._id)} goBackWhenArchived={false} onArchived={() => { modals.close("ModalWorkspaceApiApp"); }} /> )} </Stack> </Stack> </Form> ); }; export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => { return modals.open({ modalId: "ModalWorkspaceApiApp", title: ( <ModalTitle title={app ? t`Information about ${t`API App`}` : t`Create new ${t`API App`}`} icon={IconApiApp} /> ), children: <ModalWorkspaceApiApp app={app} />, size: "xl", }); }; 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:125
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:249
-msgid "Information about {0}"
-msgstr "Thông tin về {0}"
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:432
 msgid "Input"
@@ -2921,7 +2943,7 @@ msgstr "Tích hợp với các mô hình LLM"
 msgid "Integrate Zalo OA, manage customer interactions."
 msgstr "Tích hợp Zalo OA, quản lí tương tác với khách hàng."
 
-#: src/components/plugins/plugin-meta-pages.tsx:56
+#: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:56
 msgid "Interact with customers via Messenger"
 msgstr "Tương tác với khách hàng qua Messenger"
 
@@ -2930,7 +2952,7 @@ msgstr "Tương tác với khách hàng qua Messenger"
 #: src/modules/loans/components/loan-receipt-card.tsx:124
 #: src/modules/loans/modals/modal-loan-calculator.tsx:206
 msgid "Interest"
-msgstr "Quan tâm"
+msgstr "Lãi"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:172
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:124
@@ -2939,7 +2961,7 @@ msgstr "Ngày lãi"
 
 #: src/widgets/reports/widgets/report-credit.widget.tsx:375
 msgid "Interest income"
-msgstr "Thu nhập lãi"
+msgstr "Thu lãi"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:180
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:128
@@ -3015,6 +3037,10 @@ msgstr "Tham gia ngay bây giờ"
 msgid "Join workspace"
 msgstr "Tham gia workspace"
 
+#: src/modules/workspace-members/workspace-member-list.tsx:67
+msgid "Joined at"
+msgstr "Đã tham gia tại"
+
 #: src/modules/bookings/booking-constants.tsx:5
 msgid "Just created"
 msgstr "Vừa tạo"
@@ -3025,7 +3051,7 @@ msgstr "Giữ"
 
 #: src/modules/events/event-constants.ts:113
 msgid "KYC approved"
-msgstr "KYC đã được phê duyệt"
+msgstr "KYC đã duyệt"
 
 #: src/modules/events/event-constants.ts:112
 msgid "KYC pending"
@@ -3101,12 +3127,12 @@ msgstr "Muộn"
 
 #: src/modules/loans/modals/modal-loan-package-form.tsx:261
 msgid "Late days"
-msgstr "Những ngày muộn màng"
+msgstr "Số ngày trễ"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:76
 #: src/modules/loans/modals/modal-loan-package-form.tsx:252
 msgid "Late interest"
-msgstr "Lãi muộn"
+msgstr "Lãi chậm trả"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:214
 msgid "Late interest fee"
@@ -3204,7 +3230,7 @@ msgstr "Liên kết mẫu khách hàng"
 
 #: src/modules/customer-forms/customer-form-list.tsx:31
 msgid "Link form"
-msgstr "Hình thức liên kết"
+msgstr "Liên kết form"
 
 #: src/modules/loans/components/loan-payments.tsx:117
 #: src/modules/loans/components/loan-payments.tsx:270
@@ -3228,7 +3254,7 @@ msgstr "Thông báo thanh lý"
 
 #: src/modules/loans/loan-detail.tsx:307
 msgid "Liquidation statement"
-msgstr "Tuyên bố thanh lý"
+msgstr "Hồ sơ thanh lý"
 
 #: src/components/list/list.tsx:242
 #: src/modules/orders/orders-sale/orders-sale.tsx:43
@@ -3269,7 +3295,7 @@ msgstr "Đơn xin vay tiền không có thông tin tài khoản ngân hàng"
 
 #: src/modules/events/event-constants.ts:185
 msgid "Loan approved reverted"
-msgstr "Khoản vay đã được phê duyệt được hoàn nguyên"
+msgstr "Khoản vay đã được phê duyệt được hoàn tác"
 
 #: src/modules/loans/modals/modal-create-loan.tsx:382
 msgid "Loan asset data"
@@ -3314,7 +3340,7 @@ msgstr "Khoản vay đã hoàn thành"
 
 #: src/modules/events/event-constants.ts:192
 msgid "Loan fulfilled reverted"
-msgstr "Khoản vay đã hoàn thành được hoàn nguyên"
+msgstr "Khoản vay đã hoàn thành được hoàn tác"
 
 #: src/modules/loans/modals/modal-create-loan.tsx:299
 msgid "Loan information"
@@ -3399,7 +3425,7 @@ msgstr "Nhắc nhở nhận khoản vay"
 
 #: src/modules/events/event-constants.ts:187
 msgid "Loan rejected reverted"
-msgstr "Khoản vay bị từ chối được hoàn nguyên"
+msgstr "Khoản vay bị từ chối được hoàn tác"
 
 #: src/modules/loans/loan-list.tsx:379
 msgid "Loan revert rejected"
@@ -3408,6 +3434,7 @@ msgstr "Khoản vay được hoàn trả bị từ chối"
 #: src/constant.ts:17
 #: src/modules/loans/loan-list.tsx:66
 #: src/modules/search/search-engine.tsx:215
+#: src/modules/workspace-roles/workspace-roles-config.ts:7
 #: src/modules/workspaces/workspace-modules.tsx:223
 #: src/widgets/reports/modules.ts:228
 msgid "Loans"
@@ -3419,7 +3446,7 @@ msgstr "Hợp đồng cho vay kích hoạt"
 
 #: src/modules/events/event-constants.ts:127
 msgid "Loans archived"
-msgstr "Khoản vay được lưu trữ"
+msgstr "Khoản vay được xoá"
 
 #: src/widgets/dashboard/modules.ts:239
 msgid "Loans debt not due yet"
@@ -3518,31 +3545,99 @@ msgstr "Vị trí chính"
 #: src/modules/workspace-members/workspace-member-list.tsx:39
 #: src/widgets/reports/index.tsx:308
 msgid "Main office"
-msgstr "Văn phòng chính"
+msgstr "Trụ sở chính"
 
 #: src/modals/modal-check-in-location-form.tsx:72
 msgid "Main office, Branch 1, ..."
-msgstr "Văn phòng chính, Chi nhánh 1, ..."
+msgstr "Trụ sở chính, Chi nhánh 1, ..."
 
 #: src/constant.ts:51
 msgid "Male"
-msgstr "Nam giới"
+msgstr "Nam"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:102
+msgid "Manage billings"
+msgstr "Quản lý hóa đơn"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:66
+msgid "Manage bookings"
+msgstr "Quản lý lịch hẹn"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:195
+msgid "Manage categories"
+msgstr "Quản lý danh mục"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:168
+msgid "Manage Combos"
+msgstr "Quản lý Combo"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:117
+msgid "Manage coupons"
+msgstr "Quản lý coupons"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:183
+msgid "Manage custom fields"
+msgstr "Quản lý trường tùy chỉnh"
 
 #: src/modules/workspaces/workspace-modules.tsx:361
 msgid "Manage custom fields for objects: product, service, post, ..."
 msgstr "Quản lí trường tùy chỉnh cho các đối tượng: sản phẩm, dịch vụ, bài viết, ..."
 
-#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:35
+#: src/modules/workspace-roles/workspace-roles-constants.ts:171
+msgid "Manage customer forms"
+msgstr "Quản lý biểu mẫu khách hàng"
+
+#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:34
 msgid "Manage customer interaction via Zalo OA"
 msgstr "Quản lý tương tác khách hàng qua Zalo OA"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:42
+msgid "Manage customer KYC"
+msgstr "Quản lý KYC của khách hàng"
 
 #: src/modules/workspaces/workspace-modules.tsx:296
 msgid "Manage member roles and access permissions"
 msgstr "Quản lý vai trò, quyền truy cập của thành viên"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:93
+msgid "Manage members"
+msgstr "Quản lý thành viên"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:111
+msgid "Manage message boxes"
+msgstr "Quản lý hộp tin nhắn"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:81
+msgid "Manage partners"
+msgstr "Quản lý đối tác"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:180
+msgid "Manage posts"
+msgstr "Quản lý bài viết"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:108
+msgid "Manage prescriptions"
+msgstr "Quản lý đơn thuốc"
+
 #: src/modules/workspaces/workspace-modules.tsx:352
 msgid "Manage product, service, post, ..."
 msgstr "Quản lí danh mục sản phẩm, dịch vụ, bài viết, ..."
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:189
+msgid "Manage promotions"
+msgstr "Quản lý khuyến mãi"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:96
+msgid "Manage roles"
+msgstr "Quản lý vai trò"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:87
+msgid "Manage salaries"
+msgstr "Quản lý tiền lương"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:114
+msgid "Manage tables"
+msgstr "Quản lý bảng"
 
 #: src/modules/workspace-branches/workspace-branch-list.tsx:67
 #: src/modules/workspaces/workspace-modules.tsx:324
@@ -3552,6 +3647,10 @@ msgstr "Quản lý các chi nhánh của Workspace"
 #: src/modules/workspaces/workspace-modules.tsx:239
 msgid "Manage the settings of the Workspace"
 msgstr "Quản lí cài đặt Workspace"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:120
+msgid "Manage vouchers"
+msgstr "Quản lý chứng từ"
 
 #: src/widgets/components/manage-widgets.tsx:30
 #: src/widgets/index.tsx:297
@@ -3602,7 +3701,7 @@ msgstr "Giá tối đa phải lớn hơn giá tối thiểu"
 
 #: src/modules/customers/components/form-customer.tsx:214
 msgid "Medical history"
-msgstr "Lịch sử y tế"
+msgstr "Tiền sử bệnh"
 
 #: src/components/printer/printer-settings-bar.tsx:17
 #: src/modals/modal-printer.tsx:69
@@ -3611,7 +3710,7 @@ msgid "Medium"
 msgstr "Trung bình"
 
 #: src/modules/products/product-detail.tsx:159
-#: src/modules/workspace-roles/workspace-roles-constants.ts:7
+#: src/modules/workspace-roles/workspace-roles-constants.ts:11
 #: src/widgets/reports/widgets/report-credit.widget.tsx:370
 #: src/widgets/reports/widgets/report-time-trackings.widget.tsx:104
 msgid "Member"
@@ -3658,6 +3757,8 @@ msgstr "Đã cập nhật thành viên"
 #: src/modules/search/search-engine.tsx:262
 #: src/modules/tasks/views/calendar/index.tsx:166
 #: src/modules/tasks/views/time-trackings/index.tsx:163
+#: src/modules/workspace-members/workspace-member-list.tsx:48
+#: src/modules/workspace-roles/workspace-roles-config.ts:226
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:402
 #: src/modules/workspaces/workspace-modules.tsx:116
 #: src/widgets/reports/index.tsx:246
@@ -3950,9 +4051,9 @@ msgstr "Workspace chung"
 #: src/modules/tasks/views/gantt/gantt.layout.tsx:66
 #: src/modules/tasks/views/list/list.task-row-head.tsx:11
 #: src/modules/users/user-profile-settings.tsx:109
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:197
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:198
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:61
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:128
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:126
 #: src/modules/workspace-sdks/modals/modal-workspace-sdk-form.tsx:67
 #: src/modules/workspace-sdks/workspace-sdk-list.tsx:30
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:119
@@ -4258,10 +4359,6 @@ msgstr "Cài đặt vận hành"
 msgid "optional"
 msgstr "không bắt buộc"
 
-#: src/modules/bookings/components/form-booking.tsx:340
-msgid "Optional"
-msgstr "Không bắt buộc"
-
 #: src/modules/auth/auth-require.tsx:182
 #: src/modules/workspaces/workspace-require.tsx:133
 msgid "Or"
@@ -4286,12 +4383,13 @@ msgstr "Đặt hàng bán"
 
 #: src/modules/events/event-constants.ts:156
 msgid "Order synced"
-msgstr "Đơn hàng đã được đồng bộ hóa"
+msgstr "Đơn hàng đã được đồng bộ"
 
 #: src/constant.ts:20
 #: src/modules/orders/order-hooks.tsx:25
 #: src/modules/search/search-engine.tsx:281
 #: src/modules/search/search-engine.tsx:286
+#: src/modules/workspace-roles/workspace-roles-config.ts:157
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:123
 #: src/modules/workspaces/workspace-modules.tsx:203
 msgid "Orders"
@@ -4311,7 +4409,7 @@ msgstr "OTP"
 
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:12
 msgid "Out of amount"
-msgstr "Hết số tiền"
+msgstr "SL đã hết"
 
 #: src/modules/product-combos/product-combos-constants.tsx:12
 #: src/modules/products/components/product-card.tsx:235
@@ -4321,15 +4419,15 @@ msgstr "Hết hàng"
 
 #: src/modules/bookings/components/form-booking.tsx:351
 msgid "Out of work slots"
-msgstr "Hết chỗ làm việc"
+msgstr "Ngoài thời gian làm việc"
 
 #: src/modules/bookings/modals/modal-booking.tsx:315
 msgid "Out of working time slots"
-msgstr "Hết thời gian làm việc"
+msgstr "Ngoài thời gian làm việc"
 
 #: src/components/inputs/check-in-locations-input.tsx:66
 msgid "Outside check in location"
-msgstr "Địa điểm nhận phòng bên ngoài"
+msgstr "Ngoài phạm vi chấm công"
 
 #: src/modules/loans/loan-list-tabs.tsx:46
 #: src/modules/loans/loans-constants.tsx:19
@@ -4341,28 +4439,28 @@ msgstr "Quá hạn"
 msgid "Overtime"
 msgstr "Làm thêm giờ"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:5
+#: src/modules/workspace-roles/workspace-roles-constants.ts:9
 msgid "Owner"
-msgstr "Người sở hữu"
+msgstr "Chủ sở hữu"
 
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:73
 msgid "Package"
-msgstr "Bưu kiện"
+msgstr "Gói"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:348
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:46
 #: src/modules/receipts/receipt-constants.tsx:36
 #: src/modules/workspace-billings/workspace-billings-contants.ts:20
 msgid "Paid"
-msgstr "Trả"
+msgstr "Đã thanh toán"
 
 #: src/modules/receipts/receipt-card.tsx:314
 msgid "Paid at"
-msgstr "Thanh toán tại"
+msgstr "Thanh toán lúc"
 
 #: src/modules/plugins/zalo-oas/components/zalo-oa-zns-template-config.tsx:60
 msgid "Params"
-msgstr "Thông số"
+msgstr "Params"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:82
 #: src/modules/loans/components/loan-receipt-card.tsx:336
@@ -4377,6 +4475,7 @@ msgstr "Thanh toán một phần"
 #: src/modules/search/search-engine.tsx:245
 #: src/modules/tasks/components/form-task.tsx:561
 #: src/modules/tasks/components/tasks-menu-actions.tsx:269
+#: src/modules/workspace-roles/workspace-roles-config.ts:222
 #: src/modules/workspaces/workspace-modules.tsx:188
 msgid "Partners"
 msgstr "Đối tác"
@@ -4416,11 +4515,15 @@ msgstr "Đã cập nhật mật khẩu"
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:102
 #: src/modules/receipts/receipt-card.tsx:508
 msgid "Pay"
-msgstr "Chi trả"
+msgstr "Thanh toán"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:91
 msgid "Pay expire"
-msgstr "Thanh toán hết hạn"
+msgstr "Hạn thanh toán"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:57
+msgid "Pay loan"
+msgstr "Thanh toán vay"
 
 #: src/modules/events/event-constants.ts:67
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:278
@@ -4438,7 +4541,7 @@ msgstr "Thanh toán thành công"
 #: src/modules/workspace-billings/workspace-billings-contants.ts:9
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:139
 msgid "Payment"
-msgstr "Sự chi trả"
+msgstr "Thanh toán"
 
 #: src/modules/loans/modals/modal-loan-calculator.tsx:207
 msgid "Payment amount"
@@ -4503,19 +4606,19 @@ msgstr "PDF"
 #: src/modules/receipts/receipt-constants.tsx:32
 #: src/modules/workspace-billings/workspace-billings-contants.ts:19
 msgid "Pending"
-msgstr "Chưa giải quyết"
+msgstr "Đang xử lí"
 
 #: src/modules/workspace-billings/workspace-billing-list.tsx:144
 msgid "Pending payment"
-msgstr "Đang chờ thanh toán"
+msgstr "Chờ thanh toán"
 
 #: src/modules/loans/loans-constants.tsx:14
 msgid "Pending signature"
-msgstr "Đang chờ chữ ký"
+msgstr "Chờ ký"
 
 #: src/modules/tasks/task-status-modal.tsx:67
 msgid "Pending statuses group"
-msgstr "Nhóm trạng thái đang chờ xử lý"
+msgstr "Nhóm trạng thái đang xử lý"
 
 #: src/modules/coupons/coupon-constants.ts:11
 msgid "Percent"
@@ -4525,12 +4628,12 @@ msgstr "Phần trăm"
 #: src/modules/loans/modals/modal-loan-calculator.tsx:202
 #: src/modules/loans/modals/modal-loan-package-form.tsx:228
 msgid "Period"
-msgstr "Giai đoạn"
+msgstr "Kỳ"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:193
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:138
 msgid "Period fee amount"
-msgstr "Số tiền phí định kỳ"
+msgstr "Phí theo kỳ"
 
 #: src/modules/customers/components/customer-column.tsx:94
 #: src/modules/customers/components/customer-kyc-card.tsx:123
@@ -4544,6 +4647,7 @@ msgstr "Số tiền phí định kỳ"
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:448
 #: src/modules/users/modals/modal-user-information.tsx:196
 #: src/modules/users/user-profile-settings.tsx:114
+#: src/modules/workspace-members/workspace-member-list.tsx:92
 #: src/modules/workspaces/components/workspace-information.tsx:96
 msgid "Phone"
 msgstr "Điện thoại"
@@ -4563,17 +4667,17 @@ msgstr "Ảnh"
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:73
 #: src/modules/prescriptions/prescription-list.tsx:81
 msgid "Pill"
-msgstr "Thuốc viên"
+msgstr "Thuốc"
 
 #: src/modules/custom-fields/components/form-custom-field.tsx:103
 msgid "Placeholder"
-msgstr "Trình giữ chỗ"
+msgstr "Nội dung mẫu"
 
 #: src/modules/message-boxes/message-boxes.tsx:79
 msgid "Platform"
 msgstr "Nền tảng"
 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:157
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:158
 msgid "Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised"
 msgstr "Vui lòng không cung cấp khóa bí mật cho bất kỳ ai, vui lòng đặt lại khóa bí mật nếu bạn nghi ngờ khóa bí mật đã bị xâm phạm"
 
@@ -4604,7 +4708,7 @@ msgstr "Vui lòng đợi Chấm công được phê duyệt"
 
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:213
 msgid "Plugin"
-msgstr "Trình cắm"
+msgstr "Plugin"
 
 #: src/layout/navigation/navigation-drawer.tsx:198
 #: src/modules/users/user-profile.tsx:133
@@ -4616,7 +4720,7 @@ msgstr "Plugins"
 #: src/modules/customers/components/customer-kyc-card.tsx:81
 #: src/modules/customers/components/customer-kyc-card.tsx:171
 msgid "Portrait image"
-msgstr "Hình ảnh chân dung"
+msgstr "Ảnh chân dung"
 
 #: src/modals/modal-check-in-location-form.tsx:79
 msgid "Positioning"
@@ -4628,34 +4732,35 @@ msgstr "Tích cực"
 
 #: src/modules/products/components/form-product.tsx:228
 msgid "Post"
-msgstr "Bưu kiện"
+msgstr "Bài viết"
 
 #: src/modules/events/event-constants.ts:178
 msgid "Post archived"
-msgstr "Đã lưu trữ bài đăng"
+msgstr "Bài viết đã xoá"
 
 #: src/modules/events/event-constants.ts:176
 msgid "Post created"
-msgstr "Đã tạo bài đăng"
+msgstr "Bài viết được tạo"
 
 #: src/modules/posts/components/form-post.tsx:224
 msgid "Post thumbnail"
-msgstr "Đăng hình thu nhỏ"
+msgstr "Thumbnail bài viết"
 
 #: src/modules/events/event-constants.ts:177
 msgid "Post updated"
-msgstr "Đã cập nhật bài đăng"
+msgstr "Bài viết đã cập nhật"
 
 #: src/constant.ts:27
 #: src/modules/categories/category-constants.ts:8
 #: src/modules/search/search-engine.tsx:102
+#: src/modules/workspace-roles/workspace-roles-config.ts:243
 #: src/modules/workspaces/workspace-modules.tsx:92
 msgid "Posts"
 msgstr "Bài viết"
 
 #: src/modules/workspaces/workspace-require.tsx:91
 msgid "Preparing everything for you. Please wait for a moment"
-msgstr "Chuẩn bị mọi thứ cho bạn. Vui lòng đợi trong giây lát"
+msgstr "Đang chuẩn bị mọi thứ cho bạn. Vui lòng đợi trong giây lát"
 
 #: src/modals/modal-printer.tsx:450
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:345
@@ -4681,6 +4786,7 @@ msgstr "Đã cập nhật đơn thuốc"
 
 #: src/constant.ts:16
 #: src/modules/search/search-engine.tsx:300
+#: src/modules/workspace-roles/workspace-roles-config.ts:217
 #: src/modules/workspaces/workspace-modules.tsx:194
 msgid "Prescriptions"
 msgstr "Đơn thuốc"
@@ -4699,7 +4805,7 @@ msgstr "Giá"
 #: src/modules/loans/components/loan-payments.tsx:353
 #: src/modules/loans/components/loan-receipt-card.tsx:134
 msgid "Principal"
-msgstr "Hiệu trưởng"
+msgstr "Tiền gốc"
 
 #: src/modules/loans/modals/modal-loan-calculator.tsx:204
 msgid "Principal amount"
@@ -4707,11 +4813,11 @@ msgstr "Số tiền gốc"
 
 #: src/widgets/reports/widgets/report-credit.widget.tsx:389
 msgid "Principal expense"
-msgstr "Chi phí gốc"
+msgstr "Chi gốc"
 
 #: src/widgets/reports/widgets/report-credit.widget.tsx:382
 msgid "Principal income"
-msgstr "Thu nhập gốc"
+msgstr "Thu gốc"
 
 #: src/components/printer/printer.tsx:133
 #: src/modals/modal-printer.tsx:185
@@ -4745,7 +4851,7 @@ msgstr "In hoá đơn"
 #: src/components/printer/printer-body.tsx:33
 #: src/modals/modal-printer.tsx:294
 msgid "Printed at"
-msgstr "In tại"
+msgstr "In lúc"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:247
 #: src/modules/tasks/components/form-task.tsx:383
@@ -4753,7 +4859,7 @@ msgstr "In tại"
 #: src/modules/tasks/views/board/board.task-card.tsx:311
 #: src/modules/tasks/views/list/list.task-row-head.tsx:24
 msgid "Priority"
-msgstr "Sự ưu tiên"
+msgstr "Ưu tiên"
 
 #: src/modules/workspace-settings/components/workspace-setting-terms-and-policies.tsx:11
 #: src/modules/workspace-settings/workspace-setting-term-policy-editor.tsx:25
@@ -4765,11 +4871,11 @@ msgstr "Chính sách bảo mật"
 #: src/modules/orders/orders-constants.tsx:9
 #: src/utils/actions.tsx:30
 msgid "Processing"
-msgstr "Xử lý"
+msgstr "Đang xử lý"
 
 #: src/widgets/dashboard/modules.ts:403
 msgid "Processing tasks"
-msgstr "Xử lý công việc"
+msgstr "Công việc đang xử lí"
 
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:264
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:315
@@ -4819,13 +4925,17 @@ msgstr "Mã hàng sản phẩm"
 msgid "Product stocks"
 msgstr "Kho sản phẩm"
 
+#: src/modules/workspace-roles/workspace-roles-config.ts:183
+msgid "Product Stocks"
+msgstr "Kho sản phẩm"
+
 #: src/modules/products/components/form-product.tsx:361
 msgid "Product supplies"
 msgstr "Nguồn cung cấp sản phẩm"
 
 #: src/modules/events/event-constants.ts:71
 msgid "Product supply record created"
-msgstr "Đã tạo hồ sơ cung cấp sản phẩm"
+msgstr "Đã tạo lịch sử cung cấp sản phẩm"
 
 #: src/constant.ts:12
 msgid "Product Vouchers"
@@ -4844,6 +4954,10 @@ msgstr "Sản phẩm/Dịch vụ"
 #: src/widgets/reports/widgets/report-products.widget.tsx:116
 msgid "Products & services"
 msgstr "Sản phẩm & dịch vụ"
+
+#: src/modules/workspace-roles/workspace-roles-config.ts:179
+msgid "Products & Services"
+msgstr "Sản phẩm & Dịch vụ"
 
 #: src/widgets/reports/modules.ts:164
 msgid "Products services"
@@ -4877,7 +4991,7 @@ msgstr "Lợi nhuận"
 
 #: src/modules/events/event-constants.ts:184
 msgid "Promotion archived"
-msgstr "Đã lưu trữ khuyến mại"
+msgstr "Đã xoá khuyến mại"
 
 #: src/modules/events/event-constants.ts:182
 msgid "Promotion created"
@@ -4894,11 +5008,12 @@ msgstr "Trạng thái khuyến mãi không thể chỉnh sửa"
 
 #: src/modules/events/event-constants.ts:183
 msgid "Promotion updated"
-msgstr "Đã cập nhật khuyến mãi"
+msgstr "Khuyến mãi được cập nhật"
 
 #: src/constant.ts:29
 #: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:43
 #: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:75
+#: src/modules/workspace-roles/workspace-roles-config.ts:93
 #: src/modules/workspaces/workspace-modules.tsx:107
 msgid "Promotions"
 msgstr "Khuyến mãi"
@@ -5043,6 +5158,7 @@ msgstr "Hoá đơn đã khôi phục"
 #: src/constant.ts:13
 #: src/modules/loans/components/loan-payments.tsx:172
 #: src/modules/search/search-engine.tsx:179
+#: src/modules/workspace-roles/workspace-roles-config.ts:119
 #: src/modules/workspaces/workspace-modules.tsx:209
 #: src/widgets/reports/widgets/report-products.widget.tsx:261
 msgid "Receipts"
@@ -5178,14 +5294,13 @@ msgstr "Thời gian nhắc nhở"
 msgid "Remove"
 msgstr "Xoá"
 
-#. placeholder {0}: args.name || t`data`
-#: src/utils/actions.tsx:97
-msgid "Remove {0}"
-msgstr "Xóa {0}"
-
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:290
 msgid "Remove all"
 msgstr "Xóa tất cả"
+
+#: src/utils/actions.tsx:97
+msgid "Remove data"
+msgstr ""
 
 #: src/modules/events/event-constants.ts:65
 msgid "Remove file"
@@ -5227,6 +5342,7 @@ msgstr "Báo cáo được đồng bộ hóa theo thời gian thực"
 msgid "Report synced"
 msgstr "Đã đồng bộ hóa báo cáo"
 
+#: src/modules/workspace-roles/workspace-roles-config.ts:263
 #: src/modules/workspaces/workspace-modules.tsx:463
 #: src/widgets/reports/widgets/report-credit.widget.tsx:541
 msgid "Reports"
@@ -5269,7 +5385,7 @@ msgstr "Yêu cầu"
 #: src/modules/bookings/modals/modal-create-booking.tsx:11
 #: src/modules/bookings/modals/modal-reschedule-booking.tsx:10
 msgid "Reschedule booking"
-msgstr "Đổi lịch đặt chỗ"
+msgstr "Đổi lịch lịch hẹn"
 
 #: src/modules/bookings/booking-constants.tsx:8
 msgid "Rescheduled"
@@ -5292,7 +5408,7 @@ msgstr "Đặt lại mặc định"
 msgid "Reset filter"
 msgstr "Đặt lại bộ lọc"
 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:175
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:176
 msgid "Reset secret key"
 msgstr "Đặt lại khóa bí mật"
 
@@ -5339,23 +5455,44 @@ msgstr "Hủy bỏ phê duyệt"
 
 #: src/modules/loans/components/loan-payments.tsx:128
 msgid "Revert fulfilled"
-msgstr "Hoàn nguyên đã hoàn thành"
+msgstr "Hoàn tác đã hoàn thành"
 
 #: src/modules/events/event-constants.ts:140
 #: src/modules/loans/components/loan-payments.tsx:134
 msgid "Revert liquidation"
-msgstr "Hoàn nguyên việc thanh lý"
+msgstr "Hoàn tác việc thanh lý"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:198
+msgid "Revert loan approve"
+msgstr "Hoàn tác phê duyệt khoản vay"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:204
+msgid "Revert loan fulfill"
+msgstr "Hoàn trả khoản vay"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:201
+msgid "Revert payment"
+msgstr "Hoàn tác thanh toán"
 
 #: src/modules/receipts/receipt-detail.tsx:76
 #: src/modules/receipts/receipt-detail.tsx:131
 msgid "Revert Payment"
-msgstr "Hoàn nguyên thanh toán"
+msgstr "Hoàn tác thanh toán"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:153
+msgid "Revert stock in"
+msgstr "Hoàn tác nhập hàng"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:156
+msgid "Revert stock out"
+msgstr "Hoàn tác xuất hàng"
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:266
 msgid "Right"
 msgstr "Phải"
 
 #: src/modules/workspace-api-apps/workspace-api-app-card.tsx:67
+#: src/modules/workspace-members/workspace-member-list.tsx:105
 msgid "Role"
 msgstr "Vai trò"
 
@@ -5371,7 +5508,7 @@ msgstr "Đã xóa vai trò"
 msgid "Role updated"
 msgstr "Đã cập nhật vai trò"
 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:201
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:202
 #: src/modules/workspaces/workspace-modules.tsx:295
 msgid "Roles"
 msgstr "Phân quyền"
@@ -5403,7 +5540,7 @@ msgstr "Giá bán"
 msgid "Save"
 msgstr "Cứu"
 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:225
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:226
 msgid "Save changes"
 msgstr "Lưu thay đổi"
 
@@ -5445,7 +5582,7 @@ msgstr "Tìm kiếm sản phẩm/dịch vụ/khách hàng"
 msgid "Secondary address"
 msgstr "Địa chỉ phụ"
 
-#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:156
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:157
 msgid "Secret key"
 msgstr "Khóa bí mật"
 
@@ -5613,7 +5750,7 @@ msgstr "Gửi"
 msgid "Send message failed"
 msgstr "Gửi tin nhắn không thành công"
 
-#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:36
+#: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:35
 msgid "Send reminder messages to customers"
 msgstr "Gửi tin nhắn nhắc nhở tới khách hàng"
 
@@ -5813,7 +5950,7 @@ msgstr "Spa"
 
 #: src/modules/workspace-settings/modals/modal-workspace-setting-work-slots.tsx:32
 msgid "Specify the working time, bookings can only be booked in these time slots"
-msgstr "Chỉ định thời gian làm việc, chỉ có thể đặt chỗ trong các khoảng thời gian này"
+msgstr "Chỉ định thời gian làm việc, chỉ có thể lịch hẹn trong các khoảng thời gian này"
 
 #: src/modules/workspace-settings/workspace-setting-hrm-timekeepings.tsx:44
 msgid "Start calculating OT from n (minutes) after the official working time"
@@ -5867,8 +6004,9 @@ msgstr "Mã chứng khoán"
 #: src/modules/events/event-constants.ts:158
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:119
 #: src/modules/product-stocks/product-stocks-constants.tsx:11
+#: src/modules/workspace-roles/workspace-roles-constants.ts:147
 msgid "Stock in"
-msgstr "Còn hàng"
+msgstr "Nhập hàng"
 
 #: src/modules/events/event-constants.ts:162
 msgid "Stock in multiple"
@@ -5876,17 +6014,18 @@ msgstr "Có nhiều hàng"
 
 #: src/modules/events/event-constants.ts:159
 msgid "Stock in reverted"
-msgstr "Cổ phiếu đã được hoàn nguyên"
+msgstr "Cổ phiếu đã được hoàn tác"
 
 #: src/modules/events/event-constants.ts:160
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:79
 #: src/modules/product-stocks/product-stocks-constants.tsx:16
+#: src/modules/workspace-roles/workspace-roles-constants.ts:150
 msgid "Stock out"
-msgstr "Hết hàng"
+msgstr "Xuất hàng"
 
 #: src/modules/events/event-constants.ts:161
 msgid "Stock out reverted"
-msgstr "Hết hàng đã hoàn nguyên"
+msgstr "Hoàn tác xuất hàng"
 
 #: src/modules/workspaces/workspace-modules.tsx:175
 msgid "Stocks"
@@ -5967,7 +6106,7 @@ msgstr "Bàn"
 
 #: src/modules/events/event-constants.ts:107
 msgid "Table slot archived"
-msgstr "Đã lưu trữ vùng bảng"
+msgstr "Đã xoá vùng bảng"
 
 #: src/modules/events/event-constants.ts:105
 msgid "Table slot created"
@@ -5993,7 +6132,7 @@ msgstr "Thẻ"
 
 #: src/modules/events/event-constants.ts:135
 msgid "Tags archived"
-msgstr "Đã lưu trữ thẻ"
+msgstr "Đã xoá thẻ"
 
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:63
 msgid "Take after eating"
@@ -6225,11 +6364,11 @@ msgstr "Tích hợp ChatBox vào website của bạn"
 
 #: src/modules/orders/order-hooks.tsx:18
 msgid "Ticket"
-msgstr "Vé"
+msgstr "Phiếu dịch vụ"
 
 #: src/modules/orders/order-hooks.tsx:19
 msgid "Tickets"
-msgstr "Vé"
+msgstr "Phiếu dịch vụ"
 
 #: src/components/inputs/time-trackings-input.tsx:433
 #: src/modules/bookings/modals/modal-booking.tsx:253
@@ -6254,7 +6393,7 @@ msgstr "Khung thời gian"
 
 #: src/components/list/filters/time-range-filter.tsx:108
 msgid "Time range"
-msgstr "Phạm vi thời gian"
+msgstr "Khoảng thời gian"
 
 #: src/modules/users/user-profile-settings.tsx:160
 msgid "Time settings"
@@ -6319,7 +6458,7 @@ msgstr "Tiêu đề"
 #: src/modules/loans/components/loan-payments.tsx:197
 #: src/widgets/reports/widgets/report-credit.widget.tsx:544
 msgid "To"
-msgstr "ĐẾN"
+msgstr "Đến"
 
 #: src/modules/dashboard/dashboard-suggestions.tsx:145
 msgid "To not miss important information"
@@ -6335,7 +6474,7 @@ msgstr "Hôm nay"
 
 #: src/widgets/dashboard/modules.ts:74
 msgid "Today bookings"
-msgstr "Đặt chỗ hôm nay"
+msgstr "Lịch hẹn hôm nay"
 
 #: src/widgets/dashboard/modules.ts:58
 msgid "Today new customers"
@@ -6545,10 +6684,15 @@ msgstr "Bỏ đặt mức độ ưu tiên"
 #: src/modules/posts/components/form-post.tsx:161
 #: src/modules/products/components/form-product.tsx:617
 #: src/modules/users/components/update-password.tsx:78
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:240
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:238
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:256
 msgid "Update"
 msgstr "Cập nhật"
+
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:126
+#: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:251
+msgid "Update {entity}"
+msgstr ""
 
 #: src/modules/loans/components/loan-receipt-card.tsx:280
 msgid "Update amount"
@@ -6561,7 +6705,7 @@ msgstr "Cập nhật thông tin tài sản"
 #: src/modules/bookings/modals/modal-update-booking.tsx:10
 #: src/modules/events/event-constants.ts:40
 msgid "Update booking"
-msgstr "Cập nhật đặt chỗ"
+msgstr "Cập nhật lịch hẹn"
 
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:162
 msgid "Update brand"
@@ -6573,15 +6717,19 @@ msgstr "Cập nhật màu"
 
 #: src/modules/coupons/modals/modal-coupon-form.tsx:88
 msgid "Update coupon"
-msgstr "Cập nhật phiếu giảm giá"
+msgstr "Cập nhật coupons"
 
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:118
 msgid "Update coupon rule"
-msgstr "Cập nhật quy tắc phiếu giảm giá"
+msgstr "Cập nhật quy tắc coupons"
 
 #: src/modules/customers/customer-modal.tsx:16
 msgid "Update customer"
 msgstr "Cập nhật khách hàng"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:36
+msgid "Update customer info"
+msgstr "Cập nhật thông tin khách hàng"
 
 #: src/modules/bookings/components/booking-card.tsx:271
 #: src/modules/tasks/views/gantt/gantt.task-group-by-folder.tsx:149
@@ -6604,6 +6752,10 @@ msgstr "Cập nhật thời hạn thanh toán khoản vay"
 msgid "Update model"
 msgstr "Cập nhật mô hình"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:141
+msgid "Update order / service ticket"
+msgstr "Cập nhật đơn hàng/phiếu dịch vụ"
+
 #: src/modules/events/event-constants.ts:60
 #: src/modules/partners/modals/modal-partner-form.tsx:81
 msgid "Update partner"
@@ -6619,10 +6771,11 @@ msgid "Update product"
 msgstr "Cập nhật sản phẩm"
 
 #: src/modules/events/event-constants.ts:68
+#: src/modules/workspace-roles/workspace-roles-constants.ts:129
 msgid "Update receipt"
 msgstr "Cập nhật hoá đơn"
 
-#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:259
+#: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:257
 msgid "Update role"
 msgstr "Cập nhật vai trò"
 
@@ -6778,10 +6931,34 @@ msgstr "Xem"
 msgid "View all ({total})"
 msgstr "Xem tất cả ({total})"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:45
+msgid "View all loans"
+msgstr "Xem tất cả các khoản vay"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:63
+msgid "View bookings"
+msgstr "Xem lịch hẹn"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:192
+msgid "View categories"
+msgstr "Xem danh mục"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:165
+msgid "View Combos"
+msgstr "Xem Combo"
+
 #: src/modules/loans/components/loan-card.tsx:105
 #: src/modules/loans/loan-detail.tsx:296
 msgid "View contract"
 msgstr "Xem hợp đồng"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:30
+msgid "View customer phone number and contact"
+msgstr "Xem số điện thoại và liên hệ của khách hàng"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:27
+msgid "View customers"
+msgstr "Xem khách hàng"
 
 #: src/modules/e-invoices/e-invoice-list.tsx:52
 msgid "View E-Invoice"
@@ -6790,6 +6967,10 @@ msgstr "Xem hóa đơn điện tử"
 #: src/modules/receipts/receipt-e-invoices.tsx:129
 msgid "View Invoice"
 msgstr "Xem hóa đơn"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:90
+msgid "View members"
+msgstr "Xem thành viên"
 
 #: src/components/buttons/button-view-more.tsx:36
 msgid "View more"
@@ -6803,9 +6984,33 @@ msgstr "Xem danh sách thông báo"
 msgid "View on google map"
 msgstr "Xem trên bản đồ google"
 
+#: src/modules/workspace-roles/workspace-roles-constants.ts:135
+msgid "View orders / service ticket"
+msgstr "Xem đơn hàng/phiếu dịch vụ"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:177
+msgid "View posts"
+msgstr "Xem bài viết"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:186
+msgid "View promotions"
+msgstr "Xem khuyến mãi"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:69
+msgid "View receipts"
+msgstr "Xem hoá đơn"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:105
+msgid "View reports"
+msgstr "Xem báo cáo"
+
 #: src/modules/workspaces/workspace-modules.tsx:464
 msgid "View reports and analytics"
 msgstr "Xem báo cáo và phân tích"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:162
+msgid "View stock"
+msgstr "Xem kho"
 
 #: src/modules/orders/orders-constants.tsx:21
 #: src/modules/products/components/form-product.tsx:65
@@ -6941,10 +7146,14 @@ msgstr "Loại thời gian làm việc"
 msgid "Working time, invoice, service voucher, payment method, search settings, ..."
 msgstr "Thời gian làm việc, hóa đơn, phiếu dịch vụ, phương thức thanh toán, cài đặt tìm kiếm, ..."
 
+#: src/modules/workspace-roles/workspace-roles-config.ts:236
+msgid "Workspace"
+msgstr "Không gian làm việc"
+
 #: src/modules/events/event-constants.ts:134
 #: src/modules/workspaces/components/workspace-archived.tsx:31
 msgid "Workspace archived"
-msgstr "Đã lưu trữ workspace"
+msgstr "Đã xoá workspace"
 
 #: src/modules/customer-forms/modal-customer-form.tsx:42
 #: src/modules/loans/loan-detail.tsx:285
@@ -6953,7 +7162,7 @@ msgstr "Nhánh workspace"
 
 #: src/modules/events/event-constants.ts:164
 msgid "Workspace branch archived"
-msgstr "Đã lưu trữ nhánh workspace"
+msgstr "Đã xoá nhánh workspace"
 
 #: src/constant.ts:23
 msgid "Workspace Branches"
@@ -7028,7 +7237,7 @@ msgstr "Hôm qua"
 #: src/modules/bookings/components/form-booking.tsx:357
 #: src/modules/bookings/modals/modal-booking.tsx:321
 msgid "You are booking in the past"
-msgstr "Bạn đã đặt chỗ trước đây"
+msgstr "Bạn đã lịch hẹn trước đây"
 
 #. placeholder {0}: app.metadata.appName || "Workspace"
 #: src/modules/workspaces/workspace-require.tsx:95

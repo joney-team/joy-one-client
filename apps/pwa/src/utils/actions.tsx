@@ -94,7 +94,7 @@ export function onArchive<T = any>(args: {
       modalId,
       title: (
         <ModalTitle
-          title={args.title || `${t`Remove ${args.name || t`data`}`}`}
+          title={args.title || `${t`Remove data`}`}
           color={color}
           icon={args.icon || IconArchive}
         />

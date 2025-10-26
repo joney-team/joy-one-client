@@ -50,7 +50,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
         />
 
         <TextInput
-          label={t`IMEIL`}
+          label="IMEIL"
           value={props.value?.imeil || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), imeil: event.currentTarget.value })
