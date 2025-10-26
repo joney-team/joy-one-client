@@ -3952,18 +3952,6 @@ msgstr "Move branch"
 msgid "Move workspace branch"
 msgstr "Move workspace branch"
 
-#: src/modules/files/files-constants.ts:20
-msgid "MS Excel"
-msgstr "MS Excel"
-
-#: src/modules/files/files-constants.ts:21
-msgid "MS PowerPoint"
-msgstr "MS PowerPoint"
-
-#: src/modules/files/files-constants.ts:19
-msgid "MS Word"
-msgstr "MS Word"
-
 #: src/modules/custom-fields/custom-field-constants.tsx:10
 msgid "Multi select"
 msgstr "Multi select"
@@ -4463,12 +4451,9 @@ msgstr "Params"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:82
 #: src/modules/loans/components/loan-receipt-card.tsx:336
+#: src/modules/receipts/modals/modal-partial-payment.tsx:120
 msgid "Partial payment"
 msgstr "Partial payment"
-
-#: src/modules/receipts/modals/modal-partial-payment.tsx:120
-msgid "Partial Payment"
-msgstr "Partial Payment"
 
 #: src/constant.ts:9
 #: src/modules/search/search-engine.tsx:245
@@ -4594,10 +4579,6 @@ msgstr "Payment periods"
 #: src/modules/loans/loan-list.tsx:314
 msgid "Payment progress"
 msgstr "Payment progress"
-
-#: src/modules/files/files-constants.ts:18
-msgid "PDF"
-msgstr "PDF"
 
 #: src/modules/customer-forms/customer-form-constants.tsx:13
 #: src/modules/customer-kycs/customer-kyc-constants.tsx:9
@@ -4921,12 +4902,9 @@ msgid "Product stock code"
 msgstr "Product stock code"
 
 #: src/modules/products/product-list.tsx:65
+#: src/modules/workspace-roles/workspace-roles-config.ts:183
 msgid "Product stocks"
 msgstr "Product stocks"
-
-#: src/modules/workspace-roles/workspace-roles-config.ts:183
-msgid "Product Stocks"
-msgstr "Product Stocks"
 
 #: src/modules/products/components/form-product.tsx:361
 msgid "Product supplies"

@@ -1608,7 +1608,7 @@ msgstr "Tạo mới"
 
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:251
 msgid "Create new {entity}"
-msgstr ""
+msgstr "Tạo mới {entity}"
 
 #: src/modules/events/event-constants.ts:121
 msgid "Create new loan contract"
@@ -3953,18 +3953,6 @@ msgstr "Di chuyển nhánh"
 msgid "Move workspace branch"
 msgstr "Di chuyển nhánh workspace"
 
-#: src/modules/files/files-constants.ts:20
-msgid "MS Excel"
-msgstr "MS Excel"
-
-#: src/modules/files/files-constants.ts:21
-msgid "MS PowerPoint"
-msgstr "MS PowerPoint"
-
-#: src/modules/files/files-constants.ts:19
-msgid "MS Word"
-msgstr "MS Word"
-
 #: src/modules/custom-fields/custom-field-constants.tsx:10
 msgid "Multi select"
 msgstr "Nhiều lựa chọn"
@@ -4464,11 +4452,8 @@ msgstr "Params"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:82
 #: src/modules/loans/components/loan-receipt-card.tsx:336
-msgid "Partial payment"
-msgstr "Thanh toán một phần"
-
 #: src/modules/receipts/modals/modal-partial-payment.tsx:120
-msgid "Partial Payment"
+msgid "Partial payment"
 msgstr "Thanh toán một phần"
 
 #: src/constant.ts:9
@@ -4595,10 +4580,6 @@ msgstr "Kỳ thanh toán"
 #: src/modules/loans/loan-list.tsx:314
 msgid "Payment progress"
 msgstr "Tiến độ thanh toán"
-
-#: src/modules/files/files-constants.ts:18
-msgid "PDF"
-msgstr "PDF"
 
 #: src/modules/customer-forms/customer-form-constants.tsx:13
 #: src/modules/customer-kycs/customer-kyc-constants.tsx:9
@@ -4922,11 +4903,8 @@ msgid "Product stock code"
 msgstr "Mã hàng sản phẩm"
 
 #: src/modules/products/product-list.tsx:65
-msgid "Product stocks"
-msgstr "Kho sản phẩm"
-
 #: src/modules/workspace-roles/workspace-roles-config.ts:183
-msgid "Product Stocks"
+msgid "Product stocks"
 msgstr "Kho sản phẩm"
 
 #: src/modules/products/components/form-product.tsx:361
@@ -5300,7 +5278,7 @@ msgstr "Xóa tất cả"
 
 #: src/utils/actions.tsx:97
 msgid "Remove data"
-msgstr ""
+msgstr "Xoá dữ liệu"
 
 #: src/modules/events/event-constants.ts:65
 msgid "Remove file"
@@ -6692,7 +6670,7 @@ msgstr "Cập nhật"
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:126
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:251
 msgid "Update {entity}"
-msgstr ""
+msgstr "Cập nhật {entity}"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:280
 msgid "Update amount"
