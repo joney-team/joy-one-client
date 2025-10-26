@@ -76,7 +76,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                     </Group>
                   ) : (
                     <Text fz={13} fw={500} pr={5} style={{ cursor: "default" }}>
-                      <Trans>All {t`Tasks`}</Trans>
+                      <Trans>All tasks</Trans>
                     </Text>
                   )}
                 </Group>

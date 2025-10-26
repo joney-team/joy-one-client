@@ -3,6 +3,7 @@ import { DateTime } from "@joy-one-client/utils/date-time";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconClock } from "@tabler/icons-react";
 import { Column } from "../types";
+import { t } from "@lingui/core/macro";
 
 export interface DateTimeColumnArgs extends Omit<Column, "render"> {
   emptyText?: string;
@@ -15,7 +16,7 @@ export const DateTimeColumn = (args?: DateTimeColumnArgs): Column => {
   return {
     ...args,
     icon: args?.icon || IconClock,
-    name: args?.name || "time",
+    name: args?.name || t`Time`,
     w: args?.w || 150,
     render: ({ value }) => {
       if (!value || !DateTime.isValid(value)) return args?.emptyText || "-";

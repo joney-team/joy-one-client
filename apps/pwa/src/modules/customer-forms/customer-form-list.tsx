@@ -8,16 +8,16 @@ import { OnModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modal
 import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity } from "@/types";
+import { t } from "@lingui/core/macro";
 import { Stack } from "@mantine/core";
 import { IconBuildingSkyscraper, IconLink } from "@tabler/icons-react";
 import { type FC } from "react";
 import { OnCustomerFormModal } from "../customers/modals/modal-customer-form";
+import { useLocations } from "../locations/locations-context";
+import { customerFormStatuses } from "./customer-form-constants";
 import { CustomerFormEntity } from "./customer-form-entity";
 import { multiArchiveCustomerForm } from "./customer-form-service";
 import { OnModalCustomerForm } from "./modal-customer-form";
-import { useLocations } from "../locations/locations-context";
-import { t } from "@lingui/core/macro";
-import { customerFormStatuses } from "./customer-form-constants";
 
 export const CustomerFormList: FC = () => {
   const { renderVnLocation: renderLocation } = useLocations();
@@ -33,12 +33,14 @@ export const CustomerFormList: FC = () => {
         }}
         columns={{
           name: {
+            name: t`Name`,
             filter: { text: true },
             render: ({ value, data }) => {
               return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
             },
           },
           phone: {
+            name: t`Phone`,
             filter: { text: true },
             render: ({ value, data }) => {
               return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
@@ -46,7 +48,7 @@ export const CustomerFormList: FC = () => {
           },
           vnLocation: {
             w: 400,
-            name: "address",
+            name: t`Address`,
             render: ({ value }) => renderLocation(value),
           },
           workspaceBranchId: WorkspaceBranchColumn({
@@ -54,6 +56,7 @@ export const CustomerFormList: FC = () => {
             entity: AppEntity.CUSTOMER_FORMS,
           }),
           status: StatusColumn({
+            name: t`Status`,
             w: 200,
             options: Object.entries(customerFormStatuses).map(([key, value]) => ({
               value: key,
@@ -82,7 +85,10 @@ export const CustomerFormList: FC = () => {
           {
             permission: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
             type: "archive",
-            handler: (data) => multiArchiveCustomerForm(data.map((v) => v._id)),
+            handler: async (data, ctx) => {
+              await multiArchiveCustomerForm(data.map((v) => v._id));
+              ctx.refetch();
+            },
           },
         ]}
       />

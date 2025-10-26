@@ -47,7 +47,7 @@ export const ReceiptList: FC = () => {
     <Stack p={16}>
       <List<ReceiptEntity>
         id="rps"
-        name="receipts"
+        name={t`Receipts`}
         limit={18}
         icon={IconCashRegister}
         route="/receipts"
@@ -56,22 +56,23 @@ export const ReceiptList: FC = () => {
             onClick: (_, data) => OnReceiptDetailModal({ id: data.id }),
           }),
           workspaceBranchId: WorkspaceBranchColumn({ entity: AppEntity.RECEIPTS }),
-          createdAt: DateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
+          createdAt: DateTimeColumn({ name: t`Created at`, sortable: true, isHasFilter: true }),
           paidAt: DateTimeColumn({
-            name: "paidAt",
+            name: t`Paid at`,
             sortable: true,
             defaultHidden: true,
             isHasFilter: true,
             w: 200,
           }),
           expireAt: DateTimeColumn({
-            name: "receipt_expireAt",
+            name: t`Pay expire`,
             sortable: true,
             defaultHidden: true,
             isHasFilter: true,
             w: 200,
           }),
           type: EnumColumn({
+            name: t`Type`,
             icon: IconArrowsDoubleSwNe,
             w: 110,
             options: Object.values(ReceiptType).map((type) => ({
@@ -91,6 +92,7 @@ export const ReceiptList: FC = () => {
             optionalValuePath: "disbursementUser",
           }),
           status: StatusColumn({
+            name: t`Status`,
             w: 180,
             options: Object.values(ReceiptStatus).map((status) => ({
               label: receiptStatuses[status].label(),
@@ -99,6 +101,7 @@ export const ReceiptList: FC = () => {
             })),
           }),
           paymentMethod: EnumColumn({
+            name: t`Payment`,
             icon: IconCreditCard,
             w: 180,
             options: Object.values(ReceiptPaymentMethod).map((paymentMethod) => ({
@@ -108,7 +111,12 @@ export const ReceiptList: FC = () => {
               icon: receiptPaymentMethods[paymentMethod].icon,
             })),
           }),
-          amount: NumberColumn({ align: "right", sortable: true, type: "money" }),
+          amount: NumberColumn({
+            name: t`Money amount`,
+            align: "right",
+            sortable: true,
+            type: "money",
+          }),
         }}
         filterModes={[
           {

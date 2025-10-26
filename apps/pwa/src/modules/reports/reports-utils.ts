@@ -2,9 +2,9 @@ import { round } from "@/utils/number.utils";
 import { AppCurrency } from "../../types";
 
 export function reportConvertMoneyAmount(value: number, currency: AppCurrency) {
-  if (!value || typeof value !== 'number') return value;
+  if (!value || typeof value !== "number") return value;
 
-  if (currency.code === 'VND') {
+  if (currency.code === "VND") {
     return round(value / 1000000, 1);
   }
 
@@ -12,15 +12,15 @@ export function reportConvertMoneyAmount(value: number, currency: AppCurrency) {
 }
 
 export function reportConvertMoneyAmountUnit(currency: AppCurrency) {
-  if (currency.code === 'VND') {
+  if (currency.code === "VND") {
     return {
-      short: 'money_unit_millions_short',
-      full: 'money_unit_millions',
-    }
+      short: "Tr",
+      full: "Triệu đồng",
+    };
   }
 
   return {
     short: currency.symbol,
     full: currency.symbol,
-  }
+  };
 }

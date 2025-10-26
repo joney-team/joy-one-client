@@ -371,11 +371,6 @@ msgstr "AI Assistants"
 msgid "All"
 msgstr "All"
 
-#. placeholder {0}: import { ContentEditable } from "@/components/content-editable/content-editable"; import { useRouter } from "@/hooks/use-router"; import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form"; import { useTags } from "@/modules/tags/tags-context"; import { onRemoveTaskTagFolder } from "@/modules/tags/tags-service"; import { TagType } from "@/modules/tags/tags-types"; import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector"; import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, alpha, Card, Group, Menu, Text, Tooltip } from "@mantine/core"; import { useDebouncedCallback, useHover } from "@mantine/hooks"; import { IconDots, IconFolder, IconLogout2, IconPencil, IconTrash } from "@tabler/icons-react"; import { FC } from "react"; export const WorkspaceHeaderTasksBreadcrumbs: FC = () => { const router = useRouter(); const tagFolders = useTaskFolders(); const hover = useHover(); const tags = useTags(); const onChangeTaskFolderName = useDebouncedCallback((name: string) => { if (!tagFolders.tagFolder) return; tags.update(tagFolders.tagFolder._id, { ...tagFolders.tagFolder, name }); }, 500); if (!router.pathname.startsWith("/tasks")) return null; return ( <Group gap={8}> <TaskTagFolderSelector excludeIds={[tagFolders.tagFolder?._id || ""]} onSelect={(tag) => { if (tag) tagFolders.openFolder(tag); else tagFolders.exitFolder(); }} render={(ctx) => { return ( <Group gap={0}> <Card p={3} withBorder={false} shadow="none" ref={hover.ref} bg={ hover.hovered ? tagFolders.tagFolder ? alpha(tagFolders.tagFolder?.color || "dark", 0.1) : "gray.1" : undefined } > <Group gap={0}> <Tooltip label={<Trans>Select folder</Trans>} position="right"> <ActionIcon variant="subtle" color={tagFolders.tagFolder?.color || "dark"} onClick={ctx.toggle} style={{ cursor: "pointer" }} > <IconFolder size={18} strokeWidth={2} /> </ActionIcon> </Tooltip> {!!tagFolders.tagFolder ? ( <Group pr={8}> <ContentEditable fz={13} fw={500} value={tagFolders.tagFolder.name} onChange={(value) => { if (!value || typeof value !== "string") return; onChangeTaskFolderName(value); }} /> </Group> ) : ( <Text fz={13} fw={500} pr={5} style={{ cursor: "default" }}> <Trans>All {t`Tasks`}</Trans> </Text> )} </Group> </Card> {tagFolders.tagFolder && ( <Menu> <Menu.Target> <ActionIcon variant="subtle" color="dark"> <IconDots strokeWidth={1.5} size={16} /> </ActionIcon> </Menu.Target> <Menu.Dropdown> <Menu.Item leftSection={<IconLogout2 strokeWidth={2} size={18} />} onClick={(e) => { e.stopPropagation(); tagFolders.exitFolder(); }} > <Text fz={14}> <Trans>Exit</Trans> </Text> </Menu.Item> <Menu.Item leftSection={<IconPencil strokeWidth={2} size={18} />} onClick={(e) => { e.stopPropagation(); OnModalTagForm({ tag: tagFolders.tagFolder!, type: TagType.TASK_FOLDER }); }} > <Text fz={14}> <Trans>Edit</Trans> </Text> </Menu.Item> <Menu.Item leftSection={<IconTrash strokeWidth={2} size={18} />} onClick={(e) => { e.stopPropagation(); onRemoveTaskTagFolder(tagFolders.tagFolder!, () => { tagFolders.exitFolder(); }); }} > <Text fz={14}> <Trans>Remove</Trans> </Text> </Menu.Item> </Menu.Dropdown> </Menu> )} </Group> ); }} /> </Group> ); }; 
-#: src/layout/header/header-tasks-breadcrumbs.tsx:79
-msgid "All {0}"
-msgstr "All {0}"
-
 #: src/modules/users/components/user-workspace-settings-form.tsx:137
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:211
 #: src/modules/workspace-members/workspace-member-list.tsx:153
@@ -385,6 +380,10 @@ msgstr "All branches"
 #: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:95
 msgid "All receipts of the payment plans will also be moved to the new branch"
 msgstr "All receipts of the payment plans will also be moved to the new branch"
+
+#: src/layout/header/header-tasks-breadcrumbs.tsx:79
+msgid "All tasks"
+msgstr "All tasks"
 
 #: src/components/inputs/time-trackings-input.tsx:203
 msgid "All time trackings"
@@ -743,6 +742,10 @@ msgstr "Automatically reply to customer messages"
 msgid "Available entities to search"
 msgstr "Available entities to search"
 
+#: src/modules/customers/customer-list.tsx:43
+msgid "Avatar"
+msgstr "Avatar"
+
 #: src/modules/plugins/mailer/plugin-mailer-form.tsx:129
 msgid "Back"
 msgstr "Back"
@@ -1004,7 +1007,7 @@ msgstr "Cashback created"
 #: src/modals/modal-printer.tsx:424
 #: src/modals/modal-printer.tsx:583
 #: src/modules/receipts/receipt-card.tsx:301
-#: src/modules/receipts/receipt-list.tsx:89
+#: src/modules/receipts/receipt-list.tsx:90
 msgid "Cashier"
 msgstr "Cashier"
 
@@ -1698,7 +1701,9 @@ msgstr "Create/update loan"
 msgid "Created"
 msgstr "Created"
 
+#: src/modules/customers/customer-list.tsx:41
 #: src/modules/loans/loan-list.tsx:104
+#: src/modules/receipts/receipt-list.tsx:59
 msgid "Created at"
 msgstr "Created at"
 
@@ -1785,7 +1790,7 @@ msgstr "customer"
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:138
 #: src/modules/product-vouchers/product-voucher-card.tsx:68
 #: src/modules/receipts/modals/modal-receipt-form.tsx:130
-#: src/modules/receipts/receipt-list.tsx:85
+#: src/modules/receipts/receipt-list.tsx:86
 #: src/modules/tags/tags-constants.ts:7
 #: src/modules/tasks/components/form-task.tsx:547
 #: src/modules/tasks/views/list/list.task-row-head.tsx:18
@@ -1860,6 +1865,7 @@ msgid "Customer updated"
 msgstr "Customer updated"
 
 #: src/constant.ts:7
+#: src/modules/customers/customer-list.tsx:36
 #: src/modules/search/search-engine.tsx:122
 #: src/modules/workspace-roles/workspace-roles-config.ts:55
 #: src/modules/workspaces/workspace-modules.tsx:130
@@ -2234,6 +2240,7 @@ msgstr "Edit workspace branch"
 
 #: src/modules/auth/components/form-register.tsx:67
 #: src/modules/customers/components/form-customer.tsx:144
+#: src/modules/customers/customer-list.tsx:89
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:449
 #: src/modules/users/modals/modal-user-information.tsx:188
 #: src/modules/workspace-members/workspace-member-list.tsx:76
@@ -2472,6 +2479,7 @@ msgstr "Expense"
 #: src/modules/promotions/components/form-promotion.tsx:167
 #: src/modules/promotions/promostion-list.tsx:66
 #: src/modules/promotions/promotions-service.ts:103
+#: src/modules/receipts/receipt-list.tsx:68
 msgid "Expire at"
 msgstr "Expire at"
 
@@ -2664,6 +2672,7 @@ msgstr "Gantt"
 #: src/modals/modal-printer.tsx:468
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:253
 #: src/modules/customers/components/form-customer.tsx:167
+#: src/modules/customers/customer-list.tsx:50
 #: src/modules/loans/loan-detail.tsx:263
 msgid "Gender"
 msgstr "Gender"
@@ -3179,8 +3188,8 @@ msgid "Leave blank or fill in 0 if you do not want to remind the customer. <br /
 msgstr "Leave blank or fill in 0 if you do not want to remind the customer. <br /> The reminder will be sent via Zalo OA, SMS and Email if these services are enabled."
 
 #: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:100
-msgid "Leave blank to use main branch"
-msgstr "Leave blank to use main branch"
+msgid "Leave blank to use main office"
+msgstr "Leave blank to use main office"
 
 #: src/modules/promotions/components/form-promotion.tsx:150
 #: src/modules/promotions/components/form-promotion.tsx:162
@@ -3904,6 +3913,10 @@ msgstr "Modules"
 msgid "Monday"
 msgstr "Monday"
 
+#: src/modules/receipts/receipt-list.tsx:115
+msgid "Money"
+msgstr "Money"
+
 #: src/modules/loans/loan-list.tsx:162
 #: src/widgets/reports/modules.ts:256
 msgid "Money amount"
@@ -4028,6 +4041,7 @@ msgstr "Mutual workspaces"
 #: src/modules/customers/components/customer-column.tsx:90
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:76
 #: src/modules/customers/components/form-customer.tsx:136
+#: src/modules/customers/customer-list.tsx:60
 #: src/modules/customers/modals/modal-customer-contacts.tsx:69
 #: src/modules/customers/modals/modal-customer-form.tsx:102
 #: src/modules/partners/modals/modal-partner-form.tsx:119
@@ -4442,6 +4456,7 @@ msgid "Paid"
 msgstr "Paid"
 
 #: src/modules/receipts/receipt-card.tsx:314
+#: src/modules/receipts/receipt-list.tsx:61
 msgid "Paid at"
 msgstr "Paid at"
 
@@ -4552,6 +4567,7 @@ msgstr "Payment info"
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:301
 #: src/modules/receipts/receipt-card.tsx:338
 #: src/modules/receipts/receipt-card.tsx:346
+#: src/modules/receipts/receipt-list.tsx:104
 msgid "Payment method"
 msgstr "Payment method"
 
@@ -4619,6 +4635,7 @@ msgstr "Period fee amount"
 #: src/modules/customers/components/customer-kyc-card.tsx:123
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:83
 #: src/modules/customers/components/form-customer.tsx:138
+#: src/modules/customers/customer-list.tsx:69
 #: src/modules/customers/modals/modal-customer-form.tsx:104
 #: src/modules/loans/components/loan-card.tsx:62
 #: src/modules/loans/loan-detail.tsx:265
@@ -4803,7 +4820,7 @@ msgstr "Principal income"
 #: src/modals/modal-printer.tsx:185
 #: src/modules/orders/order-card.tsx:217
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:47
-#: src/modules/receipts/receipt-list.tsx:133
+#: src/modules/receipts/receipt-list.tsx:141
 msgid "Print"
 msgstr "Print"
 
@@ -5053,8 +5070,8 @@ msgid "Quantity of free product, leave blank or fill in 0 if you want to be free
 msgstr "Quantity of free product, leave blank or fill in 0 if you want to be free all."
 
 #: src/layout/header/header-shortcuts.tsx:151
-msgid "Quick action"
-msgstr "Quick action"
+msgid "Quick Creation"
+msgstr "Quick Creation"
 
 #: src/modals/modal-printer.tsx:653
 #: src/modals/modal-printer.tsx:673
@@ -5134,6 +5151,7 @@ msgstr "Receipt unarchived"
 
 #: src/constant.ts:13
 #: src/modules/loans/components/loan-payments.tsx:172
+#: src/modules/receipts/receipt-list.tsx:50
 #: src/modules/search/search-engine.tsx:179
 #: src/modules/workspace-roles/workspace-roles-config.ts:119
 #: src/modules/workspaces/workspace-modules.tsx:209
@@ -5960,6 +5978,7 @@ msgstr "Start time must be before end time"
 #: src/modules/loans/loan-detail.tsx:323
 #: src/modules/loans/loan-list.tsx:263
 #: src/modules/message-boxes/message-boxes.tsx:66
+#: src/modules/receipts/receipt-list.tsx:95
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:155
 #: src/modules/tasks/components/form-task.tsx:274
 #: src/modules/tasks/views/board/board.task-card.tsx:179
@@ -6172,7 +6191,6 @@ msgid "Task synced"
 msgstr "Task synced"
 
 #: src/constant.ts:10
-#: src/layout/header/header-tasks-breadcrumbs.tsx:79
 #: src/modules/customers/customer-tasks.tsx:67
 #: src/modules/search/search-engine.tsx:198
 #: src/modules/workspaces/workspace-modules.tsx:198
@@ -6348,6 +6366,7 @@ msgid "Tickets"
 msgstr "Tickets"
 
 #: src/components/inputs/time-trackings-input.tsx:433
+#: src/components/list/columns/date-time-column.tsx:19
 #: src/modules/bookings/modals/modal-booking.tsx:253
 #: src/modules/loans/components/loan-payments.tsx:168
 #: src/modules/loans/loan-list.tsx:175
@@ -6457,7 +6476,7 @@ msgstr "Today bookings"
 msgid "Today new customers"
 msgstr "Today new customers"
 
-#: src/modules/receipts/receipt-list.tsx:116
+#: src/modules/receipts/receipt-list.tsx:124
 msgid "Today receipts"
 msgstr "Today receipts"
 
@@ -6560,6 +6579,7 @@ msgstr "Turn on notification"
 #: src/modules/custom-fields/components/form-custom-field.tsx:113
 #: src/modules/promotions/components/form-promotion.tsx:124
 #: src/modules/receipts/modals/modal-receipt-form.tsx:98
+#: src/modules/receipts/receipt-list.tsx:75
 #: src/modules/tags/modals/modal-tag-form.tsx:83
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:203
 #: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:240

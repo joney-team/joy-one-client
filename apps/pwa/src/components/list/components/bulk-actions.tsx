@@ -53,6 +53,7 @@ export const BulkActions: FC<ListContext> = (ctx) => {
                     onClick={() =>
                       action.handler(selectedItems, {
                         unSelect: () => ctx.unselectAll(),
+                        refetch: () => ctx.list.fetch(true),
                       })
                     }
                     leftIcon={action.icon}
@@ -83,6 +84,7 @@ export const BulkActions: FC<ListContext> = (ctx) => {
                     .find((v) => v.type === "archive")
                     ?.handler(selectedItems, {
                       unSelect: () => ctx.unselectAll(),
+                      refetch: () => ctx.list.fetch(true),
                     })
                 }
               >

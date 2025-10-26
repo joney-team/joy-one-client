@@ -39,7 +39,7 @@ const ModalCustomerForm: FC = () => {
         }}
         target={(ctx) => {
           return (
-            <InputWrapper onClick={ctx.toggle} label={t`Workspace branch`} w="100%">
+            <InputWrapper onClick={ctx.toggle} label={t`Branch`} w="100%">
               <Group gap={8}>
                 <Input
                   flex={1}
@@ -47,6 +47,7 @@ const ModalCustomerForm: FC = () => {
                   value={ctx.value?.name || t`Main office`}
                   readOnly
                 />
+
                 {workspaceBranch && (
                   <Tooltip label={t`Main office`}>
                     <ActionIcon

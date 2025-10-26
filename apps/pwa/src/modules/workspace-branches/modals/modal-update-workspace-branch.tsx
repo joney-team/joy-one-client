@@ -97,7 +97,7 @@ export const ModalUpdateWorkspaceBranch: FC = () => {
         )}
 
         <Blockquote variant="light" color="gray" p={16} py={8} fz={14}>
-          <Trans>Leave blank to use main branch</Trans>
+          <Trans>Leave blank to use main office</Trans>
         </Blockquote>
 
         <WorkspaceBranchInput value={branch} onChange={(v) => setBranch(v)} />

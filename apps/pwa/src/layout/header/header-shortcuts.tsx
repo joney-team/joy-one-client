@@ -148,7 +148,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
           <Menu.Target>
             <Group>
               <Button id="create-credit" size="xs" leftIcon={IconCirclePlus} isGradient>
-                {t`Quick create`}
+                {t`Quick Creation`}
               </Button>
             </Group>
           </Menu.Target>

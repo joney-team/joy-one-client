@@ -82,7 +82,7 @@ export interface ListBulkAction<Data> {
   icon?: Icon;
   permission?: WorkspacePermission;
   available?: (data: Data[]) => boolean;
-  handler: (data: Data[], ctx: { unSelect: () => void }) => Promise<any> | any;
+  handler: (data: Data[], ctx: { unSelect: () => void; refetch: () => void }) => Promise<any> | any;
 }
 
 export type ListFetch<Data = any> = (

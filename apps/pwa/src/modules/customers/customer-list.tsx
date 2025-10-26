@@ -13,11 +13,18 @@ import { EventType } from "@/modules/events/event-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity, Gender } from "@/types";
 import { Stack } from "@mantine/core";
-import { IconGenderBigender, IconMail, IconPhone, IconUserSquare } from "@tabler/icons-react";
+import {
+  IconGenderBigender,
+  IconMail,
+  IconPhone,
+  IconPhoto,
+  IconUserSquare,
+} from "@tabler/icons-react";
 import { type FC } from "react";
 import { WorkspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { CustomerEntity } from "./customer-types";
+import { t } from "@lingui/core/macro";
 
 export const CustomerList: FC = () => {
   const workspace = useWorkspace();
@@ -26,19 +33,21 @@ export const CustomerList: FC = () => {
     <Stack p={16}>
       <List<CustomerEntity>
         id="cus"
-        name="customers"
+        name={t`Customers`}
         icon={IconUserSquare}
         route="/customers"
         columns={{
           code: CodeColumn({ href: (value) => `/customers/${value}` }),
-          createdAt: DateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
+          createdAt: DateTimeColumn({ name: t`Created at`, sortable: true, isHasFilter: true }),
           avatar: {
-            w: 120,
+            name: t`Avatar`,
+            w: 100,
             align: "center",
             render: ({ data }) => <Avatar customer={data} size={50} radius={8} />,
             exportToExcel: false,
           },
           gender: EnumColumn({
+            name: t`Gender`,
             icon: IconGenderBigender,
             options: Object.values(Gender).map((gender) => ({
               label: genders[gender].name(),
@@ -48,6 +57,7 @@ export const CustomerList: FC = () => {
             })),
           }),
           name: {
+            name: t`Name`,
             exportToExcel: (value) => {
               return {
                 text: value,
@@ -56,6 +66,7 @@ export const CustomerList: FC = () => {
             },
           },
           phone: {
+            name: t`Phone`,
             icon: IconPhone,
             filter: workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)
               ? { text: true }
@@ -75,6 +86,7 @@ export const CustomerList: FC = () => {
             },
           },
           email: {
+            name: t`Email`,
             icon: IconMail,
             filter: { text: true },
             exportToExcel: (value) => {
