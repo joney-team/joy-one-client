@@ -9,13 +9,13 @@ import { CheckInLocation } from "../hrm-timekeepings/hrm-timekeepings-types";
 export const isGeolocationSupported = () =>
   !isServer() && "navigator" in window && "geolocation" in navigator;
 
-export const locationErrorCodes: Record<number, string> = {
-  1: t`You have not granted permission or refused to access the device location information.`,
-  2: t`Failed to acquire geolocation, please try again in a few minutes.`,
-  3: t`The time allowed to acquire the geolocation was reached before the information was obtained.`,
-};
-
 export const getGeolocation = async () => {
+  const locationErrorCodes: Record<number, string> = {
+    1: t`You have not granted permission or refused to access the device location information.`,
+    2: t`Failed to acquire geolocation, please try again in a few minutes.`,
+    3: t`The time allowed to acquire the geolocation was reached before the information was obtained.`,
+  };
+
   return new Promise<GeolocationPosition>((resolve, reject) => {
     if (isGeolocationSupported()) {
       navigator.geolocation.getCurrentPosition(

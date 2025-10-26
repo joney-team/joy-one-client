@@ -2,9 +2,10 @@
 
 import { Avatar } from "@/components/avatar";
 import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows";
+import { RelativeTimeFormat } from "@/components/format/date-format";
 import { Image } from "@/components/image";
 import { useLayout } from "@/layout/layout-context";
-import { renderDateTime, renderFromNow } from "@/modules/lang/lang-service";
+import { renderDateTime } from "@/modules/lang/lang-service";
 import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service";
 import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types";
 import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
@@ -220,7 +221,7 @@ const PluginNode = (props: any) => {
               >
                 <Text fz={10} fw={500} c="gray" truncate="end">
                   <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "}
-                  {renderFromNow(plugin.lastInteractionAt)}
+                  <RelativeTimeFormat value={plugin.lastInteractionAt} />
                 </Text>
               </Tooltip>
             )}

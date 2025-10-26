@@ -1,11 +1,14 @@
 "use client";
 
-import * as Sentry from "@sentry/react";
 import { AppLoading } from "@/components/app-loading/app-loading";
+import LangProvider from "@/modules/lang/lang-provider";
 import { wait } from "@/utils/common.utils";
+import config from "@joy-one-client/config";
+import * as Sentry from "@sentry/react";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState, type FC, type PropsWithChildren } from "react";
 import { v4 as uuid } from "uuid";
+import packageJson from "../package.json";
 import { AppContext } from "./app.context";
 import { GeneralAnalytics } from "./components/analytics/general-analytics";
 import { getGlobal } from "./global";
@@ -18,9 +21,6 @@ import { type EventEntity } from "./modules/events/event-types";
 import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
-import config from "@joy-one-client/config";
-import packageJson from "../package.json";
-import LangProvider from "@/modules/lang/lang-provider";
 
 if (!config.isDevelopment) {
   Sentry.init({ dsn: config.SENTRY_DSN, release: packageJson.version });
@@ -126,10 +126,10 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   );
 
   return (
-    <LangProvider>
-      <QueryProvider>
-        <LocationsProvider>
-          <AppContext.Provider value={context}>
+    <AppContext.Provider value={context}>
+      <LangProvider>
+        <QueryProvider>
+          <LocationsProvider>
             <LayoutProvider>
               <ModuleProviders>
                 {props.children}
@@ -137,9 +137,9 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
                 <GeneralAnalytics />
               </ModuleProviders>
             </LayoutProvider>
-          </AppContext.Provider>
-        </LocationsProvider>
-      </QueryProvider>
-    </LangProvider>
+          </LocationsProvider>
+        </QueryProvider>
+      </LangProvider>
+    </AppContext.Provider>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { RelativeTimeFormat } from "@/components/format/date-format";
 import {
   checkinBooking,
   completeBooking,
@@ -10,7 +11,7 @@ import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { OnModalBookingDetail } from "@/modules/bookings/modals/modal-booking-detail";
 import { OnModalCancelBooking } from "@/modules/bookings/modals/modal-cancel-booking";
 import { OnModalUpdateBooking } from "@/modules/bookings/modals/modal-update-booking";
-import { renderFromNow, renderTime } from "@/modules/lang/lang-service";
+import { renderTime } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { DateTime } from "@/utils/date-time.utils";
 import { t } from "@lingui/core/macro";
@@ -120,7 +121,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           </Card>
 
           <Text ta="center" tt="capitalize" fz={10} fw={500}>
-            {renderFromNow(startTime)}
+            <RelativeTimeFormat value={startTime} />
           </Text>
 
           <Badge color={color(bookingColor)} size="xs" variant="light">

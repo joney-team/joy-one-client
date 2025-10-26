@@ -3,13 +3,13 @@
 import { Button } from "@/components/buttons/button";
 import { DateInput } from "@/components/inputs/date-input";
 import { ModalTitle } from "@/components/modal-title";
-import { currencies } from "@/configs/currency.config";
 import { num } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { Currency } from "@joy-one-client/utils/currency";
 import { t } from "@lingui/core/macro";
 import {
   Anchor,
@@ -69,7 +69,7 @@ export const ModalInput: FC = () => {
   const color = useColor();
 
   const focusInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
-  const currency = currencies.find((c) => c.code === workspace.settings.currencyCode);
+  const currency = Currency.get(workspace.settings.currencyCode);
   const placeholder = props?.placeholder || props?.label;
 
   const form = useForm({
@@ -89,7 +89,12 @@ export const ModalInput: FC = () => {
   });
 
   OnModalInput = (p) => {
-    form.setInitialValues({ value: p.value });
+    const initialValue =
+      p.type === InputModalType.MONEY
+        ? Currency.normalize(p.value, workspace.settings.currencyCode)
+        : p.value;
+
+    form.setInitialValues({ value: initialValue });
     form.reset();
     setProps(p);
     open();
@@ -202,6 +207,7 @@ export const ModalInput: FC = () => {
                       min={args.min}
                       max={args.max}
                       ref={focusInputRef as any}
+                      step={currency?.stepPrice}
                       hideControls
                     />
                   </Stack>

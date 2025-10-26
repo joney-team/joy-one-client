@@ -5,13 +5,14 @@ import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
+import { RelativeTimeFormat } from "@/components/format/date-format";
 import { UseList, useList } from "@/components/list/use-list";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate, renderFromNow } from "@/modules/lang/lang-service";
+import { renderDate } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
 import { getUserPublicInformation } from "@/modules/users/users-service";
@@ -157,7 +158,9 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
               {!!user.lastSignInAt && !isOnline && (
                 <Text c="gray" fz={10}>
-                  <Trans>Last sign in at {renderFromNow(user.lastSignInAt)}</Trans>
+                  <Trans>
+                    Last sign in at <RelativeTimeFormat value={user.lastSignInAt} />
+                  </Trans>
                 </Text>
               )}
             </Stack>

@@ -116,7 +116,7 @@ export const ProductDetail: FC = () => {
                       name: "expire_at",
                       emptyText: "--",
                       hideTime: true,
-                      isFromNow: true,
+                      isShowRelativeTime: true,
                     }),
                     costPrice: NumberColumn({ name: "costPrice", type: "money" }),
                     note: { defaultHidden: true },

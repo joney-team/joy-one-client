@@ -43,11 +43,13 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
                       <ModalsProvider>
                         {props.children}
                         {routeRule.workspace && <LayoutWorkspace />}
-                        <PreloadResource />
-                        <Suspense>
-                          <Modals />
-                        </Suspense>
-                        <SearchEngine />
+                        {lang.isInitialized && (
+                          <Suspense>
+                            <Modals />
+                            <PreloadResource />
+                            <SearchEngine />
+                          </Suspense>
+                        )}
                       </ModalsProvider>
                     </CameraProvider>
                   </PluginsProvider>

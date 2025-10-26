@@ -1,14 +1,17 @@
+"use client";
+
+import { DateFormat } from "@/components/format/date-format";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { DateTime } from "@joy-one-client/utils/date-time";
+import { t } from "@lingui/core/macro";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconClock } from "@tabler/icons-react";
 import { Column } from "../types";
-import { t } from "@lingui/core/macro";
 
 export interface DateTimeColumnArgs extends Omit<Column, "render"> {
   emptyText?: string;
   hideTime?: boolean;
-  isFromNow?: boolean;
+  isShowRelativeTime?: boolean;
   isHasFilter?: boolean;
 }
 
@@ -24,21 +27,23 @@ export const DateTimeColumn = (args?: DateTimeColumnArgs): Column => {
 
       return (
         <Stack gap={0}>
-          <Text c="var(--mantine-color-text)">{DateTime.formatDate(value, { locale })}</Text>
+          <Text c="var(--mantine-color-text)">
+            <DateFormat value={value} format={{ dateStyle: "short" }} />
+          </Text>
           {!args?.hideTime && (
             <Group gap={3}>
               <ThemeIcon variant="transparent" color="var(--mantine-color-dimmed)" size="xs">
                 <IconClock strokeWidth={1.5} />
               </ThemeIcon>
               <Text fz={14} c="var(--mantine-color-dimmed)">
-                {DateTime.formatTime(value, { locale })}
+                <DateFormat value={value} format={{ timeStyle: "short" }} />
               </Text>
             </Group>
           )}
 
-          {args?.isFromNow && (
+          {args?.isShowRelativeTime && (
             <Text fz={10} c="var(--mantine-color-dimmed)">
-              {DateTime.fromNow(value)}
+              {DateTime.formatRelative(value)}
             </Text>
           )}
         </Stack>

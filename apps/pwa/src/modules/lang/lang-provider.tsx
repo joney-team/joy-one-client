@@ -40,6 +40,7 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
   const [locale, _setLocale] = useState(getClientLocale());
   const [config, setConfig] = useState<LocaleConfig>({} as LocaleConfig);
   const [state, setState] = useState<LangState>({} as LangState);
+  const [isInitialized, setIsInitialized] = useState(false);
   const global = getGlobal();
   global._langState = state;
 
@@ -52,11 +53,12 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
     }>((resolve) => {
       const action = async () => {
         try {
-          await api.get(`/lang/${activeLocale}`).then((res) => resolve(res));
-          const catalog = await import(`@/modules/lang/catalog/${activeLocale}.po`);
-
+          const txt = process.env.NODE_ENV === "development" ? "po" : "js";
+          const catalog = await import(`@/modules/lang/catalog/${activeLocale}.${txt}`);
           i18n.current.load(activeLocale, catalog.messages);
           i18n.current.activate(activeLocale);
+
+          await api.get(`/lang/${activeLocale}`).then((res) => resolve(res));
         } catch (error) {
           console.warn(`FetchLocale failed`, error);
           setTimeout(action, 3000);
@@ -80,6 +82,7 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
       console.error(error);
     } finally {
       _setLocale(activeLocale);
+      setIsInitialized(true);
       endAppLoading("lang");
     }
   };
@@ -89,7 +92,7 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
     else deleteCookie(StorageKey.LOCALE);
 
     startAppLoading("lang");
-    await initialize(locale || getClientLocale());
+    await initialize(getClientLocale());
   };
 
   // Sync week start for all locales
@@ -109,11 +112,12 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
       <Context.Provider
         value={{
           locale,
-          config: config,
+          config,
           setLocale,
           state,
           setState,
           weekStart,
+          isInitialized,
         }}
       >
         {props.children}

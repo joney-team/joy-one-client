@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "rm -rf .next && next dev --turbopack",
     "start": "next start",
-    "build": "next build",
+    "build": "pnpm translate:compile && next build",
     "typescript": "tsc",
     "prestart": "node scripts/prepare.js",
     "translate": "lingui extract --clean",

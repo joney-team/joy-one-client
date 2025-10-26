@@ -4,7 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
 import { renderSlotTime } from "@/components/inputs/work-slot-settings-input";
 import { Renderer } from "@/components/renderer";
-import { currencies } from "@/configs/currency.config";
 import { appEntities } from "@/constant";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
@@ -20,6 +19,7 @@ import {
 } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
+import { Currency } from "@joy-one-client/utils/currency";
 import { t } from "@lingui/core/macro";
 import {
   Badge,
@@ -30,6 +30,7 @@ import {
   NumberInput,
   Select,
   SimpleGrid,
+  Space,
   Stack,
   Switch,
   Text,
@@ -139,8 +140,9 @@ export const WorkspaceOperationSettings: FC = () => {
       <FormSession title={t`Payment`}>
         <Select
           label={t`Currency`}
+          searchable
           defaultValue={workspace.settings.currencyCode}
-          data={currencies.map((c) => ({ value: c.code, label: c.name })) || []}
+          data={Currency.data.map((c) => ({ value: c.code, label: c.name }))}
           onChange={(value) => {
             setWorkspaceSettings({
               ...workspace.settings,
@@ -151,6 +153,7 @@ export const WorkspaceOperationSettings: FC = () => {
 
         <Select
           label={t`Default payment method`}
+          searchable
           defaultValue={
             workspace.settings.receiptPaymentMethodDefault || Object.values(ReceiptPaymentMethod)[0]
           }
@@ -166,6 +169,8 @@ export const WorkspaceOperationSettings: FC = () => {
           }}
           disabled={!workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}
         />
+
+        <Space h={12} />
 
         <Switch
           label={t`Receipt image required`}
@@ -242,7 +247,7 @@ export const WorkspaceOperationSettings: FC = () => {
       <FormSession title={t`Search`}>
         <InputWrapper label={t`Available entities to search`}>
           <Card withBorder p={12} shadow="none" mt={5}>
-            <SimpleGrid cols={{ md: 4 }}>
+            <SimpleGrid cols={{ md: 3 }}>
               {searchAvailableEntities.data?.map((e) => {
                 const hideEntities = workspace.settings.searchSettings?.hideEntities || [];
                 const isAvailable = !!!hideEntities.includes(e);

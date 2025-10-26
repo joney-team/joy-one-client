@@ -60,10 +60,9 @@ interface ModalPrescriptionFormProps {
   notUseTemplate?: boolean;
 }
 
-const itemNotes = [t`Take after eating`, t`Take before eating`];
-
 export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => {
   const workspace = useWorkspace();
+  const itemNotes = [t`Take after eating`, t`Take before eating`];
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [customer, setCustomer] = useState(props.customer);

@@ -41,7 +41,7 @@ import {
   IconStack2,
   IconTopologyStar3,
 } from "@tabler/icons-react";
-import { type FC, useState } from "react";
+import { type FC, useCallback, useMemo, useState } from "react";
 import { loanStatuses } from "../loans/loans-constants";
 import { productTypes } from "../products/products-constants";
 import { useTaskRouter } from "../tasks/hooks/use-task-router";
@@ -72,8 +72,9 @@ export const SearchEngine: FC = () => {
     return true;
   };
 
-  const getActions = () => {
-    const actionGroups = [] as SpotlightActionGroupData[];
+  const actions: (SpotlightActionGroupData | SpotlightActionData)[] = useMemo(() => {
+    const actionGroups: SpotlightActionGroupData[] = [];
+    if (!workspace.isAvailable) return actionGroups;
 
     if (isHasSearchResult) {
       Object.keys(searchResult).forEach((entity) => {
@@ -335,9 +336,7 @@ export const SearchEngine: FC = () => {
     }
 
     return actionGroups;
-  };
-
-  const actions: (SpotlightActionGroupData | SpotlightActionData)[] = getActions();
+  }, [workspace]);
 
   const handleSearch = useDebouncedCallback(async (q: string) => {
     try {

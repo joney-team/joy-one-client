@@ -1,9 +1,9 @@
 "use client";
 
 import { configs } from "@/configs/layout.config";
-import { getDateTimeFormat, renderDate, renderDateTime } from "@/modules/lang/lang-service";
+import { getClientLocale, getDateTimeFormat, renderDate } from "@/modules/lang/lang-service";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { DateTime } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
@@ -20,7 +20,6 @@ import {
 import { DatePicker, TimeInput } from "@mantine/dates";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCalendar, IconClock, IconX } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, useRef, useState } from "react";
 import { Button } from "../buttons/button";
 
@@ -37,12 +36,14 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
 
   const [pointed, setPointed] = useState<"start" | "due">("due");
   const pointedValue =
-    pointed === "start"
-      ? DateTime.secondsToTime(props.startDate)
-      : DateTime.secondsToTime(props.dueDate);
+    pointed === "start" && props.startDate
+      ? DateTime.normalizeDate(props.startDate)
+      : props.dueDate
+      ? DateTime.normalizeDate(props.dueDate)
+      : null;
 
-  const startDate = DateTime.secondsToTime(props.startDate);
-  const dueDate = DateTime.secondsToTime(props.dueDate);
+  const startDate = props.startDate ? DateTime.normalizeDate(props.startDate) : null;
+  const dueDate = props.dueDate ? DateTime.normalizeDate(props.dueDate) : null;
 
   let _props = { ...props } as any;
   delete _props.onChange;
@@ -60,13 +61,13 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
 
     if (pointed === "start") {
       props.onChange?.({
-        startDate: DateTime.timeToSeconds(temp),
+        startDate: DateTime.toSeconds(temp),
         dueDate: props.dueDate,
       });
     } else {
       props.onChange?.({
         startDate: props.startDate,
-        dueDate: DateTime.timeToSeconds(temp),
+        dueDate: DateTime.toSeconds(temp),
       });
     }
   };
@@ -103,8 +104,13 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             <TextInput
               flex={1}
               label={t`Start date`}
+              readOnly
               leftSection={<IconCalendar strokeWidth={1.3} />}
-              value={renderDateTime(props.startDate, true)}
+              value={
+                startDate
+                  ? DateTime.format(startDate, { dateStyle: "short", locale: getClientLocale() })
+                  : ""
+              }
               styles={{
                 input: {
                   borderColor: pointed === "start" ? theme.colors.primary[6] : undefined,
@@ -140,7 +146,11 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
               flex={1}
               label={t`Due date`}
               leftSection={<IconCalendar strokeWidth={1.3} />}
-              value={renderDateTime(props.dueDate, true)}
+              value={
+                dueDate
+                  ? DateTime.format(dueDate, { dateStyle: "short", locale: getClientLocale() })
+                  : ""
+              }
               placeholder={getDateTimeFormat()}
               styles={{
                 input: {
@@ -187,7 +197,10 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
           >
             <Suggestion
               label={t`Today`}
-              value={dayjs().format("dddd")}
+              value={DateTime.format(DateTime.getStartEndOfDay(new Date()).end, {
+                weekday: "long",
+                locale: getClientLocale(),
+              })}
               onSelect={() => {
                 onChangePointedValue(DateTime.getStartEndOfDay(new Date()).end);
               }}
@@ -224,7 +237,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t`Range week ${`(2)`}`}
+              label={t`Range week ${`2`}`}
               value={renderDate(
                 DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2).end
               )}
@@ -236,7 +249,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t`Range week ${`(4)`}`}
+              label={t`Range week ${`4`}`}
               value={renderDate(
                 DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4).end
               )}
@@ -248,7 +261,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t`Range week ${`(8)`}`}
+              label={t`Range week ${`8`}`}
               value={renderDate(
                 DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8).end
               )}

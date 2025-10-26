@@ -25,14 +25,14 @@ import { FC } from "react";
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { HoverToEdit } from "@/components/hover-to-edit";
 import { ModalTitle } from "@/components/modal-title";
-import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Renderer } from "@/components/renderer";
 import { InputModalType } from "@/modals/modal-input";
 import { PrintButton } from "@/modals/modal-printer";
 import { FilesBox } from "@/modules/files/files-box";
-import { num, renderDate, renderDateTime } from "@/modules/lang/lang-service";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnModalDisburesementReceipt } from "@/modules/receipts/modals/modal-disburesement-receipt";
@@ -53,9 +53,9 @@ import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import { IconArchive, IconCashRegister, IconCheck } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import Link from "next/link";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
 
@@ -134,11 +134,11 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
 
                 <Group gap={5}>
                   <Text fz={em(10)} c="dark">
-                    {renderDateTime(receipt.createdAt, true)}
+                    <DateFormat value={receipt.createdAt} format={{ dateStyle: "short" }} />
                   </Text>
 
                   <Text fz={em(8)} c="gray">
-                    {dayjs(receipt.createdAt * 1000).fromNow()}
+                    <RelativeTimeFormat value={receipt.createdAt} />
                   </Text>
                 </Group>
               </Stack>
@@ -231,7 +231,12 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                     {t`Due date`}
                   </Table.Th>
                   <Table.Td ta="right" c={isExpired ? "red" : undefined}>
-                    {renderDate(receipt.expireAt)}
+                    {receipt.expireAt && (
+                      <DateFormat
+                        value={receipt.expireAt}
+                        format={{ dateStyle: "short", timeStyle: "short" }}
+                      />
+                    )}
                   </Table.Td>
                 </Table.Tr>
               </Renderer>
@@ -290,7 +295,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                     Tip
                   </Table.Th>
                   <Table.Td fw={700} ta="right">
-                    {num(receipt.tipAmount, { type: "money" })}
+                    <CurrencyFormat value={receipt.tipAmount} />
                   </Table.Td>
                 </Table.Tr>
               )}
@@ -326,7 +331,12 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                         },
                       }}
                     >
-                      <Text ta="right">{renderDateTime(receipt.paidAt)}</Text>
+                      <Text ta="right">
+                        <DateFormat
+                          value={receipt.paidAt}
+                          format={{ dateStyle: "short", timeStyle: "short" }}
+                        />
+                      </Text>
                     </HoverToEdit>
                   </Table.Td>
                 </Table.Tr>
@@ -393,7 +403,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
 
               <Table.Tr>
                 <Table.Th fz={13} fw={500} ta="left">
-                  {t`Amount`}
+                  <Trans>Money amount</Trans>
                 </Table.Th>
                 <Table.Td ta="right" c={receipt.amount < 0 ? "red" : "dark"}>
                   <Stack gap={8}>
@@ -402,7 +412,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                       disabled={!isAbleToUpdate}
                       input={{
                         type: InputModalType.MONEY,
-                        title: t`Amount`,
+                        title: t`Money amount`,
                         value: receipt.amount,
                         icon: IconCashRegister,
                         onDone: (amount) => {
@@ -412,7 +422,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                       }}
                     >
                       <Text fz={18} fw={700}>
-                        <NumberCurrencyFormatter value={receipt.amount} />
+                        <CurrencyFormat value={receipt.amount} />
                       </Text>
                     </HoverToEdit>
 

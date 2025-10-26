@@ -173,13 +173,6 @@ export const forceTime = (date: Date | number) => {
   return new Date(date);
 };
 
-export const renderFromNow = (date: Date | number) => {
-  const _date = dayjs(forceTime(date));
-  const isTomorrow = _date.isSame(dayjs().add(1, "day"), "day");
-  if (isTomorrow) return t`Tomorrow`;
-  return _date.fromNow();
-};
-
 export const renderDateTime = (value: any, hideSeconds?: boolean) => {
   if (!value) return "";
   const _date = dayjs(forceTime(value));

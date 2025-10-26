@@ -65,7 +65,7 @@ export const WorkspaceMemberList: FC = () => {
           createdAt: DateTimeColumn({
             valuePath: "joinedAt",
             name: t`Joined at`,
-            isFromNow: true,
+            isShowRelativeTime: true,
             hideTime: true,
             isHasFilter: false,
             sortable: true,

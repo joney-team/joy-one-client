@@ -121,7 +121,7 @@ msgstr "Access faster with standalone app"
 msgid "Action failed"
 msgstr "Action failed"
 
-#: src/components/list/components/bulk-actions.tsx:66
+#: src/components/list/components/bulk-actions.tsx:67
 #: src/modules/bookings/components/booking-card.tsx:168
 msgid "Actions"
 msgstr "Actions"
@@ -297,6 +297,7 @@ msgstr "Add widget"
 #: src/components/location-form.tsx:56
 #: src/components/printer/printer-settings-bar.tsx:39
 #: src/modals/modal-printer.tsx:574
+#: src/modules/customer-forms/customer-form-list.tsx:51
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:314
 #: src/modules/customers/components/customer-kyc-card.tsx:150
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:65
@@ -884,6 +885,7 @@ msgstr "Bookings"
 msgid "Bookings chart"
 msgstr "Bookings chart"
 
+#: src/modules/customer-forms/modal-customer-form.tsx:42
 #: src/modules/customers/components/form-customer.tsx:131
 #: src/modules/loans/modals/modal-create-loan.tsx:394
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:290
@@ -1826,7 +1828,7 @@ msgstr "Customer detail"
 msgid "Customer form archived"
 msgstr "Customer form archived"
 
-#: src/modules/customer-forms/modal-customer-form.tsx:102
+#: src/modules/customer-forms/modal-customer-form.tsx:103
 msgid "Customer form link"
 msgstr "Customer form link"
 
@@ -2479,7 +2481,6 @@ msgstr "Expense"
 #: src/modules/promotions/components/form-promotion.tsx:167
 #: src/modules/promotions/promostion-list.tsx:66
 #: src/modules/promotions/promotions-service.ts:103
-#: src/modules/receipts/receipt-list.tsx:68
 msgid "Expire at"
 msgstr "Expire at"
 
@@ -3232,7 +3233,7 @@ msgstr "Link"
 msgid "Link customer"
 msgstr "Link customer"
 
-#: src/modules/customer-forms/modal-customer-form.tsx:76
+#: src/modules/customer-forms/modal-customer-form.tsx:77
 msgid "Link customer form"
 msgstr "Link customer form"
 
@@ -3544,7 +3545,7 @@ msgid "Main location"
 msgstr "Main location"
 
 #: src/modules/customer-forms/modal-customer-form.tsx:47
-#: src/modules/customer-forms/modal-customer-form.tsx:51
+#: src/modules/customer-forms/modal-customer-form.tsx:52
 #: src/modules/loans/loan-detail.tsx:286
 #: src/modules/workspace-branches/workspace-branch-column.tsx:33
 #: src/modules/workspace-branches/workspace-branch-column.tsx:45
@@ -3913,11 +3914,8 @@ msgstr "Modules"
 msgid "Monday"
 msgstr "Monday"
 
-#: src/modules/receipts/receipt-list.tsx:115
-msgid "Money"
-msgstr "Money"
-
 #: src/modules/loans/loan-list.tsx:162
+#: src/modules/receipts/receipt-list.tsx:115
 #: src/widgets/reports/modules.ts:256
 msgid "Money amount"
 msgstr "Money amount"
@@ -3957,7 +3955,7 @@ msgstr "Moto bike registration"
 msgid "Move"
 msgstr "Move"
 
-#: src/modules/customer-forms/customer-form-list.tsx:72
+#: src/modules/customer-forms/customer-form-list.tsx:75
 msgid "Move branch"
 msgstr "Move branch"
 
@@ -4038,6 +4036,7 @@ msgstr "Mutual workspaces"
 #: src/modules/categories/components/form-category.tsx:109
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:127
 #: src/modules/custom-fields/components/form-custom-field.tsx:101
+#: src/modules/customer-forms/customer-form-list.tsx:36
 #: src/modules/customers/components/customer-column.tsx:90
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:76
 #: src/modules/customers/components/form-customer.tsx:136
@@ -4517,6 +4516,7 @@ msgid "Pay"
 msgstr "Pay"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:91
+#: src/modules/receipts/receipt-list.tsx:68
 msgid "Pay expire"
 msgstr "Pay expire"
 
@@ -4537,6 +4537,7 @@ msgstr "Pay successful"
 #: src/components/printer/printer-body.tsx:94
 #: src/modals/modal-printer.tsx:363
 #: src/modules/loans/loan-detail.tsx:412
+#: src/modules/receipts/receipt-list.tsx:104
 #: src/modules/workspace-billings/workspace-billings-contants.ts:9
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:139
 msgid "Payment"
@@ -4567,7 +4568,6 @@ msgstr "Payment info"
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:301
 #: src/modules/receipts/receipt-card.tsx:338
 #: src/modules/receipts/receipt-card.tsx:346
-#: src/modules/receipts/receipt-list.tsx:104
 msgid "Payment method"
 msgstr "Payment method"
 
@@ -4631,6 +4631,7 @@ msgstr "Period"
 msgid "Period fee amount"
 msgstr "Period fee amount"
 
+#: src/modules/customer-forms/customer-form-list.tsx:43
 #: src/modules/customers/components/customer-column.tsx:94
 #: src/modules/customers/components/customer-kyc-card.tsx:123
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:83
@@ -5276,7 +5277,7 @@ msgid "Reminder time"
 msgstr "Reminder time"
 
 #: src/components/inputs/work-slot-settings-input.tsx:294
-#: src/components/list/components/bulk-actions.tsx:89
+#: src/components/list/components/bulk-actions.tsx:91
 #: src/layout/header/header-tasks-breadcrumbs.tsx:128
 #: src/layout/navigation/navigation-task-folders.tsx:168
 #: src/modals/modal-date-picker.tsx:86
@@ -5974,6 +5975,7 @@ msgid "Start time must be before end time"
 msgstr "Start time must be before end time"
 
 #: src/modules/bookings/components/booking-card.tsx:187
+#: src/modules/customer-forms/customer-form-list.tsx:59
 #: src/modules/customers/modals/modal-customer-form.tsx:132
 #: src/modules/loans/loan-detail.tsx:323
 #: src/modules/loans/loan-list.tsx:263
@@ -6662,7 +6664,7 @@ msgstr "Unlink"
 msgid "Unnamed"
 msgstr "Unnamed"
 
-#: src/components/list/components/bulk-actions.tsx:93
+#: src/components/list/components/bulk-actions.tsx:95
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:268
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:344
 msgid "Unselect all"
@@ -7152,7 +7154,6 @@ msgstr "Workspace"
 msgid "Workspace archived"
 msgstr "Workspace archived"
 
-#: src/modules/customer-forms/modal-customer-form.tsx:42
 #: src/modules/loans/loan-detail.tsx:285
 msgid "Workspace branch"
 msgstr "Workspace branch"
