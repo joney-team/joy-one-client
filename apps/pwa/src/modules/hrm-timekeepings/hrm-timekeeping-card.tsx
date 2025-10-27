@@ -21,6 +21,7 @@ import { FC, Fragment } from "react";
 
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
+import { DateFormat } from "@/components/format/date-format";
 import { Image } from "@/components/image";
 import { useList } from "@/components/list/use-list";
 import { getFiles } from "@/modules/files/file-service";
@@ -31,7 +32,6 @@ import {
   rejectTimekeeping,
   removeTimekeeping,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
-import { renderDateTime } from "@/modules/lang/lang-service";
 import { UserCard } from "@/modules/users/components/user-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -87,7 +87,9 @@ export const HrmTimekeepingCard: FC<HrmTimekeepingCardProps> = (props) => {
                 <IconClock size={18} />
               </ThemeIcon>
               <Group gap={5}>
-                <Text fz={em(15)}>{renderDateTime(timekeeping.time, true)}</Text>
+                <Text fz={em(15)}>
+                  <DateFormat value={timekeeping.time} type="date" />
+                </Text>
               </Group>
             </Group>
 

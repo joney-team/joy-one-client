@@ -79,7 +79,7 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
     }
   };
 
-  const renderDate = () => {
+  const displayDate = () => {
     if ([CalendarView.WEEK].includes(view)) {
       const start = dayjs(date).startOf(view);
       const end = dayjs(date).endOf(view);
@@ -157,7 +157,7 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
           </Group>
 
           <Text fz={14} fw={500} tt="capitalize">
-            {renderDate()}
+            {displayDate()}
           </Text>
         </Group>
 

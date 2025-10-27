@@ -4,17 +4,18 @@ import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { getDateTimeFormat, numCurrencyRound, renderDateTime } from "@/modules/lang/lang-service";
+import { useLang } from "@/modules/lang/lang-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
+import { Currency } from "@joy-one-client/utils/currency";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { downloadJSON } from "@joy-one-client/utils/files";
 import { t } from "@lingui/core/macro";
 import { Center, Modal, parseThemeColor, Select, Stack, useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDownload, IconFileExport } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, Fragment, useState } from "react";
 import writeXlsxFile, { Row } from "write-excel-file";
 import { ExportToExcelItem, ListContext } from "../types";
@@ -29,6 +30,7 @@ export enum ExportType {
 export const ExportButton: FC<ListContext> = (props) => {
   const workspace = useWorkspace();
   const theme = useMantineTheme();
+  const lang = useLang();
 
   const [opened, { open, close }] = useDisclosure(false);
   const [exportType, setExportType] = useState<ExportType>(ExportType.EXCEL);
@@ -37,12 +39,12 @@ export const ExportButton: FC<ListContext> = (props) => {
     if (item.text) return { value: item.text };
     if (item.money)
       return {
-        value: numCurrencyRound(item.money),
+        value: Currency.normalize(item.money, workspace.settings.currencyCode),
         type: Number,
         format: "#,##0",
       };
     if (item.number) return { value: item.number, type: Number, format: "#,##0" };
-    if (item.date) return { value: renderDateTime(item.date) };
+    if (item.date) return { value: DateTime.format(item.date, { locale: lang.locale }) };
     if (item.imageUrl) return { value: renderFileUrl(item.imageUrl) };
     return { value: "" };
   };
@@ -61,7 +63,9 @@ export const ExportButton: FC<ListContext> = (props) => {
 
           const filename = `[${workspace.userMember.workspace.code}] ${
             props.name || t`Data`
-          } ${dayjs().format(getDateTimeFormat()).replace(/:/g, "-").replace(/\//g, "-")}`;
+          } ${DateTime.format(new Date(), { locale: lang.locale })
+            .replace(/:/g, "-")
+            .replace(/\//g, "-")}`;
 
           if (exportType === ExportType.JSON) {
             return downloadJSON(data, `${filename}.json`);

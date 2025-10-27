@@ -7,6 +7,7 @@ import { getCookie } from "cookies-next/client";
 import dayjs from "dayjs";
 import { getGlobal } from "../../global";
 import { Dictionary, LangState, Locale, LocaleConfig } from "./lang-types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 export const getClientLocale = (): Locale => {
   let locale: Locale | undefined = undefined;
@@ -141,7 +142,10 @@ export const translateNotification = (key: string, params?: any): string => {
     Object.keys(params).map((param) => {
       switch (param) {
         case "dateTime":
-          message = message.replace(`{${param}}`, renderDateTime(params[param], true));
+          message = message.replace(
+            `{${param}}`,
+            DateTime.format(params[param], { locale: getClientLocale() })
+          );
           break;
         case "money":
           message = message.replace(`{${param}}`, num(params[param], { type: "money" }));

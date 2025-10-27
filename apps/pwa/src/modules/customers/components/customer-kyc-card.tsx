@@ -13,7 +13,6 @@ import {
   CustomerKycStatus,
 } from "@/modules/customer-kycs/customer-kycs-types";
 import { FileType } from "@/modules/files/file-types";
-import { renderDateTime } from "@/modules/lang/lang-service";
 import { String } from "@/utils/string.utils";
 import {
   Anchor,
@@ -40,6 +39,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { Renderer } from "../../../components/renderer";
 import { useLocations } from "@/modules/locations/locations-context";
 import { t } from "@lingui/core/macro";
+import { DateFormat } from "@/components/format/date-format";
 
 interface CustomerKycCardProps {
   kyc: CustomerKycEntity;
@@ -109,7 +109,9 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
   return (
     <Card className="CustomerKycCard" withBorder shadow="none" {...props.cardProps}>
       <Stack align="stretch">
-        <Text fz={em(12)}>{renderDateTime(lastVersion.createdAt, true)}</Text>
+        <Text fz={em(12)}>
+          <DateFormat value={lastVersion.createdAt} type="date" />
+        </Text>
 
         <Renderer visible={!props.hideCustomer}>
           <Group justify="space-between">

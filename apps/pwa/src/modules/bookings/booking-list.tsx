@@ -3,6 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { CalendarViewSelector } from "@/components/calendar-view-selector";
+import { DateFormat } from "@/components/format/date-format";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { Selector } from "@/components/selector";
@@ -17,7 +18,6 @@ import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { getDateFormat } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
@@ -28,9 +28,9 @@ import {
   useWorkDaySlots,
 } from "@/modules/workspace-settings/workspace-settings-service";
 import { CalendarView } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
 import { ObjectUtils } from "@/utils/object.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -55,18 +55,19 @@ import {
   IconRefresh,
   IconUsers,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
-import { type FC, useEffect, useRef, useState } from "react";
+import { type FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Calendar } from "react-big-calendar";
 import { bookingStatuses } from "./booking-constants";
 import { BookingEntity, BookingStatus } from "./booking-types";
 import { OnModalCreateBooking } from "./modals/modal-create-booking";
 
 const normalizeQuery = (query: any) => {
-  const date = query.date ? dayjs(+query.date * 1000).toDate() : new Date();
+  const date = query.date ? DateTime.normalizeDate(+query.date) : new Date();
   const view = Object.values(CalendarView).includes(query.view) ? query.view : CalendarView.WEEK;
-  const startTime = dayjs(date).startOf(view).toDate();
-  const endTime = dayjs(date).endOf(view).toDate();
+
+  const { start, end } = DateTime.getRange(date, view);
+  const startTime = new Date(start);
+  const endTime = new Date(end);
   const assigneeUserIds = `${(query.assigneeUserIds ?? "").toString()}`.split(",").filter(Boolean);
 
   return {
@@ -93,12 +94,11 @@ export const BookingList: FC = () => {
     id: "bk",
     fetch: async (q) => {
       const query = normalizeQuery(q);
+      const range = `${DateTime.toSeconds(query.startTime)}-${DateTime.toSeconds(query.endTime)}`;
 
       return getBookings(
         ObjectUtils.cleanObj({
-          rangeStartTime: `${DateTime.timeToSeconds(query.startTime)}-${DateTime.timeToSeconds(
-            query.endTime
-          )}`,
+          rangeStartTime: range,
           assigneeUserIds: query.assigneeUserIds.length > 0 ? query.assigneeUserIds : undefined,
           status: query.status || bookingActiveStatus,
           getAll: true,
@@ -120,16 +120,14 @@ export const BookingList: FC = () => {
     bookings.params.assigneeUserIds
   );
 
-  const query = normalizeQuery(bookings.params);
+  const normalizedQuery = normalizeQuery(bookings.params);
 
-  const startWeek = dayjs(query.date).startOf("week");
-  const dayWeek = new Array(7).fill(0).map((_, index) => {
-    const date = startWeek.add(index, "day");
+  const startWeek = DateTime.rangeWeek(normalizedQuery.date).start;
+  const daysOfWeek = new Array(7).fill(0).map((_, index) => {
+    const date = DateTime.add(startWeek, "DAY", index);
 
     return {
       date,
-      nameDay: date.format("ddd"),
-      name: date.format("ddd DD/MM"),
     };
   });
 
@@ -141,50 +139,71 @@ export const BookingList: FC = () => {
   };
 
   const setDate = (date: Date) => {
-    const isToday = dayjs(date).isSame(new Date(), "day");
+    const isToday = DateTime.isSameDay(date, new Date());
     if (isToday) {
       bookings.removeParams(["date"]);
     } else {
-      bookings.setParams({ date: DateTime.timeToSeconds(date) });
+      bookings.setParams({ date: DateTime.toSeconds(date) });
     }
   };
 
   const nextRange = () => {
-    const nextDate = dayjs(query.date).add(1, query.view).toDate();
-    if (dayjs(nextDate).isSame(new Date(), "day")) {
+    const nextDate = DateTime.add(normalizedQuery.date, normalizedQuery.view, 1);
+    if (DateTime.isSameDay(nextDate, new Date())) {
       bookings.removeParams(["date"]);
     } else {
-      bookings.setParams({ date: DateTime.timeToSeconds(nextDate) });
+      bookings.setParams({ date: DateTime.toSeconds(nextDate) });
     }
   };
 
   const previousRange = () => {
-    const previousDate = dayjs(query.date).subtract(1, query.view).toDate();
-    if (dayjs(previousDate).isSame(new Date(), "day")) {
+    const previousDate = DateTime.subtract(normalizedQuery.date, normalizedQuery.view, 1);
+    if (DateTime.isSameDay(previousDate, new Date())) {
       bookings.removeParams(["date"]);
     } else {
-      bookings.setParams({ date: DateTime.timeToSeconds(previousDate) });
+      bookings.setParams({ date: DateTime.toSeconds(previousDate) });
     }
   };
 
-  const renderDate = () => {
-    if ([CalendarView.WEEK, CalendarView.MONTH].includes(query.view)) {
-      const start = dayjs(query.date).startOf(query.view);
-      const end = dayjs(query.date).endOf(query.view);
-      return `${start.format(`ddd ${getDateFormat()}`)} - ${end.format(`ddd ${getDateFormat()}`)}`;
+  const displayDate = useMemo(() => {
+    if (normalizedQuery.view === CalendarView.WEEK) {
+      const { start, end } = DateTime.getRange(normalizedQuery.date, normalizedQuery.view);
+      return (
+        <Fragment>
+          <DateFormat value={start} type="date" />
+          {" - "}
+          <DateFormat value={end} type="date" />
+        </Fragment>
+      );
     }
 
-    return dayjs(query.date).format(`dddd ${getDateFormat()}`);
-  };
+    if (normalizedQuery.view === CalendarView.MONTH) {
+      return (
+        <DateFormat
+          value={normalizedQuery.date}
+          type="custom"
+          format={{ month: "short", year: "numeric" }}
+        />
+      );
+    }
+
+    return (
+      <DateFormat
+        value={normalizedQuery.date}
+        type="custom"
+        format={{ month: "short", day: "2-digit", year: "numeric" }}
+      />
+    );
+  }, [normalizedQuery.view, normalizedQuery.date]);
 
   const toggleAssigneeUser = (member?: WorkspaceMember) => {
     if (!member) return;
 
     setWorkspaceMember(member);
-    const isSelected = query.assigneeUserIds.includes(member.userId);
+    const isSelected = normalizedQuery.assigneeUserIds.includes(member.userId);
     const assigneeUserIds = isSelected
-      ? query.assigneeUserIds.filter((id) => id !== member.userId)
-      : [...query.assigneeUserIds, member.userId];
+      ? normalizedQuery.assigneeUserIds.filter((id) => id !== member.userId)
+      : [...normalizedQuery.assigneeUserIds, member.userId];
 
     if (assigneeUserIds.length === 0) {
       bookings.removeParams(["assigneeUserIds"]);
@@ -193,7 +212,9 @@ export const BookingList: FC = () => {
     }
   };
 
-  const selectedAssignees = assignees.filter((u) => query.assigneeUserIds.includes(u.userId));
+  const selectedAssignees = assignees.filter((u) =>
+    normalizedQuery.assigneeUserIds.includes(u.userId)
+  );
 
   const selectStatus = (status?: string) => {
     if (status === "default" || !status) {
@@ -208,7 +229,7 @@ export const BookingList: FC = () => {
 
   useEffect(() => {
     syncColumnSize();
-  }, [layout.width, lang.state.isTwelveHour, query.view]);
+  }, [layout.width, lang.state.isTwelveHour, normalizedQuery.view]);
 
   return (
     <Stack p={16}>
@@ -232,14 +253,14 @@ export const BookingList: FC = () => {
               </Group>
 
               <Text fz={14} fw={500} tt="capitalize">
-                {renderDate()}
+                {displayDate}
               </Text>
 
               <Group gap={8}>
                 <WorkspaceMemberSelector
                   onSelect={toggleAssigneeUser}
                   optionRightSection={(user) => {
-                    const isSelected = query.assigneeUserIds.includes(user.userId);
+                    const isSelected = normalizedQuery.assigneeUserIds.includes(user.userId);
                     return (
                       <ActionIcon
                         variant="subtle"
@@ -331,12 +352,12 @@ export const BookingList: FC = () => {
                   }}
                   onSelect={(e) => selectStatus(e?.id)}
                   target={(ctx) => {
-                    const statusColor = !query.status
+                    const statusColor = !normalizedQuery.status
                       ? "primary"
-                      : getBookingStatusColor(query.status as BookingStatus);
-                    const statusLabel = !query.status
+                      : getBookingStatusColor(normalizedQuery.status as BookingStatus);
+                    const statusLabel = !normalizedQuery.status
                       ? t`Active`
-                      : bookingStatuses[query.status as BookingStatus].label();
+                      : bookingStatuses[normalizedQuery.status as BookingStatus].label();
 
                     return (
                       <Card
@@ -381,22 +402,19 @@ export const BookingList: FC = () => {
             </Group>
 
             <Group gap={10} justify="end">
-              {!dayjs(query.date).isSame(new Date(), query.view) && (
+              {!DateTime.isSameDay(normalizedQuery.date, new Date()) && (
                 <Button
                   size="compact-sm"
-                  fz={12}
-                  leftIcon={IconCalendarDown}
-                  iconSize={16}
-                  iconSpacing={-10}
                   variant="light"
+                  leftIcon={IconCalendarDown}
                   onClick={() => setDate(new Date())}
                 >
-                  {query.view === CalendarView.DAY ? t`Today` : t`This week`}
+                  {normalizedQuery.view === CalendarView.DAY ? t`Today` : t`This week`}
                 </Button>
               )}
 
               <CalendarViewSelector
-                view={query.view}
+                view={normalizedQuery.view}
                 onChange={(view) => bookings.setParams({ view })}
               />
 
@@ -414,9 +432,9 @@ export const BookingList: FC = () => {
           </Group>
 
           <Stack gap={0}>
-            <Renderer visible={query.view === CalendarView.WEEK}>
+            <Renderer visible={normalizedQuery.view === CalendarView.WEEK}>
               <Group justify="end" gap={0} wrap="nowrap" w="100%">
-                {dayWeek.map((day, index) => {
+                {daysOfWeek.map((day, index) => {
                   return (
                     <Card
                       key={index}
@@ -433,11 +451,15 @@ export const BookingList: FC = () => {
                     >
                       <Group justify="center" align="center" wrap="nowrap" w="100%">
                         <Text fz={13} fw={700} tt="capitalize" c="gray">
-                          {day.date.format("ddd")}
+                          {DateTime.format(day.date, { locale: lang.locale, weekday: "short" })}
                         </Text>
 
                         <Text fz={13} fw={500} tt="capitalize" c="gray">
-                          {day.date.format(getDateFormat().replace("/YYYY", ""))}
+                          {DateTime.format(day.date, {
+                            locale: lang.locale,
+                            month: "2-digit",
+                            day: "2-digit",
+                          })}
                         </Text>
                       </Group>
                     </Card>
@@ -446,10 +468,10 @@ export const BookingList: FC = () => {
               </Group>
             </Renderer>
 
-            <Renderer visible={query.view === CalendarView.DAY}>
+            <Renderer visible={normalizedQuery.view === CalendarView.DAY}>
               <Group justify="end" gap={0} wrap="nowrap" w="100%">
-                {dayWeek.map((day, index) => {
-                  const isActive = dayjs(query.date).isSame(day.date, "day");
+                {daysOfWeek.map((day, index) => {
+                  const isActive = DateTime.isSameDay(normalizedQuery.date, day.date);
 
                   return (
                     <Group flex={1} key={index} justify="center" pb={10}>
@@ -457,16 +479,20 @@ export const BookingList: FC = () => {
                         key={index}
                         variant={isActive ? "filled" : "light"}
                         color={isActive ? "primary" : "gray"}
-                        onClick={() => setDate(day.date.toDate())}
+                        onClick={() => setDate(new Date(day.date))}
                         size="compact-sm"
                       >
                         <Group justify="center" align="center" wrap="nowrap" w="100%">
                           <Text fz={13} fw={700} tt="capitalize">
-                            {day.date.format("ddd")}
+                            {DateTime.format(day.date, { locale: lang.locale, weekday: "short" })}
                           </Text>
 
                           <Text fz={13} fw={500} tt="capitalize">
-                            {day.date.format(getDateFormat().replace("/YYYY", ""))}
+                            {DateTime.format(day.date, {
+                              locale: lang.locale,
+                              month: "2-digit",
+                              day: "2-digit",
+                            })}
                           </Text>
                         </Group>
                       </Button>
@@ -480,8 +506,8 @@ export const BookingList: FC = () => {
               {...calendarProps}
               className="hide-header"
               dayLayoutAlgorithm="no-overlap"
-              date={query.date}
-              view={query.view}
+              date={normalizedQuery.date}
+              view={normalizedQuery.view}
               toolbar={false}
               events={bookings.data.map((b) => ({
                 id: b._id,

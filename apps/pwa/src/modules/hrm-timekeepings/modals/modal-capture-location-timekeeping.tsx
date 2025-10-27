@@ -3,6 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { useCamera } from "@/components/camera";
 import { Errored } from "@/components/errored";
+import { DateFormat } from "@/components/format/date-format";
 import { TimekeepingsIllustration } from "@/components/illustrations/timekeepings";
 import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
@@ -16,7 +17,6 @@ import {
   HrmTimekeepingStatus,
   HrmTimekeepingType,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { renderDateTime } from "@/modules/lang/lang-service";
 import {
   findAvailableLocationToCheckIn,
   getGeolocation,
@@ -179,7 +179,12 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
               {prevTimekeeping.data &&
                 prevTimekeeping.data.type === HrmTimekeepingType.CHECK_IN && (
                   <Text ta="center" c="dark">
-                    {t`Checked in at`} <strong>{renderDateTime(prevTimekeeping.data.time)}</strong>
+                    <Trans>
+                      Checked in at{" "}
+                      <strong>
+                        <DateFormat value={prevTimekeeping.data.time} type="date" />
+                      </strong>
+                    </Trans>
                   </Text>
                 )}
 

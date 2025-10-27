@@ -139,10 +139,11 @@ export class DateTime {
   }
 
   static getStartEndOf(time: any, type: "DAY" | "WEEK" | "MONTH" | "YEAR") {
-    if (type === "DAY") return this.getStartEndOfDay(time);
-    if (type === "WEEK") return this.getStartEndOfWeek(time);
-    if (type === "MONTH") return this.getStartEndOfMonth(time);
-    if (type === "YEAR") return this.getStartEndOfYear(time);
+    const _type = type.toUpperCase();
+    if (_type === "DAY") return this.getStartEndOfDay(time);
+    if (_type === "WEEK") return this.getStartEndOfWeek(time);
+    if (_type === "MONTH") return this.getStartEndOfMonth(time);
+    if (_type === "YEAR") return this.getStartEndOfYear(time);
     throw Error("Type is not supported");
   }
 

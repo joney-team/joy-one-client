@@ -198,62 +198,55 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
           >
             <Suggestion
               label={t`Today`}
-              value={DateTime.format(DateTime.getStartEndOfDay(new Date()).end, {
+              value={DateTime.format(DateTime.rangeDay(new Date()).end, {
                 weekday: "long",
                 locale: lang.locale,
               })}
               onSelect={() => {
-                onChangePointedValue(DateTime.getStartEndOfDay(new Date()).end);
+                onChangePointedValue(DateTime.rangeDay(new Date()).end);
               }}
             />
 
             <Suggestion
               label={t`Tomorrow`}
               value={DateTime.format(
-                DateTime.getStartEndOfDay(new Date(Date.now() + 1000 * 60 * 60 * 24)).end,
+                DateTime.rangeDay(new Date(Date.now() + 1000 * 60 * 60 * 24)).end,
                 {
                   dateStyle: "short",
                   locale: lang.locale,
                 }
               )}
               onSelect={() => {
-                onChangePointedValue(
-                  DateTime.getStartEndOfDay(Date.now() + 1000 * 60 * 60 * 24).end
-                );
+                onChangePointedValue(DateTime.rangeDay(Date.now() + 1000 * 60 * 60 * 24).end);
               }}
             />
 
             <Suggestion
               label={t`This weekend`}
-              value={DateTime.format(DateTime.getStartEndOfWeek(Date.now()).end, {
+              value={DateTime.format(DateTime.rangeWeek(Date.now()).end, {
                 dateStyle: "short",
                 locale: lang.locale,
               })}
               onSelect={() => {
-                onChangePointedValue(DateTime.getStartEndOfWeek(Date.now()).end);
+                onChangePointedValue(DateTime.rangeWeek(Date.now()).end);
               }}
             />
 
             <Suggestion
               label={t`Next weekend`}
-              value={DateTime.format(
-                DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7).end,
-                {
-                  dateStyle: "short",
-                  locale: lang.locale,
-                }
-              )}
+              value={DateTime.format(DateTime.rangeWeek(Date.now() + 1000 * 60 * 60 * 24 * 7).end, {
+                dateStyle: "short",
+                locale: lang.locale,
+              })}
               onSelect={() => {
-                onChangePointedValue(
-                  DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7).end
-                );
+                onChangePointedValue(DateTime.rangeWeek(Date.now() + 1000 * 60 * 60 * 24 * 7).end);
               }}
             />
 
             <Suggestion
               label={t`Range week ${`2`}`}
               value={DateTime.format(
-                DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2).end,
+                DateTime.rangeWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2).end,
                 {
                   dateStyle: "short",
                   locale: lang.locale,
@@ -261,7 +254,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
               )}
               onSelect={() => {
                 onChangePointedValue(
-                  DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2).end
+                  DateTime.rangeWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2).end
                 );
               }}
             />
@@ -269,7 +262,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             <Suggestion
               label={t`Range week ${`4`}`}
               value={DateTime.format(
-                DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4).end,
+                DateTime.rangeWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4).end,
                 {
                   dateStyle: "short",
                   locale: lang.locale,
@@ -277,7 +270,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
               )}
               onSelect={() => {
                 onChangePointedValue(
-                  DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4).end
+                  DateTime.rangeWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4).end
                 );
               }}
             />
@@ -285,7 +278,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             <Suggestion
               label={t`Range week ${`8`}`}
               value={DateTime.format(
-                DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8).end,
+                DateTime.rangeWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8).end,
                 {
                   dateStyle: "short",
                   locale: lang.locale,
@@ -293,7 +286,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
               )}
               onSelect={() => {
                 onChangePointedValue(
-                  DateTime.getStartEndOfWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8).end
+                  DateTime.rangeWeek(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8).end
                 );
               }}
             />
@@ -306,7 +299,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
               value={pointedValue}
               getDayProps={(_date) => {
                 return {
-                  selected: !!pointedValue && DateTime.isMatchDay(_date, pointedValue),
+                  selected: !!pointedValue && DateTime.isSameDay(_date, pointedValue),
                   onClick: () => {
                     onChangePointedValue(new Date(_date));
                   },

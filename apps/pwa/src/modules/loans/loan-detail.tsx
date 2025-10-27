@@ -15,7 +15,6 @@ import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDate } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { archiveLoan, getLoanByCode, updateLoanAssetData } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
@@ -27,6 +26,8 @@ import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { formatPhoneNumber } from "@/utils/phone.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { Currency } from "@joy-one-client/utils/currency";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -60,6 +61,7 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import { useLang } from "../lang/lang-context";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { LoanCustomerKyc } from "./components/loan-customer-kyc";
@@ -77,6 +79,7 @@ export const LoanDetail: NextPage = () => {
   const layout = useLayout();
   const color = useColor();
   const { getGoogleMapLink } = useLocations();
+  const lang = useLang();
 
   const isAutoRedirectStep = useRef(true);
   const [customerKyc, setCustomerKyc] = useState<CustomerKycEntity>();
@@ -258,27 +261,42 @@ export const LoanDetail: NextPage = () => {
             <SimpleGrid cols={{ md: 4 }}>
               <InfoCard
                 label={t`Birhtday`}
-                content={customer.data.birthday ? renderDate(customer.data.birthday) : "--"}
+                content={
+                  customer.data.birthday
+                    ? DateTime.format(customer.data.birthday, { locale: lang.locale })
+                    : "--"
+                }
               />
+
               <InfoCard label={t`Gender`} content={genders[customer.data.gender].name()} />
+
               <InfoCard
                 label={t`Phone`}
                 content={customer.data.phone ? formatPhoneNumber(customer.data.phone) : "--"}
                 href={`tel:${customer.data.phone}`}
                 visible={workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)}
               />
+
               <InfoCard
-                label="Email"
+                label={t`Email`}
                 content={customer.data.email}
                 href={`mailto:${customer.data.email}`}
               />
+
               <InfoCard
                 label={t`Loan package`}
                 content={`${loan.data.package.id} / ${loanAssetTypes[
                   loan.data.assetType
                 ]?.label()}`}
               />
-              <InfoCard label="money_amount" content={num(loan.data.amount, { type: "money" })} />
+
+              <InfoCard
+                label={t`Money amount`}
+                content={Currency.format(loan.data.amount, {
+                  locale: lang.locale,
+                  currency: workspace.settings.currencyCode,
+                })}
+              />
 
               {workspace.isShouldEnableBranches && (
                 <InfoCard

@@ -2,8 +2,8 @@
 
 import { Menu, MenuDropdown, Text } from "@mantine/core";
 
+import { DateFormat } from "@/components/format/date-format";
 import { OnModalDatePicker } from "@/modals/modal-date-picker";
-import { renderDate } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { Period } from "@/types";
 import { timeToSeconds } from "@joy-one-client/utils/date-time.legacy";
@@ -16,8 +16,7 @@ import {
   IconCalendarEvent,
   IconCalendarMonth,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
-import { FC, useMemo } from "react";
+import { FC, Fragment, useMemo } from "react";
 import { FilterProps } from "./types";
 
 export interface TimeRangeFilterConfig {}
@@ -37,7 +36,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
   const filterValue = filterPeriodValue ?? filterRangeValue ?? "";
 
   const { period, fromDate, toDate } = useMemo(() => {
-    if (filterRangeKey) {
+    if (filterRangeValue) {
       return {
         period: Period.DATE,
         fromDate: filterValue.split("-")[0],
@@ -45,7 +44,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
       };
     }
 
-    return { period: Period.DATE, fromDate: filterValue };
+    return { period: filterValue.split("-")[0], fromDate: filterValue.split("-")[1] };
   }, [filterValue]);
 
   const activatedValue = useMemo(() => {
@@ -121,26 +120,46 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
     },
   ];
 
+  const displayFilterValue = useMemo(() => {
+    if (!filterValue) return null;
+
+    if (filterRangeValue)
+      return (
+        <Fragment>
+          <DateFormat value={fromDate} type="date" />
+          {" - "}
+          <DateFormat value={toDate} type="date" />
+        </Fragment>
+      );
+
+    if (period === Period.DATE) {
+      return <DateFormat value={fromDate} type="date" />;
+    }
+
+    if (period === Period.MONTH) {
+      return (
+        <DateFormat value={fromDate} type="custom" format={{ month: "2-digit", year: "2-digit" }} />
+      );
+    }
+
+    if (period === Period.YEAR) {
+      return <DateFormat value={fromDate} type="custom" format={{ year: "numeric" }} />;
+    }
+  }, [filterRangeKey, period, fromDate, toDate]);
+
+  const onClear = () => {
+    if (!filterValue) return;
+    list.removeParams([filterRangeKey, filterPeriodKey]);
+  };
+
   return (
     <Menu>
       <Menu.Target>
         <Group>
-          <Wrapper
-            onClear={
-              filterValue ? () => list.removeParams([filterRangeValue, filterPeriodKey]) : undefined
-            }
-            active={!!filterValue}
-          >
-            {filterValue && (
-              <Text fz={12} fw={700}>
-                {(function () {
-                  if (filterRangeKey)
-                    return `${renderDate(+fromDate * 1000)} - ${renderDate(+toDate * 1000)}`;
-                  if (period === Period.DATE) return renderDate(+fromDate * 1000);
-                  if (period === Period.MONTH)
-                    return capitalizeFirstLetter(dayjs(+fromDate * 1000).format(`MMMM YYYY`));
-                  if (period === Period.YEAR) return dayjs(+fromDate * 1000).format(`YYYY`);
-                })()}
+          <Wrapper onClear={onClear} active={!!filterValue}>
+            {displayFilterValue && (
+              <Text fz={12} fw={700} tt="capitalize">
+                {displayFilterValue}
               </Text>
             )}
           </Wrapper>

@@ -1,17 +1,20 @@
-import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
+"use client";
+
+import { DateFormat } from "@/components/format/date-format";
 import { useRouter } from "@/hooks/use-router";
-import { renderGener, renderGenerIcon } from "../customer-service";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { renderDateTime } from "@/modules/lang/lang-service";
+import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { renderEntityCode } from "@/modules/workspaces/utils";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { Trans } from "@lingui/react/macro";
 import { Anchor, Badge, Card, CardProps, Group, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import { IconClock, IconPhone, IconTags } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
 import { Avatar } from "../../../components/avatar";
+import { renderGener, renderGenerIcon } from "../customer-service";
 
 interface CustomerCardProps extends CardProps {
   customer: CustomerShortInfo;
@@ -134,7 +137,11 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
               <ThemeIcon color="dark" variant="transparent">
                 <IconClock strokeWidth={1.2} size={18} />
               </ThemeIcon>
-              <Text fz={em(15)}>Lần check-in gần nhất: {renderDateTime(customer.lastCheckin)}</Text>
+              <Text fz={em(15)}>
+                <Trans>Last check-in</Trans>
+                {": "}
+                <DateFormat value={customer.lastCheckin} type="date-time" />
+              </Text>
             </Group>
           )}
         </Stack>
