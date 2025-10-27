@@ -6,7 +6,7 @@ import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { num } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagType } from "@/modules/tags/tags-types";
@@ -58,7 +58,7 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
   return (
     <Card shadow="xs" p={16} w="100%">
       <Stack>
-        <SessionTitle name={t`Tasks time trackings`} icon={IconStopwatch}>
+        <SectionTitle name={t`Tasks time trackings`} icon={IconStopwatch}>
           <Group gap={8}>
             <ButtonSelect
               icon={IconFolder}
@@ -86,7 +86,7 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
               enabled={taskFolderTags.length > 0}
             />
           </Group>
-        </SessionTitle>
+        </SectionTitle>
 
         <Renderer visible={tasks.isFetching}>
           <Skeleton h={200} />

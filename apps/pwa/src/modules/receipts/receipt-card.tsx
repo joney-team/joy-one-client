@@ -134,7 +134,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
 
                 <Group gap={5}>
                   <Text fz={em(10)} c="dark">
-                    <DateFormat value={receipt.createdAt} format={{ dateStyle: "short" }} />
+                    <DateFormat value={receipt.createdAt} type="date" />
                   </Text>
 
                   <Text fz={em(8)} c="gray">
@@ -231,12 +231,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                     {t`Due date`}
                   </Table.Th>
                   <Table.Td ta="right" c={isExpired ? "red" : undefined}>
-                    {receipt.expireAt && (
-                      <DateFormat
-                        value={receipt.expireAt}
-                        format={{ dateStyle: "short", timeStyle: "short" }}
-                      />
-                    )}
+                    {receipt.expireAt && <DateFormat value={receipt.expireAt} type="date-time" />}
                   </Table.Td>
                 </Table.Tr>
               </Renderer>
@@ -332,10 +327,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                       }}
                     >
                       <Text ta="right">
-                        <DateFormat
-                          value={receipt.paidAt}
-                          format={{ dateStyle: "short", timeStyle: "short" }}
-                        />
+                        <DateFormat value={receipt.paidAt} type="date-time" />
                       </Text>
                     </HoverToEdit>
                   </Table.Td>

@@ -28,7 +28,7 @@ export const DateTimeColumn = (args?: DateTimeColumnArgs): Column => {
       return (
         <Stack gap={0}>
           <Text c="var(--mantine-color-text)">
-            <DateFormat value={value} format={{ dateStyle: "short" }} />
+            <DateFormat value={value} type="date" />
           </Text>
           {!args?.hideTime && (
             <Group gap={3}>
@@ -36,14 +36,14 @@ export const DateTimeColumn = (args?: DateTimeColumnArgs): Column => {
                 <IconClock strokeWidth={1.5} />
               </ThemeIcon>
               <Text fz={14} c="var(--mantine-color-dimmed)">
-                <DateFormat value={value} format={{ timeStyle: "short" }} />
+                <DateFormat value={value} type="time" />
               </Text>
             </Group>
           )}
 
           {args?.isShowRelativeTime && (
             <Text fz={10} c="var(--mantine-color-dimmed)">
-              {DateTime.formatRelative(value)}
+              {DateTime.formatRelative(value, locale)}
             </Text>
           )}
         </Stack>

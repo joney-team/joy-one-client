@@ -20,7 +20,7 @@ import { Fragment, useEffect } from "react";
 import { archiveCustomer, getCustomerByCode } from "../customer-service";
 
 import { EventList } from "@/components/event-list";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { CustomerTasks } from "@/modules/customers/customer-tasks";
 import { FilesBox } from "@/modules/files/files-box";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
@@ -115,7 +115,7 @@ export const CustomerDetail = () => {
 
         <Renderer visible={workspace.isModuleActive("customerKYCs")}>
           <Stack gap={10}>
-            <SessionTitle name="KYC" icon={IconUserScan} />
+            <SectionTitle name="KYC" icon={IconUserScan} />
             <CustomerKyc customer={customer} />
           </Stack>
         </Renderer>
@@ -129,7 +129,7 @@ export const CustomerDetail = () => {
         </Renderer>
 
         <Stack gap={10}>
-          <SessionTitle name={t`Images & Documents`} icon={IconFiles} />
+          <SectionTitle name={t`Images & Documents`} icon={IconFiles} />
 
           <FilesBox
             query={{ relatedCustomerId: customer._id }}

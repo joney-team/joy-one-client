@@ -7,7 +7,7 @@ import { FormSession } from "@/components/form-session";
 import { Image } from "@/components/image";
 import { DateInput } from "@/components/inputs/date-input";
 import { TimeZoneInput } from "@/components/inputs/timezone-input";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { configs } from "@/configs/layout.config";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
@@ -221,7 +221,7 @@ export const UserProfileSettings: FC = () => {
           </Stack>
         </Card>
 
-        <SessionTitle name={t`Workspace settings`} mb={-20} />
+        <SectionTitle name={t`Workspace settings`} mb={-20} />
 
         <Card shadow="xs">
           <UserWorkspaceSettings userId={auth.user!._id} />

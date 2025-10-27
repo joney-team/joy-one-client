@@ -5,7 +5,7 @@ import { Button } from "@/components/buttons/button";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Image } from "@/components/image";
 import { useList } from "@/components/list/use-list";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -286,7 +286,7 @@ export const HrmTimekeepingList: FC = () => {
 
       {timekeepings.isHasData && (
         <Stack gap={8}>
-          <SessionTitle name={t`Total summary`} icon={IconUsers} />
+          <SectionTitle name={t`Total summary`} icon={IconUsers} />
 
           <HrmTimekeepingsSummary timekeepings={timekeepings.data} />
         </Stack>

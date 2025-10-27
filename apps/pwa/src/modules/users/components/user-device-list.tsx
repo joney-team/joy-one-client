@@ -5,7 +5,7 @@ import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getUserDevices } from "@/modules/devices/devices-service";
 import { useUserEventsListner } from "@/modules/events/event-service";
@@ -41,7 +41,7 @@ export const UserDeviceList = () => {
 
   return (
     <Fragment>
-      <SessionTitle name={t`Devices`} icon={IconDevices}>
+      <SectionTitle name={t`Devices`} icon={IconDevices}>
         <Renderer visible={devices.count > 1}>
           <Group gap={8}>
             <Button
@@ -67,7 +67,7 @@ export const UserDeviceList = () => {
             </ActionIcon>
           </Group>
         </Renderer>
-      </SessionTitle>
+      </SectionTitle>
 
       <SimpleGrid cols={1}>
         <Empty visible={devices.isEmpty} />

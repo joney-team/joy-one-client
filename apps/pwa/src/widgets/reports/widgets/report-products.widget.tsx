@@ -5,7 +5,7 @@ import { Circle } from "@/components/circle";
 import { Empty } from "@/components/empty";
 import { FlexSize } from "@/components/flex-size";
 import { Renderer } from "@/components/renderer";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { num } from "@/modules/lang/lang-service";
 import { productTypes } from "@/modules/products/products-constants";
 import { getProductIcon } from "@/modules/products/products-service";
@@ -113,7 +113,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
     <Card shadow="xs" p={0} w="100%" h="100%">
       <Stack h="100%">
         <Stack px={16} pt={16}>
-          <SessionTitle name={t`Products & services`} icon={IconReportAnalytics} />
+          <SectionTitle name={t`Products & services`} icon={IconReportAnalytics} />
 
           <Renderer visible={props.ctx.isFetching}>
             <Skeleton h="100%" />

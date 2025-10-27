@@ -2,7 +2,7 @@
 
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Period, ResponseList, StorageKey } from "@/types";
@@ -62,7 +62,7 @@ export const DashboardBookings: FC = () => {
 
   return (
     <Stack>
-      <SessionTitle id="dashboard-bookings" icon={IconClipboardList} name={t`Bookings`}>
+      <SectionTitle id="dashboard-bookings" icon={IconClipboardList} name={t`Bookings`}>
         <Group gap={8} wrap="nowrap">
           <ButtonSelect
             icon={IconAnalyze}
@@ -78,7 +78,7 @@ export const DashboardBookings: FC = () => {
             isActive={query.status === "in_progress"}
           />
         </Group>
-      </SessionTitle>
+      </SectionTitle>
 
       <Empty visible={bookingData.length === 0} />
 

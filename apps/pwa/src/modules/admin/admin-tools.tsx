@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Card, Group, Stack, Textarea } from "@mantine/core";
@@ -23,7 +23,7 @@ export const AdminTools: FC = () => {
 
   return (
     <Stack p={16}>
-      <SessionTitle name="Admin Tools" icon={IconTools} />
+      <SectionTitle name="Admin Tools" icon={IconTools} />
       <Card shadow="xs">
         <Stack align="start">
           <Button onClick={() => api.post("/helpers/reset-redis")}>Reset Redis Cache</Button>
@@ -49,7 +49,7 @@ export const AdminTools: FC = () => {
         </Stack>
       </Card>
 
-      <SessionTitle name="VN Locations" icon={IconLocation} />
+      <SectionTitle name="VN Locations" icon={IconLocation} />
       <Card shadow="xs">
         <Stack align="start">
           <Button onClick={() => api.patch("/locations/crawls/vn-locations")}>
@@ -70,7 +70,7 @@ export const AdminTools: FC = () => {
         </Stack>
       </Card>
 
-      <SessionTitle name="Set Runtime Webhook URL" icon={IconTools} />
+      <SectionTitle name="Set Runtime Webhook URL" icon={IconTools} />
       <Card shadow="xs">
         <Stack>
           <Textarea id="runtime-webhook-url" placeholder="Enter the runtime webhook URL" />
@@ -94,7 +94,7 @@ export const AdminTools: FC = () => {
         </Stack>
       </Card>
 
-      <SessionTitle name="Exec Scheduling" icon={IconCalendar} />
+      <SectionTitle name="Exec Scheduling" icon={IconCalendar} />
 
       <Card shadow="xs">
         <Group>
@@ -144,7 +144,7 @@ export const AdminTools: FC = () => {
         </Group>
       </Card>
 
-      <SessionTitle name="Search Index" icon={IconSearch} />
+      <SectionTitle name="Search Index" icon={IconSearch} />
       <Card shadow="xs">
         <Group>
           <Button color="teal" onClick={() => api.patch("/search/sys/index-all")}>
@@ -153,7 +153,7 @@ export const AdminTools: FC = () => {
         </Group>
       </Card>
 
-      <SessionTitle name="Reports" icon={IconReportAnalytics} />
+      <SectionTitle name="Reports" icon={IconReportAnalytics} />
       <Card shadow="xs">
         <Group>
           <Button
@@ -175,7 +175,7 @@ export const AdminTools: FC = () => {
         </Group>
       </Card>
 
-      <SessionTitle name="Modal Inputs" icon={IconClipboard} />
+      <SectionTitle name="Modal Inputs" icon={IconClipboard} />
       <Card shadow="xs">
         <Group align="start">
           {Object.values(InputModalType).map((type) => (

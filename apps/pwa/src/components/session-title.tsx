@@ -14,7 +14,7 @@ export interface SessionTitleProps {
   mb?: number;
 }
 
-export const SessionTitle: FC<PropsWithChildren<SessionTitleProps>> = (props) => {
+export const SectionTitle: FC<PropsWithChildren<SessionTitleProps>> = (props) => {
   const color = useColor();
 
   return (

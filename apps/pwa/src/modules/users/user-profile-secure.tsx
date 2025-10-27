@@ -3,7 +3,7 @@
 import { type FC, useEffect } from "react";
 
 import { Container } from "@/components/container";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { useLayout } from "@/layout/layout-context";
 import { t } from "@lingui/core/macro";
 import { Stack } from "@mantine/core";
@@ -24,7 +24,7 @@ export const UserProfileSecure: FC = () => {
     <Container p={16}>
       <Stack gap={30}>
         <Stack>
-          <SessionTitle name={t`Update password`} icon={IconLockFilled} />
+          <SectionTitle name={t`Update password`} icon={IconLockFilled} />
           <UpdatePassword />
         </Stack>
 

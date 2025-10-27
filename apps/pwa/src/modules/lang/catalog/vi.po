@@ -6217,7 +6217,7 @@ msgstr "Biểu đồ tỷ lệ hoàn thành công việc"
 #: src/widgets/reports/modules.ts:177
 #: src/widgets/reports/widgets/report-time-trackings.widget.tsx:61
 msgid "Tasks time trackings"
-msgstr "Theo dõi thời gian công việc"
+msgstr "Thời gian làm"
 
 #: src/modules/events/event-constants.ts:136
 msgid "Tasks updated"
@@ -6407,7 +6407,7 @@ msgstr "Cài đặt thời gian cho hồ sơ của bạn"
 #: src/modules/tasks/views/index.tsx:37
 #: src/widgets/reports/widgets/report-time-trackings.widget.tsx:113
 msgid "Time trackings"
-msgstr "Theo dõi thời gian"
+msgstr "Thời gian làm"
 
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:198
 msgid "timekeeping"

@@ -9,7 +9,7 @@ import { useRouter } from "@/hooks/use-router";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Button } from "@/components/buttons/button";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
@@ -62,7 +62,7 @@ export const ModalBookingDetail: FC = () => {
 
             {props?.booking.customer && (
               <Fragment>
-                <SessionTitle mb={-10} name={t`Customer`} icon={IconUser} />
+                <SectionTitle mb={-10} name={t`Customer`} icon={IconUser} />
                 <CustomerCard
                   customer={props?.booking.customer}
                   withBorder
@@ -72,7 +72,7 @@ export const ModalBookingDetail: FC = () => {
               </Fragment>
             )}
 
-            <SessionTitle mb={-10} name={t`Booking`} icon={IconCalendar} />
+            <SectionTitle mb={-10} name={t`Booking`} icon={IconCalendar} />
 
             <BookingCard
               booking={props?.booking}

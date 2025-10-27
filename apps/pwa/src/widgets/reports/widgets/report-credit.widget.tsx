@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { renderDate } from "@/modules/lang/lang-service";
@@ -563,13 +563,13 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
   return (
     <Card withBorder={false} shadow="xs" p={16} w="100%" h="100%">
       <Stack justify="center" h="100%">
-        <SessionTitle name={t`Report income and expenditure`} icon={IconReportAnalytics}>
+        <SectionTitle name={t`Report income and expenditure`} icon={IconReportAnalytics}>
           <Group justify="end" flex={1}>
             <Button leftIcon={IconFileExcel} onClick={exportExcel} fz={12}>
               <Trans>Export</Trans> Excel
             </Button>
           </Group>
-        </SessionTitle>
+        </SectionTitle>
       </Stack>
     </Card>
   );

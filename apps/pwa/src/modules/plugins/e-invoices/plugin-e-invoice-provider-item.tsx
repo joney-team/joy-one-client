@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { api } from "@/modules/apis";
 import { useQuery } from "@/modules/apis/use-query";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -184,7 +184,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
 
           return (
             <Stack key={type} gap={5}>
-              <SessionTitle name={t`Template ${t`E-Invoice`}`} />
+              <SectionTitle name={t`Template ${t`E-Invoice`}`} />
               <Card style={{ overflow: "visible" }}>
                 <PluginEInvoiceTemplateEditor
                   type={type}

@@ -5,7 +5,7 @@ import { Container } from "@/components/container";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { useList } from "@/components/list/use-list";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
@@ -157,7 +157,7 @@ export const WorkspaceBillingList: FC = () => {
         </SimpleGrid>
 
         <Stack gap={10}>
-          <SessionTitle name={t`Billings`} icon={IconReportMoney} />
+          <SectionTitle name={t`Billings`} icon={IconReportMoney} />
 
           {billings.isHasData && (
             <SimpleGrid cols={{ md: 1 }}>

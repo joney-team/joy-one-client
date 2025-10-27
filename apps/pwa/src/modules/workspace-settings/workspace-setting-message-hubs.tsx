@@ -4,7 +4,7 @@ import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Container } from "@/components/container";
 import { Image } from "@/components/image";
 import { LazyLoad } from "@/components/lazy-load";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { MessageHubCard } from "@/modules/plugins/message-hubs/message-hub-card";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
@@ -59,9 +59,9 @@ export const WorkspaceSettingMessageHubs: FC = () => {
   return (
     <Container p={16}>
       <Stack>
-        <SessionTitle icon={IconMessage} name="Message Hubs" iconColor="primary">
+        <SectionTitle icon={IconMessage} name="Message Hubs" iconColor="primary">
           <ButtonPlus onClick={plugins.onCreateMessageHub} size="sm" iconSize={16} />
-        </SessionTitle>
+        </SectionTitle>
 
         {plugins.messageHubs.map((messageHub) => {
           return <MessageHubCard key={messageHub._id} messageHub={messageHub} />;

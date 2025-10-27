@@ -4,7 +4,7 @@ import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Container } from "@/components/container";
 import { EventList } from "@/components/event-list";
 import { Renderer } from "@/components/renderer";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { EventType } from "@/modules/events/event-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { WorkspaceAppSettings } from "@/modules/workspace-settings/components/workspace-setting-app";
@@ -38,28 +38,28 @@ export const Workspace: FC = () => {
 
         <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
           <Renderer visible={workspace.type === WorkspaceType.CREDIT}>
-            <SessionTitle mb={-20} name={t`Credit`} icon={IconReportMoney} />
+            <SectionTitle mb={-20} name={t`Credit`} icon={IconReportMoney} />
             <Card shadow="xs">
               <WorkspaceSettingCreditOperation />
             </Card>
 
-            <SessionTitle mb={-20} name={t`Loan package`} icon={IconCreditCardPay} />
+            <SectionTitle mb={-20} name={t`Loan package`} icon={IconCreditCardPay} />
             <Card shadow="xs">
               <WorkspacetSettingLoans />
             </Card>
           </Renderer>
 
-          <SessionTitle mb={-20} name={t`Operation settings`} icon={IconSettings} />
+          <SectionTitle mb={-20} name={t`Operation settings`} icon={IconSettings} />
           <Card shadow="xs">
             <WorkspaceOperationSettings />
           </Card>
 
-          <SessionTitle mb={-20} name={t`App settings`} icon={IconApps} />
+          <SectionTitle mb={-20} name={t`App settings`} icon={IconApps} />
           <Card shadow="xs">
             <WorkspaceAppSettings />
           </Card>
 
-          <SessionTitle mb={-20} name={t`Terms and policies`} icon={IconNotebook} />
+          <SectionTitle mb={-20} name={t`Terms and policies`} icon={IconNotebook} />
           <Card shadow="xs">
             <WorkspaceTermsAndPolicies />
           </Card>

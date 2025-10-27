@@ -1,6 +1,6 @@
 "use client";
 
-import { RelativeTimeFormat } from "@/components/format/date-format";
+import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import {
   checkinBooking,
   completeBooking,
@@ -298,8 +298,8 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
 
           <Group flex={1} gap={30} align="start">
             <Timeline active={3} bulletSize={10} lineWidth={1} mt={5} mb={-12} color="grey">
-              <Timeline.Item title={renderTime(startTime)} fz={13} />
-              <Timeline.Item title={renderTime(endTime)} fz={13} />
+              <Timeline.Item title={<DateFormat value={startTime} type="time" />} fz={13} />
+              <Timeline.Item title={<DateFormat value={endTime} type="time" />} fz={13} />
             </Timeline>
 
             <Stack gap={0} align="start">

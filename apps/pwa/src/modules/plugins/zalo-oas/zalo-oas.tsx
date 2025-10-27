@@ -24,7 +24,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { Avatar } from "../../../components/avatar";
-import { SessionTitle } from "../../../components/session-title";
+import { SectionTitle } from "../../../components/session-title";
 import { ZaloOaGmfGroups } from "./components/zalo-oa-gmf-groups";
 import { ZaloOaZnsTemplateConfig } from "./components/zalo-oa-zns-template-config";
 import { ZaloOasOnboarding } from "./components/zalo-oas-onboarding";
@@ -141,14 +141,14 @@ export const PluginZaloOAs: FC = () => {
         {defaultZaloOa && (
           <Fragment>
             <Stack gap={5}>
-              <SessionTitle name={t`GMF groups`} icon={IconUsersGroup} />
+              <SectionTitle name={t`GMF groups`} icon={IconUsersGroup} />
               <Card>
                 <ZaloOaGmfGroups />
               </Card>
             </Stack>
 
             <Stack gap={5}>
-              <SessionTitle name={t`ZNS templates`} icon={IconTemplate} />
+              <SectionTitle name={t`ZNS templates`} icon={IconTemplate} />
               <Card>
                 <SimpleGrid cols={{ md: 2 }}>
                   {Object.keys(plugins.znsTemplateConfigs).map((key) => {

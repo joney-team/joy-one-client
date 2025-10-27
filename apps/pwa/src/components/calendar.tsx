@@ -1,6 +1,5 @@
 "use client";
 
-import { renderDate } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { CalendarView } from "@/types";
@@ -12,6 +11,7 @@ import dayjs from "dayjs";
 import { FC, useState } from "react";
 import { Button } from "./buttons/button";
 import { CalendarViewSelector } from "./calendar-view-selector";
+import { DateFormat } from "./format/date-format";
 import { LaunchingSoon } from "./launching-soon";
 
 interface CalendarProps {
@@ -57,29 +57,31 @@ export const Calendar: FC<CalendarProps> = (props) => {
     [CalendarView.DAY]: (
       <Group gap={3}>
         <Text tt="capitalize" fw={600} fz={16}>
-          {dayjs(date).format("dddd")}
+          <DateFormat value={date} type="custom" format={{ weekday: "long" }} />
         </Text>
         <Text fw={300} fz={16}>
-          {renderDate(date)}
+          <DateFormat value={date} type="date" />
         </Text>
       </Group>
     ),
     [CalendarView.WEEK]: (
       <Group gap={3}>
         <Text tt="capitalize" fz={16}>
-          {renderDate(startAt.toDate())}
+          <DateFormat value={startAt.toDate()} type="date" />
         </Text>
         <Text fz={16}>-</Text>
-        <Text fz={16}>{renderDate(endAt.toDate())}</Text>
+        <Text fz={16}>
+          <DateFormat value={endAt.toDate()} type="date" />
+        </Text>
       </Group>
     ),
     [CalendarView.MONTH]: (
       <Group gap={3}>
         <Text tt="capitalize" fw={600} fz={16}>
-          {dayjs(date).format("MMMM")}
+          <DateFormat value={date} type="custom" format={{ month: "long" }} />
         </Text>
         <Text fw={300} fz={16}>
-          {dayjs(date).format("YYYY")}
+          <DateFormat value={date} type="custom" format={{ year: "numeric" }} />
         </Text>
       </Group>
     ),

@@ -14,7 +14,7 @@ import { ActionIcon, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { IconCalendar, IconEye, IconLayoutNavbarCollapse } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { Renderer } from "../../../components/renderer";
-import { SessionTitle } from "../../../components/session-title";
+import { SectionTitle } from "../../../components/session-title";
 
 interface CustomerBookingsProps {
   customer: CustomerEntity;
@@ -65,7 +65,7 @@ export const CustomerBookings: FC<CustomerBookingsProps> = (props) => {
 
   return (
     <Stack className="customer-bookings" gap={10}>
-      <SessionTitle name={t`Bookings`} icon={IconCalendar}>
+      <SectionTitle name={t`Bookings`} icon={IconCalendar}>
         <Renderer visible={total > 1 || (total === 1 && bookings.count === 0)}>
           <Group gap={0} onClick={() => setIsCollapsed((s) => !s)} style={{ cursor: "pointer" }}>
             <ActionIcon variant="transparent" color={isCollapsed ? "gray" : "primary"}>
@@ -81,7 +81,7 @@ export const CustomerBookings: FC<CustomerBookingsProps> = (props) => {
             </Text>
           </Group>
         </Renderer>
-      </SessionTitle>
+      </SectionTitle>
 
       <Empty visible={bookings.isEmpty} />
       <Errored error={bookings.error} visible={bookings.isHasError} />

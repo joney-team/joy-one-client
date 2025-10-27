@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
-import { SessionTitle } from "@/components/session-title";
+import { SectionTitle } from "@/components/session-title";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { FileType } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
@@ -100,7 +100,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
   return (
     <Stack gap={30}>
-      <SessionTitle mb={-20} name={t`Loan`} icon={IconNotes} />
+      <SectionTitle mb={-20} name={t`Loan`} icon={IconNotes} />
 
       <Card className="LoanDetailDoc" shadow="xs">
         <Stack>
@@ -169,7 +169,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
         </Stack>
       </Card>
 
-      <SessionTitle mb={-20} name={t`Asset data`} icon={IconClipboardText} />
+      <SectionTitle mb={-20} name={t`Asset data`} icon={IconClipboardText} />
       <Card shadow="xs">
         <LoanAssetDataInput
           loanId={loan.id}
