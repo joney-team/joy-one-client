@@ -6,7 +6,6 @@ import { Errored } from "@/components/errored";
 import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
 import { useLayout } from "@/layout/layout-context";
-import { num } from "@/modules/lang/lang-service";
 import {
   connectCallbackPluginZalo,
   connectPluginZalo,
@@ -103,7 +102,7 @@ const Page: NextPage = () => {
             <Title ta="center" order={2} fw={300}>
               Kết nối thành công
             </Title>
-            <Text ta="center">Tự động trở về trong {num(tick)}s...</Text>
+            <Text ta="center">Tự động trở về trong {tick}s...</Text>
 
             <Center>
               <Button onClick={onDone}>Trở về</Button>

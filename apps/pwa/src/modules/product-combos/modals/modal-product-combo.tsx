@@ -3,9 +3,10 @@
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { Errored } from "@/components/errored";
+import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { OnModalProductComboUsing } from "@/modules/product-combos/modals/modal-product-combo-using";
 import { ProductComboHistoryEntity } from "@/modules/product-combos/product-combos-entity";
@@ -93,7 +94,8 @@ export const ModalProductCombo: FC = () => {
                       </Text>
 
                       <Badge variant="light" color={color(statusOptions.color)}>
-                        {num(ref.quantity - ref.quantityUsed)}/{num(ref.quantity)}
+                        <NumberFormat value={ref.quantity - ref.quantityUsed} />/
+                        <NumberFormat value={ref.quantity} />{" "}
                       </Badge>
                     </Group>
                   );
@@ -145,7 +147,9 @@ export const ModalProductCombo: FC = () => {
                   {combo.data.history.map((history) => {
                     return (
                       <Table.Tr key={history.id}>
-                        <Table.Td>{renderDateTime(history.createdAt)}</Table.Td>
+                        <Table.Td>
+                          <DateFormat value={history.createdAt} type="date-time" />
+                        </Table.Td>
 
                         <Table.Td>
                           <BindOrder history={history} onClose={close} />
@@ -170,7 +174,7 @@ export const ModalProductCombo: FC = () => {
                                     variant="light"
                                     color={color(record.quantity >= 0 ? "primary" : "red")}
                                   >
-                                    {num(record.quantity)}
+                                    <NumberFormat value={record.quantity} />
                                   </Badge>
                                 </Group>
                               );

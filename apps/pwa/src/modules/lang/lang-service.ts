@@ -2,12 +2,11 @@ import { defaultDateFormats } from "@/configs/lang.config";
 import { StorageKey } from "@/types";
 import { isServer } from "@/utils/common.utils";
 import { round } from "@/utils/number.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { getCookie } from "cookies-next/client";
-import dayjs from "dayjs";
 import { getGlobal } from "../../global";
 import { Dictionary, LangState, Locale, LocaleConfig } from "./lang-types";
-import { DateTime } from "@joy-one-client/utils/date-time";
 
 export const getClientLocale = (): Locale => {
   let locale: Locale | undefined = undefined;
@@ -175,36 +174,4 @@ export const forceTime = (date: Date | number) => {
   }
 
   return new Date(date);
-};
-
-export const renderDateTime = (value: any, hideSeconds?: boolean) => {
-  if (!value) return "";
-  const _date = dayjs(forceTime(value));
-  if (hideSeconds) return _date.format(getDateFormat());
-  return _date.format(getDateTimeFormat());
-};
-
-export const renderDate = (value: any, args?: { hideYear?: boolean }) => {
-  if (!value) return "";
-  const isSecs = isSeconds(value);
-  const _date = isSecs ? new Date(value * 1000) : new Date(value);
-  let format = getDateTimeFormat();
-  if (args?.hideYear) format = format.replace("/YYYY", "");
-  return dayjs(_date).format(format.split(" ")[0]);
-};
-
-export const renderTime = (value: any) => {
-  if (!value) return "";
-  const _date = dayjs(forceTime(value));
-  return _date.format(getTimeFormat());
-};
-
-export const renderRangeTime = (from: Date | number, to: Date | number) => {
-  const state = getLangState();
-  const fromDate = dayjs(forceTime(from));
-  const toDate = dayjs(forceTime(to));
-
-  if (state.isTwelveHour && fromDate.format("a") === toDate.format("a"))
-    return `${fromDate.format("hh:mm")} - ${toDate.format("hh:mm A")}`;
-  return `${renderTime(from)} - ${renderTime(to)}`;
 };

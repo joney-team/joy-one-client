@@ -4,12 +4,13 @@ import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { SectionTitle } from "@/components/session-title";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { useGradient } from "@/modules/theme/use-color";
 import { OnModalWorkspaceBillingDeposit } from "@/modules/workspace-billings/modals/modal-workspace-billing-deposit";
 import { calculateWorkspaceSubscriptionBillings } from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
@@ -120,7 +121,7 @@ export const WorkspaceBillingList: FC = () => {
                     <Trans>Balance</Trans>
                   </Text>
                   <Text c="white" fw={700} fz={16}>
-                    {num(billings.report?.balance || 0)}
+                    <NumberFormat value={billings.report?.balance || 0} />
                   </Text>
                 </Stack>
               </Group>
@@ -148,7 +149,7 @@ export const WorkspaceBillingList: FC = () => {
                     fw={700}
                     fz={16}
                   >
-                    {num(Math.abs(billings.report?.pendingPayment || 0))}
+                    <NumberFormat value={Math.abs(billings.report?.pendingPayment || 0)} />
                   </Text>
                 </Stack>
               </Group>
@@ -167,7 +168,7 @@ export const WorkspaceBillingList: FC = () => {
                     <Group gap={10} justify="space-between">
                       <Stack gap={5}>
                         <Text fw={500} fz={em(12)} c="gray">
-                          {renderDateTime(billing.createdAt, true)}
+                          <DateFormat value={billing.createdAt} type="date" />
                         </Text>
                         <Group gap={8}>
                           <Text>{workspaceBillingTypes[billing.type].label()}</Text>
@@ -182,11 +183,11 @@ export const WorkspaceBillingList: FC = () => {
                       <Stack justify="end" miw={100} gap={3}>
                         <Text fw={700} ta="right" c={workspaceBillingTypes[billing.type].color}>
                           {billing.amount > 0 ? "+" : ""}
-                          {num(billing.amount)}
+                          <NumberFormat value={billing.amount} />
                         </Text>
 
                         <Text fz={em(10)} ta="right" c="gray">
-                          {t`Balance at billing time`}: {num(billing.balance)}
+                          {t`Balance at billing time`}: <NumberFormat value={billing.balance} />
                         </Text>
                       </Stack>
                     </Group>

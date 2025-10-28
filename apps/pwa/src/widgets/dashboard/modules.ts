@@ -1,11 +1,11 @@
+"use client";
+
 import { Period } from "@/types";
-import { renderDateTime } from "@/modules/lang/lang-service";
 import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
 } from "@/modules/reports/reports-utils";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
-import { DateTime } from "@/utils/date-time.utils";
 import { round } from "@/utils/number.utils";
 import {
   IconBusinessplan,
@@ -21,6 +21,8 @@ import { numberWidget } from "../common/number.widget";
 import { EWidgetModules } from "../types";
 import { DashboardWidgetsContext, DashboardWidgetType } from "./types";
 import { t } from "@lingui/core/macro";
+import { DateTime } from "@joy-one-client/utils/date-time";
+import { getClientLocale } from "@/modules/lang/lang-service";
 
 export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, DashboardWidgetsContext> =
   {
@@ -41,7 +43,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         onClick: (ctx) =>
           ctx.router.push(`/reports`, {
             period: Period.DATE,
-            date: DateTime.timeToSeconds(),
+            date: DateTime.toSeconds(new Date()),
           }),
         boxColor: (ctx) => {
           const totalRevenue = ctx.realtimeReport.data?.data.receipts.revenueToday || 0;
@@ -49,7 +51,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         },
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
+            ? t`Last updated at ${DateTime.format(ctx.realtimeReport.data?.updatedAt, {
+                locale: getClientLocale(),
+              })}`
             : null,
       }),
     },
@@ -65,7 +69,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           ctx.rangeReports.data?.period.map((r) => r.data.customers.total) || [],
         onClick: (ctx) =>
           ctx.router.push(`/customers`, {
-            "cus-timeRangeCreatedAt": `${Period.DATE}-${DateTime.timeToSeconds()}`,
+            "cus-timeRangeCreatedAt": `${Period.DATE}-${DateTime.toSeconds(new Date())}`,
           }),
       }),
     },
@@ -80,7 +84,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         onClick: (ctx) =>
           ctx.router.push(`/bookings`, {
             "bk-view": "day",
-            "bk-date": `${DateTime.timeToSeconds()}`,
+            "bk-date": `${DateTime.toSeconds(new Date())}`,
           }),
       }),
     },
@@ -94,7 +98,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         loading: (ctx) => ctx.rangeReports.isFetching,
         renderData: (ctx) =>
           ctx.rangeReports.data?.period.map((v, i) => {
-            const date = DateTime.secondsToTime(v.data.fromTime);
+            const date = DateTime.normalizeDate(v.data.fromTime);
             return {
               date: date ? date.getDate() : "-",
               value: reportConvertMoneyAmount(v.data.receipts.revenue, ctx.workspace.currency),
@@ -121,7 +125,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         loading: (ctx) => ctx.rangeReports.isFetching,
         renderData: (ctx) =>
           ctx.rangeReports.data?.period.map((v, i) => {
-            const date = DateTime.secondsToTime(v.data.fromTime);
+            const date = DateTime.normalizeDate(v.data.fromTime);
             return {
               date: date ? date.getDate() : "-",
               value: v.data.customers.total,
@@ -144,7 +148,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         loading: (ctx) => ctx.rangeReports.isFetching,
         renderData: (ctx) =>
           ctx.rangeReports.data?.period.map((v, i) => {
-            const date = DateTime.secondsToTime(v.data.fromTime);
+            const date = DateTime.normalizeDate(v.data.fromTime);
             return {
               date: date ? date.getDate() : "-",
               value: v.data.bookings.total,
@@ -174,7 +178,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
+            ? t`Last updated at ${DateTime.format(ctx.realtimeReport.data?.updatedAt, {
+                locale: getClientLocale(),
+              })}`
             : null,
       }),
     },
@@ -194,7 +200,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
+            ? t`Last updated at ${DateTime.format(ctx.realtimeReport.data?.updatedAt, {
+                locale: getClientLocale(),
+              })}`
             : null,
       }),
     },
@@ -214,7 +222,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
+            ? t`Last updated at ${DateTime.format(ctx.realtimeReport.data?.updatedAt, {
+                locale: getClientLocale(),
+              })}`
             : null,
       }),
     },
@@ -230,7 +240,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         renderValue: (ctx) => ctx.realtimeReport.data?.data.loans?.debt?.total || 0,
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
+            ? t`Last updated at ${DateTime.format(ctx.realtimeReport.data?.updatedAt, {
+                locale: getClientLocale(),
+              })}`
             : null,
       }),
     },
@@ -247,7 +259,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         renderValue: (ctx) => ctx.realtimeReport.data?.data.loans?.debt?.notDueYet || 0,
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
+            ? t`Last updated at ${DateTime.format(ctx.realtimeReport.data?.updatedAt, {
+                locale: getClientLocale(),
+              })}`
             : null,
       }),
     },
@@ -268,7 +282,9 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           }),
         tooltip: (ctx) =>
           ctx.realtimeReport.data?.updatedAt
-            ? t`Last updated at ${renderDateTime(ctx.realtimeReport.data?.updatedAt)}`
+            ? t`Last updated at ${DateTime.format(ctx.realtimeReport.data?.updatedAt, {
+                locale: getClientLocale(),
+              })}`
             : null,
       }),
     },
@@ -283,7 +299,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         loading: (ctx) => ctx.rangeReports.isFetching,
         renderData: (ctx) =>
           ctx.rangeReports.data?.period.map((v, i) => {
-            const date = DateTime.secondsToTime(v.data.fromTime);
+            const date = DateTime.normalizeDate(v.data.fromTime);
             return {
               date: date ? date.getDate() : "-",
               value: v.data.loans.contracts.new,
@@ -307,7 +323,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         loading: (ctx) => ctx.rangeReports.isFetching,
         renderData: (ctx) =>
           ctx.rangeReports.data?.period.map((v, i) => {
-            const date = DateTime.secondsToTime(v.data.fromTime);
+            const date = DateTime.normalizeDate(v.data.fromTime);
             return {
               date: date ? date.getDate() : "-",
               value: reportConvertMoneyAmount(
@@ -340,7 +356,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         loading: (ctx) => ctx.rangeReports.isFetching,
         renderData: (ctx) =>
           ctx.rangeReports.data?.period.map((v, i) => {
-            const date = DateTime.secondsToTime(v.data.fromTime);
+            const date = DateTime.normalizeDate(v.data.fromTime);
             return {
               date: date ? date.getDate() : "-",
               value: v.data.tasks.total,
@@ -363,7 +379,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
         loading: (ctx) => ctx.rangeReports.isFetching,
         renderData: (ctx) =>
           ctx.rangeReports.data?.period.map((v, i) => {
-            const date = DateTime.secondsToTime(v.data.fromTime);
+            const date = DateTime.normalizeDate(v.data.fromTime);
             return {
               date: date ? date.getDate() : "-",
               value:

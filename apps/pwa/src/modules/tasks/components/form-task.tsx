@@ -3,6 +3,8 @@
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor";
+import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { Hovered } from "@/components/hovered";
 import { DueDateInput } from "@/components/inputs/due-date-input";
 import { EstimateTimeInput } from "@/components/inputs/estimate-time-input";
@@ -13,7 +15,6 @@ import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { onUploadFile } from "@/modules/files/file-service";
-import { num, renderDate, renderDateTime } from "@/modules/lang/lang-service";
 import { PartnersInput } from "@/modules/partners/components/partners-input";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { TagsInput } from "@/modules/tags/components/tags-input";
@@ -39,7 +40,6 @@ import { WorkspaceMembersInput } from "@/modules/workspace-members/components/wo
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -89,6 +89,7 @@ import { taskPriorities } from "../task-constants";
 import { TasksDndProvider } from "../tasks-dnd-provider";
 import { ListTaskRow } from "../views/list/list.task-row";
 import { ListTaskRowHead } from "../views/list/list.task-row-head";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 export interface TaskFormProps {
   task?: TaskEntity;
@@ -191,7 +192,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
   const isOutdated =
     form.values.dueDate &&
-    form.values.dueDate < DateTime.timeToSeconds() &&
+    form.values.dueDate < DateTime.toSeconds(new Date()) &&
     props.task &&
     props.task.status !== DefaultTaskStatusId.CLOSED;
 
@@ -439,39 +440,13 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                     <Group style={{ cursor: "pointer", flex: 1 }} mih={formFieldHeight} p={5}>
                       {(function () {
                         if (form.values.dueDate && form.values.startDate) {
-                          if (
-                            DateTime.isMatchDay(
-                              form.values.dueDate * 1000,
-                              form.values.startDate * 1000
-                            )
-                          ) {
-                            return (
-                              <Group c={isOutdated ? "red" : "var(--mantine-color-text)"} gap={5}>
-                                <Text>{dayjs(form.values.startDate * 1000).format("HH:mm")}</Text>{" "}
-                                <Text>-</Text>{" "}
-                                <Text>
-                                  {dayjs(form.values.dueDate * 1000).format("HH:mm")}{" "}
-                                  {renderDate(form.values.dueDate)}
-                                </Text>
-                              </Group>
-                            );
-                          }
-
-                          if (
-                            dayjs(form.values.startDate * 1000).isSame(
-                              dayjs(form.values.dueDate * 1000),
-                              "month"
-                            )
-                          ) {
+                          if (DateTime.isSame(form.values.dueDate, form.values.startDate, "day")) {
                             return (
                               <Group c={isOutdated ? "red" : "var(--mantine-color-text)"} gap={5}>
                                 <Text>
-                                  {dayjs(form.values.startDate * 1000).format("HH:mm DD/MM")}
-                                </Text>{" "}
-                                <Text>-</Text>{" "}
-                                <Text>
-                                  {dayjs(form.values.dueDate * 1000).format("HH:mm")}{" "}
-                                  {renderDate(form.values.dueDate)}
+                                  <DateFormat value={form.values.startDate} type="time" />
+                                  {" - "}
+                                  <DateFormat value={form.values.dueDate} type="date-time" />
                                 </Text>
                               </Group>
                             );
@@ -479,8 +454,9 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
                           return (
                             <Text c={isOutdated ? "red" : "var(--mantine-color-text)"}>
-                              {renderDateTime(form.values.startDate, true)} -{" "}
-                              {renderDateTime(form.values.dueDate, true)}
+                              <DateFormat value={form.values.startDate} type="date-time" />
+                              {" - "}
+                              <DateFormat value={form.values.dueDate} type="date-time" />
                             </Text>
                           );
                         }
@@ -488,7 +464,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                         if (form.values.dueDate) {
                           return (
                             <Text c={isOutdated ? "red" : "var(--mantine-color-text)"}>
-                              {renderDateTime(form.values.dueDate, true)}
+                              <DateFormat value={form.values.dueDate} type="date-time" />
                             </Text>
                           );
                         }
@@ -633,7 +609,9 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </Group>
 
               <Group gap={5}>
-                <Text fz={em(15)}>{num(progress.percent, { roundPrecision: 0 })}%</Text>
+                <Text fz={15}>
+                  <NumberFormat value={progress.percent} suffix="%" />
+                </Text>
                 <Progress value={progress.percent} w={70} color={progress.status.color || "dark"} />
               </Group>
 

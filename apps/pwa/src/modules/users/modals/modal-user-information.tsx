@@ -5,14 +5,13 @@ import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
-import { RelativeTimeFormat } from "@/components/format/date-format";
+import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { UseList, useList } from "@/components/list/use-list";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
 import { getUserPublicInformation } from "@/modules/users/users-service";
@@ -215,7 +214,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
             {!!user.birthday && (
               <ShortInfoSession
                 label={t`Birthday`}
-                value={renderDate(user.birthday)}
+                value={<DateFormat value={user.birthday} type="date" />}
                 icon={IconCake}
               />
             )}

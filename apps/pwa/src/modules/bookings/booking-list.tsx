@@ -122,9 +122,9 @@ export const BookingList: FC = () => {
 
   const normalizedQuery = normalizeQuery(bookings.params);
 
-  const startWeek = DateTime.rangeWeek(normalizedQuery.date).start;
+  const startWeek = DateTime.getRange(normalizedQuery.date, "week").start;
   const daysOfWeek = new Array(7).fill(0).map((_, index) => {
-    const date = DateTime.add(startWeek, "DAY", index);
+    const date = DateTime.add(startWeek, "day", index);
 
     return {
       date,
@@ -139,7 +139,7 @@ export const BookingList: FC = () => {
   };
 
   const setDate = (date: Date) => {
-    const isToday = DateTime.isSameDay(date, new Date());
+    const isToday = DateTime.isSame(date, new Date(), "day");
     if (isToday) {
       bookings.removeParams(["date"]);
     } else {
@@ -149,7 +149,7 @@ export const BookingList: FC = () => {
 
   const nextRange = () => {
     const nextDate = DateTime.add(normalizedQuery.date, normalizedQuery.view, 1);
-    if (DateTime.isSameDay(nextDate, new Date())) {
+    if (DateTime.isSame(nextDate, new Date(), "day")) {
       bookings.removeParams(["date"]);
     } else {
       bookings.setParams({ date: DateTime.toSeconds(nextDate) });
@@ -158,7 +158,7 @@ export const BookingList: FC = () => {
 
   const previousRange = () => {
     const previousDate = DateTime.subtract(normalizedQuery.date, normalizedQuery.view, 1);
-    if (DateTime.isSameDay(previousDate, new Date())) {
+    if (DateTime.isSame(previousDate, new Date(), "day")) {
       bookings.removeParams(["date"]);
     } else {
       bookings.setParams({ date: DateTime.toSeconds(previousDate) });
@@ -402,7 +402,7 @@ export const BookingList: FC = () => {
             </Group>
 
             <Group gap={10} justify="end">
-              {!DateTime.isSameDay(normalizedQuery.date, new Date()) && (
+              {!DateTime.isSame(normalizedQuery.date, new Date(), "day") && (
                 <Button
                   size="compact-sm"
                   variant="light"
@@ -471,7 +471,7 @@ export const BookingList: FC = () => {
             <Renderer visible={normalizedQuery.view === CalendarView.DAY}>
               <Group justify="end" gap={0} wrap="nowrap" w="100%">
                 {daysOfWeek.map((day, index) => {
-                  const isActive = DateTime.isSameDay(normalizedQuery.date, day.date);
+                  const isActive = DateTime.isSame(normalizedQuery.date, day.date, "day");
 
                   return (
                     <Group flex={1} key={index} justify="center" pb={10}>

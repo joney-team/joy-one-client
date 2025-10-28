@@ -3,11 +3,11 @@
 import type { FC, JSX } from "react";
 import { Fragment, useMemo } from "react";
 
-import { useLang } from "@/modules/lang/lang-context";
-import { DateTime } from "@joy-one-client/utils/date-time";
 import { useAuth } from "@/modules/auth/auth-context";
+import { useLang } from "@/modules/lang/lang-context";
+import { DateTime, RawDate } from "@joy-one-client/utils/date-time";
 
-type DateFormatProps = { value: Date | number | string } & (
+type DateFormatProps = { value: RawDate } & (
   | {
       type?: "date" | "time" | "date-time";
       hour12?: boolean;

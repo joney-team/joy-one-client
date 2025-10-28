@@ -1,24 +1,24 @@
 "use client";
 
 import { Circle } from "@/components/circle";
+import { DateFormat } from "@/components/format/date-format";
 import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { EnumColumn } from "@/components/list/columns/enum-column";
 import { Selector } from "@/components/selector";
+import { DynamicSelectionOperator } from "@/types";
 import { onActionLoad } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Badge, Combobox, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
+import { Fragment } from "react";
 import { api } from "../apis";
 import { EventType } from "../events/event-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
+import { PromotionDescription } from "./components/promotion-description";
 import { OnPromotionModal } from "./modals/modal-promotion";
 import { promotionStatuses, promotionTypes } from "./promotions-constants";
-import {
-  promotionDescription,
-  promotionTermsOfUseCustomerLimit,
-  promotionTermsOfUseExpireAt,
-} from "./promotions-service";
 import { PromotionEntity, PromotionStatus, PromotionType } from "./promotions-types";
 
 export const PromostionList = () => {
@@ -47,7 +47,9 @@ export const PromostionList = () => {
               return (
                 <Group gap={8} variant="light" wrap="nowrap">
                   <Circle color={promotionType.color} size={12} />
-                  <Text>{promotionDescription(promotion)}</Text>
+                  <Text>
+                    <PromotionDescription promotion={promotion} />
+                  </Text>
                 </Group>
               );
             },
@@ -57,8 +59,45 @@ export const PromostionList = () => {
             render: ({ data: promotion }) => {
               return (
                 <Stack gap={5}>
-                  <Group>• {promotionTermsOfUseCustomerLimit(promotion)}</Group>
-                  <Group>• {promotionTermsOfUseExpireAt(promotion)}</Group>
+                  <Group>
+                    •{" "}
+                    {(function () {
+                      if (
+                        !promotion.customersSelection ||
+                        promotion.customersSelection.value.length === 0
+                      ) {
+                        return <Trans>Unlimited customers</Trans>;
+                      }
+
+                      if (
+                        promotion.customersSelection.operator === DynamicSelectionOperator.INCLUDES
+                      ) {
+                        return (
+                          <Fragment>
+                            <Trans>Includes customers</Trans>:{" "}
+                            {promotion.customersSelection.value.map((c) => c.name).join(", ")}
+                          </Fragment>
+                        );
+                      }
+
+                      if (
+                        promotion.customersSelection.operator === DynamicSelectionOperator.EXCLUDES
+                      ) {
+                        return (
+                          <Fragment>
+                            <Trans>Excludes customers</Trans>:{" "}
+                            {promotion.customersSelection.value.map((c) => c.name).join(", ")}
+                          </Fragment>
+                        );
+                      }
+                    })()}
+                  </Group>
+                  {promotion.expireAt && (
+                    <Group>
+                      •<Trans>Expire at</Trans>:{" "}
+                      <DateFormat value={promotion.expireAt} type="date-time" />
+                    </Group>
+                  )}
                 </Stack>
               );
             },

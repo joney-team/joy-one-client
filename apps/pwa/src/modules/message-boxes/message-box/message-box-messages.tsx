@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { DateFormat } from "@/components/format/date-format";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { eventsEmitter, useEventsListener } from "@/modules/events/event-service";
@@ -8,7 +9,6 @@ import { EventType } from "@/modules/events/event-types";
 import { FileCard } from "@/modules/files/file-card";
 import { FileType } from "@/modules/files/file-types";
 import { parseFile } from "@/modules/files/files-utils";
-import { getDateFormat, getTimeFormat, renderTime } from "@/modules/lang/lang-service";
 import { getMessages } from "@/modules/message-boxes/message-boxes-service";
 import {
   MessageBoxEntity,
@@ -21,7 +21,9 @@ import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { String } from "@/utils/string.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Card,
@@ -37,7 +39,6 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { IconAnalyze, IconUserFilled, IconX } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, Fragment, useEffect, useRef } from "react";
 
 export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> = (props) => {
@@ -143,9 +144,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
           const prevMsg = messagesList[index - 1];
           const nextMsg = messagesList[index + 1];
           const senderMember = userMemberInfos.find((m) => m.userId === msg.userId);
-          const timeBtw = prevMsg
-            ? dayjs(msg.createdAt * 1000).diff(dayjs(prevMsg.createdAt * 1000), "minutes")
-            : 0;
+          const timeBtw = prevMsg ? DateTime.diff(msg.createdAt, prevMsg.createdAt, "minute") : 0;
           const limitTimeBtw = 30;
 
           const needToShowDivider =
@@ -174,17 +173,23 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
           };
 
           const getTime = () => {
-            const isToday = dayjs(msg.createdAt * 1000).isSame(dayjs(), "day");
-            const isYesterday = dayjs(msg.createdAt * 1000).isSame(
-              dayjs().subtract(1, "day"),
-              "day"
-            );
-            const isSameWeek = dayjs(msg.createdAt * 1000).isSame(dayjs(), "week");
+            // Today
+            if (DateTime.isSame(msg.createdAt, new Date(), "day")) {
+              return <DateFormat value={msg.createdAt} type="time" />;
+            }
 
-            if (isToday) return renderTime(msg.createdAt);
-            if (isYesterday) return `${t`Yesterday`} ${renderTime(msg.createdAt)}`;
-            if (isSameWeek) return dayjs(msg.createdAt * 1000).format("dddd HH:mm");
-            return dayjs(msg.createdAt * 1000).format(`MMM ${getDateFormat()} ${getTimeFormat()}`);
+            // Yesterday
+            if (DateTime.isSame(msg.createdAt, DateTime.subtract(new Date(), "day", 1), "day")) {
+              return (
+                <Fragment>
+                  <Trans>Yesterday</Trans>
+                  <DateFormat value={msg.createdAt} type="time" />
+                </Fragment>
+              );
+            }
+
+            // Other days
+            return <DateFormat value={msg.createdAt} type="date-time" />;
           };
 
           return (

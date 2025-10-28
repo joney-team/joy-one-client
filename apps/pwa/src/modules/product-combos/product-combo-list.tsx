@@ -1,11 +1,12 @@
 "use client";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { StatusColumn } from "@/components/list/columns/status-column";
 import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
-import { num } from "@/modules/lang/lang-service";
+import { getClientLocale } from "@/modules/lang/lang-service";
 import { OnModalProductCombo } from "@/modules/product-combos/modals/modal-product-combo";
 import { productComboStatusOptions } from "@/modules/product-combos/product-combos-service";
 import { ProductComboStatus } from "@/modules/product-combos/product-combos-types";
@@ -46,7 +47,8 @@ export const ProductComboList: FC = () => {
                     </Text>
 
                     <Badge variant="light" color={color(statusOptions.color)}>
-                      {num(ref.quantity - ref.quantityUsed)}/{num(ref.quantity)}
+                      <NumberFormat value={ref.quantity - ref.quantityUsed} />/
+                      <NumberFormat value={ref.quantity} />{" "}
                     </Badge>
                   </Group>
                 );
@@ -57,9 +59,9 @@ export const ProductComboList: FC = () => {
                 text: productRefs
                   .map(
                     (v) =>
-                      `${v.productRef.name} (${num(v.quantity - v.quantityUsed)}/${num(
-                        v.quantity
-                      )})`
+                      `${v.productRef.name} (${(v.quantity - v.quantityUsed).toLocaleString(
+                        getClientLocale()
+                      )}/${v.quantity.toLocaleString(getClientLocale())})`
                   )
                   .join("\n"),
               };

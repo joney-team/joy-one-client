@@ -14,7 +14,6 @@ import { Center, NumberInput, Select, SimpleGrid, Stack, Textarea, TextInput } f
 import { useForm } from "@mantine/form";
 import { type FC } from "react";
 import { promotionTypes } from "../promotions-constants";
-import { promotionRuleTypeConfigs } from "../promotions-service";
 import { PromotionDto, PromotionEntity, PromotionStatus, PromotionType } from "../promotions-types";
 
 export interface FormPromotionProps {
@@ -124,7 +123,6 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
             label={t`Type`}
             {...form.getInputProps("type")}
             data={Object.values(PromotionType).map((type) => {
-              const config = promotionRuleTypeConfigs[type];
               return {
                 value: type,
                 label: promotionTypes[type].label(),

@@ -1,11 +1,11 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { DateFormat } from "@/components/format/date-format";
 import { useList } from "@/components/list/use-list";
 import { TextOverflow } from "@/components/text-overflow";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { renderDateTime, renderTime } from "@/modules/lang/lang-service";
 import {
   getMessages,
   messageBoxPlatformImages,
@@ -17,15 +17,15 @@ import {
 } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
-import { forceDate } from "@/utils/date-time.utils";
 import { String } from "@/utils/string.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Badge, Card, Group, Image, Indicator, Stack, Text, Tooltip } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC } from "react";
 import { messageBoxStatuses } from "../message-boxes-contants";
 import { useMessageBoxes } from "../message-boxes-context";
+
 interface CardMessageBoxProps {
   box: MessageBoxEntity;
 }
@@ -107,10 +107,9 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
             {latestMessage && (
               <Text fz={12} c="gray">
                 {(function () {
-                  const isToday = dayjs(forceDate(latestMessage.createdAt)).isSame(dayjs(), "day");
-                  if (isToday) return renderTime(latestMessage.createdAt);
-
-                  return renderDateTime(latestMessage.createdAt);
+                  const isToday = DateTime.isSame(latestMessage.createdAt, new Date(), "day");
+                  if (isToday) return <DateFormat value={latestMessage.createdAt} type="time" />;
+                  return <DateFormat value={latestMessage.createdAt} type="date-time" />;
                 })()}
               </Text>
             )}

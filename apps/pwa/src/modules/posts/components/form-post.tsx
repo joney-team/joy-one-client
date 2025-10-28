@@ -35,8 +35,8 @@ import { IconCheck, IconEye } from "@tabler/icons-react";
 import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
 import { api } from "../../apis";
-import { renderDateTime } from "../../lang/lang-service";
 import { PostEntity } from "../posts-types";
+import { DateFormat } from "@/components/format/date-format";
 
 interface FormPostProps {
   post?: PostEntity;
@@ -141,7 +141,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
             )}
             {post?.updatedAt && (
               <Text fz={12} c="gray">
-                <Trans>Updated at</Trans>: {renderDateTime(post.updatedAt)}
+                <Trans>Updated at</Trans>: <DateFormat value={post.updatedAt} type="date-time" />
               </Text>
             )}
           </Stack>

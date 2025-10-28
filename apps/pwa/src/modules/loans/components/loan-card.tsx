@@ -1,7 +1,8 @@
 "use client";
 
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { DateFormat } from "@/components/format/date-format";
 import { useRouter } from "@/hooks/use-router";
-import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { loanStatusColors } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -40,7 +41,7 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
           </Anchor>
 
           <Text fz={em(12)} c="gray">
-            {renderDateTime(loan.createdAt, true)}
+            <DateFormat value={loan.createdAt} type="date-time" />
           </Text>
         </Group>
 
@@ -83,7 +84,7 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
             <Trans>Loan amount</Trans>
           </Text>
           <Text fz={em(15)} fw={500}>
-            {num(loan.amount, { type: "money" })}
+            <CurrencyFormat value={loan.amount} />
           </Text>
         </Group>
 

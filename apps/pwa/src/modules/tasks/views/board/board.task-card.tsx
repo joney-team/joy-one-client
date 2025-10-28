@@ -1,8 +1,9 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { DueDateInput } from "@/components/inputs/due-date-input";
-import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
@@ -265,7 +266,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                               <Text
                                 c={ctx.isOutdated ? "red" : "var(--mantine-primary-color-text)"}
                               >
-                                {renderDateTime(task.dueDate, true)}
+                                <DateFormat value={task.dueDate} type="date" />
                               </Text>
                             );
                           }
@@ -371,10 +372,13 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                         variant="subtle"
                         onClick={() => setIsShowSubTasks((s) => !s)}
                       >
-                        <Trans>{num(ctx.subTasks.length)} subtasks</Trans>
+                        <NumberFormat value={ctx.subTasks.length} />
+                        <Trans>subtasks</Trans>
                       </Button>
                       <Group flex={1} justify="end" gap={5}>
-                        <Text fz={em(10)}>{num(ctx.progress.percent, { roundPrecision: 0 })}%</Text>
+                        <Text fz={em(10)}>
+                          <NumberFormat value={ctx.progress.percent} suffix="%" />
+                        </Text>
                         <Progress
                           value={ctx.progress.percent}
                           w={60}

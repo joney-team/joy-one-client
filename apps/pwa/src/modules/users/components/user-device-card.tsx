@@ -1,8 +1,8 @@
 "use client";
 
+import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { useAuth } from "@/modules/auth/auth-context";
 import { DeviceEntity } from "@/modules/devices/devices-types";
-import { renderDate } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { String } from "@/utils/string.utils";
 import { t } from "@lingui/core/macro";
@@ -76,10 +76,8 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
           )}
 
           <Text fz={em(12)} c="gray">
-            <Trans>
-              Active at {dayjs(device.lastActiveAt * 1000).fromNow()}(
-              {renderDate(device.lastActiveAt * 1000)})
-            </Trans>
+            <Trans>Active at</Trans> <RelativeTimeFormat value={device.lastActiveAt} />{" "}
+            <DateFormat value={device.lastActiveAt} type="date" />)
           </Text>
         </Stack>
       </Group>

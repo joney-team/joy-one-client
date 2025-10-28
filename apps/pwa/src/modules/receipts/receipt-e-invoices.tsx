@@ -1,6 +1,7 @@
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Empty } from "@/components/empty";
+import { DateFormat } from "@/components/format/date-format";
 import { ModalTitle } from "@/components/modal-title";
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
@@ -13,7 +14,6 @@ import { useMemo, type FC } from "react";
 import { api } from "../apis";
 import { useQuery } from "../apis/use-query";
 import { EventType } from "../events/event-types";
-import { renderDateTime } from "../lang/lang-service";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
@@ -95,7 +95,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
                   </Text>
 
                   <Text fz={12} truncate maw={200}>
-                    {renderDateTime(invoice.createdAt)}
+                    <DateFormat value={invoice.createdAt} type="date-time" />
                   </Text>
 
                   <CopyText text={invoice.invoiceId} fz={14} truncate maw={200}>

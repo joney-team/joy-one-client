@@ -17,7 +17,6 @@ import {
 } from "@/modules/bank-transactions/bank-transaction-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate, num } from "@/modules/lang/lang-service";
 import { getSubscriptions } from "@/modules/subscriptions/subscriptions-service";
 import { SubscriptionEntity } from "@/modules/subscriptions/subscriptions-types";
 import { getBillingBankAccount } from "@/modules/workspace-billings/workspace-billings-service";
@@ -50,6 +49,7 @@ import { IconArrowRight, IconBox, IconConfetti } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
+import { CurrencyFormat } from "@/components/format/currency-format";
 
 export const ModalWorkspaceSubscription: FC = () => {
   const workspace = useWorkspace();
@@ -307,7 +307,6 @@ export const ModalWorkspaceSubscription: FC = () => {
                       <Group justify="space-between">
                         <Text fz={em(13)}>Ngày thanh toán tiếp theo</Text>
                         <Text ta="right" fz={em(15)} fw={700}>
-                          {renderDate(calculated.nextBillingAt * 1000)}
                         </Text>
                       </Group>
                     </Stack>
@@ -390,11 +389,11 @@ export const SubscriptionCard: FC<{
           <Stack gap={0} justify="space-between">
             <Group gap={5}>
               <Text fz={em(25)} fw={500}>
-                {num(subscription.pricePerMember)}đ
+                <CurrencyFormat value={subscription.pricePerMember} />
               </Text>
               {subscription.pricePerMemberNotSale && (
                 <Text fz={em(13)} c="gray" td="line-through" fw={500}>
-                  {num(subscription.pricePerMemberNotSale)}đ
+                  <CurrencyFormat value={subscription.pricePerMemberNotSale} />
                 </Text>
               )}
             </Group>

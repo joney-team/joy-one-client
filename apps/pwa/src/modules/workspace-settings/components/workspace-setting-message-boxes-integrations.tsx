@@ -5,7 +5,7 @@ import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows";
 import { RelativeTimeFormat } from "@/components/format/date-format";
 import { Image } from "@/components/image";
 import { useLayout } from "@/layout/layout-context";
-import { renderDateTime } from "@/modules/lang/lang-service";
+import { getClientLocale } from "@/modules/lang/lang-service";
 import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service";
 import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types";
 import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
@@ -15,6 +15,7 @@ import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { String } from "@/utils/string.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core";
@@ -217,7 +218,9 @@ const PluginNode = (props: any) => {
 
             {!!plugin.lastInteractionAt && (
               <Tooltip
-                label={`${t`Last interaction at`}: ${renderDateTime(plugin.lastInteractionAt)}`}
+                label={`${t`Last interaction at`}: ${DateTime.format(plugin.lastInteractionAt, {
+                  locale: getClientLocale(),
+                })}`}
               >
                 <Text fz={10} fw={500} c="gray" truncate="end">
                   <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "}

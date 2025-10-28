@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { OnModalShareLink } from "@/modals/modal-share-link";
-import { renderDateTime } from "@/modules/lang/lang-service";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
@@ -133,7 +133,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
       <Group justify="end" wrap="nowrap" gap={8}>
         <Renderer views={["desktop"]}>
           <Text fz={em(12)} c="var(--mantine-color-dimmed)" px={10}>
-            <Trans>Created at {renderDateTime(task.createdAt, true)}</Trans>
+            <Trans>Created at</Trans> <DateFormat value={task.createdAt} type="date-time" />
           </Text>
 
           <Button

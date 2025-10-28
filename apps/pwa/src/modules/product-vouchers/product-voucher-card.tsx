@@ -1,10 +1,12 @@
 "use client";
 
-import { num, renderDate } from "@/modules/lang/lang-service";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { DateFormat } from "@/components/format/date-format";
 import { ProductVoucherEntity } from "@/modules/product-vouchers/product-vouchers-types";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Badge,
   Card,
@@ -50,22 +52,25 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
           </Badge>
 
           <Text fw={500} fz={em(13)} c="gray">
-            • {t`Voucher amount`}: {num(voucher.remainAmount, { type: "money" })}/
-            {num(voucher.amount, { type: "money" })}
+            • {t`Voucher amount`}: <CurrencyFormat value={voucher.remainAmount} />/
+            <CurrencyFormat value={voucher.amount} />
           </Text>
 
           <Renderer visible={!!voucher.productVoucher.voucherExpireInDays}>
             <Text fw={500} fz={em(13)} c="gray">
-              •{" "}
-              {`${t`Expire date`}: ${renderDate(
-                voucher.createdAt + voucher.productVoucher.voucherExpireInDays! * 60 * 60 * 24
-              )}`}
+              • <Trans>Expire date</Trans>:{" "}
+              <DateFormat
+                value={
+                  voucher.createdAt + voucher.productVoucher.voucherExpireInDays! * 60 * 60 * 24
+                }
+                type="date"
+              />
             </Text>
           </Renderer>
 
           <Renderer visible={!!!props.hideCustomer}>
             <Text fw={500} fz={em(13)} c="gray">
-              • {`${t`Customer`}: ${voucher.customer.name}`}
+              • <Trans>Customer</Trans>: {voucher.customer.name}
             </Text>
           </Renderer>
 
@@ -76,7 +81,7 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
             }
           >
             <Text fw={500} fz={em(13)} c="gray">
-              • {`${t`Include products`}:`}
+              • <Trans>Include products</Trans>:
             </Text>
             {voucher.productVoucher.voucherIncludeProducts?.map((product) => {
               return (

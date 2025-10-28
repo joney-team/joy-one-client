@@ -1,3 +1,5 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, em, Grid, Group, Stack, Text } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
@@ -7,7 +9,7 @@ import { FC } from "react";
 export const LoanRowInfo: FC<{
   label: string;
   description?: string;
-  value: any;
+  value: string | JSX.Element;
   copy?: boolean;
   visible?: boolean;
 }> = (props) => {

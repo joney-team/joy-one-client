@@ -1,6 +1,4 @@
-import { renderDate } from "@/modules/lang/lang-service";
 import { Period } from "@/types";
-import { t } from "@lingui/core/macro";
 
 export class DateTime {
   static addDays(now: Date, days: number): Date {
@@ -138,11 +136,11 @@ export class DateTime {
     };
   }
 
-  static getStartEndOf(time: any, type: "DAY" | "WEEK" | "MONTH" | "YEAR") {
+  static getStartEndOf(time: any, type: "day" | "week" | "month" | "YEAR") {
     const _type = type.toUpperCase();
-    if (_type === "DAY") return this.getStartEndOfDay(time);
-    if (_type === "WEEK") return this.getStartEndOfWeek(time);
-    if (_type === "MONTH") return this.getStartEndOfMonth(time);
+    if (_type === "day") return this.getStartEndOfDay(time);
+    if (_type === "week") return this.getStartEndOfWeek(time);
+    if (_type === "month") return this.getStartEndOfMonth(time);
     if (_type === "YEAR") return this.getStartEndOfYear(time);
     throw Error("Type is not supported");
   }
@@ -192,29 +190,6 @@ export class DateTime {
     if (period === Period.MONTH) return this.getStartEndOfMonth(date);
     if (period === Period.WEEK) return this.getStartEndOfWeek(date);
     return this.getStartEndOfDay(date);
-  }
-
-  static renderDate(date: any, period: Period, defaultValue?: string) {
-    const _date = date ? new Date(date) : new Date();
-
-    if (!date) return defaultValue || t`Time`;
-
-    if (period === Period.MONTH) {
-      return _date.getMonth() + 1 + "/" + _date.getFullYear();
-    }
-
-    if (period === Period.WEEK) {
-      const range = DateTime.getStartEndOfWeek(_date);
-      return `${renderDate(range.start)} - ${renderDate(range.end)}`;
-    }
-
-    if (period === Period.YEAR) {
-      const range = DateTime.getStartEndOfYear(_date);
-      return `${new Date(range.start).getFullYear()}`;
-    }
-
-    if (DateTime.isToday(_date)) return t`Today`;
-    return renderDate(_date);
   }
 
   static toHHMMSS(input: number) {

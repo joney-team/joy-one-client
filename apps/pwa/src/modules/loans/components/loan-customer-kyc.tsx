@@ -1,12 +1,17 @@
 "use client";
 
-import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
-import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
 import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";
+import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
 import { CustomerEntity } from "@/modules/customers/customer-types";
+import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDate } from "@/modules/lang/lang-service";
+import { useLocations } from "@/modules/locations/locations-context";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { formatPhoneNumber } from "@/utils/phone.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import {
@@ -25,9 +30,6 @@ import {
 import { IconAddressBook, IconShieldCheck } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { LoanRowInfo } from "./loan-row-info";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useLocations } from "@/modules/locations/locations-context";
 
 interface LoanCustomerKycProps {
   customer: CustomerEntity;
@@ -74,7 +76,9 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                   label="Ngày cấp"
                   value={
                     <Group>
-                      <Text>{renderDate(kyc?.cidCreatedAt)}</Text>
+                      <Text>
+                        {kyc?.cidCreatedAt && <DateFormat value={kyc?.cidCreatedAt} type="date" />}
+                      </Text>
                     </Group>
                   }
                 />
@@ -121,7 +125,9 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
 
             <LoanRowInfo
               label="Mức lương hiện tại"
-              value={num(customer.salaryAmount, { type: "money" })}
+              value={
+                customer.salaryAmount ? <CurrencyFormat value={customer.salaryAmount} /> : "--"
+              }
             />
 
             {workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
@@ -179,7 +185,9 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                           <ThemeIcon color="dark" variant="transparent" ml={-5}>
                             <IconAddressBook strokeWidth={1.5} size={18} />
                           </ThemeIcon>
-                          <Text fz={em(15)}>{num(contacts.data.contacts.length)}</Text>
+                          <Text fz={em(15)}>
+                            <NumberFormat value={contacts.data.contacts.length} />
+                          </Text>
                         </Group>
                       </Anchor>
                     ) : (

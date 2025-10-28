@@ -4,7 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { SectionTitle } from "@/components/session-title";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { renderDate } from "@/modules/lang/lang-service";
 import { loanPackageTypes } from "@/modules/loans/loans-constants";
 import { getLoanByCode } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanPackageType, LoanReceiptData } from "@/modules/loans/loans-types";
@@ -23,6 +22,8 @@ import { IconFileExcel, IconReportAnalytics } from "@tabler/icons-react";
 import { FC } from "react";
 import writeXlsxFile from "write-excel-file";
 import { ReportWidgetsContext } from "../types";
+import { DateTime } from "@joy-one-client/utils/date-time";
+import { getClientLocale } from "@/modules/lang/lang-service";
 
 interface CreditReportItem {
   time: number;
@@ -295,7 +296,10 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
 
         return [
           {
-            value: renderDate(receipt.paidAt * 1000),
+            value: DateTime.format(receipt.paidAt, {
+              locale: getClientLocale(),
+              dateStyle: "short",
+            }),
             ...generalStyle,
           },
           {
@@ -538,10 +542,13 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
       const endAt = receipts[receipts.length - 1]?.paidAt;
 
       const name = String.capitalizeFirstLetter(
-        `${t`Reports`} ${t`Income expense`} ${t`From`} ${renderDate(startAt).replace(
-          /\//g,
-          "-"
-        )} ${t`To`} ${renderDate(endAt).replace(/\//g, "-")}`
+        `${t`Reports`} ${t`Income expense`} ${t`From`} ${DateTime.format(startAt, {
+          locale: getClientLocale(),
+          dateStyle: "short",
+        }).replace(/\//g, "-")} ${t`To`} ${DateTime.format(endAt, {
+          locale: getClientLocale(),
+          dateStyle: "short",
+        }).replace(/\//g, "-")}`
       );
       const blob = new Blob([buffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

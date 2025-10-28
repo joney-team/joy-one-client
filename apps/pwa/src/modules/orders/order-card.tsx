@@ -1,7 +1,9 @@
 "use client";
 
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { OnModalPrinter } from "@/modals/modal-printer";
-import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
 import { onPayOrder, updateOrder } from "@/modules/orders/orders-service";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
@@ -123,7 +125,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
             <Stack gap={0}>
               <Text ta="right" fz={13} c="gray">
-                {renderDateTime(order.createdAt)}
+                <DateFormat value={order.createdAt} type="date-time" />
               </Text>
             </Stack>
           </Group>
@@ -159,8 +161,12 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                         />
                       </Group>
                     </Table.Td>
-                    <Table.Td ta="right">x{num(item.quantity)}</Table.Td>
-                    <Table.Td ta="right">{num(item.price, { type: "money" })}</Table.Td>
+                    <Table.Td ta="right">
+                      x<NumberFormat value={item.quantity} />
+                    </Table.Td>
+                    <Table.Td ta="right">
+                      <CurrencyFormat value={item.price} />
+                    </Table.Td>
                   </Table.Tr>
                 );
               })}
@@ -170,10 +176,9 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                   {t`Subtotal`}
                 </Table.Td>
                 <Table.Td ta="right">
-                  {num(
-                    order.items.reduce((acc, item) => acc + item.price * item.quantity, 0),
-                    { type: "money" }
-                  )}
+                  <CurrencyFormat
+                    value={order.items.reduce((acc, item) => acc + item.price * item.quantity, 0)}
+                  />
                 </Table.Td>
               </Table.Tr>
 
@@ -182,10 +187,9 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                   {t`Discount`}
                 </Table.Td>
                 <Table.Td ta="right">
-                  {num(
-                    order.discounts.reduce((acc, discount) => acc + discount.amount, 0),
-                    { type: "money" }
-                  )}
+                  <CurrencyFormat
+                    value={order.discounts.reduce((acc, discount) => acc + discount.amount, 0)}
+                  />
                 </Table.Td>
               </Table.Tr>
 
@@ -194,7 +198,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                   {t`Total`}
                 </Table.Td>
                 <Table.Td ta="right" fw={600}>
-                  {num(order.totalAmount, { type: "money" })}
+                  <CurrencyFormat value={order.totalAmount} />
                 </Table.Td>
               </Table.Tr>
             </Table.Tbody>

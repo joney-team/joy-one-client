@@ -3,10 +3,13 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
 import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
 import { getCustomer } from "@/modules/customers/customer-service";
-import { num, renderDate } from "@/modules/lang/lang-service";
+import { getClientLocale } from "@/modules/lang/lang-service";
 import { LoanRowInfo } from "@/modules/loans/components/loan-row-info";
 import {
   loanLiquidation,
@@ -80,7 +83,8 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
             <Stack gap={0}>
               <Text fw={700}>{kyc.cidFullName}</Text>
               <Text fz={em(12)} c="gray">
-                {t`Birthday`}: {renderDate(kyc.cidBirthday)}
+                {t`Birthday`}:{" "}
+                {kyc.cidBirthday && <DateFormat value={kyc.cidBirthday} type="date" />}
               </Text>
               <Text fz={em(12)} c="gray">
                 {t`Phone`}: {customer.phone}
@@ -89,14 +93,42 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
           </Group>
           <LoanRowInfo label={t`Loan asset type`} value={loanAssetTypes[loan.assetType].label()} />
           <LoanRowInfo label={t`Loan period`} value={renderLoanPeriod(loan.package.days)} />
-          <LoanRowInfo label={t`Loan amount`} value={num(loan.amount, { type: "money" })} />
-          <LoanRowInfo label={t`Loan payment periods`} value={num(loan.packagePeriodDays)} />
+          <LoanRowInfo
+            label={t`Loan amount`}
+            value={
+              <Text>
+                <CurrencyFormat value={loan.amount} />
+              </Text>
+            }
+          />
+          <LoanRowInfo
+            label={t`Loan payment periods`}
+            value={
+              <Text>
+                <NumberFormat value={loan.packagePeriodDays} />
+              </Text>
+            }
+          />
           {loan.paymentPeriods && (
             <LoanRowInfo
               label={t`Loan period range`}
-              value={`${renderDate(
-                loan.paymentPeriods.find((v) => v.period === 1)?.startTime
-              )} - ${renderDate(loan.paymentPeriods[loan.paymentPeriods.length - 1].endTime)}`}
+              value={
+                <Text>
+                  {loan.paymentPeriods.find((v) => v.period === 1)?.startTime && (
+                    <DateFormat
+                      value={loan.paymentPeriods.find((v) => v.period === 1)?.startTime as number}
+                      type="date"
+                    />
+                  )}
+                  {" - "}
+                  {loan.paymentPeriods[loan.paymentPeriods.length - 1].endTime && (
+                    <DateFormat
+                      value={loan.paymentPeriods[loan.paymentPeriods.length - 1].endTime}
+                      type="date"
+                    />
+                  )}
+                </Text>
+              }
             />
           )}
         </Stack>
@@ -106,7 +138,11 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
         <Stack>
           <LoanRowInfo
             label={t`Remain capital amount`}
-            value={num(calculated.remainCapitalAmount, { type: "money" })}
+            value={
+              <Text>
+                <CurrencyFormat value={calculated.remainCapitalAmount} />
+              </Text>
+            }
           />
           <Tooltip
             disabled={calculated.period === 0}
@@ -117,16 +153,24 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
                     <Table.Tr>
                       <Table.Td>{t`Interest period`}</Table.Td>
                       <Table.Td fw={700}>
-                        {calculated.period} ({renderDate(calculated.periodStartAt)})
+                        {calculated.period} (
+                        {calculated.periodStartAt && (
+                          <DateFormat value={calculated.periodStartAt} type="date" />
+                        )}
+                        )
                       </Table.Td>
                     </Table.Tr>
                     <Table.Tr>
                       <Table.Td>{t`Interest days`}</Table.Td>
-                      <Table.Td fw={700}>{num(calculated.periodFeeDays)}</Table.Td>
+                      <Table.Td fw={700}>
+                        <NumberFormat value={calculated.periodFeeDays} />
+                      </Table.Td>
                     </Table.Tr>
                     <Table.Tr>
                       <Table.Td>{t`Interest per day`}</Table.Td>
-                      <Table.Td fw={700}>{num(calculated.periodFeePerDay)}</Table.Td>
+                      <Table.Td fw={700}>
+                        <NumberFormat value={calculated.periodFeePerDay} />
+                      </Table.Td>
                     </Table.Tr>
                   </Table.Tbody>
                 </Table>
@@ -136,26 +180,38 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
             <Box w="100%">
               <LoanRowInfo
                 label={t`Period fee amount`}
-                value={num(calculated.periodFeeAmount, { type: "money" })}
+                value={
+                  <Text>
+                    <CurrencyFormat value={calculated.periodFeeAmount} />
+                  </Text>
+                }
               />
             </Box>
           </Tooltip>
           <LoanRowInfo
-            label={`${t`Remain capital amount fee`} (${num(
-              calculated.remainCapitalAmountFeePercent
+            label={`${t`Remain capital amount fee`} (${calculated.remainCapitalAmountFeePercent.toLocaleString(
+              getClientLocale()
             )}%)`}
-            value={num(calculated.remainCapitalAmountFee, { type: "money" })}
+            value={
+              <Text>
+                <CurrencyFormat value={calculated.remainCapitalAmountFee} />
+              </Text>
+            }
           />
           <LoanRowInfo
             label={`${t`Loan receipt late interest`}`}
-            value={num(calculated.lateInterestAmount, { type: "money" })}
+            value={
+              <Text>
+                <CurrencyFormat value={calculated.lateInterestAmount} />
+              </Text>
+            }
           />
 
           <LoanRowInfo
             label={t`Total`}
             value={
               <Text c="orange" fz={em(20)} fw={800}>
-                {num(calculated.feeAmount, { type: "money" })}
+                <CurrencyFormat value={calculated.feeAmount} />
               </Text>
             }
           />

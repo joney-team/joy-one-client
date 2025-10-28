@@ -1,15 +1,18 @@
 "use client";
 
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { onReconnected } from "@/modules/events/event-service";
-import { num, renderDate } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { getLoanPaymentPlan, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { LoanAssetType, LoanPaymentPlanResult } from "@/modules/loans/loans-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@/utils/date-time.utils";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Badge,
@@ -217,9 +220,12 @@ export const ModalLoanCalculator: FC = () => {
                       <Table.Td>
                         {(function () {
                           if (p.period === 0) return "-";
+                          if (!p.startTime || !p.endTime) return "-";
                           return (
                             <Fragment>
-                              {renderDate(p.startTime)} - {renderDate(p.endTime)}
+                              <DateFormat value={p.startTime} type="date" />
+                              {" - "}
+                              <DateFormat value={p.endTime} type="date" />
                             </Fragment>
                           );
                         })()}
@@ -249,10 +255,7 @@ export const ModalLoanCalculator: FC = () => {
                     {t`Total`}
                   </Table.Td>
                   <Table.Td fw={700} ta="right">
-                    {num(
-                      paymentPeriods.reduce((a, b) => a + b.totalAmount, 0),
-                      { type: "money" }
-                    )}
+                    <CurrencyFormat value={paymentPeriods.reduce((a, b) => a + b.totalAmount, 0)} />
                   </Table.Td>
                 </Table.Tr>
               </Table.Tbody>
@@ -282,9 +285,20 @@ export const ModalLoanCalculator: FC = () => {
 
                 <RowInfo
                   label={t`Loan period`}
-                  value={`${num(loanPackage.days / 30)} ${t`months`}`}
+                  value={
+                    <Text ta="right">
+                      <NumberFormat value={loanPackage.days / 30} /> <Trans>months</Trans>
+                    </Text>
+                  }
                 />
-                <RowInfo label={t`Contract fee`} value={num(loanPackage.contractFee)} />
+                <RowInfo
+                  label={t`Contract fee`}
+                  value={
+                    <Text ta="right">
+                      <CurrencyFormat value={loanPackage.contractFee} />
+                    </Text>
+                  }
+                />
               </Stack>
             </Card>
           </InputWrapper>
@@ -296,7 +310,7 @@ export const ModalLoanCalculator: FC = () => {
 
 const RowInfo: FC<{
   label: string;
-  value: any;
+  value: string | JSX.Element;
   valueProps?: TextProps;
 }> = (props) => {
   return (

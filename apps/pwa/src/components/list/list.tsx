@@ -37,6 +37,7 @@ import { Sort } from "./sort/sort";
 import ListTable from "./table/table";
 import { BaseData, ListContext, ListProps, ListViewState } from "./types";
 import { getListDataId } from "./utils";
+import { NumberFormat } from "../format/number-format";
 
 export function List<T extends BaseData>(props: ListProps<T>) {
   const forceUpdate = useForceUpdate();
@@ -255,7 +256,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
 
                     {list.count > 0 && (
                       <Badge variant="light" color="dark" size="sm">
-                        {num(list.count)}
+                        <NumberFormat value={list.count} />
                       </Badge>
                     )}
 
@@ -265,7 +266,9 @@ export function List<T extends BaseData>(props: ListProps<T>) {
                         variant="light"
                         onClick={() => list.fetch(true, { isSilient: false })}
                       >
-                        <Trans>+{num(list.newDataCount)} new one</Trans>
+                        <Trans>
+                          +<NumberFormat value={list.newDataCount || 0} /> new one
+                        </Trans>
                       </Badge>
                     )}
                   </Group>

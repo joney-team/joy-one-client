@@ -1,13 +1,23 @@
 "use client";
 
 import { useLayout } from "@/layout/layout-context";
-import { num } from "@/modules/lang/lang-service";
-import { Center, Group, MantineSize, Menu, MenuProps, ThemeIcon, ThemeIconProps, em, rgba } from "@mantine/core";
+import { useColor } from "@/modules/theme/use-color";
+import {
+  Center,
+  Group,
+  MantineSize,
+  Menu,
+  MenuProps,
+  ThemeIcon,
+  ThemeIconProps,
+  em,
+  rgba,
+} from "@mantine/core";
 import { useClickOutside, useDisclosure, useHover } from "@mantine/hooks";
 import { Icon, IconCheck, IconX } from "@tabler/icons-react";
 import { FC } from "react";
+import { NumberFormat } from "../format/number-format";
 import { Button } from "./button";
-import { useColor } from "@/modules/theme/use-color";
 
 interface ButtonSelectProps {
   icon: Icon;
@@ -50,7 +60,9 @@ export const ButtonSelect: FC<ButtonSelectProps> = (props) => {
   const color = useColor();
   const ref = useClickOutside(() => close());
   const selected =
-    props.options?.filter((opt) => opt.value === props.value || (opt.value && props.value?.includes(opt.value))) || [];
+    props.options?.filter(
+      (opt) => opt.value === props.value || (opt.value && props.value?.includes(opt.value))
+    ) || [];
   const hasSelected = selected.length > 0;
   const hover = useHover();
   const viewport = useLayout();
@@ -60,7 +72,8 @@ export const ButtonSelect: FC<ButtonSelectProps> = (props) => {
   const isActive = !!props.isActive || (hasSelected && !!props.value);
 
   const renderLabel = () => {
-    if (selected.length === 0 || props.mutiltiple || props.hideOptionLabel) return props.label || "";
+    if (selected.length === 0 || props.mutiltiple || props.hideOptionLabel)
+      return props.label || "";
     if (!props.label || !!props.autoHideLabel) return selected[0]?.label;
     return `${props.label}: ${selected[0]?.label}`;
   };
@@ -139,8 +152,18 @@ export const ButtonSelect: FC<ButtonSelectProps> = (props) => {
                 {((props.mutiltiple && selected.length > 0) ||
                   props.indicator ||
                   (props.quantity && props.quantity > 0)) && (
-                  <Center w={16} h={16} bg={activeColor} style={{ borderRadius: 100 }} fz={8} fw={700} c="white">
-                    {num(props.indicator || selected.length || props.quantity)}
+                  <Center
+                    w={16}
+                    h={16}
+                    bg={activeColor}
+                    style={{ borderRadius: 100 }}
+                    fz={8}
+                    fw={700}
+                    c="white"
+                  >
+                    <NumberFormat
+                      value={props.indicator || selected.length || props.quantity || 0}
+                    />
                   </Center>
                 )}
 
@@ -226,7 +249,8 @@ export const ButtonSelect: FC<ButtonSelectProps> = (props) => {
           {props.dropdown ? <props.dropdown close={close} /> : null}
 
           {props.options?.map((opt, index) => {
-            const isSelected = opt.value === props.value || (opt.value && props.value?.includes(opt.value));
+            const isSelected =
+              opt.value === props.value || (opt.value && props.value?.includes(opt.value));
 
             return (
               <Menu.Item
@@ -239,7 +263,13 @@ export const ButtonSelect: FC<ButtonSelectProps> = (props) => {
                   if (opt.leftSession) return opt.leftSession;
                   if (opt.icon)
                     return (
-                      <ThemeIcon variant="subtle" color={color(opt.activeColor)} {...opt.iconProps} size={22} ml={-3}>
+                      <ThemeIcon
+                        variant="subtle"
+                        color={color(opt.activeColor)}
+                        {...opt.iconProps}
+                        size={22}
+                        ml={-3}
+                      >
                         <opt.icon size={20} />
                       </ThemeIcon>
                     );

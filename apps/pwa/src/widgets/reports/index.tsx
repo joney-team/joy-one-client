@@ -1,13 +1,13 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { DateFormat } from "@/components/format/date-format";
 import { Hovered } from "@/components/hovered";
 import { useList } from "@/components/list/use-list";
 import { useRouter } from "@/hooks/use-router";
 import { OnModalDatePicker } from "@/modals/modal-date-picker";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate } from "@/modules/lang/lang-service";
 import { ReportEntity } from "@/modules/reports/reports-entity";
 import { exportPeriodReport } from "@/modules/reports/reports-services";
 import { RangeReport, ReportType } from "@/modules/reports/reports-types";
@@ -169,7 +169,7 @@ export const ReportWidgets: FC = () => {
             const date = report.params.date ? new Date(+report.params.date * 1000) : new Date();
             if (period === Period.MONTH) return `${date.getMonth() + 1}/${date.getFullYear()}`;
             if (period === Period.YEAR) return `${date.getFullYear()}`;
-            if (period === Period.DATE) return renderDate(date);
+            if (period === Period.DATE) return <DateFormat value={date} type="date" />;
           })()}
           isActive
           onClear={() => report.removeParams(["date"], { isSilient: false })}

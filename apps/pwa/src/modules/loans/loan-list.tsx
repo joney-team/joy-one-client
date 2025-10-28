@@ -1,6 +1,7 @@
 "use client";
 
 import { Circle } from "@/components/circle";
+import { DateFormat } from "@/components/format/date-format";
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
@@ -8,7 +9,7 @@ import { Renderer } from "@/components/renderer";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
-import { num, renderDate } from "@/modules/lang/lang-service";
+import { num } from "@/modules/lang/lang-service";
 import { LoanCard } from "@/modules/loans/components/loan-card";
 import {
   archiveLoans,
@@ -24,8 +25,7 @@ import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-br
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
-import { round } from "@/utils/number.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Badge, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
@@ -56,7 +56,7 @@ interface LoanListProps {
 
 export const LoanList: FC<LoanListProps> = (props) => {
   const workspace = useWorkspace();
-  const now = DateTime.timeToSeconds(DateTime.getStartEndOfDay(new Date()).end);
+  const nowInSeconds = DateTime.toSeconds(DateTime.getRange(new Date(), "day").end);
   const color = useColor();
   const location = useLocations();
 
@@ -174,9 +174,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
                       <Text c="gray">
                         <Trans>Time</Trans>
                       </Text>
-                      <Text ta="right">
-                        {renderDate(startPeriod?.endTime)} - {renderDate(endPeriod?.endTime)}
-                      </Text>
+
+                      {startPeriod?.endTime && endPeriod?.endTime && (
+                        <Text ta="right">
+                          <DateFormat value={startPeriod.endTime} type="date" /> -{" "}
+                          <DateFormat value={endPeriod.endTime} type="date" />
+                        </Text>
+                      )}
                     </Group>
                   );
                 })()}
@@ -230,14 +234,14 @@ export const LoanList: FC<LoanListProps> = (props) => {
               warningReceiptBeforeDays > 0 &&
               loan.nextReceiptAt &&
               dayjs(loan.nextReceiptAt * 1000).isBefore(
-                dayjs(now * 1000).add(warningReceiptBeforeDays + 1, "day")
+                dayjs(nowInSeconds * 1000).add(warningReceiptBeforeDays + 1, "day")
               );
 
             const renderNextReceipt = () => {
               if (!loan.nextReceiptAt) return "--";
               const isToday = dayjs(loan.nextReceiptAt * 1000).isSame(dayjs(), "day");
               if (isToday) return t`Today`;
-              return dayjs(loan.nextReceiptAt * 1000).from(now * 1000);
+              return dayjs(loan.nextReceiptAt * 1000).from(nowInSeconds * 1000);
             };
 
             if (!value || loan.status === LoanStatus.COMPLETED) return "--";
@@ -245,7 +249,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             return (
               <Stack gap={3}>
                 <Text c={isExpired ? "red" : isWarning ? "orange" : "var(--mantine-color-text)"}>
-                  {renderDate(loan.nextReceiptAt)}
+                  {loan.nextReceiptAt && <DateFormat value={loan.nextReceiptAt} type="date" />}
                 </Text>
                 <Text
                   fz={12}
@@ -311,17 +315,16 @@ export const LoanList: FC<LoanListProps> = (props) => {
                     LoanStatus.OVERDUE,
                   ].includes(loan.status)}
                 >
-                  <Tooltip label={`${t`Payment progress`} ${round(percent, 1)}%`}>
+                  <Tooltip label={`${t`Payment progress`} ${Number(percent.toFixed(1))}%`}>
                     <Group gap={4} wrap="nowrap">
                       {loan.paymentProgress?.map((r) => {
                         const isPaid = r.isCompleted;
+
                         const isExpired =
                           !isPaid && !!r.time && dayjs(r.time * 1000).isBefore(dayjs());
+
                         const isExpireToday =
-                          !isPaid &&
-                          !isPaid &&
-                          !!r.time &&
-                          dayjs(r.time * 1000).isSame(dayjs(), "day");
+                          !isPaid && !!r.time && dayjs(r.time * 1000).isSame(dayjs(), "day");
 
                         return (
                           <Progress

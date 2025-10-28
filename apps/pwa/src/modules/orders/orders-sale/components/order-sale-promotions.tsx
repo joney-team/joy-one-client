@@ -5,7 +5,7 @@ import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { ModalTitle } from "@/components/modal-title";
 import { num } from "@/modules/lang/lang-service";
-import { promotionDescription } from "@/modules/promotions/promotions-service";
+import { PromotionDescription } from "@/modules/promotions/components/promotion-description";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { t } from "@lingui/core/macro";
@@ -82,7 +82,7 @@ export const OrderSalePromotions: FC = () => {
               <PromotionCard
                 key={promotion.id}
                 name={promotion.name}
-                description={promotionDescription(promotion)}
+                description={<PromotionDescription promotion={promotion} />}
                 icon={mod.icon}
                 isActive={isActive}
                 onClick={() => {

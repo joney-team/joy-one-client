@@ -1,13 +1,13 @@
 "use client";
 
-import { type FC, type ReactNode } from "react";
 import { getDateFormat } from "@/modules/lang/lang-service";
-import { DateTime, forceDate } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import {
   DateInput as MantineDateInput,
   DateInputProps as MantineDateInputProps,
 } from "@mantine/dates";
 import { IconCalendar } from "@tabler/icons-react";
+import { type FC, type ReactNode } from "react";
 
 interface DateInputProps
   extends Omit<MantineDateInputProps, "value" | "onChange" | "defaultValue"> {
@@ -24,13 +24,13 @@ export const DateInput: FC<DateInputProps> = (props) => {
     <MantineDateInput
       {...rest}
       leftSection={rest.leftSection || <IconCalendar strokeWidth={1.5} size={20} />}
-      defaultValue={forceDate(props.defaultValue)}
-      value={forceDate(value)}
+      defaultValue={props.defaultValue ? DateTime.normalizeDate(props.defaultValue) : undefined}
+      value={value ? DateTime.normalizeDate(value) : undefined}
       valueFormat={getDateFormat()}
       placeholder={getDateFormat()}
       onChange={(e) => {
         if (!e) return onChange?.(null);
-        onChange?.(DateTime.timeToSeconds(e));
+        onChange?.(DateTime.toSeconds(e));
       }}
       clearable={props.clearable ?? true}
     />

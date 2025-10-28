@@ -1,15 +1,17 @@
+"use client";
+
 import { OnModalCaptureLocationTimekeeping } from "@/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping";
 import { EventType } from "@/modules/events/event-types";
 import { getPreviousTimeKeeping } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@/utils/date-time.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Group, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { IconAnalyze, IconLogin2, IconLogout } from "@tabler/icons-react";
 import { FC, useEffect } from "react";
 import { Button } from "./button";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 export const ButtonHrmTimeKeeping: FC = () => {
   const forceUpdate = useForceUpdate();

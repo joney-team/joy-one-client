@@ -1,13 +1,13 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { DateFormat } from "@/components/format/date-format";
 import { ModalTitle } from "@/components/modal-title";
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Renderer } from "@/components/renderer";
 import { api } from "@/modules/apis";
 import { eventTypes } from "@/modules/events/event-constants";
 import { EventType } from "@/modules/events/event-types";
-import { renderDate } from "@/modules/lang/lang-service";
 import { healthCheckLoan, revertLiquidationLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
@@ -191,10 +191,16 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                       <Table.Td>
                         <Stack gap={8}>
                           <Text>
-                            <Trans>From</Trans>: {renderDate(paymentPeriod.startTime)}
+                            <Trans>From</Trans>:{" "}
+                            {paymentPeriod.startTime && (
+                              <DateFormat value={paymentPeriod.startTime} type="date" />
+                            )}
                           </Text>
                           <Text>
-                            <Trans>To</Trans>: {renderDate(paymentPeriod.endTime)}
+                            <Trans>To</Trans>:{" "}
+                            {paymentPeriod.endTime && (
+                              <DateFormat value={paymentPeriod.endTime} type="date" />
+                            )}
                           </Text>
                         </Stack>
                       </Table.Td>
@@ -336,7 +342,13 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                       Kỳ {paymentPeriod.period > 0 ? paymentPeriod.period : "--"}
                     </Text>
                     <Text px={16} py={5} fz={12} fw={500} c="white">
-                      {renderDate(paymentPeriod.startTime)} - {renderDate(paymentPeriod.endTime)}
+                      {paymentPeriod.startTime && (
+                        <DateFormat value={paymentPeriod.startTime} type="date" />
+                      )}
+                      {" - "}
+                      {paymentPeriod.endTime && (
+                        <DateFormat value={paymentPeriod.endTime} type="date" />
+                      )}
                     </Text>
                   </Group>
 

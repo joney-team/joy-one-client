@@ -2,12 +2,13 @@
 
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { ContentEditable } from "@/components/content-editable/content-editable";
+import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { DueDateInput } from "@/components/inputs/due-date-input";
 import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
-import { num, renderDateTime } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
@@ -255,11 +256,13 @@ export const ListTaskRow: FC<{
                     toggleSubTasks();
                   }}
                 >
-                  {num(task.childCount)}
+                  <NumberFormat value={task.childCount} />
                 </Button>
 
                 <Group flex={1} justify="end" gap={5}>
-                  <Text fz={em(10)}>{num(ctx.progress.percent, { roundPrecision: 0 })}%</Text>
+                  <Text fz={em(10)}>
+                    <NumberFormat value={ctx.progress.percent} suffix="%" />
+                  </Text>
                   <Progress
                     value={ctx.progress.percent}
                     w={60}
@@ -387,7 +390,7 @@ export const ListTaskRow: FC<{
               inactiveColor="gray.4"
               size={32}
               icon={IconCalendar}
-              label={renderDateTime(task.dueDate, true)}
+              label={task.dueDate ? <DateFormat value={task.dueDate} type="date" /> : ""}
               activeColor={ctx.isOutdated ? "red" : "blue"}
               isActive={!!task.dueDate}
               dropdown={() => (

@@ -1,4 +1,6 @@
 export type RawDate = Date | string | number;
+export type DateTimeUnit = "day" | "week" | "month" | "year";
+export type DateTimeDiffUnit = DateTimeUnit | "second" | "minute" | "hour";
 
 export class DateTime {
   static isValid(raw: RawDate): boolean {
@@ -35,114 +37,221 @@ export class DateTime {
     }
   }
 
-  static getMonday(date: RawDate) {
+  static getMonday(date: RawDate): Date {
     const d = this.normalizeDate(date);
     const day = d.getDay();
     const diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
-    return this.normalizeDate(d.setDate(diff));
+    return new Date(d.setDate(diff));
   }
 
-  static rangeDay(time: RawDate) {
+  static getRange(time: RawDate, unit: DateTimeUnit): { start: Date; end: Date } {
     const inputTime = this.normalizeDate(time);
-    return {
-      start: this.normalizeDate(inputTime.setHours(0, 0, 0, 0)).getTime(),
-      end: this.normalizeDate(inputTime.setHours(23, 59, 59, 999)).getTime(),
-    };
-  }
+    const safeUnit = unit.toLowerCase();
 
-  static rangeWeek(time: RawDate) {
-    const firstDay = this.getMonday(time);
-    const lastDay = this.normalizeDate(
-      this.normalizeDate(firstDay).getTime() + 6 * 24 * 60 * 60 * 1000
-    );
+    const rangeDay = (date: Date) => ({
+      start: this.normalizeDate(new Date(date).setHours(0, 0, 0, 0)),
+      end: this.normalizeDate(new Date(date).setHours(23, 59, 59, 999)),
+    });
 
-    return {
-      start: this.rangeDay(firstDay).start,
-      end: this.rangeDay(lastDay).end,
-    };
-  }
+    if (safeUnit === "day") {
+      return rangeDay(inputTime);
+    }
 
-  static rangeMonth(time: RawDate) {
-    const date = this.normalizeDate(time);
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    if (safeUnit === "week") {
+      const firstDay = this.getMonday(time);
+      const lastDay = new Date(firstDay.getTime() + 6 * 24 * 60 * 60 * 1000);
 
-    return {
-      start: this.rangeDay(firstDay).start,
-      end: this.rangeDay(lastDay).end,
-    };
-  }
+      return {
+        start: rangeDay(firstDay).start,
+        end: rangeDay(lastDay).end,
+      };
+    }
 
-  static rangeYear(time: RawDate) {
-    const date = this.normalizeDate(time);
-    const firstDay = new Date(date.getFullYear(), 0, 1);
-    const lastDay = new Date(date.getFullYear(), 11, 31);
-    return {
-      start: this.rangeDay(firstDay).start,
-      end: this.rangeDay(lastDay).end,
-    };
-  }
+    if (safeUnit === "month") {
+      const date = this.normalizeDate(time);
+      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
-  static getRange(time: RawDate, type: "DAY" | "WEEK" | "MONTH" | "YEAR") {
-    const _type = type.toUpperCase();
-    if (_type === "DAY") return this.rangeDay(time);
-    if (_type === "WEEK") return this.rangeWeek(time);
-    if (_type === "MONTH") return this.rangeMonth(time);
-    if (_type === "YEAR") return this.rangeYear(time);
-    throw Error(`Type ${_type} is not supported`);
+      return {
+        start: rangeDay(firstDay).start,
+        end: rangeDay(lastDay).end,
+      };
+    }
+
+    if (safeUnit === "year") {
+      const date = this.normalizeDate(time);
+      const firstDay = new Date(date.getFullYear(), 0, 1);
+      const lastDay = new Date(date.getFullYear(), 11, 31);
+
+      return {
+        start: rangeDay(firstDay).start,
+        end: rangeDay(lastDay).end,
+      };
+    }
+
+    throw Error(`Unit ${unit} is not supported`);
   }
 
   static toSeconds(date: RawDate) {
     return +Math.floor(this.normalizeDate(date).getTime() / 1000).toFixed(0);
   }
 
-  static isSameDay(date: RawDate, compareDate: RawDate) {
-    return (
-      this.normalizeDate(date).getDate() === this.normalizeDate(compareDate).getDate() &&
-      this.normalizeDate(date).getMonth() === this.normalizeDate(compareDate).getMonth() &&
-      this.normalizeDate(date).getFullYear() === this.normalizeDate(compareDate).getFullYear()
-    );
+  static isSame(date: RawDate, compareDate: RawDate, unit: DateTimeUnit) {
+    const _date = this.normalizeDate(date);
+    const _compareDate = this.normalizeDate(compareDate);
+    const safeUnit = unit.toLowerCase();
+
+    if (safeUnit === "day") {
+      return (
+        _date.getDate() === _compareDate.getDate() &&
+        _date.getMonth() === _compareDate.getMonth() &&
+        _date.getFullYear() === _compareDate.getFullYear()
+      );
+    }
+
+    if (safeUnit === "week") {
+      return (
+        _date.getDay() === _compareDate.getDay() &&
+        _date.getMonth() === _compareDate.getMonth() &&
+        _date.getFullYear() === _compareDate.getFullYear()
+      );
+    }
+
+    if (safeUnit === "month") {
+      return (
+        _date.getMonth() === _compareDate.getMonth() &&
+        _date.getFullYear() === _compareDate.getFullYear()
+      );
+    }
+
+    if (safeUnit === "year") {
+      return _date.getFullYear() === _compareDate.getFullYear();
+    }
+
+    throw Error(`Unit ${unit} is not supported`);
   }
 
-  static add(date: RawDate, type: "DAY" | "WEEK" | "MONTH" | "YEAR", amount: number) {
+  static add(date: RawDate, unit: DateTimeUnit, amount: number) {
     const _date = this.normalizeDate(date);
-    const _type = type.toUpperCase();
-    if (_type === "DAY")
+    const safeUnit = unit.toLowerCase();
+
+    if (safeUnit === "day") {
       return this.normalizeDate(_date).setDate(this.normalizeDate(_date).getDate() + amount);
-    if (_type === "WEEK")
+    }
+
+    if (safeUnit === "week") {
       return this.normalizeDate(_date).setDate(this.normalizeDate(_date).getDate() + amount * 7);
-    if (_type === "MONTH")
+    }
+
+    if (safeUnit === "month") {
       return this.normalizeDate(_date).setMonth(this.normalizeDate(_date).getMonth() + amount);
-    if (_type === "YEAR")
+    }
+
+    if (safeUnit === "year") {
       return this.normalizeDate(_date).setFullYear(
         this.normalizeDate(_date).getFullYear() + amount
       );
-    throw Error(`Type ${_type} is not supported`);
+    }
+
+    throw Error(`Unit ${unit} is not supported`);
   }
 
-  static subtractDays(date: RawDate, amount: number) {
-    return this.normalizeDate(date).setDate(this.normalizeDate(date).getDate() - amount);
+  static subtract(date: RawDate, unit: DateTimeUnit, amount: number): Date {
+    const normalizedDate = this.normalizeDate(date);
+    const safeUnit = unit.toLowerCase();
+
+    if (safeUnit === "day") {
+      return new Date(normalizedDate.setDate(normalizedDate.getDate() - amount));
+    }
+
+    if (safeUnit === "week") {
+      return new Date(normalizedDate.setDate(normalizedDate.getDate() - amount * 7));
+    }
+
+    if (safeUnit === "month") {
+      return new Date(normalizedDate.setMonth(normalizedDate.getMonth() - amount));
+    }
+
+    if (safeUnit === "year") {
+      return new Date(normalizedDate.setFullYear(normalizedDate.getFullYear() - amount));
+    }
+
+    throw Error(`Unit ${unit} is not supported`);
   }
 
-  static subtractWeeks(date: RawDate, amount: number) {
-    return this.normalizeDate(date).setDate(this.normalizeDate(date).getDate() - amount * 7);
+  static countdown(endTime: RawDate, startTime = Date.now()) {
+    const _endTime = this.normalizeDate(endTime);
+    const _startTime = this.normalizeDate(startTime);
+
+    if (!_endTime || _endTime.getTime() <= _startTime.getTime()) {
+      return {
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        isExpired: true,
+      };
+    }
+
+    const distance = Math.abs(_endTime.getTime() - _startTime.getTime());
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    return { days, hours, minutes, seconds, isExpired: false };
   }
 
-  static subtractMonths(date: RawDate, amount: number) {
-    return this.normalizeDate(date).setMonth(this.normalizeDate(date).getMonth() - amount);
-  }
-
-  static subtractYears(date: RawDate, amount: number) {
-    return this.normalizeDate(date).setFullYear(this.normalizeDate(date).getFullYear() - amount);
-  }
-
-  static subtract(date: RawDate, type: "DAY" | "WEEK" | "MONTH" | "YEAR", amount: number) {
+  static diff(date: RawDate, compareDate: RawDate, unit: DateTimeDiffUnit) {
     const _date = this.normalizeDate(date);
-    const _type = type.toUpperCase();
-    if (_type === "DAY") return this.subtractDays(_date, amount);
-    if (_type === "WEEK") return this.subtractWeeks(_date, amount);
-    if (_type === "MONTH") return this.subtractMonths(_date, amount);
-    if (_type === "YEAR") return this.subtractYears(_date, amount);
-    throw Error(`Type ${_type} is not supported`);
+    const _compareDate = this.normalizeDate(compareDate);
+    const safeUnit = unit.toLowerCase();
+
+    const timeDiff = Math.abs(_date.getTime() - _compareDate.getTime());
+
+    if (safeUnit === "second") {
+      return Math.floor(timeDiff / 1000);
+    }
+
+    if (safeUnit === "minute") {
+      return Math.floor(timeDiff / (1000 * 60));
+    }
+
+    if (safeUnit === "hour") {
+      return Math.floor(timeDiff / (1000 * 60 * 60));
+    }
+
+    if (safeUnit === "day") {
+      // Reset time components to get accurate day difference
+      const date1 = new Date(_date.getFullYear(), _date.getMonth(), _date.getDate());
+      const date2 = new Date(
+        _compareDate.getFullYear(),
+        _compareDate.getMonth(),
+        _compareDate.getDate()
+      );
+      return Math.floor(Math.abs(date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    if (safeUnit === "week") {
+      // Get the start of the week for both dates
+      const date1 = this.getMonday(
+        new Date(_date.getFullYear(), _date.getMonth(), _date.getDate())
+      );
+      const date2 = this.getMonday(
+        new Date(_compareDate.getFullYear(), _compareDate.getMonth(), _compareDate.getDate())
+      );
+      return Math.floor(Math.abs(date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24 * 7));
+    }
+
+    if (safeUnit === "month") {
+      const yearDiff = _date.getFullYear() - _compareDate.getFullYear();
+      const monthDiff = _date.getMonth() - _compareDate.getMonth();
+      return Math.abs(yearDiff * 12 + monthDiff);
+    }
+
+    if (safeUnit === "year") {
+      return Math.abs(_date.getFullYear() - _compareDate.getFullYear());
+    }
+
+    throw Error(`Unit ${unit} is not supported`);
   }
 }

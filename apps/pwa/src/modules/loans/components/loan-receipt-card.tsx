@@ -1,12 +1,14 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { HoverToEdit } from "@/components/hover-to-edit";
 import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Renderer } from "@/components/renderer";
 import { TooltipIcon } from "@/components/tooltip-icon";
 import { InputModalType } from "@/modals/modal-input";
-import { num, renderDate } from "@/modules/lang/lang-service";
 import { useInspectLoanReceipt } from "@/modules/loans/hooks/use-inspect-loan-receipt";
 import { LoanEntity } from "@/modules/loans/loans-types";
 import { OnModalPartialPayment } from "@/modules/receipts/modals/modal-partial-payment";
@@ -92,7 +94,7 @@ export const LoanReceiptCard: FC<{
               </Table.Td>
 
               <Table.Td ta="right" c={isExpired ? "red" : "gray"}>
-                {renderDate(receipt.expireAt)}
+                {receipt.expireAt && <DateFormat value={receipt.expireAt} type="date" />}
               </Table.Td>
             </Table.Tr>
 
@@ -148,7 +150,7 @@ export const LoanReceiptCard: FC<{
                     <Trans>Remain capital amount</Trans>
                   </Table.Td>
                   <Table.Td ta="right">
-                    {num(data.liquidationCalculated.remainCapitalAmount, { type: "money" })}
+                    <CurrencyFormat value={data.liquidationCalculated.remainCapitalAmount} />
                   </Table.Td>
                 </Table.Tr>
 
@@ -164,7 +166,13 @@ export const LoanReceiptCard: FC<{
                             </Table.Td>
                             <Table.Td fw={700}>
                               {data.liquidationCalculated.period} (
-                              {renderDate(data.liquidationCalculated.periodStartAt)})
+                              {data.liquidationCalculated.periodStartAt && (
+                                <DateFormat
+                                  value={data.liquidationCalculated.periodStartAt}
+                                  type="date"
+                                />
+                              )}
+                              )
                             </Table.Td>
                           </Table.Tr>
                           <Table.Tr>
@@ -172,7 +180,7 @@ export const LoanReceiptCard: FC<{
                               <Trans>Interest days</Trans>
                             </Table.Td>
                             <Table.Td fw={700}>
-                              {num(data.liquidationCalculated.periodFeeDays)}
+                              <NumberFormat value={data.liquidationCalculated.periodFeeDays} />
                             </Table.Td>
                           </Table.Tr>
                           <Table.Tr>
@@ -180,7 +188,7 @@ export const LoanReceiptCard: FC<{
                               <Trans>Interest per day</Trans>
                             </Table.Td>
                             <Table.Td fw={700}>
-                              {num(data.liquidationCalculated.periodFeePerDay)}
+                              <NumberFormat value={data.liquidationCalculated.periodFeePerDay} />
                             </Table.Td>
                           </Table.Tr>
                         </Table.Tbody>
@@ -194,7 +202,7 @@ export const LoanReceiptCard: FC<{
                     </Table.Td>
 
                     <Table.Td ta="right">
-                      {num(data.liquidationCalculated.periodFeeAmount, { type: "money" })}
+                      <CurrencyFormat value={data.liquidationCalculated.periodFeeAmount} />
                     </Table.Td>
                   </Table.Tr>
                 </Tooltip>
@@ -202,10 +210,13 @@ export const LoanReceiptCard: FC<{
                 <Table.Tr>
                   <Table.Td>
                     <Trans>Remain capital amount fee</Trans> (
-                    {num(data.liquidationCalculated.remainCapitalAmountFeePercent)}%)
+                    <NumberFormat
+                      value={data.liquidationCalculated.remainCapitalAmountFeePercent}
+                    />
+                    %)
                   </Table.Td>
                   <Table.Td ta="right">
-                    {num(data.liquidationCalculated.remainCapitalAmountFee, { type: "money" })}
+                    <CurrencyFormat value={data.liquidationCalculated.remainCapitalAmountFee} />
                   </Table.Td>
                 </Table.Tr>
 
@@ -214,7 +225,7 @@ export const LoanReceiptCard: FC<{
                     <Trans>Late interest fee</Trans>
                   </Table.Td>
                   <Table.Td ta="right">
-                    {num(data.liquidationCalculated.lateInterestAmount, { type: "money" })}
+                    <CurrencyFormat value={data.liquidationCalculated.lateInterestAmount} />
                   </Table.Td>
                 </Table.Tr>
               </Fragment>
@@ -227,7 +238,9 @@ export const LoanReceiptCard: FC<{
                     <Trans>Late interest fee days</Trans>
                   </Table.Td>
 
-                  <Table.Td ta="right">{num(data.lateInterest.days)}</Table.Td>
+                  <Table.Td ta="right">
+                    <NumberFormat value={data.lateInterest.days} />
+                  </Table.Td>
                 </Table.Tr>
 
                 <Table.Tr>
@@ -235,7 +248,9 @@ export const LoanReceiptCard: FC<{
                     <Trans>Late interest fee rate</Trans>
                   </Table.Td>
 
-                  <Table.Td ta="right">{num(data.lateInterest.rate)}%</Table.Td>
+                  <Table.Td ta="right">
+                    <NumberFormat value={data.lateInterest.rate} />%
+                  </Table.Td>
                 </Table.Tr>
               </Fragment>
             )}
