@@ -3,9 +3,9 @@ import { ModalTitle } from "@/components/modal-title";
 import { getDateFormat, num } from "@/modules/lang/lang-service";
 import { partialPaymentReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
-import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { round } from "@/utils/number.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Center, NumberInput, Slider, Stack, Text } from "@mantine/core";
@@ -13,7 +13,6 @@ import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconCircleHalf2 } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, useState } from "react";
 import { OnModalPayReceipt } from "./modal-pay-receipt";
 
@@ -85,11 +84,11 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
           valueFormat={getDateFormat()}
           {...form.getInputProps("nextExpireAt")}
           minDate={new Date()}
-          value={DateTime.secondsToTime(form.values.nextExpireAt)}
+          value={DateTime.normalizeDate(form.values.nextExpireAt)}
           onChange={(date) => {
             if (!date) return;
-            const _date = dayjs(date).endOf("day");
-            form.setFieldValue("nextExpireAt", DateTime.timeToSeconds(_date));
+            const range = DateTime.getRange(date, "day");
+            form.setFieldValue("nextExpireAt", DateTime.toSeconds(range.end));
           }}
         />
       )}

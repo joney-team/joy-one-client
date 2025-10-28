@@ -1,9 +1,9 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { Period } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Card, Center, Group, Indicator, NumberInput, Stack, Text } from "@mantine/core";
@@ -24,7 +24,7 @@ interface ModalDatePickerProps {
 const dayRenderer: DatePickerProps["renderDay"] = (date) => {
   const day = new Date(date).getDate();
 
-  if (DateTime.isToday(date))
+  if (DateTime.isSame(date, new Date(), "day"))
     return (
       <Indicator size={6} color="green" offset={-5}>
         <div>{day}</div>
@@ -50,8 +50,9 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
               value={range}
               onChange={(range) => {
                 if (range[0]) {
-                  const _range = DateTime.getStartEndOfWeek(
-                    new Date(range[0]).getTime() + 1000 * 60
+                  const _range = DateTime.getRange(
+                    new Date(range[0]).getTime() + 1000 * 60,
+                    "week"
                   );
                   setRange([new Date(_range.start), new Date(_range.end)]);
                 }
@@ -100,7 +101,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
               level="year"
               monthsListFormat="MMMM"
               onMonthSelect={(e) => {
-                const rangeOfMonth = DateTime.getStartEndOfMonth(new Date(e));
+                const rangeOfMonth = DateTime.getRange(new Date(e), "month");
                 props.onRangeSelected?.([new Date(rangeOfMonth.start), new Date(rangeOfMonth.end)]);
                 modals.close("date-picker");
               }}
@@ -168,7 +169,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                   const input = document.getElementById("year-input") as HTMLInputElement;
                   const value = +input.value;
                   if (value < min || value > max) throw new Error(t`Invalid year`);
-                  const range = DateTime.getStartEndOfYear(new Date(value, 1, 0, 0, 0));
+                  const range = DateTime.getRange(new Date(value, 1, 0, 0, 0), "year");
                   props.onRangeSelected?.([new Date(range.start), new Date(range.end)]);
                   modals.close("date-picker");
                 } catch (error) {

@@ -5,8 +5,8 @@ import { getDateFormat } from "@/modules/lang/lang-service";
 import { TaskTimeTracking } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime, parseTimeInput, setHoursMinutes, timeInputValue } from "@/utils/date-time.utils";
 import { String } from "@/utils/string.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
@@ -96,7 +96,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
       id: uuid(),
       user: t?.user || workspace.userMember,
       userId: t?.userId || workspace.userMember.userId,
-      startAt: DateTime.timeToSeconds(),
+      startAt: DateTime.toSeconds(new Date()),
     };
 
     onChange?.([...(value || []), tracking]);
@@ -106,7 +106,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
     const tracking = timeTrackings.find((v) => !!!v.endAt);
     if (!tracking) return;
 
-    const now = DateTime.timeToSeconds();
+    const now = DateTime.toSeconds(new Date());
     const seconds = now - tracking.startAt;
     const minSeconds = 60;
 
@@ -219,7 +219,7 @@ const InProgressTimeTrackingTimmer: FC<{
   timeTracking: TaskTimeTracking;
 }> = (props) => {
   const forceUpdate = useForceUpdate();
-  const now = DateTime.timeToSeconds();
+  const now = DateTime.toSeconds(new Date());
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -356,8 +356,8 @@ export const TimeTrackingForm: FC<{
       user: workspace.userMember,
       note: "",
       billable: true,
-      startAt: DateTime.timeToSeconds(),
-      endAt: DateTime.timeToSeconds() + 60 * 15,
+      startAt: DateTime.toSeconds(new Date()),
+      endAt: DateTime.toSeconds(new Date()) + 60 * 15,
     },
     onValuesChange: (values) => {
       if (props.timeTracking?.id) {
@@ -367,7 +367,7 @@ export const TimeTrackingForm: FC<{
   });
 
   const handleTimeTrackingChange = useDebouncedCallback(async (input: string) => {
-    const { seconds } = parseTimeInput(input);
+    const { seconds } = DateTime.parseTimeInputValue(input);
     if (seconds > 0) form.setFieldValue("endAt", form.values.startAt + seconds);
   }, 500);
 
@@ -446,17 +446,19 @@ export const TimeTrackingForm: FC<{
                   <TimeInput
                     flex={1}
                     ref={startAtRef}
-                    value={timeInputValue(form.values.startAt)}
+                    value={DateTime.toTimeInputValue(form.values.startAt)}
                     onChange={(e) => {
                       if (!form.values.startAt || !e.currentTarget.value) return;
                       const [hours, minutes] = e.currentTarget.value.split(":");
-                      const startAt = setHoursMinutes(form.values.startAt, hours, minutes);
+                      const startAt = DateTime.toSeconds(
+                        new Date().setHours(+hours, +minutes, 0, 0)
+                      );
                       form.setFieldValue("startAt", startAt);
 
                       // Sync with end at
                       const timeTracking = timeTrackingRef.current?.value;
                       if (timeTracking) {
-                        const { seconds } = parseTimeInput(timeTracking);
+                        const { seconds } = DateTime.parseTimeInputValue(timeTracking);
                         form.setFieldValue("endAt", startAt + seconds);
                       } else if (form.values.endAt && startAt >= form.values.endAt) {
                         form.setFieldValue("endAt", startAt + 60);
@@ -479,16 +481,16 @@ export const TimeTrackingForm: FC<{
 
                   <TimeInput
                     ref={endAtRef}
-                    value={timeInputValue(form.values.endAt)}
+                    value={DateTime.toTimeInputValue(form.values.endAt)}
                     onChange={(e) => {
                       if (!form.values.endAt || !e.currentTarget.value) return;
                       const [hours, minutes] = e.currentTarget.value.split(":");
-                      const endAt = setHoursMinutes(form.values.endAt, hours, minutes);
+                      const endAt = DateTime.toSeconds(new Date().setHours(+hours, +minutes, 0, 0));
                       form.setFieldValue("endAt", endAt);
 
                       const timeTracking = timeTrackingRef.current?.value;
                       if (timeTracking) {
-                        const { seconds } = parseTimeInput(timeTracking);
+                        const { seconds } = DateTime.parseTimeInputValue(timeTracking);
                         form.setFieldValue("startAt", endAt - seconds);
                       } else if (form.values.startAt && endAt <= form.values.startAt) {
                         form.setFieldValue("startAt", endAt - 60);

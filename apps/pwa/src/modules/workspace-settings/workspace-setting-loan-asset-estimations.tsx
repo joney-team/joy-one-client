@@ -18,7 +18,7 @@ import { OnModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loa
 import { convertExcelToJson } from "@/modules/tools/tools-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
-import { DateTime } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { ActionIcon, Card, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
@@ -99,7 +99,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
         productImages: [],
         colorId: "",
         productManufacturingDate: rawProductManufacturingYear
-          ? DateTime.timeToSeconds(new Date(+rawProductManufacturingYear, 0, 1))
+          ? DateTime.toSeconds(new Date(+rawProductManufacturingYear, 0, 1))
           : undefined,
         productName: rawProductName,
       };

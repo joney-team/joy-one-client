@@ -6,8 +6,8 @@ import { requestTimekeeping } from "@/modules/hrm-timekeepings/hrm-timekeepings-
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { getDateFormat } from "@/modules/lang/lang-service";
 import { onSuccess } from "@/utils/actions";
-import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Center, SimpleGrid, Stack, Text, Textarea, em } from "@mantine/core";
@@ -81,7 +81,7 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
     try {
       if (checkInAt) {
         await requestTimekeeping({
-          time: DateTime.timeToSeconds(checkInAt),
+          time: DateTime.toSeconds(checkInAt),
           note: values.note!,
           type: HrmTimekeepingType.CHECK_IN,
         });
@@ -89,7 +89,7 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
 
       if (checkOutAt) {
         await requestTimekeeping({
-          time: DateTime.timeToSeconds(checkOutAt),
+          time: DateTime.toSeconds(checkOutAt),
           note: values.note!,
           type: HrmTimekeepingType.CHECK_OUT,
         });

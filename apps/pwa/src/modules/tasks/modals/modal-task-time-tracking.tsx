@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { ModalTitle } from "@/components/modal-title";
@@ -12,13 +14,8 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import {
-  DateTime,
-  findNearestTimeSlot,
-  setHoursMinutes,
-  timeInputValue,
-} from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -49,6 +46,37 @@ import {
 import { FC, useEffect, useRef, useState } from "react";
 import { Calendar } from "react-big-calendar";
 import { v4 as uuId } from "uuid";
+
+export function findNearestTimeSlot(now = new Date()) {
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  // Các mốc thời gian trong ngày (15 phút mỗi mốc)
+  const timeSlots = [];
+  for (let i = 0; i < 24 * 60; i += 15) {
+    timeSlots.push(i); // Lưu trữ số phút từ đầu ngày
+  }
+
+  // Tìm mốc thời gian gần nhất
+  let nearestSlot = timeSlots[0];
+  let minDifference = Math.abs(currentMinutes - timeSlots[0]);
+
+  for (let i = 1; i < timeSlots.length; i++) {
+    const difference = Math.abs(currentMinutes - timeSlots[i]);
+    if (difference < minDifference) {
+      nearestSlot = timeSlots[i];
+      minDifference = difference;
+    }
+  }
+
+  // Chuyển đổi mốc thời gian từ phút thành định dạng hh:mm
+  const hours = Math.floor(nearestSlot / 60);
+  const minutes = nearestSlot % 60;
+  const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}`;
+
+  return formattedTime;
+}
 
 export interface TaskTimeTrackingModalProps {
   date: Date;
@@ -124,8 +152,8 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
             id: uuId(),
             userId: user.userId,
             user,
-            startAt: DateTime.timeToSeconds(startAt),
-            endAt: DateTime.timeToSeconds(endAt),
+            startAt: DateTime.toSeconds(startAt),
+            endAt: DateTime.toSeconds(endAt),
             billable,
           },
         ],
@@ -216,8 +244,8 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
                 }
                 onSelectSlot={(slot) => {
                   setSlot({
-                    startAt: DateTime.timeToSeconds(slot.start),
-                    endAt: DateTime.timeToSeconds(slot.end),
+                    startAt: DateTime.toSeconds(slot.start),
+                    endAt: DateTime.toSeconds(slot.end),
                   });
                 }}
                 formats={{
@@ -267,10 +295,10 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
             <TimeInput
               flex={1}
               ref={startAtRef}
-              value={timeInputValue(slot?.startAt)}
+              value={DateTime.toTimeInputValue(slot?.startAt)}
               onChange={(e) => {
                 const [hours, minutes] = e.currentTarget.value.split(":");
-                const startAt = setHoursMinutes(new Date().getTime(), +hours, +minutes);
+                const startAt = DateTime.toSeconds(new Date().setHours(+hours, +minutes, 0, 0));
 
                 setSlot(
                   slot
@@ -305,15 +333,15 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
             <TimeInput
               ref={endAtRef}
               disabled={!slot}
-              defaultValue={timeInputValue(slot?.endAt)}
+              defaultValue={DateTime.toTimeInputValue(slot?.endAt)}
               onChange={(e) => {
                 if (!slot) return;
                 const [hours, minutes] = e.currentTarget.value.split(":");
-                const endAt = setHoursMinutes(new Date().getTime(), +hours, +minutes);
+                const endAt = DateTime.toSeconds(new Date().setHours(+hours, +minutes, 0, 0));
 
                 setSlot({
                   startAt: slot.startAt,
-                  endAt: endAt,
+                  endAt,
                 });
 
                 scrollToSlot(new Date(slot.startAt * 1000));

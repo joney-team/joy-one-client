@@ -1,11 +1,11 @@
-import { wait } from "@/utils/common.utils";
+import { useList } from "@/components/list/use-list";
 import { useLayout } from "@/layout/layout-context";
-import { useTasks } from "@/modules/tasks/tasks-context";
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
+import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, syncTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
-import { DateTime } from "@/utils/date-time.utils";
-import { useList } from "@/components/list/use-list";
+import { wait } from "@/utils/common.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { useForceUpdate, useThrottledCallback } from "@mantine/hooks";
 import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { ganttConfig } from "./gantt.config";
@@ -122,7 +122,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
       return acc;
     }, undefined as TaskEntity | undefined);
 
-    if (lastedTask && lastedTask.dueDate && lastedTask.dueDate > DateTime.timeToSeconds(now)) {
+    if (lastedTask && lastedTask.dueDate && lastedTask.dueDate > DateTime.toSeconds(now)) {
       toDate = lastedTask.dueDate * 1000 + oneDate * ganttConfig.rangeDates;
     }
 
@@ -132,7 +132,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
       return acc;
     }, {} as TaskEntity | undefined);
 
-    if (oldedTask && oldedTask.dueDate && oldedTask.dueDate < DateTime.timeToSeconds(now)) {
+    if (oldedTask && oldedTask.dueDate && oldedTask.dueDate < DateTime.toSeconds(now)) {
       fromDate = oldedTask.dueDate * 1000 - oneDate * ganttConfig.rangeDates;
     }
 

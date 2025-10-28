@@ -6,7 +6,7 @@ import { useHrmTimekeeping } from "@/modules/hrm-timekeepings/hooks";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { OnModalCaptureLocationTimekeeping } from "@/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping";
 import { useColor } from "@/modules/theme/use-color";
-import { DateTime } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -41,7 +41,7 @@ export const HrmTimekeepingButton: FC = () => {
 
   const workTime =
     timekeeping.prevTimekeeping && timekeeping.prevTimekeeping.type === HrmTimekeepingType.CHECK_IN
-      ? DateTime.countdown(Date.now(), timekeeping.prevTimekeeping.time * 1000)
+      ? DateTime.countdown(new Date(), timekeeping.prevTimekeeping.time)
       : undefined;
 
   useEffect(() => {

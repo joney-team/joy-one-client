@@ -12,8 +12,8 @@ import { getDateFormat } from "@/modules/lang/lang-service";
 import { optionsFilter } from "@/modules/theme/generator";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -258,20 +258,28 @@ export const ModalRegisterCustomerKyc: FC = () => {
               <DateInput
                 label={t`Birthday`}
                 valueFormat={getDateFormat()}
-                value={DateTime.secondsToTime(form.values.cidBirthday)}
+                value={
+                  form.values.cidBirthday
+                    ? DateTime.normalizeDate(form.values.cidBirthday)
+                    : undefined
+                }
                 onChange={(date) => {
                   if (!date) return;
-                  form.setFieldValue("cidBirthday", DateTime.timeToSeconds(date));
+                  form.setFieldValue("cidBirthday", DateTime.toSeconds(date));
                 }}
               />
 
               <DateInput
                 label={t`Issued date`}
                 valueFormat={getDateFormat()}
-                value={DateTime.secondsToTime(form.values.cidCreatedAt)}
+                value={
+                  form.values.cidCreatedAt
+                    ? DateTime.normalizeDate(form.values.cidCreatedAt)
+                    : undefined
+                }
                 onChange={(date) => {
                   if (!date) return;
-                  form.setFieldValue("cidCreatedAt", DateTime.timeToSeconds(date));
+                  form.setFieldValue("cidCreatedAt", DateTime.toSeconds(date));
                 }}
               />
             </SimpleGrid>

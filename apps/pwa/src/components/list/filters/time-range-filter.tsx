@@ -6,7 +6,7 @@ import { DateFormat } from "@/components/format/date-format";
 import { OnModalDatePicker } from "@/modals/modal-date-picker";
 import { useColor } from "@/modules/theme/use-color";
 import { Period } from "@/types";
-import { timeToSeconds } from "@joy-one-client/utils/date-time.legacy";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
 import { t } from "@lingui/core/macro";
 import { Group } from "@mantine/core";
@@ -66,7 +66,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
             if (!date) return;
             list.setParams({
               [filterRangeKey]: null,
-              [filterPeriodKey]: `${Period.DATE}-${timeToSeconds(date)}`,
+              [filterPeriodKey]: `${Period.DATE}-${DateTime.toSeconds(date)}`,
             });
           },
         }),
@@ -79,10 +79,10 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         OnModalDatePicker({
           period: Period.MONTH,
           onRangeSelected: (date) => {
-            if (!date) return;
+            if (!date || !date[0]) return;
             list.setParams({
               [filterRangeKey]: null,
-              [filterPeriodKey]: `${Period.MONTH}-${timeToSeconds(date[0])}`,
+              [filterPeriodKey]: `${Period.MONTH}-${DateTime.toSeconds(date[0])}`,
             });
           },
         }),
@@ -95,10 +95,10 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         OnModalDatePicker({
           period: Period.YEAR,
           onRangeSelected: (date) => {
-            if (!date) return;
+            if (!date || !date[0]) return;
             list.setParams({
               [filterRangeKey]: null,
-              [filterPeriodKey]: `${Period.YEAR}-${timeToSeconds(date[0])}`,
+              [filterPeriodKey]: `${Period.YEAR}-${DateTime.toSeconds(date[0])}`,
             });
           },
         }),
@@ -110,10 +110,10 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
       onClick: () =>
         OnModalDatePicker({
           onRangeSelected: (date) => {
-            if (!date) return;
+            if (!date || !date[0] || !date[1]) return;
             list.setParams({
               [filterPeriodKey]: null,
-              [filterRangeKey]: `${timeToSeconds(date[0])}-${timeToSeconds(date[1])}`,
+              [filterRangeKey]: `${DateTime.toSeconds(date[0])}-${DateTime.toSeconds(date[1])}`,
             });
           },
         }),

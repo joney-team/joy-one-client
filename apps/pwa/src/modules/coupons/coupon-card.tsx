@@ -1,9 +1,9 @@
 "use client";
 
 import { EntityImage } from "@/components/entity-image";
+import { NumberFormat } from "@/components/format/number-format";
 import { getCouponCode } from "@/modules/coupons/coupon-service";
 import { CouponEntity } from "@/modules/coupons/coupon-types";
-import { num } from "@/modules/lang/lang-service";
 import { Trans } from "@lingui/react/macro";
 import { Card, CardProps, em, Group, Stack, Text } from "@mantine/core";
 import { IconTicket } from "@tabler/icons-react";
@@ -31,7 +31,7 @@ export const CouponCard: FC<CouponCardProps> = (props) => {
 
           {!props.hideQuantity && (
             <Text fw={500} fz={em(13)} c="gray">
-              • <Trans>Quantity</Trans>: {num(coupon.quantity)}
+              • <Trans>Quantity</Trans>: <NumberFormat value={coupon.quantity} />
             </Text>
           )}
           {!props.hideCode && (

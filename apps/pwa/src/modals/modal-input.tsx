@@ -1,15 +1,15 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateInput } from "@/components/inputs/date-input";
 import { ModalTitle } from "@/components/modal-title";
-import { num } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { Currency } from "@joy-one-client/utils/currency";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import {
   Anchor,
@@ -167,7 +167,7 @@ export const ModalInput: FC = () => {
                       const date = dayjs(form.values.value * 1000)
                         .hour(+hours)
                         .minute(+mins);
-                      form.setFieldValue("value", DateTime.timeToSeconds(date.toDate()));
+                      form.setFieldValue("value", DateTime.toSeconds(date.toDate()));
                     }}
                   />
                 </Group>
@@ -193,10 +193,10 @@ export const ModalInput: FC = () => {
 
                         <Group justify="space-between">
                           <Text fz={12} c="gray" ta="left">
-                            {num(args.min, { type: "money" })}
+                            <CurrencyFormat value={args.min} />
                           </Text>
                           <Text fz={12} c="gray" ta="right">
-                            {num(args.max, { type: "money" })}
+                            <CurrencyFormat value={args.max} />
                           </Text>
                         </Group>
                       </Stack>

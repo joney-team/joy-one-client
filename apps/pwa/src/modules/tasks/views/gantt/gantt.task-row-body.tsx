@@ -7,7 +7,6 @@ import { getTaskProgress, renderTaskStatusStyle } from "@/modules/tasks/tasks-se
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@/utils/date-time.utils";
 import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
@@ -29,6 +28,7 @@ import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
 import { useGanttTaskState } from "./gantt.hooks";
 import { getRangeOfTasks } from "./gantt.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 interface GanttTaskRowBodyProps {
   id: string;
@@ -65,19 +65,19 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
     if (!isResizing) return;
     try {
       const selectedDate = gantt.dates[Math.floor(mouse.x / gantt.state.columnSize)];
-      const rangeDate = DateTime.getStartEndOfDay(selectedDate);
+      const rangeDate = DateTime.getRange(selectedDate, "day");
 
       if (isResizing === "left") {
         ctx.onUpdate({
           ...task,
-          startDate: DateTime.timeToSeconds(rangeDate.start),
+          startDate: DateTime.toSeconds(rangeDate.start),
         });
       }
 
       if (isResizing === "right") {
         ctx.onUpdate({
           ...task,
-          dueDate: DateTime.timeToSeconds(rangeDate.end),
+          dueDate: DateTime.toSeconds(rangeDate.end),
         });
       }
     } catch (error) {
@@ -95,10 +95,10 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
 
     const selectedDate = gantt.dates[Math.floor(x / dateWidth)];
     if (!selectedDate) return;
-    const rangeDate = DateTime.getStartEndOfDay(selectedDate);
+    const rangeDate = DateTime.getRange(selectedDate, "day");
 
-    const startDateInSecs = DateTime.timeToSeconds(rangeDate.start);
-    const dueDateInSecs = DateTime.timeToSeconds(rangeDate.end);
+    const startDateInSecs = DateTime.toSeconds(rangeDate.start);
+    const dueDateInSecs = DateTime.toSeconds(rangeDate.end);
 
     let startDate = task.startDate;
     let dueDate = task.dueDate;
@@ -173,8 +173,8 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
 
       ctx.onUpdate({
         ...task,
-        startDate: DateTime.timeToSeconds(startDate),
-        dueDate: DateTime.timeToSeconds(dueDate),
+        startDate: DateTime.toSeconds(startDate),
+        dueDate: DateTime.toSeconds(dueDate),
       });
 
       close();

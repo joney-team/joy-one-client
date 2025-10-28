@@ -12,7 +12,6 @@ import {
   LoanAssetEstimationModel,
   LoanAssetType,
 } from "@/modules/loans/loans-types";
-import { DateTime } from "@/utils/date-time.utils";
 import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
@@ -32,6 +31,7 @@ import { IconCoins, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { InputModalType, OnModalInput } from "../../../modals/modal-input";
 import { loanAssetTypes } from "../loans-constants";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 interface ModalLoanAssetEstimationFormProps {
   estimation?: LoanAssetEstimation;
@@ -359,7 +359,7 @@ export const ModalLoanAssetEstimationForm: FC = () => {
               if (!date) return null;
               form.setFieldValue(
                 "productManufacturingDate",
-                DateTime.timeToSeconds(new Date(new Date(date).getFullYear(), 0, 1))
+                DateTime.toSeconds(new Date(new Date(date).getFullYear(), 0, 1))
               );
             }}
             valueFormat="YYYY"

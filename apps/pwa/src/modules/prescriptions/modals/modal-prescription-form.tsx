@@ -23,9 +23,9 @@ import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
-import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
@@ -291,7 +291,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
             ...form.values,
             items,
             _id: props.prescription?._id || "",
-            createdAt: DateTime.timeToSeconds(),
+            createdAt: DateTime.toSeconds(new Date()),
             workspaceId: workspace.userMember.workspaceId,
           }}
         />

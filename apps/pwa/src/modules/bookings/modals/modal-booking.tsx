@@ -37,10 +37,10 @@ import { getDateFormat } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
-import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import dayjs from "dayjs";
@@ -84,7 +84,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
 
   const fetchRelatedBookings = async () => {
     const bookings = await getBookings({
-      rangeStartTime: `${DateTime.timeToSeconds(bookingQuery.start)}-${DateTime.timeToSeconds(
+      rangeStartTime: `${DateTime.toSeconds(bookingQuery.start)}-${DateTime.toSeconds(
         bookingQuery.end
       )}`,
       assigneeUserIds: assigneeUsers.map((v) => v.userId),
@@ -122,8 +122,8 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
         customerId: customer._id,
         note,
         assigneeUserIds: assigneeUsers.map((v) => v.userId),
-        startTime: DateTime.timeToSeconds(creatingData.start),
-        endTime: DateTime.timeToSeconds(creatingData.end),
+        startTime: DateTime.toSeconds(creatingData.start),
+        endTime: DateTime.toSeconds(creatingData.end),
         status: BookingStatus.JUST_CREATED,
       };
 

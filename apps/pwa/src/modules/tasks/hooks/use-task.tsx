@@ -1,13 +1,14 @@
 "use client";
 
-import { DateTime } from "@/utils/date-time.utils";
-import { onError } from "@/utils/exceptions.utils";
 import { useList } from "@/components/list/use-list";
-import { useEffect, useState } from "react";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useTasks } from "@/modules/tasks/tasks-context";
+import { useColor } from "@/modules/theme/use-color";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onError } from "@/utils/exceptions.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
+import { useEffect, useState } from "react";
 import {
   getTask,
   getTaskEntity,
@@ -19,7 +20,6 @@ import {
   updateTasks,
 } from "../tasks-service";
 import { DefaultTaskStatusId, TaskEntity, TaskStatus } from "../tasks-types";
-import { useColor } from "@/modules/theme/use-color";
 
 export type UseTask = [
   TaskEntity,
@@ -102,7 +102,7 @@ export const useTask = (id: string, initTask?: TaskEntity, isSkipLoadSubTasks = 
   const themeColor = color(tagFolder?.color || "primary");
   const isOutdated =
     !!task?.dueDate &&
-    task.dueDate < DateTime.timeToSeconds() &&
+    task.dueDate < DateTime.toSeconds(new Date()) &&
     task.status !== DefaultTaskStatusId.CLOSED;
 
   const nextStatus = async () => {

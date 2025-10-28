@@ -1,5 +1,4 @@
 import { WorkSlot } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
 import { WorkspaceMemberWorkingTimeType } from "@/modules/workspace-members/workspace-members-types";
 import {
   HrmTimekeepingEntity,
@@ -8,6 +7,7 @@ import {
 } from "./hrm-timekeepings-types";
 import dayjs from "dayjs";
 import { sortWorkSlots } from "../workspace-settings/workspace-settings-service";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 export interface HrmCalculateTimekeepingsArgs {
   timekeepings: HrmTimekeepingEntity[];
@@ -55,6 +55,55 @@ export interface HrmCalculateTimekeepingsResult {
   totalWorkingTime: number;
   lateTime: number;
   overTime: number;
+}
+
+function getDeviation(fixedTime: number, time: number) {
+  if (fixedTime === time) return 0;
+  const between = Math.abs(fixedTime - time);
+  if (fixedTime > time) return -between;
+  return between;
+}
+
+function getIntersect(
+  fixedTime: { start: number; end: number },
+  time: { start: number; end: number }
+): {
+  start: number;
+  end: number;
+  duration: number;
+  startDeviation: number;
+  endDeviation: number;
+} | null {
+  if (fixedTime.start >= time.end || fixedTime.end <= time.start) return null;
+
+  const start = Math.max(fixedTime.start, time.start);
+  const end = Math.min(fixedTime.end, time.end);
+  const duration = end - start;
+
+  const startDeviation = getDeviation(fixedTime.start, time.start);
+  const endDeviation = getDeviation(fixedTime.end, time.end);
+
+  return {
+    start,
+    end,
+    duration,
+    startDeviation,
+    endDeviation,
+  };
+}
+
+function rangeSlice(time: { start: number; end: number }, slice: { start: number; end: number }) {
+  const remainTimes = [] as { start: number; end: number }[];
+
+  if (time.start < slice.start) {
+    remainTimes.push({ start: time.start, end: slice.start });
+  }
+
+  if (time.end > slice.end) {
+    remainTimes.push({ start: slice.end, end: time.end });
+  }
+
+  return remainTimes;
 }
 
 export function calculateTimekeepings(
@@ -116,13 +165,13 @@ export function calculateTimekeepings(
         const slots = _workSlots.filter((slot) => (slot.groupId || "0") === groupId);
 
         if (slots.length > 0) {
-          const start = DateTime.timeToSeconds(
+          const start = DateTime.toSeconds(
             dayjs(timekeepings[0].time * 1000)
               .add(slots[0].startHour, "hour")
               .add(slots[0].startMin, "minute")
               .toDate()
           );
-          const end = DateTime.timeToSeconds(
+          const end = DateTime.toSeconds(
             dayjs(timekeepings[0].time * 1000)
               .add(slots[slots.length - 1].endHour, "hour")
               .add(slots[slots.length - 1].endMin, "minute")
@@ -166,20 +215,20 @@ export function calculateTimekeepings(
           if (+groupId >= +mainGroupId) {
             group.slots.map((slot) => {
               rangeTimes.map((range, index) => {
-                const slotStart = DateTime.timeToSeconds(
-                  dayjs(timekeepings[0].time * 1000)
+                const slotStart = DateTime.toSeconds(
+                  dayjs(timekeepings[0].time)
                     .add(slot.startHour, "hour")
                     .add(slot.startMin, "minute")
                     .toDate()
                 );
-                const slotEnd = DateTime.timeToSeconds(
-                  dayjs(timekeepings[0].time * 1000)
+                const slotEnd = DateTime.toSeconds(
+                  dayjs(timekeepings[0].time)
                     .add(slot.endHour, "hour")
                     .add(slot.endMin, "minute")
                     .toDate()
                 );
 
-                const interect = DateTime.getIntersect(
+                const interect = getIntersect(
                   {
                     start: slotStart,
                     end: slotEnd,
@@ -188,9 +237,7 @@ export function calculateTimekeepings(
                 );
                 if (interect) {
                   let _ranges = rangeTimes.filter((_, i) => i !== index);
-                  const remainRange = DateTime.rangeSlice(range, interect).filter(
-                    (r) => r.start >= slotEnd
-                  );
+                  const remainRange = rangeSlice(range, interect).filter((r) => r.start >= slotEnd);
 
                   _ranges = [..._ranges, ...remainRange];
                   rangeTimes = _ranges;
@@ -287,3 +334,12 @@ export function calculateTimekeepings(
     overTime,
   };
 }
+
+export const workingTimeHours = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600);
+  const remainingSeconds = seconds % 3600;
+  const minutes = remainingSeconds / 60;
+
+  const workHours = hours + minutes / 60;
+  return parseFloat(workHours.toFixed(2));
+};

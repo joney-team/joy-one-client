@@ -4,6 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { ModalTitle } from "@/components/modal-title";
 import { useEventsListener } from "@/modules/events/event-service";
@@ -18,11 +19,13 @@ import {
   HrmTimekeepingStatus,
   HrmTimekeepingType,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { calculateTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
-import { num } from "@/modules/lang/lang-service";
+import {
+  calculateTimekeepings,
+  workingTimeHours,
+} from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -92,11 +95,11 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
   const lastTimekeeping = timekeepings.data[timekeepings.data.length - 1];
   const isWorking =
     lastTimekeeping &&
-    DateTime.isToday(lastTimekeeping.time * 1000) &&
+    DateTime.isSame(lastTimekeeping.time * 1000, new Date(), "day") &&
     lastTimekeeping.type === HrmTimekeepingType.CHECK_IN;
   const isForgotCheckOut =
     lastTimekeeping &&
-    !DateTime.isToday(lastTimekeeping.time * 1000) &&
+    !DateTime.isSame(lastTimekeeping.time * 1000, new Date(), "day") &&
     lastTimekeeping.type !== HrmTimekeepingType.CHECK_OUT;
 
   const isEmpty = timekeepings.count === 0 && !timekeepings.isFetching && !timekeepings.error;
@@ -159,7 +162,9 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                     <Text fw={700}>
                       <Trans>Working time</Trans>:
                     </Text>
-                    <Text>{num(calculated.totalWorkingTime, { type: "hours" })}</Text>
+                    <Text>
+                      <NumberFormat value={workingTimeHours(calculated.totalWorkingTime)} />
+                    </Text>
                     {calculated.totalWorkingTime > 0 && (
                       <Badge color="green">{DateTime.toHHMM(calculated.totalWorkingTime)}</Badge>
                     )}
@@ -170,7 +175,9 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                       <Text fw={700}>
                         <Trans>Working time</Trans>:
                       </Text>
-                      <Text>{num(calculated.overTime, { type: "hours" })}</Text>
+                      <Text>
+                        <NumberFormat value={workingTimeHours(calculated.overTime)} />
+                      </Text>
                       {calculated.overTime > 0 && (
                         <Badge color="green">{DateTime.toHHMM(calculated.overTime)}</Badge>
                       )}
@@ -182,7 +189,9 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
                       <Text fw={700}>
                         <Trans>Late</Trans>:
                       </Text>
-                      <Text>{num(calculated.lateTime, { type: "hours" })}</Text>
+                      <Text>
+                        <NumberFormat value={workingTimeHours(calculated.lateTime)} />
+                      </Text>
                       {calculated.lateTime > 0 && (
                         <Badge color="red">{DateTime.toHHMM(calculated.lateTime)}</Badge>
                       )}
@@ -201,7 +210,8 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
             <Group justify="space-between" wrap="nowrap">
               <Text>
                 <Trans>
-                  There are {num(pendingTimekeepings.length)} timekeeping requests pending approval
+                  There are <NumberFormat value={pendingTimekeepings.length} /> timekeeping requests
+                  pending approval
                 </Trans>
               </Text>
 

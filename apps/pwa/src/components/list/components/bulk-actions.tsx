@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
-import { num } from "@/modules/lang/lang-service";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Center, Divider, Group, Text, Tooltip } from "@mantine/core";
@@ -32,7 +32,7 @@ export const BulkActions: FC<ListContext> = (ctx) => {
           <IconStack2 size={20} strokeWidth={1.5} color="white" />
           <Group gap={3} wrap="nowrap">
             <Text c="white" fz={14} fw={600} miw={10}>
-              {num(ctx.selectedIds.length)}
+              <NumberFormat value={ctx.selectedIds.length} />
             </Text>
             <Text c="white" fz={14} fw={600}>
               {t`Selected`}

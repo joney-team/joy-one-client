@@ -1,5 +1,6 @@
 "use client";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { useLayout } from "@/layout/layout-context";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
 import { OnCustomerModal } from "@/modules/customers/customer-modal";
@@ -8,7 +9,7 @@ import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-custom
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/modal-customer-relationship-contacts";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
-import { getDateFormat, num } from "@/modules/lang/lang-service";
+import { getDateFormat } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -20,6 +21,7 @@ import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import config from "@joy-one-client/config";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -54,8 +56,6 @@ import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
 import { assignCustomer, renderGener, renderGenerIcon, updateCustomer } from "../customer-service";
 import { CustomerLocations } from "./customer-locations";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
 
 interface CustomerInformationsProps {
   customer: CustomerEntity;
@@ -210,7 +210,9 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         <IconAddressBook strokeWidth={1.5} size={18} />
                       </ThemeIcon>
                       <Text fz={em(15)}>
-                        {t`Contacts`}: {num(contacts.data?.contacts.length)}
+                        <Trans>Contacts</Trans>
+                        {": "}
+                        <NumberFormat value={contacts.data?.contacts.length ?? 0} />
                       </Text>
                     </Group>
                   </Anchor>
@@ -227,7 +229,9 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         <IconAddressBook strokeWidth={1.5} size={18} />
                       </ThemeIcon>
                       <Text fz={em(15)}>
-                        {t`Contact relatives`}: {num(customer.relationshipContacts?.length)}
+                        <Trans>Contact relatives</Trans>
+                        {": "}
+                        <NumberFormat value={customer.relationshipContacts?.length ?? 0} />
                       </Text>
                     </Group>
                   </Anchor>

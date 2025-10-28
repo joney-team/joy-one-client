@@ -20,9 +20,8 @@ import {
   useWorkDaySlots,
 } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@/utils/date-time.utils";
 import { onFormError } from "@/utils/exceptions.utils";
-import { capitalize } from "@/utils/string.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -94,13 +93,17 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
+      if (!values.startTime || !values.endTime) {
+        throw Error(t`Start time and end time are required`);
+      }
+
       const payload: CreateBookingDto = {
         title: values.title,
         note: values.note,
         customerId: values.customer?._id,
         assigneeUserIds: values.assigneeUsers?.map((v) => v.userId) ?? [],
-        startTime: DateTime.timeToSeconds(values.startTime),
-        endTime: DateTime.timeToSeconds(values.endTime),
+        startTime: DateTime.toSeconds(values.startTime),
+        endTime: DateTime.toSeconds(values.endTime),
         status: BookingStatus.JUST_CREATED,
       };
 

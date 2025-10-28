@@ -19,7 +19,6 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { Period } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
 import { ObjectUtils } from "@/utils/object.utils";
 import { t } from "@lingui/core/macro";
 import { Group, Loader, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
@@ -42,6 +41,7 @@ import { Errored } from "../../components/errored";
 import { Renderer } from "../../components/renderer";
 import { reportWidgetModules } from "./modules";
 import { ReportWidgetsContext } from "./types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 export const ReportWidgets: FC = () => {
   const workspace = useWorkspace();
@@ -62,8 +62,8 @@ export const ReportWidgets: FC = () => {
     const date = _query.date ? new Date(+_query.date * 1000) : new Date();
     const range = DateTime.getRange(date, targetPeriod);
 
-    let fromTime = DateTime.timeToSeconds(range.start);
-    let toTime = DateTime.timeToSeconds(range.end > Date.now() ? Date.now() : range.end);
+    let fromTime = DateTime.toSeconds(range.start);
+    let toTime = DateTime.toSeconds(range.end.getTime() > Date.now() ? Date.now() : range.end);
 
     if (prev) {
       const distance = toTime - fromTime;
@@ -180,14 +180,14 @@ export const ReportWidgets: FC = () => {
               onSelected:
                 period === Period.DATE
                   ? (date) => {
-                      report.setParams({ date: DateTime.timeToSeconds(date) });
+                      report.setParams({ date: DateTime.toSeconds(date) });
                     }
                   : undefined,
               onRangeSelected:
                 period !== Period.DATE
                   ? (range) => {
-                      if (range) {
-                        report.setParams({ date: DateTime.timeToSeconds(range[0]) });
+                      if (range && range[0]) {
+                        report.setParams({ date: DateTime.toSeconds(range[0]) });
                       }
                     }
                   : undefined,

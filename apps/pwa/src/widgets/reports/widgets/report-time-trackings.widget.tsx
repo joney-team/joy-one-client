@@ -13,7 +13,6 @@ import { TagType } from "@/modules/tags/tags-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
-import { DateTime } from "@/utils/date-time.utils";
 import { WidgetProps } from "@/widgets/types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -21,6 +20,7 @@ import { Card, Group, Skeleton, Stack, Table, Text, ThemeIcon } from "@mantine/c
 import { IconFolder, IconStopwatch } from "@tabler/icons-react";
 import { FC } from "react";
 import { ReportWidgetsContext } from "../types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = (props) => {
   const tags = useTags();
@@ -117,7 +117,7 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
 
             <Table.Tbody>
               {users.map((user) => {
-                const now = DateTime.timeToSeconds();
+                const now = DateTime.toSeconds(new Date());
                 const relatedTasks = tasks.data.filter((t) =>
                   t.relatedUserIds?.some((u) => u === user.userId)
                 );

@@ -8,7 +8,7 @@ import { ProductComboEntity } from "@/modules/product-combos/product-combos-enti
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
 import { ResponseList } from "@/types";
 import { onArchive } from "@/utils/actions";
-import { timeToSeconds } from "@joy-one-client/utils/date-time.legacy";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { readLocalStorageValue, useLocalStorage, UseStorageOptions } from "@mantine/hooks";
 import { useSearchParams } from "next/navigation";
@@ -47,7 +47,7 @@ const generateInitialOrderSale = (): Order => {
     isSaved: false,
     items: [],
     assigneeUsers: [],
-    createdAt: timeToSeconds(),
+    createdAt: DateTime.toSeconds(new Date()),
   };
 };
 
@@ -212,7 +212,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     },
     addOrder: (order) => {
       const _order = order ? normalizeEntityToOrder(order) : generateInitialOrderSale();
-      _order.createdAt = timeToSeconds();
+      _order.createdAt = DateTime.toSeconds(new Date());
       setState((s) => ({ ...s, orders: [...s.orders, _order], activeOrderId: _order.id }));
     },
     addProduct: (product) => {

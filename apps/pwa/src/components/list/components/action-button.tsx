@@ -1,4 +1,6 @@
-import { num } from "@/modules/lang/lang-service";
+"use client";
+
+import { NumberFormat } from "@/components/format/number-format";
 import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Badge, Button, Group, Text, Tooltip } from "@mantine/core";
 import { Icon, IconX } from "@tabler/icons-react";
@@ -80,7 +82,7 @@ export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
 
           {quantity && quantity > 0 && (
             <Badge size="xs" variant="outline" color={color(quantityColor || "primary")} px={5}>
-              {num(quantity)}
+              <NumberFormat value={quantity} />
             </Badge>
           )}
 

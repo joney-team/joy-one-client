@@ -1,5 +1,7 @@
+"use client";
+
+import { NumberFormat } from "@/components/format/number-format";
 import { Text } from "@mantine/core";
-import { num } from "@/modules/lang/lang-service";
 import { Column } from "../types";
 
 export interface NumberColumnOptions extends Omit<Column, "render"> {
@@ -16,7 +18,11 @@ export const NumberColumn = (options?: NumberColumnOptions): Column => {
     align,
     render: ({ value }) => {
       if (typeof value !== "number") return null;
-      return <Text ta={options?.align}>{num(value, { type: options?.type })}</Text>;
+      return (
+        <Text ta={options?.align}>
+          <NumberFormat value={value} />
+        </Text>
+      );
     },
     exportToExcel: (value) => {
       if (options?.type === "money") {

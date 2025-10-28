@@ -1,24 +1,26 @@
-import { type FC, useEffect } from "react";
+"use client";
+
 import { ButtonSelect } from "@/components/buttons/button-select";
+import { useList } from "@/components/list/use-list";
+import { useLayout } from "@/layout/layout-context";
+import { useAuth } from "@/modules/auth/auth-context";
+import { useEventsListener } from "@/modules/events/event-service";
+import { EventType } from "@/modules/events/event-types";
 import {
   HrmTimekeepingsCalendar,
   TimekeepingsCalendarExplain,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-calendar";
-import { useLayout } from "@/layout/layout-context";
-import { OnModalListTimekeepings } from "@/modules/hrm-timekeepings/modals/modal-timekeeping-list";
-import { OnModalCaptureTimekeeping } from "@/modules/hrm-timekeepings/modals/modal-request-timekeeping";
-import { useAuth } from "@/modules/auth/auth-context";
-import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import { getTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import {
   HrmTimekeepingEntity,
   HrmTimekeepingStatus,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { DateTime } from "@/utils/date-time.utils";
-import { useList } from "@/components/list/use-list";
+import { OnModalCaptureTimekeeping } from "@/modules/hrm-timekeepings/modals/modal-request-timekeeping";
+import { OnModalListTimekeepings } from "@/modules/hrm-timekeepings/modals/modal-timekeeping-list";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { ActionIcon, Card, Group, SimpleGrid, Skeleton, Stack, Text, em } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight, IconClipboardList } from "@tabler/icons-react";
+import { type FC, useEffect } from "react";
 
 export const HrmMemberTimekeepings: FC = () => {
   const layout = useLayout();
@@ -27,11 +29,10 @@ export const HrmMemberTimekeepings: FC = () => {
   const getQuery = (query: any) => {
     let _query = { ...query };
 
-    const date = _query.date ? new Date(+_query.date * 1000) : new Date();
-    const range = DateTime.getStartEndOfMonth(date);
-
-    const fromTime = DateTime.timeToSeconds(range.start);
-    const toTime = DateTime.timeToSeconds(range.end);
+    const date = _query.date ? DateTime.normalizeDate(_query.date) : new Date();
+    const range = DateTime.getRange(date, "month");
+    const fromTime = DateTime.toSeconds(range.start);
+    const toTime = DateTime.toSeconds(range.end);
 
     return {
       fromTime,

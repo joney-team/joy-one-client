@@ -6,7 +6,7 @@ import { SectionTitle } from "@/components/session-title";
 import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Period, ResponseList, StorageKey } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Group, SimpleGrid, Stack } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
@@ -29,7 +29,7 @@ export const DashboardBookings: FC = () => {
     route: "/bookings",
     isSkip: !workspace.hasPermission(WorkspacePermission.BOOKING_VIEW),
     params: {
-      timeRangeStartTime: `${Period.DATE}-${DateTime.timeToSeconds()}`,
+      timeRangeStartTime: `${Period.DATE}-${DateTime.toSeconds(new Date())}`,
       getAll: true,
     },
     refetchEvents: [

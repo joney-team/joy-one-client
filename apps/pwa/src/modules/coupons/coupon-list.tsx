@@ -2,12 +2,12 @@
 
 import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
+import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { getCoupons } from "@/modules/coupons/coupon-service";
 import { OnModalCouponForm } from "@/modules/coupons/modals/modal-coupon-form";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num } from "@/modules/lang/lang-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Trans } from "@lingui/react/macro";
 import { Badge, em, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
@@ -44,7 +44,8 @@ export const CouponList: FC = () => {
 
           <Badge variant="light" size="xl" fz={em(12)} style={{ borderRadius: 100 }}>
             <Trans>QTY</Trans>
-            {coupons.isInitialized && `: ${num(coupons.count)}`}
+            {": "}
+            {coupons.isInitialized && <NumberFormat value={coupons.count} />}
           </Badge>
         </Group>
 

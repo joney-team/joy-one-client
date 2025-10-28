@@ -1,19 +1,22 @@
 "use client";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { useLayout } from "@/layout/layout-context";
 import {
   HrmTimekeepingEntity,
   HrmTimekeepingsRules,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { calculateTimekeepings } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
-import { num } from "@/modules/lang/lang-service";
+import {
+  calculateTimekeepings,
+  workingTimeHours,
+} from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
 import { useColor } from "@/modules/theme/use-color";
 import { UserCard } from "@/modules/users/components/user-card";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkSlot } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Card, Group, SimpleGrid, Stack, Table, Text } from "@mantine/core";
 import { FC } from "react";
@@ -63,16 +66,25 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
                   <UserCard user={groupByUser.user} />
                   <Stack gap={0}>
                     <Text>
-                      <strong>Giờ công: </strong>
-                      {num(DateTime.calculateWorkHours(summary.totalWorkingTime))} giờ
+                      <strong>
+                        <Trans>Working hours</Trans>:{" "}
+                      </strong>
+                      <NumberFormat value={DateTime.countHours(summary.totalWorkingTime)} />{" "}
+                      <Trans>hours</Trans>
                     </Text>
                     <Text c={summary.totalOvertime > 0 ? "primary" : "dark"}>
-                      <strong>OT: </strong>
-                      {num(DateTime.calculateWorkHours(summary.totalOvertime))} giờ
+                      <strong>
+                        <Trans>Overtime</Trans>:{" "}
+                      </strong>
+                      <NumberFormat value={DateTime.countHours(summary.totalOvertime)} />{" "}
+                      <Trans>hours</Trans>
                     </Text>
                     <Text c={summary.totalLateTime > 0 ? "red" : "dark"}>
-                      <strong>Đi trễ: </strong>
-                      {num(DateTime.calculateWorkHours(summary.totalLateTime))} giờ
+                      <strong>
+                        <Trans>Late</Trans>:{" "}
+                      </strong>
+                      <NumberFormat value={DateTime.countHours(summary.totalLateTime)} />{" "}
+                      <Trans>hours</Trans>
                     </Text>
                   </Stack>
                 </Group>
@@ -129,7 +141,9 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
                       <Badge color="red">{DateTime.toHHMM(summary.totalLateTime)}</Badge>
                     )}
 
-                    <Text>{num(summary.totalLateTime, { type: "hours" })}</Text>
+                    <Text>
+                      <NumberFormat value={workingTimeHours(summary.totalLateTime)} />
+                    </Text>
                   </Group>
                 </Table.Td>
 
@@ -145,7 +159,9 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
                       </Badge>
                     )}
 
-                    <Text>{num(summary.totalOvertime, { type: "hours" })}</Text>
+                    <Text>
+                      <NumberFormat value={workingTimeHours(summary.totalOvertime)} />
+                    </Text>
                   </Group>
                 </Table.Td>
 
@@ -155,7 +171,9 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
                       <Badge color="green">{DateTime.toHHMM(summary.totalWorkingTime)}</Badge>
                     )}
 
-                    <Text>{num(summary.totalWorkingTime, { type: "hours" })}</Text>
+                    <Text>
+                      <NumberFormat value={workingTimeHours(summary.totalWorkingTime)} />
+                    </Text>
                   </Group>
                 </Table.Td>
               </Table.Tr>
@@ -184,7 +202,7 @@ const useTimekeepingsSummary = (
     if (pointedTimekeepingIds.includes(v._id)) return;
 
     const _timekeepings = timekeepings.filter((t) =>
-      DateTime.isMatchDay(new Date(t.time * 1000), v.time * 1000)
+      DateTime.isSame(new Date(t.time * 1000), v.time * 1000, "day")
     );
 
     pointedTimekeepingIds = [..._timekeepings.map((v) => v._id), v._id, ...pointedTimekeepingIds];

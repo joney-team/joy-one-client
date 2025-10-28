@@ -17,8 +17,8 @@ import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@/utils/date-time.utils";
 import { objSelect } from "@/utils/object.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -47,10 +47,10 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
     let _query = { ...query };
 
     const date = _query.date ? new Date(+_query.date * 1000) : new Date();
-    const range = DateTime.getStartEndOfMonth(date);
+    const range = DateTime.getRange(date, "month");
 
-    const fromDate = DateTime.timeToSeconds(range.start);
-    const toDate = DateTime.timeToSeconds(range.end);
+    const fromDate = DateTime.toSeconds(range.start);
+    const toDate = DateTime.toSeconds(range.end);
 
     return {
       ..._query,
@@ -227,7 +227,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                   tasks.removeParams(["date"]);
                 } else {
                   tasks.setParams({
-                    date: DateTime.timeToSeconds(range.start) + 60 * 60 * 24,
+                    date: DateTime.toSeconds(range.start) + 60 * 60 * 24,
                   });
                 }
               }}
@@ -241,7 +241,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                         variant="subtle"
                         radius={100}
                         color="gray"
-                        onClick={() => OnModalCreateTask({ dueDate: DateTime.timeToSeconds(date) })}
+                        onClick={() => OnModalCreateTask({ dueDate: DateTime.toSeconds(date) })}
                         opacity={hovered || layout.view !== "desktop" ? 1 : 0}
                       >
                         <IconCirclePlus size={18} strokeWidth={1.5} />
@@ -316,7 +316,7 @@ const TaskRow: FC<{
 }> = ({ task, date, type }) => {
   const color = useColor();
 
-  const now = DateTime.timeToSeconds();
+  const now = DateTime.toSeconds(new Date());
   const workspace = useWorkspace();
   const hover = useHover();
   const forceUpdate = useForceUpdate();

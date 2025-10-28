@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { NumberFormat } from "@/components/format/number-format";
 import { Image } from "@/components/image";
 import { useLayout } from "@/layout/layout-context";
 import { downloadFileFromURL, removeFile } from "@/modules/files/file-service";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
-import { num } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
@@ -148,7 +148,7 @@ export const ModalFileGallery: FC = () => {
               <IconChevronLeft />
             </ActionIcon>
             <Text c="white">
-              {num(index + 1)}/{num(props.files.length)}
+              <NumberFormat value={index + 1} />/{<NumberFormat value={props.files.length} />}
             </Text>
 
             <ActionIcon

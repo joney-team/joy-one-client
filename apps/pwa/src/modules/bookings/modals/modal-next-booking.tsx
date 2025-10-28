@@ -1,20 +1,22 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Anchor, Center, Modal, Stack, ThemeIcon, Title, em } from "@mantine/core";
 import { IconEye, IconUserScreen } from "@tabler/icons-react";
 
+import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Period } from "@/types";
-import { getBookings } from "@/modules/bookings/booking-service";
-import { BookingStatus } from "../booking-types";
-import { DateTime } from "@/utils/date-time.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { useDisclosure, useForceUpdate } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import { FC, useEffect } from "react";
 import { useColor } from "../../theme/use-color";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { BookingStatus } from "../booking-types";
 
 export function setBookingReaded(bookingId: string) {
   const readedBookings = (localStorage.getItem("readed_bookings") || "").split(",");
@@ -41,7 +43,7 @@ export const ModalNextBooking: FC = () => {
     default: [],
     fetch: async () => {
       return getBookings({
-        timeRangeStartTime: `${Period.DATE}-${DateTime.timeToSeconds()}`,
+        timeRangeStartTime: `${Period.DATE}-${DateTime.toSeconds(new Date())}`,
       }).then((r) =>
         r.data.filter(
           (b) =>

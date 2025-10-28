@@ -39,16 +39,6 @@ export const getLocaleConfig = () => {
   return global._localeConfig || ({} as LocaleConfig);
 };
 
-export const hours = (seconds: number) => {
-  const hours = Math.floor(seconds / 3600); // Tính số giờ
-  const remainingSeconds = seconds % 3600;
-  const minutes = remainingSeconds / 60; // Tính số phút còn lại
-
-  // Tính tổng số giờ công dưới dạng số thập phân
-  const workHours = hours + minutes / 60;
-  return parseFloat(workHours.toFixed(2)); // Làm tròn tới 2 chữ số thập phân
-};
-
 export const numCurrencyRound = (value: number) => {
   try {
     const global = getGlobal();
@@ -93,10 +83,6 @@ export const num = (
     if (typeof roundPrecision === "number") _value = round(+value, roundPrecision);
     else if (_args.type === "money") {
       if (typeof roundPrecision === "number") _value = round(+value, roundPrecision);
-    } else if (_args.type === "hours") {
-      const _val = hours(_value);
-      if (_val === 1) return `${_val} ${t`hour`}`;
-      return `${_val} ${t`hours`}`;
     }
     return (+_value).toLocaleString(getClientLocale());
   };

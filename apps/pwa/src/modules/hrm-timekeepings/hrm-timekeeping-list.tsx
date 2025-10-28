@@ -19,7 +19,7 @@ import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -61,10 +61,9 @@ export const HrmTimekeepingList: FC = () => {
     let _query = { ...query };
 
     const date = _query.date ? new Date(+_query.date * 1000) : new Date();
-    const range = DateTime.getStartEndOfMonth(date);
-
-    const fromTime = DateTime.timeToSeconds(range.start);
-    const toTime = DateTime.timeToSeconds(range.end);
+    const range = DateTime.getRange(date, "month");
+    const fromTime = DateTime.toSeconds(range.start);
+    const toTime = DateTime.toSeconds(range.end);
 
     return {
       ..._query,
@@ -276,7 +275,7 @@ export const HrmTimekeepingList: FC = () => {
                 if (dayjs(range.start).isSame(dayjs(), "day")) {
                   timekeepings.removeParams(["date"]);
                 } else {
-                  timekeepings.setParams({ date: DateTime.timeToSeconds(range.start) });
+                  timekeepings.setParams({ date: DateTime.toSeconds(range.start) });
                 }
               }}
             />

@@ -10,9 +10,9 @@ import {
   useWorkDaySlots,
 } from "@/modules/workspace-settings/workspace-settings-service";
 import { CalendarView } from "@/types";
-import { parseToTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { classNames } from "@/utils/ui.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { ActionIcon, Card, Group, Stack, Text } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import dayjs from "dayjs";
@@ -203,8 +203,8 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
             return {
               id: e.id,
               title: e.title,
-              start: parseToTime(e.start)!,
-              end: parseToTime(e.end)!,
+              start: DateTime.normalizeDate(e.start),
+              end: DateTime.normalizeDate(e.end),
             };
           })}
           popup

@@ -7,8 +7,8 @@ import { useFormSubmit } from "@/hooks/use-form";
 import { createCoupon, getCouponRules } from "@/modules/coupons/coupon-service";
 import { CouponDto, CouponEntity } from "@/modules/coupons/coupon-types";
 import { getCustomers } from "@/modules/customers/customer-service";
-import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import {
   Card,
@@ -149,8 +149,10 @@ export const ModalCouponForm: FC = () => {
                 <DateTimePicker
                   label={t`Expire at`}
                   {...form.getInputProps("expiredAt")}
-                  value={DateTime.secondsToTime(form.values.expiredAt)}
-                  onChange={(v) => form.setFieldValue("expiredAt", DateTime.timeToSeconds(v))}
+                  value={DateTime.normalizeDate(form.values.expiredAt)}
+                  onChange={(v) =>
+                    form.setFieldValue("expiredAt", v ? DateTime.toSeconds(v) : null)
+                  }
                 />
               </Stack>
             </Card>

@@ -8,7 +8,7 @@ import { FileEntity, FileType } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { AppEntity } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -340,7 +340,7 @@ export const FileBoxCard: FC<{
                     type: detectFileType(file.name),
                     url: URL.createObjectURL(file),
                     _id: "",
-                    createdAt: DateTime.timeToSeconds(),
+                    createdAt: DateTime.toSeconds(new Date()),
                     relativePath: "",
                     size: file.size,
                     path: "",

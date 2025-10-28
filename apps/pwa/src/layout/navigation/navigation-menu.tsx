@@ -1,10 +1,10 @@
 "use client";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { WorkspaceNavigationTaskFolders } from "@/layout/navigation/navigation-task-folders";
-import { num } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagType } from "@/modules/tags/tags-types";
@@ -96,7 +96,7 @@ export const WorkspaceNavigationMenu: FC<{
           color="red"
           label={
             <Text fz={8} fw={700}>
-              {num(props.indicator)}
+              {props.indicator && <NumberFormat value={props.indicator} />}
             </Text>
           }
           disabled={!props.indicator || props.indicator === 0}

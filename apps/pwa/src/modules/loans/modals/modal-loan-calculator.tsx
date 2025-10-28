@@ -10,7 +10,7 @@ import { useLoans } from "@/modules/loans/loans-context";
 import { getLoanPaymentPlan, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { LoanAssetType, LoanPaymentPlanResult } from "@/modules/loans/loans-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -49,7 +49,7 @@ export const ModalLoanCalculator: FC = () => {
   const [assetType, setAssetType] = useState<any>(LoanAssetType.MOTOBIKE_REGISTRATION);
   const [_packageDays, setPackageDays] = useState<any>(180);
   const [_packagePeriodDays, setPackagePeriodDays] = useState<any>(30);
-  const [startTime, setStartTime] = useState(DateTime.timeToSeconds());
+  const [startTime, setStartTime] = useState(DateTime.toSeconds(new Date()));
 
   OnModalLoanCalculator = () => {
     open();
@@ -150,7 +150,10 @@ export const ModalLoanCalculator: FC = () => {
             flex={1}
             label={t`Fulfill at`}
             value={startTime ? new Date(startTime * 1000) : null}
-            onChange={(d) => setStartTime(DateTime.timeToSeconds(d))}
+            onChange={(d) => {
+              if (!d) return;
+              setStartTime(DateTime.toSeconds(d));
+            }}
           />
         </Group>
 

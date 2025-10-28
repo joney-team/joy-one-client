@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
+import { numberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { ModalTitle } from "@/components/modal-title";
 import { WayPoint } from "@/components/way-point";
@@ -10,7 +11,6 @@ import { useLayout } from "@/layout/layout-context";
 import { FileEntity, FileType } from "@/modules/files/file-types";
 import { InternalFileCard } from "@/modules/files/internal-file-card";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { num } from "@/modules/lang/lang-service";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -167,7 +167,7 @@ export const ModalFiles: FC = () => {
             <Group>
               <Trans>Complete</Trans>
               {selectedFiles.length > 0 && (
-                <Circle color="white" c="primary" label={num(selectedFiles.length)} />
+                <Circle color="white" c="primary" label={numberFormat(selectedFiles.length)} />
               )}
             </Group>
           </Button>

@@ -1,12 +1,14 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
 import { useLayout } from "@/layout/layout-context";
 import { getCustomer, renderGener } from "@/modules/customers/customer-service";
 import { CustomerEntity, CustomerShortInfo } from "@/modules/customers/customer-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { getClientLocale, num } from "@/modules/lang/lang-service";
+import { getClientLocale } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { BankQrCode } from "@/modules/plugins/banks/banks.types";
@@ -274,8 +276,6 @@ export const ModalPrinter: FC = () => {
                       const totalAmount = receipt
                         ? receipt.amount + (receipt.tipAmount || 0)
                         : order.totalAmount;
-                      const renderMoney = (n: number) =>
-                        num(n, { type: printSettings.showCurrency ? "money" : undefined });
                       const totalDiscount = order.discounts.reduce((a, b) => a + b.amount, 0);
 
                       return (
@@ -323,8 +323,12 @@ export const ModalPrinter: FC = () => {
                                     <td className="ta-left">
                                       {item.product.displayName || item.product.name}
                                     </td>
-                                    <td className="ta-right">{num(item.quantity)}</td>
-                                    <td className="ta-right">{renderMoney(item.price)}</td>
+                                    <td className="ta-right">
+                                      <NumberFormat value={item.quantity} />
+                                    </td>
+                                    <td className="ta-right">
+                                      <CurrencyFormat value={item.price} />
+                                    </td>
                                   </tr>
                                 );
                               })}
@@ -334,7 +338,9 @@ export const ModalPrinter: FC = () => {
                                   <td className="ta-right" colSpan={2}>
                                     <Trans>Subtotal</Trans>
                                   </td>
-                                  <td className="ta-right">{renderMoney(subTotalPrice)}</td>
+                                  <td className="ta-right">
+                                    <CurrencyFormat value={subTotalPrice} />
+                                  </td>
                                 </tr>
                               )}
 
@@ -343,7 +349,9 @@ export const ModalPrinter: FC = () => {
                                   <td className="ta-right" colSpan={2} style={{ width: 90 }}>
                                     <Trans>Discount</Trans>
                                   </td>
-                                  <td className="ta-right">{renderMoney(totalDiscount)}</td>
+                                  <td className="ta-right">
+                                    <CurrencyFormat value={totalDiscount} />
+                                  </td>
                                 </tr>
                               )}
 
@@ -352,7 +360,9 @@ export const ModalPrinter: FC = () => {
                                   <td className="ta-right" colSpan={2}>
                                     <Trans>Tip</Trans>
                                   </td>
-                                  <td className="ta-right">{renderMoney(receipt.tipAmount)}</td>
+                                  <td className="ta-right">
+                                    <CurrencyFormat value={receipt.tipAmount} />
+                                  </td>
                                 </tr>
                               )}
 
@@ -363,7 +373,9 @@ export const ModalPrinter: FC = () => {
                                       <Trans>Payment</Trans>
                                     </td>
                                     <td className="ta-right">
-                                      {renderMoney(receipt?.amount || order.totalAmount)}
+                                      <CurrencyFormat
+                                        value={receipt?.amount || order.totalAmount}
+                                      />
                                     </td>
                                   </tr>
 
@@ -373,7 +385,9 @@ export const ModalPrinter: FC = () => {
                                     </td>
                                     <td className="ta-right">
                                       <strong>
-                                        {renderMoney(order.totalAmount - order.paidAmount)}
+                                        <CurrencyFormat
+                                          value={order.totalAmount - order.paidAmount}
+                                        />
                                       </strong>
                                     </td>
                                   </tr>
@@ -383,7 +397,9 @@ export const ModalPrinter: FC = () => {
                                       <Trans id="TotalShorten">Total</Trans>
                                     </td>
                                     <td className="ta-right">
-                                      <strong>{renderMoney(totalAmount)}</strong>
+                                      <strong>
+                                        <CurrencyFormat value={totalAmount} />
+                                      </strong>
                                     </td>
                                   </tr>
                                 </Fragment>
@@ -394,7 +410,9 @@ export const ModalPrinter: FC = () => {
                                       <Trans id="TotalShorten">Total</Trans>
                                     </td>
                                     <td className="ta-right">
-                                      <strong>{renderMoney(totalAmount)}</strong>
+                                      <strong>
+                                        <CurrencyFormat value={totalAmount} />
+                                      </strong>
                                     </td>
                                   </tr>
                                 </Fragment>
@@ -405,7 +423,9 @@ export const ModalPrinter: FC = () => {
                                   <td className="ta-right" colSpan={2}>
                                     <Trans>Money given</Trans>
                                   </td>
-                                  <td className="ta-right">{renderMoney(receipt.giveAmount)}</td>
+                                  <td className="ta-right">
+                                    <CurrencyFormat value={receipt.giveAmount} />
+                                  </td>
                                 </tr>
                               )}
                             </tbody>
@@ -489,7 +509,7 @@ export const ModalPrinter: FC = () => {
                                   if (!qty || qty <= 0) return "--";
                                   return (
                                     <strong>
-                                      {num(qty)} {item.unit}
+                                      <NumberFormat value={qty} /> {item.unit}
                                     </strong>
                                   );
                                 };
@@ -525,7 +545,7 @@ export const ModalPrinter: FC = () => {
                                     <td className="ta-left">
                                       <p className="text-smaller ta-right">
                                         <strong>
-                                          {num(total)} {item.unit}
+                                          <NumberFormat value={total} /> {item.unit}
                                         </strong>
                                       </p>
                                     </td>

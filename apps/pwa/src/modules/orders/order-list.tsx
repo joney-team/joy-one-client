@@ -13,7 +13,7 @@ import { OrderPaymentStatus } from "@/modules/orders/orders-types";
 import { UserColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@/utils/date-time.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { ActionIcon, Stack, Tooltip } from "@mantine/core";
 import { IconCalendarDown, IconCashRegister, IconEdit } from "@tabler/icons-react";
@@ -75,7 +75,7 @@ export const OrderList: FC = () => {
             icon: IconCalendarDown,
             replaceFilterKeys: ["createdAt"],
             params: () => ({
-              timeRangeCreatedAt: `date-${DateTime.timeToSeconds()}`,
+              timeRangeCreatedAt: `date-${DateTime.toSeconds(new Date())}`,
             }),
           },
         ]}

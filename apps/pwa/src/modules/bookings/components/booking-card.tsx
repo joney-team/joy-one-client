@@ -11,9 +11,7 @@ import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { OnModalBookingDetail } from "@/modules/bookings/modals/modal-booking-detail";
 import { OnModalCancelBooking } from "@/modules/bookings/modals/modal-cancel-booking";
 import { OnModalUpdateBooking } from "@/modules/bookings/modals/modal-update-booking";
-import { renderTime } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { DateTime } from "@/utils/date-time.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -50,6 +48,7 @@ import { WorkspaceMembersInput } from "../../workspace-members/components/worksp
 import { bookingStatuses } from "../booking-constants";
 import { BookingEntity, BookingStatus } from "../booking-types";
 import { OnModalRescheduleBooking } from "../modals/modal-reschedule-booking";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 interface BookingCardProps extends CardProps {
   booking: BookingEntity;
@@ -73,8 +72,8 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
   const color = useColor();
 
   const [_, setNow] = useState(new Date());
-  const startTime = DateTime.secondsToTime(booking.startTime)!;
-  const endTime = DateTime.secondsToTime(booking.endTime)!;
+  const startTime = DateTime.toSeconds(booking.startTime)!;
+  const endTime = DateTime.toSeconds(booking.endTime)!;
 
   const [opened, setOpened] = useState(false);
   const ref = useClickOutside(() => setOpened(false));

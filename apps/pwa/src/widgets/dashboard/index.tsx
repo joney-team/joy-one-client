@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
@@ -10,8 +12,8 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { Period } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Stack } from "@mantine/core";
 import dayjs from "dayjs";
 import { FC } from "react";
@@ -57,13 +59,13 @@ export const DashboardWidgets: FC = () => {
         const rangeResults = await Promise.all([
           exportPeriodReport({
             period: Period.DATE,
-            fromTime: DateTime.timeToSeconds(ranges.current.start),
-            toTime: DateTime.timeToSeconds(ranges.current.end),
+            fromTime: DateTime.toSeconds(ranges.current.start),
+            toTime: DateTime.toSeconds(ranges.current.end),
           }),
           exportPeriodReport({
             period: Period.DATE,
-            fromTime: DateTime.timeToSeconds(ranges.prev.start),
-            toTime: DateTime.timeToSeconds(ranges.prev.end),
+            fromTime: DateTime.toSeconds(ranges.prev.start),
+            toTime: DateTime.toSeconds(ranges.prev.end),
           }),
         ]);
 

@@ -254,4 +254,62 @@ export class DateTime {
 
     throw Error(`Unit ${unit} is not supported`);
   }
+
+  static toHHMMSS(input: number) {
+    let secs = typeof input === "number" ? input : 0;
+
+    const secNum = parseInt(secs.toString(), 10);
+    const hours = Math.floor(secNum / 3600);
+    const minutes = Math.floor(secNum / 60) % 60;
+    const seconds = secNum % 60;
+
+    return [hours, minutes, seconds].map((val) => val.toString().padStart(2, "0")).join(":");
+  }
+
+  static toHHMM(input: number) {
+    let secs = typeof input === "number" ? input : 0;
+
+    const secNum = parseInt(secs.toString(), 10);
+    const hours = Math.floor(secNum / 3600);
+    const minutes = Math.floor(secNum / 60) % 60;
+
+    return [hours, minutes].map((val) => val.toString().padStart(2, "0")).join(":");
+  }
+
+  static countHours(seconds: number) {
+    const hours = Math.floor(seconds / 3600);
+    const remainingSeconds = seconds % 3600;
+    const minutes = remainingSeconds / 60;
+
+    const workHours = hours + minutes / 60;
+    return parseFloat(workHours.toFixed(2));
+  }
+
+  static toTimeInputValue(date: RawDate | null | undefined) {
+    if (!date) return "";
+    const _date = this.normalizeDate(date);
+    return `${_date.getHours().toString().padStart(2, "0")}:${_date
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
+  }
+
+  static parseTimeInputValue(value: string): { hours: number; minutes: number; seconds: number } {
+    try {
+      const hourPattern = /(\d+)\s*h/;
+      const minutePattern = /(\d+)\s*m/;
+
+      const hourMatch = value.match(hourPattern);
+      const minuteMatch = value.match(minutePattern);
+
+      const hours = hourMatch ? parseInt(hourMatch[1], 10) : 0;
+      const minutes = minuteMatch ? parseInt(minuteMatch[1], 10) : 0;
+
+      const seconds = +hours * 3600 + +minutes * 60;
+
+      return { hours, minutes, seconds };
+    } catch (error) {
+      return { hours: 0, minutes: 0, seconds: 0 };
+    }
+  }
 }

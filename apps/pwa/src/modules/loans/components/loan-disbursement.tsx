@@ -22,7 +22,6 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@/utils/date-time.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
@@ -43,6 +42,7 @@ import {
 import { DateTimePicker } from "@mantine/dates";
 import { FC, Fragment, useState } from "react";
 import { LoanRowInfo } from "./loan-row-info";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 interface LoanDisburesementProps {
   loan: LoanEntity;
@@ -63,7 +63,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [isCustomFulfilledAt, setIsCustomFulfilledAt] = useState(false);
-  const [fulfilledAt, setFulfilledAt] = useState<number | null>(DateTime.timeToSeconds());
+  const [fulfilledAt, setFulfilledAt] = useState<number | null>(DateTime.toSeconds(new Date()));
 
   const disbursementReceiptResponse = useFetch({
     fetch: () =>
@@ -265,7 +265,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                     <DateTimePicker
                       label={t`Fulfilled at`}
                       value={fulfilledAt ? new Date(fulfilledAt * 1000) : null}
-                      onChange={(d) => setFulfilledAt(DateTime.timeToSeconds(d))}
+                      onChange={(d) => setFulfilledAt(d ? DateTime.toSeconds(d) : null)}
                     />
                   )}
                 </Stack>

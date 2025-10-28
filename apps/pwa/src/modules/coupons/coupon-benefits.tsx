@@ -1,5 +1,7 @@
 "use client";
 
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat } from "@/components/format/number-format";
 import {
   CouponRuleBenefit,
   CouponRuleBenefitType,
@@ -8,7 +10,6 @@ import {
   DiscountType,
   FreeOnProductData,
 } from "@/modules/coupons/coupon-types";
-import { num } from "@/modules/lang/lang-service";
 import { Trans } from "@lingui/react/macro";
 import { em, Text, TextProps } from "@mantine/core";
 import { FC, Fragment } from "react";
@@ -26,27 +27,36 @@ export const CouponBenefits: FC<CouponBenefitsProps> = (props) => {
       {props.benefits.map((benefit, i) => {
         if (benefit.type === CouponRuleBenefitType.DISCOUNT_ON_TOTAL) {
           const data: DiscountOnTotalData = benefit.data;
+          const value = data.value ? (
+            data.type === DiscountType.PERCENT ? (
+              <NumberFormat value={data.value} suffix="%" />
+            ) : (
+              <CurrencyFormat value={data.value} />
+            )
+          ) : null;
+
           return (
             <Text key={i} fw={500} fz={em(13)} c="gray" {..._props}>
-              •{" "}
-              <Trans>
-                Discount{" "}
-                {`${num(data.value)}${data.type === DiscountType.PERCENT ? "%" : ""}`.trim()} on
-                total bill
-              </Trans>
+              • <Trans>Discount {value} on total bill</Trans>
             </Text>
           );
         }
 
         if (benefit.type === CouponRuleBenefitType.DISCOUNT_ON_PRODUCT) {
           const data: DiscountOnProductData = benefit.data;
+          const value = data.value ? (
+            data.type === DiscountType.PERCENT ? (
+              <NumberFormat value={data.value} suffix="%" />
+            ) : (
+              <CurrencyFormat value={data.value} />
+            )
+          ) : null;
+
           return (
             <Text key={i} fw={500} fz={em(13)} c="gray" {..._props}>
               •{" "}
               <Trans>
-                Discount{" "}
-                {`${num(data.value)}${data.type === DiscountType.PERCENT ? "%" : ""}`.trim()} on
-                product {data.product?.name}
+                Discount {value} on product {data.product?.name}
               </Trans>
             </Text>
           );

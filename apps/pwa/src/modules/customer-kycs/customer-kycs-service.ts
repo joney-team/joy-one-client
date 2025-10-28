@@ -1,7 +1,7 @@
 import { Gender, ResponseList } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
 import { api } from "../apis";
 import { CustomerKycDto, CustomerKycEntity, RejectCustomerKycDto } from "./customer-kycs-types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 export async function getCustomerKycs(query?: any) {
   return api.get<ResponseList<CustomerKycEntity>>("/customer-kycs", { params: query });
@@ -26,7 +26,7 @@ export async function rejectCustomerKyc(customerId: string, dto: RejectCustomerK
 export const parseCidDate = (d: string) => {
   if (!d) return null;
   const [date, month, year] = [+d.slice(0, 2), +d.slice(2, 4), +d.slice(4, 8)];
-  return DateTime.timeToSeconds(new Date(year, month - 1, date));
+  return DateTime.toSeconds(new Date(year, month - 1, date));
 };
 
 export const decodeCid = (cid: string) => {

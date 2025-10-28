@@ -4,9 +4,9 @@ import {
 } from "@/modules/reports/reports-utils";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Period } from "@/types";
-import { DateTime } from "@/utils/date-time.utils";
 import { numberWidget, numberWidgetlayoutConfig } from "@/widgets/common/number.widget";
 import { EWidgetModules } from "@/widgets/types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import {
   IconBusinessplan,
@@ -78,7 +78,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
       loading: (ctx) => ctx.isFetching,
       renderData: (ctx) =>
         ctx.rangeReports.map((v) => {
-          const date = DateTime.secondsToTime(v.fromTime);
+          const date = DateTime.normalizeDate(v.fromTime);
           return {
             date: date
               ? ctx.period === Period.MONTH
@@ -102,7 +102,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
       loading: (ctx) => ctx.isFetching,
       renderData: (ctx) =>
         ctx.rangeReports.map((v) => {
-          const date = DateTime.secondsToTime(v.fromTime);
+          const date = DateTime.normalizeDate(v.fromTime);
           return {
             date: date
               ? ctx.period === Period.MONTH
@@ -210,7 +210,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
       loading: (ctx) => ctx.isFetching,
       renderData: (ctx) =>
         ctx.rangeReports.map((v) => {
-          const date = DateTime.secondsToTime(v.fromTime);
+          const date = DateTime.normalizeDate(v.fromTime);
           return {
             date: date
               ? ctx.period === Period.MONTH
@@ -239,7 +239,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
       loading: (ctx) => ctx.isFetching,
       renderData: (ctx) =>
         ctx.rangeReports.map((v) => {
-          const date = DateTime.secondsToTime(v.fromTime);
+          const date = DateTime.normalizeDate(v.fromTime);
           return {
             date: date
               ? ctx.period === Period.MONTH
