@@ -139,7 +139,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             if (!loanPackage) return;
 
             return (
-              <Stack gap={5} w="100%">
+              <Stack gap={3} w="100%">
                 <Group justify="space-between">
                   <Group gap={5}>
                     <Text fw={500}>{loanAssetTypes[loan.assetType].label()}</Text>
@@ -151,17 +151,19 @@ export const LoanList: FC<LoanListProps> = (props) => {
                       {loanPackage.id}
                     </Badge>
                   </Group>
-                  <Text ta="right">
+                  <Text ta="right" fz={13} fw={500}>
                     {renderLoanPeriod(loan.packagePeriodDays)} /{" "}
                     {renderLoanPeriod(loan.package.days)}
                   </Text>
                 </Group>
 
                 <Group justify="space-between">
-                  <Text c="gray">
+                  <Text c="gray" fz={13}>
                     <Trans>Money amount</Trans>
                   </Text>
-                  <Text ta="right">{num(loan.amount, { type: "money" })}</Text>
+                  <Text ta="right" fz={13} fw={500}>
+                    {num(loan.amount, { type: "money" })}
+                  </Text>
                 </Group>
 
                 {(function () {
@@ -171,12 +173,12 @@ export const LoanList: FC<LoanListProps> = (props) => {
 
                   return (
                     <Group justify="space-between">
-                      <Text c="gray">
+                      <Text c="gray" fz={13}>
                         <Trans>Time</Trans>
                       </Text>
 
                       {startPeriod?.endTime && endPeriod?.endTime && (
-                        <Text ta="right">
+                        <Text ta="right" fz={13} fw={500}>
                           <DateFormat value={startPeriod.endTime} type="date" /> -{" "}
                           <DateFormat value={endPeriod.endTime} type="date" />
                         </Text>
@@ -187,12 +189,12 @@ export const LoanList: FC<LoanListProps> = (props) => {
 
                 {linkContractPdf && (
                   <Group justify="space-between">
-                    <Text c="gray">
+                    <Text c="gray" fz={13}>
                       <Trans>Loan contract</Trans>
                     </Text>
-                    <Anchor href={linkContractPdf} target="_blank" ta="right" fz={14}>
+                    <Anchor href={linkContractPdf} target="_blank" ta="right" fz={13} fw={500}>
                       <Group gap={4} justify="right">
-                        <IconFileTypePdf size={18} />
+                        <IconFileTypePdf size={15} />
                         <Trans>Open file</Trans>
                       </Group>
                     </Anchor>
@@ -251,10 +253,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 <Text c={isExpired ? "red" : isWarning ? "orange" : "var(--mantine-color-text)"}>
                   {loan.nextReceiptAt && <DateFormat value={loan.nextReceiptAt} type="date" />}
                 </Text>
-                <Text
-                  fz={12}
-                  c={isExpired ? "red" : isWarning ? "orange" : "var(--mantine-color-text)"}
-                >
+                <Text fz={10} c={isExpired ? "red" : isWarning ? "orange" : "gray"}>
                   {renderNextReceipt()}
                 </Text>
               </Stack>
