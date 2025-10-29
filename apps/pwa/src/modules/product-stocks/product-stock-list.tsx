@@ -1,16 +1,17 @@
 "use client";
 
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { NumberColumn } from "@/components/list/columns/number-column";
 import { EventType } from "@/modules/events/event-types";
-import { num } from "@/modules/lang/lang-service";
 import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
 import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
 import { ProductColumn } from "@/modules/products/components/product-column";
 import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Stack, Text } from "@mantine/core";
 import { IconBuildingWarehouse } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -33,14 +34,14 @@ export const ProductStockList: FC = () => {
               if (value.minPrice && value.maxPrice) {
                 return (
                   <Text>
-                    {t`Sale price`}: {num(value.minPrice, { type: "money" })} -{" "}
-                    {num(value.maxPrice, { type: "money" })}
+                    <Trans>Sale price</Trans>: <CurrencyFormat value={value.minPrice} /> -{" "}
+                    <CurrencyFormat value={value.maxPrice} />
                   </Text>
                 );
               }
               return (
                 <Text>
-                  {t`Sale price`}: {num(value.price, { type: "money" })}
+                  <Trans>Sale price</Trans>: <CurrencyFormat value={value.price} />
                 </Text>
               );
             },
@@ -51,7 +52,8 @@ export const ProductStockList: FC = () => {
             render: ({ data }) => {
               return (
                 <Text>
-                  {num(data.remainQuantity)} / {num(data.quantity)}
+                  <NumberFormat value={data.remainQuantity} /> /{" "}
+                  <NumberFormat value={data.quantity} />
                 </Text>
               );
             },

@@ -1,7 +1,8 @@
 "use client";
 
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
-import { num } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { resizeArrayForSparkline } from "@/utils/chart.utils";
@@ -64,7 +65,7 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
     };
 
     const name = config.name;
-    const value = num(getValue(), { type: args.type });
+    const value = getValue();
     const sparkline = args.renderSparkline ? args.renderSparkline(ctx) : undefined;
     const isLoading = args.isLoading ? args.isLoading(ctx) : typeof value === "undefined";
 
@@ -123,11 +124,15 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
                 <Group h={20} align="center">
                   {isLoading ? (
                     <Skeleton h={18} w={100} opacity={isDarkContent ? 0.2 : 1} />
-                  ) : (
+                  ) : typeof value === "number" ? (
                     <Text c={contentColor} fw={500} fz={em(16)}>
-                      {`${value} ${args.unit || ""}`.trim()}
+                      {args.type === "money" ? (
+                        <CurrencyFormat value={value} />
+                      ) : (
+                        <NumberFormat value={value} suffix={args.unit} />
+                      )}
                     </Text>
-                  )}
+                  ) : null}
                 </Group>
               </Stack>
             </Tooltip>

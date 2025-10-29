@@ -5,20 +5,26 @@ import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { FC, PropsWithChildren } from "react";
 
 export interface CopyTextProps extends TextProps {
-  text: string;
+  text: string | number;
+  renderText?: () => string | JSX.Element;
   empty?: string;
 }
 
-export const CopyText: FC<PropsWithChildren<CopyTextProps>> = ({ text, empty, ...props }) => {
+export const CopyText: FC<PropsWithChildren<CopyTextProps>> = ({
+  text,
+  renderText,
+  empty,
+  ...props
+}) => {
   return (
-    <CopyButton value={text}>
+    <CopyButton value={text.toString()}>
       {({ copied, copy }) => (
         <Group gap={3} onClick={copy} style={{ maxWidth: "100%" }} wrap="nowrap">
           {props.children ? (
             props.children
           ) : (
-            <Tooltip label={text} disabled={!text}>
-              <Text {...props}>{text || empty || ""}</Text>
+            <Tooltip label={text.toString()} disabled={!text}>
+              <Text {...props}>{renderText ? renderText() : text || empty || ""}</Text>
             </Tooltip>
           )}
 

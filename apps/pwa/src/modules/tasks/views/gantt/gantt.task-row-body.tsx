@@ -1,12 +1,13 @@
 "use client";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { formatDuration } from "@/components/inputs/estimate-time-input";
-import { num } from "@/modules/lang/lang-service";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { getTaskProgress, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
@@ -28,7 +29,6 @@ import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
 import { useGanttTaskState } from "./gantt.hooks";
 import { getRangeOfTasks } from "./gantt.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
 
 interface GanttTaskRowBodyProps {
   id: string;
@@ -312,7 +312,12 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
                   c="gray"
                   w="max-content"
                 >
-                  {`${num(progress.percent, { roundPrecision: 1 })}%`} - {task.name}
+                  <NumberFormat
+                    value={progress.percent}
+                    suffix="%"
+                    format={{ maximumFractionDigits: 1 }}
+                  />{" "}
+                  - {task.name}
                 </Text>
 
                 <Box

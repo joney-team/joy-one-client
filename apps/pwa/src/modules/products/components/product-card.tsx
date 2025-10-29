@@ -1,13 +1,15 @@
 "use client";
 
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { useRouter } from "@/hooks/use-router";
-import { num } from "@/modules/lang/lang-service";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -30,7 +32,7 @@ import {
   IconReportMoney,
   IconStack,
 } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
 
@@ -87,11 +89,18 @@ export const ProductCard: FC<
               </ThemeIcon>
               <Text fz={em(15)} c="dark" fw={500}>
                 {(function () {
-                  if (typeof product.minPrice === "number" && typeof product.maxPrice === "number")
-                    return `${num(product.minPrice, { type: "money" })} - ${num(product.maxPrice, {
-                      type: "money",
-                    })}`;
-                  return num(product.price, { type: "money" });
+                  if (
+                    typeof product.minPrice === "number" &&
+                    typeof product.maxPrice === "number"
+                  ) {
+                    return (
+                      <Fragment>
+                        <CurrencyFormat value={product.minPrice} /> -{" "}
+                        <CurrencyFormat value={product.maxPrice} />
+                      </Fragment>
+                    );
+                  }
+                  return <CurrencyFormat value={product.price} />;
                 })()}{" "}
                 / {product.unit}
               </Text>
@@ -106,8 +115,8 @@ export const ProductCard: FC<
                       <ComboIcon size={20} />
                     </ThemeIcon>
 
-                    <Text fz={em(15)} c="dark" fw={500}>
-                      x{num(combo.quantity)} {combo.product.name}
+                    <Text fz={15} c="dark" fw={500}>
+                      x<NumberFormat value={combo.quantity} /> {combo.product.name}
                     </Text>
                   </Group>
                 );
@@ -118,11 +127,15 @@ export const ProductCard: FC<
                   <IconClock size={20} />
                 </ThemeIcon>
 
-                <Text fz={em(15)} c="dark" fw={500}>
+                <Text fz={15} c="dark" fw={500}>
                   {t`Expire in`}:{" "}
-                  {product.combosExpireInDays && product.combosExpireInDays > 0
-                    ? `${num(product.combosExpireInDays)} ${t`days`}`
-                    : t`Unlimited`}
+                  {product.combosExpireInDays && product.combosExpireInDays > 0 ? (
+                    <Fragment>
+                      <NumberFormat value={product.combosExpireInDays} /> <Trans>days</Trans>
+                    </Fragment>
+                  ) : (
+                    <Trans>Unlimited</Trans>
+                  )}
                 </Text>
               </Group>
             </Renderer>
@@ -132,7 +145,7 @@ export const ProductCard: FC<
                 <ThemeIcon variant="transparent" color="dark" size="xs" radius={100} ml={-3}>
                   <IconList size={18} />
                 </ThemeIcon>
-                <Text fz={em(15)} fw={500}>
+                <Text fz={15} fw={500}>
                   {product.category?.name}
                 </Text>
               </Group>
@@ -143,8 +156,8 @@ export const ProductCard: FC<
                 <ThemeIcon variant="transparent" color="dark" size="xs" radius={100} ml={-3}>
                   <IconStack size={18} />
                 </ThemeIcon>
-                <Text fz={em(15)} fw={500}>
-                  {num(product.supplies.length)} {t`Consumables`}
+                <Text fz={15} fw={500}>
+                  <NumberFormat value={product.supplies.length} /> <Trans>Consumables</Trans>
                 </Text>
               </Group>
             )}
@@ -155,8 +168,8 @@ export const ProductCard: FC<
                   <IconGiftCard size={20} />
                 </ThemeIcon>
 
-                <Text fz={em(15)} c="dark" fw={500}>
-                  {t`Voucher amount`}: {num(product.voucherAmount, { type: "money" })}
+                <Text fz={15} c="dark" fw={500}>
+                  {t`Voucher amount`}: <CurrencyFormat value={product.voucherAmount ?? 0} />
                 </Text>
               </Group>
 
@@ -166,7 +179,7 @@ export const ProductCard: FC<
                 </ThemeIcon>
 
                 <Stack gap={3}>
-                  <Text fz={em(15)} c="dark" fw={500}>
+                  <Text fz={15} c="dark" fw={500}>
                     {t`Terms of use`}:
                   </Text>
 
@@ -175,12 +188,12 @@ export const ProductCard: FC<
                       !!product.voucherIncludeProducts && product.voucherIncludeProducts.length > 0
                     }
                   >
-                    <Text fw={500} fz={em(13)} c="gray">
+                    <Text fw={500} fz={13} c="gray">
                       • {`${t`Include products`}:`}
                     </Text>
                     {product.voucherIncludeProducts?.map((product) => {
                       return (
-                        <Text key={product._id} fw={500} fz={em(13)} c="gray" pl={10}>
+                        <Text key={product._id} fw={500} fz={13} c="gray" pl={10}>
                           - {product.name}
                         </Text>
                       );
@@ -192,12 +205,12 @@ export const ProductCard: FC<
                       !!product.voucherExcludeProducts && product.voucherExcludeProducts.length > 0
                     }
                   >
-                    <Text fw={500} fz={em(13)} c="gray">
+                    <Text fw={500} fz={13} c="gray">
                       • {`${t`Exclude products`}:`}
                     </Text>
                     {product.voucherExcludeProducts?.map((product) => {
                       return (
-                        <Text key={product._id} fw={500} fz={em(13)} c="gray" pl={10}>
+                        <Text key={product._id} fw={500} fz={13} c="gray" pl={10}>
                           - {product.name}
                         </Text>
                       );
@@ -212,7 +225,7 @@ export const ProductCard: FC<
                         product.voucherIncludeProducts.length === 0)
                     }
                   >
-                    <Text fw={500} fz={em(13)} c="gray">
+                    <Text fw={500} fz={13} c="gray">
                       • {`${t`Apply all products`}`}
                     </Text>
                   </Renderer>
@@ -232,7 +245,11 @@ export const ProductCard: FC<
                 fz={10}
                 px={8}
               >
-                {product.stock.quantity <= 0 ? t`Out of stock` : num(product.stock.quantity)}
+                {product.stock.quantity <= 0 ? (
+                  <Trans>Out of stock</Trans>
+                ) : (
+                  <NumberFormat value={product.stock.quantity} />
+                )}
               </Badge>
             </Group>
           )}

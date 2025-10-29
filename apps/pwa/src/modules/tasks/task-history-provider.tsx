@@ -1,7 +1,7 @@
 "use client";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { configs } from "@/configs/layout.config";
-import { num } from "@/modules/lang/lang-service";
 import { tasksEmitter, updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskHistory } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -37,7 +37,10 @@ const TaskHistoriesProvider: FC<PropsWithChildren> = (props) => {
       message: (
         <Stack gap={5}>
           <Text fz={13}>
-            <Trans>You have deleted {num(_history.tasks.length)} tasks. Do you want to undo?</Trans>
+            <Trans>
+              You have deleted <NumberFormat value={_history.tasks.length} /> tasks. Do you want to
+              undo?
+            </Trans>
           </Text>
           <Group>
             <Button

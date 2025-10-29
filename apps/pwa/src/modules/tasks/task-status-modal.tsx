@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
+import { NumberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
-import { num } from "@/modules/lang/lang-service";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { getTasks, renderTaskStatusStyle, updateTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskStatus } from "@/modules/tasks/tasks-types";
@@ -237,8 +237,10 @@ export const StatusCard: FC<{
           </Text>
           <Text>
             <Trans>
-              <strong>{num(relatedTasks.length)}</strong> related tasks will be transferred to
-              status <strong>{statusStyle.name}</strong>
+              <strong>
+                <NumberFormat value={relatedTasks.length} />
+              </strong>{" "}
+              related tasks will be transferred to status <strong>{statusStyle.name}</strong>
             </Trans>
           </Text>
         </Stack>

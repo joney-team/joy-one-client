@@ -3,8 +3,8 @@
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
+import { NumberFormat, numberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
-import { num } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -54,7 +54,7 @@ export const OrderSaleCombos: FC = () => {
           <Indicator
             inline
             disabled={unUsedCombos.length === 0}
-            label={`x${num(unUsedCombos.length)}`}
+            label={`x${numberFormat(unUsedCombos.length)}`}
             size={16}
           >
             <Button
@@ -65,7 +65,8 @@ export const OrderSaleCombos: FC = () => {
               fw={400}
               onClick={open}
             >
-              <Trans>Apply</Trans> {num(orderCombos.length)}/{num(combos.length ?? 0)}
+              <Trans>Apply</Trans> <NumberFormat value={orderCombos.length} />/
+              <NumberFormat value={combos.length} />
             </Button>
           </Indicator>
         ) : (
@@ -94,7 +95,8 @@ export const OrderSaleCombos: FC = () => {
                       </Text>
 
                       <Badge variant="light" color="dark">
-                        {num(ref.quantity - ref.quantityUsed)}/{num(ref.quantity)}
+                        <NumberFormat value={ref.quantity - ref.quantityUsed} />/
+                        <NumberFormat value={ref.quantity} />
                       </Badge>
                     </Group>
                   );

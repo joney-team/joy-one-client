@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { num } from "@/modules/lang/lang-service";
 import { Trans } from "@lingui/react/macro";
 import { Group, Skeleton, Text } from "@mantine/core";
 import { IconCoin, IconPencil, IconPlus } from "@tabler/icons-react";
@@ -45,7 +45,7 @@ export const OrderSaleDiscounts: FC = () => {
             component="div"
             onClick={onDirectDiscount}
           >
-            <Trans>Direct</Trans>: {num(directDiscount, { type: "money" })}
+            <Trans>Direct</Trans>: <CurrencyFormat value={directDiscount} />
           </Button>
         ) : (
           <Button
@@ -64,7 +64,9 @@ export const OrderSaleDiscounts: FC = () => {
         {orderSale.calculating.isLoading ? (
           <Skeleton h={20} w={80} visible={orderSale.calculating.isLoading} />
         ) : (
-          <Text>{num(orderSale.activeOrder.directDiscount, { type: "money" })}</Text>
+          <Text>
+            <CurrencyFormat value={orderSale.activeOrder.directDiscount ?? 0} />
+          </Text>
         )}
       </Group>
     </Group>

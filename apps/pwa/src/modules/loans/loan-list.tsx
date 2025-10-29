@@ -1,7 +1,9 @@
 "use client";
 
 import { Circle } from "@/components/circle";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
@@ -9,7 +11,6 @@ import { Renderer } from "@/components/renderer";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { CustomerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
-import { num } from "@/modules/lang/lang-service";
 import { LoanCard } from "@/modules/loans/components/loan-card";
 import {
   archiveLoans,
@@ -162,7 +163,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                     <Trans>Money amount</Trans>
                   </Text>
                   <Text ta="right" fz={13} fw={500}>
-                    {num(loan.amount, { type: "money" })}
+                    <CurrencyFormat value={loan.amount} />
                   </Text>
                 </Group>
 
@@ -443,7 +444,7 @@ export const LoanListCount: FC<LoanListProps> = (props) => {
   if (count > 0)
     return (
       <Badge ml={8} size="xs" color={color(props.counterColor)}>
-        {num(count)}
+        <NumberFormat value={count} />
       </Badge>
     );
 

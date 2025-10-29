@@ -2,9 +2,9 @@
 
 import { Clickable } from "@/components/clickable";
 import { EntityImage } from "@/components/entity-image";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { List } from "@/components/list";
 import { EventType } from "@/modules/events/event-types";
-import { num } from "@/modules/lang/lang-service";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
@@ -68,12 +68,17 @@ export const ServiceList: FC = () => {
               if (data.minPrice && data.maxPrice) {
                 return (
                   <Text>
-                    {num(data.minPrice)} - {num(data.maxPrice, { type: "money" })}
+                    <CurrencyFormat value={data.minPrice} /> -{" "}
+                    <CurrencyFormat value={data.maxPrice} />
                   </Text>
                 );
               }
 
-              return <Text>{num(data.price, { type: "money" })}</Text>;
+              return (
+                <Text>
+                  <CurrencyFormat value={data.price} />
+                </Text>
+              );
             },
           },
         }}

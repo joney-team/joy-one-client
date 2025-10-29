@@ -43,6 +43,7 @@ import { DateTimePicker } from "@mantine/dates";
 import { FC, Fragment, useState } from "react";
 import { LoanRowInfo } from "./loan-row-info";
 import { DateTime } from "@joy-one-client/utils/date-time";
+import { CurrencyFormat } from "@/components/format/currency-format";
 
 interface LoanDisburesementProps {
   loan: LoanEntity;
@@ -169,9 +170,10 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
           <Card withBorder shadow="none" p={16}>
             <Stack>
               <LoanRowInfo
-                label={t`Loan amount`}
-                value={num(loan.amount, { type: "money" })}
                 copy
+                label={t`Loan amount`}
+                value={loan.amount}
+                renderValue={(value) => <CurrencyFormat value={value} />}
               />
 
               {(function () {

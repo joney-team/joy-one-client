@@ -1,9 +1,8 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { Checkout } from "@/components/checkout";
-import { Errored } from "@/components/errored";
-import { Loading } from "@/components/loading";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { useList } from "@/components/list/use-list";
 import { ModalTitle } from "@/components/modal-title";
 import { getView } from "@/layout/layout-service";
 import {
@@ -30,26 +29,12 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { formatBytes } from "@/utils/file.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { useList } from "@/components/list/use-list";
-import {
-  Anchor,
-  Badge,
-  Card,
-  em,
-  Group,
-  SimpleGrid,
-  Skeleton,
-  Stack,
-  Text,
-  ThemeIcon,
-  Title,
-} from "@mantine/core";
-import { modals } from "@mantine/modals";
-import { IconArrowRight, IconBox, IconConfetti } from "@tabler/icons-react";
-import { FC, Fragment, useEffect, useState } from "react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { CurrencyFormat } from "@/components/format/currency-format";
+import { Card, em, Group, Stack, Text } from "@mantine/core";
+import { modals } from "@mantine/modals";
+import { IconBox } from "@tabler/icons-react";
+import { FC, Fragment, useEffect, useState } from "react";
 
 export const ModalWorkspaceSubscription: FC = () => {
   const workspace = useWorkspace();
@@ -157,217 +142,7 @@ export const ModalWorkspaceSubscription: FC = () => {
     }
   }, [bankTransaction?._id]);
 
-  return (
-    <Stack p={16}>
-      {/* {(function () {
-        if (subscriptions.isFetching || billingBankAccount.isFetching)
-          return <Skeleton height={300} />;
-        if (subscriptions.error || billingBankAccount.error || !billingBankAccount.data)
-          return <Errored error={subscriptions.error || billingBankAccount.error} />;
-
-        if (calculated) {
-          const activatedIndex = subscriptions.data.findIndex(
-            (v) => v._id === workspace.workspaceSubscription?.subscriptionId
-          );
-          const selectSubscriptionIndex = subscriptions.data.findIndex(
-            (v) => v._id === calculated.selectedSubscription._id
-          );
-          const isUpgraded = selectSubscriptionIndex > activatedIndex;
-
-          if (step === "COMPLETED") {
-            return (
-              <Stack p={16}>
-                <Title ta="center" c={workspace.workspaceSubscription?.subscription.color} fw={340}>
-                  Thành công!
-                </Title>
-                <Text ta="center">Cảm ơn bạn đã tin tưởng sử dụng dịch vụ Joy One</Text>
-
-                <Button
-                  type="submit"
-                  color={workspace.workspaceSubscription?.subscription.color}
-                  radius={100}
-                  onClick={() => modals.close("ModalWorkspaceSubscription")}
-                >
-                  Okay!
-                </Button>
-              </Stack>
-            );
-          }
-
-          if (step === "PROCESSING") {
-            return (
-              <Stack p={16}>
-                <Loading message={isUpgraded ? "Đang nâng cấp..." : "Đang thay đổi gói..."} />
-              </Stack>
-            );
-          }
-
-          if (step === "PAYMENT") {
-            if (bankTransaction)
-              return (
-                <Stack gap={16}>
-                  <Card withBorder p={10}>
-                    <Checkout
-                      tx={bankTransaction}
-                      onBack={() => {
-                        setBankTransaction(undefined);
-                        setCalculated(undefined);
-                      }}
-                    />
-                  </Card>
-                </Stack>
-              );
-
-            return (
-              <Stack p={16}>
-                <Title ta="center" c="primary" fw={700}>
-                  Đang xử lí giao dịch
-                </Title>
-                <Loading message="Vui lòng đợi trong giây lát..." />
-              </Stack>
-            );
-          }
-
-          return (
-            <Stack>
-              <SimpleGrid cols={{ md: 2 }}>
-                <Card withBorder radius={25}>
-                  <Stack gap={20}>
-                    <Stack gap={10}>
-                      <Text fz={em(13)}>{isUpgraded ? "Nâng cấp gói" : "Sử dụng gói"}</Text>
-                      <Group gap={10}>
-                        <Badge
-                          color={workspace.workspaceSubscription?.subscription.color}
-                          size="xl"
-                          variant={
-                            workspace.workspaceSubscription?.subscription.isDefault
-                              ? "outline"
-                              : "filled"
-                          }
-                        >
-                          {workspace.workspaceSubscription?.subscription.name}
-                        </Badge>
-                        <ThemeIcon color="dark" variant="transparent">
-                          <IconArrowRight />
-                        </ThemeIcon>
-                        <Badge
-                          color={calculated.selectedSubscription.color}
-                          size="xl"
-                          variant={calculated.selectedSubscription.isDefault ? "outline" : "filled"}
-                          leftSection={
-                            isUpgraded ? (
-                              <IconConfetti size={18} style={{ marginRight: 5 }} />
-                            ) : undefined
-                          }
-                        >
-                          {calculated.selectedSubscription.name}
-                        </Badge>
-                      </Group>
-                    </Stack>
-
-                    <Card withBorder radius={16}>
-                      <Stack gap={10}>
-                        <Text fz={em(13)}>Chi phí mỗi tháng</Text>
-
-                        <Group justify="space-between">
-                          <Text fw={500}>
-                            x{num(workspace.workspaceSubscription?.stat.totalMembers)} Thành viên
-                          </Text>
-                          <Stack gap={0}>
-                            {calculated.selectedSubscription.pricePerMemberNotSale && (
-                              <Text ta="right" td="line-through" fz={em(12)} c="gray">
-                                {num(
-                                  calculated.selectedSubscription.pricePerMemberNotSale *
-                                    (workspace.workspaceSubscription?.stat.totalMembers ?? 0)
-                                )}
-                              </Text>
-                            )}
-                            <Text ta="right" fw={800}>
-                              {num(totalPrice)}
-                            </Text>
-                          </Stack>
-                        </Group>
-                      </Stack>
-                    </Card>
-
-                    <Stack gap={10}>
-                      <Group justify="space-between">
-                        <Text fz={em(13)}>
-                          {calculated.totalPrice < 0
-                            ? "Bạn sẽ được hoàn lại"
-                            : calculated.totalPrice < totalPrice
-                            ? "Cần thanh toán thêm"
-                            : "Tổng số tiền thanh toán"}
-                        </Text>
-                        <Text ta="right" fz={em(15)} fw={700}>
-                          {num(Math.abs(calculated.totalPrice))}
-                        </Text>
-                      </Group>
-
-                      <Group justify="space-between">
-                        <Text fz={em(13)}>Ngày thanh toán tiếp theo</Text>
-                        <Text ta="right" fz={em(15)} fw={700}>
-                        </Text>
-                      </Group>
-                    </Stack>
-
-                    <Button
-                      type="submit"
-                      color={calculated.selectedSubscription.color}
-                      radius={100}
-                      miw={200}
-                      onClick={onPayment}
-                    >
-                      {totalAmount > 0 ? "Thanh toán" : "Chọn gói này"}
-                    </Button>
-                  </Stack>
-                </Card>
-
-                <SubscriptionCard subscription={calculated.selectedSubscription} />
-              </SimpleGrid>
-
-              <Anchor
-                mt={10}
-                onClick={() => setCalculated(undefined)}
-                c="gray"
-                ta="center"
-                fz={em(12)}
-                fw={500}
-              >
-                Chọn gói khác
-              </Anchor>
-            </Stack>
-          );
-        }
-
-        return (
-          <SimpleGrid cols={{ md: 3 }}>
-            {subscriptions.data
-              .filter((v) => !v.isPrivate)
-              .map((subscription) => {
-                const activatedIndex = subscriptions.data.findIndex(
-                  (v) => v._id === workspace.workspaceSubscription?.subscriptionId
-                );
-                const index = subscriptions.data.findIndex((v) => v._id === subscription._id);
-                const isUpgrade = index > activatedIndex;
-                const isActivated =
-                  workspace.workspaceSubscription?.subscriptionId === subscription._id;
-
-                return (
-                  <SubscriptionCard
-                    key={subscription._id}
-                    subscription={subscription}
-                    onSelect={() => onCalculate(subscription._id)}
-                    isUpgrade={isUpgrade}
-                    isActivated={isActivated}
-                  />
-                );
-              })}
-          </SimpleGrid>
-        );
-      })()} */}
-    </Stack>
-  );
+  return <Stack p={16}></Stack>;
 };
 
 export const SubscriptionCard: FC<{

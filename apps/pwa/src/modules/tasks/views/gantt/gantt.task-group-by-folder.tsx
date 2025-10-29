@@ -1,9 +1,9 @@
 "use client";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { Hovered } from "@/components/hovered";
 import { formatDuration } from "@/components/inputs/estimate-time-input";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { num } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity } from "@/modules/tags/tags-types";
@@ -265,7 +265,12 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
                     c={color(folderColor)}
                     w="max-content"
                   >
-                    {`${num(tasksProgress.percent, { roundPrecision: 2 })}%`} {folderName}
+                    <NumberFormat
+                      value={tasksProgress.percent}
+                      suffix="%"
+                      format={{ maximumFractionDigits: 2 }}
+                    />{" "}
+                    {folderName}
                   </Text>
 
                   <Box

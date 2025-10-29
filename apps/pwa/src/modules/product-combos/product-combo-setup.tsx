@@ -1,14 +1,14 @@
 "use client";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { NumberColumn } from "@/components/list/columns/number-column";
 import { EventType } from "@/modules/events/event-types";
-import { num } from "@/modules/lang/lang-service";
-import { t } from "@lingui/core/macro";
-import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductCard } from "@/modules/products/components/product-card";
+import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { t } from "@lingui/core/macro";
 import { Badge, em, Group, Stack, Text } from "@mantine/core";
 import { IconEditCircle, IconSettings } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -40,11 +40,11 @@ export const ProductComboSetup: FC = () => {
                     return (
                       <Group key={i} gap={5}>
                         <Text fz={em(15)} c="var(--mantine-color-text)" fw={500}>
-                          • {combo.product.name}
+                          • {combo.product.name}
                         </Text>
 
                         <Badge variant="light" color="var(--mantine-color-text)">
-                          x{num(combo.quantity)}
+                          x<NumberFormat value={combo.quantity} />
                         </Badge>
                       </Group>
                     );

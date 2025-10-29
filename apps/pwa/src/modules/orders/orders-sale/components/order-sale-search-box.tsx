@@ -1,11 +1,11 @@
 "use client";
 
 import { EntityImage } from "@/components/entity-image";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { useList } from "@/components/list/use-list";
 import { ScrollArea } from "@/components/scroll-area";
 import { api } from "@/modules/apis";
 import { useQuery } from "@/modules/apis/use-query";
-import { num } from "@/modules/lang/lang-service";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity } from "@/modules/products/products-types";
 import { SearchCustomer, SearchProduct, SearchResult } from "@/modules/search/search-types";
@@ -15,7 +15,7 @@ import { t } from "@lingui/core/macro";
 import { Card, Group, Popover, Stack, Text, TextInput } from "@mantine/core";
 import { useClickOutside, useThrottledValue } from "@mantine/hooks";
 import { IconSearch, IconUserSquareRounded } from "@tabler/icons-react";
-import { useEffect, useMemo, useState, type FC } from "react";
+import { Fragment, useEffect, useMemo, useState, type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
 
 const searchBoxWidth = 400;
@@ -150,14 +150,16 @@ export const OrderSaleSearchBox: FC = () => {
                                   if (
                                     typeof product.minPrice === "number" &&
                                     typeof product.maxPrice === "number"
-                                  )
-                                    return `${num(product.minPrice, { type: "money" })} - ${num(
-                                      product.maxPrice,
-                                      {
-                                        type: "money",
-                                      }
-                                    )}`;
-                                  return num(product.price, { type: "money" });
+                                  ) {
+                                    return (
+                                      <Fragment>
+                                        <CurrencyFormat value={product.minPrice} /> -{" "}
+                                        <CurrencyFormat value={product.maxPrice} />
+                                      </Fragment>
+                                    );
+                                  }
+
+                                  return <CurrencyFormat value={product.price} />;
                                 })()}{" "}
                                 / {product.unit}
                               </Text>
@@ -233,13 +235,13 @@ export const OrderSaleSearchBox: FC = () => {
                                   typeof product.minPrice === "number" &&
                                   typeof product.maxPrice === "number"
                                 )
-                                  return `${num(product.minPrice, { type: "money" })} - ${num(
-                                    product.maxPrice,
-                                    {
-                                      type: "money",
-                                    }
-                                  )}`;
-                                return num(product.price, { type: "money" });
+                                  return (
+                                    <Fragment>
+                                      <CurrencyFormat value={product.minPrice} /> -{" "}
+                                      <CurrencyFormat value={product.maxPrice} />
+                                    </Fragment>
+                                  );
+                                return <CurrencyFormat value={product.price} />;
                               })()}{" "}
                               / {product.unit}
                             </Text>

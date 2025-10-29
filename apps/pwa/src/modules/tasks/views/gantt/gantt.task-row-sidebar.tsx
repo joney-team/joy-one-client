@@ -1,10 +1,10 @@
 "use client";
 
 import { ContentEditable } from "@/components/content-editable/content-editable";
+import { NumberFormat } from "@/components/format/number-format";
 import { formatDuration, QuickEstimateTimeInput } from "@/components/inputs/estimate-time-input";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { num } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
@@ -246,7 +246,7 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
                         toggleSubTasks();
                       }}
                     >
-                      {num(ctx.subTasks.length)}
+                      <NumberFormat value={ctx.subTasks.length} />
                     </Button>
                   </Group>
                 )}

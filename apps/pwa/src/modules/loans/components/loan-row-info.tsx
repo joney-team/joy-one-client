@@ -1,18 +1,19 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
+import { Coordinates } from "@/types";
 import { ActionIcon, em, Grid, Group, Stack, Text } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
-import { FC } from "react";
 
-export const LoanRowInfo: FC<{
+export const LoanRowInfo = <T extends string | number | Coordinates | null | undefined>(props: {
   label: string;
   description?: string;
-  value: string | JSX.Element;
+  value: T;
+  renderValue?: (value: T) => JSX.Element | string;
   copy?: boolean;
   visible?: boolean;
-}> = (props) => {
+}): JSX.Element | null => {
   const clipboard = useClipboard();
   const color = useColor();
 
@@ -35,7 +36,11 @@ export const LoanRowInfo: FC<{
 
       <Grid.Col span="auto">
         <Group gap={10}>
-          {typeof props.value === "string" ? <Text>{props.value || "--"}</Text> : props.value}
+          {props.renderValue ? (
+            <Text>{props.renderValue(props.value)}</Text>
+          ) : (
+            <Text>{String(props.value) || "--"}</Text>
+          )}
 
           {props.copy && (
             <ActionIcon

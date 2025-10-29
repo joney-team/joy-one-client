@@ -10,7 +10,6 @@ import { NumberColumn } from "@/components/list/columns/number-column";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { num } from "@/modules/lang/lang-service";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
 import { OnModalProductStockOut } from "@/modules/product-stocks/modals/modal-product-stock-out";
@@ -39,6 +38,7 @@ import {
   ProductStockEntity,
   ProductStockRecordEntity,
 } from "../product-stocks/product-stocks-entity";
+import { NumberFormat } from "@/components/format/number-format";
 
 const events = [
   EventType.PRODUCT_NEW,
@@ -107,7 +107,8 @@ export const ProductDetail: FC = () => {
                       render: ({ data }) => {
                         return (
                           <Text>
-                            {num(data.remainQuantity)} / {num(data.quantity)}
+                            <NumberFormat value={data.remainQuantity} /> /{" "}
+                            <NumberFormat value={data.quantity} />
                           </Text>
                         );
                       },

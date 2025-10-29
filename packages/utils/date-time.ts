@@ -7,10 +7,35 @@ export class DateTime {
     return this.normalizeDate(raw) instanceof Date && !isNaN(this.normalizeDate(raw).getTime());
   }
 
+  static isSeconds(
+    value: number,
+    options?: {
+      minYear?: number;
+      maxYear?: number;
+    }
+  ): boolean {
+    // Check if it's a valid number
+    if (!Number.isFinite(value) || Number.isNaN(value)) {
+      return false;
+    }
+
+    // Default range: 1900 to 2200
+    const minYear = options?.minYear ?? 1900;
+    const maxYear = options?.maxYear ?? 2200;
+
+    const minTimestamp = Math.floor(new Date(minYear, 0, 1).getTime() / 1000);
+    const maxTimestamp = Math.floor(new Date(maxYear, 11, 31, 23, 59, 59).getTime() / 1000);
+
+    // Check if value is within reasonable timestamp range
+    return value >= minTimestamp && value <= maxTimestamp;
+  }
+
   static normalizeDate(raw: RawDate): Date {
-    const isSeconds =
-      (typeof raw === "number" || typeof raw === "string") && (+raw).toString().length === 10;
-    return isSeconds ? new Date(+raw * 1000) : new Date(raw);
+    if (typeof raw === "number" || (typeof raw === "string" && !isNaN(+raw))) {
+      return this.isSeconds(+raw) ? new Date(+raw * 1000) : new Date(+raw);
+    }
+
+    return new Date(raw);
   }
 
   static format(date: RawDate, format?: Intl.DateTimeFormatOptions & { locale?: string }) {

@@ -1,13 +1,14 @@
 "use client";
 
 import { Empty } from "@/components/empty";
+import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { api } from "@/modules/apis";
 import { EventType } from "@/modules/events/event-types";
-import { num } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Anchor, Card, Group, Stack, Switch, Text } from "@mantine/core";
 import { IconExternalLink } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -39,7 +40,7 @@ export const ZaloOaGmfGroups: FC = () => {
                 </Anchor>
 
                 <Text fz={12} c="gray">
-                  {num(item.total_member)} {t`Members`}
+                  <NumberFormat value={item.total_member} /> <Trans>Members</Trans>
                 </Text>
               </Group>
 

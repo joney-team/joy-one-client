@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { num } from "@/modules/lang/lang-service";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
@@ -132,7 +132,7 @@ export const BoardTaskGroupByStatuses: FC<BoardTaskGroupByStatusesProps> = (prop
             </Button>
 
             <Text c="gray" fz={em(12)} fw={500}>
-              {num(taskList.count)}
+              <NumberFormat value={taskList.count} />
             </Text>
           </Group>
 

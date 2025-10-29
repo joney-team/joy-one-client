@@ -1,13 +1,14 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { FileType } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { num } from "@/modules/lang/lang-service";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import {
   approveLoan,
@@ -112,7 +113,8 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
           <LoanRowInfo
             label={t`Loan amount`}
-            value={
+            value={loan.amount}
+            renderValue={() =>
               ableToUpdate ? (
                 <NumberInput
                   hideControls
@@ -120,14 +122,15 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
                   onChange={(v) => onUpdateAmount(+v)}
                 />
               ) : (
-                num(loan.amount, { type: "money" })
+                <CurrencyFormat value={loan.amount} />
               )
             }
           />
 
           <LoanRowInfo
             label={t`Loan payment periods`}
-            value={
+            value={loan.packagePeriodDays}
+            renderValue={() =>
               ableToUpdate ? (
                 <Select
                   data={loan.package.periodDaysOptions.map((value) => ({
@@ -138,25 +141,26 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
                   onChange={(v) => onUpdatePackagePeriodDays(v)}
                 />
               ) : (
-                num(loan.packagePeriodDays)
+                <NumberFormat value={loan.packagePeriodDays} />
               )
             }
           />
 
-          <LoanRowInfo label={t`Signature`} value={<SignareCard url={loan.signature} />} />
+          <LoanRowInfo
+            label={t`Signature`}
+            value={loan.signature}
+            renderValue={(value) => <SignareCard url={value} />}
+          />
 
           <LoanRowInfo
-            label={t`Loan coord`}
+            label={t`Customer location`}
             description={t`At the time of loan signing`}
-            value={
-              loan.coord ? (
-                <Anchor href={getGoogleMapLinkCoord(loan.coord)} target="_blank">
-                  {t`View on google map`}
-                </Anchor>
-              ) : (
-                "--"
-              )
-            }
+            value={loan.coord}
+            renderValue={(value) => (
+              <Anchor href={value ? getGoogleMapLinkCoord(value) : undefined} target="_blank">
+                {t`View on Google Map`}
+              </Anchor>
+            )}
           />
 
           {loan.status === LoanStatus.REJECTED && (

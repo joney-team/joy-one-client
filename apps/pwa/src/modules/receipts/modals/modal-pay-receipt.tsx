@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { Timer } from "@/components/timer";
@@ -10,7 +11,6 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
 import { uploadFile } from "@/modules/files/file-service";
 import { FilesBox } from "@/modules/files/files-box";
-import { num } from "@/modules/lang/lang-service";
 import { getLoan } from "@/modules/loans/loans-service";
 import {
   getStaticQrCode,
@@ -35,6 +35,7 @@ import { round } from "@/utils/number.utils";
 import { removeAccents } from "@/utils/string.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -287,7 +288,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
             {workspace.isShouldEnableBranches && (
               <Stack gap={0}>
                 <Text fw={500} fz={14}>
-                  {t`Branch`}
+                  <Trans>Branch</Trans>
                 </Text>
                 <WorkspaceBranchInput
                   value={workspaceBranch}
@@ -298,7 +299,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
             <Stack gap={25}>
               <Text mb={-20} fw={500} fz={14}>
-                {t`Payment method`}
+                <Trans>Payment method</Trans>
               </Text>
               <Group gap={10}>
                 {paymentMethods.map((method) => {
@@ -322,7 +323,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
               </Group>
 
               <Text mb={-20} fw={500} fz={14}>
-                {t`Payment info`}
+                <Trans>Payment info</Trans>
               </Text>
 
               <Card withBorder p={10}>
@@ -338,12 +339,20 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
                         <Stack>
                           <Group justify="space-between">
-                            <Text>{t`Amount`}: </Text>
-                            <CopyText fw={500} text={num(totalAmount, { type: "money" })} />
+                            <Text>
+                              <Trans>Amount</Trans>:{" "}
+                            </Text>
+                            <CopyText
+                              fw={500}
+                              text={totalAmount}
+                              renderText={() => <CurrencyFormat value={totalAmount} />}
+                            />
                           </Group>
 
                           <Group justify="space-between" wrap="nowrap" gap={8}>
-                            <Text>{t`Content`}: </Text>
+                            <Text>
+                              <Trans>Content</Trans>:{" "}
+                            </Text>
                             <CopyText fw={500} text={transactionDesc}>
                               <Group wrap="nowrap" gap={5}>
                                 {transactionDesc !== receipt.code && (
@@ -377,7 +386,9 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
                           {bankInformation?.bankAccount.accountName && (
                             <Group justify="space-between">
-                              <Text>{t`Bank account name`}: </Text>
+                              <Text>
+                                <Trans>Bank account name</Trans>:{" "}
+                              </Text>
                               <CopyText
                                 fw={500}
                                 truncate="end"
@@ -390,7 +401,9 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
                           {bankInformation?.bankAccount.accountNumber && (
                             <Group justify="space-between">
-                              <Text>{t`Bank account number`}: </Text>
+                              <Text>
+                                <Trans>Bank account number</Trans>:{" "}
+                              </Text>
                               <CopyText
                                 fw={500}
                                 text={bankInformation?.bankAccount.accountNumber}
@@ -407,11 +420,17 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                       <Stack>
                         <Group justify="space-between">
                           <Text>{t`Amount`}: </Text>
-                          <CopyText fw={500} text={num(totalAmount, { type: "money" })} />
+                          <CopyText
+                            fw={500}
+                            text={totalAmount}
+                            renderText={() => <CurrencyFormat value={totalAmount} />}
+                          />
                         </Group>
 
                         <Group justify="space-between" wrap="nowrap">
-                          <Text>{t`Money given`}: </Text>
+                          <Text>
+                            <Trans>Money given</Trans>:{" "}
+                          </Text>
                           <NumberInput
                             value={giveAmount}
                             onChange={(e) => setGiveAmount(+e)}
@@ -426,11 +445,15 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                         </Group>
 
                         <Group justify="space-between">
-                          <Text>{t`Money change`}: </Text>
+                          <Text>
+                            <Trans>Money change</Trans>:{" "}
+                          </Text>
                           <Text fw={500}>
-                            {giveAmount && giveAmount > totalAmount
-                              ? num(giveAmount - totalAmount, { type: "money" })
-                              : "0"}
+                            {giveAmount && giveAmount > totalAmount ? (
+                              <CurrencyFormat value={giveAmount - totalAmount} />
+                            ) : (
+                              "0"
+                            )}
                           </Text>
                         </Group>
                       </Stack>
@@ -439,8 +462,14 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
                   return (
                     <Group justify="space-between">
-                      <Text>{t`Amount`}: </Text>
-                      <CopyText fw={500} text={num(totalAmount)} />
+                      <Text>
+                        <Trans>Amount</Trans>:{" "}
+                      </Text>
+                      <CopyText
+                        fw={500}
+                        text={totalAmount}
+                        renderText={() => <CurrencyFormat value={totalAmount} />}
+                      />
                     </Group>
                   );
                 })()}
@@ -448,7 +477,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
               <Group gap={3} mb={-20}>
                 <Text fw={500} fz={em(14)}>
-                  {t`Receipts images`}
+                  <Trans>Receipts images</Trans>
                 </Text>
                 <Renderer visible={!!workspace.settings.receiptImagesRequired}>
                   <Text fw={700} c="red">
@@ -478,11 +507,11 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
             <Stack gap={16} mt={10} align="center">
               <Button leftIcon={IconCheck} onClick={onPayReceipt} action tt="uppercase" h={42}>
-                {t`Confirm paid`}
+                <Trans>Confirm paid</Trans>
               </Button>
 
               <Anchor ta="center" c="gray" fz={13} onClick={onClose}>
-                {t`Exit`}
+                <Trans>Exit</Trans>
               </Anchor>
             </Stack>
           </Fragment>

@@ -3,10 +3,10 @@
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { QuantityInput } from "@/components/inputs/quantity-input";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { num } from "@/modules/lang/lang-service";
 import { ProductSelector } from "@/modules/products/components/product-selector";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
@@ -195,7 +195,7 @@ export const OrderSaleItemComponent: FC<{
           />
 
           <Text w={120} ta="right" pr={8} fw={500}>
-            {num(item.price * item.quantity, { type: "money" })}
+            <CurrencyFormat value={item.price * item.quantity} />
           </Text>
 
           <ActionIcon variant="subtle" color="gray" onClick={onRemove}>

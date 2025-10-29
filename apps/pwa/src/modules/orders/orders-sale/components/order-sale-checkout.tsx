@@ -2,9 +2,9 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { useLayout } from "@/layout/layout-context";
 import { CustomerSelector } from "@/modules/customers/components/customer-selector";
-import { num } from "@/modules/lang/lang-service";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -45,7 +45,9 @@ export const OrderSaleCheckout: FC = () => {
             <Text>
               <Trans>Paid</Trans>
             </Text>
-            <Text>{num(paidAmount, { type: "money" })}</Text>
+            <Text>
+              <CurrencyFormat value={paidAmount} />
+            </Text>
           </Group>
         </Fragment>
       )}
@@ -58,12 +60,12 @@ export const OrderSaleCheckout: FC = () => {
           <Skeleton h={20} w={80} visible={orderSale.calculating.isLoading} />
         ) : (
           <Text fw={700}>
-            {num(
-              (orderSale.calculating.data?.totalAmount || 0) +
-                (orderSale.activeOrder.tipAmount ?? 0) -
-                paidAmount,
-              { type: "money" }
-            )}
+            <CurrencyFormat
+              value={
+                (orderSale.calculating.data?.totalAmount ||
+                  0 + (orderSale.activeOrder.tipAmount ?? 0)) - paidAmount
+              }
+            />
           </Text>
         )}
       </Group>
@@ -195,7 +197,9 @@ export const OrderSaleCheckout: FC = () => {
               {orderSale.calculating.isLoading ? (
                 <Skeleton h={20} w={80} visible />
               ) : (
-                <Text>{num(subTotalAmount, { type: "money" })}</Text>
+                <Text>
+                  <CurrencyFormat value={subTotalAmount} />
+                </Text>
               )}
             </Group>
 

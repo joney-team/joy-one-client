@@ -4,9 +4,10 @@ import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { Empty } from "@/components/empty";
 import { FlexSize } from "@/components/flex-size";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat, numberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
-import { num } from "@/modules/lang/lang-service";
 import { productTypes } from "@/modules/products/products-constants";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
@@ -160,7 +161,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                     size="xs"
                     bg={!isActive ? color("primary") : color("white")}
                     c={!isActive ? color("white") : color("primary")}
-                    label={num(count)}
+                    label={numberFormat(count)}
                     disabled={count === 0}
                   />
                 </Button>
@@ -217,14 +218,14 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                                   </Stack>
                                 </Table.Td>
                                 <Table.Td w={80} ta="right">
-                                  {num(productReport.qtySold)}
+                                  <NumberFormat value={productReport.qtySold} />
                                 </Table.Td>
                                 <Table.Td w={200} ta="right">
-                                  {num(productReport.revenue, { type: "money" })}
+                                  <CurrencyFormat value={productReport.revenue} />
                                 </Table.Td>
                                 {workspace.hasPermission(WorkspacePermission.REPORTS_VIEW) && (
                                   <Table.Td w={200} ta="right">
-                                    {num(productReport.profit, { type: "money" })}
+                                    <CurrencyFormat value={productReport.profit} />
                                   </Table.Td>
                                 )}
                               </Table.Tr>
@@ -249,6 +250,7 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
 
   const workspace = useWorkspace();
   const moduleOrder = workspace.getModule("orders");
+  const relatedEntity = t`Receipts`.toLowerCase();
 
   return (
     <Stack gap={8}>
@@ -258,7 +260,7 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
             <IconClipboardList />
           </ThemeIcon>
           <Trans>
-            {num(items.length)} related to {t`Receipts`.toLowerCase()} / {moduleOrder?.name()}
+            <NumberFormat value={items.length} /> related to {relatedEntity} / {moduleOrder?.name()}
           </Trans>
           <ActionIcon variant="subtle" size="xs">
             {!isShow ? <IconChevronDown /> : <IconChevronUp />}
@@ -301,7 +303,7 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
                   <Group justify="space-between">
                     <Text fz={16}>{t`QTY`}</Text>
                     <Text fw={700} fz={em(13)}>
-                      {num(product.data.qty)}
+                      <NumberFormat value={product.data.qty} />
                     </Text>
                   </Group>
                 )}

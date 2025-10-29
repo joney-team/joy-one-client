@@ -4,23 +4,23 @@ import { Avatar } from "@/components/avatar";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
-import { num } from "@/modules/lang/lang-service";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagType } from "@/modules/tags/tags-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { WidgetProps } from "@/widgets/types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Table, Text, ThemeIcon } from "@mantine/core";
 import { IconFolder, IconStopwatch } from "@tabler/icons-react";
 import { FC } from "react";
 import { ReportWidgetsContext } from "../types";
-import { DateTime } from "@joy-one-client/utils/date-time";
 
 export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = (props) => {
   const tags = useTags();
@@ -149,14 +149,15 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
                         <Text>{user.name}</Text>
                       </Group>
                     </Table.Td>
-                    <Table.Td>{num(assignedTasks.length, { empty: "--" })}</Table.Td>
                     <Table.Td>
-                      {assignedTasks.length > 0
-                        ? num((completedAssignedTasks.length * 100) / assignedTasks.length, {
-                            suffix: `% (${completedAssignedTasks.length}/${assignedTasks.length})`,
-                            empty: "--",
-                          })
-                        : "--"}
+                      <NumberFormat value={assignedTasks.length} />
+                    </Table.Td>
+                    <Table.Td>
+                      <NumberFormat
+                        value={(completedAssignedTasks.length * 100) / assignedTasks.length}
+                        format={{ maximumFractionDigits: 2 }}
+                        suffix="%"
+                      />
                     </Table.Td>
                     <Table.Td>
                       {totalTimeTrackings > 0 ? DateTime.toHHMM(totalTimeTrackings) : "--"}

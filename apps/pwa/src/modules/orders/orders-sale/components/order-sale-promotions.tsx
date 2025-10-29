@@ -3,8 +3,8 @@
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
+import { NumberFormat, numberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
-import { num } from "@/modules/lang/lang-service";
 import { PromotionDescription } from "@/modules/promotions/components/promotion-description";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -50,7 +50,7 @@ export const OrderSalePromotions: FC = () => {
           <Indicator
             inline
             disabled={unUsedPromotions.length === 0}
-            label={`x${num(unUsedPromotions.length)}`}
+            label={`x${numberFormat(unUsedPromotions.length)}`}
             size={16}
           >
             <Button
@@ -61,7 +61,8 @@ export const OrderSalePromotions: FC = () => {
               fw={400}
               onClick={open}
             >
-              <Trans>Apply</Trans> {num(orderPromotions.length)}/{num(promotions.length ?? 0)}
+              <Trans>Apply</Trans> <NumberFormat value={orderPromotions.length} />/
+              <NumberFormat value={promotions.length} />
             </Button>
           </Indicator>
         ) : (

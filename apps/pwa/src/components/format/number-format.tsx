@@ -8,10 +8,11 @@ export interface NumberFormatProps {
   value: number;
   suffix?: string;
   prefix?: string;
+  format?: Intl.NumberFormatOptions;
 }
 
 export const numberFormat = (value: number, props?: Omit<NumberFormatProps, "value">): string => {
-  return `${props?.prefix || ""}${(+value).toLocaleString(getClientLocale())}${
+  return `${props?.prefix || ""}${(+value).toLocaleString(getClientLocale(), props?.format)}${
     props?.suffix || ""
   }`.trim();
 };
@@ -23,7 +24,7 @@ export const NumberFormat: FC<NumberFormatProps> = (props): JSX.Element => {
   return (
     <Fragment>
       {props.prefix}
-      {(+value).toLocaleString(lang.locale)}
+      {(+value).toLocaleString(lang.locale, props.format)}
       {props.suffix}
     </Fragment>
   );

@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { DateInput } from "@/components/inputs/date-input";
 import { ModalTitle } from "@/components/modal-title";
-import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
-import { num } from "@/modules/lang/lang-service";
 import {
   multipleProductsStockIn,
   productStockRecordTypeOptions,
@@ -261,11 +261,13 @@ export const ModalProductStockIn: FC = () => {
                 </Table.Td>
 
                 <Table.Td ta="right">
-                  {num(form.values.items.reduce((acc, item) => acc + (item.quantity || 0), 0))}
+                  <NumberFormat
+                    value={form.values.items.reduce((acc, item) => acc + (item.quantity || 0), 0)}
+                  />
                 </Table.Td>
 
                 <Table.Td ta="right">
-                  <NumberCurrencyFormatter
+                  <CurrencyFormat
                     value={form.values.items.reduce(
                       (acc, item) => acc + (item.quantity || 0) * (item.costPrice || 0),
                       0

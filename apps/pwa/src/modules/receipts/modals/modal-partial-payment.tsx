@@ -15,6 +15,7 @@ import { modals } from "@mantine/modals";
 import { IconCheck, IconCircleHalf2 } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { OnModalPayReceipt } from "./modal-pay-receipt";
+import { CurrencyFormat } from "@/components/format/currency-format";
 
 interface ModalPartialPaymentProps {
   onDone?: (receipts: ReceiptEntity[]) => void | Promise<void>;
@@ -94,7 +95,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
       )}
 
       <Text ta="center">
-        <Trans>Remaining amount</Trans>: {num(remainAmount, { type: "money" })}
+        <Trans>Remaining amount</Trans>: <CurrencyFormat value={remainAmount} />
       </Text>
 
       <Center>

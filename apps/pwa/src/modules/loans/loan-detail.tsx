@@ -5,6 +5,8 @@ import { Container } from "@/components/container";
 import { EntityImage } from "@/components/entity-image";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
 import { genders } from "@/constant";
 import { useRouter } from "@/hooks/use-router";
@@ -26,8 +28,6 @@ import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { formatPhoneNumber } from "@/utils/phone.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { Currency } from "@joy-one-client/utils/currency";
-import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -261,47 +261,76 @@ export const LoanDetail: NextPage = () => {
             <SimpleGrid cols={{ md: 4 }}>
               <InfoCard
                 label={t`Birhtday`}
+                visible={!!customer.data?.birthday}
                 content={
-                  customer.data.birthday
-                    ? DateTime.format(customer.data.birthday, { locale: lang.locale })
-                    : "--"
+                  <Text truncate="end" fz={16} fw={500} maw={250}>
+                    {customer.data.birthday ? (
+                      <DateFormat value={customer.data.birthday} type="date" />
+                    ) : (
+                      "--"
+                    )}
+                  </Text>
                 }
               />
 
-              <InfoCard label={t`Gender`} content={genders[customer.data.gender].name()} />
+              <InfoCard
+                label={t`Gender`}
+                visible={!!customer.data?.gender}
+                content={
+                  <Text truncate="end" fz={16} fw={500} maw={250}>
+                    {genders[customer.data.gender].name()}
+                  </Text>
+                }
+              />
 
               <InfoCard
                 label={t`Phone`}
-                content={customer.data.phone ? formatPhoneNumber(customer.data.phone) : "--"}
+                content={
+                  <Text truncate="end" fz={16} fw={500} maw={250}>
+                    {customer.data.phone ? formatPhoneNumber(customer.data.phone) : "--"}
+                  </Text>
+                }
                 href={`tel:${customer.data.phone}`}
                 visible={workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)}
               />
 
               <InfoCard
                 label={t`Email`}
-                content={customer.data.email}
                 href={`mailto:${customer.data.email}`}
+                visible={!!customer.data?.email}
+                content={
+                  <Text truncate="end" fz={16} fw={500} maw={250}>
+                    {customer.data.email}
+                  </Text>
+                }
               />
 
               <InfoCard
                 label={t`Loan package`}
-                content={`${loan.data.package.id} / ${loanAssetTypes[
-                  loan.data.assetType
-                ]?.label()}`}
+                content={
+                  <Text truncate="end" fz={16} fw={500} maw={250}>
+                    {loan.data.package.id} / {loanAssetTypes[loan.data.assetType]?.label()}
+                  </Text>
+                }
               />
 
               <InfoCard
                 label={t`Money amount`}
-                content={Currency.format(loan.data.amount, {
-                  locale: lang.locale,
-                  currency: workspace.settings.currencyCode,
-                })}
+                content={
+                  <Text truncate="end" fz={16} fw={500} maw={250}>
+                    <CurrencyFormat value={loan.data.amount} />
+                  </Text>
+                }
               />
 
               {workspace.isShouldEnableBranches && (
                 <InfoCard
                   label={t`Workspace branch`}
-                  content={loan.data.workspaceBranch?.name || t`Main office`}
+                  content={
+                    <Text truncate="end" fz={16} fw={500} maw={250}>
+                      {loan.data.workspaceBranch?.name || t`Main office`}
+                    </Text>
+                  }
                 />
               )}
 
@@ -314,7 +343,9 @@ export const LoanDetail: NextPage = () => {
                       <Trans>View contract</Trans>
                     </Group>
                   ) : (
-                    "--"
+                    <Text fz={16} fw={500}>
+                      --
+                    </Text>
                   )
                 }
                 href={linkContractPdf}
@@ -330,7 +361,9 @@ export const LoanDetail: NextPage = () => {
                         <Trans>View</Trans>
                       </Group>
                     ) : (
-                      "--"
+                      <Text fz={16} fw={500}>
+                        --
+                      </Text>
                     )
                   }
                   href={linkLiquidationPdf}
@@ -339,8 +372,17 @@ export const LoanDetail: NextPage = () => {
 
               <InfoCard
                 label={t`Status`}
-                content={loanStatuses[loan.data.status].label()}
-                c={loanStatuses[loan.data.status].color}
+                content={
+                  <Text
+                    truncate="end"
+                    fz={16}
+                    fw={500}
+                    maw={250}
+                    c={loanStatuses[loan.data.status].color}
+                  >
+                    {loanStatuses[loan.data.status].label()}
+                  </Text>
+                }
               />
             </SimpleGrid>
           </Stack>
@@ -503,9 +545,8 @@ const getStepActive = (loan: LoanEntity, kyc?: CustomerKycEntity): number => {
 
 const InfoCard: FC<{
   label: string;
-  content?: any;
+  content?: JSX.Element;
   href?: string;
-  c?: string;
   visible?: boolean;
 }> = (props) => {
   if (!props.content || props.visible === false) return null;
@@ -525,15 +566,7 @@ const InfoCard: FC<{
       <Text fz={12} fw={500} c="gray.6">
         {props.label}
       </Text>
-      <ContentWrapper>
-        {typeof props.content === "string" ? (
-          <Text truncate="end" fz={16} fw={500} maw={250} c={props.c}>
-            {props.content}
-          </Text>
-        ) : (
-          props.content
-        )}
-      </ContentWrapper>
+      <ContentWrapper>{props.content}</ContentWrapper>
     </Stack>
   );
 };

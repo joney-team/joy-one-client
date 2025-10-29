@@ -1,5 +1,8 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Checkout } from "@/components/checkout";
+import { NumberFormat } from "@/components/format/number-format";
 import { Loading } from "@/components/loading";
 import { ModalTitle } from "@/components/modal-title";
 import {
@@ -14,7 +17,6 @@ import {
 } from "@/modules/bank-transactions/bank-transaction-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { num } from "@/modules/lang/lang-service";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -125,11 +127,14 @@ export const ModalWorkspaceBillingDeposit: FC = () => {
 
             <Text fz={em(13)}>
               <Trans>
-                Minimum amount <strong>{num(minAmount)}</strong>
+                Minimum amount{" "}
+                <strong>
+                  <NumberFormat value={minAmount} />
+                </strong>
               </Trans>
             </Text>
             <Button type="submit" onClick={onPayment} disabled={amount < minAmount}>
-              {t`Deposit`}
+              <Trans>Deposit</Trans>
             </Button>
           </Stack>
         );

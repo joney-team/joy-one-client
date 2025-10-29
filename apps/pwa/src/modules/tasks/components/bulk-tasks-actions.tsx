@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { num } from "@/modules/lang/lang-service";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
@@ -124,7 +124,7 @@ export const BulkTasksActions: FC = () => {
           <IconStack2 size={20} strokeWidth={1.5} color="white" />
           <Group gap={3} wrap="nowrap">
             <Text c="white" fz={14} fw={600} miw={10}>
-              {num(tasks.selectedTaskIds.length)}
+              <NumberFormat value={tasks.selectedTaskIds.length} />
             </Text>
             <Text c="white" fz={14} fw={600}>
               <Trans>Selected</Trans>

@@ -4,10 +4,11 @@ import { Button } from "@/components/buttons/button";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { ContentEditHover } from "@/components/content-edit-hover";
 import { Empty } from "@/components/empty";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
 import { useRouter } from "@/hooks/use-router";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { num } from "@/modules/lang/lang-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import {
   LoanAssetEstimation,
@@ -286,16 +287,21 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                               })
                             }
                           >
-                            {num(estimation.estimatePrice, { type: "money" })}
+                            <CurrencyFormat value={estimation.estimatePrice} />
                           </ContentEditHover>
 
                           {assetEstimationPriceSpreadRate > 0 && (
                             <Tooltip label={t`Display price for users`}>
                               <Text fz={em(13)} c="gray">
-                                {num(estimation.estimatePrice * assetEstimationPriceSpreadRate, {
-                                  type: "money",
-                                })}{" "}
-                                ({assetEstimationPriceSpreadRate * 100}%)
+                                <CurrencyFormat
+                                  value={estimation.estimatePrice * assetEstimationPriceSpreadRate}
+                                />
+                                (
+                                <NumberFormat
+                                  value={assetEstimationPriceSpreadRate * 100}
+                                  suffix="%"
+                                />
+                                )
                               </Text>
                             </Tooltip>
                           )}

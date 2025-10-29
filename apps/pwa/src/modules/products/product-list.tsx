@@ -2,15 +2,17 @@
 
 import { Clickable } from "@/components/clickable";
 import { EntityImage } from "@/components/entity-image";
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
 import { EventType } from "@/modules/events/event-types";
-import { num } from "@/modules/lang/lang-service";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Badge, Stack, Text } from "@mantine/core";
 import { IconBox, IconBuildingWarehouse, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -73,7 +75,11 @@ export const ProductList: FC = () => {
                   variant={data.stock.quantity > 0 ? "light" : "outline"}
                   color={data.stock.quantity <= 0 ? "gray" : undefined}
                 >
-                  {data.stock.quantity <= 0 ? t`Out of stock` : num(data.stock.quantity)}
+                  {data.stock.quantity <= 0 ? (
+                    <Trans>Out of stock</Trans>
+                  ) : (
+                    <NumberFormat value={data.stock.quantity ?? 0} />
+                  )}
                 </Badge>
               );
             },
@@ -89,12 +95,17 @@ export const ProductList: FC = () => {
               if (data.minPrice && data.maxPrice) {
                 return (
                   <Text>
-                    {num(data.minPrice)} - {num(data.maxPrice, { type: "money" })}
+                    <CurrencyFormat value={data.minPrice} /> -{" "}
+                    <CurrencyFormat value={data.maxPrice} />
                   </Text>
                 );
               }
 
-              return <Text>{num(data.price, { type: "money" })}</Text>;
+              return (
+                <Text>
+                  <CurrencyFormat value={data.price} />
+                </Text>
+              );
             },
           },
         }}

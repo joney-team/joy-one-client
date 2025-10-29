@@ -30,7 +30,9 @@ export const DateFormat: FC<DateFormatProps> = (props): JSX.Element => {
     if ("type" in props && props.type === "date") {
       return {
         locale,
-        dateStyle: "short",
+        month: "2-digit",
+        year: "numeric",
+        day: "2-digit",
       };
     }
 

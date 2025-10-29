@@ -3,7 +3,6 @@ import { StorageKey } from "@/types";
 import { isServer } from "@/utils/common.utils";
 import { round } from "@/utils/number.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
 import { getCookie } from "cookies-next/client";
 import { getGlobal } from "../../global";
 import { Dictionary, LangState, Locale, LocaleConfig } from "./lang-types";
@@ -131,12 +130,6 @@ export const translateNotification = (key: string, params?: any): string => {
             `{${param}}`,
             DateTime.format(params[param], { locale: getClientLocale() })
           );
-          break;
-        case "money":
-          message = message.replace(`{${param}}`, num(params[param], { type: "money" }));
-          break;
-        case "amount":
-          message = message.replace(`{${param}}`, num(params[param]));
           break;
         default:
           message = message.replace(`{${param}}`, params[param]);
