@@ -3,6 +3,9 @@
 import { i18n as defaultI18n } from "@lingui/core";
 
 import dayjs from "dayjs";
+import "dayjs/locale/en";
+import "dayjs/locale/vi";
+
 import updateLocale from "dayjs/plugin/updateLocale";
 
 import { onReconnected } from "@/modules/events/event-service";
@@ -33,9 +36,6 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
   const fetchLocale = async (activeLocale: AppLocale) => {
     const action = async () => {
       try {
-        // Load dayjs locale dynamically
-        await import(`dayjs/locale/${activeLocale}`);
-
         // Load translation catalog
         const txt = process.env.NODE_ENV === "development" ? "po" : "js";
         const catalog = await import(`@/modules/lang/catalog/${activeLocale}.${txt}`);
