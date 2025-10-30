@@ -36,6 +36,7 @@ import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCalendar, IconMail, IconPhone, IconUpload, IconUser } from "@tabler/icons-react";
 import { useEffect, type FC } from "react";
 import { UserWorkspaceSettings } from "./components/user-workspace-settings-form";
+import { DateFormat } from "@/components/format/date-format";
 
 export const UserProfileSettings: FC = () => {
   const auth = useAuth();
@@ -157,8 +158,16 @@ export const UserProfileSettings: FC = () => {
 
                 <TimeZoneInput
                   label={<Trans>Timezone</Trans>}
-                  {...form.getInputProps("settings.timezone")}
+                  {...form.getInputProps("settings.timezoneId")}
                 />
+
+                <Group>
+                  <Text>
+                    <Trans>Current time</Trans>
+                    {": "}
+                  </Text>
+                  <DateFormat value={new Date()} type="date-time" />
+                </Group>
               </Stack>
             </FormSession>
 

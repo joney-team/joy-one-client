@@ -65,7 +65,8 @@ export interface UpdateUserPasswordDto {
 
 export interface UserSettings {
   locale?: AppLocale;
-  timezone?: string;
+  timezoneId?: string;
+  timezoneUtc?: string;
   dateFormat?: string;
   isStartOfWeekSunday?: boolean;
   isTwelveHour?: boolean;

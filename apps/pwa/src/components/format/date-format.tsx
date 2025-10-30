@@ -19,16 +19,19 @@ export const DateFormat: FC<DateFormatProps> = (props): JSX.Element => {
   const { locale } = useLang();
   const auth = useAuth();
   const hour12 = ("hour12" in props && props.hour12) ?? auth.user?.settings.isTwelveHour;
+  const timeZone = auth.user?.settings.timezoneUtc;
 
   const format = useMemo<Intl.DateTimeFormatOptions>(() => {
     if (props.type === "custom")
       return {
+        timeZone,
         locale,
         ...props.format,
       };
 
     if ("type" in props && props.type === "date") {
       return {
+        timeZone,
         locale,
         month: "2-digit",
         year: "numeric",
@@ -38,6 +41,7 @@ export const DateFormat: FC<DateFormatProps> = (props): JSX.Element => {
 
     if (props.type === "time") {
       return {
+        timeZone,
         locale,
         hour12,
         timeStyle: "short",
@@ -45,6 +49,7 @@ export const DateFormat: FC<DateFormatProps> = (props): JSX.Element => {
     }
 
     return {
+      timeZone,
       locale,
       hour12,
       dateStyle: "short",

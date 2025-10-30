@@ -301,7 +301,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       const timeZones = await getTimeZones();
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const _timezone = timeZones.find((tz) => tz.utc.includes(timezone));
-      await updateProfile({ ...user, settings: { ...user.settings, timezone: _timezone?.id } });
+      await updateProfile({ ...user, settings: { ...user.settings, timezoneId: _timezone?.id } });
       return null;
     } catch (error) {
       console.error("Error when detecting timezone", error);
@@ -333,7 +333,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       const authType = search.get("authType");
       if (authType) router.removeQuery("authType", true);
 
-      if (!user.settings.timezone) detectTimeZone();
+      if (!user.settings.timezoneId) detectTimeZone();
 
       Sentry.setUser({ id: user._id, username: user.name, email: user.email });
     }
