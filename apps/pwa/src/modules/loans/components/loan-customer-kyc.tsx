@@ -14,6 +14,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { formatPhoneNumber } from "@/utils/phone.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Card,
@@ -57,11 +58,12 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
           <Stack>
             {props.kyc && kyc && (
               <Fragment>
-                <Divider label="Căn Cước Công Dân" labelPosition="left" />
+                <Divider label={<Trans>CID Infos</Trans>} labelPosition="left" />
 
                 <LoanRowInfo
-                  label="Số CCCD"
-                  value={
+                  label={<Trans>CID number</Trans>}
+                  value={kyc.cidNumber}
+                  renderValue={() => (
                     <Group gap={10}>
                       <Text>{kyc?.cidNumber || "--"}</Text>
                       {props.kyc.status === CustomerKycStatus.APPROVED && (
@@ -70,29 +72,33 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                         </ThemeIcon>
                       )}
                     </Group>
-                  }
+                  )}
                 />
                 <LoanRowInfo
-                  label="Ngày cấp"
-                  value={
-                    <Group>
-                      <Text>
-                        {kyc?.cidCreatedAt && <DateFormat value={kyc?.cidCreatedAt} type="date" />}
-                      </Text>
-                    </Group>
-                  }
+                  label={<Trans>CID created at</Trans>}
+                  value={kyc?.cidCreatedAt}
+                  renderValue={() => (
+                    <Text>
+                      {kyc?.cidCreatedAt && <DateFormat value={kyc?.cidCreatedAt} type="date" />}
+                    </Text>
+                  )}
                 />
               </Fragment>
             )}
 
-            <Divider label="Thông tin cá nhân" labelPosition="left" />
+            <Divider label={<Trans>Personal informations</Trans>} labelPosition="left" />
 
             <LoanRowInfo
-              label="Địa chỉ hiện tại"
-              value={
+              label={<Trans>Current address</Trans>}
+              value={customer.vnLocationFullAddress}
+              renderValue={() => (
                 <Tooltip
-                  label={`Địa chỉ cũ: ${customer.vnLocationFullAddress}`}
-                  disabled={!customer.vnLocationFullAddress}
+                  label={
+                    <Fragment>
+                      <Trans>Previous address</Trans>: {customer.vnPrevLocationFullAddress}
+                    </Fragment>
+                  }
+                  disabled={!customer.vnPrevLocationFullAddress}
                 >
                   <Anchor
                     href={customer.vnLocation && getGoogleMapLink(customer.vnLocation)}
@@ -101,54 +107,55 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                     {renderLocation(customer.vnLocation) || "--"}
                   </Anchor>
                 </Tooltip>
-              }
+              )}
             />
 
             <LoanRowInfo
-              label="Địa chỉ thứ 2 (Quê quán)"
-              value={
+              label={<Trans>Secondary address (Hometown)</Trans>}
+              value={customer.vnSecondaryLocation}
+              renderValue={(value) => (
                 <Tooltip
-                  label={`Địa chỉ thứ 2 cũ: ${customer.vnPrevSecondaryLocationFullAddress}`}
+                  label={
+                    <Fragment>
+                      <Trans>Previous address</Trans>: {customer.vnPrevSecondaryLocationFullAddress}
+                    </Fragment>
+                  }
                   disabled={!customer.vnPrevSecondaryLocationFullAddress}
                 >
-                  <Anchor
-                    href={
-                      customer.vnSecondaryLocation && getGoogleMapLink(customer.vnSecondaryLocation)
-                    }
-                    target="_blank"
-                  >
-                    {renderLocation(customer.vnSecondaryLocation) || "--"}
+                  <Anchor href={value && getGoogleMapLink(value)} target="_blank">
+                    {renderLocation(value) || "--"}
                   </Anchor>
                 </Tooltip>
-              }
+              )}
             />
 
             <LoanRowInfo
-              label="Mức lương hiện tại"
-              value={
-                customer.salaryAmount ? <CurrencyFormat value={customer.salaryAmount} /> : "--"
-              }
+              label={<Trans>Salary amount</Trans>}
+              value={customer.salaryAmount}
+              renderValue={(value) => (
+                <Text>{value ? <CurrencyFormat value={value} /> : "--"}</Text>
+              )}
             />
 
             {workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
               <Fragment>
-                <Divider label="Liên hệ" labelPosition="left" />
+                <Divider label={<Trans>Contacts</Trans>} labelPosition="left" />
 
                 <LoanRowInfo
-                  label="Số điện thoại"
-                  value={
-                    <Anchor href={`tel:${customer.phone}`}>
-                      {formatPhoneNumber(customer.phone)}
-                    </Anchor>
-                  }
+                  label={<Trans>Phone</Trans>}
+                  value={customer.phone}
+                  renderValue={(value) => (
+                    <Anchor href={`tel:${value}`}>{formatPhoneNumber(value)}</Anchor>
+                  )}
                 />
 
                 <LoanRowInfo
-                  label="SĐT Người thân"
-                  value={
-                    customer.relationshipContacts && customer.relationshipContacts.length > 0 ? (
+                  label={<Trans>Relative contacts</Trans>}
+                  value={customer.relationshipContacts}
+                  renderValue={(value) =>
+                    value && value.length > 0 ? (
                       <Stack>
-                        {customer.relationshipContacts.map((contact, index) => (
+                        {value.map((contact, index) => (
                           <Card withBorder shadow="none" p={10} key={index}>
                             <Group key={index} justify="space-between">
                               <Stack gap={0}>
@@ -169,8 +176,9 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                 />
 
                 <LoanRowInfo
-                  label="Danh bạ"
-                  value={
+                  label={<Trans>Contacts</Trans>}
+                  value={contacts.data?.contacts.length}
+                  renderValue={() =>
                     contacts.isFetching ? (
                       <Loader size="xs" />
                     ) : contacts.data ? (

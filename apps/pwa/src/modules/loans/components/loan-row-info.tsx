@@ -1,13 +1,12 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { Coordinates } from "@/types";
 import { ActionIcon, em, Grid, Group, Stack, Text } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
 
-export const LoanRowInfo = <T extends string | number | Coordinates | null | undefined>(props: {
-  label: string;
+export const LoanRowInfo = <T extends any>(props: {
+  label: string | JSX.Element;
   description?: string;
   value: T;
   renderValue?: (value: T) => JSX.Element | string;

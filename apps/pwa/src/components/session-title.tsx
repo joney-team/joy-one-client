@@ -7,7 +7,7 @@ import { FC, PropsWithChildren } from "react";
 
 export interface SessionTitleProps {
   id?: string;
-  name: string;
+  name: string | JSX.Element;
   icon?: Icon;
   iconColor?: string;
   onViewAll?: () => void;

@@ -20,6 +20,7 @@ import { LoanEntity } from "@/modules/loans/loans-types";
 import { onActionLoad } from "@/utils/actions";
 import { useFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Box, Card, Center, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconBrandSpeedtest } from "@tabler/icons-react";
@@ -91,10 +92,16 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
               </Text>
             </Stack>
           </Group>
-          <LoanRowInfo label={t`Loan asset type`} value={loanAssetTypes[loan.assetType].label()} />
-          <LoanRowInfo label={t`Loan period`} value={renderLoanPeriod(loan.package.days)} />
           <LoanRowInfo
-            label={t`Loan amount`}
+            label={<Trans>Loan asset type</Trans>}
+            value={loanAssetTypes[loan.assetType].label()}
+          />
+          <LoanRowInfo
+            label={<Trans>Loan period</Trans>}
+            value={renderLoanPeriod(loan.package.days)}
+          />
+          <LoanRowInfo
+            label={<Trans>Loan amount</Trans>}
             value={
               <Text>
                 <CurrencyFormat value={loan.amount} />
@@ -102,7 +109,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
             }
           />
           <LoanRowInfo
-            label={t`Loan payment periods`}
+            label={<Trans>Loan payment periods</Trans>}
             value={
               <Text>
                 <NumberFormat value={loan.packagePeriodDays} />
@@ -111,7 +118,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
           />
           {loan.paymentPeriods && (
             <LoanRowInfo
-              label={t`Loan period range`}
+              label={<Trans>Loan period range</Trans>}
               value={
                 <Text>
                   {loan.paymentPeriods.find((v) => v.period === 1)?.startTime && (
@@ -137,7 +144,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
       <Card withBorder p={10}>
         <Stack>
           <LoanRowInfo
-            label={t`Remain capital amount`}
+            label={<Trans>Remain capital amount</Trans>}
             value={
               <Text>
                 <CurrencyFormat value={calculated.remainCapitalAmount} />
@@ -151,7 +158,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
                 <Table withTableBorder withColumnBorders>
                   <Table.Tbody>
                     <Table.Tr>
-                      <Table.Td>{t`Interest period`}</Table.Td>
+                      <Table.Td>{<Trans>Interest period</Trans>}</Table.Td>
                       <Table.Td fw={700}>
                         {calculated.period} (
                         {calculated.periodStartAt && (
@@ -161,13 +168,13 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
                       </Table.Td>
                     </Table.Tr>
                     <Table.Tr>
-                      <Table.Td>{t`Interest days`}</Table.Td>
+                      <Table.Td>{<Trans>Interest days</Trans>}</Table.Td>
                       <Table.Td fw={700}>
                         <NumberFormat value={calculated.periodFeeDays} />
                       </Table.Td>
                     </Table.Tr>
                     <Table.Tr>
-                      <Table.Td>{t`Interest per day`}</Table.Td>
+                      <Table.Td>{<Trans>Interest per day</Trans>}</Table.Td>
                       <Table.Td fw={700}>
                         <NumberFormat value={calculated.periodFeePerDay} />
                       </Table.Td>
@@ -179,7 +186,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
           >
             <Box w="100%">
               <LoanRowInfo
-                label={t`Period fee amount`}
+                label={<Trans>Period fee amount</Trans>}
                 value={
                   <Text>
                     <CurrencyFormat value={calculated.periodFeeAmount} />
@@ -199,7 +206,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
             }
           />
           <LoanRowInfo
-            label={`${t`Loan receipt late interest`}`}
+            label={<Trans>Loan receipt late interest</Trans>}
             value={
               <Text>
                 <CurrencyFormat value={calculated.lateInterestAmount} />
@@ -208,7 +215,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
           />
 
           <LoanRowInfo
-            label={t`Total`}
+            label={<Trans>Total</Trans>}
             value={
               <Text c="orange" fz={em(20)} fw={800}>
                 <CurrencyFormat value={calculated.feeAmount} />
@@ -219,12 +226,12 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
       </Card>
 
       <Text ta="center" c="orange">
-        {t`Liquidation message`}
+        {<Trans>Liquidation message</Trans>}
       </Text>
 
       <Center>
         <Button miw={200} action color="orange" onClick={onSubmit} loading={isSubmitting}>
-          {t`Liquidation`}
+          {<Trans>Liquidation</Trans>}
         </Button>
       </Center>
     </Stack>

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Checkbox } from "@/components/checkbox";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { DocumentsIllustration } from "@/components/illustrations/documents";
 import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
@@ -9,7 +10,6 @@ import { api } from "@/modules/apis";
 import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
 import { onUploadFiles } from "@/modules/files/file-service";
 import { FilesBox } from "@/modules/files/files-box";
-import { num } from "@/modules/lang/lang-service";
 import { fulfillLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanReceiptData, LoanStatus } from "@/modules/loans/loans-types";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
@@ -25,7 +25,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { t } from "@lingui/core/macro";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import {
   Blockquote,
@@ -42,8 +42,6 @@ import {
 import { DateTimePicker } from "@mantine/dates";
 import { FC, Fragment, useState } from "react";
 import { LoanRowInfo } from "./loan-row-info";
-import { DateTime } from "@joy-one-client/utils/date-time";
-import { CurrencyFormat } from "@/components/format/currency-format";
 
 interface LoanDisburesementProps {
   loan: LoanEntity;
@@ -171,7 +169,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
             <Stack>
               <LoanRowInfo
                 copy
-                label={t`Loan amount`}
+                label={<Trans>Loan amount</Trans>}
                 value={loan.amount}
                 renderValue={(value) => <CurrencyFormat value={value} />}
               />
@@ -218,17 +216,21 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 return (
                   <Fragment>
                     <LoanRowInfo
-                      label={t`Bank account name`}
+                      label={<Trans>Bank account name</Trans>}
                       value={loan.payment.accountName}
                       copy
                     />
                     <LoanRowInfo
-                      label={t`Bank account number`}
+                      label={<Trans>Bank account number</Trans>}
                       value={loan.payment.accountNumber}
                       copy
                     />
-                    <LoanRowInfo label={t`Bank name`} value={bank.shortName} copy />
-                    <LoanRowInfo label={t`Bank transaction content`} value={description} copy />
+                    <LoanRowInfo label={<Trans>Bank name</Trans>} value={bank.shortName} copy />
+                    <LoanRowInfo
+                      label={<Trans>Bank transaction content</Trans>}
+                      value={description}
+                      copy
+                    />
 
                     {loan.status === LoanStatus.APPROVED && !!qrCode && (
                       <Fragment>
@@ -241,7 +243,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
               })()}
 
               <InputWrapper
-                label={t`Receipts images`}
+                label={<Trans>Receipts images</Trans>}
                 withAsterisk
                 styles={{
                   label: {
@@ -257,7 +259,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 <Stack gap={4}>
                   <Center>
                     <Checkbox
-                      label={t`Custom fulfilled at`}
+                      label={<Trans>Custom fulfilled at</Trans>}
                       checked={isCustomFulfilledAt}
                       onChange={() => setIsCustomFulfilledAt(!isCustomFulfilledAt)}
                     />
@@ -265,7 +267,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
 
                   {isCustomFulfilledAt && (
                     <DateTimePicker
-                      label={t`Fulfilled at`}
+                      label={<Trans>Fulfilled at</Trans>}
                       value={fulfilledAt ? new Date(fulfilledAt * 1000) : null}
                       onChange={(d) => setFulfilledAt(d ? DateTime.toSeconds(d) : null)}
                     />
@@ -280,12 +282,12 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
       <Group justify="center">
         {workspace.hasPermission(WorkspacePermission.LOANS_APPROVED_REVERTED) && (
           <Button variant="outline" color="gray" onClick={onRevertApproval} disabled={isSubmitting}>
-            {t`Revert approval`}
+            {<Trans>Revert approval</Trans>}
           </Button>
         )}
 
         <Button type="submit" onClick={onSubmit} miw={200} loading={isSubmitting}>
-          {t`Loan disbursement`}
+          {<Trans>Loan disbursement</Trans>}
         </Button>
       </Group>
     </Stack>

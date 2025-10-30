@@ -24,6 +24,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Badge,
@@ -105,14 +106,20 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
       <Card className="LoanDetailDoc" shadow="xs">
         <Stack>
-          <LoanRowInfo label={t`Loan package`} value={loan.package.id} />
-
-          <LoanRowInfo label={t`Loan asset type`} value={loanAssetTypes[loan.assetType].label()} />
-
-          <LoanRowInfo label={t`Loan period`} value={renderLoanPeriod(loan.package.days)} />
+          <LoanRowInfo label={<Trans>Loan package</Trans>} value={loan.package.id} />
 
           <LoanRowInfo
-            label={t`Loan amount`}
+            label={<Trans>Loan asset type</Trans>}
+            value={loanAssetTypes[loan.assetType].label()}
+          />
+
+          <LoanRowInfo
+            label={<Trans>Loan period</Trans>}
+            value={renderLoanPeriod(loan.package.days)}
+          />
+
+          <LoanRowInfo
+            label={<Trans>Loan amount</Trans>}
             value={loan.amount}
             renderValue={() =>
               ableToUpdate ? (
@@ -128,7 +135,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
           />
 
           <LoanRowInfo
-            label={t`Loan payment periods`}
+            label={<Trans>Loan payment periods</Trans>}
             value={loan.packagePeriodDays}
             renderValue={() =>
               ableToUpdate ? (
@@ -147,25 +154,25 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
           />
 
           <LoanRowInfo
-            label={t`Signature`}
+            label={<Trans>Signature</Trans>}
             value={loan.signature}
             renderValue={(value) => <SignareCard url={value} />}
           />
 
           <LoanRowInfo
-            label={t`Customer location`}
+            label={<Trans>Customer location</Trans>}
             description={t`At the time of loan signing`}
             value={loan.coord}
             renderValue={(value) => (
               <Anchor href={value ? getGoogleMapLinkCoord(value) : undefined} target="_blank">
-                {t`View on Google Map`}
+                {<Trans>View on Google Map</Trans>}
               </Anchor>
             )}
           />
 
           {loan.status === LoanStatus.REJECTED && (
             <Stack align="center" gap={5} mt={16}>
-              <Badge color="red">{t`Rejected`}</Badge>
+              <Badge color="red">{<Trans>Rejected</Trans>}</Badge>
 
               {loan.rejectReason && <Text c="red">{loan.rejectReason}</Text>}
             </Stack>
@@ -173,7 +180,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
         </Stack>
       </Card>
 
-      <SectionTitle mb={-20} name={t`Asset data`} icon={IconClipboardText} />
+      <SectionTitle mb={-20} name={<Trans>Asset data</Trans>} icon={IconClipboardText} />
       <Card shadow="xs">
         <LoanAssetDataInput
           loanId={loan.id}
@@ -192,11 +199,11 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
       >
         <Group justify="center">
           <Button onClick={onApprove} leftIcon={IconCheck}>
-            {t`Approve`}
+            {<Trans>Approve</Trans>}
           </Button>
 
           <Button variant="outline" color="gray" onClick={onReject}>
-            {t`Reject`}
+            {<Trans>Reject</Trans>}
           </Button>
         </Group>
       </Renderer>

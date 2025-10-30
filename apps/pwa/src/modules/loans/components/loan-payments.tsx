@@ -339,7 +339,8 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                 <Stack>
                   <Group bg={color("primary")} justify="space-between">
                     <Text px={16} py={5} fz={14} fw={700} c="white">
-                      Kỳ {paymentPeriod.period > 0 ? paymentPeriod.period : "--"}
+                      <Trans>Period</Trans>:{" "}
+                      {paymentPeriod.period > 0 ? paymentPeriod.period : "--"}
                     </Text>
                     <Text px={16} py={5} fz={12} fw={500} c="white">
                       {paymentPeriod.startTime && (
@@ -354,20 +355,19 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
 
                   <Stack px={16}>
                     <LoanRowInfo
-                      label={t`Interest`}
-                      value={
-                        <NumberCurrencyFormatter
-                          value={paymentPeriod.totalAmount - paymentPeriod.capitalAmount}
-                        />
-                      }
+                      label={<Trans>Interest</Trans>}
+                      value={paymentPeriod.totalAmount - paymentPeriod.capitalAmount}
+                      renderValue={(value) => <NumberCurrencyFormatter value={value} />}
                     />
                     <LoanRowInfo
-                      label={t`Principal`}
-                      value={<NumberCurrencyFormatter value={paymentPeriod.capitalAmount} />}
+                      label={<Trans>Principal</Trans>}
+                      value={paymentPeriod.capitalAmount}
+                      renderValue={(value) => <NumberCurrencyFormatter value={value} />}
                     />
                     <LoanRowInfo
-                      label={t`Total`}
-                      value={<NumberCurrencyFormatter value={paymentPeriod.totalAmount} />}
+                      label={<Trans>Total</Trans>}
+                      value={paymentPeriod.totalAmount}
+                      renderValue={(value) => <NumberCurrencyFormatter value={value} />}
                     />
 
                     <Stack py={10}>
