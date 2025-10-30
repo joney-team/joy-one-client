@@ -74,6 +74,8 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
     ctx.onUpdate({ ...task, name });
   }, 500);
 
+  if (!task) return null;
+
   const indexSpacing = generation * 16;
   const childIndexSpacing = (generation + 1) * 16;
   const isHasChild = ctx.subTasks.length > 0 || task.childCount > 0;
