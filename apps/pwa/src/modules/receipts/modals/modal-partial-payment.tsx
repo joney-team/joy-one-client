@@ -1,6 +1,7 @@
 import { Button } from "@/components/buttons/button";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { ModalTitle } from "@/components/modal-title";
-import { getDateFormat, num } from "@/modules/lang/lang-service";
+import { useLang } from "@/modules/lang/lang-context";
 import { partialPaymentReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { onError } from "@/utils/exceptions.utils";
@@ -15,7 +16,6 @@ import { modals } from "@mantine/modals";
 import { IconCheck, IconCircleHalf2 } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { OnModalPayReceipt } from "./modal-pay-receipt";
-import { CurrencyFormat } from "@/components/format/currency-format";
 
 interface ModalPartialPaymentProps {
   onDone?: (receipts: ReceiptEntity[]) => void | Promise<void>;
@@ -24,6 +24,8 @@ interface ModalPartialPaymentProps {
 
 export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const lang = useLang();
+  const dateFormat = DateTime.getDateFormatString(lang.locale);
 
   const form = useForm({
     initialValues: {
@@ -82,7 +84,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
       {props.receipt.expireAt && (
         <DateInput
           label={t`Next payment deadline`}
-          valueFormat={getDateFormat()}
+          valueFormat={dateFormat}
           {...form.getInputProps("nextExpireAt")}
           minDate={new Date()}
           value={DateTime.normalizeDate(form.values.nextExpireAt)}

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
-import { renderSlotTime } from "@/components/inputs/work-slot-settings-input";
+import { SlotTime } from "@/components/inputs/work-slot-settings-input";
 import { Renderer } from "@/components/renderer";
 import { appEntities } from "@/constant";
 import { useLayout } from "@/layout/layout-context";
@@ -20,7 +20,7 @@ import {
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Currency } from "@joy-one-client/utils/currency";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Badge,
   Card,
@@ -59,8 +59,10 @@ export const WorkspaceOperationSettings: FC = () => {
   return (
     <Stack py={16}>
       <FormSession
-        title={t`Work slots`}
-        description={t`Working time slots applied to the booking, timekeeping, and other features.`}
+        title={<Trans>Work slots</Trans>}
+        description={
+          <Trans>Working time slots applied to the booking, timekeeping, and other features.</Trans>
+        }
       >
         <Renderer visible={workDaySlots.length > 0}>
           <Group gap={8}>
@@ -74,13 +76,13 @@ export const WorkspaceOperationSettings: FC = () => {
                       </Text>
 
                       <Text fz={12} c="gray">
-                        {renderSlotTime({
-                          ...stat.slots[0],
-                          startHour: stat.startHour,
-                          startMin: stat.startMin,
-                          endHour: stat.endHour,
-                          endMin: stat.endMin,
-                        })}
+                        <SlotTime
+                          dayWeek={stat.dayWeek}
+                          startHour={stat.startHour}
+                          startMin={stat.startMin}
+                          endHour={stat.endHour}
+                          endMin={stat.endMin}
+                        />
                       </Text>
                     </Stack>
 
@@ -89,7 +91,13 @@ export const WorkspaceOperationSettings: FC = () => {
                         const groupId = +(s.groupId || "0");
                         return (
                           <Badge key={s.id} color={color(slotGroupColors[groupId])} variant="light">
-                            {renderSlotTime(s)}
+                            <SlotTime
+                              dayWeek={s.dayWeek}
+                              startHour={s.startHour}
+                              startMin={s.startMin}
+                              endHour={s.endHour}
+                              endMin={s.endMin}
+                            />
                           </Badge>
                         );
                       })}
@@ -114,16 +122,16 @@ export const WorkspaceOperationSettings: FC = () => {
             variant="outline"
             onClick={() => OnModalWorkspaceSettingsWorkSlots()}
           >
-            {workDaySlots.length > 0 ? t`Edit` : t`Add`}
+            {workDaySlots.length > 0 ? <Trans>Edit</Trans> : <Trans>Add</Trans>}
           </Button>
         </Group>
       </FormSession>
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title={t`Orders`}>
+      <FormSession title={<Trans>Orders</Trans>}>
         <Switch
-          label={t`Allow multiple payments (Installment or Deposit)`}
+          label={<Trans>Allow multiple payments (Installment or Deposit)</Trans>}
           defaultChecked={workspace.settings.allowPayTicketMultipleTimes}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -137,9 +145,9 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title={t`Payment`}>
+      <FormSession title={<Trans>Payment</Trans>}>
         <Select
-          label={t`Currency`}
+          label={<Trans>Currency</Trans>}
           searchable
           defaultValue={workspace.settings.currencyCode}
           data={Currency.data.map((c) => ({ value: c.code, label: c.name }))}
@@ -152,7 +160,7 @@ export const WorkspaceOperationSettings: FC = () => {
         />
 
         <Select
-          label={t`Default payment method`}
+          label={<Trans>Default payment method</Trans>}
           searchable
           defaultValue={
             workspace.settings.receiptPaymentMethodDefault || Object.values(ReceiptPaymentMethod)[0]
@@ -173,7 +181,7 @@ export const WorkspaceOperationSettings: FC = () => {
         <Space h={12} />
 
         <Switch
-          label={t`Receipt image required`}
+          label={<Trans>Receipt image required</Trans>}
           defaultChecked={workspace.settings.receiptImagesRequired}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -185,7 +193,7 @@ export const WorkspaceOperationSettings: FC = () => {
         />
 
         <Switch
-          label={t`Allow tip`}
+          label={<Trans>Allow tip</Trans>}
           defaultChecked={workspace.settings.allowTip}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -199,11 +207,11 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title={t`Bookings`}>
+      <FormSession title={<Trans>Bookings</Trans>}>
         <Stack gap={5}>
           <Group>
             <NumberInput
-              label={t`Remind customers before the appointment n (days)`}
+              label={<Trans>Remind customers before the appointment n (days)</Trans>}
               defaultValue={workspace.settings.bookingsAutoRemindCustomerBookingBeforeDays}
               onBlur={(value) => {
                 setWorkspaceSettings({
@@ -214,7 +222,7 @@ export const WorkspaceOperationSettings: FC = () => {
             />
 
             <TimeInput
-              label={t`Reminder time`}
+              label={<Trans>Reminder time</Trans>}
               defaultValue={workspace.settings.bookingsAutoRemindCustomerBookingTime}
               onBlur={(value) => {
                 setWorkspaceSettings({
@@ -225,12 +233,17 @@ export const WorkspaceOperationSettings: FC = () => {
             />
           </Group>
           <Text fz={em(12)} c="gray">
-            {t`Leave blank or fill in 0 if you do not want to remind the customer. <br /> The reminder will be sent via Zalo OA, SMS and Email if these services are enabled.`}
+            {
+              <Trans>
+                Leave blank or fill in 0 if you do not want to remind the customer. <br /> The
+                reminder will be sent via Zalo OA, SMS and Email if these services are enabled.
+              </Trans>
+            }
           </Text>
         </Stack>
 
         <Switch
-          label={t`Allow duplicate bookings`}
+          label={<Trans>Allow duplicate bookings</Trans>}
           defaultChecked={workspace.settings.allowDuplicateBookings}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -244,8 +257,8 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title={t`Search`}>
-        <InputWrapper label={t`Available entities to search`}>
+      <FormSession title={<Trans>Search</Trans>}>
+        <InputWrapper label={<Trans>Available entities to search</Trans>}>
           <Card withBorder p={12} shadow="none" mt={5}>
             <SimpleGrid cols={{ md: 3 }}>
               {searchAvailableEntities.data?.map((e) => {
@@ -279,9 +292,9 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title={t`Security`}>
+      <FormSession title={<Trans>Security</Trans>}>
         <Switch
-          label={t`Require re-login when logging out`}
+          label={<Trans>Require re-login when logging out</Trans>}
           defaultChecked={workspace.settings.isAuthSessionRestricted}
           onChange={(e) => {
             setWorkspaceSettings({

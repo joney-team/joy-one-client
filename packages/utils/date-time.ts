@@ -337,4 +337,52 @@ export class DateTime {
       return { hours: 0, minutes: 0, seconds: 0 };
     }
   }
+
+  static getDateFormatString(locale = "en") {
+    // Create a date formatter for the locale
+    const formatter = new Intl.DateTimeFormat(locale);
+
+    // Get the format parts
+    const parts = formatter.formatToParts(new Date(2023, 11, 31)); // Dec 31, 2023
+
+    // Map each part to its format token
+    const formatMap: Record<string, string> = {
+      year: "YYYY",
+      month: "MM",
+      day: "DD",
+    };
+
+    // Build the format string
+    let format = "";
+    for (const part of parts) {
+      if (part.type === "literal") {
+        format += part.value;
+      } else if (formatMap[part.type]) {
+        format += formatMap[part.type];
+      }
+    }
+
+    return format;
+  }
+
+  static getSeparators(locale = "en") {
+    // Use a number with both thousand and decimal parts
+    const numberWithSeparators = 1234.5;
+
+    // Format the number according to the locale
+    const formatted = new Intl.NumberFormat(locale).format(numberWithSeparators);
+
+    // Extract separators by finding non-digit characters
+    const parts = formatted.match(/\D/g) || [];
+
+    // The first non-digit is usually the thousand separator
+    // The last non-digit is usually the decimal separator
+    const thousandSeparator = parts[0] || ",";
+    const decimalSeparator = parts[parts.length - 1] || ".";
+
+    return {
+      decimalSeparator,
+      thousandSeparator,
+    };
+  }
 }

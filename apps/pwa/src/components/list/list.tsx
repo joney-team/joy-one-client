@@ -3,7 +3,6 @@
 import { useList } from "@/components/list/use-list";
 import { useLayout } from "@/layout/layout-context";
 import { api } from "@/modules/apis";
-import { num } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { shiftSelect } from "@joy-one-client/utils/array";
 import { t } from "@lingui/core/macro";
@@ -24,6 +23,7 @@ import { IconRefresh } from "@tabler/icons-react";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Empty } from "../empty";
 import { Errored } from "../errored";
+import { NumberFormat } from "../format/number-format";
 import { Renderer } from "../renderer";
 import { WayPoint } from "../way-point";
 import { BulkActions } from "./components/bulk-actions";
@@ -37,7 +37,6 @@ import { Sort } from "./sort/sort";
 import ListTable from "./table/table";
 import { BaseData, ListContext, ListProps, ListViewState } from "./types";
 import { getListDataId } from "./utils";
-import { NumberFormat } from "../format/number-format";
 
 export function List<T extends BaseData>(props: ListProps<T>) {
   const forceUpdate = useForceUpdate();

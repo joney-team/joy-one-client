@@ -27,7 +27,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Badge, Center, ColorInput, Select, Skeleton, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -80,13 +80,18 @@ const UserWorkspaceSettingsForm: FC<
   return (
     <Stack p={16}>
       <FormSession
-        title={t`Display name in Workspace`}
-        description={t`Nickname or full name, used internally in Workspace. Leave blank if using default account name.`}
+        title={<Trans>Display name in Workspace</Trans>}
+        description={
+          <Trans>
+            Nickname or full name, used internally in Workspace. Leave blank if using default
+            account name.
+          </Trans>
+        }
       >
         <TextInput {...form.getInputProps("displayName")} disabled={!isAbleToUpdate} />
       </FormSession>
 
-      <FormSession title="color">
+      <FormSession title={<Trans>Color</Trans>}>
         <ColorInput
           format="hex"
           swatches={configs.swatches}
@@ -95,7 +100,7 @@ const UserWorkspaceSettingsForm: FC<
         />
       </FormSession>
 
-      <FormSession title={t`Working time type`}>
+      <FormSession title={<Trans>Working time type</Trans>}>
         <Select
           value={form.values.workingTimeType}
           data={Object.values(WorkspaceMemberWorkingTimeType).map((type) => ({
@@ -107,7 +112,7 @@ const UserWorkspaceSettingsForm: FC<
         />
       </FormSession>
 
-      <FormSession title={t`Member roles`}>
+      <FormSession title={<Trans>Member roles</Trans>}>
         {isOwner ? (
           <Badge
             variant="light"
@@ -132,9 +137,11 @@ const UserWorkspaceSettingsForm: FC<
       </FormSession>
 
       {workspace.isShouldEnableBranches && (
-        <FormSession title={t`Branches`}>
+        <FormSession title={<Trans>Branches</Trans>}>
           {isMainWorkspaceAccessable ? (
-            <Badge variant="light">{t`All branches`}</Badge>
+            <Badge variant="light">
+              <Trans>All branches</Trans>
+            </Badge>
           ) : (
             <WorkspaceBranchesInput
               key={userMember.userId}
@@ -172,7 +179,7 @@ const UserWorkspaceSettingsForm: FC<
               }
             >
               <Text fz={12} fw={400}>
-                {t`Remove`}
+                <Trans>Remove</Trans>
               </Text>
             </Button>
           </Center>

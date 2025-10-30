@@ -8,7 +8,6 @@ import { genders } from "@/constant";
 import { useFormSubmit } from "@/hooks/use-form";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { onUploadFile } from "@/modules/files/file-service";
-import { getDateFormat } from "@/modules/lang/lang-service";
 import { optionsFilter } from "@/modules/theme/generator";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
@@ -42,6 +41,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
 import { InputModalType, OnModalInput } from "../../modals/modal-input";
+import { useLang } from "../lang/lang-context";
 import { useLocations } from "../locations/locations-context";
 import { decodeCid, registerCustomerKyc } from "./customer-kycs-service";
 import { CustomerKycDto } from "./customer-kycs-types";
@@ -55,6 +55,9 @@ export let OnModalRegisterCustomerKyc: (props: ModalRegisterCustomerKycProps) =>
 
 export const ModalRegisterCustomerKyc: FC = () => {
   const camera = useCamera();
+  const lang = useLang();
+  const dateFormat = DateTime.getDateFormatString(lang.locale);
+
   const { vnLocations } = useLocations();
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalRegisterCustomerKycProps>();
@@ -257,7 +260,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
 
               <DateInput
                 label={t`Birthday`}
-                valueFormat={getDateFormat()}
+                valueFormat={dateFormat}
                 value={
                   form.values.cidBirthday
                     ? DateTime.normalizeDate(form.values.cidBirthday)
@@ -271,7 +274,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
 
               <DateInput
                 label={t`Issued date`}
-                valueFormat={getDateFormat()}
+                valueFormat={dateFormat}
                 value={
                   form.values.cidCreatedAt
                     ? DateTime.normalizeDate(form.values.cidCreatedAt)

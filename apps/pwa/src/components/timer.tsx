@@ -1,11 +1,11 @@
 "use client";
 
-import { getDateFormat } from "@/modules/lang/lang-service";
 import { Group, Text, ThemeIcon } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import { FC, useEffect } from "react";
+import { DateFormat } from "./format/date-format";
 
 export const Timer: FC = () => {
   const forceUpdate = useForceUpdate();
@@ -26,7 +26,9 @@ export const Timer: FC = () => {
         </ThemeIcon>
 
         <Group wrap="nowrap" justify="center" align="center" gap={3}>
-          <Text>{dayjs().format(getDateFormat())}</Text>
+          <Text>
+            <DateFormat value={new Date()} type="date" />
+          </Text>
         </Group>
       </Group>
 

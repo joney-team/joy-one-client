@@ -2,7 +2,7 @@
 
 import { Circle } from "@/components/circle";
 import { CurrencyFormat } from "@/components/format/currency-format";
-import { DateFormat } from "@/components/format/date-format";
+import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { CodeColumn } from "@/components/list/columns/code-column";
@@ -240,13 +240,6 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 dayjs(nowInSeconds * 1000).add(warningReceiptBeforeDays + 1, "day")
               );
 
-            const renderNextReceipt = () => {
-              if (!loan.nextReceiptAt) return "--";
-              const isToday = dayjs(loan.nextReceiptAt * 1000).isSame(dayjs(), "day");
-              if (isToday) return t`Today`;
-              return dayjs(loan.nextReceiptAt * 1000).from(nowInSeconds * 1000);
-            };
-
             if (!value || loan.status === LoanStatus.COMPLETED) return "--";
 
             return (
@@ -255,7 +248,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                   {loan.nextReceiptAt && <DateFormat value={loan.nextReceiptAt} type="date" />}
                 </Text>
                 <Text fz={10} c={isExpired ? "red" : isWarning ? "orange" : "gray"}>
-                  {renderNextReceipt()}
+                  {loan.nextReceiptAt && <RelativeTimeFormat value={loan.nextReceiptAt} />}
                 </Text>
               </Stack>
             );

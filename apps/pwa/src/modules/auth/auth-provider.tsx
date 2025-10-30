@@ -22,7 +22,6 @@ import {
 import { EventEntity, EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
 import { getClientLocale } from "@/modules/lang/lang-service";
-import { LangState } from "@/modules/lang/lang-types";
 import { showInAppNotification } from "@/modules/notifications/notification-service";
 import { NotificationEntity } from "@/modules/notifications/notification-types";
 import { getTimeZones } from "@/modules/times/times-service";
@@ -31,7 +30,6 @@ import { UpdateUserProfileDto, UserEntity } from "@/modules/users/users-types";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
-import { isDiff, objSelect } from "@/utils/object.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { t } from "@lingui/core/macro";
 import { useMantineTheme } from "@mantine/core";
@@ -318,15 +316,15 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const syncUserSettingToLangState = () => {
     if (!user) return;
 
-    const keys: (keyof LangState)[] = [
-      "isStartOfWeekSunday",
-      "timezone",
-      "isTwelveHour",
-      "dateFormat",
-    ];
+    // const keys: (keyof LangState)[] = [
+    //   "isStartOfWeekSunday",
+    //   "timezone",
+    //   "isTwelveHour",
+    //   "dateFormat",
+    // ];
 
-    const diff = isDiff(objSelect(user.settings, keys), objSelect(lang.state, keys));
-    if (diff) lang.setState(objSelect(user.settings, keys));
+    // const diff = isDiff(objSelect(user.settings, keys), objSelect(lang.state, keys));
+    // if (diff) lang.setState(objSelect(user.settings, keys));
   };
 
   useEffect(() => {

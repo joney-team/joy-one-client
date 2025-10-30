@@ -20,6 +20,7 @@ import { modals } from "@mantine/modals";
 import { IconArrowDown, IconCalendar, IconCalendarTime, IconCheck } from "@tabler/icons-react";
 
 import { FormSession } from "@/components/form-session";
+import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { WorkSlotCreateEventDto, WorkSlotsInput } from "@/components/inputs/work-slots-input";
 import { getView } from "@/layout/layout-service";
 import {
@@ -33,7 +34,6 @@ import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
-import { getDateFormat } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
@@ -230,7 +230,13 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
         onClose={() => setCreatingData(undefined)}
         title={
           <ModalTitle
-            title={props.reschedule ? t`Reschedule booking` : t`Booking information`}
+            title={
+              props.reschedule ? (
+                <Trans>Reschedule booking</Trans>
+              ) : (
+                <Trans>Booking information</Trans>
+              )
+            }
             icon={IconCalendar}
           />
         }
@@ -238,11 +244,11 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
       >
         {!!creatingData && (
           <Stack pt={16} gap={30}>
-            <FormSession title={t`Customer`}>
+            <FormSession title={<Trans>Customer</Trans>}>
               <CustomerInput value={customer} onSelect={(value) => setCustomer(value)} />
             </FormSession>
 
-            <FormSession title={t`Attendees`}>
+            <FormSession title={<Trans>Attendees</Trans>}>
               <WorkspaceMembersInput
                 showMainResponsible
                 value={assigneeUsers}
@@ -250,7 +256,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
               />
             </FormSession>
 
-            <FormSession title={t`Time`}>
+            <FormSession title={<Trans>Time</Trans>}>
               {props.reschedule && (
                 <Fragment>
                   <Card withBorder shadow="none" p={10}>
@@ -262,19 +268,17 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
                       <Stack gap={5}>
                         <Stack gap={0}>
                           <Text fw={600} td="line-through">
-                            {dayjs(props.reschedule.startTime * 1000).format(
-                              `dddd, ${getDateFormat()}`
-                            )}
+                            <DateFormat value={props.reschedule.startTime} type="date" />
                           </Text>
                           <Text td="line-through">
-                            {`${dayjs(props.reschedule.startTime * 1000).format("HH:mm")} - ${dayjs(
-                              props.reschedule.endTime * 1000
-                            ).format("HH:mm")}`}
+                            <DateFormat value={props.reschedule.startTime} type="time" />
+                            {" - "}
+                            <DateFormat value={props.reschedule.endTime} type="time" />
                           </Text>
                         </Stack>
 
                         <Text c="gray" fw={500} fz={12} tt="capitalize">
-                          {dayjs(props.reschedule.endTime * 1000).fromNow()}
+                          <RelativeTimeFormat value={props.reschedule.endTime} />
                         </Text>
                       </Stack>
                     </Group>
@@ -297,17 +301,17 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
                   <Stack gap={5}>
                     <Stack gap={0}>
                       <Text fw={600}>
-                        {dayjs(creatingData!.start).format(`dddd, ${getDateFormat()}`)}
+                        <DateFormat value={creatingData!.start} type="date" />
                       </Text>
                       <Text>
-                        {`${dayjs(creatingData!.start).format("HH:mm")} - ${dayjs(
-                          creatingData!.end
-                        ).format("HH:mm")}`}
+                        <DateFormat value={creatingData!.start} type="time" />
+                        {" - "}
+                        <DateFormat value={creatingData!.end} type="time" />
                       </Text>
                     </Stack>
 
                     <Text c="gray" fw={500} fz={12} tt="capitalize">
-                      {dayjs(creatingData.end).fromNow()}
+                      <RelativeTimeFormat value={creatingData.end} />
                     </Text>
 
                     {!creatingData.conflict.isInWorkspaceWorkSlots && (
@@ -326,7 +330,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
               </Card>
             </FormSession>
 
-            <FormSession title={t`Content`}>
+            <FormSession title={<Trans>Content</Trans>}>
               <Textarea
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
@@ -336,7 +340,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
 
             <Group justify="center" mt={16}>
               <Button onClick={onSubmit} leftIcon={IconCheck} action>
-                {props.reschedule ? t`Reschedule booking` : t`Save`}
+                {props.reschedule ? <Trans>Reschedule booking</Trans> : <Trans>Save</Trans>}
               </Button>
             </Group>
           </Stack>

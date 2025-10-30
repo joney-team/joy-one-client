@@ -1,22 +1,22 @@
-import { Locale } from "@/modules/lang/lang-types";
+import { AppLocale } from "@/modules/lang/lang-types";
 
-export type ChannelWidgetWelcomeInputType = 'text' | 'number' | 'name' | 'phone' | 'email';
+export type ChannelWidgetWelcomeInputType = "text" | "number" | "name" | "phone" | "email";
 
 export interface ChannelWidgetWelcomeInput {
-  id: string,
-  type: ChannelWidgetWelcomeInputType,
-  label?: string,
-  fieldName?: string,
-  description?: string,
-  placeholder?: string,
-  isRequired?: boolean,
+  id: string;
+  type: ChannelWidgetWelcomeInputType;
+  label?: string;
+  fieldName?: string;
+  description?: string;
+  placeholder?: string;
+  isRequired?: boolean;
 }
 
 export interface ChannelWidgetSettings {
   color?: string;
-  position?: 'left' | 'right';
+  position?: "left" | "right";
   chatIcon?: string;
-  locale?: Locale;
+  locale?: AppLocale;
   brandName?: string;
   brandLogo?: string;
   welcomMessage?: string;
@@ -30,12 +30,12 @@ export interface PluginMessageHubEntity {
   webhookUrl?: string;
   widgetSettings: ChannelWidgetSettings;
   script: {
-    src: string,
-    html: string,
-  },
+    src: string;
+    html: string;
+  };
   direct: {
-    src: string,
-  }
+    src: string;
+  };
 }
 
 export interface PluginMessageHubDto {

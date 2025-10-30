@@ -1,5 +1,7 @@
 import { type AppMetadata } from "@/types";
 import { primaryColors } from "@joy-one-client/config/colors";
+import { zIndexes } from "@joy-one-client/config/layout";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import {
   Card,
   Checkbox,
@@ -21,8 +23,7 @@ import {
 } from "@mantine/core";
 import { LayoutContext } from "../../layout/layout-context";
 import { String } from "../../utils/string.utils";
-import { getLocaleConfig } from "../lang/lang-service";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { AppLocale } from "../lang/lang-types";
 
 export const getColorShape = (shape?: number) => {
   if (typeof shape === "number" && shape >= 0 && shape <= 9) {
@@ -32,22 +33,11 @@ export const getColorShape = (shape?: number) => {
   return 6;
 };
 
-export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
+export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: AppLocale) => {
   return createTheme({
     fontFamily: "Inter, sans-serif",
     colors: {
-      primary: [
-        primaryColors[0],
-        primaryColors[1],
-        primaryColors[2],
-        primaryColors[3],
-        primaryColors[4],
-        primaryColors[5],
-        primaryColors[6],
-        primaryColors[7],
-        primaryColors[8],
-        primaryColors[9],
-      ],
+      primary: primaryColors,
     },
     primaryColor: metadata.appColor || "primary",
     primaryShade: {
@@ -127,10 +117,10 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext) => {
         },
       }),
       NumberInput: NumberInput.extend({
-        defaultProps: getLocaleConfig().defaultNumberInputProps || {},
+        defaultProps: DateTime.getSeparators(locale),
       }),
       NumberFormatter: NumberFormatter.extend({
-        defaultProps: getLocaleConfig().defaultNumberInputProps || {},
+        defaultProps: DateTime.getSeparators(locale),
       }),
       TagsInput: TagsInput.extend({
         defaultProps: {

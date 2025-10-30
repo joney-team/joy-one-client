@@ -1,21 +1,21 @@
-import { type AppPageMetadata } from "@/types"
-import { Locale } from "@/modules/lang/lang-types"
-import { getLocaleServer } from "@/modules/lang/lang-server-service"
-import { Metadata, ResolvingMetadata } from "next"
+import { type AppPageMetadata } from "@/types";
+import { AppLocale } from "@/modules/lang/lang-types";
+import { getLocaleServer } from "@/modules/lang/lang-server-service";
+import { Metadata, ResolvingMetadata } from "next";
 
 type MetadataProps = {
-  params: Promise<{ id: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
 type FetchProps = {
-  locale: Locale
-  params: { [key: string]: string | string[] | undefined }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
+  locale: AppLocale;
+  params: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 export const combineMetadata = (args: {
-  fetch: (props: FetchProps) => Promise<AppPageMetadata | null> | AppPageMetadata,
+  fetch: (props: FetchProps) => Promise<AppPageMetadata | null> | AppPageMetadata;
 }) => {
   const { fetch } = args;
 
@@ -24,7 +24,7 @@ export const combineMetadata = (args: {
       props.params,
       props.searchParams,
       parent,
-      getLocaleServer()
+      getLocaleServer(),
     ]);
 
     try {
@@ -32,10 +32,10 @@ export const combineMetadata = (args: {
 
       try {
         metadata = await fetch({ params, searchParams, locale });
-      } catch (error) { }
+      } catch (error) {}
 
       const title = metadata?.title;
-      const description = metadata?.description || parentMetadata.description || '';
+      const description = metadata?.description || parentMetadata.description || "";
       const images = metadata?.images || parentMetadata.openGraph?.images || [];
       const icons = metadata?.icons;
 
@@ -47,11 +47,11 @@ export const combineMetadata = (args: {
           title,
           description,
           images,
-        }
-      }
+        },
+      };
     } catch (error) {
       console.error(`[Metadata] Error: ${error}`);
       return parentMetadata as Metadata;
     }
-  }
-}
+  };
+};

@@ -1,5 +1,5 @@
 import { BaseMongoEntity } from "@/types";
-import { Locale } from "../lang/lang-types";
+import { AppLocale } from "../lang/lang-types";
 
 interface IBrowser {
   name: string | undefined;
@@ -37,7 +37,7 @@ interface UaResult {
 
 export interface RegisterDeviceDto {
   identifyId: string;
-  locale?: Locale;
+  locale?: AppLocale;
 }
 
 export interface SetDeviceNotificationTokenDto {
@@ -45,7 +45,7 @@ export interface SetDeviceNotificationTokenDto {
 }
 
 export interface SetDeviceLocaleDto {
-  locale?: Locale;
+  locale?: AppLocale;
 }
 
 export interface DeviceEntity extends BaseMongoEntity {
@@ -54,6 +54,6 @@ export interface DeviceEntity extends BaseMongoEntity {
   lastActiveAt: number;
   ua: UaResult;
   notificationToken?: string;
-  locale?: Locale;
+  locale?: AppLocale;
   userId: string;
 }

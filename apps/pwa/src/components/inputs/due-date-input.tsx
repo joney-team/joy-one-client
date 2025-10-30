@@ -2,7 +2,6 @@
 
 import { configs } from "@/configs/layout.config";
 import { useLang } from "@/modules/lang/lang-context";
-import { getDateTimeFormat } from "@/modules/lang/lang-service";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
@@ -119,7 +118,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
                   cursor: "pointer",
                 },
               }}
-              placeholder={getDateTimeFormat()}
+              placeholder={DateTime.getDateFormatString(lang.locale)}
               onClick={() => {
                 setPointed("start");
                 onSyncTimeInput();
@@ -152,7 +151,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
               value={
                 dueDate ? DateTime.format(dueDate, { dateStyle: "short", locale: lang.locale }) : ""
               }
-              placeholder={getDateTimeFormat()}
+              placeholder={DateTime.getDateFormatString(lang.locale)}
               styles={{
                 input: {
                   borderColor: pointed === "due" ? theme.colors.primary[6] : undefined,

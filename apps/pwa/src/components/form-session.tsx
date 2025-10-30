@@ -5,8 +5,8 @@ import { Icon } from "@tabler/icons-react";
 import type { FC, ReactNode } from "react";
 
 export const FormSession: FC<{
-  title: string;
-  description?: string;
+  title: string | ReactNode;
+  description?: string | ReactNode;
   children: React.ReactNode;
 }> = ({ title, description, children }) => {
   return (

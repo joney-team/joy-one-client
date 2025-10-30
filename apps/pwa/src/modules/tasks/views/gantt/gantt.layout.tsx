@@ -3,7 +3,7 @@
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { getClientLocale } from "@/modules/lang/lang-service";
-import { Locale } from "@/modules/lang/lang-types";
+import { AppLocale } from "@/modules/lang/lang-types";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
@@ -148,7 +148,7 @@ export const BodyHead: FC = () => {
   const weeks = getWeeksFromRange(
     gantt.state.fromDate,
     gantt.state.toDate,
-    getClientLocale() === Locale.VI
+    getClientLocale() === AppLocale.VI
   );
 
   return (

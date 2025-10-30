@@ -13,7 +13,6 @@ import {
   TextInput,
 } from "@mantine/core";
 import { IconHourglassHigh } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, PropsWithChildren, useState } from "react";
 
 interface EstimateTimeInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
@@ -33,13 +32,13 @@ export function parseTimeInput(input: string) {
 
     switch (unit) {
       case "d":
-        totalSeconds += dayjs.duration(value, "days").asSeconds();
+        totalSeconds += value * 86400;
         break;
       case "h":
-        totalSeconds += dayjs.duration(value, "hours").asSeconds();
+        totalSeconds += value * 3600;
         break;
       case "m":
-        totalSeconds += dayjs.duration(value, "minutes").asSeconds();
+        totalSeconds += value * 60;
         break;
     }
   }

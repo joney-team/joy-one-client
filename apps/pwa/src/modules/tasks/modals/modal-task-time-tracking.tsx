@@ -286,7 +286,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
       <InputWrapper label={t`Time`}>
         <Group gap={10} wrap="nowrap">
           <DateInput
-            valueFormat={lang.config.dateFormat}
+            valueFormat={DateTime.getDateFormatString(lang.locale)}
             value={date}
             onChange={(v) => setDate(new Date(v!))}
           />

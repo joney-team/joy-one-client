@@ -1,5 +1,6 @@
 "use client";
 
+import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { useLayout } from "@/layout/layout-context";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
@@ -9,7 +10,6 @@ import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-custom
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/modal-customer-relationship-contacts";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
-import { getDateFormat } from "@/modules/lang/lang-service";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -50,7 +50,6 @@ import {
   IconTags,
   IconUserSquareRounded,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, Fragment, useState } from "react";
 import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
@@ -163,7 +162,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                       <IconCake strokeWidth={1.5} size={18} />
                     </ThemeIcon>
                     <Text fz={em(15)}>
-                      {dayjs(customer.birthday * 1000).format(getDateFormat())}
+                      <DateFormat value={customer.birthday} type="date" />
                     </Text>
                   </Group>
                 )}

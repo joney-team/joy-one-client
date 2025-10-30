@@ -25,10 +25,10 @@ import { OnModalUserInformation } from "@/modules/users/modals/modal-user-inform
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
-import dayjs from "dayjs";
 import { Avatar } from "./avatar";
 import { ButtonViewMore } from "./buttons/button-view-more";
 import { Errored } from "./errored";
+import { RelativeTimeFormat } from "./format/date-format";
 
 interface EventListProps extends StackProps {
   ref?: string;
@@ -122,7 +122,7 @@ export const EventItem: FC<{ event: EventEntity }> = (props) => {
           )}
 
           <Text fz={10} c="gray">
-            {dayjs(new Date(event.time * 1000)).fromNow()}
+            <RelativeTimeFormat value={event.time * 1000} />
           </Text>
         </Group>
       </Stack>

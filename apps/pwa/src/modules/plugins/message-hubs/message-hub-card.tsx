@@ -8,7 +8,7 @@ import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { uploadFile } from "@/modules/files/file-service";
 import { localeNames } from "@/modules/lang/lang-service";
-import { Locale } from "@/modules/lang/lang-types";
+import { AppLocale } from "@/modules/lang/lang-types";
 import {
   removePluginMessageHub,
   updatePluginMessageHub,
@@ -273,7 +273,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
 
           <Select
             label={t`Language`}
-            data={Object.values(Locale).map((v) => ({
+            data={Object.values(AppLocale).map((v) => ({
               label: localeNames[v],
               value: v,
             }))}

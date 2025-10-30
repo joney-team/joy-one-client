@@ -24,6 +24,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onFormError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -154,8 +155,13 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
             </FormSession>
 
             <FormSession
-              title={t`Secret key`}
-              description={t`Please do not provide the secret key to anyone, please reset the secret key if you suspect the secret key has been compromised`}
+              title={<Trans>Secret key</Trans>}
+              description={
+                <Trans>
+                  Please do not provide the secret key to anyone, please reset the secret key if you
+                  suspect the secret key has been compromised
+                </Trans>
+              }
             >
               <CopyButton value={secretKey}>
                 {({ copied, copy }) => (
@@ -173,7 +179,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
                     }}
                     rightSection={
                       <Group wrap="nowrap" gap={0}>
-                        <Tooltip label={t`Reset secret key`}>
+                        <Tooltip label={<Trans>Reset secret key</Trans>}>
                           <ActionIcon onClick={onResetKey} variant="subtle">
                             <IconRefresh size={16} />
                           </ActionIcon>
@@ -195,20 +201,22 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
           </Fragment>
         )}
 
-        <FormSession title={t`Name`}>
+        <FormSession title={<Trans>Name</Trans>}>
           <TextInput {...form.getInputProps("name")} />
         </FormSession>
 
-        <FormSession title={t`Roles`}>
+        <FormSession title={<Trans>Roles</Trans>}>
           <WorkspaceRolesInput
             value={form.values.roles}
             onChange={(roles) => form.setFieldValue("roles", roles)}
           />
         </FormSession>
 
-        <FormSession title={t`Branches`}>
+        <FormSession title={<Trans>Branches</Trans>}>
           {isMainWorkspaceAccessable ? (
-            <Badge variant="light">{t`All branches`}</Badge>
+            <Badge variant="light">
+              <Trans>All branches</Trans>
+            </Badge>
           ) : (
             <WorkspaceBranchesInput
               key={app?.member.userId}
@@ -223,7 +231,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
         <Stack gap={16} mt={16}>
           <Center>
             <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}>
-              {app ? t`Save changes` : t`Create new`}
+              {app ? <Trans>Save changes</Trans> : <Trans>Create new</Trans>}
             </Button>
           </Center>
 
@@ -248,7 +256,10 @@ export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => {
   return modals.open({
     modalId: "ModalWorkspaceApiApp",
     title: (
-      <ModalTitle title={app ? t`Update ${entity}` : t`Create new ${entity}`} icon={IconApiApp} />
+      <ModalTitle
+        title={app ? <Trans>Update {entity}</Trans> : <Trans>Create new {entity}</Trans>}
+        icon={IconApiApp}
+      />
     ),
     children: <ModalWorkspaceApiApp app={app} />,
     size: "xl",

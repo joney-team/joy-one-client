@@ -3,11 +3,11 @@
 import { useColor } from "@/modules/theme/use-color";
 import { Group, Text, ThemeIcon } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
 interface Props {
   icon?: Icon;
-  title: string;
+  title: string | ReactNode;
   px?: number;
   color?: any;
   rightSection?: React.ReactNode;

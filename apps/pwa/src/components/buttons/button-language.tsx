@@ -2,7 +2,7 @@
 
 import { locales } from "@/modules/lang/lang-constants";
 import { useLang } from "@/modules/lang/lang-context";
-import { Locale } from "@/modules/lang/lang-types";
+import { AppLocale } from "@/modules/lang/lang-types";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
@@ -16,9 +16,9 @@ export const ButtonLanguage: FC = () => {
   const lang = useLang();
   const color = useColor();
 
-  const onSelect = async (locale?: Locale) => {
+  const onSelect = async (locale?: AppLocale) => {
     close();
-    lang.setLocale(locale);
+    lang.changeLocale(locale ?? "default");
   };
 
   return (
@@ -44,7 +44,7 @@ export const ButtonLanguage: FC = () => {
             </Title>
           </Group>
 
-          {Object.values(Locale).map((locale) => {
+          {Object.values(AppLocale).map((locale) => {
             return (
               <Card
                 withBorder

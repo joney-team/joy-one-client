@@ -1,11 +1,11 @@
 import { BaseMongoEntity, Query } from "@/types";
-import { Locale } from "../lang/lang-types";
+import { AppLocale } from "../lang/lang-types";
 import { WorkspaceType } from "../workspaces/workspaces-types";
 import { WorkspaceRoleEntity } from "../workspace-roles/workspace-roles-types";
 
 export enum UserRole {
-  ADMIN = 'ADMIN',
-  SYS_ADMIN = 'SYS_ADMIN',
+  ADMIN = "ADMIN",
+  SYS_ADMIN = "SYS_ADMIN",
 }
 
 export interface UserAuthProvider {
@@ -25,7 +25,7 @@ export interface UserEntity extends BaseMongoEntity {
   lastSignInAt?: number;
   isEmailVerified?: boolean;
   color?: string;
-  locale?: Locale;
+  locale?: AppLocale;
   isPasswordProvided: boolean;
   settings: UserSettings;
   providers: UserAuthProvider[];
@@ -51,7 +51,7 @@ export interface UserClient {
 }
 
 export interface UserClients {
-  [socketId: string]: UserClient
+  [socketId: string]: UserClient;
 }
 
 export interface SignOutDto {
@@ -64,7 +64,7 @@ export interface UpdateUserPasswordDto {
 }
 
 export interface UserSettings {
-  locale?: Locale;
+  locale?: AppLocale;
   timezone?: string;
   dateFormat?: string;
   isStartOfWeekSunday?: boolean;
@@ -80,7 +80,7 @@ export interface UserMutualWorkspace {
   displayName?: string;
   memberId: string;
   memberColor?: string;
-  roles: Pick<WorkspaceRoleEntity, '_id' | 'name' | 'color'>[];
+  roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[];
 }
 
 export interface UserPublicInformation {

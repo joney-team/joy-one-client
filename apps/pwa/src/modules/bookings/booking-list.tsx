@@ -7,7 +7,7 @@ import { DateFormat } from "@/components/format/date-format";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { Selector } from "@/components/selector";
-import { calendarProps } from "@/configs/calendar.config";
+import { useCalendarProps } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
 import {
   bookingActiveStatus,
@@ -57,6 +57,7 @@ import {
 } from "@tabler/icons-react";
 import { type FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Calendar } from "react-big-calendar";
+import { useAuth } from "../auth/auth-context";
 import { bookingStatuses } from "./booking-constants";
 import { BookingEntity, BookingStatus } from "./booking-types";
 import { OnModalCreateBooking } from "./modals/modal-create-booking";
@@ -87,6 +88,8 @@ export const BookingList: FC = () => {
   const lang = useLang();
   const colorScheme = useColorScheme();
   const color = useColor();
+  const auth = useAuth();
+  const calendarProps = useCalendarProps();
 
   const [columnSize, setColumnSize] = useState(0);
 
@@ -229,7 +232,7 @@ export const BookingList: FC = () => {
 
   useEffect(() => {
     syncColumnSize();
-  }, [layout.width, lang.state.isTwelveHour, normalizedQuery.view]);
+  }, [layout.width, auth.user?.settings.isTwelveHour, normalizedQuery.view]);
 
   return (
     <Stack p={16}>

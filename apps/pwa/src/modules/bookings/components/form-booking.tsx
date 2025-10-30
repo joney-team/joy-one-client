@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { FormSessionIcon } from "@/components/form-session";
+import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { TimeInput } from "@/components/inputs/time-input";
 import {
   createBooking,
@@ -11,7 +12,7 @@ import {
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { getDateFormat } from "@/modules/lang/lang-service";
+import { useLang } from "@/modules/lang/lang-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
@@ -68,6 +69,8 @@ export interface BookingFormProps {
 export const BookingForm: FC<BookingFormProps> = (props) => {
   const { reschedule } = props;
   const color = useColor();
+  const lang = useLang();
+  const dateFormat = DateTime.getDateFormatString(lang.locale);
   const workDaySlots = useWorkDaySlots();
   const workspace = useWorkspace();
   const type = props.booking ? "UPDATE" : props.reschedule ? "RESCHEDULE" : "CREATE";
@@ -199,17 +202,17 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                 <Stack gap={5}>
                   <Stack gap={0}>
                     <Text tt="capitalize" fw={600} td="line-through" fz={14}>
-                      {dayjs(reschedule.startTime * 1000).format(`dddd, ${getDateFormat()}`)}
+                      <DateFormat value={reschedule.startTime} type="date" />
                     </Text>
                     <Group gap={8}>
                       <Text td="line-through" fz={12}>
-                        {`${dayjs(reschedule.startTime * 1000).format("HH:mm")} - ${dayjs(
-                          reschedule.endTime * 1000
-                        ).format("HH:mm")}`}
+                        <DateFormat value={reschedule.startTime} type="time" />
+                        {" - "}
+                        <DateFormat value={reschedule.endTime} type="time" />
                       </Text>
 
                       <Text c="gray" fz={10} tt="capitalize">
-                        {dayjs(reschedule.endTime * 1000).fromNow()}
+                        <RelativeTimeFormat value={reschedule.endTime} />
                       </Text>
                     </Group>
                   </Stack>
@@ -232,8 +235,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                 <DateInput
                   flex={1}
                   defaultValue={form.values.startTime}
-                  placeholder={getDateFormat()}
-                  valueFormat={getDateFormat()}
+                  placeholder={dateFormat}
+                  valueFormat={dateFormat}
                   onChange={(value) => {
                     const currentStartTime = dayjs(form.values.startTime);
                     const currentEndTime = dayjs(form.values.endTime);

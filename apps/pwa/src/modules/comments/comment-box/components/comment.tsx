@@ -1,15 +1,16 @@
 "use client";
 
-import { type FC } from "react";
 import { Avatar } from "@/components/avatar";
 import { Renderer } from "@/components/renderer";
-import { FileCard } from "@/modules/files/file-card";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CommentEntity } from "@/modules/comments/comment-types";
-import { getDateFormat } from "@/modules/lang/lang-service";
+import { FileCard } from "@/modules/files/file-card";
+import { useLang } from "@/modules/lang/lang-context";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Card, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import dayjs from "dayjs";
+import { type FC } from "react";
 
 interface Comment extends CommentEntity {
   isFirstSession: boolean;
@@ -23,6 +24,8 @@ const cornorRadius = "3px";
 
 export const Comment: FC<Comment> = (comment) => {
   const auth = useAuth();
+  const lang = useLang();
+  const dateFormat = DateTime.getDateFormatString(lang.locale);
 
   const [userMemberInfos] = useWorkspaceMembers([comment.createdByUserId]);
   const isMe = auth.user._id === comment.createdByUserId;
@@ -52,7 +55,7 @@ export const Comment: FC<Comment> = (comment) => {
     if (isToday) return dayjs(comment.createdAt * 1000).format("HH:mm");
     if (isYesterday) return dayjs(comment.createdAt * 1000).format("HH:mm");
     if (isSameWeek) return dayjs(comment.createdAt * 1000).format("dddd HH:mm");
-    return dayjs(comment.createdAt * 1000).format(`${getDateFormat()} HH:mm`);
+    return dayjs(comment.createdAt * 1000).format(`${dateFormat} HH:mm`);
   };
 
   if (!member) return null;

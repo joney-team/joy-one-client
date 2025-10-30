@@ -1,16 +1,19 @@
-import { useLang } from "@/modules/lang/lang-context";
-import { SetWorkspaceSettingsDto, WorkspaceSettingEntity } from "@/modules/workspace-settings/workspace-settings-types";
+import {
+  SetWorkspaceSettingsDto,
+  WorkspaceSettingEntity,
+} from "@/modules/workspace-settings/workspace-settings-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkSlot } from "@/types";
 import dayjs from "dayjs";
 import { api } from "../apis";
+import { useAuth } from "../auth/auth-context";
 
 export async function getWorkspaceSettings() {
-  return api.get<WorkspaceSettingEntity>(`/workspace-settings`)
+  return api.get<WorkspaceSettingEntity>(`/workspace-settings`);
 }
 
 export async function setWorkspaceSettings(dto: SetWorkspaceSettingsDto) {
-  return api.put<WorkspaceSettingEntity>(`/workspace-settings`, dto)
+  return api.put<WorkspaceSettingEntity>(`/workspace-settings`, dto);
 }
 
 export interface WorkDaySlot {
@@ -23,11 +26,11 @@ export interface WorkDaySlot {
 }
 
 export function useWorkDaySlots() {
-  const lang = useLang();
+  const auth = useAuth();
   const workspace = useWorkspace();
 
   let workDaySlots: WorkDaySlot[] = new Array(7).fill(0).reduce((acc, _, curr) => {
-    const relatedSlots = (workspace.settings.wSlots || []).filter(v => v.dayWeek === curr);
+    const relatedSlots = (workspace.settings.wSlots || []).filter((v) => v.dayWeek === curr);
     const startSlot = relatedSlots.reduce((acc, curr) => {
       return acc.startHour < curr.startHour ? acc : curr;
     }, relatedSlots[0]);
@@ -44,15 +47,18 @@ export function useWorkDaySlots() {
         endHour: endSlot.endHour,
         endMin: endSlot.endMin,
         slots: relatedSlots,
-      })
+      });
     }
     return acc;
   }, [] as WorkDaySlot[]);
 
   workDaySlots = workDaySlots.sort((a, b) => a.dayWeek - b.dayWeek);
 
-  if (lang.weekStart === 1) {
-    workDaySlots = [...workDaySlots.filter(v => v.dayWeek !== 0), ...workDaySlots.filter(v => v.dayWeek === 0)];
+  if (auth.user?.settings.isStartOfWeekSunday) {
+    workDaySlots = [
+      ...workDaySlots.filter((v) => v.dayWeek !== 0),
+      ...workDaySlots.filter((v) => v.dayWeek === 0),
+    ];
   }
 
   return workDaySlots;
@@ -61,21 +67,22 @@ export function useWorkDaySlots() {
 export const isInWorkSlot = (slot: Date, workSlots?: WorkSlot[]) => {
   if (!workSlots) return false;
 
-  return workSlots.some(s => {
+  return workSlots.some((s) => {
     const from = dayjs(slot).hour(s.startHour).minute(s.startMin);
     const to = dayjs(slot).hour(s.endHour).minute(s.endMin);
-    return from.isBefore(slot) && to.isAfter(slot) || from.isSame(slot);
-  })
-}
+    return (from.isBefore(slot) && to.isAfter(slot)) || from.isSame(slot);
+  });
+};
 
 export const calWorkSlotTimePoint = (workSlot: WorkSlot) => {
-  return dayjs().add(workSlot.dayWeek, 'day')
-    .add(workSlot.startHour, 'hour')
-    .add(workSlot.startMin, 'minute')
+  return dayjs()
+    .add(workSlot.dayWeek, "day")
+    .add(workSlot.startHour, "hour")
+    .add(workSlot.startMin, "minute")
     .toDate()
     .getTime();
-}
+};
 
 export const sortWorkSlots = (workSlots: WorkSlot[]) => {
   return workSlots.sort((a, b) => calWorkSlotTimePoint(a) - calWorkSlotTimePoint(b));
-}
+};

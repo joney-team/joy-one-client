@@ -1,11 +1,13 @@
-import { type FC } from "react";
+"use client";
+
+import { Avatar } from "@/components/avatar";
+import { RelativeTimeFormat } from "@/components/format/date-format";
 import { useAuth } from "@/modules/auth/auth-context";
 import { pinComment, removeComment, unpinComment } from "@/modules/comments/comment-service";
 import { CommentEntity } from "@/modules/comments/comment-types";
 import { ActionIcon, Group, Popover, Stack, Text, TypographyStylesProvider } from "@mantine/core";
 import { IconDots, IconPin, IconPinnedOff, IconX } from "@tabler/icons-react";
-import dayjs from "dayjs";
-import { Avatar } from "@/components/avatar";
+import { type FC } from "react";
 
 interface CommentCardProps {
   comment: CommentEntity;
@@ -19,7 +21,9 @@ export const CommentCard: FC<CommentCardProps> = (props) => {
 
   return (
     <Group align="start" gap={10} wrap="nowrap">
-      <Avatar src={comment.createdByUser!.avatar}>{comment.createdByUser!.name?.slice(0, 2)}</Avatar>
+      <Avatar src={comment.createdByUser!.avatar}>
+        {comment.createdByUser!.name?.slice(0, 2)}
+      </Avatar>
 
       <Stack gap={10} flex={1}>
         <Group align="start" justify="space-between">
@@ -28,7 +32,7 @@ export const CommentCard: FC<CommentCardProps> = (props) => {
               {comment.createdByUser!.name}
             </Text>
             <Text c="gray" fz={10}>
-              {dayjs(comment.createdAt * 1000).fromNow()}
+              <RelativeTimeFormat value={comment.createdAt} />
             </Text>
           </Stack>
 
@@ -42,7 +46,12 @@ export const CommentCard: FC<CommentCardProps> = (props) => {
                 </Popover.Target>
                 <Popover.Dropdown p={5}>
                   <Stack gap={10}>
-                    <Group gap={0} style={{ cursor: "pointer" }} pr={5} onClick={() => removeComment(comment._id)}>
+                    <Group
+                      gap={0}
+                      style={{ cursor: "pointer" }}
+                      pr={5}
+                      onClick={() => removeComment(comment._id)}
+                    >
                       <ActionIcon variant="transparent" color="dark">
                         <IconX strokeWidth={1.2} size={16} />
                       </ActionIcon>
@@ -98,7 +107,9 @@ export const CommentCard: FC<CommentCardProps> = (props) => {
 
         <Stack pb={10}>
           <TypographyStylesProvider>
-            <div dangerouslySetInnerHTML={{ __html: comment.text || (comment as any).content || "" }} />
+            <div
+              dangerouslySetInnerHTML={{ __html: comment.text || (comment as any).content || "" }}
+            />
           </TypographyStylesProvider>
         </Stack>
       </Stack>

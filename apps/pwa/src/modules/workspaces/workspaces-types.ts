@@ -1,7 +1,7 @@
 import { AppCurrency, BaseMongoEntity } from "@/types";
 import { Icon } from "@tabler/icons-react";
 import { Dispatch, SetStateAction } from "react";
-import { Locale } from "../lang/lang-types";
+import { AppLocale } from "../lang/lang-types";
 import { LocationEntity } from "../locations/locations-types";
 import { WorkspaceBranchEntity } from "../workspace-branches/workspace-branches-types";
 import {
@@ -35,7 +35,7 @@ export interface WorkspaceEntity extends BaseMongoEntity {
   appName?: string;
   appColor?: string;
   appColorShape?: number;
-  locale?: Locale;
+  locale?: AppLocale;
   inviteCode: string;
   cover?: string;
   branches: number;
@@ -64,7 +64,7 @@ export interface WorkspaceDto {
   appName?: string;
   appColor?: string;
   appColorShape?: number;
-  locale?: Locale;
+  locale?: AppLocale;
 }
 
 export interface WorkspaceContext {

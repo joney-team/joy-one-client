@@ -8,7 +8,6 @@ import { Image } from "@/components/image";
 import { DateInput } from "@/components/inputs/date-input";
 import { TimeZoneInput } from "@/components/inputs/timezone-input";
 import { SectionTitle } from "@/components/session-title";
-import { configs } from "@/configs/layout.config";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getSessionId } from "@/modules/auth/auth-service";
@@ -16,9 +15,9 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
 import { localeNames } from "@/modules/lang/lang-service";
-import { Locale } from "@/modules/lang/lang-types";
+import { AppLocale } from "@/modules/lang/lang-types";
 import { onActionLoad } from "@/utils/actions";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Card,
   Divider,
@@ -47,7 +46,7 @@ export const UserProfileSettings: FC = () => {
 
   useEffect(() => {
     layout.setComponents({
-      head: t`Profile settings`,
+      head: <Trans>Profile settings</Trans>,
     });
   }, []);
 
@@ -72,7 +71,10 @@ export const UserProfileSettings: FC = () => {
       <Stack gap={30}>
         <Card shadow="xs">
           <Stack>
-            <FormSession title={t`Profile`} description={t`Your personal information`}>
+            <FormSession
+              title={<Trans>Profile</Trans>}
+              description={<Trans>Your personal information</Trans>}
+            >
               <Stack>
                 <Dropzone
                   accept={IMAGE_MIME_TYPE}
@@ -99,30 +101,32 @@ export const UserProfileSettings: FC = () => {
                       <ThemeIcon variant="transparent" color="dark" size="md">
                         <IconUpload strokeWidth={1.2} size={16} />
                       </ThemeIcon>
-                      <Text fz={10}>{t`Click to change avatar`}</Text>
+                      <Text fz={10}>
+                        <Trans>Click to change avatar</Trans>
+                      </Text>
                     </Group>
                   </Group>
                 </Dropzone>
 
                 <TextInput
                   leftSection={<IconUser size={16} />}
-                  label={t`Name`}
+                  label={<Trans>Name</Trans>}
                   {...form.getInputProps("name")}
                 />
                 <TextInput
                   leftSection={<IconPhone size={16} />}
-                  label={t`Phone`}
+                  label={<Trans>Phone</Trans>}
                   {...form.getInputProps("phone")}
                   placeholder="090 0000 000"
                 />
                 <TextInput
                   leftSection={<IconMail size={16} />}
-                  label="Email"
+                  label={<Trans>Email</Trans>}
                   {...form.getInputProps("email")}
                   disabled={!!auth.user?.email}
                 />
                 <DateInput
-                  label={t`Birthday`}
+                  label={<Trans>Birthday</Trans>}
                   leftSection={<IconCalendar size={16} />}
                   value={auth.user!.birthday}
                   onChange={(date) => form.setFieldValue("birthday", date)}
@@ -133,84 +137,66 @@ export const UserProfileSettings: FC = () => {
             <Divider opacity={0.5} my={30} />
 
             <FormSession
-              title={t`Language and region`}
-              description={t`Customize your language and region settings`}
+              title={<Trans>Language and region</Trans>}
+              description={<Trans>Customize your language and region settings</Trans>}
             >
               <Stack>
                 <Select
-                  label={t`Language`}
-                  description={t`Change your language settings`}
+                  label={<Trans>Language</Trans>}
+                  description={<Trans>Change your language settings</Trans>}
                   leftSection={
                     <Image src={`/lang/${form.values.settings.locale}.png`} w={16} h={16} />
                   }
-                  data={Object.values(Locale).map((locale) => ({
+                  data={Object.values(AppLocale).map((locale) => ({
                     label: localeNames[locale],
                     value: locale,
                   }))}
                   value={form.values.settings.locale}
-                  onChange={(l) => lang.setLocale(l as Locale)}
+                  onChange={(l) => lang.changeLocale(l as AppLocale)}
                 />
 
-                <TimeZoneInput label={t`Timezone`} {...form.getInputProps("settings.timezone")} />
+                <TimeZoneInput
+                  label={<Trans>Timezone</Trans>}
+                  {...form.getInputProps("settings.timezone")}
+                />
               </Stack>
             </FormSession>
 
             <Divider opacity={0.5} my={30} />
 
-            <FormSession title={t`Time settings`} description={t`Time settings for your profile`}>
+            <FormSession
+              title={<Trans>Time settings</Trans>}
+              description={<Trans>Time settings for your profile</Trans>}
+            >
               <Stack gap={30}>
-                <InputWrapper label={t`Start of week`}>
+                <InputWrapper label={<Trans>Start of week</Trans>}>
                   <Stack gap={10} mt={10}>
                     <Checkbox
-                      label={t`Sunday`}
+                      label={<Trans>Sunday</Trans>}
                       checked={!!form.values.settings.isStartOfWeekSunday}
                       onChange={() => form.setFieldValue("settings.isStartOfWeekSunday", true)}
                     />
 
                     <Checkbox
-                      label={t`Monday`}
+                      label={<Trans>Monday</Trans>}
                       checked={!!!form.values.settings.isStartOfWeekSunday}
                       onChange={() => form.setFieldValue("settings.isStartOfWeekSunday", false)}
                     />
                   </Stack>
                 </InputWrapper>
 
-                <InputWrapper label={t`Time format`}>
+                <InputWrapper label={<Trans>Time format</Trans>}>
                   <Stack gap={10} mt={10}>
                     <Checkbox
-                      label={t`12 hour`}
+                      label={<Trans>12 hour</Trans>}
                       checked={!!form.values.settings.isTwelveHour}
                       onChange={() => form.setFieldValue("settings.isTwelveHour", true)}
                     />
 
                     <Checkbox
-                      label={t`24 hour`}
+                      label={<Trans>24 hour</Trans>}
                       checked={!!!form.values.settings.isTwelveHour}
                       onChange={() => form.setFieldValue("settings.isTwelveHour", false)}
-                    />
-                  </Stack>
-                </InputWrapper>
-
-                <InputWrapper label={t`Date format`}>
-                  <Stack gap={10} mt={10}>
-                    {configs.dateFormats.map((f) => {
-                      return (
-                        <Checkbox
-                          key={f}
-                          label={f}
-                          checked={form.values.settings.dateFormat === f}
-                          onChange={() => form.setFieldValue("settings.dateFormat", f)}
-                        />
-                      );
-                    })}
-
-                    <Checkbox
-                      label={t`Auto`}
-                      checked={
-                        form.values.settings.dateFormat === "auto" ||
-                        !form.values.settings.dateFormat
-                      }
-                      onChange={() => form.setFieldValue("settings.dateFormat", "auto")}
                     />
                   </Stack>
                 </InputWrapper>
@@ -221,7 +207,7 @@ export const UserProfileSettings: FC = () => {
           </Stack>
         </Card>
 
-        <SectionTitle name={t`Workspace settings`} mb={-20} />
+        <SectionTitle name={<Trans>Workspace settings</Trans>} mb={-20} />
 
         <Card shadow="xs">
           <UserWorkspaceSettings userId={auth.user!._id} />

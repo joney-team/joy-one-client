@@ -1,13 +1,11 @@
 "use client";
 
-import { CalendarEvent, calendarProps } from "@/configs/calendar.config";
+import { CalendarEvent, useCalendarProps } from "@/configs/calendar.config";
 import { configs } from "@/configs/layout.config";
 import { useLayout } from "@/layout/layout-context";
-import { useLang } from "@/modules/lang/lang-context";
-import { getLangState } from "@/modules/lang/lang-service";
+import { useAuth } from "@/modules/auth/auth-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkSlot } from "@/types";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
@@ -24,11 +22,12 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { IconClock, IconEdit, IconPlus } from "@tabler/icons-react";
 import dayjs from "dayjs";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { Calendar, Views } from "react-big-calendar";
 import { v4 as uuid } from "uuid";
 import { Button } from "../buttons/button";
 import { FormSession } from "../form-session";
+import { DateFormat } from "../format/date-format";
 import { ModalTitle } from "../modal-title";
 
 interface WorkSlotsSettingsInputProps {
@@ -38,11 +37,12 @@ interface WorkSlotsSettingsInputProps {
 }
 
 export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) => {
-  const lang = useLang();
+  const auth = useAuth();
   const slots = props.slots || [];
   const layout = useLayout();
   const ref = useRef<HTMLDivElement>(null);
   const start = dayjs().startOf("week");
+  const calendarProps = useCalendarProps();
 
   const [pointedSlot, setPointedSlot] = useState<WorkSlot | null>(null);
   const isPointedSlotNew = pointedSlot?.id === "new";
@@ -70,7 +70,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
 
   useEffect(() => {
     syncColumnSize();
-  }, [layout.width, lang.state.isTwelveHour]);
+  }, [layout.width, auth.user?.settings.isTwelveHour]);
 
   // Convert slots to calendar events
   const events = dayWeek.reduce((output, val) => {
@@ -169,7 +169,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
           close();
           setPointedSlot(null);
         }}
-        title={<ModalTitle title={t`Work schedule`} icon={IconClock} />}
+        title={<ModalTitle title={<Trans>Work schedule</Trans>} icon={IconClock} />}
         zIndex={300}
         yOffset={100}
         size="lg"
@@ -177,8 +177,10 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
         {pointedSlot && (
           <Stack mt={16}>
             <FormSession
-              title={t`Time frame`}
-              description={t`Working time frame, activities are performed in these time frames`}
+              title={<Trans>Time frame</Trans>}
+              description={
+                <Trans>Working time frame, activities are performed in these time frames</Trans>
+              }
             >
               <Stack gap={0}>
                 <Group>
@@ -224,8 +226,8 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
             <Divider opacity={0.5} my={10} />
 
             <FormSession
-              title={t`Working shift`}
-              description={t`Applied to staff working in shifts`}
+              title={<Trans>Working shift</Trans>}
+              description={<Trans>Applied to staff working in shifts</Trans>}
             >
               <Group>
                 {new Array(3).fill(0).map((_, index) => {
@@ -240,7 +242,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
                       variant={isActive ? "filled" : "outline"}
                       onClick={onSelect}
                     >
-                      {t`Shift`} {index + 1}
+                      {<Trans>Shift</Trans>} {index + 1}
                     </Button>
                   );
                 })}
@@ -272,7 +274,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
                   close();
                 }}
               >
-                {isPointedSlotNew ? t`Add` : t`Save`}
+                {isPointedSlotNew ? <Trans>Add</Trans> : <Trans>Save</Trans>}
               </Button>
             </Center>
 
@@ -300,18 +302,19 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
   );
 };
 
-export function renderSlotTime(slot: WorkSlot) {
-  const langState = getLangState();
+export function SlotTime(
+  slot: Pick<WorkSlot, "dayWeek" | "startHour" | "startMin" | "endHour" | "endMin">
+): JSX.Element {
   const start = dayjs().day(slot.dayWeek).hour(slot.startHour).minute(slot.startMin);
   const end = dayjs().day(slot.dayWeek).hour(slot.endHour).minute(slot.endMin);
 
-  if (langState.isTwelveHour) {
-    const isSameAmPm = start.format("A") === end.format("A");
-    if (isSameAmPm) return `${start.format("h:mm")} - ${end.format("h:mm A")}`;
-    return `${start.format("h:mm A")} - ${end.format("h:mm A")}`;
-  }
-
-  return `${start.format("HH:mm")} - ${end.format("HH:mm")}`;
+  return (
+    <Fragment>
+      <DateFormat value={start.toDate()} type="time" />
+      {" - "}
+      <DateFormat value={end.toDate()} type="time" />
+    </Fragment>
+  );
 }
 
 // Convert WorkSlot to slider minutes

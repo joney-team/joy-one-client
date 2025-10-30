@@ -2,11 +2,11 @@
 
 import dayjs from "dayjs";
 
-import { dayjsLocalizer, type CalendarProps } from "react-big-calendar";
 import { getView } from "@/layout/layout-service";
-import { LangState } from "@/modules/lang/lang-types";
-import { getGlobal } from "@/global";
+import { useAuth } from "@/modules/auth/auth-context";
+import { t } from "@lingui/core/macro";
 import { Fragment } from "react";
+import { dayjsLocalizer, type CalendarProps } from "react-big-calendar";
 
 export interface CalendarEvent {
   title?: string;
@@ -49,47 +49,47 @@ function Event(props: { event: CalendarEvent }) {
 
 export const calendarDayJsLocalizer = dayjsLocalizer(dayjs);
 
-export const calendarProps: CalendarProps<CalendarEvent> = {
-  localizer: calendarDayJsLocalizer,
-  step: 15,
-  messages: {
-    allDay: "Tất cả",
-    previous: "<",
-    next: ">",
-    today: "Hôm nay",
-    month: "Tháng",
-    week: "Tuần",
-    day: "Ngày",
-    agenda: "Danh sách",
-    date: "Date",
-    time: "Thời gian",
-    event: "Nội dung",
-    noEventsInRange: "Không có bookings nào vào khung thời gian này",
-  },
-  components: {
-    event: Event,
-  },
-  formats: {
-    timeGutterFormat: (date, culture) => {
-      const global = getGlobal();
-      const langState = global._langState as LangState | undefined;
-      if (langState?.isTwelveHour) return calendarDayJsLocalizer.format(date, "hh:mm A", culture);
-      return calendarDayJsLocalizer.format(date, "HH:mm", culture);
-    },
-    dayFormat: (date) => {
-      if (getView() === "mobile") return dayjs(date).format("dd");
-      return dayjs(date).format("dddd");
-    },
-    eventTimeRangeFormat: (date, culture) => {
-      const global = getGlobal();
-      const langState = global._langState as LangState | undefined;
-      const format = langState?.isTwelveHour ? "hh:mm A" : "HH:mm";
+export const useCalendarProps = (): CalendarProps<CalendarEvent> => {
+  const auth = useAuth();
 
-      return (
-        calendarDayJsLocalizer.format(date.start, format, culture) +
-        " - " +
-        calendarDayJsLocalizer.format(date.end, format, culture)
-      );
+  return {
+    localizer: calendarDayJsLocalizer,
+    step: 15,
+    messages: {
+      allDay: t`All`,
+      previous: "<",
+      next: ">",
+      today: t`Today`,
+      month: t`Month`,
+      week: t`Week`,
+      day: t`Day`,
+      agenda: t`Agenda`,
+      date: t`Date`,
+      time: t`Time`,
+      event: t`Event`,
+      noEventsInRange: t`No events in range`,
     },
-  },
+    components: {
+      event: Event,
+    },
+    formats: {
+      timeGutterFormat: (date, culture) => {
+        const format = auth.user?.settings.isTwelveHour ? "hh:mm A" : "HH:mm";
+        return calendarDayJsLocalizer.format(date, format, culture);
+      },
+      dayFormat: (date) => {
+        if (getView() === "mobile") return dayjs(date).format("dd");
+        return dayjs(date).format("dddd");
+      },
+      eventTimeRangeFormat: (date, culture) => {
+        const format = auth.user?.settings.isTwelveHour ? "hh:mm A" : "HH:mm";
+
+        return (
+          calendarDayJsLocalizer.format(date.start, format, culture) +
+          " - " +
+          calendarDayJsLocalizer.format(date.end, format, culture)
+        );
+      },
+    },
+  };
 };

@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { requestTimekeeping } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { getDateFormat } from "@/modules/lang/lang-service";
+import { useLang } from "@/modules/lang/lang-context";
 import { onSuccess } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -19,6 +19,8 @@ import { FC, useState } from "react";
 
 export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const lang = useLang();
+  const dateFormat = DateTime.getDateFormatString(lang.locale);
 
   const onClose = async () => {
     modals.close("ModalCaptureTimekeeping");
@@ -119,7 +121,7 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
 
       <DatePickerInput
         label={t`Date`}
-        valueFormat={getDateFormat()}
+        valueFormat={dateFormat}
         {...requestForm.getInputProps("date")}
       />
 

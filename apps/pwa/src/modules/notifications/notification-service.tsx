@@ -10,7 +10,6 @@ import {
   IconSquareRoundedCheck,
 } from "@tabler/icons-react";
 import { api } from "../apis";
-import { translateNotification } from "../lang/lang-service";
 import { getColor } from "../theme/use-color";
 import { NotificationEntity, NotificationIcon, NotificationType } from "./notification-types";
 
@@ -75,8 +74,8 @@ export function showInAppNotification(
 
   notifications.show({
     id: notification._id,
-    title: translateNotification(notification?.title, notification.titleParams),
-    message: translateNotification(notification?.body, notification.bodyParams),
+    title: notification?.title,
+    message: notification?.body,
     color,
     withCloseButton: true,
     icon: <Icon strokeWidth={1.5} size={18} />,

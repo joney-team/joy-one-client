@@ -3,7 +3,7 @@
 import { Image } from "@/components/image";
 import { useLang } from "@/modules/lang/lang-context";
 import { localeNames } from "@/modules/lang/lang-service";
-import { Locale } from "@/modules/lang/lang-types";
+import { AppLocale } from "@/modules/lang/lang-types";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
 import { Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
@@ -20,9 +20,9 @@ export const ModalLang: FC = () => {
 
   OnModalLang = () => open();
 
-  const onSelect = async (locale?: Locale) => {
+  const onSelect = async (locale: AppLocale | "default") => {
+    lang.changeLocale(locale);
     close();
-    lang.setLocale(locale);
   };
 
   return (
@@ -38,7 +38,7 @@ export const ModalLang: FC = () => {
           </Title>
         </Group>
 
-        {Object.values(Locale).map((locale) => {
+        {Object.values(AppLocale).map((locale) => {
           const isSelected = lang.locale === locale;
 
           return (
@@ -65,7 +65,7 @@ export const ModalLang: FC = () => {
           shadow="none"
           p={10}
           style={{ cursor: "pointer", borderColor: !lang.locale ? color("primary") : undefined }}
-          onClick={() => onSelect()}
+          onClick={() => onSelect("default")}
         >
           <Group gap={10}>
             <ThemeIcon variant="transparent" color="dark">

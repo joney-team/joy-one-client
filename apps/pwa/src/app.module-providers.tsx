@@ -31,7 +31,10 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
   const routeRule = useRouteRule();
 
   return (
-    <MantineProvider theme={generateTheme(app.metadata, layout)} defaultColorScheme="auto">
+    <MantineProvider
+      theme={generateTheme(app.metadata, layout, lang.locale)}
+      defaultColorScheme="auto"
+    >
       <DatesProvider settings={{ locale: lang.locale }}>
         <AuthProvider>
           <WorkspaceProvider>

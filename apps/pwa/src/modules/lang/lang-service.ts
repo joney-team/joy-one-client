@@ -1,27 +1,22 @@
-import { defaultDateFormats } from "@/configs/lang.config";
 import { StorageKey } from "@/types";
-import { isServer } from "@/utils/common.utils";
-import { round } from "@/utils/number.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
 import { getCookie } from "cookies-next/client";
-import { getGlobal } from "../../global";
-import { Dictionary, LangState, Locale, LocaleConfig } from "./lang-types";
+import { AppLocale } from "./lang-types";
 
-export const getClientLocale = (): Locale => {
-  let locale: Locale | undefined = undefined;
+export const getClientLocale = (): AppLocale => {
+  let locale: AppLocale | undefined = undefined;
 
   try {
     // Fallback to cookie
     const cookieLocale = getCookie(StorageKey.LOCALE);
-    if (cookieLocale && Object.values(Locale).includes(cookieLocale as Locale)) {
-      locale = cookieLocale as Locale;
+    if (cookieLocale && Object.values(AppLocale).includes(cookieLocale as AppLocale)) {
+      locale = cookieLocale as AppLocale;
     }
 
     // Fallback to browser language
     if (!locale && typeof navigator !== "undefined" && navigator?.language) {
       navigator?.language.split("-").map((lang) => {
-        if (Object.values(Locale).includes(lang as Locale)) {
-          locale = lang as Locale;
+        if (Object.values(AppLocale).includes(lang as AppLocale)) {
+          locale = lang as AppLocale;
         }
       });
     }
@@ -29,128 +24,10 @@ export const getClientLocale = (): Locale => {
     console.error(`Error getting locale: `, error);
   }
 
-  return locale || Locale.EN;
-};
-
-export const getLocaleConfig = () => {
-  if (isServer()) return {} as LocaleConfig;
-  const global = getGlobal();
-  return global._localeConfig || ({} as LocaleConfig);
-};
-
-export const numCurrencyRound = (value: number) => {
-  try {
-    const global = getGlobal();
-    const settings = global._workspaceSettings;
-    const currency = global._appConfig.currencies.find((c) => c.code === settings?.currencyCode);
-    if (currency) return round(value, currency.roundPrecision);
-    return value;
-  } catch (error) {
-    return value;
-  }
-};
-
-export const num = (
-  value: any,
-  args?: {
-    roundPrecision?: number;
-    type?: "money" | "hours";
-    suffix?: string;
-    prefix?: string;
-    empty?: string;
-  }
-): string => {
-  let _args = { ...args };
-  let roundPrecision = _args.roundPrecision;
-
-  if (_args.type === "money" && !_args.suffix) {
-    try {
-      const global = getGlobal();
-      const settings = global._workspaceSettings;
-      const currency = global._appConfig.currencies.find((c) => c.code === settings?.currencyCode);
-      if (currency) {
-        _args.suffix = `${currency.symbol}`;
-        roundPrecision = currency.roundPrecision;
-      }
-    } catch (error) {}
-  }
-
-  const render = () => {
-    if (!value || typeof value !== "number" || Number.isNaN(+value) || +value === 0)
-      return args?.empty || "0";
-    let _value = value;
-    if (typeof roundPrecision === "number") _value = round(+value, roundPrecision);
-    else if (_args.type === "money") {
-      if (typeof roundPrecision === "number") _value = round(+value, roundPrecision);
-    }
-    return (+_value).toLocaleString(getClientLocale());
-  };
-
-  return `${_args.prefix || ""}${render()}${_args.suffix || ""}`.trim();
-};
-
-export const isSeconds = (value: any) => {
-  return typeof value === "number" && (+value).toString().length <= 10;
-};
-
-export const getTimeFormat = () => {
-  const state = getLangState();
-  return state.isTwelveHour ? "hh:mm A" : "HH:mm";
-};
-
-export const getDateFormat = () => {
-  const state = getLangState();
-  if (state.dateFormat === "auto") return defaultDateFormats[getClientLocale()];
-  return state.dateFormat || defaultDateFormats[getClientLocale()];
-};
-
-export const getDateTimeFormat = () => {
-  return `${getDateFormat()} ${getTimeFormat()}`;
+  return locale || AppLocale.EN;
 };
 
 export const localeNames = {
-  [Locale.VI]: "Tiếng Việt",
-  [Locale.EN]: "English",
-};
-
-export const translateNotification = (key: string, params?: any): string => {
-  if (isServer()) return key;
-  if (!key || typeof key !== "string") return "";
-
-  const global = getGlobal();
-  const dictionary: Dictionary = global._dictionary || {};
-
-  let message = dictionary[key] || key;
-
-  if (params && typeof params === "object") {
-    Object.keys(params).map((param) => {
-      switch (param) {
-        case "dateTime":
-          message = message.replace(
-            `{${param}}`,
-            DateTime.format(params[param], { locale: getClientLocale() })
-          );
-          break;
-        default:
-          message = message.replace(`{${param}}`, params[param]);
-          break;
-      }
-    });
-  }
-
-  return message;
-};
-
-export const getLangState = () => {
-  if (isServer()) throw new Error("Lang state is not available on server");
-  const global = getGlobal();
-  return global._langState as LangState;
-};
-
-export const forceTime = (date: Date | number) => {
-  if (typeof date === "number" && isSeconds(date)) {
-    return new Date(date * 1000);
-  }
-
-  return new Date(date);
+  [AppLocale.VI]: "Tiếng Việt",
+  [AppLocale.EN]: "English",
 };

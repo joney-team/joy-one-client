@@ -1,11 +1,9 @@
 "use client";
 
 import { useLang } from "@/modules/lang/lang-context";
-import { getDateFormat } from "@/modules/lang/lang-service";
 import { TaskTimeTracking } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { String } from "@/utils/string.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import {
@@ -47,6 +45,7 @@ import { v4 as uuid } from "uuid";
 import { WorkspaceMemberInput } from "../../modules/workspace-members/components/workspace-member-input";
 import { Avatar } from "../avatar";
 import { Button } from "../buttons/button";
+import { DateFormat } from "../format/date-format";
 import { ModalTitle } from "../modal-title";
 import { Renderer } from "../renderer";
 import { DateInput } from "./date-input";
@@ -292,9 +291,7 @@ export const TimeTrackingGroupByUser: FC<{
                           </ThemeIcon>
 
                           <Text fz={14}>
-                            {String.capitalizeFirstLetter(
-                              dayjs(t.startAt * 1000).format(`dd ${getDateFormat()}`)
-                            )}
+                            <DateFormat value={t.startAt} type="date" />
                           </Text>
 
                           <ThemeIcon variant="transparent" size={18} color="gray" ml={5}>

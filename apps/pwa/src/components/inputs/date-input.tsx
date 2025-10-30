@@ -1,6 +1,6 @@
 "use client";
 
-import { getDateFormat } from "@/modules/lang/lang-service";
+import { useLang } from "@/modules/lang/lang-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import {
   DateInput as MantineDateInput,
@@ -19,6 +19,7 @@ interface DateInputProps
 
 export const DateInput: FC<DateInputProps> = (props) => {
   const { value, onChange, ...rest } = props;
+  const lang = useLang();
 
   return (
     <MantineDateInput
@@ -26,8 +27,8 @@ export const DateInput: FC<DateInputProps> = (props) => {
       leftSection={rest.leftSection || <IconCalendar strokeWidth={1.5} size={20} />}
       defaultValue={props.defaultValue ? DateTime.normalizeDate(props.defaultValue) : undefined}
       value={value ? DateTime.normalizeDate(value) : undefined}
-      valueFormat={getDateFormat()}
-      placeholder={getDateFormat()}
+      valueFormat={DateTime.getDateFormatString(lang.locale)}
+      placeholder={DateTime.getDateFormatString(lang.locale)}
       onChange={(e) => {
         if (!e) return onChange?.(null);
         onChange?.(DateTime.toSeconds(e));

@@ -1,9 +1,9 @@
 "use client";
 
-import { calendarProps } from "@/configs/calendar.config";
+import { useCalendarProps } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
+import { useAuth } from "@/modules/auth/auth-context";
 import { useLang } from "@/modules/lang/lang-context";
-import { getDateFormat } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import {
   isInWorkSlot,
@@ -51,12 +51,15 @@ interface WorkSlotsInputProps {
 export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
   const events = props.events || [];
+  const calendarProps = useCalendarProps();
 
   const [view, setView] = useState<CalendarView>(props.view || CalendarView.WEEK);
 
   const workDaySlots = useWorkDaySlots();
   const layout = useLayout();
   const lang = useLang();
+  const auth = useAuth();
+  const dateFormat = DateTime.getDateFormatString(lang.locale);
 
   const color = useColor();
   const [date, setDate] = useState<Date>(props.initialDate || new Date());
@@ -83,10 +86,10 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
     if ([CalendarView.WEEK].includes(view)) {
       const start = dayjs(date).startOf(view);
       const end = dayjs(date).endOf(view);
-      return `${start.format(`ddd ${getDateFormat()}`)} - ${end.format(`ddd ${getDateFormat()}`)}`;
+      return `${start.format(`ddd ${dateFormat}`)} - ${end.format(`ddd ${dateFormat}`)}`;
     }
 
-    return dayjs(date).format(`dddd ${getDateFormat()}`);
+    return dayjs(date).format(`dddd ${dateFormat}`);
   };
 
   const nextRange = () => {
@@ -135,7 +138,7 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
 
   useEffect(() => {
     syncColumnSize();
-  }, [layout.width, lang.state.isTwelveHour]);
+  }, [layout.width, auth.user?.settings.isTwelveHour]);
 
   return (
     <Stack ref={ref} w="100%" gap={10}>
