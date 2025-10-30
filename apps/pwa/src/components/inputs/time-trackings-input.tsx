@@ -39,7 +39,6 @@ import {
   IconStopwatch,
   IconTrash,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { WorkspaceMemberInput } from "../../modules/workspace-members/components/workspace-member-input";
@@ -299,8 +298,8 @@ export const TimeTrackingGroupByUser: FC<{
                           </ThemeIcon>
 
                           <Text fz={14}>
-                            {dayjs(t.startAt * 1000).format("HH:mm")} -{" "}
-                            {dayjs(t.endAt! * 1000).format("HH:mm")}
+                            {DateTime.toTimeInputValue(t.startAt)} -{" "}
+                            {DateTime.toTimeInputValue(t.endAt)}
                           </Text>
                         </Group>
 

@@ -1,30 +1,9 @@
-import type { AppMetadata, WorkSlot } from "@/types";
+import type { AppMetadata } from "@/types";
 
 import { defaultMetadata } from "@/configs/metadata.config";
-import dayjs from "dayjs";
 import { apiServerSide } from "../apis/server";
 import { renderFileUrl } from "../files/files-utils";
 import type { WorkspaceEntity } from "./workspaces-types";
-import { DateTime } from "@joy-one-client/utils/date-time";
-
-export function isInWorkSlots(slots?: WorkSlot[], date?: Date) {
-  if (!slots || slots.length === 0) return true;
-  const _date = date ? new Date(date) : new Date();
-
-  const matchedSlot = slots.find((slot) => {
-    const slotStartDate = dayjs().hour(slot.startHour).minute(slot.startMin).toDate();
-    const slotEndDate = dayjs().hour(slot.endHour).minute(slot.endMin).toDate();
-    if (!DateTime.isSame(slotStartDate, _date, "day")) return false;
-
-    const startTimeSeconds = 60 * 60 * slotStartDate.getHours() + 60 * slotStartDate.getMinutes();
-    const endTimeSeconds = 60 * 60 * slotEndDate.getHours() + 60 * slotEndDate.getMinutes();
-    const targetSeconds = 60 * 60 * _date.getHours() + 60 * _date.getMinutes();
-
-    return startTimeSeconds <= targetSeconds && targetSeconds <= endTimeSeconds;
-  });
-
-  return !!matchedSlot;
-}
 
 export function encodeWorkspace(params: { workspaceCode: string; code: string; entity: string }) {
   return `${params.workspaceCode}${params.code}${params.entity}`;

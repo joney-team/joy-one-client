@@ -9,11 +9,11 @@ import { createComment, getComments } from "@/modules/comments/comment-service";
 import { CommentEntity } from "@/modules/comments/comment-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { em, Group, ScrollArea, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { IconMessages } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, useEffect, useRef } from "react";
 import { CommentInput } from "./components/comment-input";
 import { CommentBoxProps, UseCommentBox } from "./types";
@@ -131,10 +131,7 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
                     nextMsg?.createdByUserId !== comment.createdByUserId || !nextMsg;
                   const isOnlyOneMessageSession = isFirstSession && isLastSession;
                   const timeBtw = prevMsg
-                    ? dayjs(comment.createdAt * 1000).diff(
-                        dayjs(prevMsg.createdAt * 1000),
-                        "minutes"
-                      )
+                    ? DateTime.diff(comment.createdAt, prevMsg.createdAt, "minute")
                     : 0;
 
                   return (

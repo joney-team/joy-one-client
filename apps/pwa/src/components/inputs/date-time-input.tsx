@@ -1,9 +1,9 @@
 "use client";
 
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { ActionIcon, Group, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
 import { IconChevronDown, IconClock } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { type FC, type ReactNode, useRef } from "react";
 import { DateInput } from "./date-input";
 
@@ -26,13 +26,11 @@ export const DateTimeInput: FC<DateTimeInputProps> = (props) => {
           value={value}
           onChange={(date) => {
             if (!date) return onChange?.(null);
-            onChange?.(
-              dayjs(date * 1000)
-                .hour(0)
-                .minute(0)
-                .second(0)
-                .unix()
+            const output = DateTime.toSeconds(
+              new Date(DateTime.normalizeDate(date).setHours(0, 0, 0, 0))
             );
+
+            onChange?.(output);
           }}
         />
         <TimeInput
@@ -41,9 +39,9 @@ export const DateTimeInput: FC<DateTimeInputProps> = (props) => {
           leftSection={<IconClock strokeWidth={1.5} size={20} />}
           defaultValue={(function () {
             if (value) {
-              const date = dayjs(value * 1000);
-              return `${date.hour().toString().padStart(2, "0")}:${date
-                .minute()
+              const date = DateTime.normalizeDate(value);
+              return `${date.getHours().toString().padStart(2, "0")}:${date
+                .getMinutes()
                 .toString()
                 .padStart(2, "0")}`;
             }
@@ -55,8 +53,8 @@ export const DateTimeInput: FC<DateTimeInputProps> = (props) => {
             const hours = parseInt(e.target.value.split(":")[0]);
             const minutes = parseInt(e.target.value.split(":")[1]);
             if (typeof hours === "undefined" || typeof minutes === "undefined") return;
-            const _date = dayjs(value * 1000);
-            onChange?.(dayjs(_date).hour(hours).minute(minutes).unix());
+            const _date = DateTime.normalizeDate(value);
+            onChange?.(DateTime.toSeconds(new Date(_date).setHours(hours, minutes, 0, 0)));
           }}
           rightSection={
             <ActionIcon

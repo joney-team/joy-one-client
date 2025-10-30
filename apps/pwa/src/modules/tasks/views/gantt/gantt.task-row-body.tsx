@@ -23,7 +23,6 @@ import {
 } from "@mantine/core";
 import { useMergedRef, useMouse } from "@mantine/hooks";
 import { IconGripVertical, IconHourglassHigh } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
@@ -273,11 +272,11 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
             const progress = getTaskProgress(ctx.subTasks, gantt.statuses);
 
             const rangeDate = getRangeOfTasks(ctx.subTasks);
-            const startIndex = gantt.dates.findIndex((v) =>
-              dayjs(v).isSame(rangeDate.startDate, "day")
+            const startIndex = gantt.dates.findIndex(
+              (v) => rangeDate.startDate && DateTime.isSame(v, rangeDate.startDate, "day")
             );
-            const endIndex = gantt.dates.findIndex((v) =>
-              dayjs(v).isSame(rangeDate.dueDate, "day")
+            const endIndex = gantt.dates.findIndex(
+              (v) => rangeDate.dueDate && DateTime.isSame(v, rangeDate.dueDate, "day")
             );
             const left = startIndex * gantt.state.columnSize;
 
@@ -346,11 +345,11 @@ export const GanttTaskRowBody: FC<GanttTaskRowBodyProps> = (props) => {
         {(function () {
           if (!task.startDate || !task.dueDate || isEstimating) return null;
 
-          const startIndex = gantt.dates.findIndex((v) =>
-            dayjs(v).isSame(new Date(task.startDate! * 1000), "day")
+          const startIndex = gantt.dates.findIndex(
+            (v) => task.startDate && DateTime.isSame(v, new Date(task.startDate! * 1000), "day")
           );
-          const endIndex = gantt.dates.findIndex((v) =>
-            dayjs(v).isSame(new Date(task.dueDate! * 1000), "day")
+          const endIndex = gantt.dates.findIndex(
+            (v) => task.dueDate && DateTime.isSame(v, new Date(task.dueDate! * 1000), "day")
           );
 
           const left = startIndex * gantt.state.columnSize;

@@ -1,16 +1,14 @@
 // Import styles of packages that you've installed.
 // All packages except `@mantine/hooks` require styles imports
 import "@mantine/core/styles.css";
-import dayjs from "dayjs";
 
-import config from "@joy-one-client/config";
 import { ChatBox } from "@/components/chatbox";
+import config from "@joy-one-client/config";
 import { createTheme, MantineColorsTuple, MantineProvider } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -83,9 +81,6 @@ const theme = createTheme({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
-  const router = useRouter();
-  dayjs.locale(router.locale);
-
   const configs = {
     title: "Joy One",
     webURL: config.PUBLIC_URL,

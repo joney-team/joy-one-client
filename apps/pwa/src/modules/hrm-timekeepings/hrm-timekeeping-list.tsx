@@ -45,7 +45,6 @@ import {
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { type FC } from "react";
 import { getTimekeepings } from "./hrm-timekeepings-service";
@@ -272,7 +271,7 @@ export const HrmTimekeepingList: FC = () => {
               showAddButton
               timekeepings={timekeepings.data}
               onDateChange={(range) => {
-                if (dayjs(range.start).isSame(dayjs(), "day")) {
+                if (DateTime.isSame(range.start, new Date(), "day")) {
                   timekeepings.removeParams(["date"]);
                 } else {
                   timekeepings.setParams({ date: DateTime.toSeconds(range.start) });

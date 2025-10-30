@@ -1,6 +1,5 @@
 export type RawDate = Date | string | number;
-export type DateTimeUnit = "day" | "week" | "month" | "year";
-export type DateTimeDiffUnit = DateTimeUnit | "second" | "minute" | "hour";
+export type DateTimeUnit = "day" | "week" | "month" | "year" | "hour" | "minute" | "second";
 
 export class DateTime {
   static isValid(raw: RawDate): boolean {
@@ -157,25 +156,35 @@ export class DateTime {
   }
 
   static add(date: RawDate, unit: DateTimeUnit, amount: number) {
-    const _date = this.normalizeDate(date);
+    const normalizedDate = this.normalizeDate(date);
     const safeUnit = unit.toLowerCase();
 
     if (safeUnit === "day") {
-      return this.normalizeDate(_date).setDate(this.normalizeDate(_date).getDate() + amount);
+      return new Date(normalizedDate.setDate(normalizedDate.getDate() + amount));
     }
 
     if (safeUnit === "week") {
-      return this.normalizeDate(_date).setDate(this.normalizeDate(_date).getDate() + amount * 7);
+      return new Date(normalizedDate.setDate(normalizedDate.getDate() + amount * 7));
     }
 
     if (safeUnit === "month") {
-      return this.normalizeDate(_date).setMonth(this.normalizeDate(_date).getMonth() + amount);
+      return new Date(normalizedDate.setMonth(normalizedDate.getMonth() + amount));
     }
 
     if (safeUnit === "year") {
-      return this.normalizeDate(_date).setFullYear(
-        this.normalizeDate(_date).getFullYear() + amount
-      );
+      return new Date(normalizedDate.setFullYear(normalizedDate.getFullYear() + amount));
+    }
+
+    if (safeUnit === "hour") {
+      return new Date(normalizedDate.getTime() + amount * 60 * 60 * 1000);
+    }
+
+    if (safeUnit === "minute") {
+      return new Date(normalizedDate.getTime() + amount * 60 * 1000);
+    }
+
+    if (safeUnit === "second") {
+      return new Date(normalizedDate.getTime() + amount * 1000);
     }
 
     throw Error(`Unit ${unit} is not supported`);
@@ -226,7 +235,7 @@ export class DateTime {
     return { days, hours, minutes, seconds, isExpired: false };
   }
 
-  static diff(date: RawDate, compareDate: RawDate, unit: DateTimeDiffUnit) {
+  static diff(date: RawDate, compareDate: RawDate, unit: DateTimeUnit) {
     const _date = this.normalizeDate(date);
     const _compareDate = this.normalizeDate(compareDate);
     const safeUnit = unit.toLowerCase();
@@ -384,5 +393,24 @@ export class DateTime {
       decimalSeparator,
       thousandSeparator,
     };
+  }
+
+  static isBefore(date: RawDate, compareDate: RawDate) {
+    const _date = this.normalizeDate(date);
+    const _compareDate = this.normalizeDate(compareDate);
+    return _date.getTime() < _compareDate.getTime();
+  }
+
+  static isAfter(date: RawDate, compareDate: RawDate) {
+    const _date = this.normalizeDate(date);
+    const _compareDate = this.normalizeDate(compareDate);
+    return _date.getTime() > _compareDate.getTime();
+  }
+
+  static isBetween(date: RawDate, startDate: RawDate, endDate: RawDate) {
+    const _date = this.normalizeDate(date);
+    const _startDate = this.normalizeDate(startDate);
+    const _endDate = this.normalizeDate(endDate);
+    return _date.getTime() >= _startDate.getTime() && _date.getTime() <= _endDate.getTime();
   }
 }

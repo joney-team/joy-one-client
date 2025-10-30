@@ -35,7 +35,6 @@ import {
 } from "@mantine/core";
 import { useForceUpdate, useHover } from "@mantine/hooks";
 import { IconCirclePlus, IconMinus, IconPlus, IconUsers, IconX } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, PropsWithChildren, useEffect } from "react";
 
 export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
@@ -222,7 +221,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
             <Calendar
               initialDate={query.date}
               onChange={(range) => {
-                const isThisMonth = dayjs(range.start).isSame(new Date(), "month");
+                const isThisMonth = DateTime.isSame(range.start, new Date(), "month");
                 if (isThisMonth) {
                   tasks.removeParams(["date"]);
                 } else {
@@ -254,13 +253,13 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                 if (isOutOfRange) return null;
 
                 const closedTasks = tasks.data.filter(
-                  (task) => task.closedAt && dayjs(task.closedAt * 1000).isSame(date, "day")
+                  (task) => task.closedAt && DateTime.isSame(task.closedAt, date, "day")
                 );
                 const dueDateTasks = tasks.data.filter(
-                  (task) => task.dueDate && dayjs(task.dueDate * 1000).isSame(date, "day")
+                  (task) => task.dueDate && DateTime.isSame(task.dueDate, date, "day")
                 );
                 const createdTasks = tasks.data.filter(
-                  (task) => task.createdAt && dayjs(task.createdAt * 1000).isSame(date, "day")
+                  (task) => task.createdAt && DateTime.isSame(task.createdAt, date, "day")
                 );
 
                 return (
@@ -328,10 +327,10 @@ const TaskRow: FC<{
   const isDueDateExpired =
     task.status !== DefaultTaskStatusId.CLOSED &&
     task.dueDate &&
-    dayjs(task.dueDate * 1000).isBefore(dayjs());
+    DateTime.isBefore(task.dueDate, new Date());
 
   const timeTrackings = (task.timeTrackings || []).filter(
-    (v) => v.startAt && dayjs(v.startAt * 1000).isSame(date, "day")
+    (v) => v.startAt && DateTime.isSame(v.startAt, date, "day")
   );
 
   const isHasInProgressTimeTracking = timeTrackings.find((v) => !!!v.endAt);

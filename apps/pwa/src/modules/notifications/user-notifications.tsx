@@ -31,6 +31,7 @@ import { Button } from "../../components/buttons/button";
 import { Errored } from "../../components/errored";
 import { ModalTitle } from "../../components/modal-title";
 import { Renderer } from "../../components/renderer";
+import { useLang } from "../lang/lang-context";
 import { NotificationCard } from "./notification-card";
 
 const EmptyNotification: FC<{ visible: boolean }> = ({ visible }) => {
@@ -52,6 +53,7 @@ const EmptyNotification: FC<{ visible: boolean }> = ({ visible }) => {
 
 export const UserNotifications: FC = () => {
   const auth = useAuth();
+  const lang = useLang();
   const [opened, { open, close }] = useDisclosure(false);
   const [stat, setStat] = useState<UserNotificationStat>();
   const layout = useLayout();
@@ -75,7 +77,7 @@ export const UserNotifications: FC = () => {
   }, [auth.user?._id]);
 
   const notifications = useList<NotificationEntity>({
-    id: "user-notifications",
+    id: `user-notifications-${lang.locale}`,
     fetch: (q) => getNotifications(q),
   });
 

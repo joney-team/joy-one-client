@@ -4,9 +4,9 @@ import {
 } from "@/modules/workspace-settings/workspace-settings-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkSlot } from "@/types";
-import dayjs from "dayjs";
 import { api } from "../apis";
 import { useAuth } from "../auth/auth-context";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 export async function getWorkspaceSettings() {
   return api.get<WorkspaceSettingEntity>(`/workspace-settings`);
@@ -68,21 +68,23 @@ export const isInWorkSlot = (slot: Date, workSlots?: WorkSlot[]) => {
   if (!workSlots) return false;
 
   return workSlots.some((s) => {
-    const from = dayjs(slot).hour(s.startHour).minute(s.startMin);
-    const to = dayjs(slot).hour(s.endHour).minute(s.endMin);
-    return (from.isBefore(slot) && to.isAfter(slot)) || from.isSame(slot);
+    const from = DateTime.normalizeDate(new Date(slot).setHours(s.startHour, s.startMin, 0, 0));
+    const to = DateTime.normalizeDate(new Date(slot).setHours(s.endHour, s.endMin, 0, 0));
+    return (
+      (DateTime.isBefore(from, slot) && DateTime.isAfter(to, slot)) ||
+      DateTime.isSame(from, slot, "day")
+    );
   });
 };
 
-export const calWorkSlotTimePoint = (workSlot: WorkSlot) => {
-  return dayjs()
-    .add(workSlot.dayWeek, "day")
-    .add(workSlot.startHour, "hour")
-    .add(workSlot.startMin, "minute")
-    .toDate()
-    .getTime();
+export const calculateWorkSlotTimePoint = (workSlot: WorkSlot) => {
+  return DateTime.normalizeDate(
+    DateTime.add(new Date(), "day", workSlot.dayWeek).getTime() +
+      workSlot.startHour * 3600 * 1000 +
+      workSlot.startMin * 60 * 1000
+  ).getTime();
 };
 
 export const sortWorkSlots = (workSlots: WorkSlot[]) => {
-  return workSlots.sort((a, b) => calWorkSlotTimePoint(a) - calWorkSlotTimePoint(b));
+  return workSlots.sort((a, b) => calculateWorkSlotTimePoint(a) - calculateWorkSlotTimePoint(b));
 };

@@ -37,7 +37,6 @@ import {
 } from "@mantine/core";
 import { useForceUpdate, useHover } from "@mantine/hooks";
 import { IconMinus, IconPlus, IconStopwatch, IconUsers, IconX } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, PropsWithChildren, useEffect } from "react";
 
 export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
@@ -89,7 +88,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
   }, [] as { user: WorkspaceMemberInfo; timeTrackings: TaskTimeTracking[] }[]);
 
   const onChangeDate = (date: Date) => {
-    const isThisMonth = dayjs(date).isSame(new Date(), "month");
+    const isThisMonth = DateTime.isSame(date, new Date(), "month");
     if (isThisMonth) {
       tasks.removeParams(["date"]);
     } else {
@@ -289,7 +288,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
                 (task) =>
                   task.timeTrackings &&
                   task.timeTrackings.some(
-                    (v) => v.startAt && dayjs(v.startAt * 1000).isSame(date, "day")
+                    (v) => v.startAt && DateTime.isSame(v.startAt, date, "day")
                   )
               );
 
@@ -328,7 +327,7 @@ const TaskRow: FC<{
   const assignee = task.assigneeUsers?.[0];
 
   const timeTrackings = (task.timeTrackings || []).filter(
-    (v) => v.startAt && dayjs(v.startAt * 1000).isSame(date, "day")
+    (v) => v.startAt && DateTime.isSame(v.startAt, date, "day")
   );
 
   const isHasInProgressTimeTracking = timeTrackings.find((v) => !!!v.endAt);

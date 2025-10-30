@@ -1,6 +1,6 @@
 import { LoanReceiptData } from "../loans-types";
 
-import dayjs from "dayjs";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { ReceiptEntity, ReceiptStatus } from "../../receipts/receipts-types";
 import { LoanEntity } from "../loans-types";
 
@@ -8,14 +8,20 @@ export const useInspectLoanReceipt = (receipt: ReceiptEntity, loan: LoanEntity) 
   const receiptData = receipt.data as LoanReceiptData;
   const { period } = receiptData;
 
-  const isExpireInToday = dayjs(receipt.expireAt! * 1000).isSame(dayjs(), "day");
+  const isExpireInToday = DateTime.isSame(receipt.expireAt!, new Date(), "day");
   const isExpired =
-    !!receipt.expireAt && dayjs(receipt.expireAt * 1000).isBefore(dayjs()) && receipt.status === ReceiptStatus.PENDING;
+    !!receipt.expireAt &&
+    DateTime.isBefore(receipt.expireAt!, new Date()) &&
+    receipt.status === ReceiptStatus.PENDING;
   const isLiquidation = receiptData.liquidation;
   const isPartialPayment = receiptData.partial || receiptData.remainPartial;
-  const expiredDays = isExpired ? dayjs().diff(dayjs(receipt.expireAt! * 1000), "days") : 0;
-  const relatedPaymentPeriod = loan.paymentPeriods?.find((v) => v.period === receiptData.period?.period);
-  const paymentPeriodRate = relatedPaymentPeriod ? receipt.amount / relatedPaymentPeriod.totalAmount : 1;
+  const expiredDays = isExpired ? DateTime.diff(new Date(), receipt.expireAt!, "day") : 0;
+  const relatedPaymentPeriod = loan.paymentPeriods?.find(
+    (v) => v.period === receiptData.period?.period
+  );
+  const paymentPeriodRate = relatedPaymentPeriod
+    ? receipt.amount / relatedPaymentPeriod.totalAmount
+    : 1;
 
   const getCapital = () => {
     if (receiptData.liquidation && receiptData.liquidationCalculated) {

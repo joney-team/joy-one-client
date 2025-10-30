@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CommentEntity } from "@/modules/comments/comment-types";
@@ -9,7 +10,6 @@ import { useLang } from "@/modules/lang/lang-context";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Card, Group, SimpleGrid, Stack, Text } from "@mantine/core";
-import dayjs from "dayjs";
 import { type FC } from "react";
 
 interface Comment extends CommentEntity {
@@ -48,14 +48,15 @@ export const Comment: FC<Comment> = (comment) => {
   };
 
   const getTime = () => {
-    const isToday = dayjs(comment.createdAt * 1000).isSame(dayjs(), "day");
-    const isYesterday = dayjs(comment.createdAt * 1000).isSame(dayjs().subtract(1, "day"), "day");
-    const isSameWeek = dayjs(comment.createdAt * 1000).isSame(dayjs(), "week");
-
-    if (isToday) return dayjs(comment.createdAt * 1000).format("HH:mm");
-    if (isYesterday) return dayjs(comment.createdAt * 1000).format("HH:mm");
-    if (isSameWeek) return dayjs(comment.createdAt * 1000).format("dddd HH:mm");
-    return dayjs(comment.createdAt * 1000).format(`${dateFormat} HH:mm`);
+    const isToday = DateTime.isSame(comment.createdAt, new Date(), "day");
+    const isYesterday = DateTime.isSame(
+      comment.createdAt,
+      DateTime.subtract(new Date(), "day", 1),
+      "day"
+    );
+    if (isToday) return <DateFormat value={comment.createdAt} type="time" />;
+    if (isYesterday) return <DateFormat value={comment.createdAt} type="time" />;
+    return <DateFormat value={comment.createdAt} type="date-time" />;
   };
 
   if (!member) return null;

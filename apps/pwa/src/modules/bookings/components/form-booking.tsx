@@ -50,7 +50,6 @@ import {
   IconUsers,
   IconUserSquareRounded,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, Fragment, useEffect, useMemo } from "react";
 import { BookingEntity, BookingStatus, CreateBookingDto } from "../booking-types";
 
@@ -84,10 +83,10 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         props.reschedule?.assigneeUsers ??
         props.assigneeUsers ?? [workspace.userMember],
       startTime: props.booking?.startTime
-        ? dayjs(props.booking.startTime * 1000).toDate()
+        ? DateTime.normalizeDate(props.booking.startTime)
         : props.startTime,
       endTime: props.booking?.endTime
-        ? dayjs(props.booking.endTime * 1000).toDate()
+        ? DateTime.normalizeDate(props.booking.endTime)
         : props.endTime,
     };
   }, [props.customer, props.assigneeUsers, props.startTime, props.endTime, props.booking, type]);
@@ -139,7 +138,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
     : false;
 
   const isPassed =
-    form.values.startTime && dayjs(form.values.startTime).isBefore(dayjs().subtract(1, "day"));
+    form.values.startTime &&
+    DateTime.isBefore(form.values.startTime, DateTime.subtract(new Date(), "day", 1));
 
   useEffect(() => {
     form.setInitialValues(initialValues);
@@ -230,7 +230,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
         <Stack>
           <Group flex={1}>
-            <Tooltip label={t`Select date`}>
+            <Tooltip label={<Trans>Select date</Trans>}>
               <Group flex={1}>
                 <DateInput
                   flex={1}
@@ -238,30 +238,45 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                   placeholder={dateFormat}
                   valueFormat={dateFormat}
                   onChange={(value) => {
-                    const currentStartTime = dayjs(form.values.startTime);
-                    const currentEndTime = dayjs(form.values.endTime);
+                    if (!value) return;
 
-                    const startTime = dayjs(value)
-                      .set("hour", currentStartTime.hour())
-                      .set("minute", currentStartTime.minute());
-                    let endTime = dayjs(value)
-                      .set("hour", currentEndTime.hour())
-                      .set("minute", currentEndTime.minute());
+                    const currentStartTime = form.values.startTime
+                      ? DateTime.normalizeDate(form.values.startTime)
+                      : null;
 
-                    if (!form.values.endTime) endTime = endTime.add(15, "minutes");
+                    const currentEndTime = form.values.endTime
+                      ? DateTime.normalizeDate(form.values.endTime)
+                      : null;
+
+                    const startTime = new Date(
+                      DateTime.normalizeDate(value).setHours(
+                        currentStartTime?.getHours() ?? 0,
+                        currentStartTime?.getMinutes() ?? 0,
+                        0,
+                        0
+                      )
+                    );
+
+                    const endTime = new Date(
+                      DateTime.normalizeDate(value).setHours(
+                        currentEndTime?.getHours() ?? 0,
+                        currentEndTime?.getMinutes() ?? 0,
+                        0,
+                        0
+                      )
+                    );
 
                     form.setValues({
                       ...form.values,
-                      startTime: startTime.toDate(),
-                      endTime: endTime.toDate(),
+                      startTime: startTime,
+                      endTime: endTime,
                     });
                   }}
                   renderDay={(date) => {
-                    const day = dayjs(date).date();
-                    const isToday = dayjs(date).isSame(dayjs(), "day");
+                    const isToday = DateTime.isSame(date, new Date(), "day");
                     return (
                       <Indicator disabled={!isToday} size={6} color={color("primary")} offset={-2}>
-                        <div>{day}</div>
+                        <div>{DateTime.normalizeDate(date).getDate()}</div>
                       </Indicator>
                     );
                   }}
@@ -269,34 +284,38 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
               </Group>
             </Tooltip>
 
-            <Tooltip label={t`Start time`}>
+            <Tooltip label={<Trans>Start time</Trans>}>
               <Group>
                 <TimeInput
                   value={form.values.startTime}
                   onChange={(value) => {
                     form.setValues({
                       ...form.values,
-                      startTime: dayjs(form.values.startTime)
-                        .set("hour", value[0])
-                        .set("minute", value[1])
-                        .toDate(),
+                      startTime: new Date(
+                        DateTime.normalizeDate(form.values.startTime ?? new Date()).setHours(
+                          value[0],
+                          value[1]
+                        )
+                      ),
                     });
                   }}
                 />
               </Group>
             </Tooltip>
 
-            <Tooltip label={t`End time`}>
+            <Tooltip label={<Trans>End time</Trans>}>
               <Group>
                 <TimeInput
                   value={form.values.endTime}
                   onChange={(value) => {
                     form.setValues({
                       ...form.values,
-                      endTime: dayjs(form.values.endTime)
-                        .set("hour", value[0])
-                        .set("minute", value[1])
-                        .toDate(),
+                      endTime: new Date(
+                        DateTime.normalizeDate(form.values.endTime ?? new Date()).setHours(
+                          value[0],
+                          value[1]
+                        )
+                      ),
                     });
                   }}
                 />
@@ -306,13 +325,14 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
           <Group wrap="nowrap" gap={5}>
             <Text fz={12} flex={1}>
-              {t`Suggest time`}
+              <Trans>Suggest time</Trans>
             </Text>
 
             {[15, 30, 45, 60].map((v) => {
               const isSelected =
                 form.values.endTime &&
-                dayjs(form.values.endTime).diff(form.values.startTime, "minute") === v;
+                form.values.startTime &&
+                DateTime.diff(form.values.endTime, form.values.startTime, "minute") === v;
               return (
                 <Button
                   key={v}
@@ -326,13 +346,19 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                     borderColor: isSelected ? undefined : "var(--mantine-color-default-border)",
                   }}
                   onClick={() => {
-                    form.setFieldValue(
-                      "endTime",
-                      dayjs(form.values.startTime).add(v, "minute").toDate()
-                    );
+                    form.setValues({
+                      ...form.values,
+                      endTime: DateTime.add(form.values.startTime ?? new Date(), "minute", v),
+                    });
                   }}
                 >
-                  {v === 60 ? t`One hour` : `${v} ${t`mins`}`}
+                  {v === 60 ? (
+                    <Trans>One hour</Trans>
+                  ) : (
+                    <Fragment>
+                      {v} <Trans> mins</Trans>
+                    </Fragment>
+                  )}
                 </Button>
               );
             })}
@@ -366,7 +392,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
           {form.values.startTime &&
             form.values.endTime &&
-            dayjs(form.values.endTime).isBefore(dayjs(form.values.startTime)) && (
+            DateTime.isBefore(form.values.endTime, form.values.startTime) && (
               <Blockquote color="red" p={8} fz={14} fw={500} mt={5}>
                 <Trans>End time must be after start time</Trans>
               </Blockquote>

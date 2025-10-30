@@ -42,7 +42,6 @@ import {
   IconFileTypePdf,
   IconRefresh,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, Fragment } from "react";
 import { api } from "../apis";
 import { useLocations } from "../locations/locations-context";
@@ -232,12 +231,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
             const warningReceiptBeforeDays =
               workspace.settings.loanSettings?.warningReceiptBeforeDays || 0;
             const isExpired =
-              loan.nextReceiptAt && dayjs(loan.nextReceiptAt * 1000).isBefore(dayjs());
+              loan.nextReceiptAt && DateTime.isBefore(loan.nextReceiptAt, new Date());
             const isWarning =
               warningReceiptBeforeDays > 0 &&
               loan.nextReceiptAt &&
-              dayjs(loan.nextReceiptAt * 1000).isBefore(
-                dayjs(nowInSeconds * 1000).add(warningReceiptBeforeDays + 1, "day")
+              DateTime.isBefore(
+                loan.nextReceiptAt,
+                DateTime.add(new Date(), "day", warningReceiptBeforeDays + 1)
               );
 
             if (!value || loan.status === LoanStatus.COMPLETED) return "--";
@@ -314,10 +314,10 @@ export const LoanList: FC<LoanListProps> = (props) => {
                         const isPaid = r.isCompleted;
 
                         const isExpired =
-                          !isPaid && !!r.time && dayjs(r.time * 1000).isBefore(dayjs());
+                          !isPaid && !!r.time && DateTime.isBefore(r.time, new Date());
 
                         const isExpireToday =
-                          !isPaid && !!r.time && dayjs(r.time * 1000).isSame(dayjs(), "day");
+                          !isPaid && !!r.time && DateTime.isSame(r.time, new Date(), "day");
 
                         return (
                           <Progress

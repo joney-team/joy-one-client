@@ -41,6 +41,7 @@ import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -80,7 +81,6 @@ import {
   IconUserSquareRounded,
   IconX,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { CustomerInput } from "../../customers/components/customer-input";
 import { FilesBox } from "../../files/files-box";
@@ -89,7 +89,6 @@ import { taskPriorities } from "../task-constants";
 import { TasksDndProvider } from "../tasks-dnd-provider";
 import { ListTaskRow } from "../views/list/list.task-row";
 import { ListTaskRowHead } from "../views/list/list.task-row-head";
-import { DateTime } from "@joy-one-client/utils/date-time";
 
 export interface TaskFormProps {
   task?: TaskEntity;

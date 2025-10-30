@@ -6,6 +6,7 @@ import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkSlot } from "@/types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
@@ -21,7 +22,6 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconClock, IconEdit, IconPlus } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { Calendar, Views } from "react-big-calendar";
 import { v4 as uuid } from "uuid";
@@ -41,7 +41,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
   const slots = props.slots || [];
   const layout = useLayout();
   const ref = useRef<HTMLDivElement>(null);
-  const start = dayjs().startOf("week");
+  const startOfWeek = DateTime.getRange(new Date(), "week").start;
   const calendarProps = useCalendarProps();
 
   const [pointedSlot, setPointedSlot] = useState<WorkSlot | null>(null);
@@ -53,11 +53,11 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
   const [columnSize, setColumnSize] = useState(0);
 
   const dayWeek = new Array(7).fill(0).map((_, index) => {
-    const date = start.add(index, "day");
+    const date = DateTime.add(startOfWeek, "day", index);
 
     return {
       date,
-      name: date.format("ddd"),
+      name: <DateFormat value={date} type="custom" format={{ weekday: "short" }} />,
     };
   });
 
@@ -74,17 +74,17 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
 
   // Convert slots to calendar events
   const events = dayWeek.reduce((output, val) => {
-    const _slots = [...slots].filter((slot) => slot.dayWeek === val.date.toDate().getDay());
+    const _slots = [...slots].filter((slot) => slot.dayWeek === val.date.getDay());
 
-    if (pointedSlot?.id === "new" && pointedSlot.dayWeek === val.date.toDate().getDay()) {
+    if (pointedSlot?.id === "new" && pointedSlot.dayWeek === val.date.getDay()) {
       _slots.push(pointedSlot);
     }
 
     output.push(
       ..._slots.map((s) => ({
         id: s.id,
-        start: dayjs(val.date).hour(s.startHour).minute(s.startMin).toDate(),
-        end: dayjs(val.date).hour(s.endHour).minute(s.endMin).toDate(),
+        start: DateTime.normalizeDate(new Date(val.date).setHours(s.startHour, s.startMin, 0, 0)),
+        end: DateTime.normalizeDate(new Date(val.date).setHours(s.endHour, s.endMin, 0, 0)),
       }))
     );
     return output;
@@ -305,14 +305,19 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
 export function SlotTime(
   slot: Pick<WorkSlot, "dayWeek" | "startHour" | "startMin" | "endHour" | "endMin">
 ): JSX.Element {
-  const start = dayjs().day(slot.dayWeek).hour(slot.startHour).minute(slot.startMin);
-  const end = dayjs().day(slot.dayWeek).hour(slot.endHour).minute(slot.endMin);
+  const start = DateTime.normalizeDate(
+    new Date(new Date().setDate(slot.dayWeek)).setHours(slot.startHour, slot.startMin, 0, 0)
+  );
+
+  const end = DateTime.normalizeDate(
+    new Date(new Date().setDate(slot.dayWeek)).setHours(slot.endHour, slot.endMin, 0, 0)
+  );
 
   return (
     <Fragment>
-      <DateFormat value={start.toDate()} type="time" />
+      <DateFormat value={start} type="time" />
       {" - "}
-      <DateFormat value={end.toDate()} type="time" />
+      <DateFormat value={end} type="time" />
     </Fragment>
   );
 }

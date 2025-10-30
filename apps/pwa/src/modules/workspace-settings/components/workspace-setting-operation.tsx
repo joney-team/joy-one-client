@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
+import { DateFormat } from "@/components/format/date-format";
 import { SlotTime } from "@/components/inputs/work-slot-settings-input";
 import { Renderer } from "@/components/renderer";
 import { appEntities } from "@/constant";
@@ -38,7 +39,6 @@ import {
 } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC } from "react";
 
 export const slotGroupColors = ["primary", "orange", "teal"];
@@ -72,7 +72,7 @@ export const WorkspaceOperationSettings: FC = () => {
                   <Stack gap={8}>
                     <Stack gap={0}>
                       <Text fz={14} fw={600} tt="capitalize">
-                        {dayjs().day(stat.dayWeek).format("dddd")}
+                        <DateFormat value={new Date()} type="custom" format={{ weekday: "long" }} />
                       </Text>
 
                       <Text fz={12} c="gray">

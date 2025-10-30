@@ -3,11 +3,11 @@
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { CalendarView } from "@/types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Badge, Card, Group, SimpleGrid, Stack, Text, alpha, em } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconCalendarDown, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, useState } from "react";
 import { Button } from "./buttons/button";
 import { CalendarViewSelector } from "./calendar-view-selector";
@@ -27,25 +27,21 @@ export const Calendar: FC<CalendarProps> = (props) => {
   const [date, setDate] = useState<Date>(props.initialDate || new Date());
   const [view, setView] = useState<CalendarView>(CalendarView.MONTH);
 
-  const startAt = dayjs(date).startOf(view);
-  const endAt = dayjs(date).endOf(view);
+  const range = DateTime.getRange(date, view);
 
   const nextRange = () => {
-    const nextDate = dayjs(date).add(1, view).toDate();
+    const nextDate = DateTime.add(date, view, 1);
     setDate(nextDate);
-    props.onChange?.({
-      start: dayjs(nextDate).startOf(view).toDate(),
-      end: dayjs(nextDate).endOf(view).toDate(),
-    });
+
+    const nextRange = DateTime.getRange(nextDate, view);
+    props.onChange?.(nextRange);
   };
 
   const previousRange = () => {
-    const previousDate = dayjs(date).subtract(1, view).toDate();
+    const previousDate = DateTime.subtract(date, view, 1);
     setDate(previousDate);
-    props.onChange?.({
-      start: dayjs(previousDate).startOf(view).toDate(),
-      end: dayjs(previousDate).endOf(view).toDate(),
-    });
+    const previousRange = DateTime.getRange(previousDate, view);
+    props.onChange?.(previousRange);
   };
 
   const goToday = () => {
@@ -67,11 +63,11 @@ export const Calendar: FC<CalendarProps> = (props) => {
     [CalendarView.WEEK]: (
       <Group gap={3}>
         <Text tt="capitalize" fz={16}>
-          <DateFormat value={startAt.toDate()} type="date" />
+          <DateFormat value={range.start} type="date" />
         </Text>
         <Text fz={16}>-</Text>
         <Text fz={16}>
-          <DateFormat value={endAt.toDate()} type="date" />
+          <DateFormat value={range.end} type="date" />
         </Text>
       </Group>
     ),
@@ -90,9 +86,7 @@ export const Calendar: FC<CalendarProps> = (props) => {
   const calendarViews: Record<CalendarView, React.ReactNode | undefined> = {
     [CalendarView.DAY]: undefined,
     [CalendarView.WEEK]: undefined,
-    [CalendarView.MONTH]: (
-      <MonthView {...props} _startAt={startAt.toDate()} _endAt={endAt.toDate()} />
-    ),
+    [CalendarView.MONTH]: <MonthView {...props} startAt={range.start} endAt={range.end} />,
   };
 
   return (
@@ -113,7 +107,7 @@ export const Calendar: FC<CalendarProps> = (props) => {
         </Group>
 
         <Group gap={5}>
-          {!dayjs(date).isSame(new Date(), view) && (
+          {!DateTime.isSame(date, new Date(), view) && (
             <Button size="compact-sm" leftIcon={IconCalendarDown} variant="light" onClick={goToday}>
               <Trans>Today</Trans>
             </Button>
@@ -133,17 +127,18 @@ const dayRows = new Array(6).fill(0);
 
 const MonthView: FC<
   CalendarProps & {
-    _startAt: Date;
-    _endAt: Date;
+    startAt: Date;
+    endAt: Date;
   }
 > = (props) => {
   const borderColor = alpha("gray", 0.1);
+  const startOfWeek = DateTime.getRange(props.startAt, "week").start;
 
   return (
     <Card p={0} withBorder shadow="none">
       <SimpleGrid cols={7} spacing={0}>
         {dayCols.map((_, index) => {
-          const date = dayjs(dayjs(props._startAt).startOf("week")).add(index, "day");
+          const date = DateTime.add(startOfWeek, "day", index);
 
           return (
             <Group
@@ -157,19 +152,19 @@ const MonthView: FC<
               }}
             >
               <Text fz={em(12)} fw={600}>
-                {date.format("ddd")}
+                <DateFormat value={date} type="custom" format={{ weekday: "short" }} />
               </Text>
             </Group>
           );
         })}
 
         {dayRows.map((_, weekIndex) => {
-          const weekStartAt = dayjs(dayjs(props._startAt).add(weekIndex, "week").startOf("week"));
+          const weekStartAt = DateTime.add(props.startAt, "week", weekIndex);
 
           return dayCols.map((_, dayIndex) => {
-            const thisDate = dayjs(weekStartAt).add(dayIndex, "day").toDate();
-            const isInThisMonth = thisDate.getMonth() === props._startAt.getMonth();
-            const isToday = dayjs(thisDate).isSame(dayjs(), "day");
+            const thisDate = DateTime.add(weekStartAt, "day", dayIndex);
+            const isInThisMonth = thisDate.getMonth() === props.startAt.getMonth();
+            const isToday = DateTime.isSame(thisDate, new Date(), "day");
 
             return (
               <DateSlot

@@ -15,10 +15,10 @@ import { classNames } from "@/utils/ui.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { ActionIcon, Card, Group, Stack, Text } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import dayjs from "dayjs";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { Calendar, SlotInfo } from "react-big-calendar";
 import { CalendarViewSelector } from "../calendar-view-selector";
+import { DateFormat } from "../format/date-format";
 import { Renderer } from "../renderer";
 
 export interface WorkSlotEvent {
@@ -65,13 +65,13 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
   const [date, setDate] = useState<Date>(props.initialDate || new Date());
   const [columnSize, setColumnSize] = useState(0);
 
-  const startWeek = dayjs(date).startOf("week");
+  const startWeek = DateTime.getRange(date, "week").start;
   const dayWeek = new Array(7).fill(0).map((_, index) => {
-    const date = startWeek.add(index, "day");
+    const date = DateTime.add(startWeek, "day", index);
 
     return {
       date,
-      name: date.format("ddd"),
+      name: <DateFormat value={date} type="custom" format={{ weekday: "short" }} />,
     };
   });
 
@@ -84,30 +84,30 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
 
   const displayDate = () => {
     if ([CalendarView.WEEK].includes(view)) {
-      const start = dayjs(date).startOf(view);
-      const end = dayjs(date).endOf(view);
-      return `${start.format(`ddd ${dateFormat}`)} - ${end.format(`ddd ${dateFormat}`)}`;
+      const start = DateTime.getRange(date, view).start;
+      const end = DateTime.getRange(date, view).end;
+      return (
+        <Fragment>
+          <DateFormat value={start} type="custom" format={{ weekday: "short" }} />
+          {" - "}
+          <DateFormat value={end} type="custom" format={{ weekday: "short" }} />
+        </Fragment>
+      );
     }
 
-    return dayjs(date).format(`dddd ${dateFormat}`);
+    return <DateFormat value={date} type="custom" format={{ weekday: "long" }} />;
   };
 
   const nextRange = () => {
-    const nextDate = dayjs(date).add(1, view).toDate();
+    const nextDate = DateTime.add(date, view, 1);
     setDate(nextDate);
-    props.onDateChange?.({
-      start: dayjs(date).startOf(view).toDate(),
-      end: dayjs(nextDate).endOf(view).toDate(),
-    });
+    props.onDateChange?.(DateTime.getRange(nextDate, view));
   };
 
   const previousRange = () => {
-    const previousDate = dayjs(date).subtract(1, view).toDate();
+    const previousDate = DateTime.subtract(date, view, 1);
     setDate(previousDate);
-    props.onDateChange?.({
-      start: dayjs(previousDate).startOf(view).toDate(),
-      end: dayjs(date).endOf(view).toDate(),
-    });
+    props.onDateChange?.(DateTime.getRange(previousDate, view));
   };
 
   const onSelectSlot = (slot: SlotInfo) => {
@@ -117,11 +117,9 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
         workDaySlots.find((v) => v.dayWeek === slot.start.getDay())?.slots
       );
 
-      const conflictEvents = events.filter((e) => {
-        const from = dayjs(e.start);
-        const to = dayjs(e.end);
-        return from.isBefore(slot.start) && to.isAfter(slot.start);
-      });
+      const conflictEvents = events.filter((e) =>
+        DateTime.isBetween(e.start, slot.start, slot.end)
+      );
 
       props.onCreate?.({
         start: slot.start,

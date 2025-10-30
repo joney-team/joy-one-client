@@ -152,4 +152,110 @@ describe("DateTime", () => {
       );
     });
   });
+
+  describe("add", () => {
+    const baseDate = new Date(2024, 0, 15, 12, 30, 45); // Jan 15, 2024, 12:30:45
+
+    it("should add seconds", () => {
+      // Add 1 second
+      expect(DateTime.add(baseDate, "second", 1)).toEqual(new Date(2024, 0, 15, 12, 30, 46));
+      // Add 30 seconds
+      expect(DateTime.add(baseDate, "second", 30)).toEqual(new Date(2024, 0, 15, 12, 31, 15));
+      // Add 60 seconds (1 minute)
+      expect(DateTime.add(baseDate, "second", 60)).toEqual(new Date(2024, 0, 15, 12, 31, 45));
+      // Add negative seconds
+      expect(DateTime.add(baseDate, "second", -30)).toEqual(new Date(2024, 0, 15, 12, 30, 15));
+    });
+
+    it("should add minutes", () => {
+      // Add 1 minute
+      expect(DateTime.add(baseDate, "minute", 1)).toEqual(new Date(2024, 0, 15, 12, 31, 45));
+      // Add 30 minutes
+      expect(DateTime.add(baseDate, "minute", 30)).toEqual(new Date(2024, 0, 15, 13, 0, 45));
+      // Add 60 minutes (1 hour)
+      expect(DateTime.add(baseDate, "minute", 60)).toEqual(new Date(2024, 0, 15, 13, 30, 45));
+      // Add negative minutes
+      expect(DateTime.add(baseDate, "minute", -30)).toEqual(new Date(2024, 0, 15, 12, 0, 45));
+    });
+
+    it("should add hours", () => {
+      // Add 1 hour
+      expect(DateTime.add(baseDate, "hour", 1)).toEqual(new Date(2024, 0, 15, 13, 30, 45));
+      // Add 12 hours
+      expect(DateTime.add(baseDate, "hour", 12)).toEqual(new Date(2024, 0, 16, 0, 30, 45));
+      // Add 24 hours (1 day)
+      expect(DateTime.add(baseDate, "hour", 24)).toEqual(new Date(2024, 0, 16, 12, 30, 45));
+      // Add negative hours
+      expect(DateTime.add(baseDate, "hour", -12)).toEqual(new Date(2024, 0, 15, 0, 30, 45));
+    });
+
+    it("should add days", () => {
+      // Add 1 day
+      expect(DateTime.add(baseDate, "day", 1)).toEqual(new Date(2024, 0, 16, 12, 30, 45));
+      // Add 7 days (1 week)
+      expect(DateTime.add(baseDate, "day", 7)).toEqual(new Date(2024, 0, 22, 12, 30, 45));
+      // Add 31 days (1 month)
+      expect(DateTime.add(baseDate, "day", 31)).toEqual(new Date(2024, 1, 15, 12, 30, 45));
+      // Add negative days
+      expect(DateTime.add(baseDate, "day", -1)).toEqual(new Date(2024, 0, 14, 12, 30, 45));
+    });
+
+    it("should add weeks", () => {
+      // Add 1 week
+      expect(DateTime.add(baseDate, "week", 1)).toEqual(new Date(2024, 0, 22, 12, 30, 45));
+      // Add 2 weeks
+      expect(DateTime.add(baseDate, "week", 2)).toEqual(new Date(2024, 0, 29, 12, 30, 45));
+      // Add 4 weeks
+      expect(DateTime.add(baseDate, "week", 4)).toEqual(new Date(2024, 1, 12, 12, 30, 45));
+      // Add negative weeks
+      expect(DateTime.add(baseDate, "week", -1)).toEqual(new Date(2024, 0, 8, 12, 30, 45));
+    });
+
+    it("should add months", () => {
+      // Add 1 month
+      expect(DateTime.add(baseDate, "month", 1)).toEqual(new Date(2024, 1, 15, 12, 30, 45));
+      // Add 3 months
+      expect(DateTime.add(baseDate, "month", 3)).toEqual(new Date(2024, 3, 15, 12, 30, 45));
+      // Add 12 months (1 year)
+      expect(DateTime.add(baseDate, "month", 12)).toEqual(new Date(2025, 0, 15, 12, 30, 45));
+      // Add negative months
+      expect(DateTime.add(baseDate, "month", -1)).toEqual(new Date(2023, 11, 15, 12, 30, 45));
+    });
+
+    it("should add years", () => {
+      // Add 1 year
+      expect(DateTime.add(baseDate, "year", 1)).toEqual(new Date(2025, 0, 15, 12, 30, 45));
+      // Add 2 years
+      expect(DateTime.add(baseDate, "year", 2)).toEqual(new Date(2026, 0, 15, 12, 30, 45));
+      // Add 10 years
+      expect(DateTime.add(baseDate, "year", 10)).toEqual(new Date(2034, 0, 15, 12, 30, 45));
+      // Add negative years
+      expect(DateTime.add(baseDate, "year", -1)).toEqual(new Date(2023, 0, 15, 12, 30, 45));
+    });
+
+    it("should handle different date formats", () => {
+      // Test with timestamp in seconds
+      expect(DateTime.add(1705251600, "day", 1)).toEqual(new Date(2024, 0, 16, 0, 0, 0)); // Jan 16, 2024 00:00:00 UTC
+      // Test with ISO string (UTC time)
+      expect(DateTime.add("2024-01-15T12:30:45.000Z", "hour", 1)).toEqual(
+        new Date("2024-01-15T13:30:45.000Z")
+      );
+    });
+
+    it("should throw error for invalid unit", () => {
+      // @ts-expect-error Testing invalid unit
+      expect(() => DateTime.add(baseDate, "invalid", 1)).toThrow("Unit invalid is not supported");
+    });
+
+    it("should handle case insensitive units", () => {
+      // Test uppercase units
+      expect(DateTime.add(baseDate, "day", 1)).toEqual(new Date(2024, 0, 16, 12, 30, 45));
+      expect(DateTime.add(baseDate, "hour", 1)).toEqual(new Date(2024, 0, 15, 13, 30, 45));
+      expect(DateTime.add(baseDate, "month", 1)).toEqual(new Date(2024, 1, 15, 12, 30, 45));
+
+      // Test mixed case units
+      expect(DateTime.add(baseDate, "day", 1)).toEqual(new Date(2024, 0, 16, 12, 30, 45));
+      expect(DateTime.add(baseDate, "hour", 1)).toEqual(new Date(2024, 0, 15, 13, 30, 45));
+    });
+  });
 });

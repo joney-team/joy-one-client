@@ -11,6 +11,7 @@ import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-ta
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { getTaskEntites, getTaskProgress } from "@/modules/tasks/tasks-service";
 import { useColor } from "@/modules/theme/use-color";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { ActionIcon, alpha, Box, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
@@ -21,7 +22,6 @@ import {
   IconPencil,
   IconPlus,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, Fragment } from "react";
 import { useTaskDrop } from "../../tasks-dnd-provider";
 import { ganttConfig } from "./gantt.config";
@@ -225,11 +225,11 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
         >
           {(function () {
             if (rangeDate.dueDate && rangeDate.startDate && folderTasks.length > 0) {
-              const startIndex = gantt.dates.findIndex((v) =>
-                dayjs(v).isSame(rangeDate.startDate, "day")
+              const startIndex = gantt.dates.findIndex(
+                (v) => rangeDate.startDate && DateTime.isSame(v, rangeDate.startDate, "day")
               );
-              const endIndex = gantt.dates.findIndex((v) =>
-                dayjs(v).isSame(rangeDate.dueDate, "day")
+              const endIndex = gantt.dates.findIndex(
+                (v) => rangeDate.dueDate && DateTime.isSame(v, rangeDate.dueDate, "day")
               );
               const left = startIndex * gantt.state.columnSize;
 
@@ -239,7 +239,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
                   : (endIndex - startIndex + 1) * gantt.state.columnSize;
 
               const isStartToday =
-                dayjs(rangeDate.startDate).isSame(dayjs(), "day") && props.index === 0;
+                DateTime.isSame(rangeDate.startDate, new Date(), "day") && props.index === 0;
 
               return (
                 <Box

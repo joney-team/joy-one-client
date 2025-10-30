@@ -1,12 +1,12 @@
 "use client";
 
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { ActionIcon } from "@mantine/core";
 import {
   TimeInput as MantineTimeInput,
   TimeInputProps as MantineTimeInputProps,
 } from "@mantine/dates";
 import { IconClock } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, useEffect, useRef, useState } from "react";
 
 export interface TimeInputProps
@@ -33,7 +33,7 @@ export const TimeInput: FC<TimeInputProps> = (props) => {
 
   useEffect(() => {
     if (!isFocused && props.value && ref.current) {
-      ref.current.value = dayjs(props.value).format("HH:mm");
+      ref.current.value = DateTime.toTimeInputValue(props.value);
     }
   }, [props.value, isFocused, ref]);
 
@@ -51,7 +51,7 @@ export const TimeInput: FC<TimeInputProps> = (props) => {
       }}
       rightSection={pickerControl}
       defaultValue={
-        value || defaultValue ? dayjs(value || defaultValue).format("HH:mm") : undefined
+        value || defaultValue ? DateTime.toTimeInputValue(value || defaultValue) : undefined
       }
       onChange={(value) => {
         const [hour, minute] = value.target.value.split(":");

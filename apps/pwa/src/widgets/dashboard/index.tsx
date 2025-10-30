@@ -15,7 +15,6 @@ import { Period } from "@/types";
 import { useFetch } from "@/utils/use-fetch.util";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Stack } from "@mantine/core";
-import dayjs from "dayjs";
 import { FC } from "react";
 import { Widgets } from "..";
 import { dashboardWidgetModules } from "./modules";
@@ -32,27 +31,23 @@ export const DashboardWidgets: FC = () => {
       id: `range-reports-${auth.user?._id}`,
       fetch: async () => {
         const now = new Date();
+        const rangeMonth = DateTime.getRange(now, "month");
+
         const startOfMonth = {
-          current: dayjs(now).startOf("month").toDate(),
-          prev: dayjs(now).subtract(1, "month").startOf("month").toDate(),
+          current: rangeMonth.start,
+          prev: DateTime.subtract(rangeMonth.start, "month", 1),
         };
 
-        const totalDateBwtStartOfMonthToNow = dayjs().diff(startOfMonth.current, "day");
+        const totalDateBwtStartOfMonthToNow = DateTime.diff(rangeMonth.start, now, "day");
 
         const ranges = {
           current: {
             start: startOfMonth.current,
-            end: dayjs(
-              dayjs(startOfMonth.current).add(totalDateBwtStartOfMonthToNow, "day").toDate()
-            )
-              .endOf("day")
-              .toDate(),
+            end: DateTime.add(startOfMonth.current, "day", totalDateBwtStartOfMonthToNow),
           },
           prev: {
             start: startOfMonth.prev,
-            end: dayjs(dayjs(startOfMonth.prev).add(totalDateBwtStartOfMonthToNow, "day").toDate())
-              .endOf("day")
-              .toDate(),
+            end: DateTime.add(startOfMonth.prev, "day", totalDateBwtStartOfMonthToNow),
           },
         };
 

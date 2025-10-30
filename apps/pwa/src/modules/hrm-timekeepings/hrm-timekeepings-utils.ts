@@ -1,13 +1,12 @@
-import { WorkSlot } from "@/types";
 import { WorkspaceMemberWorkingTimeType } from "@/modules/workspace-members/workspace-members-types";
+import { WorkSlot } from "@/types";
+import { DateTime } from "@joy-one-client/utils/date-time";
+import { sortWorkSlots } from "../workspace-settings/workspace-settings-service";
 import {
   HrmTimekeepingEntity,
   HrmTimekeepingsRules,
   HrmTimekeepingType,
 } from "./hrm-timekeepings-types";
-import dayjs from "dayjs";
-import { sortWorkSlots } from "../workspace-settings/workspace-settings-service";
-import { DateTime } from "@joy-one-client/utils/date-time";
 
 export interface HrmCalculateTimekeepingsArgs {
   timekeepings: HrmTimekeepingEntity[];
@@ -136,12 +135,13 @@ export function calculateTimekeepings(
 
   if (isAbleToCalculate) {
     if (workTimeType === WorkspaceMemberWorkingTimeType.FULLTIME && workSlots.length > 0) {
-      const date = dayjs(timekeepings[0].time * 1000)
-        .hour(0)
-        .minute(0)
-        .second(0);
+      // const date = DateTime.normalizeDate(timekeepings[0].time)
+      //   .hour(0)
+      //   .minute(0)
+      //   .second(0);
+      const date = new Date(DateTime.normalizeDate(timekeepings[0].time).setHours(0, 0, 0, 0));
 
-      const _workSlots = sortWorkSlots(workSlots.filter((slot) => slot.dayWeek === date.day()));
+      const _workSlots = sortWorkSlots(workSlots.filter((slot) => slot.dayWeek === date.getDay()));
 
       const userWorkSlots = [] as {
         workSlotId: string;
@@ -166,17 +166,21 @@ export function calculateTimekeepings(
 
         if (slots.length > 0) {
           const start = DateTime.toSeconds(
-            dayjs(timekeepings[0].time * 1000)
-              .add(slots[0].startHour, "hour")
-              .add(slots[0].startMin, "minute")
-              .toDate()
+            DateTime.add(
+              DateTime.add(date, "hour", slots[0].startHour),
+              "minute",
+              slots[0].startMin
+            )
           );
+
           const end = DateTime.toSeconds(
-            dayjs(timekeepings[0].time * 1000)
-              .add(slots[slots.length - 1].endHour, "hour")
-              .add(slots[slots.length - 1].endMin, "minute")
-              .toDate()
+            DateTime.add(
+              DateTime.add(date, "hour", slots[slots.length - 1].endHour),
+              "minute",
+              slots[slots.length - 1].endMin
+            )
           );
+
           const duration = end - start;
 
           out[groupId] = {
@@ -216,16 +220,11 @@ export function calculateTimekeepings(
             group.slots.map((slot) => {
               rangeTimes.map((range, index) => {
                 const slotStart = DateTime.toSeconds(
-                  dayjs(timekeepings[0].time)
-                    .add(slot.startHour, "hour")
-                    .add(slot.startMin, "minute")
-                    .toDate()
+                  DateTime.add(DateTime.add(date, "hour", slot.startHour), "minute", slot.startMin)
                 );
+
                 const slotEnd = DateTime.toSeconds(
-                  dayjs(timekeepings[0].time)
-                    .add(slot.endHour, "hour")
-                    .add(slot.endMin, "minute")
-                    .toDate()
+                  DateTime.add(DateTime.add(date, "hour", slot.endHour), "minute", slot.endMin)
                 );
 
                 const interect = getIntersect(

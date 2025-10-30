@@ -1,5 +1,6 @@
 "use client";
 
+import { DateFormat } from "@/components/format/date-format";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { getClientLocale } from "@/modules/lang/lang-service";
@@ -8,6 +9,7 @@ import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useColor } from "@/modules/theme/use-color";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
@@ -30,8 +32,7 @@ import {
   IconHourglassOff,
   IconPlus,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
-import { FC, PropsWithChildren, useEffect } from "react";
+import { FC, Fragment, PropsWithChildren, useEffect } from "react";
 import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
 import { getWeeksFromRange } from "./gantt.utils";
@@ -194,22 +195,42 @@ export const BodyHead: FC = () => {
               {week.dates.length > 4 && (
                 <Text tt="capitalize" ta="center" fz={em(9)} fw={700}>
                   {(function () {
-                    const isSameMonth = dayjs(week.from).isSame(week.to, "month");
+                    const isSameMonth = DateTime.isSame(week.from, week.to, "month");
                     if (isSameMonth) {
-                      return `${dayjs(week.from).format("D")} - ${dayjs(week.to).format(
-                        "D"
-                      )} ${dayjs(week.from).format("MMMM")}`;
+                      return (
+                        <Fragment>
+                          <DateFormat value={week.from} type="custom" format={{ day: "2-digit" }} />
+                          {" - "}
+                          <DateFormat
+                            value={week.to}
+                            type="custom"
+                            format={{ day: "2-digit", month: "long" }}
+                          />
+                        </Fragment>
+                      );
                     }
 
-                    return `${dayjs(week.from).format("MMM D")} - ${dayjs(week.to).format(
-                      "MMM D"
-                    )}`;
+                    return (
+                      <Fragment>
+                        <DateFormat
+                          value={week.from}
+                          type="custom"
+                          format={{ day: "2-digit", month: "short" }}
+                        />
+                        {" - "}
+                        <DateFormat
+                          value={week.to}
+                          type="custom"
+                          format={{ day: "2-digit", month: "short" }}
+                        />
+                      </Fragment>
+                    );
                   })()}
                 </Text>
               )}
 
               <Text tt="capitalize" ta="center" fz={em(10)} fw={700}>
-                {dayjs(week.from).format("YYYY")}
+                <DateFormat value={week.from} type="custom" format={{ year: "numeric" }} />
               </Text>
             </Group>
           );
@@ -231,7 +252,11 @@ export const BodyHead: FC = () => {
               justify="center"
             >
               <Text ta="center" fz={em(10)}>
-                {dayjs(date).format("dd D/M")}
+                <DateFormat
+                  value={date}
+                  type="custom"
+                  format={{ weekday: "narrow", day: "2-digit", month: "2-digit" }}
+                />
               </Text>
             </Group>
           );
@@ -265,8 +290,9 @@ export const GridColumns: FC = () => {
       {gantt.dates.map((date, index) => {
         const id = `column-${new Date(date).getTime()}`;
         const first = index === 0;
-        const isToday = dayjs(date).isSame(dayjs(), "day");
-        const isWeekend = dayjs(date).day() === 0 || dayjs(date).day() === 6;
+        const isToday = DateTime.isSame(date, new Date(), "day");
+        const day = DateTime.normalizeDate(date).getDay();
+        const isWeekend = day === 0 || day === 6;
 
         return (
           <Stack

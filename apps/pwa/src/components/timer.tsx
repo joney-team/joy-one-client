@@ -3,7 +3,6 @@
 import { Group, Text, ThemeIcon } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { IconCalendar, IconClock } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, useEffect } from "react";
 import { DateFormat } from "./format/date-format";
 
@@ -39,15 +38,15 @@ export const Timer: FC = () => {
 
         <Group wrap="nowrap" justify="center" align="center" gap={3}>
           <Text ta="center" miw={22}>
-            {dayjs().format("HH")}
+            <DateFormat value={new Date()} type="custom" format={{ hour: "2-digit" }} />
           </Text>
           <Text ta="center">:</Text>
           <Text ta="center" miw={22}>
-            {dayjs().format("mm")}
+            <DateFormat value={new Date()} type="custom" format={{ minute: "2-digit" }} />
           </Text>
           <Text ta="center">:</Text>
           <Text ta="center" miw={22}>
-            {dayjs().format("ss")}
+            <DateFormat value={new Date()} type="custom" format={{ second: "2-digit" }} />
           </Text>
         </Group>
       </Group>

@@ -43,7 +43,6 @@ import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import dayjs from "dayjs";
 import { FC, Fragment, useEffect, useState } from "react";
 
 interface ModalBookingProps {
@@ -77,10 +76,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
   const [customer, setCustomer] = useState<CustomerShortInfo | undefined>(props.customer);
 
   const [relatedBookings, setRelatedBookings] = useState<BookingEntity[]>([]);
-  const [bookingQuery, setBookingQuery] = useState({
-    start: dayjs().startOf("week").toDate(),
-    end: dayjs().endOf("week").toDate(),
-  });
+  const [bookingQuery, setBookingQuery] = useState(DateTime.getRange(new Date(), "week"));
 
   const fetchRelatedBookings = async () => {
     const bookings = await getBookings({
@@ -320,7 +316,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
                       </Blockquote>
                     )}
 
-                    {creatingData.start < dayjs().toDate() && (
+                    {creatingData.start < new Date() && (
                       <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
                         {t`You are booking in the past`}
                       </Blockquote>

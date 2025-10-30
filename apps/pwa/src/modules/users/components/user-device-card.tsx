@@ -14,7 +14,6 @@ import {
   IconDeviceTablet,
   IconDeviceUnknown,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, Fragment } from "react";
 
 interface UserDeviceCardProps {

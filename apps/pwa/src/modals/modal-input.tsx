@@ -28,7 +28,6 @@ import { TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { Icon, IconCalendar, IconCheck, IconClock, IconCursorText } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, useRef, useState } from "react";
 
 export enum InputModalType {
@@ -157,17 +156,23 @@ export const ModalInput: FC = () => {
                     w={100}
                     defaultValue={
                       form.values.value
-                        ? dayjs(form.values.value * 1000).format("HH:mm")
+                        ? DateTime.format(form.values.value * 1000, {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
                         : undefined
                     }
                     onChange={(d) => {
                       if (!d || !d.target.value) return;
                       const [hours, mins] = d.target.value.split(":");
                       if (Number.isNaN(+hours) || Number.isNaN(+mins)) return;
-                      const date = dayjs(form.values.value * 1000)
-                        .hour(+hours)
-                        .minute(+mins);
-                      form.setFieldValue("value", DateTime.toSeconds(date.toDate()));
+                      const date = DateTime.normalizeDate(form.values.value).setHours(
+                        +hours,
+                        +mins,
+                        0,
+                        0
+                      );
+                      form.setFieldValue("value", DateTime.toSeconds(date));
                     }}
                   />
                 </Group>

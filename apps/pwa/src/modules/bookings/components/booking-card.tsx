@@ -41,7 +41,6 @@ import {
   IconUserCheck,
   IconX,
 } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { FC, useEffect, useState } from "react";
 import { CustomerInput } from "../../customers/components/customer-input";
 import { WorkspaceMembersInput } from "../../workspace-members/components/workspace-members-input";
@@ -108,13 +107,17 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           <Card bg={color(bookingColor)} w={85} p={5}>
             <Stack gap={0}>
               <Text fz={10} c="white" ta="center" fw={500} tt="uppercase">
-                {dayjs(startTime).format("dddd")}
+                <DateFormat value={startTime} type="custom" format={{ weekday: "long" }} />
               </Text>
               <Text fz={30} my={-5} c="white" ta="center" fw={500}>
-                {dayjs(startTime).format("DD")}
+                <DateFormat value={startTime} type="custom" format={{ day: "2-digit" }} />
               </Text>
               <Text fz={10} c="white" ta="center" fw={500}>
-                {dayjs(startTime).format("MM/YYYY")}
+                <DateFormat
+                  value={startTime}
+                  type="custom"
+                  format={{ month: "2-digit", year: "numeric" }}
+                />
               </Text>
             </Stack>
           </Card>

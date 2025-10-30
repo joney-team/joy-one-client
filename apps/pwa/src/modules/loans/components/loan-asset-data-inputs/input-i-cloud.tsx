@@ -3,18 +3,23 @@
 import { EntityImages } from "@/components/entity-images";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { api } from "@/modules/apis";
+import { useLang } from "@/modules/lang/lang-context";
 import { LoanAssetType } from "@/modules/loans/loans-types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, InputWrapper, SimpleGrid, TextInput, Tooltip } from "@mantine/core";
 import { IconCursorText, IconLockPlus } from "@tabler/icons-react";
-import dayjs from "dayjs";
 import { type FC, Fragment } from "react";
 import { LoanAssetDataInputProps } from ".";
 
 export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (props) => {
+  const lang = useLang();
   const retreiveDeviceKey = async () => {
     const { hash } = await api.post("/tools/md5", {
-      text: `${props.loanId}-${dayjs().format("DD/MM/YYYY")}`,
+      text: `${props.loanId}-${DateTime.format(new Date(), {
+        dateStyle: "short",
+        locale: lang.locale,
+      })}`,
     });
     props.onChange?.({ ...(props.value as any), deviceSecretKey: hash });
   };
