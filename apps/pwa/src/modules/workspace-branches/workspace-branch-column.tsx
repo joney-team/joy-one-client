@@ -37,7 +37,7 @@ export const WorkspaceBranchColumn = (
   };
 
   return {
-    w: args?.w,
+    w: args?.w ?? 180,
     icon: IconBuildingSkyscraper,
     name: t`Branch`,
     render: ({ data }) => {

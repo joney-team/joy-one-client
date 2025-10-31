@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { ActionIcon, em, Grid, Group, Stack, Text } from "@mantine/core";
+import { ActionIcon, Grid, Group, Stack, Text } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
 
@@ -22,11 +22,11 @@ export const LoanRowInfo = <T extends any>(props: {
     <Grid>
       <Grid.Col span={4}>
         <Stack gap={5}>
-          <Text fz={em(15)} fw={700} c="gray">
+          <Text fz={15} fw={600}>
             {props.label}
           </Text>
           {!!props.description && (
-            <Text fz={em(12)} fw={400} c="gray">
+            <Text fz={12} fw={400} c="gray">
               {props.description}
             </Text>
           )}

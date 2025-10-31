@@ -10,6 +10,7 @@ import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Card,
+  Center,
   em,
   Group,
   InputWrapper,
@@ -25,9 +26,11 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { IconCoins, IconPlus, IconX } from "@tabler/icons-react";
+import { IconCheck, IconCoins, IconPlus, IconX } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
 import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
+import { Currency } from "@joy-one-client/utils/currency";
+import { Trans } from "@lingui/react/macro";
 
 interface ModalLoanPackageFormProps {
   loanPackage?: LoanPackage;
@@ -106,7 +109,7 @@ export const ModalLoanPackageForm: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={t`Loan package`} icon={IconCoins} />}
+      title={<ModalTitle title={<Trans>Loan package</Trans>} icon={IconCoins} />}
       onClose={onClose}
       opened={opened}
       size="xl"
@@ -114,17 +117,15 @@ export const ModalLoanPackageForm: FC = () => {
       <Stack gap={16}>
         <TextInput
           withAsterisk
-          label={t`Loan package code`}
+          label={<Trans>Loan package code</Trans>}
           description={t`Loan package code must be at least 3 characters, no spaces`}
-          placeholder={t`Enter loan package code`}
           {...form.getInputProps("id")}
           onChange={(e) => form.setFieldValue("id", e.target.value.toUpperCase().trim())}
         />
 
         <SimpleGrid cols={{ md: 3 }}>
           <Select
-            label="Loại"
-            placeholder="Chọn loại"
+            label={<Trans>Loan package type</Trans>}
             value={form.values.type}
             data={Object.values(LoanPackageType).map((type) => ({
               value: type,
@@ -135,7 +136,6 @@ export const ModalLoanPackageForm: FC = () => {
 
           <Select
             label={t`Loan period`}
-            placeholder={t`Select loan period`}
             data={[
               { label: t`1 month`, value: "30" },
               { label: t`2 months`, value: "60" },
@@ -150,15 +150,14 @@ export const ModalLoanPackageForm: FC = () => {
           />
 
           <NumberInput
-            label={t`Contract fee`}
-            placeholder={t`Enter contract fee`}
+            label={<Trans>Contract fee</Trans>}
             {...form.getInputProps("contractFee")}
-            rightSection={<Text>{workspace.settings.currencyCode}</Text>}
+            rightSection={<Text>{Currency.get(workspace.settings.currencyCode)?.symbol}</Text>}
           />
         </SimpleGrid>
 
         <MultiSelect
-          label={t`Asset types`}
+          label={<Trans>Asset types</Trans>}
           placeholder={t`Select asset types`}
           value={form.values.assetTypes}
           data={Object.values(LoanAssetType).map((type) => ({
@@ -169,8 +168,7 @@ export const ModalLoanPackageForm: FC = () => {
         />
 
         <MultiSelect
-          label={t`Payment period options`}
-          placeholder={t`Select payment period options`}
+          label={<Trans>Payment period options</Trans>}
           data={[
             { label: t`10 days`, value: "10" },
             { label: t`15 days`, value: "15" },
@@ -206,7 +204,7 @@ export const ModalLoanPackageForm: FC = () => {
                 return (
                   <InputWrapper
                     key={i}
-                    label={t`Capital rate for each period ${days} days`}
+                    label={<Trans>Capital rate for each period {days} days</Trans>}
                     description={t`Leave blank if the capital rate for each period is the same`}
                     error={error}
                   >
@@ -249,7 +247,7 @@ export const ModalLoanPackageForm: FC = () => {
             </Fragment>
           )}
 
-        <InputWrapper label={t`Late interest`}>
+        <InputWrapper label={<Trans>Late interest</Trans>}>
           <Stack gap={10} mt={5}>
             <SimpleGrid cols={{ md: 3 }}>
               {form.values.lateInterestRates.map((v, i) => {
@@ -258,7 +256,7 @@ export const ModalLoanPackageForm: FC = () => {
                     <Group wrap="nowrap" gap={5} align="start">
                       <NumberInput
                         mt={-5}
-                        label={t`Late days`}
+                        label={<Trans>Late days</Trans>}
                         value={v.lateDays}
                         onChange={(e) => {
                           let _lateInterestRates = [...form.values.lateInterestRates];
@@ -271,7 +269,7 @@ export const ModalLoanPackageForm: FC = () => {
 
                       <NumberInput
                         mt={-5}
-                        label={t`Late interest rate`}
+                        label={<Trans>Late interest rate</Trans>}
                         min={0}
                         flex={1}
                         value={v.rate}
@@ -321,16 +319,23 @@ export const ModalLoanPackageForm: FC = () => {
         </InputWrapper>
 
         <NumberInput
-          label={t`Liquidation fee rate, calculated on the remaining debt (0 - 100)`}
+          label={<Trans>Liquidation fee rate, calculated on the remaining debt (0 - 100)</Trans>}
           rightSection={<Text>%</Text>}
           {...form.getInputProps("liquidationFeeRate")}
         />
 
-        <Textarea label={t`Description`} {...form.getInputProps("description")} />
+        <Textarea label={<Trans>Description</Trans>} {...form.getInputProps("description")} />
 
-        <Button onClick={submitting.handle} loading={submitting.isSubmitting} mt={10}>
-          {props?.loanPackage ? t`Update` : t`Create`}
-        </Button>
+        <Center mt={12}>
+          <Button
+            action
+            onClick={submitting.handle}
+            loading={submitting.isSubmitting}
+            leftIcon={IconCheck}
+          >
+            {props?.loanPackage ? <Trans>Update</Trans> : <Trans>Create</Trans>}
+          </Button>
+        </Center>
       </Stack>
     </Modal>
   );

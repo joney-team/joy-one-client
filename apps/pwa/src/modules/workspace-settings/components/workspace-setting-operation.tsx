@@ -181,7 +181,7 @@ export const WorkspaceOperationSettings: FC = () => {
         <Space h={12} />
 
         <Switch
-          label={<Trans>Receipt image required</Trans>}
+          label={<Trans>Receipt images required</Trans>}
           defaultChecked={workspace.settings.receiptImagesRequired}
           onChange={(e) => {
             setWorkspaceSettings({
@@ -292,7 +292,7 @@ export const WorkspaceOperationSettings: FC = () => {
 
       <Divider opacity={0.5} my={30} />
 
-      <FormSession title={<Trans>Security</Trans>}>
+      <FormSession title={<Trans>Secure</Trans>}>
         <Switch
           label={<Trans>Require re-login when logging out</Trans>}
           defaultChecked={workspace.settings.isAuthSessionRestricted}

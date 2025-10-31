@@ -2,16 +2,37 @@
 
 import { DateFormat } from "@/components/format/date-format";
 import { FormulaInput } from "@/components/inputs/formual-input/formula-input";
+import { WorkSlotsInput } from "@/components/inputs/work-slots-input";
 import { SectionTitle } from "@/components/session-title";
+import { CalendarView } from "@/types";
 import { Group, Paper, Stack, Text, TextInput } from "@mantine/core";
 import { useState, type FC } from "react";
+import { useWorkspace } from "../workspaces/workspace-context";
 
 export const AdminPlayground: FC = () => {
+  const workspace = useWorkspace();
   const [value, setValue] = useState("= @receiptAmount");
   const displayTime = new Date().setHours(15, 0, 0, 0);
 
   return (
     <Stack p={30} gap={20}>
+      {workspace.isAvailable && (
+        <Paper withBorder p={20}>
+          <Stack>
+            <SectionTitle name="Work Slots Input" />
+            <WorkSlotsInput
+              events={[]}
+              onSelectEvent={() => {}}
+              onCreate={() => {}}
+              onDateChange={() => {}}
+              initialDate={new Date()}
+              disabled={false}
+              view={CalendarView.DAY}
+            />
+          </Stack>
+        </Paper>
+      )}
+
       <Paper withBorder p={20}>
         <Stack>
           <SectionTitle name="Date Format" />

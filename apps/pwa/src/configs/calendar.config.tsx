@@ -8,6 +8,7 @@ import { t } from "@lingui/core/macro";
 import { Fragment } from "react";
 import { dayjsLocalizer, type CalendarProps } from "react-big-calendar";
 import { DateTime } from "@joy-one-client/utils/date-time";
+import { useLang } from "@/modules/lang/lang-context";
 
 export interface CalendarEvent {
   title?: string;
@@ -52,6 +53,7 @@ export const calendarDayJsLocalizer = dayjsLocalizer(dayjs);
 
 export const useCalendarProps = (): CalendarProps<CalendarEvent> => {
   const auth = useAuth();
+  const lang = useLang();
 
   return {
     localizer: calendarDayJsLocalizer,
@@ -80,7 +82,7 @@ export const useCalendarProps = (): CalendarProps<CalendarEvent> => {
       },
       dayFormat: (date) => {
         if (getView() === "mobile") return DateTime.format(date, { weekday: "short" });
-        return DateTime.format(date, { weekday: "long" });
+        return DateTime.format(date, { locale: lang.locale });
       },
       eventTimeRangeFormat: (date, culture) => {
         const format = auth.user?.settings.isTwelveHour ? "hh:mm A" : "HH:mm";

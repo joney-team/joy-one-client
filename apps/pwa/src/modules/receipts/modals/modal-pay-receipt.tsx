@@ -257,13 +257,13 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                     <IconClipboardCheck strokeWidth={1.4} size={35} />
                   </ThemeIcon>
                   <Text c={color("primary")} ta="center" fz={em(22)} fw={600} tt="capitalize">
-                    {t`Pay successful`}
+                    <Trans>Pay successful</Trans>
                   </Text>
                 </Stack>
               </Card>
 
               <Anchor ta="center" c="gray" fz={em(14)} onClick={onClose}>
-                {t`Exit`}
+                <Trans>Exit</Trans>
               </Anchor>
             </Stack>
           );
@@ -276,7 +276,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                   <IconCashRegister strokeWidth={1.5} size={30} />
                 </ThemeIcon>
                 <Text ta="center" c={color("primary")} fw={500} fz={em(20)}>
-                  {t`Pay receipt`}
+                  <Trans>Pay receipt</Trans>
                 </Text>
               </Group>
 
@@ -340,7 +340,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                         <Stack>
                           <Group justify="space-between">
                             <Text>
-                              <Trans>Amount</Trans>:{" "}
+                              <Trans>Money amount</Trans>:{" "}
                             </Text>
                             <CopyText
                               fw={500}
@@ -351,7 +351,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
                           <Group justify="space-between" wrap="nowrap" gap={8}>
                             <Text>
-                              <Trans>Content</Trans>:{" "}
+                              <Trans>Content</Trans>:
                             </Text>
                             <CopyText fw={500} text={transactionDesc}>
                               <Group wrap="nowrap" gap={5}>
@@ -419,7 +419,9 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                     return (
                       <Stack>
                         <Group justify="space-between">
-                          <Text>{t`Amount`}: </Text>
+                          <Text>
+                            <Trans>Money amount</Trans>:{" "}
+                          </Text>
                           <CopyText
                             fw={500}
                             text={totalAmount}
@@ -463,7 +465,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                   return (
                     <Group justify="space-between">
                       <Text>
-                        <Trans>Amount</Trans>:{" "}
+                        <Trans>Money amount</Trans>:{" "}
                       </Text>
                       <CopyText
                         fw={500}
@@ -500,7 +502,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
                 <PrintButton
                   receipt={receipt}
                   bankQrCode={bankInformation?.qr}
-                  label={t`Print receipt`}
+                  label={<Trans>Print receipt</Trans>}
                 />
               </Group>
             </Renderer>

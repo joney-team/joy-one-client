@@ -41,11 +41,11 @@ import {
 } from "@mantine/core";
 import { useDisclosure, useForceUpdate } from "@mantine/hooks";
 import { IconDimensions, IconPrinter, IconSettings } from "@tabler/icons-react";
-import { type FC, Fragment, useRef, useState } from "react";
+import { type FC, Fragment, ReactNode, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
 interface PrinterProps {
-  label?: string;
+  label?: string | ReactNode;
   receipt?: ReceiptEntity;
   bankQrCode?: BankQrCode;
   prescription?: PrescriptionEntity;
@@ -700,7 +700,7 @@ export const PrintButton: FC<PrinterProps> = (props) => {
               leftIcon={IconPrinter}
               fz={13}
             >
-              {props.label || t`Quick print`}
+              {props.label || <Trans>Quick print</Trans>}
             </Button>
           </Center>
         </Tooltip>

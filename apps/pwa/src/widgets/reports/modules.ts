@@ -332,7 +332,7 @@ export const reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgets
   [ReportWidgetType.LOANS_FULFILLED_NEW]: {
     config: {
       workspaceTypes: [WorkspaceType.CREDIT],
-      name: () => t`New customers and fulfilled`,
+      name: () => t`Loans fulfilled new`,
       icon: IconUsersPlus,
       layout: numberWidgetlayoutConfig,
     },

@@ -4,7 +4,6 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
-import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { onReconnected } from "@/modules/events/event-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { getLoanPaymentPlan, renderLoanPeriod } from "@/modules/loans/loans-service";
@@ -235,19 +234,19 @@ export const ModalLoanCalculator: FC = () => {
                       </Table.Td>
 
                       <Table.Td>
-                        <NumberCurrencyFormatter value={p.capitalAmount} />
+                        <CurrencyFormat value={p.capitalAmount} />
                       </Table.Td>
 
                       <Table.Td>
-                        <NumberCurrencyFormatter value={p.remainCapitalAmount || 0} />
+                        <CurrencyFormat value={p.remainCapitalAmount || 0} />
                       </Table.Td>
 
                       <Table.Td>
-                        <NumberCurrencyFormatter value={p.fee || 0} />
+                        <CurrencyFormat value={p.fee || 0} />
                       </Table.Td>
 
                       <Table.Td ta="right">
-                        <NumberCurrencyFormatter value={p.totalAmount} />
+                        <CurrencyFormat value={p.totalAmount} />
                       </Table.Td>
                     </Table.Tr>
                   );

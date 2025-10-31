@@ -17,6 +17,7 @@ import {
   NumberFormatter,
   NumberInput,
   OptionsFilter,
+  Select,
   Switch,
   TagsInput,
   Tooltip,
@@ -24,6 +25,7 @@ import {
 import { LayoutContext } from "../../layout/layout-context";
 import { String } from "../../utils/string.utils";
 import { AppLocale } from "../lang/lang-types";
+import { t } from "@lingui/core/macro";
 
 export const getColorShape = (shape?: number) => {
   if (typeof shape === "number" && shape >= 0 && shape <= 9) {
@@ -144,6 +146,11 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: A
               minHeight: "unset",
             },
           },
+        },
+      }),
+      Select: Select.extend({
+        defaultProps: {
+          placeholder: t`Select`,
         },
       }),
     },

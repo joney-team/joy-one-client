@@ -356,7 +356,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                     <Trans>One hour</Trans>
                   ) : (
                     <Fragment>
-                      {v} <Trans> mins</Trans>
+                      {v} <Trans>mins</Trans>
                     </Fragment>
                   )}
                 </Button>

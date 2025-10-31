@@ -111,7 +111,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
           sortable: true,
           defaultHidden: true,
           isHasFilter: true,
-          w: 200,
+          w: 165,
         }),
         workspaceBranchId: WorkspaceBranchColumn({ entity: AppEntity.LOANS }),
         customerId: CustomerColumn({ valuePath: "customer" }),
@@ -126,7 +126,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
               })),
             },
           },
-          w: 350,
+          w: 300,
           render: ({ data: loan }) => {
             const loanPackage = loan.package;
 
@@ -205,13 +205,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
           },
           exportToExcel: (_, loan) => {
             return [
-              { col: "CCCD", text: loan.metadata?.cidNumber?.toString() || "" },
+              { col: t`CID Infos`, text: loan.metadata?.cidNumber?.toString() || "" },
               {
-                col: "Địa chỉ",
+                col: t`Location`,
                 text: location.renderVnLocation(loan.metadata?.cidVnLocation) || "-",
               },
               {
-                col: "Địa chỉ cũ",
+                col: t`Previous address`,
                 text: location.renderVnLocation(loan.metadata?.cidLocation) || "-",
               },
               { col: t`Loan package`, text: loan.package.id, width: 20 },
@@ -225,7 +225,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
           },
         },
         nextReceiptAt: {
-          name: t`Next receipt at`,
+          name: t`Payment date`,
           sortable: true,
           render: ({ value, data: loan }) => {
             const warningReceiptBeforeDays =
@@ -256,7 +256,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
           exportToExcel: false,
         },
         status: {
-          w: 250,
+          w: 200,
           name: t`Status`,
           icon: IconCircle,
           filter: props.strictStatus

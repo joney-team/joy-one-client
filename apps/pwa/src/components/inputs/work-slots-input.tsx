@@ -3,7 +3,6 @@
 import { useCalendarProps } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
-import { useLang } from "@/modules/lang/lang-context";
 import { useColor } from "@/modules/theme/use-color";
 import {
   isInWorkSlot,
@@ -57,9 +56,7 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
 
   const workDaySlots = useWorkDaySlots();
   const layout = useLayout();
-  const lang = useLang();
   const auth = useAuth();
-  const dateFormat = DateTime.getDateFormatString(lang.locale);
 
   const color = useColor();
   const [date, setDate] = useState<Date>(props.initialDate || new Date());
@@ -88,14 +85,18 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
       const end = DateTime.getRange(date, view).end;
       return (
         <Fragment>
-          <DateFormat value={start} type="custom" format={{ weekday: "short" }} />
+          <DateFormat value={start} type="date" />
           {" - "}
-          <DateFormat value={end} type="custom" format={{ weekday: "short" }} />
+          <DateFormat value={end} type="date" />
         </Fragment>
       );
     }
 
-    return <DateFormat value={date} type="custom" format={{ weekday: "long" }} />;
+    if ([CalendarView.MONTH].includes(view)) {
+      return <DateFormat value={date} type="custom" format={{ month: "long", year: "numeric" }} />;
+    }
+
+    return <DateFormat value={date} type="date" />;
   };
 
   const nextRange = () => {

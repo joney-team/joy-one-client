@@ -36,17 +36,17 @@ export const Timer: FC = () => {
           <IconClock size={18} />
         </ThemeIcon>
 
-        <Group wrap="nowrap" justify="center" align="center" gap={3}>
+        <Group wrap="nowrap" justify="center" align="center" gap={1}>
           <Text ta="center" miw={22}>
-            <DateFormat value={new Date()} type="custom" format={{ hour: "2-digit" }} />
+            {new Date().getHours().toString().padStart(2, "0")}
           </Text>
           <Text ta="center">:</Text>
           <Text ta="center" miw={22}>
-            <DateFormat value={new Date()} type="custom" format={{ minute: "2-digit" }} />
+            {new Date().getMinutes().toString().padStart(2, "0")}
           </Text>
           <Text ta="center">:</Text>
           <Text ta="center" miw={22}>
-            <DateFormat value={new Date()} type="custom" format={{ second: "2-digit" }} />
+            {new Date().getSeconds().toString().padStart(2, "0")}
           </Text>
         </Group>
       </Group>

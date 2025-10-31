@@ -5,7 +5,6 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { HoverToEdit } from "@/components/hover-to-edit";
-import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Renderer } from "@/components/renderer";
 import { TooltipIcon } from "@/components/tooltip-icon";
 import { InputModalType } from "@/modals/modal-input";
@@ -127,7 +126,7 @@ export const LoanReceiptCard: FC<{
                   </Table.Td>
 
                   <Table.Td ta="right">
-                    <NumberCurrencyFormatter value={fee} />
+                    <CurrencyFormat value={fee} />
                   </Table.Td>
                 </Table.Tr>
 
@@ -137,7 +136,7 @@ export const LoanReceiptCard: FC<{
                   </Table.Td>
 
                   <Table.Td ta="right">
-                    <NumberCurrencyFormatter value={capital} />
+                    <CurrencyFormat value={capital} />
                   </Table.Td>
                 </Table.Tr>
               </Fragment>
@@ -309,7 +308,7 @@ export const LoanReceiptCard: FC<{
                       },
                     }}
                   >
-                    <NumberCurrencyFormatter value={receipt.amount} />
+                    <CurrencyFormat value={receipt.amount} />
                   </HoverToEdit>
                 </Group>
               </Table.Td>

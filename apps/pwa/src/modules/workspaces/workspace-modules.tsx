@@ -248,6 +248,15 @@ export const workspaceModuleConfigs = {
     description: () => t`Set name, address, Hotline, Workspace type, ...`,
     color: "primary",
   }),
+  workspaceSettingsModules: combineModule({
+    href: "/workspace-settings/modules",
+    icon: IconLayout,
+    permissions: WorkspacePermission.WORKSPACE_SETTINGS,
+    restrictDisplay: ["spotlight"],
+    name: () => t`Modules`,
+    description: () => t`Customize the features needed on the navigation bar`,
+    color: "teal",
+  }),
   workspaceSettingsOperation: combineModule({
     href: "/workspace-settings/operation",
     icon: IconActivityHeartbeat,
@@ -257,25 +266,6 @@ export const workspaceModuleConfigs = {
     description: () =>
       t`Working time, invoice, service voucher, payment method, search settings, ...`,
     color: "grape",
-  }),
-  workspaceSettingsDocuments: combineModule({
-    href: "/workspace-settings/documents",
-    icon: IconFiles,
-    permissions: WorkspacePermission.WORKSPACE_SETTINGS,
-    restrictDisplay: ["spotlight"],
-    name: () => t`Documents`,
-    description: () => t`Terms of use, privacy policy, user manual, ...`,
-    color: "lime",
-  }),
-  workspaceSettingsHrmTimekeepings: combineModule({
-    href: "/workspace-settings/hrm-timekeepings",
-    icon: IconCalendarCheck,
-    permissions: WorkspacePermission.WORKSPACE_SETTINGS,
-    restrictDisplay: ["spotlight"],
-    name: () => t`Timekeepings settings`,
-    description: () =>
-      t`Support GPS Check-in, summarize working hours, late, overtime and support salary calculation.`,
-    color: "violet",
   }),
   workspaceSettingsApp: combineModule({
     href: "/workspace-settings/app",
@@ -287,14 +277,24 @@ export const workspaceModuleConfigs = {
       t`Create an application with a custom domain, customize the application name, icon, color.`,
     color: "blue",
   }),
-  workspaceSettingsRoles: combineModule({
-    href: "/workspace-settings/roles",
-    icon: IconAccessible,
-    permissions: WorkspacePermission.WORKSPACE_ROLES_MANAGER,
+  workspaceSettingsHrmTimekeepings: combineModule({
+    href: "/workspace-settings/hrm-timekeepings",
+    icon: IconCalendarCheck,
+    permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Roles`,
-    description: () => t`Manage member roles and access permissions`,
-    color: "orange",
+    name: () => t`Timekeepings settings`,
+    description: () =>
+      t`Support GPS Check-in, summarize working hours, late, overtime and support salary calculation.`,
+    color: "violet",
+  }),
+  workspaceSettingsDocuments: combineModule({
+    href: "/workspace-settings/documents",
+    icon: IconFiles,
+    permissions: WorkspacePermission.WORKSPACE_SETTINGS,
+    restrictDisplay: ["spotlight"],
+    name: () => t`Documents`,
+    description: () => t`Terms of use, privacy policy, user manual, ...`,
+    color: "lime",
   }),
   workspaceSettingsCredit: combineModule({
     href: "/workspace-settings/credit",
@@ -306,15 +306,6 @@ export const workspaceModuleConfigs = {
     description: () => t`Set loan package, interest, late payment penalty, ...`,
     color: "yellow",
   }),
-  workspaceSettingsModules: combineModule({
-    href: "/workspace-settings/modules",
-    icon: IconLayout,
-    permissions: WorkspacePermission.WORKSPACE_SETTINGS,
-    restrictDisplay: ["spotlight"],
-    name: () => t`Modules`,
-    description: () => t`Customize the features needed on the navigation bar`,
-    color: "teal",
-  }),
   workspaceSettingsBranches: combineModule({
     href: "/workspace-settings/branches",
     icon: IconBuildingSkyscraper,
@@ -324,6 +315,16 @@ export const workspaceModuleConfigs = {
     description: () => t`Manage the branches of the Workspace`,
     color: "blue",
   }),
+  workspaceSettingsRoles: combineModule({
+    href: "/workspace-settings/roles",
+    icon: IconAccessible,
+    permissions: WorkspacePermission.WORKSPACE_ROLES_MANAGER,
+    restrictDisplay: ["spotlight"],
+    name: () => t`Roles`,
+    description: () => t`Manage member roles and access permissions`,
+    color: "orange",
+  }),
+
   workspaceSettingsApiApps: combineModule({
     href: "/workspace-settings/api-apps",
     icon: IconApiApp,

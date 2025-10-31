@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { DateFormat } from "@/components/format/date-format";
 import { ModalTitle } from "@/components/modal-title";
-import { NumberCurrencyFormatter } from "@/components/number-currency-formatter";
 import { Renderer } from "@/components/renderer";
 import { api } from "@/modules/apis";
 import { eventTypes } from "@/modules/events/event-constants";
@@ -32,6 +31,7 @@ import {
 import { FC, Fragment } from "react";
 import { LoanReceiptCard } from "./loan-receipt-card";
 import { LoanRowInfo } from "./loan-row-info";
+import { CurrencyFormat } from "@/components/format/currency-format";
 
 interface LoanPaymentsProps {
   loan: UseFetch<LoanEntity>;
@@ -206,17 +206,17 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                       </Table.Td>
 
                       <Table.Td>
-                        <NumberCurrencyFormatter
+                        <CurrencyFormat
                           value={paymentPeriod.totalAmount - paymentPeriod.capitalAmount}
                         />
                       </Table.Td>
 
                       <Table.Td>
-                        <NumberCurrencyFormatter value={paymentPeriod.capitalAmount} />
+                        <CurrencyFormat value={paymentPeriod.capitalAmount} />
                       </Table.Td>
 
                       <Table.Td>
-                        <NumberCurrencyFormatter value={paymentPeriod.totalAmount} />
+                        <CurrencyFormat value={paymentPeriod.totalAmount} />
                       </Table.Td>
 
                       <Table.Td w={340}>
@@ -278,7 +278,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                     </Table.Td>
 
                     <Table.Td>
-                      <NumberCurrencyFormatter
+                      <CurrencyFormat
                         value={
                           liquidationReceipt.amount -
                           (liquidationReceipt.data?.liquidationCalculated?.remainCapitalAmount || 0)
@@ -287,13 +287,13 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                     </Table.Td>
 
                     <Table.Td>
-                      <NumberCurrencyFormatter
+                      <CurrencyFormat
                         value={liquidationReceipt.data?.liquidationCalculated?.remainCapitalAmount}
                       />
                     </Table.Td>
 
                     <Table.Td>
-                      <NumberCurrencyFormatter value={liquidationReceipt.amount} />
+                      <CurrencyFormat value={liquidationReceipt.amount} />
                     </Table.Td>
 
                     <Table.Td>
@@ -357,17 +357,17 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                     <LoanRowInfo
                       label={<Trans>Interest</Trans>}
                       value={paymentPeriod.totalAmount - paymentPeriod.capitalAmount}
-                      renderValue={(value) => <NumberCurrencyFormatter value={value} />}
+                      renderValue={(value) => <CurrencyFormat value={value} />}
                     />
                     <LoanRowInfo
                       label={<Trans>Principal</Trans>}
                       value={paymentPeriod.capitalAmount}
-                      renderValue={(value) => <NumberCurrencyFormatter value={value} />}
+                      renderValue={(value) => <CurrencyFormat value={value} />}
                     />
                     <LoanRowInfo
                       label={<Trans>Total</Trans>}
                       value={paymentPeriod.totalAmount}
-                      renderValue={(value) => <NumberCurrencyFormatter value={value} />}
+                      renderValue={(value) => <CurrencyFormat value={value} />}
                     />
 
                     <Stack py={10}>
