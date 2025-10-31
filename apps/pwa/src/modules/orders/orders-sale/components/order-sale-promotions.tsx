@@ -8,7 +8,6 @@ import { ModalTitle } from "@/components/modal-title";
 import { PromotionDescription } from "@/modules/promotions/components/promotion-description";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Indicator, Modal, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -73,7 +72,8 @@ export const OrderSalePromotions: FC = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle title={t`Promotions`} icon={IconPackage} />}
+        title={<ModalTitle title={<Trans>Promotions</Trans>} icon={IconPackage} />}
+        size={500}
       >
         <Stack>
           {promotions.map((promotion) => {

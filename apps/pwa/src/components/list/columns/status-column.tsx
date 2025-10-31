@@ -5,6 +5,7 @@ import { IconProgress } from "@tabler/icons-react";
 import { ReactNode } from "react";
 import { Column } from "../types";
 import { useColor } from "@/modules/theme/use-color";
+import { t } from "@lingui/core/macro";
 
 export interface StatusColumnOption {
   label: string;
@@ -28,6 +29,7 @@ export function StatusColumn<T = any>(args: StatusColumnArgs<T>): Column<T> {
     ...(args ? objUnselect(args, ["options"]) : {}),
     w: args?.w || 160,
     icon: IconProgress,
+    name: args.name || t`Status`,
     render: ({ value, data }) => {
       const color = useColor();
       const option = args.options.find((v) => v.value === value);

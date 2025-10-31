@@ -12,9 +12,9 @@ export const PromotionDescription: FC<{ promotion: Pick<PromotionEntity, "type" 
   if (promotion.type === PromotionType.DISCOUNT_RATE) {
     return (
       <Fragment>
-        <Trans>Promotion discount</Trans>
-        {": "}
-        <NumberFormat value={promotion.value} suffix="%" />
+        <Trans>
+          Discount <NumberFormat value={promotion.value} suffix="%" /> on total bill
+        </Trans>
       </Fragment>
     );
   }
@@ -22,9 +22,9 @@ export const PromotionDescription: FC<{ promotion: Pick<PromotionEntity, "type" 
   if (promotion.type === PromotionType.DISCOUNT_AMOUNT) {
     return (
       <Fragment>
-        <Trans>Promotion discount</Trans>
-        {": "}
-        <CurrencyFormat value={promotion.value} />
+        <Trans>
+          Discount <CurrencyFormat value={promotion.value} /> on total bill
+        </Trans>
       </Fragment>
     );
   }

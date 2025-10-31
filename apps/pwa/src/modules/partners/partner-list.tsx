@@ -8,6 +8,7 @@ import { Stack } from "@mantine/core";
 import { IconEdit, IconTopologyStar3 } from "@tabler/icons-react";
 import { FC } from "react";
 import { PartnerEntity } from "./partners-types";
+import { t } from "@lingui/core/macro";
 
 export const PartnerList: FC = () => {
   return (
@@ -16,15 +17,16 @@ export const PartnerList: FC = () => {
         columns={{
           logo: {
             w: 40,
+            name: t`Logo`,
             align: "center",
             render: ({ data }) => <Avatar partner={data} size={30} />,
           },
-          name: {},
-          phone: {},
-          email: {},
+          name: { name: t`Name` },
+          phone: { name: t`Phone` },
+          email: { name: t`Email` },
         }}
         id="pas"
-        name="partners"
+        name={t`Partners`}
         route="/partners"
         icon={IconTopologyStar3}
         card={(props) => <PartnerCard partner={props.data} />}
@@ -35,7 +37,7 @@ export const PartnerList: FC = () => {
         events={[EventType.PARTNER_NEW, EventType.PARTNER_UPDATED, EventType.PARTNER_ARCHIVED]}
         actions={[
           {
-            label: "edit",
+            label: t`Edit`,
             icon: IconEdit,
             onClick: (data) => OnModalParnterForm({ partner: data }),
           },

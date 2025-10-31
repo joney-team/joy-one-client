@@ -70,10 +70,7 @@ export const isInWorkSlot = (slot: Date, workSlots?: WorkSlot[]) => {
   return workSlots.some((s) => {
     const from = DateTime.normalizeDate(new Date(slot).setHours(s.startHour, s.startMin, 0, 0));
     const to = DateTime.normalizeDate(new Date(slot).setHours(s.endHour, s.endMin, 0, 0));
-    return (
-      (DateTime.isBefore(from, slot) && DateTime.isAfter(to, slot)) ||
-      DateTime.isSame(from, slot, "day")
-    );
+    return DateTime.isBefore(from, slot) && DateTime.isAfter(to, slot);
   });
 };
 

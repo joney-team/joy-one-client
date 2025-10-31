@@ -451,7 +451,7 @@ export const workspaceModuleConfigs = {
     href: "/profile/settings",
     icon: IconSettings,
     restrictDisplay: ["spotlight"],
-    name: () => t`Profile Settings`,
+    name: () => t`Profile settings`,
     description: () => t`Manage your profile settings`,
     color: "primary",
   }),

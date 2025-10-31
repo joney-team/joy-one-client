@@ -29,13 +29,14 @@ export const ProductComboList: FC = () => {
         name={t`List combos`}
         route="/product-combos"
         columns={{
-          customerId: CustomerColumn({ valuePath: "customer" }),
-          createdAt: DateTimeColumn({ valuePath: "createdAt" }),
+          customerId: CustomerColumn({ name: t`Customer`, valuePath: "customer" }),
+          createdAt: DateTimeColumn({ name: t`Time`, valuePath: "createdAt" }),
           product: {
-            name: "name",
-            render: ({ value }) => value?.name,
+            name: t`Name`,
+            render: ({ data }) => data.product.name,
           },
           productRefs: {
+            name: t`Products/Services`,
             render: ({ value, data }) => {
               const statusOptions = productComboStatusOptions[data.status];
 

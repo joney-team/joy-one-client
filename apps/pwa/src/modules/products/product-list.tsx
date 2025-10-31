@@ -36,6 +36,7 @@ export const ProductList: FC = () => {
         columns={{
           image: {
             w: 100,
+            name: t`Image`,
             align: "center",
             render: ({ data }) => {
               return (
@@ -86,11 +87,13 @@ export const ProductList: FC = () => {
           },
           unit: {
             w: 150,
+            name: t`Unit`,
           },
           price: {
             w: 250,
             align: "right",
             sortable: true,
+            name: t`Price`,
             render: ({ data }) => {
               if (data.minPrice && data.maxPrice) {
                 return (

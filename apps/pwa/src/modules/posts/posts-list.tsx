@@ -14,6 +14,7 @@ import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { PostEntity } from "./posts-types";
 import { api } from "../apis";
 import { onArchive } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 
 export const PostsList: FC = () => {
   const router = useRouter();
@@ -25,16 +26,16 @@ export const PostsList: FC = () => {
         id="pst"
         route="/posts"
         columns={{
-          _id: PrimaryColumn({ name: "title", route: "/posts/:_id/edit", valuePath: "title" }),
+          _id: PrimaryColumn({ name: t`Title`, route: "/posts/:_id/edit", valuePath: "title" }),
           thumbnail: {
-            name: "post_thumbnail",
+            name: t`Thumbnail`,
             render: ({ value }) => {
               return <EntityImage src={value} w={200} h={100} onlyRead />;
             },
           },
           categoryId: CategoryColumn(),
-          excerpt: {},
-          publishedAt: DateTimeColumn({ name: "publishedAt" }),
+          excerpt: { name: t`Excerpt` },
+          publishedAt: DateTimeColumn({ name: t`Published at`, valuePath: "publishedAt" }),
         }}
         creatable={{
           permission: WorkspacePermission.POSTS_MANAGER,
@@ -44,7 +45,7 @@ export const PostsList: FC = () => {
         bulkActions={[
           {
             type: "archive",
-            label: "archive",
+            label: t`Archive`,
             icon: IconArchive,
             permission: WorkspacePermission.POSTS_MANAGER,
             handler: async (data) => {

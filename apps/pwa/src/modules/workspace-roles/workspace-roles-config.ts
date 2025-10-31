@@ -176,7 +176,7 @@ export const permissionGroups: Record<PermissionGroupKey, PermissionGroup> = {
     ],
   },
   [PermissionGroupKey.PRODUCTS_SERVICES]: {
-    name: () => t`Products & Services`,
+    name: () => t`Products/Services`,
     permissions: [{ value: WorkspacePermission.PRODUCTS_SERVICES_WRITE }],
   },
   [PermissionGroupKey.PRODUCT_STOCKS]: {

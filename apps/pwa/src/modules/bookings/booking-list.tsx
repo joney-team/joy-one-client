@@ -524,13 +524,11 @@ export const BookingList: FC = () => {
                 const workDaySlot = workDaySlots.find((v) => v.dayWeek === slot.getDay());
                 const isInWorkspaceWorkSlots = isInWorkSlot(slot, workDaySlot?.slots);
 
-                const isAvailable = isInWorkspaceWorkSlots;
-
                 const bg = {
-                  light: isAvailable
+                  light: isInWorkspaceWorkSlots
                     ? "var(--mantine-color-body)"
                     : `var(--mantine-color-gray-light)`,
-                  dark: isAvailable
+                  dark: isInWorkspaceWorkSlots
                     ? "var(--mantine-color-default-hover)"
                     : `var(--mantine-color-body)`,
                 };

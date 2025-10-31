@@ -37,19 +37,20 @@ export const OrderList: FC = () => {
         route="/orders"
         columns={{
           code: CodeColumn({ href: (value) => `/orders/${value}` }),
-          createdAt: DateTimeColumn({ name: "time", sortable: true }),
+          createdAt: DateTimeColumn({ name: t`Time`, sortable: true }),
           relatedCustomerId: CustomerColumn({
-            name: "customer",
+            name: t`Customer`,
             valuePath: "relatedCustomer",
           }),
           createdByUserId: UserColumn({
-            name: "createdByUser",
+            name: t`Created by`,
             valuePath: "createdByUser",
           }),
           items: OrderItemsColumn,
-          totalAmount: NumberColumn({ type: "money", sortable: true }),
+          totalAmount: NumberColumn({ name: t`Money amount`, type: "money", sortable: true }),
           paymentStatus: StatusColumn({
             w: 200,
+            name: t`Payment status`,
             options: Object.values(OrderPaymentStatus).map((status) => ({
               label: orderPaymentStatuses[status].label(),
               color: orderPaymentStatuses[status].color,

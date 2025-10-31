@@ -221,7 +221,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
             <Stack>
               <TextInput label="Slug" {...form.getInputProps("slug")} />
 
-              <InputWrapper label={t`Post thumbnail`}>
+              <InputWrapper label={t`Thumbnail`}>
                 <ImageInput
                   value={form.values.thumbnail || post?.thumbnail}
                   onChange={(value) => form.setFieldValue("thumbnail", value)}

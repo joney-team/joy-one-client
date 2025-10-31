@@ -8,7 +8,6 @@ import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -128,7 +127,7 @@ export const ProductCard: FC<
                 </ThemeIcon>
 
                 <Text fz={15} c="dark" fw={500}>
-                  {t`Expire in`}:{" "}
+                  <Trans>Expire in</Trans>:{" "}
                   {product.combosExpireInDays && product.combosExpireInDays > 0 ? (
                     <Fragment>
                       <NumberFormat value={product.combosExpireInDays} /> <Trans>days</Trans>
@@ -169,7 +168,8 @@ export const ProductCard: FC<
                 </ThemeIcon>
 
                 <Text fz={15} c="dark" fw={500}>
-                  {t`Voucher amount`}: <CurrencyFormat value={product.voucherAmount ?? 0} />
+                  <Trans>Voucher amount</Trans>:{" "}
+                  <CurrencyFormat value={product.voucherAmount ?? 0} />
                 </Text>
               </Group>
 
@@ -180,7 +180,7 @@ export const ProductCard: FC<
 
                 <Stack gap={3}>
                   <Text fz={15} c="dark" fw={500}>
-                    {t`Terms of use`}:
+                    <Trans>Terms of use</Trans>:
                   </Text>
 
                   <Renderer
@@ -189,7 +189,7 @@ export const ProductCard: FC<
                     }
                   >
                     <Text fw={500} fz={13} c="gray">
-                      • {`${t`Include products`}:`}
+                      • <Trans>Include products</Trans>:
                     </Text>
                     {product.voucherIncludeProducts?.map((product) => {
                       return (
@@ -206,7 +206,7 @@ export const ProductCard: FC<
                     }
                   >
                     <Text fw={500} fz={13} c="gray">
-                      • {`${t`Exclude products`}:`}
+                      • <Trans>Exclude products</Trans>:
                     </Text>
                     {product.voucherExcludeProducts?.map((product) => {
                       return (
@@ -226,7 +226,7 @@ export const ProductCard: FC<
                     }
                   >
                     <Text fw={500} fz={13} c="gray">
-                      • {`${t`Apply all products`}`}
+                      • <Trans>Apply all products</Trans>
                     </Text>
                   </Renderer>
                 </Stack>

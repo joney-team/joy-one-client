@@ -42,11 +42,11 @@ msgstr "<0/> related to {relatedEntity} / {0}"
 msgid "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 msgstr "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:139
+#: src/modules/loans/modals/modal-loan-package-form.tsx:140
 msgid "1 month"
 msgstr "1 month"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:172
+#: src/modules/loans/modals/modal-loan-package-form.tsx:173
 msgid "10 days"
 msgstr "10 days"
 
@@ -54,15 +54,15 @@ msgstr "10 days"
 msgid "12 hour"
 msgstr "12 hour"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:144
+#: src/modules/loans/modals/modal-loan-package-form.tsx:145
 msgid "12 months"
 msgstr "12 months"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:173
+#: src/modules/loans/modals/modal-loan-package-form.tsx:174
 msgid "15 days"
 msgstr "15 days"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:140
+#: src/modules/loans/modals/modal-loan-package-form.tsx:141
 msgid "2 months"
 msgstr "2 months"
 
@@ -70,19 +70,19 @@ msgstr "2 months"
 msgid "24 hour"
 msgstr "24 hour"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:141
+#: src/modules/loans/modals/modal-loan-package-form.tsx:142
 msgid "3 months"
 msgstr "3 months"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:174
+#: src/modules/loans/modals/modal-loan-package-form.tsx:175
 msgid "30 days (1 month)"
 msgstr "30 days (1 month)"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:142
+#: src/modules/loans/modals/modal-loan-package-form.tsx:143
 msgid "6 months"
 msgstr "6 months"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:143
+#: src/modules/loans/modals/modal-loan-package-form.tsx:144
 msgid "9 months"
 msgstr "9 months"
 
@@ -138,7 +138,7 @@ msgstr "Activity"
 #: src/components/inputs/time-trackings-input.tsx:532
 #: src/components/inputs/work-slot-settings-input.tsx:277
 #: src/modules/customers/components/customer-information.tsx:378
-#: src/modules/loans/modals/modal-loan-package-form.tsx:313
+#: src/modules/loans/modals/modal-loan-package-form.tsx:314
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:46
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:132
 #: src/modules/product-combos/modals/modal-product-combo-using.tsx:106
@@ -451,7 +451,7 @@ msgstr "Applied to staff working in shifts"
 #: src/modules/custom-fields/components/form-custom-field.tsx:122
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:68
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:167
-#: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:64
+#: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:63
 #: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:150
 msgid "Apply"
 msgstr "Apply"
@@ -502,6 +502,7 @@ msgstr "Approved"
 #: src/components/buttons/button-archive.tsx:48
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:43
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:166
+#: src/modules/posts/posts-list.tsx:48
 #: src/modules/receipts/receipt-detail.tsx:151
 #: src/utils/actions.tsx:105
 msgid "Archive"
@@ -633,7 +634,7 @@ msgid "Asset type"
 msgstr "Asset type"
 
 #: src/modules/loans/modals/modal-loan-calculator.tsx:275
-#: src/modules/loans/modals/modal-loan-package-form.tsx:159
+#: src/modules/loans/modals/modal-loan-package-form.tsx:160
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:38
 msgid "Asset types"
 msgstr "Asset types"
@@ -969,7 +970,7 @@ msgstr "Cannot be deleted, cannot be assigned to other members, can only be tran
 msgid "Cannot display file"
 msgstr "Cannot display file"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:206
+#: src/modules/loans/modals/modal-loan-package-form.tsx:207
 msgid "Capital rate for each period {days} days"
 msgstr "Capital rate for each period {days} days"
 
@@ -1004,6 +1005,7 @@ msgstr "Cashier"
 msgid "Categories"
 msgstr "Categories"
 
+#: src/modules/categories/components/category-column.tsx:18
 #: src/modules/categories/components/category-input.tsx:25
 #: src/modules/categories/components/quick-create-category.tsx:27
 msgid "Category"
@@ -1414,7 +1416,7 @@ msgstr "Connect success"
 msgid "Connect with Social channels"
 msgstr "Connect with Social channels"
 
-#: src/modules/products/components/product-card.tsx:160
+#: src/modules/products/components/product-card.tsx:159
 msgid "Consumables"
 msgstr "Consumables"
 
@@ -1454,7 +1456,7 @@ msgid "Continue with"
 msgstr "Continue with"
 
 #: src/modules/loans/modals/modal-loan-calculator.tsx:297
-#: src/modules/loans/modals/modal-loan-package-form.tsx:152
+#: src/modules/loans/modals/modal-loan-package-form.tsx:153
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:60
 msgid "Contract fee"
 msgstr "Contract fee"
@@ -1488,6 +1490,7 @@ msgid "Copy the script and paste it into your website."
 msgstr "Copy the script and paste it into your website."
 
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:148
+#: src/modules/product-stocks/product-stock-list.tsx:65
 msgid "Cost price"
 msgstr "Cost price"
 
@@ -1527,7 +1530,7 @@ msgstr "Coupons"
 #: src/components/list/components/create-button.tsx:46
 #: src/modules/bookings/modals/modal-booking.tsx:359
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:383
-#: src/modules/loans/modals/modal-loan-package-form.tsx:329
+#: src/modules/loans/modals/modal-loan-package-form.tsx:336
 #: src/modules/promotions/components/form-promotion.tsx:175
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:87
 #: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:238
@@ -1704,6 +1707,10 @@ msgstr "Created"
 msgid "Created at"
 msgstr "Created at"
 
+#: src/modules/orders/order-list.tsx:46
+msgid "Created by"
+msgstr "Created by"
+
 #: src/modules/events/event-constants.ts:152
 msgid "Created order"
 msgstr "Created order"
@@ -1783,8 +1790,10 @@ msgstr "customer"
 #: src/modules/loans/components/loan-card.tsx:52
 #: src/modules/loans/modals/modal-create-loan.tsx:223
 #: src/modules/orders/order-card.tsx:95
+#: src/modules/orders/order-list.tsx:42
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:134
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:140
+#: src/modules/product-combos/product-combo-list.tsx:32
 #: src/modules/product-vouchers/product-voucher-card.tsx:73
 #: src/modules/receipts/modals/modal-receipt-form.tsx:130
 #: src/modules/receipts/receipt-list.tsx:86
@@ -1924,7 +1933,7 @@ msgid "Day"
 msgstr "Day"
 
 #: src/modules/loans/loans-service.ts:200
-#: src/modules/products/components/product-card.tsx:134
+#: src/modules/products/components/product-card.tsx:133
 msgid "days"
 msgstr "days"
 
@@ -1988,7 +1997,7 @@ msgstr "Deposited message"
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:129
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:133
 #: src/modules/custom-fields/components/form-custom-field.tsx:108
-#: src/modules/loans/modals/modal-loan-package-form.tsx:326
+#: src/modules/loans/modals/modal-loan-package-form.tsx:327
 #: src/modules/promotions/components/form-promotion.tsx:118
 #: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:134
 msgid "Description"
@@ -2061,6 +2070,11 @@ msgstr "Discount {value} on product {0}"
 #: src/modules/coupons/coupon-benefits.tsx:40
 msgid "Discount {value} on total bill"
 msgstr "Discount {value} on total bill"
+
+#: src/modules/promotions/components/promotion-description.tsx:15
+#: src/modules/promotions/components/promotion-description.tsx:25
+msgid "Discount <0/> on total bill"
+msgstr "Discount <0/> on total bill"
 
 #: src/modules/promotions/promotions-constants.ts:15
 msgid "Discount amount"
@@ -2207,12 +2221,14 @@ msgstr "Easy & quick setup"
 #: src/layout/navigation/navigation-task-folders.tsx:156
 #: src/modules/categories/category-list.tsx:49
 #: src/modules/orders/order-card.tsx:235
-#: src/modules/orders/order-list.tsx:94
+#: src/modules/orders/order-list.tsx:95
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:46
+#: src/modules/partners/partner-list.tsx:40
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:132
 #: src/modules/product-combos/product-combo-setup.tsx:61
-#: src/modules/products/product-list.tsx:116
+#: src/modules/products/product-list.tsx:119
 #: src/modules/promotions/promostion-list.tsx:198
+#: src/modules/services/service-list.tsx:94
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:87
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:125
 msgid "Edit"
@@ -2239,6 +2255,7 @@ msgstr "Edit workspace branch"
 #: src/modules/customers/components/form-customer.tsx:144
 #: src/modules/customers/customer-list.tsx:89
 #: src/modules/loans/loan-detail.tsx:298
+#: src/modules/partners/partner-list.tsx:26
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:449
 #: src/modules/users/modals/modal-user-information.tsx:190
 #: src/modules/users/user-profile-settings.tsx:125
@@ -2438,6 +2455,7 @@ msgid "Example"
 msgstr "Example"
 
 #: src/modules/posts/components/form-post.tsx:234
+#: src/modules/posts/posts-list.tsx:37
 msgid "Excerpt"
 msgstr "Excerpt"
 
@@ -2471,6 +2489,7 @@ msgstr "Expense"
 
 #: src/modules/coupons/modals/modal-coupon-form.tsx:150
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:139
+#: src/modules/product-stocks/product-stock-list.tsx:64
 #: src/modules/promotions/components/form-promotion.tsx:165
 #: src/modules/promotions/promostion-list.tsx:97
 #: src/modules/promotions/promostion-list.tsx:105
@@ -2481,7 +2500,7 @@ msgstr "Expire at"
 msgid "Expire date"
 msgstr "Expire date"
 
-#: src/modules/products/components/product-card.tsx:131
+#: src/modules/products/components/product-card.tsx:130
 msgid "Expire in"
 msgstr "Expire in"
 
@@ -2755,7 +2774,7 @@ msgid "High"
 msgstr "High"
 
 #: src/modules/product-combos/modals/modal-product-combo.tsx:126
-#: src/modules/product-combos/product-combo-list.tsx:80
+#: src/modules/product-combos/product-combo-list.tsx:81
 msgid "History"
 msgstr "History"
 
@@ -2795,7 +2814,9 @@ msgstr "ID number"
 msgid "Identify brand through Email. Help you take better care of customers through Email."
 msgstr "Identify brand through Email. Help you take better care of customers through Email."
 
+#: src/modules/products/product-list.tsx:39
 #: src/modules/promotions/components/form-promotion.tsx:119
+#: src/modules/services/service-list.tsx:36
 msgid "Image"
 msgstr "Image"
 
@@ -3129,12 +3150,12 @@ msgstr "Last updated at {0}"
 msgid "Late"
 msgstr "Late"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:258
+#: src/modules/loans/modals/modal-loan-package-form.tsx:259
 msgid "Late days"
 msgstr "Late days"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:77
-#: src/modules/loans/modals/modal-loan-package-form.tsx:249
+#: src/modules/loans/modals/modal-loan-package-form.tsx:250
 msgid "Late interest"
 msgstr "Late interest"
 
@@ -3150,7 +3171,7 @@ msgstr "Late interest fee days"
 msgid "Late interest fee rate"
 msgstr "Late interest fee rate"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:271
+#: src/modules/loans/modals/modal-loan-package-form.tsx:272
 msgid "Late interest rate"
 msgstr "Late interest rate"
 
@@ -3167,7 +3188,7 @@ msgstr "Latitue"
 msgid "Leave"
 msgstr "Leave"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:207
+#: src/modules/loans/modals/modal-loan-package-form.tsx:208
 msgid "Leave blank if the capital rate for each period is the same"
 msgstr "Leave blank if the capital rate for each period is the same"
 
@@ -3248,7 +3269,7 @@ msgstr "Liquidation"
 msgid "Liquidation fee rate"
 msgstr "Liquidation fee rate"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:321
+#: src/modules/loans/modals/modal-loan-package-form.tsx:322
 msgid "Liquidation fee rate, calculated on the remaining debt (0 - 100)"
 msgstr "Liquidation fee rate, calculated on the remaining debt (0 - 100)"
 
@@ -3360,7 +3381,7 @@ msgstr "Loan liquidation"
 #: src/modules/loans/loan-list.tsx:120
 #: src/modules/loans/loan-list.tsx:217
 #: src/modules/loans/modals/modal-loan-calculator.tsx:269
-#: src/modules/loans/modals/modal-loan-package-form.tsx:111
+#: src/modules/loans/modals/modal-loan-package-form.tsx:112
 #: src/modules/workspace-settings/workspace-setting-credit.tsx:30
 #: src/modules/workspaces/workspace.tsx:46
 msgid "Loan package"
@@ -3370,16 +3391,16 @@ msgstr "Loan package"
 msgid "Loan package calculator"
 msgstr "Loan package calculator"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:119
+#: src/modules/loans/modals/modal-loan-package-form.tsx:120
 msgid "Loan package code"
 msgstr "Loan package code"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:120
+#: src/modules/loans/modals/modal-loan-package-form.tsx:121
 msgid "Loan package code must be at least 3 characters, no spaces"
 msgstr "Loan package code must be at least 3 characters, no spaces"
 
 #: src/modules/loans/modals/modal-loan-calculator.tsx:280
-#: src/modules/loans/modals/modal-loan-package-form.tsx:127
+#: src/modules/loans/modals/modal-loan-package-form.tsx:128
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:43
 msgid "Loan package type"
 msgstr "Loan package type"
@@ -3399,7 +3420,7 @@ msgstr "Loan payment periods"
 #: src/modules/loans/modals/modal-loan-calculator.tsx:175
 #: src/modules/loans/modals/modal-loan-calculator.tsx:289
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:100
-#: src/modules/loans/modals/modal-loan-package-form.tsx:137
+#: src/modules/loans/modals/modal-loan-package-form.tsx:138
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:52
 msgid "Loan period"
 msgstr "Loan period"
@@ -3514,6 +3535,10 @@ msgstr "Location not supported"
 #: src/modules/auth/components/form-sign-in.tsx:69
 msgid "Login"
 msgstr "Login"
+
+#: src/modules/partners/partner-list.tsx:20
+msgid "Logo"
+msgstr "Logo"
 
 #: src/layout/header/header-account.tsx:107
 #: src/modules/workspaces/workspace-require.tsx:141
@@ -3913,6 +3938,7 @@ msgstr "Monday"
 
 #: src/modules/loans/loan-detail.tsx:318
 #: src/modules/loans/loan-list.tsx:162
+#: src/modules/orders/order-list.tsx:50
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:343
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:423
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:468
@@ -4049,9 +4075,12 @@ msgstr "Mutual workspaces"
 #: src/modules/customers/modals/modal-customer-contacts.tsx:69
 #: src/modules/customers/modals/modal-customer-form.tsx:102
 #: src/modules/partners/modals/modal-partner-form.tsx:119
+#: src/modules/partners/partner-list.tsx:24
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:447
+#: src/modules/product-combos/product-combo-list.tsx:35
 #: src/modules/products/components/form-product.tsx:244
 #: src/modules/promotions/components/form-promotion.tsx:117
+#: src/modules/services/service-list.tsx:50
 #: src/modules/tags/modals/modal-tag-form.tsx:78
 #: src/modules/tasks/views/gantt/gantt.layout.tsx:67
 #: src/modules/tasks/views/list/list.task-row-head.tsx:11
@@ -4269,6 +4298,7 @@ msgstr "Not receiving notification token. Please try again."
 #: src/modules/product-combos/modals/modal-product-combo.tsx:123
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:142
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:117
+#: src/modules/product-stocks/product-stock-list.tsx:66
 #: src/modules/receipts/modals/modal-receipt-form.tsx:119
 msgid "Note"
 msgstr "Note"
@@ -4399,7 +4429,7 @@ msgstr "Order synced"
 msgid "Orders"
 msgstr "Orders"
 
-#: src/modules/orders/order-list.tsx:74
+#: src/modules/orders/order-list.tsx:75
 msgid "Orders today"
 msgstr "Orders today"
 
@@ -4417,7 +4447,7 @@ msgstr "Out of amount"
 
 #: src/modules/product-combos/product-combos-constants.tsx:12
 #: src/modules/products/components/product-card.tsx:249
-#: src/modules/products/product-list.tsx:79
+#: src/modules/products/product-list.tsx:80
 msgid "Out of stock"
 msgstr "Out of stock"
 
@@ -4475,6 +4505,7 @@ msgid "Partial payment"
 msgstr "Partial payment"
 
 #: src/constant.ts:9
+#: src/modules/partners/partner-list.tsx:29
 #: src/modules/search/search-engine.tsx:246
 #: src/modules/tasks/components/form-task.tsx:536
 #: src/modules/tasks/components/tasks-menu-actions.tsx:269
@@ -4514,7 +4545,7 @@ msgstr "Password updated"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:335
 #: src/modules/orders/order-card.tsx:212
-#: src/modules/orders/order-list.tsx:61
+#: src/modules/orders/order-list.tsx:62
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:104
 #: src/modules/receipts/receipt-card.tsx:510
 msgid "Pay"
@@ -4593,7 +4624,7 @@ msgstr "Payment paid"
 msgid "Payment period"
 msgstr "Payment period"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:170
+#: src/modules/loans/modals/modal-loan-package-form.tsx:171
 msgid "Payment period options"
 msgstr "Payment period options"
 
@@ -4604,6 +4635,10 @@ msgstr "Payment periods"
 #: src/modules/loans/loan-list.tsx:311
 msgid "Payment progress"
 msgstr "Payment progress"
+
+#: src/modules/orders/order-list.tsx:53
+msgid "Payment status"
+msgstr "Payment status"
 
 #: src/modules/customer-forms/customer-form-constants.tsx:13
 #: src/modules/customer-kycs/customer-kyc-constants.tsx:9
@@ -4632,7 +4667,7 @@ msgstr "Percent"
 #: src/modules/loans/components/loan-payments.tsx:166
 #: src/modules/loans/components/loan-payments.tsx:342
 #: src/modules/loans/modals/modal-loan-calculator.tsx:207
-#: src/modules/loans/modals/modal-loan-package-form.tsx:225
+#: src/modules/loans/modals/modal-loan-package-form.tsx:226
 msgid "Period"
 msgstr "Period"
 
@@ -4657,6 +4692,7 @@ msgstr "Personal informations"
 #: src/modules/loans/loan-detail.tsx:287
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:91
 #: src/modules/partners/modals/modal-partner-form.tsx:120
+#: src/modules/partners/partner-list.tsx:25
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:448
 #: src/modules/users/modals/modal-user-information.tsx:198
 #: src/modules/users/user-profile-settings.tsx:119
@@ -4755,10 +4791,6 @@ msgstr "Post archived"
 msgid "Post created"
 msgstr "Post created"
 
-#: src/modules/posts/components/form-post.tsx:224
-msgid "Post thumbnail"
-msgstr "Post thumbnail"
-
 #: src/modules/events/event-constants.ts:177
 msgid "Post updated"
 msgstr "Post updated"
@@ -4817,6 +4849,8 @@ msgid "Previous address"
 msgstr "Previous address"
 
 #: src/modules/product-combos/product-combo-setup.tsx:56
+#: src/modules/products/product-list.tsx:96
+#: src/modules/services/service-list.tsx:71
 msgid "Price"
 msgstr "Price"
 
@@ -4901,6 +4935,7 @@ msgstr "Processing tasks"
 #: src/modules/product-combos/modals/modal-product-combo-using.tsx:78
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:133
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:96
+#: src/modules/product-stocks/product-stock-list.tsx:33
 #: src/modules/products/components/form-product.tsx:90
 #: src/modules/products/components/product-input.tsx:26
 #: src/modules/products/products-constants.tsx:5
@@ -4940,7 +4975,7 @@ msgstr "Product quantity"
 msgid "Product stock code"
 msgstr "Product stock code"
 
-#: src/modules/products/product-list.tsx:67
+#: src/modules/products/product-list.tsx:68
 #: src/modules/workspace-roles/workspace-roles-config.ts:183
 msgid "Product stocks"
 msgstr "Product stocks"
@@ -4967,17 +5002,16 @@ msgstr "Product Vouchers"
 msgid "Products"
 msgstr "Products"
 
-#: src/widgets/reports/widgets/report-products.widget.tsx:117
-msgid "Products & services"
-msgstr "Products & services"
-
-#: src/modules/workspace-roles/workspace-roles-config.ts:179
-msgid "Products & Services"
-msgstr "Products & Services"
-
 #: src/widgets/reports/modules.ts:164
 msgid "Products services"
 msgstr "Products services"
+
+#: src/modules/orders/order-items-columns.tsx:10
+#: src/modules/product-combos/product-combo-list.tsx:39
+#: src/modules/workspace-roles/workspace-roles-config.ts:179
+#: src/widgets/reports/widgets/report-products.widget.tsx:117
+msgid "Products/Services"
+msgstr "Products/Services"
 
 #: src/modules/products/product-detail.tsx:182
 msgid "Products/Services related"
@@ -4990,16 +5024,10 @@ msgid "Profile"
 msgstr "Profile"
 
 #: src/layout/header/header-account.tsx:67
-msgid "Profile setting"
-msgstr "Profile setting"
-
 #: src/modules/users/user-profile-settings.tsx:50
+#: src/modules/workspaces/workspace-modules.tsx:454
 msgid "Profile settings"
 msgstr "Profile settings"
-
-#: src/modules/workspaces/workspace-modules.tsx:454
-msgid "Profile Settings"
-msgstr "Profile Settings"
 
 #: src/widgets/reports/widgets/report-products.widget.tsx:193
 msgid "Profit"
@@ -5013,11 +5041,6 @@ msgstr "Promotion archived"
 msgid "Promotion created"
 msgstr "Promotion created"
 
-#: src/modules/promotions/components/promotion-description.tsx:15
-#: src/modules/promotions/components/promotion-description.tsx:25
-msgid "Promotion discount"
-msgstr "Promotion discount"
-
 #: src/modules/promotions/promostion-list.tsx:118
 msgid "Promotion status not editable"
 msgstr "Promotion status not editable"
@@ -5027,8 +5050,8 @@ msgid "Promotion updated"
 msgstr "Promotion updated"
 
 #: src/constant.ts:29
-#: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:43
-#: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:76
+#: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:42
+#: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:75
 #: src/modules/workspace-roles/workspace-roles-config.ts:93
 #: src/modules/workspaces/workspace-modules.tsx:107
 msgid "Promotions"
@@ -5061,6 +5084,10 @@ msgstr "Publish"
 msgid "Published"
 msgstr "Published"
 
+#: src/modules/posts/posts-list.tsx:38
+msgid "Published at"
+msgstr "Published at"
+
 #: src/components/list-qty.tsx:17
 #: src/components/printer/printer-body.tsx:47
 #: src/modals/modal-printer.tsx:304
@@ -5078,6 +5105,7 @@ msgstr "QTY"
 #: src/modules/product-combos/modals/modal-product-combo-using.tsx:79
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:145
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:111
+#: src/modules/product-stocks/product-stock-list.tsx:54
 #: src/modules/products/components/form-product.tsx:100
 #: src/modules/products/product-detail.tsx:184
 msgid "Quantity"
@@ -5540,8 +5568,8 @@ msgstr "Rule"
 msgid "Salary amount"
 msgstr "Salary amount"
 
-#: src/modules/product-stocks/product-stock-list.tsx:37
-#: src/modules/product-stocks/product-stock-list.tsx:44
+#: src/modules/product-stocks/product-stock-list.tsx:39
+#: src/modules/product-stocks/product-stock-list.tsx:46
 msgid "Sale price"
 msgstr "Sale price"
 
@@ -5651,7 +5679,7 @@ msgstr "Select a conversation to start"
 msgid "Select asset"
 msgstr "Select asset"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:160
+#: src/modules/loans/modals/modal-loan-package-form.tsx:161
 msgid "Select asset types"
 msgstr "Select asset types"
 
@@ -5805,6 +5833,7 @@ msgstr "Service"
 #: src/modules/products/components/form-product.tsx:183
 #: src/modules/products/components/form-product.tsx:442
 #: src/modules/products/components/form-product.tsx:497
+#: src/modules/services/service-list.tsx:25
 #: src/modules/workspaces/workspace-modules.tsx:169
 msgid "Services"
 msgstr "Services"
@@ -5995,6 +6024,7 @@ msgstr "Start time and end time are required"
 msgid "Start time must be before end time"
 msgstr "Start time must be before end time"
 
+#: src/components/list/columns/status-column.tsx:32
 #: src/modules/bookings/components/booking-card.tsx:190
 #: src/modules/customer-forms/customer-form-list.tsx:59
 #: src/modules/customers/modals/modal-customer-form.tsx:132
@@ -6022,6 +6052,7 @@ msgstr "Stock code"
 
 #: src/modules/events/event-constants.ts:158
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:119
+#: src/modules/product-stocks/product-stock-list.tsx:71
 #: src/modules/product-stocks/product-stocks-constants.tsx:11
 #: src/modules/workspace-roles/workspace-roles-constants.ts:147
 msgid "Stock in"
@@ -6046,6 +6077,7 @@ msgstr "Stock out"
 msgid "Stock out reverted"
 msgstr "Stock out reverted"
 
+#: src/modules/product-stocks/product-stock-list.tsx:27
 #: src/modules/workspaces/workspace-modules.tsx:175
 msgid "Stocks"
 msgstr "Stocks"
@@ -6321,7 +6353,7 @@ msgstr "The system is automatically connecting to your Facebook pages. Please wa
 msgid "The time allowed to acquire the geolocation was reached before the information was obtained."
 msgstr "The time allowed to acquire the geolocation was reached before the information was obtained."
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:200
+#: src/modules/loans/modals/modal-loan-package-form.tsx:201
 msgid "The total capital rate must be 100% or 0%"
 msgstr "The total capital rate must be 100% or 0%"
 
@@ -6379,6 +6411,11 @@ msgstr "This workspace is no longer active. Please contact <0>{ownerName}</0> to
 msgid "This workspace is no longer active. Please contact support to reactivate"
 msgstr "This workspace is no longer active. Please contact support to reactivate"
 
+#: src/modules/posts/components/form-post.tsx:224
+#: src/modules/posts/posts-list.tsx:31
+msgid "Thumbnail"
+msgstr "Thumbnail"
+
 #: src/modules/workspace-settings/workspace-setting-message-hubs.tsx:46
 msgid "Tích hợp ChatBox vào website của bạn"
 msgstr "Tích hợp ChatBox vào website của bạn"
@@ -6398,7 +6435,10 @@ msgstr "Tickets"
 #: src/modules/loans/components/loan-payments.tsx:168
 #: src/modules/loans/loan-list.tsx:177
 #: src/modules/loans/modals/modal-loan-calculator.tsx:208
+#: src/modules/orders/order-list.tsx:40
 #: src/modules/product-combos/modals/modal-product-combo.tsx:117
+#: src/modules/product-combos/product-combo-list.tsx:33
+#: src/modules/product-stocks/product-stock-list.tsx:30
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:216
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:286
 #: src/widgets/reports/widgets/report-credit.widget.tsx:364
@@ -6474,6 +6514,7 @@ msgstr "Tip"
 #: src/modules/bookings/components/form-booking.tsx:151
 #: src/modules/bookings/components/form-booking.tsx:154
 #: src/modules/bookings/components/form-booking.tsx:159
+#: src/modules/posts/posts-list.tsx:29
 msgid "Title"
 msgstr "Title"
 
@@ -6639,6 +6680,8 @@ msgstr "Unfixed capital"
 
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:177
 #: src/modules/products/components/form-product.tsx:245
+#: src/modules/products/product-list.tsx:90
+#: src/modules/services/service-list.tsx:65
 #: src/widgets/common/chart.widget.tsx:61
 msgid "Unit"
 msgstr "Unit"
@@ -6668,7 +6711,7 @@ msgstr "Unknown file size"
 msgid "Unknown reason"
 msgstr "Unknown reason"
 
-#: src/modules/products/components/product-card.tsx:137
+#: src/modules/products/components/product-card.tsx:136
 msgid "Unlimited"
 msgstr "Unlimited"
 
@@ -6699,7 +6742,7 @@ msgstr "Unset priority"
 #: src/modules/bookings/modals/modal-booking.tsx:165
 #: src/modules/bookings/modals/modal-booking.tsx:356
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:383
-#: src/modules/loans/modals/modal-loan-package-form.tsx:329
+#: src/modules/loans/modals/modal-loan-package-form.tsx:336
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:118
 #: src/modules/posts/components/form-post.tsx:161
 #: src/modules/products/components/form-product.tsx:617
@@ -7040,7 +7083,7 @@ msgstr "Voucher"
 
 #: src/modules/product-vouchers/product-voucher-card.tsx:55
 #: src/modules/products/components/form-product.tsx:303
-#: src/modules/products/components/product-card.tsx:172
+#: src/modules/products/components/product-card.tsx:171
 msgid "Voucher amount"
 msgstr "Voucher amount"
 

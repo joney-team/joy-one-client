@@ -114,7 +114,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
     <Card shadow="xs" p={0} w="100%" h="100%">
       <Stack h="100%">
         <Stack px={16} pt={16}>
-          <SectionTitle name={t`Products & services`} icon={IconReportAnalytics} />
+          <SectionTitle name={<Trans>Products/Services</Trans>} icon={IconReportAnalytics} />
 
           <Renderer visible={props.ctx.isFetching}>
             <Skeleton h="100%" />

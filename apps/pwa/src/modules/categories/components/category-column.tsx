@@ -15,7 +15,7 @@ export interface CategoryColumnArgs<Data = any> extends Omit<Column<Data>, "rend
 export function CategoryColumn<T = any>(args?: CategoryColumnArgs<T>): Column {
   return {
     icon: IconCategory,
-    name: args?.name || "category",
+    name: args?.name || t`Category`,
     valuePath: args?.valuePath || "category.name",
     filter: {
       dynamicSelector: {

@@ -15,13 +15,14 @@ import { type FC } from "react";
 import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
 import { getProductIcon } from "../products/products-service";
+import { t } from "@lingui/core/macro";
 
 export const ServiceList: FC = () => {
   return (
     <Stack p={16}>
       <List<ProductEntity>
         id="sers"
-        name="services"
+        name={t`Services`}
         icon={IconCategory2}
         route="/products"
         params={{ type: ProductType.SERVICE }}
@@ -32,6 +33,7 @@ export const ServiceList: FC = () => {
         columns={{
           image: {
             w: 100,
+            name: t`Image`,
             align: "center",
             render: ({ data }) => {
               return (
@@ -45,6 +47,7 @@ export const ServiceList: FC = () => {
             },
           },
           name: {
+            name: t`Name`,
             render: ({ data }) => {
               return (
                 <Clickable
@@ -59,11 +62,13 @@ export const ServiceList: FC = () => {
           categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
           unit: {
             w: 150,
+            name: t`Unit`,
           },
           price: {
             w: 250,
             align: "right",
             sortable: true,
+            name: t`Price`,
             render: ({ data }) => {
               if (data.minPrice && data.maxPrice) {
                 return (
@@ -86,7 +91,7 @@ export const ServiceList: FC = () => {
         events={[EventType.PRODUCT_NEW, EventType.PRODUCT_UPDATE, EventType.PRODUCT_ARCHIVED]}
         actions={[
           {
-            label: "edit",
+            label: t`Edit`,
             icon: IconEdit,
             onClick: (data) => OnProductModal({ product: data }),
           },

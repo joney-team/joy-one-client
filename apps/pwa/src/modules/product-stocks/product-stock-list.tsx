@@ -3,14 +3,15 @@
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
+import { CodeColumn } from "@/components/list/columns/code-column";
 import { DateTimeColumn } from "@/components/list/columns/date-time-column";
 import { NumberColumn } from "@/components/list/columns/number-column";
 import { EventType } from "@/modules/events/event-types";
 import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
-import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
 import { ProductColumn } from "@/modules/products/components/product-column";
 import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Stack, Text } from "@mantine/core";
 import { IconBuildingWarehouse } from "@tabler/icons-react";
@@ -23,12 +24,13 @@ export const ProductStockList: FC = () => {
       <List<ProductStockEntity>
         id="psks"
         icon={IconBuildingWarehouse}
-        name="product_stocks"
+        name={t`Stocks`}
         route="/product-stocks"
         columns={{
-          createdAt: DateTimeColumn({ sortable: true, name: "time" }),
+          createdAt: DateTimeColumn({ sortable: true, name: t`Time` }),
           productId: ProductColumn({
             type: ProductType.PRODUCT,
+            name: t`Product`,
             valuePath: "product",
             extraInfos: (value) => {
               if (value.minPrice && value.maxPrice) {
@@ -46,9 +48,10 @@ export const ProductStockList: FC = () => {
               );
             },
           }),
-          code: { name: "product_stock_code" },
+          code: CodeColumn(),
           quantity: {
             sortable: true,
+            name: t`Quantity`,
             render: ({ data }) => {
               return (
                 <Text>
@@ -58,14 +61,14 @@ export const ProductStockList: FC = () => {
               );
             },
           },
-          expireAt: DateTimeColumn({ name: "expire_at", emptyText: "--", hideTime: true }),
-          costPrice: NumberColumn({ name: "costPrice", type: "money" }),
-          note: {},
+          expireAt: DateTimeColumn({ name: t`Expire at`, emptyText: "--", hideTime: true }),
+          costPrice: NumberColumn({ name: t`Cost price`, type: "money" }),
+          note: { name: t`Note` },
         }}
         creatable={{
           onCreate: () => OnModalProductStockIn(),
           permission: WorkspacePermission.PRODUCT_STOCK_IN,
-          label: `product_stock_record_type_${ProductStockRecordType.STOCK_IN}`,
+          label: t`Stock in`,
         }}
         events={[
           EventType.PRODUCT_STOCK_IN,

@@ -64,7 +64,7 @@ export const WorkspaceHeaderAccount: FC = () => {
           href="/profile/settings"
           leftSection={<IconSettings size={20} strokeWidth={1.6} />}
         >
-          <Trans>Profile setting</Trans>
+          <Trans>Profile settings</Trans>
         </Menu.Item>
 
         <Menu.Item
