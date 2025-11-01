@@ -5,7 +5,7 @@ import { EntityImage } from "@/components/entity-image";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/code-column";
+import { codeColumn } from "@/components/list/columns/code-column";
 import { EventType } from "@/modules/events/event-types";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
@@ -35,7 +35,7 @@ export const ProductList: FC = () => {
         }}
         columns={{
           image: {
-            w: 100,
+            defaultWidth: 100,
             name: t`Image`,
             align: "center",
             render: ({ data }) => {
@@ -56,15 +56,15 @@ export const ProductList: FC = () => {
                   permission={WorkspacePermission.PRODUCTS_SERVICES_WRITE}
                   onClick={() => OnProductModal({ product: data })}
                 >
-                  <Text>{data.name}</Text>
+                  {data.name}
                 </Clickable>
               );
             },
           },
-          code: CodeColumn({ defaultHidden: true }),
+          code: codeColumn({ defaultHidden: true }),
           categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
           stock: {
-            w: 150,
+            defaultWidth: 150,
             name: t`Product stocks`,
             render: ({ data }) => {
               if (!data.isStockCheck) return "-";
@@ -86,11 +86,11 @@ export const ProductList: FC = () => {
             },
           },
           unit: {
-            w: 150,
+            defaultWidth: 150,
             name: t`Unit`,
           },
           price: {
-            w: 250,
+            defaultWidth: 250,
             align: "right",
             sortable: true,
             name: t`Price`,

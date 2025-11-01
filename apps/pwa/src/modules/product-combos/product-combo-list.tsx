@@ -2,9 +2,9 @@
 
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { StatusColumn } from "@/components/list/columns/status-column";
-import { CustomerColumn } from "@/modules/customers/components/customer-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
+import { statusColumn } from "@/components/list/columns/status-column";
+import { customerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { OnModalProductCombo } from "@/modules/product-combos/modals/modal-product-combo";
@@ -29,8 +29,8 @@ export const ProductComboList: FC = () => {
         name={t`List combos`}
         route="/product-combos"
         columns={{
-          customerId: CustomerColumn({ name: t`Customer`, valuePath: "customer" }),
-          createdAt: DateTimeColumn({ name: t`Time`, valuePath: "createdAt" }),
+          customerId: customerColumn({ name: t`Customer`, valuePath: "customer" }),
+          createdAt: dateTimeColumn({ name: t`Time`, valuePath: "createdAt" }),
           product: {
             name: t`Name`,
             render: ({ data }) => data.product.name,
@@ -68,7 +68,7 @@ export const ProductComboList: FC = () => {
               };
             },
           },
-          status: StatusColumn({
+          status: statusColumn({
             options: Object.values(ProductComboStatus).map((status) => ({
               label: productComboStatuses[status].label(),
               value: status,

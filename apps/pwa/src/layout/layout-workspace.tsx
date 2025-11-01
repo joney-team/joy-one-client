@@ -12,6 +12,7 @@ import { Fragment, Suspense, useEffect, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 import { WorkspaceNavigationSplitter } from "./navigation/navigation-splitter";
+import { useColor } from "@/modules/theme/use-color";
 
 const AppNavigation = dynamic(
   () => import("./navigation/navigation").then((m) => m.AppNavigation),
@@ -33,15 +34,15 @@ export const LayoutWorkspace: FC = () => {
   const workspaceLayout = useWorkspaceLayout();
   const colorScheme = useColorScheme();
 
-  const _pinned = useHeadroom({
+  const headroom = useHeadroom({
     fixedAt:
       layout.view === "mobile"
         ? workspaceLayout.navigationHeight / 2
         : workspaceLayout.headerHeight / 2,
   });
 
-  const pinned =
-    layout.view === "mobile" && !layout.isStandalone ? !layout.isBrowerCollapsed : _pinned;
+  const headPinned =
+    layout.view === "mobile" && !layout.isStandalone ? !layout.isBrowerCollapsed : headroom;
 
   useEffect(() => {
     const backgroundColor = backgroundColors[colorScheme];
@@ -74,7 +75,9 @@ export const LayoutWorkspace: FC = () => {
                   height: workspaceLayout.headerHeight,
                   zIndex: zIndexes.pannel,
                   borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
-                  transform: `translate3d(0, ${pinned ? 0 : "-110px"}, 0)`,
+                  transform: `translate3d(0, ${
+                    headPinned ? 0 : `${-workspaceLayout.headerHeight}px`
+                  }, 0)`,
                 }
               : {
                   top: 0,
@@ -84,6 +87,8 @@ export const LayoutWorkspace: FC = () => {
                   paddingLeft: workspaceLayout.navigationWidth,
                   zIndex: zIndexes.pannel,
                   borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
+                  transform: `translate3d(0, ${headPinned ? 0 : "-110px"}, 0)`,
+                  transition: "transform 0.2s ease-out",
                 }
           }
         >
@@ -108,7 +113,7 @@ export const LayoutWorkspace: FC = () => {
                   zIndex: zIndexes.pannel,
                   height: workspaceLayout.navigationHeight,
                   width: "100dvw",
-                  transform: `translate3d(0, ${pinned ? 0 : "110px"}, 0)`,
+                  transform: `translate3d(0, ${headPinned ? 0 : "110px"}, 0)`,
                   transition: workspaceLayout.transition("all"),
                   borderTop: `1px solid ${workspaceLayout.dividerColor}`,
                   background: "red",

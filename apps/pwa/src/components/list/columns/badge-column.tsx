@@ -16,10 +16,10 @@ export interface BadgeColumnArgs extends Column {
   }[];
 }
 
-export const BadgeColumn = (args: BadgeColumnArgs): Column => {
+export const badgeColumn = (args: BadgeColumnArgs): Column => {
   return {
     ...(args ? objUnselect(args, ["options"]) : {}),
-    w: args?.w || 120,
+    defaultWidth: args?.defaultWidth || 120,
     render: (ctx) => {
       if (args.render) return args.render(ctx);
       const color = useColor();
@@ -47,7 +47,11 @@ export const BadgeColumn = (args: BadgeColumnArgs): Column => {
 
             return (
               <Group gap={8}>
-                {v.icon ? <v.icon size={16} color={color(v.color)} /> : <Circle color={color(v.color)} size={8} />}
+                {v.icon ? (
+                  <v.icon size={16} color={color(v.color)} />
+                ) : (
+                  <Circle color={color(v.color)} size={8} />
+                )}
 
                 <Text fz={14} fw={500}>
                   {v.label}

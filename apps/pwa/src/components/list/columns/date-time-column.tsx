@@ -15,12 +15,12 @@ export interface DateTimeColumnArgs extends Omit<Column, "render"> {
   isHasFilter?: boolean;
 }
 
-export const DateTimeColumn = (args?: DateTimeColumnArgs): Column => {
+export const dateTimeColumn = (args?: DateTimeColumnArgs): Column => {
   return {
     ...args,
-    icon: args?.icon || IconClock,
-    name: args?.name || t`Time`,
-    w: args?.w || 150,
+    icon: args?.icon ?? IconClock,
+    name: args?.name ?? t`Time`,
+    defaultWidth: args?.defaultWidth ?? 150,
     render: ({ value }) => {
       if (!value || !DateTime.isValid(value)) return args?.emptyText || "-";
       const locale = getClientLocale();
@@ -30,6 +30,7 @@ export const DateTimeColumn = (args?: DateTimeColumnArgs): Column => {
           <Text c="var(--mantine-color-text)">
             <DateFormat value={value} type="date" />
           </Text>
+
           {!args?.hideTime && (
             <Group gap={3}>
               <ThemeIcon variant="transparent" color="var(--mantine-color-dimmed)" size="xs">

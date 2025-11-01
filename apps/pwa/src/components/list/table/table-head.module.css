@@ -1,0 +1,10 @@
+.TableHead {
+  & .ResizeHandle {
+    /* opacity: 0; */
+    cursor: col-resize;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

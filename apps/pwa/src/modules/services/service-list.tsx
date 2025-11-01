@@ -32,7 +32,7 @@ export const ServiceList: FC = () => {
         }}
         columns={{
           image: {
-            w: 100,
+            defaultWidth: 100,
             name: t`Image`,
             align: "center",
             render: ({ data }) => {
@@ -54,18 +54,18 @@ export const ServiceList: FC = () => {
                   permission={WorkspacePermission.PRODUCTS_SERVICES_WRITE}
                   onClick={() => OnProductModal({ product: data })}
                 >
-                  <Text>{data.name}</Text>
+                  {data.name}
                 </Clickable>
               );
             },
           },
           categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
           unit: {
-            w: 150,
+            defaultWidth: 150,
             name: t`Unit`,
           },
           price: {
-            w: 250,
+            defaultWidth: 250,
             align: "right",
             sortable: true,
             name: t`Price`,

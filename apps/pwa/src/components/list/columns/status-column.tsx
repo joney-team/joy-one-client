@@ -19,7 +19,7 @@ export interface StatusColumnArgs<T> extends Omit<Column<T>, "render" | "icon"> 
   rightSection?: (value: T) => ReactNode;
 }
 
-export function StatusColumn<T = any>(args: StatusColumnArgs<T>): Column<T> {
+export function statusColumn<T = any>(args: StatusColumnArgs<T>): Column<T> {
   const dropdownProps: ComboboxDropdownProps = {
     ...args.dropdownProps,
     miw: 200,
@@ -27,7 +27,7 @@ export function StatusColumn<T = any>(args: StatusColumnArgs<T>): Column<T> {
 
   return {
     ...(args ? objUnselect(args, ["options"]) : {}),
-    w: args?.w || 160,
+    defaultWidth: args?.defaultWidth || 160,
     icon: IconProgress,
     name: args.name || t`Status`,
     render: ({ value, data }) => {

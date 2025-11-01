@@ -2,8 +2,8 @@
 
 import { EntityImage } from "@/components/entity-image";
 import { List } from "@/components/list";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { PrimaryColumn } from "@/components/list/columns/primary-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
+import { primaryColumn } from "@/components/list/columns/primary-column";
 import { useRouter } from "@/hooks/use-router";
 import { Stack } from "@mantine/core";
 import { IconArchive, IconNews } from "@tabler/icons-react";
@@ -26,7 +26,7 @@ export const PostsList: FC = () => {
         id="pst"
         route="/posts"
         columns={{
-          _id: PrimaryColumn({ name: t`Title`, route: "/posts/:_id/edit", valuePath: "title" }),
+          _id: primaryColumn({ name: t`Title`, route: "/posts/:_id/edit", valuePath: "title" }),
           thumbnail: {
             name: t`Thumbnail`,
             render: ({ value }) => {
@@ -35,7 +35,7 @@ export const PostsList: FC = () => {
           },
           categoryId: CategoryColumn(),
           excerpt: { name: t`Excerpt` },
-          publishedAt: DateTimeColumn({ name: t`Published at`, valuePath: "publishedAt" }),
+          publishedAt: dateTimeColumn({ name: t`Published at`, valuePath: "publishedAt" }),
         }}
         creatable={{
           permission: WorkspacePermission.POSTS_MANAGER,

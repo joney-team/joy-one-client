@@ -14,13 +14,13 @@ export type TextFilterConfig =
     };
 
 export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
-  colKey,
   list,
   Wrapper,
   config,
+  column,
 }) => {
   const [opened, setOpened] = useState(false);
-  const value = list.params[colKey] || "";
+  const value = list.params[column.columnKey] || "";
   const color = useColor();
 
   const placeholder =
@@ -59,7 +59,7 @@ export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
               e.preventDefault();
               e.stopPropagation();
               const value = (e.target as any).value;
-              list.setParams({ [colKey]: value });
+              list.setParams({ [column.columnKey]: value });
               setOpened(false);
             }
           }}

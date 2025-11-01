@@ -29,7 +29,7 @@ export const FormSession: FC<{
 
 export const FormSessionIcon: FC<{
   icon: Icon;
-  description?: string;
+  description?: string | ReactNode;
   children: ReactNode;
   visible?: boolean;
 }> = ({ icon: Icon, description, children, visible = true }) => {

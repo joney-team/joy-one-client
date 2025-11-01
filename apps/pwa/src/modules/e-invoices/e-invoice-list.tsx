@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/buttons/button";
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/code-column";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { EnumColumn } from "@/components/list/columns/enum-column";
+import { codeColumn } from "@/components/list/columns/code-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
+import { enumColumn } from "@/components/list/columns/enum-column";
 import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconFileInvoice } from "@tabler/icons-react";
@@ -30,14 +30,14 @@ export const EInvoiceList: FC = () => {
         icon={IconFileInvoice}
         route="/plugins/e-invoices"
         columns={{
-          receiptCode: CodeColumn({
-            w: 200,
+          receiptCode: codeColumn({
+            defaultWidth: 200,
             name: "receipt_code",
             onClick: (_, data) => OnReceiptDetailModal({ id: data.receiptId }),
           }),
-          createdAt: DateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
-          provider: EnumColumn({
-            w: 200,
+          createdAt: dateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
+          provider: enumColumn({
+            defaultWidth: 200,
             name: "provider",
             valuePath: "provider.provider",
             options: Object.entries(providerConfigs.data ?? {}).map(([provider, info]) => ({

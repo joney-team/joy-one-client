@@ -1,6 +1,6 @@
 "use client";
 
-import { EnumColumn } from "@/components/list/columns/enum-column";
+import { enumColumn } from "@/components/list/columns/enum-column";
 import { List } from "@/components/list/list";
 import { Badge, Group, Stack } from "@mantine/core";
 import { IconEdit, IconForms } from "@tabler/icons-react";
@@ -23,7 +23,7 @@ export const CustomFieldList: FC = () => {
           label: {},
           description: {},
           key: { name: "Key", filter: { text: true } },
-          type: EnumColumn({
+          type: enumColumn({
             options: Object.values(CustomFieldType).map((type) => ({
               label: customFieldTypes[type].label(),
               value: type,

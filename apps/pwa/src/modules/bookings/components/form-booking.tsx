@@ -148,10 +148,10 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
   return (
     <Stack pt={16} gap={30}>
-      <FormSessionIcon icon={IconReservedLine} description={t`Title`}>
+      <FormSessionIcon icon={IconReservedLine} description={<Trans>Title</Trans>}>
         {type === "RESCHEDULE" ? (
           <Title order={5} fw={500}>
-            {getBookingTitle(form.values) || t`Title`}
+            {getBookingTitle(form.values) || <Trans>Title</Trans>}
           </Title>
         ) : (
           <TextInput
@@ -163,7 +163,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
       <FormSessionIcon
         icon={IconUserSquareRounded}
-        description="customer"
+        description={<Trans>Customer</Trans>}
         visible={!(type === "RESCHEDULE" && !form.values.customer)}
       >
         <CustomerInput
@@ -176,7 +176,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
       <FormSessionIcon
         icon={IconUsers}
-        description="attendees"
+        description={<Trans>Attendees</Trans>}
         visible={!(type === "RESCHEDULE" && form.values.assigneeUsers?.length === 0)}
       >
         <WorkspaceMembersInput
@@ -188,7 +188,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
       <FormSessionIcon
         icon={IconCalendar}
-        description="dateTime"
+        description={<Trans>Date time</Trans>}
         visible={type === "CREATE" || type === "RESCHEDULE"}
       >
         {reschedule && (
@@ -366,10 +366,14 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         </Stack>
       </FormSessionIcon>
 
-      <FormSessionIcon icon={IconNotebook} description="details" visible={type !== "RESCHEDULE"}>
+      <FormSessionIcon
+        icon={IconNotebook}
+        description={<Trans>Detail</Trans>}
+        visible={type !== "RESCHEDULE"}
+      >
         <Textarea
           {...form.getInputProps("note")}
-          placeholder={t`Enter details (Optional)`}
+          placeholder={t`Enter detail (Optional)`}
           minRows={4}
           autosize
           readOnly={type === "RESCHEDULE"}

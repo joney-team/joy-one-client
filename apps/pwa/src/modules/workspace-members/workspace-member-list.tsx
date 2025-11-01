@@ -3,7 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-selector-filter";
 import { EventType } from "@/modules/events/event-types";
 import { searchEntity } from "@/modules/search/search-service";
@@ -57,31 +57,31 @@ export const WorkspaceMemberList: FC = () => {
               >
                 <Avatar user={data} size={30} />
                 <Clickable onClick={() => OnModalUserInformation(data.userId)}>
-                  <Text>{data.name || t`Unnamed`}</Text>
+                  {data.name || t`Unnamed`}
                 </Clickable>
               </Group>
             ),
           },
-          createdAt: DateTimeColumn({
+          createdAt: dateTimeColumn({
             valuePath: "joinedAt",
             name: t`Joined at`,
             isShowRelativeTime: true,
             hideTime: true,
             isHasFilter: false,
             sortable: true,
-            w: 180,
+            defaultWidth: 180,
           }),
           email: {
             icon: IconMail,
             name: t`Email`,
-            w: 200,
+            defaultWidth: 200,
             render: ({ data }) => {
               if (!data.email) return null;
 
               if (data.email) {
                 return (
                   <Clickable href={`mailto:${data.email}`} blank>
-                    <Text>{data.email}</Text>
+                    {data.email}
                   </Clickable>
                 );
               }
@@ -90,13 +90,13 @@ export const WorkspaceMemberList: FC = () => {
           phone: {
             icon: IconPhone,
             name: t`Phone`,
-            w: 150,
+            defaultWidth: 150,
             render: ({ data }) => {
               if (!data.phone) return null;
 
               return (
                 <Clickable href={`tel:${data.phone}`} blank>
-                  <Text>{data.phone}</Text>
+                  {data.phone}
                 </Clickable>
               );
             },
@@ -145,7 +145,7 @@ export const WorkspaceMemberList: FC = () => {
             },
           },
           workspaceBranchIds: {
-            w: 300,
+            defaultWidth: 300,
             name: t`Branch`,
             icon: IconBuilding,
             render: ({ data }) => {

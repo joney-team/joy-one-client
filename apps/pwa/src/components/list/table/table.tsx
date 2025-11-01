@@ -4,160 +4,213 @@ import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { BaseData } from "@/components/list/types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, Checkbox, Group, Loader, Menu, Table, Text } from "@mantine/core";
+import { ActionIcon, Checkbox, Group, Loader, Menu, Stack, Text } from "@mantine/core";
 import { IconDotsVertical } from "@tabler/icons-react";
 import Link from "next/link";
-import { ListContext } from "../types";
+import { useEffect, useMemo, useRef } from "react";
 import { getIn, getListDataId, getValuePath } from "../utils";
 import { ListTableHead } from "./table-head";
 
-export default function ListTable<T extends BaseData>(ctx: ListContext<T>) {
-  const actions = ctx.actions || [];
+import { useListContext } from "../list-context";
+import styles from "./table.module.css";
+
+export default function ListTable<T extends BaseData>() {
+  const context = useListContext();
   const workspace = useWorkspace();
 
+  // Refs for sticky header
+  const tableScrollRef = useRef<HTMLDivElement>(null);
+  const fixedHeaderRef = useRef<HTMLDivElement>(null);
+
+  // Sync horizontal scroll
+  useEffect(() => {
+    const tableScroll = tableScrollRef.current;
+    const fixedHeader = fixedHeaderRef.current;
+
+    if (!tableScroll || !fixedHeader) return;
+
+    const handleScroll = () => {
+      fixedHeader.scrollLeft = tableScroll.scrollLeft;
+    };
+
+    tableScroll.addEventListener("scroll", handleScroll);
+    return () => tableScroll.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const isSelectedAll =
+    context.list.data.length > 0 &&
+    context.list.data.every((v: any) => context.selectedIds.includes(v.id || v._id || ""));
+
+  const header = useMemo(() => {
+    return (
+      <tr>
+        {context.isBulkActionsActivated && (
+          <th className={styles.BulkActionsCell}>
+            <Group justify="end">
+              <Checkbox
+                size="xs"
+                radius={5}
+                checked={isSelectedAll}
+                onChange={() => (isSelectedAll ? context.unselectAll() : context.selectAll())}
+              />
+            </Group>
+          </th>
+        )}
+
+        {context.columns.map((column) => {
+          if (!column.isVisible) return null;
+          return <ListTableHead key={column.columnKey} column={column} />;
+        })}
+
+        <th />
+      </tr>
+    );
+  }, [context.columns, context.actions, context.isBulkActionsActivated, isSelectedAll]);
+
   return (
-    <Table
-      miw="max-content"
-      withColumnBorders
-      withTableBorder
-      horizontalSpacing={10}
-      verticalSpacing={10}
-      style={{
-        borderBottom: "none",
-        borderLeft: "none",
-        borderRight: "none",
-      }}
-      stickyHeader
-    >
-      <Table.Thead>
-        <Table.Tr bg="var(--mantine-color-default-hover)">
-          {ctx.columnSettings.map((col, colIndex) => {
-            const column = ctx.columns[col.id as keyof T];
-            if (!col.isVisible || !column) return null;
-            return <ListTableHead colIndex={colIndex} key={col.id} columnId={col.id} {...ctx} />;
-          })}
+    <Stack className={styles.Table} pos="relative" w="100%" gap={0}>
+      {/* Fixed Header */}
+      <Stack
+        ref={fixedHeaderRef}
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          overflow: "hidden",
+          background: "white",
+        }}
+      >
+        <table
+          style={{
+            tableLayout: "fixed",
+            borderTop: `1px solid var(--table-border-color)`,
+            position: "relative",
+          }}
+        >
+          <thead>{header}</thead>
+        </table>
+      </Stack>
 
-          {actions.length > 0 && <Table.Th />}
-        </Table.Tr>
-      </Table.Thead>
+      <Stack ref={tableScrollRef} maw="100%" pos="relative" style={{ overflowX: "auto" }}>
+        <table style={{ position: "relative" }}>
+          <tbody>
+            {context.list.data.map((rowData: T) => {
+              const id = getListDataId(rowData);
+              const isSelected = context.selectedIds.includes(id);
 
-      <Table.Tbody>
-        {ctx.list.data.map((item: T) => {
-          const id = getListDataId(item);
-          return (
-            <Table.Tr key={id}>
-              {ctx.columnSettings.map((columnSetting, colIndex) => {
-                if (!columnSetting.isVisible) return null;
-
-                const column = ctx.columns[columnSetting.id as keyof T];
-                if (!column) return null;
-
-                const isShowSelect = colIndex === 0 && ctx.isShowMultipleSelectActions;
-
-                const w = isShowSelect && column.w ? column.w + 38 : column.w;
-                const isSelected = ctx.selectedIds.includes(id);
-
-                return (
-                  <Table.Td
-                    pl={isShowSelect ? 10 : undefined}
-                    key={columnSetting.id}
-                    w={w}
-                    align={column.align}
-                  >
-                    <Group wrap="nowrap" gap={4} justify={column.align}>
-                      {isShowSelect && (
+              return (
+                <tr key={id}>
+                  {context.isBulkActionsActivated && (
+                    <td
+                      className={styles.BulkActionsCell}
+                      onClick={(e) => {
+                        if (isSelected) return context.unselect(id);
+                        return context.select(id, e.shiftKey);
+                      }}
+                    >
+                      <Group justify="end">
                         <Checkbox
                           size="xs"
                           className="clickable"
                           radius={5}
                           checked={isSelected}
                           onChange={() => {}}
-                          onClick={(e) => {
-                            return isSelected ? ctx.unselect(id) : ctx.select(id, e.shiftKey);
-                          }}
                         />
-                      )}
+                      </Group>
+                    </td>
+                  )}
 
-                      {(function () {
-                        const value = getIn(item, getValuePath(columnSetting.id, column));
-                        if (column.render) {
-                          const Renderer = column.render;
-                          return <Renderer value={value} data={item} />;
-                        }
+                  {context.columns.map((column) => {
+                    if (!column.isVisible) return null;
+                    const columnData = getIn(rowData, getValuePath(column.columnKey, column));
+                    const Renderer = column.render;
 
-                        if (value) return <Text>{value}</Text>;
-                        return null;
-                      })()}
-                    </Group>
-                  </Table.Td>
-                );
-              })}
+                    return (
+                      <td
+                        key={column.columnKey}
+                        style={{ width: column.width, maxWidth: column.width }}
+                        data-body-column-key={column.columnKey}
+                      >
+                        <Group wrap="nowrap" gap={4} justify={column.align} maw="100%">
+                          {Renderer ? (
+                            <Renderer value={columnData} data={rowData} />
+                          ) : (
+                            <Text ta={column.align ?? "left"} truncate title={columnData}>
+                              {columnData}
+                            </Text>
+                          )}
+                        </Group>
+                      </td>
+                    );
+                  })}
 
-              {actions.length > 0 && (
-                <Table.Td w={38} px={5}>
-                  <Menu>
-                    <Menu.Target>
-                      <ActionIcon variant="subtle" color="gray">
-                        <IconDotsVertical size={16} />
-                      </ActionIcon>
-                    </Menu.Target>
+                  <td>
+                    {context.actions.length > 0 && (
+                      <Menu>
+                        <Menu.Target>
+                          <ActionIcon variant="subtle" color="gray">
+                            <IconDotsVertical size={16} />
+                          </ActionIcon>
+                        </Menu.Target>
 
-                    <Menu.Dropdown>
-                      {actions.map((action) => {
-                        const isDisabled =
-                          (action.disabled && action.disabled?.(item) === true) ||
-                          (action.permission && !workspace.hasPermission(action.permission));
+                        <Menu.Dropdown>
+                          {context.actions.map((action) => {
+                            const isDisabled =
+                              (action.disabled && action.disabled?.(rowData) === true) ||
+                              (action.permission && !workspace.hasPermission(action.permission));
 
-                        if ("onClick" in action)
-                          return (
-                            <Menu.Item
-                              key={action.label}
-                              onClick={() => action.onClick(item)}
-                              leftSection={<action.icon size={16} />}
-                              disabled={isDisabled}
-                            >
-                              {action.label}
-                            </Menu.Item>
-                          );
+                            if ("onClick" in action)
+                              return (
+                                <Menu.Item
+                                  key={action.label}
+                                  onClick={() => action.onClick(rowData)}
+                                  leftSection={<action.icon size={16} />}
+                                  disabled={isDisabled}
+                                >
+                                  {action.label}
+                                </Menu.Item>
+                              );
 
-                        if ("href" in action)
-                          return (
-                            <Menu.Item
-                              key={action.label}
-                              component={Link}
-                              href={action.href(item)}
-                              leftSection={<action.icon size={16} />}
-                            >
-                              {action.label}
-                            </Menu.Item>
-                          );
-                      })}
-                    </Menu.Dropdown>
-                  </Menu>
-                </Table.Td>
-              )}
-            </Table.Tr>
-          );
-        })}
-      </Table.Tbody>
+                            if ("href" in action)
+                              return (
+                                <Menu.Item
+                                  key={action.label}
+                                  component={Link}
+                                  href={action.href(rowData)}
+                                  leftSection={<action.icon size={16} />}
+                                >
+                                  {action.label}
+                                </Menu.Item>
+                              );
+                          })}
+                        </Menu.Dropdown>
+                      </Menu>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
 
-      {ctx.list.isFetching && (
-        <Table.Caption py={ctx.spacing * 2}>
-          <Loader size="sm" type="dots" color="gray" />
-        </Table.Caption>
-      )}
+          {context.list.isFetching && (
+            <caption style={{ padding: context.spacing * 2 }}>
+              <Loader size="sm" type="dots" color="gray" />
+            </caption>
+          )}
 
-      {ctx.list.isEmpty && (
-        <Table.Caption p={ctx.spacing}>
-          {ctx.components?.empty ? <ctx.components.empty /> : <Empty hideBorder />}
-        </Table.Caption>
-      )}
+          {context.list.isEmpty && (
+            <caption style={{ padding: context.spacing }}>
+              {context.components?.empty ? <context.components.empty /> : <Empty hideBorder />}
+            </caption>
+          )}
 
-      {ctx.list.isHasError && (
-        <Table.Caption p={ctx.spacing}>
-          <Errored error={ctx.list.error} />
-        </Table.Caption>
-      )}
-    </Table>
+          {context.list.isHasError && (
+            <caption style={{ padding: context.spacing }}>
+              <Errored error={context.list.error} />
+            </caption>
+          )}
+        </table>
+      </Stack>
+    </Stack>
   );
 }

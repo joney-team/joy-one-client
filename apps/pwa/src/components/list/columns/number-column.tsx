@@ -8,7 +8,7 @@ export interface NumberColumnOptions extends Omit<Column, "render"> {
   type?: "money" | "hours";
 }
 
-export const NumberColumn = (options?: NumberColumnOptions): Column => {
+export const numberColumn = (options?: NumberColumnOptions): Column => {
   const name = options?.name || (options?.type === "money" ? "money_amount" : "number");
   const align = options?.align || "right";
 

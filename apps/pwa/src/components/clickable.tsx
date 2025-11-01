@@ -1,6 +1,6 @@
 "use client";
 
-import { Anchor, AnchorProps, Group } from "@mantine/core";
+import { Anchor, AnchorProps, Group, Text } from "@mantine/core";
 import { FC, PropsWithChildren } from "react";
 import { Hovered } from "./hovered";
 import Link from "next/link";
@@ -13,6 +13,7 @@ interface ClickableProps extends AnchorProps {
   onClick?: () => any;
   disabled?: boolean;
   permission?: WorkspacePermission;
+  children: string;
 }
 
 export const Clickable: FC<PropsWithChildren<ClickableProps>> = (props) => {
@@ -31,10 +32,12 @@ export const Clickable: FC<PropsWithChildren<ClickableProps>> = (props) => {
           href={href}
           component={Link}
           target={blank ? "_blank" : "_self"}
+          maw="100%"
           style={{
             textDecoration: "none",
             color: "inherit",
           }}
+          truncate
           {...rest}
         >
           {props.children}
@@ -42,7 +45,11 @@ export const Clickable: FC<PropsWithChildren<ClickableProps>> = (props) => {
       );
     }
 
-    return props.children;
+    return (
+      <Text truncate title={props.children}>
+        {props.children}
+      </Text>
+    );
   };
 
   return (
@@ -53,7 +60,7 @@ export const Clickable: FC<PropsWithChildren<ClickableProps>> = (props) => {
             ref={hover.ref}
             px={5}
             py={1}
-            w="max-content"
+            maw="100%"
             style={{
               cursor: "pointer",
               borderRadius: 5,

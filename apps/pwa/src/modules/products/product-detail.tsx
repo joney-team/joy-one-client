@@ -4,9 +4,9 @@ import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
 import { List } from "@/components/list";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { EnumColumn } from "@/components/list/columns/enum-column";
-import { NumberColumn } from "@/components/list/columns/number-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
+import { enumColumn } from "@/components/list/columns/enum-column";
+import { numberColumn } from "@/components/list/columns/number-column";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
@@ -96,7 +96,7 @@ export const ProductDetail: FC = () => {
                   route="/product-stocks"
                   params={{ productId, sortExpireAt: 1 }}
                   columns={{
-                    createdAt: DateTimeColumn({ sortable: true, name: "time" }),
+                    createdAt: dateTimeColumn({ sortable: true, name: "time" }),
                     code: { name: "product_stock_code", filter: { text: true } },
                     createdByUserId: UserColumn({
                       name: "member",
@@ -113,13 +113,13 @@ export const ProductDetail: FC = () => {
                         );
                       },
                     },
-                    expireAt: DateTimeColumn({
+                    expireAt: dateTimeColumn({
                       name: "expire_at",
                       emptyText: "--",
                       hideTime: true,
                       isShowRelativeTime: true,
                     }),
-                    costPrice: NumberColumn({ name: "costPrice", type: "money" }),
+                    costPrice: numberColumn({ name: "costPrice", type: "money" }),
                     note: { defaultHidden: true },
                   }}
                   creatable={{
@@ -145,8 +145,8 @@ export const ProductDetail: FC = () => {
                   route="/product-stock-records"
                   params={{ productId }}
                   columns={{
-                    createdAt: DateTimeColumn(),
-                    type: EnumColumn({
+                    createdAt: dateTimeColumn(),
+                    type: enumColumn({
                       icon: IconBox,
                       options: Object.values(ProductStockRecordType).map((type) => ({
                         label: productStockRecordTypes[type].label(),
@@ -181,7 +181,7 @@ export const ProductDetail: FC = () => {
                       valuePath: "relatedProduct",
                       name: t`Products/Services related`,
                     }),
-                    quantity: NumberColumn({ name: t`Quantity` }),
+                    quantity: numberColumn({ name: t`Quantity` }),
                     note: { defaultHidden: true },
                   }}
                   events={events}

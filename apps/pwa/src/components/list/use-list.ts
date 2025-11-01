@@ -12,6 +12,7 @@ import { isPlural } from "../../utils/string.utils";
 import { BaseData } from "./types";
 import { getId } from "./utils";
 import { removeParams, setParams } from "@joy-one-client/utils/location-query";
+import { t } from "@lingui/core/macro";
 
 export interface UseListFetchReponse<T = any> {
   data: T[];
@@ -95,21 +96,31 @@ export interface UseListData<T extends BaseData> {
 
 let dataCached: any = {};
 
-export const useList = <T extends BaseData>(args: UseListArgs<T>): UseList<T> => {
+export const useList = <T extends BaseData>({
+  limit = 30,
+  isSkip = false,
+  autoFetch = true,
+  ...args
+}: UseListArgs<T>): UseList<T> => {
   const searchs = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const workspace = useWorkspace();
   const controller = useRef(new AbortController());
 
-  const isReadyToFetch = typeof args.isSkip === "boolean" ? !args.isSkip : true;
-  const listKey = args.id ? args.id.replace(/-/g, "") : undefined;
-  const cacheId = args.id
-    ? `${listKey}-${JSON.stringify(args.params || "p")}-${getWorkspaceId()}`
-    : undefined;
+  const isReadyToFetch = !isSkip;
+
+  const listKey = useMemo(() => {
+    return args.id ? args.id.replace(/-/g, "") : undefined;
+  }, [args.id]);
+
+  const cacheId = useMemo(() => {
+    return args.id
+      ? `${listKey}-${JSON.stringify(args.params || "p")}-${getWorkspaceId()}`
+      : undefined;
+  }, [args.id, args.params]);
+
   const cachedData = cacheId ? dataCached[cacheId] : undefined;
-  const autoFetch = typeof args.autoFetch === "boolean" ? args.autoFetch : true;
-  const limit = args.limit || 30;
 
   const [version, setVersion] = useState(0);
   const forceUpdate = () => setVersion((s) => s + 1);
@@ -185,17 +196,17 @@ export const useList = <T extends BaseData>(args: UseListArgs<T>): UseList<T> =>
           error: undefined,
           report: undefined,
         }));
+      } else {
+        forceUpdate();
       }
     }
-
-    let response: UseListFetchReponse<T> | undefined = undefined;
 
     try {
       if (options?.addonQuery) {
         setStateQuery({ ...stateQuery.current, ...options.addonQuery });
       }
 
-      response = await args.fetch(
+      const response: UseListFetchReponse<T> = await args.fetch(
         {
           offset: _isReset ? 0 : list.data.length,
           limit,
@@ -221,13 +232,18 @@ export const useList = <T extends BaseData>(args: UseListArgs<T>): UseList<T> =>
         }));
       }
 
-      if (_isReset) status.current.newDataCount = 0;
+      if (_isReset) {
+        status.current.newDataCount = 0;
+        forceUpdate();
+      }
+
+      return response;
     } catch (error: any) {
       if (error instanceof CanceledError) {
       } else {
         setList((s) => ({
           ...s,
-          error: error.message || "unknown_error",
+          error: error.message || t`Unknown error`,
         }));
       }
     } finally {
@@ -235,8 +251,6 @@ export const useList = <T extends BaseData>(args: UseListArgs<T>): UseList<T> =>
       status.current.isInitialized = true;
       forceUpdate();
     }
-
-    return response;
   };
 
   // Auto fetch when component is mounted

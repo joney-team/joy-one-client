@@ -35,9 +35,7 @@ export const WorkspaceBranchList: FC = () => {
             filter: { text: true },
             render: ({ data }) => {
               return (
-                <Clickable onClick={() => OnWorkspaceBranchModal(data)}>
-                  <Text>{data.name}</Text>
-                </Clickable>
+                <Clickable onClick={() => OnWorkspaceBranchModal(data)}>{data.name}</Clickable>
               );
             },
           },

@@ -1,6 +1,5 @@
 "use client";
 
-import { BaseData } from "@/components/list/types";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -13,10 +12,13 @@ import { t } from "@lingui/core/macro";
 import { ActionIcon, Group, Menu, MenuDropdown, Stack, ThemeIcon } from "@mantine/core";
 import { IconColumns3, IconDotsVertical, IconEye, IconEyeOff } from "@tabler/icons-react";
 import { type FC } from "react";
-import { Column, ListContext } from "../types";
+import { useListContext } from "../list-context";
+import { Column } from "../types";
 import { ActionButton } from "./action-button";
 
-export const ColsSettings: FC<ListContext> = (ctx) => {
+export const ColsSettings: FC = () => {
+  const ctx = useListContext();
+
   if (ctx.viewState.view !== "table") return null;
 
   return (
@@ -26,21 +28,21 @@ export const ColsSettings: FC<ListContext> = (ctx) => {
           <ActionButton
             label={t`Columns`}
             icon={IconColumns3}
-            quantity={ctx.columnSettings.filter((v) => v.isVisible).length}
+            quantity={Object.values(ctx.columns).filter((v) => v.isVisible).length}
             quantityColor="gray"
           />
         </Group>
       </Menu.Target>
 
       <MenuDropdown>
-        <Columns {...ctx} />
+        <Columns />
       </MenuDropdown>
     </Menu>
   );
 };
 
-export function Columns<T extends BaseData>(ctx: ListContext<T>) {
-  const { setViewState, viewState, columnSettings: cols } = ctx;
+export function Columns() {
+  const { setViewState, columns, viewState, changeColumnState } = useListContext();
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -56,44 +58,41 @@ export function Columns<T extends BaseData>(ctx: ListContext<T>) {
       onDragEnd={(e) => {
         const { active, over } = e;
         if (!over || active.id === over?.id) return;
-        let items = [...cols];
 
-        const oldIndex = items.findIndex((v) => v.id === active.id.toString());
-        const newIndex = items.findIndex((v) => v.id === over?.id.toString());
-        items = arrayMove(items, oldIndex, newIndex);
+        const oldIndex = columns.findIndex((v) => v.columnKey === active.id.toString());
+        const newIndex = columns.findIndex((v) => v.columnKey === over?.id.toString());
+        const items = arrayMove([...columns], oldIndex, newIndex);
 
         setViewState({
           ...viewState,
-          columnSettings: items.map((v, i) => ({
-            ...v,
-            order: i,
-          })),
+          columns: items.reduce((acc, column, i) => {
+            return {
+              ...acc,
+              [column.columnKey]: { ...acc[column.columnKey], order: i },
+            };
+          }, viewState.columns),
         });
       }}
     >
       <Stack gap={0} align="stretch">
-        <SortableContext items={cols} strategy={verticalListSortingStrategy}>
-          {cols.map((columnSetting) => {
-            const column = ctx.columns[columnSetting.id as keyof T];
-
-            const isVisible = cols.some((v) => v.id === columnSetting.id && v.isVisible);
-            const toggleVisible = () =>
-              setViewState({
-                ...viewState,
-                columnSettings: cols.map((v) =>
-                  v.id === columnSetting.id ? { ...v, isVisible: !v.isVisible } : v
-                ),
-              });
+        <SortableContext
+          items={columns.map((v) => v.columnKey)}
+          strategy={verticalListSortingStrategy}
+        >
+          {columns.map((column) => {
+            const toggleVisible = () => {
+              changeColumnState(column.columnKey, { isHidden: !!column.isVisible });
+            };
 
             if (!column) return null;
 
             return (
               <ColumnItem
-                key={columnSetting.id}
-                columnKey={columnSetting.id}
+                key={column.columnKey}
+                columnKey={column.columnKey}
                 column={column}
                 toggleVisible={toggleVisible}
-                isVisible={isVisible}
+                isVisible={column.isVisible}
               />
             );
           })}

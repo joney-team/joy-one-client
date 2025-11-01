@@ -20,18 +20,18 @@ export interface StaticSelectorFilterConfig {
 }
 
 export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> = ({
-  colKey,
-  list,
+  column,
   Wrapper,
   config,
+  list,
 }) => {
   const { multiple, options, dropdownProps } = config;
-  const value = list.params[colKey] ? `${list.params[colKey]}`.split(",") : [];
+  const value = list.params[column.columnKey] ? `${list.params[column.columnKey]}`.split(",") : [];
   const selectedOptions = options.filter((v) => value.includes(v.value));
 
   return (
     <Selector
-      key={colKey}
+      key={column.columnKey}
       autoCloseOnChange={!multiple}
       pinnedOptions={config.options.map((v) => ({
         id: v.value,
@@ -98,12 +98,12 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
             : [...selectedOptions, value];
 
           if (_value.length === 0) {
-            list.removeParams([colKey]);
+            list.removeParams([column.columnKey]);
           } else {
-            list.setParams({ [colKey]: _value.map((v) => v?.value) });
+            list.setParams({ [column.columnKey]: _value.map((v) => v?.value) });
           }
         } else {
-          list.setParams({ [colKey]: value?.value });
+          list.setParams({ [column.columnKey]: value?.value });
         }
       }}
       dropdownProps={dropdownProps}

@@ -2,10 +2,10 @@
 
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
-import { StatusColumn } from "@/components/list/columns/status-column";
+import { statusColumn } from "@/components/list/columns/status-column";
 import { EventType } from "@/modules/events/event-types";
 import { OnModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
-import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
+import { workspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity } from "@/types";
 import { t } from "@lingui/core/macro";
@@ -36,6 +36,7 @@ export const CustomerFormList: FC = () => {
             name: t`Name`,
             filter: { text: true },
             render: ({ value, data }) => {
+              if (!value) return null;
               return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
             },
           },
@@ -43,21 +44,19 @@ export const CustomerFormList: FC = () => {
             name: t`Phone`,
             filter: { text: true },
             render: ({ value, data }) => {
+              if (!value) return null;
               return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
             },
           },
           vnLocation: {
-            w: 400,
+            defaultWidth: 400,
             name: t`Address`,
             render: ({ value }) => renderLocation(value),
           },
-          workspaceBranchId: WorkspaceBranchColumn({
-            w: 320,
-            entity: AppEntity.CUSTOMER_FORMS,
-          }),
-          status: StatusColumn({
+          workspaceBranchId: workspaceBranchColumn(),
+          status: statusColumn({
             name: t`Status`,
-            w: 200,
+            defaultWidth: 200,
             options: Object.entries(customerFormStatuses).map(([key, value]) => ({
               value: key,
               label: value.label(),

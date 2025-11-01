@@ -2,7 +2,7 @@
 
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
-import { NumberColumn } from "@/components/list/columns/number-column";
+import { numberColumn } from "@/components/list/columns/number-column";
 import { EventType } from "@/modules/events/event-types";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
@@ -53,7 +53,7 @@ export const ProductComboSetup: FC = () => {
               );
             },
           },
-          price: NumberColumn({ type: "money", name: t`Price`, sortable: true }),
+          price: numberColumn({ type: "money", name: t`Price`, sortable: true }),
         }}
         card={(props) => <ProductCard product={props.data} />}
         actions={[

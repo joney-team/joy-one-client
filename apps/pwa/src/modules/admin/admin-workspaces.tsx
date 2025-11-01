@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { List } from "@/components/list";
-import { EnumColumn } from "@/components/list/columns/enum-column";
+import { enumColumn } from "@/components/list/columns/enum-column";
 import { formatBytes } from "@joy-one-client/utils/files";
 import { Group, Stack, Text } from "@mantine/core";
 import { type FC } from "react";
@@ -28,8 +28,8 @@ export const AdminWorkspaces: FC = () => {
               );
             },
           },
-          type: EnumColumn<WorkspaceType>({
-            w: 200,
+          type: enumColumn<WorkspaceType>({
+            defaultWidth: 200,
             valuePath: "workspace.type",
             name: "Type",
             options: Object.values(WorkspaceType).map((type) => ({
@@ -39,27 +39,27 @@ export const AdminWorkspaces: FC = () => {
           }),
           memberCount: {
             name: "Members",
-            w: 150,
+            defaultWidth: 150,
             sortable: true,
           },
           customerCount: {
             name: "Customers",
-            w: 150,
+            defaultWidth: 150,
             sortable: true,
           },
           bookingCount: {
             name: "Bookings",
-            w: 150,
+            defaultWidth: 150,
             sortable: true,
           },
           orderCount: {
             name: "Orders",
-            w: 150,
+            defaultWidth: 150,
             sortable: true,
           },
           storageUsage: {
             name: "Storage Usage",
-            w: 150,
+            defaultWidth: 150,
             sortable: true,
             render: ({ value }) => {
               return formatBytes(value ?? 0);

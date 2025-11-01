@@ -1,21 +1,35 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { ActionIcon, Checkbox, Group, Table, Text } from "@mantine/core";
+import { ActionIcon, Box, Group, Stack, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconSelector } from "@tabler/icons-react";
 import { FC, useEffect, useRef } from "react";
-import { ListContext } from "../types";
+import { TableColumn } from "../types";
 import { getSortQueryKey, getValuePath } from "../utils";
+import { useColumnResize } from "./use-collumn-resize";
 
-export const ListTableHead: FC<ListContext & { columnId: string; colIndex: number }> = (ctx) => {
-  const { columnId, colIndex, isShowMultipleSelectActions, list, selectedIds, columns } = ctx;
+import { classNames } from "@/utils/ui.utils";
+import { useListContext } from "../list-context";
+import styles from "./table-head.module.css";
+
+export const ListTableHead: FC<{ column: TableColumn }> = ({ column }) => {
+  const { list, changeColumnState } = useListContext();
   const hover = useHover();
   const sortIconRef = useRef<any>(null);
   const color = useColor();
-  const column = columns[columnId];
 
-  const sortKey = getSortQueryKey(columnId);
+  const resize = useColumnResize({
+    columnKey: column.columnKey,
+    minWidth: column.minWidth,
+    initialWidth: column.width,
+    disabled: !column.resizable,
+    onResize: (columnKey, width) => {
+      changeColumnState(columnKey, { width });
+    },
+  });
+
+  const sortKey = getSortQueryKey(column.columnKey);
   const sortValue = list.params[sortKey];
   const sortValueType = +sortValue === 1 ? "asc" : +sortValue === -1 ? "desc" : "none";
 
@@ -55,57 +69,69 @@ export const ListTableHead: FC<ListContext & { columnId: string; colIndex: numbe
 
   if (!column) return null;
 
-  const { sortable: sortable } = column;
-
-  const isShowSelectAll = colIndex === 0 && isShowMultipleSelectActions;
-  const isSelectedAll =
-    list.data.length > 0 && list.data.every((v: any) => selectedIds.includes(v.id || v._id || ""));
+  const { sortable } = column;
+  const columnName = column?.name || getValuePath(column.columnKey, column);
 
   return (
-    <Table.Th
-      className="unselectable"
+    <th
+      className={classNames(styles.TableHead, "unselectable")}
       ref={hover.ref}
-      bg={
-        sortable
+      data-column-key={column.columnKey}
+      onClick={sortable ? onSort : undefined}
+      style={{
+        width: column.width,
+        cursor: resize.isResizing ? "col-resize" : sortable ? "pointer" : "default",
+        backgroundColor: sortable
           ? hover.hovered
             ? "var(--mantine-color-default-hover)"
             : "transparent"
-          : "transparent"
-      }
-      style={{ cursor: sortable ? "pointer" : "default" }}
-      onClick={sortable ? onSort : undefined}
-      pl={isShowSelectAll ? 10 : undefined}
-      w={column.w}
+          : "transparent",
+        position: "relative",
+        overflow: "visible",
+      }}
     >
-      <Group wrap="nowrap" gap={8}>
-        {isShowSelectAll && (
-          <Checkbox
-            size="xs"
-            radius={5}
-            checked={isSelectedAll}
-            onChange={() => (isSelectedAll ? ctx.unselectAll() : ctx.selectAll())}
-          />
+      <Group gap={4} flex={1} justify={column.align} align="center" w="100%" wrap="nowrap">
+        {column?.icon && typeof column.icon !== "boolean" && (
+          <Group style={{ width: 16, height: 16 }} justify="center" align="center">
+            <column.icon size={16} />
+          </Group>
         )}
 
-        <Group justify={column.align} align="center" gap={5} c="var(--mantine-color-text)" flex={1}>
-          {column?.icon && <column.icon size={16} />}
+        <Text truncate fz={13} fw={500} ta={column.align ?? "left"} title={columnName}>
+          {columnName}
+        </Text>
 
-          <Text fz={13} fw={500} flex={1} ta={column.align} c="var(--mantine-color-text)">
-            {column?.name || getValuePath(columnId, column)}
-          </Text>
-
-          {column.sortable && (
-            <ActionIcon
-              variant="subtle"
-              color="var(--mantine-color-dimmed)"
-              size="sm"
-              mr={column.align === "right" ? -10 : 0}
-            >
-              <IconSelector size={16} ref={sortIconRef} />
-            </ActionIcon>
-          )}
-        </Group>
+        {column.sortable && (
+          <ActionIcon variant="subtle" color="var(--mantine-color-dimmed)" size="sm">
+            <IconSelector size={16} ref={sortIconRef} />
+          </ActionIcon>
+        )}
       </Group>
-    </Table.Th>
+
+      <Stack
+        className={styles.ResizeHandle}
+        pos="absolute"
+        top={0}
+        justify="center"
+        align="center"
+        bottom={0}
+        w={6}
+        bg="transparent"
+        onClick={(e) => e.stopPropagation()}
+        onMouseDown={resize.handleMouseDown}
+        style={{
+          left: (resize.currentWidth || 0) - 3,
+          zIndex: 2,
+          cursor: column.resizable ? "col-resize" : "default",
+        }}
+      >
+        <Box
+          w={2}
+          h="50%"
+          bg={color({ light: "gray.3", dark: "gray.7" })}
+          style={{ borderRadius: 15 }}
+        />
+      </Stack>
+    </th>
   );
 };

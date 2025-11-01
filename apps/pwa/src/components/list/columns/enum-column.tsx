@@ -15,10 +15,10 @@ export interface EnumColumnArgs<T extends string> extends Column {
   }[];
 }
 
-export const EnumColumn = <T extends string>(args: EnumColumnArgs<T>): Column => {
+export const enumColumn = <T extends string>(args: EnumColumnArgs<T>): Column => {
   return {
     ...(args ? objUnselect(args, ["options"]) : {}),
-    w: args?.w || 150,
+    defaultWidth: args?.defaultWidth || 150,
     icon: args?.icon || IconChartBubble,
     render: (ctx) => {
       if (args.render) return args.render(ctx);
@@ -66,7 +66,7 @@ export const EnumColumn = <T extends string>(args: EnumColumnArgs<T>): Column =>
           },
         })),
         dropdownProps: {
-          miw: (args?.w || 150) + 15,
+          miw: (args?.defaultWidth || 150) + 15,
         },
       },
     },

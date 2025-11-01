@@ -1,11 +1,11 @@
 "use client";
 
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/code-column";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { NumberColumn } from "@/components/list/columns/number-column";
-import { StatusColumn } from "@/components/list/columns/status-column";
-import { CustomerColumn } from "@/modules/customers/components/customer-column";
+import { codeColumn } from "@/components/list/columns/code-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
+import { numberColumn } from "@/components/list/columns/number-column";
+import { statusColumn } from "@/components/list/columns/status-column";
+import { customerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { OrderCard } from "@/modules/orders/order-card";
 import { onPayOrder } from "@/modules/orders/orders-service";
@@ -36,9 +36,9 @@ export const OrderList: FC = () => {
         icon={mod.icon}
         route="/orders"
         columns={{
-          code: CodeColumn({ href: (value) => `/orders/${value}` }),
-          createdAt: DateTimeColumn({ name: t`Time`, sortable: true }),
-          relatedCustomerId: CustomerColumn({
+          code: codeColumn({ href: (value) => `/orders/${value}` }),
+          createdAt: dateTimeColumn({ name: t`Time`, sortable: true }),
+          relatedCustomerId: customerColumn({
             name: t`Customer`,
             valuePath: "relatedCustomer",
           }),
@@ -47,9 +47,9 @@ export const OrderList: FC = () => {
             valuePath: "createdByUser",
           }),
           items: OrderItemsColumn,
-          totalAmount: NumberColumn({ name: t`Money amount`, type: "money", sortable: true }),
-          paymentStatus: StatusColumn({
-            w: 200,
+          totalAmount: numberColumn({ name: t`Money amount`, type: "money", sortable: true }),
+          paymentStatus: statusColumn({
+            defaultWidth: 200,
             name: t`Payment status`,
             options: Object.values(OrderPaymentStatus).map((status) => ({
               label: orderPaymentStatuses[status].label(),

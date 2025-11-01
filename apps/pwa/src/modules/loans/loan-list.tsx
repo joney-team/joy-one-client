@@ -5,11 +5,11 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/code-column";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
+import { codeColumn } from "@/components/list/columns/code-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { Renderer } from "@/components/renderer";
 import { OnModalPrompt } from "@/modals/modal-prompt";
-import { CustomerColumn } from "@/modules/customers/components/customer-column";
+import { customerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { LoanCard } from "@/modules/loans/components/loan-card";
 import {
@@ -22,7 +22,7 @@ import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { ReportsContext, useReports } from "@/modules/reports/reports-context";
 import { OnModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
-import { WorkspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
+import { workspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
@@ -42,7 +42,7 @@ import {
   IconFileTypePdf,
   IconRefresh,
 } from "@tabler/icons-react";
-import { FC, Fragment } from "react";
+import { FC } from "react";
 import { api } from "../apis";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
@@ -56,7 +56,6 @@ interface LoanListProps {
 
 export const LoanList: FC<LoanListProps> = (props) => {
   const workspace = useWorkspace();
-  const nowInSeconds = DateTime.toSeconds(DateTime.getRange(new Date(), "day").end);
   const color = useColor();
   const location = useLocations();
 
@@ -79,42 +78,11 @@ export const LoanList: FC<LoanListProps> = (props) => {
         permission: WorkspacePermission.LOANS_CREATOR,
       }}
       columns={{
-        code: CodeColumn({
+        code: codeColumn({
           href: (value) => `/loans/${value}`,
-          render: (_, data) => {
-            const loan = data as LoanEntity;
-            return (
-              <Fragment>
-                <Renderer visible={loan.isLiquidated}>
-                  <Badge variant="light" color="violet" size="xs">
-                    <Trans>Liquidation</Trans>
-                  </Badge>
-                </Renderer>
-
-                <Renderer visible={loan.isHasLateInterestReceipt}>
-                  <Badge variant="light" color="orange" size="xs">
-                    <Trans>Has late interest</Trans>
-                  </Badge>
-                </Renderer>
-              </Fragment>
-            );
-          },
         }),
-        createdAt: DateTimeColumn({
-          name: t`Created at`,
-          sortable: true,
-          defaultHidden: true,
-          isHasFilter: true,
-        }),
-        fulfilledAt: DateTimeColumn({
-          name: t`Fulfilled at`,
-          sortable: true,
-          defaultHidden: true,
-          isHasFilter: true,
-          w: 165,
-        }),
-        workspaceBranchId: WorkspaceBranchColumn({ entity: AppEntity.LOANS }),
-        customerId: CustomerColumn({ valuePath: "customer" }),
+        customerId: customerColumn({ valuePath: "customer" }),
+        workspaceBranchId: workspaceBranchColumn(),
         packageId: {
           icon: IconCoins,
           name: t`Loan package`,
@@ -126,7 +94,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
               })),
             },
           },
-          w: 300,
+          defaultWidth: 300,
           render: ({ data: loan }) => {
             const loanPackage = loan.package;
 
@@ -224,8 +192,20 @@ export const LoanList: FC<LoanListProps> = (props) => {
             ];
           },
         },
+        createdAt: dateTimeColumn({
+          name: t`Created at`,
+          sortable: true,
+          defaultHidden: true,
+          isHasFilter: true,
+        }),
+        fulfilledAt: dateTimeColumn({
+          name: t`Fulfilled at`,
+          sortable: true,
+          isHasFilter: true,
+        }),
         nextReceiptAt: {
           name: t`Payment date`,
+          defaultWidth: 150,
           sortable: true,
           render: ({ value, data: loan }) => {
             const warningReceiptBeforeDays =
@@ -256,7 +236,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
           exportToExcel: false,
         },
         status: {
-          w: 200,
+          defaultWidth: 200,
           name: t`Status`,
           icon: IconCircle,
           filter: props.strictStatus
@@ -290,16 +270,26 @@ export const LoanList: FC<LoanListProps> = (props) => {
               : 0;
 
             return (
-              <Stack gap={10}>
-                <Group wrap="nowrap" gap={3} miw={200}>
-                  <Badge
-                    variant="light"
-                    style={{ borderRadius: 100 }}
-                    color={loanStatusColors[loan.status]}
-                  >
-                    {loanStatuses[loan.status].label()}
+              <Stack gap={10} flex={1}>
+                <Renderer visible={loan.isLiquidated}>
+                  <Badge variant="light" color="violet" style={{ borderRadius: 100 }}>
+                    <Trans>Liquidation</Trans>
                   </Badge>
-                </Group>
+                </Renderer>
+
+                <Renderer visible={loan.isHasLateInterestReceipt}>
+                  <Badge variant="light" color="orange" style={{ borderRadius: 100 }}>
+                    <Trans>Has late interest</Trans>
+                  </Badge>
+                </Renderer>
+
+                <Badge
+                  variant="light"
+                  style={{ borderRadius: 100 }}
+                  color={loanStatusColors[loan.status]}
+                >
+                  {loanStatuses[loan.status].label()}
+                </Badge>
 
                 <Renderer
                   visible={[
@@ -411,14 +401,14 @@ export const LoanList: FC<LoanListProps> = (props) => {
       card={({ data: loan }) => <LoanCard loan={loan} />}
       filterModes={[
         {
-          name: "liquidation",
+          name: t`Liquidation`,
           param: "isLiquidated",
           icon: IconBrandSpeedtest,
           params: () => ({ isLiquidated: true }),
           disabled: !!props.strictStatus,
         },
         {
-          name: "has_late_interest",
+          name: t`Has late interest`,
           param: "isHasLateInterestReceipt",
           icon: IconCircleDashedMinus,
           params: () => ({ isHasLateInterestReceipt: true }),

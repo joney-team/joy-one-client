@@ -1,3 +1,5 @@
+"use client";
+
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
@@ -6,22 +8,20 @@ import { ActionIcon, Group, Menu, Text } from "@mantine/core";
 import { IconArrowDown, IconArrowsDownUp, IconArrowUp } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { ActionButton } from "../components/action-button";
-import { ListContext } from "../types";
+import { useListContext } from "../list-context";
 import { getColumnLabel, getSortQueryKey } from "../utils";
 
-export const Sort: FC<ListContext> = (props) => {
-  const { columns, list, columnSettings } = props;
+export const Sort: FC = () => {
+  const { columns, list } = useListContext();
   const color = useColor();
   const layout = useLayout();
 
-  if (columnSettings.every((col) => !columns[col.id]?.sortable)) return null;
+  if (columns.every((col) => !col.sortable)) return null;
 
-  const sorting = columnSettings.filter(
-    (col) => list.params[`sort${capitalizeFirstLetter(col.id, false)}`]
-  );
+  const sorting = columns.filter((column) => list.params[getSortQueryKey(column.columnKey)]);
 
   const onReset = () => {
-    list.removeParams(sorting.map((col) => `sort${capitalizeFirstLetter(col.id, false)}`));
+    list.removeParams(sorting.map((column) => getSortQueryKey(column.columnKey)));
   };
 
   return (
@@ -39,26 +39,25 @@ export const Sort: FC<ListContext> = (props) => {
       </Menu.Target>
 
       <Menu.Dropdown>
-        {columnSettings.map((columnSetting) => {
-          const column = columns[columnSetting.id];
+        {columns.map((column) => {
           if (!column || !column.sortable) return null;
 
-          const queryKey = getSortQueryKey(columnSetting.id);
+          const queryKey = getSortQueryKey(column.columnKey);
           const querySort = list.params[queryKey];
 
           const isAsc = querySort === "1";
           const isDesc = querySort === "-1";
 
           return (
-            <Fragment key={columnSetting.id}>
+            <Fragment key={column.columnKey}>
               <Group justify="space-between" gap={8} py={8} px={4}>
                 <Text flex={1} pl={4} fz={14}>
-                  {getColumnLabel(columnSetting.id, column)}
+                  {getColumnLabel(column.columnKey, column)}
                 </Text>
 
                 <Group gap={2}>
                   <ActionIcon
-                    variant={isAsc ? "filled" : "subtle"}
+                    variant={isAsc ? "light" : "subtle"}
                     color={color(isAsc ? "primary" : "dark")}
                     onClick={() => {
                       if (isAsc) return list.removeParams([queryKey]);
@@ -69,7 +68,7 @@ export const Sort: FC<ListContext> = (props) => {
                   </ActionIcon>
 
                   <ActionIcon
-                    variant={isDesc ? "filled" : "subtle"}
+                    variant={isDesc ? "light" : "subtle"}
                     color={color(isDesc ? "primary" : "dark")}
                     onClick={() => {
                       if (isDesc) return list.removeParams([queryKey]);

@@ -1,13 +1,13 @@
 "use client";
 
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/code-column";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { EnumColumn } from "@/components/list/columns/enum-column";
-import { NumberColumn } from "@/components/list/columns/number-column";
-import { StatusColumn } from "@/components/list/columns/status-column";
+import { codeColumn } from "@/components/list/columns/code-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
+import { enumColumn } from "@/components/list/columns/enum-column";
+import { numberColumn } from "@/components/list/columns/number-column";
+import { statusColumn } from "@/components/list/columns/status-column";
 import { OnModalPrinter } from "@/modals/modal-printer";
-import { CustomerColumn } from "@/modules/customers/components/customer-column";
+import { customerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
@@ -23,7 +23,6 @@ import { UserColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { AppEntity } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Stack } from "@mantine/core";
 import {
@@ -34,7 +33,7 @@ import {
   IconPrinter,
 } from "@tabler/icons-react";
 import { type FC } from "react";
-import { WorkspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
+import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
 
 export const ReceiptList: FC = () => {
@@ -52,29 +51,29 @@ export const ReceiptList: FC = () => {
         icon={IconCashRegister}
         route="/receipts"
         columns={{
-          code: CodeColumn({
+          code: codeColumn({
             onClick: (_, data) => OnReceiptDetailModal({ id: data.id }),
           }),
-          workspaceBranchId: WorkspaceBranchColumn({ entity: AppEntity.RECEIPTS }),
-          createdAt: DateTimeColumn({ name: t`Created at`, sortable: true, isHasFilter: true }),
-          paidAt: DateTimeColumn({
+          workspaceBranchId: workspaceBranchColumn(),
+          createdAt: dateTimeColumn({ name: t`Created at`, sortable: true, isHasFilter: true }),
+          paidAt: dateTimeColumn({
             name: t`Paid at`,
             sortable: true,
             defaultHidden: true,
             isHasFilter: true,
-            w: 200,
+            defaultWidth: 200,
           }),
-          expireAt: DateTimeColumn({
+          expireAt: dateTimeColumn({
             name: t`Pay expire`,
             sortable: true,
             defaultHidden: true,
             isHasFilter: true,
-            w: 200,
+            defaultWidth: 200,
           }),
-          type: EnumColumn({
+          type: enumColumn({
             name: t`Type`,
             icon: IconArrowsDoubleSwNe,
-            w: 110,
+            defaultWidth: 110,
             options: Object.values(ReceiptType).map((type) => ({
               label: receiptTypes[type].label(),
               color: receiptTypes[type].color,
@@ -82,7 +81,7 @@ export const ReceiptList: FC = () => {
               value: type,
             })),
           }),
-          relatedCustomerId: CustomerColumn({
+          relatedCustomerId: customerColumn({
             name: t`Customer`,
             valuePath: "relatedCustomer",
           }),
@@ -91,19 +90,19 @@ export const ReceiptList: FC = () => {
             valuePath: "cashierUser",
             optionalValuePath: "disbursementUser",
           }),
-          status: StatusColumn({
+          status: statusColumn({
             name: t`Status`,
-            w: 180,
+            defaultWidth: 180,
             options: Object.values(ReceiptStatus).map((status) => ({
               label: receiptStatuses[status].label(),
               value: status,
               color: receiptStatuses[status].color,
             })),
           }),
-          paymentMethod: EnumColumn({
+          paymentMethod: enumColumn({
             name: t`Payment`,
             icon: IconCreditCard,
-            w: 180,
+            defaultWidth: 180,
             options: Object.values(ReceiptPaymentMethod).map((paymentMethod) => ({
               label: receiptPaymentMethods[paymentMethod].label(),
               value: paymentMethod,
@@ -111,7 +110,7 @@ export const ReceiptList: FC = () => {
               icon: receiptPaymentMethods[paymentMethod].icon,
             })),
           }),
-          amount: NumberColumn({
+          amount: numberColumn({
             name: t`Money amount`,
             align: "right",
             sortable: true,

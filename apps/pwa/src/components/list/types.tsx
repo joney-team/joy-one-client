@@ -39,7 +39,7 @@ export type ExportToExcel<Data, FieldType> = (
 export type Column<Data = any, FieldType = any> = {
   name?: string;
   valuePath?: string;
-  icon?: Icon;
+  icon?: Icon | false;
   activeIcon?: Icon;
   filter?: {
     staticSelector?: StaticSelectorFilterConfig;
@@ -48,12 +48,14 @@ export type Column<Data = any, FieldType = any> = {
     text?: TextFilterConfig;
   };
   exportToExcel?: ExportToExcel<Data, FieldType> | false;
-  w?: number;
   render?: ColumnItemRenderer<FieldType, Data>;
   align?: "left" | "center" | "right";
-  sortable?: boolean;
+  defaultWidth?: number;
+  minWidth?: number;
   defaultHidden?: boolean;
+  sortable?: boolean;
   disabled?: boolean;
+  resizable?: boolean;
 };
 
 export type Columns<Data = any> = {
@@ -113,34 +115,50 @@ export type ListProps<Data extends BaseData> = {
   bulkActions?: ListBulkAction<Data>[];
 };
 
-export type ColumnSetting = {
-  id: string;
+export type ColumnState = {
   order: number;
+  isHidden: boolean;
+  width?: number;
+};
+
+export type TableColumn<Data = any> = Omit<
+  Column<Data>,
+  "defaultWidth" | "minWidth" | "resizable"
+> & {
+  columnKey: string;
+  width: number;
   isVisible: boolean;
+  order: number;
+  defaultWidth: number;
+  minWidth: number;
+  resizable: boolean;
 };
 
 // Internal styles
 export interface ListViewState {
   view: "table" | "grid";
-  columnSettings: ColumnSetting[];
+  columns: Record<string, ColumnState>;
   isFilterVisible: boolean;
   activatedModes?: string[];
 }
 
-export type ListContext<Data extends BaseData = any> = ListProps<Data> & {
+export type ListContext<Data extends BaseData = any> = Omit<
+  ListProps<Data>,
+  "columns" | "actions"
+> & {
   list: UseList<Data>;
   viewState: ListViewState;
   setViewState: (viewState: ListViewState) => void;
   spacing: number;
-  isViewStateChanged: boolean;
-  onSaveViewState: () => void;
   toggleActivatedMode: (mode: string) => void;
-  columnSettings: (ColumnSetting & { name?: string })[];
+  columns: Array<TableColumn>;
   selectedIds: string[];
-  isShowMultipleSelectActions: boolean;
+  isBulkActionsActivated: boolean;
   select: (id: string, isShiftKey?: boolean) => void;
   unselect: (id: string) => void;
   selectAll: () => void;
   unselectAll: () => void;
   availableMultipleSelectActions: ListBulkAction<Data>[];
+  changeColumnState: (columnKey: string, state: Partial<ColumnState>) => void;
+  actions: ListAction<Data>[];
 };

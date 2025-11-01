@@ -16,7 +16,7 @@ export const PartnerList: FC = () => {
       <List<PartnerEntity>
         columns={{
           logo: {
-            w: 40,
+            defaultWidth: 40,
             name: t`Logo`,
             align: "center",
             render: ({ data }) => <Avatar partner={data} size={30} />,

@@ -11,14 +11,14 @@ export interface CodeColumnOptions<T = any, FieldType = T[keyof T]>
   render?: (value: FieldType, data: T) => any;
 }
 
-export function CodeColumn<T = any, FieldType = T[keyof T]>(
+export function codeColumn<T = any, FieldType = T[keyof T]>(
   options?: CodeColumnOptions<T, FieldType>
 ): Column<T, FieldType> {
   const { href, onClick, render, ...rest } = options || {};
 
   return {
     ...rest,
-    w: options?.w || 100,
+    defaultWidth: options?.defaultWidth || 100,
     name: rest.name || t`Code`,
     icon: options?.icon || IconHash,
     filter: options?.filter || { text: true },

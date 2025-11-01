@@ -3,15 +3,16 @@
 import { Avatar } from "@/components/avatar";
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/code-column";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { EnumColumn } from "@/components/list/columns/enum-column";
+import { codeColumn } from "@/components/list/columns/code-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
+import { enumColumn } from "@/components/list/columns/enum-column";
 import { genders } from "@/constant";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { EventType } from "@/modules/events/event-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { AppEntity, Gender } from "@/types";
+import { Gender } from "@/types";
+import { t } from "@lingui/core/macro";
 import { Stack } from "@mantine/core";
 import {
   IconGenderBigender,
@@ -21,10 +22,9 @@ import {
   IconUserSquare,
 } from "@tabler/icons-react";
 import { type FC } from "react";
-import { WorkspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
+import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { CustomerEntity } from "./customer-types";
-import { t } from "@lingui/core/macro";
 
 export const CustomerList: FC = () => {
   const workspace = useWorkspace();
@@ -37,16 +37,18 @@ export const CustomerList: FC = () => {
         icon={IconUserSquare}
         route="/customers"
         columns={{
-          code: CodeColumn({ href: (value) => `/customers/${value}` }),
-          createdAt: DateTimeColumn({ name: t`Created at`, sortable: true, isHasFilter: true }),
+          code: codeColumn({ href: (value) => `/customers/${value}` }),
+          createdAt: dateTimeColumn({ name: t`Created at`, sortable: true, isHasFilter: true }),
           avatar: {
+            icon: IconPhoto,
+            resizable: false,
             name: t`Avatar`,
-            w: 100,
             align: "center",
+            minWidth: 80,
             render: ({ data }) => <Avatar customer={data} size={50} radius={8} />,
             exportToExcel: false,
           },
-          gender: EnumColumn({
+          gender: enumColumn({
             name: t`Gender`,
             icon: IconGenderBigender,
             options: Object.values(Gender).map((gender) => ({
@@ -96,9 +98,7 @@ export const CustomerList: FC = () => {
               };
             },
           },
-          workspaceBranchId: WorkspaceBranchColumn({
-            entity: AppEntity.CUSTOMERS,
-          }),
+          workspaceBranchId: workspaceBranchColumn(),
         }}
         card={({ data }) => <CustomerCard customer={data} />}
         creatable={{

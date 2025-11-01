@@ -1,7 +1,7 @@
 "use client";
 
 import { Clickable } from "@/components/clickable";
-import { EnumColumn } from "@/components/list/columns/enum-column";
+import { enumColumn } from "@/components/list/columns/enum-column";
 import { List } from "@/components/list/list";
 import { Stack, Text } from "@mantine/core";
 import { IconCategory, IconEdit, IconOutlet } from "@tabler/icons-react";
@@ -29,14 +29,14 @@ export const CategoryList: FC = () => {
                   permission={WorkspacePermission.CATEGORIES_MANAGER}
                   onClick={() => OnModalCategory({ category: data })}
                 >
-                  <Text>{data.name}</Text>
+                  {data.name}
                 </Clickable>
               );
             },
           },
           slug: { filter: { text: true }, icon: IconOutlet },
-          type: EnumColumn({
-            w: 200,
+          type: enumColumn({
+            defaultWidth: 200,
             options: Object.values(CategoryType).map((type) => ({
               value: type,
               label: categoryTypes[type].label(),

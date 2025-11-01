@@ -699,6 +699,7 @@ msgstr "Tệp đính kèm"
 
 #: src/modules/bookings/booking-list.tsx:299
 #: src/modules/bookings/components/booking-card.tsx:333
+#: src/modules/bookings/components/form-booking.tsx:179
 #: src/modules/bookings/modals/modal-booking.tsx:181
 #: src/modules/bookings/modals/modal-booking.tsx:247
 msgid "Attendees"
@@ -926,7 +927,7 @@ msgstr "Gọi khách hàng"
 msgid "Can leave one of the check-in or check-out times blank if you have already checked in/out before"
 msgstr "Có thể để trống 1 trong 2 thời gian check-in hoặc check-out nếu trước đó đã chấm công"
 
-#: src/modules/bookings/components/form-booking.tsx:406
+#: src/modules/bookings/components/form-booking.tsx:410
 #: src/modules/customers/modals/modal-customer-form.tsx:118
 #: src/modules/loans/components/loan-payments.tsx:84
 #: src/modules/loans/components/loan-payments.tsx:100
@@ -1342,7 +1343,7 @@ msgstr "Nhóm trạng thái hoàn thành"
 msgid "Configuration"
 msgstr "Cấu hình"
 
-#: src/modules/bookings/components/form-booking.tsx:412
+#: src/modules/bookings/components/form-booking.tsx:416
 #: src/modules/dashboard/dashboard-suggestions.tsx:181
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:161
 #: src/modules/loans/components/loan-payments.tsx:76
@@ -1781,6 +1782,7 @@ msgstr "khách hàng"
 #: src/components/printer/printer-settings-bar.tsx:66
 #: src/modals/modal-printer.tsx:437
 #: src/modules/bookings/components/booking-card.tsx:326
+#: src/modules/bookings/components/form-booking.tsx:166
 #: src/modules/bookings/modals/modal-booking-detail.tsx:65
 #: src/modules/bookings/modals/modal-booking.tsx:174
 #: src/modules/bookings/modals/modal-booking.tsx:243
@@ -1928,6 +1930,10 @@ msgstr "Loại dữ liệu"
 msgid "Date"
 msgstr "Ngày"
 
+#: src/modules/bookings/components/form-booking.tsx:191
+msgid "Date time"
+msgstr ""
+
 #: src/configs/calendar.config.tsx:68
 #: src/constant.ts:33
 msgid "Day"
@@ -2006,6 +2012,7 @@ msgstr "Mô tả"
 
 #: src/components/printer/printer-body.tsx:46
 #: src/modals/modal-printer.tsx:303
+#: src/modules/bookings/components/form-booking.tsx:371
 msgid "Detail"
 msgstr "Chi tiết"
 
@@ -2189,7 +2196,7 @@ msgstr "Ngày đến hạn"
 
 #: src/modules/bookings/components/booking-card.tsx:309
 msgid "Duration"
-msgstr "Khoảng thời gian"
+msgstr "Thời lượng"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:187
 msgid "E-Invoice"
@@ -2281,7 +2288,7 @@ msgstr "Bật/Tắt thông báo cho quản trị viên"
 msgid "End time"
 msgstr "Thời gian kết thúc"
 
-#: src/modules/bookings/components/form-booking.tsx:397
+#: src/modules/bookings/components/form-booking.tsx:401
 msgid "End time must be after start time"
 msgstr "Thời gian kết thúc phải sau thời gian bắt đầu"
 
@@ -2320,9 +2327,9 @@ msgstr "Nhập mã khách hàng"
 msgid "Enter data"
 msgstr "Nhập dữ liệu"
 
-#: src/modules/bookings/components/form-booking.tsx:372
-msgid "Enter details (Optional)"
-msgstr "Nhập nội dung (Không bắt buộc)"
+#: src/modules/bookings/components/form-booking.tsx:376
+msgid "Enter detail (Optional)"
+msgstr "Nhập chi tiết (Tuỳ chọn)"
 
 #: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:98
 msgid "Enter device key"
@@ -4452,7 +4459,7 @@ msgstr "SL đã hết"
 msgid "Out of stock"
 msgstr "Hết hàng"
 
-#: src/modules/bookings/components/form-booking.tsx:383
+#: src/modules/bookings/components/form-booking.tsx:387
 msgid "Out of work slots"
 msgstr "Ngoài thời gian làm việc"
 
@@ -5425,7 +5432,7 @@ msgid "Required"
 msgstr "Yêu cầu"
 
 #: src/modules/bookings/components/booking-card.tsx:291
-#: src/modules/bookings/components/form-booking.tsx:414
+#: src/modules/bookings/components/form-booking.tsx:418
 #: src/modules/bookings/modals/modal-booking.tsx:231
 #: src/modules/bookings/modals/modal-booking.tsx:339
 #: src/modules/bookings/modals/modal-booking.tsx:358
@@ -5575,7 +5582,7 @@ msgid "Sale price"
 msgstr "Giá bán"
 
 #: src/components/inputs/work-slot-settings-input.tsx:277
-#: src/modules/bookings/components/form-booking.tsx:416
+#: src/modules/bookings/components/form-booking.tsx:420
 #: src/modules/bookings/modals/modal-booking.tsx:339
 #: src/modules/categories/components/form-category.tsx:137
 #: src/modules/custom-fields/components/form-custom-field.tsx:144
@@ -5969,7 +5976,7 @@ msgstr "Slug"
 #: src/components/printer/printer-settings-bar.tsx:16
 #: src/modals/modal-printer.tsx:72
 msgid "Small"
-msgstr "Bé nhỏ"
+msgstr "Nhỏ"
 
 #: src/modules/workspaces/workspace-constants.tsx:16
 msgid "Software"
@@ -5977,7 +5984,7 @@ msgstr "Phần mềm"
 
 #: src/components/list/sort/sort.tsx:33
 msgid "Sort"
-msgstr "Loại"
+msgstr "Sắp xếp"
 
 #: src/modules/custom-fields/components/form-custom-field.tsx:140
 msgid "Sort order"
@@ -7294,7 +7301,7 @@ msgstr "Có/Không"
 msgid "Yesterday"
 msgstr "Hôm qua"
 
-#: src/modules/bookings/components/form-booking.tsx:389
+#: src/modules/bookings/components/form-booking.tsx:393
 #: src/modules/bookings/modals/modal-booking.tsx:321
 msgid "You are booking in the past"
 msgstr "Bạn đang đặt lịch trong quá khứ"

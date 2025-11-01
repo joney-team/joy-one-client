@@ -3,8 +3,8 @@
 import { Circle } from "@/components/circle";
 import { DateFormat } from "@/components/format/date-format";
 import { List } from "@/components/list";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { EnumColumn } from "@/components/list/columns/enum-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
+import { enumColumn } from "@/components/list/columns/enum-column";
 import { Selector } from "@/components/selector";
 import { DynamicSelectionOperator } from "@/types";
 import { onActionLoad } from "@/utils/actions";
@@ -29,8 +29,8 @@ export const PromostionList = () => {
         route="/promotions"
         columns={{
           name: {},
-          type: EnumColumn<PromotionType>({
-            w: 400,
+          type: enumColumn<PromotionType>({
+            defaultWidth: 400,
             options: Object.values(PromotionType).map((type) => ({
               value: type,
               label: promotionTypes[type].label(),
@@ -102,9 +102,9 @@ export const PromostionList = () => {
               );
             },
           },
-          expireAt: DateTimeColumn({ name: t`Expire at`, defaultHidden: true, sortable: true }),
-          status: EnumColumn<PromotionStatus>({
-            w: 200,
+          expireAt: dateTimeColumn({ name: t`Expire at`, defaultHidden: true, sortable: true }),
+          status: enumColumn<PromotionStatus>({
+            defaultWidth: 200,
             options: Object.values(PromotionStatus).map((status) => ({
               value: status,
               label: promotionStatuses[status].label(),

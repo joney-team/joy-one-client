@@ -3,9 +3,9 @@
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
-import { CodeColumn } from "@/components/list/columns/code-column";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { NumberColumn } from "@/components/list/columns/number-column";
+import { codeColumn } from "@/components/list/columns/code-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
+import { numberColumn } from "@/components/list/columns/number-column";
 import { EventType } from "@/modules/events/event-types";
 import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
 import { ProductColumn } from "@/modules/products/components/product-column";
@@ -27,7 +27,7 @@ export const ProductStockList: FC = () => {
         name={t`Stocks`}
         route="/product-stocks"
         columns={{
-          createdAt: DateTimeColumn({ sortable: true, name: t`Time` }),
+          createdAt: dateTimeColumn({ sortable: true, name: t`Time` }),
           productId: ProductColumn({
             type: ProductType.PRODUCT,
             name: t`Product`,
@@ -48,7 +48,7 @@ export const ProductStockList: FC = () => {
               );
             },
           }),
-          code: CodeColumn(),
+          code: codeColumn(),
           quantity: {
             sortable: true,
             name: t`Quantity`,
@@ -61,8 +61,8 @@ export const ProductStockList: FC = () => {
               );
             },
           },
-          expireAt: DateTimeColumn({ name: t`Expire at`, emptyText: "--", hideTime: true }),
-          costPrice: NumberColumn({ name: t`Cost price`, type: "money" }),
+          expireAt: dateTimeColumn({ name: t`Expire at`, emptyText: "--", hideTime: true }),
+          costPrice: numberColumn({ name: t`Cost price`, type: "money" }),
           note: { name: t`Note` },
         }}
         creatable={{

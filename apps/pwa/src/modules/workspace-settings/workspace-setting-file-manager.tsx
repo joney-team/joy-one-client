@@ -2,8 +2,8 @@
 
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
-import { DateTimeColumn } from "@/components/list/columns/date-time-column";
-import { EnumColumn } from "@/components/list/columns/enum-column";
+import { dateTimeColumn } from "@/components/list/columns/date-time-column";
+import { enumColumn } from "@/components/list/columns/enum-column";
 import { formatBytes } from "@joy-one-client/utils/files";
 import { ActionIcon, Image, Stack } from "@mantine/core";
 import { IconFile } from "@tabler/icons-react";
@@ -19,7 +19,7 @@ export const WorkspaceFileManager: FC = () => {
         columns={{
           url: {
             name: "Preview",
-            w: 100,
+            defaultWidth: 100,
             align: "center",
             render: ({ data }) => {
               const onClick = () => {
@@ -40,9 +40,11 @@ export const WorkspaceFileManager: FC = () => {
               );
             },
           },
-          createdAt: DateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
+          createdAt: dateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
           fileName: {
             render: ({ value, data }) => {
+              if (!value) return null;
+
               return (
                 <Clickable
                   c="var(--mantine-color-text)"
@@ -60,8 +62,8 @@ export const WorkspaceFileManager: FC = () => {
               );
             },
           },
-          type: EnumColumn<FileType>({
-            w: 160,
+          type: enumColumn<FileType>({
+            defaultWidth: 160,
             options: Object.values(FileType).map((type) => ({
               icon: fileTypes[type].icon,
               label: fileTypes[type].label(),

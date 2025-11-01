@@ -112,7 +112,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
               <Text fz={30} my={-5} c="white" ta="center" fw={500}>
                 <DateFormat value={startTime} type="custom" format={{ day: "2-digit" }} />
               </Text>
-              <Text fz={10} c="white" ta="center" fw={500}>
+              <Text fz={10} c="white" ta="center" fw={500} tt="capitalize">
                 <DateFormat
                   value={startTime}
                   type="custom"
@@ -122,7 +122,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
             </Stack>
           </Card>
 
-          <Text ta="center" tt="capitalize" fz={10} fw={500}>
+          <Text ta="center" tt="capitalize" fz={8} fw={500}>
             <RelativeTimeFormat value={startTime} />
           </Text>
 
@@ -181,13 +181,13 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                             </ThemeIcon>
 
                             <Text fz={12} fw={500}>
-                              {t`Call customer`}
+                              <Trans>Call customer</Trans>
                             </Text>
                           </Group>
                         </Anchor>
                       )}
 
-                      <Divider label={t`Status`} labelPosition="left" />
+                      <Divider label={<Trans>Status</Trans>} labelPosition="left" />
                       <Group
                         gap={10}
                         style={{ cursor: "pointer", userSelect: "none" }}
@@ -256,7 +256,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                         </Text>
                       </Group>
 
-                      <Divider label={t`Update`} labelPosition="left" />
+                      <Divider label={<Trans>Update</Trans>} labelPosition="left" />
 
                       <Group
                         gap={10}
@@ -306,7 +306,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
 
             <Stack gap={0} align="start">
               <Text fz={10} c="gray">
-                {t`Duration`}
+                <Trans>Duration</Trans>
               </Text>
 
               <Group gap={0} mt={-3}>
@@ -323,14 +323,14 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           <Group align="start" mt={12}>
             {booking.customer && !hideCustomerInfo && (
               <Group flex={1}>
-                <CustomerInput label={t`Customer`} value={booking.customer} disabled />
+                <CustomerInput label={<Trans>Customer</Trans>} value={booking.customer} disabled />
               </Group>
             )}
 
             {booking.assigneeUsers && booking.assigneeUsers.length > 0 && (
               <Group flex={1}>
                 <WorkspaceMembersInput
-                  label={t`Attendees`}
+                  label={<Trans>Attendees</Trans>}
                   value={booking.assigneeUsers}
                   collapsed={memberCollapsed}
                   disabled
@@ -340,7 +340,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
           </Group>
 
           {booking.status === BookingStatus.CANCELLED && booking.reasonForCancellation && (
-            <Blockquote cite={t`Cancel reason`} color="red" p={8} fz={13}>
+            <Blockquote cite={<Trans>Cancel reason</Trans>} color="red" p={8} fz={13}>
               {booking.reasonForCancellation}
             </Blockquote>
           )}

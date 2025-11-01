@@ -18,22 +18,23 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, useMemo } from "react";
 import { FilterProps } from "./types";
+import { Trans } from "@lingui/react/macro";
 
 export interface TimeRangeFilterConfig {}
 
 export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
-  colKey,
+  column,
   list,
   Wrapper,
 }) => {
   const color = useColor();
-  const filterPeriodKey = `timeRange${capitalizeFirstLetter(colKey, false)}`;
+  const filterPeriodKey = `timeRange${capitalizeFirstLetter(column.columnKey, false)}`;
   const filterPeriodValue = list.params[filterPeriodKey];
 
-  const filterRangeKey = `range${capitalizeFirstLetter(colKey, false)}`;
+  const filterRangeKey = `range${capitalizeFirstLetter(column.columnKey, false)}`;
   const filterRangeValue = list.params[filterRangeKey];
 
-  const filterValue = filterPeriodValue ?? filterRangeValue ?? "";
+  const filterValue = String(filterPeriodValue ?? filterRangeValue ?? "");
 
   const { period, fromDate, toDate } = useMemo(() => {
     if (filterRangeValue) {
@@ -57,7 +58,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
 
   const options = [
     {
-      label: t`Date`,
+      label: <Trans>Date</Trans>,
       icon: IconCalendar,
       value: Period.DATE,
       onClick: () =>
@@ -72,7 +73,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         }),
     },
     {
-      label: t`Month`,
+      label: <Trans>Month</Trans>,
       icon: IconCalendarMonth,
       value: Period.MONTH,
       onClick: () =>
@@ -88,7 +89,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         }),
     },
     {
-      label: t`Year`,
+      label: <Trans>Year</Trans>,
       icon: IconCalendarEvent,
       value: Period.YEAR,
       onClick: () =>
@@ -104,7 +105,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
         }),
     },
     {
-      label: t`Time range`,
+      label: <Trans>Time range</Trans>,
       icon: IconCalendarDot,
       value: "Range",
       onClick: () =>
@@ -123,7 +124,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
   const displayFilterValue = useMemo(() => {
     if (!filterValue) return null;
 
-    if (filterRangeValue)
+    if (filterRangeValue && fromDate && toDate)
       return (
         <Fragment>
           <DateFormat value={fromDate} type="date" />
@@ -156,7 +157,7 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
     <Menu>
       <Menu.Target>
         <Group>
-          <Wrapper onClear={onClear} active={!!filterValue}>
+          <Wrapper onClear={onClear} active={filterValue.length > 0}>
             {displayFilterValue && (
               <Text fz={12} fw={700} tt="capitalize">
                 {displayFilterValue}

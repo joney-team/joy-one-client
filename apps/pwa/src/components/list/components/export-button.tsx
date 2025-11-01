@@ -18,7 +18,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconDownload, IconFileExport } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
 import writeXlsxFile, { Row } from "write-excel-file";
-import { ExportToExcelItem, ListContext } from "../types";
+import { useListContext } from "../list-context";
+import { ExportToExcelItem } from "../types";
 import { getIn, getValuePath } from "../utils";
 import { ActionButton } from "./action-button";
 
@@ -27,7 +28,8 @@ export enum ExportType {
   JSON = "Json",
 }
 
-export const ExportButton: FC<ListContext> = (props) => {
+export const ExportButton: FC = () => {
+  const props = useListContext();
   const workspace = useWorkspace();
   const theme = useMantineTheme();
   const lang = useLang();
@@ -74,37 +76,33 @@ export const ExportButton: FC<ListContext> = (props) => {
           if (exportType === ExportType.EXCEL) {
             const headers: (Row[number] & {})[] = [];
 
-            for (const col of props.columnSettings) {
-              const column = props.columns[col.id];
-              if (!column) continue;
+            for (const column of props.columns) {
               if (column.exportToExcel === false) continue;
 
               if (column.exportToExcel) {
-                const tempExport = column.exportToExcel(data[0][col.id], data[0]);
+                const tempExport = column.exportToExcel(data[0][column.columnKey], data[0]);
                 if (Array.isArray(tempExport)) {
                   tempExport.forEach((item) => {
                     headers.push({ value: item.col });
                   });
                 } else {
-                  headers.push({ value: column.name || col.id });
+                  headers.push({ value: column.name || column.columnKey });
                 }
                 continue;
               }
 
               // Automation
-              headers.push({ value: column.name || col.id });
+              headers.push({ value: column.name || column.columnKey });
             }
 
             const rows: Row[] = await Promise.all(
               data.map(async (item: any) => {
                 const cols = new Array(headers.length).fill(null) as Row;
 
-                for (const columnSetting of props.columnSettings) {
-                  const column = props.columns[columnSetting.id];
-                  if (!column) continue;
+                for (const column of props.columns) {
                   if (column.exportToExcel === false) continue;
 
-                  const value = getIn(item, getValuePath(columnSetting.id, column));
+                  const value = getIn(item, getValuePath(column.columnKey, column));
 
                   if (column.exportToExcel) {
                     const tempExport = await column.exportToExcel(value, item);
@@ -119,7 +117,7 @@ export const ExportButton: FC<ListContext> = (props) => {
                       });
                     } else {
                       const indexOfCol = headers.findIndex(
-                        (v) => v?.value === column.name || columnSetting.id
+                        (v) => v?.value === column.name || column.columnKey
                       );
                       cols[indexOfCol] = renderExportItem(tempExport);
                     }
@@ -129,7 +127,7 @@ export const ExportButton: FC<ListContext> = (props) => {
 
                   // Automation
                   const indexOfCol = headers.findIndex(
-                    (v) => v?.value === column.name || columnSetting.id
+                    (v) => v?.value === column.name || column.columnKey
                   );
                   cols[indexOfCol] = { value };
                 }

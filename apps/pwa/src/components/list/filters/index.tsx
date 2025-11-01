@@ -7,24 +7,18 @@ import { Group } from "@mantine/core";
 import { IconFilter, IconFilterFilled, IconRefresh } from "@tabler/icons-react";
 import { FC, MouseEventHandler } from "react";
 import { ActionButton } from "../components/action-button";
-import { Column, ListContext } from "../types";
+import { useListContext } from "../list-context";
+import { TableColumn } from "../types";
 import { DynamicSelectorFilter } from "./dynamic-selector-filter";
 import { StaticSelectorFilter } from "./static-selector-filter";
 import { TextFilter } from "./text-filter";
 import { TimeRangeFilter } from "./time-range-filter";
 import { FilterProps, FilterWrapperProps } from "./types";
 
-export const FilterItem: FC<
-  ListContext & {
-    colKey: string;
-    column: Column<any, any>;
-  }
-> = ({ colKey, column, list, ...ctx }) => {
-  const onReset: MouseEventHandler<HTMLElement> = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    list.removeParams([colKey]);
-  };
+export const FilterItem: FC<{
+  column: TableColumn;
+}> = ({ column }) => {
+  const ctx = useListContext();
 
   const Wrapper: FilterWrapperProps = ({
     children,
@@ -34,12 +28,22 @@ export const FilterItem: FC<
     onClear,
     active,
   }) => {
-    const isHasValue = !!list.params[colKey] || onClear;
     return (
       <ActionButton
         icon={column.icon || IconFilter}
-        label={column.name || colKey}
-        onClear={onClear || (isHasValue ? onReset : undefined)}
+        label={column.name || column.columnKey}
+        onClear={
+          active
+            ? (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (onClear) onClear();
+                else {
+                  ctx.list.removeParams([column.columnKey]);
+                }
+              }
+            : undefined
+        }
         onClick={onClick}
         quantity={quantity}
         quantityColor={quantityColor}
@@ -51,8 +55,6 @@ export const FilterItem: FC<
   };
 
   const generalFilterProps: FilterProps<any> = {
-    colKey,
-    list,
     Wrapper,
     config: {},
     column,
@@ -78,7 +80,8 @@ export const FilterItem: FC<
   return null;
 };
 
-export const FilterBar: FC<ListContext> = (ctx) => {
+export const FilterBar: FC = () => {
+  const ctx = useListContext();
   const isHasFilter = Object.values(ctx.columns).some((v) => v?.filter);
   const onReset = () => ctx.list.removeAllParams();
   const workspaceLayout = useWorkspaceLayout();
@@ -99,11 +102,10 @@ export const FilterBar: FC<ListContext> = (ctx) => {
       align="start"
     >
       <Group gap={ctx.spacing} flex={1}>
-        {ctx.columnSettings.map(({ id: colKey }) => {
-          const column = ctx.columns[colKey];
+        {ctx.columns.map((column) => {
           if (!column || !column.filter) return null;
 
-          return <FilterItem key={colKey} {...ctx} colKey={colKey} column={column} />;
+          return <FilterItem key={column.columnKey} {...ctx} column={column} />;
         })}
       </Group>
 
@@ -118,8 +120,9 @@ export const FilterBar: FC<ListContext> = (ctx) => {
   );
 };
 
-export const Filter: FC<ListContext> = (ctx) => {
+export const Filter: FC = () => {
   const layout = useLayout();
+  const ctx = useListContext();
   const isHasFilter = Object.values(ctx.columns).some((v) => v?.filter);
 
   if (!isHasFilter) return null;

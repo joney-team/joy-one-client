@@ -5,12 +5,13 @@ import { t } from "@lingui/core/macro";
 import { Divider, Group, Popover, Stack } from "@mantine/core";
 import { IconEyeCog, IconLayoutGrid, IconTable } from "@tabler/icons-react";
 import { FC } from "react";
-import { ListContext } from "../types";
+import { useListContext } from "../list-context";
 import { ActionButton } from "./action-button";
 
-export const ListFilterModes: FC<ListContext> = (ctx) => {
+export const ListFilterModes: FC = () => {
+  const context = useListContext();
   const layout = useLayout();
-  const filterModes = (ctx.filterModes || []).filter((mode) => !mode.disabled);
+  const filterModes = (context.filterModes || []).filter((mode) => !mode.disabled);
 
   if (filterModes.length === 0) return null;
 
@@ -19,7 +20,7 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
       <Popover offset={5}>
         <Popover.Target>
           <Group>
-            <ActionButton icon={IconEyeCog} active={!!ctx.viewState.activatedModes?.length} />
+            <ActionButton icon={IconEyeCog} active={!!context.viewState.activatedModes?.length} />
           </Group>
         </Popover.Target>
 
@@ -30,7 +31,7 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
         >
           <Stack gap={10}>
             {filterModes.map((mode, i) => {
-              const isActive = !!ctx.viewState.activatedModes?.includes(mode.param);
+              const isActive = !!context.viewState.activatedModes?.includes(mode.param);
               const { icon, name } = mode;
 
               return (
@@ -39,7 +40,7 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
                   icon={icon}
                   label={name}
                   active={isActive}
-                  onClick={() => ctx.toggleActivatedMode(mode.param)}
+                  onClick={() => context.toggleActivatedMode(mode.param)}
                 />
               );
             })}
@@ -50,11 +51,11 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
               <ActionButton
                 icon={IconTable}
                 label={t`Table`}
-                active={ctx.viewState.view === "table"}
+                active={context.viewState.view === "table"}
                 onClick={() =>
-                  ctx.setViewState({
-                    ...ctx.viewState,
-                    view: ctx.viewState.view === "table" ? "grid" : "table",
+                  context.setViewState({
+                    ...context.viewState,
+                    view: context.viewState.view === "table" ? "grid" : "table",
                   })
                 }
               />
@@ -62,11 +63,11 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
               <ActionButton
                 icon={IconLayoutGrid}
                 label={t`Grid`}
-                active={ctx.viewState.view === "grid"}
+                active={context.viewState.view === "grid"}
                 onClick={() =>
-                  ctx.setViewState({
-                    ...ctx.viewState,
-                    view: ctx.viewState.view === "grid" ? "table" : "grid",
+                  context.setViewState({
+                    ...context.viewState,
+                    view: context.viewState.view === "grid" ? "table" : "grid",
                   })
                 }
               />
@@ -78,7 +79,7 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
   }
 
   return filterModes.map((mode, i) => {
-    const isActive = !!ctx.viewState.activatedModes?.includes(mode.param);
+    const isActive = !!context.viewState.activatedModes?.includes(mode.param);
     const { icon, name } = mode;
 
     return (
@@ -87,7 +88,7 @@ export const ListFilterModes: FC<ListContext> = (ctx) => {
         icon={icon}
         label={name}
         active={isActive}
-        onClick={() => ctx.toggleActivatedMode(mode.param)}
+        onClick={() => context.toggleActivatedMode(mode.param)}
       />
     );
   });

@@ -18,13 +18,11 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { useForceUpdate } from "@mantine/hooks";
 import { IconRefresh } from "@tabler/icons-react";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { Empty } from "../empty";
 import { Errored } from "../errored";
 import { NumberFormat } from "../format/number-format";
-import { Renderer } from "../renderer";
 import { WayPoint } from "../way-point";
 import { BulkActions } from "./components/bulk-actions";
 import { ColsSettings } from "./components/columns-setting";
@@ -33,31 +31,33 @@ import { ExportButton } from "./components/export-button";
 import { ListFilterModes } from "./components/filter-modes";
 import { ToggleView } from "./components/toggle-view";
 import { Filter, FilterBar } from "./filters";
+import { Context } from "./list-context";
 import { Sort } from "./sort/sort";
 import ListTable from "./table/table";
-import { BaseData, ListContext, ListProps, ListViewState } from "./types";
+import { BaseData, Column, ColumnState, ListContext, ListProps, ListViewState } from "./types";
 import { getListDataId } from "./utils";
 
 export function List<T extends BaseData>(props: ListProps<T>) {
-  const forceUpdate = useForceUpdate();
+  const [version, setVersion] = useState(0);
+  const forceUpdate = () => setVersion((s) => s + 1);
+
   const layout = useLayout();
   const workspace = useWorkspace();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
-  const listViewId = `vs_${props.id}_v1`;
+  const listViewId = `vs_${props.id}_v2`;
 
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [_selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const defaultViewState: ListViewState = {
     view: layout.view === "desktop" ? "table" : props.card ? "grid" : "table",
-    columnSettings: [],
-    isFilterVisible: false,
+    columns: {},
     activatedModes: [],
+    isFilterVisible: false,
   };
 
-  const initialViewState = useRef<ListViewState>(defaultViewState);
   const viewStateRef = useRef<ListViewState>(defaultViewState);
 
   const stateParams: Record<string, any> = useMemo(() => {
@@ -103,18 +103,10 @@ export function List<T extends BaseData>(props: ListProps<T>) {
   };
 
   const spacing = 10;
-  const isViewStateChanged =
-    JSON.stringify(initialViewState.current) !== JSON.stringify(viewStateRef.current);
-
-  const onSaveViewState = () => {
-    if (!isViewStateChanged) return;
-    initialViewState.current = viewStateRef.current;
-    localStorage.setItem(listViewId, JSON.stringify(viewStateRef.current));
-    forceUpdate();
-  };
 
   const setViewState = (viewState: ListViewState) => {
     viewStateRef.current = viewState;
+    localStorage.setItem(listViewId, JSON.stringify(viewStateRef.current));
     forceUpdate();
   };
 
@@ -140,12 +132,6 @@ export function List<T extends BaseData>(props: ListProps<T>) {
     });
   };
 
-  useEffect(() => {
-    if (isInitialized && isViewStateChanged) {
-      localStorage.setItem(listViewId, JSON.stringify(viewStateRef.current));
-    }
-  }, [isInitialized, listViewId, isViewStateChanged, viewStateRef.current]);
-
   const selectedIds = useMemo(() => {
     if (isSelectAll) return list.data.map((v) => getListDataId(v));
     return list.data
@@ -162,34 +148,44 @@ export function List<T extends BaseData>(props: ListProps<T>) {
     );
   }, [props.bulkActions, list.data, selectedIds, workspace.hasPermission]);
 
-  const ctx: ListContext<T> = {
+  const columns = useMemo(() => {
+    return Object.entries(props.columns)
+      .reduce<ListContext<T>["columns"]>((acc, [columnKey, columnValue], columnIndex) => {
+        const state = viewStateRef.current.columns?.[columnKey] ?? {};
+        const column = columnValue as Column<T>;
+        if (!column) return acc;
+
+        const defaultWidth = column.defaultWidth ?? 150;
+        const minWidth = column.minWidth ?? 100;
+
+        return [
+          ...acc,
+          {
+            ...column,
+            columnKey,
+            width: state.width ?? defaultWidth,
+            minWidth,
+            defaultWidth,
+            isVisible: !state.isHidden && !column.defaultHidden,
+            order: state.order ?? columnIndex,
+            resizable: column.resizable ?? true,
+          },
+        ];
+      }, [])
+      .sort((a, b) => a.order - b.order);
+  }, [props.columns, version, isInitialized]);
+
+  const context: ListContext<T> = {
+    ...props,
+    actions: props.actions || [],
     viewState: viewStateRef.current,
     setViewState,
     list,
-    ...props,
     spacing,
-    isViewStateChanged,
-    onSaveViewState,
     toggleActivatedMode,
-    columnSettings: Object.keys(props.columns)
-      .filter((v) => {
-        const column = props.columns[v as keyof T];
-        return column && column.disabled !== true;
-      })
-      .map((v, i) => {
-        const columnSetting = viewStateRef.current.columnSettings?.find((s) => s.id === v);
-        const column = props.columns[v as keyof T];
-
-        return {
-          id: v,
-          name: column?.name || v,
-          order: columnSetting ? columnSetting.order : i,
-          isVisible: columnSetting ? columnSetting.isVisible : !column?.defaultHidden,
-        };
-      })
-      .sort((a, b) => a.order - b.order),
+    columns,
     selectedIds,
-    isShowMultipleSelectActions: availableMultipleSelectActions.length > 0,
+    isBulkActionsActivated: availableMultipleSelectActions.length > 0,
     availableMultipleSelectActions,
     select: (id, isShiftKey) => {
       if (isShiftKey) {
@@ -210,11 +206,22 @@ export function List<T extends BaseData>(props: ListProps<T>) {
       setSelectedIds([]);
       setIsSelectAll(false);
     },
+    changeColumnState: (columnKey: string, state: Partial<ColumnState>) => {
+      setViewState({
+        ...viewStateRef.current,
+        columns: {
+          ...viewStateRef.current.columns,
+          [columnKey]: {
+            ...viewStateRef.current.columns[columnKey],
+            ...state,
+          },
+        },
+      });
+    },
   };
 
   useEffect(() => {
     const _initialViewState = getInitialViewState();
-    initialViewState.current = { ..._initialViewState };
     viewStateRef.current = { ..._initialViewState };
     setIsInitialized(true);
   }, [props.id]);
@@ -224,130 +231,123 @@ export function List<T extends BaseData>(props: ListProps<T>) {
   const ListCard = props.card;
 
   return (
-    <Stack>
-      <Card shadow="xs" p={0} w="100%" style={{ overflow: "visible" }}>
-        <Stack>
-          <Stack gap={0} w="100%">
-            <Group p={spacing} gap={spacing} justify="space-between">
-              <Group
-                pl={spacing * 0.5}
-                justify={layout.view === "mobile" ? "space-between" : "start"}
-                w={layout.view === "mobile" ? "100%" : "unset"}
-              >
-                <Group gap={spacing * 0.8} align="center">
-                  {props.icon && (
-                    <props.icon size={22} color="var(--mantine-color-bright)" strokeWidth={1.5} />
-                  )}
-                  <Text fw={500} fz={14} c="var(--mantine-color-bright)">
-                    {props.name ?? t`List`}
-                  </Text>
-
-                  <Group gap={3}>
-                    <ActionIcon
-                      loading={isRefreshing}
-                      variant="subtle"
-                      radius="50%"
-                      color={list.newDataCount > 0 ? undefined : "gray"}
-                      onClick={refreshList}
-                    >
-                      <IconRefresh size={16} strokeWidth={1.8} />
-                    </ActionIcon>
-
-                    {list.count > 0 && (
-                      <Badge variant="light" color="dark" size="sm">
-                        <NumberFormat value={list.count} />
-                      </Badge>
+    <Context.Provider value={context}>
+      <Stack>
+        <Card shadow="xs" p={0} w="100%" style={{ overflow: "visible" }}>
+          <Stack>
+            <Stack gap={0} w="100%">
+              <Group p={spacing} gap={spacing} justify="space-between">
+                <Group
+                  pl={spacing * 0.5}
+                  justify={layout.view === "mobile" ? "space-between" : "start"}
+                  w={layout.view === "mobile" ? "100%" : "unset"}
+                >
+                  <Group gap={spacing * 0.8} align="center">
+                    {props.icon && (
+                      <props.icon size={22} color="var(--mantine-color-bright)" strokeWidth={1.5} />
                     )}
+                    <Text fw={500} fz={14} c="var(--mantine-color-bright)">
+                      {props.name ?? t`List`}
+                    </Text>
 
-                    {list.newDataCount > 0 && (
-                      <Badge
-                        size="sm"
-                        variant="light"
-                        onClick={() => list.fetch(true, { isSilient: false })}
+                    <Group gap={3}>
+                      <ActionIcon
+                        loading={isRefreshing}
+                        variant="subtle"
+                        radius="50%"
+                        color={list.newDataCount > 0 ? undefined : "gray"}
+                        onClick={refreshList}
                       >
-                        <Trans>
-                          +<NumberFormat value={list.newDataCount || 0} /> new one
-                        </Trans>
-                      </Badge>
-                    )}
+                        <IconRefresh size={16} strokeWidth={1.8} />
+                      </ActionIcon>
+
+                      {list.count > 0 && (
+                        <Badge variant="light" color="dark" size="sm">
+                          <NumberFormat value={list.count} />
+                        </Badge>
+                      )}
+
+                      {list.newDataCount > 0 && (
+                        <Badge
+                          size="sm"
+                          variant="light"
+                          onClick={() => list.fetch(true, { isSilient: false })}
+                        >
+                          <Trans>
+                            +<NumberFormat value={list.newDataCount || 0} /> new one
+                          </Trans>
+                        </Badge>
+                      )}
+                    </Group>
                   </Group>
+
+                  {layout.view === "mobile" && (
+                    <Group gap={5}>
+                      <ListFilterModes />
+                      <Filter />
+                      <Sort />
+                      <ExportButton />
+                      <CreateButton />
+                    </Group>
+                  )}
                 </Group>
 
-                <Renderer views={["mobile"]}>
-                  <Group gap={5}>
-                    <ListFilterModes {...ctx} />
-                    <Filter {...ctx} />
-                    <Sort {...ctx} />
-                    <ExportButton {...ctx} />
-                    <CreateButton {...ctx} />
+                {layout.view !== "mobile" && (
+                  <Group gap={8} justify="end">
+                    <ListFilterModes />
+                    <Filter />
+                    <Sort />
+                    <ColsSettings />
+                    <ExportButton />
+                    <ToggleView />
+                    <CreateButton />
                   </Group>
-                </Renderer>
+                )}
               </Group>
 
-              <Renderer views={["desktop", "tablet"]}>
-                <Group gap={8} justify="end">
-                  <ListFilterModes {...ctx} />
-                  <Filter {...ctx} />
-                  <Sort {...ctx} />
-                  <ColsSettings {...ctx} />
-                  <ExportButton {...ctx} />
-                  <ToggleView {...ctx} />
-                  <CreateButton {...ctx} />
-                </Group>
-              </Renderer>
-            </Group>
+              <FilterBar />
 
-            <FilterBar {...ctx} />
+              {context.viewState.view === "table" && <ListTable />}
+            </Stack>
 
-            {viewStateRef.current.view === "table" && (
-              <Stack
-                style={{
-                  maxWidth: "100%",
-                  overflowX: "auto",
-                }}
-              >
-                <ListTable {...ctx} />
+            {context.viewState.view === "grid" && list.isEmpty && (
+              <Stack w="100%" p={spacing}>
+                {props.components?.empty ? <props.components.empty /> : <Empty hideBorder />}
               </Stack>
             )}
           </Stack>
+        </Card>
 
-          <Renderer visible={viewStateRef.current.view === "grid" && list.isEmpty}>
-            <Stack w="100%" p={spacing}>
-              {props.components?.empty ? <props.components.empty /> : <Empty hideBorder />}
-            </Stack>
-          </Renderer>
-        </Stack>
-      </Card>
+        {context.viewState.view === "grid" && ListCard && (
+          <Fragment>
+            <SimpleGrid cols={{ md: 3 }}>
+              {list.data.map((item) => {
+                return <ListCard key={getListDataId(item)} data={item} />;
+              })}
+            </SimpleGrid>
 
-      {viewStateRef.current.view === "grid" && ListCard && (
-        <Fragment>
-          <SimpleGrid cols={{ md: 3 }}>
-            {list.data.map((item) => {
-              return <ListCard key={getListDataId(item)} data={item} />;
-            })}
-          </SimpleGrid>
+            {list.isFetching && (
+              <Center p={spacing}>
+                <Loader size="sm" type="dots" color="gray" />
+              </Center>
+            )}
 
-          {list.isFetching && (
-            <Center p={spacing}>
-              <Loader size="sm" type="dots" color="gray" />
-            </Center>
-          )}
+            {list.isHasError && (
+              <Center p={spacing}>
+                <Errored error={list.error} />
+              </Center>
+            )}
+          </Fragment>
+        )}
 
-          {list.isHasError && (
-            <Center p={spacing}>
-              <Errored error={list.error} />
-            </Center>
-          )}
-        </Fragment>
-      )}
+        <WayPoint
+          enabled={list.isAbleToLoadMore}
+          offset={350}
+          onReached={() => list.fetch(false)}
+        />
 
-      <WayPoint
-        enabled={list.isAbleToLoadMore}
-        offset={350}
-        onReached={() => list.fetch(false, {})}
-      />
-
-      <BulkActions {...ctx} />
-    </Stack>
+        <BulkActions {...context} />
+      </Stack>
+    </Context.Provider>
   );
 }

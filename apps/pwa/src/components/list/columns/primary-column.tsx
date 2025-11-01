@@ -5,11 +5,11 @@ type ValidRoute<Data> =
   | `/${string}/:${string & keyof Data}`
   | `/${string}/:${string & keyof Data}/${string}`;
 
-export interface PrimaryColumn<Data = any> extends Omit<Column<Data>, "render"> {
+export interface primaryColumn<Data = any> extends Omit<Column<Data>, "render"> {
   route: ValidRoute<Data>;
 }
 
-export function PrimaryColumn<Data = any>(args?: PrimaryColumn<Data>): Column<Data> {
+export function primaryColumn<Data = any>(args?: primaryColumn<Data>): Column<Data> {
   return {
     ...(args ?? {}),
     render: ({ value, data }) => {

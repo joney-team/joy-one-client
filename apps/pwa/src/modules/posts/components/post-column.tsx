@@ -14,7 +14,7 @@ export interface PostColumnArgs extends Omit<Column, "render"> {}
 
 export const PostColumn = (args?: PostColumnArgs): Column => {
   return {
-    w: 180,
+    defaultWidth: 180,
     icon: IconNews,
     valuePath: "post",
     name: args?.name || "post",
@@ -22,11 +22,7 @@ export const PostColumn = (args?: PostColumnArgs): Column => {
       if (!value) return "";
       return (
         <Tooltip label={value.title}>
-          <Clickable truncate href={`/posts/${value._id}`}>
-            <Text maw={160} truncate>
-              {value.title}
-            </Text>
-          </Clickable>
+          <Clickable href={`/posts/${value._id}`}>{value.title}</Clickable>
         </Tooltip>
       );
     },

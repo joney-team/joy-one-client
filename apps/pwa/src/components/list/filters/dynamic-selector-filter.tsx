@@ -27,15 +27,15 @@ export interface DynamicSelectorFilterConfig {
 }
 
 export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>> = ({
-  colKey,
-  columns,
+  column,
   list,
   Wrapper,
   config,
 }) => {
-  const [_options, setOptions] = useState<DynamicSelectorFilterOption[]>([]);
-  const options = config.pinnedOptions || _options;
-  const querySelectedOptions = list.params[colKey] ? `${list.params[colKey]}`.split(",") : [];
+  const [options, setOptions] = useState<DynamicSelectorFilterOption[]>(config.pinnedOptions ?? []);
+  const querySelectedOptions = list.params[column.columnKey]
+    ? `${list.params[column.columnKey]}`.split(",")
+    : [];
 
   // Get missing options
   useEffect(() => {
@@ -43,19 +43,24 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
     if (missingIds.length > 0) {
       config
         .getOptions(missingIds)
-        .then((v) =>
-          setOptions((s) => [...s.filter((sv) => !v.find((v2) => v2.value === sv.value)), ...v])
-        )
-        .catch(console.error);
+        .then((options) => {
+          setOptions((prevOptions) => [
+            ...prevOptions.filter(
+              (prevOption) => !options.find((option) => option.value === prevOption.value)
+            ),
+            ...options,
+          ]);
+        })
+        .catch(() => false);
     }
-  }, [list.params[colKey]]);
+  }, [list.params[column.columnKey]]);
 
   const { multiple, render: Render, dropdownProps } = config;
   const selectedOptions = options.filter((v) => querySelectedOptions.includes(v.value));
 
   return (
     <Selector
-      key={colKey}
+      key={column.columnKey}
       listRoute={config.listRoute}
       listParams={config.listParams}
       autoCloseOnChange={!multiple}
@@ -117,7 +122,7 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
         );
       }}
       onSearch={async (q) => {
-        const value = await columns[colKey]?.filter?.dynamicSelector?.search?.(q);
+        const value = await column?.filter?.dynamicSelector?.search?.(q);
         return (value || []).map((v) => ({
           id: v.value,
           ...v,
@@ -138,12 +143,12 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
             ? querySelectedOptions.filter((v) => v !== option?.value)
             : [...querySelectedOptions, option?.value];
           if (_querySelectedOptions.length === 0) {
-            list.removeParams([colKey]);
+            list.removeParams([column.columnKey]);
           } else {
-            list.setParams({ [colKey]: _querySelectedOptions });
+            list.setParams({ [column.columnKey]: _querySelectedOptions });
           }
         } else {
-          list.setParams({ [colKey]: option?.value });
+          list.setParams({ [column.columnKey]: option?.value });
         }
       }}
       dropdownProps={dropdownProps}

@@ -3,23 +3,24 @@ import { t } from "@lingui/core/macro";
 import { ActionIcon, Card, Group, Tooltip } from "@mantine/core";
 import { IconLayoutGrid, IconTable } from "@tabler/icons-react";
 import { FC } from "react";
-import { ListContext } from "../types";
+import { useListContext } from "../list-context";
 
-export const ToggleView: FC<ListContext> = (props) => {
+export const ToggleView: FC = () => {
+  const context = useListContext();
   const color = useColor();
 
-  if (!props.card) return null;
+  if (!context.card) return null;
 
   return (
     <Card p={0} shadow="none" withBorder>
       <Group gap={0}>
         <Tooltip label={t`Table`}>
           <ActionIcon
-            variant={props.viewState.view === "table" ? "filled" : "subtle"}
-            color={props.viewState.view === "table" ? color("primary") : color("dimmed")}
+            variant={context.viewState.view === "table" ? "filled" : "subtle"}
+            color={context.viewState.view === "table" ? color("primary") : color("dimmed")}
             size={26}
             w={30}
-            onClick={() => props.setViewState({ ...props.viewState, view: "table" })}
+            onClick={() => context.setViewState({ ...context.viewState, view: "table" })}
             style={{
               borderTopRightRadius: 0,
               borderBottomRightRadius: 0,
@@ -31,11 +32,11 @@ export const ToggleView: FC<ListContext> = (props) => {
 
         <Tooltip label={t`Grid`}>
           <ActionIcon
-            variant={props.viewState.view === "grid" ? "filled" : "subtle"}
-            color={props.viewState.view === "grid" ? color("primary") : color("dimmed")}
+            variant={context.viewState.view === "grid" ? "filled" : "subtle"}
+            color={context.viewState.view === "grid" ? color("primary") : color("dimmed")}
             size={26}
             w={30}
-            onClick={() => props.setViewState({ ...props.viewState, view: "grid" })}
+            onClick={() => context.setViewState({ ...context.viewState, view: "grid" })}
             style={{
               borderTopLeftRadius: 0,
               borderBottomLeftRadius: 0,
