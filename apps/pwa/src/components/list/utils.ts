@@ -1,19 +1,19 @@
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
 import React from "react";
-import ReactDOMServer from 'react-dom/server';
+import ReactDOMServer from "react-dom/server";
 import { BaseData, Column } from "./types";
 
 export function getId(obj: BaseData) {
-  if ('id' in obj) return obj.id;
-  if ('_id' in obj) return obj._id;
-  return ''
+  if ("id" in obj) return obj.id;
+  if ("_id" in obj) return obj._id;
+  return "";
 }
 
 export const getIn = (obj: any, path: string) => {
   try {
-    var paths = path.split('.')
-      , current = obj
-      , i;
+    var paths = path.split("."),
+      current = obj,
+      i;
 
     for (i = 0; i < paths.length; ++i) {
       if (current[paths[i]] == undefined) {
@@ -27,15 +27,15 @@ export const getIn = (obj: any, path: string) => {
   } catch (e) {
     return undefined;
   }
-}
+};
 
 export const getValuePath = (key: string, column: Column<any, any>) => {
   return column.valuePath || key;
-}
+};
 
 export const getColumnLabel = (key: string, column: Column<any, any>) => {
   return column.name || key;
-}
+};
 
 export function extractTextFromComponent<P = any>(
   Component: React.ComponentType<P>,
@@ -48,35 +48,35 @@ export function extractTextFromComponent<P = any>(
     );
 
     // Create a temporary DOM element to parse the HTML
-    const tempElement = document.createElement('div');
+    const tempElement = document.createElement("div");
     tempElement.innerHTML = html;
 
     // Extract the text content
-    const textContent = tempElement.textContent || '';
+    const textContent = tempElement.textContent || "";
 
     // Clean up
     tempElement.remove();
 
     return textContent;
   } catch (error) {
-    console.error('Error extracting text from component:', error);
-    return '';
+    console.error("Error extracting text from component:", error);
+    return "";
   }
 }
 
 export function getTextFromReactNode(node: React.ReactNode): string {
   if (node === null || node === undefined) {
-    return '';
+    return "";
   }
 
   // Handle strings and numbers directly
-  if (typeof node === 'string' || typeof node === 'number') {
+  if (typeof node === "string" || typeof node === "number") {
     return node.toString();
   }
 
   // Handle arrays (like multiple children)
   if (Array.isArray(node)) {
-    return node.map(getTextFromReactNode).join('');
+    return node.map(getTextFromReactNode).join("");
   }
 
   // Handle React elements
@@ -86,7 +86,7 @@ export function getTextFromReactNode(node: React.ReactNode): string {
   }
 
   // Handle other object types that might represent text (like in React Fragments)
-  if (typeof node === 'object') {
+  if (typeof node === "object") {
     const nodeObj = node as any;
     if (nodeObj.props?.children) {
       return getTextFromReactNode(nodeObj.props.children);
@@ -94,7 +94,7 @@ export function getTextFromReactNode(node: React.ReactNode): string {
   }
 
   // Default case
-  return '';
+  return "";
 }
 
 export function getListDataId<T = any>(data: T): string {

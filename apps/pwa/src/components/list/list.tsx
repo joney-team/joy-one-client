@@ -5,7 +5,6 @@ import { useLayout } from "@/layout/layout-context";
 import { api } from "@/modules/apis";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { shiftSelect } from "@joy-one-client/utils/array";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -169,6 +168,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
             isVisible: !state.isHidden && !column.defaultHidden,
             order: state.order ?? columnIndex,
             resizable: column.resizable ?? true,
+            name: column.name ?? columnKey,
           },
         ];
       }, [])
@@ -232,7 +232,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
 
   return (
     <Context.Provider value={context}>
-      <Stack>
+      <Stack id="List">
         <Card shadow="xs" p={0} w="100%" style={{ overflow: "visible" }}>
           <Stack>
             <Stack gap={0} w="100%">
@@ -247,7 +247,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
                       <props.icon size={22} color="var(--mantine-color-bright)" strokeWidth={1.5} />
                     )}
                     <Text fw={500} fz={14} c="var(--mantine-color-bright)">
-                      {props.name ?? t`List`}
+                      {props.name ?? <Trans>List</Trans>}
                     </Text>
 
                     <Group gap={3}>

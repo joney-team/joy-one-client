@@ -7,13 +7,14 @@ import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
-import { IconFileInvoice } from "@tabler/icons-react";
+import { IconEye, IconFileInvoice } from "@tabler/icons-react";
 import { type FC } from "react";
 import { useQuery } from "../apis/use-query";
 import { EventType } from "../events/event-types";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { PluginEInvoicesProviderInformations } from "../plugins/e-invoices/plugin-e-invoices.types";
 import { OnReceiptDetailModal } from "../receipts/modals/modal-receipt-detail";
+import { t } from "@lingui/core/macro";
 
 export const EInvoiceList: FC = () => {
   const providerConfigs = useQuery<PluginEInvoicesProviderInformations>({
@@ -25,20 +26,24 @@ export const EInvoiceList: FC = () => {
     <Stack p={16}>
       <List<PluginEInvoicesEntity>
         id="eis"
-        name="eInvoices"
+        name={t`E-Invoices`}
         limit={18}
         icon={IconFileInvoice}
         route="/plugins/e-invoices"
         columns={{
           receiptCode: codeColumn({
             defaultWidth: 200,
-            name: "receipt_code",
+            name: t`Receipt code`,
             onClick: (_, data) => OnReceiptDetailModal({ id: data.receiptId }),
           }),
-          createdAt: dateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
+          createdAt: dateTimeColumn({
+            name: t`Created at`,
+            sortable: true,
+            isHasFilter: true,
+          }),
           provider: enumColumn({
-            defaultWidth: 200,
-            name: "provider",
+            defaultWidth: 400,
+            name: t`Provider`,
             valuePath: "provider.provider",
             options: Object.entries(providerConfigs.data ?? {}).map(([provider, info]) => ({
               label: info.name,
@@ -46,9 +51,15 @@ export const EInvoiceList: FC = () => {
             })),
           }),
           url: {
-            name: "invoice",
+            name: t`Invoice`,
+            defaultWidth: 200,
             render: ({ data }) => (
-              <Button onClick={() => window.open(data.url, "_blank")}>
+              <Button
+                onClick={() => window.open(data.url, "_blank")}
+                variant="light"
+                leftIcon={IconEye}
+                size="xs"
+              >
                 <Trans>View E-Invoice</Trans>
               </Button>
             ),

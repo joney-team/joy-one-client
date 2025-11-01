@@ -65,7 +65,12 @@ export const ExportButton: FC = () => {
 
           const filename = `[${workspace.userMember.workspace.code}] ${
             props.name || t`Data`
-          } ${DateTime.format(new Date(), { locale: lang.locale })
+          } ${DateTime.format(new Date(), {
+            locale: lang.locale,
+            month: "2-digit",
+            year: "numeric",
+            day: "2-digit",
+          })
             .replace(/:/g, "-")
             .replace(/\//g, "-")}`;
 

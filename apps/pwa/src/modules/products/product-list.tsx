@@ -50,6 +50,8 @@ export const ProductList: FC = () => {
             },
           },
           name: {
+            name: t`Name`,
+            defaultWidth: 350,
             render: ({ data }) => {
               return (
                 <Clickable
@@ -64,7 +66,7 @@ export const ProductList: FC = () => {
           code: codeColumn({ defaultHidden: true }),
           categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
           stock: {
-            defaultWidth: 150,
+            defaultWidth: 200,
             name: t`Product stocks`,
             render: ({ data }) => {
               if (!data.isStockCheck) return "-";

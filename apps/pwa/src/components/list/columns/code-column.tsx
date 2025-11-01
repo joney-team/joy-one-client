@@ -1,8 +1,10 @@
+"use client";
+
 import { Clickable } from "@/components/clickable";
+import { t } from "@lingui/core/macro";
 import { Stack, Text } from "@mantine/core";
 import { IconHash } from "@tabler/icons-react";
 import { Column } from "../types";
-import { t } from "@lingui/core/macro";
 
 export interface CodeColumnOptions<T = any, FieldType = T[keyof T]>
   extends Omit<Column<T, FieldType>, "render"> {
@@ -18,10 +20,9 @@ export function codeColumn<T = any, FieldType = T[keyof T]>(
 
   return {
     ...rest,
-    defaultWidth: options?.defaultWidth || 100,
-    name: rest.name || t`Code`,
-    icon: options?.icon || IconHash,
-    filter: options?.filter || { text: true },
+    name: rest.name ?? t`Code`,
+    icon: options?.icon ?? IconHash,
+    filter: options?.filter ?? { text: true },
     render: ({ value, data }) => {
       if (typeof value !== "string") return null;
 

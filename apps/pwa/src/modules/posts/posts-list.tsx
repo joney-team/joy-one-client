@@ -5,16 +5,16 @@ import { List } from "@/components/list";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { primaryColumn } from "@/components/list/columns/primary-column";
 import { useRouter } from "@/hooks/use-router";
+import { onArchive } from "@/utils/actions";
+import { t } from "@lingui/core/macro";
 import { Stack } from "@mantine/core";
 import { IconArchive, IconNews } from "@tabler/icons-react";
 import { type FC } from "react";
+import { api } from "../apis";
 import { CategoryColumn } from "../categories/components/category-column";
 import { EventType } from "../events/event-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { PostEntity } from "./posts-types";
-import { api } from "../apis";
-import { onArchive } from "@/utils/actions";
-import { t } from "@lingui/core/macro";
 
 export const PostsList: FC = () => {
   const router = useRouter();
@@ -24,18 +24,29 @@ export const PostsList: FC = () => {
       <List<PostEntity>
         icon={IconNews}
         id="pst"
+        name={t`Posts`}
         route="/posts"
         columns={{
-          _id: primaryColumn({ name: t`Title`, route: "/posts/:_id/edit", valuePath: "title" }),
+          _id: primaryColumn({
+            name: t`Title`,
+            route: "/posts/:_id/edit",
+            valuePath: "title",
+            defaultWidth: 350,
+          }),
           thumbnail: {
             name: t`Thumbnail`,
+            defaultWidth: 230,
             render: ({ value }) => {
               return <EntityImage src={value} w={200} h={100} onlyRead />;
             },
           },
           categoryId: CategoryColumn(),
-          excerpt: { name: t`Excerpt` },
-          publishedAt: dateTimeColumn({ name: t`Published at`, valuePath: "publishedAt" }),
+          excerpt: { name: t`Excerpt`, defaultWidth: 200 },
+          publishedAt: dateTimeColumn({
+            name: t`Published at`,
+            valuePath: "publishedAt",
+            defaultWidth: 200,
+          }),
         }}
         creatable={{
           permission: WorkspacePermission.POSTS_MANAGER,

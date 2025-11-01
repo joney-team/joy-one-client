@@ -123,7 +123,7 @@ export type ColumnState = {
 
 export type TableColumn<Data = any> = Omit<
   Column<Data>,
-  "defaultWidth" | "minWidth" | "resizable"
+  "defaultWidth" | "minWidth" | "resizable" | "name"
 > & {
   columnKey: string;
   width: number;
@@ -132,6 +132,7 @@ export type TableColumn<Data = any> = Omit<
   defaultWidth: number;
   minWidth: number;
   resizable: boolean;
+  name: string;
 };
 
 // Internal styles

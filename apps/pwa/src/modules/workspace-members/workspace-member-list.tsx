@@ -48,6 +48,8 @@ export const WorkspaceMemberList: FC = () => {
         name={t`Members`}
         columns={{
           name: {
+            defaultWidth: 300,
+            name: t`Name`,
             render: ({ data }) => (
               <Group
                 gap={5}
@@ -90,7 +92,7 @@ export const WorkspaceMemberList: FC = () => {
           phone: {
             icon: IconPhone,
             name: t`Phone`,
-            defaultWidth: 150,
+            defaultWidth: 200,
             render: ({ data }) => {
               if (!data.phone) return null;
 
