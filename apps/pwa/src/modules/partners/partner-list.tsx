@@ -16,14 +16,14 @@ export const PartnerList: FC = () => {
       <List<PartnerEntity>
         columns={{
           logo: {
-            defaultWidth: 40,
+            defaultWidth: 80,
             name: t`Logo`,
             align: "center",
             render: ({ data }) => <Avatar partner={data} size={30} />,
           },
-          name: { name: t`Name` },
-          phone: { name: t`Phone` },
-          email: { name: t`Email` },
+          name: { name: t`Name`, defaultWidth: 300 },
+          phone: { name: t`Phone`, defaultWidth: 200 },
+          email: { name: t`Email`, defaultWidth: 200 },
         }}
         id="pas"
         name={t`Partners`}

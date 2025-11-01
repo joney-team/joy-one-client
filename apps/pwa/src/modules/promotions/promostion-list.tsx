@@ -27,10 +27,15 @@ export const PromostionList = () => {
       <List<PromotionEntity>
         id="prs"
         route="/promotions"
+        name={t`Promotions`}
         columns={{
-          name: {},
+          name: {
+            name: t`Name`,
+            defaultWidth: 350,
+          },
           type: enumColumn<PromotionType>({
             defaultWidth: 400,
+            name: t`Type`,
             options: Object.values(PromotionType).map((type) => ({
               value: type,
               label: promotionTypes[type].label(),
@@ -55,6 +60,7 @@ export const PromostionList = () => {
             },
           }),
           value: {
+            defaultWidth: 400,
             name: t`Terms of use`,
             render: ({ data: promotion }) => {
               return (
@@ -102,8 +108,13 @@ export const PromostionList = () => {
               );
             },
           },
-          expireAt: dateTimeColumn({ name: t`Expire at`, defaultHidden: true, sortable: true }),
+          expireAt: dateTimeColumn({
+            name: t`Expire at`,
+            defaultHidden: true,
+            sortable: true,
+          }),
           status: enumColumn<PromotionStatus>({
+            name: t`Status`,
             defaultWidth: 200,
             options: Object.values(PromotionStatus).map((status) => ({
               value: status,

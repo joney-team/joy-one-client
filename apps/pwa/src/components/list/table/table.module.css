@@ -30,7 +30,7 @@
     thead {
       tr {
         th:not(.BulkActionsCell) {
-          padding: 0.5rem 0.6rem;
+          padding: 0.5rem 0.8rem;
         }
 
         background: var(--mantine-color-default-hover);
@@ -48,7 +48,7 @@
         }
 
         td:not(.BulkActionsCell) {
-          padding: 0.5rem 0.6rem;
+          padding: 0.5rem 0.8rem;
         }
 
         &:nth-child(even) {

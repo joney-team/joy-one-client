@@ -47,7 +47,12 @@ export const OrderList: FC = () => {
             valuePath: "createdByUser",
           }),
           items: OrderItemsColumn,
-          totalAmount: numberColumn({ name: t`Money amount`, type: "money", sortable: true }),
+          totalAmount: numberColumn({
+            name: t`Money amount`,
+            type: "money",
+            sortable: true,
+            defaultWidth: 200,
+          }),
           paymentStatus: statusColumn({
             defaultWidth: 200,
             name: t`Payment status`,

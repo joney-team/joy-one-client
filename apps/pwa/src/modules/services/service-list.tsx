@@ -48,6 +48,7 @@ export const ServiceList: FC = () => {
           },
           name: {
             name: t`Name`,
+            defaultWidth: 350,
             render: ({ data }) => {
               return (
                 <Clickable

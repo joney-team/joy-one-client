@@ -6315,7 +6315,7 @@ msgstr "ID mẫu"
 
 #: src/modules/hrm-timekeepings/hrm-timekeepings-calendar.tsx:271
 msgid "Temporary off"
-msgstr "Tắt tạm thời"
+msgstr "Tạm Off"
 
 #: src/modules/workspaces/workspace.tsx:62
 msgid "Terms and policies"

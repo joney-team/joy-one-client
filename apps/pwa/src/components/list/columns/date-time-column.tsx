@@ -20,7 +20,7 @@ export const dateTimeColumn = (args?: DateTimeColumnArgs): Column => {
     ...args,
     icon: args?.icon ?? IconClock,
     name: args?.name ?? t`Time`,
-    defaultWidth: args?.defaultWidth ?? 150,
+    defaultWidth: args?.defaultWidth ?? 180,
     render: ({ value }) => {
       if (!value || !DateTime.isValid(value)) return args?.emptyText || "-";
       const locale = getClientLocale();
