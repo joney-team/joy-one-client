@@ -18,7 +18,7 @@ export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
   return {
     icon: IconUserSquareRounded,
     name: args?.name || t`Customer`,
-    defaultWidth: args?.defaultWidth || 250,
+    defaultWidth: args?.defaultWidth || 230,
     render: ({ value }) => {
       const router = useRouter();
       const workspace = useWorkspace();

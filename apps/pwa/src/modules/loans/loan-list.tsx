@@ -94,7 +94,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
               })),
             },
           },
-          defaultWidth: 320,
+          defaultWidth: 280,
           render: ({ data: loan }) => {
             const loanPackage = loan.package;
 
@@ -191,17 +191,6 @@ export const LoanList: FC<LoanListProps> = (props) => {
             ];
           },
         },
-        createdAt: dateTimeColumn({
-          name: t`Created at`,
-          sortable: true,
-          defaultHidden: true,
-          isHasFilter: true,
-        }),
-        fulfilledAt: dateTimeColumn({
-          name: t`Fulfilled at`,
-          sortable: true,
-          isHasFilter: true,
-        }),
         nextReceiptAt: {
           name: t`Payment date`,
           defaultWidth: 150,
@@ -235,7 +224,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
           exportToExcel: false,
         },
         status: {
-          defaultWidth: 200,
+          defaultWidth: 180,
           name: t`Status`,
           icon: IconCircle,
           filter: {
@@ -324,6 +313,16 @@ export const LoanList: FC<LoanListProps> = (props) => {
           },
           exportToExcel: false,
         },
+        createdAt: dateTimeColumn({
+          name: t`Created at`,
+          sortable: true,
+          isHasFilter: true,
+        }),
+        fulfilledAt: dateTimeColumn({
+          name: t`Fulfilled at`,
+          sortable: true,
+          isHasFilter: true,
+        }),
       }}
       bulkActions={[
         {
