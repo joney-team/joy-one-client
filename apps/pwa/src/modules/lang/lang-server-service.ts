@@ -1,7 +1,9 @@
+"use server";
+
 import { StorageKey } from "@/types";
 import { getCookie } from "cookies-next/server";
 import { cookies, headers } from "next/headers";
-import { api } from "../apis";
+import { apiServerSide } from "../apis/server";
 import { AppLocale } from "./lang-types";
 
 export const getLocaleServer = async () => {
@@ -25,21 +27,25 @@ export const getLocaleServer = async () => {
 };
 
 export const translateServer = async (
-  key: string,
-  options?: { locale?: AppLocale; params?: any }
+  id: string,
+  args?: {
+    params?: Record<string, any>;
+    locale?: AppLocale;
+  }
 ): Promise<string> => {
   try {
-    const locale = options?.locale || getLocaleServer();
-    let sentence = (await api.get(`/lang/${locale}/${key}`)) || key;
-
-    if (options?.params && typeof options.params === "object") {
-      Object.entries(options.params).map((item: any) => {
-        sentence = sentence.replace(new RegExp(`{${item[0]}}`, "g"), item[1]);
-      });
-    }
-
-    return sentence;
+    const response = await apiServerSide.post<string>(
+      `/lang/translate`,
+      { id, params: args?.params },
+      {
+        headers: {
+          "Accept-Language": args?.locale || (await getLocaleServer()),
+        },
+      }
+    );
+    return response;
   } catch (error) {
-    return key;
+    console.error("Error translating server", error);
+    return id;
   }
 };

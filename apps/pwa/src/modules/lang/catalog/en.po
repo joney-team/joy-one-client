@@ -576,6 +576,10 @@ msgstr "Are you sure you want to delete the status <0>{0}</0>?"
 msgid "Are you sure you want to disconnect?"
 msgstr "Are you sure you want to disconnect?"
 
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:216
+msgid "Are you sure you want to liquidate this loan? This action cannot be undone."
+msgstr "Are you sure you want to liquidate this loan? This action cannot be undone."
+
 #: src/modules/message-boxes/message-box/message-box-head.tsx:48
 msgid "Are you sure you want to mark as done?"
 msgstr "Are you sure you want to mark as done?"
@@ -1150,7 +1154,7 @@ msgstr "Check-out at"
 msgid "Checked in at <0><1/></0>"
 msgstr "Checked in at <0><1/></0>"
 
-#: src/modules/loans/components/loan-customer-kyc.tsx:78
+#: src/modules/loans/components/loan-customer-kyc.tsx:79
 msgid "CID created at"
 msgstr "CID created at"
 
@@ -1433,8 +1437,8 @@ msgstr "Contact support"
 
 #: src/modules/customers/components/customer-information.tsx:212
 #: src/modules/customers/modals/modal-customer-contacts.tsx:179
-#: src/modules/loans/components/loan-customer-kyc.tsx:142
-#: src/modules/loans/components/loan-customer-kyc.tsx:179
+#: src/modules/loans/components/loan-customer-kyc.tsx:138
+#: src/modules/loans/components/loan-customer-kyc.tsx:175
 msgid "Contacts"
 msgstr "Contacts"
 
@@ -1736,7 +1740,7 @@ msgid "Currency"
 msgstr "Currency"
 
 #: src/modules/customers/components/form-customer.tsx:182
-#: src/modules/loans/components/loan-customer-kyc.tsx:92
+#: src/modules/loans/components/loan-customer-kyc.tsx:90
 msgid "Current address"
 msgstr "Current address"
 
@@ -2653,6 +2657,7 @@ msgid "Free on product"
 msgstr "Free on product"
 
 #: src/modules/loans/components/loan-payments.tsx:194
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:110
 #: src/widgets/reports/widgets/report-credit.widget.tsx:545
 msgid "From"
 msgstr "From"
@@ -2982,7 +2987,7 @@ msgid "Interest"
 msgstr "Interest"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:179
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:171
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:170
 msgid "Interest days"
 msgstr "Interest days"
 
@@ -2991,12 +2996,12 @@ msgid "Interest income"
 msgstr "Interest income"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:187
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:177
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:176
 msgid "Interest per day"
 msgstr "Interest per day"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:164
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:161
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:160
 msgid "Interest period"
 msgstr "Interest period"
 
@@ -3272,7 +3277,7 @@ msgstr "Link form"
 #: src/modules/loans/components/loan-payments.tsx:427
 #: src/modules/loans/loan-list.tsx:273
 #: src/modules/loans/loan-list.tsx:401
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:234
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:221
 msgid "Liquidation"
 msgstr "Liquidation"
 
@@ -3283,10 +3288,6 @@ msgstr "Liquidation fee rate"
 #: src/modules/loans/modals/modal-loan-package-form.tsx:322
 msgid "Liquidation fee rate, calculated on the remaining debt (0 - 100)"
 msgstr "Liquidation fee rate, calculated on the remaining debt (0 - 100)"
-
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:229
-msgid "Liquidation message"
-msgstr "Liquidation message"
 
 #: src/modules/loans/loan-detail.tsx:356
 msgid "Liquidation statement"
@@ -3317,7 +3318,7 @@ msgstr "Loan"
 #: src/modules/loans/loan-list.tsx:190
 #: src/modules/loans/modals/modal-create-loan.tsx:340
 #: src/modules/loans/modals/modal-loan-calculator.tsx:141
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:104
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:132
 msgid "Loan amount"
 msgstr "Loan amount"
 
@@ -3348,7 +3349,7 @@ msgstr "Loan Asset Estimations"
 #: src/modules/loans/components/loan-card.tsx:75
 #: src/modules/loans/components/loan-documents.tsx:112
 #: src/modules/loans/loan-list.tsx:186
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:96
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:97
 msgid "Loan asset type"
 msgstr "Loan asset type"
 
@@ -3383,7 +3384,7 @@ msgid "Loan is signed by customer, waiting for approval"
 msgstr "Loan is signed by customer, waiting for approval"
 
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:55
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:245
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:232
 msgid "Loan liquidation"
 msgstr "Loan liquidation"
 
@@ -3422,7 +3423,7 @@ msgstr "Loan payment account"
 
 #: src/modules/loans/components/loan-documents.tsx:138
 #: src/modules/loans/modals/modal-create-loan.tsx:328
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:112
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:138
 msgid "Loan payment periods"
 msgstr "Loan payment periods"
 
@@ -3430,17 +3431,13 @@ msgstr "Loan payment periods"
 #: src/modules/loans/modals/modal-create-loan.tsx:317
 #: src/modules/loans/modals/modal-loan-calculator.tsx:175
 #: src/modules/loans/modals/modal-loan-calculator.tsx:289
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:100
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:102
 #: src/modules/loans/modals/modal-loan-package-form.tsx:138
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:52
 msgid "Loan period"
 msgstr "Loan period"
 
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:121
-msgid "Loan period range"
-msgstr "Loan period range"
-
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:209
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:202
 msgid "Loan receipt late interest"
 msgstr "Loan receipt late interest"
 
@@ -4686,11 +4683,11 @@ msgid "Period"
 msgstr "Period"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:200
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:189
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:188
 msgid "Period fee amount"
 msgstr "Period fee amount"
 
-#: src/modules/loans/components/loan-customer-kyc.tsx:89
+#: src/modules/loans/components/loan-customer-kyc.tsx:87
 msgid "Personal informations"
 msgstr "Personal informations"
 
@@ -4702,7 +4699,7 @@ msgstr "Personal informations"
 #: src/modules/customers/customer-list.tsx:71
 #: src/modules/customers/modals/modal-customer-form.tsx:104
 #: src/modules/loans/components/loan-card.tsx:63
-#: src/modules/loans/components/loan-customer-kyc.tsx:145
+#: src/modules/loans/components/loan-customer-kyc.tsx:141
 #: src/modules/loans/loan-detail.tsx:287
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:91
 #: src/modules/partners/modals/modal-partner-form.tsx:120
@@ -4857,8 +4854,8 @@ msgstr "Prescriptions"
 msgid "Preview"
 msgstr "Preview"
 
-#: src/modules/loans/components/loan-customer-kyc.tsx:98
-#: src/modules/loans/components/loan-customer-kyc.tsx:120
+#: src/modules/loans/components/loan-customer-kyc.tsx:96
+#: src/modules/loans/components/loan-customer-kyc.tsx:118
 #: src/modules/loans/loan-list.tsx:181
 msgid "Previous address"
 msgstr "Previous address"
@@ -5305,7 +5302,7 @@ msgstr "Rejected timekeeping"
 msgid "Relationship type"
 msgstr "Relationship type"
 
-#: src/modules/loans/components/loan-customer-kyc.tsx:153
+#: src/modules/loans/components/loan-customer-kyc.tsx:149
 msgid "Relative contacts"
 msgstr "Relative contacts"
 
@@ -5314,12 +5311,12 @@ msgid "Released vouchers"
 msgstr "Released vouchers"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:149
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:147
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:148
 msgid "Remain capital amount"
 msgstr "Remain capital amount"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:211
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:199
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:195
 msgid "Remain capital amount fee"
 msgstr "Remain capital amount fee"
 
@@ -5582,7 +5579,7 @@ msgid "Rule"
 msgstr "Rule"
 
 #: src/modules/customers/components/form-customer.tsx:152
-#: src/modules/loans/components/loan-customer-kyc.tsx:133
+#: src/modules/loans/components/loan-customer-kyc.tsx:131
 msgid "Salary amount"
 msgstr "Salary amount"
 
@@ -5647,7 +5644,7 @@ msgstr "Search products / services / customers"
 msgid "Secondary address"
 msgstr "Secondary address"
 
-#: src/modules/loans/components/loan-customer-kyc.tsx:114
+#: src/modules/loans/components/loan-customer-kyc.tsx:112
 msgid "Secondary address (Hometown)"
 msgstr "Secondary address (Hometown)"
 
@@ -6538,6 +6535,7 @@ msgid "Title"
 msgstr "Title"
 
 #: src/modules/loans/components/loan-payments.tsx:200
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:117
 #: src/widgets/reports/widgets/report-credit.widget.tsx:548
 msgid "To"
 msgstr "To"
@@ -6587,7 +6585,7 @@ msgstr "Tomorrow"
 #: src/modules/loans/components/loan-payments.tsx:368
 #: src/modules/loans/components/loan-receipt-card.tsx:287
 #: src/modules/loans/modals/modal-loan-calculator.tsx:257
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:218
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:208
 #: src/modules/orders/order-card.tsx:198
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:57
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:260

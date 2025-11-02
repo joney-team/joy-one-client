@@ -12,6 +12,7 @@ import {
 import { api } from "../apis";
 import { getColor } from "../theme/use-color";
 import { NotificationEntity, NotificationIcon, NotificationType } from "./notification-types";
+import { translateServer } from "../lang/lang-server-service";
 
 export async function getNotifications(q?: any) {
   return api.get("/notifications", { params: q });
@@ -64,7 +65,7 @@ export function renderNotificationColor(noti: NotificationEntity, theme?: Mantin
   return getColor(theme, notificationTypeColors[noti.type]);
 }
 
-export function showInAppNotification(
+export async function showInAppNotification(
   notification: NotificationEntity,
   router: AppRouter,
   theme?: MantineTheme
@@ -74,8 +75,8 @@ export function showInAppNotification(
 
   notifications.show({
     id: notification._id,
-    title: notification?.title,
-    message: notification?.body,
+    title: await translateServer(notification.title, notification.titleParams),
+    message: await translateServer(notification.body, notification.bodyParams),
     color,
     withCloseButton: true,
     icon: <Icon strokeWidth={1.5} size={18} />,

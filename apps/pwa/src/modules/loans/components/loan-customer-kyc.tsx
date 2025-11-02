@@ -74,15 +74,13 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                     </Group>
                   )}
                 />
-                <LoanRowInfo
-                  label={<Trans>CID created at</Trans>}
-                  value={kyc?.cidCreatedAt}
-                  renderValue={() => (
-                    <Text>
-                      {kyc?.cidCreatedAt && <DateFormat value={kyc?.cidCreatedAt} type="date" />}
-                    </Text>
-                  )}
-                />
+                {kyc?.cidCreatedAt && (
+                  <LoanRowInfo
+                    label={<Trans>CID created at</Trans>}
+                    value={kyc?.cidCreatedAt}
+                    renderValue={(value) => <DateFormat value={value} type="date" />}
+                  />
+                )}
               </Fragment>
             )}
 
@@ -90,7 +88,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
 
             <LoanRowInfo
               label={<Trans>Current address</Trans>}
-              value={customer.vnLocationFullAddress}
+              value={customer.vnLocationFullAddress || ""}
               renderValue={() => (
                 <Tooltip
                   label={
@@ -112,7 +110,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
 
             <LoanRowInfo
               label={<Trans>Secondary address (Hometown)</Trans>}
-              value={customer.vnSecondaryLocation}
+              value={customer.vnSecondaryLocation?.address}
               renderValue={(value) => (
                 <Tooltip
                   label={
@@ -123,7 +121,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                   disabled={!customer.vnPrevSecondaryLocationFullAddress}
                 >
                   <Anchor href={value && getGoogleMapLink(value)} target="_blank">
-                    {renderLocation(value) || "--"}
+                    {renderLocation(customer.vnSecondaryLocation) || "--"}
                   </Anchor>
                 </Tooltip>
               )}
@@ -132,9 +130,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
             <LoanRowInfo
               label={<Trans>Salary amount</Trans>}
               value={customer.salaryAmount}
-              renderValue={(value) => (
-                <Text>{value ? <CurrencyFormat value={value} /> : "--"}</Text>
-              )}
+              renderValue={(value) => (value ? <CurrencyFormat value={value} /> : "--")}
             />
 
             {workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (

@@ -5,7 +5,9 @@ import { ActionIcon, Grid, Group, Stack, Text } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
 
-export const LoanRowInfo = <T extends any>(props: {
+export const LoanRowInfo = <
+  T extends string | number | unknown[] | Record<string, any> | undefined
+>(props: {
   label: string | JSX.Element;
   description?: string;
   value: T;

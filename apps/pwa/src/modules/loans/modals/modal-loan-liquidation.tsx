@@ -24,7 +24,7 @@ import { Trans } from "@lingui/react/macro";
 import { Box, Card, Center, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconBrandSpeedtest } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { OnModalPayReceipt } from "../../receipts/modals/modal-pay-receipt";
 import { loanAssetTypes } from "../loans-constants";
 
@@ -92,52 +92,53 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
               </Text>
             </Stack>
           </Group>
+
           <LoanRowInfo
             label={<Trans>Loan asset type</Trans>}
             value={loanAssetTypes[loan.assetType].label()}
           />
+
           <LoanRowInfo
             label={<Trans>Loan period</Trans>}
             value={renderLoanPeriod(loan.package.days)}
+            renderValue={(value) => (
+              <Fragment>
+                {value}
+                {loan.paymentPeriods && (
+                  <small>
+                    {" ("}
+                    <Trans>From</Trans>{" "}
+                    {loan.paymentPeriods.find((v) => v.period === 1)?.startTime && (
+                      <DateFormat
+                        value={loan.paymentPeriods.find((v) => v.period === 1)?.startTime as number}
+                        type="date"
+                      />
+                    )}{" "}
+                    <Trans>To</Trans>{" "}
+                    {loan.paymentPeriods[loan.paymentPeriods.length - 1].endTime && (
+                      <DateFormat
+                        value={loan.paymentPeriods[loan.paymentPeriods.length - 1].endTime}
+                        type="date"
+                      />
+                    )}
+                    {")"}
+                  </small>
+                )}
+              </Fragment>
+            )}
           />
+
           <LoanRowInfo
             label={<Trans>Loan amount</Trans>}
-            value={
-              <Text>
-                <CurrencyFormat value={loan.amount} />
-              </Text>
-            }
+            value={loan.amount}
+            renderValue={(value) => <CurrencyFormat value={value} />}
           />
+
           <LoanRowInfo
             label={<Trans>Loan payment periods</Trans>}
-            value={
-              <Text>
-                <NumberFormat value={loan.packagePeriodDays} />
-              </Text>
-            }
+            value={loan.packagePeriodDays}
+            renderValue={(value) => <NumberFormat value={value} />}
           />
-          {loan.paymentPeriods && (
-            <LoanRowInfo
-              label={<Trans>Loan period range</Trans>}
-              value={
-                <Text>
-                  {loan.paymentPeriods.find((v) => v.period === 1)?.startTime && (
-                    <DateFormat
-                      value={loan.paymentPeriods.find((v) => v.period === 1)?.startTime as number}
-                      type="date"
-                    />
-                  )}
-                  {" - "}
-                  {loan.paymentPeriods[loan.paymentPeriods.length - 1].endTime && (
-                    <DateFormat
-                      value={loan.paymentPeriods[loan.paymentPeriods.length - 1].endTime}
-                      type="date"
-                    />
-                  )}
-                </Text>
-              }
-            />
-          )}
         </Stack>
       </Card>
 
@@ -145,12 +146,10 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
         <Stack>
           <LoanRowInfo
             label={<Trans>Remain capital amount</Trans>}
-            value={
-              <Text>
-                <CurrencyFormat value={calculated.remainCapitalAmount} />
-              </Text>
-            }
+            value={calculated.remainCapitalAmount}
+            renderValue={(value) => <CurrencyFormat value={value} />}
           />
+
           <Tooltip
             disabled={calculated.period === 0}
             label={
@@ -187,11 +186,8 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
             <Box w="100%">
               <LoanRowInfo
                 label={<Trans>Period fee amount</Trans>}
-                value={
-                  <Text>
-                    <CurrencyFormat value={calculated.periodFeeAmount} />
-                  </Text>
-                }
+                value={calculated.periodFeeAmount}
+                renderValue={(value) => <CurrencyFormat value={value} />}
               />
             </Box>
           </Tooltip>
@@ -199,34 +195,25 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
             label={`${t`Remain capital amount fee`} (${calculated.remainCapitalAmountFeePercent.toLocaleString(
               getClientLocale()
             )}%)`}
-            value={
-              <Text>
-                <CurrencyFormat value={calculated.remainCapitalAmountFee} />
-              </Text>
-            }
+            value={calculated.remainCapitalAmountFee}
+            renderValue={(value) => <CurrencyFormat value={value} />}
           />
           <LoanRowInfo
             label={<Trans>Loan receipt late interest</Trans>}
-            value={
-              <Text>
-                <CurrencyFormat value={calculated.lateInterestAmount} />
-              </Text>
-            }
+            value={calculated.lateInterestAmount}
+            renderValue={(value) => <CurrencyFormat value={value} />}
           />
 
           <LoanRowInfo
             label={<Trans>Total</Trans>}
-            value={
-              <Text c="orange" fz={em(20)} fw={800}>
-                <CurrencyFormat value={calculated.feeAmount} />
-              </Text>
-            }
+            value={calculated.feeAmount}
+            renderValue={(value) => <CurrencyFormat value={value} />}
           />
         </Stack>
       </Card>
 
       <Text ta="center" c="orange">
-        {<Trans>Liquidation message</Trans>}
+        <Trans>Are you sure you want to liquidate this loan? This action cannot be undone.</Trans>
       </Text>
 
       <Center>
