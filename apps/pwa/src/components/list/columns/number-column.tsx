@@ -3,29 +3,40 @@
 import { NumberFormat } from "@/components/format/number-format";
 import { Text } from "@mantine/core";
 import { Column } from "../types";
+import { t } from "@lingui/core/macro";
+import { CurrencyFormat } from "@/components/format/currency-format";
 
 export interface NumberColumnOptions extends Omit<Column, "render"> {
   type?: "money" | "hours";
 }
 
-export const numberColumn = (options?: NumberColumnOptions): Column => {
-  const name = options?.name || (options?.type === "money" ? "money_amount" : "number");
-  const align = options?.align || "right";
+export const numberColumn = (args?: NumberColumnOptions): Column => {
+  const name = args?.name || (args?.type === "money" ? t`Money amount` : t`Number`);
+  const align = args?.align || "right";
 
   return {
-    ...options,
+    ...args,
     name,
     align,
     render: ({ value }) => {
       if (typeof value !== "number") return null;
+
+      if (args?.type === "money") {
+        return (
+          <span style={{ fontVariantNumeric: "tabular-nums" }}>
+            <CurrencyFormat value={value} />
+          </span>
+        );
+      }
+
       return (
-        <Text ta={options?.align} style={{ fontVariantNumeric: "tabular-nums" }}>
+        <span style={{ fontVariantNumeric: "tabular-nums" }}>
           <NumberFormat value={value} />
-        </Text>
+        </span>
       );
     },
     exportToExcel: (value) => {
-      if (options?.type === "money") {
+      if (args?.type === "money") {
         return {
           money: value,
         };

@@ -64,7 +64,15 @@ export default function ListTable<T extends BaseData>() {
           return <ListTableHead key={column.columnKey} column={column} />;
         })}
 
-        <th />
+        <th>
+          {context.actions.length > 0 && (
+            <Group justify="end" opacity={0}>
+              <ActionIcon variant="subtle" color="gray">
+                <IconDotsVertical size={16} />
+              </ActionIcon>
+            </Group>
+          )}
+        </th>
       </tr>
     );
   }, [context.columns, context.actions, context.isBulkActionsActivated, isSelectedAll]);
