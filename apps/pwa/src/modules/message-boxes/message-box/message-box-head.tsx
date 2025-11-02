@@ -30,6 +30,8 @@ import {
 import { FC } from "react";
 import { messageBoxStatuses } from "../message-boxes-contants";
 import { useMessageBoxes } from "../message-boxes-context";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
+import { Trans } from "@lingui/react/macro";
 
 export const MessageBoxHead: FC = () => {
   const messageBoxes = useMessageBoxes();
@@ -42,26 +44,23 @@ export const MessageBoxHead: FC = () => {
   const aiPlugin = plugins.aiAssistants[0];
   const isAiAssistantEnabled = box && aiPlugin && aiPlugin.enabled && !box.aiAssistantDisabled;
 
-  const onClose = async () => {
-    modals.openConfirmModal({
-      title: <ModalTitle title={t`Confirm`} icon={IconCircleCheck} />,
-      children: t`Are you sure you want to mark as done?`,
-      onConfirm: async () => {
-        if (!box) return;
-        return closeMesssageBox(box._id);
-      },
-      labels: {
-        cancel: t`Cancel`,
-        confirm: t`Confirm`,
-      },
+  const onMarkAsDone = async () => {
+    if (!box) return;
+
+    onConfirmModal({
+      type: "success",
+      icon: IconCircleCheck,
+      content: <Trans>Are you sure you want to mark as done?</Trans>,
+      onConfirm: () => closeMesssageBox(box._id),
     });
   };
 
   const onRemove = async () => {
+    if (!box) return;
+
     onArchive({
-      name: t`Message boxes`,
+      name: <Trans>Message boxes</Trans>,
       process: async () => {
-        if (!box) return;
         await removeMessageBox(box._id);
         router.replace("/message-boxes");
       },
@@ -118,7 +117,7 @@ export const MessageBoxHead: FC = () => {
           if (box.status === MessageBoxStatus.IN_PROGRESS)
             return (
               <Tooltip label={t`Message box closed`}>
-                <ActionIcon color="green" onClick={onClose}>
+                <ActionIcon color="green" onClick={onMarkAsDone}>
                   <IconCheck size={20} />
                 </ActionIcon>
               </Tooltip>

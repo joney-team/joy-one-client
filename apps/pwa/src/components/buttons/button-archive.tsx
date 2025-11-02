@@ -1,16 +1,18 @@
+"use client";
+
 import { useRouter } from "@/hooks/use-router";
 import { onArchive } from "@/utils/actions";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Center, Text } from "@mantine/core";
 import { IconArchive } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { Button } from "./button";
 
 interface ButtonArchiveProps {
   process: () => Promise<any> | any;
   enabled?: boolean;
   mt?: number;
-  name?: string;
+  name?: string | ReactNode;
   onClick?: () => void;
   onArchived?: () => void;
   goBackWhenArchived?: boolean;
@@ -36,8 +38,8 @@ export const ButtonArchive: FC<ButtonArchiveProps> = (props) => {
           if (props.process)
             return onArchive({
               name: props.name,
-              process: () => props.process?.(),
-              onArchived: () => {
+              process: async () => {
+                await props.process?.();
                 if (props.onArchived) props.onArchived();
                 if (goBackWhenArchived) router.back();
               },
@@ -45,7 +47,7 @@ export const ButtonArchive: FC<ButtonArchiveProps> = (props) => {
         }}
       >
         <Text fz={12} fw={400}>
-          {props.label ?? t`Archive`}
+          {props.label ?? <Trans>Archive</Trans>}
         </Text>
       </Button>
     </Center>

@@ -30,7 +30,7 @@
     thead {
       tr {
         th:not(.BulkActionsCell) {
-          padding: 0.5rem 0.8rem;
+          padding: 8px 12px;
         }
       }
     }
@@ -46,7 +46,7 @@
         }
 
         td:not(.BulkActionsCell) {
-          padding: 0.5rem 0.8rem;
+          padding: 8px 12px;
         }
 
         &:nth-child(even) {

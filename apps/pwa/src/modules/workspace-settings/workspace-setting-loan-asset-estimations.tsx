@@ -6,7 +6,7 @@ import { ContentEditHover } from "@/components/content-edit-hover";
 import { Empty } from "@/components/empty";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { ModalTitle } from "@/components/modal-title";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useRouter } from "@/hooks/use-router";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
 import { useLoans } from "@/modules/loans/loans-context";
@@ -21,10 +21,17 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-import { modals } from "@mantine/modals";
-import { IconFile, IconFilter, IconPencil, IconPlus, IconX } from "@tabler/icons-react";
+import {
+  IconFile,
+  IconFileImport,
+  IconFilter,
+  IconPencil,
+  IconPlus,
+  IconX,
+} from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
 import { FC, useMemo, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
@@ -148,25 +155,23 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
     <Stack p={16}>
       <Group>
         <Button leftIcon={IconPlus} onClick={() => OnModalLoanAssetEstimationForm({})}>
-          Thêm định giá
+          <Trans>Add asset estimation</Trans>
         </Button>
 
         <Dropzone
           accept={[MIME_TYPES.xls, MIME_TYPES.xlsx]}
           onDrop={(files) => {
-            modals.openConfirmModal({
-              title: <ModalTitle color="orange" title="Nhập dữ liệu" icon={IconFile} />,
-              children:
-                "Dữ liệu hiện tại sẽ bị thay thế bởi dữ liệu mới. Bạn có chắc chắn muốn tiếp tục?",
-              color: "orange",
+            onConfirmModal({
+              title: <Trans>Import asset estimations</Trans>,
+              icon: IconFileImport,
+              content: <Trans>Are you sure you want to import the asset estimations?</Trans>,
+              type: "warning",
               onConfirm: () => importEstimations(files[0]),
-              labels: { confirm: "Tiếp tục", cancel: "Hủy" },
-              confirmProps: { color: "orange" },
             });
           }}
         >
           <Button leftIcon={IconFile} loading={importing}>
-            Nhập định giá từ file
+            <Trans>Import asset estimations from file</Trans>
           </Button>
         </Dropzone>
       </Group>

@@ -28,6 +28,7 @@ import { FC } from "react";
 import { Avatar } from "../../../components/avatar";
 import { Button } from "../../../components/buttons/button";
 import { Image } from "../../../components/image";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
 
 export const PluginMetaPages: FC = () => {
   const workspace = useWorkspace();
@@ -84,10 +85,11 @@ export const PluginMetaPages: FC = () => {
                   fw={500}
                   fz={em(12)}
                   onClick={() =>
-                    onArchive({
+                    onConfirmModal({
+                      type: "danger",
                       icon: IconPuzzle,
-                      title: capitalize(`${t`Disconect`} ${page.name}`),
-                      process: () => disconnectPluginMetaPage(page._id).catch(onError),
+                      content: <Trans>Are you sure you want to disconnect {page.name}?</Trans>,
+                      onConfirm: () => disconnectPluginMetaPage(page._id),
                     })
                   }
                 >

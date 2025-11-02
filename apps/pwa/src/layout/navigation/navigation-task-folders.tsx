@@ -92,15 +92,13 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
       process: async () => {
         const relatedTasks = await getTasks({ tagFolderId: tag._id, limit: 1 });
         onArchive({
-          name: t`Folder`,
+          name: <Trans>Folder</Trans>,
           icon: IconFolder,
           children:
             relatedTasks.count > 0
               ? `${t`Are you sure you want to continue?`} ${t`${relatedTasks.count} related work will be moved to the default folder`}`
               : undefined,
-          process: async () => {
-            await tags.remove(tag._id).catch(onError);
-          },
+          process: () => tags.remove(tag._id),
         });
       },
     });

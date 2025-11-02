@@ -48,10 +48,10 @@ export const WorkspaceSdkList: FC = () => {
                     onArchive({
                       name: `SDK ${sdk.name}`,
                       icon: IconPuzzle,
-                      process: () =>
-                        removeWorkspaceSdk(sdk._id).then(() =>
-                          sdks.fetch(true, { isSilient: true })
-                        ),
+                      process: async () => {
+                        await removeWorkspaceSdk(sdk._id);
+                        await sdks.fetch(true, { isSilient: true });
+                      },
                     })
                   }
                 >

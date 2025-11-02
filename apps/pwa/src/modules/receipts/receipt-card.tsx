@@ -28,8 +28,8 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { HoverToEdit } from "@/components/hover-to-edit";
-import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { InputModalType } from "@/modals/modal-input";
 import { PrintButton } from "@/modals/modal-printer";
 import { FilesBox } from "@/modules/files/files-box";
@@ -48,14 +48,13 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
-import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
-import { IconArchive, IconCashRegister, IconCheck } from "@tabler/icons-react";
+import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import Link from "next/link";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
 
@@ -104,6 +103,21 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
       return getOrderById(receipt.relatedOrderId);
     },
   });
+
+  const onRejectExpense = () => {
+    onConfirmModal({
+      title: <Trans>Reject Expense</Trans>,
+      content: (
+        <Trans>
+          Are you sure you want to reject the expense? This action cannot be undone. The receipt
+          will be deleted.
+        </Trans>
+      ),
+      type: "danger",
+      onConfirm: () => archiveReceipt(receipt.id),
+      confirmLabel: <Trans>Reject Expense</Trans>,
+    });
+  };
 
   return (
     <Card withBorder shadow="none" {...props.cardProps}>
@@ -443,26 +457,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                                     radius={100}
                                     color="gray"
                                     size="xs"
-                                    onClick={() => {
-                                      modals.openConfirmModal({
-                                        id: "ConfirmArchiveReceipt",
-                                        title: (
-                                          <ModalTitle
-                                            color="red"
-                                            title={t`Reject Expense`}
-                                            icon={IconArchive}
-                                          />
-                                        ),
-                                        children: t`Are you sure you want to reject the expense? This action cannot be undone. The receipt will be deleted.`,
-                                        color: "red",
-                                        onConfirm: async () => {
-                                          return archiveReceipt(receipt.id).catch(onError);
-                                        },
-                                        labels: { confirm: t`Reject Expense`, cancel: t`Cancel` },
-                                        onCancel: () => modals.close("ConfirmArchiveReceipt"),
-                                        confirmProps: { color: "red" },
-                                      });
-                                    }}
+                                    onClick={onRejectExpense}
                                     variant="outline"
                                   >
                                     {t`Reject`}

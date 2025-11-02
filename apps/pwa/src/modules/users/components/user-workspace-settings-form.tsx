@@ -172,9 +172,11 @@ const UserWorkspaceSettingsForm: FC<
               iconStrokeWidth={1.3}
               onClick={() =>
                 onArchive({
-                  name: "member",
-                  process: () => removeWorkspaceMember(userMember.memberId!),
-                  onArchived: () => props.onClose?.(),
+                  name: userMember.memberDisplayName ?? userMember.name,
+                  process: async () => {
+                    await removeWorkspaceMember(userMember.memberId!);
+                    props.onClose?.();
+                  },
                 })
               }
             >

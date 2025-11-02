@@ -10,7 +10,7 @@ export default function NotFound() {
   const router = useRouter();
   return (
     <LangProvider>
-      <ErrorBoundary error={new Error("Page not found")} reset={() => router.replace("/")} />
+      <ErrorBoundary error={new Error("PageNotFound")} reset={() => router.replace("/")} />
     </LangProvider>
   );
 }

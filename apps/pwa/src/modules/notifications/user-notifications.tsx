@@ -3,6 +3,7 @@
 import { ChillIllustration } from "@/components/illustrations/chill";
 import { useList } from "@/components/list/use-list";
 import { WayPoint } from "@/components/way-point";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
@@ -18,7 +19,6 @@ import {
   UserNotificationStat,
 } from "@/modules/notifications/notification-types";
 import { useColor } from "@/modules/theme/use-color";
-import { onError } from "@/utils/exceptions.utils";
 import { classNames } from "@/utils/ui.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -29,7 +29,6 @@ import { IconBell, IconBrush } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";
 import { Button } from "../../components/buttons/button";
 import { Errored } from "../../components/errored";
-import { ModalTitle } from "../../components/modal-title";
 import { Renderer } from "../../components/renderer";
 import { useLang } from "../lang/lang-context";
 import { NotificationCard } from "./notification-card";
@@ -82,15 +81,17 @@ export const UserNotifications: FC = () => {
   });
 
   const onClean = () => {
-    modals.openConfirmModal({
-      modalId: "ModalCleanNotification",
-      title: <ModalTitle color="primary" title={t`Clean notifications`} icon={IconBrush} />,
-      children: t`Are you sure you want to clean up the notifications? This action cannot be undone.`,
-      color: color("primary"),
-      onConfirm: async () => cleanNotifications().then(close).catch(onError),
-      labels: { confirm: t`Clean`, cancel: t`Cancel` },
+    onConfirmModal({
+      type: "success",
+      title: <Trans>Clean up notifications</Trans>,
+      icon: IconBrush,
+      content: (
+        <Trans>
+          Are you sure you want to clean up the notifications? This action cannot be undone.
+        </Trans>
+      ),
+      onConfirm: () => cleanNotifications().then(close),
       onCancel: () => modals.close("ModalCleanNotification"),
-      confirmProps: { color: color("primary") },
     });
   };
 

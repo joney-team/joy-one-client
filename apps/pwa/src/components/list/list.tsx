@@ -157,7 +157,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
         const column = columnValue as Column<T>;
         if (!column) return acc;
 
-        const defaultWidth = column.defaultWidth ?? 150;
+        const defaultWidth = column.defaultWidth ?? 120;
         const minWidth = column.minWidth ?? 100;
 
         return [

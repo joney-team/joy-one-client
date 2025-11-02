@@ -19,7 +19,7 @@ import {
   ReceiptStatus,
   ReceiptType,
 } from "@/modules/receipts/receipts-types";
-import { UserColumn } from "@/modules/users/user-column";
+import { userColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -85,7 +85,7 @@ export const ReceiptList: FC = () => {
             name: t`Customer`,
             valuePath: "relatedCustomer",
           }),
-          cashierUserId: UserColumn({
+          cashierUserId: userColumn({
             name: t`Cashier`,
             valuePath: "cashierUser",
             optionalValuePath: "disbursementUser",

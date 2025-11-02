@@ -312,7 +312,7 @@ export class Currency {
   }
 
   static normalize(value: number, currency = "USD"): number {
-    const parts = Intl.NumberFormat(undefined, {
+    const parts = Intl.NumberFormat("en-US", {
       style: "currency",
       currency: currency,
     }).formatToParts(1);

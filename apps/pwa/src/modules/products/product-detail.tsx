@@ -3,6 +3,7 @@
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
+import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { enumColumn } from "@/components/list/columns/enum-column";
@@ -17,7 +18,7 @@ import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-
 import { ProductCard } from "@/modules/products/components/product-card";
 import { ProductColumn } from "@/modules/products/components/product-column";
 import { archiveProduct, getProduct } from "@/modules/products/products-service";
-import { UserColumn } from "@/modules/users/user-column";
+import { userColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
@@ -38,7 +39,6 @@ import {
   ProductStockEntity,
   ProductStockRecordEntity,
 } from "../product-stocks/product-stocks-entity";
-import { NumberFormat } from "@/components/format/number-format";
 
 const events = [
   EventType.PRODUCT_NEW,
@@ -98,7 +98,7 @@ export const ProductDetail: FC = () => {
                   columns={{
                     createdAt: dateTimeColumn({ sortable: true, name: "time" }),
                     code: { name: "product_stock_code", filter: { text: true } },
-                    createdByUserId: UserColumn({
+                    createdByUserId: userColumn({
                       name: "member",
                       valuePath: "createdByUser",
                     }),
@@ -156,7 +156,7 @@ export const ProductDetail: FC = () => {
                       })),
                     }),
                     stockCode: { name: t`Stock code` },
-                    createdByUserId: UserColumn({
+                    createdByUserId: userColumn({
                       name: t`Member`,
                       valuePath: "createdByUser",
                     }),
@@ -189,15 +189,20 @@ export const ProductDetail: FC = () => {
               </Fragment>
             )}
 
-            <ButtonArchive
-              enabled={workspace.hasPermission(WorkspacePermission.PRODUCTS_SERVICES_WRITE)}
-              process={() =>
-                onArchive({
-                  process: () => archiveProduct(productId),
-                  onArchived: () => router.back(),
-                })
-              }
-            />
+            {product.data && (
+              <ButtonArchive
+                enabled={workspace.hasPermission(WorkspacePermission.PRODUCTS_SERVICES_WRITE)}
+                process={() =>
+                  onArchive({
+                    name: product.data?.name,
+                    process: async () => {
+                      await archiveProduct(productId);
+                      router.back();
+                    },
+                  })
+                }
+              />
+            )}
           </Fragment>
         )}
       </Stack>

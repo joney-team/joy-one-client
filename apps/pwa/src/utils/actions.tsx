@@ -1,13 +1,13 @@
 "use client";
 
-import { ModalTitle } from "@/components/modal-title";
 import { getGlobal } from "@/global";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { type AppMetadata } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
-import { modals } from "@mantine/modals";
+import { Trans } from "@lingui/react/macro";
 import { notifications } from "@mantine/notifications";
-import { Icon, IconArchive, IconCheck } from "@tabler/icons-react";
+import { Icon, IconArchive, IconCheck, ReactNode } from "@tabler/icons-react";
 
 export function onActionLoad<T = any>(args: {
   name?: string;
@@ -78,46 +78,20 @@ export function onSuccess(args: { title?: string; message: string }) {
 }
 
 export function onArchive<T = any>(args: {
-  name?: string;
-  title?: string;
+  name?: string | ReactNode;
   color?: string;
   icon?: Icon;
-  children?: React.ReactNode;
-  onArchived?: (result: T) => void;
+  children?: ReactNode;
   process: () => Promise<T>;
 }) {
-  const modalId = `${args.name}-archived`;
-  const color = "red";
-
-  return new Promise<void>((resolve) => {
-    modals.openConfirmModal({
-      modalId,
-      title: (
-        <ModalTitle
-          title={args.title || `${t`Remove data`}`}
-          color={color}
-          icon={args.icon || IconArchive}
-        />
-      ),
-      children:
-        args.children || t`Are you sure you want to continue? This action cannot be undone.`,
-      color: color,
-      labels: { confirm: t`Archive`, cancel: t`Cancel` },
-      confirmProps: { color },
-      onConfirm: async () => {
-        await args
-          .process()
-          .then((res) => args.onArchived?.(res))
-          .catch(onError);
-        resolve();
-      },
-      onClose: () => {
-        resolve();
-      },
-      onCancel: () => {
-        modals.close(modalId);
-        resolve();
-      },
-    });
+  onConfirmModal({
+    type: "danger",
+    title: args.name ? <Trans>Remove {args.name}</Trans> : <Trans>Remove data</Trans>,
+    content: args.children ?? (
+      <Trans>Are you sure you want to continue? This action cannot be undone.</Trans>
+    ),
+    icon: IconArchive,
+    onConfirm: args.process,
+    confirmLabel: <Trans>Archive</Trans>,
   });
 }

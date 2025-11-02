@@ -516,8 +516,10 @@ export const LoanDetail: NextPage = () => {
                   onClick={() =>
                     onArchive({
                       name: `${t`Loan contract`} ${renderEntityCode(loan.data!.code)}`,
-                      process: () => archiveLoan(loan.data!.id),
-                      onArchived: () => router.back(),
+                      process: async () => {
+                        await archiveLoan(loan.data!.id);
+                        router.back();
+                      },
                     })
                   }
                 >

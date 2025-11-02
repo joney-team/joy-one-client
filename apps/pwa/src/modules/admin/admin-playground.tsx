@@ -6,8 +6,12 @@ import { WorkSlotsInput } from "@/components/inputs/work-slots-input";
 import { SectionTitle } from "@/components/session-title";
 import { CalendarView } from "@/types";
 import { Group, Paper, Stack, Text, TextInput } from "@mantine/core";
-import { useState, type FC } from "react";
+import { Fragment, useState, type FC } from "react";
 import { useWorkspace } from "../workspaces/workspace-context";
+import { Button } from "@/components/buttons/button";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
+import { Trans } from "@lingui/react/macro";
+import { wait } from "@/utils/common.utils";
 
 export const AdminPlayground: FC = () => {
   const workspace = useWorkspace();
@@ -16,6 +20,76 @@ export const AdminPlayground: FC = () => {
 
   return (
     <Stack p={30} gap={20}>
+      <Paper withBorder p={20}>
+        <Stack>
+          <SectionTitle name="Confirm modal" />
+          <Group>
+            <Button
+              color="orange"
+              onClick={() =>
+                onConfirmModal({
+                  content: (
+                    <Text>
+                      This action is so important that you are required to confirm it with a modal.
+                      Please click one of these buttons to proceed.
+                    </Text>
+                  ),
+                  onConfirm: async () => {
+                    await wait(2000);
+                    console.log("debug");
+                  },
+                })
+              }
+            >
+              Warning
+            </Button>
+
+            <Button
+              color="red"
+              onClick={() =>
+                onConfirmModal({
+                  type: "danger",
+                  content: (
+                    <Text>
+                      This action is so important that you are required to confirm it with a modal.
+                      Please click one of these buttons to proceed.
+                    </Text>
+                  ),
+                  onConfirm: async () => {
+                    await wait(2000);
+                    console.log("debug");
+                  },
+                })
+              }
+            >
+              Danger
+            </Button>
+
+            <Button
+              color="red"
+              onClick={() =>
+                onConfirmModal({
+                  type: "danger",
+                  content: (
+                    <Text>
+                      This action is so important that you are required to confirm it with a modal.
+                      Please click one of these buttons to proceed.
+                    </Text>
+                  ),
+                  onConfirm: async () => {
+                    await wait(2000);
+                    console.log("debug");
+                  },
+                  inverse: true,
+                })
+              }
+            >
+              Inverse
+            </Button>
+          </Group>
+        </Stack>
+      </Paper>
+
       {workspace.isAvailable && (
         <Paper withBorder p={20}>
           <Stack>

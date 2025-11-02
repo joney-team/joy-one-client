@@ -17,21 +17,27 @@ export interface UserColumnArgs extends Omit<Column, "render"> {
   optionalValuePath?: string;
 }
 
-export const UserColumn = (args?: UserColumnArgs): Column => {
+export const userColumn = (args?: UserColumnArgs): Column => {
   return {
     icon: IconUser,
+    defaultWidth: 200,
     render: ({ value }) => {
       if (!value) return null;
       const user = value as WorkspaceMemberInfo;
 
       return (
-        <Group gap={8} className="clickable" onClick={() => OnModalUserInformation(user.userId)}>
+        <Group
+          gap={8}
+          className="clickable"
+          onClick={() => OnModalUserInformation(user.userId)}
+          wrap="nowrap"
+        >
           <Avatar user={user} size="sm" />
-          <Stack gap={0}>
-            <Text fz={16} fw={500}>
+          <Stack gap={0} flex={1}>
+            <Text fz={16} fw={500} truncate>
               {user.name}
             </Text>
-            <Text fz={10} c="gray">
+            <Text fz={10} c="gray" truncate>
               {getWorkspaceMemberRoleLabel(user)}
             </Text>
           </Stack>

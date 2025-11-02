@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
-import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { api } from "@/modules/apis";
-import { eventTypes } from "@/modules/events/event-constants";
 import { EventType } from "@/modules/events/event-types";
 import { healthCheckLoan, revertLiquidationLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
@@ -16,12 +16,10 @@ import { ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { onActionLoad } from "@/utils/actions";
 import { useFetch, UseFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Card, Center, Group, Skeleton, Stack, Table, Text } from "@mantine/core";
-import { openConfirmModal } from "@mantine/modals";
 import {
   IconBrandSpeedtest,
   IconCircleDashedCheck,
@@ -31,7 +29,6 @@ import {
 import { FC, Fragment } from "react";
 import { LoanReceiptCard } from "./loan-receipt-card";
 import { LoanRowInfo } from "./loan-row-info";
-import { CurrencyFormat } from "@/components/format/currency-format";
 
 interface LoanPaymentsProps {
   loan: UseFetch<LoanEntity>;
@@ -72,33 +69,17 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
 
   const onRevertFulfill = async () => {
     if (!loan || !hasPermission(WorkspacePermission.LOANS_FULFILLED_REVERTED)) return;
-    openConfirmModal({
-      title: <ModalTitle color="red" title={t`Confirm`} icon={IconRefresh} />,
-      children: t`Are you sure you want to revert the payment?`,
-      color: "red",
-      onConfirm: () =>
-        onActionLoad({
-          name: eventTypes[EventType.LOANS_FULFILLED_REVERTED].name(),
-          process: () => api.post(`/loans/${loan.id}/revert-fulfilled`),
-        }),
-      labels: { confirm: t`Continue`, cancel: t`Cancel` },
-      confirmProps: { color: "red" },
+    onConfirmModal({
+      content: <Trans>Are you sure you want to revert the payment?</Trans>,
+      onConfirm: () => api.post(`/loans/${loan.id}/revert-fulfilled`),
     });
   };
 
   const onRevertLiquidation = async () => {
     if (!loan) return;
-    openConfirmModal({
-      title: <ModalTitle color="red" title={t`Confirm`} icon={IconRefresh} />,
-      children: t`Are you sure you want to revert the liquidation?`,
-      color: "red",
-      onConfirm: () =>
-        onActionLoad({
-          name: eventTypes[EventType.LOANS_REVERT_LIQUIDATION].name(),
-          process: () => revertLiquidationLoan(loan.id),
-        }),
-      labels: { confirm: t`Continue`, cancel: t`Cancel` },
-      confirmProps: { color: "red" },
+    onConfirmModal({
+      content: <Trans>Are you sure you want to revert the liquidation?</Trans>,
+      onConfirm: () => revertLiquidationLoan(loan.id),
     });
   };
 

@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
-import { ModalTitle } from "@/components/modal-title";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { EventType } from "@/modules/events/event-types";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { archiveReceipt, getReceipt, updateReceipt } from "@/modules/receipts/receipts-service";
@@ -14,8 +14,9 @@ import { AppEntity } from "@/types";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { useFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Badge, Center, Group, Skeleton, Stack } from "@mantine/core";
-import { modals, openConfirmModal } from "@mantine/modals";
+import { modals } from "@mantine/modals";
 import { IconArchive, IconRefresh, IconReload } from "@tabler/icons-react";
 import { FC } from "react";
 import { api } from "../apis";
@@ -67,20 +68,17 @@ export const ReceiptDetail: FC<{
   const onRevertPayment = async () => {
     if (!receipt) return;
 
-    openConfirmModal({
-      title: <ModalTitle color="red" title={t`Confirm`} icon={IconRefresh} />,
-      children: t`Are you sure you want to revert the payment?`,
-      color: "red",
-      onConfirm: () =>
-        onActionLoad({
-          name: t`Revert Payment`,
-          process: async () => {
-            await api.post(`/receipts/${receipt.id}/revert-payment`);
-            await detail.fetch();
-          },
-        }),
-      labels: { confirm: t`Confirm`, cancel: t`Cancel` },
-      confirmProps: { color: "red" },
+    onConfirmModal({
+      title: <Trans>Revert Payment</Trans>,
+      content: <Trans>Are you sure you want to revert the payment?</Trans>,
+      type: "danger",
+      icon: IconRefresh,
+      confirmLabel: <Trans>Revert Payment</Trans>,
+      onConfirm: async () => {
+        await api.post(`/receipts/${receipt.id}/revert-payment`);
+        await detail.fetch();
+      },
+      inverse: true,
     });
   };
 
@@ -128,7 +126,7 @@ export const ReceiptDetail: FC<{
               leftIcon={IconReload}
               size="compact-sm"
             >
-              {t`Revert Payment`}
+              <Trans>Revert Payment</Trans>
             </Button>
           )}
 
@@ -139,8 +137,9 @@ export const ReceiptDetail: FC<{
             color="gray"
             onClick={() =>
               onArchive({
-                process: () => archiveReceipt(receipt.id),
-                onArchived: () => {
+                name: <Trans>Receipt</Trans>,
+                process: async () => {
+                  await archiveReceipt(receipt.id);
                   modals.closeAll();
                 },
               })
@@ -148,7 +147,7 @@ export const ReceiptDetail: FC<{
             leftIcon={IconArchive}
             size="compact-sm"
           >
-            {t`Archive`}
+            <Trans>Archive</Trans>
           </Button>
         )}
       </Group>

@@ -1,14 +1,14 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { alpha, Stack, StackProps, Text } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
-import { FC, LegacyRef } from "react";
+import { FC, LegacyRef, ReactNode } from "react";
 import { BoxIllustration } from "./illustrations/box";
 
 export interface EmptyProps extends StackProps {
-  message?: string;
+  message?: string | ReactNode;
   icon?: Icon;
   color?: string;
   visible?: boolean;
@@ -17,16 +17,14 @@ export interface EmptyProps extends StackProps {
 }
 
 export const Empty: FC<EmptyProps> = (props) => {
-  const { message: messageProp, icon, color: colorProp, visible, ref, hideBorder, ...rest } = props;
+  const { message, icon, color: colorProp, visible, ref, hideBorder, ...rest } = props;
 
   const color = useColor();
 
   const Icon = props.icon;
   const _color = color(colorProp || "gray.5");
 
-  if (typeof props.visible === "boolean" && !!!props.visible) return null;
-
-  const message = messageProp ? messageProp : t`No data`;
+  if (typeof props.visible === "boolean" && props.visible === false) return null;
 
   return (
     <Stack
@@ -41,10 +39,10 @@ export const Empty: FC<EmptyProps> = (props) => {
       }}
       {...rest}
     >
-      {Icon ? <Icon width={50} color={_color} /> : <BoxIllustration width={45} />}
+      {Icon ? <Icon size={32} color={_color} strokeWidth={1.3} /> : <BoxIllustration height={32} />}
 
       <Text fz="xs" fw={300} c={_color}>
-        {message}
+        {message ?? <Trans>No data</Trans>}
       </Text>
 
       {props.children}

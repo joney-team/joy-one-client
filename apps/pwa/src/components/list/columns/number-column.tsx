@@ -19,7 +19,7 @@ export const numberColumn = (options?: NumberColumnOptions): Column => {
     render: ({ value }) => {
       if (typeof value !== "number") return null;
       return (
-        <Text ta={options?.align}>
+        <Text ta={options?.align} style={{ fontVariantNumeric: "tabular-nums" }}>
           <NumberFormat value={value} />
         </Text>
       );

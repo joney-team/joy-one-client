@@ -218,7 +218,7 @@ export const StatusCard: FC<{
     await setWorkspaceSettings({ ...workspace.settings, taskStatuses });
   }, 500);
 
-  const onRemove = async () => {
+  const handleRemoveStatus = async () => {
     const taskStatuses = workspace.settings.taskStatuses.filter((v) => v.id !== props.status.id);
     const relatedTasks = await getTasks({ status: props.status.id }).then((res) => res.data);
     const statusStyle = renderTaskStatusStyle(
@@ -227,7 +227,7 @@ export const StatusCard: FC<{
     );
 
     onArchive({
-      name: t`Task status`,
+      name: <Trans>Task status</Trans>,
       children: (
         <Stack gap={8}>
           <Text>
@@ -246,15 +246,15 @@ export const StatusCard: FC<{
         </Stack>
       ),
       process: async () => {
-        await setWorkspaceSettings({ ...workspace.settings, taskStatuses }),
-          await updateTasks(
-            relatedTasks.map((t) => {
-              return {
-                ...t,
-                status: DefaultTaskStatusId.TODO,
-              };
-            })
-          );
+        await setWorkspaceSettings({ ...workspace.settings, taskStatuses });
+        await updateTasks(
+          relatedTasks.map((t) => {
+            return {
+              ...t,
+              status: DefaultTaskStatusId.TODO,
+            };
+          })
+        );
       },
     });
   };
@@ -303,7 +303,7 @@ export const StatusCard: FC<{
 
         <Group justify="end">
           <Renderer visible={!isDefaultStatus}>
-            <ActionIcon onClick={onRemove} variant="subtle" color="gray">
+            <ActionIcon onClick={handleRemoveStatus} variant="subtle" color="gray">
               <IconTrash strokeWidth={1.5} size={16} />
             </ActionIcon>
           </Renderer>

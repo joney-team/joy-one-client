@@ -239,7 +239,9 @@ export const WorkSlotsInput: FC<WorkSlotsInputProps> = (props) => {
             return {
               className: classNames({ available: isAvailable }),
               style: {
-                backgroundColor: isAvailable ? "white" : color("gray.1"),
+                backgroundColor: isAvailable
+                  ? color({ light: "white", dark: "dark.6" })
+                  : color({ light: "gray.1", dark: "dark.4" }),
               },
             };
           }}

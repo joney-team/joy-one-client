@@ -22,6 +22,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -44,6 +45,7 @@ import {
   IconAccessible,
   IconBrandGithub,
   IconCake,
+  IconCalendar,
   IconMail,
   IconPhone,
   IconUser,
@@ -88,7 +90,13 @@ export const ModalUserInformation: FC = () => {
   };
 
   return (
-    <Modal opened={opened} onClose={onClose} withCloseButton={false} size="xl" zIndex={300}>
+    <Modal
+      opened={opened}
+      onClose={onClose}
+      withCloseButton={false}
+      size="xl"
+      zIndex={zIndexes.commonModals}
+    >
       <Stack>
         {!!userInformation.data && userInformation.data._id === userId.current && (
           <UserInformation user={userInformation.data} onClose={onClose} />
@@ -307,7 +315,12 @@ const UserActivity: FC<{ user: UserPublicInformation }> = (props) => {
 
   return (
     <Stack>
-      <EventList my={10} userId={user._id} empty={<Empty />} fetching={<Skeleton height={50} />} />
+      <EventList
+        my={10}
+        userId={user._id}
+        empty={<Empty hideBorder message={<Trans>No activity</Trans>} />}
+        fetching={<Skeleton height={50} />}
+      />
     </Stack>
   );
 };
@@ -320,7 +333,12 @@ const UserBookings: FC<{
 
   return (
     <Stack>
-      <Empty visible={bookings.isEmpty} hideBorder />
+      <Empty
+        visible={bookings.isEmpty}
+        icon={IconCalendar}
+        hideBorder
+        message={<Trans>No bookings</Trans>}
+      />
       <Errored error={bookings.error} visible={bookings.isHasError} />
 
       {bookings.isHasData && (

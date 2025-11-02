@@ -27,6 +27,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -341,9 +342,11 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
             leftSection={<IconArchive strokeWidth={1.3} size={16} style={{ marginRight: -5 }} />}
             onClick={() =>
               onArchive({
-                name: t`Prescription`,
-                process: () => removePrescription(props.prescription!._id),
-                onArchived: () => modals.close("ModalPrescriptionForm"),
+                name: <Trans>Prescription</Trans>,
+                process: async () => {
+                  await removePrescription(props.prescription!._id);
+                  modals.close("ModalPrescriptionForm");
+                },
               })
             }
           >

@@ -10,14 +10,15 @@ import { Center, Skeleton, Stack, Text } from "@mantine/core";
 import { IconArchive } from "@tabler/icons-react";
 import { FC, Fragment, useEffect } from "react";
 
-import { useRouter } from "@/hooks/use-router";
 import { Button } from "@/components/buttons/button";
-import { ProductCard } from "@/modules/products/components/product-card";
-import { onArchive } from "@/utils/actions";
-import { useLayout } from "@/layout/layout-context";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useParams } from "next/navigation";
 import { Container } from "@/components/container";
+import { useRouter } from "@/hooks/use-router";
+import { useLayout } from "@/layout/layout-context";
+import { ProductCard } from "@/modules/products/components/product-card";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { onArchive } from "@/utils/actions";
+import { Trans } from "@lingui/react/macro";
+import { useParams } from "next/navigation";
 
 export const ServiceDetail: FC = () => {
   const workspace = useWorkspace();
@@ -62,14 +63,16 @@ export const ServiceDetail: FC = () => {
                   }
                   onClick={() =>
                     onArchive({
-                      name: "Dịch vụ",
-                      process: () => archiveProduct(serviceId),
-                      onArchived: () => router.back(),
+                      name: product.data?.name,
+                      process: async () => {
+                        await archiveProduct(serviceId);
+                        router.back();
+                      },
                     })
                   }
                 >
                   <Text fz={12} fw={400}>
-                    Xoá
+                    <Trans>Archive</Trans>
                   </Text>
                 </Button>
               </Center>

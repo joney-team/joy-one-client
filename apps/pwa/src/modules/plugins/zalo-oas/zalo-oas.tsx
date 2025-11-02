@@ -28,6 +28,8 @@ import { SectionTitle } from "../../../components/session-title";
 import { ZaloOaGmfGroups } from "./components/zalo-oa-gmf-groups";
 import { ZaloOaZnsTemplateConfig } from "./components/zalo-oa-zns-template-config";
 import { ZaloOasOnboarding } from "./components/zalo-oas-onboarding";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
+import { Trans } from "@lingui/react/macro";
 
 export const PluginZaloOAs: FC = () => {
   const workspace = useWorkspace();
@@ -117,11 +119,12 @@ export const PluginZaloOAs: FC = () => {
                       <Tooltip label={`${t`Disconect`} ${oa.info.name}`}>
                         <ActionIcon
                           onClick={() =>
-                            onArchive({
+                            onConfirmModal({
+                              type: "danger",
                               icon: IconPuzzle,
                               title: `${t`Disconect`} ${oa.info.name}`,
-                              children: t`Are you sure you want to disconnect?`,
-                              process: () => disconnectPluginZalo(oa._id).catch(onError),
+                              content: <Trans>Are you sure you want to disconnect?</Trans>,
+                              onConfirm: () => disconnectPluginZalo(oa._id).catch(onError),
                             })
                           }
                           variant="light"

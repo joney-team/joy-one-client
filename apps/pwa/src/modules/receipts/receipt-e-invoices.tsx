@@ -2,13 +2,12 @@ import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Empty } from "@/components/empty";
 import { DateFormat } from "@/components/format/date-format";
-import { ModalTitle } from "@/components/modal-title";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { ResponseList } from "@/types";
-import { onActionLoad } from "@/utils/actions";
 import { String } from "@/utils/string.utils";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Badge, Card, Center, Group, Image, Skeleton, Stack, Text } from "@mantine/core";
-import { modals, openConfirmModal } from "@mantine/modals";
 import { IconArchive, IconEye, IconFileInvoice } from "@tabler/icons-react";
 import { useMemo, type FC } from "react";
 import { api } from "../apis";
@@ -34,23 +33,22 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
     refetchEvents: [EventType.E_INVOICE_CREATED, EventType.E_INVOICE_REMOVED],
   });
 
-  const onArchive = (invoice: PluginEInvoicesEntity) => {
-    openConfirmModal({
-      modalId: `cancel-e-invoice-${invoice._id}`,
-      title: <ModalTitle title={t`Cancel E-Invoice`} color="red" icon={IconArchive} />,
-      children: t`Are you sure you want to cancel the e-invoice? This action cannot be undone. The e-invoice will be deleted.`,
-      color: "red",
-      onConfirm: () => {
-        modals.close(`cancel-e-invoice-${invoice._id}`);
-        onActionLoad({
-          process: () => api.delete(`/plugins/e-invoices/${invoice._id}/cancel`),
-          onFinished: () => {
-            refetch();
-          },
-        });
+  const handleArchiveEInvoice = (invoice: PluginEInvoicesEntity) => {
+    onConfirmModal({
+      title: <Trans>Cancel E-Invoice</Trans>,
+      type: "danger",
+      content: (
+        <Trans>
+          Are you sure you want to cancel the e-invoice? This action cannot be undone. The e-invoice
+          will be deleted.
+        </Trans>
+      ),
+      onConfirm: async () => {
+        await api.delete(`/plugins/e-invoices/${invoice._id}/cancel`);
+        await refetch();
       },
-      labels: { confirm: t`Confirm Cancel`, cancel: t`Keep` },
-      confirmProps: { color: "red" },
+      cancelLabel: <Trans>Keep</Trans>,
+      inverse: true,
     });
   };
 
@@ -115,7 +113,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
                     color="gray"
                     variant="light"
                     leftIcon={IconArchive}
-                    onClick={() => onArchive(invoice)}
+                    onClick={() => handleArchiveEInvoice(invoice)}
                   >
                     {t`Cancel`}
                   </Button>

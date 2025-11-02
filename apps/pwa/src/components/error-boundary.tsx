@@ -18,7 +18,7 @@ import {
 import * as Sentry from "@sentry/react";
 import { IconHome, IconLifebuoy, IconRefresh } from "@tabler/icons-react";
 import Link from "next/link";
-import { FC, useEffect } from "react";
+import { FC, Fragment, useEffect, useMemo } from "react";
 import { IconErrored } from "./icons";
 
 interface ErrorBoundaryProps {
@@ -27,26 +27,40 @@ interface ErrorBoundaryProps {
 }
 
 const Content: FC<ErrorBoundaryProps> = (props) => {
-  const isHome = window?.location?.pathname === "/";
-
   useEffect(() => {
     Sentry.captureException(props.error);
+    console.error(props.error);
   }, []);
 
-  return (
-    <Container size="sm">
-      <Stack align="center" justify="center" mih="100dvh">
-        <IconErrored width={300} />
-        <Title fz={22} ta="center">
-          <Trans>Oops! Something went wrong...</Trans>
-        </Title>
-        <Text ta="center">
-          <Trans>
-            We apologize for the inconvenience, our technical team has noted it and will handle it
-            soon. If it is urgent, please contact us.
-          </Trans>
-        </Text>
-        <Group mt={16} justify="center">
+  const errorContent = useMemo(() => {
+    const isHome = window?.location?.pathname === "/";
+
+    if (typeof props.error === "object" && props.error.message === "PageNotFound") {
+      return {
+        title: <Trans>Oops! Page not found</Trans>,
+        description: <Trans>We couldn't find the page you were looking for.</Trans>,
+        ctas: (
+          <Button
+            variant="outline"
+            onClick={() => window.location.replace("/")}
+            leftSection={<IconHome size={20} style={{ marginRight: -5 }} />}
+          >
+            <Trans>Back to home</Trans>
+          </Button>
+        ),
+      };
+    }
+
+    return {
+      title: <Trans>Oops! Something went wrong...</Trans>,
+      description: (
+        <Trans>
+          We apologize for the inconvenience, our technical team has noted it and will handle it
+          soon. If it is urgent, please contact us.
+        </Trans>
+      ),
+      ctas: (
+        <Fragment>
           {!isHome && (
             <Button
               variant="outline"
@@ -73,6 +87,21 @@ const Content: FC<ErrorBoundaryProps> = (props) => {
           >
             <Trans>Contact support</Trans>
           </Button>
+        </Fragment>
+      ),
+    };
+  }, [props.error]);
+
+  return (
+    <Container size="sm">
+      <Stack align="center" justify="center" mih="100dvh">
+        <IconErrored width={300} />
+        <Title fz={22} ta="center">
+          {errorContent.title}
+        </Title>
+        <Text ta="center">{errorContent.description}</Text>
+        <Group mt={16} justify="center">
+          {errorContent.ctas}
         </Group>
       </Stack>
     </Container>

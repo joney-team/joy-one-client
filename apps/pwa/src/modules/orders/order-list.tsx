@@ -10,7 +10,7 @@ import { EventType } from "@/modules/events/event-types";
 import { OrderCard } from "@/modules/orders/order-card";
 import { onPayOrder } from "@/modules/orders/orders-service";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
-import { UserColumn } from "@/modules/users/user-column";
+import { userColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -42,7 +42,7 @@ export const OrderList: FC = () => {
             name: t`Customer`,
             valuePath: "relatedCustomer",
           }),
-          createdByUserId: UserColumn({
+          createdByUserId: userColumn({
             name: t`Created by`,
             valuePath: "createdByUser",
           }),

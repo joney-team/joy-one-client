@@ -146,11 +146,11 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
 
     onArchive({
       name: activeOrder.code ? `${t`Order`} #${activeOrder.code}` : t`Order`,
-      process: () => {
+      process: async () => {
         if (!activeOrder.isSaved) return Promise.resolve();
-        return archiveOrder(activeOrder.id);
+        await archiveOrder(activeOrder.id);
+        closeOrder(activeOrder.id);
       },
-      onArchived: () => closeOrder(activeOrder.id),
     });
   };
 
