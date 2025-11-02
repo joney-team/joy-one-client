@@ -5,7 +5,7 @@ import { useLayout } from "@/layout/layout-context";
 import { t } from "@lingui/core/macro";
 import { Group } from "@mantine/core";
 import { IconFilter, IconFilterFilled, IconRefresh } from "@tabler/icons-react";
-import { FC, MouseEventHandler } from "react";
+import { FC } from "react";
 import { ActionButton } from "../components/action-button";
 import { useListContext } from "../list-context";
 import { TableColumn } from "../types";
@@ -28,12 +28,13 @@ export const FilterItem: FC<{
     onClear,
     active,
   }) => {
+    const isReadonly = Boolean(ctx.fixedParams?.[column.columnKey]);
     return (
       <ActionButton
         icon={column.icon || IconFilter}
         label={column.name || column.columnKey}
         onClear={
-          active
+          active && !isReadonly
             ? (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -44,7 +45,7 @@ export const FilterItem: FC<{
               }
             : undefined
         }
-        onClick={onClick}
+        onClick={isReadonly ? undefined : onClick}
         quantity={quantity}
         quantityColor={quantityColor}
         active={active}
@@ -58,6 +59,7 @@ export const FilterItem: FC<{
     Wrapper,
     config: {},
     column,
+    isReadonly: Boolean(ctx.fixedParams?.[column.columnKey]),
     ...ctx,
   };
 
@@ -88,7 +90,7 @@ export const FilterBar: FC = () => {
 
   const filterCount = Object.keys(ctx.list.params).reduce((acc, key) => {
     const ignoreKeys = ["sort"];
-    if (ignoreKeys.some((v) => key.indexOf(v) > -1)) return acc;
+    if (ignoreKeys.some((v) => key.indexOf(v) > -1) || Boolean(ctx.fixedParams?.[key])) return acc;
     return acc + 1;
   }, 0);
 
@@ -129,7 +131,7 @@ export const Filter: FC = () => {
 
   const filterCount = Object.keys(ctx.list.params).reduce((acc, key) => {
     const ignoreKeys = ["sort"];
-    if (ignoreKeys.some((v) => key.indexOf(v) > -1)) return acc;
+    if (ignoreKeys.some((v) => key.indexOf(v) > -1) || Boolean(ctx.fixedParams?.[key])) return acc;
     return acc + 1;
   }, 0);
 

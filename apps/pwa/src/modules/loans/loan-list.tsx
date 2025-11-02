@@ -66,7 +66,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
       limit={16}
       icon={IconCreditCardPay}
       route="/loans"
-      params={
+      fixedParams={
         props.strictStatus
           ? {
               status: props.strictStatus,
@@ -94,7 +94,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
               })),
             },
           },
-          defaultWidth: 300,
+          defaultWidth: 320,
           render: ({ data: loan }) => {
             const loanPackage = loan.package;
 
@@ -120,8 +120,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                     </Badge>
                   </Group>
                   <Text ta="right" fz={13} fw={500}>
-                    {renderLoanPeriod(loan.packagePeriodDays)} /{" "}
-                    {renderLoanPeriod(loan.package.days)}
+                    {renderLoanPeriod(loan.packagePeriodDays)}/{renderLoanPeriod(loan.package.days)}
                   </Text>
                 </Group>
 
@@ -239,30 +238,28 @@ export const LoanList: FC<LoanListProps> = (props) => {
           defaultWidth: 200,
           name: t`Status`,
           icon: IconCircle,
-          filter: props.strictStatus
-            ? undefined
-            : {
-                staticSelector: {
-                  options: Object.values(LoanStatus).map((s) => ({
-                    label: loanStatuses[s].label(),
-                    value: s,
-                    activeColor: loanStatusColors[s],
-                    render: () => {
-                      const color = useColor();
+          filter: {
+            staticSelector: {
+              options: Object.values(LoanStatus).map((s) => ({
+                label: loanStatuses[s].label(),
+                value: s,
+                activeColor: loanStatusColors[s],
+                render: () => {
+                  const color = useColor();
 
-                      return (
-                        <Group gap={8}>
-                          <Circle color={color(loanStatusColors[s])} size={8} />
+                  return (
+                    <Group gap={8}>
+                      <Circle color={color(loanStatusColors[s])} size={8} />
 
-                          <Text fz={14} fw={500}>
-                            {loanStatuses[s].label()}
-                          </Text>
-                        </Group>
-                      );
-                    },
-                  })),
+                      <Text fz={14} fw={500}>
+                        {loanStatuses[s].label()}
+                      </Text>
+                    </Group>
+                  );
                 },
-              },
+              })),
+            },
+          },
           render: ({ data: loan }) => {
             const percent = loan.paymentProgress
               ? (loan.paymentProgress.filter((v) => v.isCompleted).length * 100) /

@@ -31,6 +31,7 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
   list,
   Wrapper,
   config,
+  isReadonly,
 }) => {
   const [options, setOptions] = useState<DynamicSelectorFilterOption[]>(config.pinnedOptions ?? []);
   const querySelectedOptions = list.params[column.columnKey]
@@ -74,22 +75,24 @@ export const DynamicSelectorFilter: FC<FilterProps<DynamicSelectorFilterConfig>>
           >
             <Group gap={5}>
               <Renderer visible={!multiple && selectedOptions.length > 0}>
-                <Group gap={5} pl={8}>
+                <Group gap={5} pl={5}>
                   <Text fw={700} fz={12}>
                     {selectedOptions.map((v) => v.label).join(", ")}
                   </Text>
                 </Group>
               </Renderer>
 
-              <ActionIcon
-                component="div"
-                variant="subtle"
-                color="gray.5"
-                size="compact-xs"
-                onClick={ctx.toggle}
-              >
-                <IconChevronDown size={16} />
-              </ActionIcon>
+              {!isReadonly && (
+                <ActionIcon
+                  component="div"
+                  variant="subtle"
+                  color="gray.5"
+                  size="compact-xs"
+                  onClick={ctx.toggle}
+                >
+                  <IconChevronDown size={16} />
+                </ActionIcon>
+              )}
             </Group>
           </Wrapper>
         );

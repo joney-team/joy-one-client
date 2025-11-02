@@ -3,8 +3,8 @@ import { LoanAssetType, LoanPackageType, LoanStatus } from "./loans-types";
 import { MantineColor } from "@mantine/core";
 
 export const loanAssetTypes: Record<LoanAssetType, { label: () => string }> = {
-  [LoanAssetType.ICLOUD]: { label: () => t`ICLOUD` },
-  [LoanAssetType.MOTOBIKE_REGISTRATION]: { label: () => t`Moto bike registration` },
+  [LoanAssetType.ICLOUD]: { label: () => "iCloud" },
+  [LoanAssetType.MOTOBIKE_REGISTRATION]: { label: () => t`Moto registration` },
   [LoanAssetType.CAR_REGISTRATION]: { label: () => t`Car registration` },
   [LoanAssetType.BUSINESS_PERMIT]: { label: () => t`Business permit` },
   [LoanAssetType.LAND_CERTIFICATE]: { label: () => t`Land certificate` },

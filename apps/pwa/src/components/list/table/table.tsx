@@ -11,12 +11,14 @@ import { useEffect, useMemo, useRef } from "react";
 import { getIn, getListDataId, getValuePath } from "../utils";
 import { ListTableHead } from "./table-head";
 
+import { useColor } from "@/modules/theme/use-color";
 import { useListContext } from "../list-context";
 import styles from "./table.module.css";
 
 export default function ListTable<T extends BaseData>() {
   const context = useListContext();
   const workspace = useWorkspace();
+  const color = useColor();
 
   // Refs for sticky header
   const tableScrollRef = useRef<HTMLDivElement>(null);
@@ -43,7 +45,7 @@ export default function ListTable<T extends BaseData>() {
 
   const header = useMemo(() => {
     return (
-      <tr>
+      <tr style={{ background: color({ light: "gray.1", dark: "dark.7" }) }}>
         {context.isBulkActionsActivated && (
           <th className={styles.BulkActionsCell}>
             <Group justify="end">
@@ -77,7 +79,6 @@ export default function ListTable<T extends BaseData>() {
           top: 0,
           zIndex: 100,
           overflow: "hidden",
-          background: "white",
         }}
       >
         <table

@@ -1,6 +1,7 @@
 import { getGradient, getThemeColor, MantineTheme, useMantineTheme } from "@mantine/core";
 import { useColorScheme } from "./use-color-scheme";
 import { backgroundColors } from "@joy-one-client/config/colors";
+import { useMemo } from "react";
 
 export const getColor = (theme: MantineTheme, color?: string) => {
   if (!color) return "";
@@ -18,19 +19,23 @@ export const useColor = () => {
   const theme = useMantineTheme();
   const colorScheme = useColorScheme();
 
-  return (color?: string | { light?: string; dark?: string }): string => {
-    if (!color) return "";
+  const color = useMemo(() => {
+    return (color?: string | { light?: string; dark?: string }): string => {
+      if (!color) return "";
 
-    if (typeof color === 'string' && ['background', 'bg'].includes(color)) {
-      return backgroundColors[colorScheme];
-    }
+      if (typeof color === "string" && ["background", "bg"].includes(color)) {
+        return backgroundColors[colorScheme];
+      }
 
-    if (typeof color === "string") {
-      return getColor(theme, color);
-    }
+      if (typeof color === "string") {
+        return getColor(theme, color);
+      }
 
-    return getColor(theme, color[colorScheme]);
-  };
+      return getColor(theme, color[colorScheme]);
+    };
+  }, [colorScheme, theme]);
+
+  return color;
 };
 
 export const useGradient = () => {

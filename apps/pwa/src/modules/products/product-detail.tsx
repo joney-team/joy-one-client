@@ -94,7 +94,7 @@ export const ProductDetail: FC = () => {
                   icon={IconBuildingWarehouse}
                   name="product_stocks"
                   route="/product-stocks"
-                  params={{ productId, sortExpireAt: 1 }}
+                  fixedParams={{ productId, sortExpireAt: 1 }}
                   columns={{
                     createdAt: dateTimeColumn({ sortable: true, name: "time" }),
                     code: { name: "product_stock_code", filter: { text: true } },
@@ -143,7 +143,7 @@ export const ProductDetail: FC = () => {
                   icon={IconArrowLeftRight}
                   name="history"
                   route="/product-stock-records"
-                  params={{ productId }}
+                  fixedParams={{ productId }}
                   columns={{
                     createdAt: dateTimeColumn(),
                     type: enumColumn({

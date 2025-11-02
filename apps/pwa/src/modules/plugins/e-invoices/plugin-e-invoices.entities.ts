@@ -18,6 +18,7 @@ export interface PluginEInvoicesProviderEntity extends BaseMongoEntity {
   auth: string;
   templates: PluginEInvoiceTemplates;
   status: PluginEInvoicesProviderStatus;
+  apiUrl?: string;
 }
 
 export interface PluginEInvoicesEntity extends BaseMongoEntity {

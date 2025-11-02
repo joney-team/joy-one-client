@@ -41,12 +41,15 @@ export type MatBaoAuth = {
 
 export type PluginEInvoicesProviderAuth = Partial<MatBaoAuth>;
 
-export interface PluginEInvoicesProviderDto {
+export interface CreatePluginEInvoicesProviderDto {
   type: PluginEInvoicesProviderType;
+  apiUrl: string;
   auth: PluginEInvoicesProviderAuth;
   templates: Partial<PluginEInvoiceTemplates>;
   status: PluginEInvoicesProviderStatus;
 }
+
+export type UpdatePluginEInvoicesProviderDto = Partial<CreatePluginEInvoicesProviderDto>;
 
 export interface PluginEInvoiceTemplateVariable {
   name?: string;

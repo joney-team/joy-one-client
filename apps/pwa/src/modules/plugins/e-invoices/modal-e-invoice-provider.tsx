@@ -14,7 +14,7 @@ import { IconFileInvoice } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useMemo } from "react";
 import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 import {
-  PluginEInvoicesProviderDto,
+  CreatePluginEInvoicesProviderDto,
   PluginEInvoicesProviderInformations,
   PluginEInvoicesProviderType,
 } from "./plugin-e-invoices.types";
@@ -33,7 +33,7 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
     networkMode: "offlineFirst",
   });
 
-  const form = useForm<Partial<PluginEInvoicesProviderDto>>({
+  const form = useForm<Partial<CreatePluginEInvoicesProviderDto>>({
     initialValues: {},
     validate: {
       type: (v: PluginEInvoicesProviderType | undefined) => {
@@ -48,13 +48,19 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
         type: provider?.type ?? PluginEInvoicesProviderType.MATBAO,
         auth: {},
         templates: provider?.templates ?? {},
+        apiUrl: provider?.apiUrl,
       });
       form.reset();
     }
   }, [providerConfigs.data, provider]);
 
   const providerForm = useMemo(() => {
-    if (!form.values.type || mode === "update_provider") return null;
+    if (!form.values.type || mode === "update_provider")
+      return (
+        <Fragment>
+          <TextInput {...form.getInputProps("apiUrl")} label="API URL" />
+        </Fragment>
+      );
 
     if (
       [PluginEInvoicesProviderType.MATBAO, PluginEInvoicesProviderType.MATBAO_DEMO].includes(

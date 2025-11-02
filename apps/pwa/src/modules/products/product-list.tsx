@@ -28,7 +28,7 @@ export const ProductList: FC = () => {
         name="products"
         icon={IconBox}
         route="/products"
-        params={{ type: ProductType.PRODUCT }}
+        fixedParams={{ type: ProductType.PRODUCT }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.PRODUCT }),
           permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,

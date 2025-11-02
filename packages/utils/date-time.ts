@@ -1,5 +1,13 @@
 export type RawDate = Date | string | number;
-export type DateTimeUnit = "day" | "week" | "month" | "year" | "hour" | "minute" | "second";
+export type DateTimeUnit =
+  | "day"
+  | "date"
+  | "week"
+  | "month"
+  | "year"
+  | "hour"
+  | "minute"
+  | "second";
 
 export class DateTime {
   static isValid(raw: RawDate): boolean {
@@ -77,7 +85,7 @@ export class DateTime {
       end: this.normalizeDate(new Date(date).setHours(23, 59, 59, 999)),
     });
 
-    if (safeUnit === "day") {
+    if (["day", "date"].includes(safeUnit)) {
       return rangeDay(inputTime);
     }
 
@@ -125,7 +133,7 @@ export class DateTime {
     const _compareDate = this.normalizeDate(compareDate);
     const safeUnit = unit.toLowerCase();
 
-    if (safeUnit === "day") {
+    if (["day", "date"].includes(safeUnit)) {
       return (
         _date.getDate() === _compareDate.getDate() &&
         _date.getMonth() === _compareDate.getMonth() &&
@@ -159,7 +167,7 @@ export class DateTime {
     const normalizedDate = this.normalizeDate(date);
     const safeUnit = unit.toLowerCase();
 
-    if (safeUnit === "day") {
+    if (["day", "date"].includes(safeUnit)) {
       return new Date(normalizedDate.setDate(normalizedDate.getDate() + amount));
     }
 
@@ -194,7 +202,7 @@ export class DateTime {
     const normalizedDate = this.normalizeDate(date);
     const safeUnit = unit.toLowerCase();
 
-    if (safeUnit === "day") {
+    if (["day", "date"].includes(safeUnit)) {
       return new Date(normalizedDate.setDate(normalizedDate.getDate() - amount));
     }
 
@@ -254,7 +262,7 @@ export class DateTime {
       return Math.floor(timeDiff / (1000 * 60 * 60));
     }
 
-    if (safeUnit === "day") {
+    if (["day", "date"].includes(safeUnit)) {
       // Reset time components to get accurate day difference
       const date1 = new Date(_date.getFullYear(), _date.getMonth(), _date.getDate());
       const date2 = new Date(

@@ -18,6 +18,7 @@ export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
   Wrapper,
   config,
   column,
+  isReadonly,
 }) => {
   const [opened, setOpened] = useState(false);
   const value = list.params[column.columnKey] || "";
@@ -36,7 +37,7 @@ export const TextFilter: FC<FilterProps<TextFilterConfig>> = ({
                 {value}
               </Text>
             )}
-            {!value && (
+            {!value && !isReadonly && (
               <ActionIcon
                 component="div"
                 variant="subtle"

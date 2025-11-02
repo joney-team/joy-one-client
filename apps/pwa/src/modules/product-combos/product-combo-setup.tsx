@@ -21,7 +21,7 @@ export const ProductComboSetup: FC = () => {
         icon={IconSettings}
         name={t`List combos`}
         route="/products"
-        params={{ type: ProductType.COMBO }}
+        fixedParams={{ type: ProductType.COMBO }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.COMBO }),
           permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,

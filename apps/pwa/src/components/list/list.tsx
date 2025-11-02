@@ -50,17 +50,20 @@ export function List<T extends BaseData>(props: ListProps<T>) {
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [_selectedIds, setSelectedIds] = useState<string[]>([]);
 
-  const defaultViewState: ListViewState = {
-    view: layout.view === "desktop" ? "table" : props.card ? "grid" : "table",
-    columns: {},
-    activatedModes: [],
-    isFilterVisible: false,
-  };
+  const defaultViewState: ListViewState = useMemo(
+    () => ({
+      view: layout.view === "desktop" ? "table" : props.card ? "grid" : "table",
+      columns: {},
+      activatedModes: [],
+      isFilterVisible: false,
+    }),
+    [layout.view, props.card]
+  );
 
   const viewStateRef = useRef<ListViewState>(defaultViewState);
 
   const stateParams: Record<string, any> = useMemo(() => {
-    let params = { ...props.params };
+    let params = { ...props.fixedParams };
 
     // Add activated modes to params
     props.filterModes?.forEach((mode) => {
@@ -71,10 +74,10 @@ export function List<T extends BaseData>(props: ListProps<T>) {
     });
 
     return {
-      ...props.params,
+      ...props.fixedParams,
       ...params,
     };
-  }, [props.params, props.filterModes, viewStateRef.current.activatedModes]);
+  }, [props.fixedParams, props.filterModes, viewStateRef.current.activatedModes]);
 
   const list = useList<T>({
     id: props.id,
@@ -82,11 +85,12 @@ export function List<T extends BaseData>(props: ListProps<T>) {
     isSkip: !isInitialized,
     params: stateParams,
     events: props.events,
-    fetch: (p, controller) =>
-      api.get(props.route, {
-        params: p,
+    fetch: (fetchParams, controller) => {
+      return api.get(props.route, {
+        params: fetchParams,
         signal: controller?.signal,
-      }),
+      });
+    },
   });
 
   const getInitialViewState = () => {
@@ -121,7 +125,6 @@ export function List<T extends BaseData>(props: ListProps<T>) {
 
     viewStateRef.current.activatedModes = activatedModes;
     forceUpdate();
-    list.fetch(true, { isSilient: false });
   };
 
   const refreshList = () => {

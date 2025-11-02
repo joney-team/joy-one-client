@@ -13,52 +13,55 @@ import {
   IconStack2,
 } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 
 export const LoanListTabs: FC = () => {
   const router = useRouter();
   const searchs = useSearchParams();
 
-  const tabs = [
-    {
-      value: "active",
-      icon: IconPlayerRecord,
-      label: t`Active`,
-      isShowCount: true,
-      components: renderLoanList({
-        strictStatus: [LoanStatus.FULFILLED],
-        count: (reports) => reports.realtimeReport.data?.data.loans.contracts.activated || 0,
-      }),
-    },
-    {
-      value: "processing",
-      icon: IconAnalyze,
-      label: t`Processing`,
-      isShowCount: true,
-      components: renderLoanList({
-        strictStatus: [LoanStatus.PENDING_SIGN, LoanStatus.PENDING, LoanStatus.APPROVED],
-        counterColor: "orange",
-        count: (reports) => reports.realtimeReport.data?.data.loans.contracts.pending || 0,
-      }),
-    },
-    {
-      value: "overdue",
-      label: t`Overdue`,
-      isShowCount: true,
-      icon: IconClockExclamation,
-      components: renderLoanList({
-        strictStatus: [LoanStatus.OVERDUE],
-        counterColor: "red",
-        count: (reports) => reports.realtimeReport.data?.data.loans.contracts.overdue || 0,
-      }),
-    },
-    {
-      value: "all",
-      label: t`All`,
-      icon: IconStack2,
-      components: renderLoanList(),
-    },
-  ];
+  const tabs = useMemo(
+    () => [
+      {
+        value: "active",
+        icon: IconPlayerRecord,
+        label: t`Active`,
+        isShowCount: true,
+        components: renderLoanList({
+          strictStatus: [LoanStatus.FULFILLED],
+          count: (reports) => reports.realtimeReport.data?.data.loans.contracts.activated || 0,
+        }),
+      },
+      {
+        value: "processing",
+        icon: IconAnalyze,
+        label: t`Processing`,
+        isShowCount: true,
+        components: renderLoanList({
+          strictStatus: [LoanStatus.PENDING_SIGN, LoanStatus.PENDING, LoanStatus.APPROVED],
+          counterColor: "orange.7",
+          count: (reports) => reports.realtimeReport.data?.data.loans.contracts.pending || 0,
+        }),
+      },
+      {
+        value: "overdue",
+        label: t`Overdue`,
+        isShowCount: true,
+        icon: IconClockExclamation,
+        components: renderLoanList({
+          strictStatus: [LoanStatus.OVERDUE],
+          counterColor: "red.8",
+          count: (reports) => reports.realtimeReport.data?.data.loans.contracts.overdue || 0,
+        }),
+      },
+      {
+        value: "all",
+        label: t`All`,
+        icon: IconStack2,
+        components: renderLoanList(),
+      },
+    ],
+    []
+  );
 
   const activeTabId = searchs.get("ltab") || "active";
   const activeTab = tabs.find((t) => t.value === activeTabId);

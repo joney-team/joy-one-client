@@ -93,12 +93,12 @@ export type ListFetch<Data = any> = (
 ) => Promise<ResponseList<Data & { id?: string; _id?: string }>>;
 
 export type ListProps<Data extends BaseData> = {
-  route: string;
-  params?: Record<string, any>;
   id: string;
+  route: string;
+  columns: Columns<Data>;
+  fixedParams?: Record<string, any>;
   name?: string;
   icon?: Icon;
-  columns: Columns<Data>;
   filterModes?: FilterMode<Data>[];
   events?: UseListArgs["events"];
   card?: FC<{ data: Data }>;

@@ -25,7 +25,7 @@ export const ServiceList: FC = () => {
         name={t`Services`}
         icon={IconCategory2}
         route="/products"
-        params={{ type: ProductType.SERVICE }}
+        fixedParams={{ type: ProductType.SERVICE }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.SERVICE }),
           permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,

@@ -17,4 +17,5 @@ export type FilterProps<Config, T extends BaseData = any> = ListContext<T> & {
   column: TableColumn<T>;
   Wrapper: FilterWrapperProps;
   config: Config;
+  isReadonly: boolean;
 };
