@@ -336,7 +336,7 @@ export const SearchEngine: FC = () => {
     }
 
     return actionGroups;
-  }, [workspace]);
+  }, [workspace, searchResult, isMessageBoxesEnabled, matchedModules]);
 
   const handleSearch = useDebouncedCallback(async (q: string) => {
     try {
