@@ -1,3 +1,5 @@
+"use client";
+
 import { AppRouter } from "@/hooks/use-router";
 import { MantineTheme } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -13,6 +15,7 @@ import { api } from "../apis";
 import { getColor } from "../theme/use-color";
 import { NotificationEntity, NotificationIcon, NotificationType } from "./notification-types";
 import { translateServer } from "../lang/lang-server-service";
+import { getClientLocale } from "../lang/lang-service";
 
 export async function getNotifications(q?: any) {
   return api.get("/notifications", { params: q });
@@ -75,8 +78,14 @@ export async function showInAppNotification(
 
   notifications.show({
     id: notification._id,
-    title: await translateServer(notification.title, notification.titleParams),
-    message: await translateServer(notification.body, notification.bodyParams),
+    title: await translateServer(notification.title, {
+      params: notification.titleParams,
+      locale: getClientLocale(),
+    }),
+    message: await translateServer(notification.body, {
+      params: notification.bodyParams,
+      locale: getClientLocale(),
+    }),
     color,
     withCloseButton: true,
     icon: <Icon strokeWidth={1.5} size={18} />,
