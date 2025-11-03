@@ -7,7 +7,7 @@ import { useQuery } from "@/modules/apis/use-query";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { PasswordInput, Select, Skeleton, Stack, TextInput } from "@mantine/core";
+import { Center, PasswordInput, Select, Skeleton, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconFileInvoice } from "@tabler/icons-react";
@@ -54,13 +54,8 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
     }
   }, [providerConfigs.data, provider]);
 
-  const providerForm = useMemo(() => {
-    if (!form.values.type || mode === "update_provider")
-      return (
-        <Fragment>
-          <TextInput {...form.getInputProps("apiUrl")} label="API URL" />
-        </Fragment>
-      );
+  const providerAuthForm = useMemo(() => {
+    if (!form.values.type || (mode !== "update_auth" && mode !== "create")) return null;
 
     if (
       [PluginEInvoicesProviderType.MATBAO, PluginEInvoicesProviderType.MATBAO_DEMO].includes(
@@ -118,11 +113,27 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
           disabled={provider && mode === "update_auth"}
         />
 
-        {providerForm}
+        {mode !== "update_auth" && (
+          <TextInput
+            {...form.getInputProps("apiUrl")}
+            label={
+              <Fragment>
+                API URL{" "}
+                <small>
+                  (<Trans>Optional</Trans>)
+                </small>
+              </Fragment>
+            }
+          />
+        )}
 
-        <Button loading={form.submitting} type="submit">
-          {provider ? <Trans>Update</Trans> : <Trans>Complete</Trans>}
-        </Button>
+        {providerAuthForm}
+
+        <Center mt={8}>
+          <Button action loading={form.submitting} type="submit">
+            {provider ? <Trans>Update</Trans> : <Trans>Complete</Trans>}
+          </Button>
+        </Center>
       </Stack>
     </form>
   );

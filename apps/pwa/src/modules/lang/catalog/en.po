@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. placeholder {0}: provider ? t`Edit` : t`Add`
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:138
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:147
 msgid "{0} E-invoices provider"
 msgstr "{0} E-invoices provider"
 
@@ -140,7 +140,7 @@ msgstr "Activity"
 #: src/modules/customers/components/customer-information.tsx:378
 #: src/modules/loans/modals/modal-loan-package-form.tsx:314
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:46
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:138
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:147
 #: src/modules/product-combos/modals/modal-product-combo-using.tsx:106
 #: src/modules/products/components/form-product.tsx:497
 #: src/modules/products/components/product-selector.tsx:75
@@ -1009,7 +1009,7 @@ msgstr "Cashback created"
 #: src/modals/modal-printer.tsx:444
 #: src/modals/modal-printer.tsx:603
 #: src/modules/receipts/receipt-card.tsx:315
-#: src/modules/receipts/receipt-list.tsx:89
+#: src/modules/receipts/receipt-list.tsx:87
 msgid "Cashier"
 msgstr "Cashier"
 
@@ -1339,7 +1339,7 @@ msgstr "Company branch"
 #: src/modules/files/modals/modal-files.tsx:168
 #: src/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping.tsx:229
 #: src/modules/partners/modals/modal-partner-form.tsx:131
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:124
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:133
 #: src/modules/plugins/mailer/plugin-mailer-form.tsx:145
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:298
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:128
@@ -1823,7 +1823,7 @@ msgstr "customer"
 #: src/modules/product-combos/product-combo-list.tsx:32
 #: src/modules/product-vouchers/product-voucher-card.tsx:73
 #: src/modules/receipts/modals/modal-receipt-form.tsx:130
-#: src/modules/receipts/receipt-list.tsx:85
+#: src/modules/receipts/receipt-list.tsx:83
 #: src/modules/tags/tags-constants.ts:7
 #: src/modules/tasks/components/form-task.tsx:522
 #: src/modules/tasks/views/list/list.task-row-head.tsx:18
@@ -2256,7 +2256,7 @@ msgstr "Easy & quick setup"
 #: src/modules/orders/order-list.tsx:100
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:46
 #: src/modules/partners/partner-list.tsx:40
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:138
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:147
 #: src/modules/product-combos/product-combo-setup.tsx:61
 #: src/modules/products/product-list.tsx:121
 #: src/modules/promotions/promostion-list.tsx:209
@@ -3980,7 +3980,7 @@ msgstr "Monday"
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:468
 #: src/modules/receipts/receipt-card.tsx:412
 #: src/modules/receipts/receipt-card.tsx:421
-#: src/modules/receipts/receipt-list.tsx:114
+#: src/modules/receipts/receipt-list.tsx:112
 #: src/widgets/reports/modules.ts:256
 msgid "Money amount"
 msgstr "Money amount"
@@ -4445,6 +4445,10 @@ msgstr "Operation settings"
 msgid "optional"
 msgstr "optional"
 
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:123
+msgid "Optional"
+msgstr "Optional"
+
 #: src/modules/auth/auth-require.tsx:182
 #: src/modules/workspaces/workspace-require.tsx:133
 msgid "Or"
@@ -4568,7 +4572,7 @@ msgstr "Partners"
 
 #: src/modules/auth/components/form-register.tsx:75
 #: src/modules/auth/components/form-sign-in.tsx:61
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:74
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:69
 #: src/modules/users/components/update-password.tsx:62
 msgid "Password"
 msgstr "Password"
@@ -4604,7 +4608,7 @@ msgid "Pay"
 msgstr "Pay"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:92
-#: src/modules/receipts/receipt-list.tsx:67
+#: src/modules/receipts/receipt-list.tsx:66
 msgid "Pay expire"
 msgstr "Pay expire"
 
@@ -4625,7 +4629,7 @@ msgstr "Pay successful"
 #: src/components/printer/printer-body.tsx:109
 #: src/modals/modal-printer.tsx:373
 #: src/modules/loans/loan-detail.tsx:472
-#: src/modules/receipts/receipt-list.tsx:103
+#: src/modules/receipts/receipt-list.tsx:101
 #: src/modules/workspace-billings/workspace-billings-contants.ts:9
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:148
 msgid "Payment"
@@ -4937,7 +4941,7 @@ msgstr "Principal income"
 #: src/modals/modal-printer.tsx:187
 #: src/modules/orders/order-card.tsx:221
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:47
-#: src/modules/receipts/receipt-list.tsx:140
+#: src/modules/receipts/receipt-list.tsx:138
 msgid "Print"
 msgstr "Print"
 
@@ -5130,7 +5134,7 @@ msgstr "Provide API key"
 #: src/modules/e-invoices/e-invoice-list.tsx:46
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:112
 #: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:71
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:112
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:107
 msgid "Provider"
 msgstr "Provider"
 
@@ -6001,7 +6005,7 @@ msgstr "Show task color by status"
 msgid "Sign contract"
 msgstr "Sign contract"
 
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:73
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:68
 msgid "Sign in username"
 msgstr "Sign in username"
 
@@ -6104,7 +6108,7 @@ msgstr "Start time must be before end time"
 #: src/modules/loans/loan-list.tsx:228
 #: src/modules/message-boxes/message-boxes.tsx:66
 #: src/modules/promotions/promostion-list.tsx:117
-#: src/modules/receipts/receipt-list.tsx:94
+#: src/modules/receipts/receipt-list.tsx:92
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:155
 #: src/modules/tasks/components/form-task.tsx:274
 #: src/modules/tasks/views/board/board.task-card.tsx:180
@@ -6352,7 +6356,7 @@ msgstr "Tasks time trackings"
 msgid "Tasks updated"
 msgstr "Tasks updated"
 
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:72
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:67
 msgid "Tax code"
 msgstr "Tax code"
 
@@ -6616,7 +6620,7 @@ msgstr "Today bookings"
 msgid "Today new customers"
 msgstr "Today new customers"
 
-#: src/modules/receipts/receipt-list.tsx:123
+#: src/modules/receipts/receipt-list.tsx:121
 msgid "Today receipts"
 msgstr "Today receipts"
 
@@ -6719,7 +6723,7 @@ msgstr "Turn on notification"
 #: src/modules/promotions/components/form-promotion.tsx:123
 #: src/modules/promotions/promostion-list.tsx:38
 #: src/modules/receipts/modals/modal-receipt-form.tsx:98
-#: src/modules/receipts/receipt-list.tsx:74
+#: src/modules/receipts/receipt-list.tsx:72
 #: src/modules/tags/modals/modal-tag-form.tsx:83
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:203
 #: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:246
@@ -6819,7 +6823,7 @@ msgstr "Unset priority"
 #: src/modules/bookings/modals/modal-booking.tsx:356
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:383
 #: src/modules/loans/modals/modal-loan-package-form.tsx:336
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:124
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:133
 #: src/modules/posts/components/form-post.tsx:161
 #: src/modules/products/components/form-product.tsx:617
 #: src/modules/users/components/update-password.tsx:78
