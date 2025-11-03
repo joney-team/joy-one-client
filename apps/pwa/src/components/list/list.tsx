@@ -146,6 +146,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
   const resetDefault = () => {
     viewStateRef.current = defaultViewState;
     localStorage.removeItem(listViewId);
+    list.removeAllParams({ isSilient: true });
     forceUpdate();
   };
 

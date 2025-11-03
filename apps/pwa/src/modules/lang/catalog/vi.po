@@ -29,7 +29,7 @@ msgstr "{0} công việc liên quan sẽ được chuyển đến thư mục m�
 msgid "{timeBtw} minutes ago"
 msgstr "{timeBtw} phút trước"
 
-#: src/components/list/list.tsx:296
+#: src/components/list/list.tsx:297
 msgid "+<0/> new one"
 msgstr "+<0/> mới"
 
@@ -375,10 +375,6 @@ msgstr "Tất cả chi nhánh"
 #: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:95
 msgid "All receipts of the payment plans will also be moved to the new branch"
 msgstr "Các hoá đơn của các kỳ thanh toán cũng sẽ được chuyển sang chi nhánh mới"
-
-#: src/components/list/components/reset-default-button.tsx:17
-msgid "All settings will be restored to default."
-msgstr "Tất cả cài đặt sẽ được khôi phục về mặc định."
 
 #: src/layout/header/header-tasks-breadcrumbs.tsx:79
 msgid "All tasks"
@@ -1200,7 +1196,8 @@ msgstr "Dọn dẹp thông báo"
 msgid "Clear"
 msgstr "Xoá"
 
-#: src/components/list/filters/index.tsx:116
+#: src/components/list/filters/index.tsx:125
+#: src/components/list/table/table-head.tsx:51
 msgid "Clear filter"
 msgstr "Xoá bộ lọc"
 
@@ -1950,7 +1947,7 @@ msgstr "Dữ liệu mà khách hàng cần cung cấp trước khi bắt đầu 
 msgid "Data type"
 msgstr "Loại dữ liệu"
 
-#: src/components/list/filters/time-range-filter.tsx:61
+#: src/components/list/filters/time-range-filter.tsx:59
 #: src/configs/calendar.config.tsx:70
 #: src/modules/custom-fields/custom-field-constants.tsx:8
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:123
@@ -2339,7 +2336,7 @@ msgstr "Nhập tên {0}"
 msgid "Enter code"
 msgstr "Nhập mã"
 
-#: src/components/list/filters/text-filter.tsx:28
+#: src/components/list/filters/text-filter.tsx:26
 #: src/modules/bookings/modals/modal-booking.tsx:333
 #: src/modules/posts/components/form-post.tsx:195
 #: src/modules/products/components/form-product.tsx:602
@@ -2618,7 +2615,7 @@ msgstr "Quản lí tệp tin"
 msgid "Files"
 msgstr "Tập tin"
 
-#: src/components/list/filters/index.tsx:142
+#: src/components/list/filters/index.tsx:151
 msgid "Filter"
 msgstr "Lọc"
 
@@ -2775,7 +2772,7 @@ msgstr "Lưới"
 #: src/modules/message-boxes/message-box/message-box-head.tsx:83
 #: src/modules/workspace-members/workspace-members-service.ts:58
 msgid "Guest"
-msgstr "Khách mời"
+msgstr "Khách"
 
 #: src/modules/workspace-roles/components/workspace-role-card.tsx:61
 #: src/modules/workspace-roles/components/workspace-role-card.tsx:75
@@ -3112,7 +3109,6 @@ msgstr "Ngày tham gia"
 msgid "Just created"
 msgstr "Vừa tạo"
 
-#: src/components/list/components/reset-default-button.tsx:20
 #: src/modules/receipts/receipt-e-invoices.tsx:50
 msgid "Keep"
 msgstr "Giữ lại"
@@ -3325,7 +3321,7 @@ msgstr "Tỷ lệ phí tất toán, tính trên số nợ còn lại (0 - 100)"
 msgid "Liquidation statement"
 msgstr "Hồ sơ tất toán"
 
-#: src/components/list/list.tsx:270
+#: src/components/list/list.tsx:271
 #: src/modules/orders/orders-sale/orders-sale.tsx:43
 #: src/modules/orders/orders-sale/orders-sale.tsx:94
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:122
@@ -3999,7 +3995,7 @@ msgstr "Đổi tiền"
 msgid "Money given"
 msgstr "Tiền đã cho"
 
-#: src/components/list/filters/time-range-filter.tsx:76
+#: src/components/list/filters/time-range-filter.tsx:74
 #: src/configs/calendar.config.tsx:66
 #: src/constant.ts:35
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:176
@@ -5517,12 +5513,10 @@ msgid "Resend verification code"
 msgstr "Gửi lại mã xác minh"
 
 #: src/components/error-boundary.tsx:79
-#: src/components/list/components/reset-default-button.tsx:19
 msgid "Reset"
 msgstr "Đặt lại"
 
-#: src/components/list/components/reset-default-button.tsx:16
-#: src/components/list/components/reset-default-button.tsx:24
+#: src/components/list/components/reset-default-button.tsx:11
 #: src/modules/workspaces/workspace-module-setup.tsx:107
 #: src/widgets/index.tsx:301
 msgid "Reset default"
@@ -6533,7 +6527,7 @@ msgstr "Định dạng thời gian"
 msgid "Time frame"
 msgstr "Khung thời gian"
 
-#: src/components/list/filters/time-range-filter.tsx:108
+#: src/components/list/filters/time-range-filter.tsx:106
 msgid "Time range"
 msgstr "Khoảng thời gian"
 
@@ -7367,7 +7361,7 @@ msgstr "Đã cập nhật workspace"
 msgid "Wrong information"
 msgstr "Thông tin sai"
 
-#: src/components/list/filters/time-range-filter.tsx:92
+#: src/components/list/filters/time-range-filter.tsx:90
 #: src/widgets/reports/index.tsx:151
 msgid "Year"
 msgstr "Năm"

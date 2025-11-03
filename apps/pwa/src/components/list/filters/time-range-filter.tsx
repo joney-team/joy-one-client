@@ -8,7 +8,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { Period } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Group } from "@mantine/core";
 import {
   IconCalendar,
@@ -16,17 +16,15 @@ import {
   IconCalendarEvent,
   IconCalendarMonth,
 } from "@tabler/icons-react";
-import { FC, Fragment, useMemo } from "react";
+import { FC, Fragment, useMemo, useState } from "react";
+import { useListContext } from "../list-context";
 import { FilterProps } from "./types";
-import { Trans } from "@lingui/react/macro";
 
 export interface TimeRangeFilterConfig {}
 
-export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
-  column,
-  list,
-  Wrapper,
-}) => {
+export const TimeRangeFilter: FC<FilterProps> = ({ column, wrapper: Wrapper }) => {
+  const { list } = useListContext();
+  const [opened, setOpened] = useState(false);
   const color = useColor();
   const filterPeriodKey = `timeRange${capitalizeFirstLetter(column.columnKey, false)}`;
   const filterPeriodValue = list.params[filterPeriodKey];
@@ -154,10 +152,14 @@ export const TimeRangeFilter: FC<FilterProps<TimeRangeFilterConfig>> = ({
   };
 
   return (
-    <Menu>
+    <Menu opened={opened} onClose={() => setOpened(false)} onDismiss={() => setOpened(false)}>
       <Menu.Target>
-        <Group>
-          <Wrapper onClear={onClear} active={filterValue.length > 0}>
+        <Group flex={1}>
+          <Wrapper
+            onClick={() => setOpened(true)}
+            onClear={onClear}
+            active={filterValue.length > 0}
+          >
             {displayFilterValue && (
               <Text fz={12} fw={700} tt="capitalize">
                 {displayFilterValue}

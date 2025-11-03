@@ -28,7 +28,7 @@ msgstr "{0} related work will be moved to the default folder"
 msgid "{timeBtw} minutes ago"
 msgstr "{timeBtw} minutes ago"
 
-#: src/components/list/list.tsx:296
+#: src/components/list/list.tsx:297
 msgid "+<0/> new one"
 msgstr "+<0/> new one"
 
@@ -374,10 +374,6 @@ msgstr "All branches"
 #: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:95
 msgid "All receipts of the payment plans will also be moved to the new branch"
 msgstr "All receipts of the payment plans will also be moved to the new branch"
-
-#: src/components/list/components/reset-default-button.tsx:17
-msgid "All settings will be restored to default."
-msgstr "All settings will be restored to default."
 
 #: src/layout/header/header-tasks-breadcrumbs.tsx:79
 msgid "All tasks"
@@ -1199,7 +1195,8 @@ msgstr "Clean up notifications"
 msgid "Clear"
 msgstr "Clear"
 
-#: src/components/list/filters/index.tsx:116
+#: src/components/list/filters/index.tsx:125
+#: src/components/list/table/table-head.tsx:51
 msgid "Clear filter"
 msgstr "Clear filter"
 
@@ -1949,7 +1946,7 @@ msgstr "Data that customers need to provide before starting a conversation"
 msgid "Data type"
 msgstr "Data type"
 
-#: src/components/list/filters/time-range-filter.tsx:61
+#: src/components/list/filters/time-range-filter.tsx:59
 #: src/configs/calendar.config.tsx:70
 #: src/modules/custom-fields/custom-field-constants.tsx:8
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:123
@@ -2338,7 +2335,7 @@ msgstr "Enter {0} name"
 msgid "Enter code"
 msgstr "Enter code"
 
-#: src/components/list/filters/text-filter.tsx:28
+#: src/components/list/filters/text-filter.tsx:26
 #: src/modules/bookings/modals/modal-booking.tsx:333
 #: src/modules/posts/components/form-post.tsx:195
 #: src/modules/products/components/form-product.tsx:602
@@ -2617,7 +2614,7 @@ msgstr "File manager"
 msgid "Files"
 msgstr "Files"
 
-#: src/components/list/filters/index.tsx:142
+#: src/components/list/filters/index.tsx:151
 msgid "Filter"
 msgstr "Filter"
 
@@ -3111,7 +3108,6 @@ msgstr "Joined at"
 msgid "Just created"
 msgstr "Just created"
 
-#: src/components/list/components/reset-default-button.tsx:20
 #: src/modules/receipts/receipt-e-invoices.tsx:50
 msgid "Keep"
 msgstr "Keep"
@@ -3324,7 +3320,7 @@ msgstr "Liquidation fee rate, calculated on the remaining debt (0 - 100)"
 msgid "Liquidation statement"
 msgstr "Liquidation statement"
 
-#: src/components/list/list.tsx:270
+#: src/components/list/list.tsx:271
 #: src/modules/orders/orders-sale/orders-sale.tsx:43
 #: src/modules/orders/orders-sale/orders-sale.tsx:94
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:122
@@ -3998,7 +3994,7 @@ msgstr "Money change"
 msgid "Money given"
 msgstr "Money given"
 
-#: src/components/list/filters/time-range-filter.tsx:76
+#: src/components/list/filters/time-range-filter.tsx:74
 #: src/configs/calendar.config.tsx:66
 #: src/constant.ts:35
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:176
@@ -5516,12 +5512,10 @@ msgid "Resend verification code"
 msgstr "Resend verification code"
 
 #: src/components/error-boundary.tsx:79
-#: src/components/list/components/reset-default-button.tsx:19
 msgid "Reset"
 msgstr "Reset"
 
-#: src/components/list/components/reset-default-button.tsx:16
-#: src/components/list/components/reset-default-button.tsx:24
+#: src/components/list/components/reset-default-button.tsx:11
 #: src/modules/workspaces/workspace-module-setup.tsx:107
 #: src/widgets/index.tsx:301
 msgid "Reset default"
@@ -6532,7 +6526,7 @@ msgstr "Time format"
 msgid "Time frame"
 msgstr "Time frame"
 
-#: src/components/list/filters/time-range-filter.tsx:108
+#: src/components/list/filters/time-range-filter.tsx:106
 msgid "Time range"
 msgstr "Time range"
 
@@ -7366,7 +7360,7 @@ msgstr "Workspace updated"
 msgid "Wrong information"
 msgstr "Wrong information"
 
-#: src/components/list/filters/time-range-filter.tsx:92
+#: src/components/list/filters/time-range-filter.tsx:90
 #: src/widgets/reports/index.tsx:151
 msgid "Year"
 msgstr "Year"

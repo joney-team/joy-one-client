@@ -1,13 +1,14 @@
 "use client";
 
-import { ActionIcon, Checkbox, Combobox, ComboboxDropdownProps } from "@mantine/core";
+import { ActionIcon, Checkbox, Combobox, ComboboxDropdownProps, Radio } from "@mantine/core";
 
 import { Renderer } from "@/components/renderer";
+import { getId, Selector } from "@/components/selector";
 import { Group, Text } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
+import { useListContext } from "../list-context";
 import { FilterProps } from "./types";
-import { getId, Selector } from "@/components/selector";
 
 export interface StaticSelectorFilterConfig {
   multiple?: boolean;
@@ -19,22 +20,20 @@ export interface StaticSelectorFilterConfig {
   }[];
 }
 
-export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> = ({
-  column,
-  Wrapper,
-  config,
-  list,
-  isReadonly,
-}) => {
+export const StaticSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrapper }) => {
+  const { list, fixedParams } = useListContext();
+  const isReadonly = Boolean(fixedParams?.[column.columnKey]);
+  const config = column.filter?.staticSelector ?? ({} as Partial<StaticSelectorFilterConfig>);
   const { multiple, options, dropdownProps } = config;
   const value = list.params[column.columnKey] ? `${list.params[column.columnKey]}`.split(",") : [];
-  const selectedOptions = options.filter((v) => value.includes(v.value));
+  const selectedOptions = options?.filter((v) => value.includes(v.value)) ?? [];
 
   return (
     <Selector
+      flex={1}
       key={column.columnKey}
       autoCloseOnChange={!multiple}
-      pinnedOptions={config.options.map((v) => ({
+      pinnedOptions={config.options?.map((v) => ({
         id: v.value,
         label: v.label,
         value: v.value,
@@ -46,7 +45,7 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
             quantity={multiple ? selectedOptions.length : undefined}
             active={selectedOptions.length > 0}
           >
-            <Group gap={5}>
+            <Group gap={5} flex={1}>
               <Renderer visible={!multiple && selectedOptions.length > 0}>
                 <Group gap={5} pl={5}>
                   <Text fw={700} fz={12}>
@@ -72,17 +71,24 @@ export const StaticSelectorFilter: FC<FilterProps<StaticSelectorFilterConfig>> =
       }}
       renderOption={(item) => {
         const itemId = getId(item);
-        const option = options.find((v) => v.value === item.value);
+        const option = options?.find((v) => v.value === item.value);
         if (!option) return null;
 
         return (
           <Combobox.Option value={itemId} key={itemId} fz={14}>
             <Group gap={8} wrap="nowrap">
-              {multiple && (
+              {multiple ? (
                 <Checkbox
                   checked={selectedOptions.some((v) => v.value === item.value)}
                   onChange={() => {}}
                   radius={5}
+                  size="xs"
+                />
+              ) : (
+                <Radio
+                  checked={selectedOptions.some((v) => v.value === item.value)}
+                  onChange={() => {}}
+                  radius={20}
                   size="xs"
                 />
               )}

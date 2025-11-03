@@ -13,14 +13,34 @@ import { DynamicSelectorFilter } from "./dynamic-selector-filter";
 import { StaticSelectorFilter } from "./static-selector-filter";
 import { TextFilter } from "./text-filter";
 import { TimeRangeFilter } from "./time-range-filter";
-import { FilterProps, FilterWrapperProps } from "./types";
+import { FilterProps, FilterWrapper } from "./types";
+
+export const getFilterComponent = (column: TableColumn): FC<FilterProps<any>> | null => {
+  if (column.filter?.dynamicSelector) {
+    return DynamicSelectorFilter;
+  }
+
+  if (column.filter?.staticSelector) {
+    return StaticSelectorFilter;
+  }
+
+  if (column.filter?.timeRange) {
+    return TimeRangeFilter;
+  }
+
+  if (column.filter?.text) {
+    return TextFilter;
+  }
+
+  return null;
+};
 
 export const FilterItem: FC<{
   column: TableColumn;
 }> = ({ column }) => {
   const ctx = useListContext();
 
-  const Wrapper: FilterWrapperProps = ({
+  const wrapper: FilterWrapper = ({
     children,
     onClick,
     quantity,
@@ -55,31 +75,16 @@ export const FilterItem: FC<{
     );
   };
 
-  const generalFilterProps: FilterProps<any> = {
-    Wrapper,
-    config: {},
+  const FilterComponent = getFilterComponent(column);
+  if (!FilterComponent) return null;
+
+  const generalFilterProps: FilterProps = {
+    wrapper,
     column,
-    isReadonly: Boolean(ctx.fixedParams?.[column.columnKey]),
     ...ctx,
   };
 
-  if (column.filter?.dynamicSelector) {
-    return <DynamicSelectorFilter {...generalFilterProps} config={column.filter.dynamicSelector} />;
-  }
-
-  if (column.filter?.staticSelector) {
-    return <StaticSelectorFilter {...generalFilterProps} config={column.filter.staticSelector} />;
-  }
-
-  if (column.filter?.timeRange) {
-    return <TimeRangeFilter {...generalFilterProps} config={column.filter.timeRange} />;
-  }
-
-  if (column.filter?.text) {
-    return <TextFilter {...generalFilterProps} config={column.filter.text} />;
-  }
-
-  return null;
+  return <FilterComponent {...generalFilterProps} />;
 };
 
 export const FilterBar: FC = () => {
@@ -107,7 +112,11 @@ export const FilterBar: FC = () => {
         {ctx.columns.map((column) => {
           if (!column || !column.filter) return null;
 
-          return <FilterItem key={column.columnKey} {...ctx} column={column} />;
+          return (
+            <Group key={column.columnKey}>
+              <FilterItem key={column.columnKey} {...ctx} column={column} />
+            </Group>
+          );
         })}
       </Group>
 
