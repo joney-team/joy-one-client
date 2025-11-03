@@ -125,8 +125,6 @@ export const ListTableHead: FC<{
     }
   }, [sortValueType]);
 
-  const { sortable } = column;
-
   const FilterComponent = getFilterComponent(column);
   const filterWrapper: FilterWrapper = useMemo(() => {
     return (filter) => <TableHeadContent column={column} filter={filter} />;
@@ -140,11 +138,6 @@ export const ListTableHead: FC<{
       style={{
         width: column.width,
         cursor: resize.isResizing ? "col-resize" : "default",
-        backgroundColor: sortable
-          ? hover.hovered
-            ? "var(--mantine-color-default-hover)"
-            : "transparent"
-          : "transparent",
         position: "relative",
         overflow: "visible",
         ...style,
