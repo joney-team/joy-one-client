@@ -28,7 +28,7 @@ msgstr "{0} related work will be moved to the default folder"
 msgid "{timeBtw} minutes ago"
 msgstr "{timeBtw} minutes ago"
 
-#: src/components/list/list.tsx:279
+#: src/components/list/list.tsx:296
 msgid "+<0/> new one"
 msgstr "+<0/> new one"
 
@@ -374,6 +374,10 @@ msgstr "All branches"
 #: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:95
 msgid "All receipts of the payment plans will also be moved to the new branch"
 msgstr "All receipts of the payment plans will also be moved to the new branch"
+
+#: src/components/list/components/reset-default-button.tsx:17
+msgid "All settings will be restored to default."
+msgstr "All settings will be restored to default."
 
 #: src/layout/header/header-tasks-breadcrumbs.tsx:79
 msgid "All tasks"
@@ -1216,6 +1220,19 @@ msgstr "Click to change avatar"
 msgid "Click to change status"
 msgstr "Click to change status"
 
+#: src/components/list/components/columns-setting.tsx:174
+msgid "Click to hide"
+msgstr "Click to hide"
+
+#: src/components/list/components/columns-setting.tsx:174
+msgid "Click to show"
+msgstr "Click to show"
+
+#: src/components/list/components/columns-setting.tsx:144
+#: src/components/list/components/columns-setting.tsx:159
+msgid "Click to unpin"
+msgstr "Click to unpin"
+
 #: src/modules/workspaces/workspace-constants.tsx:19
 msgid "Clinic"
 msgstr "Clinic"
@@ -1260,7 +1277,7 @@ msgstr "Color name"
 msgid "Color shape"
 msgstr "Color shape"
 
-#: src/components/list/components/columns-setting.tsx:29
+#: src/components/list/components/columns-setting.tsx:41
 msgid "Columns"
 msgstr "Columns"
 
@@ -3094,6 +3111,7 @@ msgstr "Joined at"
 msgid "Just created"
 msgstr "Just created"
 
+#: src/components/list/components/reset-default-button.tsx:20
 #: src/modules/receipts/receipt-e-invoices.tsx:50
 msgid "Keep"
 msgstr "Keep"
@@ -3306,7 +3324,7 @@ msgstr "Liquidation fee rate, calculated on the remaining debt (0 - 100)"
 msgid "Liquidation statement"
 msgstr "Liquidation statement"
 
-#: src/components/list/list.tsx:253
+#: src/components/list/list.tsx:270
 #: src/modules/orders/orders-sale/orders-sale.tsx:43
 #: src/modules/orders/orders-sale/orders-sale.tsx:94
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:122
@@ -3957,6 +3975,7 @@ msgstr "Modules"
 msgid "Monday"
 msgstr "Monday"
 
+#: src/components/list/columns/number-column.tsx:14
 #: src/modules/loans/loan-detail.tsx:318
 #: src/modules/loans/loan-list.tsx:129
 #: src/modules/orders/order-list.tsx:51
@@ -4359,6 +4378,7 @@ msgstr "Notifications"
 msgid "Now you can use the <0>Messages</0> feature to communicate with customers on Facebook."
 msgstr "Now you can use the <0>Messages</0> feature to communicate with customers on Facebook."
 
+#: src/components/list/columns/number-column.tsx:14
 #: src/modules/custom-fields/custom-field-constants.tsx:6
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:451
 msgid "Number"
@@ -4753,6 +4773,14 @@ msgstr "Photo"
 #: src/modules/prescriptions/prescription-list.tsx:82
 msgid "Pill"
 msgstr "Pill"
+
+#: src/components/list/components/columns-setting.tsx:144
+msgid "Pin to left"
+msgstr "Pin to left"
+
+#: src/components/list/components/columns-setting.tsx:159
+msgid "Pin to right"
+msgstr "Pin to right"
 
 #: src/modules/custom-fields/components/form-custom-field.tsx:103
 msgid "Placeholder"
@@ -5488,9 +5516,12 @@ msgid "Resend verification code"
 msgstr "Resend verification code"
 
 #: src/components/error-boundary.tsx:79
+#: src/components/list/components/reset-default-button.tsx:19
 msgid "Reset"
 msgstr "Reset"
 
+#: src/components/list/components/reset-default-button.tsx:16
+#: src/components/list/components/reset-default-button.tsx:24
 #: src/modules/workspaces/workspace-module-setup.tsx:107
 #: src/widgets/index.tsx:301
 msgid "Reset default"

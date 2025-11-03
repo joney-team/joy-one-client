@@ -29,7 +29,7 @@ msgstr "{0} công việc liên quan sẽ được chuyển đến thư mục m�
 msgid "{timeBtw} minutes ago"
 msgstr "{timeBtw} phút trước"
 
-#: src/components/list/list.tsx:279
+#: src/components/list/list.tsx:296
 msgid "+<0/> new one"
 msgstr "+<0/> mới"
 
@@ -375,6 +375,10 @@ msgstr "Tất cả chi nhánh"
 #: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:95
 msgid "All receipts of the payment plans will also be moved to the new branch"
 msgstr "Các hoá đơn của các kỳ thanh toán cũng sẽ được chuyển sang chi nhánh mới"
+
+#: src/components/list/components/reset-default-button.tsx:17
+msgid "All settings will be restored to default."
+msgstr "Tất cả cài đặt sẽ được khôi phục về mặc định."
 
 #: src/layout/header/header-tasks-breadcrumbs.tsx:79
 msgid "All tasks"
@@ -1217,6 +1221,19 @@ msgstr "Nhấp để thay đổi ảnh đại diện"
 msgid "Click to change status"
 msgstr "Click để thay đổi trạng thái"
 
+#: src/components/list/components/columns-setting.tsx:174
+msgid "Click to hide"
+msgstr "Nhấp để ẩn"
+
+#: src/components/list/components/columns-setting.tsx:174
+msgid "Click to show"
+msgstr "Nhấp để hiện"
+
+#: src/components/list/components/columns-setting.tsx:144
+#: src/components/list/components/columns-setting.tsx:159
+msgid "Click to unpin"
+msgstr "Nhấp để bỏ ghim"
+
 #: src/modules/workspaces/workspace-constants.tsx:19
 msgid "Clinic"
 msgstr "Phòng khám"
@@ -1261,7 +1278,7 @@ msgstr "Tên màu"
 msgid "Color shape"
 msgstr "Khối màu"
 
-#: src/components/list/components/columns-setting.tsx:29
+#: src/components/list/components/columns-setting.tsx:41
 msgid "Columns"
 msgstr "Cột"
 
@@ -3095,6 +3112,7 @@ msgstr "Ngày tham gia"
 msgid "Just created"
 msgstr "Vừa tạo"
 
+#: src/components/list/components/reset-default-button.tsx:20
 #: src/modules/receipts/receipt-e-invoices.tsx:50
 msgid "Keep"
 msgstr "Giữ lại"
@@ -3307,7 +3325,7 @@ msgstr "Tỷ lệ phí tất toán, tính trên số nợ còn lại (0 - 100)"
 msgid "Liquidation statement"
 msgstr "Hồ sơ tất toán"
 
-#: src/components/list/list.tsx:253
+#: src/components/list/list.tsx:270
 #: src/modules/orders/orders-sale/orders-sale.tsx:43
 #: src/modules/orders/orders-sale/orders-sale.tsx:94
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:122
@@ -3958,6 +3976,7 @@ msgstr "Chức năng"
 msgid "Monday"
 msgstr "Thứ hai"
 
+#: src/components/list/columns/number-column.tsx:14
 #: src/modules/loans/loan-detail.tsx:318
 #: src/modules/loans/loan-list.tsx:129
 #: src/modules/orders/order-list.tsx:51
@@ -4360,6 +4379,7 @@ msgstr "Thông báo"
 msgid "Now you can use the <0>Messages</0> feature to communicate with customers on Facebook."
 msgstr "Giờ đây, bạn có thể sử dụng tính năng <0>Tin nhắn</0> để liên lạc với khách hàng trên Facebook."
 
+#: src/components/list/columns/number-column.tsx:14
 #: src/modules/custom-fields/custom-field-constants.tsx:6
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:451
 msgid "Number"
@@ -4754,6 +4774,14 @@ msgstr "Ảnh"
 #: src/modules/prescriptions/prescription-list.tsx:82
 msgid "Pill"
 msgstr "Thuốc"
+
+#: src/components/list/components/columns-setting.tsx:144
+msgid "Pin to left"
+msgstr "Ghim bên trái"
+
+#: src/components/list/components/columns-setting.tsx:159
+msgid "Pin to right"
+msgstr "Ghim bên phải"
 
 #: src/modules/custom-fields/components/form-custom-field.tsx:103
 msgid "Placeholder"
@@ -5489,9 +5517,12 @@ msgid "Resend verification code"
 msgstr "Gửi lại mã xác minh"
 
 #: src/components/error-boundary.tsx:79
+#: src/components/list/components/reset-default-button.tsx:19
 msgid "Reset"
 msgstr "Đặt lại"
 
+#: src/components/list/components/reset-default-button.tsx:16
+#: src/components/list/components/reset-default-button.tsx:24
 #: src/modules/workspaces/workspace-module-setup.tsx:107
 #: src/widgets/index.tsx:301
 msgid "Reset default"
