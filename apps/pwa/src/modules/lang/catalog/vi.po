@@ -3097,7 +3097,7 @@ msgstr "Vừa tạo"
 
 #: src/modules/receipts/receipt-e-invoices.tsx:50
 msgid "Keep"
-msgstr "Giữ"
+msgstr "Giữ lại"
 
 #: src/modules/events/event-constants.ts:113
 msgid "KYC approved"
@@ -6206,7 +6206,7 @@ msgstr "Chế độ hệ thống"
 #: src/components/list/components/filter-modes.tsx:53
 #: src/components/list/components/toggle-view.tsx:17
 msgid "Table"
-msgstr "Bàn"
+msgstr "Bảng"
 
 #: src/modules/events/event-constants.ts:107
 msgid "Table slot archived"

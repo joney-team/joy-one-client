@@ -50,9 +50,10 @@ export type Column<Data = any, FieldType = any> = {
   exportToExcel?: ExportToExcel<Data, FieldType> | false;
   render?: ColumnItemRenderer<FieldType, Data>;
   align?: "left" | "center" | "right";
-  defaultWidth?: number;
   minWidth?: number;
+  defaultWidth?: number;
   defaultHidden?: boolean;
+  defaultPinned?: "left" | "right";
   sortable?: boolean;
   disabled?: boolean;
   resizable?: boolean;
@@ -119,6 +120,7 @@ export type ColumnState = {
   order: number;
   isHidden: boolean;
   width?: number;
+  pinned?: "left" | "right" | null;
 };
 
 export type TableColumn<Data = any> = Omit<
@@ -128,6 +130,7 @@ export type TableColumn<Data = any> = Omit<
   columnKey: string;
   width: number;
   isVisible: boolean;
+  pinned: "left" | "right" | null;
   order: number;
   defaultWidth: number;
   minWidth: number;
@@ -152,7 +155,7 @@ export type ListContext<Data extends BaseData = any> = Omit<
   setViewState: (viewState: ListViewState) => void;
   spacing: number;
   toggleActivatedMode: (mode: string) => void;
-  columns: Array<TableColumn>;
+  columns: TableColumn[];
   selectedIds: string[];
   isBulkActionsActivated: boolean;
   select: (id: string, isShiftKey?: boolean) => void;
@@ -162,4 +165,5 @@ export type ListContext<Data extends BaseData = any> = Omit<
   availableMultipleSelectActions: ListBulkAction<Data>[];
   changeColumnState: (columnKey: string, state: Partial<ColumnState>) => void;
   actions: ListAction<Data>[];
+  resetDefault: () => void;
 };

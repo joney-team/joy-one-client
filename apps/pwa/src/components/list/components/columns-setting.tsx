@@ -1,5 +1,6 @@
 "use client";
 
+import { useColor } from "@/modules/theme/use-color";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -9,11 +10,22 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { t } from "@lingui/core/macro";
-import { ActionIcon, Group, Menu, MenuDropdown, Stack, ThemeIcon } from "@mantine/core";
-import { IconColumns3, IconDotsVertical, IconEye, IconEyeOff } from "@tabler/icons-react";
+import { ActionIcon, Group, Menu, MenuDropdown, Stack, ThemeIcon, Tooltip } from "@mantine/core";
+import {
+  IconColumns3,
+  IconDotsVertical,
+  IconEye,
+  IconEyeOff,
+  IconLayoutSidebarLeftCollapse,
+  IconLayoutSidebarLeftCollapseFilled,
+  IconLayoutSidebarRightCollapse,
+  IconLayoutSidebarRightCollapseFilled,
+  IconPin,
+  IconPinFilled,
+} from "@tabler/icons-react";
 import { type FC } from "react";
 import { useListContext } from "../list-context";
-import { Column } from "../types";
+import { ColumnState, TableColumn } from "../types";
 import { ActionButton } from "./action-button";
 
 export const ColsSettings: FC = () => {
@@ -80,19 +92,11 @@ export function Columns() {
           strategy={verticalListSortingStrategy}
         >
           {columns.map((column) => {
-            const toggleVisible = () => {
-              changeColumnState(column.columnKey, { isHidden: !!column.isVisible });
-            };
-
-            if (!column) return null;
-
             return (
               <ColumnItem
                 key={column.columnKey}
-                columnKey={column.columnKey}
                 column={column}
-                toggleVisible={toggleVisible}
-                isVisible={column.isVisible}
+                onChange={(state) => changeColumnState(column.columnKey, state)}
               />
             );
           })}
@@ -102,15 +106,15 @@ export function Columns() {
   );
 }
 
-function ColumnItem<T = any>(props: {
-  columnKey: string;
-  column: Column<T, T[keyof T]>;
-  toggleVisible: () => void;
-  isVisible: boolean;
+function ColumnItem<T = any>({
+  column,
+  onChange,
+}: {
+  column: TableColumn<T>;
+  onChange: (state: Partial<ColumnState>) => void;
 }) {
-  const { columnKey, column, toggleVisible, isVisible } = props;
-
-  const sortable = useSortable({ id: columnKey, data: { columnKey } });
+  const color = useColor();
+  const sortable = useSortable({ id: column.columnKey, data: { columnKey: column.columnKey } });
 
   return (
     <Group
@@ -128,17 +132,56 @@ function ColumnItem<T = any>(props: {
       }}
       wrap="nowrap"
     >
-      <Group gap={3}>
-        <ThemeIcon variant="subtle" size="sm" color="gray">
+      <Group gap={3} flex={1}>
+        <ThemeIcon variant="subtle" size="sm" color="gray" style={{ cursor: "move" }}>
           <IconDotsVertical size={16} />
         </ThemeIcon>
 
-        {column.name || columnKey}
+        {column.name}
       </Group>
 
-      <ActionIcon variant="subtle" size="sm" color="gray" onClick={toggleVisible}>
-        {!isVisible ? <IconEyeOff strokeWidth={1.5} /> : <IconEye strokeWidth={1.5} />}
-      </ActionIcon>
+      <Group gap={5}>
+        <Tooltip label={column.pinned === "left" ? t`Click to unpin` : t`Pin to left`}>
+          <ActionIcon
+            variant="subtle"
+            size="sm"
+            color={column.pinned === "left" ? color("primary") : "gray"}
+            onClick={() => onChange({ pinned: column.pinned === "left" ? null : "left" })}
+          >
+            {column.pinned === "left" ? (
+              <IconLayoutSidebarLeftCollapseFilled strokeWidth={1.5} />
+            ) : (
+              <IconLayoutSidebarLeftCollapse strokeWidth={1.5} />
+            )}
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip label={column.pinned === "right" ? t`Click to unpin` : t`Pin to right`}>
+          <ActionIcon
+            variant="subtle"
+            size="sm"
+            color={column.pinned === "right" ? color("primary") : "gray"}
+            onClick={() => onChange({ pinned: column.pinned === "right" ? null : "right" })}
+          >
+            {column.pinned === "right" ? (
+              <IconLayoutSidebarRightCollapseFilled strokeWidth={1.5} />
+            ) : (
+              <IconLayoutSidebarRightCollapse strokeWidth={1.5} />
+            )}
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip label={column.isVisible ? t`Click to hide` : t`Click to show`}>
+          <ActionIcon
+            variant="subtle"
+            size="sm"
+            color={column.isVisible ? "dark" : "gray"}
+            onClick={() => onChange({ isHidden: !column.isVisible })}
+          >
+            {!column.isVisible ? <IconEyeOff strokeWidth={1.5} /> : <IconEye strokeWidth={1.5} />}
+          </ActionIcon>
+        </Tooltip>
+      </Group>
     </Group>
   );
 }

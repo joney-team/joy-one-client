@@ -2,18 +2,57 @@
 
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
-import { BaseData } from "@/components/list/types";
+import { BaseData, TableColumn } from "@/components/list/types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, Checkbox, Group, Loader, Menu, Stack, Text } from "@mantine/core";
+import { ActionIcon, Center, Checkbox, Group, Loader, Menu, Stack, Text } from "@mantine/core";
 import { IconDotsVertical } from "@tabler/icons-react";
 import Link from "next/link";
-import { useEffect, useMemo, useRef } from "react";
+import { CSSProperties, useEffect, useRef } from "react";
 import { getIn, getListDataId, getValuePath } from "../utils";
 import { ListTableHead } from "./table-head";
 
 import { useColor } from "@/modules/theme/use-color";
 import { useListContext } from "../list-context";
 import styles from "./table.module.css";
+
+const getPinnedPositionStyle = (args: {
+  columns: TableColumn[];
+  column: TableColumn;
+}): {
+  style?: CSSProperties | undefined;
+} => {
+  if (args.column.pinned === "right") {
+    const rightPinnedColumns = [
+      ...args.columns.filter((c) => c.pinned === "right" && c.isVisible),
+    ].reverse();
+    const columnIndex = rightPinnedColumns.findIndex((c) => c.columnKey === args.column.columnKey);
+    const right = rightPinnedColumns.slice(0, columnIndex).reduce((acc, c) => acc + c.width, 0);
+
+    return {
+      style: {
+        right,
+        position: "sticky",
+        zIndex: 1,
+      },
+    };
+  }
+
+  if (args.column.pinned === "left") {
+    const leftPinnedColumns = [...args.columns.filter((c) => c.pinned === "left" && c.isVisible)];
+    const columnIndex = leftPinnedColumns.findIndex((c) => c.columnKey === args.column.columnKey);
+    const left = leftPinnedColumns.slice(0, columnIndex).reduce((acc, c) => acc + c.width, 0);
+
+    return {
+      style: {
+        left,
+        position: "sticky",
+        zIndex: 1,
+      },
+    };
+  }
+
+  return {};
+};
 
 export default function ListTable<T extends BaseData>() {
   const context = useListContext();
@@ -43,40 +82,6 @@ export default function ListTable<T extends BaseData>() {
     context.list.data.length > 0 &&
     context.list.data.every((v: any) => context.selectedIds.includes(v.id || v._id || ""));
 
-  const header = useMemo(() => {
-    return (
-      <tr style={{ background: color({ light: "gray.1", dark: "dark.7" }) }}>
-        {context.isBulkActionsActivated && (
-          <th className={styles.BulkActionsCell}>
-            <Group justify="end">
-              <Checkbox
-                size="xs"
-                radius={5}
-                checked={isSelectedAll}
-                onChange={() => (isSelectedAll ? context.unselectAll() : context.selectAll())}
-              />
-            </Group>
-          </th>
-        )}
-
-        {context.columns.map((column) => {
-          if (!column.isVisible) return null;
-          return <ListTableHead key={column.columnKey} column={column} />;
-        })}
-
-        <th>
-          {context.actions.length > 0 && (
-            <Group justify="end" opacity={0}>
-              <ActionIcon variant="subtle" color="gray">
-                <IconDotsVertical size={16} />
-              </ActionIcon>
-            </Group>
-          )}
-        </th>
-      </tr>
-    );
-  }, [context.columns, context.actions, context.isBulkActionsActivated, isSelectedAll]);
-
   return (
     <Stack className={styles.Table} pos="relative" w="100%" gap={0}>
       {/* Fixed Header */}
@@ -96,7 +101,44 @@ export default function ListTable<T extends BaseData>() {
             position: "relative",
           }}
         >
-          <thead>{header}</thead>
+          <thead>
+            <tr style={{ background: color({ light: "gray.1", dark: "dark.7" }) }}>
+              {context.isBulkActionsActivated && (
+                <th className={styles.BulkActionsCell}>
+                  <Group justify="end">
+                    <Checkbox
+                      size="xs"
+                      radius={5}
+                      checked={isSelectedAll}
+                      onChange={() => (isSelectedAll ? context.unselectAll() : context.selectAll())}
+                    />
+                  </Group>
+                </th>
+              )}
+
+              {context.columns.map((column) => {
+                if (!column.isVisible) return null;
+                const pinnedPosition = getPinnedPositionStyle({
+                  columns: context.columns,
+                  column,
+                });
+
+                return (
+                  <ListTableHead
+                    key={column.columnKey}
+                    column={column}
+                    style={{
+                      ...pinnedPosition.style,
+                      backgroundColor: color({ light: "gray.1", dark: "dark.7" }),
+                    }}
+                  />
+                );
+              })}
+
+              {context.actions.length > 0 && <th className={styles.ActionColumn} />}
+              <th />
+            </tr>
+          </thead>
         </table>
       </Stack>
 
@@ -133,11 +175,19 @@ export default function ListTable<T extends BaseData>() {
                     if (!column.isVisible) return null;
                     const columnData = getIn(rowData, getValuePath(column.columnKey, column));
                     const Renderer = column.render;
+                    const pinnedPosition = getPinnedPositionStyle({
+                      columns: context.columns,
+                      column,
+                    });
 
                     return (
                       <td
                         key={column.columnKey}
-                        style={{ width: column.width, maxWidth: column.width }}
+                        style={{
+                          width: column.width,
+                          maxWidth: column.width,
+                          ...pinnedPosition.style,
+                        }}
                         data-body-column-key={column.columnKey}
                       >
                         <Group wrap="nowrap" gap={4} justify={column.align} maw="100%">
@@ -153,13 +203,15 @@ export default function ListTable<T extends BaseData>() {
                     );
                   })}
 
-                  <td>
-                    {context.actions.length > 0 && (
+                  {context.actions.length > 0 && (
+                    <td className={styles.ActionColumn}>
                       <Menu>
                         <Menu.Target>
-                          <ActionIcon variant="subtle" color="gray">
-                            <IconDotsVertical size={16} />
-                          </ActionIcon>
+                          <Center>
+                            <ActionIcon variant="subtle" color="gray">
+                              <IconDotsVertical size={16} />
+                            </ActionIcon>
+                          </Center>
                         </Menu.Target>
 
                         <Menu.Dropdown>
@@ -194,8 +246,10 @@ export default function ListTable<T extends BaseData>() {
                           })}
                         </Menu.Dropdown>
                       </Menu>
-                    )}
-                  </td>
+                    </td>
+                  )}
+
+                  <td />
                 </tr>
               );
             })}

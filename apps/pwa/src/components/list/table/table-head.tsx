@@ -4,7 +4,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Box, Group, Stack, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconSelector } from "@tabler/icons-react";
-import { FC, useEffect, useRef } from "react";
+import { CSSProperties, FC, useEffect, useRef } from "react";
 import { TableColumn } from "../types";
 import { getSortQueryKey, getValuePath } from "../utils";
 import { useColumnResize } from "./use-collumn-resize";
@@ -13,7 +13,11 @@ import { classNames } from "@/utils/ui.utils";
 import { useListContext } from "../list-context";
 import styles from "./table-head.module.css";
 
-export const ListTableHead: FC<{ column: TableColumn }> = ({ column }) => {
+export const ListTableHead: FC<{
+  column: TableColumn;
+  style?: CSSProperties;
+  className?: string;
+}> = ({ column, style, className }) => {
   const { list, changeColumnState } = useListContext();
   const hover = useHover();
   const sortIconRef = useRef<any>(null);
@@ -74,7 +78,7 @@ export const ListTableHead: FC<{ column: TableColumn }> = ({ column }) => {
 
   return (
     <th
-      className={classNames(styles.TableHead, "unselectable")}
+      className={classNames(styles.TableHead, "unselectable", className)}
       ref={hover.ref}
       data-column-key={column.columnKey}
       onClick={sortable ? onSort : undefined}
@@ -88,6 +92,7 @@ export const ListTableHead: FC<{ column: TableColumn }> = ({ column }) => {
           : "transparent",
         position: "relative",
         overflow: "visible",
+        ...style,
       }}
     >
       <Group gap={4} flex={1} justify={column.align} align="center" w="100%" wrap="nowrap">
@@ -121,7 +126,6 @@ export const ListTableHead: FC<{ column: TableColumn }> = ({ column }) => {
         onMouseDown={resize.handleMouseDown}
         style={{
           left: (resize.currentWidth || 0) - 3,
-          zIndex: 2,
           cursor: column.resizable ? "col-resize" : "default",
         }}
       >

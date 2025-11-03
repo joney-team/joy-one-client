@@ -109,3 +109,12 @@ export function getListDataId<T = any>(data: T): string {
 export function getSortQueryKey(colId: string) {
   return `sort${capitalizeFirstLetter(colId, false)}`;
 }
+
+export function cleanObject<T extends Record<string, unknown>>(obj: T): T {
+  return Object.keys(obj).reduce((acc, key) => {
+    if (obj[key] !== undefined && obj[key] !== null) {
+      acc[key] = obj[key];
+    }
+    return acc;
+  }, {} as Record<string, unknown>) as T;
+}

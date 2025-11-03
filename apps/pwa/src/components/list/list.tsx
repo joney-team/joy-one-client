@@ -33,8 +33,17 @@ import { Filter, FilterBar } from "./filters";
 import { Context } from "./list-context";
 import { Sort } from "./sort/sort";
 import ListTable from "./table/table";
-import { BaseData, Column, ColumnState, ListContext, ListProps, ListViewState } from "./types";
-import { getListDataId } from "./utils";
+import {
+  BaseData,
+  Column,
+  ColumnState,
+  ListContext,
+  ListProps,
+  ListViewState,
+  TableColumn,
+} from "./types";
+import { cleanObject, getListDataId } from "./utils";
+import { ResetDefaultButton } from "./components/reset-default-button";
 
 export function List<T extends BaseData>(props: ListProps<T>) {
   const [version, setVersion] = useState(0);
@@ -134,6 +143,12 @@ export function List<T extends BaseData>(props: ListProps<T>) {
     });
   };
 
+  const resetDefault = () => {
+    viewStateRef.current = defaultViewState;
+    localStorage.removeItem(listViewId);
+    forceUpdate();
+  };
+
   const selectedIds = useMemo(() => {
     if (isSelectAll) return list.data.map((v) => getListDataId(v));
     return list.data
@@ -152,7 +167,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
 
   const columns = useMemo(() => {
     return Object.entries(props.columns)
-      .reduce<ListContext<T>["columns"]>((acc, [columnKey, columnValue], columnIndex) => {
+      .reduce<TableColumn[]>((acc, [columnKey, columnValue], columnIndex) => {
         const state = viewStateRef.current.columns?.[columnKey] ?? {};
         const column = columnValue as Column<T>;
         if (!column) return acc;
@@ -168,10 +183,11 @@ export function List<T extends BaseData>(props: ListProps<T>) {
             width: state.width ?? defaultWidth,
             minWidth,
             defaultWidth,
-            isVisible: !state.isHidden && !column.defaultHidden,
+            isVisible: typeof state.isHidden === "boolean" ? state.isHidden : !column.defaultHidden,
             order: state.order ?? columnIndex,
             resizable: column.resizable ?? true,
             name: column.name ?? columnKey,
+            pinned: state.pinned ?? column.defaultPinned ?? null,
           },
         ];
       }, [])
@@ -180,6 +196,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
 
   const context: ListContext<T> = {
     ...props,
+    resetDefault,
     actions: props.actions || [],
     viewState: viewStateRef.current,
     setViewState,
@@ -214,10 +231,10 @@ export function List<T extends BaseData>(props: ListProps<T>) {
         ...viewStateRef.current,
         columns: {
           ...viewStateRef.current.columns,
-          [columnKey]: {
+          [columnKey]: cleanObject({
             ...viewStateRef.current.columns[columnKey],
             ...state,
-          },
+          }),
         },
       });
     },
@@ -301,8 +318,9 @@ export function List<T extends BaseData>(props: ListProps<T>) {
                     <Filter />
                     <Sort />
                     <ColsSettings />
-                    <ExportButton />
                     <ToggleView />
+                    <ResetDefaultButton />
+                    <ExportButton />
                     <CreateButton />
                   </Group>
                 )}

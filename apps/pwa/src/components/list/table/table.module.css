@@ -16,20 +16,21 @@
         overflow: hidden;
         position: relative;
 
-        &.isPinned {
-          position: sticky;
-          z-index: 2;
+        &.ActionColumn {
+          width: 40px;
         }
 
         &.BulkActionsCell {
-          width: 1.8rem;
+          width: 30px;
         }
       }
     }
 
-    thead {
+    thead,
+    tbody {
       tr {
-        th:not(.BulkActionsCell) {
+        th:not(.BulkActionsCell):not(.ActionColumn),
+        td:not(.BulkActionsCell):not(.ActionColumn) {
           padding: 8px 12px;
         }
       }
@@ -45,12 +46,16 @@
           }
         }
 
-        td:not(.BulkActionsCell) {
-          padding: 8px 12px;
+        &:nth-child(odd) {
+          & td {
+            background: var(--mantine-color-body);
+          }
         }
 
         &:nth-child(even) {
-          background: var(--mantine-color-default-hover);
+          & td {
+            background: var(--mantine-color-default-hover);
+          }
         }
       }
     }
