@@ -61,14 +61,12 @@ export const ReceiptList: FC = () => {
             sortable: true,
             defaultHidden: true,
             isHasFilter: true,
-            defaultWidth: 200,
           }),
           expireAt: dateTimeColumn({
             name: t`Pay expire`,
             sortable: true,
             defaultHidden: true,
             isHasFilter: true,
-            defaultWidth: 200,
           }),
           type: enumColumn({
             name: t`Type`,
