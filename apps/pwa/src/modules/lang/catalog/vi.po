@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Poedit 3.8\n"
 
 #. placeholder {0}: provider ? t`Edit` : t`Add`
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:147
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:149
 msgid "{0} E-invoices provider"
 msgstr "{0} nhà cung cấp HĐĐT"
 
@@ -141,7 +141,7 @@ msgstr "Hoạt động"
 #: src/modules/customers/components/customer-information.tsx:378
 #: src/modules/loans/modals/modal-loan-package-form.tsx:314
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:46
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:147
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:149
 #: src/modules/product-combos/modals/modal-product-combo-using.tsx:106
 #: src/modules/products/components/form-product.tsx:497
 #: src/modules/products/components/product-selector.tsx:75
@@ -1340,7 +1340,7 @@ msgstr "Chi nhánh"
 #: src/modules/files/modals/modal-files.tsx:168
 #: src/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping.tsx:229
 #: src/modules/partners/modals/modal-partner-form.tsx:131
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:133
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:134
 #: src/modules/plugins/mailer/plugin-mailer-form.tsx:145
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:298
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:128
@@ -2257,7 +2257,7 @@ msgstr "Thiết lập dễ dàng và nhanh chóng"
 #: src/modules/orders/order-list.tsx:100
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:46
 #: src/modules/partners/partner-list.tsx:40
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:147
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:149
 #: src/modules/product-combos/product-combo-setup.tsx:61
 #: src/modules/products/product-list.tsx:121
 #: src/modules/promotions/promostion-list.tsx:209
@@ -6824,7 +6824,7 @@ msgstr "Bỏ đặt mức độ ưu tiên"
 #: src/modules/bookings/modals/modal-booking.tsx:356
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:383
 #: src/modules/loans/modals/modal-loan-package-form.tsx:336
-#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:133
+#: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:134
 #: src/modules/posts/components/form-post.tsx:161
 #: src/modules/products/components/form-product.tsx:617
 #: src/modules/users/components/update-password.tsx:78
