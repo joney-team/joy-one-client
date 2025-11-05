@@ -116,7 +116,7 @@ msgstr "Actions"
 #: src/modules/bookings/booking-list.tsx:362
 #: src/modules/loans/loan-list-tabs.tsx:27
 #: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:15
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:57
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:56
 #: src/modules/product-combos/product-combos-constants.tsx:9
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:9
 #: src/modules/promotions/promotions-constants.ts:22
@@ -582,7 +582,7 @@ msgstr "Are you sure you want to delete the status <0>{0}</0>?"
 msgid "Are you sure you want to disconnect {0}?"
 msgstr "Are you sure you want to disconnect {0}?"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:126
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:125
 msgid "Are you sure you want to disconnect?"
 msgstr "Are you sure you want to disconnect?"
 
@@ -741,6 +741,10 @@ msgstr "Auto reply messages according to the script"
 #: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:39
 msgid "Automatically reply to customer messages"
 msgstr "Automatically reply to customer messages"
+
+#: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:109
+msgid "Automatically returning in {tick}s..."
+msgstr "Automatically returning in {tick}s..."
 
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:261
 msgid "Available entities to search"
@@ -1439,9 +1443,17 @@ msgstr "Connect platform"
 msgid "Connect success"
 msgstr "Connect success"
 
+#: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:106
+msgid "Connect successfully"
+msgstr "Connect successfully"
+
 #: src/modules/message-boxes/message-boxes-integrate.tsx:25
 msgid "Connect with Social channels"
 msgstr "Connect with Social channels"
+
+#: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:81
+msgid "Connecting..."
+msgstr "Connecting..."
 
 #: src/modules/products/components/product-card.tsx:159
 msgid "Consumables"
@@ -1974,7 +1986,7 @@ msgstr "days"
 msgid "Days number"
 msgstr "Days number"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:80
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:79
 msgid "Default"
 msgstr "Default"
 
@@ -2081,8 +2093,8 @@ msgstr "Disbursement"
 
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:217
 #: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:96
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:119
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:125
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:118
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:124
 msgid "Disconect"
 msgstr "Disconect"
 
@@ -2505,6 +2517,7 @@ msgstr "Excludes"
 msgid "Excludes customers"
 msgstr "Excludes customers"
 
+#: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:98
 #: src/components/printer/printer.tsx:138
 #: src/layout/header/header-tasks-breadcrumbs.tsx:102
 #: src/modals/modal-printer.tsx:678
@@ -2751,7 +2764,7 @@ msgstr "Gmail account"
 msgid "Gmail address"
 msgstr "Gmail address"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:147
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:146
 msgid "GMF groups"
 msgstr "GMF groups"
 
@@ -2889,7 +2902,7 @@ msgid "In progress"
 msgstr "In progress"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:23
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:61
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:60
 #: src/modules/product-combos/product-combos-constants.tsx:10
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:10
 msgid "Inactive"
@@ -3333,6 +3346,10 @@ msgstr "List"
 #: src/modules/product-combos/product-combo-setup.tsx:22
 msgid "List combos"
 msgstr "List combos"
+
+#: src/components/loading.tsx:20
+msgid "Loading data..."
+msgstr "Loading data..."
 
 #: src/modules/loans/components/loan-documents.tsx:105
 #: src/modules/receipts/receipt-card.tsx:199
@@ -4534,7 +4551,7 @@ msgstr "Overtime"
 msgid "Owner"
 msgstr "Owner"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:75
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:74
 msgid "Package"
 msgstr "Package"
 
@@ -5289,8 +5306,8 @@ msgstr "Receive important system notifications related to customers, messages, t
 msgid "Recently"
 msgstr "Recently"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:103
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:108
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:102
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:107
 msgid "Reconnect"
 msgstr "Reconnect"
 
@@ -5554,6 +5571,10 @@ msgstr "Retry"
 #: src/modules/workspaces/workspace-invitation.tsx:86
 msgid "Retry now"
 msgstr "Retry now"
+
+#: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:114
+msgid "Return"
+msgstr "Return"
 
 #: src/widgets/reports/modules.ts:34
 #: src/widgets/reports/modules.ts:92
@@ -5918,8 +5939,8 @@ msgstr "Services"
 msgid "Session expired, please login again"
 msgstr "Session expired, please login again"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:86
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:91
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:85
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:90
 msgid "Set default"
 msgstr "Set default"
 
@@ -7477,7 +7498,7 @@ msgstr "Zalo OAs"
 msgid "ZNS sent"
 msgstr "ZNS sent"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:154
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:153
 msgid "ZNS templates"
 msgstr "ZNS templates"
 

@@ -117,7 +117,7 @@ msgstr "Hành động"
 #: src/modules/bookings/booking-list.tsx:362
 #: src/modules/loans/loan-list-tabs.tsx:27
 #: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:15
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:57
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:56
 #: src/modules/product-combos/product-combos-constants.tsx:9
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:9
 #: src/modules/promotions/promotions-constants.ts:22
@@ -583,7 +583,7 @@ msgstr "Bạn có chắc chắn muốn xoá trạng thái <0>{0}</0>?"
 msgid "Are you sure you want to disconnect {0}?"
 msgstr "Bạn có chắc muốn ngắt kết nối với {0}"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:126
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:125
 msgid "Are you sure you want to disconnect?"
 msgstr "Bạn có chắc chắn muốn ngắt kết nối không?"
 
@@ -742,6 +742,10 @@ msgstr "Trả lời tin nhắn tự động theo kịch bản"
 #: src/modules/plugins/ai-assistants/plugin-ai-assistant-list.tsx:39
 msgid "Automatically reply to customer messages"
 msgstr "Tự động trả lời tin nhắn khách hàng"
+
+#: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:109
+msgid "Automatically returning in {tick}s..."
+msgstr "Hệ thống sẽ tự động quay về sai {tick} giây..."
 
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:261
 msgid "Available entities to search"
@@ -1440,9 +1444,17 @@ msgstr "Kết nối nền tảng"
 msgid "Connect success"
 msgstr "Kết nối thành công"
 
+#: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:106
+msgid "Connect successfully"
+msgstr "Kết nối thành công"
+
 #: src/modules/message-boxes/message-boxes-integrate.tsx:25
 msgid "Connect with Social channels"
 msgstr "Kết nối với các kênh mạng xã hội"
+
+#: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:81
+msgid "Connecting..."
+msgstr "Đang kết nối..."
 
 #: src/modules/products/components/product-card.tsx:159
 msgid "Consumables"
@@ -1975,7 +1987,7 @@ msgstr "ngày"
 msgid "Days number"
 msgstr "Số ngày"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:80
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:79
 msgid "Default"
 msgstr "Mặc định"
 
@@ -2082,8 +2094,8 @@ msgstr "Giải ngân"
 
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:217
 #: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:96
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:119
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:125
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:118
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:124
 msgid "Disconect"
 msgstr "Ngắt kết nối"
 
@@ -2506,6 +2518,7 @@ msgstr "Loại trừ"
 msgid "Excludes customers"
 msgstr "Loại trừ khách hàng"
 
+#: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:98
 #: src/components/printer/printer.tsx:138
 #: src/layout/header/header-tasks-breadcrumbs.tsx:102
 #: src/modals/modal-printer.tsx:678
@@ -2752,7 +2765,7 @@ msgstr "Tài khoản Gmail"
 msgid "Gmail address"
 msgstr "Địa chỉ Gmail"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:147
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:146
 msgid "GMF groups"
 msgstr "Nhóm GMF"
 
@@ -2890,7 +2903,7 @@ msgid "In progress"
 msgstr "Đang xử lí"
 
 #: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:23
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:61
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:60
 #: src/modules/product-combos/product-combos-constants.tsx:10
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:10
 msgid "Inactive"
@@ -3334,6 +3347,10 @@ msgstr "Danh sách"
 #: src/modules/product-combos/product-combo-setup.tsx:22
 msgid "List combos"
 msgstr "Danh sách combo"
+
+#: src/components/loading.tsx:20
+msgid "Loading data..."
+msgstr "Đang tải dữ liệu..."
 
 #: src/modules/loans/components/loan-documents.tsx:105
 #: src/modules/receipts/receipt-card.tsx:199
@@ -4535,7 +4552,7 @@ msgstr "Làm thêm giờ"
 msgid "Owner"
 msgstr "Chủ sở hữu"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:75
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:74
 msgid "Package"
 msgstr "Gói"
 
@@ -5290,8 +5307,8 @@ msgstr "Nhận các thông báo hệ thống quan trọng liên quan đến khá
 msgid "Recently"
 msgstr "Gần đây"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:103
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:108
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:102
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:107
 msgid "Reconnect"
 msgstr "Kết nối lại"
 
@@ -5555,6 +5572,10 @@ msgstr "Thử lại"
 #: src/modules/workspaces/workspace-invitation.tsx:86
 msgid "Retry now"
 msgstr "Thử lại ngay bây giờ"
+
+#: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:114
+msgid "Return"
+msgstr "Trở về"
 
 #: src/widgets/reports/modules.ts:34
 #: src/widgets/reports/modules.ts:92
@@ -5919,8 +5940,8 @@ msgstr "Dịch vụ"
 msgid "Session expired, please login again"
 msgstr "Phiên đã hết hạn, vui lòng đăng nhập lại"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:86
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:91
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:85
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:90
 msgid "Set default"
 msgstr "Đặt mặc định"
 
@@ -7478,7 +7499,7 @@ msgstr "Zalo OAs"
 msgid "ZNS sent"
 msgstr "ZNS đã gửi"
 
-#: src/modules/plugins/zalo-oas/zalo-oas.tsx:154
+#: src/modules/plugins/zalo-oas/zalo-oas.tsx:153
 msgid "ZNS templates"
 msgstr "Mẫu ZNS"
 
