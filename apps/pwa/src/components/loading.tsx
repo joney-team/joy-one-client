@@ -1,11 +1,12 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { Group, Text, ThemeIcon } from "@mantine/core";
 import { IconAnalyze } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
 interface LoadingProps {
-  message?: string;
+  message?: string | ReactNode;
 }
 
 export const Loading: FC<LoadingProps> = (props) => {
@@ -16,7 +17,7 @@ export const Loading: FC<LoadingProps> = (props) => {
       </ThemeIcon>
 
       <Text ta="center" c="dark">
-        {props.message || "Đang tải dữ liệu..."}
+        {props.message ?? <Trans>Loading data...</Trans>}
       </Text>
     </Group>
   );

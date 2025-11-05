@@ -13,6 +13,7 @@ import {
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
 import config from "@joy-one-client/config";
+import { Trans } from "@lingui/react/macro";
 import { Anchor, Center, Group, Stack, Text, ThemeIcon, Title, em } from "@mantine/core";
 import { IconCirclesRelation } from "@tabler/icons-react";
 import { NextPage } from "next";
@@ -77,7 +78,7 @@ const Page: NextPage = () => {
       </Group>
 
       {(function () {
-        if (connect.isFetching) return <Loading message="Đang kết nối ..." />;
+        if (connect.isFetching) return <Loading message={<Trans>Connecting...</Trans>} />;
         if (connect.error)
           return (
             <Fragment>
@@ -90,9 +91,11 @@ const Page: NextPage = () => {
                 fz={em(13)}
                 fw={500}
                 c="gray"
-                onClick={() => window.location.replace(`${config.APP_URL}/plugins/zalo`)}
+                onClick={() =>
+                  window.location.replace(`${config.APP_URL}/workspace-settings/plugins/zalo-oas`)
+                }
               >
-                Thoát
+                <Trans>Exit</Trans>
               </Anchor>
             </Fragment>
           );
@@ -100,12 +103,16 @@ const Page: NextPage = () => {
         return (
           <Fragment>
             <Title ta="center" order={2} fw={300}>
-              Kết nối thành công
+              <Trans>Connect successfully</Trans>
             </Title>
-            <Text ta="center">Tự động trở về trong {tick}s...</Text>
+            <Text ta="center">
+              <Trans>Automatically returning in {tick}s...</Trans>
+            </Text>
 
             <Center>
-              <Button onClick={onDone}>Trở về</Button>
+              <Button onClick={onDone}>
+                <Trans>Return</Trans>
+              </Button>
             </Center>
           </Fragment>
         );

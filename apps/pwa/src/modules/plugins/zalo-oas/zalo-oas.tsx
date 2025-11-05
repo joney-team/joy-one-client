@@ -1,6 +1,7 @@
 "use client";
 
 import { Container } from "@/components/container";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import {
   disconnectPluginZalo,
@@ -9,10 +10,10 @@ import {
 } from "@/modules/plugins/zalo-oas/zalo-oas-service";
 import { PluginZaloOaStatus, ZnsTemplateConfig } from "@/modules/plugins/zalo-oas/zalo-oas-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { onActionLoad, onArchive } from "@/utils/actions";
-import { onError } from "@/utils/exceptions.utils";
+import { onActionLoad } from "@/utils/actions";
 import { String } from "@/utils/string.utils";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Badge, Card, Group, SimpleGrid, Stack, Text, Tooltip } from "@mantine/core";
 import {
   IconLinkOff,
@@ -28,8 +29,6 @@ import { SectionTitle } from "../../../components/session-title";
 import { ZaloOaGmfGroups } from "./components/zalo-oa-gmf-groups";
 import { ZaloOaZnsTemplateConfig } from "./components/zalo-oa-zns-template-config";
 import { ZaloOasOnboarding } from "./components/zalo-oas-onboarding";
-import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { Trans } from "@lingui/react/macro";
 
 export const PluginZaloOAs: FC = () => {
   const workspace = useWorkspace();
