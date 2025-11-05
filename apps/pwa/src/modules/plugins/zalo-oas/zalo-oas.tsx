@@ -89,7 +89,7 @@ export const PluginZaloOAs: FC = () => {
                             onActionLoad({
                               icon: IconStackFront,
                               name: `${t`Set default`} ${oa.info.name}`,
-                              process: () => setDefaultPluginZalo(oa._id).catch(onError),
+                              process: () => setDefaultPluginZalo(oa._id),
                             })
                           }
                           variant="light"
@@ -106,7 +106,7 @@ export const PluginZaloOAs: FC = () => {
                             onActionLoad({
                               icon: IconRefresh,
                               name: `${t`Reconnect`} ${oa.info.name}`,
-                              process: () => reconnectPluginZalo(oa._id).catch(onError),
+                              process: () => reconnectPluginZalo(oa._id),
                             })
                           }
                           variant="light"
@@ -124,7 +124,7 @@ export const PluginZaloOAs: FC = () => {
                               icon: IconPuzzle,
                               title: `${t`Disconect`} ${oa.info.name}`,
                               content: <Trans>Are you sure you want to disconnect?</Trans>,
-                              onConfirm: () => disconnectPluginZalo(oa._id).catch(onError),
+                              onConfirm: () => disconnectPluginZalo(oa._id),
                             })
                           }
                           variant="light"
