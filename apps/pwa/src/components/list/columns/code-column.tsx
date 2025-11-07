@@ -5,6 +5,7 @@ import { t } from "@lingui/core/macro";
 import { Stack, Text } from "@mantine/core";
 import { IconHash } from "@tabler/icons-react";
 import { Column } from "../types";
+import { Trans } from "@lingui/react/macro";
 
 export interface CodeColumnOptions<T = any, FieldType = T[keyof T]>
   extends Omit<Column<T, FieldType>, "render"> {
@@ -20,7 +21,7 @@ export function codeColumn<T = any, FieldType = T[keyof T]>(
 
   return {
     ...rest,
-    name: rest.name ?? t`Code`,
+    name: rest.name ?? <Trans>Code</Trans>,
     icon: options?.icon ?? IconHash,
     filter: options?.filter ?? { text: true },
     render: ({ value, data }) => {

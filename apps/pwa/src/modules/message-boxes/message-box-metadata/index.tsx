@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { FlexSize } from "@/components/flex-size";
+import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { TechIllustration } from "@/components/illustrations/tech";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { OnModalBooking } from "@/modules/bookings/modals/modal-booking";
@@ -120,7 +120,7 @@ export const MetadataMessageBox: FC = () => {
           </Group>
         </Group>
 
-        <FlexSize>
+        <FlexSizeLegacy>
           {(size) => {
             return (
               <ScrollArea h={size.height} w="100%">
@@ -179,7 +179,7 @@ export const MetadataMessageBox: FC = () => {
               </ScrollArea>
             );
           }}
-        </FlexSize>
+        </FlexSizeLegacy>
       </Stack>
     );
 

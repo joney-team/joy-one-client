@@ -7,6 +7,7 @@ import { t } from "@lingui/core/macro";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconClock } from "@tabler/icons-react";
 import { Column } from "../types";
+import { Trans } from "@lingui/react/macro";
 
 export interface DateTimeColumnArgs extends Omit<Column, "render"> {
   emptyText?: string;
@@ -19,7 +20,7 @@ export const dateTimeColumn = (args?: DateTimeColumnArgs): Column => {
   return {
     ...args,
     icon: args?.icon ?? IconClock,
-    name: args?.name ?? t`Time`,
+    name: args?.name ?? <Trans>Time</Trans>,
     defaultWidth: args?.defaultWidth ?? 180,
     render: ({ value }) => {
       if (!value || !DateTime.isValid(value)) return args?.emptyText || "-";

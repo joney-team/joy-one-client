@@ -16,14 +16,14 @@ import { FC, Fragment } from "react";
 import { loanAssetTypes, loanStatuses } from "../loans-constants";
 
 interface LoanCardProps {
-  loan: LoanEntity;
+  data: LoanEntity;
   hideCustomer?: boolean;
   cardProps?: CardProps;
 }
 
 export const LoanCard: FC<LoanCardProps> = (props) => {
   const workspace = useWorkspace();
-  const { loan } = props;
+  const { data: loan } = props;
   const customer = loan.customer;
   const router = useRouter();
 

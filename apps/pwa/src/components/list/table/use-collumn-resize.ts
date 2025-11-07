@@ -64,11 +64,16 @@ export function useColumnResize({
       finalWidthRef.current = startWidth;
       setIsResizing(true);
 
+      const tableElement: HTMLElement | null = document.querySelector(
+        `[data-column-key="${columnKey}"]`
+      );
+
+      const bodyCells: HTMLElement[] = Array.from(
+        document.querySelectorAll(`[data-body-column-key="${columnKey}"]`)
+      );
+
       // Helper function to update DOM widths
       const updateDOMWidths = (width: number) => {
-        const tableElement = document.querySelector(
-          `[data-column-key="${columnKey}"]`
-        ) as HTMLElement;
         if (tableElement) {
           tableElement.style.width = `${width}px`;
           tableElement.style.minWidth = `${width}px`;
@@ -76,7 +81,6 @@ export function useColumnResize({
         }
 
         // Also update the corresponding cell in body
-        const bodyCells = document.querySelectorAll(`[data-body-column-key="${columnKey}"]`);
         bodyCells.forEach((cell) => {
           const htmlCell = cell as HTMLElement;
           htmlCell.style.width = `${width}px`;
@@ -126,6 +130,19 @@ export function useColumnResize({
         document.removeEventListener("keydown", handleKeyDown);
         document.body.style.cursor = "";
         document.body.style.userSelect = "";
+
+        if (tableElement) {
+          tableElement.style.removeProperty("width");
+          tableElement.style.removeProperty("min-width");
+          tableElement.style.removeProperty("max-width");
+        }
+
+        bodyCells.forEach((cell) => {
+          const htmlCell = cell as HTMLElement;
+          htmlCell.style.removeProperty("width");
+          htmlCell.style.removeProperty("min-width");
+          htmlCell.style.removeProperty("max-width");
+        });
       };
 
       document.addEventListener("mousemove", handleMouseMove);

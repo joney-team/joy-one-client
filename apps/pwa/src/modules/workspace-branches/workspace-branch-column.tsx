@@ -9,6 +9,7 @@ import { searchEntity } from "../search/search-service";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { getWorkspaceBranchByIds } from "./workspace-branches-service";
+import { Trans } from "@lingui/react/macro";
 
 export const workspaceBranchColumn = (): Column => {
   const workspace = useWorkspace();
@@ -21,7 +22,7 @@ export const workspaceBranchColumn = (): Column => {
   return {
     defaultWidth: 150,
     icon: IconBuildingSkyscraper,
-    name: t`Branch`,
+    name: <Trans>Branch</Trans>,
     render: ({ data }) => {
       return data.workspaceBranch ? data.workspaceBranch.name : t`Main office`;
     },

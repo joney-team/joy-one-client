@@ -1,6 +1,6 @@
 "use client";
 
-import { FlexSize } from "@/components/flex-size";
+import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { CommentsIllustration } from "@/components/illustrations/comments";
 import { LayoutSplit } from "@/components/layout-split";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
@@ -18,7 +18,7 @@ export const ContainerMessageBox: FC = () => {
   const [layoutSplit, setLayoutSplit] = useState(0.6);
 
   return (
-    <FlexSize>
+    <FlexSizeLegacy>
       {(rootSize) => {
         if (messageBox) {
           return (
@@ -56,6 +56,6 @@ export const ContainerMessageBox: FC = () => {
           </Stack>
         );
       }}
-    </FlexSize>
+    </FlexSizeLegacy>
   );
 };

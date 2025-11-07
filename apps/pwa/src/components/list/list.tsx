@@ -9,6 +9,7 @@ import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
+  Box,
   Card,
   Center,
   Group,
@@ -173,7 +174,7 @@ export function List<T extends BaseData>(props: ListProps<T>) {
         const column = columnValue as Column<T>;
         if (!column) return acc;
 
-        const defaultWidth = column.defaultWidth ?? 120;
+        const defaultWidth = column.defaultWidth ?? column.minWidth ?? 120;
         const minWidth = column.minWidth ?? 100;
 
         return [
@@ -370,6 +371,22 @@ export function List<T extends BaseData>(props: ListProps<T>) {
 
         <BulkActions {...context} />
       </Stack>
+
+      <div id="list-name" style={{ visibility: "hidden", display: "none" }}>
+        {context.name ?? <Trans>Data</Trans>}
+      </div>
+
+      {context.columns.map((col) => {
+        return (
+          <div
+            key={col.columnKey}
+            data-column-name-key={col.columnKey}
+            style={{ visibility: "hidden", display: "none" }}
+          >
+            {col.name}
+          </div>
+        );
+      })}
     </Context.Provider>
   );
 }

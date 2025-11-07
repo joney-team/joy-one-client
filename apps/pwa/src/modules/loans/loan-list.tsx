@@ -37,6 +37,7 @@ import {
   IconCircle,
   IconCircleDashedMinus,
   IconClipboard,
+  IconClock,
   IconCoins,
   IconCreditCardPay,
   IconFileTypePdf,
@@ -62,7 +63,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
   return (
     <List<LoanEntity>
       id={`loans-list-${(props.strictStatus || ["all"]).join("-")}`}
-      name={t`Loans`}
+      name={<Trans>Loans</Trans>}
       limit={16}
       icon={IconCreditCardPay}
       route="/loans"
@@ -85,7 +86,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
         workspaceBranchId: workspaceBranchColumn(),
         packageId: {
           icon: IconCoins,
-          name: t`Loan package`,
+          name: <Trans>Loan package</Trans>,
           filter: {
             staticSelector: {
               options: (workspace.settings.loanSettings?.loanPackages || []).map((s) => ({
@@ -94,7 +95,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
               })),
             },
           },
-          defaultWidth: 280,
+          minWidth: 290,
           render: ({ data: loan }) => {
             const loanPackage = loan.package;
 
@@ -192,8 +193,9 @@ export const LoanList: FC<LoanListProps> = (props) => {
           },
         },
         nextReceiptAt: {
-          name: t`Payment date`,
+          name: <Trans>Payment date</Trans>,
           defaultWidth: 150,
+          icon: IconClock,
           sortable: true,
           render: ({ value, data: loan }) => {
             const warningReceiptBeforeDays =
@@ -225,7 +227,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
         },
         status: {
           defaultWidth: 180,
-          name: t`Status`,
+          name: <Trans>Status</Trans>,
           icon: IconCircle,
           filter: {
             staticSelector: {
@@ -314,12 +316,12 @@ export const LoanList: FC<LoanListProps> = (props) => {
           exportToExcel: false,
         },
         createdAt: dateTimeColumn({
-          name: t`Created at`,
+          name: <Trans>Created at</Trans>,
           sortable: true,
           isHasFilter: true,
         }),
         fulfilledAt: dateTimeColumn({
-          name: t`Fulfilled at`,
+          name: <Trans>Fulfilled at</Trans>,
           sortable: true,
           isHasFilter: true,
         }),
@@ -394,7 +396,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
         EventType.LOANS_APPROVED_REVERTED,
         EventType.LOANS_REVERT_REJECTED,
       ]}
-      card={({ data: loan }) => <LoanCard loan={loan} />}
+      card={LoanCard}
       filterModes={[
         {
           name: t`Liquidation`,

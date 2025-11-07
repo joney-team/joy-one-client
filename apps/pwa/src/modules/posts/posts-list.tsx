@@ -15,6 +15,7 @@ import { CategoryColumn } from "../categories/components/category-column";
 import { EventType } from "../events/event-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { PostEntity } from "./posts-types";
+import { Trans } from "@lingui/react/macro";
 
 export const PostsList: FC = () => {
   const router = useRouter();
@@ -24,26 +25,26 @@ export const PostsList: FC = () => {
       <List<PostEntity>
         icon={IconNews}
         id="pst"
-        name={t`Posts`}
+        name={<Trans>Posts</Trans>}
         route="/posts"
         columns={{
           _id: primaryColumn({
-            name: t`Title`,
+            name: <Trans>Title</Trans>,
             route: "/posts/:_id/edit",
             valuePath: "title",
             defaultWidth: 350,
           }),
           thumbnail: {
-            name: t`Thumbnail`,
+            name: <Trans>Thumbnail</Trans>,
             defaultWidth: 230,
             render: ({ value }) => {
               return <EntityImage src={value} w={200} h={100} onlyRead />;
             },
           },
           categoryId: CategoryColumn(),
-          excerpt: { name: t`Excerpt`, defaultWidth: 200 },
+          excerpt: { name: <Trans>Excerpt</Trans>, defaultWidth: 200 },
           publishedAt: dateTimeColumn({
-            name: t`Published at`,
+            name: <Trans>Published at</Trans>,
             valuePath: "publishedAt",
             defaultWidth: 200,
           }),

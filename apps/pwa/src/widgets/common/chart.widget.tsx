@@ -1,6 +1,6 @@
 "use client";
 
-import { FlexSize } from "@/components/flex-size";
+import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { useColor } from "@/modules/theme/use-color";
 import type { WidgetComponent, WidgetLayoutConfig } from "@/widgets/types";
 import { t } from "@lingui/core/macro";
@@ -63,7 +63,7 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
             )}
           </Group>
 
-          <FlexSize>
+          <FlexSizeLegacy>
             {(size) => {
               return (
                 <Stack pos="relative" style={{ height: size.height }}>
@@ -96,7 +96,7 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
                 </Stack>
               );
             }}
-          </FlexSize>
+          </FlexSizeLegacy>
         </Stack>
       </Card>
     );

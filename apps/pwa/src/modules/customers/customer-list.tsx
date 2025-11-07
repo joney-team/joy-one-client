@@ -25,6 +25,7 @@ import { type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { CustomerEntity } from "./customer-types";
+import { Trans } from "@lingui/react/macro";
 
 export const CustomerList: FC = () => {
   const workspace = useWorkspace();
@@ -33,23 +34,27 @@ export const CustomerList: FC = () => {
     <Stack p={16}>
       <List<CustomerEntity>
         id="cus"
-        name={t`Customers`}
+        name={<Trans>Customers</Trans>}
         icon={IconUserSquare}
         route="/customers"
         columns={{
           code: codeColumn({ href: (value) => `/customers/${value}` }),
-          createdAt: dateTimeColumn({ name: t`Created at`, sortable: true, isHasFilter: true }),
+          createdAt: dateTimeColumn({
+            name: <Trans>Created at</Trans>,
+            sortable: true,
+            isHasFilter: true,
+          }),
           avatar: {
             icon: IconPhoto,
             resizable: false,
-            name: t`Avatar`,
+            name: <Trans>Avatar</Trans>,
             align: "center",
             minWidth: 80,
             render: ({ data }) => <Avatar customer={data} size={50} radius={8} />,
             exportToExcel: false,
           },
           gender: enumColumn({
-            name: t`Gender`,
+            name: <Trans>Gender</Trans>,
             icon: IconGenderBigender,
             options: Object.values(Gender).map((gender) => ({
               label: genders[gender].name(),
@@ -59,7 +64,7 @@ export const CustomerList: FC = () => {
             })),
           }),
           name: {
-            name: t`Name`,
+            name: <Trans>Name</Trans>,
             exportToExcel: (value) => {
               return {
                 text: value,
@@ -68,7 +73,7 @@ export const CustomerList: FC = () => {
             },
           },
           phone: {
-            name: t`Phone`,
+            name: <Trans>Phone</Trans>,
             icon: IconPhone,
             filter: workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)
               ? { text: true }
@@ -88,7 +93,7 @@ export const CustomerList: FC = () => {
             },
           },
           email: {
-            name: t`Email`,
+            name: <Trans>Email</Trans>,
             icon: IconMail,
             filter: { text: true },
             exportToExcel: (value) => {

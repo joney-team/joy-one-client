@@ -13,6 +13,7 @@ import { Currency } from "@joy-one-client/utils/currency";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { downloadJSON } from "@joy-one-client/utils/files";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Center, Modal, parseThemeColor, Select, Stack, useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDownload, IconFileExport } from "@tabler/icons-react";
@@ -20,7 +21,7 @@ import { FC, Fragment, useState } from "react";
 import writeXlsxFile, { Row } from "write-excel-file";
 import { useListContext } from "../list-context";
 import { ExportToExcelItem } from "../types";
-import { getIn, getValuePath } from "../utils";
+import { getColumnName, getIn, getListName, getValuePath } from "../utils";
 import { ActionButton } from "./action-button";
 
 export enum ExportType {
@@ -29,7 +30,7 @@ export enum ExportType {
 }
 
 export const ExportButton: FC = () => {
-  const props = useListContext();
+  const context = useListContext();
   const workspace = useWorkspace();
   const theme = useMantineTheme();
   const lang = useLang();
@@ -56,16 +57,16 @@ export const ExportButton: FC = () => {
       process: async () => {
         try {
           const data = await api
-            .get<ResponseList<any>>(props.route, {
-              params: { ...props.list.params, getAll: true },
+            .get<ResponseList<any>>(context.route, {
+              params: { ...context.list.params, getAll: true },
             })
             .then((res) => res.data);
 
           if (data.length === 0) throw new Error(t`No data to export`);
 
-          const filename = `[${workspace.userMember.workspace.code}] ${
-            props.name || t`Data`
-          } ${DateTime.format(new Date(), {
+          const filename = `[${
+            workspace.userMember.workspace.code
+          }] ${getListName()} ${DateTime.format(new Date(), {
             locale: lang.locale,
             month: "2-digit",
             year: "numeric",
@@ -81,7 +82,7 @@ export const ExportButton: FC = () => {
           if (exportType === ExportType.EXCEL) {
             const headers: (Row[number] & {})[] = [];
 
-            for (const column of props.columns) {
+            for (const column of context.columns) {
               if (column.exportToExcel === false) continue;
 
               if (column.exportToExcel) {
@@ -91,20 +92,20 @@ export const ExportButton: FC = () => {
                     headers.push({ value: item.col });
                   });
                 } else {
-                  headers.push({ value: column.name || column.columnKey });
+                  headers.push({ value: getColumnName(column.columnKey) });
                 }
                 continue;
               }
 
               // Automation
-              headers.push({ value: column.name || column.columnKey });
+              headers.push({ value: getColumnName(column.columnKey) });
             }
 
             const rows: Row[] = await Promise.all(
               data.map(async (item: any) => {
                 const cols = new Array(headers.length).fill(null) as Row;
 
-                for (const column of props.columns) {
+                for (const column of context.columns) {
                   if (column.exportToExcel === false) continue;
 
                   const value = getIn(item, getValuePath(column.columnKey, column));

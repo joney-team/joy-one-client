@@ -6,7 +6,7 @@ import { useHover } from "@mantine/hooks";
 import { IconMinus, IconSelector } from "@tabler/icons-react";
 import { CSSProperties, FC, useEffect, useMemo, useRef } from "react";
 import { TableColumn } from "../types";
-import { getSortQueryKey, getValuePath } from "../utils";
+import { getColumnName, getSortQueryKey, getValuePath } from "../utils";
 import { useColumnResize } from "./use-collumn-resize";
 
 import { classNames } from "@/utils/ui.utils";
@@ -20,6 +20,8 @@ const TableHeadContent: FC<{
   column: TableColumn;
   filter?: FilterWrapperProps;
 }> = ({ column, filter }) => {
+  const { list } = useListContext();
+  const sortIconRef = useRef<any>(null);
   const color = useColor();
   const context = useListContext();
   const columnName = column?.name || getValuePath(column.columnKey, column);
@@ -28,64 +30,6 @@ const TableHeadContent: FC<{
     if (filter?.onClear) filter?.onClear?.();
     else context.list.removeParams([column.columnKey]);
   };
-
-  return (
-    <Group
-      gap={6}
-      className={filter?.onClick ? "clickable" : undefined}
-      onClick={filter?.onClick}
-      wrap="nowrap"
-      flex={1}
-    >
-      {column?.icon && typeof column.icon !== "boolean" && (
-        <Group style={{ width: 16, height: 16 }} justify="center" align="center">
-          <column.icon size={16} color={filter?.active ? color("primary") : undefined} />
-        </Group>
-      )}
-
-      <Text truncate fz={13} fw={500} title={columnName}>
-        {columnName}
-      </Text>
-
-      {filter?.active && (
-        <Tooltip label={<Trans>Clear filter</Trans>}>
-          <ActionIcon
-            variant="subtle"
-            color="var(--mantine-color-dimmed)"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              onClearFilter();
-            }}
-          >
-            <IconMinus size={16} />
-          </ActionIcon>
-        </Tooltip>
-      )}
-    </Group>
-  );
-};
-
-export const ListTableHead: FC<{
-  column: TableColumn;
-  style?: CSSProperties;
-  className?: string;
-}> = ({ column, style, className }) => {
-  const { list, changeColumnState, fixedParams } = useListContext();
-  const hover = useHover();
-  const sortIconRef = useRef<any>(null);
-  const color = useColor();
-  const isReadonly = Boolean(fixedParams?.[column.columnKey]);
-
-  const resize = useColumnResize({
-    columnKey: column.columnKey,
-    minWidth: column.minWidth,
-    initialWidth: column.width,
-    disabled: !column.resizable,
-    onResize: (columnKey, width) => {
-      changeColumnState(columnKey, { width });
-    },
-  });
 
   const sortKey = getSortQueryKey(column.columnKey);
   const sortValue = list.params[sortKey];
@@ -125,6 +69,89 @@ export const ListTableHead: FC<{
     }
   }, [sortValueType]);
 
+  const contentWidth = useMemo(() => {
+    const padding = 12;
+    const gap = 6;
+
+    const sortIconSize = column.sortable ? 16 + gap : 0;
+    const columnIconSize = column?.icon ? 16 + gap : 0;
+
+    return column.width - padding * 2 - sortIconSize - columnIconSize;
+  }, [column.width, column.sortable, column.icon, column.minWidth]);
+
+  return (
+    <Group
+      gap="6px"
+      align="center"
+      w="100%"
+      maw="100%"
+      wrap="nowrap"
+      style={{ overflow: "hidden" }}
+      className={filter?.onClick ? "clickable" : undefined}
+      onClick={filter?.onClick}
+    >
+      {column?.icon && typeof column.icon !== "boolean" && (
+        <Group style={{ width: 16, height: 16 }} justify="center" align="center">
+          <column.icon size={16} color={filter?.active ? color("primary") : undefined} />
+        </Group>
+      )}
+
+      <Text
+        ta={column.align ?? "left"}
+        truncate
+        fz={13}
+        fw={500}
+        title={getColumnName(column.columnKey)}
+        style={{ width: contentWidth }}
+      >
+        {columnName}
+      </Text>
+
+      {filter?.active && (
+        <Tooltip label={<Trans>Clear filter</Trans>}>
+          <ActionIcon
+            variant="subtle"
+            color="var(--mantine-color-dimmed)"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClearFilter();
+            }}
+          >
+            <IconMinus size={16} />
+          </ActionIcon>
+        </Tooltip>
+      )}
+
+      {column.sortable && (
+        <ActionIcon variant="subtle" color="var(--mantine-color-dimmed)" size="sm" onClick={onSort}>
+          <IconSelector size={16} ref={sortIconRef} />
+        </ActionIcon>
+      )}
+    </Group>
+  );
+};
+
+export const ListTableHead: FC<{
+  column: TableColumn;
+  style?: CSSProperties;
+  className?: string;
+}> = ({ column, style, className }) => {
+  const { changeColumnState, fixedParams } = useListContext();
+  const hover = useHover();
+  const color = useColor();
+  const isReadonly = Boolean(fixedParams?.[column.columnKey]);
+
+  const resize = useColumnResize({
+    columnKey: column.columnKey,
+    minWidth: column.minWidth,
+    initialWidth: column.width,
+    disabled: !column.resizable,
+    onResize: (columnKey, width) => {
+      changeColumnState(columnKey, { width });
+    },
+  });
+
   const FilterComponent = getFilterComponent(column);
   const filterWrapper: FilterWrapper = useMemo(() => {
     return (filter) => <TableHeadContent column={column} filter={filter} />;
@@ -143,24 +170,11 @@ export const ListTableHead: FC<{
         ...style,
       }}
     >
-      <Group gap={6} flex={1} justify={column.align} align="center" w="100%" wrap="nowrap">
-        {isReadonly || !FilterComponent ? (
-          <TableHeadContent column={column} />
-        ) : (
-          <FilterComponent wrapper={filterWrapper} column={column} />
-        )}
-
-        {column.sortable && (
-          <ActionIcon
-            variant="subtle"
-            color="var(--mantine-color-dimmed)"
-            size="sm"
-            onClick={onSort}
-          >
-            <IconSelector size={16} ref={sortIconRef} />
-          </ActionIcon>
-        )}
-      </Group>
+      {isReadonly || !FilterComponent ? (
+        <TableHeadContent column={column} />
+      ) : (
+        <FilterComponent wrapper={filterWrapper} column={column} />
+      )}
 
       <Stack
         className={styles.ResizeHandle}
@@ -174,7 +188,7 @@ export const ListTableHead: FC<{
         onClick={(e) => e.stopPropagation()}
         onMouseDown={resize.handleMouseDown}
         style={{
-          left: (resize.currentWidth || 0) - 3,
+          left: (resize.currentWidth || 0) - 6,
           cursor: column.resizable ? "col-resize" : "default",
         }}
       >

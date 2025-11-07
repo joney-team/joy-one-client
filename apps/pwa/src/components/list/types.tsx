@@ -2,7 +2,7 @@ import { UseList, UseListArgs } from "@/components/list/use-list";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { ResponseList } from "@/types";
 import type { Icon } from "@tabler/icons-react";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import type { DynamicSelectorFilterConfig } from "./filters/dynamic-selector-filter";
 import type { StaticSelectorFilterConfig } from "./filters/static-selector-filter";
 import type { TextFilterConfig } from "./filters/text-filter";
@@ -37,7 +37,7 @@ export type ExportToExcel<Data, FieldType> = (
 ) => ExportToExcelOutput | Promise<ExportToExcelOutput>;
 
 export type Column<Data = any, FieldType = any> = {
-  name?: string;
+  name?: string | ReactNode;
   valuePath?: string;
   icon?: Icon | false;
   activeIcon?: Icon;
@@ -98,7 +98,7 @@ export type ListProps<Data extends BaseData> = {
   route: string;
   columns: Columns<Data>;
   fixedParams?: Record<string, any>;
-  name?: string;
+  name?: string | ReactNode;
   icon?: Icon;
   filterModes?: FilterMode<Data>[];
   events?: UseListArgs["events"];
@@ -135,7 +135,7 @@ export type TableColumn<Data = any> = Omit<
   defaultWidth: number;
   minWidth: number;
   resizable: boolean;
-  name: string;
+  name: string | ReactNode;
 };
 
 // Internal styles

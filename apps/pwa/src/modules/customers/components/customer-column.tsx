@@ -11,13 +11,14 @@ import { WorkspacePermission } from "../../workspace-roles/workspace-roles-types
 import { useWorkspace } from "../../workspaces/workspace-context";
 import { getCustomerByIds } from "../customer-service";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 
 export interface CustomerColumnArgs<Data = any> extends Omit<Column<Data>, "render"> {}
 
 export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
   return {
     icon: IconUserSquareRounded,
-    name: args?.name || t`Customer`,
+    name: args?.name || <Trans>Customer</Trans>,
     defaultWidth: args?.defaultWidth || 230,
     render: ({ value }) => {
       const router = useRouter();

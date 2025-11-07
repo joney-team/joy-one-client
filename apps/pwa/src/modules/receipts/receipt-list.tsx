@@ -35,6 +35,7 @@ import {
 import { type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
+import { Trans } from "@lingui/react/macro";
 
 export const ReceiptList: FC = () => {
   const workspace = useWorkspace();
@@ -46,7 +47,7 @@ export const ReceiptList: FC = () => {
     <Stack p={16}>
       <List<ReceiptEntity>
         id="rps"
-        name={t`Receipts`}
+        name={<Trans>Receipts</Trans>}
         limit={18}
         icon={IconCashRegister}
         route="/receipts"
@@ -55,21 +56,25 @@ export const ReceiptList: FC = () => {
             onClick: (_, data) => OnReceiptDetailModal({ id: data.id }),
           }),
           workspaceBranchId: workspaceBranchColumn(),
-          createdAt: dateTimeColumn({ name: t`Created at`, sortable: true, isHasFilter: true }),
+          createdAt: dateTimeColumn({
+            name: <Trans>Created at</Trans>,
+            sortable: true,
+            isHasFilter: true,
+          }),
           paidAt: dateTimeColumn({
-            name: t`Paid at`,
+            name: <Trans>Paid at</Trans>,
             sortable: true,
             defaultHidden: true,
             isHasFilter: true,
           }),
           expireAt: dateTimeColumn({
-            name: t`Pay expire`,
+            name: <Trans>Pay expire</Trans>,
             sortable: true,
             defaultHidden: true,
             isHasFilter: true,
           }),
           type: enumColumn({
-            name: t`Type`,
+            name: <Trans>Type</Trans>,
             icon: IconArrowsDoubleSwNe,
             defaultWidth: 110,
             options: Object.values(ReceiptType).map((type) => ({
@@ -80,16 +85,15 @@ export const ReceiptList: FC = () => {
             })),
           }),
           relatedCustomerId: customerColumn({
-            name: t`Customer`,
             valuePath: "relatedCustomer",
           }),
           cashierUserId: userColumn({
-            name: t`Cashier`,
+            name: <Trans>Cashier</Trans>,
             valuePath: "cashierUser",
             optionalValuePath: "disbursementUser",
           }),
           status: statusColumn({
-            name: t`Status`,
+            name: <Trans>Status</Trans>,
             defaultWidth: 180,
             options: Object.values(ReceiptStatus).map((status) => ({
               label: receiptStatuses[status].label(),
@@ -98,7 +102,7 @@ export const ReceiptList: FC = () => {
             })),
           }),
           paymentMethod: enumColumn({
-            name: t`Payment`,
+            name: <Trans>Payment</Trans>,
             icon: IconCreditCard,
             defaultWidth: 180,
             options: Object.values(ReceiptPaymentMethod).map((paymentMethod) => ({
@@ -109,7 +113,7 @@ export const ReceiptList: FC = () => {
             })),
           }),
           amount: numberColumn({
-            name: t`Money amount`,
+            name: <Trans>Money amount</Trans>,
             align: "right",
             sortable: true,
             type: "money",

@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { Empty } from "@/components/empty";
-import { FlexSize } from "@/components/flex-size";
+import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat, numberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
@@ -169,7 +169,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
             })}
           </Group>
 
-          <FlexSize>
+          <FlexSizeLegacy>
             {(size) => {
               return (
                 <ScrollArea.Autosize mah={size.height}>
@@ -238,7 +238,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                 </ScrollArea.Autosize>
               );
             }}
-          </FlexSize>
+          </FlexSizeLegacy>
         </Renderer>
       </Stack>
     </Card>

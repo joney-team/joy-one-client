@@ -31,7 +31,7 @@ export const MessageBoxMetadataLoans: AccordionItemComponent = ({ customer }) =>
         return (
           <LoanCard
             key={loan.id}
-            loan={loan}
+            data={loan}
             cardProps={{
               withBorder: true,
               shadow: "none",
