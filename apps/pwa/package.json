@@ -8,7 +8,6 @@
     "build": "pnpm translate:compile && next build",
     "typescript": "tsc",
     "prestart": "node scripts/prepare.js",
-    "prepare": "pnpm translate:compile",
     "translate": "lingui extract --clean",
     "translate:compile": "lingui compile",
     "sourcemaps:upload": "sentry-cli sourcemaps upload --release $(node -p 'require(\"./package.json\").version') .next && pnpm sourcemaps:clean",
