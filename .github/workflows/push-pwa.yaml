@@ -7,15 +7,18 @@ on:
 
 env:
   DOCKERFILE_PATH: .deploy/push-pwa.dockerfile
-  IMAGE_NAME: joy-one-client-pwa
 
 jobs:
   build-and-push:
-    name: Build and push PWA Docker image
+    name: Build and push
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    outputs:
+      image_tag: ${{ steps.meta.outputs.image_tag }}
+      package_version: ${{ steps.version.outputs.version }}
+      image_name: ${{ steps.meta.outputs.image_name }}
 
     steps:
       - name: Checkout code
@@ -34,18 +37,25 @@ jobs:
       - name: Generate image tags
         id: meta
         run: |
-          IMAGE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}"
+          BRANCH_NAME="${{ github.ref_name }}"
+          IMAGE_NAME="joy-one-client-pwa-${BRANCH_NAME}"
+          IMAGE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}"
           GIT_REF="${{ github.ref }}"
           GIT_SHA="${{ github.sha }}"
           PACKAGE_VERSION="${{ steps.version.outputs.version }}"
 
           # Always tag as latest
           TAGS="${IMAGE_TAG}:latest,${IMAGE_TAG}:${PACKAGE_VERSION}-${GITHUB_RUN_NUMBER}"
+          
+          # Full image name for release
+          IMAGE_NAME_FULL="${IMAGE_TAG}:${PACKAGE_VERSION}-${GITHUB_RUN_NUMBER}"
 
           echo "tags=${TAGS}" >> $GITHUB_OUTPUT
           echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "package_version=${PACKAGE_VERSION}" >> $GITHUB_OUTPUT
+          echo "image_name=${IMAGE_NAME_FULL}" >> $GITHUB_OUTPUT
           echo "Generated tags: ${TAGS}"
+          echo "Image name for release: ${IMAGE_NAME_FULL}"
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
@@ -69,25 +79,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-push
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Extract version from package.json
-        id: version
-        run: |
-          VERSION=$(node -p "require('./apps/pwa/package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Set environment variables based on branch
         id: set-env
         run: |
           BRANCH_NAME="${{ github.ref_name }}"
-          IMAGE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}"
-          PACKAGE_VERSION="${{ steps.version.outputs.version }}"
           
           echo "branch=${BRANCH_NAME}" >> $GITHUB_OUTPUT
-          echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
-          echo "package_version=${PACKAGE_VERSION}" >> $GITHUB_OUTPUT
           
           if [[ "${BRANCH_NAME}" == "production" ]]; then
             echo "dokploy_url=${{ vars.DOKPLOY_PRODUCTION_URL }}" >> $GITHUB_OUTPUT
@@ -106,6 +103,6 @@ jobs:
         env:
           DOKPLOY_TOKEN: ${{ steps.set-env.outputs.dokploy_token }}
           DOKPLOY_URL: ${{ steps.set-env.outputs.dokploy_url }}
-          DOKPLOY_IMAGE: ${{ steps.set-env.outputs.image_tag }}:${{ steps.set-env.outputs.package_version }}-${{ github.run_number }}
+          DOKPLOY_IMAGE: ${{ needs.build-and-push.outputs.image_name }}
           DOKPLOY_APPLICATION_ID: ${{ steps.set-env.outputs.dokploy_app_id }}
         run: node .github/release-dokploy.js
