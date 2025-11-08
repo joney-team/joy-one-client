@@ -45,7 +45,7 @@ jobs:
             IMAGE_NAME="joy-one-client-pwa-${BRANCH_NAME}"
           fi
           
-          IMAGE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/${IMAGE_NAME}"
+          IMAGE_TAG="${{ vars.DOCKERHUB_USERNAME }}/${IMAGE_NAME}"
           GIT_REF="${{ github.ref }}"
           GIT_SHA="${{ github.sha }}"
           PACKAGE_VERSION="${{ steps.version.outputs.version }}"
@@ -66,7 +66,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push Docker image
@@ -108,18 +108,10 @@ jobs:
             exit 1
           fi
 
-      - name: Debug outputs
-        run: |
-          echo "Image name from build-and-push: ${{ needs.build-and-push.outputs.image_name }}"
-          echo "All build-and-push outputs:"
-          echo "  image_name: ${{ needs.build-and-push.outputs.image_name }}"
-
       - name: Run release Dokploy
         env:
           DOKPLOY_TOKEN: ${{ steps.set-env.outputs.dokploy_token }}
           DOKPLOY_URL: ${{ steps.set-env.outputs.dokploy_url }}
           DOKPLOY_IMAGE: ${{ needs.build-and-push.outputs.image_name }}
           DOKPLOY_APPLICATION_ID: ${{ steps.set-env.outputs.dokploy_app_id }}
-        run: |
-          echo "DOKPLOY_IMAGE value: ${DOKPLOY_IMAGE}"
-          node .github/release-dokploy.js
+        run: node .github/release-dokploy.js
