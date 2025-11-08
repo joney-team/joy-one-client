@@ -4,14 +4,14 @@ import { NumberFormat } from "@/components/format/number-format";
 import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Badge, Button, Group, Text, Tooltip } from "@mantine/core";
 import { Icon, IconX } from "@tabler/icons-react";
-import { FC, MouseEventHandler, PropsWithChildren } from "react";
+import { FC, MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 
 interface ActionButtonProps {
   icon?: Icon;
   activeIcon?: Icon;
   iconSize?: number;
   active?: boolean;
-  label?: string | null;
+  label?: string | null | ReactNode;
   onClick?: MouseEventHandler<HTMLElement>;
   quantity?: number;
   quantityColor?: string;
