@@ -7,6 +7,7 @@ on:
       - "packages/**"
       - "apps/pwa/**"
       - ".deploy/push-pwa.dockerfile"
+      - ".github/workflows/push-pwa.yaml"
   workflow_dispatch:
 
 env:
