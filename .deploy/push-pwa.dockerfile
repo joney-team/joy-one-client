@@ -24,7 +24,6 @@ WORKDIR /app
 COPY --from=app-installer /app .
 
 RUN cd apps/pwa && pnpm build
-RUN cd apps/pwa && pnpm install @sentry/cli && pnpm sourcemaps:upload
 
 # Run-time
 FROM base AS runner

@@ -3,8 +3,6 @@ name: Build & Push PWA Docker Image
 on:
   push:
     branches: ["develop"]
-    tags:
-      - "v*"
   workflow_dispatch:
 
 env:
@@ -41,20 +39,7 @@ jobs:
           PACKAGE_VERSION="${{ steps.version.outputs.version }}"
           
           # Always tag as latest
-          TAGS="${IMAGE_TAG}:latest"
-          
-          # If it's a tag push, use the tag version
-          if [[ "${GIT_REF}" == refs/tags/* ]]; then
-            TAG_VERSION="${GIT_REF#refs/tags/}"
-            TAGS="${TAGS},${IMAGE_TAG}:${TAG_VERSION}"
-          fi
-          
-          # Also tag with package version
-          TAGS="${TAGS},${IMAGE_TAG}:${PACKAGE_VERSION}"
-          
-          # Tag with commit SHA for traceability (first 8 chars)
-          SHA_SHORT=$(echo "${GIT_SHA}" | cut -c1-8)
-          TAGS="${TAGS},${IMAGE_TAG}:sha-${SHA_SHORT}"
+          TAGS="${IMAGE_TAG}:latest,${IMAGE_TAG}:${PACKAGE_VERSION}-${GITHUB_RUN_NUMBER}"
           
           echo "tags=${TAGS}" >> $GITHUB_OUTPUT
           echo "Generated tags: ${TAGS}"
@@ -65,16 +50,16 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ env.DOCKERFILE_PATH }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ${{ env.DOCKERFILE_PATH }}
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
+      #     platforms: linux/amd64
 
       - name: Image digest
         run: |
