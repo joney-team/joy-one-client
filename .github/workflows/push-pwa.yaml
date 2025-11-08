@@ -36,21 +36,24 @@ jobs:
         id: meta
         run: |
           IMAGE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}"
+          GIT_REF="${{ github.ref }}"
+          GIT_SHA="${{ github.sha }}"
+          PACKAGE_VERSION="${{ steps.version.outputs.version }}"
           
           # Always tag as latest
           TAGS="${IMAGE_TAG}:latest"
           
           # If it's a tag push, use the tag version
-          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            TAG_VERSION="${GITHUB_REF#refs/tags/}"
+          if [[ "${GIT_REF}" == refs/tags/* ]]; then
+            TAG_VERSION="${GIT_REF#refs/tags/}"
             TAGS="${TAGS},${IMAGE_TAG}:${TAG_VERSION}"
           fi
           
           # Also tag with package version
-          TAGS="${TAGS},${IMAGE_TAG}:${{ steps.version.outputs.version }}"
+          TAGS="${TAGS},${IMAGE_TAG}:${PACKAGE_VERSION}"
           
           # Tag with commit SHA for traceability (first 8 chars)
-          SHA_SHORT=$(echo "${{ github.sha }}" | cut -c1-8)
+          SHA_SHORT=$(echo "${GIT_SHA}" | cut -c1-8)
           TAGS="${TAGS},${IMAGE_TAG}:sha-${SHA_SHORT}"
           
           echo "tags=${TAGS}" >> $GITHUB_OUTPUT
