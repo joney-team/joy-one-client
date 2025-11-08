@@ -1,16 +1,16 @@
-name: Build & Release PWA
+name: Build & Release Website
 
 on:
   push:
     branches: ["staging", "production"]
     paths:
       - "packages/**"
-      - "apps/pwa/**"
-      - ".deploy/push-pwa.dockerfile"
+      - "apps/website/**"
+      - ".deploy/push-website.dockerfile"
   workflow_dispatch:
 
 env:
-  DOCKERFILE_PATH: .deploy/push-pwa.dockerfile
+  DOCKERFILE_PATH: .deploy/push-website.dockerfile
 
 jobs:
   build-and-push:
@@ -32,9 +32,9 @@ jobs:
       - name: Extract version from package.json
         id: version
         run: |
-          VERSION=$(node -p "require('./apps/pwa/package.json').version")
+          VERSION=$(node -p "require('./apps/website/package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "PWA version: $VERSION"
+          echo "Website version: $VERSION"
 
       - name: Generate image tags
         id: meta
@@ -44,9 +44,9 @@ jobs:
           
           # Set IMAGE_NAME: include branch name only for non-production branches
           if [[ "${BRANCH_NAME}" == "production" ]]; then
-            IMAGE_NAME="joy-one-client-pwa"
+            IMAGE_NAME="joy-one-client-website"
           else
-            IMAGE_NAME="joy-one-client-pwa-${BRANCH_NAME}"
+            IMAGE_NAME="joy-one-client-website-${BRANCH_NAME}"
           fi
           
           IMAGE_TAG="${{ vars.DOCKERHUB_USERNAME }}/${IMAGE_NAME}"
@@ -102,11 +102,11 @@ jobs:
           if [[ "${BRANCH_NAME}" == "production" ]]; then
             echo "dokploy_url=${{ vars.DOKPLOY_PRODUCTION_URL }}" >> $GITHUB_OUTPUT
             echo "dokploy_token=${{ secrets.DOKPLOY_PRODUCTION_TOKEN }}" >> $GITHUB_OUTPUT
-            echo "dokploy_app_id=${{ vars.DOKPLOY_PRODUCTION_JOY_ONE_CLIENT_PWA_ID }}" >> $GITHUB_OUTPUT
+            echo "dokploy_app_id=${{ vars.DOKPLOY_PRODUCTION_JOY_ONE_CLIENT_WEBSITE_ID }}" >> $GITHUB_OUTPUT
           elif [[ "${BRANCH_NAME}" == "staging" ]]; then
             echo "dokploy_url=${{ vars.DOKPLOY_STAGING_URL }}" >> $GITHUB_OUTPUT
             echo "dokploy_token=${{ secrets.DOKPLOY_STAGING_TOKEN }}" >> $GITHUB_OUTPUT
-            echo "dokploy_app_id=${{ vars.DOKPLOY_STAGING_JOY_ONE_CLIENT_PWA_ID }}" >> $GITHUB_OUTPUT
+            echo "dokploy_app_id=${{ vars.DOKPLOY_STAGING_JOY_ONE_CLIENT_WEBSITE_ID }}" >> $GITHUB_OUTPUT
           else
             echo "Unknown branch: ${BRANCH_NAME}"
             exit 1
