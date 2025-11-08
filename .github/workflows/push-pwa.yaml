@@ -1,0 +1,79 @@
+name: Build & Push PWA Docker Image
+
+on:
+  push:
+    branches: ["staging"]
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+env:
+  DOCKERFILE_PATH: .deploy/push-pwa.dockerfile
+  IMAGE_NAME: joy-one-client-pwa
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract version from package.json
+        id: version
+        run: |
+          VERSION=$(node -p "require('./apps/pwa/package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "PWA version: $VERSION"
+
+      - name: Generate image tags
+        id: meta
+        run: |
+          IMAGE_TAG="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}"
+          
+          # Always tag as latest
+          TAGS="${IMAGE_TAG}:latest"
+          
+          # If it's a tag push, use the tag version
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            TAG_VERSION="${GITHUB_REF#refs/tags/}"
+            TAGS="${TAGS},${IMAGE_TAG}:${TAG_VERSION}"
+          fi
+          
+          # Also tag with package version
+          TAGS="${TAGS},${IMAGE_TAG}:${{ steps.version.outputs.version }}"
+          
+          # Tag with commit SHA for traceability (first 8 chars)
+          SHA_SHORT=$(echo "${{ github.sha }}" | cut -c1-8)
+          TAGS="${TAGS},${IMAGE_TAG}:sha-${SHA_SHORT}"
+          
+          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+          echo "Generated tags: ${TAGS}"
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ env.DOCKERFILE_PATH }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+
+      - name: Image digest
+        run: echo "Image pushed with tags: ${{ steps.meta.outputs.tags }}"
