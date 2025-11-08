@@ -50,16 +50,16 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     file: ${{ env.DOCKERFILE_PATH }}
-      #     push: true
-      #     tags: ${{ steps.meta.outputs.tags }}
-      #     cache-from: type=gha
-      #     cache-to: type=gha,mode=max
-      #     platforms: linux/amd64
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ env.DOCKERFILE_PATH }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
 
       - name: Image digest
         run: |
