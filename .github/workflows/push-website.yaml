@@ -26,6 +26,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup ENV
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          sed -i "s/ENV = \"development\"/ENV = \"${BRANCH_NAME}\"/g" packages/config/index.ts
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
