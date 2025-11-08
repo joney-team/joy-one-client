@@ -2,7 +2,7 @@ name: Build & Push PWA Docker Image
 
 on:
   push:
-    branches: ["staging"]
+    branches: ["develop"]
     tags:
       - "v*"
   workflow_dispatch:
