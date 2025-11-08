@@ -1204,7 +1204,7 @@ msgid "Clear"
 msgstr "Clear"
 
 #: src/components/list/filters/index.tsx:125
-#: src/components/list/table/table-head.tsx:95
+#: src/components/list/table/table-head.tsx:112
 msgid "Clear filter"
 msgstr "Clear filter"
 
