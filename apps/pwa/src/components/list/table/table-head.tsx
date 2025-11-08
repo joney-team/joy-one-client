@@ -62,14 +62,31 @@ const TableHeadContent: FC<{
     return column.width - padding * 2 - sortIconSize - columnIconSize - filterIconSize;
   }, [column.width, column.sortable, column.icon, column.minWidth, filter?.active]);
 
+  useEffect(() => {
+    // Change color of sort icon
+    if (sortIconRef.current) {
+      const svg = sortIconRef.current as HTMLDivElement;
+      const paths = svg.querySelectorAll("path");
+      if (sortValueType === "asc") {
+        paths[0].style.stroke = color("primary");
+        paths[1].style.stroke = "currentColor";
+      } else if (sortValueType === "desc") {
+        paths[0].style.stroke = "currentColor";
+        paths[1].style.stroke = color("primary");
+      } else {
+        paths[0].style.stroke = "currentColor";
+        paths[1].style.stroke = "currentColor";
+      }
+    }
+  }, [sortValueType]);
+
   return (
     <Group
-      gap="6px"
       align="center"
       w="100%"
       maw="100%"
       wrap="nowrap"
-      style={{ overflow: "hidden" }}
+      style={{ overflow: "hidden", gap: 6 }}
       className={filter?.onClick ? "clickable" : undefined}
       onClick={filter?.onClick}
     >
