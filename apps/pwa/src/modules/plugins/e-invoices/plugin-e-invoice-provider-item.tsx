@@ -68,6 +68,8 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
 
   const resetTemplates = async () => {
     onActionLoad({
+      name: <Trans>Reset templates</Trans>,
+      icon: IconTemplate,
       process: async () => {
         await api.post(`/plugins/e-invoices/providers/${provider._id}/reset-templates`);
         await onRefetch();
@@ -135,6 +137,8 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                   size={30}
                   onClick={async () =>
                     onActionLoad({
+                      name: <Trans>Healthcheck</Trans>,
+                      icon: IconRefresh,
                       process: async () => {
                         await api.post(`/plugins/e-invoices/providers/${provider._id}/healthcheck`);
                         await onRefetch();

@@ -88,6 +88,8 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
 
   const onRemoveTag = () => {
     onActionLoad({
+      name: <Trans>Remove folder</Trans>,
+      icon: IconTrash,
       isShowCompleted: false,
       process: async () => {
         const relatedTasks = await getTasks({ tagFolderId: tag._id, limit: 1 });

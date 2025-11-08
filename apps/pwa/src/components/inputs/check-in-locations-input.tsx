@@ -41,7 +41,7 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
         {locations.map((location, index) => {
           const check = async () => {
             onActionLoad({
-              name: t`Check location`,
+              name: <Trans>Check location</Trans>,
               icon: IconGps,
               process: () => getGeolocation(),
               onFinished: (res, id) => {

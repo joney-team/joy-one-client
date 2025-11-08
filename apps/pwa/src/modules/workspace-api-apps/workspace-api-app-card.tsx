@@ -5,6 +5,7 @@ import { updateWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-ap
 import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { onActionLoad } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Card, Group, Stack, Switch, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconApiApp, IconId } from "@tabler/icons-react";
 import { FC } from "react";
@@ -37,6 +38,7 @@ export const WorkspaceApiAppCard: FC<WorkspaceApiAppCardProps> = ({ app }) => {
                 e.stopPropagation();
                 e.preventDefault();
                 onActionLoad({
+                  name: <Trans>Update workspace API app</Trans>,
                   process: () =>
                     updateWorkspaceApiApp(app._id, {
                       name: app.member.name,

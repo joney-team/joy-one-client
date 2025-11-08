@@ -64,14 +64,14 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
   const onUpdateAmount = useDebouncedCallback(async (value: any) => {
     onActionLoad({
-      name: t`Update loan amount`,
+      name: <Trans>Update loan amount</Trans>,
       process: () => updateLoanAmount(loan.id, { amount: +value }).catch(onError),
     });
   }, 300);
 
   const onUpdatePackagePeriodDays = useDebouncedCallback(async (v: any) => {
     onActionLoad({
-      name: t`Update loan payment period`,
+      name: <Trans>Update loan payment period</Trans>,
       process: () =>
         updateLoanPackage(loan.id, { packagePeriodDays: +v, packageId: loan.package.id }).catch(
           onError
@@ -81,8 +81,8 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
   const onReject = async () => {
     OnModalPrompt({
-      title: t`Reject loan`,
-      message: t`Enter reject reason`,
+      title: <Trans>Reject loan</Trans>,
+      message: <Trans>Enter reject reason</Trans>,
       onSubmit: (reason) => rejectLoan(loan.id, { reason }),
       icon: IconClipboard,
       color: "red",
@@ -92,7 +92,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
   const onApprove = async () => {
     await onActionLoad({
-      name: t`Approve`,
+      name: <Trans>Approve</Trans>,
       icon: IconClipboardCheck,
       process: async () => {
         await approveLoan(loan.id);

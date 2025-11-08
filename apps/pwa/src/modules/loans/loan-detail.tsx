@@ -135,7 +135,7 @@ export const LoanDetail: NextPage = () => {
 
   const _updateAssetData = useDebouncedCallback((assetData) => {
     onActionLoad({
-      name: t`Update asset information`,
+      name: <Trans>Update asset information</Trans>,
       process: () => updateLoanAssetData(loan.data!.id, { assetData }).catch(onError),
     });
   }, 500);

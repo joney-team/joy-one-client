@@ -1,8 +1,7 @@
 "use client";
 
+import { DateFormat } from "@/components/format/date-format";
 import { useRouter } from "@/hooks/use-router";
-import { onActionLoad } from "@/utils/actions";
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import {
   approveCustomerKyc,
@@ -13,7 +12,14 @@ import {
   CustomerKycStatus,
 } from "@/modules/customer-kycs/customer-kycs-types";
 import { FileType } from "@/modules/files/file-types";
+import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { useLocations } from "@/modules/locations/locations-context";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onActionLoad } from "@/utils/actions";
 import { String } from "@/utils/string.utils";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Badge,
@@ -32,14 +38,9 @@ import { useHover } from "@mantine/hooks";
 import { IconArrowsDiagonal, IconCheck, IconUserScan } from "@tabler/icons-react";
 import { FC } from "react";
 import { Button } from "../../../components/buttons/button";
-import { Image } from "../../../components/image";
 import { EntityImage } from "../../../components/entity-image";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { Image } from "../../../components/image";
 import { Renderer } from "../../../components/renderer";
-import { useLocations } from "@/modules/locations/locations-context";
-import { t } from "@lingui/core/macro";
-import { DateFormat } from "@/components/format/date-format";
 
 interface CustomerKycCardProps {
   kyc: CustomerKycEntity;
@@ -87,7 +88,8 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
 
   const onApprove = async () => {
     await onActionLoad({
-      name: t`Approve`,
+      name: <Trans>Approve</Trans>,
+      icon: IconCheck,
       process: async () => {
         const _kyc = await approveCustomerKyc(customer._id);
         props.onApproved?.(_kyc);
@@ -98,7 +100,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
   const onReject = () => {
     OnModalPrompt({
       title: String.capitalizeFirstLetter(`${t`Reject`} ${t`Customer KYC`}`),
-      message: t`Enter reject reason`,
+      message: <Trans>Enter reject reason</Trans>,
       onSubmit: (reason) => rejectCustomerKyc(customer._id, { reason }),
       icon: IconUserScan,
       color: "red",

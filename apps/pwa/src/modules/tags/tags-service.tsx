@@ -1,3 +1,5 @@
+"use client";
+
 import { AppPageMetadata, ResponseList } from "@/types";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
@@ -7,6 +9,7 @@ import { IconFolder } from "@tabler/icons-react";
 import { api } from "../apis";
 import { getTasks } from "../tasks/tasks-service";
 import { ReorderTagsDto, TagDto, TagEntity, TagType } from "./tags-types";
+import { Trans } from "@lingui/react/macro";
 
 export async function createTag(dto: TagDto) {
   return api.post(`/tags`, dto);
@@ -41,6 +44,8 @@ export async function interactTag(tagId: string) {
 export const onRemoveTaskTagFolder = (tag: TagEntity, onDone?: () => void) => {
   onActionLoad({
     isShowCompleted: false,
+    name: <Trans>Remove folder</Trans>,
+    icon: IconFolder,
     process: async () => {
       const relatedTasks = await getTasks({ tagFolderId: tag._id, limit: 1 });
       onArchive({

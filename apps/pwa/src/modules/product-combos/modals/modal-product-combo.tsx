@@ -33,7 +33,7 @@ import {
   Text,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconPackage, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconHistory, IconPackage, IconPlus, IconTrash } from "@tabler/icons-react";
 import { FC, useRef } from "react";
 
 export interface ProductComboModalProps {
@@ -56,6 +56,8 @@ export const ModalProductCombo: FC = () => {
 
   const onRevertHistory = (historyId: string) => {
     onActionLoad({
+      name: <Trans>Revert history</Trans>,
+      icon: IconHistory,
       process: () => revertProductComboHistory(historyId),
     });
   };

@@ -52,7 +52,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
   const onSubmit = async () => {
     setIsSubmitting(true);
     onActionLoad({
-      name: t`Loan liquidation`,
+      name: <Trans>Loan liquidation</Trans>,
       icon: IconBrandSpeedtest,
       process: async () => {
         try {
@@ -229,7 +229,13 @@ export const OnModalLoanLiquidation = (loan: LoanEntity) => {
   return modals.open({
     size: "xl",
     modalId: "ModalLoanLiquidation",
-    title: <ModalTitle title={t`Loan liquidation`} color="orange" icon={IconBrandSpeedtest} />,
+    title: (
+      <ModalTitle
+        title={<Trans>Loan liquidation</Trans>}
+        color="orange"
+        icon={IconBrandSpeedtest}
+      />
+    ),
     children: <ModalLoanLiquidation {...loan} />,
   });
 };

@@ -12,6 +12,7 @@ import { getGeolocation } from "@/modules/locations/locations-service";
 import { onActionLoad } from "@/utils/actions";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useDisclosure } from "@mantine/hooks";
 
 interface ModalCheckInLocationFormProps {
@@ -82,6 +83,8 @@ export const ModalCheckInLocationForm: FC = () => {
               h={36}
               onClick={() =>
                 onActionLoad({
+                  name: <Trans>Positioning</Trans>,
+                  icon: IconGps,
                   process: () =>
                     getGeolocation().then((res) =>
                       form.setFieldValue("coordinates", {

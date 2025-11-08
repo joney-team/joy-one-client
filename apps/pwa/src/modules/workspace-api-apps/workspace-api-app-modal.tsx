@@ -95,6 +95,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
     if (!app?._id) return;
 
     onActionLoad({
+      name: <Trans>Reset secret key</Trans>,
       process: () => resetWorkspaceApiAppSecretKey(app._id),
       onFinished: (result) => {
         setSecretKey(result.secretKey);

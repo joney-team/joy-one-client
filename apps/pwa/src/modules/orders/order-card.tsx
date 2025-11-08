@@ -28,6 +28,7 @@ import {
   normalizeEntityToOrder,
   normalizeOrderForSubmission,
 } from "./orders-management/orders-management-utils";
+import { Trans } from "@lingui/react/macro";
 
 interface OrderCardProps {
   data: OrderEntity;
@@ -46,6 +47,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
     const _order = normalizeEntityToOrder(newOrder);
 
     onActionLoad({
+      name: <Trans>Update order</Trans>,
       process: async () => updateOrder(order.id, normalizeOrderForSubmission(_order)),
     });
   }, 1000);

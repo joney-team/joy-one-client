@@ -10,7 +10,7 @@ import { notifications } from "@mantine/notifications";
 import { Icon, IconArchive, IconCheck, ReactNode } from "@tabler/icons-react";
 
 export function onActionLoad<T = any>(args: {
-  name?: string;
+  name: ReactNode;
   icon?: Icon;
   process: () => Promise<T>;
   color?: string;
@@ -27,8 +27,8 @@ export function onActionLoad<T = any>(args: {
 
   return new Promise(async (resolve, reject) => {
     const id = notifications.show({
-      title: args.name || t`Processing`,
-      message: t`Waiting`,
+      title: args.name,
+      message: <Trans>Processing</Trans>,
       color,
       icon: args.icon ? <args.icon strokeWidth={1.6} size={20} /> : undefined,
       autoClose: false,

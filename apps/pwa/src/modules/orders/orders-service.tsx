@@ -1,9 +1,12 @@
+"use client";
+
 import {
   ModalPayReceiptProps,
   OnModalPayReceipt,
 } from "@/modules/receipts/modals/modal-pay-receipt";
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
+import { Trans } from "@lingui/react/macro";
 import { api } from "../apis";
 import { ReceiptEntity } from "../receipts/receipts-types";
 import { OrderEntity } from "./order-entity";
@@ -85,6 +88,7 @@ export const onPayOrder = async (
   if (args?.isWithoutActionLoad) return process();
 
   return onActionLoad({
+    name: <Trans>Pay order</Trans>,
     isShowCompleted: false,
     process,
   });

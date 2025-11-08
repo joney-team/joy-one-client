@@ -19,7 +19,7 @@ interface ActionButtonProps {
   withBorder?: boolean;
   borderStyle?: "solid" | "dashed";
   disabled?: boolean;
-  tooltip?: string;
+  tooltip?: ReactNode;
 }
 
 export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
@@ -42,7 +42,7 @@ export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
   const Icon = active && activeIcon ? activeIcon : icon;
 
   return (
-    <Tooltip label={tooltip} disabled={!!!tooltip}>
+    <Tooltip label={tooltip} disabled={!tooltip}>
       <Button
         variant="outline"
         px={8}

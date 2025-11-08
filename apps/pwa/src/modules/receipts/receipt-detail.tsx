@@ -17,7 +17,7 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Center, Group, Skeleton, Stack } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconArchive, IconRefresh, IconReload } from "@tabler/icons-react";
+import { IconArchive, IconEdit, IconRefresh, IconReload } from "@tabler/icons-react";
 import { FC } from "react";
 import { api } from "../apis";
 import { ReceiptEInvoices } from "./receipt-e-invoices";
@@ -58,6 +58,8 @@ export const ReceiptDetail: FC<{
     if (!detail.data) return;
     detail.setData({ ...detail.data, ...dto });
     onActionLoad({
+      name: <Trans>Update receipt</Trans>,
+      icon: IconEdit,
       process: async () => {
         if (!detail.data) return;
         await updateReceipt(detail.data.id, dto);

@@ -1,3 +1,5 @@
+"use client";
+
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
@@ -14,6 +16,7 @@ import {
   IconMusic,
   IconPdf,
   IconPhoto,
+  IconTrash,
   IconUpload,
   IconVideo,
 } from "@tabler/icons-react";
@@ -21,6 +24,7 @@ import imageCompression, { Options } from "browser-image-compression";
 import { apiTools } from "../apis";
 import { FileEntity, FileType, UploadFile } from "./file-types";
 import { parseFile } from "./files-utils";
+import { Trans } from "@lingui/react/macro";
 
 export function getFileExtension(fileName: string | File) {
   return parseFile(typeof fileName === "string" ? fileName : fileName.name).extension;
@@ -53,7 +57,8 @@ export async function removeFileFromRelativePath(relativePath: string) {
 
 export async function removeFile(fileId: string) {
   return onActionLoad({
-    name: "Xóa tệp tin",
+    name: <Trans>Remove file</Trans>,
+    icon: IconTrash,
     process: () => apiTools.delete(`/files/${fileId}`),
   });
 }

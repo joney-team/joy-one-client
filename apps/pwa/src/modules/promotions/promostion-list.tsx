@@ -11,7 +11,7 @@ import { onActionLoad } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Combobox, Group, Stack, Text, Tooltip } from "@mantine/core";
-import { IconEdit } from "@tabler/icons-react";
+import { IconCheck, IconEdit } from "@tabler/icons-react";
 import { Fragment } from "react";
 import { api } from "../apis";
 import { EventType } from "../events/event-types";
@@ -139,6 +139,8 @@ export const PromostionList = () => {
                     )}
                     onSelect={(value) => {
                       onActionLoad({
+                        name: <Trans>Update promotion status</Trans>,
+                        icon: IconCheck,
                         process: () =>
                           api.patch(`/promotions/${promotion.id}/status`, {
                             status: value?.id as PromotionStatus,

@@ -53,144 +53,141 @@ export const ExportButton: FC = () => {
   };
 
   const onExport = async () => {
+    close();
+
     onActionLoad({
+      name: <Trans>Export data</Trans>,
       process: async () => {
-        try {
-          const data = await api
-            .get<ResponseList<any>>(context.route, {
-              params: { ...context.list.params, getAll: true },
-            })
-            .then((res) => res.data);
+        const { data } = await api.get<ResponseList<any>>(context.route, {
+          params: { ...context.list.params, getAll: true },
+        });
 
-          if (data.length === 0) throw new Error(t`No data to export`);
+        if (data.length === 0) throw new Error(t`No data to export`);
 
-          const filename = `[${
-            workspace.userMember.workspace.code
-          }] ${getListName()} ${DateTime.format(new Date(), {
-            locale: lang.locale,
-            month: "2-digit",
-            year: "numeric",
-            day: "2-digit",
-          })
-            .replace(/:/g, "-")
-            .replace(/\//g, "-")}`;
+        const time = DateTime.format(new Date(), {
+          locale: lang.locale,
+          month: "2-digit",
+          year: "numeric",
+          day: "2-digit",
+        })
+          .replace(/:/g, "-")
+          .replace(/\//g, "-");
 
-          if (exportType === ExportType.JSON) {
-            return downloadJSON(data, `${filename}.json`);
-          }
+        const filename = `[${workspace.userMember.workspace.code}] ${getListName()} ${time}`;
 
-          if (exportType === ExportType.EXCEL) {
-            const headers: (Row[number] & {})[] = [];
+        if (exportType === ExportType.JSON) {
+          return downloadJSON(data, `${filename}.json`);
+        }
 
-            for (const column of context.columns) {
-              if (column.exportToExcel === false) continue;
+        if (exportType === ExportType.EXCEL) {
+          const headers: (Row[number] & {})[] = [];
 
-              if (column.exportToExcel) {
-                const tempExport = column.exportToExcel(data[0][column.columnKey], data[0]);
-                if (Array.isArray(tempExport)) {
-                  tempExport.forEach((item) => {
-                    headers.push({ value: item.col });
-                  });
-                } else {
-                  headers.push({ value: getColumnName(column.columnKey) });
-                }
-                continue;
+          for (const column of context.columns) {
+            if (column.exportToExcel === false) continue;
+
+            if (column.exportToExcel) {
+              const columnExport = column.exportToExcel(data[0][column.columnKey], data[0]);
+              if (Array.isArray(columnExport)) {
+                columnExport.forEach((item) => {
+                  headers.push({ value: item.col });
+                });
+              } else {
+                headers.push({ value: getColumnName(column.columnKey) });
               }
-
-              // Automation
-              headers.push({ value: getColumnName(column.columnKey) });
+              continue;
             }
 
-            const rows: Row[] = await Promise.all(
-              data.map(async (item: any) => {
-                const cols = new Array(headers.length).fill(null) as Row;
+            // Automation
+            headers.push({ value: getColumnName(column.columnKey) });
+          }
 
-                for (const column of context.columns) {
-                  if (column.exportToExcel === false) continue;
+          const rows: Row[] = await Promise.all(
+            data.map(async (item: any) => {
+              const cols = new Array(headers.length).fill(null) as Row;
 
-                  const value = getIn(item, getValuePath(column.columnKey, column));
+              for (const column of context.columns) {
+                if (column.exportToExcel === false) continue;
 
-                  if (column.exportToExcel) {
-                    const tempExport = await column.exportToExcel(value, item);
-                    if (Array.isArray(tempExport)) {
-                      tempExport.forEach((item) => {
-                        if (item.col) {
-                          const indexOfCol = headers.findIndex((v) => v?.value === item.col);
-                          if (indexOfCol !== -1) {
-                            cols[indexOfCol] = renderExportItem(item);
-                          }
+                const cellValue = getIn(item, getValuePath(column.columnKey, column));
+
+                if (column.exportToExcel) {
+                  const columnExport = await column.exportToExcel(cellValue, item);
+                  if (Array.isArray(columnExport)) {
+                    columnExport.forEach((item) => {
+                      if (item.col) {
+                        const indexOfCol = headers.findIndex((v) => v?.value === item.col);
+                        if (indexOfCol !== -1) {
+                          cols[indexOfCol] = renderExportItem(item);
                         }
-                      });
-                    } else {
-                      const indexOfCol = headers.findIndex(
-                        (v) => v?.value === column.name || column.columnKey
-                      );
-                      cols[indexOfCol] = renderExportItem(tempExport);
-                    }
-
-                    continue;
+                      }
+                    });
+                  } else {
+                    const indexOfCol = headers.findIndex(
+                      (v) => v?.value === getColumnName(column.columnKey)
+                    );
+                    cols[indexOfCol] = renderExportItem(columnExport);
                   }
 
-                  // Automation
-                  const indexOfCol = headers.findIndex(
-                    (v) => v?.value === column.name || column.columnKey
-                  );
-                  cols[indexOfCol] = { value };
+                  continue;
                 }
 
-                return cols;
-              })
-            );
-
-            const primaryColor = parseThemeColor({
-              color: workspace.userMember.workspace.appColor || "primary",
-              theme,
-            }).value;
-            const borderColor = parseThemeColor({ color: "dark", theme }).value;
-
-            const buffer = await writeXlsxFile(
-              [
-                headers.map((v) => ({
-                  ...v,
-                  color: "#ffffff",
-                  backgroundColor: primaryColor,
-                  borderColor: borderColor,
-                })),
-                ...rows,
-              ],
-              {
-                stickyRowsCount: 1,
-                fontSize: 16,
-                columns: headers.map((v, i) => {
-                  const width = rows.reduce((acc, row) => {
-                    const value = row[i];
-                    return Math.max(
-                      Math.max(acc, (value?.value?.toString()?.length || 0) + 2),
-                      v.value?.toString()?.length || 0
-                    );
-                  }, 0);
-
-                  return { width };
-                }),
+                // Automation
+                const indexOfCol = headers.findIndex(
+                  (v) => v?.value === getColumnName(column.columnKey)
+                );
+                cols[indexOfCol] = { value: cellValue };
               }
-            );
 
-            const blob = new Blob([buffer], {
-              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = `${filename}.xlsx`;
+              return cols;
+            })
+          );
 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-          }
-        } catch (error) {
-          console.error(error);
-          throw error;
+          const primaryColor = parseThemeColor({
+            color: workspace.userMember.workspace.appColor || "primary",
+            theme,
+          }).value;
+
+          const borderColor = parseThemeColor({ color: "dark", theme }).value;
+
+          const buffer = await writeXlsxFile(
+            [
+              headers.map((v) => ({
+                ...v,
+                color: "#ffffff",
+                backgroundColor: primaryColor,
+                borderColor: borderColor,
+              })),
+              ...rows,
+            ],
+            {
+              stickyRowsCount: 1,
+              fontSize: 16,
+              columns: headers.map((v, i) => {
+                const width = rows.reduce((acc, row) => {
+                  const value = row[i];
+                  return Math.max(
+                    Math.max(acc, (value?.value?.toString()?.length || 0) + 2),
+                    v.value?.toString()?.length || 0
+                  );
+                }, 0);
+
+                return { width };
+              }),
+            }
+          );
+
+          const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `${filename}.xlsx`;
+
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
         }
       },
     });
@@ -200,7 +197,7 @@ export const ExportButton: FC = () => {
 
   return (
     <Fragment>
-      <ActionButton icon={IconFileExport} tooltip={t`Export data`} onClick={open} />
+      <ActionButton icon={IconFileExport} tooltip={<Trans>Export data</Trans>} onClick={open} />
 
       <Modal
         opened={opened}
@@ -209,7 +206,7 @@ export const ExportButton: FC = () => {
       >
         <Stack>
           <Select
-            label={t`Export type`}
+            label={<Trans>File type</Trans>}
             value={exportType}
             onChange={(value) => setExportType(value as ExportType)}
             data={[
@@ -218,7 +215,7 @@ export const ExportButton: FC = () => {
             ]}
           />
 
-          <Center mt={16}>
+          <Center>
             <Button action leftIcon={IconDownload} onClick={onExport} label={t`Export`} />
           </Center>
         </Stack>

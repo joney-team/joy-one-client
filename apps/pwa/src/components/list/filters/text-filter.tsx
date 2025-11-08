@@ -23,7 +23,7 @@ export const TextFilter: FC<FilterProps> = ({ wrapper: Wrapper, column }) => {
   const color = useColor();
 
   const placeholder =
-    typeof config === "object" && config.placeholder ? config.placeholder : t`Enter content`;
+    typeof config === "object" && config.placeholder ? config.placeholder : t`Enter information`;
 
   return (
     <Popover opened={opened} onClose={() => setOpened(false)} onDismiss={() => setOpened(false)}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
-import { ModalTitle } from "@/components/modal-title";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useRouter } from "@/hooks/use-router";
 import {
   closeMesssageBox,
@@ -17,8 +17,8 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Badge, Group, Image, Stack, Text, Title, Tooltip } from "@mantine/core";
-import { modals } from "@mantine/modals";
 import {
   IconCheck,
   IconCircleCheck,
@@ -30,8 +30,6 @@ import {
 import { FC } from "react";
 import { messageBoxStatuses } from "../message-boxes-contants";
 import { useMessageBoxes } from "../message-boxes-context";
-import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { Trans } from "@lingui/react/macro";
 
 export const MessageBoxHead: FC = () => {
   const messageBoxes = useMessageBoxes();
@@ -100,7 +98,7 @@ export const MessageBoxHead: FC = () => {
               value={box.assigneeUser}
               onChange={(u) => {
                 onActionLoad({
-                  name: t`Assign assignee`,
+                  name: <Trans>Assign assignee</Trans>,
                   icon: IconUser,
                   process: async () => {
                     return setAssigneeToMessageBox(box._id, u?.userId);

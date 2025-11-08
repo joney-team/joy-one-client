@@ -4,6 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { Checkbox } from "@/components/checkbox";
 import { Container } from "@/components/container";
 import { FormSession } from "@/components/form-session";
+import { DateFormat } from "@/components/format/date-format";
 import { Image } from "@/components/image";
 import { DateInput } from "@/components/inputs/date-input";
 import { TimeZoneInput } from "@/components/inputs/timezone-input";
@@ -33,10 +34,16 @@ import {
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { IconCalendar, IconMail, IconPhone, IconUpload, IconUser } from "@tabler/icons-react";
+import {
+  IconCalendar,
+  IconMail,
+  IconPhone,
+  IconPhoto,
+  IconUpload,
+  IconUser,
+} from "@tabler/icons-react";
 import { useEffect, type FC } from "react";
 import { UserWorkspaceSettings } from "./components/user-workspace-settings-form";
-import { DateFormat } from "@/components/format/date-format";
 
 export const UserProfileSettings: FC = () => {
   const auth = useAuth();
@@ -82,6 +89,8 @@ export const UserProfileSettings: FC = () => {
                   onDrop={(files) => {
                     if (!files.length) return;
                     onActionLoad({
+                      name: <Trans>Upload avatar</Trans>,
+                      icon: IconPhoto,
                       process: () => auth.uploadAvatar(files[0]),
                     });
                   }}

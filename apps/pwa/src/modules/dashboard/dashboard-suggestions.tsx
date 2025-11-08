@@ -8,7 +8,6 @@ import { useLayout } from "@/layout/layout-context";
 import { OnInstallWebAppTutorial } from "@/modals/modal-install-web-app-tutorial";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -25,7 +24,7 @@ import {
 import { useLocalStorage } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconBell, IconX } from "@tabler/icons-react";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, ReactNode, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../auth/auth-context";
 import { useLang } from "../lang/lang-context";
 import { useColor } from "../theme/use-color";
@@ -103,8 +102,8 @@ const SuggestionItem: FC<SuggestionItemProps> = (props) => {
 
 interface Suggestion {
   id: string;
-  title: string;
-  message: React.ReactNode;
+  title: ReactNode;
+  message: ReactNode;
   image: string;
   bg?: any;
   notIgnore?: boolean;
@@ -141,12 +140,12 @@ export const DashboardSuggestions: FC = () => {
 
       output.push({
         id: "notification",
-        title: t`Turn on notification`,
-        message: t`To not miss important information`,
+        title: <Trans>Turn on notification</Trans>,
+        message: <Trans>To not miss important information</Trans>,
         image: "/images/notification.png",
         onClick: () =>
           onActionLoad({
-            name: t`Turn on notification`,
+            name: <Trans>Turn on notification</Trans>,
             icon: IconBell,
             process: () => auth.registerNotification(),
           }),
@@ -163,10 +162,13 @@ export const DashboardSuggestions: FC = () => {
                 <Image src="/images/notification.png" w={100} h={100} />
                 <Stack gap={3}>
                   <Text fw={600} ta="center" fz={20} tt="uppercase">
-                    {t`Turn on notification`}
+                    <Trans>Turn on notification</Trans>
                   </Text>
                   <Text ta="center" fw={300}>
-                    {t`Receive important system notifications related to customers, messages, tasks,...`}
+                    <Trans>
+                      Receive important system notifications related to customers, messages,
+                      tasks,...
+                    </Trans>
                   </Text>
                 </Stack>
 
@@ -194,8 +196,8 @@ export const DashboardSuggestions: FC = () => {
     if (layout.view === "mobile" && !layout.isStandalone && !ignored.includes("install-pwa")) {
       output.push({
         id: "install-pwa",
-        title: t`Install Web App`,
-        message: t`Access faster with standalone app`,
+        title: <Trans>Install Web App</Trans>,
+        message: <Trans>Access faster with standalone app</Trans>,
         image: "/images/settings.png",
         onClick: () => OnInstallWebAppTutorial(),
       });
