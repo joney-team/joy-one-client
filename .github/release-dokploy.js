@@ -8,7 +8,7 @@ const releaseDokploy = async () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${DOKPLOY_TOKEN}`
+      'x-api-key': DOKPLOY_TOKEN,
     },
     body: JSON.stringify({
       dockerImage: DOKPLOY_IMAGE,
@@ -27,7 +27,7 @@ const releaseDokploy = async () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${DOKPLOY_TOKEN}`
+      'x-api-key': DOKPLOY_TOKEN,
     },
     body: JSON.stringify({
       applicationId: DOKPLOY_APPLICATION_ID
