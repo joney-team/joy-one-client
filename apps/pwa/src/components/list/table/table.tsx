@@ -186,11 +186,17 @@ export default function ListTable<T extends BaseData>() {
                         style={{
                           width: column.width,
                           maxWidth: column.width,
+                          minWidth: column.width,
                           ...pinnedPosition.style,
                         }}
                         data-body-column-key={column.columnKey}
                       >
-                        <Group wrap="nowrap" gap={4} justify={column.align} maw="100%">
+                        <Group
+                          wrap="nowrap"
+                          gap={4}
+                          justify={column.align}
+                          style={{ overflow: "visible", width: "100%" }}
+                        >
                           {Renderer ? (
                             <Renderer value={columnData} data={rowData} />
                           ) : (

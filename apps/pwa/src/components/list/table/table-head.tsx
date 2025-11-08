@@ -51,33 +51,16 @@ const TableHeadContent: FC<{
     }
   };
 
-  useEffect(() => {
-    // Change color of sort icon
-    if (sortIconRef.current) {
-      const svg = sortIconRef.current as HTMLDivElement;
-      const paths = svg.querySelectorAll("path");
-      if (sortValueType === "asc") {
-        paths[0].style.stroke = color("primary");
-        paths[1].style.stroke = "currentColor";
-      } else if (sortValueType === "desc") {
-        paths[0].style.stroke = "currentColor";
-        paths[1].style.stroke = color("primary");
-      } else {
-        paths[0].style.stroke = "currentColor";
-        paths[1].style.stroke = "currentColor";
-      }
-    }
-  }, [sortValueType]);
-
   const contentWidth = useMemo(() => {
     const padding = 12;
     const gap = 6;
 
     const sortIconSize = column.sortable ? 16 + gap : 0;
     const columnIconSize = column?.icon ? 16 + gap : 0;
+    const filterIconSize = filter?.active ? 16 + gap : 0;
 
-    return column.width - padding * 2 - sortIconSize - columnIconSize;
-  }, [column.width, column.sortable, column.icon, column.minWidth]);
+    return column.width - padding * 2 - sortIconSize - columnIconSize - filterIconSize;
+  }, [column.width, column.sortable, column.icon, column.minWidth, filter?.active]);
 
   return (
     <Group
@@ -107,27 +90,34 @@ const TableHeadContent: FC<{
         {columnName}
       </Text>
 
-      {filter?.active && (
-        <Tooltip label={<Trans>Clear filter</Trans>}>
+      <Group gap={0} wrap="nowrap">
+        {filter?.active && (
+          <Tooltip label={<Trans>Clear filter</Trans>}>
+            <ActionIcon
+              variant="subtle"
+              color="var(--mantine-color-dimmed)"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                onClearFilter();
+              }}
+            >
+              <IconMinus size={16} />
+            </ActionIcon>
+          </Tooltip>
+        )}
+
+        {column.sortable && (
           <ActionIcon
             variant="subtle"
             color="var(--mantine-color-dimmed)"
             size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              onClearFilter();
-            }}
+            onClick={onSort}
           >
-            <IconMinus size={16} />
+            <IconSelector size={16} ref={sortIconRef} />
           </ActionIcon>
-        </Tooltip>
-      )}
-
-      {column.sortable && (
-        <ActionIcon variant="subtle" color="var(--mantine-color-dimmed)" size="sm" onClick={onSort}>
-          <IconSelector size={16} ref={sortIconRef} />
-        </ActionIcon>
-      )}
+        )}
+      </Group>
     </Group>
   );
 };
@@ -154,8 +144,10 @@ export const ListTableHead: FC<{
 
   const FilterComponent = getFilterComponent(column);
   const filterWrapper: FilterWrapper = useMemo(() => {
-    return (filter) => <TableHeadContent column={column} filter={filter} />;
-  }, []);
+    return (filter) => (
+      <TableHeadContent column={{ ...column, width: resize.currentWidth }} filter={filter} />
+    );
+  }, [column, resize.currentWidth]);
 
   return (
     <th
@@ -164,6 +156,8 @@ export const ListTableHead: FC<{
       data-column-key={column.columnKey}
       style={{
         width: column.width,
+        minWidth: column.width,
+        maxWidth: column.width,
         cursor: resize.isResizing ? "col-resize" : "default",
         position: "relative",
         overflow: "visible",
@@ -177,18 +171,18 @@ export const ListTableHead: FC<{
       )}
 
       <Stack
-        className={styles.ResizeHandle}
         pos="absolute"
         top={0}
         justify="center"
-        align="center"
+        align="end"
         bottom={0}
-        w={6}
         bg="transparent"
         onClick={(e) => e.stopPropagation()}
         onMouseDown={resize.handleMouseDown}
+        className={styles.ResizeHandle}
         style={{
-          left: (resize.currentWidth || 0) - 6,
+          width: 6,
+          left: resize.currentWidth - 6,
           cursor: column.resizable ? "col-resize" : "default",
         }}
       >

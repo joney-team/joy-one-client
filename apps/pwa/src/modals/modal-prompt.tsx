@@ -5,17 +5,17 @@ import { ModalTitle } from "@/components/modal-title";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { em, Group, Stack, Textarea } from "@mantine/core";
+import { em, Group, MantineColor, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { Icon, IconCheck } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 
 interface ModalPromptProps {
-  title: string;
+  title: ReactNode;
   icon: Icon;
-  color?: string;
-  message: string;
+  color?: MantineColor;
+  message: ReactNode;
   onSubmit: (content: string) => Promise<void>;
   suggestions?: string[];
 }

@@ -328,7 +328,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
       }}
       bulkActions={[
         {
-          label: t`Change branch`,
+          label: <Trans>Change branch</Trans>,
           icon: IconBuildingSkyscraper,
           permission: WorkspacePermission.LOANS_UPDATE_WORKSPACE_BRANCH,
           handler: (data, ctx) =>
@@ -339,14 +339,14 @@ export const LoanList: FC<LoanListProps> = (props) => {
             }),
         },
         {
-          label: t`Reject`,
+          label: <Trans>Reject</Trans>,
           icon: IconBan,
           permission: WorkspacePermission.LOANS_APPROVE,
           available: (data) => data.every((v) => [LoanStatus.PENDING].includes(v.status)),
           handler: (data, ctx) =>
             OnModalPrompt({
-              title: t`Reject`,
-              message: t`Enter reject reason`,
+              title: <Trans>Reject</Trans>,
+              message: <Trans>Enter reject reason</Trans>,
               onSubmit: async (reason) => {
                 await api.post(`/loans/bulk-reject`, {
                   loanIds: data.map((v) => v.id),
@@ -360,7 +360,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             }),
         },
         {
-          label: t`Loan revert rejected`,
+          label: <Trans>Loan revert rejected</Trans>,
           icon: IconRefresh,
           permission: WorkspacePermission.LOANS_APPROVE,
           available: (data) => data.every((v) => [LoanStatus.REJECTED].includes(v.status)),
@@ -399,14 +399,14 @@ export const LoanList: FC<LoanListProps> = (props) => {
       card={LoanCard}
       filterModes={[
         {
-          name: t`Liquidation`,
+          name: <Trans>Liquidation</Trans>,
           param: "isLiquidated",
           icon: IconBrandSpeedtest,
           params: () => ({ isLiquidated: true }),
           disabled: !!props.strictStatus,
         },
         {
-          name: t`Has late interest`,
+          name: <Trans>Has late interest</Trans>,
           param: "isHasLateInterestReceipt",
           icon: IconCircleDashedMinus,
           params: () => ({ isHasLateInterestReceipt: true }),

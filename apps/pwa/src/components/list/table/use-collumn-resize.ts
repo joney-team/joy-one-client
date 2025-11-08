@@ -36,13 +36,13 @@ export function useColumnResize({
   disabled = false,
 }: {
   columnKey: string;
-  initialWidth: number | undefined;
+  initialWidth: number;
   onResize: (columnKey: string, newWidth: number) => void;
   minWidth: number;
   disabled?: boolean;
 }) {
   const [isResizing, setIsResizing] = useState(false);
-  const [currentWidth, setCurrentWidth] = useState<number | undefined>(initialWidth);
+  const [currentWidth, setCurrentWidth] = useState<number>(initialWidth);
   const startXRef = useRef<number>(0);
   const startWidthRef = useRef<number>(0);
   const finalWidthRef = useRef<number>(0);
@@ -75,7 +75,6 @@ export function useColumnResize({
       // Helper function to update DOM widths
       const updateDOMWidths = (width: number) => {
         if (tableElement) {
-          tableElement.style.width = `${width}px`;
           tableElement.style.minWidth = `${width}px`;
           tableElement.style.maxWidth = `${width}px`;
         }
@@ -83,7 +82,6 @@ export function useColumnResize({
         // Also update the corresponding cell in body
         bodyCells.forEach((cell) => {
           const htmlCell = cell as HTMLElement;
-          htmlCell.style.width = `${width}px`;
           htmlCell.style.minWidth = `${width}px`;
           htmlCell.style.maxWidth = `${width}px`;
         });
@@ -132,14 +130,12 @@ export function useColumnResize({
         document.body.style.userSelect = "";
 
         if (tableElement) {
-          tableElement.style.removeProperty("width");
           tableElement.style.removeProperty("min-width");
           tableElement.style.removeProperty("max-width");
         }
 
         bodyCells.forEach((cell) => {
           const htmlCell = cell as HTMLElement;
-          htmlCell.style.removeProperty("width");
           htmlCell.style.removeProperty("min-width");
           htmlCell.style.removeProperty("max-width");
         });
@@ -162,6 +158,6 @@ export function useColumnResize({
   return {
     handleMouseDown,
     isResizing,
-    currentWidth: currentWidth || initialWidth,
+    currentWidth,
   };
 }

@@ -8,13 +8,13 @@ import {
   MantineSize,
 } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
-import React, { FC, useMemo, useState } from "react";
+import { FC, ReactNode, useMemo, useState } from "react";
 
 type ButtonSize = MantineSize | `compact-${MantineSize}` | (string & {});
 
 export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
   id?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   component?: any;
   href?: string;
   onClick?: (e: any) => any;
@@ -28,7 +28,7 @@ export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
   iconStrokeWidth?: number;
   action?: boolean;
   visible?: boolean;
-  label?: string;
+  label?: ReactNode;
 }
 
 const defaultIconSizes: Partial<Record<ButtonSize, number>> = {

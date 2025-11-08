@@ -72,7 +72,7 @@ export type ListAction<Data> = {
 
 export interface FilterMode<Data = any> {
   param: string;
-  name: string;
+  name: ReactNode;
   icon?: Icon;
   replaceFilterKeys?: (keyof Data)[];
   params: () => { [key: string]: any | any[] };
@@ -81,7 +81,7 @@ export interface FilterMode<Data = any> {
 
 export interface ListBulkAction<Data> {
   type?: "common" | "archive";
-  label?: string;
+  label?: ReactNode;
   icon?: Icon;
   permission?: WorkspacePermission;
   available?: (data: Data[]) => boolean;
@@ -98,7 +98,7 @@ export type ListProps<Data extends BaseData> = {
   route: string;
   columns: Columns<Data>;
   fixedParams?: Record<string, any>;
-  name?: string | ReactNode;
+  name?: ReactNode;
   icon?: Icon;
   filterModes?: FilterMode<Data>[];
   events?: UseListArgs["events"];
@@ -135,7 +135,7 @@ export type TableColumn<Data = any> = Omit<
   defaultWidth: number;
   minWidth: number;
   resizable: boolean;
-  name: string | ReactNode;
+  name: ReactNode;
 };
 
 // Internal styles

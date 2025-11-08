@@ -9,7 +9,6 @@ import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
-  Box,
   Card,
   Center,
   Group,
@@ -29,6 +28,7 @@ import { ColsSettings } from "./components/columns-setting";
 import { CreateButton } from "./components/create-button";
 import { ExportButton } from "./components/export-button";
 import { ListFilterModes } from "./components/filter-modes";
+import { ResetDefaultButton } from "./components/reset-default-button";
 import { ToggleView } from "./components/toggle-view";
 import { Filter, FilterBar } from "./filters";
 import { Context } from "./list-context";
@@ -44,7 +44,6 @@ import {
   TableColumn,
 } from "./types";
 import { cleanObject, getListDataId } from "./utils";
-import { ResetDefaultButton } from "./components/reset-default-button";
 
 export function List<T extends BaseData>(props: ListProps<T>) {
   const [version, setVersion] = useState(0);
