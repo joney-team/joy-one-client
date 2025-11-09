@@ -134,12 +134,16 @@ jobs:
           GIT_REF="${{ github.ref }}"
           GIT_SHA="${{ github.sha }}"
           PACKAGE_VERSION="${{ steps.version.outputs.version }}"
+          
+          # Replace last version segment with RUN_NUMBER (e.g., 3.0.0 -> 3.0.123)
+          VERSION_BASE="${PACKAGE_VERSION%.*}"
+          VERSION_WITH_RUN="${VERSION_BASE}.${RUN_NUMBER}"
 
           # Always tag as latest
-          TAGS="${IMAGE_TAG}:latest,${IMAGE_TAG}:v${PACKAGE_VERSION}-${RUN_NUMBER}"
+          TAGS="${IMAGE_TAG}:latest,${IMAGE_TAG}:v${VERSION_WITH_RUN}"
           
           # Full image name for release
-          IMAGE_NAME_FULL="${IMAGE_TAG}:v${PACKAGE_VERSION}-${RUN_NUMBER}"
+          IMAGE_NAME_FULL="${IMAGE_TAG}:v${VERSION_WITH_RUN}"
 
           echo "tags=${TAGS}" >> $GITHUB_OUTPUT
           echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
