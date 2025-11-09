@@ -5631,7 +5631,7 @@ msgstr "Hủy bỏ phê duyệt"
 
 #: src/modules/loans/components/loan-payments.tsx:109
 msgid "Revert fulfilled"
-msgstr "Hoàn tác đã hoàn thành"
+msgstr "Hoàn tác giải ngân"
 
 #: src/modules/product-combos/modals/modal-product-combo.tsx:59
 msgid "Revert history"
