@@ -1,4 +1,4 @@
-const defaultConfig = {
+export default {
   ENV: "development",
   PUBLIC_URL: "http://localhost:3000",
   APP_URL: "http://localhost:3000",
@@ -9,8 +9,3 @@ const defaultConfig = {
   ANALYTICS_KEY: "",
   SENTRY_DSN: "",
 };
-
-export type Config = typeof defaultConfig;
-const config: Config = defaultConfig;
-
-export default config;
