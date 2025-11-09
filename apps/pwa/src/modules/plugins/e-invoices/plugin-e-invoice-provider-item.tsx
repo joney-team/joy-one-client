@@ -38,10 +38,12 @@ import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor
 import {
   eInvoicesProviderStatuses,
   eInvoicesTemplateAutoCreateModes,
+  eInvoicesTemplateCreateCriteria,
 } from "./plugin-e-invoices-constants";
 import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 import {
   PluginEInvoiceTemplateAutoCreateMode,
+  PluginEInvoiceTemplateCreateCriteria,
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
@@ -208,6 +210,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 <Stack>
                   <Group>
                     <Select
+                      flex={1}
                       label={<Trans>Auto create mode</Trans>}
                       data={Object.entries(eInvoicesTemplateAutoCreateModes).map(
                         ([key, value]) => ({
@@ -222,6 +225,25 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                           [type]: {
                             ...templates[type],
                             autoCreateMode: value as PluginEInvoiceTemplateAutoCreateMode,
+                          },
+                        });
+                      }}
+                    />
+
+                    <Select
+                      flex={1}
+                      label={<Trans>Create E-Invoice criteria</Trans>}
+                      data={Object.entries(eInvoicesTemplateCreateCriteria).map(([key, value]) => ({
+                        label: value.name(),
+                        value: key,
+                      }))}
+                      value={templates[type]?.createCriteria}
+                      onChange={(value) => {
+                        setTemplates({
+                          ...templates,
+                          [type]: {
+                            ...templates[type],
+                            createCriteria: value as PluginEInvoiceTemplateCreateCriteria,
                           },
                         });
                       }}

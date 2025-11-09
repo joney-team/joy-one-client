@@ -2,6 +2,7 @@ import { t } from "@lingui/core/macro";
 import {
   PluginEInvoicesProviderStatus,
   PluginEInvoiceTemplateAutoCreateMode,
+  PluginEInvoiceTemplateCreateCriteria,
   PluginEInvoiceTemplateType,
 } from "./plugin-e-invoices.types";
 
@@ -38,7 +39,17 @@ export const eInvoicesTemplateAutoCreateModes: Record<
   }
 > = {
   [PluginEInvoiceTemplateAutoCreateMode.NONE]: { name: () => t`None` },
-  [PluginEInvoiceTemplateAutoCreateMode.LOAN_PROFIT_MORE_THAN_ZERO]: {
+  [PluginEInvoiceTemplateAutoCreateMode.EXPIRE_TIME]: {
+    name: () => t`For expired time of receipt`,
+  },
+};
+
+export const eInvoicesTemplateCreateCriteria: Record<
+  PluginEInvoiceTemplateCreateCriteria,
+  { name: () => string }
+> = {
+  [PluginEInvoiceTemplateCreateCriteria.NONE]: { name: () => t`None` },
+  [PluginEInvoiceTemplateCreateCriteria.PROFIT_MORE_THAN_ZERO]: {
     name: () => t`Loan profit more than 0`,
   },
 };

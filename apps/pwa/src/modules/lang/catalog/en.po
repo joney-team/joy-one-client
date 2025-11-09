@@ -115,7 +115,7 @@ msgstr "Actions"
 #: src/modules/bookings/booking-list.tsx:324
 #: src/modules/bookings/booking-list.tsx:362
 #: src/modules/loans/loan-list-tabs.tsx:27
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:16
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:17
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:56
 #: src/modules/product-combos/product-combos-constants.tsx:9
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:9
@@ -505,7 +505,7 @@ msgstr "Approved"
 
 #: src/components/buttons/button-archive.tsx:50
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:43
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:185
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:187
 #: src/modules/posts/posts-list.tsx:60
 #: src/modules/receipts/receipt-detail.tsx:152
 #: src/modules/services/service-detail.tsx:75
@@ -726,7 +726,7 @@ msgstr "Attendees"
 msgid "Audio"
 msgstr "Audio"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:20
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:21
 msgid "Auth failed"
 msgstr "Auth failed"
 
@@ -734,7 +734,7 @@ msgstr "Auth failed"
 msgid "Auto"
 msgstr "Auto"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:211
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:213
 msgid "Auto create mode"
 msgstr "Auto create mode"
 
@@ -1062,7 +1062,7 @@ msgstr "Change"
 msgid "Change app icon"
 msgstr "Change app icon"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:145
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:147
 msgid "Change auth"
 msgstr "Change auth"
 
@@ -1097,7 +1097,7 @@ msgstr "Change name"
 msgid "Change password"
 msgstr "Change password"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:129
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:131
 msgid "Change provider"
 msgstr "Change provider"
 
@@ -1142,7 +1142,7 @@ msgstr "Check in successfully"
 
 #: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:46
 #: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:58
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:174
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:176
 msgid "Check invoice"
 msgstr "Check invoice"
 
@@ -1626,6 +1626,10 @@ msgstr "Create coupon rule"
 #: src/modules/workspace-roles/workspace-roles-constants.ts:33
 msgid "Create customer"
 msgstr "Create customer"
+
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:233
+msgid "Create E-Invoice criteria"
+msgstr "Create E-Invoice criteria"
 
 #: src/modules/events/event-constants.ts:64
 msgid "Create file"
@@ -2617,7 +2621,7 @@ msgstr "Fetching location"
 msgid "Field name"
 msgstr "Field name"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:231
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:251
 msgid "Fields"
 msgstr "Fields"
 
@@ -2669,6 +2673,10 @@ msgstr "For each type of Workspace, Joy One will arrange the interface and featu
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:144
 msgid "For example: Late, Early leave, ..."
 msgstr "For example: Late, Early leave, ..."
+
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:43
+msgid "For expired time of receipt"
+msgstr "For expired time of receipt"
 
 #: src/modules/auth/components/form-sign-in.tsx:73
 msgid "Forgot password"
@@ -2811,8 +2819,8 @@ msgstr "Has access to all functions of the system"
 msgid "Has late interest"
 msgstr "Has late interest"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:148
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:155
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:150
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:157
 msgid "Healthcheck"
 msgstr "Healthcheck"
 
@@ -2921,7 +2929,7 @@ msgstr "In progress"
 msgid "In progress booking"
 msgstr "In progress booking"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:24
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:25
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:60
 #: src/modules/product-combos/product-combos-constants.tsx:10
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:10
@@ -3501,7 +3509,7 @@ msgstr "Loan payment periods"
 msgid "Loan period"
 msgstr "Loan period"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:42
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:53
 msgid "Loan profit more than 0"
 msgstr "Loan profit more than 0"
 
@@ -4360,7 +4368,8 @@ msgstr "No search results"
 msgid "No widgets"
 msgstr "No widgets"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:40
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:41
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:51
 msgid "None"
 msgstr "None"
 
@@ -5598,8 +5607,8 @@ msgstr "Reset filter"
 msgid "Reset secret key"
 msgstr "Reset secret key"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:86
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:168
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:88
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:170
 msgid "Reset templates"
 msgstr "Reset templates"
 
@@ -6434,7 +6443,7 @@ msgstr "Tasks updated"
 msgid "Tax code"
 msgstr "Tax code"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:206
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:208
 msgid "Template E-Invoice"
 msgstr "Template E-Invoice"
 

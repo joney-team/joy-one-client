@@ -116,7 +116,7 @@ msgstr "Hành động"
 #: src/modules/bookings/booking-list.tsx:324
 #: src/modules/bookings/booking-list.tsx:362
 #: src/modules/loans/loan-list-tabs.tsx:27
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:16
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:17
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:56
 #: src/modules/product-combos/product-combos-constants.tsx:9
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:9
@@ -506,7 +506,7 @@ msgstr "Đã duyệt"
 
 #: src/components/buttons/button-archive.tsx:50
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:43
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:185
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:187
 #: src/modules/posts/posts-list.tsx:60
 #: src/modules/receipts/receipt-detail.tsx:152
 #: src/modules/services/service-detail.tsx:75
@@ -727,7 +727,7 @@ msgstr "Tham gia"
 msgid "Audio"
 msgstr "Âm thanh"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:20
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:21
 msgid "Auth failed"
 msgstr "Xác thực thất bại"
 
@@ -735,7 +735,7 @@ msgstr "Xác thực thất bại"
 msgid "Auto"
 msgstr "Tự động"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:211
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:213
 msgid "Auto create mode"
 msgstr "Chế độ tự động tạo"
 
@@ -1063,7 +1063,7 @@ msgstr "Thay đổi"
 msgid "Change app icon"
 msgstr "Thay đổi biểu tượng ứng dụng"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:145
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:147
 msgid "Change auth"
 msgstr "Thay đổi xác thực"
 
@@ -1098,7 +1098,7 @@ msgstr "Thay đổi tên"
 msgid "Change password"
 msgstr "Đổi mật khẩu"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:129
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:131
 msgid "Change provider"
 msgstr "Đổi nhà cung cấp"
 
@@ -1143,7 +1143,7 @@ msgstr "Check-in thành công"
 
 #: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:46
 #: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:58
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:174
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:176
 msgid "Check invoice"
 msgstr "Kiểm tra hoá đơn"
 
@@ -1627,6 +1627,10 @@ msgstr "Tạo quy tắc coupon"
 #: src/modules/workspace-roles/workspace-roles-constants.ts:33
 msgid "Create customer"
 msgstr "Tạo khách hàng"
+
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:233
+msgid "Create E-Invoice criteria"
+msgstr "Điều kiện tạo HĐĐT"
 
 #: src/modules/events/event-constants.ts:64
 msgid "Create file"
@@ -2618,7 +2622,7 @@ msgstr "Đang tìm nạp vị trí"
 msgid "Field name"
 msgstr "Tên trường"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:231
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:251
 msgid "Fields"
 msgstr "Trường dữ liệu"
 
@@ -2670,6 +2674,10 @@ msgstr "Với mỗi loại Workspace, Joy One sẽ sắp xếp giao diện, tín
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:144
 msgid "For example: Late, Early leave, ..."
 msgstr "Ví dụ: Đi muộn, nghỉ sớm,..."
+
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:43
+msgid "For expired time of receipt"
+msgstr "Theo ngày thanh toán của hoá đơn"
 
 #: src/modules/auth/components/form-sign-in.tsx:73
 msgid "Forgot password"
@@ -2812,8 +2820,8 @@ msgstr "Có quyền truy cập vào tất cả các chức năng của hệ th�
 msgid "Has late interest"
 msgstr "Có lãi chậm trả"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:148
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:155
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:150
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:157
 msgid "Healthcheck"
 msgstr "Kiểm tra sức khỏe"
 
@@ -2922,7 +2930,7 @@ msgstr "Đang xử lí"
 msgid "In progress booking"
 msgstr "Lịch hẹn đang xử lí"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:24
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:25
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:60
 #: src/modules/product-combos/product-combos-constants.tsx:10
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:10
@@ -3502,7 +3510,7 @@ msgstr "Kỳ hạn thanh toán"
 msgid "Loan period"
 msgstr "Hạn vay"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:42
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:53
 msgid "Loan profit more than 0"
 msgstr "Khi lãi vay lớn hơn 0"
 
@@ -4361,7 +4369,8 @@ msgstr "Không có kết quả tìm kiếm"
 msgid "No widgets"
 msgstr "Không có vật dụng"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:40
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:41
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:51
 msgid "None"
 msgstr "Không"
 
@@ -5599,8 +5608,8 @@ msgstr "Đặt lại bộ lọc"
 msgid "Reset secret key"
 msgstr "Đặt lại khóa bí mật"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:86
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:168
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:88
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:170
 msgid "Reset templates"
 msgstr "Đặt lại mẫu"
 
@@ -6435,7 +6444,7 @@ msgstr "Đã cập nhật công việc"
 msgid "Tax code"
 msgstr "Mã số thuế"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:206
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:208
 msgid "Template E-Invoice"
 msgstr "Mẫu HĐĐT"
 

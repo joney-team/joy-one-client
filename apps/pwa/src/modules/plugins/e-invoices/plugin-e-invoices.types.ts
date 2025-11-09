@@ -21,12 +21,18 @@ export type PluginEInvoiceTemplateField = {
 
 export enum PluginEInvoiceTemplateAutoCreateMode {
   NONE = "NONE",
-  LOAN_PROFIT_MORE_THAN_ZERO = "LOAN_PROFIT_MORE_THAN_ZERO",
+  EXPIRE_TIME = "EXPIRE_TIME",
+}
+
+export enum PluginEInvoiceTemplateCreateCriteria {
+  NONE = "NONE",
+  PROFIT_MORE_THAN_ZERO = "PROFIT_MORE_THAN_ZERO",
 }
 
 export interface PluginEInvoiceTemplate {
   fields: PluginEInvoiceTemplateField[];
   autoCreateMode?: PluginEInvoiceTemplateAutoCreateMode;
+  createCriteria?: PluginEInvoiceTemplateCreateCriteria;
 }
 
 export type PluginEInvoiceTemplates = Partial<
