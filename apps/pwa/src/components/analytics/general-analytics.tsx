@@ -3,10 +3,10 @@
 import { useApp } from "@/app.context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import config from "@joy-one-client/config";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useEffect, type FC } from "react";
 import { getClarity, useTracking } from "./hooks-analytics";
-import config from "@joy-one-client/config";
 
 export const GeneralAnalytics: FC = () => {
   const app = useApp();
@@ -27,7 +27,7 @@ export const GeneralAnalytics: FC = () => {
 
   useEffect(() => {
     const clarity = getClarity();
-    if (auth.user && clarity && !config.isDevelopment) {
+    if (auth.user && clarity && config.ANALYTICS_KEY) {
       clarity("identify", auth.user._id, auth.device._id, undefined, auth.user.name);
     }
   }, [auth.user]);

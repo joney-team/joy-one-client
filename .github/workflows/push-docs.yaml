@@ -33,6 +33,52 @@ jobs:
           BRANCH_NAME="${{ github.ref_name }}"
           sed -i "s/ENV = \"development\"/ENV = \"${BRANCH_NAME}\"/g" packages/config/index.ts
 
+      - name: Generate .env file from CLIENT_ENVIRONMENTS
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          ENVIRONMENTS="${{ vars.CLIENT_ENVIRONMENTS }}"
+          
+          # Create packages/config directory if it doesn't exist
+          mkdir -p packages/config
+          
+          # Write environments to temporary file
+          echo "$ENVIRONMENTS" > /tmp/client-environments.env
+          
+          # Extract the section for the current branch
+          # Look for the section starting with ENV=${BRANCH_NAME}
+          IN_SECTION=false
+          ENV_CONTENT=""
+          
+          while IFS= read -r line || [ -n "$line" ]; do
+            # Check if this line starts a new ENV section
+            if [[ "$line" =~ ^ENV= ]]; then
+              # If we were in a section, we've reached the next one
+              if [[ "$IN_SECTION" == true ]]; then
+                break
+              fi
+              # Check if this is our target branch
+              if [[ "$line" == "ENV=${BRANCH_NAME}" ]]; then
+                IN_SECTION=true
+                ENV_CONTENT="${line}"$'\n'
+              fi
+            elif [[ "$IN_SECTION" == true ]]; then
+              # If we're in the target section, collect the line
+              # Stop if we hit an empty line (section separator)
+              if [[ -z "$line" ]]; then
+                break
+              fi
+              ENV_CONTENT="${ENV_CONTENT}${line}"$'\n'
+            fi
+          done < /tmp/client-environments.env
+          
+          # Write the extracted content to packages/config/.env
+          echo -n "$ENV_CONTENT" > packages/config/.env
+          
+          # Clean up
+          rm -f /tmp/client-environments.env
+          
+          echo "Generated packages/config/.env for ${BRANCH_NAME} environment"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 

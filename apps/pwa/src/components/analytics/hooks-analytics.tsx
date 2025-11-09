@@ -9,7 +9,7 @@ export const getClarity = () => {
 export const useTracking = () => {
   return {
     trackEvent: (event: string) => {
-      if (config.isDevelopment) return null;
+      if (!config.ANALYTICS_KEY) return null;
       const clarity = getClarity();
       if (clarity) clarity("event", event);
     },

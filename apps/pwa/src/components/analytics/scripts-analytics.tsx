@@ -3,7 +3,7 @@ import Script from "next/script";
 import config from "@joy-one-client/config";
 
 export const ScriptsAnalytics: FC = () => {
-  if (config.isDevelopment) return null;
+  if (!config.ANALYTICS_KEY) return null;
 
   return (
     <Script

@@ -6,6 +6,7 @@
   "private": true,
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
-    "@joy-one-client/apis": "workspace:*"
+    "@joy-one-client/apis": "workspace:*",
+    "dotenv": "^17.2.3"
   }
 }
