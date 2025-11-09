@@ -16,7 +16,7 @@ import { EventType } from "../events/event-types";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
-import { ReceiptEntity, ReceiptStatus } from "./receipts-types";
+import { ReceiptEntity } from "./receipts-types";
 
 interface ReceiptEInvoicesProps {
   receipt: Pick<ReceiptEntity, "id" | "status">;
@@ -67,7 +67,6 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
           mt={16}
           size="xs"
           leftIcon={IconFileInvoice}
-          disabled={receipt.status !== ReceiptStatus.PAID}
           onClick={() => api.post(`/plugins/e-invoices`, { receiptId: receipt.id })}
         >
           {t`Export E-Invoice`}
