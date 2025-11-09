@@ -98,30 +98,56 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set environment variables based on branch
-        id: set-env
+      - name: Parse environment variables from .env format
+        id: parse-env
         run: |
           BRANCH_NAME="${{ github.ref_name }}"
           
-          echo "branch=${BRANCH_NAME}" >> $GITHUB_OUTPUT
-          
+          # Get the .env format string from vars
           if [[ "${BRANCH_NAME}" == "production" ]]; then
-            echo "dokploy_url=${{ vars.DOKPLOY_PRODUCTION_URL }}" >> $GITHUB_OUTPUT
+            ENV_STRING="${{ vars.DOKPLOY_PRODUCTION }}"
             echo "dokploy_token=${{ secrets.DOKPLOY_PRODUCTION_TOKEN }}" >> $GITHUB_OUTPUT
-            echo "dokploy_app_id=${{ vars.DOKPLOY_PRODUCTION_JOY_ONE_CLIENT_PWA_ID }}" >> $GITHUB_OUTPUT
           elif [[ "${BRANCH_NAME}" == "staging" ]]; then
-            echo "dokploy_url=${{ vars.DOKPLOY_STAGING_URL }}" >> $GITHUB_OUTPUT
+            ENV_STRING="${{ vars.DOKPLOY_STAGING }}"
             echo "dokploy_token=${{ secrets.DOKPLOY_STAGING_TOKEN }}" >> $GITHUB_OUTPUT
-            echo "dokploy_app_id=${{ vars.DOKPLOY_STAGING_JOY_ONE_CLIENT_PWA_ID }}" >> $GITHUB_OUTPUT
           else
             echo "Unknown branch: ${BRANCH_NAME}"
             exit 1
           fi
+          
+          # Write .env string to temporary file for parsing
+          echo "$ENV_STRING" > /tmp/dokploy.env
+          
+          # Parse .env format and extract values
+          while IFS='=' read -r key value || [ -n "$key" ]; do
+            # Skip empty lines and comments
+            [[ -z "$key" ]] && continue
+            [[ "$key" =~ ^[[:space:]]*# ]] && continue
+            
+            # Remove leading/trailing whitespace
+            key=$(echo "$key" | xargs)
+            value=$(echo "$value" | xargs)
+            
+            # Skip if value is empty
+            [[ -z "$value" ]] && continue
+            
+            case "$key" in
+              URL)
+                echo "dokploy_url=${value}" >> $GITHUB_OUTPUT
+                ;;
+              CLIENT_PWA_ID)
+                echo "dokploy_app_id=${value}" >> $GITHUB_OUTPUT
+                ;;
+            esac
+          done < /tmp/dokploy.env
+          
+          # Clean up
+          rm -f /tmp/dokploy.env
 
       - name: Run release Dokploy
         env:
-          DOKPLOY_TOKEN: ${{ steps.set-env.outputs.dokploy_token }}
-          DOKPLOY_URL: ${{ steps.set-env.outputs.dokploy_url }}
+          DOKPLOY_TOKEN: ${{ steps.parse-env.outputs.dokploy_token }}
+          DOKPLOY_URL: ${{ steps.parse-env.outputs.dokploy_url }}
           DOKPLOY_IMAGE: ${{ needs.build-and-push.outputs.image_name }}
-          DOKPLOY_APPLICATION_ID: ${{ steps.set-env.outputs.dokploy_app_id }}
+          DOKPLOY_APPLICATION_ID: ${{ steps.parse-env.outputs.dokploy_app_id }}
         run: node .github/release-dokploy.js
