@@ -10,6 +10,9 @@ importers:
 
   apps/docs:
     dependencies:
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       next:
         specifier: 15.3.3
         version: 15.3.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -176,6 +179,9 @@ importers:
       dayjs:
         specifier: ^1.11.18
         version: 1.11.18
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       firebase:
         specifier: ^11.9.0
         version: 11.10.0
@@ -324,6 +330,9 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.18
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       html-react-parser:
         specifier: ^5.2.2
         version: 5.2.7(@types/react@18.3.26)(react@18.3.1)
@@ -375,9 +384,6 @@ importers:
 
   packages/config:
     dependencies:
-      '@joy-one-client/apis':
-        specifier: workspace:*
-        version: link:../apis
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
