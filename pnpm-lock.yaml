@@ -10,9 +10,6 @@ importers:
 
   apps/docs:
     dependencies:
-      dotenv:
-        specifier: ^17.2.3
-        version: 17.2.3
       next:
         specifier: 15.3.3
         version: 15.3.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -179,9 +176,6 @@ importers:
       dayjs:
         specifier: ^1.11.18
         version: 1.11.18
-      dotenv:
-        specifier: ^17.2.3
-        version: 17.2.3
       firebase:
         specifier: ^11.9.0
         version: 11.10.0
@@ -330,9 +324,6 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.18
-      dotenv:
-        specifier: ^17.2.3
-        version: 17.2.3
       html-react-parser:
         specifier: ^5.2.2
         version: 5.2.7(@types/react@18.3.26)(react@18.3.1)
@@ -382,11 +373,7 @@ importers:
 
   packages/assets: {}
 
-  packages/config:
-    dependencies:
-      dotenv:
-        specifier: ^17.2.3
-        version: 17.2.3
+  packages/config: {}
 
   packages/utils:
     dependencies:
@@ -3225,10 +3212,6 @@ packages:
 
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
-
-  dotenv@17.2.3:
-    resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
-    engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -8680,8 +8663,6 @@ snapshots:
       dom-serializer: 2.0.0
       domelementtype: 2.3.0
       domhandler: 5.0.3
-
-  dotenv@17.2.3: {}
 
   dunder-proto@1.0.1:
     dependencies:

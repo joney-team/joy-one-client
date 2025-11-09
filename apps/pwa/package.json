@@ -61,7 +61,6 @@
     "browser-image-compression": "^2.0.2",
     "cookies-next": "^5.1.0",
     "dayjs": "^1.11.18",
-    "dotenv": "^17.2.3",
     "firebase": "^11.9.0",
     "framer-motion": "^11.18.2",
     "html-react-parser": "^5.2.6",

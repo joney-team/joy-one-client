@@ -28,56 +28,73 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup ENV
-        run: |
-          BRANCH_NAME="${{ github.ref_name }}"
-          sed -i "s/ENV = \"development\"/ENV = \"${BRANCH_NAME}\"/g" packages/config/index.ts
-
-      - name: Generate .env file from CLIENT_ENVIRONMENTS
+      - name: Update packages/config/index.ts from CLIENT_ENVIRONMENTS
         run: |
           BRANCH_NAME="${{ github.ref_name }}"
           ENVIRONMENTS="${{ vars.CLIENT_ENVIRONMENTS }}"
           
-          # Create packages/config directory if it doesn't exist
-          mkdir -p packages/config
-          
           # Write environments to temporary file
           echo "$ENVIRONMENTS" > /tmp/client-environments.env
           
-          # Extract the section for the current branch
-          # Look for the section starting with ENV=${BRANCH_NAME}
-          IN_SECTION=false
-          ENV_CONTENT=""
+          # Extract the section for the current branch and update config file
+          export BRANCH_NAME
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
           
-          while IFS= read -r line || [ -n "$line" ]; do
-            # Check if this line starts a new ENV section
-            if [[ "$line" =~ ^ENV= ]]; then
-              # If we were in a section, we've reached the next one
-              if [[ "$IN_SECTION" == true ]]; then
-                break
-              fi
-              # Check if this is our target branch
-              if [[ "$line" == "ENV=${BRANCH_NAME}" ]]; then
-                IN_SECTION=true
-                ENV_CONTENT="${line}"$'\n'
-              fi
-            elif [[ "$IN_SECTION" == true ]]; then
-              # If we're in the target section, collect the line
-              # Stop if we hit an empty line (section separator)
-              if [[ -z "$line" ]]; then
-                break
-              fi
-              ENV_CONTENT="${ENV_CONTENT}${line}"$'\n'
-            fi
-          done < /tmp/client-environments.env
+          const branchName = process.env.BRANCH_NAME;
+          const envContent = fs.readFileSync('/tmp/client-environments.env', 'utf8');
+          const configPath = 'packages/config/index.ts';
           
-          # Write the extracted content to packages/config/.env
-          echo -n "$ENV_CONTENT" > packages/config/.env
+          // Parse environment variables for the current branch
+          const lines = envContent.split('\n');
+          let inSection = false;
+          const envVars = {};
+          
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('ENV=')) {
+              if (inSection) break;
+              if (trimmed === `ENV=${branchName}`) {
+                inSection = true;
+              }
+            } else if (inSection) {
+              if (trimmed === '') break;
+              const match = trimmed.match(/^([^=]+)=(.*)$/);
+              if (match) {
+                const key = match[1].trim();
+                const value = match[2].trim();
+                envVars[key] = value;
+              }
+            }
+          }
+          
+          // Read the config file
+          let configContent = fs.readFileSync(configPath, 'utf8');
+          
+          // Update each environment variable in the defaultConfig object
+          for (const [key, value] of Object.entries(envVars)) {
+            // Escape special characters in value for JavaScript string
+            const escapedValue = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            
+            // Escape special regex characters in key name
+            const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            
+            // Replace the key-value pair, preserving indentation
+            // Match pattern: KEY: "old_value" or KEY: 'old_value'
+            const regex = new RegExp(`(^\\s*${escapedKey}:\\s*)(["'])([^"']*)(["'])`, 'm');
+            configContent = configContent.replace(regex, `$1"${escapedValue}"`);
+          }
+          
+          // Write the updated config file
+          fs.writeFileSync(configPath, configContent, 'utf8');
+          
+          console.log(`Updated packages/config/index.ts for ${branchName} environment`);
+          console.log('Updated variables:', Object.keys(envVars).join(', '));
+          EOF
           
           # Clean up
           rm -f /tmp/client-environments.env
-          
-          echo "Generated packages/config/.env for ${BRANCH_NAME} environment"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
