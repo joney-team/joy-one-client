@@ -13,7 +13,7 @@
     "sourcemaps:upload": "sentry-cli sourcemaps upload --release $(node -p 'require(\"./package.json\").version') .next && pnpm sourcemaps:clean",
     "sourcemaps:clean": "find .next -type f -name '*.map' -delete",
     "ws:apps:dev": "NEXT_PUBLIC_EXTENDED_APP=true next dev",
-    "ws:apps:build": "pnpm translate:compile && NEXT_PUBLIC_EXTENDED_APP=true next build",
+    "ws:apps:build": "pnpm translate:compile && NODE_OPTIONS=\"--max-old-space-size=8192\" NEXT_PUBLIC_EXTENDED_APP=true next build",
     "ws:apps:start": "NEXT_PUBLIC_EXTENDED_APP=true next start"
   },
   "dependencies": {
