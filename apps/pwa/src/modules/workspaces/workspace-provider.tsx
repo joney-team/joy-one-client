@@ -67,6 +67,7 @@ import {
   WorkspaceMemberInvitationState,
   WorkspaceType,
 } from "./workspaces-types";
+import { Currency } from "@joy-one-client/utils/currency";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
@@ -453,13 +454,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     roles: [...state.current.roles, ...defaultWorkspaceRoles],
     isInitialized,
     settings: state.current.settings!,
-    currency: app.config?.currencies.find((c) => c.code === state.current.settings?.currencyCode) ||
-      app.config?.currencies[0] || {
-        code: "VND",
-        symbol: "₫",
-        name: "Vietnamese Dong",
-        stepPrice: 1000,
-      },
+    currency: Currency.get(state.current.settings?.currencyCode) || Currency.get()!,
     userMember: userMember!,
     userMembers: state.current.workspaceMembers,
     select,

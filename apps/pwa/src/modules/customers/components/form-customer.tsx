@@ -30,7 +30,6 @@ import { createCustomer, updateCustomer } from "../customer-service";
 
 import { Form } from "@/components/form";
 import { DateInput } from "@/components/inputs/date-input";
-import { medicalHistoryOptions } from "@/configs/medical.config";
 import { genders } from "@/constant";
 import { useRouter } from "@/hooks/use-router";
 import { api } from "@/modules/apis";
@@ -45,6 +44,7 @@ import { Trans } from "@lingui/react/macro";
 import { LocationForm } from "../../../components/location-form";
 import { Renderer } from "../../../components/renderer";
 import { CustomerRelationshipContactInput } from "./customer-relationship-contact-input";
+import { AppLocale } from "@/modules/lang/lang-types";
 
 export interface CustomerFormProps {
   onDone?: (customer: CustomerEntity) => void | Promise<void>;
@@ -52,6 +52,31 @@ export interface CustomerFormProps {
   customer?: CustomerEntity;
   relationship?: boolean;
 }
+
+export const medicalHistoryOptions: { [key in AppLocale]: string[] } = {
+  [AppLocale.VI]: [
+    "Tiểu đường",
+    "Huyết áp cao",
+    "Huyết áp thấp",
+    "Bệnh lí gan/thận",
+    "Tim mạch",
+    "Dị ứng thuốc",
+    "Lâu cầm máu",
+    "Thai/kinh nguyệt",
+    "Thần kinh",
+  ],
+  [AppLocale.EN]: [
+    "Diabetes",
+    "High blood pressure",
+    "Low blood pressure",
+    "Liver/kidney disease",
+    "Heart disease",
+    "Drug allergy",
+    "Long-term bleeding",
+    "Pregnancy/menstruation",
+    "Nervous system",
+  ],
+};
 
 export const CustomerForm: FC<CustomerFormProps> = (props) => {
   const workspace = useWorkspace();

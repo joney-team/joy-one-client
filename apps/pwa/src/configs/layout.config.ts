@@ -5,12 +5,7 @@ export const configs = {
     light: "#f3f3f3",
     dark: "#242424",
   },
-  backgroundPatternColors: {
-    light: "#bcbcbc",
-    dark: "#3f3f3f",
-  },
   maxHistoryOfTasks: 100,
-  maxAgeCookie: 60 * 60 * 24 * 400,
   swatches: [
     "#2e2e2e",
     "#868e96",
@@ -26,13 +21,6 @@ export const configs = {
     "#82c91e",
     "#fab005",
     "#fd7e14",
-  ],
-  publicPages: ["/links/", "/connect", "/customer-forms/new"],
-  layoutFluidPages: ["/tasks", "/message-boxes", "/loans", "/combos"],
-  withoutLayoutPages: [
-    "/plugins/zalo-oas/connect-callback",
-    "/bank-transactions/callback",
-    "/join",
   ],
   metaScope: [
     "pages_show_list",
