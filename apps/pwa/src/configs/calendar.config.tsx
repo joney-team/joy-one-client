@@ -4,11 +4,11 @@ import dayjs from "dayjs";
 
 import { getView } from "@/layout/layout-service";
 import { useAuth } from "@/modules/auth/auth-context";
-import { t } from "@lingui/core/macro";
+import { useLang } from "@/modules/lang/lang-context";
+import { DateTime } from "@joy-one-client/utils/date-time";
+import { Trans } from "@lingui/react/macro";
 import { Fragment } from "react";
 import { dayjsLocalizer, type CalendarProps } from "react-big-calendar";
-import { DateTime } from "@joy-one-client/utils/date-time";
-import { useLang } from "@/modules/lang/lang-context";
 
 export interface CalendarEvent {
   title?: string;
@@ -59,18 +59,18 @@ export const useCalendarProps = (): CalendarProps<CalendarEvent> => {
     localizer: calendarDayJsLocalizer,
     step: 15,
     messages: {
-      allDay: t`All`,
+      allDay: <Trans>All</Trans>,
       previous: "<",
       next: ">",
-      today: t`Today`,
-      month: t`Month`,
-      week: t`Week`,
-      day: t`Day`,
-      agenda: t`Agenda`,
-      date: t`Date`,
-      time: t`Time`,
-      event: t`Event`,
-      noEventsInRange: t`No events in range`,
+      today: <Trans>Today</Trans>,
+      month: <Trans>Month</Trans>,
+      week: <Trans>Week</Trans>,
+      day: <Trans>Day</Trans>,
+      agenda: <Trans>Agenda</Trans>,
+      date: <Trans>Date</Trans>,
+      time: <Trans>Time</Trans>,
+      event: <Trans>Event</Trans>,
+      noEventsInRange: <Trans>No events in range</Trans>,
     },
     components: {
       event: Event,

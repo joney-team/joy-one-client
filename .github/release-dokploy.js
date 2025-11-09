@@ -41,7 +41,7 @@ const releaseDokploy = async () => {
     process.exit(1);
   }
 
-  console.info(`Deployed ${applicationId} > ${DOKPLOY_IMAGE} successfully`);
+  console.info(`Deployed ${DOKPLOY_APPLICATION_ID} > ${DOKPLOY_IMAGE} successfully`);
 };
 
 releaseDokploy();
