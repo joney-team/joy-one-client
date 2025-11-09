@@ -56,10 +56,11 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
     });
   };
 
-  const cta = useMemo(() => {
-    if (isLoading || !workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE))
-      return null;
+  const isCanExportEInvoice = useMemo(() => {
+    return !isLoading && workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE);
+  }, [isLoading, workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE)]);
 
+  const cta = useMemo(() => {
     return (
       <Center>
         <Button
@@ -73,9 +74,9 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
         </Button>
       </Center>
     );
-  }, [receipt.status, workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE)]);
+  }, [receipt.status]);
 
-  if (!workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE)) return null;
+  if (!isCanExportEInvoice) return null;
 
   return (
     <Stack gap={8}>
@@ -96,13 +97,13 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
                     {invoice.provider.name}
                   </Text>
 
-                  <Text fz={12} truncate maw={200}>
-                    <DateFormat value={invoice.createdAt} type="date-time" />
-                  </Text>
-
                   <CopyText text={invoice.invoiceId} fz={14} truncate maw={200}>
                     ID: {String.limitCharacters(invoice.invoiceId, 10)}
                   </CopyText>
+
+                  <Text fz={12} truncate maw={200}>
+                    <DateFormat value={invoice.createdAt} type="date-time" />
+                  </Text>
                 </Stack>
               </Group>
 
