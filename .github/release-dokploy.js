@@ -40,6 +40,8 @@ const releaseDokploy = async () => {
     console.error('Deploy Failed', deployResponse.statusText);
     process.exit(1);
   }
+
+  console.info(`Deployed ${applicationId} > ${DOKPLOY_IMAGE} successfully`);
 };
 
 releaseDokploy();
