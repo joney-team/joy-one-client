@@ -11,7 +11,18 @@ import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Badge, Card, Group, Stack, Text, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Card,
+  Divider,
+  Group,
+  InputWrapper,
+  Select,
+  Stack,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
   IconArchive,
@@ -24,9 +35,13 @@ import { FC, useEffect, useState } from "react";
 import { OnModalCheckEInvoice } from "./modal-check-e-invoice";
 import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
 import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor";
-import { eInvoicesProviderStatuses } from "./plugin-e-invoices-constants";
+import {
+  eInvoicesProviderStatuses,
+  eInvoicesTemplateAutoCreateModes,
+} from "./plugin-e-invoices-constants";
 import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 import {
+  PluginEInvoiceTemplateAutoCreateMode,
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
@@ -188,16 +203,48 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
 
           return (
             <Stack key={type} gap={5}>
-              <SectionTitle name={t`Template ${t`E-Invoice`}`} />
+              <SectionTitle name={<Trans>Template E-Invoice</Trans>} />
               <Card style={{ overflow: "visible" }}>
-                <PluginEInvoiceTemplateEditor
-                  type={type}
-                  template={templates[type]}
-                  variables={variables}
-                  onChange={(template) => {
-                    setTemplates({ ...templates, [type]: template });
-                  }}
-                />
+                <Stack>
+                  <Group>
+                    <Select
+                      label={<Trans>Auto create mode</Trans>}
+                      data={Object.entries(eInvoicesTemplateAutoCreateModes).map(
+                        ([key, value]) => ({
+                          label: value.name(),
+                          value: key,
+                        })
+                      )}
+                      value={templates[type]?.autoCreateMode}
+                      onChange={(value) => {
+                        setTemplates({
+                          ...templates,
+                          [type]: {
+                            ...templates[type],
+                            autoCreateMode: value as PluginEInvoiceTemplateAutoCreateMode,
+                          },
+                        });
+                      }}
+                    />
+                  </Group>
+
+                  <InputWrapper label={<Trans>Fields</Trans>}>
+                    <PluginEInvoiceTemplateEditor
+                      type={type}
+                      template={templates[type]}
+                      variables={variables}
+                      onChange={(template) => {
+                        setTemplates({
+                          ...templates,
+                          [type]: {
+                            ...templates[type],
+                            ...template,
+                          },
+                        });
+                      }}
+                    />
+                  </InputWrapper>
+                </Stack>
               </Card>
             </Stack>
           );

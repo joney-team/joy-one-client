@@ -6,7 +6,7 @@ import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Renderer } from "@/components/renderer";
 import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
-import { getColorShape } from "@/modules/theme/generator";
+import { getColorShape } from "@/modules/theme/generate-theme";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";

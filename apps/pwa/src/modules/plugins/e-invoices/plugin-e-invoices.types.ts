@@ -19,8 +19,14 @@ export type PluginEInvoiceTemplateField = {
   children?: Omit<PluginEInvoiceTemplateField, "children">[];
 };
 
+export enum PluginEInvoiceTemplateAutoCreateMode {
+  NONE = "NONE",
+  LOAN_PROFIT_MORE_THAN_ZERO = "LOAN_PROFIT_MORE_THAN_ZERO",
+}
+
 export interface PluginEInvoiceTemplate {
   fields: PluginEInvoiceTemplateField[];
+  autoCreateMode?: PluginEInvoiceTemplateAutoCreateMode;
 }
 
 export type PluginEInvoiceTemplates = Partial<

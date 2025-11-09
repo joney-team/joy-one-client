@@ -12,7 +12,7 @@ import PluginsProvider from "@/modules/plugins/plugins-provider";
 import { ReportsProvider } from "@/modules/reports/reports-provider";
 import { SearchEngine } from "@/modules/search/search-engine";
 import TagsProvider from "@/modules/tags/tags-provider";
-import { generateTheme } from "@/modules/theme/generator";
+import { generateTheme } from "@/modules/theme/generate-theme";
 import WorkspaceProvider from "@/modules/workspaces/workspace-provider";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { MantineProvider } from "@mantine/core";

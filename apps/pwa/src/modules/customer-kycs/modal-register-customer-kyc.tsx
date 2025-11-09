@@ -8,7 +8,7 @@ import { genders } from "@/constant";
 import { useFormSubmit } from "@/hooks/use-form";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { onUploadFile } from "@/modules/files/file-service";
-import { optionsFilter } from "@/modules/theme/generator";
+import { optionsFilter } from "@/modules/theme/generate-theme";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
 import { onError } from "@/utils/exceptions.utils";

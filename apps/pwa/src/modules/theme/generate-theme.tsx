@@ -65,6 +65,11 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: A
           shadow: "xs",
           withBorder: false,
         },
+        styles: {
+          root: {
+            overflow: "visible",
+          },
+        },
       }),
       Switch: Switch.extend({
         styles: {

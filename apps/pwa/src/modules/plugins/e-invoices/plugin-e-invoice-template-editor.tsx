@@ -24,6 +24,7 @@ import {
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
+import { Empty } from "@/components/empty";
 
 const getInitField = (): PluginEInvoiceTemplateField => ({
   id: uuidv4(),
@@ -217,10 +218,13 @@ export interface PluginEInvoiceTemplateEditorProps {
 
 export const PluginEInvoiceTemplateEditor: FC<PluginEInvoiceTemplateEditorProps> = (props) => {
   const { variables } = props;
+  const fields = props.template?.fields ?? [];
 
   return (
     <Stack>
-      {props.template?.fields?.map((field, index) => (
+      {fields.length === 0 && <Empty message={<Trans>No fields</Trans>} />}
+
+      {fields.map((field, index) => (
         <TemplateField
           key={field.id}
           templateType={props.type}

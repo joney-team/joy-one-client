@@ -115,7 +115,7 @@ msgstr "Actions"
 #: src/modules/bookings/booking-list.tsx:324
 #: src/modules/bookings/booking-list.tsx:362
 #: src/modules/loans/loan-list-tabs.tsx:27
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:15
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:16
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:56
 #: src/modules/product-combos/product-combos-constants.tsx:9
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:9
@@ -159,7 +159,7 @@ msgstr "ADD"
 msgid "Add asset estimation"
 msgstr "Add asset estimation"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:194
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:195
 msgid "Add child field"
 msgstr "Add child field"
 
@@ -189,7 +189,7 @@ msgstr "Add divider"
 msgid "Add due date"
 msgstr "Add due date"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:257
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:261
 msgid "Add field"
 msgstr "Add field"
 
@@ -505,7 +505,7 @@ msgstr "Approved"
 
 #: src/components/buttons/button-archive.tsx:50
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:43
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:170
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:185
 #: src/modules/posts/posts-list.tsx:60
 #: src/modules/receipts/receipt-detail.tsx:152
 #: src/modules/services/service-detail.tsx:75
@@ -726,13 +726,17 @@ msgstr "Attendees"
 msgid "Audio"
 msgstr "Audio"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:19
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:20
 msgid "Auth failed"
 msgstr "Auth failed"
 
 #: src/components/printer/printer-settings-bar.tsx:75
 msgid "Auto"
 msgstr "Auto"
+
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:211
+msgid "Auto create mode"
+msgstr "Auto create mode"
 
 #: src/modules/workspaces/workspace-modules.tsx:436
 msgid "Auto reply messages according to the script"
@@ -1058,7 +1062,7 @@ msgstr "Change"
 msgid "Change app icon"
 msgstr "Change app icon"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:130
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:145
 msgid "Change auth"
 msgstr "Change auth"
 
@@ -1093,7 +1097,7 @@ msgstr "Change name"
 msgid "Change password"
 msgstr "Change password"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:114
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:129
 msgid "Change provider"
 msgstr "Change provider"
 
@@ -1138,7 +1142,7 @@ msgstr "Check in successfully"
 
 #: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:46
 #: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:58
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:159
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:174
 msgid "Check invoice"
 msgstr "Check invoice"
 
@@ -2240,10 +2244,6 @@ msgstr "Due date"
 msgid "Duration"
 msgstr "Duration"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:191
-msgid "E-Invoice"
-msgstr "E-Invoice"
-
 #: src/modules/events/event-constants.ts:194
 msgid "E-invoice created"
 msgstr "E-invoice created"
@@ -2613,9 +2613,13 @@ msgstr "Female"
 msgid "Fetching location"
 msgstr "Fetching location"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:93
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:94
 msgid "Field name"
 msgstr "Field name"
+
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:231
+msgid "Fields"
+msgstr "Fields"
 
 #: src/modules/custom-fields/custom-field-constants.tsx:12
 msgid "File"
@@ -2807,8 +2811,8 @@ msgstr "Has access to all functions of the system"
 msgid "Has late interest"
 msgstr "Has late interest"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:133
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:140
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:148
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:155
 msgid "Healthcheck"
 msgstr "Healthcheck"
 
@@ -2917,7 +2921,7 @@ msgstr "In progress"
 msgid "In progress booking"
 msgstr "In progress booking"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:23
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:24
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:60
 #: src/modules/product-combos/product-combos-constants.tsx:10
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:10
@@ -3497,6 +3501,10 @@ msgstr "Loan payment periods"
 msgid "Loan period"
 msgstr "Loan period"
 
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:42
+msgid "Loan profit more than 0"
+msgstr "Loan profit more than 0"
+
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:202
 msgid "Loan receipt late interest"
 msgstr "Loan receipt late interest"
@@ -3764,7 +3772,7 @@ msgstr "Manage your profile settings"
 msgid "Manual approval timekeeping"
 msgstr "Manual approval timekeeping"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:104
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:105
 msgid "Manual input"
 msgstr "Manual input"
 
@@ -4319,6 +4327,10 @@ msgstr "No data to export"
 msgid "No events in range"
 msgstr "No events in range"
 
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:225
+msgid "No fields"
+msgstr "No fields"
+
 #: src/modules/receipts/receipt-card.tsx:294
 msgid "No files"
 msgstr "No files"
@@ -4347,6 +4359,10 @@ msgstr "No search results"
 #: src/widgets/index.tsx:277
 msgid "No widgets"
 msgstr "No widgets"
+
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:40
+msgid "None"
+msgstr "None"
 
 #: src/modals/modal-printer.tsx:531
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:203
@@ -5582,8 +5598,8 @@ msgstr "Reset filter"
 msgid "Reset secret key"
 msgstr "Reset secret key"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:71
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:153
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:86
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:168
 msgid "Reset templates"
 msgstr "Reset templates"
 
@@ -5795,7 +5811,7 @@ msgstr "Secure"
 #: src/modules/prescriptions/components/prescription-selector.tsx:58
 #: src/modules/tags/components/tag-selector.tsx:60
 #: src/modules/tasks/components/task-tag-folder-selector.tsx:50
-#: src/modules/theme/generator.tsx:153
+#: src/modules/theme/generate-theme.tsx:158
 #: src/modules/workspace-branches/workspace-branch-selector.tsx:83
 #: src/modules/workspace-branches/workspace-branches-selector.tsx:50
 #: src/modules/workspace-roles/components/workspace-roles-selector.tsx:71
@@ -6418,10 +6434,9 @@ msgstr "Tasks updated"
 msgid "Tax code"
 msgstr "Tax code"
 
-#. placeholder {0}: "use client"; import { Button } from "@/components/buttons/button"; import { Image } from "@/components/image"; import { SectionTitle } from "@/components/session-title"; import { api } from "@/modules/apis"; import { useQuery } from "@/modules/apis/use-query"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { WorkspaceType } from "@/modules/workspaces/workspaces-types"; import { onActionLoad } from "@/utils/actions"; import { onError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Badge, Card, Group, Stack, Text, Tooltip } from "@mantine/core"; import { useDebouncedCallback } from "@mantine/hooks"; import { IconArchive, IconEdit, IconFileInvoice, IconRefresh, IconTemplate, } from "@tabler/icons-react"; import { FC, useEffect, useState } from "react"; import { OnModalCheckEInvoice } from "./modal-check-e-invoice"; import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider"; import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor"; import { eInvoicesProviderStatuses } from "./plugin-e-invoices-constants"; import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities"; import { PluginEInvoiceTemplateType, PluginEInvoiceTemplateVariables, } from "./plugin-e-invoices.types"; interface PluginEInvoiceProviderItemProps { provider: PluginEInvoicesProviderEntity; onRefetch: () => Promise<unknown>; } export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = ({ provider, onRefetch, }) => { const workspace = useWorkspace(); const status = eInvoicesProviderStatuses[provider.status]; const [templates, setTemplates] = useState(provider.templates); const { data: variables } = useQuery<PluginEInvoiceTemplateVariables>({ route: "/plugins/e-invoices/templates/variables", refetchWhenReconnected: true, }); const syncTemplates = useDebouncedCallback(() => { if (JSON.stringify(templates) !== JSON.stringify(provider.templates)) { api .put(`/plugins/e-invoices/providers/${provider._id}`, { ...provider, templates, }) .catch(onError); } }, 2000); const archive = async () => { await api.delete(`/plugins/e-invoices/providers/${provider._id}`); await onRefetch(); }; const resetTemplates = async () => { onActionLoad({ name: <Trans>Reset templates</Trans>, icon: IconTemplate, process: async () => { await api.post(`/plugins/e-invoices/providers/${provider._id}/reset-templates`); await onRefetch(); }, }); }; useEffect(() => { syncTemplates(); }, [templates]); return ( <Stack> <Card> <Group gap={20} align="start"> <Image src={provider.logo} w={120} h={40} /> <Stack gap={5} flex={1}> <Group align="center"> <Text fw={600} fz={20}> {provider.name} </Text> <Badge color={status.color} variant="light"> {status.name()} </Badge> </Group> <Group gap={8}> <Button variant="outline" color="gray" size="xs" leftIcon={IconEdit} onClick={() => { OnModalEInvoiceProvider({ onDone: () => onRefetch(), provider, mode: "update_provider", }); }} > <Trans>Change provider</Trans> </Button> <Button variant="outline" color="gray" size="xs" leftIcon={IconEdit} onClick={() => { OnModalEInvoiceProvider({ onDone: () => onRefetch(), provider, mode: "update_auth", }); }} > <Trans>Change auth</Trans> </Button> <Tooltip label={t`Healthcheck`}> <ActionIcon variant="light" color="gray" size={30} onClick={async () => onActionLoad({ name: <Trans>Healthcheck</Trans>, icon: IconRefresh, process: async () => { await api.post(`/plugins/e-invoices/providers/${provider._id}/healthcheck`); await onRefetch(); }, }) } > <IconRefresh size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Reset templates`}> <ActionIcon variant="light" color="gray" size={30} onClick={resetTemplates}> <IconTemplate size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Check invoice`}> <ActionIcon variant="light" color="gray" size={30} onClick={() => OnModalCheckEInvoice()} > <IconFileInvoice size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Archive`}> <ActionIcon variant="light" color="gray" size={30} onClick={archive}> <IconArchive size={18} /> </ActionIcon> </Tooltip> </Group> </Stack> </Group> </Card> <Stack flex={1}> {Object.values(PluginEInvoiceTemplateType).map((type) => { if ( (type === PluginEInvoiceTemplateType.LOAN_INCOME_RECEIPT && workspace.type !== WorkspaceType.CREDIT) || !variables ) return null; return ( <Stack key={type} gap={5}> <SectionTitle name={t`Template ${t`E-Invoice`}`} /> <Card style={{ overflow: "visible" }}> <PluginEInvoiceTemplateEditor type={type} template={templates[type]} variables={variables} onChange={(template) => { setTemplates({ ...templates, [type]: template }); }} /> </Card> </Stack> ); })} </Stack> </Stack> ); }; 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:191
-msgid "Template {0}"
-msgstr "Template {0}"
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:206
+msgid "Template E-Invoice"
+msgstr "Template E-Invoice"
 
 #: src/modules/plugins/zalo-oas/components/zalo-oa-zns-template-config.tsx:86
 msgid "Template ID"
@@ -7119,8 +7134,8 @@ msgstr "Using this subscription"
 msgid "Value"
 msgstr "Value"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:108
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:126
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:109
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:127
 msgid "Variable"
 msgstr "Variable"
 

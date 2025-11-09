@@ -116,7 +116,7 @@ msgstr "Hành động"
 #: src/modules/bookings/booking-list.tsx:324
 #: src/modules/bookings/booking-list.tsx:362
 #: src/modules/loans/loan-list-tabs.tsx:27
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:15
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:16
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:56
 #: src/modules/product-combos/product-combos-constants.tsx:9
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:9
@@ -160,7 +160,7 @@ msgstr "ĐC"
 msgid "Add asset estimation"
 msgstr "Thêm định giá"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:194
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:195
 msgid "Add child field"
 msgstr "Thêm trường con"
 
@@ -190,7 +190,7 @@ msgstr "Thêm đường phân cách"
 msgid "Add due date"
 msgstr "Thêm thời hạn"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:257
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:261
 msgid "Add field"
 msgstr "Thêm trường"
 
@@ -506,7 +506,7 @@ msgstr "Đã duyệt"
 
 #: src/components/buttons/button-archive.tsx:50
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:43
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:170
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:185
 #: src/modules/posts/posts-list.tsx:60
 #: src/modules/receipts/receipt-detail.tsx:152
 #: src/modules/services/service-detail.tsx:75
@@ -727,13 +727,17 @@ msgstr "Tham gia"
 msgid "Audio"
 msgstr "Âm thanh"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:19
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:20
 msgid "Auth failed"
 msgstr "Xác thực thất bại"
 
 #: src/components/printer/printer-settings-bar.tsx:75
 msgid "Auto"
 msgstr "Tự động"
+
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:211
+msgid "Auto create mode"
+msgstr "Chế độ tự động tạo"
 
 #: src/modules/workspaces/workspace-modules.tsx:436
 msgid "Auto reply messages according to the script"
@@ -1059,7 +1063,7 @@ msgstr "Thay đổi"
 msgid "Change app icon"
 msgstr "Thay đổi biểu tượng ứng dụng"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:130
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:145
 msgid "Change auth"
 msgstr "Thay đổi xác thực"
 
@@ -1094,7 +1098,7 @@ msgstr "Thay đổi tên"
 msgid "Change password"
 msgstr "Đổi mật khẩu"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:114
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:129
 msgid "Change provider"
 msgstr "Đổi nhà cung cấp"
 
@@ -1139,7 +1143,7 @@ msgstr "Check-in thành công"
 
 #: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:46
 #: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:58
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:159
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:174
 msgid "Check invoice"
 msgstr "Kiểm tra hoá đơn"
 
@@ -2241,10 +2245,6 @@ msgstr "Ngày đến hạn"
 msgid "Duration"
 msgstr "Thời lượng"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:191
-msgid "E-Invoice"
-msgstr "Hóa đơn điện tử"
-
 #: src/modules/events/event-constants.ts:194
 msgid "E-invoice created"
 msgstr "HĐĐT được tạo"
@@ -2614,9 +2614,13 @@ msgstr "Nữ"
 msgid "Fetching location"
 msgstr "Đang tìm nạp vị trí"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:93
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:94
 msgid "Field name"
 msgstr "Tên trường"
+
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:231
+msgid "Fields"
+msgstr "Trường dữ liệu"
 
 #: src/modules/custom-fields/custom-field-constants.tsx:12
 msgid "File"
@@ -2808,8 +2812,8 @@ msgstr "Có quyền truy cập vào tất cả các chức năng của hệ th�
 msgid "Has late interest"
 msgstr "Có lãi chậm trả"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:133
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:140
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:148
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:155
 msgid "Healthcheck"
 msgstr "Kiểm tra sức khỏe"
 
@@ -2918,7 +2922,7 @@ msgstr "Đang xử lí"
 msgid "In progress booking"
 msgstr "Lịch hẹn đang xử lí"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:23
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:24
 #: src/modules/plugins/zalo-oas/zalo-oas.tsx:60
 #: src/modules/product-combos/product-combos-constants.tsx:10
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:10
@@ -3498,6 +3502,10 @@ msgstr "Kỳ hạn thanh toán"
 msgid "Loan period"
 msgstr "Hạn vay"
 
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:42
+msgid "Loan profit more than 0"
+msgstr "Khi lãi vay lớn hơn 0"
+
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:202
 msgid "Loan receipt late interest"
 msgstr "Lãi vay trả chậm"
@@ -3765,7 +3773,7 @@ msgstr "Quản lí thông tin tài khoản"
 msgid "Manual approval timekeeping"
 msgstr "Chấm công phê duyệt thủ công"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:104
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:105
 msgid "Manual input"
 msgstr "Nhập thủ công"
 
@@ -4320,6 +4328,10 @@ msgstr "Không có dữ liệu để xuất"
 msgid "No events in range"
 msgstr "Không có sự kiện"
 
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:225
+msgid "No fields"
+msgstr "Không có trường dữ liệu"
+
 #: src/modules/receipts/receipt-card.tsx:294
 msgid "No files"
 msgstr "Không có tập tin"
@@ -4348,6 +4360,10 @@ msgstr "Không có kết quả tìm kiếm"
 #: src/widgets/index.tsx:277
 msgid "No widgets"
 msgstr "Không có vật dụng"
+
+#: src/modules/plugins/e-invoices/plugin-e-invoices-constants.ts:40
+msgid "None"
+msgstr "Không"
 
 #: src/modals/modal-printer.tsx:531
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:203
@@ -5583,8 +5599,8 @@ msgstr "Đặt lại bộ lọc"
 msgid "Reset secret key"
 msgstr "Đặt lại khóa bí mật"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:71
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:153
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:86
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:168
 msgid "Reset templates"
 msgstr "Đặt lại mẫu"
 
@@ -5796,7 +5812,7 @@ msgstr "Bảo mật"
 #: src/modules/prescriptions/components/prescription-selector.tsx:58
 #: src/modules/tags/components/tag-selector.tsx:60
 #: src/modules/tasks/components/task-tag-folder-selector.tsx:50
-#: src/modules/theme/generator.tsx:153
+#: src/modules/theme/generate-theme.tsx:158
 #: src/modules/workspace-branches/workspace-branch-selector.tsx:83
 #: src/modules/workspace-branches/workspace-branches-selector.tsx:50
 #: src/modules/workspace-roles/components/workspace-roles-selector.tsx:71
@@ -6419,10 +6435,9 @@ msgstr "Đã cập nhật công việc"
 msgid "Tax code"
 msgstr "Mã số thuế"
 
-#. placeholder {0}: "use client"; import { Button } from "@/components/buttons/button"; import { Image } from "@/components/image"; import { SectionTitle } from "@/components/session-title"; import { api } from "@/modules/apis"; import { useQuery } from "@/modules/apis/use-query"; import { useWorkspace } from "@/modules/workspaces/workspace-context"; import { WorkspaceType } from "@/modules/workspaces/workspaces-types"; import { onActionLoad } from "@/utils/actions"; import { onError } from "@/utils/exceptions.utils"; import { t } from "@lingui/core/macro"; import { Trans } from "@lingui/react/macro"; import { ActionIcon, Badge, Card, Group, Stack, Text, Tooltip } from "@mantine/core"; import { useDebouncedCallback } from "@mantine/hooks"; import { IconArchive, IconEdit, IconFileInvoice, IconRefresh, IconTemplate, } from "@tabler/icons-react"; import { FC, useEffect, useState } from "react"; import { OnModalCheckEInvoice } from "./modal-check-e-invoice"; import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider"; import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor"; import { eInvoicesProviderStatuses } from "./plugin-e-invoices-constants"; import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities"; import { PluginEInvoiceTemplateType, PluginEInvoiceTemplateVariables, } from "./plugin-e-invoices.types"; interface PluginEInvoiceProviderItemProps { provider: PluginEInvoicesProviderEntity; onRefetch: () => Promise<unknown>; } export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = ({ provider, onRefetch, }) => { const workspace = useWorkspace(); const status = eInvoicesProviderStatuses[provider.status]; const [templates, setTemplates] = useState(provider.templates); const { data: variables } = useQuery<PluginEInvoiceTemplateVariables>({ route: "/plugins/e-invoices/templates/variables", refetchWhenReconnected: true, }); const syncTemplates = useDebouncedCallback(() => { if (JSON.stringify(templates) !== JSON.stringify(provider.templates)) { api .put(`/plugins/e-invoices/providers/${provider._id}`, { ...provider, templates, }) .catch(onError); } }, 2000); const archive = async () => { await api.delete(`/plugins/e-invoices/providers/${provider._id}`); await onRefetch(); }; const resetTemplates = async () => { onActionLoad({ name: <Trans>Reset templates</Trans>, icon: IconTemplate, process: async () => { await api.post(`/plugins/e-invoices/providers/${provider._id}/reset-templates`); await onRefetch(); }, }); }; useEffect(() => { syncTemplates(); }, [templates]); return ( <Stack> <Card> <Group gap={20} align="start"> <Image src={provider.logo} w={120} h={40} /> <Stack gap={5} flex={1}> <Group align="center"> <Text fw={600} fz={20}> {provider.name} </Text> <Badge color={status.color} variant="light"> {status.name()} </Badge> </Group> <Group gap={8}> <Button variant="outline" color="gray" size="xs" leftIcon={IconEdit} onClick={() => { OnModalEInvoiceProvider({ onDone: () => onRefetch(), provider, mode: "update_provider", }); }} > <Trans>Change provider</Trans> </Button> <Button variant="outline" color="gray" size="xs" leftIcon={IconEdit} onClick={() => { OnModalEInvoiceProvider({ onDone: () => onRefetch(), provider, mode: "update_auth", }); }} > <Trans>Change auth</Trans> </Button> <Tooltip label={t`Healthcheck`}> <ActionIcon variant="light" color="gray" size={30} onClick={async () => onActionLoad({ name: <Trans>Healthcheck</Trans>, icon: IconRefresh, process: async () => { await api.post(`/plugins/e-invoices/providers/${provider._id}/healthcheck`); await onRefetch(); }, }) } > <IconRefresh size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Reset templates`}> <ActionIcon variant="light" color="gray" size={30} onClick={resetTemplates}> <IconTemplate size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Check invoice`}> <ActionIcon variant="light" color="gray" size={30} onClick={() => OnModalCheckEInvoice()} > <IconFileInvoice size={18} /> </ActionIcon> </Tooltip> <Tooltip label={t`Archive`}> <ActionIcon variant="light" color="gray" size={30} onClick={archive}> <IconArchive size={18} /> </ActionIcon> </Tooltip> </Group> </Stack> </Group> </Card> <Stack flex={1}> {Object.values(PluginEInvoiceTemplateType).map((type) => { if ( (type === PluginEInvoiceTemplateType.LOAN_INCOME_RECEIPT && workspace.type !== WorkspaceType.CREDIT) || !variables ) return null; return ( <Stack key={type} gap={5}> <SectionTitle name={t`Template ${t`E-Invoice`}`} /> <Card style={{ overflow: "visible" }}> <PluginEInvoiceTemplateEditor type={type} template={templates[type]} variables={variables} onChange={(template) => { setTemplates({ ...templates, [type]: template }); }} /> </Card> </Stack> ); })} </Stack> </Stack> ); }; 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:191
-msgid "Template {0}"
-msgstr "Mẫu {0}"
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:206
+msgid "Template E-Invoice"
+msgstr "Mẫu HĐĐT"
 
 #: src/modules/plugins/zalo-oas/components/zalo-oa-zns-template-config.tsx:86
 msgid "Template ID"
@@ -7120,8 +7135,8 @@ msgstr "Sử dụng đăng ký này"
 msgid "Value"
 msgstr "Giá trị"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:108
-#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:126
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:109
+#: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:127
 msgid "Variable"
 msgstr "Biến"
 

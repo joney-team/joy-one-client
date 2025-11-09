@@ -4,7 +4,7 @@ import { Group } from "@mantine/core";
 import { Fragment, memo, type FC } from "react";
 
 import { useLocations } from "@/modules/locations/locations-context";
-import { optionsFilter } from "@/modules/theme/generator";
+import { optionsFilter } from "@/modules/theme/generate-theme";
 import { t } from "@lingui/core/macro";
 import { Select, TextInput } from "@mantine/core";
 
