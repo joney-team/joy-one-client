@@ -14,8 +14,6 @@ import {
 import { api } from "../apis";
 import { getColor } from "../theme/use-color";
 import { NotificationEntity, NotificationIcon, NotificationType } from "./notification-types";
-import { translateServer } from "../lang/lang-server-service";
-import { getClientLocale } from "../lang/lang-service";
 
 export async function getNotifications(q?: any) {
   return api.get("/notifications", { params: q });
