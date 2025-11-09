@@ -14,31 +14,30 @@ import { connectPluginZalo } from "../zalo-oas-service";
 export const ZaloOasOnboarding: FC = () => {
   const workspace = useWorkspace();
   const color = useColor();
+
   return (
-    <Container p={16}>
-      <Stack align="center" py={20}>
-        <Group gap={30} mb={20}>
-          <Avatar workspace={workspace.userMember.workspace} size={55} />
-          <ThemeIcon variant="transparent" size="lg" color="dark">
-            <IconCirclesRelation size={50} />
-          </ThemeIcon>
-          <Image w={55} src="/images/plugins-zalo-oa.svg" />
-        </Group>
+    <Stack align="center" py={20}>
+      <Group gap={30} mb={20}>
+        <Avatar workspace={workspace.userMember.workspace} size={55} />
+        <ThemeIcon variant="transparent" size="lg" color="dark">
+          <IconCirclesRelation size={50} />
+        </ThemeIcon>
+        <Image w={55} src="/images/plugins-zalo-oa.svg" />
+      </Group>
 
-        <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
-          <Trans>Connect</Trans>
-          <strong>Zalo OAs</strong>
-        </Title>
+      <Title mt={-10} ta="center" order={2} fw={300} c={color("primary")}>
+        <Trans>Connect</Trans>
+        <strong>Zalo OAs</strong>
+      </Title>
 
-        <Text ta="center">
-          • <Trans>Manage customer interaction via Zalo OA</Trans> <br /> •{" "}
-          <Trans>Send reminder messages to customers</Trans>
-        </Text>
+      <Text ta="center">
+        • <Trans>Manage customer interaction via Zalo OA</Trans> <br /> •{" "}
+        <Trans>Send reminder messages to customers</Trans>
+      </Text>
 
-        <Button mt={10} type="submit" onClick={() => connectPluginZalo()} leftIcon={IconLinkPlus}>
-          <Trans>Connect</Trans>
-        </Button>
-      </Stack>
-    </Container>
+      <Button mt={10} type="submit" onClick={() => connectPluginZalo()} leftIcon={IconLinkPlus}>
+        <Trans>Connect</Trans>
+      </Button>
+    </Stack>
   );
 };
