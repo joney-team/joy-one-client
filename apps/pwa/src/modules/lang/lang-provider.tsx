@@ -21,7 +21,9 @@ import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loa
 import { StorageKey } from "@/types";
 import { Context } from "./lang-context";
 
-defaultI18n.load(getClientLocale(), {});
+import { messages as defaultMessages } from "./catalog/en";
+
+defaultI18n.load(getClientLocale(), defaultMessages);
 defaultI18n.activate(getClientLocale());
 
 dayjs.extend(updateLocale);

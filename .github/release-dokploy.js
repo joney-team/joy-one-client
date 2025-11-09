@@ -1,7 +1,7 @@
-const DOKPLOY_TOKEN = process.env.DOKPLOY_TOKEN;
-const DOKPLOY_URL = process.env.DOKPLOY_URL;
-const DOKPLOY_IMAGE = process.env.DOKPLOY_IMAGE;
-const DOKPLOY_APPLICATION_ID = process.env.DOKPLOY_APPLICATION_ID;
+const DOKPLOY_TOKEN = String(process.env.DOKPLOY_TOKEN).trim();
+const DOKPLOY_URL = String(process.env.DOKPLOY_URL).trim();
+const DOKPLOY_IMAGE = String(process.env.DOKPLOY_IMAGE).trim();
+const DOKPLOY_APPLICATION_ID = String(process.env.DOKPLOY_APPLICATION_ID).trim();
 
 const releaseDokploy = async () => {
   const saveDockerProviderResponse = await fetch(`${DOKPLOY_URL}/api/application.saveDockerProvider`, {
