@@ -678,7 +678,7 @@ msgstr "Assign user"
 msgid "Assigned to"
 msgstr "Assigned to"
 
-#: src/modules/customers/components/form-customer.tsx:227
+#: src/modules/customers/components/form-customer.tsx:252
 #: src/modules/message-boxes/message-box/message-box-head.tsx:95
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:170
 #: src/modules/tasks/components/form-task.tsx:366
@@ -844,7 +844,7 @@ msgstr "Birhtday"
 
 #: src/modals/modal-printer.tsx:483
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:262
-#: src/modules/customers/components/form-customer.tsx:160
+#: src/modules/customers/components/form-customer.tsx:185
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:87
 #: src/modules/users/modals/modal-user-information.tsx:224
 #: src/modules/users/user-profile-settings.tsx:139
@@ -894,7 +894,7 @@ msgid "Bookings chart"
 msgstr "Bookings chart"
 
 #: src/modules/customer-forms/modal-customer-form.tsx:42
-#: src/modules/customers/components/form-customer.tsx:131
+#: src/modules/customers/components/form-customer.tsx:156
 #: src/modules/loans/modals/modal-create-loan.tsx:394
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:291
 #: src/modules/workspace-branches/workspace-branch-column.tsx:25
@@ -1341,7 +1341,7 @@ msgstr "Company branch"
 #: src/modules/coupons/modals/modal-coupon-form.tsx:164
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:195
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:334
-#: src/modules/customers/components/form-customer.tsx:245
+#: src/modules/customers/components/form-customer.tsx:270
 #: src/modules/customers/modals/modal-customer-form.tsx:122
 #: src/modules/customers/modals/modal-customer-plain-code-form.tsx:65
 #: src/modules/files/modals/modal-files.tsx:168
@@ -1506,7 +1506,7 @@ msgstr "Continue with"
 msgid "Contract fee"
 msgstr "Contract fee"
 
-#: src/modules/customers/components/form-customer.tsx:235
+#: src/modules/customers/components/form-customer.tsx:260
 msgid "Convert locations"
 msgstr "Convert locations"
 
@@ -1779,7 +1779,7 @@ msgstr "Credit settings"
 msgid "Currency"
 msgstr "Currency"
 
-#: src/modules/customers/components/form-customer.tsx:182
+#: src/modules/customers/components/form-customer.tsx:207
 #: src/modules/loans/components/loan-customer-kyc.tsx:90
 msgid "Current address"
 msgstr "Current address"
@@ -2303,7 +2303,7 @@ msgid "Edit workspace branch"
 msgstr "Edit workspace branch"
 
 #: src/modules/auth/components/form-register.tsx:67
-#: src/modules/customers/components/form-customer.tsx:144
+#: src/modules/customers/components/form-customer.tsx:169
 #: src/modules/customers/customer-list.tsx:96
 #: src/modules/loans/loan-detail.tsx:298
 #: src/modules/partners/partner-list.tsx:26
@@ -2741,7 +2741,7 @@ msgstr "Gantt"
 
 #: src/modals/modal-printer.tsx:488
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:256
-#: src/modules/customers/components/form-customer.tsx:167
+#: src/modules/customers/components/form-customer.tsx:192
 #: src/modules/customers/customer-list.tsx:57
 #: src/modules/loans/loan-detail.tsx:277
 msgid "Gender"
@@ -2837,7 +2837,7 @@ msgstr "High"
 msgid "History"
 msgstr "History"
 
-#: src/modules/customers/components/form-customer.tsx:193
+#: src/modules/customers/components/form-customer.tsx:218
 msgid "Homeland"
 msgstr "Homeland"
 
@@ -3073,7 +3073,7 @@ msgstr "Invalid CID number"
 msgid "Invalid domain"
 msgstr "Invalid domain"
 
-#: src/modules/workspaces/workspace-provider.tsx:215
+#: src/modules/workspaces/workspace-provider.tsx:216
 msgid "Invalid invitation"
 msgstr "Invalid invitation"
 
@@ -3798,7 +3798,7 @@ msgstr "Max value is {0}"
 msgid "Maximum price must be greater than minimum price"
 msgstr "Maximum price must be greater than minimum price"
 
-#: src/modules/customers/components/form-customer.tsx:214
+#: src/modules/customers/components/form-customer.tsx:239
 msgid "Medical history"
 msgstr "Medical history"
 
@@ -4095,7 +4095,7 @@ msgstr "Multi select"
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:94
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:97
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:100
-#: src/modules/customers/components/form-customer.tsx:73
+#: src/modules/customers/components/form-customer.tsx:98
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:41
 #: src/modules/partners/modals/modal-partner-form.tsx:40
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:40
@@ -4139,7 +4139,7 @@ msgstr "Mutual workspaces"
 #: src/modules/customer-forms/customer-form-list.tsx:36
 #: src/modules/customers/components/customer-column.tsx:98
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:76
-#: src/modules/customers/components/form-customer.tsx:136
+#: src/modules/customers/components/form-customer.tsx:161
 #: src/modules/customers/customer-list.tsx:67
 #: src/modules/customers/modals/modal-customer-contacts.tsx:69
 #: src/modules/customers/modals/modal-customer-form.tsx:102
@@ -4777,7 +4777,7 @@ msgstr "Personal informations"
 #: src/modules/customers/components/customer-column.tsx:102
 #: src/modules/customers/components/customer-kyc-card.tsx:127
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:83
-#: src/modules/customers/components/form-customer.tsx:138
+#: src/modules/customers/components/form-customer.tsx:163
 #: src/modules/customers/customer-list.tsx:76
 #: src/modules/customers/modals/modal-customer-form.tsx:104
 #: src/modules/loans/components/loan-card.tsx:63
@@ -5697,7 +5697,7 @@ msgstr "Roles"
 msgid "Rule"
 msgstr "Rule"
 
-#: src/modules/customers/components/form-customer.tsx:152
+#: src/modules/customers/components/form-customer.tsx:177
 #: src/modules/loans/components/loan-customer-kyc.tsx:131
 msgid "Salary amount"
 msgstr "Salary amount"
@@ -5759,7 +5759,7 @@ msgstr "Search customers"
 msgid "Search products / services / customers"
 msgstr "Search products / services / customers"
 
-#: src/modules/customers/components/form-customer.tsx:193
+#: src/modules/customers/components/form-customer.tsx:218
 msgid "Secondary address"
 msgstr "Secondary address"
 

@@ -679,7 +679,7 @@ msgstr "Gán người dùng"
 msgid "Assigned to"
 msgstr "Giao việc cho"
 
-#: src/modules/customers/components/form-customer.tsx:227
+#: src/modules/customers/components/form-customer.tsx:252
 #: src/modules/message-boxes/message-box/message-box-head.tsx:95
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:170
 #: src/modules/tasks/components/form-task.tsx:366
@@ -845,7 +845,7 @@ msgstr "Ngày sinh"
 
 #: src/modals/modal-printer.tsx:483
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:262
-#: src/modules/customers/components/form-customer.tsx:160
+#: src/modules/customers/components/form-customer.tsx:185
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:87
 #: src/modules/users/modals/modal-user-information.tsx:224
 #: src/modules/users/user-profile-settings.tsx:139
@@ -895,7 +895,7 @@ msgid "Bookings chart"
 msgstr "Biểu đồ lịch hẹn"
 
 #: src/modules/customer-forms/modal-customer-form.tsx:42
-#: src/modules/customers/components/form-customer.tsx:131
+#: src/modules/customers/components/form-customer.tsx:156
 #: src/modules/loans/modals/modal-create-loan.tsx:394
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:291
 #: src/modules/workspace-branches/workspace-branch-column.tsx:25
@@ -1342,7 +1342,7 @@ msgstr "Chi nhánh"
 #: src/modules/coupons/modals/modal-coupon-form.tsx:164
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:195
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:334
-#: src/modules/customers/components/form-customer.tsx:245
+#: src/modules/customers/components/form-customer.tsx:270
 #: src/modules/customers/modals/modal-customer-form.tsx:122
 #: src/modules/customers/modals/modal-customer-plain-code-form.tsx:65
 #: src/modules/files/modals/modal-files.tsx:168
@@ -1507,7 +1507,7 @@ msgstr "Tiếp tục với"
 msgid "Contract fee"
 msgstr "Phí hợp đồng"
 
-#: src/modules/customers/components/form-customer.tsx:235
+#: src/modules/customers/components/form-customer.tsx:260
 msgid "Convert locations"
 msgstr "Chuyển đổi địa chỉ"
 
@@ -1780,7 +1780,7 @@ msgstr "Cài đặt tín dụng"
 msgid "Currency"
 msgstr "Tiền tệ"
 
-#: src/modules/customers/components/form-customer.tsx:182
+#: src/modules/customers/components/form-customer.tsx:207
 #: src/modules/loans/components/loan-customer-kyc.tsx:90
 msgid "Current address"
 msgstr "Địa chỉ hiện tại"
@@ -2304,7 +2304,7 @@ msgid "Edit workspace branch"
 msgstr "Chỉnh sửa chi nhánh workspace"
 
 #: src/modules/auth/components/form-register.tsx:67
-#: src/modules/customers/components/form-customer.tsx:144
+#: src/modules/customers/components/form-customer.tsx:169
 #: src/modules/customers/customer-list.tsx:96
 #: src/modules/loans/loan-detail.tsx:298
 #: src/modules/partners/partner-list.tsx:26
@@ -2742,7 +2742,7 @@ msgstr "Gantt"
 
 #: src/modals/modal-printer.tsx:488
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:256
-#: src/modules/customers/components/form-customer.tsx:167
+#: src/modules/customers/components/form-customer.tsx:192
 #: src/modules/customers/customer-list.tsx:57
 #: src/modules/loans/loan-detail.tsx:277
 msgid "Gender"
@@ -2838,7 +2838,7 @@ msgstr "Cao"
 msgid "History"
 msgstr "Lịch sử"
 
-#: src/modules/customers/components/form-customer.tsx:193
+#: src/modules/customers/components/form-customer.tsx:218
 msgid "Homeland"
 msgstr "Quê quán"
 
@@ -3074,7 +3074,7 @@ msgstr "Số CID không hợp lệ"
 msgid "Invalid domain"
 msgstr "Tên miền không hợp lệ"
 
-#: src/modules/workspaces/workspace-provider.tsx:215
+#: src/modules/workspaces/workspace-provider.tsx:216
 msgid "Invalid invitation"
 msgstr "Lời mời không hợp lệ"
 
@@ -3799,7 +3799,7 @@ msgstr "Giá trị tối đa là {0}"
 msgid "Maximum price must be greater than minimum price"
 msgstr "Giá tối đa phải lớn hơn giá tối thiểu"
 
-#: src/modules/customers/components/form-customer.tsx:214
+#: src/modules/customers/components/form-customer.tsx:239
 msgid "Medical history"
 msgstr "Tiền sử bệnh"
 
@@ -4096,7 +4096,7 @@ msgstr "Nhiều lựa chọn"
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:94
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:97
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:100
-#: src/modules/customers/components/form-customer.tsx:73
+#: src/modules/customers/components/form-customer.tsx:98
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:41
 #: src/modules/partners/modals/modal-partner-form.tsx:40
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:40
@@ -4140,7 +4140,7 @@ msgstr "Workspace chung"
 #: src/modules/customer-forms/customer-form-list.tsx:36
 #: src/modules/customers/components/customer-column.tsx:98
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:76
-#: src/modules/customers/components/form-customer.tsx:136
+#: src/modules/customers/components/form-customer.tsx:161
 #: src/modules/customers/customer-list.tsx:67
 #: src/modules/customers/modals/modal-customer-contacts.tsx:69
 #: src/modules/customers/modals/modal-customer-form.tsx:102
@@ -4778,7 +4778,7 @@ msgstr "Thông tin cá nhân"
 #: src/modules/customers/components/customer-column.tsx:102
 #: src/modules/customers/components/customer-kyc-card.tsx:127
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:83
-#: src/modules/customers/components/form-customer.tsx:138
+#: src/modules/customers/components/form-customer.tsx:163
 #: src/modules/customers/customer-list.tsx:76
 #: src/modules/customers/modals/modal-customer-form.tsx:104
 #: src/modules/loans/components/loan-card.tsx:63
@@ -5698,7 +5698,7 @@ msgstr "Phân quyền"
 msgid "Rule"
 msgstr "Luật lệ"
 
-#: src/modules/customers/components/form-customer.tsx:152
+#: src/modules/customers/components/form-customer.tsx:177
 #: src/modules/loans/components/loan-customer-kyc.tsx:131
 msgid "Salary amount"
 msgstr "Thu nhập"
@@ -5760,7 +5760,7 @@ msgstr "Tìm kiếm khách hàng"
 msgid "Search products / services / customers"
 msgstr "Tìm kiếm sản phẩm/dịch vụ/khách hàng"
 
-#: src/modules/customers/components/form-customer.tsx:193
+#: src/modules/customers/components/form-customer.tsx:218
 msgid "Secondary address"
 msgstr "Nơi thường trú"
 
