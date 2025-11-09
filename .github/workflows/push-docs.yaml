@@ -4,6 +4,7 @@ on:
   push:
     branches: ["staging", "production"]
     paths:
+      - "package.json"
       - "packages/**"
       - "apps/docs/**"
       - ".github/docker/push-docs.dockerfile"

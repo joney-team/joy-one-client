@@ -4,6 +4,7 @@ on:
   push:
     branches: ["staging", "production"]
     paths:
+      - "package.json"
       - "packages/**"
       - "apps/pwa/**"
       - ".github/docker/push-pwa.dockerfile"

@@ -4,6 +4,7 @@ on:
   push:
     branches: ["staging", "production"]
     paths:
+      - "package.json"
       - "packages/**"
       - "apps/website/**"
       - ".github/docker/push-website.dockerfile"
