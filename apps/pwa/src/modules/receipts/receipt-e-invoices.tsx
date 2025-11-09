@@ -30,7 +30,11 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
     params: {
       receiptId: receipt.id,
     },
-    refetchEvents: [EventType.E_INVOICE_CREATED, EventType.E_INVOICE_REMOVED],
+    refetchEvents: [
+      EventType.E_INVOICE_CREATED,
+      EventType.E_INVOICE_REMOVED,
+      EventType.RECEIPT_PAID,
+    ],
   });
 
   const handleArchiveEInvoice = (invoice: PluginEInvoicesEntity) => {
@@ -53,7 +57,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
   };
 
   const cta = useMemo(() => {
-    if (!isLoading || !workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE))
+    if (isLoading || !workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE))
       return null;
 
     return (
@@ -69,7 +73,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
         </Button>
       </Center>
     );
-  }, [receipt.status]);
+  }, [receipt.status, workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE)]);
 
   if (!workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE)) return null;
 
