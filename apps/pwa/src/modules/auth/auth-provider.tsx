@@ -313,18 +313,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     await saveTokens(tokens);
   };
 
-  const syncUserSettingToLangState = () => {
-    if (!user) return;
-
-    // const keys: (keyof LangState)[] = [
-    //   "isStartOfWeekSunday",
-    //   "timezone",
-    //   "isTwelveHour",
-    //   "dateFormat",
-    // ];
-
-    // const diff = isDiff(objSelect(user.settings, keys), objSelect(lang.state, keys));
-    // if (diff) lang.setState(objSelect(user.settings, keys));
+  const syncUserLocale = async () => {
+    if (!user || !lang.isInitialized) return;
+    if (user.locale !== lang.locale) {
+      await api.put(`/users/locale`, { locale: lang.locale }).catch(onErrorLog);
+    }
   };
 
   useEffect(() => {
@@ -340,8 +333,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   }, [isInitialized, user]);
 
   useEffect(() => {
-    if (user?.settings) syncUserSettingToLangState();
-  }, [user?.settings]);
+    if (user && lang.isInitialized && lang.locale) syncUserLocale();
+  }, [user, lang.isInitialized, lang.locale]);
 
   useEventsListener(
     [EventType.USER_PROFILE_UPDATED],

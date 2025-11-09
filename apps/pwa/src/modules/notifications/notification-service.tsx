@@ -78,14 +78,8 @@ export async function showInAppNotification(
 
   notifications.show({
     id: notification._id,
-    title: await translateServer(notification.title, {
-      params: notification.titleParams,
-      locale: getClientLocale(),
-    }),
-    message: await translateServer(notification.body, {
-      params: notification.bodyParams,
-      locale: getClientLocale(),
-    }),
+    title: notification.title,
+    message: notification.body,
     color,
     withCloseButton: true,
     icon: <Icon strokeWidth={1.5} size={18} />,
