@@ -47,19 +47,30 @@ jobs:
           const configPath = 'packages/config/index.ts';
           
           // Parse environment variables for the current branch
+          // New format: sections are marked by comments like #staging, #production
           const lines = envContent.split('\n');
           let inSection = false;
           const envVars = {};
           
           for (const line of lines) {
             const trimmed = line.trim();
-            if (trimmed.startsWith('ENV=')) {
-              if (inSection) break;
-              if (trimmed === `ENV=${branchName}`) {
+            
+            // Check if this is a section comment (e.g., #staging, #production)
+            if (trimmed.startsWith('#')) {
+              // Extract branch name from comment (remove # and whitespace)
+              const commentBranch = trimmed.replace(/^#\s*/, '').toLowerCase();
+              if (commentBranch === branchName.toLowerCase()) {
                 inSection = true;
+                continue;
+              } else if (inSection) {
+                // We've hit a new section, stop parsing
+                break;
               }
             } else if (inSection) {
-              if (trimmed === '') break;
+              // Skip empty lines
+              if (trimmed === '') continue;
+              
+              // Parse key=value pairs
               const match = trimmed.match(/^([^=]+)=(.*)$/);
               if (match) {
                 const key = match[1].trim();
@@ -154,45 +165,6 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
 
-  clear-cache:
-    name: Clear GitHub Actions cache
-    runs-on: ubuntu-latest
-    needs: build-and-push
-    if: success()
-    permissions:
-      contents: read
-      actions: write
-    steps:
-      - name: Clear GitHub Actions cache
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const cacheKey = `buildx-${process.env.GITHUB_REPOSITORY}-${process.env.GITHUB_REF_NAME}`;
-            console.log(`Clearing cache for key: ${cacheKey}`);
-            
-            try {
-              const { data: caches } = await github.rest.actions.getActionsCacheList({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                per_page: 100
-              });
-              
-              for (const cache of caches.actions_caches || []) {
-                if (cache.key.includes('buildx') || cache.key.includes(context.repo.repo)) {
-                  console.log(`Deleting cache: ${cache.key} (ID: ${cache.id})`);
-                  await github.rest.actions.deleteActionsCacheById({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    cache_id: cache.id
-                  });
-                }
-              }
-              
-              console.log('Cache cleared successfully');
-            } catch (error) {
-              console.log(`Cache cleanup completed with warnings: ${error.message}`);
-            }
-
   release-dokploy:
     name: Release Dokploy
     runs-on: ubuntu-latest
@@ -205,44 +177,77 @@ jobs:
         id: parse-env
         run: |
           BRANCH_NAME="${{ github.ref_name }}"
+          DOKPLOY_CONFIG="${{ vars.DOKPLOY }}"
           
-          # Get the .env format string from vars
+          # Set token based on branch
           if [[ "${BRANCH_NAME}" == "production" ]]; then
-            ENV_STRING="${{ vars.DOKPLOY_PRODUCTION }}"
             echo "dokploy_token=${{ secrets.DOKPLOY_PRODUCTION_TOKEN }}" >> $GITHUB_OUTPUT
           elif [[ "${BRANCH_NAME}" == "staging" ]]; then
-            ENV_STRING="${{ vars.DOKPLOY_STAGING }}"
             echo "dokploy_token=${{ secrets.DOKPLOY_STAGING_TOKEN }}" >> $GITHUB_OUTPUT
           else
             echo "Unknown branch: ${BRANCH_NAME}"
             exit 1
           fi
           
-          # Write .env string to temporary file for parsing
-          echo "$ENV_STRING" > /tmp/dokploy.env
+          # Write config to temporary file for parsing
+          echo "$DOKPLOY_CONFIG" > /tmp/dokploy.env
           
-          # Parse .env format and extract values
-          while IFS='=' read -r key value || [ -n "$key" ]; do
-            # Skip empty lines and comments
-            [[ -z "$key" ]] && continue
-            [[ "$key" =~ ^[[:space:]]*# ]] && continue
+          # Extract the section for the current branch and parse values
+          export BRANCH_NAME
+          node << 'EOF'
+          const fs = require('fs');
+          
+          const branchName = process.env.BRANCH_NAME;
+          const envContent = fs.readFileSync('/tmp/dokploy.env', 'utf8');
+          
+          // Parse environment variables for the current branch
+          // New format: sections are marked by comments like #staging, #production
+          const lines = envContent.split('\n');
+          let inSection = false;
+          const envVars = {};
+          
+          for (const line of lines) {
+            const trimmed = line.trim();
             
-            # Remove leading/trailing whitespace
-            key=$(echo "$key" | xargs)
-            value=$(echo "$value" | xargs)
-            
-            # Skip if value is empty
-            [[ -z "$value" ]] && continue
-            
-            case "$key" in
-              URL)
-                echo "dokploy_url=${value}" >> $GITHUB_OUTPUT
-                ;;
-              CLIENT_PWA_ID)
-                echo "dokploy_app_id=${value}" >> $GITHUB_OUTPUT
-                ;;
-            esac
-          done < /tmp/dokploy.env
+            // Check if this is a section comment (e.g., #staging, #production)
+            if (trimmed.startsWith('#')) {
+              // Extract branch name from comment (remove # and whitespace)
+              const commentBranch = trimmed.replace(/^#\s*/, '').toLowerCase();
+              if (commentBranch === branchName.toLowerCase()) {
+                inSection = true;
+                continue;
+              } else if (inSection) {
+                // We've hit a new section, stop parsing
+                break;
+              }
+            } else if (inSection) {
+              // Skip empty lines
+              if (trimmed === '') continue;
+              
+              // Parse key=value pairs
+              const match = trimmed.match(/^([^=]+)=(.*)$/);
+              if (match) {
+                const key = match[1].trim();
+                const value = match[2].trim();
+                envVars[key] = value;
+              }
+            }
+          }
+          
+          // Output values to GitHub Actions output
+          const outputFile = process.env.GITHUB_OUTPUT;
+          if (outputFile) {
+            if (envVars.URL) {
+              fs.appendFileSync(outputFile, `dokploy_url=${envVars.URL}\n`, 'utf8');
+            }
+            if (envVars.CLIENT_PWA_ID) {
+              fs.appendFileSync(outputFile, `dokploy_app_id=${envVars.CLIENT_PWA_ID}\n`, 'utf8');
+            }
+          }
+          
+          console.log(`Parsed Dokploy config for ${branchName} environment`);
+          console.log('Extracted variables:', Object.keys(envVars).join(', '));
+          EOF
           
           # Clean up
           rm -f /tmp/dokploy.env
