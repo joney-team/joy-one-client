@@ -6,12 +6,12 @@ on:
     paths:
       - "packages/**"
       - "apps/pwa/**"
-      - ".deploy/push-pwa.dockerfile"
+      - ".github/docker/push-pwa.dockerfile"
       - ".github/workflows/push-pwa.yaml"
   workflow_dispatch:
 
 env:
-  DOCKERFILE_PATH: .deploy/push-pwa.dockerfile
+  DOCKERFILE_PATH: .github/docker/push-pwa.dockerfile
 
 jobs:
   build-and-push:

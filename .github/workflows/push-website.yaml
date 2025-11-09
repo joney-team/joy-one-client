@@ -6,12 +6,12 @@ on:
     paths:
       - "packages/**"
       - "apps/website/**"
-      - ".deploy/push-website.dockerfile"
+      - ".github/docker/push-website.dockerfile"
       - ".github/workflows/push-website.yaml"
   workflow_dispatch:
 
 env:
-  DOCKERFILE_PATH: .deploy/push-website.dockerfile
+  DOCKERFILE_PATH: .github/docker/push-website.dockerfile
 
 jobs:
   build-and-push:
