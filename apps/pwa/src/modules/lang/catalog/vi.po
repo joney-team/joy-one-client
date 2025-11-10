@@ -6701,7 +6701,7 @@ msgstr "Lịch hẹn hôm nay"
 
 #: src/widgets/dashboard/modules.ts:62
 msgid "Today new customers"
-msgstr "Hôm nay khách hàng mới"
+msgstr "Khách mới hôm nay"
 
 #: src/modules/receipts/receipt-list.tsx:125
 msgid "Today receipts"
@@ -7121,7 +7121,7 @@ msgstr "Sử dụng combo hiện có"
 
 #: src/modules/receipts/receipt-card.tsx:400
 msgid "User disbursement"
-msgstr "Giải ngân của người dùng"
+msgstr "Người giải ngân"
 
 #: src/modules/events/event-constants.ts:191
 msgid "User offline"
@@ -7161,7 +7161,7 @@ msgstr "Phiên bản {0}"
 
 #: src/modules/files/files-constants.ts:16
 msgid "Video"
-msgstr "Băng hình"
+msgstr "Video"
 
 #: src/modules/lang/lang-constants.tsx:5
 msgid "Vietnamese"
@@ -7307,7 +7307,7 @@ msgstr "Cảnh báo"
 
 #: src/modules/products/components/form-product.tsx:343
 msgid "Warning out of date"
-msgstr "Cảnh báo lỗi thời"
+msgstr "Cảnh báo hết HSD"
 
 #: src/modules/products/components/form-product.tsx:350
 msgid "Warning out of stock"
@@ -7428,11 +7428,11 @@ msgstr "Đã cập nhật mã mời làm việc"
 
 #: src/modules/events/event-constants.ts:189
 msgid "Workspace member offline"
-msgstr "Thành viên Workspace ngoại tuyến"
+msgstr "Thành viên offline"
 
 #: src/modules/events/event-constants.ts:188
 msgid "Workspace member online"
-msgstr "Thành viên workspace trực tuyến"
+msgstr "Thành viên online"
 
 #: src/modules/events/event-constants.ts:27
 msgid "Workspace setting updated"
@@ -7508,7 +7508,7 @@ msgstr "Bạn không có workspace"
 
 #: src/modules/auth/auth-require.tsx:111
 msgid "You have an account?"
-msgstr "Bạn có tài khoản?"
+msgstr "Bạn đã có tài khoản?"
 
 #: src/modules/workspaces/workspace-invitation.tsx:146
 msgid "You have been invited to join workspace"
@@ -7542,7 +7542,7 @@ msgstr "Trình duyệt của bạn không hỗ trợ định vị địa lý."
 
 #: src/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping.tsx:105
 msgid "Your Check-in/out is pending approval"
-msgstr "Việc nhận/trả phòng của bạn đang chờ phê duyệt"
+msgstr "Yêu cầu chấm công của bạn đang chờ phê duyệt"
 
 #: src/modules/plugins/plugins-provider.tsx:108
 msgid "Your name"
