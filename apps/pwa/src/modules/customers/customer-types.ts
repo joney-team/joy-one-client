@@ -29,9 +29,9 @@ export interface CustomerDto {
 }
 
 export interface CustomerRelationshipContact {
-  name: string,
-  phone: string,
-  type: string,
+  name: string;
+  phone: string;
+  type: string;
 }
 
 export interface CustomerEntity extends BaseMongoEntity {
@@ -46,7 +46,10 @@ export interface CustomerEntity extends BaseMongoEntity {
   location?: LocationEntity;
   secondaryLocation?: LocationEntity;
   vnLocation?: LocationEntity;
+
   vnSecondaryLocation?: LocationEntity;
+  vnSecondaryLocationFullAddress?: string;
+
   vnPrevLocationFullAddress?: string;
   vnPrevSecondaryLocationFullAddress?: string;
   vnLocationFullAddress?: string;
@@ -68,7 +71,13 @@ export interface CustomerEntity extends BaseMongoEntity {
 export interface QueryCustomers extends Query {
   q?: string;
   userInChargeId?: string;
-  sortBy?: 'updatedAtDESC' | 'updatedAtASC' | 'createdAtDESC' | 'createdAtASC' | 'lastCheckinDESC' | 'lastCheckinASC';
+  sortBy?:
+    | "updatedAtDESC"
+    | "updatedAtASC"
+    | "createdAtDESC"
+    | "createdAtASC"
+    | "lastCheckinDESC"
+    | "lastCheckinASC";
 }
 
 export interface AssignCustomerDto {
@@ -84,18 +93,19 @@ export interface CustomerRealtimeReport {
   newCustomersToday: number;
 }
 
-export type CustomerShortInfo = Pick<CustomerEntity,
-  | 'code'
-  | 'plainCode'
-  | 'name'
-  | 'phone'
-  | 'email'
-  | 'gender'
-  | 'avatar'
-  | 'tagIds'
-  | 'lastCheckin'
-  | 'workspaceId'
-  | 'workspaceBranchId'
+export type CustomerShortInfo = Pick<
+  CustomerEntity,
+  | "code"
+  | "plainCode"
+  | "name"
+  | "phone"
+  | "email"
+  | "gender"
+  | "avatar"
+  | "tagIds"
+  | "lastCheckin"
+  | "workspaceId"
+  | "workspaceBranchId"
 > & {
   _id: string;
 };

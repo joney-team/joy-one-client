@@ -99,10 +99,13 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                   disabled={!customer.vnPrevLocationFullAddress}
                 >
                   <Anchor
-                    href={customer.vnLocation && getGoogleMapLink(customer.vnLocation)}
+                    href={
+                      customer.vnLocationFullAddress &&
+                      getGoogleMapLink(customer.vnLocationFullAddress)
+                    }
                     target="_blank"
                   >
-                    {renderLocation(customer.vnLocation) || "--"}
+                    {customer.vnLocationFullAddress || "--"}
                   </Anchor>
                 </Tooltip>
               )}
@@ -110,7 +113,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
 
             <LoanRowInfo
               label={<Trans>Secondary address (Hometown)</Trans>}
-              value={customer.vnSecondaryLocation?.address}
+              value={customer.vnSecondaryLocationFullAddress}
               renderValue={(value) => (
                 <Tooltip
                   label={
@@ -121,7 +124,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                   disabled={!customer.vnPrevSecondaryLocationFullAddress}
                 >
                   <Anchor href={value && getGoogleMapLink(value)} target="_blank">
-                    {renderLocation(customer.vnSecondaryLocation) || "--"}
+                    {customer.vnSecondaryLocationFullAddress || "--"}
                   </Anchor>
                 </Tooltip>
               )}
