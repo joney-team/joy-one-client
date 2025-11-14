@@ -364,13 +364,16 @@ const TaskRow: FC<{
       style={{
         borderLeft: `3px solid ${color(statusStyle.color)}`,
         position: "relative",
+        overflow: "hidden",
       }}
     >
-      <Group w="max-content" style={{ cursor: "pointer" }} onClick={() => tasks.open(task)}>
-        <Stack gap={8}>
-          <Text fz={14} fw={500}>
-            {task.name}
-          </Text>
+      <Group className="clickable" onClick={() => tasks.open(task)} w="100%">
+        <Stack gap={8} w="100%">
+          <Tooltip label={task.name}>
+            <Text fz={14} fw={500} truncate>
+              {task.name}
+            </Text>
+          </Tooltip>
 
           <Renderer visible={timeTrackingGroupByUsers.length > 0}>
             {timeTrackingGroupByUsers.map(({ user, timeTrackings }) => {

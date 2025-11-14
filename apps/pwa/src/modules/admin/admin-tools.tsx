@@ -10,7 +10,6 @@ import {
   IconClipboard,
   IconLocation,
   IconReportAnalytics,
-  IconSearch,
   IconTools,
 } from "@tabler/icons-react";
 
@@ -197,13 +196,6 @@ export const AdminTools: FC = () => {
           ))}
         </Group>
       </Card>
-
-      {/* <SessionTitle name="Illustrations" icon={IconClipboard} />
-      <Card shadow="xs">
-        <Stack>
-          <TechIllustration width={1000} />
-        </Stack>
-      </Card> */}
     </Stack>
   );
 };

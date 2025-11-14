@@ -92,17 +92,37 @@ async function handleUploadFile(uploadFile: UploadFile, route: string) {
 
   formData.append("file", file);
 
-  if (uploadFile.ref) formData.append("ref", uploadFile.ref);
-  if (uploadFile.relatedCustomerId)
+  if (uploadFile.ref) {
+    formData.append("ref", uploadFile.ref);
+  }
+
+  if (uploadFile.relatedCustomerId) {
     formData.append("relatedCustomerId", uploadFile.relatedCustomerId);
-  if (uploadFile.relatedTicketId) formData.append("relatedTicketId", uploadFile.relatedTicketId);
-  if (uploadFile.relatedTaskId) formData.append("relatedTaskId", uploadFile.relatedTaskId);
-  if (uploadFile.relatedReceiptId) formData.append("relatedReceiptId", uploadFile.relatedReceiptId);
-  if (uploadFile.relatedHrmTimekeepingId)
+  }
+
+  if (uploadFile.relatedTicketId) {
+    formData.append("relatedTicketId", uploadFile.relatedTicketId);
+  }
+
+  if (uploadFile.relatedTaskId) {
+    formData.append("relatedTaskId", uploadFile.relatedTaskId);
+  }
+
+  if (uploadFile.relatedReceiptId) {
+    formData.append("relatedReceiptId", uploadFile.relatedReceiptId);
+  }
+
+  if (uploadFile.relatedHrmTimekeepingId) {
     formData.append("relatedHrmTimekeepingId", uploadFile.relatedHrmTimekeepingId);
-  if (uploadFile.relatedLoanId) formData.append("relatedLoanId", uploadFile.relatedLoanId);
-  if (uploadFile.relatedEntities)
+  }
+
+  if (uploadFile.relatedLoanId) {
+    formData.append("relatedLoanId", uploadFile.relatedLoanId);
+  }
+
+  if (uploadFile.relatedEntities) {
     formData.append("relatedEntities", JSON.stringify(uploadFile.relatedEntities));
+  }
 
   return apiTools.formData<FileEntity>(route, formData);
 }
