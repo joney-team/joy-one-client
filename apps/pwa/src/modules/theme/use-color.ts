@@ -23,11 +23,11 @@ export const useColor = () => {
     return (color?: string | { light?: string; dark?: string }): string => {
       if (!color) return "";
 
-      if (typeof color === "string" && ["background", "bg"].includes(color)) {
-        return backgroundColors[colorScheme];
-      }
-
       if (typeof color === "string") {
+        if (["background", "bg"].includes(color)) {
+          return backgroundColors[colorScheme];
+        }
+
         return getColor(theme, color);
       }
 

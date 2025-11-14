@@ -4,6 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { ColorSchemes } from "@/components/color-schemes";
 import { useRouter } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
+import { useColor } from "@/modules/theme/use-color";
 import { UserRole } from "@/modules/users/users-types";
 import {
   ActionIcon,
@@ -51,6 +52,7 @@ export const LayoutAdmin: FC<PropsWithChildren> = (props) => {
   const auth = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const color = useColor();
 
   if (!allowedRoles.includes(auth.user?.role!))
     return (
@@ -68,6 +70,7 @@ export const LayoutAdmin: FC<PropsWithChildren> = (props) => {
         breakpoint: "sm",
         collapsed: { mobile: !opened },
       }}
+      bg={color("bg")}
     >
       <AppShell.Header>
         <Group h="100%" align="center" px={12} gap={8}>

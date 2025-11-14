@@ -71,8 +71,8 @@ export const LoanListTabs: FC = () => {
       <NavigationTabs
         activeTab={activeTabId}
         onChange={(e) => {
-          if (!e || e === tabs[0].value) router.removeQuery("ltab");
-          else router.setQuery("ltab", e);
+          if (!e || e === tabs[0].value) router.replace('/loans')
+          else router.replace(`/loans?ltab=${e}`);
         }}
         tabs={tabs.map((t) => ({
           id: t.value,

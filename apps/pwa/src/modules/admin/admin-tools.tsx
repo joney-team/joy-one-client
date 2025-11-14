@@ -23,10 +23,25 @@ export const AdminTools: FC = () => {
 
   return (
     <Stack p={16}>
-      <SectionTitle name="Admin Tools" icon={IconTools} />
+      <SectionTitle name="System Tools" icon={IconTools} />
       <Card shadow="xs">
         <Stack align="start">
-          <Button onClick={() => api.post("/helpers/reset-redis")}>Reset Redis Cache</Button>
+          <Button color="red" onClick={() => api.post("/helpers/reset-redis")}>
+            Redis | Reset Cache
+          </Button>
+
+          <Button color="teal" onClick={() => api.patch("/search/sys/index-all")}>
+            Search | Re-Index All
+          </Button>
+        </Stack>
+      </Card>
+
+      <SectionTitle name="Migrations" icon={IconTools} />
+      <Card shadow="xs">
+        <Stack align="start">
+          <Button onClick={() => api.patch(`/loans/migrate-created-at`)}>
+            Migrate Loan Created At
+          </Button>
 
           <Button onClick={() => api.patch(`/receipts/sync-all`)}>Sync All Receipts</Button>
 
@@ -40,12 +55,6 @@ export const AdminTools: FC = () => {
 
           <Button onClick={() => api.patch(`/files/migrate`)}>Migrate files</Button>
           <Button onClick={() => api.patch(`/files/remove-old-files`)}>Remove old files</Button>
-
-          <Button
-            onClick={() => Promise.all(new Array(100).fill(0).map(() => api.get(`/receipts`)))}
-          >
-            Test Rate Limit
-          </Button>
         </Stack>
       </Card>
 
@@ -54,18 +63,6 @@ export const AdminTools: FC = () => {
         <Stack align="start">
           <Button onClick={() => api.patch("/locations/crawls/vn-locations")}>
             Crawl VN Location
-          </Button>
-
-          <Button onClick={() => api.patch("/customers/migrateCustomerVnLocations")}>
-            Sync Customers
-          </Button>
-
-          <Button onClick={() => api.patch("/customer-kycs/bulkConvertVnLocations")}>
-            Sync Customer KYCs
-          </Button>
-
-          <Button onClick={() => api.patch("/customer-forms/bulkConvertVnLocations")}>
-            Sync Customer Forms
           </Button>
         </Stack>
       </Card>
@@ -94,7 +91,7 @@ export const AdminTools: FC = () => {
         </Stack>
       </Card>
 
-      <SectionTitle name="Exec Scheduling" icon={IconCalendar} />
+      <SectionTitle name="Scheduling" icon={IconCalendar} />
 
       <Card shadow="xs">
         <Group>
@@ -144,15 +141,6 @@ export const AdminTools: FC = () => {
         </Group>
       </Card>
 
-      <SectionTitle name="Search Index" icon={IconSearch} />
-      <Card shadow="xs">
-        <Group>
-          <Button color="teal" onClick={() => api.patch("/search/sys/index-all")}>
-            Re-Index All
-          </Button>
-        </Group>
-      </Card>
-
       <SectionTitle name="Reports" icon={IconReportAnalytics} />
       <Card shadow="xs">
         <Group>
@@ -171,6 +159,17 @@ export const AdminTools: FC = () => {
             onClick={() => api.delete(`/reports/purge`).catch(onError)}
           >
             Purge Reports
+          </Button>
+        </Group>
+      </Card>
+
+      <SectionTitle name="Testing" />
+      <Card shadow="xs">
+        <Group>
+          <Button
+            onClick={() => Promise.all(new Array(100).fill(0).map(() => api.get(`/receipts`)))}
+          >
+            Test Rate Limit
           </Button>
         </Group>
       </Card>
