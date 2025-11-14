@@ -115,7 +115,7 @@ export const DynamicSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrappe
                   size="xs"
                 />
               ) : (
-                <Radio
+                <Radio.Indicator
                   checked={selectedOptions.some((v) => v.value === item.value)}
                   onChange={() => {}}
                   radius={20}
