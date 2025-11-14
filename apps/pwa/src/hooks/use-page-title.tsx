@@ -7,15 +7,39 @@ import { useEffect, useRef } from "react";
  * Detects if a title looks like a URL path (e.g., "domain/tasks/12313")
  */
 const isUrlPath = (title: string, currentPathname?: string): boolean => {
+  if (!title) return false;
+
   // If title exactly matches the pathname, it's definitely a URL path
-  if (currentPathname && (title === currentPathname || title.endsWith(currentPathname))) {
-    return true;
+  if (currentPathname) {
+    const normalizedPathname = currentPathname.toLowerCase();
+    const normalizedTitle = title.toLowerCase();
+
+    if (
+      normalizedTitle === normalizedPathname ||
+      normalizedTitle.endsWith(normalizedPathname) ||
+      normalizedTitle.includes(normalizedPathname + " ") ||
+      normalizedTitle.includes(" " + normalizedPathname)
+    ) {
+      // But exclude if it's part of a proper title format (e.g., "Page Title - /path" is valid)
+      // Only consider it a URL path if the pathname is at the start or the title is very short
+      if (normalizedTitle.startsWith(normalizedPathname) || title.length < 30) {
+        return true;
+      }
+    }
   }
 
-  // Check if title contains a path-like pattern (starts with domain or contains slashes)
-  // Common patterns: "domain/path", "/path", or just the path segment
-  // Pattern matches: "domain/path", "domain.com/path", "/path", but not "Home / Dashboard"
-  return /^[^/]*\/[^/]/.test(title) || (title.startsWith("/") && title.length > 1);
+  // Check if title contains a path-like pattern
+  // Pattern matches: "domain/path", "domain.com/path", "/path/to/page"
+  // But not: "Home / Dashboard" (which has spaces around the slash)
+  const hasPathPattern =
+    /^[^/]*\/[^/\s]+/.test(title) ||
+    (title.startsWith("/") && title.length > 1 && !title.includes(" - "));
+
+  // Also check if it looks like a URL without protocol
+  const looksLikeUrl =
+    /^[a-z0-9.-]+\.[a-z]{2,}\//i.test(title) || /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(title);
+
+  return hasPathPattern || looksLikeUrl;
 };
 
 /**
@@ -36,10 +60,10 @@ const isUrlPath = (title: string, currentPathname?: string): boolean => {
 export const usePageTitle = () => {
   const pathname = usePathname();
   const previousTitleRef = useRef<string | null>(null);
-  const isRestoringRef = useRef(false);
+  const lastPathnameRef = useRef<string | null>(null);
 
+  // Initialize with current title if it's valid
   useEffect(() => {
-    // Initialize with current title if it's valid
     const currentTitle = document.title;
     if (currentTitle && !isUrlPath(currentTitle)) {
       previousTitleRef.current = currentTitle;
@@ -48,37 +72,82 @@ export const usePageTitle = () => {
 
   useEffect(() => {
     // When pathname changes, we're navigating to a new page
+    const previousPathname = lastPathnameRef.current;
+    lastPathnameRef.current = pathname;
+
     // Store the current title as the previous title if it's valid
     const currentTitle = document.title;
     if (currentTitle && !isUrlPath(currentTitle, pathname)) {
       previousTitleRef.current = currentTitle;
     }
 
-    // Immediately check if title became a URL path after navigation
-    // This handles the case where Next.js sets the title before our observer is set up
+    // Only start monitoring if we actually navigated (pathname changed)
+    if (previousPathname === pathname) {
+      return;
+    }
+
+    // Proactively restore title immediately on navigation to prevent flicker
+    // This is the key fix - we restore before Next.js has a chance to set the URL path
+    if (previousTitleRef.current) {
+      // Use multiple strategies to ensure the title is set
+      document.title = previousTitleRef.current;
+      requestAnimationFrame(() => {
+        if (isUrlPath(document.title, pathname) && previousTitleRef.current) {
+          document.title = previousTitleRef.current;
+        }
+      });
+    }
+
+    let isActive = true;
+    let lastCheckedTitle = document.title;
+
     const checkAndRestore = () => {
+      if (!isActive) return;
+
       const title = document.title;
-      if (isUrlPath(title, pathname) && previousTitleRef.current && !isRestoringRef.current) {
-        isRestoringRef.current = true;
-        document.title = previousTitleRef.current;
-      } else if (!isUrlPath(title, pathname) && title) {
-        previousTitleRef.current = title;
-        isRestoringRef.current = false;
+
+      // Skip if title hasn't changed
+      if (title === lastCheckedTitle) {
+        return;
+      }
+
+      lastCheckedTitle = title;
+
+      if (isUrlPath(title, pathname)) {
+        // Title is a URL path - restore previous if we have one
+        if (previousTitleRef.current) {
+          document.title = previousTitleRef.current;
+          // Use requestAnimationFrame to ensure our change persists
+          requestAnimationFrame(() => {
+            if (isActive && isUrlPath(document.title, pathname) && previousTitleRef.current) {
+              document.title = previousTitleRef.current;
+            }
+          });
+        }
+      } else if (title && title.trim().length > 0) {
+        // Title is valid - update our stored title
+        if (title !== previousTitleRef.current) {
+          previousTitleRef.current = title;
+        }
       }
     };
 
-    // Check immediately and after a short delay to catch early title changes
+    // Immediate checks with multiple timing strategies to catch fast changes
     checkAndRestore();
-    const immediateCheck = setTimeout(checkAndRestore, 0);
-    const delayedCheck = setTimeout(checkAndRestore, 100);
+    const timeout1 = setTimeout(checkAndRestore, 0);
+    const timeout2 = setTimeout(checkAndRestore, 10);
+    const timeout3 = setTimeout(checkAndRestore, 50);
+    const timeout4 = setTimeout(checkAndRestore, 100);
 
     // Set up a MutationObserver to watch for title changes
     const observer = new MutationObserver(() => {
       checkAndRestore();
     });
 
-    // Observe changes to the title element
+    // Observe changes to the title element and head
     const titleElement = document.querySelector("title");
+    const headElement = document.head;
+
     if (titleElement) {
       observer.observe(titleElement, {
         childList: true,
@@ -87,24 +156,37 @@ export const usePageTitle = () => {
       });
     }
 
-    // Also check periodically in case MutationObserver misses changes
-    // This is a fallback for cases where Next.js updates the title in a way
-    // that doesn't trigger the observer. We'll run this for a short period after navigation
+    if (headElement) {
+      observer.observe(headElement, {
+        childList: true,
+        subtree: true,
+      });
+    }
+
+    // Also use interval as a fallback (runs for 2 seconds after navigation)
     let checkCount = 0;
-    const maxChecks = 20; // Check for up to 1 second (20 * 50ms)
+    const maxChecks = 40; // 2 seconds (40 * 50ms)
     const checkInterval = setInterval(() => {
+      if (!isActive) {
+        clearInterval(checkInterval);
+        return;
+      }
       checkAndRestore();
       checkCount++;
       if (checkCount >= maxChecks) {
         clearInterval(checkInterval);
       }
-    }, 50); // Check every 50ms during navigation
+    }, 50);
 
+    // Cleanup
     return () => {
+      isActive = false;
       observer.disconnect();
       clearInterval(checkInterval);
-      clearTimeout(immediateCheck);
-      clearTimeout(delayedCheck);
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+      clearTimeout(timeout3);
+      clearTimeout(timeout4);
     };
   }, [pathname]);
 };
