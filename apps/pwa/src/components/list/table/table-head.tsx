@@ -86,7 +86,7 @@ const TableHeadContent: FC<{
             {filter?.selectedContent}
           </Group>
         }
-        disabled={!filter?.selectedContent}
+        disabled={!filter?.selectedContent || !filter.active}
       >
         <Group wrap="nowrap" style={{ flex: 1, overflow: "hidden", minWidth: 0, gap: 6 }}>
           {column?.icon && typeof column.icon !== "boolean" && (
