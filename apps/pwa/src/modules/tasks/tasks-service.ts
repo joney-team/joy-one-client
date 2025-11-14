@@ -59,10 +59,6 @@ export async function getTaskByCode(code: string) {
   return response;
 }
 
-export async function getTaskMetadata(code: string) {
-  return api.get(`/tasks/metadata/${code}`);
-}
-
 export async function getTasks(query: any) {
   const response = await api.get<ResponseList<TaskEntity>>("/tasks", { params: query });
   response.data.map((v) => (taskEntities[v._id] = v));
