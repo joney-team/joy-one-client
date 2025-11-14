@@ -29,7 +29,7 @@ export const TextFilter: FC<FilterProps> = ({ wrapper: Wrapper, column }) => {
     <Popover opened={opened} onClose={() => setOpened(false)} onDismiss={() => setOpened(false)}>
       <Popover.Target>
         <Group flex={1}>
-          <Wrapper active={!!value} onClick={() => setOpened((s) => !s)}>
+          <Wrapper active={!!value} onClick={() => setOpened((s) => !s)} selectedContent={value}>
             <Group>
               {value && (
                 <Text c={color("primary")} fz={12} fw={700}>

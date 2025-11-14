@@ -1,5 +1,5 @@
 import { BaseData } from "@/components/list/types";
-import { FC, MouseEventHandler, PropsWithChildren } from "react";
+import { FC, MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 import { TableColumn } from "../types";
 
 export type FilterWrapperProps = {
@@ -9,6 +9,7 @@ export type FilterWrapperProps = {
   quantity?: number;
   quantityColor?: string;
   onClear?: () => void | undefined;
+  selectedContent?: ReactNode;
 };
 
 export type FilterWrapper = FC<PropsWithChildren & FilterWrapperProps>;

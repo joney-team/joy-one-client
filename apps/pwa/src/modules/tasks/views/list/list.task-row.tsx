@@ -236,7 +236,6 @@ export const ListTaskRow: FC<{
                   fw={500}
                   c={hover.hovered ? color("primary") : undefined}
                   truncate="end"
-                  maw={650}
                 >
                   {String.limitCharacters(task.name, props.limitName || 100)}
                 </Text>

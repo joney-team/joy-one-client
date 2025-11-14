@@ -44,6 +44,10 @@ export const StaticSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrapper
             onClick={ctx.toggle}
             quantity={multiple ? selectedOptions.length : undefined}
             active={selectedOptions.length > 0}
+            selectedContent={selectedOptions
+              .map((v) => v.label)
+              .join(", ")
+              .trim()}
           >
             <Group gap={5} flex={1}>
               <Renderer visible={!multiple && selectedOptions.length > 0}>
@@ -74,23 +78,15 @@ export const StaticSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrapper
         const option = options?.find((v) => v.value === item.value);
         if (!option) return null;
 
+        const isSelected = selectedOptions.some((v) => v.value === item.value);
+
         return (
           <Combobox.Option value={itemId} key={itemId} fz={14}>
             <Group gap={8} wrap="nowrap">
               {multiple ? (
-                <Checkbox
-                  checked={selectedOptions.some((v) => v.value === item.value)}
-                  onChange={() => {}}
-                  radius={5}
-                  size="xs"
-                />
+                <Checkbox checked={isSelected} radius={5} size="xs" />
               ) : (
-                <Radio
-                  checked={selectedOptions.some((v) => v.value === item.value)}
-                  onChange={() => {}}
-                  radius={20}
-                  size="xs"
-                />
+                <Radio.Indicator checked={isSelected} radius={20} size="xs" />
               )}
 
               {option?.render ? <option.render /> : <Text fz={14}>{item.label}</Text>}

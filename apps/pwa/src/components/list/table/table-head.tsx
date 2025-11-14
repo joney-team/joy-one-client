@@ -4,7 +4,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Box, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconMinus, IconSelector } from "@tabler/icons-react";
-import { CSSProperties, FC, useEffect, useMemo, useRef } from "react";
+import { CSSProperties, FC, Fragment, useEffect, useMemo, useRef } from "react";
 import { TableColumn } from "../types";
 import { getColumnName, getSortQueryKey, getValuePath } from "../utils";
 import { useColumnResize } from "./use-collumn-resize";
@@ -51,17 +51,6 @@ const TableHeadContent: FC<{
     }
   };
 
-  const contentWidth = useMemo(() => {
-    const padding = 12;
-    const gap = 6;
-
-    const sortIconSize = column.sortable ? 16 + gap : 0;
-    const columnIconSize = column?.icon ? 16 + gap : 0;
-    const filterIconSize = filter?.active ? 16 + gap : 0;
-
-    return column.width - padding * 2 - sortIconSize - columnIconSize - filterIconSize;
-  }, [column.width, column.sortable, column.icon, column.minWidth, filter?.active]);
-
   useEffect(() => {
     // Change color of sort icon
     if (sortIconRef.current) {
@@ -90,22 +79,34 @@ const TableHeadContent: FC<{
       className={filter?.onClick ? "clickable" : undefined}
       onClick={filter?.onClick}
     >
-      {column?.icon && typeof column.icon !== "boolean" && (
-        <Group style={{ width: 16, height: 16 }} justify="center" align="center">
-          <column.icon size={16} color={filter?.active ? color("primary") : undefined} />
-        </Group>
-      )}
-
-      <Text
-        ta={column.align ?? "left"}
-        truncate
-        fz={13}
-        fw={500}
-        title={getColumnName(column.columnKey)}
-        style={{ width: contentWidth }}
+      <Tooltip
+        label={
+          <Fragment>
+            <Trans>Filter</Trans>
+            {": "}
+            {filter?.selectedContent}
+          </Fragment>
+        }
+        disabled={!filter?.selectedContent}
       >
-        {columnName}
-      </Text>
+        <Group wrap="nowrap" style={{ flex: 1, overflow: "hidden", minWidth: 0, gap: 6 }}>
+          {column?.icon && typeof column.icon !== "boolean" && (
+            <Group style={{ width: 16, height: 16 }} justify="center" align="center">
+              <column.icon size={16} color={filter?.active ? color("primary") : undefined} />
+            </Group>
+          )}
+
+          <Text
+            ta={column.align ?? "left"}
+            truncate
+            fz={13}
+            fw={500}
+            title={getColumnName(column.columnKey)}
+          >
+            {columnName}
+          </Text>
+        </Group>
+      </Tooltip>
 
       <Group gap={0} wrap="nowrap">
         {filter?.active && (

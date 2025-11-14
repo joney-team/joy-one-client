@@ -75,6 +75,7 @@ export const DynamicSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrappe
             onClick={ctx.toggle}
             quantity={multiple ? selectedOptions.length : undefined}
             active={selectedOptions.length > 0}
+            selectedContent={selectedOptions.map((v) => v.label).join(", ")}
           >
             <Group gap={5} flex={1}>
               <Renderer visible={!multiple && selectedOptions.length > 0}>
