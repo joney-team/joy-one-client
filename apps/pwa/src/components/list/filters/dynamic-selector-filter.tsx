@@ -1,21 +1,14 @@
 "use client";
 
-import {
-  ActionIcon,
-  Checkbox,
-  CheckboxProps,
-  Combobox,
-  ComboboxDropdownProps,
-  Radio,
-} from "@mantine/core";
+import { ActionIcon, Checkbox, Combobox, ComboboxDropdownProps, Radio } from "@mantine/core";
 
 import { Renderer } from "@/components/renderer";
 import { getId, Selector } from "@/components/selector";
 import { Group, Text } from "@mantine/core";
-import { IconChevronDown, IconCircleFilled } from "@tabler/icons-react";
+import { IconChevronDown } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
-import { FilterProps } from "./types";
 import { useListContext } from "../list-context";
+import { FilterProps } from "./types";
 
 export interface DynamicSelectorFilterOption {
   label: string;

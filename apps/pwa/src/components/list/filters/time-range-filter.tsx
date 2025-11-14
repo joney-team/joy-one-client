@@ -159,7 +159,9 @@ export const TimeRangeFilter: FC<FilterProps> = ({ column, wrapper: Wrapper }) =
             onClick={() => setOpened(true)}
             onClear={onClear}
             active={filterValue.length > 0}
-            selectedContent={displayFilterValue}
+            selectedContent={
+              <span style={{ textTransform: "capitalize" }}>{displayFilterValue}</span>
+            }
           >
             {displayFilterValue && (
               <Text fz={12} fw={700} tt="capitalize">

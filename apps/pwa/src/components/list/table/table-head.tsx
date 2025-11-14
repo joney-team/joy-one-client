@@ -3,8 +3,8 @@
 import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Box, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
-import { IconFilter, IconFilterFilled, IconMinus, IconSelector } from "@tabler/icons-react";
-import { CSSProperties, FC, Fragment, useEffect, useMemo, useRef } from "react";
+import { IconFilterFilled, IconMinus, IconSelector } from "@tabler/icons-react";
+import { CSSProperties, FC, useEffect, useMemo, useRef } from "react";
 import { TableColumn } from "../types";
 import { getColumnName, getSortQueryKey, getValuePath } from "../utils";
 import { useColumnResize } from "./use-collumn-resize";
