@@ -21,6 +21,7 @@ import { type EventEntity } from "./modules/events/event-types";
 import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
+import { usePageTitle } from "./hooks/use-page-title";
 
 if (config.SENTRY_DSN) {
   Sentry.init({ dsn: config.SENTRY_DSN, release: packageJson.version });
@@ -33,6 +34,8 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   const global = getGlobal();
   const [metadata, setMetadata] = useState(props.metadata);
   global._metadata = metadata;
+
+  usePageTitle();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [config, setConfig] = useState<AppConfig>();
