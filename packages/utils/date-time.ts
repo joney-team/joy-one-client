@@ -124,6 +124,10 @@ export class DateTime {
     throw Error(`Unit ${unit} is not supported`);
   }
 
+  static getNowInSeconds() {
+    return this.toSeconds(new Date());
+  }
+
   static toSeconds(date: RawDate) {
     return +Math.floor(this.normalizeDate(date).getTime() / 1000).toFixed(0);
   }
@@ -336,7 +340,11 @@ export class DateTime {
       .padStart(2, "0")}`;
   }
 
-  static parseTimeInputValue(value: string): { hours: number; minutes: number; seconds: number } {
+  static parseTimeInputValue(value: string): {
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } {
     try {
       const hourPattern = /(\d+)\s*h/;
       const minutePattern = /(\d+)\s*m/;

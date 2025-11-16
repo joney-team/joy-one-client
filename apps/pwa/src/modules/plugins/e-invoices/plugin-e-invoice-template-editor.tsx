@@ -143,7 +143,7 @@ const TemplateField: FC<{
                 }}
                 variables={Object.entries(availableVariables.formula).map(([key, value]) => ({
                   name: key,
-                  description: key,
+                  description: value.description,
                   isNumerical: value.isNumerical,
                 }))}
               />

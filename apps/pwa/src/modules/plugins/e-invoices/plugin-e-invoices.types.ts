@@ -64,7 +64,6 @@ export interface CreatePluginEInvoicesProviderDto {
 export type UpdatePluginEInvoicesProviderDto = Partial<CreatePluginEInvoicesProviderDto>;
 
 export interface PluginEInvoiceTemplateVariable {
-  name?: string;
   description?: string;
   isNumerical?: true;
   childVariables?: Record<string, PluginEInvoiceTemplateVariable>;
