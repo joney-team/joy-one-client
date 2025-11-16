@@ -14,6 +14,7 @@ import { StaticSelectorFilter } from "./static-selector-filter";
 import { TextFilter } from "./text-filter";
 import { TimeRangeFilter } from "./time-range-filter";
 import { FilterProps, FilterWrapper } from "./types";
+import { Trans } from "@lingui/react/macro";
 
 export const getFilterComponent = (column: TableColumn): FC<FilterProps<any>> | null => {
   if (column.filter?.dynamicSelector) {
@@ -133,14 +134,18 @@ export const FilterBar: FC = () => {
 
 export const Filter: FC = () => {
   const layout = useLayout();
-  const ctx = useListContext();
-  const isHasFilter = Object.values(ctx.columns).some((v) => v?.filter);
+  const context = useListContext();
+  const isHasFilter = Object.values(context.columns).some((v) => v?.filter);
 
   if (!isHasFilter) return null;
 
-  const filterCount = Object.keys(ctx.list.params).reduce((acc, key) => {
+  const filterCount = Object.keys(context.list.params).reduce((acc, key) => {
     const ignoreKeys = ["sort"];
-    if (ignoreKeys.some((v) => key.indexOf(v) > -1) || Boolean(ctx.fixedParams?.[key])) return acc;
+
+    if (ignoreKeys.some((v) => key.indexOf(v) > -1) || Boolean(context.fixedParams?.[key])) {
+      return acc;
+    }
+
     return acc + 1;
   }, 0);
 
@@ -148,11 +153,14 @@ export const Filter: FC = () => {
     <ActionButton
       icon={IconFilter}
       activeIcon={IconFilterFilled}
-      label={layout.view !== "mobile" ? t`Filter` : ""}
+      label={layout.view !== "mobile" ? <Trans>Filter</Trans> : ""}
       onClick={() =>
-        ctx.setViewState({ ...ctx.viewState, isFilterVisible: !ctx.viewState.isFilterVisible })
+        context.setViewState({
+          ...context.viewState,
+          isFilterVisible: !context.viewState.isFilterVisible,
+        })
       }
-      active={ctx.viewState.isFilterVisible}
+      active={context.viewState.isFilterVisible}
       quantity={filterCount}
     />
   );

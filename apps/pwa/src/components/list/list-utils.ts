@@ -89,6 +89,7 @@ export function generateDefaultViewState(args: {
   const totalRemainingWidth =
     elementWidth -
     Object.entries(args.props.columns).reduce((acc, [_, column]) => {
+      if (column?.defaultHidden) return acc;
       return acc + (column?.defaultWidth ?? 0);
     }, 0);
 

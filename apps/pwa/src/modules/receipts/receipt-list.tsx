@@ -23,21 +23,21 @@ import { userColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import {
   IconArrowsDoubleSwNe,
   IconCalendarDown,
   IconCashRegister,
+  IconCoins,
   IconCreditCard,
   IconEye,
   IconPrinter,
 } from "@tabler/icons-react";
 import { type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
-import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
-import { Trans } from "@lingui/react/macro";
 import { OnModalPayReceipt } from "./modals/modal-pay-receipt";
+import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
 
 export const ReceiptList: FC = () => {
   const workspace = useWorkspace();
@@ -115,6 +115,7 @@ export const ReceiptList: FC = () => {
             })),
           }),
           amount: numberColumn({
+            icon: IconCoins,
             name: <Trans>Money amount</Trans>,
             align: "right",
             sortable: true,

@@ -32,7 +32,7 @@ export const StaticSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrapper
     <Selector
       flex={1}
       key={column.columnKey}
-      autoCloseOnChange={!multiple}
+      autoCloseOnChange={false}
       pinnedOptions={config.options?.map((v) => ({
         id: v.value,
         label: v.label,
@@ -98,14 +98,14 @@ export const StaticSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrapper
         if (multiple) {
           const isSelected = selectedOptions.some((v) => v.value === value?.value);
 
-          let _value = isSelected
+          const selectedValues = isSelected
             ? selectedOptions.filter((v) => v.value !== value?.value)
             : [...selectedOptions, value];
 
-          if (_value.length === 0) {
+          if (selectedValues.length === 0) {
             list.removeParams([column.columnKey]);
           } else {
-            list.setParams({ [column.columnKey]: _value.map((v) => v?.value) });
+            list.setParams({ [column.columnKey]: selectedValues.map((v) => v?.value) });
           }
         } else {
           list.setParams({ [column.columnKey]: value?.value });

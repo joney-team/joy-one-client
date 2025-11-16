@@ -20,7 +20,7 @@ export function codeColumn<T = any, FieldType = T[keyof T]>(
 
   return {
     icon: IconHash,
-    defaultWidth: 100,
+    defaultWidth: 120,
     filter: { text: true },
     name: <Trans>Code</Trans>,
     ...rest,

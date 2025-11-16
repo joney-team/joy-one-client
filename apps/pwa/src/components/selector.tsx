@@ -190,7 +190,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     return acc;
   }, {} as Record<string, T[]>);
 
-  const _onSearch = useDebouncedCallback(
+  const handleSearch = useDebouncedCallback(
     async (q?: string) => {
       if (!q || q.length < 0) {
         setSearchOptions([]);
@@ -211,7 +211,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     props.staticSearch ? 0 : 300
   );
 
-  const _onOpen = async () => {
+  const handleOpen = async () => {
     if (props.disabled) return;
 
     props.onOpen?.();
@@ -277,7 +277,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                   combobox.closeDropdown();
                   onClose?.();
                 } else {
-                  _onOpen();
+                  handleOpen();
                 }
               },
               close: () => {
@@ -296,7 +296,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
               onChange={(event) => {
                 if (search.length === 0 && event.currentTarget.value.length > 0) setSearching(true);
                 setSearch(event.currentTarget.value);
-                _onSearch(event.currentTarget.value);
+                handleSearch(event.currentTarget.value);
               }}
               placeholder={props.searchPlaceholder || t`Search`}
               rightSection={
