@@ -6,16 +6,15 @@ import { BaseData, TableColumn } from "@/components/list/types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Checkbox, Group, Loader, Stack, Text } from "@mantine/core";
 import Link from "next/link";
-import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, useEffect, useMemo, useRef } from "react";
 import { getId, getIn, getValuePath } from "../list-utils";
 import { ListTableHead } from "./table-head";
 
 import { ContextMenu } from "@/components/context-menu";
 import { useColor } from "@/modules/theme/use-color";
+import { Trans } from "@lingui/react/macro";
 import { useListContext } from "../list-context";
 import styles from "./table.module.css";
-import { Trans } from "@lingui/react/macro";
-import { IconCircle } from "@tabler/icons-react";
 
 const getPinnedPositionStyle = (args: {
   columns: TableColumn[];
@@ -60,7 +59,6 @@ export default function ListTable<T extends BaseData>() {
   const context = useListContext();
   const workspace = useWorkspace();
   const color = useColor();
-  const [dataPointedId, setDataPointedId] = useState<string | null>(null);
 
   // Refs for sticky header
   const tableScrollRef = useRef<HTMLDivElement>(null);
@@ -86,8 +84,8 @@ export default function ListTable<T extends BaseData>() {
     context.list.data.every((v: any) => context.selectedIds.includes(v.id || v._id || ""));
 
   const contextMenuDropdown = useMemo(() => {
-    const rowData = context.list.data.find((v) => getId(v) === dataPointedId);
-    if (!dataPointedId || !rowData) return null;
+    const rowData = context.list.data.find((v) => getId(v) === context.pointedId);
+    if (!context.pointedId || !rowData) return null;
 
     const availableSelectBulkActions = context.bulkActions.filter((bulkAction) => {
       const isAvailable = bulkAction.available?.(context.list.data) ?? true;
@@ -150,7 +148,7 @@ export default function ListTable<T extends BaseData>() {
         })}
       </ContextMenu.Dropdown>
     );
-  }, [dataPointedId]);
+  }, [context.pointedId]);
 
   const isBulkActionsActivated = useMemo(() => {
     return (
@@ -222,10 +220,15 @@ export default function ListTable<T extends BaseData>() {
       </Stack>
 
       <ContextMenu
+        onClose={() => {
+          if (!context.pointedId) return;
+          context.unselect(context.pointedId);
+          context.setPointedId(null);
+        }}
         dataPointed={{
           attributeName: "data-id",
           onPointed: (id) => {
-            setDataPointedId(id);
+            context.setPointedId(id);
             if (id) context.select(id, { isReplace: true });
           },
         }}

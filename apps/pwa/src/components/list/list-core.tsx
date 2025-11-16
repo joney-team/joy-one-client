@@ -3,7 +3,6 @@
 import { useList } from "@/components/list/use-list";
 import { useLayout } from "@/layout/layout-context";
 import { api } from "@/modules/apis";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { shiftSelect } from "@joy-one-client/utils/array";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -63,7 +62,6 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
   const forceUpdate = () => setVersion((s) => s + 1);
 
   const layout = useLayout();
-  const workspace = useWorkspace();
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -71,6 +69,7 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
 
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [_selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [pointedId, setPointedId] = useState<string | null>(null);
 
   const defaultViewState = useMemo(() => {
     return generateDefaultViewState({ element: listEleRef.current!, view: layout.view, props });
@@ -243,6 +242,8 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
         },
       });
     },
+    pointedId,
+    setPointedId,
   };
 
   const { card: ListCard } = props;

@@ -165,4 +165,6 @@ export type ListContext<Data extends BaseData = any> = Omit<
   actions: ListAction<Data>[];
   bulkActions: ListBulkAction<Data>[];
   resetDefault: () => void;
+  pointedId: string | null;
+  setPointedId: (id: string | null) => void;
 };

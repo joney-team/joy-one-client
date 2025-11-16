@@ -13,22 +13,27 @@ import { useListContext } from "../list-context";
 import { getId } from "../list-utils";
 
 export const BulkActions: FC = () => {
-  const ctx = useListContext();
+  const context = useListContext();
   const workspace = useWorkspace();
 
   const availableSelectBulkActions = useMemo(() => {
-    return (ctx.bulkActions || []).filter(
+    return (context.bulkActions || []).filter(
       (v) =>
         (!v.available ||
-          v.available(ctx.list.data.filter((i) => ctx.selectedIds.includes(getId(i))))) &&
+          v.available(context.list.data.filter((i) => context.selectedIds.includes(getId(i))))) &&
         (!v.permission || workspace.hasPermission(v.permission))
     );
-  }, [ctx.bulkActions, ctx.list.data, ctx.selectedIds, workspace.hasPermission]);
+  }, [context.bulkActions, context.list.data, context.selectedIds, workspace.hasPermission]);
 
-  if (availableSelectBulkActions.length === 0 || ctx.selectedIds.length === 0) return null;
+  if (
+    availableSelectBulkActions.length === 0 ||
+    context.selectedIds.length === 0 ||
+    context.pointedId
+  )
+    return null;
 
-  const selectedItems = ctx.list.data.filter((i: any) =>
-    ctx.selectedIds.includes(i.id || i._id || "")
+  const selectedItems = context.list.data.filter((i: any) =>
+    context.selectedIds.includes(i.id || i._id || "")
   );
 
   return (
@@ -45,11 +50,11 @@ export const BulkActions: FC = () => {
         <Group h={45} align="center" justify="space-between" gap={5} wrap="nowrap">
           <IconStack2 size={20} strokeWidth={1.5} color="white" />
           <Group gap={3} wrap="nowrap">
-            <Text c="white" fz={14} fw={600} miw={10}>
-              <NumberFormat value={ctx.selectedIds.length} />
+            <Text c="white" fz={12} fw={600} miw={10}>
+              <NumberFormat value={context.selectedIds.length} />
             </Text>
-            <Text c="white" fz={14} fw={600}>
-              {t`Selected`}
+            <Text c="white" fz={12} fw={600}>
+              <Trans>Selected</Trans>
             </Text>
           </Group>
 
@@ -66,8 +71,8 @@ export const BulkActions: FC = () => {
                     key={i}
                     onClick={() =>
                       action.handler(selectedItems, {
-                        unSelect: () => ctx.unselectAll(),
-                        refetch: () => ctx.list.fetch(true),
+                        unSelect: () => context.unselectAll(),
+                        refetch: () => context.list.fetch(true),
                       })
                     }
                     leftIcon={action.icon}
@@ -97,8 +102,8 @@ export const BulkActions: FC = () => {
                   availableSelectBulkActions
                     .find((v) => v.type === "archive")
                     ?.handler(selectedItems, {
-                      unSelect: () => ctx.unselectAll(),
-                      refetch: () => ctx.list.fetch(true),
+                      unSelect: () => context.unselectAll(),
+                      refetch: () => context.list.fetch(true),
                     })
                 }
               >
@@ -111,7 +116,7 @@ export const BulkActions: FC = () => {
                 color="gray"
                 variant="subtle"
                 radius={100}
-                onClick={() => ctx.unselectAll()}
+                onClick={() => context.unselectAll()}
               >
                 <IconX size={18} />
               </ActionIcon>
