@@ -3,7 +3,6 @@
 import { StorageKey } from "@/types";
 import { getCookie } from "cookies-next/server";
 import { cookies, headers } from "next/headers";
-import { apiServerSide } from "../apis/server";
 import { AppLocale } from "./lang-types";
 
 export const getLocaleServer = async () => {
@@ -24,28 +23,4 @@ export const getLocaleServer = async () => {
   }
 
   return locale || AppLocale.EN;
-};
-
-export const translateServer = async (
-  id: string,
-  args?: {
-    params?: Record<string, any>;
-    locale?: AppLocale;
-  }
-): Promise<string> => {
-  try {
-    const response = await apiServerSide.post<string>(
-      `/lang/translate`,
-      { id, params: args?.params },
-      {
-        headers: {
-          "Accept-Language": args?.locale || (await getLocaleServer()),
-        },
-      }
-    );
-    return response;
-  } catch (error) {
-    console.error("Error translating server", error);
-    return id;
-  }
 };
