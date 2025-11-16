@@ -5,7 +5,7 @@ import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Menu, useMantineColorScheme } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";
-import { IconAutomation, IconMoon, IconSun } from "@tabler/icons-react";
+import { IconBrightnessAutoFilled, IconMoon, IconSun } from "@tabler/icons-react";
 import { FC } from "react";
 
 export const ColorSchemes: FC = () => {
@@ -46,10 +46,10 @@ export const ColorSchemes: FC = () => {
 
         <Menu.Item
           color={colorScheme === "auto" ? color("primary") : undefined}
-          leftSection={<IconAutomation size={18} />}
+          leftSection={<IconBrightnessAutoFilled size={18} />}
           onClick={() => clearColorScheme()}
         >
-          <Trans>System mode</Trans>
+          <Trans>Auto</Trans>
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

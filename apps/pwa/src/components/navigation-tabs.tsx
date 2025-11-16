@@ -28,7 +28,7 @@ export interface NavigationTabsProps {
 
 const buttonProps: ButtonProps = {
   variant: "subtle",
-  size: "compact-sm",
+  size: "sm",
   color: "var(--mantine-color-text)",
   radius: 5,
   py: 0,
@@ -82,6 +82,7 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
               >
                 {!!props.onChange ? (
                   <Button
+                    h={28}
                     {...buttonProps}
                     leftIcon={tab.icon}
                     onClick={() => props.onChange?.(tab.id!)}

@@ -32,10 +32,10 @@ export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
 }
 
 const defaultIconSizes: Partial<Record<ButtonSize, number>> = {
-  xs: 16,
-  "compact-xs": 16,
+  xs: 14,
+  "compact-xs": 14,
   sm: 18,
-  "compact-sm": 18,
+  "compact-sm": 16,
   default: 20,
 };
 
@@ -56,7 +56,10 @@ const defaultFontSizes: Partial<Record<ButtonSize, number>> = {
 };
 
 const defaultSconStrokeWidth: Partial<Record<ButtonSize, number>> = {
-  xs: 1.8,
+  xs: 2.2,
+  "compact-xs": 2.2,
+  sm: 1.6,
+  "compact-sm": 1.8,
   default: 1.6,
 };
 

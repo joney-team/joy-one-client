@@ -23,6 +23,7 @@ import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-membe
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Loader, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import {
@@ -54,7 +55,6 @@ export const TaskMenuActions: FC = () => {
     tasks.state.assigneeUserIds
   );
   const assigneesHover = useHover();
-  const partnersHover = useHover();
   const layout = useLayout();
   const tagsHover = useHover();
 
@@ -86,12 +86,12 @@ export const TaskMenuActions: FC = () => {
   return (
     <Group justify="space-between" wrap="nowrap" flex={1}>
       <Group gap={10}>
-        <ButtonPlus onClick={() => OnModalCreateTask()} />
+        <ButtonPlus iconSize={16} size={26} onClick={() => OnModalCreateTask()} />
 
         {layout.view === "mobile" && (
           <ButtonSelect
             icon={IconFolder}
-            label={t`Folder`}
+            label={<Trans>Folder</Trans>}
             autoHideLabel
             value={tasks.tagFolder?._id}
             options={tasks.tagFolders.map((tagFolder) => ({
@@ -108,8 +108,7 @@ export const TaskMenuActions: FC = () => {
         {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
           <ButtonSelect
             icon={IconSettings}
-            label={t`Settings`}
-            iconStrokeWidth={1.8}
+            label={<Trans>Settings</Trans>}
             onClick={() => OnTaskSatusesModal()}
           />
         )}
@@ -152,18 +151,15 @@ export const TaskMenuActions: FC = () => {
               >
                 <Button
                   onClick={ctx.toggle}
-                  size="compact-md"
-                  h={32}
+                  size="compact-sm"
                   color={isHasAssignee ? "primary" : "var(--mantine-color-dimmed)"}
                   variant="outline"
                   radius={100}
-                  fz={12}
                   leftIcon={IconUsers}
-                  iconSize={18}
                 >
                   <Group gap={5}>
                     <Text fz={12} fw={500}>
-                      {t`Assignee`}
+                      <Trans>Assignee</Trans>
                     </Text>
 
                     {!isAssigneesReady ? (
@@ -180,7 +176,12 @@ export const TaskMenuActions: FC = () => {
                             return (
                               <Group key={userId} ml={i > 0 ? -10 : 0}>
                                 <Tooltip label={assignee.name}>
-                                  <Avatar key={userId} user={assignee} size={22} withBorder />
+                                  <Avatar
+                                    key={userId}
+                                    user={assignee}
+                                    size={20}
+                                    withBorder={color({ light: "gray.6", dark: "gray.5" })}
+                                  />
                                 </Tooltip>
                               </Group>
                             );
@@ -245,65 +246,19 @@ export const TaskMenuActions: FC = () => {
             );
           }}
           target={(ctx) => {
-            const isHasPartner = tasks.state.partnerIds && tasks.state.partnerIds.length > 0;
+            const selectedPartnerIds = tasks.state.partnerIds ?? [];
 
             return (
-              <Group
-                justify="space-between"
-                style={{ position: "relative" }}
-                ref={partnersHover.ref}
-              >
-                <Button
-                  onClick={ctx.toggle}
-                  size="compact-md"
-                  h={32}
-                  color={isHasPartner ? "primary" : "var(--mantine-color-dimmed)"}
-                  variant="outline"
-                  radius={100}
-                  fz={12}
-                  leftIcon={IconUsers}
-                  iconSize={18}
-                >
-                  <Group gap={5}>
-                    <Text fz={12} fw={500}>
-                      {t`Partners`}
-                    </Text>
-
-                    {/* TODO: display partners */}
-                    {/* {isHasPartner && <Group gap={5} mr={0}>
-                    {tasks.state.partnerIds?.map((partnerId) => {
-                      const partner = workspace.partners.find(partner => partner._id === partnerId);
-                      if (!partner) return null;
-                      return <Tooltip label={partner.name} key={partnerId}>
-                        <AppAvatar key={partnerId} partner={partner} size={22} />
-                      </Tooltip>
-                    })}
-                  </Group>} */}
-                  </Group>
-                </Button>
-
-                {isHasPartner && partnersHover.hovered && (
-                  <ThemeIcon
-                    color="dark.2"
-                    radius={100}
-                    size={16}
-                    style={{
-                      position: "absolute",
-                      right: -5,
-                      top: -5,
-                      border: `1px solid white`,
-                      cursor: "pointer",
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      tasks.setState((s) => ({ ...s, partnerIds: undefined }));
-                    }}
-                  >
-                    <IconX size={7} strokeWidth={4} />
-                  </ThemeIcon>
-                )}
-              </Group>
+              <ButtonSelect
+                icon={IconUsers}
+                label={<Trans>Partners</Trans>}
+                autoHideLabel
+                onClick={ctx.toggle}
+                isActive={selectedPartnerIds.length > 0}
+                quantity={selectedPartnerIds.length}
+                value={tasks.state.partnerIds}
+                onClear={() => tasks.setState((s) => ({ ...s, partnerIds: undefined }))}
+              />
             );
           }}
         />
@@ -334,18 +289,15 @@ export const TaskMenuActions: FC = () => {
               <Group style={{ position: "relative" }} ref={tagsHover.ref}>
                 <Button
                   onClick={ctx.toggle}
-                  size="compact-md"
-                  h={32}
+                  size="compact-sm"
                   color={isHasTag ? "primary" : "var(--mantine-color-dimmed)"}
                   variant="outline"
                   radius={100}
-                  fz={12}
                   leftIcon={IconTags}
-                  iconSize={18}
                 >
                   <Group gap={5}>
                     <Text fz={12} fw={500}>
-                      {t`Tags`}
+                      <Trans>Tags</Trans>
                     </Text>
                     <Renderer visible={!!isHasTag}>
                       <Group gap={3} wrap="nowrap">

@@ -118,22 +118,11 @@ export const ButtonSelect: FC<ButtonSelectProps> = (props) => {
         <Group ref={hover.ref}>
           {label ? (
             <Button
-              size={"compact-md"}
-              h={props.size || 34}
+              size="compact-sm"
               color={isActive ? activeColor : props.inactiveColor || "var(--mantine-color-dimmed)"}
               variant="outline"
               radius={100}
-              leftSection={
-                <ActiveIcon
-                  className={props.iconClassName}
-                  size={props.iconSize || 18}
-                  strokeWidth={iconStrokeWidth || 1.5}
-                  style={{
-                    ...{ marginRight: -10, marginLeft: 3 },
-                    ...props.iconStyle,
-                  }}
-                />
-              }
+              leftIcon={ActiveIcon}
               styles={{
                 root: {
                   backgroundColor: isActive ? rgba(activeColor, 0.1) : undefined,
@@ -141,7 +130,8 @@ export const ButtonSelect: FC<ButtonSelectProps> = (props) => {
                   overflow: "visible",
                 },
                 label: {
-                  fontSize: 11,
+                  fontSize: 12,
+                  fontWeight: "normal",
                 },
               }}
               onClick={_onModal}

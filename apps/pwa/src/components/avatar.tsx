@@ -35,7 +35,7 @@ export interface AvatarProps extends MantineAvatarProps {
   pluginZaloOa?: PluginZaloOaEntity;
   onlineIndicatorProps?: IndicatorProps;
   icon?: Icon;
-  withBorder?: boolean;
+  withBorder?: boolean | string;
   fit?: "contain" | "cover";
 }
 
@@ -131,7 +131,11 @@ export const Avatar: FC<AvatarProps> = (props) => {
         src={src}
         style={{
           backgroundColor: src ? "var(--mantine-color-body)" : undefined,
-          border: withBorder ? `1px solid var(--mantine-color-body)` : undefined,
+          border: withBorder
+            ? `1px solid ${
+                typeof withBorder === "string" ? withBorder : "var(--mantine-color-body)"
+              }`
+            : undefined,
           ...props.style,
         }}
         color={color(getColor())}

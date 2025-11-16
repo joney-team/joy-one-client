@@ -6319,7 +6319,7 @@ msgstr "Đồng bộ hóa thẻ"
 
 #: src/components/color-schemes.tsx:52
 msgid "System mode"
-msgstr "Chế độ hệ thống"
+msgstr "Tự động"
 
 #: src/components/list/components/filter-modes.tsx:53
 #: src/components/list/components/toggle-view.tsx:17
