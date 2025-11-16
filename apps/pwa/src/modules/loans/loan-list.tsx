@@ -40,8 +40,10 @@ import {
   IconClock,
   IconCoins,
   IconCreditCardPay,
+  IconEye,
   IconFileTypePdf,
   IconRefresh,
+  IconTrash,
 } from "@tabler/icons-react";
 import { FC } from "react";
 import { api } from "../apis";
@@ -326,6 +328,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
           isHasFilter: true,
         }),
       }}
+      actions={[
+        {
+          label: <Trans>Detail</Trans>,
+          icon: IconEye,
+          href: (data) => `/loans/${data.code}`,
+        },
+      ]}
       bulkActions={[
         {
           label: <Trans>Change branch</Trans>,
@@ -374,6 +383,8 @@ export const LoanList: FC<LoanListProps> = (props) => {
         {
           permission: WorkspacePermission.LOANS_ARCHIVE,
           type: "archive",
+          icon: IconTrash,
+          label: <Trans>Archive</Trans>,
           available: (data) =>
             data.every((v) => [LoanStatus.PENDING, LoanStatus.PENDING_SIGN].includes(v.status)),
           handler: (data) => archiveLoans(data.map((v) => v.id)),

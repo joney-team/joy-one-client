@@ -1,7 +1,7 @@
 "use client";
 
 import { Anchor, AnchorProps, Group, Text } from "@mantine/core";
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useMemo } from "react";
 import { Hovered } from "./hovered";
 import Link from "next/link";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -25,7 +25,7 @@ export const Clickable: FC<PropsWithChildren<ClickableProps>> = (props) => {
     return props.children;
   }
 
-  const render = () => {
+  const content = useMemo(() => {
     if (href) {
       return (
         <Anchor
@@ -39,6 +39,7 @@ export const Clickable: FC<PropsWithChildren<ClickableProps>> = (props) => {
           }}
           truncate
           {...rest}
+          title={props.children}
         >
           {props.children}
         </Anchor>
@@ -50,7 +51,7 @@ export const Clickable: FC<PropsWithChildren<ClickableProps>> = (props) => {
         {props.children}
       </Text>
     );
-  };
+  }, [href, blank, rest, props.children]);
 
   return (
     <Hovered>
@@ -68,7 +69,7 @@ export const Clickable: FC<PropsWithChildren<ClickableProps>> = (props) => {
             }}
             onClick={onClick}
           >
-            {render()}
+            {content}
           </Group>
         );
       }}

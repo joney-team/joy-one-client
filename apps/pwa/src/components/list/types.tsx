@@ -64,7 +64,7 @@ export type Columns<Data = any> = {
 };
 
 export type ListAction<Data> = {
-  label: string;
+  label: ReactNode;
   icon: Icon;
   disabled?: (data: Data) => boolean;
   permission?: WorkspacePermission;
@@ -80,12 +80,12 @@ export interface FilterMode<Data = any> {
 }
 
 export interface ListBulkAction<Data> {
+  label: ReactNode;
+  icon: Icon;
+  handler: (data: Data[], ctx: { unSelect: () => void; refetch: () => void }) => Promise<any> | any;
   type?: "common" | "archive";
-  label?: ReactNode;
-  icon?: Icon;
   permission?: WorkspacePermission;
   available?: (data: Data[]) => boolean;
-  handler: (data: Data[], ctx: { unSelect: () => void; refetch: () => void }) => Promise<any> | any;
 }
 
 export type ListFetch<Data = any> = (
@@ -93,7 +93,7 @@ export type ListFetch<Data = any> = (
   controller?: AbortController
 ) => Promise<ResponseList<Data & { id?: string; _id?: string }>>;
 
-export type ListProps<Data extends BaseData> = {
+export type ListProps<Data extends BaseData = any> = {
   id: string;
   route: string;
   columns: Columns<Data>;
@@ -148,7 +148,7 @@ export interface ListViewState {
 
 export type ListContext<Data extends BaseData = any> = Omit<
   ListProps<Data>,
-  "columns" | "actions"
+  "columns" | "actions" | "bulkActions"
 > & {
   list: UseList<Data>;
   viewState: ListViewState;
@@ -157,13 +157,12 @@ export type ListContext<Data extends BaseData = any> = Omit<
   toggleActivatedMode: (mode: string) => void;
   columns: TableColumn[];
   selectedIds: string[];
-  isBulkActionsActivated: boolean;
-  select: (id: string, isShiftKey?: boolean) => void;
+  select: (id: string, args?: { isShiftKey?: boolean; isReplace?: boolean }) => void;
   unselect: (id: string) => void;
   selectAll: () => void;
   unselectAll: () => void;
-  availableMultipleSelectActions: ListBulkAction<Data>[];
   changeColumnState: (columnKey: string, state: Partial<ColumnState>) => void;
   actions: ListAction<Data>[];
+  bulkActions: ListBulkAction<Data>[];
   resetDefault: () => void;
 };

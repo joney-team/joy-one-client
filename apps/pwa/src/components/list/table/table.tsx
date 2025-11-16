@@ -4,16 +4,18 @@ import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { BaseData, TableColumn } from "@/components/list/types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ActionIcon, Center, Checkbox, Group, Loader, Menu, Stack, Text } from "@mantine/core";
-import { IconDotsVertical } from "@tabler/icons-react";
+import { Checkbox, Group, Loader, Stack, Text } from "@mantine/core";
 import Link from "next/link";
-import { CSSProperties, useEffect, useRef } from "react";
-import { getIn, getListDataId, getValuePath } from "../utils";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { getId, getIn, getValuePath } from "../list-utils";
 import { ListTableHead } from "./table-head";
 
+import { ContextMenu } from "@/components/context-menu";
 import { useColor } from "@/modules/theme/use-color";
 import { useListContext } from "../list-context";
 import styles from "./table.module.css";
+import { Trans } from "@lingui/react/macro";
+import { IconCircle } from "@tabler/icons-react";
 
 const getPinnedPositionStyle = (args: {
   columns: TableColumn[];
@@ -58,6 +60,7 @@ export default function ListTable<T extends BaseData>() {
   const context = useListContext();
   const workspace = useWorkspace();
   const color = useColor();
+  const [dataPointedId, setDataPointedId] = useState<string | null>(null);
 
   // Refs for sticky header
   const tableScrollRef = useRef<HTMLDivElement>(null);
@@ -82,6 +85,84 @@ export default function ListTable<T extends BaseData>() {
     context.list.data.length > 0 &&
     context.list.data.every((v: any) => context.selectedIds.includes(v.id || v._id || ""));
 
+  const contextMenuDropdown = useMemo(() => {
+    const rowData = context.list.data.find((v) => getId(v) === dataPointedId);
+    if (!dataPointedId || !rowData) return null;
+
+    const availableSelectBulkActions = context.bulkActions.filter((bulkAction) => {
+      const isAvailable = bulkAction.available?.(context.list.data) ?? true;
+      const isHasPermission = bulkAction.permission
+        ? workspace.hasPermission(bulkAction.permission)
+        : true;
+
+      return isAvailable && isHasPermission;
+    });
+
+    if (availableSelectBulkActions.length === 0 && context.actions.length === 0) return null;
+
+    return (
+      <ContextMenu.Dropdown>
+        {context.actions.map((action, index) => {
+          const isDisabled =
+            (action.disabled && action.disabled?.(rowData) === true) ||
+            (action.permission && !workspace.hasPermission(action.permission));
+
+          if ("onClick" in action)
+            return (
+              <ContextMenu.Item
+                key={index}
+                onClick={() => action.onClick(rowData)}
+                leftSection={<action.icon size={16} />}
+                disabled={isDisabled}
+              >
+                {action.label}
+              </ContextMenu.Item>
+            );
+
+          if ("href" in action)
+            return (
+              <ContextMenu.Item
+                key={index}
+                component={Link}
+                href={action.href(rowData)}
+                leftSection={<action.icon size={16} />}
+              >
+                {action.label}
+              </ContextMenu.Item>
+            );
+        })}
+
+        {availableSelectBulkActions.map((bulkAction, index) => {
+          return (
+            <ContextMenu.Item
+              key={index}
+              leftSection={<bulkAction.icon size={16} />}
+              onClick={() =>
+                bulkAction.handler(context.list.data, {
+                  unSelect: context.unselectAll,
+                  refetch: context.list.fetch,
+                })
+              }
+            >
+              {bulkAction.label ?? <Trans>Action</Trans>}
+            </ContextMenu.Item>
+          );
+        })}
+      </ContextMenu.Dropdown>
+    );
+  }, [dataPointedId]);
+
+  const isBulkActionsActivated = useMemo(() => {
+    return (
+      context.bulkActions.filter(
+        (v) =>
+          (!v.available ||
+            v.available(context.list.data.filter((i) => context.selectedIds.includes(getId(i))))) &&
+          (!v.permission || workspace.hasPermission(v.permission))
+      ).length > 0
+    );
+  }, [context.bulkActions, context.selectedIds]);
+
   return (
     <Stack className={styles.Table} pos="relative" w="100%" gap={0}>
       {/* Fixed Header */}
@@ -103,7 +184,7 @@ export default function ListTable<T extends BaseData>() {
         >
           <thead>
             <tr style={{ background: color({ light: "gray.1", dark: "dark.7" }) }}>
-              {context.isBulkActionsActivated && (
+              {isBulkActionsActivated && (
                 <th className={styles.BulkActionsCell}>
                   <Group justify="end">
                     <Checkbox
@@ -134,152 +215,120 @@ export default function ListTable<T extends BaseData>() {
                   />
                 );
               })}
-
-              {context.actions.length > 0 && <th className={styles.ActionColumn} />}
-              <th />
+              <th className={styles.SpaceCell} />
             </tr>
           </thead>
         </table>
       </Stack>
 
-      <Stack ref={tableScrollRef} maw="100%" pos="relative" style={{ overflowX: "auto" }}>
-        <table style={{ position: "relative" }}>
-          <tbody>
-            {context.list.data.map((rowData: T) => {
-              const id = getListDataId(rowData);
-              const isSelected = context.selectedIds.includes(id);
+      <ContextMenu
+        dataPointed={{
+          attributeName: "data-id",
+          onPointed: (id) => {
+            setDataPointedId(id);
+            if (id) context.select(id, { isReplace: true });
+          },
+        }}
+      >
+        <ContextMenu.Target>
+          <Stack ref={tableScrollRef} maw="100%" pos="relative" style={{ overflowX: "auto" }}>
+            <table style={{ position: "relative" }}>
+              <tbody>
+                {context.list.data.map((rowData: T) => {
+                  const id = getId(rowData);
+                  const isSelected = context.selectedIds.includes(id);
 
-              return (
-                <tr key={id}>
-                  {context.isBulkActionsActivated && (
-                    <td
-                      className={styles.BulkActionsCell}
-                      onClick={(e) => {
-                        if (isSelected) return context.unselect(id);
-                        return context.select(id, e.shiftKey);
-                      }}
-                    >
-                      <Group justify="end">
-                        <Checkbox
-                          size="xs"
-                          className="clickable"
-                          radius={5}
-                          checked={isSelected}
-                          onChange={() => {}}
-                        />
-                      </Group>
-                    </td>
-                  )}
-
-                  {context.columns.map((column) => {
-                    if (!column.isVisible) return null;
-                    const columnData = getIn(rowData, getValuePath(column.columnKey, column));
-                    const Renderer = column.render;
-                    const pinnedPosition = getPinnedPositionStyle({
-                      columns: context.columns,
-                      column,
-                    });
-
-                    return (
-                      <td
-                        key={column.columnKey}
-                        style={{
-                          width: column.width,
-                          maxWidth: column.width,
-                          minWidth: column.width,
-                          ...pinnedPosition.style,
-                        }}
-                        data-body-column-key={column.columnKey}
-                      >
-                        <Group
-                          wrap="nowrap"
-                          gap={4}
-                          justify={column.align}
-                          style={{ overflow: "visible", width: "100%" }}
+                  return (
+                    <tr key={id} data-id={id}>
+                      {isBulkActionsActivated && (
+                        <td
+                          className={styles.BulkActionsCell}
+                          onClick={(e) => {
+                            if (isSelected) return context.unselect(id);
+                            return context.select(id, { isShiftKey: e.shiftKey });
+                          }}
                         >
-                          {Renderer ? (
-                            <Renderer value={columnData} data={rowData} />
-                          ) : (
-                            <Text ta={column.align ?? "left"} truncate title={columnData}>
-                              {columnData}
-                            </Text>
-                          )}
-                        </Group>
-                      </td>
-                    );
-                  })}
+                          <Group justify="end">
+                            <Checkbox
+                              size="xs"
+                              className="clickable"
+                              radius={5}
+                              checked={isSelected}
+                              onChange={() => {}}
+                            />
+                          </Group>
+                        </td>
+                      )}
 
-                  {context.actions.length > 0 && (
-                    <td className={styles.ActionColumn}>
-                      <Menu>
-                        <Menu.Target>
-                          <Center>
-                            <ActionIcon variant="subtle" color="gray">
-                              <IconDotsVertical size={16} />
-                            </ActionIcon>
-                          </Center>
-                        </Menu.Target>
+                      {context.columns.map((column) => {
+                        if (!column.isVisible) return null;
+                        const columnData = getIn(rowData, getValuePath(column.columnKey, column));
+                        const Renderer = column.render;
+                        const pinnedPosition = getPinnedPositionStyle({
+                          columns: context.columns,
+                          column,
+                        });
 
-                        <Menu.Dropdown>
-                          {context.actions.map((action) => {
-                            const isDisabled =
-                              (action.disabled && action.disabled?.(rowData) === true) ||
-                              (action.permission && !workspace.hasPermission(action.permission));
+                        return (
+                          <td
+                            key={column.columnKey}
+                            style={{
+                              width: column.width,
+                              maxWidth: column.width,
+                              minWidth: column.width,
+                              ...pinnedPosition.style,
+                            }}
+                            data-body-column-key={column.columnKey}
+                          >
+                            <Group
+                              wrap="nowrap"
+                              gap={4}
+                              justify={column.align}
+                              style={{ overflow: "visible", width: "100%" }}
+                              flex={1}
+                              miw={0}
+                            >
+                              {Renderer ? (
+                                <Renderer value={columnData} data={rowData} />
+                              ) : (
+                                <Text ta={column.align ?? "left"} truncate title={columnData}>
+                                  {columnData}
+                                </Text>
+                              )}
+                            </Group>
+                          </td>
+                        );
+                      })}
 
-                            if ("onClick" in action)
-                              return (
-                                <Menu.Item
-                                  key={action.label}
-                                  onClick={() => action.onClick(rowData)}
-                                  leftSection={<action.icon size={16} />}
-                                  disabled={isDisabled}
-                                >
-                                  {action.label}
-                                </Menu.Item>
-                              );
+                      <td className={styles.SpaceCell} />
+                    </tr>
+                  );
+                })}
+              </tbody>
 
-                            if ("href" in action)
-                              return (
-                                <Menu.Item
-                                  key={action.label}
-                                  component={Link}
-                                  href={action.href(rowData)}
-                                  leftSection={<action.icon size={16} />}
-                                >
-                                  {action.label}
-                                </Menu.Item>
-                              );
-                          })}
-                        </Menu.Dropdown>
-                      </Menu>
-                    </td>
-                  )}
+              {context.list.isFetching && (
+                <caption style={{ padding: context.spacing * 2 }}>
+                  <Loader size="sm" type="dots" color="gray" />
+                </caption>
+              )}
 
-                  <td />
-                </tr>
-              );
-            })}
-          </tbody>
+              {context.list.isEmpty && (
+                <caption style={{ padding: context.spacing }}>
+                  {context.components?.empty ? <context.components.empty /> : <Empty hideBorder />}
+                </caption>
+              )}
 
-          {context.list.isFetching && (
-            <caption style={{ padding: context.spacing * 2 }}>
-              <Loader size="sm" type="dots" color="gray" />
-            </caption>
-          )}
+              {context.list.isHasError && (
+                <caption style={{ padding: context.spacing }}>
+                  <Errored error={context.list.error} />
+                </caption>
+              )}
+            </table>
+          </Stack>
+        </ContextMenu.Target>
 
-          {context.list.isEmpty && (
-            <caption style={{ padding: context.spacing }}>
-              {context.components?.empty ? <context.components.empty /> : <Empty hideBorder />}
-            </caption>
-          )}
-
-          {context.list.isHasError && (
-            <caption style={{ padding: context.spacing }}>
-              <Errored error={context.list.error} />
-            </caption>
-          )}
-        </table>
-      </Stack>
+        {contextMenuDropdown}
+      </ContextMenu>
     </Stack>
   );
 }

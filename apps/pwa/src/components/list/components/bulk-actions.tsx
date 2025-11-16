@@ -3,15 +3,29 @@
 import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Center, Divider, Group, Text, Tooltip } from "@mantine/core";
 import { IconStack2, IconTrash, IconX } from "@tabler/icons-react";
-import { FC } from "react";
-import { ListContext } from "../types";
+import { FC, useMemo } from "react";
+import { useListContext } from "../list-context";
+import { getId } from "../list-utils";
 
-export const BulkActions: FC<ListContext> = (ctx) => {
-  if (ctx.availableMultipleSelectActions.length === 0 || ctx.selectedIds.length === 0) return null;
+export const BulkActions: FC = () => {
+  const ctx = useListContext();
+  const workspace = useWorkspace();
+
+  const availableSelectBulkActions = useMemo(() => {
+    return (ctx.bulkActions || []).filter(
+      (v) =>
+        (!v.available ||
+          v.available(ctx.list.data.filter((i) => ctx.selectedIds.includes(getId(i))))) &&
+        (!v.permission || workspace.hasPermission(v.permission))
+    );
+  }, [ctx.bulkActions, ctx.list.data, ctx.selectedIds, workspace.hasPermission]);
+
+  if (availableSelectBulkActions.length === 0 || ctx.selectedIds.length === 0) return null;
 
   const selectedItems = ctx.list.data.filter((i: any) =>
     ctx.selectedIds.includes(i.id || i._id || "")
@@ -44,7 +58,7 @@ export const BulkActions: FC<ListContext> = (ctx) => {
               <Divider orientation="vertical" h={18} opacity={0.5} mx={8} />
             </Center>
 
-            {ctx.availableMultipleSelectActions
+            {availableSelectBulkActions
               .filter((v) => !v.type || v.type === "common")
               .map((action, i) => {
                 return (
@@ -69,7 +83,7 @@ export const BulkActions: FC<ListContext> = (ctx) => {
                 );
               })}
 
-            {ctx.availableMultipleSelectActions.find((v) => v.type === "archive") && (
+            {availableSelectBulkActions.find((v) => v.type === "archive") && (
               <Button
                 leftIcon={IconTrash}
                 iconSize={18}
@@ -80,7 +94,7 @@ export const BulkActions: FC<ListContext> = (ctx) => {
                 radius={100}
                 fz={12}
                 onClick={() =>
-                  ctx.availableMultipleSelectActions
+                  availableSelectBulkActions
                     .find((v) => v.type === "archive")
                     ?.handler(selectedItems, {
                       unSelect: () => ctx.unselectAll(),

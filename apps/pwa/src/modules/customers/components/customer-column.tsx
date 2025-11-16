@@ -32,9 +32,10 @@ export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
           className={value ? "clickable" : ""}
           wrap="nowrap"
           onClick={value ? () => router.push(`/customers/${value.code}`) : undefined}
+          miw={0}
         >
           <Avatar icon={IconUserSquareRounded} customer={value} size={40} radius={8} />
-          <Stack gap={0} flex={1}>
+          <Stack gap={0} flex={1} miw={0}>
             <Tooltip label={name} disabled={name.length < 22}>
               <Text fw={500} truncate maw={180}>
                 {name}
@@ -43,7 +44,7 @@ export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
 
             {value?.phone &&
               workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
-                <Text fz={14} c="gray">
+                <Text fz={14} c="gray" truncate>
                   {value.phone}
                 </Text>
               )}

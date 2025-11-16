@@ -5,13 +5,15 @@ import { Text } from "@mantine/core";
 import { Column } from "../types";
 import { t } from "@lingui/core/macro";
 import { CurrencyFormat } from "@/components/format/currency-format";
+import { Trans } from "@lingui/react/macro";
 
 export interface NumberColumnOptions extends Omit<Column, "render"> {
   type?: "money" | "hours";
 }
 
 export const numberColumn = (args?: NumberColumnOptions): Column => {
-  const name = args?.name || (args?.type === "money" ? t`Money amount` : t`Number`);
+  const name =
+    args?.name || (args?.type === "money" ? <Trans>Money amount</Trans> : <Trans>Number</Trans>);
   const align = args?.align || "right";
 
   return {

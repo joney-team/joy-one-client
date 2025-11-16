@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import type { MenuProps, MenuTargetProps, PopoverStylesNames } from '@mantine/core';
-import { createEventHandler, createSafeContext, isElement, Menu } from '@mantine/core';
-import { useUncontrolled } from '@mantine/hooks';
-import React, { cloneElement, forwardRef, useRef } from 'react';
+import type { MenuProps, MenuTargetProps, PopoverStylesNames } from "@mantine/core";
+import { createEventHandler, createSafeContext, isElement, Menu } from "@mantine/core";
+import { useUncontrolled } from "@mantine/hooks";
+import React, { cloneElement, forwardRef, useRef } from "react";
 
-export type TriggerEvent = 'click' | 'context';
+export type TriggerEvent = "click" | "context";
 
 interface ContextMenuContext {
   lastEventRef: React.MutableRefObject<React.MouseEvent | null>;
@@ -13,74 +13,69 @@ interface ContextMenuContext {
   trigger?: TriggerEvent;
 }
 
-export const [ContextMenuProvider, useContextMenuContext] = createSafeContext<ContextMenuContext>('ContextMenuContext is undefined');
-
-interface RefWrapperProps extends React.PropsWithChildren<{ refProp: string }> { }
-
-/** ref wrapper, append custom floating middleware to move dropdown follow mouse click */
-const RefWrapper = forwardRef<HTMLElement, RefWrapperProps>(
-  (props, ref) => {
-    const { children, refProp, ...others } = props;
-
-    if (!isElement(children)) {
-      throw new Error(
-        'ContextMenu.Target component children should be an element or a component that accepts ref',
-      );
-    }
-    const ctx = useContextMenuContext();
-
-    const toggleDropdown = (e: React.MouseEvent) => {
-      // ref of trigger should be an function
-      if (typeof ref === 'function') {
-        ref({
-          getBoundingClientRect() {
-            return {
-              x: e.clientX,
-              y: e.clientY,
-              width: 0,
-              height: 0,
-              top: e.clientY,
-              right: e.clientX,
-              bottom: e.clientY,
-              left: e.clientX,
-            };
-          },
-        } as any);
-        ctx.toggleDropdown(e);
-      }
-    };
-
-    const onContextMenu = createEventHandler(
-      children.props.onContextMenu,
-      (e) => {
-        if (ctx.trigger === 'context') {
-          (e as React.MouseEvent).preventDefault();
-          toggleDropdown(e as React.MouseEvent);
-        }
-      },
-    );
-
-    const onClick = createEventHandler(
-      children.props.onClick,
-      (e) => {
-        if (ctx.trigger === 'click') {
-          toggleDropdown(e as React.MouseEvent);
-        }
-      });
-
-    return cloneElement(children, {
-      ...others,
-      onClick,
-      onContextMenu,
-      [refProp]: ref,
-    } as any);
-  },
+export const [ContextMenuProvider, useContextMenuContext] = createSafeContext<ContextMenuContext>(
+  "ContextMenuContext is undefined"
 );
 
-RefWrapper.displayName = 'RefWrapper';
+interface RefWrapperProps extends React.PropsWithChildren<{ refProp: string }> {}
+
+/** ref wrapper, append custom floating middleware to move dropdown follow mouse click */
+const RefWrapper = forwardRef<HTMLElement, RefWrapperProps>((props, ref) => {
+  const { children, refProp, ...others } = props;
+
+  if (!isElement(children)) {
+    throw new Error(
+      "ContextMenu.Target component children should be an element or a component that accepts ref"
+    );
+  }
+  const ctx = useContextMenuContext();
+
+  const toggleDropdown = (e: React.MouseEvent) => {
+    // ref of trigger should be an function
+    if (typeof ref === "function") {
+      ref({
+        getBoundingClientRect() {
+          return {
+            x: e.clientX,
+            y: e.clientY,
+            width: 0,
+            height: 0,
+            top: e.clientY,
+            right: e.clientX,
+            bottom: e.clientY,
+            left: e.clientX,
+          };
+        },
+      } as any);
+      ctx.toggleDropdown(e);
+    }
+  };
+
+  const onContextMenu = createEventHandler(children.props.onContextMenu, (e) => {
+    if (ctx.trigger === "context") {
+      (e as React.MouseEvent).preventDefault();
+      toggleDropdown(e as React.MouseEvent);
+    }
+  });
+
+  const onClick = createEventHandler(children.props.onClick, (e) => {
+    if (ctx.trigger === "click") {
+      toggleDropdown(e as React.MouseEvent);
+    }
+  });
+
+  return cloneElement(children, {
+    ...others,
+    onClick,
+    onContextMenu,
+    [refProp]: ref,
+  } as any);
+});
+
+RefWrapper.displayName = "RefWrapper";
 
 export const ContextMenuTarget = forwardRef<HTMLElement, MenuTargetProps>((props, ref) => {
-  const { children, refProp = 'ref', ...others } = props;
+  const { children, refProp = "ref", ...others } = props;
   return (
     <Menu.Target {...others} refProp={refProp} ref={ref}>
       <RefWrapper refProp={refProp}>{children}</RefWrapper>
@@ -88,13 +83,17 @@ export const ContextMenuTarget = forwardRef<HTMLElement, MenuTargetProps>((props
   );
 });
 
-ContextMenuTarget.displayName = 'ContextMenuTarget';
+ContextMenuTarget.displayName = "ContextMenuTarget";
 
 export type ContextMenuStylesNames = PopoverStylesNames;
 
-export interface ContextMenuProps extends Omit<MenuProps, 'trigger' | 'onOpen'> {
+export interface ContextMenuProps extends Omit<MenuProps, "trigger" | "onOpen"> {
   trigger?: TriggerEvent;
   onOpen?: (e: React.MouseEvent) => void;
+  dataPointed?: {
+    attributeName: string;
+    onPointed: (id: string | null) => void;
+  };
 }
 
 /**
@@ -123,8 +122,9 @@ export const ContextMenu = (props: ContextMenuProps) => {
     onOpen,
     onClose,
     children,
-    trigger = 'context',
-    position = 'bottom-start',
+    trigger = "context",
+    position = "bottom-start",
+    dataPointed,
     ...others
   } = props;
 
@@ -150,6 +150,12 @@ export const ContextMenu = (props: ContextMenuProps) => {
   const toggleDropdown = (e: React.MouseEvent) => {
     lastEventRef.current = e;
     _opened ? close() : open(e);
+
+    if (dataPointed) {
+      const closestElement = (e.target as HTMLElement).closest(`[${dataPointed.attributeName}]`);
+      const id = closestElement?.getAttribute(dataPointed.attributeName);
+      dataPointed.onPointed(id ?? null);
+    }
   };
 
   const ctx = {
@@ -162,9 +168,9 @@ export const ContextMenu = (props: ContextMenuProps) => {
     <ContextMenuProvider value={ctx}>
       <Menu
         {...others}
-        trigger={trigger === 'context' ? undefined : trigger}
+        trigger={trigger === "context" ? undefined : trigger}
         opened={_opened}
-        onChange={e => {
+        onChange={(e) => {
           setOpened(e);
           if (!e) onClose?.();
         }}

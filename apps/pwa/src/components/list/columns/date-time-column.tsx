@@ -3,11 +3,10 @@
 import { DateFormat } from "@/components/format/date-format";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconClock } from "@tabler/icons-react";
 import { Column } from "../types";
-import { Trans } from "@lingui/react/macro";
 
 export interface DateTimeColumnArgs extends Omit<Column, "render"> {
   emptyText?: string;
@@ -18,10 +17,20 @@ export interface DateTimeColumnArgs extends Omit<Column, "render"> {
 
 export const dateTimeColumn = (args?: DateTimeColumnArgs): Column => {
   return {
+    defaultWidth: 180,
+    icon: IconClock,
+    name: <Trans>Time</Trans>,
+    exportToExcel: (value) => {
+      return {
+        date: value,
+      };
+    },
+    filter: args?.isHasFilter
+      ? {
+          timeRange: {},
+        }
+      : undefined,
     ...args,
-    icon: args?.icon ?? IconClock,
-    name: args?.name ?? <Trans>Time</Trans>,
-    defaultWidth: args?.defaultWidth ?? 180,
     render: ({ value }) => {
       if (!value || !DateTime.isValid(value)) return args?.emptyText || "-";
       const locale = getClientLocale();
@@ -50,16 +59,6 @@ export const dateTimeColumn = (args?: DateTimeColumnArgs): Column => {
           )}
         </Stack>
       );
-    },
-    filter: args?.isHasFilter
-      ? {
-          timeRange: {},
-        }
-      : undefined,
-    exportToExcel: (value) => {
-      return {
-        date: value,
-      };
     },
   };
 };

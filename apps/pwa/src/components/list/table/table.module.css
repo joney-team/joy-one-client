@@ -1,7 +1,7 @@
 .Table {
   border-top: var(--mantine-color-disabled) 1px solid;
 
-  table {
+  & table {
     border-collapse: collapse;
     width: max-content;
     min-width: 100%;
@@ -16,10 +16,6 @@
         overflow: hidden;
         position: relative;
 
-        &.ActionColumn {
-          width: 40px;
-        }
-
         &.BulkActionsCell {
           width: 30px;
         }
@@ -29,8 +25,8 @@
     thead,
     tbody {
       tr {
-        th:not(.BulkActionsCell):not(.ActionColumn),
-        td:not(.BulkActionsCell):not(.ActionColumn) {
+        th:not(.BulkActionsCell):not(.SpaceCell),
+        td:not(.BulkActionsCell):not(.SpaceCell) {
           padding: 8px 12px;
         }
       }

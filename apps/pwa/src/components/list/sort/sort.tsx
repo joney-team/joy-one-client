@@ -9,7 +9,7 @@ import { IconArrowDown, IconArrowsDownUp, IconArrowUp } from "@tabler/icons-reac
 import { FC, Fragment } from "react";
 import { ActionButton } from "../components/action-button";
 import { useListContext } from "../list-context";
-import { getColumnLabel, getSortQueryKey } from "../utils";
+import { getColumnLabel, getSortQueryKey } from "../list-utils";
 
 export const Sort: FC = () => {
   const { columns, list } = useListContext();

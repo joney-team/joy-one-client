@@ -12,9 +12,10 @@ import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { EventType } from "@/modules/events/event-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Gender } from "@/types";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import {
+  IconEye,
   IconGenderBigender,
   IconMail,
   IconPhone,
@@ -25,7 +26,6 @@ import { type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { CustomerEntity } from "./customer-types";
-import { Trans } from "@lingui/react/macro";
 
 export const CustomerList: FC = () => {
   const workspace = useWorkspace();
@@ -46,12 +46,11 @@ export const CustomerList: FC = () => {
           }),
           avatar: {
             icon: IconPhoto,
-            resizable: false,
             name: <Trans>Avatar</Trans>,
             align: "center",
-            minWidth: 80,
             render: ({ data }) => <Avatar customer={data} size={50} radius={8} />,
             exportToExcel: false,
+            defaultWidth: 120,
           },
           gender: enumColumn({
             name: <Trans>Gender</Trans>,
@@ -110,6 +109,13 @@ export const CustomerList: FC = () => {
           onCreate: () => OnCustomerModal(),
           permission: WorkspacePermission.CUSTOMERS_CREATE,
         }}
+        actions={[
+          {
+            label: <Trans>Detail</Trans>,
+            icon: IconEye,
+            href: (data) => `/customers/${data.code}`,
+          },
+        ]}
         events={[
           EventType.CUSTOMER_NEW,
           EventType.CUSTOMER_UPDATED,

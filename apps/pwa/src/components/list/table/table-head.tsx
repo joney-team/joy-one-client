@@ -6,7 +6,7 @@ import { useHover } from "@mantine/hooks";
 import { IconFilterFilled, IconMinus, IconSelector } from "@tabler/icons-react";
 import { CSSProperties, FC, useEffect, useMemo, useRef } from "react";
 import { TableColumn } from "../types";
-import { getColumnName, getSortQueryKey, getValuePath } from "../utils";
+import { getColumnName, getSortQueryKey, getValuePath } from "../list-utils";
 import { useColumnResize } from "./use-collumn-resize";
 
 import { classNames } from "@/utils/ui.utils";
@@ -168,8 +168,8 @@ export const ListTableHead: FC<{
 
   return (
     <th
-      className={classNames(styles.TableHead, "unselectable", className)}
       ref={hover.ref}
+      className={classNames(styles.TableHead, "unselectable", className)}
       data-column-key={column.columnKey}
       style={{
         width: column.width,

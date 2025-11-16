@@ -10,7 +10,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { AppEntity } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Stack } from "@mantine/core";
-import { IconBuildingSkyscraper, IconLink } from "@tabler/icons-react";
+import { IconBuildingSkyscraper, IconLink, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
 import { OnCustomerFormModal } from "../customers/modals/modal-customer-form";
 import { useLocations } from "../locations/locations-context";
@@ -18,6 +18,7 @@ import { customerFormStatuses } from "./customer-form-constants";
 import { CustomerFormEntity } from "./customer-form-entity";
 import { multiArchiveCustomerForm } from "./customer-form-service";
 import { OnModalCustomerForm } from "./modal-customer-form";
+import { Trans } from "@lingui/react/macro";
 
 export const CustomerFormList: FC = () => {
   const { renderVnLocation: renderLocation } = useLocations();
@@ -71,7 +72,7 @@ export const CustomerFormList: FC = () => {
         ]}
         bulkActions={[
           {
-            label: t`Move branch`,
+            label: <Trans>Move branch</Trans>,
             icon: IconBuildingSkyscraper,
             permission: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
             handler: (data, ctx) =>
@@ -83,6 +84,8 @@ export const CustomerFormList: FC = () => {
           },
           {
             permission: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
+            icon: IconTrash,
+            label: <Trans>Archive</Trans>,
             type: "archive",
             handler: async (data, ctx) => {
               await multiArchiveCustomerForm(data.map((v) => v._id));

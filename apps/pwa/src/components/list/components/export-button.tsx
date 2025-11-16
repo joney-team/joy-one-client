@@ -21,7 +21,7 @@ import { FC, Fragment, useState } from "react";
 import writeXlsxFile, { Row } from "write-excel-file";
 import { useListContext } from "../list-context";
 import { ExportToExcelItem } from "../types";
-import { getColumnName, getIn, getListName, getValuePath } from "../utils";
+import { getColumnName, getIn, getListName, getValuePath } from "../list-utils";
 import { ActionButton } from "./action-button";
 
 export enum ExportType {

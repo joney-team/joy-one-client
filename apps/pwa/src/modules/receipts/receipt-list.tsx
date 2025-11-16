@@ -30,12 +30,14 @@ import {
   IconCalendarDown,
   IconCashRegister,
   IconCreditCard,
+  IconEye,
   IconPrinter,
 } from "@tabler/icons-react";
 import { type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
 import { Trans } from "@lingui/react/macro";
+import { OnModalPayReceipt } from "./modals/modal-pay-receipt";
 
 export const ReceiptList: FC = () => {
   const workspace = useWorkspace();
@@ -122,7 +124,7 @@ export const ReceiptList: FC = () => {
         filterModes={[
           {
             param: "today",
-            name: t`Today receipts`,
+            name: <Trans>Today receipts</Trans>,
             icon: IconCalendarDown,
             replaceFilterKeys: ["createdAt", "paidAt"],
             params: () => ({ today: true }),
@@ -139,7 +141,12 @@ export const ReceiptList: FC = () => {
         ]}
         actions={[
           {
-            label: t`Print`,
+            label: <Trans>Detail</Trans>,
+            icon: IconEye,
+            href: (data) => `/receipts/${data.id}`,
+          },
+          {
+            label: <Trans>Print</Trans>,
             icon: IconPrinter,
             disabled: (data) => {
               const bankQrCode =
@@ -163,6 +170,12 @@ export const ReceiptList: FC = () => {
 
               OnModalPrinter({ receipt: data, bankQrCode });
             },
+          },
+          {
+            label: <Trans>Pay</Trans>,
+            icon: IconCashRegister,
+            disabled: (data) => data.status === ReceiptStatus.PAID,
+            onClick: (data) => OnModalPayReceipt({ receipt: data }),
           },
         ]}
         creatable={{

@@ -1,15 +1,15 @@
 "use client";
 
+import { List } from "@/components/list";
 import { enumColumn } from "@/components/list/columns/enum-column";
-import { List } from "@/components/list/list";
+import { appEntities } from "@/constant";
 import { Badge, Group, Stack } from "@mantine/core";
 import { IconEdit, IconForms } from "@tabler/icons-react";
 import { type FC } from "react";
 import { EventType } from "../events/event-types";
+import { customFieldTypes } from "./custom-field-constants";
 import { CustomFieldEntity, CustomFieldType } from "./custom-field-types";
 import { OnModalCustomField } from "./modals/modal-custom-field";
-import { customFieldTypes } from "./custom-field-constants";
-import { appEntities } from "@/constant";
 
 export const CustomFieldList: FC = () => {
   return (

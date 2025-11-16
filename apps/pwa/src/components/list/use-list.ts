@@ -10,7 +10,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import { isPlural } from "../../utils/string.utils";
 import { BaseData } from "./types";
-import { getId } from "./utils";
+import { getId } from "./list-utils";
 import { removeParams, setParams } from "@joy-one-client/utils/location-query";
 import { t } from "@lingui/core/macro";
 

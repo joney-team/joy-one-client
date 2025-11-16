@@ -1,9 +1,10 @@
 "use client";
 
 import { Clickable } from "@/components/clickable";
+import { List } from "@/components/list";
 import { enumColumn } from "@/components/list/columns/enum-column";
-import { List } from "@/components/list/list";
-import { Stack, Text } from "@mantine/core";
+import { t } from "@lingui/core/macro";
+import { Stack } from "@mantine/core";
 import { IconCategory, IconEdit, IconOutlet } from "@tabler/icons-react";
 import { type FC } from "react";
 import { EventType } from "../events/event-types";
@@ -11,7 +12,6 @@ import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { categoryTypes } from "./category-constants";
 import { CategoryEntity, CategoryType } from "./category-types";
 import { OnModalCategory } from "./modals/modal-category";
-import { t } from "@lingui/core/macro";
 
 export const CategoryList: FC = () => {
   return (

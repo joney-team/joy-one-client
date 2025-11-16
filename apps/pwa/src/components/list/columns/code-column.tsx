@@ -1,11 +1,10 @@
 "use client";
 
 import { Clickable } from "@/components/clickable";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Stack, Text } from "@mantine/core";
 import { IconHash } from "@tabler/icons-react";
 import { Column } from "../types";
-import { Trans } from "@lingui/react/macro";
 
 export interface CodeColumnOptions<T = any, FieldType = T[keyof T]>
   extends Omit<Column<T, FieldType>, "render"> {
@@ -20,50 +19,38 @@ export function codeColumn<T = any, FieldType = T[keyof T]>(
   const { href, onClick, render, ...rest } = options || {};
 
   return {
+    icon: IconHash,
+    defaultWidth: 100,
+    filter: { text: true },
+    name: <Trans>Code</Trans>,
     ...rest,
-    name: rest.name ?? <Trans>Code</Trans>,
-    icon: options?.icon ?? IconHash,
-    filter: options?.filter ?? { text: true },
     render: ({ value, data }) => {
       if (typeof value !== "string") return null;
 
-      if (options?.onClick) {
+      if (options?.onClick || options?.href) {
         return (
-          <Stack gap={5}>
+          <Stack gap={5} miw={0}>
             <Clickable
-              c="var(--mantine-color-text)"
-              onClick={() => options.onClick?.(value, data)}
+              onClick={options?.onClick ? () => options?.onClick?.(value, data) : undefined}
+              href={options?.href ? options?.href?.(value, data) : undefined}
               fz={14}
               fw={500}
+              truncate
             >
               {value}
             </Clickable>
-            {render?.(value, data)}
-          </Stack>
-        );
-      }
 
-      if (options?.href) {
-        return (
-          <Stack gap={5}>
-            <Clickable
-              c="var(--mantine-color-text)"
-              href={options.href(value, data)}
-              fz={14}
-              fw={500}
-            >
-              {value}
-            </Clickable>
             {render?.(value, data)}
           </Stack>
         );
       }
 
       return (
-        <Stack gap={5}>
-          <Text fz={14} fw={500}>
+        <Stack gap={5} miw={0}>
+          <Text fz={14} fw={500} truncate>
             {value}
           </Text>
+
           {render?.(value, data)}
         </Stack>
       );

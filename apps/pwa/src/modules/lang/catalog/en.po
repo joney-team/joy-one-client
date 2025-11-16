@@ -28,7 +28,7 @@ msgstr "{0} related work will be moved to the default folder"
 msgid "{timeBtw} minutes ago"
 msgstr "{timeBtw} minutes ago"
 
-#: src/components/list/list.tsx:297
+#: src/components/list/list-core.tsx:299
 msgid "+<0/> new one"
 msgstr "+<0/> new one"
 
@@ -103,11 +103,15 @@ msgstr "Access all branches"
 msgid "Access faster with standalone app"
 msgstr "Access faster with standalone app"
 
+#: src/components/list/table/table.tsx:149
+msgid "Action"
+msgstr "Action"
+
 #: src/utils/exceptions.utils.tsx:50
 msgid "Action failed"
 msgstr "Action failed"
 
-#: src/components/list/components/bulk-actions.tsx:67
+#: src/components/list/components/bulk-actions.tsx:81
 #: src/modules/bookings/components/booking-card.tsx:171
 msgid "Actions"
 msgstr "Actions"
@@ -261,7 +265,7 @@ msgid "Add tag"
 msgstr "Add tag"
 
 #: src/modules/tags/components/tags-input.tsx:56
-#: src/modules/tasks/views/list/list.task-row.tsx:339
+#: src/modules/tasks/views/list/list.task-row.tsx:338
 msgid "Add tags"
 msgstr "Add tags"
 
@@ -504,8 +508,9 @@ msgid "Approved"
 msgstr "Approved"
 
 #: src/components/buttons/button-archive.tsx:50
+#: src/modules/loans/loan-list.tsx:387
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:43
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:187
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:186
 #: src/modules/posts/posts-list.tsx:60
 #: src/modules/receipts/receipt-detail.tsx:152
 #: src/modules/services/service-detail.tsx:75
@@ -555,7 +560,7 @@ msgstr "Archived {0}"
 msgid "Archived order"
 msgstr "Archived order"
 
-#: src/modules/receipts/receipt-e-invoices.tsx:41
+#: src/modules/receipts/receipt-e-invoices.tsx:45
 msgid "Are you sure you want to cancel the e-invoice? This action cannot be undone. The e-invoice will be deleted."
 msgstr "Are you sure you want to cancel the e-invoice? This action cannot be undone. The e-invoice will be deleted."
 
@@ -754,7 +759,7 @@ msgstr "Automatically returning in {tick}s..."
 msgid "Available entities to search"
 msgstr "Available entities to search"
 
-#: src/modules/customers/customer-list.tsx:50
+#: src/modules/customers/customer-list.tsx:48
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -957,7 +962,7 @@ msgstr "Can leave one of the check-in or check-out times blank if you have alrea
 #: src/hooks/use-confirm-modal.tsx:110
 #: src/modules/bookings/components/form-booking.tsx:410
 #: src/modules/customers/modals/modal-customer-form.tsx:118
-#: src/modules/receipts/receipt-e-invoices.tsx:118
+#: src/modules/receipts/receipt-e-invoices.tsx:122
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -966,7 +971,7 @@ msgstr "Cancel"
 msgid "Cancel booking"
 msgstr "Cancel booking"
 
-#: src/modules/receipts/receipt-e-invoices.tsx:38
+#: src/modules/receipts/receipt-e-invoices.tsx:42
 msgid "Cancel E-Invoice"
 msgstr "Cancel E-Invoice"
 
@@ -977,7 +982,7 @@ msgstr "Cancel reason"
 
 #: src/modules/bookings/booking-constants.tsx:10
 #: src/modules/customer-forms/customer-form-constants.tsx:21
-#: src/modules/receipts/receipt-e-invoices.tsx:107
+#: src/modules/receipts/receipt-e-invoices.tsx:111
 msgid "Cancelled"
 msgstr "Cancelled"
 
@@ -1017,7 +1022,7 @@ msgstr "Cashback created"
 #: src/modals/modal-printer.tsx:444
 #: src/modals/modal-printer.tsx:603
 #: src/modules/receipts/receipt-card.tsx:315
-#: src/modules/receipts/receipt-list.tsx:91
+#: src/modules/receipts/receipt-list.tsx:93
 msgid "Cashier"
 msgstr "Cashier"
 
@@ -1062,11 +1067,11 @@ msgstr "Change"
 msgid "Change app icon"
 msgstr "Change app icon"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:147
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:146
 msgid "Change auth"
 msgstr "Change auth"
 
-#: src/modules/loans/loan-list.tsx:331
+#: src/modules/loans/loan-list.tsx:340
 msgid "Change branch"
 msgstr "Change branch"
 
@@ -1097,7 +1102,7 @@ msgstr "Change name"
 msgid "Change password"
 msgstr "Change password"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:131
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:130
 msgid "Change provider"
 msgstr "Change provider"
 
@@ -1142,7 +1147,7 @@ msgstr "Check in successfully"
 
 #: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:46
 #: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:58
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:176
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:175
 msgid "Check invoice"
 msgstr "Check invoice"
 
@@ -1182,7 +1187,7 @@ msgstr "CID created at"
 
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:203
 #: src/modules/loans/components/loan-customer-kyc.tsx:61
-#: src/modules/loans/loan-list.tsx:176
+#: src/modules/loans/loan-list.tsx:178
 msgid "CID Infos"
 msgstr "CID Infos"
 
@@ -1257,7 +1262,7 @@ msgstr "Close"
 msgid "Closed"
 msgstr "Closed"
 
-#: src/components/list/columns/code-column.tsx:24
+#: src/components/list/columns/code-column.tsx:25
 #: src/modules/coupons/coupon-card.tsx:39
 #: src/modules/coupons/modals/modal-coupon-form.tsx:123
 #: src/modules/products/components/form-product.tsx:247
@@ -1483,8 +1488,8 @@ msgstr "Contact support"
 
 #: src/modules/customers/components/customer-information.tsx:212
 #: src/modules/customers/modals/modal-customer-contacts.tsx:179
-#: src/modules/loans/components/loan-customer-kyc.tsx:138
-#: src/modules/loans/components/loan-customer-kyc.tsx:175
+#: src/modules/loans/components/loan-customer-kyc.tsx:141
+#: src/modules/loans/components/loan-customer-kyc.tsx:178
 msgid "Contacts"
 msgstr "Contacts"
 
@@ -1627,7 +1632,7 @@ msgstr "Create coupon rule"
 msgid "Create customer"
 msgstr "Create customer"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:233
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:234
 msgid "Create E-Invoice criteria"
 msgstr "Create E-Invoice criteria"
 
@@ -1726,7 +1731,7 @@ msgstr "Create SDK"
 #: src/modules/tasks/components/quick-create-task-input.tsx:26
 #: src/modules/tasks/views/board/board.task-card.tsx:134
 #: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:278
-#: src/modules/tasks/views/list/list.task-row.tsx:295
+#: src/modules/tasks/views/list/list.task-row.tsx:294
 msgid "Create subtask"
 msgstr "Create subtask"
 
@@ -1753,10 +1758,10 @@ msgstr "Create/update loan"
 msgid "Created"
 msgstr "Created"
 
-#: src/modules/customers/customer-list.tsx:43
+#: src/modules/customers/customer-list.tsx:42
 #: src/modules/e-invoices/e-invoice-list.tsx:40
-#: src/modules/loans/loan-list.tsx:319
-#: src/modules/receipts/receipt-list.tsx:60
+#: src/modules/loans/loan-list.tsx:321
+#: src/modules/receipts/receipt-list.tsx:62
 #: src/modules/tasks/components/detail-head.tsx:136
 msgid "Created at"
 msgstr "Created at"
@@ -1929,7 +1934,7 @@ msgid "Customer updated"
 msgstr "Customer updated"
 
 #: src/constant.ts:7
-#: src/modules/customers/customer-list.tsx:37
+#: src/modules/customers/customer-list.tsx:36
 #: src/modules/search/search-engine.tsx:123
 #: src/modules/workspace-roles/workspace-roles-config.ts:55
 #: src/modules/workspaces/workspace-modules.tsx:130
@@ -1960,7 +1965,7 @@ msgstr "Dark mode"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: src/components/list/list.tsx:375
+#: src/components/list/list-core.tsx:378
 #: src/modules/workspace-roles/workspace-roles-config.ts:267
 msgid "Data"
 msgstr "Data"
@@ -2258,7 +2263,7 @@ msgstr "E-invoice removed"
 
 #: src/modules/e-invoices/e-invoice-list.tsx:29
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-list.tsx:52
-#: src/modules/receipts/receipt-e-invoices.tsx:79
+#: src/modules/receipts/receipt-e-invoices.tsx:83
 #: src/modules/workspaces/workspace-modules.tsx:215
 #: src/modules/workspaces/workspace-modules.tsx:444
 msgid "E-Invoices"
@@ -2298,7 +2303,7 @@ msgid "Edit promotion"
 msgstr "Edit promotion"
 
 #: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:335
-#: src/modules/tasks/views/list/list.task-row.tsx:311
+#: src/modules/tasks/views/list/list.task-row.tsx:310
 msgid "Edit task name"
 msgstr "Edit task name"
 
@@ -2308,7 +2313,7 @@ msgstr "Edit workspace branch"
 
 #: src/modules/auth/components/form-register.tsx:67
 #: src/modules/customers/components/form-customer.tsx:169
-#: src/modules/customers/customer-list.tsx:96
+#: src/modules/customers/customer-list.tsx:94
 #: src/modules/loans/loan-detail.tsx:298
 #: src/modules/partners/partner-list.tsx:26
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:449
@@ -2425,7 +2430,7 @@ msgstr "Enter product supplies"
 
 #: src/modules/customers/components/customer-kyc-card.tsx:103
 #: src/modules/loans/components/loan-documents.tsx:85
-#: src/modules/loans/loan-list.tsx:349
+#: src/modules/loans/loan-list.tsx:358
 msgid "Enter reject reason"
 msgstr "Enter reject reason"
 
@@ -2591,7 +2596,7 @@ msgstr "Export data"
 msgid "Export e-invoice"
 msgstr "Export e-invoice"
 
-#: src/modules/receipts/receipt-e-invoices.tsx:68
+#: src/modules/receipts/receipt-e-invoices.tsx:72
 msgid "Export E-Invoice"
 msgstr "Export E-Invoice"
 
@@ -2621,7 +2626,7 @@ msgstr "Fetching location"
 msgid "Field name"
 msgstr "Field name"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:251
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:252
 msgid "Fields"
 msgstr "Fields"
 
@@ -2737,7 +2742,7 @@ msgid "Fulfilled"
 msgstr "Fulfilled"
 
 #: src/modules/loans/components/loan-disbursement.tsx:270
-#: src/modules/loans/loan-list.tsx:324
+#: src/modules/loans/loan-list.tsx:326
 msgid "Fulfilled at"
 msgstr "Fulfilled at"
 
@@ -2754,7 +2759,7 @@ msgstr "Gantt"
 #: src/modals/modal-printer.tsx:488
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:256
 #: src/modules/customers/components/form-customer.tsx:192
-#: src/modules/customers/customer-list.tsx:57
+#: src/modules/customers/customer-list.tsx:55
 #: src/modules/loans/loan-detail.tsx:277
 msgid "Gender"
 msgstr "Gender"
@@ -2814,13 +2819,13 @@ msgstr "Guest"
 msgid "Has access to all functions of the system"
 msgstr "Has access to all functions of the system"
 
-#: src/modules/loans/loan-list.tsx:270
-#: src/modules/loans/loan-list.tsx:409
+#: src/modules/loans/loan-list.tsx:272
+#: src/modules/loans/loan-list.tsx:420
 msgid "Has late interest"
 msgstr "Has late interest"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:150
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:157
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:149
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:156
 msgid "Healthcheck"
 msgstr "Healthcheck"
 
@@ -2904,7 +2909,7 @@ msgid "Images & Documents"
 msgstr "Images & Documents"
 
 #: src/modules/loans/components/loan-documents.tsx:89
-#: src/modules/loans/loan-list.tsx:359
+#: src/modules/loans/loan-list.tsx:368
 msgid "Img is blurry"
 msgstr "Img is blurry"
 
@@ -2971,7 +2976,7 @@ msgstr "Info"
 
 #: src/modules/customers/components/customer-kyc-card.tsx:107
 #: src/modules/loans/components/loan-documents.tsx:89
-#: src/modules/loans/loan-list.tsx:359
+#: src/modules/loans/loan-list.tsx:368
 msgid "Info does not match image"
 msgstr "Info does not match image"
 
@@ -3149,7 +3154,7 @@ msgstr "Joined at"
 msgid "Just created"
 msgstr "Just created"
 
-#: src/modules/receipts/receipt-e-invoices.tsx:50
+#: src/modules/receipts/receipt-e-invoices.tsx:54
 msgid "Keep"
 msgstr "Keep"
 
@@ -3343,8 +3348,8 @@ msgstr "Link form"
 #: src/modules/loans/components/loan-payments.tsx:98
 #: src/modules/loans/components/loan-payments.tsx:257
 #: src/modules/loans/components/loan-payments.tsx:408
-#: src/modules/loans/loan-list.tsx:264
-#: src/modules/loans/loan-list.tsx:402
+#: src/modules/loans/loan-list.tsx:266
+#: src/modules/loans/loan-list.tsx:413
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:221
 msgid "Liquidation"
 msgstr "Liquidation"
@@ -3361,7 +3366,7 @@ msgstr "Liquidation fee rate, calculated on the remaining debt (0 - 100)"
 msgid "Liquidation statement"
 msgstr "Liquidation statement"
 
-#: src/components/list/list.tsx:271
+#: src/components/list/list-core.tsx:273
 #: src/modules/orders/orders-sale/orders-sale.tsx:43
 #: src/modules/orders/orders-sale/orders-sale.tsx:94
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:122
@@ -3387,7 +3392,7 @@ msgstr "Loan"
 #: src/modules/loans/components/loan-card.tsx:84
 #: src/modules/loans/components/loan-disbursement.tsx:172
 #: src/modules/loans/components/loan-documents.tsx:122
-#: src/modules/loans/loan-list.tsx:191
+#: src/modules/loans/loan-list.tsx:193
 #: src/modules/loans/modals/modal-create-loan.tsx:340
 #: src/modules/loans/modals/modal-loan-calculator.tsx:141
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:132
@@ -3420,7 +3425,7 @@ msgstr "Loan Asset Estimations"
 
 #: src/modules/loans/components/loan-card.tsx:75
 #: src/modules/loans/components/loan-documents.tsx:112
-#: src/modules/loans/loan-list.tsx:187
+#: src/modules/loans/loan-list.tsx:189
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:97
 msgid "Loan asset type"
 msgstr "Loan asset type"
@@ -3431,7 +3436,7 @@ msgstr "Loan calculator"
 
 #: src/modules/loans/loan-detail.tsx:338
 #: src/modules/loans/loan-detail.tsx:518
-#: src/modules/loans/loan-list.tsx:161
+#: src/modules/loans/loan-list.tsx:163
 msgid "Loan contract"
 msgstr "Loan contract"
 
@@ -3462,8 +3467,8 @@ msgstr "Loan liquidation"
 
 #: src/modules/loans/components/loan-documents.tsx:109
 #: src/modules/loans/loan-detail.tsx:309
-#: src/modules/loans/loan-list.tsx:89
-#: src/modules/loans/loan-list.tsx:185
+#: src/modules/loans/loan-list.tsx:91
+#: src/modules/loans/loan-list.tsx:187
 #: src/modules/loans/modals/modal-loan-calculator.tsx:269
 #: src/modules/loans/modals/modal-loan-package-form.tsx:112
 #: src/modules/workspace-settings/workspace-setting-credit.tsx:30
@@ -3533,12 +3538,12 @@ msgstr "Loan receipt remind"
 msgid "Loan rejected reverted"
 msgstr "Loan rejected reverted"
 
-#: src/modules/loans/loan-list.tsx:363
+#: src/modules/loans/loan-list.tsx:372
 msgid "Loan revert rejected"
 msgstr "Loan revert rejected"
 
 #: src/constant.ts:17
-#: src/modules/loans/loan-list.tsx:66
+#: src/modules/loans/loan-list.tsx:68
 #: src/modules/search/search-engine.tsx:216
 #: src/modules/workspace-roles/workspace-roles-config.ts:7
 #: src/modules/workspaces/workspace-modules.tsx:223
@@ -3606,7 +3611,7 @@ msgstr "Loans synced"
 
 #: src/modules/customers/modals/modal-customer-form.tsx:111
 #: src/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping.tsx:193
-#: src/modules/loans/loan-list.tsx:178
+#: src/modules/loans/loan-list.tsx:180
 msgid "Location"
 msgstr "Location"
 
@@ -4020,16 +4025,16 @@ msgstr "Modules"
 msgid "Monday"
 msgstr "Monday"
 
-#: src/components/list/columns/number-column.tsx:14
+#: src/components/list/columns/number-column.tsx:16
 #: src/modules/loans/loan-detail.tsx:318
-#: src/modules/loans/loan-list.tsx:130
+#: src/modules/loans/loan-list.tsx:132
 #: src/modules/orders/order-list.tsx:51
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:343
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:423
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:468
 #: src/modules/receipts/receipt-card.tsx:412
 #: src/modules/receipts/receipt-card.tsx:421
-#: src/modules/receipts/receipt-list.tsx:116
+#: src/modules/receipts/receipt-list.tsx:118
 #: src/widgets/reports/modules.ts:256
 msgid "Money amount"
 msgstr "Money amount"
@@ -4153,10 +4158,10 @@ msgstr "Mutual workspaces"
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:127
 #: src/modules/custom-fields/components/form-custom-field.tsx:101
 #: src/modules/customer-forms/customer-form-list.tsx:36
-#: src/modules/customers/components/customer-column.tsx:98
+#: src/modules/customers/components/customer-column.tsx:99
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:76
 #: src/modules/customers/components/form-customer.tsx:161
-#: src/modules/customers/customer-list.tsx:67
+#: src/modules/customers/customer-list.tsx:65
 #: src/modules/customers/modals/modal-customer-contacts.tsx:69
 #: src/modules/customers/modals/modal-customer-form.tsx:102
 #: src/modules/partners/modals/modal-partner-form.tsx:119
@@ -4432,7 +4437,7 @@ msgstr "Notifications"
 msgid "Now you can use the <0>Messages</0> feature to communicate with customers on Facebook."
 msgstr "Now you can use the <0>Messages</0> feature to communicate with customers on Facebook."
 
-#: src/components/list/columns/number-column.tsx:14
+#: src/components/list/columns/number-column.tsx:16
 #: src/modules/custom-fields/custom-field-constants.tsx:6
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:451
 msgid "Number"
@@ -4481,7 +4486,7 @@ msgstr "Open app"
 msgid "Open chat box"
 msgstr "Open chat box"
 
-#: src/modules/loans/loan-list.tsx:166
+#: src/modules/loans/loan-list.tsx:168
 msgid "Open file"
 msgstr "Open file"
 
@@ -4604,7 +4609,7 @@ msgid "Paid"
 msgstr "Paid"
 
 #: src/modules/receipts/receipt-card.tsx:328
-#: src/modules/receipts/receipt-list.tsx:65
+#: src/modules/receipts/receipt-list.tsx:67
 msgid "Paid at"
 msgstr "Paid at"
 
@@ -4662,11 +4667,12 @@ msgstr "Password updated"
 #: src/modules/orders/order-list.tsx:67
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:104
 #: src/modules/receipts/receipt-card.tsx:505
+#: src/modules/receipts/receipt-list.tsx:175
 msgid "Pay"
 msgstr "Pay"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:92
-#: src/modules/receipts/receipt-list.tsx:71
+#: src/modules/receipts/receipt-list.tsx:73
 msgid "Pay expire"
 msgstr "Pay expire"
 
@@ -4691,7 +4697,7 @@ msgstr "Pay successful"
 #: src/components/printer/printer-body.tsx:109
 #: src/modals/modal-printer.tsx:373
 #: src/modules/loans/loan-detail.tsx:472
-#: src/modules/receipts/receipt-list.tsx:105
+#: src/modules/receipts/receipt-list.tsx:107
 #: src/modules/workspace-billings/workspace-billings-contants.ts:9
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:148
 msgid "Payment"
@@ -4710,7 +4716,7 @@ msgstr "Payment code"
 msgid "Payment created"
 msgstr "Payment created"
 
-#: src/modules/loans/loan-list.tsx:196
+#: src/modules/loans/loan-list.tsx:198
 msgid "Payment date"
 msgstr "Payment date"
 
@@ -4750,7 +4756,7 @@ msgstr "Payment period options"
 msgid "Payment periods"
 msgstr "Payment periods"
 
-#: src/modules/loans/loan-list.tsx:289
+#: src/modules/loans/loan-list.tsx:291
 msgid "Payment progress"
 msgstr "Payment progress"
 
@@ -4799,14 +4805,14 @@ msgid "Personal informations"
 msgstr "Personal informations"
 
 #: src/modules/customer-forms/customer-form-list.tsx:44
-#: src/modules/customers/components/customer-column.tsx:102
+#: src/modules/customers/components/customer-column.tsx:103
 #: src/modules/customers/components/customer-kyc-card.tsx:127
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:83
 #: src/modules/customers/components/form-customer.tsx:163
-#: src/modules/customers/customer-list.tsx:76
+#: src/modules/customers/customer-list.tsx:74
 #: src/modules/customers/modals/modal-customer-form.tsx:104
 #: src/modules/loans/components/loan-card.tsx:63
-#: src/modules/loans/components/loan-customer-kyc.tsx:141
+#: src/modules/loans/components/loan-customer-kyc.tsx:144
 #: src/modules/loans/loan-detail.tsx:287
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:91
 #: src/modules/partners/modals/modal-partner-form.tsx:120
@@ -4971,8 +4977,8 @@ msgid "Preview"
 msgstr "Preview"
 
 #: src/modules/loans/components/loan-customer-kyc.tsx:96
-#: src/modules/loans/components/loan-customer-kyc.tsx:118
-#: src/modules/loans/loan-list.tsx:182
+#: src/modules/loans/components/loan-customer-kyc.tsx:121
+#: src/modules/loans/loan-list.tsx:184
 msgid "Previous address"
 msgstr "Previous address"
 
@@ -5004,7 +5010,7 @@ msgstr "Principal income"
 #: src/modals/modal-printer.tsx:187
 #: src/modules/orders/order-card.tsx:223
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:47
-#: src/modules/receipts/receipt-list.tsx:142
+#: src/modules/receipts/receipt-list.tsx:149
 msgid "Print"
 msgstr "Print"
 
@@ -5330,7 +5336,7 @@ msgstr "Receipt unarchived"
 
 #: src/constant.ts:13
 #: src/modules/loans/components/loan-payments.tsx:153
-#: src/modules/receipts/receipt-list.tsx:50
+#: src/modules/receipts/receipt-list.tsx:52
 #: src/modules/search/search-engine.tsx:180
 #: src/modules/workspace-roles/workspace-roles-config.ts:119
 #: src/modules/workspaces/workspace-modules.tsx:209
@@ -5387,8 +5393,8 @@ msgstr "Registration number"
 #: src/modules/customers/components/customer-kyc-card.tsx:208
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:147
 #: src/modules/loans/components/loan-documents.tsx:206
-#: src/modules/loans/loan-list.tsx:342
-#: src/modules/loans/loan-list.tsx:348
+#: src/modules/loans/loan-list.tsx:351
+#: src/modules/loans/loan-list.tsx:357
 #: src/modules/receipts/receipt-card.tsx:463
 msgid "Reject"
 msgstr "Reject"
@@ -5419,7 +5425,7 @@ msgstr "Rejected timekeeping"
 msgid "Relationship type"
 msgstr "Relationship type"
 
-#: src/modules/loans/components/loan-customer-kyc.tsx:149
+#: src/modules/loans/components/loan-customer-kyc.tsx:152
 msgid "Relative contacts"
 msgstr "Relative contacts"
 
@@ -5459,7 +5465,7 @@ msgid "Reminder time"
 msgstr "Reminder time"
 
 #: src/components/inputs/work-slot-settings-input.tsx:296
-#: src/components/list/components/bulk-actions.tsx:91
+#: src/components/list/components/bulk-actions.tsx:105
 #: src/layout/header/header-tasks-breadcrumbs.tsx:128
 #: src/layout/navigation/navigation-task-folders.tsx:168
 #: src/modals/modal-date-picker.tsx:87
@@ -5607,8 +5613,8 @@ msgstr "Reset filter"
 msgid "Reset secret key"
 msgstr "Reset secret key"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:88
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:170
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:87
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:169
 msgid "Reset templates"
 msgstr "Reset templates"
 
@@ -5723,7 +5729,7 @@ msgid "Rule"
 msgstr "Rule"
 
 #: src/modules/customers/components/form-customer.tsx:177
-#: src/modules/loans/components/loan-customer-kyc.tsx:131
+#: src/modules/loans/components/loan-customer-kyc.tsx:134
 msgid "Salary amount"
 msgstr "Salary amount"
 
@@ -5788,7 +5794,7 @@ msgstr "Search products / services / customers"
 msgid "Secondary address"
 msgstr "Secondary address"
 
-#: src/modules/loans/components/loan-customer-kyc.tsx:112
+#: src/modules/loans/components/loan-customer-kyc.tsx:115
 msgid "Secondary address (Hometown)"
 msgstr "Secondary address (Hometown)"
 
@@ -5935,7 +5941,7 @@ msgstr "Select week"
 msgid "Select year"
 msgstr "Select year"
 
-#: src/components/list/components/bulk-actions.tsx:38
+#: src/components/list/components/bulk-actions.tsx:52
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:130
 msgid "Selected"
 msgstr "Selected"
@@ -6188,10 +6194,10 @@ msgstr "Start time must be before end time"
 #: src/modules/customer-forms/customer-form-list.tsx:58
 #: src/modules/customers/modals/modal-customer-form.tsx:132
 #: src/modules/loans/loan-detail.tsx:374
-#: src/modules/loans/loan-list.tsx:230
+#: src/modules/loans/loan-list.tsx:232
 #: src/modules/message-boxes/message-boxes.tsx:66
 #: src/modules/promotions/promostion-list.tsx:117
-#: src/modules/receipts/receipt-list.tsx:96
+#: src/modules/receipts/receipt-list.tsx:98
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:155
 #: src/modules/tasks/components/form-task.tsx:274
 #: src/modules/tasks/views/board/board.task-card.tsx:180
@@ -6443,7 +6449,7 @@ msgstr "Tasks updated"
 msgid "Tax code"
 msgstr "Tax code"
 
-#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:208
+#: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:207
 msgid "Template E-Invoice"
 msgstr "Template E-Invoice"
 
@@ -6588,11 +6594,11 @@ msgid "Tickets"
 msgstr "Tickets"
 
 #: src/components/inputs/time-trackings-input.tsx:429
-#: src/components/list/columns/date-time-column.tsx:23
+#: src/components/list/columns/date-time-column.tsx:22
 #: src/configs/calendar.config.tsx:71
 #: src/modules/bookings/modals/modal-booking.tsx:255
 #: src/modules/loans/components/loan-payments.tsx:149
-#: src/modules/loans/loan-list.tsx:145
+#: src/modules/loans/loan-list.tsx:147
 #: src/modules/loans/modals/modal-loan-calculator.tsx:208
 #: src/modules/orders/order-list.tsx:40
 #: src/modules/product-combos/modals/modal-product-combo.tsx:119
@@ -6702,7 +6708,7 @@ msgstr "Today bookings"
 msgid "Today new customers"
 msgstr "Today new customers"
 
-#: src/modules/receipts/receipt-list.tsx:125
+#: src/modules/receipts/receipt-list.tsx:127
 msgid "Today receipts"
 msgstr "Today receipts"
 
@@ -6809,7 +6815,7 @@ msgstr "Turn on notification"
 #: src/modules/promotions/components/form-promotion.tsx:123
 #: src/modules/promotions/promostion-list.tsx:38
 #: src/modules/receipts/modals/modal-receipt-form.tsx:98
-#: src/modules/receipts/receipt-list.tsx:77
+#: src/modules/receipts/receipt-list.tsx:79
 #: src/modules/tags/modals/modal-tag-form.tsx:83
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:203
 #: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:246
@@ -6894,7 +6900,7 @@ msgstr "Unlink"
 msgid "Unnamed"
 msgstr "Unnamed"
 
-#: src/components/list/components/bulk-actions.tsx:95
+#: src/components/list/components/bulk-actions.tsx:109
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:268
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:344
 msgid "Unselect all"
@@ -7079,11 +7085,11 @@ msgstr "Upload"
 msgid "Upload avatar"
 msgstr "Upload avatar"
 
-#: src/modules/files/file-service.tsx:140
+#: src/modules/files/file-service.tsx:160
 msgid "Upload file"
 msgstr "Upload file"
 
-#: src/modules/files/file-service.tsx:119
+#: src/modules/files/file-service.tsx:139
 msgid "Upload files"
 msgstr "Upload files"
 
@@ -7206,11 +7212,16 @@ msgstr "View customer phone number and contact"
 msgid "View customers"
 msgstr "View customers"
 
+#: src/modules/loans/loan-list.tsx:333
+#: src/modules/receipts/receipt-list.tsx:144
+msgid "View detail"
+msgstr "View detail"
+
 #: src/modules/e-invoices/e-invoice-list.tsx:63
 msgid "View E-Invoice"
 msgstr "View E-Invoice"
 
-#: src/modules/receipts/receipt-e-invoices.tsx:127
+#: src/modules/receipts/receipt-e-invoices.tsx:131
 msgid "View Invoice"
 msgstr "View Invoice"
 
@@ -7462,7 +7473,7 @@ msgstr "Workspace updated"
 
 #: src/modules/customers/components/customer-kyc-card.tsx:107
 #: src/modules/loans/components/loan-documents.tsx:89
-#: src/modules/loans/loan-list.tsx:359
+#: src/modules/loans/loan-list.tsx:368
 msgid "Wrong information"
 msgstr "Wrong information"
 
