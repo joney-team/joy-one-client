@@ -22,7 +22,6 @@ import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Loader, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
@@ -30,6 +29,7 @@ import {
   IconArrowBackUp,
   IconArrowForwardUp,
   IconCircleCheck,
+  IconFlag,
   IconFlagFilled,
   IconFolder,
   IconFolderOpen,
@@ -348,8 +348,8 @@ export const TaskMenuActions: FC = () => {
         />
 
         <ButtonSelect
-          icon={IconFlagFilled}
-          label={t`Priority`}
+          icon={IconFlag}
+          label={<Trans>Priority</Trans>}
           autoHideLabel
           value={tasks.state.priority}
           options={Object.values(TaskPriority)
@@ -366,7 +366,7 @@ export const TaskMenuActions: FC = () => {
 
         <ButtonSelect
           icon={IconCircleCheck}
-          label={tasks.state.showClosed ? t`Hide closed` : t`Show closed`}
+          label={tasks.state.showClosed ? <Trans>Hide closed</Trans> : <Trans>Show closed</Trans>}
           isActive={tasks.state.showClosed}
           iconStrokeWidth={1.8}
           onClick={() => {
@@ -388,7 +388,7 @@ export const TaskMenuActions: FC = () => {
             style={{ borderColor: color("gray.5") }}
           >
             <Group gap={0}>
-              <Tooltip label={t`Undo`}>
+              <Tooltip label={<Trans>Undo</Trans>}>
                 <ActionIcon
                   disabled={!isAbleToUndo}
                   variant="subtle"
@@ -402,7 +402,7 @@ export const TaskMenuActions: FC = () => {
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={t`Redo`}>
+              <Tooltip label={<Trans>Redo</Trans>}>
                 <ActionIcon
                   disabled={!isAbleToRedo}
                   variant="subtle"
