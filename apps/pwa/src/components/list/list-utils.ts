@@ -93,7 +93,7 @@ export function generateDefaultViewState(args: {
       return acc + (column?.defaultWidth ?? 0);
     }, 0);
 
-  const avgNonDefaultWidth = Math.floor(totalRemainingWidth / nonDefaultWidthColumns);
+  const avgNonDefaultWidth = Math.floor(totalRemainingWidth / nonDefaultWidthColumns) - 10;
 
   const columns: { cols: Record<string, ColumnState>; remainingWidth: number } = Object.entries(
     args.props.columns

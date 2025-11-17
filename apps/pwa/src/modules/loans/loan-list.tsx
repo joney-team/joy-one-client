@@ -202,8 +202,10 @@ export const LoanList: FC<LoanListProps> = (props) => {
           render: ({ value, data: loan }) => {
             const warningReceiptBeforeDays =
               workspace.settings.loanSettings?.warningReceiptBeforeDays || 0;
+
             const isExpired =
               loan.nextReceiptAt && DateTime.isBefore(loan.nextReceiptAt, new Date());
+
             const isWarning =
               warningReceiptBeforeDays > 0 &&
               loan.nextReceiptAt &&
@@ -212,15 +214,19 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 DateTime.add(new Date(), "day", warningReceiptBeforeDays + 1)
               );
 
-            if (!value || loan.status === LoanStatus.COMPLETED) return "--";
+            const { end } = DateTime.getRange(new Date(), "day");
+            const diff = DateTime.toSeconds(end) - DateTime.getNowInSeconds();
+
+            if (!value || loan.status === LoanStatus.COMPLETED || !loan.nextReceiptAt) return "--";
 
             return (
               <Stack gap={3}>
                 <Text c={isExpired ? "red" : isWarning ? "orange" : "var(--mantine-color-text)"}>
                   {loan.nextReceiptAt && <DateFormat value={loan.nextReceiptAt} type="date" />}
                 </Text>
+
                 <Text fz={10} c={isExpired ? "red" : isWarning ? "orange" : "gray"}>
-                  {loan.nextReceiptAt && <RelativeTimeFormat value={loan.nextReceiptAt} />}
+                  {loan.nextReceiptAt && <RelativeTimeFormat value={loan.nextReceiptAt - diff} />}
                 </Text>
               </Stack>
             );
