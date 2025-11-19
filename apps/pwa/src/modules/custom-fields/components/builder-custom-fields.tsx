@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@/modules/apis/use-query";
+import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { EventType } from "@/modules/events/event-types";
 import { AppEntity, ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
@@ -23,7 +23,7 @@ export interface BuilderCustomFieldsProps {
 }
 
 export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
-  const customFields = useQuery<ResponseList<CustomFieldEntity>>({
+  const customFields = useRestQuery<ResponseList<CustomFieldEntity>>({
     route: "/custom-fields",
     params: {
       entities: [props.entity],

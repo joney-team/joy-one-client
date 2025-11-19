@@ -1,14 +1,14 @@
 import { NetworkMode, UseQueryResult, useQuery as useQueryTanstack } from "@tanstack/react-query";
 
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import { StorageKey } from "@/types";
 import { AxiosError } from "axios";
+import { useMemo } from "react";
 import { api } from ".";
 import { onReconnected, useEventsListener } from "../events/event-service";
 import { EventEntity, EventType } from "../events/event-types";
-import { useLocalStorage } from "@/hooks/use-local-storage";
-import { StorageKey } from "@/types";
-import { useMemo } from "react";
 
-export interface UseQueryArgs<T, P = Record<string, any>> {
+export interface UseRestQueryArgs<T, P = Record<string, any>> {
   params?: P;
   isSkip?: boolean;
   refetchEvents?: EventType[];
@@ -19,13 +19,13 @@ export interface UseQueryArgs<T, P = Record<string, any>> {
   queryKey?: string[];
 }
 
-export type UseQuery<T> = UseQueryResult<T, AxiosError<unknown, any>>;
+export type UseRestQuery<T> = UseQueryResult<T, AxiosError<unknown, any>>;
 
-export const useQuery = <T = any, P = Record<string, any>>(
-  args: string | (UseQueryArgs<T, P> & { route: string })
-): UseQuery<T> => {
+export const useRestQuery = <T = any, P = Record<string, any>>(
+  args: string | (UseRestQueryArgs<T, P> & { route: string })
+): UseRestQuery<T> => {
   const isReadyToFetch = typeof args === "string" ? true : !args.isSkip;
-  const query = typeof args === "string" ? ({} as UseQueryArgs<T>) : args;
+  const query = typeof args === "string" ? ({} as UseRestQueryArgs<T>) : args;
   const route = typeof args === "string" ? args : args.route;
   const params = typeof args === "string" ? null : args.params;
   const queryKey = typeof args === "string" ? [] : args.queryKey || [];
@@ -76,7 +76,7 @@ export const useQuery = <T = any, P = Record<string, any>>(
   return stack;
 };
 
-export interface UseDynmicQueryArgs<T> {
+export interface UseDynmicRestQueryArgs<T> {
   key?: string;
   queryFn: (args: { signal: AbortSignal }) => Promise<T>;
   isSkip?: boolean;
@@ -84,9 +84,11 @@ export interface UseDynmicQueryArgs<T> {
   refetchCondition?: (data: EventEntity, currentData: T) => boolean;
 }
 
-export type UseDynmicQuery<T> = UseQueryResult<T, AxiosError>;
+export type UseDynmicRestQuery<T> = UseQueryResult<T, AxiosError>;
 
-export function useDynmicQuery<T = any>(args: UseDynmicQueryArgs<T>): UseDynmicQuery<T> {
+export function useDynmicRestQuery<T = any>(
+  args: UseDynmicRestQueryArgs<T>
+): UseDynmicRestQuery<T> {
   const { key, queryFn, isSkip } = args;
   const isReadyToFetch = !isSkip;
   const queryKey = key || "";

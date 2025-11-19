@@ -1,4 +1,5 @@
 import { NextConfig } from "next";
+import config from "@joy-one-client/config";
 
 const nextConfig: NextConfig = {
   output: "standalone",
@@ -24,6 +25,10 @@ const nextConfig: NextConfig = {
     rules: {
       "*.po": {
         loaders: ["@lingui/loader"],
+        as: "*.js",
+      },
+      "*.graphql": {
+        loaders: ["graphql-tag/loader"],
         as: "*.js",
       },
     },
@@ -303,6 +308,14 @@ const nextConfig: NextConfig = {
       ".ico",
       ".woff",
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/graphql",
+        destination: config.API_CLIENT_SIDE_URL + "/graphql",
+      },
+    ];
   },
   typedRoutes: true,
   productionBrowserSourceMaps: true,

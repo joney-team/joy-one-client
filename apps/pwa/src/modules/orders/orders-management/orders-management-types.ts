@@ -1,4 +1,4 @@
-import { UseQuery } from "@/modules/apis/use-query";
+import { UseRestQuery } from "@/modules/apis/use-rest-query";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { ProductEntity } from "@/modules/products/products-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
@@ -64,8 +64,8 @@ export interface OrdersManagementState {
 export interface OrdersManagementContext extends OrdersManagementState {
   isInitialized: boolean;
   activeOrder: Order | null;
-  availableCombos: UseQuery<ProductComboEntity[]>;
-  availablePromotions: UseQuery<ResponseList<PromotionEntity>>;
+  availableCombos: UseRestQuery<ProductComboEntity[]>;
+  availablePromotions: UseRestQuery<ResponseList<PromotionEntity>>;
   setActiveOrderId: (orderId: string) => void;
   addOrder: (order?: OrderEntity) => void;
   addProduct: (product: OrderProduct) => void;
@@ -73,7 +73,7 @@ export interface OrdersManagementContext extends OrdersManagementState {
   updateProductItem: (productId: string, item: Partial<Omit<OrderItem, "product">>) => void;
   closeOrder: (id?: string | null) => void;
   removeOrder: () => void;
-  calculating: UseQuery<OrderEntityCalculated>;
+  calculating: UseRestQuery<OrderEntityCalculated>;
   updateOrder: (values: Partial<Order>) => void;
   payOrder: () => Promise<void>;
   saveOrder: () => Promise<void>;

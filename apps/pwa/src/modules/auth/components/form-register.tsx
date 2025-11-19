@@ -43,7 +43,7 @@ export const FormRegister: FC = () => {
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
     await auth
-      .registerWithEmailAndPassword({
+      .signUpWithEmailPassword({
         ...values,
         plainPassword: values.plainPassword,
       })

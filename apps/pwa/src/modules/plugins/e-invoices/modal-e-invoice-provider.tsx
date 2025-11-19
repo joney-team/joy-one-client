@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
-import { useQuery } from "@/modules/apis/use-query";
+import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -28,7 +28,7 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
   const provider = "provider" in props ? props.provider : undefined;
   const { mode } = props;
 
-  const providerConfigs = useQuery<PluginEInvoicesProviderInformations>({
+  const providerConfigs = useRestQuery<PluginEInvoicesProviderInformations>({
     route: "/plugins/e-invoices/providers/informations",
     networkMode: "offlineFirst",
   });

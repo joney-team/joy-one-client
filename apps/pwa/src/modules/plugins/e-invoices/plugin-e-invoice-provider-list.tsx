@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
-import { useQuery } from "@/modules/apis/use-query";
+import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
 import { Card, Skeleton, Stack, Text, Title } from "@mantine/core";
@@ -15,7 +15,7 @@ import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 
 export const PluginEInvoiceProviderList: FC = () => {
   const color = useColor();
-  const { data, isLoading, error, refetch } = useQuery<PluginEInvoicesProviderEntity[]>({
+  const { data, isLoading, error, refetch } = useRestQuery<PluginEInvoicesProviderEntity[]>({
     route: "/plugins/e-invoices/providers",
   });
 

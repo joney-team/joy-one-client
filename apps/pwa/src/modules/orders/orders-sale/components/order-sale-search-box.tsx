@@ -5,7 +5,7 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { useList } from "@/components/list/use-list";
 import { ScrollArea } from "@/components/scroll-area";
 import { api } from "@/modules/apis";
-import { useQuery } from "@/modules/apis/use-query";
+import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity } from "@/modules/products/products-types";
 import { SearchCustomer, SearchProduct, SearchResult } from "@/modules/search/search-types";
@@ -30,7 +30,7 @@ export const OrderSaleSearchBox: FC = () => {
   const [searchText, setSearchText] = useState("");
   const throttledSearchText = useThrottledValue(searchText, 300);
 
-  const { data: searchResult } = useQuery<SearchResult>({
+  const { data: searchResult } = useRestQuery<SearchResult>({
     isSkip: searchText.length === 0,
     route: "/search",
     params: {

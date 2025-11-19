@@ -14,7 +14,7 @@ import { GeneralAnalytics } from "./components/analytics/general-analytics";
 import { getGlobal } from "./global";
 import { getLocalStorage } from "./hooks/use-local-storage";
 import { socket } from "./modules/apis";
-import { QueryProvider } from "./modules/apis/query";
+import { RestQueryProvider } from "./modules/apis/query";
 import { getAccessToken } from "./modules/auth/auth-service";
 import { eventsEmitter } from "./modules/events/event-service";
 import { type EventEntity } from "./modules/events/event-types";
@@ -131,7 +131,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   return (
     <AppContext.Provider value={context}>
       <LangProvider>
-        <QueryProvider>
+        <RestQueryProvider>
           <LocationsProvider>
             <LayoutProvider>
               <ModuleProviders>
@@ -141,7 +141,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
               </ModuleProviders>
             </LayoutProvider>
           </LocationsProvider>
-        </QueryProvider>
+        </RestQueryProvider>
       </LangProvider>
     </AppContext.Provider>
   );

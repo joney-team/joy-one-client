@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { useQuery } from "@/modules/apis/use-query";
+import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity, ResponseList } from "@/types";
@@ -19,7 +19,7 @@ interface PrescriptionSelectorProps {
 }
 
 export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
-  const initOptions = useQuery<ResponseList<PrescriptionEntity>>({
+  const initOptions = useRestQuery<ResponseList<PrescriptionEntity>>({
     route: "/prescriptions",
     params: {
       limit: 9,

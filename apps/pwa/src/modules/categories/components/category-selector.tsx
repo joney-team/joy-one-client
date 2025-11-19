@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
 import { api } from "@/modules/apis";
-import { useQuery } from "@/modules/apis/use-query";
+import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity, ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
@@ -28,7 +28,7 @@ interface CategorySelectorProps
 export const CategorySelector: FC<CategorySelectorProps> = (props) => {
   const { type, excludeIds, onSelect, render, createable = true, onClose, onOpen, ...rest } = props;
 
-  const initOptions = useQuery<ResponseList<CategoryEntity>>({
+  const initOptions = useRestQuery<ResponseList<CategoryEntity>>({
     route: "/categories",
     params: {
       limit: 9,

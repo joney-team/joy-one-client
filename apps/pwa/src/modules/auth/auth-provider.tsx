@@ -30,6 +30,7 @@ import { UpdateUserProfileDto, UserEntity } from "@/modules/users/users-types";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { t } from "@lingui/core/macro";
 import { useMantineTheme } from "@mantine/core";
@@ -43,6 +44,13 @@ import { api } from "../apis";
 import { reducePhotoSize } from "../files/file-service";
 import { Context } from "./auth-context";
 import { AuthRequire } from "./auth-require";
+import {
+  serverAuthMe,
+  serverSignInWithEmailPassword,
+  serverSignInWithFacebook,
+  serverSignInWithFirebase,
+  serverSignUpWithEmailPassword,
+} from "./auth-server";
 import {
   clearTokens,
   getAccessToken,
@@ -61,6 +69,7 @@ import type {
 } from "./auth-types";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
+  const client = useApolloClient();
   const router = useRouter();
   const routeRule = useRouteRule();
   const theme = useMantineTheme();
@@ -72,7 +81,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const [device, setDevice] = useState<DeviceEntity>();
   const [, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
-  const syncLocaleDeviceToUser = async (_user: UserEntity) => {
+  const syncLocaleDeviceToUser = async (_user: UserAuthResult) => {
     try {
       const currentLocale = getClientLocale();
       if (_user.locale !== currentLocale) {
@@ -115,7 +124,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const initialize = async (type: "reconnect" | "init" | "auth") => {
-    let _user: UserEntity | undefined = undefined;
+    let _user: UserAuthResult | undefined = undefined;
     _initializeMeta();
     setSessionId(uuid());
 
@@ -131,7 +140,10 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       // User information
       const accessToken = await getAccessToken();
       if (accessToken) {
-        _user = await api.get(`/auth`);
+        _user = await serverAuthMe({
+          accessToken,
+          deviceId: device._id,
+        });
         setUser(_user);
       }
 
@@ -162,17 +174,15 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       await Promise.all([api.post(`/auth/sign-out`), firebaseAuth.signOut()]);
       clearTokens();
       onReset();
+      client.cache.reset();
       postAppChannelMessage("SIGN_OUT");
     } catch (error) {
       onError(error);
     }
   };
 
-  const _signInWithFirebase = async (idToken: string, username?: string) => {
-    const tokens = await api.post<AuthTokenResult>(`/auth/sign-in/firebase`, {
-      idToken,
-      username,
-    });
+  const handleSignInWithFirebase = async (idToken: string, username?: string) => {
+    const tokens = await serverSignInWithFirebase(idToken, username);
     await saveTokens(tokens);
     await initialize("auth");
   };
@@ -184,7 +194,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
       const result = await signInWithPopup(firebaseAuth, provider);
       const idToken = await result.user.getIdToken();
-      await _signInWithFirebase(idToken);
+      await handleSignInWithFirebase(idToken);
     } catch (error) {
       onError(error);
     }
@@ -193,9 +203,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const signInWithFacebook = async () => {
     try {
       const authResponse = await onFacebookLogin();
-      const tokens = await api.post<AuthTokenResult>(`/auth/sign-in/facebook`, {
-        accessToken: authResponse.accessToken,
-      });
+      const tokens = await serverSignInWithFacebook(authResponse.accessToken);
       await saveTokens(tokens);
       await initialize("auth");
       localStorage.setItem(StorageKey.META_ACCESS_TOKEN, authResponse.accessToken);
@@ -212,20 +220,20 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
       const result = await signInWithPopup(firebaseAuth, provider);
       const idToken = await result.user.getIdToken();
-      await _signInWithFirebase(idToken, (result as any)._tokenResponse?.screenName);
+      await handleSignInWithFirebase(idToken, (result as any)._tokenResponse?.screenName);
     } catch (error) {
       onError(error);
     }
   };
 
   const signInWithEmailAndPassword = async (dto: AuthSignInWithEmailPasswordDto) => {
-    const tokens = await api.post<AuthTokenResult>("/auth/sign-in/email-password", dto);
-    await saveTokens(tokens);
+    const result = await serverSignInWithEmailPassword(dto);
+    await saveTokens(result);
     await initialize("auth");
   };
 
-  const registerWithEmailAndPassword = async (dto: AuthSignUpWithEmailPasswordDto) => {
-    const tokens = await api.post<AuthTokenResult>("/auth/sign-up/email-password", dto);
+  const signUpWithEmailPassword = async (dto: AuthSignUpWithEmailPasswordDto) => {
+    const tokens = await serverSignUpWithEmailPassword(dto);
     await saveTokens(tokens);
     await initialize("auth");
   };
@@ -413,7 +421,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     signOut,
     updateProfile,
     signInWithEmailAndPassword,
-    registerWithEmailAndPassword,
+    signUpWithEmailPassword,
     signInWithFacebook,
     registerNotification,
     signInWithGithub,

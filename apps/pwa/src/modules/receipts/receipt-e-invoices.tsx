@@ -11,7 +11,7 @@ import { Badge, Card, Center, Group, Image, Skeleton, Stack, Text } from "@manti
 import { IconArchive, IconEye, IconFileInvoice } from "@tabler/icons-react";
 import { useMemo, type FC } from "react";
 import { api } from "../apis";
-import { useQuery } from "../apis/use-query";
+import { useRestQuery } from "../apis/use-rest-query";
 import { EventType } from "../events/event-types";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
@@ -25,7 +25,7 @@ interface ReceiptEInvoicesProps {
 export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
   const workspace = useWorkspace();
 
-  const { data, isLoading, refetch } = useQuery<ResponseList<PluginEInvoicesEntity>>({
+  const { data, isLoading, refetch } = useRestQuery<ResponseList<PluginEInvoicesEntity>>({
     route: `/plugins/e-invoices`,
     params: {
       receiptId: receipt.id,

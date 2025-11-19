@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { SectionTitle } from "@/components/session-title";
 import { api } from "@/modules/apis";
-import { useQuery } from "@/modules/apis/use-query";
+import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onActionLoad } from "@/utils/actions";
@@ -61,7 +61,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
   const status = eInvoicesProviderStatuses[provider.status];
   const [templates, setTemplates] = useState(provider.templates);
 
-  const { data: variables } = useQuery<PluginEInvoiceTemplateVariables>({
+  const { data: variables } = useRestQuery<PluginEInvoiceTemplateVariables>({
     route: "/plugins/e-invoices/templates/variables",
     refetchWhenReconnected: true,
   });

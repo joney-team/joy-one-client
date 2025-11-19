@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "@/hooks/use-router";
-import { useQuery } from "@/modules/apis/use-query";
+import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
@@ -113,7 +113,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     return state.orders.find((o) => o.id === state.activeOrderId) || null;
   }, [state.orders, state.activeOrderId]);
 
-  const calculating = useQuery<OrderEntityCalculated, OrderCalculateDto>({
+  const calculating = useRestQuery<OrderEntityCalculated, OrderCalculateDto>({
     route: "/orders/calculate",
     method: "post",
     isSkip: !activeOrder,
@@ -189,12 +189,12 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     await fetchOrder(activeOrder.id);
   };
 
-  const availablePromotions = useQuery<ResponseList<PromotionEntity>>({
+  const availablePromotions = useRestQuery<ResponseList<PromotionEntity>>({
     isSkip: !activeOrder?.relatedCustomer?._id,
     route: `/promotions/customers/${activeOrder?.relatedCustomer?._id}`,
   });
 
-  const availableCombos = useQuery<ProductComboEntity[]>({
+  const availableCombos = useRestQuery<ProductComboEntity[]>({
     route: `/product-combos/customers/${activeOrder?.relatedCustomer?._id}`,
     isSkip: !activeOrder?.relatedCustomer?._id,
   });

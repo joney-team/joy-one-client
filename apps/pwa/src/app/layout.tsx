@@ -23,6 +23,7 @@ import "@xyflow/react/dist/style.css";
 import "../styles/app.style.css";
 import "../styles/react-big-calendar.css";
 import { isExtendedApp } from "@/service";
+import { ApolloProvider } from "@/modules/apollo/apollo-provider";
 
 export async function generateMetadata(): Promise<Metadata> {
   let metadata: AppMetadata = defaultMetadata;
@@ -89,7 +90,9 @@ export default async function RootLayout(props: Readonly<{ children: React.React
       </head>
 
       <body suppressHydrationWarning tabIndex={-1}>
-        <App metadata={metadata}>{props.children}</App>
+        <ApolloProvider>
+          <App metadata={metadata}>{props.children}</App>
+        </ApolloProvider>
 
         <script
           async

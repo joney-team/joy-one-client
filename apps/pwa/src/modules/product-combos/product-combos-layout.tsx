@@ -9,13 +9,13 @@ import { t } from "@lingui/core/macro";
 import { Skeleton, Stack } from "@mantine/core";
 import { IconPackage, IconSettings } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren } from "react";
-import { useQuery } from "../apis/use-query";
+import { useRestQuery } from "../apis/use-rest-query";
 import { ProductCombosOnboarding } from "./product-combos-onboarding";
 
 export const ProductComboLayout: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
 
-  const checkCombos = useQuery({
+  const checkCombos = useRestQuery({
     route: "/products",
     params: {
       limit: 1,

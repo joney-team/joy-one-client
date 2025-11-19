@@ -9,7 +9,7 @@ import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconEye, IconFileInvoice } from "@tabler/icons-react";
 import { type FC } from "react";
-import { useQuery } from "../apis/use-query";
+import { useRestQuery } from "../apis/use-rest-query";
 import { EventType } from "../events/event-types";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { PluginEInvoicesProviderInformations } from "../plugins/e-invoices/plugin-e-invoices.types";
@@ -17,7 +17,7 @@ import { OnReceiptDetailModal } from "../receipts/modals/modal-receipt-detail";
 import { t } from "@lingui/core/macro";
 
 export const EInvoiceList: FC = () => {
-  const providerConfigs = useQuery<PluginEInvoicesProviderInformations>({
+  const providerConfigs = useRestQuery<PluginEInvoicesProviderInformations>({
     route: "/plugins/e-invoices/providers/informations",
     networkMode: "offlineFirst",
   });

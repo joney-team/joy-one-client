@@ -12,7 +12,7 @@ import { Group, SimpleGrid, Stack } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { IconAnalyze, IconClipboardList } from "@tabler/icons-react";
 import { FC } from "react";
-import { useQuery } from "../apis/use-query";
+import { useRestQuery } from "../apis/use-rest-query";
 import { EventType } from "../events/event-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
@@ -25,7 +25,7 @@ export const DashboardBookings: FC = () => {
     defaultValue: { status: "in_progress", assigneeUserIds: [] as string[] },
   });
 
-  const todayBookings = useQuery<ResponseList<BookingEntity>>({
+  const todayBookings = useRestQuery<ResponseList<BookingEntity>>({
     route: "/bookings",
     isSkip: !workspace.hasPermission(WorkspacePermission.BOOKING_VIEW),
     params: {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@/modules/apis/use-query";
+import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { BankAccount, BankInformation } from "@/modules/plugins/banks/banks.types";
 import { ResponseList } from "@/types";
 import { em, Group, Select, SelectProps, SimpleGrid, Stack, Text, TextInput } from "@mantine/core";
@@ -14,7 +14,7 @@ interface FormBankAccountProps {
 }
 
 export const FormBankAccount: FC<FormBankAccountProps> = ({ bankAccount, onChange }) => {
-  const banks = useQuery<ResponseList<BankInformation>>({
+  const banks = useRestQuery<ResponseList<BankInformation>>({
     route: "/plugins/banks",
   });
 

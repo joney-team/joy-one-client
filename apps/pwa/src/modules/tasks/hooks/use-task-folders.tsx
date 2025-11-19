@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@/modules/apis/use-query";
+import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { ResponseList } from "@/types";
 import { useParams, usePathname } from "next/navigation";
@@ -14,9 +14,11 @@ export const useTaskFolders = () => {
   const pathname = usePathname();
   const router = useRouter();
   const viewFromPathname = pathname.split("/")[2] as TaskView;
-  const view = Object.values(TaskView).includes(viewFromPathname) ? viewFromPathname : TaskView.LIST;
+  const view = Object.values(TaskView).includes(viewFromPathname)
+    ? viewFromPathname
+    : TaskView.LIST;
 
-  const tags = useQuery<ResponseList<TagEntity>>({
+  const tags = useRestQuery<ResponseList<TagEntity>>({
     route: "/tags",
     params: { type: TagType.TASK_FOLDER },
   });

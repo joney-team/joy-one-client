@@ -54,7 +54,7 @@ import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../apis";
-import { useQuery } from "../apis/use-query";
+import { useRestQuery } from "../apis/use-rest-query";
 import { useLang } from "../lang/lang-context";
 import { Context } from "./workspace-context";
 import { workspaceModuleConfigs, WorkspaceModuleId } from "./workspace-modules";
@@ -102,7 +102,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const workspaceView: WorkspaceView = state.current.settings?.view || {};
 
-  const onlineStatus = useQuery<WorkspaceMemberOnlineStatus>({
+  const onlineStatus = useRestQuery<WorkspaceMemberOnlineStatus>({
     isSkip: !userMember,
     route: "/workspace-members/online-status",
     refetchEvents: [

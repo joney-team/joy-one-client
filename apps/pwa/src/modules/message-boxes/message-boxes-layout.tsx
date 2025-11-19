@@ -17,7 +17,7 @@ import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { useParams } from "next/navigation";
 import { type FC, type PropsWithChildren } from "react";
-import { useQuery } from "../apis/use-query";
+import { useRestQuery } from "../apis/use-rest-query";
 
 export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
   const workspaceLayout = useWorkspaceLayout();
@@ -29,7 +29,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
 
   const messageBoxId = params.boxId as string;
 
-  const messageBox = useQuery<MessageBoxEntity>({
+  const messageBox = useRestQuery<MessageBoxEntity>({
     isSkip: !messageBoxId,
     route: `/message-boxes/${messageBoxId}`,
   });

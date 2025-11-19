@@ -71,6 +71,11 @@ export interface AuthRenewPasswordByCodeDto {
   plainPassword: string;
 }
 
+export interface AuthMeDto {
+  accessToken: string;
+  deviceId: string;
+}
+
 export interface AuthContext {
   user: UserAuthResult;
   device: DeviceEntity;
@@ -81,7 +86,7 @@ export interface AuthContext {
   signInWithGithub: () => Promise<void>;
   updateProfile: (values: UpdateUserProfileDto) => Promise<void>;
   signInWithEmailAndPassword: (dto: AuthSignInWithEmailPasswordDto) => Promise<void>;
-  registerWithEmailAndPassword: (dto: AuthSignUpWithEmailPasswordDto) => Promise<void>;
+  signUpWithEmailPassword: (dto: AuthSignUpWithEmailPasswordDto) => Promise<void>;
   registerNotification: () => Promise<void>;
   signOutOtherDevices: () => Promise<void>;
   uploadAvatar: (file: File) => Promise<void>;
