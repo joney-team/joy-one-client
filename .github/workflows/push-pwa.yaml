@@ -158,14 +158,6 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Generate schema
-        run: |
-          pnpm run codegen:schema
-
-      - name: Generate codegen
-        run: |
-          pnpm run codegen
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:

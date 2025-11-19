@@ -1,0 +1,64 @@
+type AppConfig {
+  UTC: String!
+  firebase: FirebaseClientConfig!
+  metaAppId: String!
+  metaAppScope: [String!]!
+  metaAppVersion: String!
+  name: String!
+  timeZone: String!
+  version: String!
+  workspaceDomainIP: String!
+  zaloAppId: String!
+}
+
+"""Available locales"""
+enum AppLocale {
+  EN
+  VI
+}
+
+type DeviceEntity {
+  identifyId: String
+  lastActiveAt: Float!
+  locale: AppLocale
+  notificationToken: String
+  userAgent: String!
+  userId: String
+}
+
+type FirebaseClientConfig {
+  apiKey: String!
+  appId: String!
+  authDomain: String!
+  measurementId: String!
+  messagingSenderId: String!
+  projectId: String!
+  storageBucket: String!
+}
+
+type Mutation {
+  registerDevice(input: RegisterDeviceDto!): DeviceEntity!
+}
+
+type Query {
+  appConfig: AppConfig!
+}
+
+input RegisterDeviceDto {
+  identifyId: String!
+  locale: AppLocale
+}
+
+type UserAuthProvider {
+  providerId: String!
+  uid: String!
+  username: String!
+}
+
+type UserSettings {
+  isStartOfWeekSunday: Boolean
+  isTwelveHour: Boolean
+  locale: AppLocale
+  timezoneId: String
+  timezoneUtc: String
+}

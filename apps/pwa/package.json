@@ -3,7 +3,7 @@
   "version": "3.2.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm run codegen:schema && pnpm run codegen && rm -rf .next && next dev --turbopack",
+    "dev": "pnpm run codegen:compile && rm -rf .next && next dev --turbopack",
     "start": "next start",
     "build": "pnpm translate:compile && next build",
     "typescript": "tsc",
@@ -15,6 +15,7 @@
     "ws:apps:dev": "NEXT_PUBLIC_EXTENDED_APP=true next dev",
     "ws:apps:build": "pnpm translate:compile && NODE_OPTIONS=\"--max-old-space-size=8192\" NEXT_PUBLIC_EXTENDED_APP=true next build",
     "ws:apps:start": "NEXT_PUBLIC_EXTENDED_APP=true next start",
+    "codegen:compile": "pnpm run codegen:schema && pnpm run codegen",
     "codegen:schema": "graphql-codegen --config ./codegen-schema.ts",
     "codegen": "graphql-codegen --config ./codegen.ts"
   },
