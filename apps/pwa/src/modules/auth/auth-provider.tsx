@@ -26,7 +26,7 @@ import { showInAppNotification } from "@/modules/notifications/notification-serv
 import { NotificationEntity } from "@/modules/notifications/notification-types";
 import { getTimeZones } from "@/modules/times/times-service";
 import { setUserLocale } from "@/modules/users/users-service";
-import { UpdateUserProfileDto, UserEntity } from "@/modules/users/users-types";
+import { UpdateUserProfileDto } from "@/modules/users/users-types";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
@@ -45,7 +45,6 @@ import { reducePhotoSize } from "../files/file-service";
 import { Context } from "./auth-context";
 import { AuthRequire } from "./auth-require";
 import {
-  serverAuthMe,
   serverSignInWithEmailPassword,
   serverSignInWithFacebook,
   serverSignInWithFirebase,
@@ -64,7 +63,6 @@ import type {
   AuthContext,
   AuthSignInWithEmailPasswordDto,
   AuthSignUpWithEmailPasswordDto,
-  AuthTokenResult,
   UserAuthResult,
 } from "./auth-types";
 
@@ -140,7 +138,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       // User information
       const accessToken = await getAccessToken();
       if (accessToken) {
-        _user = await serverAuthMe({
+        _user = await api.post<UserAuthResult>("/auth/me", {
           accessToken,
           deviceId: device._id,
         });
