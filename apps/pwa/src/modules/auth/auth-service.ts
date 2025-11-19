@@ -11,6 +11,7 @@ import {
   AuthTokenResult,
   AuthVerifyRenewPasswordCodeDto,
 } from "./auth-types";
+import { serverRefreshToken } from "./auth-server";
 
 export async function requestRenewPassword(dto: AuthRequestRenewUserPasswordDto) {
   return api.post(`/auth/renew-password/request`, dto);
@@ -99,7 +100,7 @@ export const retrieveAccessToken = async (): Promise<string> => {
   const refreshToken = await getRefreshToken();
   if (!refreshToken) throw new Error(t`Session expired, please login again`);
 
-  const result = await api.post<AuthTokenResult>("/auth/refresh-token", { refreshToken });
+  const result = await serverRefreshToken({ refreshToken });
   await Promise.all([saveAccessToken(result.accessToken), saveRefrehToken(result.refreshToken)]);
   return result.accessToken;
 };

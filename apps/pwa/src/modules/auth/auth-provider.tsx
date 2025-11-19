@@ -90,7 +90,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     }
   };
 
-  const _initializeMeta = async () => {
+  const handleInitializeMeta = async () => {
     await new Promise((resolve, reject) => {
       const action = async (retry: number) => {
         try {
@@ -122,8 +122,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const initialize = async (type: "reconnect" | "init" | "auth") => {
-    let _user: UserAuthResult | undefined = undefined;
-    _initializeMeta();
+    let authResult: UserAuthResult | undefined = undefined;
+    handleInitializeMeta();
     setSessionId(uuid());
 
     if (type === "auth") {
@@ -138,16 +138,13 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       // User information
       const accessToken = await getAccessToken();
       if (accessToken) {
-        _user = await api.post<UserAuthResult>("/auth/me", {
-          accessToken,
-          deviceId: device._id,
-        });
-        setUser(_user);
+        authResult = await api.get<UserAuthResult>("/auth");
+        setUser(authResult);
       }
 
       // Sync locale device to user
-      if (_user && !_user.locale) {
-        syncLocaleDeviceToUser(_user!);
+      if (authResult && !authResult.locale) {
+        syncLocaleDeviceToUser(authResult!);
       }
 
       if (type === "auth") {
@@ -158,7 +155,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     }
 
     setIsInitialized(true);
-    return _user;
+    return authResult;
   };
 
   const onReset = () => {

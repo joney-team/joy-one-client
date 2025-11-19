@@ -3,6 +3,7 @@
 import { apiServerSide } from "../apis/server";
 import type {
   AuthMeDto,
+  AuthRefreshTokenDto,
   AuthSignInWithEmailPasswordDto,
   AuthSignUpWithEmailPasswordDto,
   AuthTokenResult,
@@ -27,4 +28,8 @@ export const serverSignUpWithEmailPassword = async (dto: AuthSignUpWithEmailPass
 
 export const serverAuthMe = async (dto: AuthMeDto) => {
   return apiServerSide.post<UserAuthResult>("/auth/me", dto);
+};
+
+export const serverRefreshToken = async (dto: AuthRefreshTokenDto) => {
+  return apiServerSide.post<AuthTokenResult>("/auth/refresh-token", dto);
 };
