@@ -12,17 +12,19 @@ import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { categoryTypes } from "./category-constants";
 import { CategoryEntity, CategoryType } from "./category-types";
 import { OnModalCategory } from "./modals/modal-category";
+import { Trans } from "@lingui/react/macro";
 
 export const CategoryList: FC = () => {
   return (
     <Stack p={16}>
       <List<CategoryEntity>
         id="categories"
-        name="categories"
+        name={<Trans>Categories</Trans>}
         icon={IconCategory}
         route="/categories"
         columns={{
           name: {
+            name: <Trans>Name</Trans>,
             render: ({ data }) => {
               return (
                 <Clickable
@@ -34,8 +36,9 @@ export const CategoryList: FC = () => {
               );
             },
           },
-          slug: { filter: { text: true }, icon: IconOutlet },
+          slug: { name: <Trans>Slug</Trans>, filter: { text: true }, icon: IconOutlet },
           type: enumColumn({
+            name: <Trans>Type</Trans>,
             defaultWidth: 200,
             options: Object.values(CategoryType).map((type) => ({
               value: type,
@@ -46,7 +49,7 @@ export const CategoryList: FC = () => {
         }}
         actions={[
           {
-            label: t`Edit`,
+            label: <Trans>Edit</Trans>,
             icon: IconEdit,
             onClick: (data) => {
               OnModalCategory({ category: data });

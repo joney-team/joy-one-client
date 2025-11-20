@@ -5751,7 +5751,7 @@ msgstr "Giá bán"
 #: src/modules/promotions/components/form-promotion.tsx:175
 #: src/modules/tasks/task-status-modal.tsx:183
 msgid "Save"
-msgstr "Cứu"
+msgstr "Lưu"
 
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:235
 msgid "Save changes"

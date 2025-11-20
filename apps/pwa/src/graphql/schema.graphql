@@ -11,13 +11,70 @@ type AppConfig {
   zaloAppId: String!
 }
 
+"""Available app entities"""
+enum AppEntity {
+  BANK_TRANSACTIONS
+  BILLINGS
+  CATEGORIES
+  COMMENTS
+  CUSTOMERS
+  CUSTOMER_FORMS
+  LOANS
+  MESSAGES
+  MESSAGE_BOXES
+  ORDERS
+  PARTNERS
+  POSTS
+  PRESCRIPTIONS
+  PRODUCTS
+  PRODUCT_VOUCHERS
+  PROMOTIONS
+  RECEIPTS
+  TAGS
+  TASKS
+  USERS
+  WORKSPACES
+  WORKSPACE_BRANCHES
+  WORKSPACE_MEMBERS
+}
+
 """Available locales"""
 enum AppLocale {
   EN
   VI
 }
 
+type CategoryEntity {
+  _id: String!
+  description: String
+  icon: String
+  name: String!
+  order: Float!
+  parentId: String
+  slug: String!
+  thumbnail: String
+  type: CategoryType!
+}
+
+"""Available category types"""
+enum CategoryType {
+  COMMON
+  POSTS
+  PRODUCTS
+}
+
+type CustomFieldValue {
+  customFieldId: String!
+  value: JSONObject
+}
+
+input CustomFieldValueInput {
+  customFieldId: String!
+  value: JSONObject
+}
+
 type DeviceEntity {
+  _id: String!
   identifyId: String
   lastActiveAt: Float!
   locale: AppLocale
@@ -36,12 +93,79 @@ type FirebaseClientConfig {
   storageBucket: String!
 }
 
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject
+
 type Mutation {
+  createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
   registerDevice(input: RegisterDeviceDto!): DeviceEntity!
+}
+
+type Product {
+  _id: String!
+  category: CategoryEntity
+  categoryId: String
+  code: String
+  combos: [ProductCombo!]
+  combosExpireInDays: Float
+  content: String
+  defaultQtyPerUse: Float
+  displayName: String
+  image: String
+  inStock: Float
+  isHiddenInReceiptWhenNoPrice: Boolean
+  isStockCheck: Boolean
+  maxPrice: Float
+  minPrice: Float
+  name: String!
+  price: Float!
+  productCode: String
+  supplies: [ProductSupply!]
+  tags: [String!]!
+  type: ProductType!
+  unit: String!
+  voucherAmount: Float
+  voucherExcludeProductIds: [String!]
+  voucherExpireInDays: Float
+  voucherIncludeProductIds: [String!]
+  warningOutOfDateBeforeDays: Float
+  warningOutOfStockQty: Float
+  workspaceId: String!
+}
+
+type ProductCombo {
+  productId: String!
+  quantity: Float!
+}
+
+input ProductComboInput {
+  productId: String!
+  quantity: Float!
+}
+
+type ProductSupply {
+  productId: String!
+  quantity: Float!
+}
+
+input ProductSupplyInput {
+  productId: String!
+  quantity: Float!
+}
+
+"""Available product types"""
+enum ProductType {
+  COMBO
+  PRODUCT
+  SERVICE
+  VOUCHER
 }
 
 type Query {
   appConfig: AppConfig!
+  getProductByIds(ids: [String!]!): [Product!]!
 }
 
 input RegisterDeviceDto {
@@ -49,16 +173,15 @@ input RegisterDeviceDto {
   locale: AppLocale
 }
 
+type RelatedEntity {
+  data: JSONObject
+  entity: AppEntity!
+  id: String
+  index: Boolean
+}
+
 type UserAuthProvider {
   providerId: String!
   uid: String!
   username: String!
-}
-
-type UserSettings {
-  isStartOfWeekSunday: Boolean
-  isTwelveHour: Boolean
-  locale: AppLocale
-  timezoneId: String
-  timezoneUtc: String
 }

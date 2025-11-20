@@ -10,27 +10,29 @@ import { EventType } from "../events/event-types";
 import { customFieldTypes } from "./custom-field-constants";
 import { CustomFieldEntity, CustomFieldType } from "./custom-field-types";
 import { OnModalCustomField } from "./modals/modal-custom-field";
+import { Trans } from "@lingui/react/macro";
 
 export const CustomFieldList: FC = () => {
   return (
     <Stack p={16}>
       <List<CustomFieldEntity>
         id="custom-fields"
-        name="workspaceSettingsCustomFields"
+        name={<Trans>Custom fields</Trans>}
         icon={IconForms}
         route="/custom-fields"
         columns={{
-          label: {},
-          description: {},
-          key: { name: "Key", filter: { text: true } },
+          label: { name: <Trans>Name</Trans> },
+          description: { name: <Trans>Description</Trans> },
+          key: { name: <Trans>Key</Trans>, filter: { text: true } },
           type: enumColumn({
+            name: <Trans>Type</Trans>,
             options: Object.values(CustomFieldType).map((type) => ({
               label: customFieldTypes[type].label(),
               value: type,
             })),
           }),
           entities: {
-            name: "apply",
+            name: <Trans>Apply</Trans>,
             render: ({ value }) => {
               return (
                 <Group>
@@ -46,7 +48,7 @@ export const CustomFieldList: FC = () => {
         }}
         actions={[
           {
-            label: "edit",
+            label: <Trans>Edit</Trans>,
             icon: IconEdit,
             onClick: (data) => {
               OnModalCustomField({ customField: data });
