@@ -19,6 +19,13 @@ const nextConfig: NextConfig = {
       },
     });
 
+    config.module.rules.push({
+      test: /\.graphql$/,
+      use: {
+        loader: "graphql-tag/loader",
+      },
+    });
+
     return config;
   },
   turbopack: {
