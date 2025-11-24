@@ -286,11 +286,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                     <Group justify="end">
                       <FilesBox
                         disabled
-                        query={{
-                          relatedReceiptId: receipt.id,
-                          entity: AppEntity.RECEIPTS,
-                          entityId: receipt.id,
-                        }}
+                        refs={[`${AppEntity.RECEIPTS}:${receipt.id}`]}
                         empty={<Text fz={em(12)}>{t`No files`}</Text>}
                       />
                     </Group>

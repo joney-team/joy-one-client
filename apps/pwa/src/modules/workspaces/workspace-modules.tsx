@@ -13,6 +13,7 @@ import {
   IconCategory,
   IconCategory2,
   IconClipboardText,
+  IconCloudDataConnection,
   IconCoins,
   IconCreditCardPay,
   IconFileInvoice,
@@ -444,6 +445,15 @@ export const workspaceModuleConfigs = {
     name: () => t`E-Invoices`,
     description: () => t`Integrate with E-Invoices services: MatBao, ...`,
     color: "yellow",
+  }),
+  workspacePluginsStorage: combineModule({
+    href: "/workspace-settings/plugins/storage",
+    icon: IconCloudDataConnection,
+    permissions: WorkspacePermission.WORKSPACE_SETTINGS,
+    restrictDisplay: ["spotlight"],
+    name: () => t`Cloud Storage`,
+    description: () => t`Integrate with cloud storage services: S3, ...`,
+    color: "blue",
   }),
 
   // Profile

@@ -108,7 +108,7 @@ export const InputMotobileRegistration: FC<
                 driverLicenseImages: { ...props.value?.driverLicenseImages, front: image },
               })
             }
-            onlyRead={props.disabled}
+            readonly={props.disabled}
           />
         </InputWrapper>
 
@@ -125,7 +125,7 @@ export const InputMotobileRegistration: FC<
                 driverLicenseImages: { ...props.value?.driverLicenseImages, back: image },
               })
             }
-            onlyRead={props.disabled}
+            readonly={props.disabled}
           />
         </InputWrapper>
       </SimpleGrid>

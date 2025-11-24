@@ -1,7 +1,6 @@
 "use client";
 
 import { FileCard } from "@/modules/files/file-card";
-import { uploadFile } from "@/modules/files/file-service";
 import { detectMessageAttachmentType } from "@/modules/message-boxes/message-boxes-service";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
@@ -29,9 +28,12 @@ import { IconPaperclip, IconPhoto, IconSend2 } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
 import { UseCommentBox } from "../types";
 import { Trans } from "@lingui/react/macro";
+import { AppEntity } from "@/types";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 
 export const CommentInput: FC<UseCommentBox> = (ctx) => {
   const textInputRef = useRef<HTMLTextAreaElement>(null);
+  const uploadFile = useUploadFile();
 
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
@@ -46,10 +48,7 @@ export const CommentInput: FC<UseCommentBox> = (ctx) => {
       const _files = await Promise.all(
         files.map((f) =>
           f instanceof File
-            ? uploadFile({
-                file: f,
-                ref: ctx.ref,
-              }).then((r) => r.url)
+            ? uploadFile(f, { refs: [`${AppEntity.COMMENTS}:${ctx.ref}`] }).then((r) => r.path)
             : f
         )
       );

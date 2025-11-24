@@ -69,6 +69,7 @@ import { LoanDisburesement } from "./components/loan-disbursement";
 import { LoanDocuments } from "./components/loan-documents";
 import { LoanPayments } from "./components/loan-payments";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
+import { useUploadFile } from "../files/hooks/use-upload-file";
 
 export const LoanDetail: NextPage = () => {
   const params = useParams();
@@ -79,7 +80,7 @@ export const LoanDetail: NextPage = () => {
   const layout = useLayout();
   const color = useColor();
   const { getGoogleMapLink } = useLocations();
-  const lang = useLang();
+  const uploadFile = useUploadFile();
 
   const isAutoRedirectStep = useRef(true);
   const [customerKyc, setCustomerKyc] = useState<CustomerKycEntity>();
@@ -136,7 +137,7 @@ export const LoanDetail: NextPage = () => {
   const _updateAssetData = useDebouncedCallback((assetData) => {
     onActionLoad({
       name: <Trans>Update asset information</Trans>,
-      process: () => updateLoanAssetData(loan.data!.id, { assetData }).catch(onError),
+      process: () => updateLoanAssetData(loan.data!.id, { assetData }, uploadFile).catch(onError),
     });
   }, 500);
 
@@ -206,7 +207,7 @@ export const LoanDetail: NextPage = () => {
     <Stack p={16}>
       <Card shadow="xs">
         <Group align="start">
-          <EntityImage src={customer.data.avatar} onlyRead size={80} radius={10} />
+          <EntityImage src={customer.data.avatar} readonly size={80} radius={10} />
           <Stack gap={10} flex={1}>
             <Group justify="space-between" w="100%" align="start">
               <Title fz={18} fw={600}>

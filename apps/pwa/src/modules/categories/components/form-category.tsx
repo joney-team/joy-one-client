@@ -7,7 +7,6 @@ import { api } from "@/modules/apis";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
 import { CustomField } from "@/modules/custom-fields/custom-field-types";
-import { onUploadFile } from "@/modules/files/file-service";
 import { AppEntity } from "@/types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
@@ -17,6 +16,7 @@ import { useDebouncedCallback } from "@mantine/hooks";
 import { useCallback, type FC } from "react";
 import { categoryTypes } from "../category-constants";
 import { CategoryDto, CategoryEntity, CategoryType } from "../category-types";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 
 export interface FormCategoryProps {
   category?: CategoryEntity;
@@ -27,6 +27,7 @@ export interface FormCategoryProps {
 
 export const FormCategory: FC<FormCategoryProps> = (props) => {
   const { category, onSuccess } = props;
+  const uploadFile = useUploadFile();
 
   const form = useForm<{
     name: string;
@@ -66,22 +67,20 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
       if (!values.name) return;
       const { customFields, thumbnail, ...rest } = values;
 
-      const thumbnailValue = values.thumbnail
-        ? await onUploadFile({ file: values.thumbnail })
-        : undefined;
+      const thumbnailValue = values.thumbnail ? await uploadFile(values.thumbnail) : undefined;
 
       let category: CategoryEntity;
 
       if (props.category) {
         category = await api.put<CategoryEntity, CategoryDto>(`/categories/${props.category._id}`, {
           ...rest,
-          thumbnail: thumbnailValue?.relativePath ?? props.category.thumbnail,
+          thumbnail: thumbnailValue?.path ?? props.category.thumbnail,
           customFieldValues: getCustomFieldValue(values.customFields),
         });
       } else {
         category = await api.post<CategoryEntity, CategoryDto>("/categories", {
           ...rest,
-          thumbnail: thumbnailValue?.relativePath,
+          thumbnail: thumbnailValue?.path,
           customFieldValues: getCustomFieldValue(values.customFields),
         });
       }

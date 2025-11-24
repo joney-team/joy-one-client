@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { FileType } from "@/graphql/enums.graphql";
 import { eventsEmitter } from "@/modules/events/event-service";
 import { FileCard } from "@/modules/files/file-card";
-import { uploadFile } from "@/modules/files/file-service";
-import { FileType } from "@/modules/files/file-types";
 import { parseFile } from "@/modules/files/files-utils";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import {
   sendFileMessage,
   sendImageMessage,
@@ -29,6 +29,7 @@ import { FC, useRef, useState } from "react";
 export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
   const textInputRef = useRef<HTMLTextAreaElement>(null);
   const forceUpdate = useForceUpdate();
+  const uploadFile = useUploadFile();
 
   const isSubmitting = useRef(false);
   const [files, setFiles] = useState<(File | string)[]>([]);
@@ -45,9 +46,9 @@ export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
       for (let index = 0; index < files.length; index++) {
         const file = files[index];
         const type = parseFile(file).type;
-        const url = file instanceof File ? await uploadFile({ file }).then((r) => r.url) : file;
+        const url = file instanceof File ? await uploadFile(file).then((r) => r.url) : file;
 
-        if (type === FileType.PHOTO) {
+        if (type === FileType.Photo) {
           await sendImageMessage(props.box._id, { url });
         } else {
           await sendFileMessage(props.box._id, { url });

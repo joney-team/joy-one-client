@@ -1,31 +1,3 @@
-/** Available app entities */
-export const AppEntity = {
-  BankTransactions: 'BANK_TRANSACTIONS',
-  Billings: 'BILLINGS',
-  Categories: 'CATEGORIES',
-  Comments: 'COMMENTS',
-  Customers: 'CUSTOMERS',
-  CustomerForms: 'CUSTOMER_FORMS',
-  Loans: 'LOANS',
-  Messages: 'MESSAGES',
-  MessageBoxes: 'MESSAGE_BOXES',
-  Orders: 'ORDERS',
-  Partners: 'PARTNERS',
-  Posts: 'POSTS',
-  Prescriptions: 'PRESCRIPTIONS',
-  Products: 'PRODUCTS',
-  ProductVouchers: 'PRODUCT_VOUCHERS',
-  Promotions: 'PROMOTIONS',
-  Receipts: 'RECEIPTS',
-  Tags: 'TAGS',
-  Tasks: 'TASKS',
-  Users: 'USERS',
-  Workspaces: 'WORKSPACES',
-  WorkspaceBranches: 'WORKSPACE_BRANCHES',
-  WorkspaceMembers: 'WORKSPACE_MEMBERS'
-} as const;
-
-export type AppEntity = typeof AppEntity[keyof typeof AppEntity];
 /** Available locales */
 export const AppLocale = {
   En: 'EN',
@@ -41,6 +13,38 @@ export const CategoryType = {
 } as const;
 
 export type CategoryType = typeof CategoryType[keyof typeof CategoryType];
+/** Available custom field types */
+export const CustomFieldType = {
+  Date: 'DATE',
+  File: 'FILE',
+  MultiSelect: 'MULTI_SELECT',
+  Number: 'NUMBER',
+  Select: 'SELECT',
+  Switch: 'SWITCH',
+  Text: 'TEXT',
+  Textarea: 'TEXTAREA'
+} as const;
+
+export type CustomFieldType = typeof CustomFieldType[keyof typeof CustomFieldType];
+/** Available file types */
+export const FileType = {
+  Audio: 'AUDIO',
+  MsExcel: 'MS_EXCEL',
+  MsPowerpoint: 'MS_POWERPOINT',
+  MsWord: 'MS_WORD',
+  Pdf: 'PDF',
+  Photo: 'PHOTO',
+  Unknown: 'UNKNOWN',
+  Video: 'VIDEO'
+} as const;
+
+export type FileType = typeof FileType[keyof typeof FileType];
+/** Available external storage providers */
+export const PluginExternalStorageProvider = {
+  AwsS3: 'AWS_S3'
+} as const;
+
+export type PluginExternalStorageProvider = typeof PluginExternalStorageProvider[keyof typeof PluginExternalStorageProvider];
 /** Available product types */
 export const ProductType = {
   Combo: 'COMBO',

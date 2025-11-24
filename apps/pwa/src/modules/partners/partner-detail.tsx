@@ -4,7 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { Errored } from "@/components/errored";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
-import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
+import { removeFileFromRelativePath } from "@/modules/files/file-service";
 import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { getPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
@@ -27,12 +27,14 @@ import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { IconMail, IconPencil, IconPhone, IconUpload } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import { FC, Fragment, useEffect } from "react";
+import { useUploadFile } from "../files/hooks/use-upload-file";
 
 export const PartnerDetail: FC = () => {
   const params = useParams();
   const partnerId = params.id as string;
   const workspace = useWorkspace();
   const layout = useLayout();
+  const uploadFile = useUploadFile();
 
   const data = useFetch<PartnerEntity>({
     id: `partners-${partnerId}`,
@@ -66,8 +68,8 @@ export const PartnerDetail: FC = () => {
   const uploadLogo = async (file: File) => {
     try {
       const _currentAvatar = partner.logo;
-      const _file = await onUploadFile({ file, compressSize: 1 });
-      await updatePartner(partner._id, { ...partner, logo: _file.relativePath });
+      const _file = await uploadFile(file, { compressSize: 1 });
+      await updatePartner(partner._id, { ...partner, logo: _file.path });
       if (_currentAvatar) await removeFileFromRelativePath(_currentAvatar).catch(onError);
     } catch (error) {
       onError(error);

@@ -7,7 +7,6 @@ import { ModalTitle } from "@/components/modal-title";
 import { genders } from "@/constant";
 import { useFormSubmit } from "@/hooks/use-form";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { onUploadFile } from "@/modules/files/file-service";
 import { optionsFilter } from "@/modules/theme/generate-theme";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
@@ -45,6 +44,7 @@ import { useLang } from "../lang/lang-context";
 import { useLocations } from "../locations/locations-context";
 import { decodeCid, registerCustomerKyc } from "./customer-kycs-service";
 import { CustomerKycDto } from "./customer-kycs-types";
+import { useUploadFile } from "../files/hooks/use-upload-file";
 
 interface ModalRegisterCustomerKycProps {
   customer: CustomerShortInfo;
@@ -57,6 +57,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
   const camera = useCamera();
   const lang = useLang();
   const dateFormat = DateTime.getDateFormatString(lang.locale);
+  const uploadFile = useUploadFile();
 
   const { vnLocations } = useLocations();
   const [opened, { open, close }] = useDisclosure(false);
@@ -113,15 +114,9 @@ export const ModalRegisterCustomerKyc: FC = () => {
       if (!props) return;
 
       const dto: CustomerKycDto = {
-        backOfCidImage: await onUploadFile({ file: values.backOfCidImage }).then(
-          (res) => res.relativePath
-        ),
-        frontOfCidImage: await onUploadFile({ file: values.frontOfCidImage }).then(
-          (res) => res.relativePath
-        ),
-        portraitImage: await onUploadFile({ file: values.portraitImage }).then(
-          (res) => res.relativePath
-        ),
+        backOfCidImage: await uploadFile(values.backOfCidImage).then((res) => res.path),
+        frontOfCidImage: await uploadFile(values.frontOfCidImage).then((res) => res.path),
+        portraitImage: await uploadFile(values.portraitImage).then((res) => res.path),
         cidBirthday: values.cidBirthday,
         cidFullName: values.cidFullName,
         cidGender: values.cidGender,

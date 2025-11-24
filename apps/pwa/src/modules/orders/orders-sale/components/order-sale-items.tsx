@@ -128,7 +128,7 @@ export const OrderSaleItemComponent: FC<{
             src={item.product.image}
             icon={getProductIcon(item.product.type)}
             size={40}
-            onlyRead
+            readonly
           />
 
           <Stack gap={0}>

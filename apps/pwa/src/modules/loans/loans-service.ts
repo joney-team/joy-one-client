@@ -1,5 +1,4 @@
 import { ResponseList } from "@/types";
-import { uploadFile } from "../files/file-service";
 import { ReceiptEntity } from "../receipts/receipts-types";
 import {
   LoanAssetEstimations,
@@ -24,6 +23,7 @@ import {
   UpdateLoanPackageDto,
   UpdateLoanWorkspaceBranchDto,
 } from "./loan-dtos";
+import { UseUploadFile } from "../files/hooks/use-upload-file";
 
 export async function getLoans(query?: any, controller?: AbortController) {
   return api.get<ResponseList<LoanEntity>>("/loans", { params: query, signal: controller?.signal });
@@ -37,8 +37,8 @@ export async function getLoanByCode(code: string) {
   return api.get<LoanEntity>(`/loans/codes/${code}`);
 }
 
-export async function createLoan(dto: CreateLoanDto) {
-  const assetData = await prepareLoanAssetData(dto.assetData);
+export async function createLoan(dto: CreateLoanDto, uploadFile: UseUploadFile) {
+  const assetData = await prepareLoanAssetData(dto.assetData, uploadFile);
   return api.post<LoanEntity>(`/loans`, { ...dto, assetData });
 }
 
@@ -54,8 +54,12 @@ export async function updateLoanAmount(id: string, dto: UpdateLoanAmountDto) {
   return api.put(`/loans/${id}/amount`, dto);
 }
 
-export async function updateLoanAssetData(id: string, dto: UpdateLoanAssetDataDto) {
-  const assetData = await prepareLoanAssetData(dto.assetData);
+export async function updateLoanAssetData(
+  id: string,
+  dto: UpdateLoanAssetDataDto,
+  uploadFile: UseUploadFile
+) {
+  const assetData = await prepareLoanAssetData(dto.assetData, uploadFile);
   return api.put(`/loans/${id}/asset-data`, { ...dto, assetData });
 }
 
@@ -91,7 +95,7 @@ export async function archiveLoans(loanIds: string[]) {
   return api.delete(`/loans/archive`, { loanIds });
 }
 
-export async function prepareLoanAssetData(data: any) {
+export async function prepareLoanAssetData(data: any, uploadFile: UseUploadFile) {
   let _data = { ...data };
 
   // Upload files
@@ -99,8 +103,8 @@ export async function prepareLoanAssetData(data: any) {
     for (let i = 0; i < _data.images.length; i++) {
       const f = _data.images[i];
       if (f instanceof File) {
-        const _file = await uploadFile({ file: f });
-        _data.images[i] = _file.relativePath;
+        const _file = await uploadFile(f);
+        _data.images[i] = _file.path;
       }
     }
   }
@@ -109,20 +113,20 @@ export async function prepareLoanAssetData(data: any) {
     for (let i = 0; i < _data.receipts.length; i++) {
       const f = _data.receipts[i];
       if (f instanceof File) {
-        const _file = await uploadFile({ file: f });
-        _data.receipts[i] = _file.relativePath;
+        const _file = await uploadFile(f);
+        _data.receipts[i] = _file.path;
       }
     }
   }
 
   if (_data.driverLicenseImages?.front instanceof File) {
-    const _file = await uploadFile({ file: _data.driverLicenseImages.front });
-    _data.driverLicenseImages.front = _file.relativePath;
+    const _file = await uploadFile(_data.driverLicenseImages.front);
+    _data.driverLicenseImages.front = _file.path;
   }
 
   if (_data.driverLicenseImages?.back instanceof File) {
-    const _file = await uploadFile({ file: _data.driverLicenseImages.back });
-    _data.driverLicenseImages.back = _file.relativePath;
+    const _file = await uploadFile(_data.driverLicenseImages.back);
+    _data.driverLicenseImages.back = _file.path;
   }
 
   return _data;

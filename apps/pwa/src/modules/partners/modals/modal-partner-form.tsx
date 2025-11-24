@@ -3,7 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { onUploadFile } from "@/modules/files/file-service";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { createPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { onError } from "@/utils/exceptions.utils";
@@ -27,6 +27,7 @@ export const ModalParnterForm: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [avatar, setAvatar] = useState<File>();
+  const uploadFile = useUploadFile();
 
   const form = useForm({
     initialValues: {
@@ -54,8 +55,8 @@ export const ModalParnterForm: FC = () => {
     let payload = { ...values };
 
     if (avatar) {
-      const file = await onUploadFile({ file: avatar, compressSize: 0.3 });
-      payload.logo = file.relativePath;
+      const file = await uploadFile(avatar, { compressSize: 0.3 });
+      payload.logo = file.path;
     }
 
     const action = props?.partner

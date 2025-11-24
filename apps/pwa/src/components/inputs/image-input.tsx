@@ -1,6 +1,5 @@
-import { onUploadFile } from "@/modules/files/file-service";
-import { FileType } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -22,6 +21,7 @@ import { IconEye, IconPencil, IconPhoto, IconUpload } from "@tabler/icons-react"
 import { useRef, useState, type FC } from "react";
 import { Button } from "../buttons/button";
 import { Renderer } from "../renderer";
+import { FileType } from "@/graphql/enums.graphql";
 
 interface ImageInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: string;
@@ -35,6 +35,8 @@ interface ImageInputProps extends Omit<InputWrapperProps, "value" | "onChange"> 
 
 export const ImageInput: FC<ImageInputProps> = (props) => {
   const workspace = useWorkspace();
+  const uploadFile = useUploadFile();
+
   const { value, onChange, disabled: propsDisabled, h, w, ...rest } = props;
   const [loadFailed, setLoadFailed] = useState(false);
   const openRef = useRef<() => void>(null);
@@ -46,7 +48,7 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
   const onView = () => {
     if (!value) return;
     OnModalFileGallery({
-      files: [{ url: value, fileName: "image", type: FileType.PHOTO }],
+      files: [{ url: value, fileName: "image", type: FileType.Photo }],
       disabled: true,
     });
   };
@@ -58,8 +60,8 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
         onDrop={async (files) => {
           if (files.length === 0) return;
           const file = files[0];
-          const res = await onUploadFile({ file });
-          onChange?.(res.relativePath);
+          const res = await uploadFile(file);
+          onChange?.(res.path);
         }}
         disabled={disabled}
         multiple={false}
@@ -75,29 +77,29 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
           mah="100%"
           h={h}
           w={w}
-          radius={props.radius || 10}
+          radius={props.radius ?? 10}
           className="clickable"
           onClick={() => {
             if (disabled) {
               OnModalFileGallery({
-                files: [{ url: value || "", fileName: "image", type: FileType.PHOTO }],
+                files: [{ url: value || "", fileName: "image", type: FileType.Photo }],
               });
               return;
             } else {
               OnModalFiles({
-                fileTypes: [FileType.PHOTO],
+                fileTypes: [FileType.Photo],
                 length: 1,
                 onSelectedFiles: (files) => {
                   if (files.length === 0) return;
                   const file = files[0];
-                  onChange?.(file.relativePath);
+                  onChange?.(file.path);
                 },
               });
             }
           }}
           withBorder
           shadow="none"
-          style={{ borderColor: "var(--mantine-color-default-border)" }}
+          style={{ borderColor: "var(--mantine-color-default-border)", overflow: "hidden" }}
         >
           {ableView && (
             <Image

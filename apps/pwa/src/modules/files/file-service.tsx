@@ -3,6 +3,7 @@
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   IMAGE_MIME_TYPE,
   MS_EXCEL_MIME_TYPE,
@@ -22,9 +23,9 @@ import {
 } from "@tabler/icons-react";
 import imageCompression, { Options } from "browser-image-compression";
 import { apiTools } from "../apis";
-import { FileEntity, FileType, UploadFile } from "./file-types";
+import { FileEntity, UploadFile } from "./file-types";
 import { parseFile } from "./files-utils";
-import { Trans } from "@lingui/react/macro";
+import { FileType } from "@/graphql/enums.graphql";
 
 export function getFileExtension(fileName: string | File) {
   return parseFile(typeof fileName === "string" ? fileName : fileName.name).extension;
@@ -36,12 +37,12 @@ export function detectFileType(fileName: string | File): FileType {
 
 export function getMineTypeAccept(fileType: FileType[]) {
   let output: string[] = [];
-  if (fileType.includes(FileType.PHOTO)) output = output.concat(IMAGE_MIME_TYPE);
-  if (fileType.includes(FileType.PDF)) output = output.concat(PDF_MIME_TYPE);
-  if (fileType.includes(FileType.MS_WORD)) output = output.concat(MS_WORD_MIME_TYPE);
-  if (fileType.includes(FileType.MS_EXCEL)) output = output.concat(MS_EXCEL_MIME_TYPE);
-  if (fileType.includes(FileType.MS_POWERPOINT)) output = output.concat(MS_POWERPOINT_MIME_TYPE);
-  if (fileType.includes(FileType.VIDEO))
+  if (fileType.includes(FileType.Photo)) output = output.concat(IMAGE_MIME_TYPE);
+  if (fileType.includes(FileType.Pdf)) output = output.concat(PDF_MIME_TYPE);
+  if (fileType.includes(FileType.MsWord)) output = output.concat(MS_WORD_MIME_TYPE);
+  if (fileType.includes(FileType.MsExcel)) output = output.concat(MS_EXCEL_MIME_TYPE);
+  if (fileType.includes(FileType.MsPowerpoint)) output = output.concat(MS_POWERPOINT_MIME_TYPE);
+  if (fileType.includes(FileType.Video))
     output = [...output, "video/mp4", "video/x-msvideo", "video/mpeg", "video/ogg", "video/webm"];
 
   return output;
@@ -71,116 +72,20 @@ export async function reducePhotoSize(file: File, option: Options) {
   return reducedFile;
 }
 
-async function handleUploadFile(uploadFile: UploadFile, route: string) {
-  const formData = new FormData();
-  let file = uploadFile.file;
-
-  // Handle image compression > Resize if file size > 2MB
-  const isImage = IMAGE_MIME_TYPE.includes(uploadFile.file.type as any);
-  const imgCompressSize = uploadFile.compressSize || 1;
-  if (
-    (isImage && uploadFile.compressSize !== 0 && file.size / (1024 * 1024) > imgCompressSize) ||
-    uploadFile.maxWidthOrHeight
-  ) {
-    file = await reducePhotoSize(
-      file,
-      uploadFile.maxWidthOrHeight
-        ? { maxWidthOrHeight: uploadFile.maxWidthOrHeight }
-        : { maxSizeMB: imgCompressSize }
-    );
-  }
-
-  formData.append("file", file);
-
-  if (uploadFile.ref) {
-    formData.append("ref", uploadFile.ref);
-  }
-
-  if (uploadFile.relatedCustomerId) {
-    formData.append("relatedCustomerId", uploadFile.relatedCustomerId);
-  }
-
-  if (uploadFile.relatedTicketId) {
-    formData.append("relatedTicketId", uploadFile.relatedTicketId);
-  }
-
-  if (uploadFile.relatedTaskId) {
-    formData.append("relatedTaskId", uploadFile.relatedTaskId);
-  }
-
-  if (uploadFile.relatedReceiptId) {
-    formData.append("relatedReceiptId", uploadFile.relatedReceiptId);
-  }
-
-  if (uploadFile.relatedHrmTimekeepingId) {
-    formData.append("relatedHrmTimekeepingId", uploadFile.relatedHrmTimekeepingId);
-  }
-
-  if (uploadFile.relatedLoanId) {
-    formData.append("relatedLoanId", uploadFile.relatedLoanId);
-  }
-
-  if (uploadFile.relatedEntities) {
-    formData.append("relatedEntities", JSON.stringify(uploadFile.relatedEntities));
-  }
-
-  return apiTools.formData<FileEntity>(route, formData);
-}
-
-export async function uploadFile(uploadFile: UploadFile) {
-  return handleUploadFile(uploadFile, "/files/upload");
-}
-
-export async function onUploadFiles(
-  files: UploadFile[],
-  onUploaded?: (files: FileEntity[]) => Promise<void> | void
-) {
-  return onActionLoad<FileEntity[]>({
-    name: t`Upload files`,
-    icon: IconUpload,
-    process: async () => {
-      let _files: FileEntity[] = [];
-
-      for (let file of files) {
-        const res = await uploadFile(file);
-        _files.push(res);
-      }
-
-      await onUploaded?.(_files);
-      return _files;
-    },
-  });
-}
-
-export async function onUploadFile(
-  file: UploadFile,
-  onUploaded?: (file: FileEntity) => Promise<void> | void
-) {
-  return onActionLoad<FileEntity>({
-    name: t`Upload file`,
-    icon: IconUpload,
-    process: async () => {
-      const res = await uploadFile(file);
-      await onUploaded?.(res);
-      return res;
-    },
-  });
-}
-
 export async function getFileInfo(rawUrl: string) {
   const fileName = rawUrl.split("/").pop();
   return apiTools.get<FileEntity>(`/files/${fileName?.split(".")[0]}/info`);
 }
 
 export const fileTypeIcons: Record<FileType, Icon> = {
-  [FileType.PHOTO]: IconPhoto,
-  [FileType.VIDEO]: IconVideo,
-  [FileType.AUDIO]: IconMusic,
-  [FileType.PDF]: IconPdf,
-  [FileType.MS_WORD]: IconFile,
-  [FileType.MS_EXCEL]: IconFile,
-  [FileType.MS_POWERPOINT]: IconFile,
-  [FileType.UNKNOWN]: IconFile,
+  [FileType.Photo]: IconPhoto,
+  [FileType.Video]: IconVideo,
+  [FileType.Audio]: IconMusic,
+  [FileType.Pdf]: IconPdf,
+  [FileType.MsWord]: IconFile,
+  [FileType.MsExcel]: IconFile,
+  [FileType.MsPowerpoint]: IconFile,
+  [FileType.Unknown]: IconFile,
 };
 
 export function getFileTypeIcon(fileType: FileType) {

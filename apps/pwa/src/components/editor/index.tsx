@@ -8,9 +8,9 @@ import Superscript from "@tiptap/extension-superscript";
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
 
-import { onUploadFile } from "@/modules/files/file-service";
-import { FileType, UploadFileOptions } from "@/modules/files/file-types";
+import { UploadFileOptions } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
@@ -23,6 +23,7 @@ import { Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import { ClipboardEventHandler, FC, useState } from "react";
 import { ImageResize } from "./image-resize";
+import { FileType } from "@/graphql/enums.graphql";
 
 interface EditorProps {
   value?: string | JSONContent | undefined | null;
@@ -51,13 +52,13 @@ function InsertImageControl() {
     <RichTextEditor.Control
       onClick={() => {
         OnModalFiles({
-          fileTypes: [FileType.PHOTO],
+          fileTypes: [FileType.Photo],
           onSelectedFiles: (files) => {
             files.forEach((file) => {
               editor?.commands.insertContent({
                 type: "image",
                 attrs: {
-                  src: renderFileUrl(file.relativePath),
+                  src: renderFileUrl(file.path),
                   style: "width: 500px; height: auto;",
                 },
               });
@@ -76,6 +77,7 @@ function InsertImageControl() {
 export const Editor: FC<EditorProps> = (props) => {
   const color = useColor();
   const [focused, setFocused] = useState(false);
+  const uploadFile = useUploadFile();
 
   const onChange = useDebouncedCallback((html: string, json: JSONContent) => {
     props.onChangeHTML?.(html);
@@ -99,8 +101,8 @@ export const Editor: FC<EditorProps> = (props) => {
   const onDropImage = async (files: File[]) => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const _file = await onUploadFile({ file, ...props.uploadFileOptions });
-      editor?.commands.setImage({ src: renderFileUrl(_file.relativePath) });
+      const _file = await uploadFile(file, props.uploadFileOptions);
+      editor?.commands.setImage({ src: renderFileUrl(_file.path) });
     }
   };
 

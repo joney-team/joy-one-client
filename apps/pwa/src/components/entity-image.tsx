@@ -1,6 +1,5 @@
 "use client";
 
-import { FileType } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { Trans } from "@lingui/react/macro";
@@ -11,11 +10,12 @@ import { Icon, IconEye, IconPhoto, IconProps, IconUpload } from "@tabler/icons-r
 import { FC, useRef, useState } from "react";
 import { Button } from "./buttons/button";
 import { Renderer } from "./renderer";
+import { FileType } from "@/graphql/enums.graphql";
 
 interface EntityImageProps {
   src?: string | File;
   onChange?: (image: File) => void;
-  onlyRead?: boolean;
+  readonly?: boolean;
   icon?: Icon;
   iconProps?: IconProps;
   h?: number | string;
@@ -29,7 +29,7 @@ interface EntityImageProps {
 
 export const EntityImage: FC<EntityImageProps> = (props) => {
   const hover = useHover();
-  const disabled = props.onlyRead || !props.onChange;
+  const disabled = props.readonly || !props.onChange;
   const w = props.w || props.size || 100;
   const h = props.h || props.size || 100;
   const src = props.src instanceof File ? URL.createObjectURL(props.src) : renderFileUrl(props.src);
@@ -42,7 +42,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
     if (!src) return;
     if (props.onView) return props.onView();
     OnModalFileGallery({
-      files: [{ url: src, fileName: props.name || "image", type: FileType.PHOTO }],
+      files: [{ url: src, fileName: props.name || "image", type: FileType.Photo }],
       disabled: true,
     });
   };
@@ -68,17 +68,17 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
         h={h}
         w={w}
         radius={props.radius || 10}
-        style={{ cursor: "pointer", position: "relative" }}
+        style={{ cursor: disabled || !src ? "default" : "pointer", position: "relative" }}
         onClick={() => {
           if (disabled) {
-            console.log("click");
-            OnModalFileGallery({
-              files: [{ url: src, fileName: props.name || "image", type: FileType.PHOTO }],
+            if (!src) return;
+
+            return OnModalFileGallery({
+              files: [{ url: src, fileName: props.name || "image", type: FileType.Photo }],
             });
-            return;
           }
 
-          openRef.current?.();
+          return openRef.current?.();
         }}
         withBorder
         shadow="none"

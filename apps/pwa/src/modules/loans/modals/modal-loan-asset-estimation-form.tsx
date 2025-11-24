@@ -376,7 +376,7 @@ export const ModalLoanAssetEstimationForm: FC = () => {
         />
 
         <InputWrapper label={t`Product images`}>
-          <FilesBox query={{ ref: `loan-asset-estimations-${form.values.id}` }} autoUpload />
+          <FilesBox refs={[`loan-asset-estimations-${form.values.id}`]} autoUpload />
         </InputWrapper>
 
         <Button onClick={submitting.handle} loading={submitting.isSubmitting} mt={10}>

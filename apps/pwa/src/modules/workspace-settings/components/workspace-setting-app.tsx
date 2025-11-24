@@ -5,7 +5,7 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Renderer } from "@/components/renderer";
-import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { getColorShape } from "@/modules/theme/generate-theme";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -37,6 +37,7 @@ export const WorkspaceAppSettings: FC = () => {
   const app = useApp();
   const theme = useMantineTheme();
   const color = useColor();
+  const uploadFile = useUploadFile();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm({
@@ -61,10 +62,8 @@ export const WorkspaceAppSettings: FC = () => {
       let appIcon = workspace.userMember.workspace.appIcon;
 
       if (values.iconFile) {
-        const currentLogo = workspace.userMember.workspace.appIcon;
-        const _file = await onUploadFile({ file: values.iconFile, maxWidthOrHeight: 512 });
-        appIcon = _file.relativePath;
-        if (currentLogo) await removeFileFromRelativePath(currentLogo).catch(() => false);
+        const uploadedLogo = await uploadFile(values.iconFile, { maxWidthOrHeight: 512 });
+        appIcon = uploadedLogo.path;
       }
 
       await workspace.update({

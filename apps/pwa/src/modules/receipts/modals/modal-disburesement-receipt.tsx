@@ -18,6 +18,8 @@ import { modals } from "@mantine/modals";
 import { IconCheck, IconTag } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { receiptPaymentMethods } from "../receipt-constants";
+import { AppEntity } from "@/types";
+import { Trans } from "@lingui/react/macro";
 
 interface ModalDisburesementReceiptProps {
   receipt: ReceiptEntity;
@@ -40,7 +42,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
   return (
     <Stack gap={30}>
       <Text mb={-20} fw={500} fz={em(14)}>
-        {t`Proposed by`}
+        <Trans>Proposed by</Trans>
       </Text>
       {receipt.cashierUser && (
         <Group>
@@ -49,7 +51,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
       )}
 
       <Text mb={-20} fw={500} fz={em(14)}>
-        {t`Content`}
+        <Trans>Content</Trans>
       </Text>
       {receipt.note ? (
         <Text
@@ -57,23 +59,29 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
           fw={700}
         />
       ) : (
-        <Text fz={em(12)}>{t`No content`}</Text>
+        <Text fz={em(12)}>
+          <Trans>No content</Trans>
+        </Text>
       )}
 
       <Text mb={-20} fw={500} fz={em(14)}>
-        {t`Images / Documents`}
+        <Trans>Images / Documents</Trans>
       </Text>
       <Group>
         <FilesBox
           disabled
-          query={{ relatedReceiptId: receipt.id }}
+          refs={[`${AppEntity.RECEIPTS}:${receipt.id}`]}
           filesWrapperProps={{ justify: "end" }}
-          empty={<Text fz={em(12)}>{t`No images`}</Text>}
+          empty={
+            <Text fz={em(12)}>
+              <Trans>No images</Trans>
+            </Text>
+          }
         />
       </Group>
 
       <Text mb={-20} fw={500} fz={em(14)}>
-        {t`Payment Method`}
+        <Trans>Payment Method</Trans>
       </Text>
       <Group gap={10}>
         {Object.values(ReceiptPaymentMethod).map((method) => {
@@ -99,7 +107,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
         type="submit"
         color={color}
       >
-        {t`Approve`}
+        <Trans>Approve</Trans>
       </Button>
     </Stack>
   );
@@ -110,7 +118,7 @@ export const OnModalDisburesementReceipt = (props: ModalDisburesementReceiptProp
     modalId: "ModalDisburesementReceipt",
     title: (
       <ModalTitle
-        title={t`Approve Receipt`}
+        title={<Trans>Approve Receipt</Trans>}
         icon={IconTag}
         color={props.receipt.type === ReceiptType.EXPENSE ? "red" : "primary"}
       />

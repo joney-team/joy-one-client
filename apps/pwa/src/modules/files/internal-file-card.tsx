@@ -1,7 +1,7 @@
 "use client";
 
 import { getFileTypeIcon } from "@/modules/files/file-service";
-import { FileEntity, FileType } from "@/modules/files/file-types";
+import { FileEntity } from "@/modules/files/file-types";
 import { formatBytes } from "@/utils/file.utils";
 import {
   Box,
@@ -17,6 +17,7 @@ import {
 import { IconCircleCheck, IconFile, IconVideo } from "@tabler/icons-react";
 import { FC, Fragment, useRef } from "react";
 import { Image } from "../../components/image";
+import { FileType } from "@/graphql/enums.graphql";
 
 export interface InternalFileCardProps {
   file: FileEntity;
@@ -80,11 +81,11 @@ export const InternalFileCard: FC<InternalFileCardProps> = (props) => {
             );
           }
 
-          if (fileType === FileType.PHOTO) {
+          if (fileType === FileType.Photo) {
             return <Image src={url} w="100%" fit="contain" bg="gray.1" h={100} />;
           }
 
-          if (fileType === FileType.VIDEO)
+          if (fileType === FileType.Video)
             return (
               <Fragment>
                 <video

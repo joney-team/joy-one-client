@@ -9,7 +9,7 @@ import { CustomerEntity } from "@/modules/customers/customer-types";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/modal-customer-relationship-contacts";
-import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
@@ -18,6 +18,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
+import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import config from "@joy-one-client/config";
@@ -66,6 +67,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
   const workspace = useWorkspace();
   const tags = useTags();
   const isCanUpdateInfo = workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO);
+  const uploadFile = useUploadFile();
 
   const { customer } = props;
   const IconGender = renderGenerIcon(customer.gender);
@@ -80,10 +82,11 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
 
   const uploadAvatar = async (file: File) => {
     try {
-      const _currentAvatar = customer.avatar;
-      const _file = await onUploadFile({ file, compressSize: 1 });
-      await updateCustomer(customer._id, { ...customer, avatar: _file.relativePath });
-      if (_currentAvatar) await removeFileFromRelativePath(_currentAvatar).catch(onError);
+      const avatarFile = await uploadFile(file, {
+        refs: [`${AppEntity.CUSTOMERS}:${customer._id}`],
+        compressSize: 1,
+      });
+      await updateCustomer(customer._id, { ...customer, avatar: avatarFile.path });
     } catch (error) {
       onError(error);
     }
@@ -123,7 +126,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
               onChange={(file) => uploadAvatar(file)}
               name={customer.name}
               icon={IconUserSquareRounded}
-              onlyRead={!isCanUpdateInfo}
+              readonly={!isCanUpdateInfo}
             />
 
             <Stack gap={5}>

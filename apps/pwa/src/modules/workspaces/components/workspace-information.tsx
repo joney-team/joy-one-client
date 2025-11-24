@@ -1,7 +1,6 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
-import { onUploadFile, removeFileFromRelativePath } from "@/modules/files/file-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
@@ -24,10 +23,12 @@ import { IconUpload } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { workspaceTypes } from "../workspace-constants";
 import { WorkspaceTypeItem } from "./workpsace-type-item";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 
 let timeout: NodeJS.Timeout;
 export const WorkspaceInformation: FC = () => {
   const workspace = useWorkspace();
+  const uploadFile = useUploadFile();
   const [avatarUploading, setAvatarUploading] = useState(false);
 
   const form = useForm({
@@ -51,13 +52,8 @@ export const WorkspaceInformation: FC = () => {
   const handleUploadLogo = async (file: File) => {
     setAvatarUploading(true);
     try {
-      const currentAvatar = workspace.userMember?.workspace?.logo;
-      const _file = await onUploadFile({ file, maxWidthOrHeight: 300 });
-      await workspace.update({
-        ...workspace.userMember.workspace,
-        logo: _file.relativePath,
-      } as any);
-      if (currentAvatar) await removeFileFromRelativePath(currentAvatar).catch(() => false);
+      const uploadedLogo = await uploadFile(file, { maxWidthOrHeight: 300 });
+      await workspace.update({ ...workspace.userMember.workspace, logo: uploadedLogo.path });
     } catch (error) {
       onError(error);
     }

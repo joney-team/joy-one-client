@@ -1,4 +1,5 @@
-import { BaseMongoEntity, Query, RelatedEntity } from "@/types";
+import { FileType } from "@/graphql/enums.graphql";
+import { BaseMongoEntity, Query } from "@/types";
 
 export interface FileEntity extends BaseMongoEntity {
   type: FileType;
@@ -23,34 +24,13 @@ export interface FilesContext {
   upload: (file: UploadFile) => Promise<FileEntity>;
 }
 
-export enum FileType {
-  PHOTO = "PHOTO",
-  VIDEO = "VIDEO",
-  AUDIO = "AUDIO",
-  PDF = "PDF",
-  MS_WORD = "MS_WORD",
-  MS_EXCEL = "MS_EXCEL",
-  MS_POWERPOINT = "MS_POWERPOINT",
-  UNKNOWN = "UNKNOWN",
-}
-
 export interface UploadFileOptions {
   id?: string;
   progress?: number;
   error?: string;
   compressSize?: number;
   maxWidthOrHeight?: number;
-
-  ref?: string;
-  relatedCustomerId?: string;
-  relatedTaskId?: string;
-  relatedTicketId?: string;
-  relatedReceiptId?: string;
-  relatedHrmTimekeepingId?: string;
-  relatedMessageId?: string;
-  relatedLoanId?: string;
-
-  relatedEntities?: RelatedEntity[];
+  refs?: string[];
 }
 
 export interface UploadFile extends UploadFileOptions {

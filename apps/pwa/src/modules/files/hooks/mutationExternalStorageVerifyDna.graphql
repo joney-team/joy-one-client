@@ -1,0 +1,11 @@
+mutation ExternalStorageVerifyDna($dna: String!) {
+  externalStorageVerifyDna(dna: $dna) {
+    _id
+    url
+    fileName
+    externalUrl
+    path
+    refs
+    type
+  }
+}

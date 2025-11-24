@@ -7,7 +7,6 @@ import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
 import { OnModalPrompt } from "@/modals/modal-prompt";
-import { FileType } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import {
@@ -49,6 +48,7 @@ import {
 import { FC } from "react";
 import { loanAssetTypes } from "../loans-constants";
 import { LoanRowInfo } from "./loan-row-info";
+import { FileType } from "@/graphql/enums.graphql";
 
 interface LoanDocumentsProps {
   loan: LoanEntity;
@@ -243,7 +243,7 @@ export const SignareCard: FC<{ url: string }> = (props) => {
               }}
               onClick={() => {
                 OnModalFileGallery({
-                  files: [{ url, fileName: t`Signature`, type: FileType.PHOTO }],
+                  files: [{ url, fileName: t`Signature`, type: FileType.Photo }],
                   disabled: true,
                   background: "white",
                 });

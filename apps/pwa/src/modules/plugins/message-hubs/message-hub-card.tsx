@@ -6,7 +6,7 @@ import { Renderer } from "@/components/renderer";
 import { configs } from "@/configs/layout.config";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { uploadFile } from "@/modules/files/file-service";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { localeNames } from "@/modules/lang/lang-service";
 import { AppLocale } from "@/modules/lang/lang-types";
 import {
@@ -74,7 +74,7 @@ interface MessageHubCardProps {
 
 export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
   const workspace = useWorkspace();
-  const layout = useLayout();
+  const uploadFile = useUploadFile();
 
   const { messageHub } = props;
   const color = useColor();
@@ -86,18 +86,14 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
     let _widgetSettings = { ...debouced };
 
     if ((_widgetSettings.brandLogo as any) instanceof File) {
-      const brandLogo = await uploadFile({
-        file: _widgetSettings.brandLogo as any,
+      const brandLogo = await uploadFile(_widgetSettings.brandLogo as any, {
         maxWidthOrHeight: 200,
       });
       _widgetSettings.brandLogo = brandLogo.url;
     }
 
     if ((_widgetSettings.chatIcon as any) instanceof File) {
-      const chatIcon = await uploadFile({
-        file: _widgetSettings.chatIcon as any,
-        maxWidthOrHeight: 200,
-      });
+      const chatIcon = await uploadFile(_widgetSettings.chatIcon as any, { maxWidthOrHeight: 200 });
       _widgetSettings.chatIcon = chatIcon.url;
     }
 

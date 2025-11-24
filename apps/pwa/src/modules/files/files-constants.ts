@@ -1,23 +1,23 @@
+import { FileType } from "@/graphql/enums.graphql";
+import { t } from "@lingui/core/macro";
 import {
   Icon,
-  IconPhoto,
-  IconVideo,
-  IconPdf,
   IconFile,
   IconFileExcel,
   IconMusic,
+  IconPdf,
+  IconPhoto,
   IconPresentationAnalytics,
+  IconVideo,
 } from "@tabler/icons-react";
-import { FileType } from "./file-types";
-import { t } from "@lingui/core/macro";
 
 export const fileTypes: Record<FileType, { label: () => string; icon: Icon }> = {
-  [FileType.PHOTO]: { label: () => t`Photo`, icon: IconPhoto },
-  [FileType.VIDEO]: { label: () => t`Video`, icon: IconVideo },
-  [FileType.AUDIO]: { label: () => t`Audio`, icon: IconMusic },
-  [FileType.PDF]: { label: () => "PDF", icon: IconPdf },
-  [FileType.MS_WORD]: { label: () => "MS Word", icon: IconFile },
-  [FileType.MS_EXCEL]: { label: () => "MS Excel", icon: IconFileExcel },
-  [FileType.MS_POWERPOINT]: { label: () => "MS PowerPoint", icon: IconPresentationAnalytics },
-  [FileType.UNKNOWN]: { label: () => t`Unknown`, icon: IconFile },
+  [FileType.Photo]: { label: () => t`Photo`, icon: IconPhoto },
+  [FileType.Video]: { label: () => t`Video`, icon: IconVideo },
+  [FileType.Audio]: { label: () => t`Audio`, icon: IconMusic },
+  [FileType.Pdf]: { label: () => "PDF", icon: IconPdf },
+  [FileType.MsWord]: { label: () => "MS Word", icon: IconFile },
+  [FileType.MsExcel]: { label: () => "MS Excel", icon: IconFileExcel },
+  [FileType.MsPowerpoint]: { label: () => "MS PowerPoint", icon: IconPresentationAnalytics },
+  [FileType.Unknown]: { label: () => t`Unknown`, icon: IconFile },
 };

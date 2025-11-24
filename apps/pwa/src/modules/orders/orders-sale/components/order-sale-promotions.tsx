@@ -131,7 +131,7 @@ const PromotionCard: FC<{
       p={10}
     >
       <Group wrap="nowrap">
-        <EntityImage src={props.image} w={70} h={70} onlyRead icon={props.icon} />
+        <EntityImage src={props.image} w={70} h={70} readonly icon={props.icon} />
 
         <Stack flex={1} gap={8}>
           <Text fz={16} c="dark" fw={600}>

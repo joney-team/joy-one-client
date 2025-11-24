@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { SignatureInput } from "@/components/inputs/signature-input";
 import { ModalTitle } from "@/components/modal-title";
-import { onUploadFile } from "@/modules/files/file-service";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { signLoan } from "@/modules/loans/loans-service";
 import { LoanEntity } from "@/modules/loans/loans-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -25,14 +25,15 @@ export const ModalSignLoan: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalSignLoanProps>();
   const [signature, setSignature] = useState<File>();
+  const uploadFile = useUploadFile();
 
   const onClose = async () => close();
 
   const onSubmit = async () => {
     if (!signature || !props) return;
     try {
-      const signatureImage = await onUploadFile({ file: signature });
-      await signLoan(props.loan.id, { signature: signatureImage.relativePath });
+      const signatureImage = await uploadFile(signature);
+      await signLoan(props.loan.id, { signature: signatureImage.path });
       onClose();
     } catch (error) {
       onError(error);

@@ -8,8 +8,8 @@ import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
 import { api } from "@/modules/apis";
 import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
-import { onUploadFiles } from "@/modules/files/file-service";
 import { FilesBox } from "@/modules/files/files-box";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { fulfillLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanReceiptData, LoanStatus } from "@/modules/loans/loans-types";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
@@ -26,6 +26,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { DateTime } from "@joy-one-client/utils/date-time";
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   Blockquote,
@@ -53,6 +54,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
   const color = useColor();
   const workspace = useWorkspace();
   const banks = useBanks();
+  const uploadFile = useUploadFile();
 
   const { loan } = props;
   const [paymentMethod, setPaymentMethod] = useState<ReceiptPaymentMethod>(
@@ -83,12 +85,17 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
     setIsSubmitting(true);
 
     try {
-      if (files.length === 0) throw new Error("Vui lòng chọn file");
-      const _files = await onUploadFiles(files.map((f) => ({ file: f }))).catch(console.error);
-      if (!Array.isArray(_files) || _files.length === 0) throw new Error("Vui lòng chọn file");
+      if (files.length === 0) throw new Error(t`Please select at least one file`);
+
+      const receiptFileIds: string[] = [];
+
+      for (const file of files) {
+        const _file = await uploadFile(file);
+        receiptFileIds.push(_file._id);
+      }
 
       await fulfillLoan(loan.id, {
-        receiptFileIds: _files.map((v) => v._id),
+        receiptFileIds,
         paymentMethod,
         fulfilledAt: isCustomFulfilledAt ? fulfilledAt : null,
       });

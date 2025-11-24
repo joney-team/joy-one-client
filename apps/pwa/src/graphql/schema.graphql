@@ -1,3 +1,6 @@
+"""The `AnyType` scalar type represents any value without restrictions."""
+scalar AnyType
+
 type AppConfig {
   UTC: String!
   firebase: FirebaseClientConfig!
@@ -11,49 +14,50 @@ type AppConfig {
   zaloAppId: String!
 }
 
-"""Available app entities"""
-enum AppEntity {
-  BANK_TRANSACTIONS
-  BILLINGS
-  CATEGORIES
-  COMMENTS
-  CUSTOMERS
-  CUSTOMER_FORMS
-  LOANS
-  MESSAGES
-  MESSAGE_BOXES
-  ORDERS
-  PARTNERS
-  POSTS
-  PRESCRIPTIONS
-  PRODUCTS
-  PRODUCT_VOUCHERS
-  PROMOTIONS
-  RECEIPTS
-  TAGS
-  TASKS
-  USERS
-  WORKSPACES
-  WORKSPACE_BRANCHES
-  WORKSPACE_MEMBERS
-}
-
 """Available locales"""
 enum AppLocale {
   EN
   VI
 }
 
-type CategoryEntity {
+type CategoriesPaginated {
+  count: Float!
+  data: [Category!]!
+}
+
+type Category {
   _id: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  customFields: [CustomField!]
   description: String
   icon: String
   name: String!
   order: Float!
   parentId: String
+  refs: [String!]
+  relatedEntities: [RelatedEntity!]
   slug: String!
   thumbnail: String
   type: CategoryType!
+  updatedAt: Float
+}
+
+type CategoryEntity {
+  _id: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  description: String
+  icon: String
+  name: String!
+  order: Float!
+  parentId: String
+  refs: [String!]
+  relatedEntities: [RelatedEntity!]
+  slug: String!
+  thumbnail: String
+  type: CategoryType!
+  updatedAt: Float
 }
 
 """Available category types"""
@@ -63,24 +67,87 @@ enum CategoryType {
   PRODUCTS
 }
 
+type CustomField {
+  config: JSONObject
+  customFieldId: String!
+  key: String
+  type: CustomFieldType!
+  value: AnyType
+}
+
+"""Available custom field types"""
+enum CustomFieldType {
+  DATE
+  FILE
+  MULTI_SELECT
+  NUMBER
+  SELECT
+  SWITCH
+  TEXT
+  TEXTAREA
+}
+
 type CustomFieldValue {
   customFieldId: String!
-  value: JSONObject
+  value: AnyType
 }
 
 input CustomFieldValueInput {
   customFieldId: String!
-  value: JSONObject
+  value: AnyType
 }
 
 type DeviceEntity {
   _id: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
   identifyId: String
   lastActiveAt: Float!
   locale: AppLocale
   notificationToken: String
+  refs: [String!]
+  relatedEntities: [RelatedEntity!]
+  updatedAt: Float
   userAgent: String!
   userId: String
+}
+
+type File {
+  _id: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  externalUrl: String
+  fileName: String!
+  path: String!
+  ref: String
+  refs: [String!]
+  relatedCustomerId: String
+  relatedEntities: [RelatedEntity!]
+  relatedHrmTimekeepingId: String
+  relatedMessageBoxId: String
+  relatedMessageId: String
+  relatedProductId: String
+  relatedReceiptId: String
+  relativePath: String
+  size: Float
+  thumbnail: String
+  type: FileType!
+  updatedAt: Float
+  uploadByUserId: String
+  url: String!
+  workspaceId: String!
+}
+
+"""Available file types"""
+enum FileType {
+  AUDIO
+  MS_EXCEL
+  MS_POWERPOINT
+  MS_WORD
+  PDF
+  PHOTO
+  UNKNOWN
+  VIDEO
 }
 
 type FirebaseClientConfig {
@@ -99,8 +166,30 @@ The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](
 scalar JSONObject
 
 type Mutation {
+  createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
+  deleteCategory(id: String!): Boolean!
+  externalStorageVerifyDna(dna: String!): File!
+  generateCategorySlug(name: String!): String!
+  healthcheckPluginExternalStorage: Boolean!
+  interactCategory(id: String!): Boolean!
+  pluginExternalStorageSignUploadUrl(fileName: String!, refs: [String!]): SignUploadUrlResponse!
   registerDevice(input: RegisterDeviceDto!): DeviceEntity!
+  removePluginExternalStorage: Boolean!
+  setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
+  updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
+}
+
+type PluginExternalStorage {
+  bucketName: String
+  endpointUrl: String
+  provider: PluginExternalStorageProvider!
+  region: String
+}
+
+"""Available external storage providers"""
+enum PluginExternalStorageProvider {
+  AWS_S3
 }
 
 type Product {
@@ -111,6 +200,8 @@ type Product {
   combos: [ProductCombo!]
   combosExpireInDays: Float
   content: String
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
   defaultQtyPerUse: Float
   displayName: String
   image: String
@@ -122,10 +213,13 @@ type Product {
   name: String!
   price: Float!
   productCode: String
+  refs: [String!]
+  relatedEntities: [RelatedEntity!]
   supplies: [ProductSupply!]
   tags: [String!]!
   type: ProductType!
   unit: String!
+  updatedAt: Float
   voucherAmount: Float
   voucherExcludeProductIds: [String!]
   voucherExpireInDays: Float
@@ -165,7 +259,13 @@ enum ProductType {
 
 type Query {
   appConfig: AppConfig!
+  categoriesPaginated(limit: Float = 20, offset: Float = 0, query: JSONObject): CategoriesPaginated!
+  getCategoriesByIds(ids: [String!]!): [Category!]!
+  getCategory(id: String!): Category!
+  getCategoryBySlug(slug: String!): Category!
+  getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
+  pluginExternalStorage: PluginExternalStorage
 }
 
 input RegisterDeviceDto {
@@ -175,9 +275,14 @@ input RegisterDeviceDto {
 
 type RelatedEntity {
   data: JSONObject
-  entity: AppEntity!
+  entity: String!
   id: String
   index: Boolean
+}
+
+type SignUploadUrlResponse {
+  dna: String!
+  signedUrl: String!
 }
 
 type UserAuthProvider {

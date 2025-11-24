@@ -14,7 +14,7 @@ import { Renderer } from "@/components/renderer";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { onUploadFile } from "@/modules/files/file-service";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { PartnersInput } from "@/modules/partners/components/partners-input";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { TagsInput } from "@/modules/tags/components/tags-input";
@@ -109,6 +109,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
   const workspace = useWorkspace();
   const taskFolders = useTaskFolders();
   const id = props.task?._id || "new_task_id";
+  const uploadFile = useUploadFile();
 
   const tags = useTags();
   const tagFolder = tags.list.find(
@@ -176,7 +177,9 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         estimatedTime: values.estimatedTime,
       }).then(async (task) => {
         await Promise.all(
-          rawFiles.map(async (file) => onUploadFile({ file, ref: task._id }).catch(onError))
+          rawFiles.map(async (file) =>
+            uploadFile(file, { refs: [`${AppEntity.TASKS}:${task._id}`] }).catch(onError)
+          )
         );
         props.onClose?.();
         props.onCreated?.(task);
@@ -569,7 +572,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
             placeholder={t`Task description`}
             uploadFileOptions={{
               maxWidthOrHeight: 1500,
-              relatedTaskId: props.task?._id,
+              refs: [`${AppEntity.TASKS}:${props.task?._id}`],
             }}
           />
         </Stack>
@@ -584,13 +587,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
           </Group>
 
           {props.task ? (
-            <FilesBox
-              autoUpload
-              query={{
-                entity: AppEntity.TASKS,
-                entityId: props.task?._id,
-              }}
-            />
+            <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${props.task._id}`]} />
           ) : (
             <FilesBox rawFiles={rawFiles} onChangeRawFiles={(files) => setRawFiles(files)} />
           )}

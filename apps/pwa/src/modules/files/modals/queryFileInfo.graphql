@@ -1,0 +1,10 @@
+query GetFileInfo($fileId: String!) {
+  getFileInfo(fileId: $fileId) {
+    _id
+    refs
+    size
+    fileName
+    path
+    externalUrl
+  }
+}

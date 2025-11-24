@@ -5,7 +5,6 @@ import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
-import { uploadFile } from "@/modules/files/file-service";
 import { useLang } from "@/modules/lang/lang-context";
 import { LocationEntity } from "@/modules/locations/locations-types";
 import { WorkspaceTypeItem } from "@/modules/workspaces/components/workpsace-type-item";
@@ -236,8 +235,6 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [logo, setLogo] = useState<File | null>(null);
-
   const form = useForm({
     initialValues: {
       logo: "",
@@ -265,17 +262,11 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
-    let _logo = "";
-    if (logo) {
-      const file = await uploadFile({ file: logo, maxWidthOrHeight: 300 });
-      _logo = file.relativePath;
-    }
-
     await workspace
-      .create({ ...values, logo: _logo })
+      .create(values)
       .then(props.onDone)
-      .catch(onError);
-    setIsSubmitting(false);
+      .catch(onError)
+      .finally(() => setIsSubmitting(false));
   });
 
   const onAutoFillCode = useDebouncedCallback((name: string) => {

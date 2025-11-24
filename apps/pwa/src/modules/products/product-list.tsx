@@ -25,7 +25,7 @@ export const ProductList: FC = () => {
     <Stack p={16}>
       <List<ProductEntity>
         id="prods"
-        name="products"
+        name={<Trans>Products</Trans>}
         icon={IconBox}
         route="/products"
         fixedParams={{ type: ProductType.PRODUCT }}
@@ -36,7 +36,7 @@ export const ProductList: FC = () => {
         columns={{
           image: {
             defaultWidth: 100,
-            name: t`Image`,
+            name: <Trans>Image</Trans>,
             align: "center",
             render: ({ data }) => {
               return (
@@ -50,7 +50,7 @@ export const ProductList: FC = () => {
             },
           },
           name: {
-            name: t`Name`,
+            name: <Trans>Name</Trans>,
             defaultWidth: 350,
             render: ({ data }) => {
               return (
@@ -67,7 +67,7 @@ export const ProductList: FC = () => {
           categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
           stock: {
             defaultWidth: 200,
-            name: t`Product stocks`,
+            name: <Trans>Product stocks</Trans>,
             render: ({ data }) => {
               if (!data.isStockCheck) return "-";
               return (
@@ -89,13 +89,13 @@ export const ProductList: FC = () => {
           },
           unit: {
             defaultWidth: 150,
-            name: t`Unit`,
+            name: <Trans>Unit</Trans>,
           },
           price: {
             defaultWidth: 250,
             align: "right",
             sortable: true,
-            name: t`Price`,
+            name: <Trans>Price</Trans>,
             render: ({ data }) => {
               if (data.minPrice && data.maxPrice) {
                 return (
@@ -118,7 +118,7 @@ export const ProductList: FC = () => {
         events={[EventType.PRODUCT_NEW, EventType.PRODUCT_UPDATE, EventType.PRODUCT_ARCHIVED]}
         actions={[
           {
-            label: t`Edit`,
+            label: <Trans>Edit</Trans>,
             icon: IconEdit,
             permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,
             onClick: (data) => OnProductModal({ product: data }),

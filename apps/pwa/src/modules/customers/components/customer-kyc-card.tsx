@@ -11,7 +11,6 @@ import {
   type CustomerKycEntity,
   CustomerKycStatus,
 } from "@/modules/customer-kycs/customer-kycs-types";
-import { FileType } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { useLocations } from "@/modules/locations/locations-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -41,6 +40,7 @@ import { Button } from "../../../components/buttons/button";
 import { EntityImage } from "../../../components/entity-image";
 import { Image } from "../../../components/image";
 import { Renderer } from "../../../components/renderer";
+import { FileType } from "@/graphql/enums.graphql";
 
 interface CustomerKycCardProps {
   kyc: CustomerKycEntity;
@@ -68,19 +68,19 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
           url: lastVersion.frontOfCidImage,
           _id: "1",
           fileName: t`Front of CID`,
-          type: FileType.PHOTO,
+          type: FileType.Photo,
         },
         {
           url: lastVersion.backOfCidImage,
           _id: "2",
           fileName: t`Back of CID`,
-          type: FileType.PHOTO,
+          type: FileType.Photo,
         },
         {
           url: lastVersion.portraitImage,
           _id: "3",
           fileName: t`Portrait image`,
-          type: FileType.PHOTO,
+          type: FileType.Photo,
         },
       ],
     });

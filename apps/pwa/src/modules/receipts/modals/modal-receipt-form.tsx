@@ -4,7 +4,6 @@ import { ModalTitle } from "@/components/modal-title";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { onUploadFile } from "@/modules/files/file-service";
 import { FilesBox } from "@/modules/files/files-box";
 import { LoanEntity } from "@/modules/loans/loans-types";
 import { createReceipt, receiptTypeColors } from "@/modules/receipts/receipts-service";
@@ -18,6 +17,8 @@ import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { receiptTypes } from "../receipt-constants";
+import { AppEntity } from "@/types";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 
 interface ReceiptFormValues {
   amount: number;
@@ -40,6 +41,7 @@ interface ModalReceiptFormProps {
 export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
   const auth = useAuth();
   const color = useColor();
+  const uploadFile = useUploadFile();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [receiptFiles, setReceiptFiles] = useState<File[]>([]);
@@ -77,9 +79,8 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
       .then(async (receipt) => {
         await Promise.all(
           receiptFiles.map((file) =>
-            onUploadFile({
-              file,
-              relatedReceiptId: receipt.id,
+            uploadFile(file, {
+              refs: [`${AppEntity.RECEIPTS}:${receipt.id}`],
             })
           )
         );

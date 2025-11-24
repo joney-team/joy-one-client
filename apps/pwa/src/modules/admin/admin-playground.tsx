@@ -1,17 +1,54 @@
 "use client";
 
+import { Button } from "@/components/buttons/button";
 import { DateFormat } from "@/components/format/date-format";
 import { FormulaInput } from "@/components/inputs/formual-input/formula-input";
 import { WorkSlotsInput } from "@/components/inputs/work-slots-input";
 import { SectionTitle } from "@/components/session-title";
-import { CalendarView } from "@/types";
-import { Group, Paper, Stack, Text, TextInput } from "@mantine/core";
-import { Fragment, useState, type FC } from "react";
-import { useWorkspace } from "../workspaces/workspace-context";
-import { Button } from "@/components/buttons/button";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { Trans } from "@lingui/react/macro";
+import { CalendarView } from "@/types";
 import { wait } from "@/utils/common.utils";
+import { FileInput, Group, Paper, Stack, Text, TextInput } from "@mantine/core";
+import { useState, type FC } from "react";
+import { useWorkspace } from "../workspaces/workspace-context";
+import { useUploadFile } from "../files/hooks/use-upload-file";
+import { onError } from "@/utils/exceptions.utils";
+
+const UseUploadFilePlayground: FC = () => {
+  const uploadFile = useUploadFile();
+
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const onUpload = async () => {
+    if (!file) return;
+    try {
+      setLoading(true);
+      const fileMetadata = await uploadFile(file);
+      console.log("fileMetadata", fileMetadata);
+    } catch (error) {
+      onError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Paper withBorder p={20}>
+      <Stack>
+        <SectionTitle name="Use Upload File" />
+
+        <FileInput value={file} onChange={setFile} accept="image/*" />
+
+        <Group>
+          <Button onClick={onUpload} loading={loading}>
+            Upload
+          </Button>
+        </Group>
+      </Stack>
+    </Paper>
+  );
+};
 
 export const AdminPlayground: FC = () => {
   const workspace = useWorkspace();
@@ -20,6 +57,8 @@ export const AdminPlayground: FC = () => {
 
   return (
     <Stack p={30} gap={20}>
+      {workspace.userMember && <UseUploadFilePlayground />}
+
       <Paper withBorder p={20}>
         <Stack>
           <SectionTitle name="Confirm modal" />

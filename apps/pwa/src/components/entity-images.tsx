@@ -1,7 +1,6 @@
 "use client";
 
 import { useLayout } from "@/layout/layout-context";
-import { FileType } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -13,6 +12,7 @@ import { FC, useRef } from "react";
 import { Empty } from "./empty";
 import { Image } from "./image";
 import { Renderer } from "./renderer";
+import { FileType } from "@/graphql/enums.graphql";
 
 interface EntityImagesProps {
   name?: string;
@@ -107,7 +107,7 @@ const EntityImage: FC<EntityImageProps> = (props) => {
       files: props.images!.map((src) => ({
         fileName: `${props.name || "image"} ${props.index + 1}`,
         url: src instanceof File ? URL.createObjectURL(src) : (src as string),
-        type: FileType.PHOTO,
+        type: FileType.Photo,
       })),
       index: props.index,
       disabled: true,

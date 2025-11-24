@@ -38,7 +38,7 @@ export const PostsList: FC = () => {
             name: <Trans>Thumbnail</Trans>,
             defaultWidth: 230,
             render: ({ value }) => {
-              return <EntityImage src={value} w={200} h={100} onlyRead />;
+              return <EntityImage src={value} w={200} h={100} readonly />;
             },
           },
           categoryId: CategoryColumn(),

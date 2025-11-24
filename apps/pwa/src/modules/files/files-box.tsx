@@ -1,13 +1,13 @@
 "use client";
 
 import { useList } from "@/components/list/use-list";
+import { FileType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { detectFileType, getFiles, onUploadFile, removeFile } from "@/modules/files/file-service";
-import { FileEntity, FileType } from "@/modules/files/file-types";
+import { detectFileType, getFiles, removeFile } from "@/modules/files/file-service";
+import { FileEntity } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { AppEntity } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -29,24 +29,27 @@ import { IconArrowsDiagonal, IconFile, IconUpload, IconVideo, IconX } from "@tab
 import { FC, forwardRef, Fragment, useImperativeHandle, useRef, useState } from "react";
 import { Image } from "../../components/image";
 import { Renderer } from "../../components/renderer";
+import { useUploadFile } from "./hooks/use-upload-file";
 
 interface FilesBoxProps {
-  query?: {
-    relatedCustomerId?: string;
-    relatedTicketId?: string;
-    relatedTaskId?: string;
-    relatedReceiptId?: string;
-    relatedHrmTimekeepingId?: string;
-    ref?: string;
-    entity?: AppEntity;
-    entityId?: string;
-  };
+  // query?: {
+  //   relatedCustomerId?: string;
+  //   relatedTicketId?: string;
+  //   relatedTaskId?: string;
+  //   relatedReceiptId?: string;
+  //   relatedHrmTimekeepingId?: string;
+  //   ref?: string;
+  //   entity?: AppEntity;
+  //   entityId?: string;
+  // };
+  refs?: string[];
   rawFiles?: File[];
   onChangeRawFiles?: (files: File[]) => void;
   autoUpload?: boolean;
   placeholder?: string;
   filesWrapperProps?: StackProps;
   disabled?: boolean;
+  readonly?: boolean;
   empty?: React.ReactNode;
   specificDisabledRelated?: string[];
   replace?: boolean;
@@ -64,6 +67,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
   const openRef = useRef<() => void>(null);
   const [_rawFiles, setRawFiles] = useState<File[]>([]);
   const rawFiles = props.rawFiles || _rawFiles;
+  const uploadFile = useUploadFile();
 
   const onChangeRawFiles = (files: File[]) => {
     if (props.rawFiles) return props.onChangeRawFiles?.(files);
@@ -71,11 +75,11 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
   };
 
   const uploadedFiles = useList({
-    autoFetch: !!props.query,
-    id: `uploaded-files-${JSON.stringify(props.query || {})}`,
+    autoFetch: !!props.refs,
+    id: `uploaded-files-${props.refs?.join(",")}`,
     fetch: (p) => {
-      if (!props.query) return { count: 0, data: [] };
-      return getFiles({ ...props.query, ...p, strictRelated: true });
+      if (!props.refs) return { count: 0, data: [] };
+      return getFiles({ ...p, refs: props.refs, strictRelated: true });
     },
   });
 
@@ -85,10 +89,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
     if (props.autoUpload) {
       Promise.all(
         _files.map((file) => {
-          const { entity, entityId, ...rest } = props.query || {};
-          const relatedEntities = entity && entityId ? [{ id: entityId, entity }] : [];
-
-          return onUploadFile({ file, relatedEntities, ...rest });
+          return uploadFile(file, { refs: props.refs });
         })
       ).then(() => uploadedFiles.fetch(true, { isSilient: true }));
     } else {
@@ -130,10 +131,12 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
     })
   );
 
+  const disabled = props.disabled || props.readonly;
+
   return (
     <Dropzone
       onDrop={(_files) => addFile(_files)}
-      disabled={props.disabled}
+      disabled={disabled}
       activateOnClick={false}
       openRef={openRef}
       {...props.props}
@@ -168,7 +171,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
                   <FileBoxCard
                     key={file._id}
                     file={file}
-                    disabled={props.disabled || !!specificDisabled}
+                    disabled={disabled || !!specificDisabled}
                     onRemove={() => onRemove(file)}
                     onGallery={() =>
                       OnModalFileGallery({
@@ -185,7 +188,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
               {rawFiles.map((file, index) => {
                 return (
                   <FileBoxCard
-                    disabled={props.disabled}
+                    disabled={disabled}
                     key={index}
                     file={file}
                     onRemove={() => onRemove(file)}
@@ -198,7 +201,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
 
           <Renderer visible={length === 0 && !!props.empty}>{props.empty}</Renderer>
 
-          <Renderer visible={!props.disabled}>
+          <Renderer visible={!disabled}>
             <Dropzone.Accept>
               <Group gap={5} justify="center" py={5} pb={length > 0 ? 0 : 5}>
                 <ThemeIcon variant="transparent" color="gray.5">
@@ -255,7 +258,7 @@ export const FileBoxCard: FC<{
           {(function () {
             const url = file instanceof File ? URL.createObjectURL(file) : renderFileUrl(file.url);
 
-            if (fileType === FileType.PHOTO)
+            if (fileType === FileType.Photo)
               return (
                 <Image
                   src={url}
@@ -269,7 +272,7 @@ export const FileBoxCard: FC<{
                 />
               );
 
-            if (fileType === FileType.VIDEO)
+            if (fileType === FileType.Video)
               return (
                 <Fragment>
                   <video

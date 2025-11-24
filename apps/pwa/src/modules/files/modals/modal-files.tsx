@@ -8,7 +8,7 @@ import { ModalTitle } from "@/components/modal-title";
 import { WayPoint } from "@/components/way-point";
 import { configs } from "@/configs/layout.config";
 import { useLayout } from "@/layout/layout-context";
-import { FileEntity, FileType } from "@/modules/files/file-types";
+import { FileEntity } from "@/modules/files/file-types";
 import { InternalFileCard } from "@/modules/files/internal-file-card";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
@@ -19,12 +19,14 @@ import { Dropzone } from "@mantine/dropzone";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconPhotoSquareRounded, IconUpload } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
-import { getFiles, getMineTypeAccept, onUploadFile } from "../file-service";
+import { getFiles, getMineTypeAccept } from "../file-service";
+import { useUploadFile } from "../hooks/use-upload-file";
+import { FileType } from "@/graphql/types.graphql";
 
 interface ModalFilesState {
   fileTypes?: FileType[];
   length?: number;
-  onSelectedFiles: (files: FileEntity[]) => void;
+  onSelectedFiles: (files: Pick<FileEntity, "_id" | "type" | "path">[]) => void;
 }
 
 export let OnModalFiles: (state: ModalFilesState) => void = () => {};
@@ -32,6 +34,7 @@ export let OnModalFiles: (state: ModalFilesState) => void = () => {};
 export const ModalFiles: FC = () => {
   const viewport = useLayout();
   const colorScheme = useColorScheme();
+  const uploadFile = useUploadFile();
 
   const state = useRef<ModalFilesState | null>(null);
   const [opened, { open, close }] = useDisclosure(false);
@@ -49,7 +52,7 @@ export const ModalFiles: FC = () => {
     open();
   };
 
-  const toggleSeleteFile = (file: FileEntity) => {
+  const toggleSeleteFile = (file: Pick<FileEntity, "type" | "_id" | "url" | "path">) => {
     if (!state.current || (state.current.fileTypes && !state.current.fileTypes.includes(file.type)))
       return;
 
@@ -135,13 +138,12 @@ export const ModalFiles: FC = () => {
           <Dropzone
             flex={1}
             accept={state.current?.fileTypes && getMineTypeAccept(state.current?.fileTypes)}
-            onDrop={(_files) => {
-              _files.map((file) => {
-                onUploadFile({ file }, async (file) => {
-                  await files.fetch(true, { isSilient: true });
-                  toggleSeleteFile(file);
-                });
-              });
+            onDrop={async (_files) => {
+              for (const file of _files) {
+                const uploadedFile = await uploadFile(file);
+                await files.fetch(true, { isSilient: true });
+                toggleSeleteFile(uploadedFile);
+              }
             }}
           >
             <Card withBorder shadow="none" className="clickable" style={{ borderStyle: "dashed" }}>

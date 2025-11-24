@@ -9,7 +9,6 @@ import { Timer } from "@/components/timer";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
-import { uploadFile } from "@/modules/files/file-service";
 import { FilesBox } from "@/modules/files/files-box";
 import { getLoan } from "@/modules/loans/loans-service";
 import {
@@ -28,7 +27,6 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { getWorkspaceBranchById } from "@/modules/workspace-branches/workspace-branches-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { AppEntity } from "@/types";
 import { loadImage } from "@/utils/asset.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { round } from "@/utils/number.utils";
@@ -59,6 +57,8 @@ import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { PrintButton } from "../../../modals/modal-printer";
 import { receiptPaymentMethods } from "../receipt-constants";
 import { OnReceiptDetailModal } from "./modal-receipt-detail";
+import { AppEntity } from "@/types";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 
 export interface ModalPayReceiptProps {
   receipt: Pick<ReceiptEntity, "id">;
@@ -75,6 +75,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
   const [receipt, setReceipt] = useState<ReceiptEntity | null>(null);
   const [receiptFiles, setReceiptFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(true);
+  const uploadFile = useUploadFile();
 
   const [paymentMethod, setPaymentMethod] = useState(
     workspace.settings.receiptPaymentMethodDefault || ReceiptPaymentMethod.CASH
@@ -148,34 +149,21 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
   const onPayReceipt = async () => {
     if (!receipt) return;
+
     try {
       if (workspace.settings.receiptImagesRequired && receiptFiles.length <= 0) {
         throw new Error(t`Receipt images required`);
       }
 
-      await Promise.all(
-        receiptFiles.map((file) =>
-          uploadFile({
-            file,
-            relatedCustomerId: receipt.relatedCustomerId,
-            relatedReceiptId: receipt.id,
-            relatedEntities: [
-              {
-                id: receipt.id,
-                entity: AppEntity.RECEIPTS,
-              },
-              {
-                id: receipt.relatedCustomerId || "",
-                entity: AppEntity.CUSTOMERS,
-              },
-              {
-                id: receipt.relatedLoanId || "",
-                entity: AppEntity.LOANS,
-              },
-            ].filter((v) => !!v.id),
-          })
-        )
-      );
+      for (const file of receiptFiles) {
+        await uploadFile(file, {
+          refs: [
+            `${AppEntity.RECEIPTS}:${receipt.id}`,
+            `${AppEntity.CUSTOMERS}:${receipt.relatedCustomerId}`,
+            `${AppEntity.LOANS}:${receipt.relatedLoanId}`,
+          ],
+        });
+      }
 
       const _receipt = await payReceipt(receipt.id, {
         paymentMethod,

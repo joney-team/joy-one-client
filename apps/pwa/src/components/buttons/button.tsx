@@ -17,7 +17,7 @@ export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
   children?: ReactNode;
   component?: any;
   href?: string;
-  onClick?: (e: any) => any;
+  onClick?: any;
   weight?: string | number;
   type?: "button" | "submit" | "reset";
   isGradient?: boolean;

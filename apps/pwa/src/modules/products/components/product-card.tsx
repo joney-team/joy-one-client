@@ -64,7 +64,7 @@ export const ProductCard: FC<
       {...rest}
     >
       <Group align="start">
-        <EntityImage src={product.image} size={imageSize} onlyRead icon={Icon} />
+        <EntityImage src={product.image} size={imageSize} readonly icon={Icon} />
         <Stack gap={8} flex={1}>
           <Stack flex={1} gap={5}>
             <Text fw={600}>{product.name}</Text>

@@ -12,6 +12,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** The `AnyType` scalar type represents any value without restrictions. */
+  AnyType: { input: any; output: any; }
   /** The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSONObject: { input: any; output: any; }
 };
@@ -30,34 +32,6 @@ export type AppConfig = {
   zaloAppId: Scalars['String']['output'];
 };
 
-/** Available app entities */
-export const AppEntity = {
-  BankTransactions: 'BANK_TRANSACTIONS',
-  Billings: 'BILLINGS',
-  Categories: 'CATEGORIES',
-  Comments: 'COMMENTS',
-  Customers: 'CUSTOMERS',
-  CustomerForms: 'CUSTOMER_FORMS',
-  Loans: 'LOANS',
-  Messages: 'MESSAGES',
-  MessageBoxes: 'MESSAGE_BOXES',
-  Orders: 'ORDERS',
-  Partners: 'PARTNERS',
-  Posts: 'POSTS',
-  Prescriptions: 'PRESCRIPTIONS',
-  Products: 'PRODUCTS',
-  ProductVouchers: 'PRODUCT_VOUCHERS',
-  Promotions: 'PROMOTIONS',
-  Receipts: 'RECEIPTS',
-  Tags: 'TAGS',
-  Tasks: 'TASKS',
-  Users: 'USERS',
-  Workspaces: 'WORKSPACES',
-  WorkspaceBranches: 'WORKSPACE_BRANCHES',
-  WorkspaceMembers: 'WORKSPACE_MEMBERS'
-} as const;
-
-export type AppEntity = typeof AppEntity[keyof typeof AppEntity];
 /** Available locales */
 export const AppLocale = {
   En: 'EN',
@@ -65,17 +39,47 @@ export const AppLocale = {
 } as const;
 
 export type AppLocale = typeof AppLocale[keyof typeof AppLocale];
-export type CategoryEntity = {
-  __typename?: 'CategoryEntity';
+export type CategoriesPaginated = {
+  __typename?: 'CategoriesPaginated';
+  count: Scalars['Float']['output'];
+  data: Array<Category>;
+};
+
+export type Category = {
+  __typename?: 'Category';
   _id: Scalars['String']['output'];
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  customFields: Maybe<Array<CustomField>>;
   description: Maybe<Scalars['String']['output']>;
   icon: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   order: Scalars['Float']['output'];
   parentId: Maybe<Scalars['String']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  relatedEntities: Maybe<Array<RelatedEntity>>;
   slug: Scalars['String']['output'];
   thumbnail: Maybe<Scalars['String']['output']>;
   type: CategoryType;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+};
+
+export type CategoryEntity = {
+  __typename?: 'CategoryEntity';
+  _id: Scalars['String']['output'];
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  description: Maybe<Scalars['String']['output']>;
+  icon: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  order: Scalars['Float']['output'];
+  parentId: Maybe<Scalars['String']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  relatedEntities: Maybe<Array<RelatedEntity>>;
+  slug: Scalars['String']['output'];
+  thumbnail: Maybe<Scalars['String']['output']>;
+  type: CategoryType;
+  updatedAt: Maybe<Scalars['Float']['output']>;
 };
 
 /** Available category types */
@@ -86,28 +90,95 @@ export const CategoryType = {
 } as const;
 
 export type CategoryType = typeof CategoryType[keyof typeof CategoryType];
+export type CustomField = {
+  __typename?: 'CustomField';
+  config: Maybe<Scalars['JSONObject']['output']>;
+  customFieldId: Scalars['String']['output'];
+  key: Maybe<Scalars['String']['output']>;
+  type: CustomFieldType;
+  value: Maybe<Scalars['AnyType']['output']>;
+};
+
+/** Available custom field types */
+export const CustomFieldType = {
+  Date: 'DATE',
+  File: 'FILE',
+  MultiSelect: 'MULTI_SELECT',
+  Number: 'NUMBER',
+  Select: 'SELECT',
+  Switch: 'SWITCH',
+  Text: 'TEXT',
+  Textarea: 'TEXTAREA'
+} as const;
+
+export type CustomFieldType = typeof CustomFieldType[keyof typeof CustomFieldType];
 export type CustomFieldValue = {
   __typename?: 'CustomFieldValue';
   customFieldId: Scalars['String']['output'];
-  value: Maybe<Scalars['JSONObject']['output']>;
+  value: Maybe<Scalars['AnyType']['output']>;
 };
 
 export type CustomFieldValueInput = {
   customFieldId: Scalars['String']['input'];
-  value?: InputMaybe<Scalars['JSONObject']['input']>;
+  value?: InputMaybe<Scalars['AnyType']['input']>;
 };
 
 export type DeviceEntity = {
   __typename?: 'DeviceEntity';
   _id: Scalars['String']['output'];
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
   identifyId: Maybe<Scalars['String']['output']>;
   lastActiveAt: Scalars['Float']['output'];
   locale: Maybe<AppLocale>;
   notificationToken: Maybe<Scalars['String']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  relatedEntities: Maybe<Array<RelatedEntity>>;
+  updatedAt: Maybe<Scalars['Float']['output']>;
   userAgent: Scalars['String']['output'];
   userId: Maybe<Scalars['String']['output']>;
 };
 
+export type File = {
+  __typename?: 'File';
+  _id: Scalars['String']['output'];
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  externalUrl: Maybe<Scalars['String']['output']>;
+  fileName: Scalars['String']['output'];
+  path: Scalars['String']['output'];
+  ref: Maybe<Scalars['String']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  relatedCustomerId: Maybe<Scalars['String']['output']>;
+  relatedEntities: Maybe<Array<RelatedEntity>>;
+  relatedHrmTimekeepingId: Maybe<Scalars['String']['output']>;
+  relatedMessageBoxId: Maybe<Scalars['String']['output']>;
+  relatedMessageId: Maybe<Scalars['String']['output']>;
+  relatedProductId: Maybe<Scalars['String']['output']>;
+  relatedReceiptId: Maybe<Scalars['String']['output']>;
+  relativePath: Maybe<Scalars['String']['output']>;
+  size: Maybe<Scalars['Float']['output']>;
+  thumbnail: Maybe<Scalars['String']['output']>;
+  type: FileType;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+  uploadByUserId: Maybe<Scalars['String']['output']>;
+  url: Scalars['String']['output'];
+  workspaceId: Scalars['String']['output'];
+};
+
+/** Available file types */
+export const FileType = {
+  Audio: 'AUDIO',
+  MsExcel: 'MS_EXCEL',
+  MsPowerpoint: 'MS_POWERPOINT',
+  MsWord: 'MS_WORD',
+  Pdf: 'PDF',
+  Photo: 'PHOTO',
+  Unknown: 'UNKNOWN',
+  Video: 'VIDEO'
+} as const;
+
+export type FileType = typeof FileType[keyof typeof FileType];
 export type FirebaseClientConfig = {
   __typename?: 'FirebaseClientConfig';
   apiKey: Scalars['String']['output'];
@@ -121,8 +192,31 @@ export type FirebaseClientConfig = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCategory: Category;
   createProduct: Product;
+  deleteCategory: Scalars['Boolean']['output'];
+  externalStorageVerifyDna: File;
+  generateCategorySlug: Scalars['String']['output'];
+  healthcheckPluginExternalStorage: Scalars['Boolean']['output'];
+  interactCategory: Scalars['Boolean']['output'];
+  pluginExternalStorageSignUploadUrl: SignUploadUrlResponse;
   registerDevice: DeviceEntity;
+  removePluginExternalStorage: Scalars['Boolean']['output'];
+  setPluginExternalStorage: PluginExternalStorage;
+  updateCategory: Category;
+};
+
+
+export type MutationCreateCategoryArgs = {
+  customFieldValues?: InputMaybe<Array<CustomFieldValueInput>>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  icon?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  order?: InputMaybe<Scalars['Float']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  thumbnail?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<CategoryType>;
 };
 
 
@@ -156,10 +250,74 @@ export type MutationCreateProductArgs = {
 };
 
 
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationExternalStorageVerifyDnaArgs = {
+  dna: Scalars['String']['input'];
+};
+
+
+export type MutationGenerateCategorySlugArgs = {
+  name: Scalars['String']['input'];
+};
+
+
+export type MutationInteractCategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationPluginExternalStorageSignUploadUrlArgs = {
+  fileName: Scalars['String']['input'];
+  refs?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
 export type MutationRegisterDeviceArgs = {
   input: RegisterDeviceDto;
 };
 
+
+export type MutationSetPluginExternalStorageArgs = {
+  accessKeyId?: InputMaybe<Scalars['String']['input']>;
+  bucketName?: InputMaybe<Scalars['String']['input']>;
+  endpointUrl?: InputMaybe<Scalars['String']['input']>;
+  provider: PluginExternalStorageProvider;
+  region?: InputMaybe<Scalars['String']['input']>;
+  secretAccessKey?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  customFieldValues?: InputMaybe<Array<CustomFieldValueInput>>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  icon?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  order?: InputMaybe<Scalars['Float']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  thumbnail?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<CategoryType>;
+};
+
+export type PluginExternalStorage = {
+  __typename?: 'PluginExternalStorage';
+  bucketName: Maybe<Scalars['String']['output']>;
+  endpointUrl: Maybe<Scalars['String']['output']>;
+  provider: PluginExternalStorageProvider;
+  region: Maybe<Scalars['String']['output']>;
+};
+
+/** Available external storage providers */
+export const PluginExternalStorageProvider = {
+  AwsS3: 'AWS_S3'
+} as const;
+
+export type PluginExternalStorageProvider = typeof PluginExternalStorageProvider[keyof typeof PluginExternalStorageProvider];
 export type Product = {
   __typename?: 'Product';
   _id: Scalars['String']['output'];
@@ -169,6 +327,8 @@ export type Product = {
   combos: Maybe<Array<ProductCombo>>;
   combosExpireInDays: Maybe<Scalars['Float']['output']>;
   content: Maybe<Scalars['String']['output']>;
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
   defaultQtyPerUse: Maybe<Scalars['Float']['output']>;
   displayName: Maybe<Scalars['String']['output']>;
   image: Maybe<Scalars['String']['output']>;
@@ -180,10 +340,13 @@ export type Product = {
   name: Scalars['String']['output'];
   price: Scalars['Float']['output'];
   productCode: Maybe<Scalars['String']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  relatedEntities: Maybe<Array<RelatedEntity>>;
   supplies: Maybe<Array<ProductSupply>>;
   tags: Array<Scalars['String']['output']>;
   type: ProductType;
   unit: Scalars['String']['output'];
+  updatedAt: Maybe<Scalars['Float']['output']>;
   voucherAmount: Maybe<Scalars['Float']['output']>;
   voucherExcludeProductIds: Maybe<Array<Scalars['String']['output']>>;
   voucherExpireInDays: Maybe<Scalars['Float']['output']>;
@@ -227,7 +390,40 @@ export type ProductType = typeof ProductType[keyof typeof ProductType];
 export type Query = {
   __typename?: 'Query';
   appConfig: AppConfig;
+  categoriesPaginated: CategoriesPaginated;
+  getCategoriesByIds: Array<Category>;
+  getCategory: Category;
+  getCategoryBySlug: Category;
+  getFileInfo: File;
   getProductByIds: Array<Product>;
+  pluginExternalStorage: Maybe<PluginExternalStorage>;
+};
+
+
+export type QueryCategoriesPaginatedArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
+
+export type QueryGetCategoriesByIdsArgs = {
+  ids: Array<Scalars['String']['input']>;
+};
+
+
+export type QueryGetCategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetCategoryBySlugArgs = {
+  slug: Scalars['String']['input'];
+};
+
+
+export type QueryGetFileInfoArgs = {
+  fileId: Scalars['String']['input'];
 };
 
 
@@ -243,9 +439,15 @@ export type RegisterDeviceDto = {
 export type RelatedEntity = {
   __typename?: 'RelatedEntity';
   data: Maybe<Scalars['JSONObject']['output']>;
-  entity: AppEntity;
+  entity: Scalars['String']['output'];
   id: Maybe<Scalars['String']['output']>;
   index: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type SignUploadUrlResponse = {
+  __typename?: 'SignUploadUrlResponse';
+  dna: Scalars['String']['output'];
+  signedUrl: Scalars['String']['output'];
 };
 
 export type UserAuthProvider = {

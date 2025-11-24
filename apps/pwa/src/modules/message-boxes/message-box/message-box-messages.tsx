@@ -4,10 +4,10 @@ import { Avatar } from "@/components/avatar";
 import { DateFormat } from "@/components/format/date-format";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
+import { FileType } from "@/graphql/enums.graphql";
 import { eventsEmitter, useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { FileCard } from "@/modules/files/file-card";
-import { FileType } from "@/modules/files/file-types";
 import { parseFile } from "@/modules/files/files-utils";
 import { getMessages } from "@/modules/message-boxes/message-boxes-service";
 import {
@@ -298,7 +298,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                                 <FileCard
                                   src={att.url}
                                   key={`${msg._id}-${i}-file`}
-                                  type={file.type === FileType.PHOTO ? "preview" : undefined}
+                                  type={file.type === FileType.Photo ? "preview" : undefined}
                                   viewable
                                   thumbnail={{
                                     mih: 100,

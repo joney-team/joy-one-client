@@ -7,7 +7,7 @@ import { DateFormat } from "@/components/format/date-format";
 import { TimekeepingsIllustration } from "@/components/illustrations/timekeepings";
 import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
-import { onUploadFile } from "@/modules/files/file-service";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import {
   captureLocationTimekeeping,
   getPreviousTimeKeeping,
@@ -23,6 +23,7 @@ import {
 } from "@/modules/locations/locations-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
@@ -36,6 +37,7 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
   const workspace = useWorkspace();
   const camera = useCamera();
   const color = useColor();
+  const uploadFile = useUploadFile();
 
   const acceptLocations = workspace.settings.hrmTimeKeepingsRules?.acceptLocations || [];
   const geolocation = useFetch({ fetch: () => getGeolocation() });
@@ -71,10 +73,9 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
 
       const timekeeping = await captureLocationTimekeeping({ coordinates });
 
-      await onUploadFile({
-        file,
+      await uploadFile(file, {
         compressSize: 1,
-        relatedHrmTimekeepingId: timekeeping._id,
+        refs: [`${AppEntity.HRM_TIMEKEEPINGS}:${timekeeping._id}`],
       });
 
       setTimekeeping(timekeeping);

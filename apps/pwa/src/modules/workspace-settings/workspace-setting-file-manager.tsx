@@ -8,9 +8,10 @@ import { formatBytes } from "@joy-one-client/utils/files";
 import { ActionIcon, Image, Stack } from "@mantine/core";
 import { IconFile } from "@tabler/icons-react";
 import { type FC } from "react";
-import { FileEntity, FileType } from "../files/file-types";
+import { FileEntity } from "../files/file-types";
 import { fileTypes } from "../files/files-constants";
 import { OnModalFileGallery } from "../files/modals/modal-file-gallery";
+import { FileType } from "@/graphql/enums.graphql";
 
 export const WorkspaceFileManager: FC = () => {
   return (
@@ -29,7 +30,7 @@ export const WorkspaceFileManager: FC = () => {
                 });
               };
 
-              if (data.type === FileType.PHOTO) {
+              if (data.type === FileType.Photo) {
                 return <Image className="clickable" w={50} src={data.url} onClick={onClick} />;
               }
 

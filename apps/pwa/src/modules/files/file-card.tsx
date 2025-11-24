@@ -6,7 +6,7 @@ import {
   detectFileType,
   getFileSizeFromUrl,
 } from "@/modules/files/file-service";
-import { FileEntity, FileType } from "@/modules/files/file-types";
+import { FileEntity } from "@/modules/files/file-types";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { formatBytes, getFileName } from "@/utils/file.utils";
 import { t } from "@lingui/core/macro";
@@ -36,6 +36,7 @@ import {
 import { FC, useEffect, useState } from "react";
 import { api } from "../apis";
 import { renderFileUrl } from "./files-utils";
+import { FileType } from "@/graphql/enums.graphql";
 
 interface FileCardProps extends CardProps {
   src: File | string;
@@ -87,13 +88,13 @@ export const FileCard: FC<FileCardProps> = ({
 
   const getIconFile = () => {
     const fileType = detectFileType(src);
-    if (fileType === FileType.PHOTO) return IconPhoto;
-    if (fileType === FileType.VIDEO) return IconVideo;
-    if (fileType === FileType.AUDIO) return IconMusic;
-    if (fileType === FileType.PDF) return IconPdf;
-    if (fileType === FileType.MS_WORD) return IconFileWord;
-    if (fileType === FileType.MS_EXCEL) return IconFileExcel;
-    if (fileType === FileType.MS_POWERPOINT) return IconPresentationAnalytics;
+    if (fileType === FileType.Photo) return IconPhoto;
+    if (fileType === FileType.Video) return IconVideo;
+    if (fileType === FileType.Audio) return IconMusic;
+    if (fileType === FileType.Pdf) return IconPdf;
+    if (fileType === FileType.MsWord) return IconFileWord;
+    if (fileType === FileType.MsExcel) return IconFileExcel;
+    if (fileType === FileType.MsPowerpoint) return IconPresentationAnalytics;
     return IconFile;
   };
 

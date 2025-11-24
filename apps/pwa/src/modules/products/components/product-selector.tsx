@@ -49,7 +49,7 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
                 src={product.image}
                 icon={Icon}
                 iconProps={{ strokeWidth: 1.2, size: 18 }}
-                onlyRead
+                readonly
                 size={em(30)}
               />
 

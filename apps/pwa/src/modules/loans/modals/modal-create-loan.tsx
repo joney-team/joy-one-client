@@ -55,6 +55,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, useState } from "react";
 import { loanAssetTypes } from "../loans-constants";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 
 interface ModalCreateLoanProps {
   customer?: CustomerShortInfo;
@@ -66,6 +67,7 @@ export const ModalCreateLoan: FC = () => {
   const banks = useBanks();
   const router = useRouter();
   const workspace = useWorkspace();
+  const uploadFile = useUploadFile();
 
   const [opened, { open, close }] = useDisclosure(false);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -199,7 +201,7 @@ export const ModalCreateLoan: FC = () => {
       };
 
       // Submit
-      const loan = await createLoan(dto);
+      const loan = await createLoan(dto, uploadFile);
       await router.push(`/loans/${loan.code}`);
       close();
     },

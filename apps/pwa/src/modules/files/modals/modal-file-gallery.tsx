@@ -5,7 +5,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { Image } from "@/components/image";
 import { useLayout } from "@/layout/layout-context";
 import { downloadFileFromURL, removeFile } from "@/modules/files/file-service";
-import { FileEntity, FileType } from "@/modules/files/file-types";
+import { FileEntity } from "@/modules/files/file-types";
 import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
@@ -24,6 +24,12 @@ import {
 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { useFileSize } from "../files-hooks";
+import { useQuery } from "@apollo/client/react";
+import QUERY_FILE_INFO, {
+  type GetFileInfoQuery,
+  type GetFileInfoQueryVariables,
+} from "./queryFileInfo.graphql";
+import { FileType } from "@/graphql/enums.graphql";
 
 interface ModalFileGalleryProps {
   files: FileEntity[] | { _id?: string; url: string; fileName?: string; type?: FileType }[];
@@ -63,6 +69,14 @@ export const ModalFileGallery: FC = () => {
     setIndex(index - 1);
   };
 
+  const bodyHeight = layout.height - head;
+  const renderFile = parseFile(activeFile?.url || "");
+
+  const fileInfo = useQuery<GetFileInfoQuery, GetFileInfoQueryVariables>(QUERY_FILE_INFO, {
+    skip: !renderFile.fileId,
+    variables: { fileId: renderFile.fileId || "" },
+  });
+
   useEffect(() => {
     if (opened) {
       const handleKeyDown = (event: KeyboardEvent) => {
@@ -82,9 +96,6 @@ export const ModalFileGallery: FC = () => {
   }, [opened, onNext, onPrev, index]);
 
   if (!props || !activeFile) return null;
-
-  const bodyHeight = layout.height - head;
-  const _file = parseFile(activeFile.url);
 
   const onRemove = async () => {
     if (!activeFile || !activeFile._id) return;
@@ -106,7 +117,7 @@ export const ModalFileGallery: FC = () => {
     await onActionLoad({
       name: t`File downloading`,
       process: () =>
-        downloadFileFromURL(renderFileUrl(activeFile.url), activeFile.fileName || _file.name),
+        downloadFileFromURL(renderFileUrl(activeFile.url), activeFile.fileName || renderFile.name),
     });
   };
 
@@ -128,12 +139,12 @@ export const ModalFileGallery: FC = () => {
         <SimpleGrid cols={3} w="100%">
           <Group wrap="nowrap" gap={10}>
             <Text c="white" truncate="end" maw={layout.view === "mobile" ? "30dvw" : "40dvw"}>
-              {_file.name}
+              {fileInfo.data?.getFileInfo?.fileName ?? renderFile.name}
             </Text>
 
             {fileSize.size && (
               <Text fz={12} c="gray">
-                {formatBytes(fileSize.size)}
+                {formatBytes(fileInfo.data?.getFileInfo?.size ?? fileSize.size)}
               </Text>
             )}
           </Group>
@@ -189,7 +200,7 @@ export const ModalFileGallery: FC = () => {
         p={16}
       >
         {(function () {
-          if (_file.type === FileType.PHOTO)
+          if (renderFile.type === FileType.Photo)
             return (
               <Image
                 src={renderFileUrl(activeFile.url)}

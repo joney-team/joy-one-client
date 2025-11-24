@@ -37,6 +37,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
+import { AppEntity } from "@/types";
 
 export const CustomerDetail = () => {
   const workspace = useWorkspace();
@@ -132,7 +133,7 @@ export const CustomerDetail = () => {
           <SectionTitle name={t`Images & Documents`} icon={IconFiles} />
 
           <FilesBox
-            query={{ relatedCustomerId: customer._id }}
+            refs={[`${AppEntity.CUSTOMERS}:${customer._id}`]}
             autoUpload
             specificDisabledRelated={["relatedReceiptId"]}
           />

@@ -1,0 +1,9 @@
+mutation PluginExternalStorageSignUploadUrl(
+  $fileName: String!
+  $refs: [String!]
+) {
+  pluginExternalStorageSignUploadUrl(fileName: $fileName, refs: $refs) {
+    dna
+    signedUrl
+  }
+}
