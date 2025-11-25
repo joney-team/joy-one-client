@@ -1,23 +1,23 @@
+import { api } from "@/modules/apis";
 import { useMutation, useQuery } from "@apollo/client/react";
+import { IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import imageCompression from "browser-image-compression";
+import { FileEntity, UploadFileOptions } from "../file-types";
 import GET_PLUGIN_EXTERNAL_STORAGE, {
   type PluginExternalStorageQuery,
   type PluginExternalStorageQueryVariables,
 } from "./queryPluginExternalStorage.graphql";
-import { IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import imageCompression from "browser-image-compression";
-import { FileEntity, UploadFileOptions } from "../file-types";
-import { api } from "@/modules/apis";
 
-import MUTATION_PLUGIN_EXTERNAL_STORAGE_SIGN_UPLOAD_URL, {
-  type PluginExternalStorageSignUploadUrlMutation,
-  type PluginExternalStorageSignUploadUrlMutationVariables,
-} from "./mutationPluginExternalStorageSignUploadUrl.graphql";
+import { FileType } from "@/graphql/enums.graphql";
 import axios from "axios";
 import MUTATION_EXTERNAL_STORAGE_VERIFY_DNA, {
   type ExternalStorageVerifyDnaMutation,
   type ExternalStorageVerifyDnaMutationVariables,
 } from "./mutationExternalStorageVerifyDna.graphql";
-import { FileType } from "@/graphql/enums.graphql";
+import MUTATION_PLUGIN_EXTERNAL_STORAGE_SIGN_UPLOAD_URL, {
+  type PluginExternalStorageSignUploadUrlMutation,
+  type PluginExternalStorageSignUploadUrlMutationVariables,
+} from "./mutationPluginExternalStorageSignUploadUrl.graphql";
 
 export const reduceFileSize = async (
   file: File,
@@ -64,6 +64,34 @@ export const useUploadFile = () => {
     return api.formData<FileEntity>("/files/upload", formData);
   };
 
+  const uploadToExternalStorage = async (file: File, options: UploadFileOptions = {}) => {
+    const signed = await signUploadUrl({
+      variables: { fileName: file.name, refs: options.refs },
+    });
+
+    if (!signed.data?.pluginExternalStorageSignUploadUrl) {
+      throw Error("Failed to sign upload URL");
+    }
+
+    // Upload file to external storage
+    await axios.put(signed.data?.pluginExternalStorageSignUploadUrl.signedUrl, file, {
+      headers: {
+        "Content-Type": file.type,
+      },
+    });
+
+    // Verify DNA
+    const result = await verifyDna({
+      variables: { dna: signed.data?.pluginExternalStorageSignUploadUrl.dna },
+    });
+
+    if (!result.data?.externalStorageVerifyDna) {
+      throw Error("Failed to verify DNA");
+    }
+
+    return result.data?.externalStorageVerifyDna;
+  };
+
   return async (
     file: File,
     options: UploadFileOptions = {}
@@ -75,32 +103,10 @@ export const useUploadFile = () => {
   }> => {
     const inputFile = options.compressSize ? await reduceFileSize(file, options) : file;
 
-    if (externalStorage.data?.pluginExternalStorage) {
-      const signed = await signUploadUrl({
-        variables: { fileName: file.name, refs: options.refs },
-      });
+    const { pluginExternalStorage } = externalStorage.data ?? {};
 
-      if (!signed.data?.pluginExternalStorageSignUploadUrl) {
-        throw Error("Failed to sign upload URL");
-      }
-
-      // Upload file to external storage
-      await axios.put(signed.data?.pluginExternalStorageSignUploadUrl.signedUrl, inputFile, {
-        headers: {
-          "Content-Type": inputFile.type,
-        },
-      });
-
-      // Verify DNA
-      const result = await verifyDna({
-        variables: { dna: signed.data?.pluginExternalStorageSignUploadUrl.dna },
-      });
-
-      if (!result.data?.externalStorageVerifyDna) {
-        throw Error("Failed to verify DNA");
-      }
-
-      return result.data?.externalStorageVerifyDna;
+    if (pluginExternalStorage && !pluginExternalStorage.isDisabled) {
+      return uploadToExternalStorage(inputFile, options);
     }
 
     // Internal storage

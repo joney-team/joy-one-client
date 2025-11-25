@@ -6,6 +6,18 @@ import { IconInfoCircle, IconMoodCry } from "@tabler/icons-react";
 import { AxiosError } from "axios";
 import { String } from "./string.utils";
 
+export const getErrorMessage = (error: unknown): string => {
+  let message: string = t`Internal server error`;
+  if (error instanceof AxiosError) {
+    message = error.response?.data?.message || error.message;
+  } else if (typeof error === "string") {
+    message = error;
+  } else if (error instanceof Error) {
+    message = error.message;
+  }
+  return message;
+};
+
 export const onError = (
   error: any,
   notification?: NotificationData | string,

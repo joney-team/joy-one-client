@@ -26,6 +26,7 @@ import { type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { CustomerEntity } from "./customer-types";
+import { EntityImage } from "@/components/entity-image";
 
 export const CustomerList: FC = () => {
   const workspace = useWorkspace();

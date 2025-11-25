@@ -6,6 +6,7 @@ import type { Widget, WidgetsContext, WidgetsProps, WidgetStorage } from "./type
 
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
+
 import "./widget.css";
 
 import { ContextMenu } from "@/components/context-menu";
@@ -14,7 +15,6 @@ import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { isDiff } from "@/utils/object.utils";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { IconPencil, IconPlusMinus, IconRefresh, IconTrash } from "@tabler/icons-react";
 import { Fragment, useMemo, useState } from "react";
@@ -274,7 +274,13 @@ export function Widgets<ContextType = object, WidgetType = string>(
               <Empty
                 hideBorder
                 mih={150}
-                message={readonly ? t`No widgets` : t`Click right mouse button to add Widgets`}
+                message={
+                  readonly ? (
+                    <Trans>No widgets</Trans>
+                  ) : (
+                    <Trans>Click right mouse button to add Widgets</Trans>
+                  )
+                }
               />
             )}
           </Stack>
@@ -286,7 +292,7 @@ export function Widgets<ContextType = object, WidgetType = string>(
             leftSection={<IconPencil size={16} />}
             onClick={() => setIsEditMode(!isEditMode)}
           >
-            {isEditMode ? t`Disable` : t`Enable`} {t`Resize widget layout`.toLowerCase()}
+            {isEditMode ? <Trans>Disable</Trans> : <Trans>Resize widget layout</Trans>}
           </ContextMenu.Item>
 
           <ContextMenu.Item
@@ -294,7 +300,7 @@ export function Widgets<ContextType = object, WidgetType = string>(
             leftSection={<IconPlusMinus size={16} />}
             onClick={() => setIsManageWidgetsOpened(true)}
           >
-            <Trans>Manage widgets</Trans>
+            <Trans>Plus or remove widgets</Trans>
           </ContextMenu.Item>
 
           <ContextMenu.Item fz={14} leftSection={<IconRefresh size={16} />} onClick={resetDefault}>
@@ -308,7 +314,7 @@ export function Widgets<ContextType = object, WidgetType = string>(
               leftSection={<IconTrash size={16} />}
               onClick={() => onRemove(pointedWidgetId)}
             >
-              <Trans>Remove Widget</Trans>
+              <Trans>Remove widget</Trans>
             </ContextMenu.Item>
           )}
         </ContextMenu.Dropdown>

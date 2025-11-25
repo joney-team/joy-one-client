@@ -28,7 +28,8 @@ import { Trans } from "@lingui/react/macro";
 import { Avatar } from "./avatar";
 import { ButtonViewMore } from "./buttons/button-view-more";
 import { Errored } from "./errored";
-import { RelativeTimeFormat } from "./format/date-format";
+import { DateFormat, RelativeTimeFormat } from "./format/date-format";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 interface EventListProps extends StackProps {
   ref?: string;
@@ -102,6 +103,7 @@ export const EventList: FC<EventListProps> = ({
 
 export const EventItem: FC<{ event: EventEntity }> = (props) => {
   const { event } = props;
+  const isToday = DateTime.isSame(event.time, new Date(), "day");
 
   return (
     <Timeline.Item bullet={renderBullet(event)} title={<EventItemTitle event={event} />}>
@@ -122,7 +124,11 @@ export const EventItem: FC<{ event: EventEntity }> = (props) => {
           )}
 
           <Text fz={10} c="gray">
-            <RelativeTimeFormat value={event.time * 1000} />
+            {isToday ? (
+              <RelativeTimeFormat value={event.time} />
+            ) : (
+              <DateFormat value={event.time} />
+            )}
           </Text>
         </Group>
       </Stack>

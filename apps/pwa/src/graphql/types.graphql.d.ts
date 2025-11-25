@@ -203,6 +203,7 @@ export type Mutation = {
   registerDevice: DeviceEntity;
   removePluginExternalStorage: Scalars['Boolean']['output'];
   setPluginExternalStorage: PluginExternalStorage;
+  toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateCategory: Category;
 };
 
@@ -308,6 +309,7 @@ export type PluginExternalStorage = {
   __typename?: 'PluginExternalStorage';
   bucketName: Maybe<Scalars['String']['output']>;
   endpointUrl: Maybe<Scalars['String']['output']>;
+  isDisabled: Maybe<Scalars['Boolean']['output']>;
   provider: PluginExternalStorageProvider;
   region: Maybe<Scalars['String']['output']>;
 };

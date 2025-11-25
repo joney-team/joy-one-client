@@ -33,7 +33,6 @@ export const EntityImages: FC<EntityImagesProps> = (props) => {
   const openRef = useRef<() => void>(null);
   const isHasImage = !!props.images?.length;
   const images = props.images || [];
-  const layout = useLayout();
 
   return (
     <Dropzone
@@ -119,7 +118,8 @@ const EntityImage: FC<EntityImageProps> = (props) => {
       ref={hover.ref}
       withBorder
       shadow="none"
-      style={{ position: "relative" }}
+      pos="relative"
+      style={{ overflow: "hidden" }}
       w={w}
       h={h}
       p={0}

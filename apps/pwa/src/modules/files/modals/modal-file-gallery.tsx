@@ -3,16 +3,29 @@
 import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { Image } from "@/components/image";
+import { FileType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { downloadFileFromURL, removeFile } from "@/modules/files/file-service";
 import { FileEntity } from "@/modules/files/file-types";
 import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
+import { useQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { formatBytes } from "@joy-one-client/utils/files";
 import { t } from "@lingui/core/macro";
-import { ActionIcon, Anchor, em, Group, Modal, SimpleGrid, Stack, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Anchor,
+  em,
+  Group,
+  Loader,
+  Modal,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconBrowser,
@@ -24,12 +37,10 @@ import {
 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { useFileSize } from "../files-hooks";
-import { useQuery } from "@apollo/client/react";
 import QUERY_FILE_INFO, {
   type GetFileInfoQuery,
   type GetFileInfoQueryVariables,
 } from "./queryFileInfo.graphql";
-import { FileType } from "@/graphql/enums.graphql";
 
 interface ModalFileGalleryProps {
   files: FileEntity[] | { _id?: string; url: string; fileName?: string; type?: FileType }[];
@@ -137,17 +148,21 @@ export const ModalFileGallery: FC = () => {
     >
       <Group h={head} justify="space-between" px={16} bg="dark.7" wrap="nowrap" w="100%">
         <SimpleGrid cols={3} w="100%">
-          <Group wrap="nowrap" gap={10}>
-            <Text c="white" truncate="end" maw={layout.view === "mobile" ? "30dvw" : "40dvw"}>
-              {fileInfo.data?.getFileInfo?.fileName ?? renderFile.name}
-            </Text>
-
-            {fileSize.size && (
-              <Text fz={12} c="gray">
-                {formatBytes(fileInfo.data?.getFileInfo?.size ?? fileSize.size)}
+          {fileInfo.loading ? (
+            <Loader size={28} type="dots" color="white" />
+          ) : (
+            <Group wrap="nowrap" gap={10}>
+              <Text c="white" truncate="end" maw={layout.view === "mobile" ? "30dvw" : "40dvw"}>
+                {fileInfo.data?.getFileInfo?.fileName ?? renderFile.name}
               </Text>
-            )}
-          </Group>
+
+              {fileSize.size && (
+                <Text fz={12} c="gray">
+                  {formatBytes(fileInfo.data?.getFileInfo?.size ?? fileSize.size)}
+                </Text>
+              )}
+            </Group>
+          )}
 
           <Group justify="center" wrap="nowrap" w="100%">
             <ActionIcon

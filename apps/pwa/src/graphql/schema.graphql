@@ -177,12 +177,14 @@ type Mutation {
   registerDevice(input: RegisterDeviceDto!): DeviceEntity!
   removePluginExternalStorage: Boolean!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
+  toggleDisablePluginExternalStorage: Boolean!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
 }
 
 type PluginExternalStorage {
   bucketName: String
   endpointUrl: String
+  isDisabled: Boolean
   provider: PluginExternalStorageProvider!
   region: String
 }

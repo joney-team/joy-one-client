@@ -1,8 +1,5 @@
 query PluginExternalStorage {
   pluginExternalStorage {
-    provider
-    region
-    bucketName
-    endpointUrl
+    isDisabled
   }
 }

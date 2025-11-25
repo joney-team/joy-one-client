@@ -108,7 +108,7 @@ msgstr "Truy cập nhanh hơn với ứng dụng độc lập"
 msgid "Action"
 msgstr "Hành động"
 
-#: src/utils/exceptions.utils.tsx:50
+#: src/utils/exceptions.utils.tsx:62
 msgid "Action failed"
 msgstr "Thao tác thất bại"
 
@@ -682,7 +682,7 @@ msgstr "Giao công việc"
 msgid "Assign user"
 msgstr "Gán người dùng"
 
-#: src/components/event-list.tsx:296
+#: src/components/event-list.tsx:302
 msgid "Assigned to"
 msgstr "Giao việc cho"
 
@@ -763,7 +763,7 @@ msgstr "Hệ thống sẽ tự động quay về sai {tick} giây..."
 msgid "Available entities to search"
 msgstr "Các dữ liệu có thể tìm kiếm"
 
-#: src/modules/customers/customer-list.tsx:49
+#: src/modules/customers/customer-list.tsx:50
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -998,7 +998,7 @@ msgstr "Không thể xóa, có thể gán cho thành viên khác"
 msgid "Cannot be deleted, cannot be assigned to other members, can only be transferred"
 msgstr "Không thể xóa, không thể gán cho thành viên khác, chỉ có thể chuyển nhượng"
 
-#: src/modules/files/modals/modal-file-gallery.tsx:225
+#: src/modules/files/modals/modal-file-gallery.tsx:240
 msgid "Cannot display file"
 msgstr "Không thể hiển thị tập tin"
 
@@ -1136,7 +1136,8 @@ msgstr "Biểu tượng Chat"
 msgid "Check"
 msgstr "Kiểm tra"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:132
+#: src/modules/plugins/storage/plugin-storage.tsx:72
+#: src/modules/plugins/storage/plugin-storage.tsx:172
 msgid "Check connection"
 msgstr "Kiểm tra kết nối"
 
@@ -1226,7 +1227,7 @@ msgstr "Xoá"
 msgid "Clear filter"
 msgstr "Xoá bộ lọc"
 
-#: src/widgets/index.tsx:277
+#: src/widgets/index.tsx:281
 msgid "Click right mouse button to add Widgets"
 msgstr "Nhấp chuột phải để thêm Widget"
 
@@ -1446,7 +1447,7 @@ msgstr "Chúc mừng! Bạn đã dọn sạch các thông báo quan trọng 🎉
 #: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:53
 #: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:62
 #: src/modules/plugins/storage/plugin-storage-modal.tsx:108
-#: src/modules/plugins/storage/plugin-storage.tsx:95
+#: src/modules/plugins/storage/plugin-storage.tsx:125
 #: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:29
 #: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:39
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:134
@@ -1455,7 +1456,7 @@ msgid "Connect"
 msgstr "Kết nối"
 
 #: src/modules/plugins/storage/plugin-storage-modal.tsx:60
-#: src/modules/plugins/storage/plugin-storage.tsx:84
+#: src/modules/plugins/storage/plugin-storage.tsx:114
 msgid "Connect Cloud Storage"
 msgstr "Kết nối Cloud Storage"
 
@@ -1491,6 +1492,14 @@ msgstr "Kết nối với các kênh mạng xã hội"
 #: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:81
 msgid "Connecting..."
 msgstr "Đang kết nối..."
+
+#: src/modules/plugins/storage/plugin-storage.tsx:78
+msgid "Connection failed"
+msgstr "Kết nối thất bại"
+
+#: src/modules/plugins/storage/plugin-storage.tsx:73
+msgid "Connection successful"
+msgstr "Kết nối thành công"
 
 #: src/modules/products/components/product-card.tsx:159
 msgid "Consumables"
@@ -1778,7 +1787,7 @@ msgstr "Tạo/cập nhật hồ sơ vay"
 msgid "Created"
 msgstr "Đã tạo"
 
-#: src/modules/customers/customer-list.tsx:43
+#: src/modules/customers/customer-list.tsx:44
 #: src/modules/e-invoices/e-invoice-list.tsx:40
 #: src/modules/loans/loan-list.tsx:327
 #: src/modules/receipts/receipt-list.tsx:62
@@ -1807,6 +1816,10 @@ msgstr "Báo cáo tín dụng"
 #: src/modules/workspaces/workspace-modules.tsx:306
 msgid "Credit settings"
 msgstr "Cài đặt tín dụng"
+
+#: src/modules/plugins/storage/plugin-storage.tsx:211
+msgid "Cross-origin resource sharing (CORS)"
+msgstr "Chia sẻ tài nguyên giữa các nguồn khác nhau (CORS)"
 
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:150
 msgid "Currency"
@@ -1955,7 +1968,7 @@ msgid "Customer updated"
 msgstr "Cập nhật khách hàng"
 
 #: src/constant.ts:7
-#: src/modules/customers/customer-list.tsx:37
+#: src/modules/customers/customer-list.tsx:38
 #: src/modules/search/search-engine.tsx:123
 #: src/modules/workspace-roles/workspace-roles-config.ts:55
 #: src/modules/workspaces/workspace-modules.tsx:131
@@ -2091,7 +2104,7 @@ msgstr "Mô tả"
 #: src/components/printer/printer-body.tsx:46
 #: src/modals/modal-printer.tsx:303
 #: src/modules/bookings/components/form-booking.tsx:371
-#: src/modules/customers/customer-list.tsx:114
+#: src/modules/customers/customer-list.tsx:115
 #: src/modules/loans/loan-list.tsx:339
 #: src/modules/receipts/receipt-list.tsx:145
 msgid "Detail"
@@ -2127,7 +2140,7 @@ msgid "Direct discount"
 msgstr "Giảm giá trực tiếp"
 
 #: src/modules/message-boxes/message-box/message-box-head.tsx:129
-#: src/widgets/index.tsx:289
+#: src/widgets/index.tsx:295
 msgid "Disable"
 msgstr "Tắt"
 
@@ -2239,7 +2252,7 @@ msgstr "Giấy phép lái xe (mặt sau)"
 msgid "Driver license images front"
 msgstr "Giấy phép lái xe (mặt trước)"
 
-#: src/components/entity-images.tsx:83
+#: src/components/entity-images.tsx:82
 msgid "Drop file here or click"
 msgstr "Kéo thả tệp hoặc nhấp vào đây"
 
@@ -2311,7 +2324,7 @@ msgstr "Thiết lập dễ dàng và nhanh chóng"
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:46
 #: src/modules/partners/partner-list.tsx:40
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:149
-#: src/modules/plugins/storage/plugin-storage.tsx:144
+#: src/modules/plugins/storage/plugin-storage.tsx:184
 #: src/modules/product-combos/product-combo-setup.tsx:61
 #: src/modules/products/product-list.tsx:121
 #: src/modules/promotions/promostion-list.tsx:211
@@ -2344,7 +2357,7 @@ msgstr "Chỉnh sửa chi nhánh workspace"
 
 #: src/modules/auth/components/form-register.tsx:67
 #: src/modules/customers/components/form-customer.tsx:169
-#: src/modules/customers/customer-list.tsx:95
+#: src/modules/customers/customer-list.tsx:96
 #: src/modules/loans/loan-detail.tsx:299
 #: src/modules/partners/partner-list.tsx:26
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:445
@@ -2359,7 +2372,6 @@ msgid "Email to receive"
 msgstr "Email nhận"
 
 #: src/modules/message-boxes/message-box/message-box-head.tsx:129
-#: src/widgets/index.tsx:289
 msgid "Enable"
 msgstr "Bật"
 
@@ -2669,7 +2681,7 @@ msgstr "Trường dữ liệu"
 msgid "File"
 msgstr "Tài liệu"
 
-#: src/modules/files/modals/modal-file-gallery.tsx:118
+#: src/modules/files/modals/modal-file-gallery.tsx:129
 msgid "File downloading"
 msgstr "Tải tập tin"
 
@@ -2794,7 +2806,7 @@ msgstr "Gantt"
 #: src/modals/modal-printer.tsx:488
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:251
 #: src/modules/customers/components/form-customer.tsx:192
-#: src/modules/customers/customer-list.tsx:56
+#: src/modules/customers/customer-list.tsx:57
 #: src/modules/loans/loan-detail.tsx:278
 msgid "Gender"
 msgstr "Giới tính"
@@ -3067,7 +3079,7 @@ msgstr "Tích hợp Fanpage Facebook, quản lí tin nhắn Messenger."
 msgid "Integrate other services / utilities"
 msgstr "Tích hợp các dịch vụ / tiện ích khác"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:88
+#: src/modules/plugins/storage/plugin-storage.tsx:118
 #: src/modules/workspaces/workspace-modules.tsx:455
 msgid "Integrate with cloud storage services: S3, ..."
 msgstr "Tích hợp với các dịch vụ lưu trữ đám mây: S3, ..."
@@ -3118,7 +3130,8 @@ msgstr "Lãi mỗi ngày"
 msgid "Interest period"
 msgstr "Kỳ lãi"
 
-#: src/utils/exceptions.utils.tsx:14
+#: src/utils/exceptions.utils.tsx:10
+#: src/utils/exceptions.utils.tsx:26
 msgid "Internal server error"
 msgstr "Lỗi máy chủ nội bộ"
 
@@ -3817,7 +3830,6 @@ msgid "Manage vouchers"
 msgstr "Quản lý chứng từ"
 
 #: src/widgets/components/manage-widgets.tsx:30
-#: src/widgets/index.tsx:297
 msgid "Manage widgets"
 msgstr "Quản lý tiện ích"
 
@@ -4207,7 +4219,7 @@ msgstr "Workspace chung"
 #: src/modules/customers/components/customer-column.tsx:99
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:76
 #: src/modules/customers/components/form-customer.tsx:161
-#: src/modules/customers/customer-list.tsx:66
+#: src/modules/customers/customer-list.tsx:67
 #: src/modules/customers/modals/modal-customer-contacts.tsx:69
 #: src/modules/customers/modals/modal-customer-form.tsx:102
 #: src/modules/partners/modals/modal-partner-form.tsx:120
@@ -4399,7 +4411,7 @@ msgstr "Không có tập tin"
 msgid "No images"
 msgstr "Không có hình ảnh"
 
-#: src/components/entity-images.tsx:75
+#: src/components/entity-images.tsx:74
 msgid "No Images"
 msgstr "Không có hình ảnh"
 
@@ -4415,7 +4427,7 @@ msgstr "Không có kết quả"
 msgid "No search results"
 msgstr "Không có kết quả tìm kiếm"
 
-#: src/widgets/index.tsx:277
+#: src/widgets/index.tsx:279
 msgid "No widgets"
 msgstr "Không có vật dụng"
 
@@ -4464,7 +4476,7 @@ msgid "Note for the approver"
 msgstr "Lưu ý dành cho người phê duyệt"
 
 #: src/modules/auth/components/form-forgot-password.tsx:50
-#: src/utils/exceptions.utils.tsx:65
+#: src/utils/exceptions.utils.tsx:77
 msgid "Notification"
 msgstr "Thông báo"
 
@@ -4540,7 +4552,7 @@ msgstr "Mở tập tin"
 msgid "Open messages"
 msgstr "Mở tin nhắn"
 
-#: src/modules/files/modals/modal-file-gallery.tsx:230
+#: src/modules/files/modals/modal-file-gallery.tsx:245
 msgid "Open with browser"
 msgstr "Mở bằng trình duyệt"
 
@@ -4855,7 +4867,7 @@ msgstr "Thông tin cá nhân"
 #: src/modules/customers/components/customer-kyc-card.tsx:127
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:83
 #: src/modules/customers/components/form-customer.tsx:163
-#: src/modules/customers/customer-list.tsx:75
+#: src/modules/customers/customer-list.tsx:76
 #: src/modules/customers/modals/modal-customer-form.tsx:104
 #: src/modules/loans/components/loan-card.tsx:63
 #: src/modules/loans/components/loan-customer-kyc.tsx:144
@@ -4946,6 +4958,10 @@ msgstr "Plugin"
 #: src/modules/workspaces/workspace-modules.tsx:381
 msgid "Plugins"
 msgstr "Tích hợp"
+
+#: src/widgets/index.tsx:303
+msgid "Plus or remove widgets"
+msgstr "Thêm/xoá widget"
 
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:186
 #: src/modules/customers/components/customer-kyc-card.tsx:82
@@ -5335,6 +5351,10 @@ msgstr "Giá phạm vi"
 msgid "Range week {0}"
 msgstr "{0} tuần"
 
+#: src/modules/plugins/storage/plugin-storage.tsx:224
+msgid "Read docs"
+msgstr "Đọc tài liệu"
+
 #: src/components/overlay-resizing.tsx:47
 msgid "Rearranging the interface."
 msgstr "Đang sắp xếp lại giao diện."
@@ -5558,12 +5578,9 @@ msgid "Remove folder"
 msgstr "Xoá thư mục"
 
 #: src/widgets/components/manage-widgets.tsx:81
+#: src/widgets/index.tsx:317
 msgid "Remove widget"
-msgstr "Xóa tiện ích"
-
-#: src/widgets/index.tsx:311
-msgid "Remove Widget"
-msgstr "Xóa tiện ích"
+msgstr "Xóa widget"
 
 #: src/modules/events/event-constants.ts:83
 msgid "Removed timekeeping"
@@ -5652,7 +5669,7 @@ msgstr "Đặt lại"
 
 #: src/components/list/components/reset-default-button.tsx:11
 #: src/modules/workspaces/workspace-module-setup.tsx:107
-#: src/widgets/index.tsx:301
+#: src/widgets/index.tsx:307
 msgid "Reset default"
 msgstr "Đặt lại mặc định"
 
@@ -5670,9 +5687,9 @@ msgstr "Đặt lại khóa bí mật"
 msgid "Reset templates"
 msgstr "Đặt lại mẫu"
 
-#: src/widgets/index.tsx:289
+#: src/widgets/index.tsx:295
 msgid "Resize widget layout"
-msgstr "Thay đổi kích thước bố cục tiện ích"
+msgstr "Thay đổi bố cục widget"
 
 #: src/components/overlay-resizing.tsx:43
 msgid "Resizing"
@@ -6073,7 +6090,7 @@ msgstr "Thiết lập gói vay, lãi, phạt trả chậm, ..."
 msgid "Set name, address, Hotline, Workspace type, ..."
 msgstr "Cài đặt tên, địa chỉ, Hotline, loại hình workspace, ..."
 
-#: src/components/event-list.tsx:221
+#: src/components/event-list.tsx:227
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:235
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:334
 msgid "Set priority"
@@ -6258,7 +6275,7 @@ msgstr "Thời gian bắt đầu phải trước thời gian kết thúc"
 msgid "Status"
 msgstr "Trạng thái"
 
-#: src/components/event-list.tsx:256
+#: src/components/event-list.tsx:262
 msgid "Status updated"
 msgstr "Đã cập nhật trạng thái"
 
@@ -6428,7 +6445,7 @@ msgstr "Chụp ảnh lại"
 msgid "Task"
 msgstr "Công việc"
 
-#: src/components/event-list.tsx:335
+#: src/components/event-list.tsx:341
 #: src/modules/events/event-constants.ts:138
 msgid "Task assigned"
 msgstr "Công việc được giao"
@@ -6713,7 +6730,7 @@ msgstr "Lịch sử chấm công"
 msgid "Timekeepings settings"
 msgstr "Cài đặt chấm công"
 
-#: src/components/event-list.tsx:75
+#: src/components/event-list.tsx:76
 msgid "Timeline"
 msgstr "Dòng thời gian"
 
@@ -6739,6 +6756,10 @@ msgstr "Tiêu đề"
 #: src/widgets/reports/widgets/report-credit.widget.tsx:548
 msgid "To"
 msgstr "Đến"
+
+#: src/modules/plugins/storage/plugin-storage.tsx:215
+msgid "To allow our app to upload files to your storage, you need to configure CORS."
+msgstr "Để cho ứng dụng của chúng tôi có thể upload file lên bộ lưu trữ của bạn, bạn cần cấu hình CORS."
 
 #: src/modules/dashboard/dashboard-suggestions.tsx:144
 msgid "To not miss important information"
@@ -6889,7 +6910,7 @@ msgstr "Nhập nội dung nào đó để tìm kiếm"
 msgid "Unassign user"
 msgstr "Bỏ chỉ định người dùng"
 
-#: src/components/event-list.tsx:316
+#: src/components/event-list.tsx:322
 msgid "Unassigned from"
 msgstr "Đã bỏ chỉ định từ"
 
@@ -6959,7 +6980,7 @@ msgstr "Vô danh"
 msgid "Unselect all"
 msgstr "Bỏ chọn tất cả"
 
-#: src/components/event-list.tsx:202
+#: src/components/event-list.tsx:208
 msgid "Unset priority"
 msgstr "Bỏ đặt mức độ ưu tiên"
 
@@ -7129,7 +7150,7 @@ msgstr "Nâng cấp"
 msgid "Upgrade now"
 msgstr "Nâng cấp ngay bây giờ"
 
-#: src/components/entity-image.tsx:155
+#: src/components/entity-image.tsx:167
 #: src/components/inputs/image-input.tsx:179
 msgid "Upload"
 msgstr "Tải lên"

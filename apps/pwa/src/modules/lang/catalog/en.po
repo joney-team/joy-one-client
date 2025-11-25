@@ -107,7 +107,7 @@ msgstr "Access faster with standalone app"
 msgid "Action"
 msgstr "Action"
 
-#: src/utils/exceptions.utils.tsx:50
+#: src/utils/exceptions.utils.tsx:62
 msgid "Action failed"
 msgstr "Action failed"
 
@@ -681,7 +681,7 @@ msgstr "Assign task"
 msgid "Assign user"
 msgstr "Assign user"
 
-#: src/components/event-list.tsx:296
+#: src/components/event-list.tsx:302
 msgid "Assigned to"
 msgstr "Assigned to"
 
@@ -762,7 +762,7 @@ msgstr "Automatically returning in {tick}s..."
 msgid "Available entities to search"
 msgstr "Available entities to search"
 
-#: src/modules/customers/customer-list.tsx:49
+#: src/modules/customers/customer-list.tsx:50
 msgid "Avatar"
 msgstr "Avatar"
 
@@ -997,7 +997,7 @@ msgstr "Cannot be deleted, can be assigned to other members"
 msgid "Cannot be deleted, cannot be assigned to other members, can only be transferred"
 msgstr "Cannot be deleted, cannot be assigned to other members, can only be transferred"
 
-#: src/modules/files/modals/modal-file-gallery.tsx:225
+#: src/modules/files/modals/modal-file-gallery.tsx:240
 msgid "Cannot display file"
 msgstr "Cannot display file"
 
@@ -1135,7 +1135,8 @@ msgstr "Chat icon"
 msgid "Check"
 msgstr "Check"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:132
+#: src/modules/plugins/storage/plugin-storage.tsx:72
+#: src/modules/plugins/storage/plugin-storage.tsx:172
 msgid "Check connection"
 msgstr "Check connection"
 
@@ -1225,7 +1226,7 @@ msgstr "Clear"
 msgid "Clear filter"
 msgstr "Clear filter"
 
-#: src/widgets/index.tsx:277
+#: src/widgets/index.tsx:281
 msgid "Click right mouse button to add Widgets"
 msgstr "Click right mouse button to add Widgets"
 
@@ -1445,7 +1446,7 @@ msgstr "Congratulations! You cleared your important notifications 🎉"
 #: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:53
 #: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:62
 #: src/modules/plugins/storage/plugin-storage-modal.tsx:108
-#: src/modules/plugins/storage/plugin-storage.tsx:95
+#: src/modules/plugins/storage/plugin-storage.tsx:125
 #: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:29
 #: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:39
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:134
@@ -1454,7 +1455,7 @@ msgid "Connect"
 msgstr "Connect"
 
 #: src/modules/plugins/storage/plugin-storage-modal.tsx:60
-#: src/modules/plugins/storage/plugin-storage.tsx:84
+#: src/modules/plugins/storage/plugin-storage.tsx:114
 msgid "Connect Cloud Storage"
 msgstr "Connect Cloud Storage"
 
@@ -1490,6 +1491,14 @@ msgstr "Connect with Social channels"
 #: src/app/plugins/zalo-oas/connect-callback/page-content.tsx:81
 msgid "Connecting..."
 msgstr "Connecting..."
+
+#: src/modules/plugins/storage/plugin-storage.tsx:78
+msgid "Connection failed"
+msgstr "Connection failed"
+
+#: src/modules/plugins/storage/plugin-storage.tsx:73
+msgid "Connection successful"
+msgstr "Connection successful"
 
 #: src/modules/products/components/product-card.tsx:159
 msgid "Consumables"
@@ -1777,7 +1786,7 @@ msgstr "Create/update loan"
 msgid "Created"
 msgstr "Created"
 
-#: src/modules/customers/customer-list.tsx:43
+#: src/modules/customers/customer-list.tsx:44
 #: src/modules/e-invoices/e-invoice-list.tsx:40
 #: src/modules/loans/loan-list.tsx:327
 #: src/modules/receipts/receipt-list.tsx:62
@@ -1806,6 +1815,10 @@ msgstr "Credit report"
 #: src/modules/workspaces/workspace-modules.tsx:306
 msgid "Credit settings"
 msgstr "Credit settings"
+
+#: src/modules/plugins/storage/plugin-storage.tsx:211
+msgid "Cross-origin resource sharing (CORS)"
+msgstr "Cross-origin resource sharing (CORS)"
 
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:150
 msgid "Currency"
@@ -1954,7 +1967,7 @@ msgid "Customer updated"
 msgstr "Customer updated"
 
 #: src/constant.ts:7
-#: src/modules/customers/customer-list.tsx:37
+#: src/modules/customers/customer-list.tsx:38
 #: src/modules/search/search-engine.tsx:123
 #: src/modules/workspace-roles/workspace-roles-config.ts:55
 #: src/modules/workspaces/workspace-modules.tsx:131
@@ -2090,7 +2103,7 @@ msgstr "Description"
 #: src/components/printer/printer-body.tsx:46
 #: src/modals/modal-printer.tsx:303
 #: src/modules/bookings/components/form-booking.tsx:371
-#: src/modules/customers/customer-list.tsx:114
+#: src/modules/customers/customer-list.tsx:115
 #: src/modules/loans/loan-list.tsx:339
 #: src/modules/receipts/receipt-list.tsx:145
 msgid "Detail"
@@ -2126,7 +2139,7 @@ msgid "Direct discount"
 msgstr "Direct discount"
 
 #: src/modules/message-boxes/message-box/message-box-head.tsx:129
-#: src/widgets/index.tsx:289
+#: src/widgets/index.tsx:295
 msgid "Disable"
 msgstr "Disable"
 
@@ -2238,7 +2251,7 @@ msgstr "Driver license images back"
 msgid "Driver license images front"
 msgstr "Driver license images front"
 
-#: src/components/entity-images.tsx:83
+#: src/components/entity-images.tsx:82
 msgid "Drop file here or click"
 msgstr "Drop file here or click"
 
@@ -2310,7 +2323,7 @@ msgstr "Easy & quick setup"
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:46
 #: src/modules/partners/partner-list.tsx:40
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:149
-#: src/modules/plugins/storage/plugin-storage.tsx:144
+#: src/modules/plugins/storage/plugin-storage.tsx:184
 #: src/modules/product-combos/product-combo-setup.tsx:61
 #: src/modules/products/product-list.tsx:121
 #: src/modules/promotions/promostion-list.tsx:211
@@ -2343,7 +2356,7 @@ msgstr "Edit workspace branch"
 
 #: src/modules/auth/components/form-register.tsx:67
 #: src/modules/customers/components/form-customer.tsx:169
-#: src/modules/customers/customer-list.tsx:95
+#: src/modules/customers/customer-list.tsx:96
 #: src/modules/loans/loan-detail.tsx:299
 #: src/modules/partners/partner-list.tsx:26
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:445
@@ -2358,7 +2371,6 @@ msgid "Email to receive"
 msgstr "Email to receive"
 
 #: src/modules/message-boxes/message-box/message-box-head.tsx:129
-#: src/widgets/index.tsx:289
 msgid "Enable"
 msgstr "Enable"
 
@@ -2668,7 +2680,7 @@ msgstr "Fields"
 msgid "File"
 msgstr "File"
 
-#: src/modules/files/modals/modal-file-gallery.tsx:118
+#: src/modules/files/modals/modal-file-gallery.tsx:129
 msgid "File downloading"
 msgstr "File downloading"
 
@@ -2793,7 +2805,7 @@ msgstr "Gantt"
 #: src/modals/modal-printer.tsx:488
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:251
 #: src/modules/customers/components/form-customer.tsx:192
-#: src/modules/customers/customer-list.tsx:56
+#: src/modules/customers/customer-list.tsx:57
 #: src/modules/loans/loan-detail.tsx:278
 msgid "Gender"
 msgstr "Gender"
@@ -3066,7 +3078,7 @@ msgstr "Integrate Fanpage Facebook, manage Messenger messages."
 msgid "Integrate other services / utilities"
 msgstr "Integrate other services / utilities"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:88
+#: src/modules/plugins/storage/plugin-storage.tsx:118
 #: src/modules/workspaces/workspace-modules.tsx:455
 msgid "Integrate with cloud storage services: S3, ..."
 msgstr "Integrate with cloud storage services: S3, ..."
@@ -3117,7 +3129,8 @@ msgstr "Interest per day"
 msgid "Interest period"
 msgstr "Interest period"
 
-#: src/utils/exceptions.utils.tsx:14
+#: src/utils/exceptions.utils.tsx:10
+#: src/utils/exceptions.utils.tsx:26
 msgid "Internal server error"
 msgstr "Internal server error"
 
@@ -3816,7 +3829,6 @@ msgid "Manage vouchers"
 msgstr "Manage vouchers"
 
 #: src/widgets/components/manage-widgets.tsx:30
-#: src/widgets/index.tsx:297
 msgid "Manage widgets"
 msgstr "Manage widgets"
 
@@ -4206,7 +4218,7 @@ msgstr "Mutual workspaces"
 #: src/modules/customers/components/customer-column.tsx:99
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:76
 #: src/modules/customers/components/form-customer.tsx:161
-#: src/modules/customers/customer-list.tsx:66
+#: src/modules/customers/customer-list.tsx:67
 #: src/modules/customers/modals/modal-customer-contacts.tsx:69
 #: src/modules/customers/modals/modal-customer-form.tsx:102
 #: src/modules/partners/modals/modal-partner-form.tsx:120
@@ -4398,7 +4410,7 @@ msgstr "No files"
 msgid "No images"
 msgstr "No images"
 
-#: src/components/entity-images.tsx:75
+#: src/components/entity-images.tsx:74
 msgid "No Images"
 msgstr "No Images"
 
@@ -4414,7 +4426,7 @@ msgstr "No results"
 msgid "No search results"
 msgstr "No search results"
 
-#: src/widgets/index.tsx:277
+#: src/widgets/index.tsx:279
 msgid "No widgets"
 msgstr "No widgets"
 
@@ -4463,7 +4475,7 @@ msgid "Note for the approver"
 msgstr "Note for the approver"
 
 #: src/modules/auth/components/form-forgot-password.tsx:50
-#: src/utils/exceptions.utils.tsx:65
+#: src/utils/exceptions.utils.tsx:77
 msgid "Notification"
 msgstr "Notification"
 
@@ -4539,7 +4551,7 @@ msgstr "Open file"
 msgid "Open messages"
 msgstr "Open messages"
 
-#: src/modules/files/modals/modal-file-gallery.tsx:230
+#: src/modules/files/modals/modal-file-gallery.tsx:245
 msgid "Open with browser"
 msgstr "Open with browser"
 
@@ -4854,7 +4866,7 @@ msgstr "Personal informations"
 #: src/modules/customers/components/customer-kyc-card.tsx:127
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:83
 #: src/modules/customers/components/form-customer.tsx:163
-#: src/modules/customers/customer-list.tsx:75
+#: src/modules/customers/customer-list.tsx:76
 #: src/modules/customers/modals/modal-customer-form.tsx:104
 #: src/modules/loans/components/loan-card.tsx:63
 #: src/modules/loans/components/loan-customer-kyc.tsx:144
@@ -4945,6 +4957,10 @@ msgstr "Plugin"
 #: src/modules/workspaces/workspace-modules.tsx:381
 msgid "Plugins"
 msgstr "Plugins"
+
+#: src/widgets/index.tsx:303
+msgid "Plus or remove widgets"
+msgstr "Plus or remove widgets"
 
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:186
 #: src/modules/customers/components/customer-kyc-card.tsx:82
@@ -5334,6 +5350,10 @@ msgstr "Range price"
 msgid "Range week {0}"
 msgstr "Range week {0}"
 
+#: src/modules/plugins/storage/plugin-storage.tsx:224
+msgid "Read docs"
+msgstr "Read docs"
+
 #: src/components/overlay-resizing.tsx:47
 msgid "Rearranging the interface."
 msgstr "Rearranging the interface."
@@ -5557,12 +5577,9 @@ msgid "Remove folder"
 msgstr "Remove folder"
 
 #: src/widgets/components/manage-widgets.tsx:81
+#: src/widgets/index.tsx:317
 msgid "Remove widget"
 msgstr "Remove widget"
-
-#: src/widgets/index.tsx:311
-msgid "Remove Widget"
-msgstr "Remove Widget"
 
 #: src/modules/events/event-constants.ts:83
 msgid "Removed timekeeping"
@@ -5651,7 +5668,7 @@ msgstr "Reset"
 
 #: src/components/list/components/reset-default-button.tsx:11
 #: src/modules/workspaces/workspace-module-setup.tsx:107
-#: src/widgets/index.tsx:301
+#: src/widgets/index.tsx:307
 msgid "Reset default"
 msgstr "Reset default"
 
@@ -5669,7 +5686,7 @@ msgstr "Reset secret key"
 msgid "Reset templates"
 msgstr "Reset templates"
 
-#: src/widgets/index.tsx:289
+#: src/widgets/index.tsx:295
 msgid "Resize widget layout"
 msgstr "Resize widget layout"
 
@@ -6072,7 +6089,7 @@ msgstr "Set loan package, interest, late payment penalty, ..."
 msgid "Set name, address, Hotline, Workspace type, ..."
 msgstr "Set name, address, Hotline, Workspace type, ..."
 
-#: src/components/event-list.tsx:221
+#: src/components/event-list.tsx:227
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:235
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:334
 msgid "Set priority"
@@ -6257,7 +6274,7 @@ msgstr "Start time must be before end time"
 msgid "Status"
 msgstr "Status"
 
-#: src/components/event-list.tsx:256
+#: src/components/event-list.tsx:262
 msgid "Status updated"
 msgstr "Status updated"
 
@@ -6427,7 +6444,7 @@ msgstr "Take photo again"
 msgid "Task"
 msgstr "Task"
 
-#: src/components/event-list.tsx:335
+#: src/components/event-list.tsx:341
 #: src/modules/events/event-constants.ts:138
 msgid "Task assigned"
 msgstr "Task assigned"
@@ -6712,7 +6729,7 @@ msgstr "Timekeepings history"
 msgid "Timekeepings settings"
 msgstr "Timekeepings settings"
 
-#: src/components/event-list.tsx:75
+#: src/components/event-list.tsx:76
 msgid "Timeline"
 msgstr "Timeline"
 
@@ -6738,6 +6755,10 @@ msgstr "Title"
 #: src/widgets/reports/widgets/report-credit.widget.tsx:548
 msgid "To"
 msgstr "To"
+
+#: src/modules/plugins/storage/plugin-storage.tsx:215
+msgid "To allow our app to upload files to your storage, you need to configure CORS."
+msgstr "To allow our app to upload files to your storage, you need to configure CORS."
 
 #: src/modules/dashboard/dashboard-suggestions.tsx:144
 msgid "To not miss important information"
@@ -6888,7 +6909,7 @@ msgstr "Type something to search"
 msgid "Unassign user"
 msgstr "Unassign user"
 
-#: src/components/event-list.tsx:316
+#: src/components/event-list.tsx:322
 msgid "Unassigned from"
 msgstr "Unassigned from"
 
@@ -6958,7 +6979,7 @@ msgstr "Unnamed"
 msgid "Unselect all"
 msgstr "Unselect all"
 
-#: src/components/event-list.tsx:202
+#: src/components/event-list.tsx:208
 msgid "Unset priority"
 msgstr "Unset priority"
 
@@ -7128,7 +7149,7 @@ msgstr "Upgrade"
 msgid "Upgrade now"
 msgstr "Upgrade now"
 
-#: src/components/entity-image.tsx:155
+#: src/components/entity-image.tsx:167
 #: src/components/inputs/image-input.tsx:179
 msgid "Upload"
 msgstr "Upload"

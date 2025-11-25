@@ -49,6 +49,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
 
   const ableView = !!props.src && !loadFailed;
   const hovered = hover.hovered && ableView;
+  const radius = props.radius ?? 10;
 
   return (
     <Dropzone
@@ -67,8 +68,12 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
         mah="100%"
         h={h}
         w={w}
-        radius={props.radius || 10}
-        style={{ cursor: disabled || !src ? "default" : "pointer", position: "relative" }}
+        pos="relative"
+        radius={radius}
+        style={{
+          cursor: disabled || !src ? "default" : "pointer",
+          overflow: "hidden",
+        }}
         onClick={() => {
           if (disabled) {
             if (!src) return;
@@ -110,7 +115,14 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
             bg="#00000098"
             h="100%"
             w="100%"
-            style={{ position: "absolute", top: 0, left: 0, bottom: 0, right: 0 }}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
+              borderRadius: radius,
+            }}
             onClick={(e) => {
               if (disabled) {
                 e.stopPropagation();

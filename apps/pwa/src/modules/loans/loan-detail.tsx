@@ -134,17 +134,17 @@ export const LoanDetail: NextPage = () => {
     refetchEvents: [EventType.CUSTOMER_UPDATED],
   });
 
-  const _updateAssetData = useDebouncedCallback((assetData) => {
+  const handleUpdateAssetData = useDebouncedCallback((assetData) => {
     onActionLoad({
       name: <Trans>Update asset information</Trans>,
       process: () => updateLoanAssetData(loan.data!.id, { assetData }, uploadFile).catch(onError),
     });
   }, 500);
 
-  const updateAssetData = (data: any) => {
+  const onUpdateAssetData = (data: any) => {
     if (!loan.data) return;
     loan.setData({ ...loan.data!, assetData: data });
-    _updateAssetData(data);
+    handleUpdateAssetData(data);
   };
 
   useEffect(() => {
@@ -425,7 +425,7 @@ export const LoanDetail: NextPage = () => {
               }}
             >
               <Stepper.Step
-                label={t`Customer information & KYC`}
+                label={<Trans>Customer information & KYC</Trans>}
                 icon={<IconUserScan size={18} />}
                 completedIcon={<IconShieldCheckered size={18} />}
                 allowStepSelect={activeStep >= 0}
@@ -440,7 +440,7 @@ export const LoanDetail: NextPage = () => {
               />
 
               <Stepper.Step
-                label={t`Loan application`}
+                label={<Trans>Loan application</Trans>}
                 icon={<IconClipboardText size={18} />}
                 completedIcon={<IconClipboardCheck size={18} />}
                 disabled={activeStep < 1}
@@ -456,7 +456,7 @@ export const LoanDetail: NextPage = () => {
               />
 
               <Stepper.Step
-                label={t`Disbursement`}
+                label={<Trans>Disbursement</Trans>}
                 icon={<IconCreditCardPay size={18} />}
                 completedIcon={<IconCreditCardPay size={18} />}
                 disabled={activeStep < 2}
@@ -470,7 +470,7 @@ export const LoanDetail: NextPage = () => {
               />
 
               <Stepper.Step
-                label={t`Payment`}
+                label={<Trans>Payment</Trans>}
                 icon={<IconAnalyze size={18} />}
                 completedIcon={<IconAnalyze size={18} />}
                 disabled={activeStep < 3}
@@ -487,7 +487,7 @@ export const LoanDetail: NextPage = () => {
               [
                 <LoanCustomerKyc customer={customer.data} kyc={customerKyc} />,
                 <Container size="md">
-                  <LoanDocuments loan={loan.data} updateAssetData={updateAssetData} />
+                  <LoanDocuments loan={loan.data} updateAssetData={onUpdateAssetData} />
                 </Container>,
                 <Container size="md">
                   <LoanDisburesement loan={loan.data} kyc={customerKyc} />
