@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
-import { Renderer } from "@/components/renderer";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
@@ -23,9 +22,9 @@ import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-sc
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Group, Stack, Text, Tooltip, alpha } from "@mantine/core";
+import { ActionIcon, Group, Skeleton, Stack, Text, Tooltip, alpha } from "@mantine/core";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { BoardTaskCard } from "./board-task-card";
 
 interface BoardGroupByStatusesProps {
@@ -156,31 +155,35 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
           )}
         </Group>
 
-        <Group justify="end" gap={0}>
-          <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
-            <Tooltip label={<Trans>Update task status</Trans>}>
+        {(workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) || !isClosedTasks) && (
+          <Group justify="end" gap={0}>
+            {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
+              <Tooltip label={<Trans>Update task status</Trans>}>
+                <ActionIcon
+                  variant="subtle"
+                  size="sm"
+                  color="gray"
+                  onClick={() => OnTaskSatusesModal()}
+                >
+                  <IconPencil size={16} strokeWidth={1.6} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+
+            {!isClosedTasks && (
               <ActionIcon
                 variant="subtle"
                 size="sm"
                 color="gray"
-                onClick={() => OnTaskSatusesModal()}
+                onClick={() =>
+                  OnModalCreateTask({ status: status.id, tagFolderId: tagFolder?._id })
+                }
               >
-                <IconPencil size={16} strokeWidth={1.6} />
+                <IconPlus size={16} strokeWidth={1.6} />
               </ActionIcon>
-            </Tooltip>
-          </Renderer>
-
-          <Renderer visible={!isClosedTasks}>
-            <ActionIcon
-              variant="subtle"
-              size="sm"
-              color="gray"
-              onClick={() => OnModalCreateTask({ status: status.id, tagFolderId: tagFolder?._id })}
-            >
-              <IconPlus size={16} strokeWidth={1.6} />
-            </ActionIcon>
-          </Renderer>
-        </Group>
+            )}
+          </Group>
+        )}
       </Group>
 
       <Stack
@@ -203,6 +206,13 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
               nextTask={tasks[index + 1]}
             />
           ))}
+
+        {taskList.isFetching && (
+          <Fragment>
+            <Skeleton height={200} />
+            <Skeleton height={200} />
+          </Fragment>
+        )}
 
         {!isClosedTasks && (
           <Group>
