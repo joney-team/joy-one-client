@@ -57,7 +57,7 @@ const defaultFontSizes: Partial<Record<ButtonSize, number>> = {
 
 const defaultSconStrokeWidth: Partial<Record<ButtonSize, number>> = {
   xs: 2.2,
-  "compact-xs": 2.2,
+  "compact-xs": 2,
   sm: 1.6,
   "compact-sm": 1.8,
   default: 1.6,

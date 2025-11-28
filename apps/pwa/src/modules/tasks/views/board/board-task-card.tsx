@@ -335,16 +335,9 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                     <TaskStatusOptions
                       task={task}
                       target={
-                        <Group gap={5}>
-                          <Button
-                            color={taskStatusStyle.color}
-                            variant="subtle"
-                            size="compact-sm"
-                            fz={em(14)}
-                          >
-                            {taskStatusStyle.name}
-                          </Button>
-                        </Group>
+                        <Button color={taskStatusStyle.color} variant="subtle" size="compact-sm">
+                          {taskStatusStyle.name}
+                        </Button>
                       }
                       onSelect={(s) => taskHandler.onUpdate({ ...task, status: s })}
                     />
@@ -391,10 +384,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                             color="gray"
                             variant="subtle"
                             leftIcon={IconPlus}
-                            iconSpacing={-12}
-                            iconSize={16}
-                            size="compact-sm"
-                            fz={13}
+                            size="compact-xs"
                             fw={400}
                           >
                             <Trans>Add tag</Trans>
@@ -433,10 +423,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                             color="gray"
                             variant="subtle"
                             leftIcon={IconPlus}
-                            iconSpacing={-12}
-                            iconSize={16}
-                            size="compact-sm"
-                            fz={13}
+                            size="compact-xs"
                             fw={400}
                           >
                             <Trans>Add due date</Trans>
@@ -488,10 +475,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                               color="gray"
                               variant="subtle"
                               leftIcon={IconPlus}
-                              iconSpacing={-12}
-                              iconSize={16}
-                              size="compact-sm"
-                              fz={13}
+                              size="compact-xs"
                               fw={400}
                             >
                               <Trans>Add priority</Trans>
@@ -523,8 +507,8 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                 >
                   <Group justify="space-between" gap={5} flex={1}>
                     <Button
-                      fz={em(14)}
                       size="compact-xs"
+                      fw={400}
                       color="gray.8"
                       variant="subtle"
                       onClick={() => setIsShowSubTasks((s) => !s)}
@@ -532,7 +516,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                       <NumberFormat value={taskHandler.subTasks.length} /> <Trans>subtasks</Trans>
                     </Button>
                     <Group flex={1} justify="end" gap={5}>
-                      <Text fz={em(10)}>
+                      <Text fz={10}>
                         <NumberFormat value={taskHandler.progress.percent} suffix="%" />
                       </Text>
                       <Progress

@@ -22,9 +22,8 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Group, Stack, Text, Tooltip, alpha, em } from "@mantine/core";
+import { ActionIcon, Group, Stack, Text, Tooltip, alpha } from "@mantine/core";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC, useEffect, useRef, useState } from "react";
 import { BoardTaskCard } from "./board-task-card";
@@ -123,13 +122,13 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
       <Group
         p={wrapperPadding}
         pb={wrapperPadding / 2}
-        gap={10}
+        gap={8}
         align="start"
         justify="space-between"
         pos="sticky"
         top={0}
       >
-        <Group gap={10}>
+        <Group gap={8}>
           <Button
             key={status.id}
             size="compact-sm"
@@ -140,32 +139,33 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                 {...status}
                 white={status.id !== DefaultTaskStatusId.TODO}
                 size={16}
-                mr={-8}
+                mr={-4}
               />
             }
             tt="uppercase"
             fz={10}
-            pr={10}
             fw={800}
           >
             {statusStyle.name}
           </Button>
 
-          <Text c="gray" fz={em(12)} fw={500}>
-            <NumberFormat value={taskList.count} />
-          </Text>
+          {taskList.count > 0 && (
+            <Text c="gray" fz={10} fw={500}>
+              <NumberFormat value={taskList.count} />
+            </Text>
+          )}
         </Group>
 
         <Group justify="end" gap={0}>
           <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
-            <Tooltip label={t`Update task status`}>
+            <Tooltip label={<Trans>Update task status</Trans>}>
               <ActionIcon
                 variant="subtle"
                 size="sm"
                 color="gray"
                 onClick={() => OnTaskSatusesModal()}
               >
-                <IconPencil size={16} strokeWidth={1.5} />
+                <IconPencil size={16} strokeWidth={1.6} />
               </ActionIcon>
             </Tooltip>
           </Renderer>
@@ -175,9 +175,9 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
               variant="subtle"
               size="sm"
               color="gray"
-              onClick={() => OnModalCreateTask({ status: status.id })}
+              onClick={() => OnModalCreateTask({ status: status.id, tagFolderId: tagFolder?._id })}
             >
-              <IconPlus size={16} strokeWidth={1.5} />
+              <IconPlus size={16} strokeWidth={1.6} />
             </ActionIcon>
           </Renderer>
         </Group>
@@ -211,7 +211,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
               size="compact-sm"
               variant="subtle"
               leftIcon={IconPlus}
-              onClick={() => OnModalCreateTask({ status: status.id })}
+              onClick={() => OnModalCreateTask({ status: status.id, tagFolderId: tagFolder?._id })}
             >
               <Trans>Create task</Trans>
             </Button>
