@@ -189,7 +189,7 @@ msgid "Add divider"
 msgstr "Add divider"
 
 #: src/modules/tasks/components/form-task.tsx:476
-#: src/modules/tasks/views/board/board.task-card.tsx:285
+#: src/modules/tasks/views/board/board-task-card.tsx:442
 msgid "Add due date"
 msgstr "Add due date"
 
@@ -230,7 +230,7 @@ msgid "Add pill"
 msgstr "Add pill"
 
 #: src/modules/tasks/components/form-task.tsx:424
-#: src/modules/tasks/views/board/board.task-card.tsx:340
+#: src/modules/tasks/views/board/board-task-card.tsx:497
 msgid "Add priority"
 msgstr "Add priority"
 
@@ -260,12 +260,12 @@ msgstr "Add status"
 msgid "Add Status"
 msgstr "Add Status"
 
-#: src/modules/tasks/views/board/board.task-card.tsx:245
+#: src/modules/tasks/views/board/board-task-card.tsx:400
 msgid "Add tag"
 msgstr "Add tag"
 
 #: src/modules/tags/components/tags-input.tsx:56
-#: src/modules/tasks/views/list/list.task-row.tsx:338
+#: src/modules/tasks/views/list/list.task-row.tsx:339
 msgid "Add tags"
 msgstr "Add tags"
 
@@ -681,7 +681,7 @@ msgstr "Assign task"
 msgid "Assign user"
 msgstr "Assign user"
 
-#: src/components/event-list.tsx:302
+#: src/components/event-list.tsx:304
 msgid "Assigned to"
 msgstr "Assigned to"
 
@@ -690,7 +690,7 @@ msgstr "Assigned to"
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:170
 #: src/modules/tasks/components/form-task.tsx:369
 #: src/modules/tasks/components/tasks-menu-actions.tsx:162
-#: src/modules/tasks/views/board/board.task-card.tsx:350
+#: src/modules/tasks/views/board/board-task-card.tsx:507
 #: src/modules/tasks/views/list/list.task-row-head.tsx:15
 msgid "Assignee"
 msgstr "Assignee"
@@ -1757,9 +1757,9 @@ msgid "Create SDK"
 msgstr "Create SDK"
 
 #: src/modules/tasks/components/quick-create-task-input.tsx:26
-#: src/modules/tasks/views/board/board.task-card.tsx:134
+#: src/modules/tasks/views/board/board-task-card.tsx:285
 #: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:278
-#: src/modules/tasks/views/list/list.task-row.tsx:294
+#: src/modules/tasks/views/list/list.task-row.tsx:295
 msgid "Create subtask"
 msgstr "Create subtask"
 
@@ -1772,7 +1772,7 @@ msgstr "Create tag"
 #: src/modules/tasks/components/quick-create-task-input.tsx:26
 #: src/modules/tasks/components/quick-create-task-input.tsx:43
 #: src/modules/tasks/modals/modal-create-task.tsx:48
-#: src/modules/tasks/views/board/board.task-group-by-statuses.tsx:224
+#: src/modules/tasks/views/board/board-group-by-statuses.tsx:216
 #: src/modules/tasks/views/gantt/gantt.layout.tsx:133
 #: src/modules/tasks/views/list/list.task-group-by-statuses.tsx:128
 msgid "Create task"
@@ -2280,7 +2280,7 @@ msgstr "Drop task here"
 #: src/components/inputs/due-date-input.tsx:148
 #: src/modules/receipts/receipt-card.tsx:245
 #: src/modules/tasks/components/form-task.tsx:435
-#: src/modules/tasks/views/board/board.task-card.tsx:258
+#: src/modules/tasks/views/board/board-task-card.tsx:413
 #: src/modules/tasks/views/calendar/index.tsx:280
 #: src/modules/tasks/views/list/list.task-row-head.tsx:21
 msgid "Due date"
@@ -2346,7 +2346,7 @@ msgid "Edit promotion"
 msgstr "Edit promotion"
 
 #: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:335
-#: src/modules/tasks/views/list/list.task-row.tsx:310
+#: src/modules/tasks/views/list/list.task-row.tsx:311
 msgid "Edit task name"
 msgstr "Edit task name"
 
@@ -4349,7 +4349,7 @@ msgid "Next payment deadline"
 msgstr "Next payment deadline"
 
 #: src/modules/tasks/components/form-task.tsx:321
-#: src/modules/tasks/views/board/board.task-card.tsx:152
+#: src/modules/tasks/views/board/board-task-card.tsx:304
 msgid "Next status"
 msgstr "Next status"
 
@@ -5108,7 +5108,7 @@ msgstr "Printed at"
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:247
 #: src/modules/tasks/components/form-task.tsx:386
 #: src/modules/tasks/components/tasks-menu-actions.tsx:352
-#: src/modules/tasks/views/board/board.task-card.tsx:312
+#: src/modules/tasks/views/board/board-task-card.tsx:469
 #: src/modules/tasks/views/list/list.task-row-head.tsx:24
 msgid "Priority"
 msgstr "Priority"
@@ -6089,7 +6089,7 @@ msgstr "Set loan package, interest, late payment penalty, ..."
 msgid "Set name, address, Hotline, Workspace type, ..."
 msgstr "Set name, address, Hotline, Workspace type, ..."
 
-#: src/components/event-list.tsx:227
+#: src/components/event-list.tsx:229
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:235
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:334
 msgid "Set priority"
@@ -6270,11 +6270,11 @@ msgstr "Start time must be before end time"
 #: src/modules/receipts/receipt-list.tsx:98
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:155
 #: src/modules/tasks/components/form-task.tsx:277
-#: src/modules/tasks/views/board/board.task-card.tsx:180
+#: src/modules/tasks/views/board/board-task-card.tsx:333
 msgid "Status"
 msgstr "Status"
 
-#: src/components/event-list.tsx:262
+#: src/components/event-list.tsx:264
 msgid "Status updated"
 msgstr "Status updated"
 
@@ -6330,13 +6330,13 @@ msgstr "Subscription / billings"
 msgid "Subscription updated"
 msgstr "Subscription updated"
 
-#: src/modules/tasks/views/board/board.task-card.tsx:376
+#: src/modules/tasks/views/board/board-task-card.tsx:532
 msgid "subtasks"
 msgstr "subtasks"
 
 #: src/modules/tasks/components/form-task.tsx:604
 #: src/modules/tasks/components/form-task.tsx:627
-#: src/modules/tasks/views/board/board.task-card.tsx:363
+#: src/modules/tasks/views/board/board-task-card.tsx:520
 msgid "Subtasks"
 msgstr "Subtasks"
 
@@ -6413,7 +6413,7 @@ msgstr "Tag"
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:201
 #: src/modules/tasks/components/form-task.tsx:553
 #: src/modules/tasks/components/tasks-menu-actions.tsx:300
-#: src/modules/tasks/views/board/board.task-card.tsx:225
+#: src/modules/tasks/views/board/board-task-card.tsx:378
 msgid "Tags"
 msgstr "Tags"
 
@@ -6444,7 +6444,7 @@ msgstr "Take photo again"
 msgid "Task"
 msgstr "Task"
 
-#: src/components/event-list.tsx:341
+#: src/components/event-list.tsx:343
 #: src/modules/events/event-constants.ts:138
 msgid "Task assigned"
 msgstr "Task assigned"
@@ -6909,7 +6909,7 @@ msgstr "Type something to search"
 msgid "Unassign user"
 msgstr "Unassign user"
 
-#: src/components/event-list.tsx:322
+#: src/components/event-list.tsx:324
 msgid "Unassigned from"
 msgstr "Unassigned from"
 
@@ -6979,7 +6979,7 @@ msgstr "Unnamed"
 msgid "Unselect all"
 msgstr "Unselect all"
 
-#: src/components/event-list.tsx:208
+#: src/components/event-list.tsx:210
 msgid "Unset priority"
 msgstr "Unset priority"
 
@@ -7117,7 +7117,7 @@ msgid "Update task priority"
 msgstr "Update task priority"
 
 #: src/modules/events/event-constants.ts:137
-#: src/modules/tasks/views/board/board.task-group-by-statuses.tsx:141
+#: src/modules/tasks/views/board/board-group-by-statuses.tsx:161
 msgid "Update task status"
 msgstr "Update task status"
 
