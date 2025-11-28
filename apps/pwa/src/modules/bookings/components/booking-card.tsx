@@ -12,7 +12,7 @@ import { OnModalBookingDetail } from "@/modules/bookings/modals/modal-booking-de
 import { OnModalCancelBooking } from "@/modules/bookings/modals/modal-cancel-booking";
 import { OnModalUpdateBooking } from "@/modules/bookings/modals/modal-update-booking";
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@lingui/core/macro";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -47,7 +47,6 @@ import { WorkspaceMembersInput } from "../../workspace-members/components/worksp
 import { bookingStatuses } from "../booking-constants";
 import { BookingEntity, BookingStatus } from "../booking-types";
 import { OnModalRescheduleBooking } from "../modals/modal-reschedule-booking";
-import { DateTime } from "@joy-one-client/utils/date-time";
 
 interface BookingCardProps extends CardProps {
   booking: BookingEntity;
@@ -168,7 +167,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                     style={{ zIndex: 500 }}
                   >
                     <Stack>
-                      <Divider label={t`Actions`} labelPosition="left" />
+                      <Divider label={<Trans>Actions</Trans>} labelPosition="left" />
                       {booking.customer && (
                         <Anchor
                           href={`tel:${booking.customer.phone}`}

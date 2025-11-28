@@ -149,7 +149,7 @@ export const MetadataMessageBox: FC = () => {
                               <ActionIcon variant="subtle" color="dark" component="div">
                                 <mod.icon size={18} />
                               </ActionIcon>
-                              <Text>{mod.name()}</Text>
+                              <Text>{mod.name}</Text>
 
                               {item.onCreate && (
                                 <ActionIcon

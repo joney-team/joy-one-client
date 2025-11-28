@@ -3,8 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { useAuth } from "@/modules/auth/auth-context";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { PasswordInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconLock, IconMail, IconUser } from "@tabler/icons-react";
@@ -13,6 +12,7 @@ import { FC, useEffect, useState } from "react";
 export const FormRegister: FC = () => {
   const auth = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useLingui();
 
   const form = useForm({
     initialValues: {

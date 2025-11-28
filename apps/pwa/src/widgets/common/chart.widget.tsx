@@ -3,7 +3,7 @@
 import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { useColor } from "@/modules/theme/use-color";
 import type { WidgetComponent, WidgetLayoutConfig } from "@/widgets/types";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Card, em, Group, LoadingOverlay, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
@@ -58,7 +58,7 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
             </Group>
             {unit && (
               <Text fz={em(12)} fw={400}>
-                {t`Unit`}: {unit?.full}
+                <Trans>Unit</Trans>: {unit?.full}
               </Text>
             )}
           </Group>

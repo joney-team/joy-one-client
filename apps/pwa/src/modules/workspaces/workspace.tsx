@@ -14,7 +14,7 @@ import { WorkspaceOperationSettings } from "@/modules/workspace-settings/compone
 import { WorkspaceTermsAndPolicies } from "@/modules/workspace-settings/components/workspace-setting-terms-and-policies";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Card, Stack } from "@mantine/core";
 import {
   IconApps,
@@ -38,28 +38,28 @@ export const Workspace: FC = () => {
 
         <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
           <Renderer visible={workspace.type === WorkspaceType.CREDIT}>
-            <SectionTitle mb={-20} name={t`Credit`} icon={IconReportMoney} />
+            <SectionTitle mb={-20} name={<Trans>Credit</Trans>} icon={IconReportMoney} />
             <Card shadow="xs">
               <WorkspaceSettingCreditOperation />
             </Card>
 
-            <SectionTitle mb={-20} name={t`Loan package`} icon={IconCreditCardPay} />
+            <SectionTitle mb={-20} name={<Trans>Loan package</Trans>} icon={IconCreditCardPay} />
             <Card shadow="xs">
               <WorkspacetSettingLoans />
             </Card>
           </Renderer>
 
-          <SectionTitle mb={-20} name={t`Operation settings`} icon={IconSettings} />
+          <SectionTitle mb={-20} name={<Trans>Operation settings</Trans>} icon={IconSettings} />
           <Card shadow="xs">
             <WorkspaceOperationSettings />
           </Card>
 
-          <SectionTitle mb={-20} name={t`App settings`} icon={IconApps} />
+          <SectionTitle mb={-20} name={<Trans>App settings</Trans>} icon={IconApps} />
           <Card shadow="xs">
             <WorkspaceAppSettings />
           </Card>
 
-          <SectionTitle mb={-20} name={t`Terms and policies`} icon={IconNotebook} />
+          <SectionTitle mb={-20} name={<Trans>Terms and policies</Trans>} icon={IconNotebook} />
           <Card shadow="xs">
             <WorkspaceTermsAndPolicies />
           </Card>

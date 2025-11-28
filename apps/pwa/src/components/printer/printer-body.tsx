@@ -5,14 +5,15 @@ import { PrinterComponentProps, PrintSize } from "./printer-types";
 
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Currency } from "@joy-one-client/utils/currency";
-import { t } from "@lingui/core/macro";
 import { DateFormat } from "../format/date-format";
 import styles from "./printer.module.css";
 import { useLang } from "@/modules/lang/lang-context";
+import { useLingui } from "@lingui/react/macro";
 
 export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) => {
   const workspace = useWorkspace();
   const lang = useLang();
+  const { t } = useLingui();
 
   if ("order" in props) {
     const order = props.order;

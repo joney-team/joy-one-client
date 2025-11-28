@@ -12,8 +12,7 @@ import { onActionLoad } from "@/utils/actions";
 import { Currency } from "@joy-one-client/utils/currency";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { downloadJSON } from "@joy-one-client/utils/files";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Center, Modal, parseThemeColor, Select, Stack, useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDownload, IconFileExport } from "@tabler/icons-react";
@@ -33,7 +32,7 @@ export const ExportButton: FC = () => {
   const context = useListContext();
   const workspace = useWorkspace();
   const theme = useMantineTheme();
-  const lang = useLang();
+  const { t, i18n } = useLingui();
 
   const [opened, { open, close }] = useDisclosure(false);
   const [exportType, setExportType] = useState<ExportType>(ExportType.EXCEL);
@@ -47,7 +46,7 @@ export const ExportButton: FC = () => {
         format: "#,##0",
       };
     if (item.number) return { value: item.number, type: Number, format: "#,##0" };
-    if (item.date) return { value: DateTime.format(item.date, { locale: lang.locale }) };
+    if (item.date) return { value: DateTime.format(item.date, { locale: i18n.locale }) };
     if (item.imageUrl) return { value: renderFileUrl(item.imageUrl) };
     return { value: "" };
   };
@@ -65,7 +64,7 @@ export const ExportButton: FC = () => {
         if (data.length === 0) throw new Error(t`No data to export`);
 
         const time = DateTime.format(new Date(), {
-          locale: lang.locale,
+          locale: i18n.locale,
           month: "2-digit",
           year: "numeric",
           day: "2-digit",

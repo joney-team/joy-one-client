@@ -23,8 +23,7 @@ import {
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onFormError } from "@/utils/exceptions.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Blockquote,
   Card,
@@ -67,6 +66,7 @@ export interface BookingFormProps {
 
 export const BookingForm: FC<BookingFormProps> = (props) => {
   const { reschedule } = props;
+  const { t } = useLingui();
   const color = useColor();
   const lang = useLang();
   const dateFormat = DateTime.getDateFormatString(lang.locale);

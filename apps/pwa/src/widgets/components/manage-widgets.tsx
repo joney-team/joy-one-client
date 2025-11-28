@@ -2,7 +2,7 @@
 
 import { ModalTitle } from "@/components/modal-title";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Modal, Stack, Text, TextInput, Tooltip } from "@mantine/core";
 import { IconBox, IconMinus, IconPlus, IconPuzzle, IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
@@ -22,12 +22,13 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
 ) {
   const workspace = useWorkspace();
   const [search, setSearch] = useState("");
+  const { t } = useLingui();
 
   return (
     <Modal
       opened={props.opened}
       onClose={props.onClose}
-      title={<ModalTitle title={t`Manage widgets`} icon={IconPuzzle} />}
+      title={<ModalTitle title={<Trans>Manage widgets</Trans>} icon={IconPuzzle} />}
     >
       <Stack>
         <TextInput

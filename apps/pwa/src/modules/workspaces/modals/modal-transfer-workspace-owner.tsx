@@ -7,7 +7,6 @@ import { WorkspaceMembersInput } from "@/modules/workspace-members/components/wo
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { transferOwner } from "@/modules/workspace-roles/workspace-roles-service";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Card, Center, Stack, Text, em } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -54,6 +53,6 @@ export const ModalTransferWorkspaceOwner: FC = () => {
 export const OnModalTransferOwner = () =>
   modals.open({
     modalId: "ModalWorkspaceMember",
-    title: <ModalTitle title={t`Transfer ownership`} icon={IconUser} />,
+    title: <ModalTitle title={<Trans>Transfer ownership</Trans>} icon={IconUser} />,
     children: <ModalTransferWorkspaceOwner />,
   });

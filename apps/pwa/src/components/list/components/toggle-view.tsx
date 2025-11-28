@@ -1,5 +1,7 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Tooltip } from "@mantine/core";
 import { IconLayoutGrid, IconTable } from "@tabler/icons-react";
 import { FC } from "react";
@@ -14,7 +16,7 @@ export const ToggleView: FC = () => {
   return (
     <Card p={0} shadow="none" withBorder>
       <Group gap={0}>
-        <Tooltip label={t`Table`}>
+        <Tooltip label={<Trans>Table</Trans>}>
           <ActionIcon
             variant={context.viewState.view === "table" ? "filled" : "subtle"}
             color={context.viewState.view === "table" ? color("primary") : color("dimmed")}
@@ -30,7 +32,7 @@ export const ToggleView: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t`Grid`}>
+        <Tooltip label={<Trans>Grid</Trans>}>
           <ActionIcon
             variant={context.viewState.view === "grid" ? "filled" : "subtle"}
             color={context.viewState.view === "grid" ? color("primary") : color("dimmed")}

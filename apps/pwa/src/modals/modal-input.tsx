@@ -28,7 +28,7 @@ import { TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { Icon, IconCalendar, IconCheck, IconClock, IconCursorText } from "@tabler/icons-react";
-import { FC, useRef, useState } from "react";
+import { FC, ReactNode, useRef, useState } from "react";
 
 export enum InputModalType {
   TEXT = "Text",
@@ -44,8 +44,8 @@ export let OnModalInput: (props: InputModalProps) => any = () => {};
 export interface InputModalProps {
   type: InputModalType;
   color?: string;
-  title?: string;
-  label?: string;
+  title?: ReactNode;
+  label?: ReactNode;
   placeholder?: string;
   value?: any;
   onDone?: (value: any) => void | Promise<void>;
@@ -69,7 +69,7 @@ export const ModalInput: FC = () => {
 
   const focusInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
   const currency = Currency.get(workspace.settings.currencyCode);
-  const placeholder = props?.placeholder || props?.label;
+  const placeholder = props?.placeholder;
 
   const form = useForm({
     initialValues: {

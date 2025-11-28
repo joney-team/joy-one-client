@@ -9,7 +9,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Menu, MenuDropdown, Stack, ThemeIcon, Tooltip } from "@mantine/core";
 import {
   IconColumns3,
@@ -20,8 +20,6 @@ import {
   IconLayoutSidebarLeftCollapseFilled,
   IconLayoutSidebarRightCollapse,
   IconLayoutSidebarRightCollapseFilled,
-  IconPin,
-  IconPinFilled,
 } from "@tabler/icons-react";
 import { type FC } from "react";
 import { useListContext } from "../list-context";
@@ -38,7 +36,7 @@ export const ColsSettings: FC = () => {
       <Menu.Target>
         <Group>
           <ActionButton
-            label={t`Columns`}
+            label={<Trans>Columns</Trans>}
             icon={IconColumns3}
             quantity={Object.values(ctx.columns).filter((v) => v.isVisible).length}
             quantityColor="gray"
@@ -141,7 +139,11 @@ function ColumnItem<T = any>({
       </Group>
 
       <Group gap={5}>
-        <Tooltip label={column.pinned === "left" ? t`Click to unpin` : t`Pin to left`}>
+        <Tooltip
+          label={
+            column.pinned === "left" ? <Trans>Click to unpin</Trans> : <Trans>Pin to left</Trans>
+          }
+        >
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -156,7 +158,11 @@ function ColumnItem<T = any>({
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={column.pinned === "right" ? t`Click to unpin` : t`Pin to right`}>
+        <Tooltip
+          label={
+            column.pinned === "right" ? <Trans>Click to unpin</Trans> : <Trans>Pin to right</Trans>
+          }
+        >
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -171,7 +177,9 @@ function ColumnItem<T = any>({
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={column.isVisible ? t`Click to hide` : t`Click to show`}>
+        <Tooltip
+          label={column.isVisible ? <Trans>Click to hide</Trans> : <Trans>Click to show</Trans>}
+        >
           <ActionIcon
             variant="subtle"
             size="sm"

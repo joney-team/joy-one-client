@@ -6,7 +6,6 @@ import { calculateDistance, getGeolocation } from "@/modules/locations/locations
 import { Coordinates } from "@/types";
 import { onActionLoad } from "@/utils/actions";
 import { String } from "@/utils/string.utils";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -54,8 +53,8 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                 if (distance <= location.radius) {
                   notifications.update({
                     id,
-                    title: t`Arrived location ${location.name}`,
-                    message: t`This location can check in`,
+                    title: <Trans>Arrived location {location.name}</Trans>,
+                    message: <Trans>This location can check in</Trans>,
                     icon: <IconMapCheck strokeWidth={1.5} size={18} />,
                     color: "primary",
                     autoClose: 3000,
@@ -63,8 +62,8 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                 } else {
                   notifications.update({
                     id,
-                    title: t`Outside check in location`,
-                    message: t`This location cannot check in`,
+                    title: <Trans>Outside check in location</Trans>,
+                    message: <Trans>This location cannot check in</Trans>,
                     icon: <IconX strokeWidth={1.5} size={18} />,
                     color: "red",
                     autoClose: 3000,
@@ -111,7 +110,7 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
                       {location.name}
                     </Text>
                     <Text c="gray" fz={em(12)} fw={500}>
-                      {t`Coordinates`}:{" "}
+                      <Trans>Coordinates</Trans>:{" "}
                       {String.limitCharacters(location.coordinates.lat.toString(), 15)}/
                       {String.limitCharacters(location.coordinates.lng.toString(), 15)}
                     </Text>
@@ -119,13 +118,13 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
 
                   <Switch
                     checked={!location.disabled}
-                    label={t`On/Off activate`}
+                    label={<Trans>On/Off activate</Trans>}
                     onChange={toggleDisable}
                     mb={5}
                   />
 
                   <NumberInput
-                    label={t`Radius (meter)`}
+                    label={<Trans>Radius (meter)</Trans>}
                     value={location.radius}
                     onChange={(e) => changeRadius(+e)}
                     min={0}

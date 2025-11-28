@@ -2,7 +2,7 @@
 
 import { updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Group,
@@ -63,6 +63,7 @@ export function formatDuration(seconds: number) {
 
 export const EstimateTimeInput: FC<EstimateTimeInputProps> = (props) => {
   const { value, onChange, label, ...rest } = props;
+  const { t } = useLingui();
   const placeholder = rest.placeholder || t`Select`;
   const [opened, setOpened] = useState(false);
 
@@ -111,6 +112,7 @@ export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInput
   props
 ) => {
   const [opened, setOpened] = useState(false);
+  const { t } = useLingui();
 
   const children = props.children ? (
     <Group onClick={() => setOpened((s) => !s)}>{props.children}</Group>
@@ -126,7 +128,7 @@ export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInput
 
       <Popover.Dropdown p={10}>
         <TextInput
-          label={t`Estimate time`}
+          label={<Trans>Estimate time</Trans>}
           placeholder={t`Enter number of days, hours, minutes (e.g. 2d 4h 30m)`}
           autoFocus
           miw={260}

@@ -6,7 +6,7 @@
     "dev": "pnpm run codegen:compile && rm -rf .next && next dev --turbopack",
     "start": "next start",
     "build": "pnpm translate:compile && next build",
-    "typescript": "tsc",
+    "typecheck": "tsc",
     "prestart": "node scripts/prepare.js",
     "translate": "lingui extract --clean",
     "translate:compile": "lingui compile",

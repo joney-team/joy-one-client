@@ -12,7 +12,6 @@ import { updateCustomer } from "../customer-service";
 import { CustomerShortInfo } from "../customer-types";
 
 import { useRouter } from "@/hooks/use-router";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 
 interface ModalCustomerPlainCodeFormProps {
@@ -71,6 +70,6 @@ export const ModalCustomerPlainCodeForm: FC<ModalCustomerPlainCodeFormProps> = (
 export const OnModalCustomerPlainCodeForm = (props: ModalCustomerPlainCodeFormProps) =>
   modals.open({
     modalId: "ModalCustomerPlainCodeForm",
-    title: <ModalTitle title={t`Enter customer plain code`} icon={IconId} />,
+    title: <ModalTitle title={<Trans>Enter customer plain code</Trans>} icon={IconId} />,
     children: <ModalCustomerPlainCodeForm {...props} />,
   });

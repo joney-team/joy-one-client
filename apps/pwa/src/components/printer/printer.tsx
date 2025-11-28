@@ -15,8 +15,7 @@ import { PrinterHeader } from "./printer-header";
 import { PrinterComponentProps, PrinterProps, PrinterSettings, PrintSize } from "./printer-types";
 
 import { classNames } from "@/utils/ui.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { PrinterBody } from "./printer-body";
 import { PrinterSettingsBar, printerSizeClasses } from "./printer-settings-bar";
 import styles from "./printer.module.css";
@@ -24,6 +23,7 @@ import styles from "./printer.module.css";
 export const Printer: FC<PrinterProps> = (props) => {
   const layout = useLayout();
   const orderFeatureName = useOrderFeatureName();
+  const { t } = useLingui();
 
   const [isLoading, setIsLoading] = useState(true);
   const [opened, { open, close }] = useDisclosure(false);
@@ -46,7 +46,7 @@ export const Printer: FC<PrinterProps> = (props) => {
   const printTitle = useMemo(() => {
     const entity = "props.receipt" in props ? t`Receipt` : t`Order`;
     return t`Print ${entity}`;
-  }, [props, orderFeatureName]);
+  }, [props, orderFeatureName, t]);
 
   const printerClass = classNames(styles.Printer, styles[settings.size]);
 

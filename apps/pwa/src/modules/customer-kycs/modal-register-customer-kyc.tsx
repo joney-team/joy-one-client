@@ -12,8 +12,7 @@ import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Card,
   em,
@@ -38,13 +37,13 @@ import {
   IconTextScan2,
   IconUserScan,
 } from "@tabler/icons-react";
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, PropsWithChildren, ReactNode, useState } from "react";
 import { InputModalType, OnModalInput } from "../../modals/modal-input";
+import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLang } from "../lang/lang-context";
 import { useLocations } from "../locations/locations-context";
 import { decodeCid, registerCustomerKyc } from "./customer-kycs-service";
 import { CustomerKycDto } from "./customer-kycs-types";
-import { useUploadFile } from "../files/hooks/use-upload-file";
 
 interface ModalRegisterCustomerKycProps {
   customer: CustomerShortInfo;
@@ -58,6 +57,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
   const lang = useLang();
   const dateFormat = DateTime.getDateFormatString(lang.locale);
   const uploadFile = useUploadFile();
+  const { t } = useLingui();
 
   const { vnLocations } = useLocations();
   const [opened, { open, close }] = useDisclosure(false);
@@ -151,17 +151,17 @@ export const ModalRegisterCustomerKyc: FC = () => {
 
   return (
     <Modal
-      title={<ModalTitle title={t`Customer KYC`} icon={IconUserScan} />}
+      title={<ModalTitle title={<Trans>Customer KYC</Trans>} icon={IconUserScan} />}
       onClose={onClose}
       opened={opened}
       yOffset={20}
       size="xl"
     >
       <Stack gap={16}>
-        <Session name={t`ID images`} icon={IconCards}>
+        <Session name={<Trans>ID images</Trans>} icon={IconCards}>
           <Stack gap={10}>
             <SimpleGrid cols={{ md: 2 }}>
-              <InputWrapper label={t`Front of CID`}>
+              <InputWrapper label={<Trans>Front of CID</Trans>}>
                 <EntityImage
                   w="100%"
                   src={form.values.frontOfCidImage}
@@ -172,7 +172,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
                 />
               </InputWrapper>
 
-              <InputWrapper label={t`Back of CID`}>
+              <InputWrapper label={<Trans>Back of CID</Trans>}>
                 <EntityImage
                   w="100%"
                   src={form.values.backOfCidImage}
@@ -183,7 +183,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
               </InputWrapper>
             </SimpleGrid>
 
-            <InputWrapper label={t`Portrait image`}>
+            <InputWrapper label={<Trans>Portrait image</Trans>}>
               <EntityImage
                 w="100%"
                 src={form.values.portraitImage}
@@ -195,7 +195,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
           </Stack>
         </Session>
 
-        <Session name={t`CID Infos`} icon={IconInfoCircle}>
+        <Session name={<Trans>CID Infos</Trans>} icon={IconInfoCircle}>
           <Stack>
             <Group>
               <Button
@@ -224,7 +224,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
                 leftIcon={IconTextScan2}
                 onClick={() =>
                   OnModalInput({
-                    title: t`Enter code`,
+                    title: <Trans>Enter code</Trans>,
                     type: InputModalType.TEXT,
                     onDone(value) {
                       const cid = decodeCid(value);
@@ -242,19 +242,19 @@ export const ModalRegisterCustomerKyc: FC = () => {
               </Button>
             </Group>
 
-            <TextInput label={t`ID number`} {...form.getInputProps("cidNumber")} />
+            <TextInput label={<Trans>ID number</Trans>} {...form.getInputProps("cidNumber")} />
 
             <SimpleGrid cols={{ md: 2 }}>
-              <TextInput label={t`Full name`} {...form.getInputProps("cidFullName")} />
+              <TextInput label={<Trans>Full name</Trans>} {...form.getInputProps("cidFullName")} />
 
               <Select
-                label={t`Gender`}
+                label={<Trans>Gender</Trans>}
                 {...form.getInputProps("cidGender")}
                 data={Object.values(Gender).map((v) => ({ value: v, label: genders[v].name() }))}
               />
 
               <DateInput
-                label={t`Birthday`}
+                label={<Trans>Birthday</Trans>}
                 valueFormat={dateFormat}
                 value={
                   form.values.cidBirthday
@@ -268,7 +268,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
               />
 
               <DateInput
-                label={t`Issued date`}
+                label={<Trans>Issued date</Trans>}
                 valueFormat={dateFormat}
                 value={
                   form.values.cidCreatedAt
@@ -282,12 +282,12 @@ export const ModalRegisterCustomerKyc: FC = () => {
               />
             </SimpleGrid>
 
-            <InputWrapper label={t`Main location`}>
+            <InputWrapper label={<Trans>Main location</Trans>}>
               <Card p={8} withBorder>
                 <Stack>
                   <SimpleGrid cols={{ base: 1, md: 2 }}>
                     <Select
-                      label={t`Province`}
+                      label={<Trans>Province</Trans>}
                       {...form.getInputProps(`cidVnLocation.provinceId`)}
                       searchable
                       data={vnLocations
@@ -301,7 +301,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
                     />
 
                     <Select
-                      label={t`Ward`}
+                      label={<Trans>Ward</Trans>}
                       {...form.getInputProps("cidVnLocation.wardId")}
                       searchable
                       data={vnLocations
@@ -317,7 +317,10 @@ export const ModalRegisterCustomerKyc: FC = () => {
                     />
                   </SimpleGrid>
 
-                  <TextInput label={t`Address`} {...form.getInputProps("cidVnLocation.address")} />
+                  <TextInput
+                    label={<Trans>Address</Trans>}
+                    {...form.getInputProps("cidVnLocation.address")}
+                  />
                 </Stack>
               </Card>
             </InputWrapper>
@@ -326,7 +329,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
 
         <Group mt={10} justify="center">
           <Button onClick={submit.handle} type="submit" miw={300} maw="100%">
-            {t`Complete`}
+            <Trans>Complete</Trans>
           </Button>
         </Group>
       </Stack>
@@ -334,7 +337,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
   );
 };
 
-const Session: FC<PropsWithChildren<{ name: string; icon: Icon }>> = (props) => {
+const Session: FC<PropsWithChildren<{ name: ReactNode; icon: Icon }>> = (props) => {
   return (
     <Stack gap={5}>
       <Group gap={3}>

@@ -91,15 +91,11 @@ export interface WorkspaceContext {
   view: WorkspaceView;
   setView: (view: WorkspaceView) => Promise<WorkspaceView>;
   resetView: () => Promise<WorkspaceView>;
-  isModuleActive: (id: keyof typeof workspaceModuleConfigs) => boolean;
-  modules: WorkspaceModule[];
-  getModuleName: (id: WorkspaceModuleId) => string;
-  availableModules: WorkspaceModule[];
-  getModule: (id: WorkspaceModuleId) => WorkspaceModule;
   isCreateNew: boolean;
   setIsCreateNew: Dispatch<SetStateAction<boolean>>;
   archive: () => Promise<void>;
-  activatedModule: WorkspaceModule | undefined;
+  availableModules: WorkspaceModule[];
+  getAvailableModule: (id: WorkspaceModuleId) => WorkspaceModule | null;
   join: (code: string) => Promise<void>;
   ref: string;
   onlineStatus: WorkspaceMemberOnlineStatus;

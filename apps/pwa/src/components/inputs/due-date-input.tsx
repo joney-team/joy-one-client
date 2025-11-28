@@ -4,7 +4,7 @@ import { configs } from "@/configs/layout.config";
 import { useLang } from "@/modules/lang/lang-context";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Divider,
@@ -20,7 +20,7 @@ import {
 import { DatePicker, TimeInput } from "@mantine/dates";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCalendar, IconClock, IconX } from "@tabler/icons-react";
-import { FC, useRef, useState } from "react";
+import { FC, ReactNode, useRef, useState } from "react";
 import { Button } from "../buttons/button";
 
 interface DueDateInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
@@ -104,7 +104,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
           <Group align="end" gap={5}>
             <TextInput
               flex={1}
-              label={t`Start date`}
+              label={<Trans>Start date</Trans>}
               readOnly
               leftSection={<IconCalendar strokeWidth={1.3} />}
               value={
@@ -145,7 +145,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
           <Group align="end" gap={5}>
             <TextInput
               flex={1}
-              label={t`Due date`}
+              label={<Trans>Due date</Trans>}
               readOnly
               leftSection={<IconCalendar strokeWidth={1.3} />}
               value={
@@ -196,7 +196,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             px={5}
           >
             <Suggestion
-              label={t`Today`}
+              label={<Trans>Today</Trans>}
               value={DateTime.format(DateTime.getRange(new Date(), "day").end, {
                 weekday: "long",
                 locale: lang.locale,
@@ -207,7 +207,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t`Tomorrow`}
+              label={<Trans>Tomorrow</Trans>}
               value={DateTime.format(
                 DateTime.getRange(new Date(Date.now() + 1000 * 60 * 60 * 24), "day").end,
                 {
@@ -223,7 +223,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t`This weekend`}
+              label={<Trans>This weekend</Trans>}
               value={DateTime.format(DateTime.getRange(Date.now(), "week").end, {
                 dateStyle: "short",
                 locale: lang.locale,
@@ -234,7 +234,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t`Next weekend`}
+              label={<Trans>Next weekend</Trans>}
               value={DateTime.format(
                 DateTime.getRange(Date.now() + 1000 * 60 * 60 * 24 * 7, "week").end,
                 {
@@ -250,7 +250,11 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t`Range week ${`2`}`}
+              label={
+                <Trans>
+                  Range week <span>{2}</span>
+                </Trans>
+              }
               value={DateTime.format(
                 DateTime.getRange(Date.now() + 1000 * 60 * 60 * 24 * 7 * 2, "week").end,
                 {
@@ -266,7 +270,11 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t`Range week ${`4`}`}
+              label={
+                <Trans>
+                  Range week <span>{4}</span>
+                </Trans>
+              }
               value={DateTime.format(
                 DateTime.getRange(Date.now() + 1000 * 60 * 60 * 24 * 7 * 4, "week").end,
                 {
@@ -282,7 +290,11 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
             />
 
             <Suggestion
-              label={t`Range week ${`8`}`}
+              label={
+                <Trans>
+                  Range week <span>{8}</span>
+                </Trans>
+              }
               value={DateTime.format(
                 DateTime.getRange(Date.now() + 1000 * 60 * 60 * 24 * 7 * 8, "week").end,
                 {
@@ -329,7 +341,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
   );
 };
 
-const Suggestion: FC<{ label: string; value: string; onSelect: () => any }> = (props) => {
+const Suggestion: FC<{ label: ReactNode; value: string; onSelect: () => any }> = (props) => {
   return (
     <Button
       variant="subtle"

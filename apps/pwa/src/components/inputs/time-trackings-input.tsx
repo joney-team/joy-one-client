@@ -5,7 +5,7 @@ import { TaskTimeTracking } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -169,13 +169,13 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
         opened={opened}
         onClose={close}
         size={500}
-        title={<ModalTitle title={t`Time trackings`} icon={IconStopwatch} />}
+        title={<ModalTitle title={<Trans>Time trackings</Trans>} icon={IconStopwatch} />}
       >
         <Stack gap={30}>
           <Stack gap={8}>
             <Group justify="space-between">
               <Text fz={14} fw={500}>
-                {t`Total time`}
+                <Trans>Total time</Trans>
               </Text>
               <Text fz={14} fw={700}>
                 {DateTime.toHHMM(totalTime)}
@@ -198,7 +198,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
             <Stack gap={8}>
               <Group justify="space-between">
                 <Text fz={14} fw={500}>
-                  {t`All time trackings`}
+                  <Trans>All time trackings</Trans>
                 </Text>
               </Group>
 
@@ -340,6 +340,7 @@ export const TimeTrackingForm: FC<{
   const startAtRef = useRef<HTMLInputElement>(null);
   const endAtRef = useRef<HTMLInputElement>(null);
   const timeTrackingRef = useRef<HTMLInputElement>(null);
+  const { t } = useLingui();
 
   const onChange = useDebouncedCallback((values: TaskTimeTracking) => {
     onChange?.(values);

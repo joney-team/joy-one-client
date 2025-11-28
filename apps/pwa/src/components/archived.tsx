@@ -4,10 +4,10 @@ import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
 import { alpha, Group, Text, ThemeIcon } from "@mantine/core";
 import { Icon, IconBackground } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
 export interface ArchivedProps {
-  entity: string;
+  entity: ReactNode;
   icon?: Icon;
   enabled?: any;
 }

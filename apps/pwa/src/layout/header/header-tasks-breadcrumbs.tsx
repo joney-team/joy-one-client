@@ -6,7 +6,6 @@ import { onRemoveTaskTagFolder } from "@/modules/tags/tags-service";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, alpha, Card, Group, Menu, Text, Tooltip } from "@mantine/core";
 import { useDebouncedCallback, useHover } from "@mantine/hooks";

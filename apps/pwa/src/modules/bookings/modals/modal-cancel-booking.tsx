@@ -1,10 +1,12 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { cancelBooking } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -17,6 +19,7 @@ interface ModalCancelBookingProps {
 
 export const ModalCancelBooking: FC<ModalCancelBookingProps> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useLingui();
 
   const form = useForm({
     validate: {
@@ -55,7 +58,9 @@ export const ModalCancelBooking: FC<ModalCancelBookingProps> = (props) => {
 export const OnModalCancelBooking = (props: ModalCancelBookingProps) => {
   return modals.open({
     modalId: "cancel-booking",
-    title: <ModalTitle color="red" title={t`Cancel booking`} icon={IconCalendarMinus} />,
+    title: (
+      <ModalTitle color="red" title={<Trans>Cancel booking</Trans>} icon={IconCalendarMinus} />
+    ),
     children: <ModalCancelBooking {...props} />,
     zIndex: zIndexes.commonModals,
   });

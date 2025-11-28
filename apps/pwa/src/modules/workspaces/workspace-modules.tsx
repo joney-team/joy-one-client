@@ -43,15 +43,19 @@ import {
   IconWorld,
 } from "@tabler/icons-react";
 
+import { useMemo } from "react";
+
 import { IconFacebook, IconZalo } from "@/components/icons";
-import { t } from "@lingui/core/macro";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { MantineColor } from "@mantine/core";
+import { usePathname } from "next/navigation";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { WorkspaceType } from "./workspaces-types";
 
 export interface WorkspaceModuleConfig {
-  name: () => string;
-  description?: () => string;
+  name: MacroMessageDescriptor;
+  description?: MacroMessageDescriptor;
   color?: MantineColor;
 
   href: string;
@@ -65,15 +69,14 @@ export interface WorkspaceModuleConfig {
   workspaceTypes?: WorkspaceType[];
 }
 
-export interface WorkspaceModule extends WorkspaceModuleConfig {
+export interface WorkspaceModule extends Omit<WorkspaceModuleConfig, "name" | "description"> {
   id: WorkspaceModuleId;
+  name: string;
+  description?: string;
 }
 
-const combineModule = (config: WorkspaceModuleConfig): WorkspaceModule => {
-  return {
-    ...config,
-    id: "" as WorkspaceModuleId,
-  };
+const combineModule = (config: WorkspaceModuleConfig): WorkspaceModuleConfig => {
+  return config;
 };
 
 export const workspaceModuleConfigs = {
@@ -82,7 +85,7 @@ export const workspaceModuleConfigs = {
     href: "/",
     icon: IconLayoutDashboard,
     hrefExact: true,
-    name: () => t`Dashboard`,
+    name: defineMessage`Dashboard`,
   }),
 
   // Posts
@@ -90,14 +93,14 @@ export const workspaceModuleConfigs = {
     href: "/posts",
     icon: IconNews,
     permissions: WorkspacePermission.POSTS_VIEW,
-    name: () => t`Posts`,
+    name: defineMessage`Posts`,
   }),
   postsNew: combineModule({
     href: "/posts/new",
     icon: IconNews,
     permissions: WorkspacePermission.POSTS_MANAGER,
     restrictDisplay: ["spotlight"],
-    name: () => t`New Post`,
+    name: defineMessage`New Post`,
   }),
 
   // Promotions
@@ -105,7 +108,7 @@ export const workspaceModuleConfigs = {
     href: "/promotions",
     icon: IconRosetteDiscount,
     permissions: WorkspacePermission.PROMOTIONS_VIEW,
-    name: () => t`Promotions`,
+    name: defineMessage`Promotions`,
   }),
 
   // HRM
@@ -114,13 +117,13 @@ export const workspaceModuleConfigs = {
     icon: IconUsersGroup,
     restrictDisplay: ["spotlight"],
     permissions: WorkspacePermission.WORKSPACE_MEMBERS_VIEW,
-    name: () => t`Members`,
+    name: defineMessage`Members`,
   }),
   timekeepings: combineModule({
     href: "/timekeepings",
     icon: IconCalendarCheck,
     permissions: WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP,
-    name: () => t`Timekeepings`,
+    name: defineMessage`Timekeepings`,
   }),
 
   // Customers
@@ -128,32 +131,32 @@ export const workspaceModuleConfigs = {
     href: "/customers",
     icon: IconUserSquareRounded,
     permissions: WorkspacePermission.CUSTOMERS_VIEW,
-    name: () => t`Customers`,
+    name: defineMessage`Customers`,
   }),
   customerForms: combineModule({
     href: "/customer-forms",
     icon: IconMessageUser,
     permissions: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
-    name: () => t`Customer Forms`,
+    name: defineMessage`Customer Forms`,
   }),
   customerKYCs: combineModule({
     href: "/customer-kycs",
     icon: IconUserScan,
     permissions: WorkspacePermission.CUSTOMER_KYCS_MANAGER,
     workspaceTypes: [WorkspaceType.CREDIT],
-    name: () => t`KYCs`,
+    name: defineMessage`KYCs`,
   }),
   bookings: combineModule({
     href: "/bookings",
     icon: IconCalendar,
     permissions: WorkspacePermission.BOOKING_VIEW,
-    name: () => t`Bookings`,
+    name: defineMessage`Bookings`,
   }),
   messageBoxes: combineModule({
     href: "/message-boxes",
     icon: IconMessageCircle,
     permissions: WorkspacePermission.MESSAGE_BOXES_MANAGER,
-    name: () => t`Message Boxes`,
+    name: defineMessage`Message Boxes`,
   }),
 
   // Products
@@ -161,59 +164,63 @@ export const workspaceModuleConfigs = {
     href: "/products",
     icon: IconBox,
     permissions: WorkspacePermission.PRODUCTS_SERVICES_WRITE,
-    name: () => t`Products`,
+    name: defineMessage`Products`,
   }),
   productServices: combineModule({
     href: "/services",
     icon: IconCategory2,
     permissions: WorkspacePermission.PRODUCTS_SERVICES_WRITE,
-    name: () => t`Services`,
+    name: defineMessage`Services`,
   }),
   productStocks: combineModule({
     href: "/product-stocks",
     icon: IconBuildingWarehouse,
     permissions: WorkspacePermission.PRODUCT_STOCK_VIEW,
-    name: () => t`Stocks`,
+    name: defineMessage`Stocks`,
   }),
   productCombos: combineModule({
     href: "/combos",
     icon: IconPackage,
     permissions: WorkspacePermission.PRODUCT_COMBOS_VIEW,
-    name: () => t`Combos`,
+    name: defineMessage`Combos`,
   }),
 
   partners: combineModule({
     href: "/partners",
     icon: IconTopologyStar3,
     permissions: WorkspacePermission.PARTNERS_WRITE,
-    name: () => t`Partners`,
+    name: defineMessage`Partners`,
   }),
   prescriptions: combineModule({
     href: "/prescriptions",
     icon: IconPill,
     workspaceTypes: [WorkspaceType.DENTAL, WorkspaceType.CLINIC, WorkspaceType.HOSPITAL],
-    name: () => t`Prescriptions`,
+    name: defineMessage`Prescriptions`,
   }),
 
   // Business
-  tasks: combineModule({ href: "/tasks", icon: IconStack2, name: () => t`Tasks` }),
+  tasks: combineModule({
+    href: "/tasks",
+    icon: IconStack2,
+    name: defineMessage`Tasks`,
+  }),
   orders: combineModule({
     href: "/orders",
     icon: IconClipboardText,
     permissions: WorkspacePermission.ORDERS_VIEW,
-    name: () => t`Orders`,
+    name: defineMessage`Orders`,
   }),
   receipts: combineModule({
     href: "/receipts",
     icon: IconCashRegister,
     permissions: WorkspacePermission.RECEIPTS_VIEW,
-    name: () => t`Receipts`,
+    name: defineMessage`Receipts`,
   }),
   eInvoices: combineModule({
     href: "/e-invoices",
     icon: IconFileInvoice,
     permissions: WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE,
-    name: () => t`E-Invoices`,
+    name: defineMessage`E-Invoices`,
   }),
 
   // Credit
@@ -221,13 +228,13 @@ export const workspaceModuleConfigs = {
     href: "/loans",
     icon: IconCreditCardPay,
     permissions: WorkspacePermission.LOANS_VIEW,
-    name: () => t`Loans`,
+    name: defineMessage`Loans`,
   }),
   loanAssetEstimations: combineModule({
     href: "/loan-asset-estimations",
     icon: IconCoins,
     permissions: WorkspacePermission.LOANS_VIEW,
-    name: () => t`Loan Asset Estimations`,
+    name: defineMessage`Loan Asset Estimations`,
   }),
 
   // Workspace Settings
@@ -236,66 +243,63 @@ export const workspaceModuleConfigs = {
     icon: IconSettings,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Workspace Settings`,
-    description: () => t`Manage the settings of the Workspace`,
+    description: defineMessage`Manage the settings of the Workspace`,
     color: "primary",
+    name: defineMessage`Workspace Settings`,
   }),
   workspaceSettingsGeneral: combineModule({
     href: "/workspace-settings/general",
     icon: IconSettings2,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`General Settings`,
-    description: () => t`Set name, address, Hotline, Workspace type, ...`,
     color: "primary",
+    name: defineMessage`General Settings`,
+    description: defineMessage`Set name, address, Hotline, Workspace type, ...`,
   }),
   workspaceSettingsModules: combineModule({
     href: "/workspace-settings/modules",
     icon: IconLayout,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Modules`,
-    description: () => t`Customize the features needed on the navigation bar`,
     color: "teal",
+    name: defineMessage`Modules`,
+    description: defineMessage`Customize the features needed on the navigation bar`,
   }),
   workspaceSettingsOperation: combineModule({
     href: "/workspace-settings/operation",
     icon: IconActivityHeartbeat,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Operation settings`,
-    description: () =>
-      t`Working time, invoice, service voucher, payment method, search settings, ...`,
     color: "grape",
+    name: defineMessage`Operation settings`,
+    description: defineMessage`Working time, invoice, service voucher, payment method, search settings, ...`,
   }),
   workspaceSettingsApp: combineModule({
     href: "/workspace-settings/app",
     icon: IconWorld,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`App settings`,
-    description: () =>
-      t`Create an application with a custom domain, customize the application name, icon, color.`,
     color: "blue",
+    name: defineMessage`App settings`,
+    description: defineMessage`Create an application with a custom domain, customize the application name, icon, color.`,
   }),
   workspaceSettingsHrmTimekeepings: combineModule({
     href: "/workspace-settings/hrm-timekeepings",
     icon: IconCalendarCheck,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Timekeepings settings`,
-    description: () =>
-      t`Support GPS Check-in, summarize working hours, late, overtime and support salary calculation.`,
     color: "violet",
+    name: defineMessage`Timekeepings settings`,
+    description: defineMessage`Support GPS Check-in, summarize working hours, late, overtime and support salary calculation.`,
   }),
   workspaceSettingsDocuments: combineModule({
     href: "/workspace-settings/documents",
     icon: IconFiles,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Documents`,
-    description: () => t`Terms of use, privacy policy, user manual, ...`,
     color: "lime",
+    name: defineMessage`Documents`,
+    description: defineMessage`Terms of use, privacy policy, user manual, ...`,
   }),
   workspaceSettingsCredit: combineModule({
     href: "/workspace-settings/credit",
@@ -303,27 +307,27 @@ export const workspaceModuleConfigs = {
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     workspaceTypes: [WorkspaceType.CREDIT],
     restrictDisplay: ["spotlight"],
-    name: () => t`Credit settings`,
-    description: () => t`Set loan package, interest, late payment penalty, ...`,
     color: "yellow",
+    name: defineMessage`Credit settings`,
+    description: defineMessage`Set loan package, interest, late payment penalty, ...`,
   }),
   workspaceSettingsBranches: combineModule({
     href: "/workspace-settings/branches",
     icon: IconBuildingSkyscraper,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Branches`,
-    description: () => t`Manage the branches of the Workspace`,
     color: "blue",
+    name: defineMessage`Branches`,
+    description: defineMessage`Manage the branches of the Workspace`,
   }),
   workspaceSettingsRoles: combineModule({
     href: "/workspace-settings/roles",
     icon: IconAccessible,
     permissions: WorkspacePermission.WORKSPACE_ROLES_MANAGER,
     restrictDisplay: ["spotlight"],
-    name: () => t`Roles`,
-    description: () => t`Manage member roles and access permissions`,
     color: "orange",
+    name: defineMessage`Roles`,
+    description: defineMessage`Manage member roles and access permissions`,
   }),
 
   workspaceSettingsApiApps: combineModule({
@@ -331,46 +335,45 @@ export const workspaceModuleConfigs = {
     icon: IconApiApp,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`API Apps`,
-    description: () => t`For developers, manipulate data through APIs`,
     color: "teal",
+    name: defineMessage`API Apps`,
+    description: defineMessage`For developers, manipulate data through APIs`,
   }),
   workspaceSettingsMessages: combineModule({
     href: "/workspace-settings/messages",
     icon: IconMessage2Cog,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Messages settings`,
-    description: () =>
-      t`Summarize customer messages from various channels: Zalo, Facebook, Landing Page, ...`,
     color: "yellow",
+    name: defineMessage`Messages settings`,
+    description: defineMessage`Summarize customer messages from various channels: Zalo, Facebook, Landing Page, ...`,
   }),
   workspaceSettingsCategories: combineModule({
     href: "/workspace-settings/categories",
     icon: IconCategory,
     permissions: WorkspacePermission.CATEGORIES_MANAGER,
     restrictDisplay: ["spotlight"],
-    name: () => t`Categories`,
-    description: () => t`Manage product, service, post, ...`,
     color: "teal",
+    name: defineMessage`Categories`,
+    description: defineMessage`Manage product, service, post, ...`,
   }),
   workspaceSettingsCustomFields: combineModule({
     href: "/workspace-settings/custom-fields",
     icon: IconForms,
     permissions: WorkspacePermission.CUSTOM_FIELDS_MANAGER,
     restrictDisplay: ["spotlight"],
-    name: () => t`Custom fields`,
-    description: () => t`Manage custom fields for objects: product, service, post, ...`,
     color: "orange",
+    name: defineMessage`Custom fields`,
+    description: defineMessage`Manage custom fields for objects: product, service, post, ...`,
   }),
   workspaceSettingsFileManager: combineModule({
     href: "/workspace-settings/file-manager",
     icon: IconFolderRoot,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`File manager`,
-    description: () => t`Summarize images / documents / files, ...`,
     color: "blue",
+    name: defineMessage`File manager`,
+    description: defineMessage`Summarize images / documents / files, ...`,
   }),
 
   // Workspace Setting Plugins
@@ -378,82 +381,81 @@ export const workspaceModuleConfigs = {
     href: "/workspace-settings/plugins",
     icon: IconPuzzle,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
-    name: () => t`Plugins`,
-    description: () => t`Integrate other services / utilities`,
     color: "lime",
+    name: defineMessage`Plugins`,
+    description: defineMessage`Integrate other services / utilities`,
   }),
   workspacePluginsBanks: combineModule({
     href: "/workspace-settings/plugins/banks",
     icon: IconBuildingBank,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Banks`,
-    description: () => t`Integrate bank accounts to receive and pay money.`,
     color: "yellow",
+    name: defineMessage`Banks`,
+    description: defineMessage`Integrate bank accounts to receive and pay money.`,
   }),
   workspacePluginsZaloOas: combineModule({
     href: "/workspace-settings/plugins/zalo-oas",
     icon: IconZalo,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Zalo OAs`,
-    description: () => t`Integrate Zalo OA, manage customer interactions.`,
+    description: defineMessage`Integrate Zalo OA, manage customer interactions.`,
     color: "blue",
+    name: defineMessage`Zalo OAs`,
   }),
   workspacePluginsMetaPages: combineModule({
     href: "/workspace-settings/plugins/meta-pages",
     icon: IconFacebook,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Meta Pages`,
-    description: () => t`Integrate Fanpage Facebook, manage Messenger messages.`,
     color: "blue",
+    name: defineMessage`Meta Pages`,
+    description: defineMessage`Integrate Fanpage Facebook, manage Messenger messages.`,
   }),
   workspacePluginsMailer: combineModule({
     href: "/workspace-settings/plugins/mailer",
     icon: IconMailbox,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Mailer`,
-    description: () =>
-      t`Identify brand through Email. Help you take better care of customers through Email.`,
     color: "orange",
+    name: defineMessage`Mailer`,
+    description: defineMessage`Identify brand through Email. Help you take better care of customers through Email.`,
   }),
   workspacePluginsMessageHubs: combineModule({
     href: "/workspace-settings/plugins/message-hubs",
     icon: IconMessage,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Message Hubs`,
-    description: () => t`Integrate ChatBox into your website.`,
     color: "teal",
+    name: defineMessage`Message Hubs`,
+    description: defineMessage`Integrate ChatBox into your website.`,
   }),
   workspacePluginsAiAssistants: combineModule({
     href: "/workspace-settings/plugins/ai-assistants",
     icon: IconAi,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`AI Assistants`,
-    description: () => t`Auto reply messages according to the script`,
     color: "indigo",
+    name: defineMessage`AI Assistants`,
+    description: defineMessage`Auto reply messages according to the script`,
   }),
   workspacePluginsEInvoices: combineModule({
     href: "/workspace-settings/plugins/e-invoices",
     icon: IconFileInvoice,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`E-Invoices`,
-    description: () => t`Integrate with E-Invoices services: MatBao, ...`,
     color: "yellow",
+    name: defineMessage`E-Invoices`,
+    description: defineMessage`Integrate with E-Invoices services: MatBao, ...`,
   }),
   workspacePluginsStorage: combineModule({
     href: "/workspace-settings/plugins/storage",
     icon: IconCloudDataConnection,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
     restrictDisplay: ["spotlight"],
-    name: () => t`Cloud Storage`,
-    description: () => t`Integrate with cloud storage services: S3, ...`,
     color: "blue",
+    name: defineMessage`Cloud Storage`,
+    description: defineMessage`Integrate with cloud storage services: S3, ...`,
   }),
 
   // Profile
@@ -461,9 +463,9 @@ export const workspaceModuleConfigs = {
     href: "/profile/settings",
     icon: IconSettings,
     restrictDisplay: ["spotlight"],
-    name: () => t`Profile settings`,
-    description: () => t`Manage your profile settings`,
     color: "primary",
+    name: defineMessage`Profile settings`,
+    description: defineMessage`Manage your profile settings`,
   }),
 
   // Reports
@@ -471,14 +473,37 @@ export const workspaceModuleConfigs = {
     href: "/reports",
     icon: IconReportAnalytics,
     permissions: WorkspacePermission.REPORTS_VIEW,
-    name: () => t`Reports`,
-    description: () => t`View reports and analytics`,
     color: "teal",
+    name: defineMessage`Reports`,
+    description: defineMessage`View reports and analytics`,
   }),
 };
 
 export type WorkspaceModuleId = keyof typeof workspaceModuleConfigs;
 
-export const getWorkspaceModuleName = (id: WorkspaceModuleId) => {
-  return workspaceModuleConfigs[id].name;
+export const useWorkspaceModules = () => {
+  const { i18n, t } = useLingui();
+
+  const workspaceModules = useMemo<WorkspaceModule[]>(() => {
+    return Object.entries(workspaceModuleConfigs).map(([id, mo]) => ({
+      ...mo,
+      id: id as WorkspaceModuleId,
+      name: t(mo.name),
+      description: mo.description ? t(mo.description) : undefined,
+    }));
+  }, [i18n.locale]);
+
+  return {
+    workspaceModules,
+    getModule: (id: WorkspaceModuleId) => workspaceModules.find((m) => m.id === id)!,
+  };
+};
+
+export const useActivatedWorkspaceModule = () => {
+  const { workspaceModules } = useWorkspaceModules();
+  const pathname = usePathname();
+
+  return workspaceModules.find(
+    (m) => pathname === m.href || (pathname.startsWith(m.href) && !m.hrefExact)
+  );
 };

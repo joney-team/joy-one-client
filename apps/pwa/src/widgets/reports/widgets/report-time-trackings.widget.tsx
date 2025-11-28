@@ -15,7 +15,6 @@ import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { WidgetProps } from "@/widgets/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Table, Text, ThemeIcon } from "@mantine/core";
 import { IconFolder, IconStopwatch } from "@tabler/icons-react";
@@ -58,11 +57,11 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
   return (
     <Card shadow="xs" p={16} w="100%">
       <Stack>
-        <SectionTitle name={t`Tasks time trackings`} icon={IconStopwatch}>
+        <SectionTitle name={<Trans>Tasks time trackings</Trans>} icon={IconStopwatch}>
           <Group gap={8}>
             <ButtonSelect
               icon={IconFolder}
-              label={t`Folder`}
+              label={<Trans>Folder</Trans>}
               autoHideLabel
               activeColor={
                 tasks.params.tagFolderId

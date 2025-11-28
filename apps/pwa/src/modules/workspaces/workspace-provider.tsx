@@ -6,7 +6,6 @@ import { Fullscreen } from "@/components/fullscreen";
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
 import { getGlobal } from "@/global";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
-import { useRouter } from "@/hooks/use-router";
 import { ConnectMetaPagesModal, OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getWorkspaceAuthSessionId } from "@/modules/auth/auth-service";
@@ -45,19 +44,20 @@ import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { Currency } from "@joy-one-client/utils/currency";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
 import * as Sentry from "@sentry/react";
 import { AxiosError } from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../apis";
 import { useRestQuery } from "../apis/use-rest-query";
 import { useLang } from "../lang/lang-context";
 import { Context } from "./workspace-context";
-import { workspaceModuleConfigs, WorkspaceModuleId } from "./workspace-modules";
+import { useWorkspaceModules, WorkspaceModuleId } from "./workspace-modules";
 import { WorkspaceRequire } from "./workspace-require";
 import { getDefaultWorkspaceView } from "./workspace-view";
 import {
@@ -67,7 +67,6 @@ import {
   WorkspaceMemberInvitationState,
   WorkspaceType,
 } from "./workspaces-types";
-import { Currency } from "@joy-one-client/utils/currency";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
@@ -75,6 +74,7 @@ const syncSettings = (settings: WorkspaceSettingEntity) => {
 };
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
+  const { t } = useLingui();
   const state = useRef<{
     roles: WorkspaceRoleEntity[];
     settings?: WorkspaceSettingEntity;
@@ -91,6 +91,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const params = useParams();
   const inviteCode = params.inviteCode as string;
   const app = useApp();
+  const { workspaceModules } = useWorkspaceModules();
 
   const [isInitialized, _setIsInitialized] = useState(false);
   const [isCreateNew, setIsCreateNew] = useState(false);
@@ -287,29 +288,25 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     return { ...output };
   };
 
-  const modules = useMemo(() => {
-    return Object.entries(workspaceModuleConfigs).map(([id, mo]) => ({
-      ...mo,
-      id: id as WorkspaceModuleId,
-    }));
-  }, [userMember?.workspace, lang.locale]);
-
   const availableModules = useMemo(() => {
-    return modules.filter((mo) => {
-      const _permissions = userMember?.permissions || [];
+    return workspaceModules.filter((workspaceModule) => {
+      const userMemberPermissions = userMember?.permissions || [];
       const ableToAccess =
-        (mo && !mo.permissions) ||
-        mo.permissions
+        (workspaceModule && !workspaceModule.permissions) ||
+        workspaceModule.permissions
           ?.toString()
           .split(",")
-          .every((p) => _permissions.includes(p as WorkspacePermission));
+          .every((p) => userMemberPermissions.includes(p as WorkspacePermission));
 
       const isAvailableType =
-        !mo.workspaceTypes ||
-        mo.workspaceTypes.includes(userMember?.workspace?.type || WorkspaceType.BUSINESS);
+        !workspaceModule.workspaceTypes ||
+        workspaceModule.workspaceTypes.includes(
+          userMember?.workspace?.type || WorkspaceType.BUSINESS
+        );
+
       return ableToAccess && isAvailableType;
     });
-  }, [modules, userMember?.permissions, userMember?.workspace?.type, lang.locale]);
+  }, [workspaceModules, userMember?.permissions, userMember?.workspace?.type, lang.locale]);
 
   const isUserOnline = (userId: string) => {
     return !!onlineStatus.data?.[userId] || false;
@@ -330,10 +327,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     await setSettings({ ...state.current.settings!, view: undefined }, true);
     return getWorkspaceDisplayView({});
   };
-
-  const activatedModule = modules.find(
-    (m) => router.pathname === m.href || (router.pathname.startsWith(m.href) && !m.hrefExact)
-  );
 
   const onConnectMetaPages = async (accessToken: string) => {
     try {
@@ -445,7 +438,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const contextValue: WorkspaceContext = {
     onlineStatus: onlineStatus.data || {},
-    activatedModule,
+    availableModules,
+    getAvailableModule: (id: WorkspaceModuleId) => workspaceModules.find((m) => m.id === id)!,
     type: userMember?.workspace?.type!,
     updateSettings,
     permissions: userMember?.permissions!,
@@ -473,11 +467,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     view: workspaceView,
     setView,
     resetView,
-    isModuleActive: (id: string) => availableModules.some((m) => m.id === id),
-    modules,
-    getModule: (id: WorkspaceModuleId) => modules.find((m) => m.id === id)!,
-    getModuleName: (id: WorkspaceModuleId) => workspaceModuleConfigs[id].name(),
-    availableModules,
     isCreateNew,
     setIsCreateNew,
     archive,

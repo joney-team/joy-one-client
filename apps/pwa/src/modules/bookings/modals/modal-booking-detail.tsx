@@ -4,16 +4,16 @@ import { Anchor, Modal, Stack, ThemeIcon, Title, em } from "@mantine/core";
 import { IconCalendar, IconEye, IconUser, IconUserScreen } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
 
-import { useColor } from "@/modules/theme/use-color";
-import { useRouter } from "@/hooks/use-router";
-import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Button } from "@/components/buttons/button";
-import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { SectionTitle } from "@/components/session-title";
+import { useRouter } from "@/hooks/use-router";
 import { BookingEntity } from "@/modules/bookings/booking-types";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
+import { CustomerCard } from "@/modules/customers/components/customer-card";
+import { useColor } from "@/modules/theme/use-color";
+import { Trans } from "@lingui/react/macro";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
-import { t } from "@lingui/core/macro";
 
 interface ModalBookingDetailProps {
   booking: BookingEntity;
@@ -56,13 +56,13 @@ export const ModalBookingDetail: FC = () => {
               </ThemeIcon>
 
               <Title fz={em(20)} fw={700} c={color("primary")} ta="center">
-                {t`Booking information`}
+                <Trans>Booking information</Trans>
               </Title>
             </Stack>
 
             {props?.booking.customer && (
               <Fragment>
-                <SectionTitle mb={-10} name={t`Customer`} icon={IconUser} />
+                <SectionTitle mb={-10} name={<Trans>Customer</Trans>} icon={IconUser} />
                 <CustomerCard
                   customer={props?.booking.customer}
                   withBorder
@@ -72,7 +72,7 @@ export const ModalBookingDetail: FC = () => {
               </Fragment>
             )}
 
-            <SectionTitle mb={-10} name={t`Booking`} icon={IconCalendar} />
+            <SectionTitle mb={-10} name={<Trans>Booking</Trans>} icon={IconCalendar} />
 
             <BookingCard
               booking={props?.booking}
@@ -86,12 +86,12 @@ export const ModalBookingDetail: FC = () => {
             <Stack justify="center" align="center" mt={10}>
               {props.booking.customer && (
                 <Button leftIcon={IconEye} radius={100} onClick={onViewDetail}>
-                  {t`Customer detail`}
+                  <Trans>Customer detail</Trans>
                 </Button>
               )}
 
               <Anchor c="gray" fz={em(14)} onClick={onClose}>
-                {t`Close`}
+                <Trans>Close</Trans>
               </Anchor>
             </Stack>
           </Stack>

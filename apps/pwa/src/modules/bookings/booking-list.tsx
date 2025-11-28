@@ -31,8 +31,7 @@ import { CalendarView } from "@/types";
 import { ObjectUtils } from "@/utils/object.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -82,6 +81,7 @@ const normalizeQuery = (query: any) => {
 };
 
 export const BookingList: FC = () => {
+  const { t } = useLingui();
   const ref = useRef<HTMLDivElement>(null);
   const workDaySlots = useWorkDaySlots();
   const layout = useLayout();

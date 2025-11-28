@@ -1,11 +1,12 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Group,
@@ -23,7 +24,6 @@ import { IconUpload } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { workspaceTypes } from "../workspace-constants";
 import { WorkspaceTypeItem } from "./workpsace-type-item";
-import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 
 let timeout: NodeJS.Timeout;
 export const WorkspaceInformation: FC = () => {
@@ -81,21 +81,31 @@ export const WorkspaceInformation: FC = () => {
               <ThemeIcon variant="transparent" color="dark" size="md">
                 <IconUpload strokeWidth={1.2} />
               </ThemeIcon>
-              <Text fz={12}>{t`Click to change`}</Text>
+              <Text fz={12}>
+                <Trans>Click to change</Trans>
+              </Text>
             </Group>
           </Group>
         </Dropzone>
 
-        <TextInput label="Tên" {...form.getInputProps("name")} placeholder="Gold Dental" />
+        <TextInput
+          label={<Trans>Name</Trans>}
+          {...form.getInputProps("name")}
+          placeholder="Gold Dental"
+        />
 
         <SimpleGrid cols={{ md: 2 }}>
-          <TextInput label={t`Phone`} {...form.getInputProps("phone")} placeholder="090888888" />
+          <TextInput
+            label={<Trans>Phone</Trans>}
+            {...form.getInputProps("phone")}
+            placeholder="090888888"
+          />
           <TextInput label="Hotline" {...form.getInputProps("hotline")} placeholder="19008088" />
         </SimpleGrid>
 
-        <TextInput label={t`Address`} {...form.getInputProps("location.address")} />
+        <TextInput label={<Trans>Address</Trans>} {...form.getInputProps("location.address")} />
 
-        <InputWrapper label={t`Workspace type`} {...form.getInputProps("type")}>
+        <InputWrapper label={<Trans>Workspace type</Trans>} {...form.getInputProps("type")}>
           <Group gap={10} pt={5}>
             {Object.values(WorkspaceType).map((type) => {
               return (
@@ -132,7 +142,7 @@ export const WorkspaceInformation: FC = () => {
           )}
           {workspace.userMember?.workspace?.location && (
             <Text fz={12}>
-              {t`Address`}: {workspace.userMember.workspace.location?.address}
+              <Trans>Address</Trans>: {workspace.userMember.workspace.location?.address}
             </Text>
           )}
         </Stack>

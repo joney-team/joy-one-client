@@ -233,12 +233,10 @@ export const WorkspaceOperationSettings: FC = () => {
             />
           </Group>
           <Text fz={em(12)} c="gray">
-            {
-              <Trans>
-                Leave blank or fill in 0 if you do not want to remind the customer. <br /> The
-                reminder will be sent via Zalo OA, SMS and Email if these services are enabled.
-              </Trans>
-            }
+            <Trans>
+              Leave blank or fill in 0 if you do not want to remind the customer. <br /> The
+              reminder will be sent via Zalo OA, SMS and Email if these services are enabled.
+            </Trans>
           </Text>
         </Stack>
 

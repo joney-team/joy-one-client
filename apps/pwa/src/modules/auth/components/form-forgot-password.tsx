@@ -2,15 +2,16 @@
 
 import { Button } from "@/components/buttons/button";
 import { onError, onFormErrorLegacy } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
 import { Anchor, Center, em, PasswordInput, PinInput, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconLock, IconMail } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";
 import { renewPassword, requestRenewPassword, verifyRenewPasswordCode } from "../auth-service";
+import { Trans, useLingui } from "@lingui/react/macro";
 
 export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
+  const { t } = useLingui();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -47,16 +48,16 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
         setIsSent(true);
         notifications.show({
           autoClose: true,
-          title: t`Notification`,
-          message: t`Verification code sent to your email.`,
+          title: <Trans>Notification</Trans>,
+          message: <Trans>Verification code sent to your email.</Trans>,
           icon: <IconMail strokeWidth={1.5} size={18} />,
         });
       } else {
         await renewPassword(values);
         notifications.show({
           autoClose: true,
-          title: t`Success`,
-          message: t`Password changed successfully.`,
+          title: <Trans>Success</Trans>,
+          message: <Trans>Password changed successfully.</Trans>,
           icon: <IconLock strokeWidth={1.5} size={18} />,
         });
         props.onFinish();
@@ -84,10 +85,12 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
           if (isVerified) {
             return (
               <Fragment>
-                <Text ta="center">{t`Enter new password`}</Text>
+                <Text ta="center">
+                  <Trans>Enter new password</Trans>
+                </Text>
 
                 <PasswordInput
-                  label={t`New password`}
+                  label={<Trans>New password</Trans>}
                   size="md"
                   placeholder={t`Password must contain at least ${6} characters` as string}
                   leftSection={<IconLock strokeWidth={1.5} size={18} />}
@@ -95,7 +98,7 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
                 />
 
                 <Button mt={16} loading={isSubmitting} type="submit" h={42}>
-                  {t`Change password`}
+                  <Trans>Change password</Trans>
                 </Button>
               </Fragment>
             );
@@ -104,14 +107,16 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
           if (isSent)
             return (
               <Fragment>
-                <Text ta="center">{t`Forgot password message`}</Text>
+                <Text ta="center">
+                  <Trans>Forgot password message</Trans>
+                </Text>
 
                 <Center>
                   <PinInput length={6} oneTimeCode onComplete={onVerify} size="md" type="number" />
                 </Center>
 
                 <Anchor ta="center" onClick={() => onSubmit()} mt={16} fz={em(14)}>
-                  {t`Resend verification code`}
+                  <Trans>Resend verification code</Trans>
                 </Anchor>
               </Fragment>
             );
@@ -128,7 +133,7 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
               />
 
               <Button mt={16} loading={isSubmitting} type="submit">
-                {t`Next`}
+                <Trans>Next</Trans>
               </Button>
             </Fragment>
           );

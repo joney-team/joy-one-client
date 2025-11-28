@@ -1,13 +1,15 @@
-import { BookingForm } from "../components/form-booking";
+"use client";
+
 import { ModalTitle } from "@/components/modal-title";
 import { BookingEntity } from "@/modules/bookings/booking-types";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import { IconCalendar } from "@tabler/icons-react";
+import { BookingForm } from "../components/form-booking";
 
 export const OnModalRescheduleBooking = (booking: BookingEntity) => {
   return modals.open({
-    title: <ModalTitle title={t`Reschedule booking`} icon={IconCalendar} />,
+    title: <ModalTitle title={<Trans>Reschedule booking</Trans>} icon={IconCalendar} />,
     modalId: "RescheduleBooking",
     size: 500,
     children: (

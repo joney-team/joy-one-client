@@ -17,8 +17,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WidgetProps } from "@/widgets/types";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -181,16 +180,18 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                         <Table.Thead>
                           <Table.Tr>
                             <Table.Th w={40}>#</Table.Th>
-                            <Table.Th>{t`Name`}</Table.Th>
+                            <Table.Th>
+                              <Trans>Name</Trans>
+                            </Table.Th>
                             <Table.Th w={80} ta="right">
-                              {t`QTY`}
+                              <Trans>QTY</Trans>
                             </Table.Th>
                             <Table.Th w={200} ta="right">
-                              {t`Revenue`}
+                              <Trans>Revenue</Trans>
                             </Table.Th>
                             {workspace.hasPermission(WorkspacePermission.REPORTS_VIEW) && (
                               <Table.Th w={200} ta="right">
-                                {t`Profit`}
+                                <Trans>Profit</Trans>
                               </Table.Th>
                             )}
                           </Table.Tr>
@@ -247,10 +248,13 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
 
 const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
   const [isShow, setIsShow] = useState(false);
+  const { t } = useLingui();
 
   const workspace = useWorkspace();
-  const moduleOrder = workspace.getModule("orders");
+  const moduleOrder = workspace.getAvailableModule("orders");
   const relatedEntity = t`Receipts`.toLowerCase();
+
+  if (!moduleOrder) return null;
 
   return (
     <Stack gap={8}>
@@ -260,7 +264,7 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
             <IconClipboardList />
           </ThemeIcon>
           <Trans>
-            <NumberFormat value={items.length} /> related to {relatedEntity} / {moduleOrder?.name()}
+            <NumberFormat value={items.length} /> related to {relatedEntity} / {moduleOrder.name}
           </Trans>
           <ActionIcon variant="subtle" size="xs">
             {!isShow ? <IconChevronDown /> : <IconChevronUp />}
@@ -279,7 +283,7 @@ const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
               <Card withBorder shadow="none" p={8} key={i} maw="100%" w={220}>
                 {!!order && (
                   <Group justify="space-between">
-                    <Text fz={16}>{moduleOrder?.name()}</Text>
+                    <Text fz={16}>{moduleOrder.name}</Text>
                     <Anchor component={Link} href={`/orders/${order?.data.code}`}>
                       <Text fw={700} fz={em(13)}>
                         #{order.data.code}

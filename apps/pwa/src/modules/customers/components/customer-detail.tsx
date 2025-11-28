@@ -35,9 +35,8 @@ import { CustomerKyc } from "@/modules/customers/components/customer-kyc-list";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
 import { AppEntity } from "@/types";
+import { Trans } from "@lingui/react/macro";
 
 export const CustomerDetail = () => {
   const workspace = useWorkspace();
@@ -107,30 +106,30 @@ export const CustomerDetail = () => {
     );
 
   if (detail.error || !customer) return <Errored error={detail.error} />;
-  if (customer.isArchived) return <Archived entity={t`customer`} />;
+  if (customer.isArchived) return <Archived entity={<Trans>Customer</Trans>} />;
 
   return (
     <Fragment>
       <Stack gap={30} p={16}>
         <CustomerInformations customer={customer} />
 
-        <Renderer visible={workspace.isModuleActive("customerKYCs")}>
+        <Renderer visible={!!workspace.getAvailableModule("customerKYCs")}>
           <Stack gap={10}>
             <SectionTitle name="KYC" icon={IconUserScan} />
             <CustomerKyc customer={customer} />
           </Stack>
         </Renderer>
 
-        <Renderer visible={workspace.isModuleActive("bookings")}>
+        <Renderer visible={!!workspace.getAvailableModule("bookings")}>
           <CustomerBookings customer={customer} />
         </Renderer>
 
-        <Renderer visible={workspace.isModuleActive("tasks")}>
+        <Renderer visible={!!workspace.getAvailableModule("tasks")}>
           <CustomerTasks customer={customer} />
         </Renderer>
 
         <Stack gap={10}>
-          <SectionTitle name={t`Images & Documents`} icon={IconFiles} />
+          <SectionTitle name={<Trans>Images & Documents</Trans>} icon={IconFiles} />
 
           <FilesBox
             refs={[`${AppEntity.CUSTOMERS}:${customer._id}`]}
@@ -142,7 +141,7 @@ export const CustomerDetail = () => {
         <EventList ref={customer._id} />
 
         <ButtonArchive
-          name={t`customer`}
+          name={<Trans>Customer</Trans>}
           enabled={
             !customer.isArchived && workspace.hasPermission(WorkspacePermission.CUSTOMERS_ARCHIVE)
           }
@@ -151,7 +150,7 @@ export const CustomerDetail = () => {
       </Stack>
 
       <CtasWrapper>
-        <Renderer visible={workspace.isModuleActive("prescriptions")}>
+        <Renderer visible={!!workspace.getAvailableModule("prescriptions")}>
           <ActionIcon
             radius={150}
             size="xl"

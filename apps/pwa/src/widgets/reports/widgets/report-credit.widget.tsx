@@ -15,8 +15,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { WidgetProps } from "@/widgets/types";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Card, Group, parseThemeColor, Stack, useMantineTheme } from "@mantine/core";
 import { IconFileExcel, IconReportAnalytics } from "@tabler/icons-react";
 import { FC } from "react";
@@ -248,6 +247,7 @@ const exportReport = async (receipts: ReceiptEntity[]): Promise<CreditReport> =>
 };
 
 export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props) => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const theme = useMantineTheme();
   const parsedPrimaryColor = parseThemeColor({
@@ -570,7 +570,10 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
   return (
     <Card withBorder={false} shadow="xs" p={16} w="100%" h="100%">
       <Stack justify="center" h="100%">
-        <SectionTitle name={t`Report income and expenditure`} icon={IconReportAnalytics}>
+        <SectionTitle
+          name={<Trans>Report income and expenditure</Trans>}
+          icon={IconReportAnalytics}
+        >
           <Group justify="end" flex={1}>
             <Button leftIcon={IconFileExcel} onClick={exportExcel} fz={12}>
               <Trans>Export</Trans> Excel

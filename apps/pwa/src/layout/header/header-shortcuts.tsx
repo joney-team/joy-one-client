@@ -12,7 +12,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Menu } from "@mantine/core";
 import {
   Icon,
@@ -80,7 +80,9 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
 
   const availableShortcuts = shortcuts.filter((shortcut) => {
     const isHasPermission = !shortcut.permission || workspace.hasPermission(shortcut.permission);
-    const isModuleActive = shortcut.moduleId ? workspace.isModuleActive(shortcut.moduleId) : true;
+    const isModuleActive = shortcut.moduleId
+      ? !!workspace.getAvailableModule(shortcut.moduleId)
+      : true;
     const isMatchWorkspaceType = shortcut.workspaceType
       ? workspace.type === shortcut.workspaceType
       : true;
@@ -99,7 +101,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
 
         <Menu.Dropdown>
           {availableShortcuts.map((shortcut) => {
-            const mod = workspace.modules.find((m) => m.id === shortcut.moduleId);
+            const mod = workspace.getAvailableModule(shortcut.moduleId as WorkspaceModuleId);
             if (!mod) return null;
 
             if ("onClick" in shortcut) {
@@ -109,7 +111,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
                   leftSection={<shortcut.icon size={18} />}
                   onClick={() => shortcut.onClick(router)}
                 >
-                  {mod.name()}
+                  {mod.name}
                 </Menu.Item>
               );
             }
@@ -120,7 +122,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
                 component={Link}
                 href={shortcut.href}
               >
-                {mod.name()}
+                {mod.name}
               </Menu.Item>
             );
           })}
@@ -139,7 +141,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
           onClick={() => OnModalLoanCalculator()}
           leftIcon={IconCalculator}
         >
-          {t`Loan calculator`}
+          <Trans>Loan calculator</Trans>
         </Button>
       )}
 
@@ -148,14 +150,14 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
           <Menu.Target>
             <Group>
               <Button id="create-credit" size="xs" leftIcon={IconCirclePlus} isGradient>
-                {t`Quick Creation`}
+                <Trans>Quick Creation</Trans>
               </Button>
             </Group>
           </Menu.Target>
 
           <Menu.Dropdown>
             {availableShortcuts.map((shortcut) => {
-              const mod = workspace.modules.find((m) => m.id === shortcut.moduleId);
+              const mod = workspace.getAvailableModule(shortcut.moduleId as WorkspaceModuleId);
               if (!mod) return null;
 
               if ("onClick" in shortcut) {
@@ -165,7 +167,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
                     leftSection={<shortcut.icon size={18} />}
                     onClick={() => shortcut.onClick(router)}
                   >
-                    {mod.name()}
+                    {mod.name}
                   </Menu.Item>
                 );
               }
@@ -176,7 +178,7 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
                   component={Link}
                   href={shortcut.href}
                 >
-                  {mod.name()}
+                  {mod.name}
                 </Menu.Item>
               );
             })}

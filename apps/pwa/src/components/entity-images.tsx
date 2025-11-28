@@ -1,8 +1,7 @@
 "use client";
 
-import { useLayout } from "@/layout/layout-context";
+import { FileType } from "@/graphql/enums.graphql";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
@@ -12,7 +11,6 @@ import { FC, useRef } from "react";
 import { Empty } from "./empty";
 import { Image } from "./image";
 import { Renderer } from "./renderer";
-import { FileType } from "@/graphql/enums.graphql";
 
 interface EntityImagesProps {
   name?: string;
@@ -71,7 +69,10 @@ export const EntityImages: FC<EntityImagesProps> = (props) => {
           </Group>
         </Renderer>
 
-        <Empty visible={!!props.disabled && images.length === 0} message={t`No Images`} />
+        <Empty
+          visible={!!props.disabled && images.length === 0}
+          message={<Trans>No Images</Trans>}
+        />
 
         <Renderer visible={!props.disabled}>
           <Group gap={5} justify="center" py={16} pb={isHasImage ? 5 : 15}>

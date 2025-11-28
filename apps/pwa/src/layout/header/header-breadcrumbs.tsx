@@ -37,12 +37,12 @@ export const WorkspaceHeaderBreadcrumbs: FC = () => {
   const router = useRouter();
   const layout = useLayout();
 
-  const activatedModule = workspace.modules.find((m) => m.href === router.pathname);
-  const parentActivatedModule = workspace.modules.find(
+  const activatedModule = workspace.availableModules.find((m) => m.href === router.pathname);
+  const parentActivatedModule = workspace.availableModules.find(
     (m) => m.href === `/${router.pathname.split("/")[1]}` && m.id !== activatedModule?.id
   );
 
-  const parentModules = getParentModules(router.pathname, workspace.modules);
+  const parentModules = getParentModules(router.pathname, workspace.availableModules);
 
   const ignoreModules = ["tasks"];
 
@@ -100,7 +100,7 @@ const BreadcrumbItem: FC<{ mod: WorkspaceModule }> = ({ mod }) => {
       >
         <Group gap={0}>
           <Text fz={13} fw={500} px={4}>
-            {mod.name()}
+            {mod.name}
           </Text>
         </Group>
       </Card>

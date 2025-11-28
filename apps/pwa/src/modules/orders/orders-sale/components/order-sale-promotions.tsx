@@ -17,7 +17,7 @@ import { userOrdersManagement } from "../../orders-management/orders-management-
 
 export const OrderSalePromotions: FC = () => {
   const workspace = useWorkspace();
-  const mod = workspace.getModule("promotions");
+  const workspaceModule = workspace.getAvailableModule("promotions");
   const color = useColor();
   const [opened, { open, close }] = useDisclosure(false);
   const { availablePromotions, activeOrder, updateOrder } = userOrdersManagement();
@@ -34,7 +34,7 @@ export const OrderSalePromotions: FC = () => {
   const orderPromotions = activeOrder?.promotions ?? [];
   const unUsedPromotions = promotions.filter((c) => !orderPromotions.some((c2) => c2.id === c.id));
 
-  if (!activeOrder) return null;
+  if (!activeOrder || !workspaceModule) return null;
 
   return (
     <Group wrap="nowrap">
@@ -84,7 +84,7 @@ export const OrderSalePromotions: FC = () => {
                 key={promotion.id}
                 name={promotion.name}
                 description={<PromotionDescription promotion={promotion} />}
-                icon={mod.icon}
+                icon={workspaceModule.icon}
                 isActive={isActive}
                 onClick={() => {
                   if (isActive) {

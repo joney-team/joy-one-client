@@ -33,16 +33,13 @@ import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { useLang } from "@/modules/lang/lang-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { onError } from "@/utils/exceptions.utils";
-import { capitalize } from "@/utils/string.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { FC, Fragment, useEffect, useState } from "react";
 
 interface ModalBookingProps {
@@ -55,7 +52,7 @@ interface ModalBookingProps {
 
 export const ModalBooking: FC<ModalBookingProps> = (props) => {
   const workspace = useWorkspace();
-  const lang = useLang();
+  const { t } = useLingui();
   const color = useColor();
 
   const getInitAssigneeUsers = () => {
@@ -352,11 +349,13 @@ export const OnModalBooking = (props?: ModalBookingProps) => {
     title: (
       <ModalTitle
         title={
-          props?.booking
-            ? capitalize(`${t`Update`} ${t`Booking`}`)
-            : props?.reschedule
-            ? t`Reschedule booking`
-            : capitalize(`${t`Create`} ${t`Booking`}`)
+          props?.booking ? (
+            <Trans>Update booking</Trans>
+          ) : props?.reschedule ? (
+            <Trans>Reschedule booking</Trans>
+          ) : (
+            <Trans>Create booking</Trans>
+          )
         }
         icon={props?.reschedule ? IconCalendarTime : IconCalendar}
       />

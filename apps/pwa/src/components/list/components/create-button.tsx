@@ -4,12 +4,12 @@ import { Button } from "@/components/buttons/button";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
 import { ActionIcon, ActionIconProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
 import { useListContext } from "../list-context";
+import { Trans } from "@lingui/react/macro";
 
 export const CreateButton: FC = () => {
   const context = useListContext();
@@ -46,7 +46,7 @@ export const CreateButton: FC = () => {
       leftIcon={context.creatable.icon || IconPlus}
       iconSize={16}
       size="compact-sm"
-      label={context.creatable.label || t`Create`}
+      label={context.creatable.label || <Trans>Create</Trans>}
       {...baseProps}
     />
   );

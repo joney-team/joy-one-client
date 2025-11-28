@@ -24,16 +24,16 @@ import { orderPaymentStatuses } from "./orders-constants";
 
 export const OrderList: FC = () => {
   const workspace = useWorkspace();
-  const mod = workspace.getModule("orders");
+  const workspaceModule = workspace.getAvailableModule("orders");
 
-  if (!mod) return null;
+  if (!workspaceModule) return null;
 
   return (
     <Stack p={16}>
       <List<OrderEntity>
         id="ors"
-        name={mod.name()}
-        icon={mod.icon}
+        name={workspaceModule.name}
+        icon={workspaceModule.icon}
         route="/orders"
         columns={{
           code: codeColumn({ href: (value) => `/orders/${value}` }),

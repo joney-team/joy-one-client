@@ -20,7 +20,8 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { Period } from "@/types";
 import { ObjectUtils } from "@/utils/object.utils";
-import { t } from "@lingui/core/macro";
+import { DateTime } from "@joy-one-client/utils/date-time";
+import { Trans } from "@lingui/react/macro";
 import { Group, Loader, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {
   IconBuildingSkyscraper,
@@ -39,13 +40,13 @@ import { Avatar } from "../../components/avatar";
 import { ButtonSelect } from "../../components/buttons/button-select";
 import { Errored } from "../../components/errored";
 import { Renderer } from "../../components/renderer";
-import { reportWidgetModules } from "./modules";
 import { ReportWidgetsContext } from "./types";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { useReportWidgetModules } from "./modules";
 
 export const ReportWidgets: FC = () => {
   const workspace = useWorkspace();
   const router = useRouter();
+  const { reportWidgetModules } = useReportWidgetModules();
 
   const getQuery = (query: any, prev?: boolean) => {
     let _query = { ...query };
@@ -138,17 +139,17 @@ export const ReportWidgets: FC = () => {
           value={period}
           options={[
             {
-              label: t`Date`,
+              label: <Trans>Date</Trans>,
               icon: IconCalendar,
               value: Period.DATE,
             },
             {
-              label: t`Month`,
+              label: <Trans>Month</Trans>,
               icon: IconCalendarMonth,
               value: Period.MONTH,
             },
             {
-              label: t`Year`,
+              label: <Trans>Year</Trans>,
               icon: IconCalendarEvent,
               value: Period.YEAR,
             },
@@ -243,7 +244,7 @@ export const ReportWidgets: FC = () => {
                         >
                           <Group gap={5}>
                             <Text fz={12} fw={500}>
-                              {t`Members`}
+                              <Trans>Members</Trans>
                             </Text>
 
                             {!isUserMemberInfosReady ? (
@@ -305,7 +306,7 @@ export const ReportWidgets: FC = () => {
                   {(hover) => {
                     const workspaceBranch = [
                       ...workspaceBranches,
-                      { _id: "root", name: t`Main office` },
+                      { _id: "root", name: <Trans>Main office</Trans> },
                     ].find((v) => query.workspaceBranchIds.includes(v._id));
 
                     return (
@@ -331,7 +332,7 @@ export const ReportWidgets: FC = () => {
                         >
                           <Group gap={5}>
                             <Text fz={12} fw={500}>
-                              {t`Branch`}
+                              <Trans>Branch</Trans>
                             </Text>
 
                             {!isWorkspaceBranchesReady ? (

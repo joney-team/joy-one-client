@@ -32,7 +32,7 @@ import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { useMantineTheme } from "@mantine/core";
 import * as Sentry from "@sentry/react";
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -73,6 +73,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const theme = useMantineTheme();
   const lang = useLang();
   const app = useApp();
+  const { t } = useLingui();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [user, setUser] = useState<UserAuthResult>();

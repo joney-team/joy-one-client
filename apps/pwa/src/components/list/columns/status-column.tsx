@@ -1,11 +1,11 @@
 import { Circle } from "@/components/circle";
+import { useColor } from "@/modules/theme/use-color";
 import { objUnselect } from "@joy-one-client/utils/object";
+import { useLingui } from "@lingui/react/macro";
 import { Card, ComboboxDropdownProps, Group, Text } from "@mantine/core";
 import { IconProgress } from "@tabler/icons-react";
 import { ReactNode } from "react";
 import { Column } from "../types";
-import { useColor } from "@/modules/theme/use-color";
-import { t } from "@lingui/core/macro";
 
 export interface StatusColumnOption {
   label: string;
@@ -20,6 +20,7 @@ export interface StatusColumnArgs<T> extends Omit<Column<T>, "render" | "icon"> 
 }
 
 export function statusColumn<T = any>(args: StatusColumnArgs<T>): Column<T> {
+  const { t } = useLingui();
   const dropdownProps: ComboboxDropdownProps = {
     ...args.dropdownProps,
     miw: 200,

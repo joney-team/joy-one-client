@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { ActionIcon, Group, Popover, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
@@ -16,6 +16,7 @@ export type TextFilterConfig =
 
 export const TextFilter: FC<FilterProps> = ({ wrapper: Wrapper, column }) => {
   const { list, fixedParams } = useListContext();
+  const { t } = useLingui();
   const isReadonly = Boolean(fixedParams?.[column.columnKey]);
   const config = column.filter?.text ?? ({} as Partial<TextFilterConfig>);
   const [opened, setOpened] = useState(false);

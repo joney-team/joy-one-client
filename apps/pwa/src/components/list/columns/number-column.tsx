@@ -1,11 +1,9 @@
 "use client";
 
-import { NumberFormat } from "@/components/format/number-format";
-import { Text } from "@mantine/core";
-import { Column } from "../types";
-import { t } from "@lingui/core/macro";
 import { CurrencyFormat } from "@/components/format/currency-format";
+import { NumberFormat } from "@/components/format/number-format";
 import { Trans } from "@lingui/react/macro";
+import { Column } from "../types";
 
 export interface NumberColumnOptions extends Omit<Column, "render"> {
   type?: "money" | "hours";

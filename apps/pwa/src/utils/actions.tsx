@@ -4,7 +4,6 @@ import { getGlobal } from "@/global";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { type AppMetadata } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { notifications } from "@mantine/notifications";
 import { Icon, IconArchive, IconCheck, ReactNode } from "@tabler/icons-react";
@@ -48,7 +47,7 @@ export function onActionLoad<T = any>(args: {
           id,
           color,
           icon: <IconCheck strokeWidth={1.5} size={18} />,
-          message: t`Completed`,
+          message: <Trans>Completed</Trans>,
           autoClose: 1000,
           loading: false,
         });
@@ -69,7 +68,7 @@ export function onActionLoad<T = any>(args: {
 
 export function onSuccess(args: { title?: string; message: string }) {
   notifications.show({
-    title: args.title || t`Success`,
+    title: args.title || <Trans>Success</Trans>,
     message: args.message,
     color: "green",
     icon: <IconCheck strokeWidth={1.5} size={18} />,

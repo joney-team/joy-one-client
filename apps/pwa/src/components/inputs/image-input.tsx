@@ -1,10 +1,11 @@
+import { FileType } from "@/graphql/enums.graphql";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { OnModalFiles } from "@/modules/files/modals/modal-files";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Box,
@@ -21,7 +22,6 @@ import { IconEye, IconPencil, IconPhoto, IconUpload } from "@tabler/icons-react"
 import { useRef, useState, type FC } from "react";
 import { Button } from "../buttons/button";
 import { Renderer } from "../renderer";
-import { FileType } from "@/graphql/enums.graphql";
 
 interface ImageInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: string;
@@ -176,7 +176,7 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
                   fz={14}
                   iconSpacing={-8}
                 >
-                  {value ? t`Change` : t`Upload`}
+                  {value ? <Trans>Change</Trans> : <Trans>Upload</Trans>}
                 </Button>
               </Renderer>
             </Stack>

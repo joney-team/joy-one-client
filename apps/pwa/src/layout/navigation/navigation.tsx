@@ -5,10 +5,10 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { workspaceModuleConfigs } from "@/modules/workspaces/workspace-modules";
+import { WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
 import { getDefaultWorkspaceView, getNavigationGroups } from "@/modules/workspaces/workspace-view";
 import { String } from "@/utils/string.utils";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -42,8 +42,7 @@ export const AppNavigation: FC = () => {
     getDefaultWorkspaceView(workspace.type).menu ??
     []
   ).filter((v) => {
-    if (v.type === "MODULE")
-      return workspace.isModuleActive(v.moduleId as keyof typeof workspaceModuleConfigs);
+    if (v.type === "MODULE") return !!workspace.getAvailableModule(v.moduleId as WorkspaceModuleId);
     return true;
   });
 
@@ -73,7 +72,7 @@ export const AppNavigation: FC = () => {
         align="start"
       >
         {mainCpns.map((v) => {
-          const mod = workspace.modules.find((m) => m.id === v.moduleId);
+          const mod = workspace.getAvailableModule(v.moduleId as WorkspaceModuleId);
           if (!mod) return null;
 
           return (
@@ -81,7 +80,7 @@ export const AppNavigation: FC = () => {
               key={v.id}
               icon={mod.icon}
               route={mod.href}
-              label={mod.name()}
+              label={mod.name}
               exact={mod.href === "/"}
             />
           );
@@ -126,12 +125,12 @@ export const AppNavigation: FC = () => {
                   <Fragment key={group.id}>
                     <Divider
                       tt="capitalize"
-                      label={group.name || t`General`}
+                      label={group.name || <Trans>General</Trans>}
                       labelPosition="left"
                     />
 
                     {group.moduleIds.map((modId) => {
-                      const mod = workspace.modules.find((v) => v.id === modId);
+                      const mod = workspace.getAvailableModule(modId as WorkspaceModuleId);
                       if (!mod) return null;
                       const isActive = router.pathname === mod.href;
                       const moduleColor = isActive ? color("primary") : "var(--mantine-color-text)";
@@ -157,7 +156,7 @@ export const AppNavigation: FC = () => {
                             </ThemeIcon>
 
                             <Text tt="capitalize" fw={500} c={moduleColor}>
-                              {mod.name()}
+                              {mod.name}
                             </Text>
 
                             <Renderer visible={!!mod.isBeta}>
@@ -220,7 +219,7 @@ export const AppNavigation: FC = () => {
                 </Renderer>
 
                 {group.moduleIds.map((moduleId) => {
-                  const module = workspace.modules.find((v) => v.id === moduleId);
+                  const module = workspace.getAvailableModule(moduleId as WorkspaceModuleId);
                   if (!module) return null;
 
                   return (
@@ -228,7 +227,7 @@ export const AppNavigation: FC = () => {
                       key={moduleId}
                       icon={module.icon}
                       route={module.href}
-                      label={module.name()}
+                      label={module.name}
                       isBeta={module.isBeta}
                       exact={["/"].includes(module.href)}
                     />

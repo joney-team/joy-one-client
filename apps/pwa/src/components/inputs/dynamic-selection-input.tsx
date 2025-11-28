@@ -2,7 +2,7 @@ import { appEntities, dynamicSelectionOperators } from "@/constant";
 import { CustomersInput } from "@/modules/customers/components/customers-input";
 import { ProductsInput } from "@/modules/products/components/products-input";
 import { AppEntity, DynamicSelection, DynamicSelectionOperator } from "@/types";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Card, Group, InputWrapper, InputWrapperProps, Select } from "@mantine/core";
 
 interface DynamicSelectionInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
@@ -18,6 +18,7 @@ export const DynamicSelectionInput = ({
   ...props
 }: DynamicSelectionInputProps) => {
   const entity = fixedEntity || value?.entity;
+  const { t } = useLingui();
 
   const _onChange = (
     key: keyof DynamicSelection,

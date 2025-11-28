@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Divider, Group, Popover, Stack } from "@mantine/core";
 import { IconEyeCog, IconLayoutGrid, IconTable } from "@tabler/icons-react";
 import { FC } from "react";
@@ -45,12 +45,12 @@ export const ListFilterModes: FC = () => {
               );
             })}
 
-            <Divider label={t`View`} />
+            <Divider label={<Trans>View</Trans>} />
 
             <Group gap={10}>
               <ActionButton
                 icon={IconTable}
-                label={t`Table`}
+                label={<Trans>Table</Trans>}
                 active={context.viewState.view === "table"}
                 onClick={() =>
                   context.setViewState({
@@ -62,7 +62,7 @@ export const ListFilterModes: FC = () => {
 
               <ActionButton
                 icon={IconLayoutGrid}
-                label={t`Grid`}
+                label={<Trans>Grid</Trans>}
                 active={context.viewState.view === "grid"}
                 onClick={() =>
                   context.setViewState({

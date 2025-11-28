@@ -2,8 +2,7 @@
 
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
-import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Menu, Text } from "@mantine/core";
 import { IconArrowDown, IconArrowsDownUp, IconArrowUp } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
@@ -30,7 +29,7 @@ export const Sort: FC = () => {
         <Group>
           <ActionButton
             icon={IconArrowsDownUp}
-            label={layout.view === "mobile" ? null : t`Sort`}
+            label={layout.view === "mobile" ? null : <Trans>Sort</Trans>}
             quantity={sorting.length}
             onClear={sorting.length > 0 ? onReset : undefined}
             active={sorting.length > 0}

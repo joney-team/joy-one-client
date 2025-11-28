@@ -1,6 +1,6 @@
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import React, { useEffect, useRef, useState } from "react";
 
 interface Variable {
@@ -16,6 +16,7 @@ interface FormulaInputProps {
 }
 
 export const FormulaInput: React.FC<FormulaInputProps> = ({ value, onChange, variables }) => {
+  const { t } = useLingui();
   const color = useColor();
   const colorScheme = useColorScheme();
 

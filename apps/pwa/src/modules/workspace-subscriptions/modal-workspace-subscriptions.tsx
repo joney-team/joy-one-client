@@ -29,7 +29,6 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { formatBytes } from "@/utils/file.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Card, em, Group, Stack, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -238,7 +237,7 @@ export const SubscriptionCard: FC<{
 export const OnModalWorkspaceSubscription = () => {
   return modals.open({
     modalId: "ModalWorkspaceSubscription",
-    title: <ModalTitle title={t`Register subscription`} icon={IconBox} />,
+    title: <ModalTitle title={<Trans>Register subscription</Trans>} icon={IconBox} />,
     children: <ModalWorkspaceSubscription />,
     size: "auto",
     fullScreen: getView() === "mobile",

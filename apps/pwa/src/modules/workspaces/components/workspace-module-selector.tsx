@@ -22,7 +22,7 @@ interface WorkspaceModuleSelectorProps {
 export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props) => {
   const workspace = useWorkspace();
   const options: WorkspaceModuleOption[] = workspace.availableModules
-    .map((v) => ({ ...v, plainName: v.name() }))
+    .map((v) => ({ ...v, plainName: v.name }))
     .filter(
       (v) =>
         !props.excludeIds?.includes(v.id) &&
@@ -44,7 +44,7 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
                 <mo.icon strokeWidth={1.5} size={26} />
               </ThemeIcon>
 
-              <Text>{mo.name()}</Text>
+              <Text>{mo.name}</Text>
             </Group>
           </Combobox.Option>
         );

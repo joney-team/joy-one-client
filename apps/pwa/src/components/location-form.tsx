@@ -5,7 +5,7 @@ import { Fragment, memo, type FC } from "react";
 
 import { useLocations } from "@/modules/locations/locations-context";
 import { optionsFilter } from "@/modules/theme/generate-theme";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Select, TextInput } from "@mantine/core";
 
 export const LocationForm: FC<{
@@ -21,7 +21,7 @@ export const LocationForm: FC<{
     <Fragment>
       <Group wrap="nowrap">
         <Select
-          label={t`Province`}
+          label={<Trans>Province</Trans>}
           {...form.getInputProps(`${path}.provinceId`)}
           searchable
           data={vnLocations
@@ -35,7 +35,7 @@ export const LocationForm: FC<{
           withAsterisk={props.required}
         />
         <Select
-          label={t`Ward`}
+          label={<Trans>Ward</Trans>}
           {...form.getInputProps(`${path}.wardId`)}
           searchable
           data={vnLocations
@@ -53,7 +53,7 @@ export const LocationForm: FC<{
       </Group>
 
       <TextInput
-        label={t`Address`}
+        label={<Trans>Address</Trans>}
         {...form.getInputProps(`${path}.address`)}
         withAsterisk={props.required}
       />

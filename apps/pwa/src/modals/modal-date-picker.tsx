@@ -1,11 +1,12 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { Period } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Card, Center, Group, Indicator, NumberInput, Stack, Text } from "@mantine/core";
 import { DatePicker, DatePickerProps, DatesRangeValue } from "@mantine/dates";
 import { modals } from "@mantine/modals";
@@ -36,6 +37,7 @@ const dayRenderer: DatePickerProps["renderDay"] = (date) => {
 
 export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
   const [range, setRange] = useState<DatesRangeValue | undefined>(props.range);
+  const { t } = useLingui();
 
   if (props.onRangeSelected) {
     if (props.period === Period.WEEK) {
@@ -273,13 +275,15 @@ export const OnModalDatePicker = (props: ModalDatePickerProps) => {
     title: (
       <ModalTitle
         title={
-          props.period === Period.MONTH
-            ? t`Select month`
-            : props.period === Period.WEEK
-            ? t`Select week`
-            : props.period === Period.YEAR
-            ? t`Select year`
-            : t`Select date`
+          props.period === Period.MONTH ? (
+            <Trans>Select month</Trans>
+          ) : props.period === Period.WEEK ? (
+            <Trans>Select week</Trans>
+          ) : props.period === Period.YEAR ? (
+            <Trans>Select year</Trans>
+          ) : (
+            <Trans>Select date</Trans>
+          )
         }
         icon={IconCalendar}
       />

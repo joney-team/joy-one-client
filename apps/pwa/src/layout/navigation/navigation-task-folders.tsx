@@ -16,12 +16,11 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, em, Group, Menu, rgba, Stack, Text } from "@mantine/core";
 import { IconDots, IconFolder, IconFolderOpen, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
-import { FC, useState } from "react";
+import { FC, Fragment, useState } from "react";
 
 export const WorkspaceNavigationTaskFolders: FC = () => {
   const tags = useTags();
@@ -97,9 +96,12 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
           name: <Trans>Folder</Trans>,
           icon: IconFolder,
           children:
-            relatedTasks.count > 0
-              ? `${t`Are you sure you want to continue?`} ${t`${relatedTasks.count} related work will be moved to the default folder`}`
-              : undefined,
+            relatedTasks.count > 0 ? (
+              <Fragment>
+                <Trans>Are you sure you want to continue?</Trans>{" "}
+                <Trans>{relatedTasks.count} related work will be moved to the default folder</Trans>
+              </Fragment>
+            ) : undefined,
           process: () => tags.remove(tag._id),
         });
       },

@@ -5,11 +5,12 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { type FC } from "react";
 import { PrinterComponentProps } from "./printer-types";
 
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import styles from "./printer.module.css";
 
 export const PrinterHeader: FC<PrinterComponentProps> = ({ settings }) => {
   const workspace = useWorkspace();
+  const { t } = useLingui();
 
   return (
     <div className={styles.PrinterHeader}>

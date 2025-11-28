@@ -11,7 +11,6 @@ import { EventType } from "@/modules/events/event-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { BoardTaskCard } from "@/modules/tasks/views/board/board-task-card";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { IconEye, IconLayoutNavbarCollapse, IconStack2 } from "@tabler/icons-react";
@@ -64,7 +63,7 @@ export const CustomerTasks: FC<CustomerTasksProps> = (props) => {
 
   return (
     <Stack gap={10}>
-      <SectionTitle name={t`Tasks`} icon={IconStack2}>
+      <SectionTitle name={<Trans>Tasks</Trans>} icon={IconStack2}>
         <Renderer visible={total > 1 || (total === 1 && tasks.count === 0)}>
           <Group gap={0} onClick={() => setIsCollapsed((s) => !s)} style={{ cursor: "pointer" }}>
             <ActionIcon variant="transparent" color={isCollapsed ? "gray" : "primary"}>

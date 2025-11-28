@@ -2,11 +2,12 @@
 
 import { getTimeZones } from "@/modules/times/times-service";
 import { useFetch } from "@/utils/use-fetch.util";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Select, SelectProps } from "@mantine/core";
 import { FC } from "react";
 
 export const TimeZoneInput: FC<SelectProps> = (props) => {
+  const { t } = useLingui();
   const timeZones = useFetch({
     id: "time-zones",
     fetch: async () => getTimeZones(),

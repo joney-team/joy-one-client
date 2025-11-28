@@ -36,12 +36,12 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type FC, Fragment, useState } from "react";
+import { type FC, type ReactNode, Fragment, useState } from "react";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 
 export const WorkspaceNavigationMenu: FC<{
   icon: Icon;
-  label: React.ReactNode;
+  label: ReactNode;
   route: string;
   indicator?: number;
   exact?: boolean;
@@ -181,14 +181,14 @@ export const WorkspaceNavigationMenu: FC<{
               variant={isActive ? "subtle" : "transparent"}
               color={color(isActive ? "primary" : "var(--mantine-color-text)")}
             >
-              <props.icon strokeWidth={isActive ? 1.8 : 1.5} size={em(22)} />
+              <props.icon strokeWidth={isActive ? 1.8 : 1.5} size={22} />
             </ActionIcon>
 
             <Group gap={5} justify="space-between" flex={1}>
               <Group gap={5}>
                 <Text
                   tt="capitalize"
-                  fz={em(14)}
+                  fz={14}
                   fw={500}
                   c={color(isActive ? "primary" : "var(--mantine-color-text)")}
                 >

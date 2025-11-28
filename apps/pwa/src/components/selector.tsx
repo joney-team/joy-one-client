@@ -8,8 +8,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Center,
   Combobox,
@@ -108,6 +107,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
   } = props;
 
   const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
+  const { t } = useLingui();
 
   const isListable = listRoute && listRoute.length > 0;
   const list = useList<T>({

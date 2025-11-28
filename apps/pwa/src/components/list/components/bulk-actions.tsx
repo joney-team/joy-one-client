@@ -4,7 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Center, Divider, Group, Text, Tooltip } from "@mantine/core";
 import { IconStack2, IconTrash, IconX } from "@tabler/icons-react";
@@ -83,7 +82,7 @@ export const BulkActions: FC = () => {
                     variant="transparent"
                     radius={100}
                     fz={12}
-                    label={action?.label || t`Actions`}
+                    label={action?.label || <Trans>Actions</Trans>}
                   />
                 );
               })}
@@ -111,7 +110,7 @@ export const BulkActions: FC = () => {
               </Button>
             )}
 
-            <Tooltip label={t`Unselect all`}>
+            <Tooltip label={<Trans>Unselect all</Trans>}>
               <ActionIcon
                 color="gray"
                 variant="subtle"

@@ -2,7 +2,7 @@
 
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Group } from "@mantine/core";
 import { IconFilter, IconFilterFilled, IconRefresh } from "@tabler/icons-react";
 import { FC } from "react";
@@ -14,7 +14,6 @@ import { StaticSelectorFilter } from "./static-selector-filter";
 import { TextFilter } from "./text-filter";
 import { TimeRangeFilter } from "./time-range-filter";
 import { FilterProps, FilterWrapper } from "./types";
-import { Trans } from "@lingui/react/macro";
 
 export const getFilterComponent = (column: TableColumn): FC<FilterProps<any>> | null => {
   if (column.filter?.dynamicSelector) {
@@ -123,7 +122,7 @@ export const FilterBar: FC = () => {
 
       <ActionButton
         icon={IconRefresh}
-        label={t`Clear filter`}
+        label={<Trans>Clear filter</Trans>}
         onClick={onReset}
         borderStyle="dashed"
         disabled={filterCount === 0}

@@ -15,7 +15,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -58,8 +58,8 @@ export const WorkspaceModuleSetup: FC = () => {
   const onAddDivier = () => {
     OnModalInput({
       type: InputModalType.TEXT,
-      title: t`Divider`,
-      label: t`Name`,
+      title: <Trans>Divider</Trans>,
+      label: <Trans>Name</Trans>,
       icon: IconSeparator,
       onDone: (v) => {
         handleComponents.append({ id: uuid(), moduleId: v, type: "DIVIDER", dividerName: v });
@@ -72,7 +72,7 @@ export const WorkspaceModuleSetup: FC = () => {
 
   useEffect(() => {
     layout.setComponents({
-      head: t`Modules`,
+      head: <Trans>Modules</Trans>,
     });
 
     setTimeout(() => (isUpdateAble.current = true), 200);
@@ -100,17 +100,19 @@ export const WorkspaceModuleSetup: FC = () => {
               <IconLayout size={20} />
             </ThemeIcon>
 
-            <Text fw={600}>{t`Navigator`}</Text>
+            <Text fw={600}>
+              <Trans>Navigator</Trans>
+            </Text>
           </Group>
 
           <Group gap={3}>
-            <Tooltip label={t`Reset default`}>
+            <Tooltip label={<Trans>Reset default</Trans>}>
               <ActionIcon variant="subtle" color="dark" onClick={onReset}>
                 <IconRefresh strokeWidth={1.5} size={18} />
               </ActionIcon>
             </Tooltip>
 
-            <Tooltip label={t`Add divider`}>
+            <Tooltip label={<Trans>Add divider</Trans>}>
               <ActionIcon variant="subtle" color="dark" onClick={onAddDivier}>
                 <IconPlus strokeWidth={1.5} size={18} />
               </ActionIcon>
@@ -126,7 +128,7 @@ export const WorkspaceModuleSetup: FC = () => {
               }}
               target={(ctx) => {
                 return (
-                  <Tooltip label={t`Add modules`}>
+                  <Tooltip label={<Trans>Add modules</Trans>}>
                     <ActionIcon variant="subtle" color="dark" onClick={ctx.toggle}>
                       <IconLibraryPlus strokeWidth={1.5} size={18} />
                     </ActionIcon>
@@ -184,7 +186,7 @@ const ComponentItem: FC<{
   const { cpn } = props;
   const sortable = useSortable({ id: cpn.id, data: cpn });
   const [isHovered, setIsHovered] = useState(false);
-  const mod = workspace.modules.find((v) => v.id === cpn.moduleId);
+  const workspaceModule = cpn.moduleId ? workspace.getAvailableModule(cpn.moduleId) : null;
 
   const style = {
     transform: CSS.Transform.toString(sortable.transform),
@@ -214,15 +216,15 @@ const ComponentItem: FC<{
       wrap="nowrap"
     >
       <Group justify="space-between" w="100%">
-        {!!mod ? (
+        {!!workspaceModule ? (
           <Group align="center" flex={1}>
             <ThemeIcon color="dark" variant="transparent">
-              <mod.icon size={26} strokeWidth={1.5} />
+              <workspaceModule.icon size={26} strokeWidth={1.5} />
             </ThemeIcon>
 
-            <Text>{mod.name()}</Text>
+            <Text>{workspaceModule.name}</Text>
 
-            <Renderer visible={!!mod.isBeta}>
+            <Renderer visible={!!workspaceModule.isBeta}>
               <Badge color="orange" size="xs">
                 Beta
               </Badge>

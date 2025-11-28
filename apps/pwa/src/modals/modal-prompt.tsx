@@ -3,8 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { em, Group, MantineColor, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -22,6 +21,7 @@ interface ModalPromptProps {
 
 export const ModalPrompt: FC<ModalPromptProps> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useLingui();
 
   const form = useForm({
     initialValues: {

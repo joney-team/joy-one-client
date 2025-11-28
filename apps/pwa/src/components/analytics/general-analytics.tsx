@@ -2,7 +2,7 @@
 
 import { useApp } from "@/app.context";
 import { useAuth } from "@/modules/auth/auth-context";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useActivatedWorkspaceModule } from "@/modules/workspaces/workspace-modules";
 import config from "@joy-one-client/config";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useEffect, type FC } from "react";
@@ -11,19 +11,19 @@ import { getClarity, useTracking } from "./hooks-analytics";
 export const GeneralAnalytics: FC = () => {
   const app = useApp();
   const auth = useAuth();
-  const workspace = useWorkspace();
+  const activatedModule = useActivatedWorkspaceModule();
   const { trackEvent } = useTracking();
 
   const onChangeModule = useDebouncedCallback(() => {
-    if (!workspace.activatedModule) return;
-    trackEvent(`Access module > ${workspace.activatedModule?.id}`);
+    if (!activatedModule) return;
+    trackEvent(`Access module > ${activatedModule?.id}`);
   }, 300);
 
   useEffect(() => {
-    if (app.isInitialized && workspace.activatedModule) {
+    if (app.isInitialized && activatedModule) {
       onChangeModule();
     }
-  }, [app.isInitialized, workspace.activatedModule]);
+  }, [app.isInitialized, activatedModule]);
 
   useEffect(() => {
     const clarity = getClarity();

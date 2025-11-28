@@ -19,7 +19,7 @@ import { NextPage } from "next";
 const Page: NextPage = () => {
   const workspace = useWorkspace();
   const router = useRouter();
-  const modSettingRoles = workspace.getModule("workspaceSettingsRoles");
+  const modSettingRoles = workspace.getAvailableModule("workspaceSettingsRoles");
 
   return (
     <Stack gap={0}>
@@ -36,25 +36,20 @@ const Page: NextPage = () => {
           </Button>
         </Renderer>
 
-        <Renderer
-          visible={
-            modSettingRoles && workspace.hasPermission(WorkspacePermission.WORKSPACE_ROLES_MANAGER)
-          }
-        >
-          <Button
-            leftIcon={modSettingRoles.icon}
-            onClick={() => router.push(modSettingRoles.href)}
-            variant="outline"
-            size="xs"
-            radius={100}
-          >
-            {modSettingRoles.name()}
-          </Button>
-        </Renderer>
+        {modSettingRoles &&
+          workspace.hasPermission(WorkspacePermission.WORKSPACE_ROLES_MANAGER) && (
+            <Button
+              leftIcon={modSettingRoles.icon}
+              onClick={() => router.push(modSettingRoles.href)}
+              variant="outline"
+              size="xs"
+              radius={100}
+            >
+              {modSettingRoles.name}
+            </Button>
+          )}
 
-        <Renderer
-          visible={workspace.userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER)}
-        >
+        {workspace.userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER) && (
           <Button
             leftIcon={IconTransfer}
             onClick={() => OnModalTransferOwner()}
@@ -65,7 +60,7 @@ const Page: NextPage = () => {
           >
             <Trans>Transfer ownership</Trans>
           </Button>
-        </Renderer>
+        )}
       </Group>
 
       <WorkspaceMemberList />

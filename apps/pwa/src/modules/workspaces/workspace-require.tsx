@@ -12,8 +12,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
   Card,
@@ -129,7 +128,7 @@ export const WorkspaceRequire: FC = () => {
             <Trans>Start now</Trans>
           </Button>
 
-          <Divider label={t`Or`} w="80%" />
+          <Divider label={<Trans>Or</Trans>} w="80%" />
 
           <Text ta="center">
             <Trans>Join workspace</Trans> {auth.user?.email}
@@ -232,6 +231,7 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
   const workspace = useWorkspace();
   const lang = useLang();
   const layout = useLayout();
+  const { t } = useLingui();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 

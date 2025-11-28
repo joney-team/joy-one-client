@@ -12,7 +12,7 @@ import { isPlural } from "../../utils/string.utils";
 import { BaseData } from "./types";
 import { getId } from "./list-utils";
 import { removeParams, setParams } from "@joy-one-client/utils/location-query";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 
 export interface UseListFetchReponse<T = any> {
   data: T[];
@@ -102,6 +102,7 @@ export const useList = <T extends BaseData>({
   autoFetch = true,
   ...args
 }: UseListArgs<T>): UseList<T> => {
+  const { t } = useLingui();
   const searchs = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();

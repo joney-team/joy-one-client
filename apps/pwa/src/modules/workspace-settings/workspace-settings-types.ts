@@ -1,20 +1,20 @@
-import { AppEntity, BaseMongoEntity, WorkSlot } from "@/types";
 import { HrmTimekeepingsRules } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { LoanSettings } from "@/modules/loans/loans-types";
 import { BankAccount } from "@/modules/plugins/banks/banks.types";
 import { ReceiptPaymentMethod } from "@/modules/receipts/receipts-types";
 import { TaskStatus } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { workspaceModuleConfigs } from "@/modules/workspaces/workspace-modules";
+import { WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
 import { PluginMailerAccount } from "@/modules/workspaces/workspaces-types";
+import { AppEntity, BaseMongoEntity, WorkSlot } from "@/types";
 import { DashboardWidgetType } from "@/widgets/dashboard/types";
 import { ReportWidgetType } from "@/widgets/reports/types";
 import { Widget } from "@/widgets/types";
 import { ZaloOaGmfGroupSettings } from "../plugins/zalo-oas/zalo-oas-types";
 export interface WorkspaceViewComponent {
   id: string;
-  type: 'MODULE' | 'DIVIDER';
-  moduleId?: keyof typeof workspaceModuleConfigs;
+  type: "MODULE" | "DIVIDER";
+  moduleId?: WorkspaceModuleId;
   dividerName?: string;
 }
 

@@ -5,13 +5,12 @@ import config from "@joy-one-client/config";
 import { t } from "@lingui/core/macro";
 import { getGlobal } from "../../global";
 import { api } from "../apis";
+import { serverRefreshToken } from "./auth-server";
 import {
   AuthRenewPasswordByCodeDto,
   AuthRequestRenewUserPasswordDto,
-  AuthTokenResult,
   AuthVerifyRenewPasswordCodeDto,
 } from "./auth-types";
-import { serverRefreshToken } from "./auth-server";
 
 export async function requestRenewPassword(dto: AuthRequestRenewUserPasswordDto) {
   return api.post(`/auth/renew-password/request`, dto);

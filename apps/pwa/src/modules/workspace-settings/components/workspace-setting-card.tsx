@@ -1,3 +1,5 @@
+"use client";
+
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
 import { ActionIcon, Card, Group, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -15,20 +17,18 @@ export interface WorkspaceSettingCardProps {
 export const WorkspaceSettingCard: FC<WorkspaceSettingCardProps> = (props) => {
   const hover = useHover();
   const workspace = useWorkspace();
-  const workspaceModule = workspace.getModule(props.moduleId);
+  const workspaceModule = workspace.getAvailableModule(props.moduleId);
 
   if (!workspaceModule) {
     throw new Error(`Workspace module ${props.moduleId} not found`);
   }
-
-  const name = workspaceModule.name();
 
   return (
     <Link href={workspaceModule.href} style={{ textDecoration: "none" }} ref={hover.ref}>
       <Card withBorder shadow="none" pb={10}>
         <Group wrap="nowrap" align="start">
           {props.image ? (
-            <Image src={props.image} alt={name} w={45} h={45} />
+            <Image src={props.image} alt={workspaceModule.name} w={45} h={45} />
           ) : (
             <ThemeIcon
               size="xl"
@@ -46,11 +46,11 @@ export const WorkspaceSettingCard: FC<WorkspaceSettingCardProps> = (props) => {
           )}
 
           <Stack gap={5} flex={1}>
-            <Text fw={600}>{name}</Text>
+            <Text fw={600}>{workspaceModule.name}</Text>
 
             {workspaceModule.description && (
               <Text mih={65} fz={14}>
-                {workspaceModule.description()}
+                {workspaceModule.description}
               </Text>
             )}
 
