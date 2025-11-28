@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
@@ -9,78 +8,79 @@ import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
-import { Card, Group, ScrollArea, Space, Stack } from "@mantine/core";
-import { useElementSize } from "@mantine/hooks";
+import { Card, Group, Stack } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useRef } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
-import { TasksDndProvider } from "../../tasks-dnd-provider";
-import { BoardTaskGroupByStatuses } from "./board.task-group-by-statuses";
-import { viewBoardConfig } from "./config";
+import { BoardGroupByStatuses } from "./board-group-by-statuses";
 
 export const TasksBoardView: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
   const layout = useLayout();
   const tasks = useTasks();
-
-  const container = useElementSize();
-  const [height, setHeight] = useState(0);
-
-  const resize = () => {
-    if (container.ref.current) {
-      const rect = container.ref.current!.getBoundingClientRect();
-      const vHeight = document.documentElement.clientHeight;
-      const height =
-        vHeight - rect.top - (layout.view === "mobile" ? (layout.isStandalone ? 80 : 65) : 0);
-      setHeight(height);
-    }
-  };
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    resize();
-  }, [container.width, container.height]);
+    const pageLayout = document.getElementById("LayoutPage");
+
+    if (pageLayout && scrollAreaRef.current) {
+      const container = scrollAreaRef.current.getBoundingClientRect();
+
+      scrollAreaRef.current.style.height = `calc(100dvh - ${container.top}px)`;
+
+      if (pageLayout) {
+        pageLayout.style.height = "100dvh";
+      }
+
+      return () => {
+        if (pageLayout) {
+          pageLayout.style.height = "auto";
+        }
+      };
+    }
+  }, []);
 
   const dynamicStatuses = workspace.settings.taskStatuses.filter((v) => !v.isDefault);
 
   return (
-    <TasksDndProvider>
-      {layout.view !== "mobile" ? (
+    <Stack id="TasksBoardView" gap={0} mih={0} flex={1} miw={0}>
+      {layout.view !== "mobile" && (
         <Group p={16}>
           <TaskMenuActions />
         </Group>
-      ) : (
-        <Space h={16} />
       )}
 
-      <Stack gap={0} flex={1} style={{ position: "relative" }} ref={container.ref} w="100%">
-        <ScrollArea
-          h={height}
-          type="auto"
-          scrollbarSize={layout.view === "desktop" ? 5 : 25}
-          scrollbars="x"
-          styles={{
-            thumb: {
-              backgroundColor: "#00000015",
-            },
+      <Stack gap={0} flex={1} miw={0} style={{ overflow: "hidden" }}>
+        <Group
+          id="BoardHorizontalScroll"
+          w="100%"
+          align="stretch"
+          flex={1}
+          mih={0}
+          style={{
+            overflowX: "auto",
+            overflowY: "hidden",
           }}
         >
           <Group
+            ref={scrollAreaRef}
             wrap="nowrap"
             w="max-content"
-            align="start"
-            h={height - (layout.view !== "desktop" ? 16 : 0)}
+            align="stretch"
+            flex={1}
             pr={16}
             pl={16}
+            mih={0}
+            pb={16}
           >
-            <BoardTaskGroupByStatuses statusId={DefaultTaskStatusId.TODO} />
+            <BoardGroupByStatuses statusId={DefaultTaskStatusId.TODO} />
 
             {dynamicStatuses.map((status) => (
-              <BoardTaskGroupByStatuses key={status.id} statusId={status.id} />
+              <BoardGroupByStatuses key={status.id} statusId={status.id} />
             ))}
 
-            <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
+            {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
               <Card
-                w={viewBoardConfig.colWidth}
                 withBorder
                 shadow="none"
                 p={10}
@@ -103,15 +103,16 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                   </Button>
                 </Group>
               </Card>
-            </Renderer>
+            )}
 
             {tasks.state.showClosed && (
-              <BoardTaskGroupByStatuses statusId={DefaultTaskStatusId.CLOSED} />
+              <BoardGroupByStatuses statusId={DefaultTaskStatusId.CLOSED} />
             )}
           </Group>
-        </ScrollArea>
+        </Group>
       </Stack>
+
       {props.children}
-    </TasksDndProvider>
+    </Stack>
   );
 };

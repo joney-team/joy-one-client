@@ -27,7 +27,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { getWorkspaceBranchById } from "@/modules/workspace-branches/workspace-branches-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { loadImage } from "@/utils/asset.utils";
+import { loadImage } from "@joy-one-client/utils/assets";
 import { onError } from "@/utils/exceptions.utils";
 import { round } from "@/utils/number.utils";
 import { removeAccents } from "@/utils/string.utils";

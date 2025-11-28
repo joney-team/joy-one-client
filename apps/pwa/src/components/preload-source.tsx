@@ -2,7 +2,7 @@
 
 import { FC, Fragment, useEffect } from "react";
 import resource from "@/app.resource.json";
-import { loadImage } from "@/utils/asset.utils";
+import { loadImage } from "@joy-one-client/utils/assets";
 
 const PreloadResource: FC = () => {
   useEffect(() => {

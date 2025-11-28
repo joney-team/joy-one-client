@@ -201,6 +201,8 @@ function EventItemTitle(props: { event: EventEntity }) {
     const toPriority = event.data.toPriority as TaskPriority;
     const fromPriority = event.data.fromPriority as TaskPriority;
 
+    if (!toPriority && !fromPriority) return null;
+
     if (!toPriority)
       return (
         <Group gap={4}>

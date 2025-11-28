@@ -50,7 +50,7 @@ export const ListTaskGroupByFolder: FC<ListTaskGroupByFolderProps> = (props) => 
   if (props.pure) return <Content />;
 
   return (
-    <Card withBorder shadow="none" style={{ position: "relative" }}>
+    <Card withBorder shadow="none" style={{ position: "relative", overflow: "auto" }}>
       <Box
         w={2}
         h="100%"

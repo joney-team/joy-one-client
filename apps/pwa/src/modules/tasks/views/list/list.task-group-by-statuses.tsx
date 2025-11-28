@@ -136,7 +136,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
             <Stack gap={5} w="100%">
               <ListTaskRowHead />
 
-              <Card withBorder shadow="none" p={0}>
+              <Card withBorder shadow="none" p={0} style={{ overflow: "auto" }}>
                 {tasks.map((task, index) => (
                   <ListTaskRow
                     id={task._id}

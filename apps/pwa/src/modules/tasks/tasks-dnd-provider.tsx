@@ -14,7 +14,6 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { Group } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useRef } from "react";
 import { TaskCardOverlay } from "./tasks-dnd-overlay";

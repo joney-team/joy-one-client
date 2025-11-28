@@ -125,7 +125,7 @@ export const ListTaskRow: FC<{
           position: "relative",
           borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
           borderBottomWidth: props.showDivider ? 0.5 : 0,
-          borderRadius: 5,
+          borderRadius: 8,
         }}
         bg="var(--mantine-color-body)"
       >
@@ -200,6 +200,7 @@ export const ListTaskRow: FC<{
               if (!isEditName && !forceHover) open(task);
             }}
             wrap="nowrap"
+            miw={0}
           >
             <Group flex={1} gap={5} wrap="nowrap">
               <Renderer visible={!!ctx.tags.length}>

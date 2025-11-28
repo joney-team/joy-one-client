@@ -10,7 +10,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
-import { BoardTaskCard } from "@/modules/tasks/views/board/board.task-card";
+import { BoardTaskCard } from "@/modules/tasks/views/board/board-task-card";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, SimpleGrid, Stack, Text } from "@mantine/core";

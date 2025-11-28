@@ -15,7 +15,7 @@ import { BankQrCode } from "@/modules/plugins/banks/banks.types";
 import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { loadImage } from "@/utils/asset.utils";
+import { loadImage } from "@joy-one-client/utils/assets";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { uppercase } from "@/utils/string.utils";

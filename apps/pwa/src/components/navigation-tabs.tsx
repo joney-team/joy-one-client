@@ -10,7 +10,7 @@ import Link from "next/link";
 import { FC, Fragment } from "react";
 import { Button } from "./buttons/button";
 
-export const NavigationTabsConfig = {
+export const navigationTabsConfig = {
   height: 44,
 };
 
@@ -47,7 +47,7 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
       <ScrollArea
         type="never"
         scrollbars="x"
-        h={NavigationTabsConfig.height}
+        h={navigationTabsConfig.height}
         style={{
           borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
           background: "var(--mantine-color-body)",
@@ -55,7 +55,7 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
           overflowX: "auto",
         }}
       >
-        <Group px={16} gap={0} w="max-content" wrap="nowrap" h={NavigationTabsConfig.height}>
+        <Group px={16} gap={0} w="max-content" wrap="nowrap" h={navigationTabsConfig.height}>
           {props.tabs.map((tab) => {
             const isActive = props.activeTab
               ? props.activeTab === tab.id

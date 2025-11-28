@@ -1,11 +1,14 @@
 "use client";
 
 import { defaultRouteRule, routeRules } from "@/configs/routes.config";
-import { AppRouterInstance, NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import {
+  AppRouterInstance,
+  NavigateOptions,
+} from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter as useNextRouter, usePathname } from "next/navigation";
 import { useMemo } from "react";
 
-export interface AppRouter extends Omit<AppRouterInstance, 'push'> {
+export interface AppRouter extends Omit<AppRouterInstance, "push"> {
   pathname: string;
   back: () => void;
   setQuery: (key: string, value?: string, replace?: boolean) => void;
@@ -13,15 +16,19 @@ export interface AppRouter extends Omit<AppRouterInstance, 'push'> {
   removeQuery: (key: any, replace?: boolean) => void;
   removeQueries: (keys: string[], replace?: boolean) => void;
   removeAllQueries: () => void;
-  href: (route: string) => string
-  push: (route: string, query?: { [key: string]: string | number }, options?: NavigateOptions) => void | Promise<void>;
+  href: (route: string) => string;
+  push: (
+    route: string,
+    query?: { [key: string]: string | number },
+    options?: NavigateOptions
+  ) => void | Promise<void>;
 }
 
 export const getParams = (params: URLSearchParams, pathname?: string) => {
-  if (params.size === 0) return pathname || '';
-  if (pathname) return pathname + '?' + params.toString();
-  return '?' + params.toString();
-}
+  if (params.size === 0) return pathname || "";
+  if (pathname) return pathname + "?" + params.toString();
+  return "?" + params.toString();
+};
 
 export const useRouter = (): AppRouter => {
   const router = useNextRouter();
@@ -35,7 +42,7 @@ export const useRouter = (): AppRouter => {
       _route += getParams(params);
     }
     return _route;
-  }
+  };
 
   return {
     ...router,
@@ -46,7 +53,7 @@ export const useRouter = (): AppRouter => {
       const params = new URLSearchParams(window.location.search);
 
       // Add query params
-      Object.keys(query || {}).forEach(key => {
+      Object.keys(query || {}).forEach((key) => {
         params.set(key, (query as any)[key].toString());
       });
 
@@ -60,7 +67,7 @@ export const useRouter = (): AppRouter => {
         return router.back();
       }
 
-      return router.push('/');
+      return router.push("/");
     },
     setQuery: (key, value, replace) => {
       const params = new URLSearchParams(window.location.search);
@@ -77,30 +84,30 @@ export const useRouter = (): AppRouter => {
     },
     setQueries: (queries, replace) => {
       const params = new URLSearchParams(window.location.search);
-      Object.keys(queries).forEach(key => {
+      Object.keys(queries).forEach((key) => {
         if (queries[key]) params.set(key, queries[key]);
         else params.delete(key);
-      })
+      });
       if (replace) return router.replace(`${pathname}${getParams(params)}`);
       return router.push(`${pathname}${getParams(params)}`);
     },
     removeQueries: (keys, replace) => {
       const params = new URLSearchParams(window.location.search);
-      keys.forEach(key => params.delete(key));
+      keys.forEach((key) => params.delete(key));
       if (replace) return router.replace(`${pathname}${getParams(params)}`);
       return router.push(`${pathname}${getParams(params)}`);
     },
     removeAllQueries: () => {
       return router.replace(pathname);
-    }
-  }
-}
+    },
+  };
+};
 
 export const useRouteRule = () => {
   const pathname = usePathname();
-  
+
   return useMemo(() => {
-    const rule = Object.keys(routeRules).find(key => pathname.startsWith(key));
+    const rule = Object.keys(routeRules).find((key) => pathname.startsWith(key));
 
     if (rule && routeRules[rule]) {
       return routeRules[rule];
@@ -108,4 +115,4 @@ export const useRouteRule = () => {
 
     return defaultRouteRule;
   }, [pathname]);
-}
+};

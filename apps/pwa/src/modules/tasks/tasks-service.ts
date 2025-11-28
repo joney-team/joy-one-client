@@ -1,3 +1,5 @@
+"use client";
+
 import { ResponseList } from "@/types";
 import {
   Icon,
@@ -139,13 +141,20 @@ export function getTaskProgress(tasks: TaskEntity[], statuses: TaskStatus[]) {
   };
 }
 
-export const updateTasks = async (tasks: TaskEntity[], addToHistory = true) => {
+export const updateTasks = async (
+  tasks: (Partial<TaskEntity> & { _id: string })[],
+  addToHistory = true
+) => {
+  const updatedTasks = tasks
+    .filter((task) => !!taskEntities[task._id])
+    .map((task) => ({ ...taskEntities[task._id], ...task }));
+
   taskEntities = {
     ...taskEntities,
-    ...Object.fromEntries(tasks.map((task) => [task._id, task])),
+    ...Object.fromEntries(updatedTasks.map((task) => [task._id, task])),
   };
 
-  tasksEmitter.emit("update", tasks);
+  tasksEmitter.emit("update", updatedTasks);
 
   const response = await api.put<{
     updatedTasks: TaskEntity[];
@@ -205,12 +214,20 @@ export const syncTasks = (opts: {
   };
 };
 
-export const getRelatedTasks = (task: TaskEntity, includeSelf = false, tasks?: TaskEntity[]) => {
-  const _tasks = tasks || Object.values(taskEntities);
+export const getRelatedTasks = (
+  task: TaskEntity,
+  options?: {
+    includeSelf?: boolean;
+    sameStatus?: boolean;
+    sameFolderId?: boolean;
+  }
+) => {
+  const _tasks = Object.values(taskEntities);
 
   return _tasks
-    .filter((t) => (includeSelf ? true : t._id !== task._id))
+    .filter((t) => (options?.includeSelf ? true : t._id !== task._id))
     .filter((t) => t.parentId === task.parentId)
-    .filter((t) => t.tagFolderId === task.tagFolderId)
+    .filter((t) => (options?.sameFolderId ? t.tagFolderId === task.tagFolderId : true))
+    .filter((t) => (options?.sameStatus ? t.status === task.status : true))
     .sort((a, b) => a.order - b.order);
 };

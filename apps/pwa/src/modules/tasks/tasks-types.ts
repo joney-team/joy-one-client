@@ -1,4 +1,3 @@
-
 import type { AppRouter } from "@/hooks/use-router";
 import type { BaseMongoEntity } from "@/types";
 import type { CustomerShortInfo } from "@/modules/customers/customer-types";
@@ -11,8 +10,8 @@ import type { TasksState } from "./tasks-provider";
 import type { TaskView } from "./views/types";
 
 export enum DefaultTaskStatusId {
-  TODO = 'TODO',
-  CLOSED = 'CLOSED',
+  TODO = "TODO",
+  CLOSED = "CLOSED",
 }
 
 export interface TaskStatus {
@@ -25,10 +24,10 @@ export interface TaskStatus {
 }
 
 export enum TaskPriority {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
-  URGENT = 'URGENT',
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+  URGENT = "URGENT",
 }
 
 export interface TaskTimeTracking {
@@ -91,8 +90,8 @@ export interface TaskEntity extends BaseMongoEntity {
 }
 
 export enum ReorderTaskPotision {
-  BEFORE = 'BEFORE',
-  AFTER = 'AFTER',
+  BEFORE = "BEFORE",
+  AFTER = "AFTER",
 }
 
 export interface TasksReport {
@@ -110,37 +109,37 @@ export interface TasksRealtimeReport {
 
 export interface TaskHistory {
   id: string;
-  type: 'UPDATE' | 'ARCHIVE';
+  type: "UPDATE" | "ARCHIVE";
   tasks: TaskEntity[];
   prevTasks?: TaskEntity[] | null;
 }
 
 export interface TasksContext {
-  views: TaskView[],
-  view: TaskView,
-  setView: (view: TaskView) => void,
-  state: TasksState,
-  setState: Dispatch<SetStateAction<TasksState>>,
-  tagFolder?: TagEntity,
-  tagFolders: TagEntity[],
-  isInitialized: boolean,
-  statuses: TaskStatus[],
-  open: (task: TaskEntity) => void,
-  openFolder: (tagFolder: TagEntity) => void
-  removeFolder: () => void
-  redirectToDefaultView: () => void,
-  viewFromPathname?: TaskView | null,
-  taskCode?: string | null,
-  router: AppRouter,
-  params: Params,
-  getSelectedView: () => TaskView,
-  selectedTaskIds: string[],
-  toggleSelectTask: (taskId: string, isShiftKey?: boolean) => void,
-  removeSelectedTasks: (specificTaskIds?: string[]) => void,
+  views: TaskView[];
+  view: TaskView;
+  setView: (view: TaskView) => void;
+  state: TasksState;
+  setState: Dispatch<SetStateAction<TasksState>>;
+  tagFolder?: TagEntity;
+  tagFolders: TagEntity[];
+  isInitialized: boolean;
+  statuses: TaskStatus[];
+  open: (task: TaskEntity) => void;
+  openFolder: (tagFolder: TagEntity) => void;
+  removeFolder: () => void;
+  redirectToDefaultView: () => void;
+  viewFromPathname?: TaskView | null;
+  taskCode?: string | null;
+  router: AppRouter;
+  params: Params;
+  getSelectedView: () => TaskView;
+  selectedTaskIds: string[];
+  toggleSelectTask: (taskId: string, isShiftKey?: boolean) => void;
+  removeSelectedTasks: (specificTaskIds?: string[]) => void;
 }
 
 export interface TaskHistoriesContext {
   pointedHistoryId: string | null;
-  switchHistory: (id: string, position: 'prev' | 'next') => void;
+  switchHistory: (id: string, position: "prev" | "next") => void;
   histories: TaskHistory[];
 }

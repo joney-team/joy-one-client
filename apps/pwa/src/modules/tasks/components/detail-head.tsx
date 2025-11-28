@@ -32,7 +32,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
 
   const parentTask = getTaskEntity(task.parentId);
 
-  const relatedTasks = getRelatedTasks(task, true);
+  const relatedTasks = getRelatedTasks(task, { includeSelf: true });
 
   const indexOfTask = relatedTasks.findIndex((t) => t._id === task._id);
   const nextTask = relatedTasks[indexOfTask + 1];

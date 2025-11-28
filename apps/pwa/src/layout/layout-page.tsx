@@ -53,7 +53,9 @@ export function Layout<P>({
 
   return (
     <Stack
-      id="layout-root"
+      id="LayoutPage"
+      miw={0}
+      mih={0}
       gap={0}
       style={
         layout.view === "mobile"
