@@ -43,7 +43,6 @@ import { getGlobal } from "../../global";
 import { api } from "../apis";
 import { reducePhotoSize } from "../files/file-service";
 import { Context } from "./auth-context";
-import { AuthRequire } from "./auth-require";
 import {
   serverSignInWithEmailPassword,
   serverSignInWithFacebook,
@@ -65,6 +64,13 @@ import type {
   AuthSignUpWithEmailPasswordDto,
   UserAuthResult,
 } from "./auth-types";
+import dynamic from "next/dynamic";
+import { nonLoading } from "@/utils/non-loading";
+
+const AuthRequire = dynamic(() => import("./auth-require").then((mod) => mod.AuthRequire), {
+  ssr: false,
+  loading: nonLoading,
+});
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const client = useApolloClient();
