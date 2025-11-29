@@ -31,7 +31,7 @@ import {
 import { DateTimePicker } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCalculator } from "@tabler/icons-react";
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, ReactNode, useEffect, useState } from "react";
 import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
 
 export let OnModalLoanCalculator: () => any = () => {};
@@ -312,7 +312,7 @@ export const ModalLoanCalculator: FC = () => {
 
 const RowInfo: FC<{
   label: string;
-  value: string | JSX.Element;
+  value: string | ReactNode;
   valueProps?: TextProps;
 }> = (props) => {
   return (

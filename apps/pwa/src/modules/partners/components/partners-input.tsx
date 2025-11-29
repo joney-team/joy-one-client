@@ -17,7 +17,7 @@ export const PartnersInput: FC<PartnersInputProps> = (props) => {
 
   const partners = value || [];
 
-  const toogleSelect = (partner?: PartnerEntity) => {
+  const toogleSelect = (partner?: PartnerEntity | null) => {
     if (!partner) return;
 
     const index = props.value?.findIndex((u) => u._id === partner._id);

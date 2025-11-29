@@ -77,7 +77,7 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
                     }, 500);
                   }}
                 >
-                  {renderEntityCode(customer.code, customer.plainCode)}
+                  {renderEntityCode(customer.code, customer?.plainCode)}
                 </Text>
               </Anchor>
 

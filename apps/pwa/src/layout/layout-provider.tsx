@@ -51,7 +51,7 @@ const LayoutProvider: FC<PropsWithChildren> = (props) => {
     initialize();
 
     const onResize = () => {
-      setIsResizing(true);
+      // setIsResizing(true);
       onResized();
     };
 

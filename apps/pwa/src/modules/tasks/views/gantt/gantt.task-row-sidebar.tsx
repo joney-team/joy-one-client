@@ -32,7 +32,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag } from "../../tasks-dnd-provider";
-import { ListTaskRowDropper } from "../list/list.task-row-dropper";
+// import { ListTaskRowDropper } from "../list/list.task-row-dropper";
 import { ganttConfig } from "./gantt.config";
 import { useGantt } from "./gantt.context";
 import { useGanttTaskState } from "./gantt.hooks";
@@ -112,27 +112,6 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
         }}
         opacity={isSelfDragging ? 0.5 : 1}
       >
-        <ListTaskRowDropper
-          visible={
-            isAbleToDrop && props.prevId !== draggingTaskId && !isDraggingAsRootHasChild_thisAsChild
-          }
-          indexSpacing={indexSpacing * 3}
-          targetTask={task}
-          position={ReorderTaskPotision.BEFORE}
-        />
-
-        <ListTaskRowDropper
-          visible={
-            isAbleToDrop &&
-            props.indexType === "last" &&
-            !isHasChild &&
-            !isDraggingAsRootHasChild_thisAsChild
-          }
-          indexSpacing={indexSpacing * 3}
-          targetTask={task}
-          position={ReorderTaskPotision.AFTER}
-        />
-
         <ActionIcon
           ref={draggable.setNodeRef}
           {...draggable.listeners}
@@ -257,27 +236,11 @@ export const GanttTaskRowSidebar: FC<GanttTaskRowSidebarProps> = (props) => {
           </Group>
         </Group>
 
-        <ListTaskRowDropper
-          isSubTask
-          indexSpacing={childIndexSpacing * 2}
-          targetTask={task}
-          position={ReorderTaskPotision.AFTER}
-          visible={isAbleToDrop && !task.parentId && !isHasChild && !isDraggingAsRootAndHasChild}
-        />
-
-        {taskParent && (
-          <ListTaskRowDropper
-            targetTask={taskParent}
-            position={ReorderTaskPotision.AFTER}
-            visible={isAbleToDrop && props.indexType === "last"}
-          />
-        )}
-
         <SidebarRowSticky visible={hover.hovered}>
           {!task.parentId && (
             <Tooltip label={t`Create subtask`}>
               <Group>
-                <QuickCreateTaskInput parentId={task._id} tagFolderId={task.tagFolderId}>
+                <QuickCreateTaskInput parentId={task._id} folderId={task.folderId}>
                   <ActionIcon
                     size="sm"
                     variant="subtle"

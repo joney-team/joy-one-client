@@ -50,14 +50,13 @@ export type Category = {
   _id: Scalars['String']['output'];
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
-  customFields: Maybe<Array<CustomField>>;
+  customFields: Array<CustomField>;
   description: Maybe<Scalars['String']['output']>;
   icon: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   order: Scalars['Float']['output'];
   parentId: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
-  relatedEntities: Maybe<Array<RelatedEntity>>;
   slug: Scalars['String']['output'];
   thumbnail: Maybe<Scalars['String']['output']>;
   type: CategoryType;
@@ -75,7 +74,6 @@ export type CategoryEntity = {
   order: Scalars['Float']['output'];
   parentId: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
-  relatedEntities: Maybe<Array<RelatedEntity>>;
   slug: Scalars['String']['output'];
   thumbnail: Maybe<Scalars['String']['output']>;
   type: CategoryType;
@@ -90,6 +88,12 @@ export const CategoryType = {
 } as const;
 
 export type CategoryType = typeof CategoryType[keyof typeof CategoryType];
+export type Coordinates = {
+  __typename?: 'Coordinates';
+  lat: Scalars['Float']['output'];
+  lng: Scalars['Float']['output'];
+};
+
 export type CustomField = {
   __typename?: 'CustomField';
   config: Maybe<Scalars['JSONObject']['output']>;
@@ -123,6 +127,36 @@ export type CustomFieldValueInput = {
   value?: InputMaybe<Scalars['AnyType']['input']>;
 };
 
+export type CustomerEntity = {
+  __typename?: 'CustomerEntity';
+  _id: Scalars['String']['output'];
+  assigneeUserIds: Maybe<Array<Scalars['String']['output']>>;
+  avatar: Maybe<Scalars['String']['output']>;
+  birthday: Maybe<Scalars['Float']['output']>;
+  birthdayDate: Maybe<Scalars['Float']['output']>;
+  birthdayMonth: Maybe<Scalars['Float']['output']>;
+  code: Scalars['String']['output'];
+  codePrefix: Scalars['String']['output'];
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  email: Maybe<Scalars['String']['output']>;
+  gender: Maybe<Gender>;
+  location: Maybe<LocationEntity>;
+  medicalHistory: Maybe<Array<Scalars['String']['output']>>;
+  name: Scalars['String']['output'];
+  phone: Maybe<Scalars['String']['output']>;
+  plainCode: Maybe<Scalars['String']['output']>;
+  presenterCustomerId: Maybe<Scalars['String']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  relatedCustomerIds: Maybe<Array<Scalars['String']['output']>>;
+  salaryAmount: Maybe<Scalars['Float']['output']>;
+  secondaryLocation: Maybe<LocationEntity>;
+  tagIds: Maybe<Array<Scalars['String']['output']>>;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+  vnLocation: Maybe<LocationEntity>;
+  vnSecondaryLocation: Maybe<LocationEntity>;
+};
+
 export type DeviceEntity = {
   __typename?: 'DeviceEntity';
   _id: Scalars['String']['output'];
@@ -133,7 +167,6 @@ export type DeviceEntity = {
   locale: Maybe<AppLocale>;
   notificationToken: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
-  relatedEntities: Maybe<Array<RelatedEntity>>;
   updatedAt: Maybe<Scalars['Float']['output']>;
   userAgent: Scalars['String']['output'];
   userId: Maybe<Scalars['String']['output']>;
@@ -150,7 +183,6 @@ export type File = {
   ref: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   relatedCustomerId: Maybe<Scalars['String']['output']>;
-  relatedEntities: Maybe<Array<RelatedEntity>>;
   relatedHrmTimekeepingId: Maybe<Scalars['String']['output']>;
   relatedMessageBoxId: Maybe<Scalars['String']['output']>;
   relatedMessageId: Maybe<Scalars['String']['output']>;
@@ -190,8 +222,26 @@ export type FirebaseClientConfig = {
   storageBucket: Scalars['String']['output'];
 };
 
+/** Available genders */
+export const Gender = {
+  Female: 'FEMALE',
+  Male: 'MALE',
+  Other: 'OTHER'
+} as const;
+
+export type Gender = typeof Gender[keyof typeof Gender];
+export type LocationEntity = {
+  __typename?: 'LocationEntity';
+  address: Maybe<Scalars['String']['output']>;
+  coordinates: Maybe<Coordinates>;
+  districtId: Maybe<Scalars['String']['output']>;
+  provinceId: Maybe<Scalars['String']['output']>;
+  wardId: Maybe<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  bulkUpdateTasks: Array<Task>;
   createCategory: Category;
   createProduct: Product;
   deleteCategory: Scalars['Boolean']['output'];
@@ -205,6 +255,11 @@ export type Mutation = {
   setPluginExternalStorage: PluginExternalStorage;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateCategory: Category;
+};
+
+
+export type MutationBulkUpdateTasksArgs = {
+  items: Array<TaskInput>;
 };
 
 
@@ -305,6 +360,19 @@ export type MutationUpdateCategoryArgs = {
   type?: InputMaybe<CategoryType>;
 };
 
+export type PartnerEntity = {
+  __typename?: 'PartnerEntity';
+  _id: Scalars['String']['output'];
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  email: Maybe<Scalars['String']['output']>;
+  logo: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  phone: Maybe<Scalars['String']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+};
+
 export type PluginExternalStorage = {
   __typename?: 'PluginExternalStorage';
   bucketName: Maybe<Scalars['String']['output']>;
@@ -343,7 +411,6 @@ export type Product = {
   price: Scalars['Float']['output'];
   productCode: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
-  relatedEntities: Maybe<Array<RelatedEntity>>;
   supplies: Maybe<Array<ProductSupply>>;
   tags: Array<Scalars['String']['output']>;
   type: ProductType;
@@ -393,12 +460,14 @@ export type Query = {
   __typename?: 'Query';
   appConfig: AppConfig;
   categoriesPaginated: CategoriesPaginated;
+  category: Category;
   getCategoriesByIds: Array<Category>;
-  getCategory: Category;
   getCategoryBySlug: Category;
   getFileInfo: File;
   getProductByIds: Array<Product>;
   pluginExternalStorage: Maybe<PluginExternalStorage>;
+  task: Task;
+  tasks: TasksPaginated;
 };
 
 
@@ -409,13 +478,13 @@ export type QueryCategoriesPaginatedArgs = {
 };
 
 
-export type QueryGetCategoriesByIdsArgs = {
-  ids: Array<Scalars['String']['input']>;
+export type QueryCategoryArgs = {
+  id: Scalars['String']['input'];
 };
 
 
-export type QueryGetCategoryArgs = {
-  id: Scalars['String']['input'];
+export type QueryGetCategoriesByIdsArgs = {
+  ids: Array<Scalars['String']['input']>;
 };
 
 
@@ -431,6 +500,24 @@ export type QueryGetFileInfoArgs = {
 
 export type QueryGetProductByIdsArgs = {
   ids: Array<Scalars['String']['input']>;
+};
+
+
+export type QueryTaskArgs = {
+  code: Scalars['String']['input'];
+};
+
+
+export type QueryTasksArgs = {
+  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  folderId?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  partnerIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type RegisterDeviceDto = {
@@ -452,9 +539,150 @@ export type SignUploadUrlResponse = {
   signedUrl: Scalars['String']['output'];
 };
 
+export type TagEntity = {
+  __typename?: 'TagEntity';
+  _id: Scalars['String']['output'];
+  color: Maybe<Scalars['String']['output']>;
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  name: Scalars['String']['output'];
+  order: Maybe<Scalars['Float']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  slug: Scalars['String']['output'];
+  type: TagType;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+};
+
+/** Available tag types */
+export const TagType = {
+  Customer: 'CUSTOMER',
+  MessageBox: 'MESSAGE_BOX',
+  Task: 'TASK',
+  TaskFolder: 'TASK_FOLDER'
+} as const;
+
+export type TagType = typeof TagType[keyof typeof TagType];
+export type Task = {
+  __typename?: 'Task';
+  _id: Scalars['String']['output'];
+  assigneeUserIds: Array<Scalars['String']['output']>;
+  assigneeUsers: Array<WorkspaceMemberInfo>;
+  childCount: Scalars['Float']['output'];
+  closedAt: Maybe<Scalars['Float']['output']>;
+  code: Scalars['String']['output'];
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  customFields: Array<CustomField>;
+  customer: Maybe<CustomerEntity>;
+  customerId: Maybe<Scalars['String']['output']>;
+  description: Maybe<Scalars['String']['output']>;
+  dueDate: Maybe<Scalars['Float']['output']>;
+  estimatedTime: Maybe<Scalars['Float']['output']>;
+  folder: Maybe<TagEntity>;
+  folderId: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  order: Scalars['Float']['output'];
+  parent: Maybe<Task>;
+  parentId: Maybe<Scalars['String']['output']>;
+  partnerIds: Array<Scalars['String']['output']>;
+  partners: Array<PartnerEntity>;
+  points: Maybe<Scalars['Float']['output']>;
+  priority: Maybe<TaskPriority>;
+  progress: Maybe<Scalars['Float']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  relatedUserIds: Array<Scalars['String']['output']>;
+  startDate: Maybe<Scalars['Float']['output']>;
+  status: Scalars['String']['output'];
+  /** @deprecated Use folderId instead */
+  tagFolderId: Maybe<Scalars['String']['output']>;
+  tagIds: Array<Scalars['String']['output']>;
+  tags: Array<TagEntity>;
+  timeTrackings: Maybe<Array<TaskTimeTracking>>;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+};
+
+export type TaskInput = {
+  _id: Scalars['String']['input'];
+  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  customerId?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  dueDate?: InputMaybe<Scalars['Float']['input']>;
+  estimatedTime?: InputMaybe<Scalars['Float']['input']>;
+  folderId?: InputMaybe<Scalars['String']['input']>;
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Scalars['Float']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  partnerIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  points?: InputMaybe<Scalars['Float']['input']>;
+  priority?: InputMaybe<TaskPriority>;
+  startDate?: InputMaybe<Scalars['Float']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  timeTrackings?: InputMaybe<Array<TaskTimeTrackingInput>>;
+  workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Available task priorities */
+export const TaskPriority = {
+  High: 'HIGH',
+  Low: 'LOW',
+  Medium: 'MEDIUM',
+  Urgent: 'URGENT'
+} as const;
+
+export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
+export type TaskTimeTracking = {
+  __typename?: 'TaskTimeTracking';
+  billable: Scalars['Boolean']['output'];
+  endAt: Maybe<Scalars['Float']['output']>;
+  id: Scalars['String']['output'];
+  note: Maybe<Scalars['String']['output']>;
+  startAt: Scalars['Float']['output'];
+  user: Maybe<WorkspaceMemberInfo>;
+  userId: Scalars['String']['output'];
+  workspaceId: Scalars['String']['output'];
+};
+
+export type TaskTimeTrackingInput = {
+  billable: Scalars['Boolean']['input'];
+  endAt?: InputMaybe<Scalars['Float']['input']>;
+  id: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  startAt: Scalars['Float']['input'];
+  userId: Scalars['String']['input'];
+};
+
+export type TasksPaginated = {
+  __typename?: 'TasksPaginated';
+  count: Scalars['Float']['output'];
+  data: Array<Task>;
+};
+
 export type UserAuthProvider = {
   __typename?: 'UserAuthProvider';
   providerId: Scalars['String']['output'];
   uid: Scalars['String']['output'];
   username: Scalars['String']['output'];
+};
+
+export type WorkspaceMemberInfo = {
+  __typename?: 'WorkspaceMemberInfo';
+  _id: Scalars['String']['output'];
+  avatar: Maybe<Scalars['String']['output']>;
+  color: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  memberDisplayName: Scalars['String']['output'];
+  memberId: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  phone: Scalars['String']['output'];
+  roles: Array<WorkspaceMemberRole>;
+  userId: Scalars['String']['output'];
+};
+
+export type WorkspaceMemberRole = {
+  __typename?: 'WorkspaceMemberRole';
+  _id: Scalars['String']['output'];
+  color: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
 };

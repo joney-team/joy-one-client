@@ -9,7 +9,7 @@ export interface CurrencyFormatProps {
   value: number;
 }
 
-export const CurrencyFormat: FC<CurrencyFormatProps> = (props): JSX.Element => {
+export const CurrencyFormat: FC<CurrencyFormatProps> = (props) => {
   const workspace = useWorkspace();
   const lang = useLang();
   const { value } = props;

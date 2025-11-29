@@ -69,7 +69,7 @@ export const TagsInput: FC<TagsInputProps> = (props) => {
         );
       }}
       onSelect={(value) => {
-        toogleSelect(value);
+        toogleSelect(value as any);
       }}
     />
   );

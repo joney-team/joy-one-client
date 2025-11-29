@@ -211,7 +211,7 @@ const useTimekeepingsSummary = (
       timekeepings: _timekeepings,
       workSlots: args.workSlots,
       rules: args.rules,
-      workTimeType: args.userInfo?.workingTimeType,
+      workTimeType: args.userInfo?.workingTimeType as any,
     });
 
     totalWorkingTime += calculated.totalWorkingTime;

@@ -152,7 +152,7 @@ const UserWorkspaceSettingsForm: FC<
                 return updateWorkspaceMember(userMember.memberId, {
                   ...userMember,
                   workspaceBranchIds: branches.map((v) => v._id),
-                });
+                } as any);
               }}
             />
           )}

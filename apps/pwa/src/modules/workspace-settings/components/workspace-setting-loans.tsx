@@ -11,7 +11,7 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Badge, Card, Group, SimpleGrid, Stack, Text, TextProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
 export const WorkspacetSettingLoans: FC = () => {
   const workspace = useWorkspace();
@@ -102,7 +102,7 @@ export const WorkspacetSettingLoans: FC = () => {
 
 const RowInfo: FC<{
   label: string;
-  value: string | JSX.Element;
+  value: string | ReactNode;
   valueProps?: TextProps;
 }> = (props) => {
   return (

@@ -108,8 +108,8 @@ export enum WorkspaceSpecialRoleId {
 export interface WorkspaceRoleEntity extends BaseMongoEntity {
   workspaceId: string;
   name: string;
-  description?: string;
-  color?: string;
+  description?: string | null;
+  color?: string | null;
   permissions: WorkspacePermission[];
 }
 

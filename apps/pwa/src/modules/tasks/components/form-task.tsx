@@ -87,8 +87,8 @@ import { FilesBox } from "../../files/files-box";
 import { useTaskFolders } from "../hooks/use-task-folders";
 import { taskPriorities } from "../task-constants";
 import { TasksDndProvider } from "../tasks-dnd-provider";
-import { ListTaskRow } from "../views/list/list.task-row";
-import { ListTaskRowHead } from "../views/list/list.task-row-head";
+import { ListTaskRow } from "../views/list/list-task-row";
+import { ListTaskRowHead } from "../views/list/list-task-row-head";
 
 export interface TaskFormProps {
   task?: TaskEntity;
@@ -99,7 +99,7 @@ export interface TaskFormProps {
   status?: string;
   order?: number;
   dueDate?: number;
-  tagFolderId?: string | null;
+  folderId?: string | null;
   timeTrackings?: TaskTimeTracking[];
 }
 
@@ -113,7 +113,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
   const tags = useTags();
   const tagFolder = tags.list.find(
-    (v) => v._id === props.tagFolderId || v._id === taskFolders.tagFolder?._id
+    (v) => v._id === props.folderId || v._id === taskFolders.tagFolder?._id
   );
 
   const isInitialized = useRef(false);
@@ -133,7 +133,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         status: values.status,
         dueDate: values.dueDate,
         startDate: values.startDate,
-        relatedCustomerId: values.relatedCustomer?._id,
+        customerId: values.relatedCustomer?._id,
         assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMember) => user.userId),
         partnerIds: values.partners.map((partner: PartnerEntity) => partner._id),
         tagIds: values.tags.map((tag: TagEntity) => tag._id),
@@ -170,8 +170,8 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         startDate: values.startDate,
         assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMember) => user.userId),
         partnerIds: values.partners.map((partner: PartnerEntity) => partner._id),
-        relatedCustomerId: props.customer?._id,
-        tagFolderId: tagFolder?._id,
+        customerId: props.customer?._id,
+        folderId: tagFolder?._id,
         tagIds: values.tags.map((tag: TagEntity) => tag._id),
         timeTrackings: values.timeTrackings || [],
         estimatedTime: values.estimatedTime,
@@ -249,7 +249,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
       assigneeUsers: props.task?.assigneeUsers || [workspace.userMember],
       status: props.status || props.task?.status || DefaultTaskStatusId.TODO,
       description: props.task?.description || "",
-      relatedCustomer: props.customer || props.task?.relatedCustomer,
+      relatedCustomer: props.customer || props.task?.customer,
       dueDate: props.dueDate || props.task?.dueDate,
       timeTrackings: props.timeTrackings || props.task?.timeTrackings || [],
     });
@@ -639,7 +639,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
                       <Divider />
 
-                      {subTasks.map((task, index) => {
+                      {/* {subTasks.map((task, index) => {
                         return (
                           <ListTaskRow
                             key={task._id}
@@ -649,7 +649,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                             allowEditName={false}
                           />
                         );
-                      })}
+                      })} */}
                     </Stack>
                   </Card>
                 </Stack>

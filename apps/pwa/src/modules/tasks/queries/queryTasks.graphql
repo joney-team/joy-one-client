@@ -1,0 +1,30 @@
+#import "./fragmentTask.graphql"
+
+query Tasks(
+  $folderId: String
+  $parentId: String
+  $status: String
+  $offset: Float
+  $limit: Float
+  $ids: [String!]
+  $assigneeUserIds: [String!]
+  $partnerIds: [String!]
+  $tagIds: [String!]
+) {
+  tasks(
+    folderId: $folderId
+    parentId: $parentId
+    status: $status
+    offset: $offset
+    limit: $limit
+    ids: $ids
+    assigneeUserIds: $assigneeUserIds
+    partnerIds: $partnerIds
+    tagIds: $tagIds
+  ) {
+    count
+    data {
+      ...TaskData      
+    }
+  }
+}

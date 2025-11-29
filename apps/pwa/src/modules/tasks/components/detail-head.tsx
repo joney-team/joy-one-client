@@ -86,7 +86,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
           <TaskTagFolderSelector
             excludeIds={[tagFolder?._id || "none"]}
             onSelect={(tag) => {
-              updateTasks([{ ...task, tagFolderId: tag?._id }]);
+              updateTasks([{ ...task, folderId: tag?._id }]);
             }}
             render={(ctx) => {
               return (

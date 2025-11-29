@@ -10,9 +10,8 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
-import { BoardTaskCard } from "@/modules/tasks/views/board/board-task-card";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Group, SimpleGrid, Stack, Text } from "@mantine/core";
+import { ActionIcon, Group, Stack, Text } from "@mantine/core";
 import { IconEye, IconLayoutNavbarCollapse, IconStack2 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { Renderer } from "../../components/renderer";
@@ -83,14 +82,6 @@ export const CustomerTasks: FC<CustomerTasksProps> = (props) => {
 
       <Empty visible={tasks.isEmpty} />
       <Errored error={tasks.error} visible={tasks.isHasError} />
-
-      <Renderer visible={tasks.isHasData}>
-        <SimpleGrid cols={{ md: 3 }}>
-          {tasks.data.map((task) => {
-            return <BoardTaskCard key={task._id} id={task._id} />;
-          })}
-        </SimpleGrid>
-      </Renderer>
 
       <SessionLoader enabled={tasks.isFetching} />
       <ButtonViewMore onClick={() => tasks.fetch()} visible={tasks.isAbleToLoadMore} />

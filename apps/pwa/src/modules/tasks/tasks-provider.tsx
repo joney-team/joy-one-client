@@ -97,7 +97,7 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
     }
   };
 
-  const open = (task: TaskEntity) => {
+  const open = (task: Pick<TaskEntity, "_id" | "code">) => {
     const url = `/tasks/${view}/${tagFolder?.slug || "d"}/${task.code}`;
     router.push(url, {}, { scroll: false });
   };
@@ -129,7 +129,7 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
           v._id === taskId ||
           (v.parentId === pointedTask.parentId &&
             v.status === pointedTask.status &&
-            v.tagFolderId === pointedTask.tagFolderId)
+            v.folderId === pointedTask.folderId)
       )
       .map((v) => v._id);
     const _selectedTaskIds = _relatedTaskIds.filter((v) => selectedTaskIds.includes(v));
@@ -174,7 +174,7 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
         state,
         setState,
         tagFolder,
-        isInitialized,
+        isInitialized: isInitialized && tags.isInitialized,
         tagFolders: tags.list.filter(
           (v) =>
             v.type === TagType.TASK_FOLDER && v.workspaceId === workspace.userMember?.workspaceId
@@ -182,6 +182,8 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
         statuses: workspace.settings?.taskStatuses || [],
         open,
         openFolder,
+        href: (task: Pick<TaskEntity, "_id" | "code">) =>
+          `/tasks/${view}/${tagFolder?.slug || "d"}/${task.code}`,
         redirectToDefaultView,
         viewFromPathname,
         taskCode,

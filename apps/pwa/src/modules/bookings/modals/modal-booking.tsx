@@ -171,7 +171,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
           label={t`Customer`}
           value={customer}
           disabled={!!props.customer}
-          onSelect={(value) => setCustomer(value)}
+          onSelect={(value) => setCustomer(value as any)}
         />
 
         <WorkspaceMembersInput
@@ -238,7 +238,7 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
         {!!creatingData && (
           <Stack pt={16} gap={30}>
             <FormSession title={<Trans>Customer</Trans>}>
-              <CustomerInput value={customer} onSelect={(value) => setCustomer(value)} />
+              <CustomerInput value={customer} onSelect={(value) => setCustomer(value as any)} />
             </FormSession>
 
             <FormSession title={<Trans>Attendees</Trans>}>

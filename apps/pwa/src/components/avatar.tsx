@@ -27,7 +27,7 @@ export interface AvatarProps extends MantineAvatarProps {
   color?: string;
   user?: Pick<WorkspaceMember, "name" | "avatar" | "color" | "userId" | "memberId">;
   workspace?: Pick<WorkspaceEntity, "appColor" | "logo" | "name" | "appName" | "appIcon">;
-  customer?: CustomerShortInfo | null | undefined;
+  customer?: Pick<CustomerShortInfo, "name" | "avatar"> | null | undefined;
   partner?: PartnerEntity;
   pluginMetaPage?: PluginMetaPageEntity;
   hideOnlineStatus?: boolean;

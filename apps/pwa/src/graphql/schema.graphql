@@ -29,14 +29,13 @@ type Category {
   _id: String!
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
-  customFields: [CustomField!]
+  customFields: [CustomField!]!
   description: String
   icon: String
   name: String!
   order: Float!
   parentId: String
   refs: [String!]
-  relatedEntities: [RelatedEntity!]
   slug: String!
   thumbnail: String
   type: CategoryType!
@@ -53,7 +52,6 @@ type CategoryEntity {
   order: Float!
   parentId: String
   refs: [String!]
-  relatedEntities: [RelatedEntity!]
   slug: String!
   thumbnail: String
   type: CategoryType!
@@ -65,6 +63,11 @@ enum CategoryType {
   COMMON
   POSTS
   PRODUCTS
+}
+
+type Coordinates {
+  lat: Float!
+  lng: Float!
 }
 
 type CustomField {
@@ -97,6 +100,35 @@ input CustomFieldValueInput {
   value: AnyType
 }
 
+type CustomerEntity {
+  _id: String!
+  assigneeUserIds: [String!]
+  avatar: String
+  birthday: Float
+  birthdayDate: Float
+  birthdayMonth: Float
+  code: String!
+  codePrefix: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  email: String
+  gender: Gender
+  location: LocationEntity
+  medicalHistory: [String!]
+  name: String!
+  phone: String
+  plainCode: String
+  presenterCustomerId: String
+  refs: [String!]
+  relatedCustomerIds: [String!]
+  salaryAmount: Float
+  secondaryLocation: LocationEntity
+  tagIds: [String!]
+  updatedAt: Float
+  vnLocation: LocationEntity
+  vnSecondaryLocation: LocationEntity
+}
+
 type DeviceEntity {
   _id: String!
   createdAt: Float
@@ -106,7 +138,6 @@ type DeviceEntity {
   locale: AppLocale
   notificationToken: String
   refs: [String!]
-  relatedEntities: [RelatedEntity!]
   updatedAt: Float
   userAgent: String!
   userId: String
@@ -122,7 +153,6 @@ type File {
   ref: String
   refs: [String!]
   relatedCustomerId: String
-  relatedEntities: [RelatedEntity!]
   relatedHrmTimekeepingId: String
   relatedMessageBoxId: String
   relatedMessageId: String
@@ -160,12 +190,28 @@ type FirebaseClientConfig {
   storageBucket: String!
 }
 
+"""Available genders"""
+enum Gender {
+  FEMALE
+  MALE
+  OTHER
+}
+
 """
 The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
 scalar JSONObject
 
+type LocationEntity {
+  address: String
+  coordinates: Coordinates
+  districtId: String
+  provinceId: String
+  wardId: String
+}
+
 type Mutation {
+  bulkUpdateTasks(items: [TaskInput!]!): [Task!]!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
   deleteCategory(id: String!): Boolean!
@@ -179,6 +225,18 @@ type Mutation {
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
   toggleDisablePluginExternalStorage: Boolean!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
+}
+
+type PartnerEntity {
+  _id: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  email: String
+  logo: String
+  name: String!
+  phone: String
+  refs: [String!]
+  updatedAt: Float
 }
 
 type PluginExternalStorage {
@@ -216,7 +274,6 @@ type Product {
   price: Float!
   productCode: String
   refs: [String!]
-  relatedEntities: [RelatedEntity!]
   supplies: [ProductSupply!]
   tags: [String!]!
   type: ProductType!
@@ -262,12 +319,14 @@ enum ProductType {
 type Query {
   appConfig: AppConfig!
   categoriesPaginated(limit: Float = 20, offset: Float = 0, query: JSONObject): CategoriesPaginated!
+  category(id: String!): Category!
   getCategoriesByIds(ids: [String!]!): [Category!]!
-  getCategory(id: String!): Category!
   getCategoryBySlug(slug: String!): Category!
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
   pluginExternalStorage: PluginExternalStorage
+  task(code: String!): Task!
+  tasks(assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float, offset: Float, parentId: String, partnerIds: [String!], status: String, tagIds: [String!]): TasksPaginated!
 }
 
 input RegisterDeviceDto {
@@ -287,8 +346,140 @@ type SignUploadUrlResponse {
   signedUrl: String!
 }
 
+type TagEntity {
+  _id: String!
+  color: String
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  name: String!
+  order: Float
+  refs: [String!]
+  slug: String!
+  type: TagType!
+  updatedAt: Float
+}
+
+"""Available tag types"""
+enum TagType {
+  CUSTOMER
+  MESSAGE_BOX
+  TASK
+  TASK_FOLDER
+}
+
+type Task {
+  _id: String!
+  assigneeUserIds: [String!]!
+  assigneeUsers: [WorkspaceMemberInfo!]!
+  childCount: Float!
+  closedAt: Float
+  code: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  customFields: [CustomField!]!
+  customer: CustomerEntity
+  customerId: String
+  description: String
+  dueDate: Float
+  estimatedTime: Float
+  folder: TagEntity
+  folderId: String
+  name: String!
+  order: Float!
+  parent: Task
+  parentId: String
+  partnerIds: [String!]!
+  partners: [PartnerEntity!]!
+  points: Float
+  priority: TaskPriority
+  progress: Float
+  refs: [String!]
+  relatedUserIds: [String!]!
+  startDate: Float
+  status: String!
+  tagFolderId: String @deprecated(reason: "Use folderId instead")
+  tagIds: [String!]!
+  tags: [TagEntity!]!
+  timeTrackings: [TaskTimeTracking!]
+  updatedAt: Float
+}
+
+input TaskInput {
+  _id: String!
+  assigneeUserIds: [String!]
+  customerId: String
+  description: String
+  dueDate: Float
+  estimatedTime: Float
+  folderId: String
+  isArchived: Boolean
+  name: String
+  order: Float
+  parentId: String
+  partnerIds: [String!]
+  points: Float
+  priority: TaskPriority
+  startDate: Float
+  status: String
+  tagIds: [String!]
+  timeTrackings: [TaskTimeTrackingInput!]
+  workspaceBranchId: String
+}
+
+"""Available task priorities"""
+enum TaskPriority {
+  HIGH
+  LOW
+  MEDIUM
+  URGENT
+}
+
+type TaskTimeTracking {
+  billable: Boolean!
+  endAt: Float
+  id: String!
+  note: String
+  startAt: Float!
+  user: WorkspaceMemberInfo
+  userId: String!
+  workspaceId: String!
+}
+
+input TaskTimeTrackingInput {
+  billable: Boolean!
+  endAt: Float
+  id: String!
+  note: String
+  startAt: Float!
+  userId: String!
+}
+
+type TasksPaginated {
+  count: Float!
+  data: [Task!]!
+}
+
 type UserAuthProvider {
   providerId: String!
   uid: String!
   username: String!
+}
+
+type WorkspaceMemberInfo {
+  _id: String!
+  avatar: String
+  color: String
+  email: String!
+  memberDisplayName: String!
+  memberId: String!
+  name: String!
+  phone: String!
+  roles: [WorkspaceMemberRole!]!
+  userId: String!
+}
+
+type WorkspaceMemberRole {
+  _id: String!
+  color: String
+  name: String!
 }

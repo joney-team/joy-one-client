@@ -10,9 +10,9 @@ import {
 
 export interface HrmCalculateTimekeepingsArgs {
   timekeepings: HrmTimekeepingEntity[];
-  workSlots?: WorkSlot[] | undefined;
-  rules?: HrmTimekeepingsRules;
-  workTimeType?: WorkspaceMemberWorkingTimeType;
+  workSlots?: WorkSlot[] | null;
+  rules?: HrmTimekeepingsRules | null;
+  workTimeType?: WorkspaceMemberWorkingTimeType | null;
 }
 
 export interface HrmCalculateTimeLog {
@@ -30,13 +30,6 @@ export interface HrmCalculateTimekeepingsResult {
   totalWorkingTime: number;
   lateTime: number;
   overTime: number;
-}
-
-export interface HrmCalculateTimekeepingsArgs {
-  timekeepings: HrmTimekeepingEntity[];
-  workSlots?: WorkSlot[] | undefined;
-  rules?: HrmTimekeepingsRules;
-  workTimeType?: WorkspaceMemberWorkingTimeType;
 }
 
 export interface HrmCalculateTimeLog {

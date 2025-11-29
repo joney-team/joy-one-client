@@ -1,0 +1,23 @@
+.ListTaskRows {
+  display: flex;
+
+  .ListTaskRowContainer {
+    .ListTaskRow {
+      &:not(.isLastRow) {
+        border-bottom: 1px solid var(--mantine-color-gray-light);
+      }
+
+      & .HoverToActive {
+        opacity: 0;
+      }
+
+      &:hover {
+        background: var(--mantine-color-gray-outline-hover);
+
+        & .HoverToActive {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

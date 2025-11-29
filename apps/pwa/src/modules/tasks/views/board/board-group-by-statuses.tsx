@@ -2,29 +2,30 @@
 
 import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
-import { useList } from "@/components/list/use-list";
+import { WayPoint } from "@/components/way-point";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
-import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import {
-  getTasks,
-  renderTaskStatusStyle,
-  syncTasks,
-  updateTasks,
-} from "@/modules/tasks/tasks-service";
+import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onError } from "@/utils/exceptions.utils";
+import { useQuery } from "@apollo/client/react";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Skeleton, Stack, Text, Tooltip, alpha } from "@mantine/core";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { useUpdateTasks } from "../../hooks/use-update-tasks";
+import QUERY_TASKS, {
+  type TasksQuery,
+  type TasksQueryVariables,
+} from "../../queries/queryTasks.graphql";
 import { BoardTaskCard } from "./board-task-card";
 
 interface BoardGroupByStatusesProps {
@@ -38,8 +39,10 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
   const workspace = useWorkspace();
   const color = useColor();
   const droppableRef = useRef<HTMLDivElement | null>(null);
-  const [isOver, setIsOver] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
+  const [isOver, setIsOver] = useState(false);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const { updateTasks } = useUpdateTasks();
 
   useEffect(() => {
     if (!droppableRef.current || !scrollAreaRef.current) return;
@@ -58,7 +61,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
             args.location.current.dropTargets[0].data.status === props.statusId
           ) {
             const task = args.source.data.task as TaskEntity;
-            updateTasks([{ _id: task._id, status: props.statusId }]);
+            updateTasks({ _id: task._id, status: props.statusId });
           }
         },
       }),
@@ -68,44 +71,60 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
     );
   }, [props.statusId]);
 
-  const { tagFolder } = useTasks();
+  const { tagFolder, isInitialized } = useTasks();
 
   const isClosedTasks = props.statusId === DefaultTaskStatusId.CLOSED;
   const isTodoStatus = props.statusId === DefaultTaskStatusId.TODO;
-  const listId = `tasks-${props.statusId}-${tagFolder?._id || "all"}`;
 
-  const taskList = useList({
-    id: listId,
-    fetch: (q) =>
-      getTasks({
-        ...q,
-        status: props.statusId,
-        tagFolderId: tagFolder?._id,
-        parentId: "root",
-        getAll: true,
-      }),
+  const variables: TasksQueryVariables = useMemo(() => {
+    return {
+      status: props.statusId,
+      folderId: tagFolder?._id,
+      parentId: "root",
+    };
+  }, [props.statusId, tagFolder?._id]);
+
+  const { data, loading, fetchMore } = useQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
+    skip: !isInitialized,
+    variables,
   });
 
-  const tasks = taskList.data.sort((a, b) => a.order - b.order);
+  const onFetchMore = async () => {
+    setIsFetchingMore(true);
+    await fetchMore({
+      variables: {
+        ...variables,
+        offset: data?.tasks.data.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          ...prev,
+          tasks: {
+            ...prev.tasks,
+            count: fetchMoreResult.tasks.count,
+            data: [
+              ...prev.tasks.data,
+              ...fetchMoreResult.tasks.data.filter(
+                (task) => !prev.tasks.data.some((t) => t._id === task._id)
+              ),
+            ],
+          },
+        };
+      },
+    })
+      .catch(onError)
+      .finally(() => setIsFetchingMore(false));
+  };
 
-  onTasksUpdated(
-    (updatedTasks) => {
-      const synced = syncTasks({
-        prevTasks: tasks,
-        updatedTasks,
-        related: (task) => !!!task.parentId && task.status === props.statusId,
-      });
+  const tasks = Array.from(data?.tasks.data ?? []).sort((a, b) => a.order - b.order);
 
-      if (synced.isChanged) {
-        taskList.setData(synced.changed, taskList.count + synced.balance);
-      }
-    },
-    [tasks, listId]
-  );
+  const isCanFetchMore = data && data.tasks.data.length < data.tasks.count;
 
   const status =
     workspace.settings.taskStatuses.find((s) => s.id === props.statusId) ||
     workspace.settings.taskStatuses[0];
+
   const statusStyle = renderTaskStatusStyle(props.statusId, workspace.settings.taskStatuses);
 
   return (
@@ -148,9 +167,9 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
             {statusStyle.name}
           </Button>
 
-          {taskList.count > 0 && (
+          {data && data?.tasks.count > 0 && (
             <Text c="gray" fz={10} fw={500}>
-              <NumberFormat value={taskList.count} />
+              <NumberFormat value={data?.tasks.count} />
             </Text>
           )}
         </Group>
@@ -170,18 +189,16 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
               </Tooltip>
             )}
 
-            {!isClosedTasks && (
+            {/* {!isClosedTasks && (
               <ActionIcon
                 variant="subtle"
                 size="sm"
                 color="gray"
-                onClick={() =>
-                  OnModalCreateTask({ status: status.id, tagFolderId: tagFolder?._id })
-                }
+                onClick={() => OnModalCreateTask({ status: status.id, folderId: tagFolder?._id })}
               >
                 <IconPlus size={16} strokeWidth={1.6} />
               </ActionIcon>
-            )}
+            )} */}
           </Group>
         )}
       </Group>
@@ -201,18 +218,25 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
           tasks.map((task, index) => (
             <BoardTaskCard
               key={task._id}
-              id={task._id}
+              task={task}
               prevTask={tasks[index - 1]}
               nextTask={tasks[index + 1]}
+              scrollContainerRef={scrollAreaRef.current}
             />
           ))}
 
-        {taskList.isFetching && (
+        {(loading || isFetchingMore) && (
           <Fragment>
             <Skeleton height={200} />
             <Skeleton height={200} />
           </Fragment>
         )}
+
+        <WayPoint
+          scrollContainerRef={scrollAreaRef.current}
+          enabled={isCanFetchMore}
+          onReached={onFetchMore}
+        />
 
         {!isClosedTasks && (
           <Group>
@@ -221,7 +245,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
               size="compact-sm"
               variant="subtle"
               leftIcon={IconPlus}
-              onClick={() => OnModalCreateTask({ status: status.id, tagFolderId: tagFolder?._id })}
+              onClick={() => OnModalCreateTask({ status: status.id, folderId: tagFolder?._id })}
             >
               <Trans>Create task</Trans>
             </Button>

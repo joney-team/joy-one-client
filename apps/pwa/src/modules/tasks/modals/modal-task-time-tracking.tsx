@@ -145,7 +145,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
       const result = await createTask({
         name,
         assigneeUserIds: [user.userId],
-        tagFolderId: tasks.tagFolder?._id,
+        folderId: tasks.tagFolder?._id,
         status: DefaultTaskStatusId.CLOSED,
         timeTrackings: [
           {

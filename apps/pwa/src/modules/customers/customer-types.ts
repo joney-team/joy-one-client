@@ -3,29 +3,29 @@ import { LocationEntity } from "@/modules/locations/locations-types";
 
 export interface CustomerDto {
   name: string;
-  phone: string;
-  plainCode?: string;
-  birthday?: number;
-  avatar?: string;
-  email?: string;
+  phone?: string | null;
+  plainCode?: string | null;
+  birthday?: number | null;
+  avatar?: string | null;
+  email?: string | null;
 
-  location?: LocationEntity;
-  secondaryLocation?: LocationEntity;
+  location?: LocationEntity | null;
+  secondaryLocation?: LocationEntity | null;
 
-  vnLocation?: LocationEntity;
-  vnSecondaryLocation?: LocationEntity;
+  vnLocation?: LocationEntity | null;
+  vnSecondaryLocation?: LocationEntity | null;
 
-  presenterCustomerId?: string;
-  gender?: Gender;
-  medicalHistory?: string[];
-  assigneeUserIds?: string[];
-  tagIds?: string[];
-  salaryAmount?: number;
-  relatedCustomerIds?: string[];
-  relationshipContacts?: CustomerRelationshipContact[];
-  socialFacebookUrl?: string;
-  createdAt?: number;
-  source?: EntitySource;
+  presenterCustomerId?: string | null;
+  gender?: Gender | null;
+  medicalHistory?: string[] | null;
+  assigneeUserIds?: string[] | null;
+  tagIds?: string[] | null;
+  salaryAmount?: number | null;
+  relatedCustomerIds?: string[] | null;
+  relationshipContacts?: CustomerRelationshipContact[] | null;
+  socialFacebookUrl?: string | null;
+  createdAt?: number | null;
+  source?: EntitySource | null;
 }
 
 export interface CustomerRelationshipContact {
@@ -36,14 +36,14 @@ export interface CustomerRelationshipContact {
 
 export interface CustomerEntity extends BaseMongoEntity {
   code: string;
-  plainCode?: string;
+  plainCode?: string | null;
   name: string;
-  birthday?: number;
-  phone: string;
-  avatar?: string;
-  email?: string;
+  birthday?: number | null;
+  phone?: string | null;
+  avatar?: string | null;
+  email?: string | null;
 
-  location?: LocationEntity;
+  location?: LocationEntity | null;
   secondaryLocation?: LocationEntity;
   vnLocation?: LocationEntity;
 

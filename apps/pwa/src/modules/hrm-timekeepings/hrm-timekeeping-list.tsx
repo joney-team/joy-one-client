@@ -137,7 +137,7 @@ export const HrmTimekeepingList: FC = () => {
           <WorkspaceMemberSelector
             onSelect={(user) => {
               if (!user) return;
-              setAssignee(user);
+              setAssignee(user as any);
               const isSelected = assigneeUserIds.includes(user.userId);
               let _assigneeUserIds: string[] = [...assigneeUserIds];
               if (isSelected) {

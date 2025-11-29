@@ -1,0 +1,62 @@
+fragment TaskData on Task {
+  _id
+  code
+  name
+  status
+  order
+
+  folderId
+  parentId
+  childCount
+
+  startDate
+  dueDate
+  estimatedTime
+
+  priority
+  progress
+
+  partners {
+    _id
+    name
+    logo
+  }
+
+  assigneeUsers {
+    _id
+    userId
+    name
+    color
+    avatar
+    roles {
+      _id
+      name
+      color
+    }
+  }
+
+  customer {
+    _id
+    name
+    avatar
+    phone
+  }
+
+  parent {
+    _id
+    name
+    code
+  }
+
+  tags {
+    _id
+    color
+    name
+  }
+
+  folder {
+    _id
+    color
+    name
+  }
+}

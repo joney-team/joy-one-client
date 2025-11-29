@@ -200,7 +200,7 @@ export const ReportWidgets: FC = () => {
           <WorkspaceMemberSelector
             onSelect={(user) => {
               if (!user) return;
-              setUerMemberInfo(user);
+              setUerMemberInfo(user as any);
               report.setParams({ userId: user.userId });
             }}
             optionRightSection={(user) => {

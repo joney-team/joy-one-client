@@ -94,7 +94,7 @@ export const WorkspaceSettingImportLoans: FC = () => {
       : null;
     if (customerDtos) {
       for (const dto of customerDtos) {
-        const isExisted = await isCustomerPhoneExisted(dto.phone);
+        const isExisted = dto.phone ? await isCustomerPhoneExisted(dto.phone) : false;
 
         if (isExisted) {
           result.customers.existed++;

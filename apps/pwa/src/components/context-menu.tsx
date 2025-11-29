@@ -28,6 +28,9 @@ const RefWrapper = forwardRef<HTMLElement, RefWrapperProps>((props, ref) => {
       "ContextMenu.Target component children should be an element or a component that accepts ref"
     );
   }
+
+  // TypeScript doesn't narrow the type after isElement check, so we assert it
+  const childElement = children as React.ReactElement<any>;
   const ctx = useContextMenuContext();
 
   const toggleDropdown = (e: React.MouseEvent) => {
@@ -51,20 +54,20 @@ const RefWrapper = forwardRef<HTMLElement, RefWrapperProps>((props, ref) => {
     }
   };
 
-  const onContextMenu = createEventHandler(children.props.onContextMenu, (e) => {
+  const onContextMenu = createEventHandler(childElement.props.onContextMenu, (e) => {
     if (ctx.trigger === "context") {
       (e as React.MouseEvent).preventDefault();
       toggleDropdown(e as React.MouseEvent);
     }
   });
 
-  const onClick = createEventHandler(children.props.onClick, (e) => {
+  const onClick = createEventHandler(childElement.props.onClick, (e) => {
     if (ctx.trigger === "click") {
       toggleDropdown(e as React.MouseEvent);
     }
   });
 
-  return cloneElement(children, {
+  return cloneElement(childElement, {
     ...others,
     onClick,
     onContextMenu,

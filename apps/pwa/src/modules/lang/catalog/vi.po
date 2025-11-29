@@ -7157,7 +7157,7 @@ msgstr "Cập nhật ảnh đại diện"
 
 #: src/modules/tasks/task-constants.tsx:25
 msgid "Urgent"
-msgstr "Cấp bách"
+msgstr "Khẩn cấp"
 
 #: src/modals/modal-printer.tsx:540
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:222

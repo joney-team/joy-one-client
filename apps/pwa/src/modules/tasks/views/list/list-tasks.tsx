@@ -4,17 +4,22 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { Trans } from "@lingui/react/macro";
 import { Box, Card, em, Stack, Title } from "@mantine/core";
-import { FC, Fragment, memo, PropsWithChildren } from "react";
+import { FC, Fragment, memo, PropsWithChildren, useEffect } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
-import { TasksDndProvider } from "../../tasks-dnd-provider";
-import { ListTaskGroupByFolder } from "./list.task-group-by-folder";
-import { ListTaskGroupByStatuses } from "./list.task-group-by-statuses";
+import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
+import { ListTaskGroupByFolder } from "./list-task-group-by-folder";
+import { ListTaskGroupByStatuses } from "./list-task-group-by-statuses";
+import { autoScrollWindowForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 
-export const TasksListView: FC<PropsWithChildren> = memo((props) => {
+export const ListTasks: FC<PropsWithChildren> = memo((props) => {
   const { state, tagFolder, statuses, tagFolders } = useTasks();
 
+  useEffect(() => {
+    return autoScrollWindowForElements();
+  });
+
   return (
-    <TasksDndProvider>
+    <TaskSelectionsProvider>
       <Stack p={16}>
         <TaskMenuActions />
 
@@ -25,7 +30,7 @@ export const TasksListView: FC<PropsWithChildren> = memo((props) => {
                 <ListTaskGroupByStatuses
                   key={tagFolder._id}
                   status={DefaultTaskStatusId.TODO}
-                  tagFolderId={tagFolder._id}
+                  folderId={tagFolder._id}
                 />
 
                 {statuses
@@ -35,7 +40,7 @@ export const TasksListView: FC<PropsWithChildren> = memo((props) => {
                       key={tagFolder._id + status.id}
                       status={status.id}
                       hideWhenEmpty
-                      tagFolderId={tagFolder._id}
+                      folderId={tagFolder._id}
                     />
                   ))}
 
@@ -44,7 +49,7 @@ export const TasksListView: FC<PropsWithChildren> = memo((props) => {
                     key={tagFolder?._id + DefaultTaskStatusId.CLOSED}
                     status={DefaultTaskStatusId.CLOSED}
                     showEmptyMsg
-                    tagFolderId={tagFolder?._id}
+                    folderId={tagFolder?._id}
                   />
                 )}
               </Fragment>
@@ -85,6 +90,6 @@ export const TasksListView: FC<PropsWithChildren> = memo((props) => {
 
         {props.children}
       </Stack>
-    </TasksDndProvider>
+    </TaskSelectionsProvider>
   );
 });

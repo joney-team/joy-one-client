@@ -105,13 +105,13 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
 
         const allTasks = getTaskEntites().sort((a, b) => a.order - b.order);
         const changeStatus = e.over.data.current.changeStatus as string;
-        const tagFolderId = e.over.data.current.tagFolderId as string;
+        const folderId = e.over.data.current.folderId as string;
         const status = e.over.data.current.status as string;
         const changeParentId = e.over.data.current.changeParentId as string;
 
         // Bind properties
         let task = { ...allTasks.find((v) => v._id === draggingTask._id) } as TaskEntity;
-        if (tagFolderId) task.tagFolderId = tagFolderId;
+        if (folderId) task.folderId = folderId;
         if (status) task.status = status;
         if (changeStatus) task.status = changeStatus;
         if (changeParentId) task.parentId = changeParentId === "root" ? null : changeParentId;
@@ -138,9 +138,7 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
                 ? t.parentId === targetTask._id
                 : t._id !== task._id && t.parentId === targetTask.parentId
             )
-            .filter(
-              (t) => !!state.current.ignoreTagFolder || t.tagFolderId === targetTask.tagFolderId
-            );
+            .filter((t) => !!state.current.ignoreTagFolder || t.folderId === targetTask.folderId);
 
           if (isDebug) {
             console.log(
@@ -163,20 +161,18 @@ export const TasksDndProvider: FC<PropsWithChildren> = (props) => {
             {
               ...task,
               parentId: isSubTask ? targetTask._id : relatedTasks[0].parentId,
-              tagFolderId: state.current.ignoreTagFolder
-                ? task.tagFolderId
-                : relatedTasks[0]?.tagFolderId,
+              folderId: state.current.ignoreTagFolder ? task.folderId : relatedTasks[0]?.folderId,
             },
             indexOfPosition
           ).map((t, i) => ({ ...t, order: i }));
 
           // Đổi folder -> Các công việc con cũng phải chuyển folder
-          const isChangeTagFolderId = task.tagFolderId !== targetTask.tagFolderId;
+          const isChangefolderId = task.folderId !== targetTask.folderId;
           let subTasksChanged: TaskEntity[] = [];
-          if (isChangeTagFolderId) {
+          if (isChangefolderId) {
             subTasksChanged = allTasks
               .filter((t) => t.parentId && t.parentId === task._id)
-              .map((t) => ({ ...t, tagFolderId: targetTask.tagFolderId }));
+              .map((t) => ({ ...t, folderId: targetTask.folderId }));
 
             updatedTasks = updatedTasks.filter(
               (v) => !subTasksChanged.find((k) => k._id === v._id)
@@ -222,7 +218,7 @@ export const useTaskDrop = (
     taskId?: string;
     position?: ReorderTaskPotision;
     isSubTask?: boolean;
-    tagFolderId?: string;
+    folderId?: string;
     changeStatus?: string | null;
     changeParentId?: string;
   }

@@ -91,7 +91,7 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
       icon: IconTrash,
       isShowCompleted: false,
       process: async () => {
-        const relatedTasks = await getTasks({ tagFolderId: tag._id, limit: 1 });
+        const relatedTasks = await getTasks({ folderId: tag._id, limit: 1 });
         onArchive({
           name: <Trans>Folder</Trans>,
           icon: IconFolder,

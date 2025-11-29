@@ -40,6 +40,10 @@ export const AdminTools: FC = () => {
         <Stack align="start">
           <Button onClick={() => api.patch(`/tasks/rebalance-order`)}>Rebalance Task Order</Button>
 
+          <Button onClick={() => api.patch(`/tasks/migrate-tag-folder-id-to-folder-id`)}>
+            Migrate Tag Folder ID to Folder ID
+          </Button>
+
           <Button onClick={() => api.patch(`/files/migrate-file-refs`)}>Migrate file refs</Button>
 
           <Button onClick={() => api.patch(`/loans/migrate-created-at`)}>

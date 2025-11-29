@@ -3,7 +3,7 @@
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { enumColumn } from "@/components/list/columns/enum-column";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconCategory, IconEdit, IconOutlet } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -12,7 +12,6 @@ import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { categoryTypes } from "./category-constants";
 import { CategoryEntity, CategoryType } from "./category-types";
 import { OnModalCategory } from "./modals/modal-category";
-import { Trans } from "@lingui/react/macro";
 
 export const CategoryList: FC = () => {
   return (

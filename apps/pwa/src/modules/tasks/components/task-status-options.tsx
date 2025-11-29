@@ -12,7 +12,7 @@ import { IconCheck, IconSettings } from "@tabler/icons-react";
 import { FC, MouseEventHandler, useState } from "react";
 
 interface TaskStatusOptionsProps {
-  task: TaskEntity;
+  task: Pick<TaskEntity, "status">;
   size?: number;
   disabled?: boolean;
   target?: React.ReactNode;

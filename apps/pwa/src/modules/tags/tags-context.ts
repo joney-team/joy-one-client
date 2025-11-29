@@ -5,6 +5,7 @@ import { ReorderTag, TagDto } from "./tags-types";
 import { TagEntity } from "./tags-types";
 
 export interface TagsContext {
+  isInitialized: boolean;
   list: TagEntity[];
   create: (dto: TagDto) => Promise<TagEntity>;
   update: (id: string, dto: TagDto) => Promise<TagEntity>;

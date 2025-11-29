@@ -97,7 +97,7 @@ export const useTask = (id: string, initTask?: TaskEntity, isSkipLoadSubTasks = 
   }, [id]);
 
   const tagFolder = tags.list.find(
-    (v) => v.type === TagType.TASK_FOLDER && v._id === task?.tagFolderId
+    (v) => v.type === TagType.TASK_FOLDER && v._id === task?.folderId
   );
   const themeColor = color(tagFolder?.color || "primary");
   const isOutdated =

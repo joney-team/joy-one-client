@@ -39,6 +39,14 @@ export const FileType = {
 } as const;
 
 export type FileType = typeof FileType[keyof typeof FileType];
+/** Available genders */
+export const Gender = {
+  Female: 'FEMALE',
+  Male: 'MALE',
+  Other: 'OTHER'
+} as const;
+
+export type Gender = typeof Gender[keyof typeof Gender];
 /** Available external storage providers */
 export const PluginExternalStorageProvider = {
   AwsS3: 'AWS_S3'
@@ -54,3 +62,21 @@ export const ProductType = {
 } as const;
 
 export type ProductType = typeof ProductType[keyof typeof ProductType];
+/** Available tag types */
+export const TagType = {
+  Customer: 'CUSTOMER',
+  MessageBox: 'MESSAGE_BOX',
+  Task: 'TASK',
+  TaskFolder: 'TASK_FOLDER'
+} as const;
+
+export type TagType = typeof TagType[keyof typeof TagType];
+/** Available task priorities */
+export const TaskPriority = {
+  High: 'HIGH',
+  Low: 'LOW',
+  Medium: 'MEDIUM',
+  Urgent: 'URGENT'
+} as const;
+
+export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];

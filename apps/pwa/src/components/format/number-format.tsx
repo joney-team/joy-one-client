@@ -2,7 +2,7 @@
 
 import { useLang } from "@/modules/lang/lang-context";
 import { getClientLocale } from "@/modules/lang/lang-service";
-import { FC, Fragment } from "react";
+import { type FC, Fragment, type JSX } from "react";
 
 export interface NumberFormatProps {
   value: number;

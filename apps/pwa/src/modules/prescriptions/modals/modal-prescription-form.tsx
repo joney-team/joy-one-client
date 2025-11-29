@@ -283,7 +283,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
           disabled={!!props.customer}
           styles={{ description: { marginBottom: 5 } }}
           value={customer}
-          onSelect={(customer) => setCustomer(customer)}
+          onSelect={(customer) => setCustomer(customer as any)}
         />
 
         <PrintButton

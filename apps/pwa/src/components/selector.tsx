@@ -40,8 +40,8 @@ export interface SelectorContext<T extends SelectOption> {
   toggle: () => void;
   close: () => void;
   open: () => void;
-  value?: T;
-  onChange?: (value?: T) => Promise<void> | void;
+  value?: T | null;
+  onChange?: (value?: T | null) => Promise<void> | void;
   disabled?: boolean;
   theme: MantineTheme;
 }
@@ -54,8 +54,8 @@ export interface SelectorBaseProps<T extends SelectOption>
   extends Omit<InputWrapperProps, "value" | "onSelect" | "onChange"> {
   listRoute?: string;
   listParams?: Record<string, any>;
-  value?: T;
-  onSelect?: (value: T | undefined, ctx: ComboboxStore) => Promise<any> | any;
+  value?: T | null | undefined;
+  onSelect?: (value: T | null | undefined, ctx: ComboboxStore) => Promise<any> | any;
   onCreate?: (ctx: ComboboxStore) => void;
   pinnedOptions?: T[];
   disabled?: boolean;

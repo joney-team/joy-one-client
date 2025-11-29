@@ -13,7 +13,7 @@ import { Renderer } from "./renderer";
 import { FileType } from "@/graphql/enums.graphql";
 
 interface EntityImageProps {
-  src?: string | File;
+  src?: string | File | null;
   onChange?: (image: File) => void;
   readonly?: boolean;
   icon?: Icon;

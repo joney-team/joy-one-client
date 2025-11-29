@@ -61,7 +61,7 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
-import { useLang } from "../lang/lang-context";
+import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { LoanCustomerKyc } from "./components/loan-customer-kyc";
@@ -69,7 +69,6 @@ import { LoanDisburesement } from "./components/loan-disbursement";
 import { LoanDocuments } from "./components/loan-documents";
 import { LoanPayments } from "./components/loan-payments";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
-import { useUploadFile } from "../files/hooks/use-upload-file";
 
 export const LoanDetail: NextPage = () => {
   const params = useParams();
@@ -548,7 +547,7 @@ const getStepActive = (loan: LoanEntity, kyc?: CustomerKycEntity): number => {
 
 const InfoCard: FC<{
   label: string;
-  content?: JSX.Element;
+  content?: ReactNode;
   href?: string;
   visible?: boolean;
 }> = (props) => {

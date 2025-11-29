@@ -2,11 +2,11 @@
 
 import { ActionIcon, CopyButton, Group, Text, TextProps, Tooltip } from "@mantine/core";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, ReactNode } from "react";
 
 export interface CopyTextProps extends TextProps {
   text: string | number;
-  renderText?: () => string | JSX.Element;
+  renderText?: () => string | ReactNode;
   empty?: string;
 }
 

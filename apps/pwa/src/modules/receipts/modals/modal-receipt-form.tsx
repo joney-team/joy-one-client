@@ -130,7 +130,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
       <CustomerInput
         label={t`Customer`}
         value={form.values.relatedCustomer}
-        onSelect={(value) => form.setFieldValue("relatedCustomer", value)}
+        onSelect={(value) => form.setFieldValue("relatedCustomer", value as any)}
         disabled={!!props.relatedCustomer}
       />
 

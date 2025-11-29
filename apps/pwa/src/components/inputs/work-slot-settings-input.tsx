@@ -22,7 +22,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconClock, IconEdit, IconPlus } from "@tabler/icons-react";
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, JSX, useEffect, useRef, useState } from "react";
 import { Calendar, Views } from "react-big-calendar";
 import { v4 as uuid } from "uuid";
 import { Button } from "../buttons/button";

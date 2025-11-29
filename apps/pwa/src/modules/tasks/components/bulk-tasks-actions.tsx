@@ -33,7 +33,6 @@ import { FC } from "react";
 
 export const BulkTasksActions: FC = () => {
   const tasks = useTasks();
-  const layout = useLayout();
   const workspaceLayout = useWorkspaceLayout();
 
   const removeAll = () => {
@@ -44,7 +43,7 @@ export const BulkTasksActions: FC = () => {
     tasks.removeSelectedTasks();
   };
 
-  const assignTask = (user?: WorkspaceMember) => {
+  const assignTask = (user?: WorkspaceMember | null) => {
     if (!user) return;
 
     const selectedTasks = tasks.selectedTaskIds
@@ -74,7 +73,7 @@ export const BulkTasksActions: FC = () => {
       childTasks.forEach((child) => relatedTasks.push(child));
     });
 
-    updateTasks(relatedTasks.map((task) => ({ ...task, tagFolderId: tagFolder?._id })));
+    updateTasks(relatedTasks.map((task) => ({ ...task, folderId: tagFolder?._id })));
   };
 
   const setTag = (tag?: TagEntity) => {
@@ -160,7 +159,7 @@ export const BulkTasksActions: FC = () => {
             />
 
             <WorkspaceMemberSelector
-              onSelect={assignTask}
+              onSelect={(user) => assignTask(user as any)}
               target={(ctx) => {
                 return (
                   <Button
@@ -183,7 +182,7 @@ export const BulkTasksActions: FC = () => {
             <TagSelector
               type={TagType.TASK}
               excludeIds={tasks.state.tagIds}
-              onSelect={setTag}
+              onSelect={(tag) => setTag(tag as any)}
               target={(ctx) => {
                 return (
                   <Tooltip label={t`Set tag`}>
@@ -305,7 +304,7 @@ export const BulkTasksActions: FC = () => {
                 />
 
                 <WorkspaceMemberSelector
-                  onSelect={assignTask}
+                  onSelect={(user) => assignTask(user as any)}
                   target={(ctx) => {
                     return (
                       <Menu.Item leftSection={<IconUsersPlus size={18} />} onClick={ctx.toggle}>

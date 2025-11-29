@@ -114,7 +114,7 @@ export const OrderSaleCheckout: FC = () => {
           <Stack flex={1}>
             <Group align="center" justify="space-between">
               <CustomerSelector
-                onSelect={(value) => orderSale.updateOrder({ relatedCustomer: value ?? null })}
+                onSelect={(value) => orderSale.updateOrder({ relatedCustomer: value as any })}
                 target={(customerSelectorCtx) => {
                   return (
                     <Group

@@ -8,8 +8,8 @@ import { IconPlus } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
 
 interface QuickCreateTaskInputProps {
-  tagFolderId?: string;
-  parentId?: string;
+  folderId?: string | null;
+  parentId?: string | null;
 }
 
 export const QuickCreateTaskInput: FC<PropsWithChildren<QuickCreateTaskInputProps>> = (props) => {
@@ -44,7 +44,7 @@ export const QuickCreateTaskInput: FC<PropsWithChildren<QuickCreateTaskInputProp
                 process: () =>
                   createTask({
                     name: value,
-                    tagFolderId: props.tagFolderId,
+                    folderId: props.folderId,
                     parentId: props.parentId,
                   }),
               });

@@ -59,7 +59,7 @@ export const UserCard: FC<UserCardProps> = (props) => {
       <Group gap={8} wrap="nowrap">
         <Avatar
           user={user}
-          size={props.avatarSize || em(28)}
+          size={props.avatarSize || 28}
           radius="xl"
           hideOnlineStatus={props.hideOnlineStatus}
           onlineIndicatorProps={{

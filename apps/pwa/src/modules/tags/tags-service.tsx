@@ -47,7 +47,7 @@ export const onRemoveTaskTagFolder = (tag: TagEntity, onDone?: () => void) => {
     name: <Trans>Remove folder</Trans>,
     icon: IconFolder,
     process: async () => {
-      const relatedTasks = await getTasks({ tagFolderId: tag._id, limit: 1 });
+      const relatedTasks = await getTasks({ folderId: tag._id, limit: 1 });
       onArchive({
         name: t`Folder`,
         icon: IconFolder,

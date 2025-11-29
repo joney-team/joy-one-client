@@ -116,8 +116,8 @@ export const TaskDetail: FC = () => {
                 <TaskForm
                   key={task._id + "form"}
                   task={task}
-                  customer={task.relatedCustomer}
-                  tagFolderId={task!.tagFolderId}
+                  // customer={task.customer}
+                  folderId={task!.folderId}
                 />
 
                 <DetailFooter task={task} onClose={onClose} />
@@ -148,8 +148,8 @@ export const TaskDetail: FC = () => {
                         <TaskForm
                           key={task._id + "form"}
                           task={task}
-                          customer={task.relatedCustomer}
-                          tagFolderId={task!.tagFolderId}
+                          // customer={task.customer}
+                          folderId={task!.folderId}
                         />
 
                         <DetailFooter task={task} onClose={onClose} />

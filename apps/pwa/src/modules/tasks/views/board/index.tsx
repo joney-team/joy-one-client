@@ -84,6 +84,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                 withBorder
                 shadow="none"
                 p={10}
+                w={300}
                 style={{
                   background: "transparent",
                   border: "1px dashed rgba(0, 0, 0, 0.1)",

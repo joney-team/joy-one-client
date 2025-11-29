@@ -64,7 +64,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
     id: `calendar-${tagFolder?._id || "all"}`,
     fetch: (q) =>
       getTasks(
-        objSelect(getQuery(q), ["fromDate", "toDate", "tagFolderId", "assigneeUserIds", "getAll"])
+        objSelect(getQuery(q), ["fromDate", "toDate", "folderId", "assigneeUserIds", "getAll"])
       ),
   });
 
@@ -102,7 +102,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
       tasks.fetch(true, {
         isSilient: true,
         addonQuery: {
-          tagFolderId: tagFolder?._id,
+          folderId: tagFolder?._id,
         },
       });
   }, [tagFolder, tasks.isInitialized]);
@@ -114,7 +114,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
           <WorkspaceMemberSelector
             onSelect={(user) => {
               if (!user) return;
-              setAssignee(user);
+              setAssignee(user as any);
               const isSelected = assigneeUserIds.includes(user.userId);
               let _assigneeUserIds: string[] = [...assigneeUserIds];
               if (isSelected) {

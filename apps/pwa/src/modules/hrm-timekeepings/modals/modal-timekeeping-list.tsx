@@ -85,7 +85,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
     timekeepings: timekeepings.data,
     rules: workspace.settings.hrmTimeKeepingsRules,
     workSlots: workspace.settings.wSlots,
-    workTimeType: member?.workingTimeType,
+    workTimeType: member?.workingTimeType as any,
   });
 
   const close = () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic, { DynamicOptionsLoadingProps } from "next/dynamic";
-import { FC } from "react";
+import type { FC, JSX } from "react";
 
 const Skeleton = dynamic(() => import("@mantine/core").then((mod) => mod.Skeleton), { ssr: false });
 const Stack = dynamic(() => import("@mantine/core").then((mod) => mod.Stack), { ssr: false });

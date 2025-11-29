@@ -3,11 +3,11 @@
 import { useColor } from "@/modules/theme/use-color";
 import { Group, Text, ThemeIcon } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
-import { FC, PropsWithChildren } from "react";
+import type { FC, PropsWithChildren, ReactNode } from "react";
 
 export interface SessionTitleProps {
   id?: string;
-  name: string | JSX.Element;
+  name: string | ReactNode;
   icon?: Icon;
   iconColor?: string;
   onViewAll?: () => void;

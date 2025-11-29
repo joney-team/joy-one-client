@@ -64,13 +64,12 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
               label={<Trans>Folder</Trans>}
               autoHideLabel
               activeColor={
-                tasks.params.tagFolderId
-                  ? taskFolderTags.find((f) => f._id === tasks.params.tagFolderId)?.color ||
-                    "primary"
+                tasks.params.folderId
+                  ? taskFolderTags.find((f) => f._id === tasks.params.folderId)?.color || "primary"
                   : "gray"
               }
               iconStrokeWidth={1.8}
-              value={tasks.params.tagFolderId}
+              value={tasks.params.folderId}
               options={taskFolderTags.map((f) => ({
                 label: f.name,
                 value: f._id,
@@ -80,8 +79,8 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
                   </ThemeIcon>
                 ),
               }))}
-              onClear={() => tasks.removeParams(["tagFolderId"])}
-              onChange={(value) => tasks.setParams({ tagFolderId: value })}
+              onClear={() => tasks.removeParams(["folderId"])}
+              onChange={(value) => tasks.setParams({ folderId: value })}
               enabled={taskFolderTags.length > 0}
             />
           </Group>

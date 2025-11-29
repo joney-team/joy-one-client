@@ -4,17 +4,18 @@ import { useColor } from "@/modules/theme/use-color";
 import { ActionIcon, Box, Grid, Group, Stack, Text } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
+import { ReactNode } from "react";
 
 export const LoanRowInfo = <
   T extends string | number | unknown[] | Record<string, any> | undefined
 >(props: {
-  label: string | JSX.Element;
+  label: string | ReactNode;
   description?: string;
   value: T;
-  renderValue?: (value: T) => JSX.Element | string;
+  renderValue?: (value: T) => ReactNode | string;
   copy?: boolean;
   visible?: boolean;
-}): JSX.Element | null => {
+}): ReactNode | null => {
   const clipboard = useClipboard();
   const color = useColor();
 

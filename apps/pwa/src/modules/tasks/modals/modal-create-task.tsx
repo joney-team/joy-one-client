@@ -29,10 +29,10 @@ export const ModalCreateTask: FC = () => {
   const props = useRef<TaskFormProps | null>(null);
 
   const parentTask = getTaskEntity(props.current?.task?.parentId || props.current?.parentId);
-  const parnetTagFolder = tags.list.find((v) => v._id === parentTask?.tagFolderId);
+  const parnetTagFolder = tags.list.find((v) => v._id === parentTask?.folderId);
 
   const tagFolder = tags.list.find(
-    (v) => v._id === props.current?.tagFolderId || v._id === parnetTagFolder?._id
+    (v) => v._id === props.current?.folderId || v._id === parnetTagFolder?._id
   );
 
   OnModalCreateTask = (p) => {
@@ -102,7 +102,7 @@ export const ModalCreateTask: FC = () => {
           <TaskForm
             {...props.current}
             parentId={parentTask?._id}
-            tagFolderId={tagFolder?._id}
+            folderId={tagFolder?._id}
             onClose={() => {
               props.current?.onClose?.();
               close();

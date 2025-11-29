@@ -142,7 +142,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
 
                 <LoanRowInfo
                   label={<Trans>Phone</Trans>}
-                  value={customer.phone}
+                  value={customer.phone as any}
                   renderValue={(value) => (
                     <Anchor href={`tel:${value}`}>{formatPhoneNumber(value)}</Anchor>
                   )}

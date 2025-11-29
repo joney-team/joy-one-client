@@ -14,7 +14,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -38,6 +38,8 @@
     ".next/types/**/*.ts",
     "lingui.config.ts",
     "types.d.ts",
+    ".next/dev/types/**/*.ts",
+    ".next/dev/types/**/*.tsx"
   ],
   "exclude": [
     "node_modules",

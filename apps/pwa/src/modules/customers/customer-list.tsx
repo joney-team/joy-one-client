@@ -83,11 +83,13 @@ export const CustomerList: FC = () => {
                 return data.phone;
               }
 
+              if (!data.phone) return null;
+
               return <Clickable href={`tel:${data.phone}`}>{data.phone}</Clickable>;
             },
             exportToExcel: (value) => {
               return {
-                text: value,
+                text: value ?? "",
                 width: 20,
               };
             },
@@ -98,7 +100,7 @@ export const CustomerList: FC = () => {
             filter: { text: true },
             exportToExcel: (value) => {
               return {
-                text: value,
+                text: value ?? "",
                 width: 30,
               };
             },

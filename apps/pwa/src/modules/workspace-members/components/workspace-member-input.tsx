@@ -24,7 +24,7 @@ export const WorkspaceMemberInput: FC<WorkspaceMemberInputProps> = (props) => {
     <WorkspaceMemberSelector
       {...rest}
       excludeIds={props.value ? [props.value.userId] : []}
-      onSelect={(user) => props.onChange?.(user)}
+      onSelect={(user) => props.onChange?.(user as any)}
       target={(ctx) => {
         if (value)
           return (

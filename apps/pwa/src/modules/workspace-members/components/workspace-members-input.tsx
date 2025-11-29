@@ -1,11 +1,13 @@
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
 import { UserCard } from "@/modules/users/components/user-card";
 import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import {
   WorkspaceMemberSelector,
   WorkspaceMemberSelectorProps,
+  WorkspaceMemberSelectorValue,
 } from "@/modules/workspace-members/components/workspace-member-selector";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { ActionIcon, em, Group, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconFlagFilled, IconUserPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -13,8 +15,8 @@ import { Renderer } from "../../../components/renderer";
 
 interface WorkspaceMembersInputProps
   extends Omit<WorkspaceMemberSelectorProps, "value" | "onChange" | "target"> {
-  value?: WorkspaceMemberInfo[];
-  onChange?: (value: WorkspaceMemberInfo[]) => void;
+  value?: WorkspaceMemberSelectorValue[];
+  onChange?: (value: WorkspaceMemberSelectorValue[]) => void;
   collapsed?: boolean;
   showMainResponsible?: boolean;
   disabled?: boolean;
@@ -28,7 +30,7 @@ export const WorkspaceMembersInput: FC<WorkspaceMembersInputProps> = (props) => 
   const users = value || [];
   const disabled = props.disabled || !!!onChange;
 
-  const toogleSelect = (user?: WorkspaceMemberInfo) => {
+  const toogleSelect = (user?: WorkspaceMemberSelectorValue | null) => {
     if (!user) return;
 
     const index = users.findIndex((u) => u.userId === user.userId);

@@ -9,7 +9,7 @@ interface WayPointProps {
   throttle?: number;
   enabled?: boolean;
   scrollContainerId?: string;
-  scrollContainerRef?: HTMLElement;
+  scrollContainerRef?: HTMLElement | HTMLDivElement | null;
   offset?: number;
 }
 

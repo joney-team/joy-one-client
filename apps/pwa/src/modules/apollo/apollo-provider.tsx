@@ -110,7 +110,13 @@ const authMiddleware = new SetContextLink(async ({ headers }) => {
 
 const client = new ApolloClient({
   link: authMiddleware.concat(errorLink, httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Task: {
+        keyFields: ["_id"],
+      },
+    },
+  }),
 });
 
 export const ApolloProvider = ({ children }: { children: React.ReactNode }) => {

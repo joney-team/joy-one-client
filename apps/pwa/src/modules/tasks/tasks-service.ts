@@ -28,6 +28,7 @@ import {
   TaskPriority,
   TaskStatus,
 } from "./tasks-types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 export const tasksEmitter = new EventEmitter();
 tasksEmitter.setMaxListeners(500);
@@ -111,7 +112,7 @@ export function renderTaskStatusStyle(statusId: string, workspaceStatuses: TaskS
   };
 }
 
-export function getTaskPriorityColor(priority?: TaskPriority) {
+export function getTaskPriorityColor(priority?: string) {
   return {
     [TaskPriority.LOW]: "gray",
     [TaskPriority.MEDIUM]: "primary",
@@ -227,7 +228,15 @@ export const getRelatedTasks = (
   return _tasks
     .filter((t) => (options?.includeSelf ? true : t._id !== task._id))
     .filter((t) => t.parentId === task.parentId)
-    .filter((t) => (options?.sameFolderId ? t.tagFolderId === task.tagFolderId : true))
+    .filter((t) => (options?.sameFolderId ? t.folderId === task.folderId : true))
     .filter((t) => (options?.sameStatus ? t.status === task.status : true))
     .sort((a, b) => a.order - b.order);
+};
+
+export const isTaskOutdated = (task: Pick<TaskEntity, "dueDate" | "status">) => {
+  return (
+    !!task?.dueDate &&
+    task.dueDate < DateTime.getNowInSeconds() &&
+    task.status !== DefaultTaskStatusId.CLOSED
+  );
 };

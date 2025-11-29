@@ -20,9 +20,11 @@ import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
+import {
+  WorkspaceMemberSelector,
+  WorkspaceMemberSelectorValue,
+} from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import {
   isInWorkSlot,
   useWorkDaySlots,
@@ -199,10 +201,10 @@ export const BookingList: FC = () => {
     );
   }, [normalizedQuery.view, normalizedQuery.date]);
 
-  const toggleAssigneeUser = (member?: WorkspaceMember) => {
+  const toggleAssigneeUser = (member?: WorkspaceMemberSelectorValue | null) => {
     if (!member) return;
 
-    setWorkspaceMember(member);
+    setWorkspaceMember(member as any);
     const isSelected = normalizedQuery.assigneeUserIds.includes(member.userId);
     const assigneeUserIds = isSelected
       ? normalizedQuery.assigneeUserIds.filter((id) => id !== member.userId)

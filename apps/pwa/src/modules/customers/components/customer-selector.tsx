@@ -11,15 +11,17 @@ import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
 
+export type CustomerSelectorValue = Pick<CustomerShortInfo, "_id" | "name" | "phone" | "avatar">;
+
 interface CustomerSelectorProps
-  extends Omit<SelectorProps<CustomerShortInfo>, "onSearch" | "renderOption"> {}
+  extends Omit<SelectorProps<CustomerSelectorValue>, "onSearch" | "renderOption"> {}
 
 export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
   return (
     <Selector
       {...props}
       listRoute="/customers"
-      onSearch={(q) => searchEntity<CustomerShortInfo>(AppEntity.CUSTOMERS, q)}
+      onSearch={(q) => searchEntity<CustomerSelectorValue>(AppEntity.CUSTOMERS, q)}
       renderOption={(item) => {
         return (
           <Combobox.Option value={item._id} key={item._id}>

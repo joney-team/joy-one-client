@@ -1,26 +1,28 @@
 import { Avatar } from "@/components/avatar";
 import { Renderer } from "@/components/renderer";
 import { SelectorTarget } from "@/components/selector";
-import { CustomerSelector } from "@/modules/customers/components/customer-selector";
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
+import {
+  CustomerSelector,
+  CustomerSelectorValue,
+} from "@/modules/customers/components/customer-selector";
 import { ActionIcon, Card, em, Group, InputWrapperProps, Stack, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconUserPlus, IconX } from "@tabler/icons-react";
 import { FC } from "react";
 
 interface CustomerInputProps extends Omit<InputWrapperProps, "value" | "onSelect" | "onChange"> {
-  value?: CustomerShortInfo;
-  onSelect?: (value?: CustomerShortInfo) => void;
-  onChange?: (value?: CustomerShortInfo) => void;
+  value?: CustomerSelectorValue | null;
+  onSelect?: (value?: CustomerSelectorValue | null) => void;
+  onChange?: (value?: CustomerSelectorValue | null) => void;
   disabled?: boolean;
   clearable?: boolean;
-  renderValue?: SelectorTarget<CustomerShortInfo>;
+  renderValue?: SelectorTarget<CustomerSelectorValue>;
 }
 
 export const CustomerInput: FC<CustomerInputProps> = (props) => {
   const { onSelect, onChange, disabled, clearable, renderValue, ...rest } = props;
 
-  const _onSelect = (value?: CustomerShortInfo) => {
+  const _onSelect = (value?: CustomerSelectorValue | null) => {
     onSelect?.(value);
     onChange?.(value);
   };

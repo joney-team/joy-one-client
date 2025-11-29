@@ -3,26 +3,34 @@
 import { Avatar } from "@/components/avatar";
 import { searchEntity } from "@/modules/search/search-service";
 import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
-import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { AppEntity } from "@/types";
 import { ActionIcon, Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
 
+export type WorkspaceMemberSelectorValue = Pick<
+  WorkspaceMemberInfo,
+  "_id" | "userId" | "name" | "roles" | "avatar" | "color"
+>;
+
 export interface WorkspaceMemberSelectorProps
-  extends Omit<SelectorProps<WorkspaceMember>, "listRoute" | "searchPlaceholder" | "renderOption"> {
+  extends Omit<
+    SelectorProps<WorkspaceMemberSelectorValue>,
+    "listRoute" | "searchPlaceholder" | "renderOption"
+  > {
   iconSize?: number;
   avatarSize?: number;
   collapsed?: boolean;
-  optionRightSection?: (user: WorkspaceMember) => ReactNode;
+  optionRightSection?: (user: WorkspaceMemberSelectorValue) => ReactNode;
 }
 
 export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props) => {
   const { iconSize, avatarSize, collapsed, optionRightSection, ...rest } = props;
 
   return (
-    <Selector<WorkspaceMember>
+    <Selector<WorkspaceMemberSelectorValue>
       {...rest}
       autoCloseOnChange={false}
       listRoute="/workspace-members"

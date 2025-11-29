@@ -2,7 +2,7 @@
 
 import { useTags } from "@/modules/tags/tags-context";
 import { IconMinus } from "@tabler/icons-react";
-import { ActionIcon } from "@mantine/core";
+import { ActionIcon, CardProps } from "@mantine/core";
 import { Group, Text } from "@mantine/core";
 import { alpha } from "@mantine/core";
 import { Card } from "@mantine/core";
@@ -12,7 +12,7 @@ import { FC } from "react";
 import { Renderer } from "../../../components/renderer";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 
-interface TaskTagProps {
+interface TaskTagProps extends CardProps {
   id: string;
   h?: number;
   fz?: number;
@@ -20,12 +20,10 @@ interface TaskTagProps {
   editable?: boolean;
 }
 
-export const TaskTag: FC<TaskTagProps> = (props) => {
-  const { id } = props;
+export const TaskTag: FC<TaskTagProps> = ({ id, h, fz, onRemove, editable = true, ...rest }) => {
   const tags = useTags();
   const tag = tags.list.find((v) => v._id === id);
   const hover = useHover();
-  const editable = typeof props.editable === "undefined" ? true : props.editable;
 
   if (!tag) return null;
 
@@ -44,9 +42,10 @@ export const TaskTag: FC<TaskTagProps> = (props) => {
         e.stopPropagation();
         e.preventDefault();
       }}
+      {...rest}
     >
-      <Group mih={props.h || 28} justify="space-between" gap={5} align="center" wrap="nowrap">
-        <Text fw={600} fz={props.fz || 12} c={color}>
+      <Group mih={h ?? 28} justify="space-between" gap={5} align="center" wrap="nowrap">
+        <Text fw={600} fz={fz ?? 12} c={color}>
           {tag.name}
         </Text>
 
@@ -64,8 +63,8 @@ export const TaskTag: FC<TaskTagProps> = (props) => {
               </ActionIcon>
             </Renderer>
 
-            <Renderer visible={!!props.onRemove}>
-              <ActionIcon radius={100} variant="subtle" size="sm" color={color} onClick={props.onRemove}>
+            <Renderer visible={!!onRemove}>
+              <ActionIcon radius={100} variant="subtle" size="sm" color={color} onClick={onRemove}>
                 <IconMinus size={13} strokeWidth={2} />
               </ActionIcon>
             </Renderer>

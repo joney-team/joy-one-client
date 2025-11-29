@@ -225,13 +225,13 @@ export const ModalCreateLoan: FC = () => {
               <Session name={t`Customer`} icon={IconUser}>
                 <CustomerInput
                   value={customer}
-                  onSelect={(c) => initialize({ customer: c })}
+                  onSelect={(c) => initialize({ customer: c as any })}
                   renderValue={(ctx) => {
                     if (ctx.value)
                       return (
                         <Stack gap={8} w="100%">
                           <CustomerCard
-                            customer={ctx.value}
+                            customer={ctx.value as any}
                             withBorder={false}
                             shadow="xs"
                             p={10}

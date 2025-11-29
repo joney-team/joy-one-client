@@ -12,11 +12,13 @@ import { ReorderTag, TagEntity } from "./tags-types";
 const TagsProvider: FC<PropsWithChildren> = (props) => {
   const [tags, setTags] = useState<TagEntity[]>([]);
   const workspace = useWorkspace();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const fetch = async () => {
     try {
       const response = await getTags();
       setTags(response.data);
+      setIsInitialized(true);
     } catch (error) {
       console.error(error);
     }
@@ -24,6 +26,7 @@ const TagsProvider: FC<PropsWithChildren> = (props) => {
 
   const contextValue: TagsContext = {
     list: tags,
+    isInitialized,
     create: async (dto) => {
       const data = await createTag(dto);
       setTags([...tags, data]);

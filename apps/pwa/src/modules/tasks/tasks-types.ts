@@ -45,14 +45,14 @@ export interface TaskDto {
   order?: number;
   parentId?: string | null;
   description?: string | null;
-  relatedCustomerId?: string | null;
+  customerId?: string | null;
   status?: string | null;
   priority?: TaskPriority | null;
   startDate?: number | null;
   dueDate?: number | null;
   assigneeUserIds?: string[];
   partnerIds?: string[];
-  tagFolderId?: string | null;
+  folderId?: string | null;
   tagIds?: string[];
   timeTrackings?: TaskTimeTracking[];
   estimatedTime?: number | null;
@@ -77,10 +77,10 @@ export interface TaskEntity extends BaseMongoEntity {
   partnerIds: string[];
   partners: PartnerEntity[];
   workspaceId: string;
-  relatedCustomerId?: string | undefined;
-  relatedCustomer?: CustomerShortInfo | undefined;
+  customerId?: string | null;
+  customer?: Pick<CustomerShortInfo, "_id" | "name" | "phone" | "avatar"> | null;
   isArchived?: boolean;
-  tagFolderId?: string | undefined;
+  folderId?: string | null;
   tags: TagEntity[];
   tagIds?: string[];
   closedAt?: number | null;
@@ -120,11 +120,11 @@ export interface TasksContext {
   setView: (view: TaskView) => void;
   state: TasksState;
   setState: Dispatch<SetStateAction<TasksState>>;
-  tagFolder?: TagEntity;
+  tagFolder?: TagEntity | null;
   tagFolders: TagEntity[];
   isInitialized: boolean;
   statuses: TaskStatus[];
-  open: (task: TaskEntity) => void;
+  open: (task: Pick<TaskEntity, "_id" | "code">) => void;
   openFolder: (tagFolder: TagEntity) => void;
   removeFolder: () => void;
   redirectToDefaultView: () => void;
@@ -136,6 +136,7 @@ export interface TasksContext {
   selectedTaskIds: string[];
   toggleSelectTask: (taskId: string, isShiftKey?: boolean) => void;
   removeSelectedTasks: (specificTaskIds?: string[]) => void;
+  href: (task: Pick<TaskEntity, "_id" | "code">) => string;
 }
 
 export interface TaskHistoriesContext {

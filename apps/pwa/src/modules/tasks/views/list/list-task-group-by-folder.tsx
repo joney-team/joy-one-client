@@ -7,7 +7,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { t } from "@lingui/core/macro";
 import { Box, Card, em, Stack, Title } from "@mantine/core";
 import { FC } from "react";
-import { ListTaskGroupByStatuses } from "./list.task-group-by-statuses";
+import { ListTaskGroupByStatuses } from "./list-task-group-by-statuses";
 
 interface ListTaskGroupByFolderProps {
   tagFolder?: TagEntity;
@@ -23,7 +23,7 @@ export const ListTaskGroupByFolder: FC<ListTaskGroupByFolderProps> = (props) => 
   const Content = () => {
     return (
       <Stack gap={16}>
-        <ListTaskGroupByStatuses status={DefaultTaskStatusId.TODO} tagFolderId={tagFolder?._id} />
+        <ListTaskGroupByStatuses status={DefaultTaskStatusId.TODO} folderId={tagFolder?._id} />
 
         {statuses
           .filter((v) => !v.isDefault)
@@ -32,14 +32,14 @@ export const ListTaskGroupByFolder: FC<ListTaskGroupByFolderProps> = (props) => 
               key={status.id}
               status={status.id}
               hideWhenEmpty
-              tagFolderId={tagFolder?._id}
+              folderId={tagFolder?._id}
             />
           ))}
 
         {state.showClosed && (
           <ListTaskGroupByStatuses
             status={DefaultTaskStatusId.CLOSED}
-            tagFolderId={tagFolder?._id}
+            folderId={tagFolder?._id}
             showEmptyMsg
           />
         )}

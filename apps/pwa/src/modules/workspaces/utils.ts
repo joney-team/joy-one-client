@@ -31,7 +31,7 @@ export function decodeWorkspace(input: string, plainCode?: string) {
   return { workspaceCode, code: plainCode || code, entity, count: +code };
 }
 
-export function renderEntityCode(workspaceCode?: string, plainCode?: string) {
+export function renderEntityCode(workspaceCode?: string, plainCode?: string | null) {
   if (!workspaceCode) return plainCode || "";
   if (plainCode) return plainCode || "";
 

@@ -101,7 +101,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                     onSelect={(customer) =>
                       onUpdateOrder({
                         ...order,
-                        relatedCustomer: customer,
+                        relatedCustomer: customer as any,
                       })
                     }
                   />

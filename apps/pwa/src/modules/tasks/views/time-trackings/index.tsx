@@ -71,7 +71,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
     events: [EventType.TASKS_UPDATED, EventType.TASK_NEW, EventType.TASK_ARCHIVED],
   });
 
-  const _tasks = tasks.data.filter((v) => !ctx.tagFolder || v.tagFolderId === ctx.tagFolder?._id);
+  const _tasks = tasks.data.filter((v) => !ctx.tagFolder || v.folderId === ctx.tagFolder?._id);
   const query = getQuery(tasks.params);
 
   const timeTrackingUsers = _tasks.reduce((acc, task) => {
@@ -111,7 +111,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
           <WorkspaceMemberSelector
             onSelect={(user) => {
               if (!user) return;
-              setAssignee(user);
+              setAssignee(user as any);
               const isSelected = assigneeUserIds.includes(user.userId);
               let _assigneeUserIds: string[] = [...assigneeUserIds];
               if (isSelected) {

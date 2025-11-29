@@ -4,26 +4,28 @@ import { Button } from "@/components/buttons/button";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { DueDateInput } from "@/components/inputs/due-date-input";
+import { WayPoint } from "@/components/way-point";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
-import { useTask } from "@/modules/tasks/hooks/use-task";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import {
   getTaskPriorityColor,
+  isTaskOutdated,
   renderTaskStatusStyle,
-  updateTasks,
 } from "@/modules/tasks/tasks-service";
 import { TaskEntity, TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { renderEntityCode } from "@/modules/workspaces/utils";
+import { onError } from "@/utils/exceptions.utils";
+import { useQuery } from "@apollo/client/react";
 import {
-  attachClosestEdge,
   type Edge,
+  attachClosestEdge,
   extractClosestEdge,
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
@@ -38,11 +40,11 @@ import {
   ActionIcon,
   Badge,
   Card,
-  em,
   Group,
   Menu,
   Portal,
   Progress,
+  Skeleton,
   Stack,
   Text,
   ThemeIcon,
@@ -65,7 +67,14 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
+import { useUpdateTasks } from "../../hooks/use-update-tasks";
+import QUERY_TASKS, {
+  type TasksQuery,
+  type TasksQueryVariables,
+} from "../../queries/queryTasks.graphql";
 import { taskPriorities } from "../../task-constants";
+
+type Task = TasksQuery["tasks"]["data"][number];
 
 const CtaSection: FC<
   PropsWithChildren<{
@@ -129,26 +138,72 @@ const CtaSection: FC<
 };
 
 interface BoardTaskCardProps {
-  id: string;
-  prevTask?: TaskEntity | null;
-  nextTask?: TaskEntity | null;
+  task: Task;
+  prevTask?: Task | null;
+  nextTask?: Task | null;
   showStatus?: boolean;
+  scrollContainerRef?: HTMLDivElement | null;
 }
 
-export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
+export const BoardTaskCard: FC<BoardTaskCardProps> = ({
+  task,
+  nextTask,
+  prevTask,
+  showStatus,
+  scrollContainerRef,
+}) => {
   const tasks = useTasks();
+  const { updateTasks } = useUpdateTasks();
 
   const droppableRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef<HTMLDivElement | null>(null);
   const draggingRefContainer = useRef<HTMLElement | null>(null);
 
-  const [task, taskHandler] = useTask(props.id);
   const [isShowSubTasks, setIsShowSubTasks] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [over, setOver] = useState<{ edge: Edge; rect: DOMRect } | null>(null);
+  const [isFetchingMoreChildTasks, setIsFetchingMoreChildTasks] = useState(false);
+
+  const childTasksVariables: TasksQueryVariables = useMemo(() => {
+    return {
+      parentId: task._id,
+    };
+  }, [task._id]);
+
+  const childTasks = useQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
+    skip: !isShowSubTasks,
+    variables: childTasksVariables,
+  });
+
+  const onFetchMoreChildTasks = async () => {
+    setIsFetchingMoreChildTasks(true);
+    await childTasks
+      .fetchMore({
+        variables: {
+          ...childTasksVariables,
+          offset: childTasks.data?.tasks.data.length || 0,
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev;
+          return {
+            ...prev,
+            tasks: {
+              ...prev.tasks,
+              data: [...prev.tasks.data, ...fetchMoreResult.tasks.data],
+            },
+          };
+        },
+      })
+      .catch(onError)
+      .finally(() => setIsFetchingMoreChildTasks(false));
+  };
+
+  const isCanFetchMoreChildTasks = useMemo(() => {
+    return childTasks.data && childTasks.data?.tasks.data.length < childTasks.data?.tasks.count;
+  }, [childTasks.data]);
 
   useEffect(() => {
-    if (!draggingRef.current || !droppableRef.current || !task) return;
+    if (!draggingRef.current || !droppableRef.current) return;
 
     return combine(
       draggable({
@@ -194,7 +249,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
           setOver(null);
         },
         onDrag({ source, self }) {
-          const sourceTask = source.data.task as TaskEntity;
+          const sourceTask = source.data.task as Task;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -209,7 +264,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
         onDrop({ source, self }) {
           setOver(null);
 
-          const sourceTask = source.data.task as TaskEntity;
+          const sourceTask = source.data.task as Task;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -217,14 +272,14 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
           if (!closestEdge) return;
 
           if (closestEdge === "top") {
-            const order = (task.order + (props.prevTask?.order ?? 0)) / 2;
+            const order = (task.order + (prevTask?.order ?? 0)) / 2;
             updateTasks([
               { _id: sourceTask._id, order, status: task.status, parentId: task.parentId },
             ]);
           }
 
           if (closestEdge === "bottom") {
-            const order = (task.order + (props.nextTask?.order ?? 0.5)) / 2;
+            const order = (task.order + (nextTask?.order ?? 0.5)) / 2;
             updateTasks([
               { _id: sourceTask._id, order, status: task.status, parentId: task.parentId },
             ]);
@@ -234,19 +289,17 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
     );
   }, [task]);
 
-  const cardShadow = useMemo(() => {
-    if (over) {
-      return (
-        <motion.div
-          style={{ height: 0 }}
-          animate={{ height: over.rect.height, transition: { duration: 0.2 } }}
-        >
-          <Card bg="gray" opacity={0.2} shadow="xs" h="100%" />
-        </motion.div>
-      );
-    }
+  const droppableShadow = useMemo(() => {
+    if (!over) return null;
 
-    return undefined;
+    return (
+      <motion.div
+        style={{ height: over.rect.height * 0.7 }}
+        animate={{ height: over.rect.height, transition: { duration: 0.2 } }}
+      >
+        <Card bg="gray" opacity={0.2} shadow="xs" h="100%" />
+      </motion.div>
+    );
   }, [over]);
 
   if (!task) return null;
@@ -257,7 +310,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
   return (
     <Fragment>
       <Stack ref={droppableRef} gap={10} opacity={isDragging ? 0.5 : 1} pos="relative">
-        {over && over.edge === "top" && cardShadow}
+        {over && over.edge === "top" && droppableShadow}
 
         <Card shadow="xs" p={10}>
           <Stack gap={5} ref={draggingRef}>
@@ -268,14 +321,9 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                     {renderEntityCode(task.code)}
                   </Badge>
 
-                  {taskHandler.tagFolder && !tasks.tagFolder && (
-                    <Badge
-                      fz={10}
-                      color={taskHandler.tagFolder.color || "gray"}
-                      size="xs"
-                      variant="outline"
-                    >
-                      {taskHandler.tagFolder.name}
+                  {task.folder && (
+                    <Badge fz={10} color={task.folder.color ?? "gray"} size="xs" variant="outline">
+                      {task.folder.name}
                     </Badge>
                   )}
                 </Group>
@@ -299,23 +347,6 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                       </ActionIcon>
                     </Tooltip>
                   )}
-
-                  {taskHandler.isAbleToNextStatus && !props.showStatus && (
-                    <Tooltip label={t`Next status`}>
-                      <ActionIcon
-                        variant="subtle"
-                        color={taskStatusStyle.color}
-                        size="sm"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          return taskHandler.nextStatus();
-                        }}
-                      >
-                        <IconCaretRightFilled size={16} />
-                      </ActionIcon>
-                    </Tooltip>
-                  )}
                 </Group>
               </Group>
 
@@ -329,7 +360,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
             </Stack>
 
             <Stack gap={0}>
-              {props.showStatus && (
+              {showStatus && (
                 <CtaSection icon={IconPlaystationCircle} label={t`Status`}>
                   <Group gap={0}>
                     <TaskStatusOptions
@@ -339,23 +370,8 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                           {taskStatusStyle.name}
                         </Button>
                       }
-                      onSelect={(s) => taskHandler.onUpdate({ ...task, status: s })}
+                      onSelect={(s) => updateTasks([{ ...task, status: s }])}
                     />
-
-                    {taskHandler.isAbleToNextStatus && (
-                      <ActionIcon
-                        size="sm"
-                        variant="subtle"
-                        color={taskStatusStyle.color}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          return taskHandler.nextStatus();
-                        }}
-                      >
-                        <IconCaretRightFilled size={16} />
-                      </ActionIcon>
-                    )}
                   </Group>
                 </CtaSection>
               )}
@@ -364,7 +380,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                 type={TagType.TASK}
                 onSelect={(t) => {
                   if (!t) return;
-                  taskHandler.onUpdate({ ...task, tagIds: [...(task.tagIds || []), t._id] });
+                  updateTasks([{ ...task, tags: [...(task.tags || []), t as any] }]);
                 }}
                 target={(selector) => {
                   return (
@@ -375,10 +391,8 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                         style={{ cursor: "pointer" }}
                         className="unselectable"
                       >
-                        {taskHandler.tags.length ? (
-                          taskHandler.tags.map((tag) => (
-                            <TaskTag key={tag._id} id={tag._id} h={26} />
-                          ))
+                        {task.tags.length ? (
+                          task.tags.map((tag) => <TaskTag key={tag._id} id={tag._id} h={26} />)
                         ) : (
                           <Button
                             color="gray"
@@ -398,7 +412,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
 
               <CtaSection
                 icon={IconCalendar}
-                onRemove={() => taskHandler.onUpdate({ ...task, dueDate: null, startDate: null })}
+                onRemove={() => updateTasks([{ ...task, dueDate: null, startDate: null }])}
                 canRemove={!!task.dueDate || !!task.startDate}
                 label={t`Due date`}
               >
@@ -409,9 +423,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                         if (task.dueDate) {
                           return (
                             <Text
-                              c={
-                                taskHandler.isOutdated ? "red" : "var(--mantine-primary-color-text)"
-                              }
+                              c={isTaskOutdated(task) ? "red" : "var(--mantine-primary-color-text)"}
                             >
                               <DateFormat value={task.dueDate} type="date" />
                             </Text>
@@ -439,7 +451,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                       startDate={task.startDate}
                       dueDate={task.dueDate}
                       onChange={(e) => {
-                        taskHandler.onUpdate({ ...task, ...e });
+                        updateTasks([{ _id: task._id, ...e }]);
                       }}
                     />
                   </Menu.Dropdown>
@@ -447,7 +459,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
               </CtaSection>
 
               <TaskPrioritySelector
-                onSelect={(priority) => taskHandler.onUpdate({ ...task, priority })}
+                onSelect={(priority) => updateTasks([{ _id: task._id, priority }])}
                 render={(selector) => {
                   return (
                     <CtaSection
@@ -455,7 +467,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                       iconColor={task.priority ? getTaskPriorityColor(task.priority) : undefined}
                       label={t`Priority`}
                       canRemove={!!task.priority}
-                      onRemove={() => taskHandler.onUpdate({ ...task, priority: null })}
+                      onRemove={() => updateTasks([{ _id: task._id, priority: null }])}
                       onClick={selector.toggle}
                     >
                       <Group style={{ cursor: "pointer" }} flex={1}>
@@ -493,12 +505,12 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                   collapsed
                   value={task.assigneeUsers}
                   onChange={(users) => {
-                    taskHandler.onUpdate({ ...task, assigneeUserIds: users.map((v) => v.userId) });
+                    updateTasks([{ _id: task._id, assigneeUsers: users as any }]);
                   }}
                 />
               </CtaSection>
 
-              {taskHandler.subTasks.length > 0 && (
+              {task.childCount > 0 && (
                 <CtaSection
                   icon={IconSubtask}
                   label={t`Subtasks`}
@@ -513,18 +525,17 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                       variant="subtle"
                       onClick={() => setIsShowSubTasks((s) => !s)}
                     >
-                      <NumberFormat value={taskHandler.subTasks.length} /> <Trans>subtasks</Trans>
+                      <NumberFormat value={task.childCount} /> <Trans>subtasks</Trans>
                     </Button>
-                    <Group flex={1} justify="end" gap={5}>
-                      <Text fz={10}>
-                        <NumberFormat value={taskHandler.progress.percent} suffix="%" />
-                      </Text>
-                      <Progress
-                        value={taskHandler.progress.percent}
-                        w={60}
-                        color={taskHandler.progress.status.color || "dark"}
-                      />
-                    </Group>
+
+                    {task.progress && (
+                      <Group flex={1} justify="end" gap={5}>
+                        <Text fz={10}>
+                          <NumberFormat value={task.progress} suffix="%" />
+                        </Text>
+                        <Progress value={task.progress} w={60} color={"dark"} />
+                      </Group>
+                    )}
                   </Group>
                 </CtaSection>
               )}
@@ -532,21 +543,37 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
           </Stack>
         </Card>
 
-        {over && over.edge === "bottom" && cardShadow}
+        {over && over.edge === "bottom" && droppableShadow}
       </Stack>
 
-      {taskHandler.subTasks.length > 0 && isShowSubTasks && (
-        <Stack gap={10} pl={20}>
-          {taskHandler.subTasks.map((subTask, subTaskIndex) => (
-            <BoardTaskCard
-              key={subTask._id}
-              id={subTask._id}
-              showStatus
-              prevTask={taskHandler.subTasks[subTaskIndex - 1]}
-              nextTask={taskHandler.subTasks[subTaskIndex + 1]}
-            />
-          ))}
-        </Stack>
+      {isShowSubTasks && (
+        <Fragment>
+          {childTasks.data && childTasks.data?.tasks.data.length > 0 && (
+            <Stack gap={10} pl={20}>
+              {childTasks.data?.tasks.data.map((subTask, subTaskIndex) => (
+                <BoardTaskCard
+                  key={subTask._id}
+                  task={subTask}
+                  showStatus
+                  prevTask={childTasks.data?.tasks.data[subTaskIndex - 1]}
+                  nextTask={childTasks.data?.tasks.data[subTaskIndex + 1]}
+                />
+              ))}
+            </Stack>
+          )}
+
+          {(childTasks.loading || isFetchingMoreChildTasks) && (
+            <Stack gap={10} pl={20}>
+              <Skeleton height={200} />
+            </Stack>
+          )}
+
+          <WayPoint
+            scrollContainerRef={scrollContainerRef}
+            enabled={isCanFetchMoreChildTasks}
+            onReached={onFetchMoreChildTasks}
+          />
+        </Fragment>
       )}
 
       {isDragging && draggingRefContainer.current && (
@@ -562,14 +589,9 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = (props) => {
                   {renderEntityCode(task.code)}
                 </Badge>
 
-                {taskHandler.tagFolder && !tasks.tagFolder && (
-                  <Badge
-                    fz={10}
-                    color={taskHandler.tagFolder.color || "gray"}
-                    size="xs"
-                    variant="outline"
-                  >
-                    {taskHandler.tagFolder.name}
+                {task.folder && (
+                  <Badge fz={10} color={task.folder.color || "gray"} size="xs" variant="outline">
+                    {task.folder.name}
                   </Badge>
                 )}
               </Group>

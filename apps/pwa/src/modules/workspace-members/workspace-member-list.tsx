@@ -135,7 +135,7 @@ export const WorkspaceMemberList: FC = () => {
                     return updateWorkspaceMember(data.memberId, {
                       ...data,
                       roleIds: roles.map((v) => v._id),
-                    });
+                    } as any);
                   }}
                 />
               );
@@ -166,7 +166,7 @@ export const WorkspaceMemberList: FC = () => {
                     return updateWorkspaceMember(data.memberId, {
                       ...data,
                       workspaceBranchIds: branches.map((v) => v._id),
-                    });
+                    } as any);
                   }}
                 />
               );

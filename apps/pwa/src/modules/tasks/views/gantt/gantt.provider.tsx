@@ -224,7 +224,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
       isSilient: true,
       addonQuery: {
         statusNotIn: state.showClosed ? undefined : [DefaultTaskStatusId.CLOSED],
-        tagFolderId: tagFolder?._id,
+        folderId: tagFolder?._id,
         parentId: "root",
       },
     });
@@ -314,7 +314,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     sidebarContentWidth,
     setSidebarContentWidth,
     tagFolders,
-    activatedTagFolder: tagFolder,
+    activatedTagFolder: tagFolder as any,
     tasks,
     sidebarWidth,
     setSidebarWidth,

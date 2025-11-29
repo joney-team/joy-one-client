@@ -84,11 +84,11 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
   const isCollapsed = !!folderState?.isCollapsed;
 
   const folderTasks = gantt.tasks
-    .filter((t) => (t.tagFolderId || "root") === folderId)
+    .filter((t) => (t.folderId || "root") === folderId)
     .sort((a, b) => a.order - b.order);
 
   const allFolderTasks = getTaskEntites()
-    .filter((t) => (t.tagFolderId || "root") === folderId)
+    .filter((t) => (t.folderId || "root") === folderId)
     .sort((a, b) => a.order - b.order);
 
   const folderRootTasks = folderTasks.filter((v) => !v.parentId);
@@ -96,7 +96,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
   onTasksUpdated(
     (updatedTasks) => {
       const relatedTasks = updatedTasks
-        .filter((t) => (t.tagFolderId || "root") === folderId)
+        .filter((t) => (t.folderId || "root") === folderId)
         .sort((a, b) => a.order - b.order);
 
       if (relatedTasks.length > 0) {
@@ -162,7 +162,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
                     )}
 
                     <Tooltip label={t`Add tasks`}>
-                      <QuickCreateTaskInput tagFolderId={props.tagFolder?._id}>
+                      <QuickCreateTaskInput folderId={props.tagFolder?._id}>
                         <ActionIcon
                           size="sm"
                           variant="subtle"
@@ -181,7 +181,7 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
         )}
 
         <ChangeTagFolderDrop
-          tagFolderId={props.tagFolder?._id}
+          folderId={props.tagFolder?._id}
           visible={allFolderTasks.length === 0}
         />
 
@@ -323,13 +323,13 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
   );
 };
 
-export const ChangeTagFolderDrop: FC<{ tagFolderId?: string; visible?: boolean }> = (props) => {
+export const ChangeTagFolderDrop: FC<{ folderId?: string; visible?: boolean }> = (props) => {
   const tags = useTags();
   const color = useColor();
-  const tagFolder = tags.list.find((v) => v._id === props.tagFolderId);
+  const tagFolder = tags.list.find((v) => v._id === props.folderId);
 
-  const droppable = useTaskDrop(`${props.tagFolderId}-tag-folder`, {
-    tagFolderId: props.tagFolderId || "root",
+  const droppable = useTaskDrop(`${props.folderId}-tag-folder`, {
+    folderId: props.folderId || "root",
   });
 
   if (!props.visible) return null;
