@@ -17,7 +17,6 @@ export interface UsePlugins {
   znsTemplateConfigs: ZnsTemplateConfigs;
   aiAssistants: PluginAiAssistantEntity[];
   onCreateMessageHub: () => void;
-  onConnectMetaPages: () => Promise<void>;
   plugins: Plugin[];
   getPlugin: (id: string | null | undefined) => Plugin | null;
   isHasPlugin: boolean;

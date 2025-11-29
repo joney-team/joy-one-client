@@ -13,6 +13,7 @@ import {
   Group,
   Loader,
   SimpleGrid,
+  Skeleton,
   Stack,
   Text,
 } from "@mantine/core";
@@ -22,18 +23,8 @@ import { Empty } from "../empty";
 import { Errored } from "../errored";
 import { NumberFormat } from "../format/number-format";
 import { WayPoint } from "../way-point";
-import { BulkActions } from "./components/bulk-actions";
-import { ColsSettings } from "./components/columns-setting";
-import { CreateButton } from "./components/create-button";
-import { ExportButton } from "./components/export-button";
-import { ListFilterModes } from "./components/filter-modes";
-import { ResetDefaultButton } from "./components/reset-default-button";
-import { ToggleView } from "./components/toggle-view";
-import { Filter, FilterBar } from "./filters";
 import { Context } from "./list-context";
 import { cleanObject, generateDefaultViewState, getId } from "./list-utils";
-import { Sort } from "./sort/sort";
-import ListTable from "./table/table";
 import {
   BaseData,
   Column,
@@ -43,6 +34,78 @@ import {
   ListViewState,
   TableColumn,
 } from "./types";
+import dynamic from "next/dynamic";
+import { nonLoading } from "@/utils/non-loading";
+
+const ListTable = dynamic(() => import("./table/table"), {
+  ssr: false,
+  loading: () => <Skeleton height={500} radius={0} />,
+});
+
+const ListFilterModes = dynamic(
+  () => import("./components/filter-modes").then((m) => m.ListFilterModes),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const Filter = dynamic(() => import("./filters").then((m) => m.Filter), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const Sort = dynamic(() => import("./sort/sort").then((m) => m.Sort), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const ColsSettings = dynamic(
+  () => import("./components/columns-setting").then((m) => m.ColsSettings),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ToggleView = dynamic(() => import("./components/toggle-view").then((m) => m.ToggleView), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const ResetDefaultButton = dynamic(
+  () => import("./components/reset-default-button").then((m) => m.ResetDefaultButton),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ExportButton = dynamic(
+  () => import("./components/export-button").then((m) => m.ExportButton),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const CreateButton = dynamic(
+  () => import("./components/create-button").then((m) => m.CreateButton),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const BulkActions = dynamic(() => import("./components/bulk-actions").then((m) => m.BulkActions), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const FilterBar = dynamic(() => import("./filters").then((m) => m.FilterBar), {
+  ssr: false,
+  loading: nonLoading,
+});
 
 function getInitialViewState(listViewId: string, args: typeof generateDefaultViewState.arguments) {
   try {

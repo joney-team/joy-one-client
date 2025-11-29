@@ -1,14 +1,14 @@
 "use client";
 
 import { Skeleton } from "@mantine/core";
-import { Suspense } from "react";
-import { ListCore as ListCore } from "./list-core";
 import { BaseData, ListProps } from "./types";
+import dynamic from "next/dynamic";
+
+const ListCore = dynamic(() => import("./list-core").then((m) => m.ListCore), {
+  ssr: false,
+  loading: () => <Skeleton height={500} />,
+});
 
 export function List<T extends BaseData>(props: ListProps<T>) {
-  return (
-    <Suspense fallback={<Skeleton height={500} />}>
-      <ListCore {...props} />
-    </Suspense>
-  );
+  return <ListCore {...(props as any)} />;
 }

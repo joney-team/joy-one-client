@@ -1,14 +1,16 @@
 "use client";
 
-import { disconnectPluginMetaPage } from "@/modules/plugins/meta-pages/meta-pages-service";
+import { onConfirmModal } from "@/hooks/use-confirm-modal";
+import { WithConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
+import { onFacebookLogin } from "@/modules/auth/auth-service";
+import {
+  disconnectPluginMetaPage,
+  getPluginMetaPagesInfo,
+} from "@/modules/plugins/meta-pages/meta-pages-service";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { onArchive } from "@/utils/actions";
-import { onError } from "@/utils/exceptions.utils";
-import { capitalize } from "@/utils/string.utils";
 import config from "@joy-one-client/config";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
@@ -28,7 +30,6 @@ import { FC } from "react";
 import { Avatar } from "../../../components/avatar";
 import { Button } from "../../../components/buttons/button";
 import { Image } from "../../../components/image";
-import { onConfirmModal } from "@/hooks/use-confirm-modal";
 
 export const PluginMetaPages: FC = () => {
   const workspace = useWorkspace();
@@ -58,9 +59,21 @@ export const PluginMetaPages: FC = () => {
           <Trans>Easy & quick setup</Trans>
         </Text>
 
-        <Button mt={10} action onClick={plugins.onConnectMetaPages} leftIcon={IconLinkPlus}>
-          <Trans>Connect</Trans>
-        </Button>
+        <WithConnectMetaPagesModal>
+          {(open) => {
+            const onConnect = async () => {
+              const authResponse = await onFacebookLogin();
+              const { pages } = await getPluginMetaPagesInfo(authResponse.accessToken);
+              open({ pages, accessToken: authResponse.accessToken });
+            };
+
+            return (
+              <Button mt={10} type="submit" onClick={onConnect} leftIcon={IconLinkPlus}>
+                <Trans>Connect</Trans>
+              </Button>
+            );
+          }}
+        </WithConnectMetaPagesModal>
       </Stack>
     );
 
@@ -100,15 +113,23 @@ export const PluginMetaPages: FC = () => {
           );
         })}
 
-        <Center>
-          <Button
-            type="submit"
-            onClick={plugins.onConnectMetaPages}
-            rightSection={<IconLinkPlus strokeWidth={1.5} />}
-          >
-            <Trans>Connect more</Trans>
-          </Button>
-        </Center>
+        <WithConnectMetaPagesModal>
+          {(open) => {
+            const onConnect = async () => {
+              const authResponse = await onFacebookLogin();
+              const { pages } = await getPluginMetaPagesInfo(authResponse.accessToken);
+              open({ pages, accessToken: authResponse.accessToken });
+            };
+
+            return (
+              <Center>
+                <Button type="submit" onClick={onConnect} leftIcon={IconLinkPlus}>
+                  <Trans>Connect more</Trans>
+                </Button>
+              </Center>
+            );
+          }}
+        </WithConnectMetaPagesModal>
       </SimpleGrid>
     </Stack>
   );

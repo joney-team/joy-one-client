@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { useCamera } from "@/components/camera";
+import { WithCamera } from "@/components/camera";
 import { Errored } from "@/components/errored";
 import { DateFormat } from "@/components/format/date-format";
 import { TimekeepingsIllustration } from "@/components/illustrations/timekeepings";
@@ -28,14 +28,13 @@ import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { Anchor, Card, Center, Group, Stack, Text, em } from "@mantine/core";
+import { Anchor, Card, Center, em, Group, Stack, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCamera, IconCameraSelfie, IconCheck } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
 
 export const ModalCaptureLocationTimekeeping: FC = () => {
   const workspace = useWorkspace();
-  const camera = useCamera();
   const color = useColor();
   const uploadFile = useUploadFile();
 
@@ -139,141 +138,147 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
       : HrmTimekeepingType.CHECK_IN;
   const nextColor = nextType === HrmTimekeepingType.CHECK_IN ? "primary" : "orange";
 
-  const onTakePhoto = () => {
-    camera.onTakePhoto({
-      defaultCameraPosition: "front",
-      onCaputure: (_file) => {
-        setFile(_file);
-      },
-    });
-  };
-
   return (
-    <Stack align="stretch" justify="center" gap={10} pt={16}>
-      <Center>
-        <TimekeepingsIllustration width={180} color={nextColor} />
-      </Center>
-
-      {(function () {
-        if (prevTimekeeping.isFetching) return <Loading />;
-        if (geolocation.isFetching) return <Loading message={t`Fetching location`} />;
-
-        if (prevTimekeeping.error || !geolocation.data)
-          return <Errored hideIcon error={prevTimekeeping.error || geolocation.error} />;
-
-        if (!checkInLocation)
-          return <Errored centered hideIcon error={t`Location not supported`} />;
-
-        const prevType = prevTimekeeping.data?.type || HrmTimekeepingType.CHECK_OUT;
-        const nextType =
-          prevType === HrmTimekeepingType.CHECK_IN
-            ? HrmTimekeepingType.CHECK_OUT
-            : HrmTimekeepingType.CHECK_IN;
+    <WithCamera>
+      {(camera) => {
+        const onTakePhoto = () => {
+          camera.onTakePhoto({
+            defaultCameraPosition: "front",
+            onCaputure: (_file) => {
+              setFile(_file);
+            },
+          });
+        };
 
         return (
-          <Fragment>
-            <Text ta="center" fw={500} fz={em(25)} c={color(nextColor)} tt="uppercase">
-              {nextType === HrmTimekeepingType.CHECK_IN ? t`Check in` : t`Check out`}
-            </Text>
-
-            <Stack gap={0}>
-              {prevTimekeeping.data &&
-                prevTimekeeping.data.type === HrmTimekeepingType.CHECK_IN && (
-                  <Text ta="center" c="dark">
-                    <Trans>
-                      Checked in at{" "}
-                      <strong>
-                        <DateFormat value={prevTimekeeping.data.time} type="date" />
-                      </strong>
-                    </Trans>
-                  </Text>
-                )}
-
-              {checkInLocation && (
-                <Text ta="center" c="dark">
-                  {t`Location`} <strong>{checkInLocation.name}</strong>
-                </Text>
-              )}
-            </Stack>
+          <Stack align="stretch" justify="center" gap={10} pt={16}>
+            <Center>
+              <TimekeepingsIllustration width={180} color={nextColor} />
+            </Center>
 
             {(function () {
-              if (geolocation.data && checkInLocation) {
-                if (file) {
-                  return (
-                    <Fragment>
-                      <Card p={3} withBorder shadow="none">
-                        <Center>
-                          <Image src={URL.createObjectURL(file)} w={200} mah={200} />
-                        </Center>
-                      </Card>
+              if (prevTimekeeping.isFetching) return <Loading />;
+              if (geolocation.isFetching) return <Loading message={t`Fetching location`} />;
 
-                      <Group>
-                        <Button
-                          type="submit"
-                          variant="outline"
-                          color={nextColor}
-                          rightSection={<IconCamera size={18} />}
-                          onClick={onTakePhoto}
-                          mt={10}
-                        >
-                          {t`Take photo again`}
-                        </Button>
+              if (prevTimekeeping.error || !geolocation.data)
+                return <Errored hideIcon error={prevTimekeeping.error || geolocation.error} />;
 
-                        <Button
-                          flex={1}
-                          type="submit"
-                          color={nextColor}
-                          rightSection={<IconCheck size={18} />}
-                          onClick={onLocation}
-                          mt={10}
-                        >
-                          {t`Complete`}
-                        </Button>
-                      </Group>
-                    </Fragment>
-                  );
-                }
+              if (!checkInLocation)
+                return <Errored centered hideIcon error={t`Location not supported`} />;
 
-                return (
-                  <Center mt={16}>
-                    <Button
-                      action
-                      type="submit"
-                      onClick={onTakePhoto}
-                      leftIcon={IconCameraSelfie}
-                      color={nextColor}
-                    >
-                      {t`Take photo`}
-                    </Button>
-                  </Center>
-                );
-              }
+              const prevType = prevTimekeeping.data?.type || HrmTimekeepingType.CHECK_OUT;
+              const nextType =
+                prevType === HrmTimekeepingType.CHECK_IN
+                  ? HrmTimekeepingType.CHECK_OUT
+                  : HrmTimekeepingType.CHECK_IN;
 
               return (
                 <Fragment>
-                  <Stack gap={10}>
-                    <Errored error={geolocation.error} centered hideIcon />
+                  <Text ta="center" fw={500} fz={em(25)} c={color(nextColor)} tt="uppercase">
+                    {nextType === HrmTimekeepingType.CHECK_IN ? t`Check in` : t`Check out`}
+                  </Text>
+
+                  <Stack gap={0}>
+                    {prevTimekeeping.data &&
+                      prevTimekeeping.data.type === HrmTimekeepingType.CHECK_IN && (
+                        <Text ta="center" c="dark">
+                          <Trans>
+                            Checked in at{" "}
+                            <strong>
+                              <DateFormat value={prevTimekeeping.data.time} type="date" />
+                            </strong>
+                          </Trans>
+                        </Text>
+                      )}
+
+                    {checkInLocation && (
+                      <Text ta="center" c="dark">
+                        {t`Location`} <strong>{checkInLocation.name}</strong>
+                      </Text>
+                    )}
                   </Stack>
 
-                  <Center mt={10}>
-                    <Button
-                      onClick={() => geolocation.fetch({ isSilient: true })}
-                      color={nextColor}
-                    >
-                      {t`Retry`}
-                    </Button>
-                  </Center>
+                  {(function () {
+                    if (geolocation.data && checkInLocation) {
+                      if (file) {
+                        return (
+                          <Fragment>
+                            <Card p={3} withBorder shadow="none">
+                              <Center>
+                                <Image src={URL.createObjectURL(file)} w={200} mah={200} />
+                              </Center>
+                            </Card>
+
+                            <Group>
+                              <Button
+                                type="submit"
+                                variant="outline"
+                                color={nextColor}
+                                rightSection={<IconCamera size={18} />}
+                                onClick={onTakePhoto}
+                                mt={10}
+                              >
+                                {t`Take photo again`}
+                              </Button>
+
+                              <Button
+                                flex={1}
+                                type="submit"
+                                color={nextColor}
+                                rightSection={<IconCheck size={18} />}
+                                onClick={onLocation}
+                                mt={10}
+                              >
+                                {t`Complete`}
+                              </Button>
+                            </Group>
+                          </Fragment>
+                        );
+                      }
+
+                      return (
+                        <Center mt={16}>
+                          <Button
+                            action
+                            type="submit"
+                            onClick={onTakePhoto}
+                            leftIcon={IconCameraSelfie}
+                            color={nextColor}
+                          >
+                            {t`Take photo`}
+                          </Button>
+                        </Center>
+                      );
+                    }
+
+                    return (
+                      <Fragment>
+                        <Stack gap={10}>
+                          <Errored error={geolocation.error} centered hideIcon />
+                        </Stack>
+
+                        <Center mt={10}>
+                          <Button
+                            onClick={() => geolocation.fetch({ isSilient: true })}
+                            color={nextColor}
+                          >
+                            {t`Retry`}
+                          </Button>
+                        </Center>
+                      </Fragment>
+                    );
+                  })()}
                 </Fragment>
               );
             })()}
-          </Fragment>
-        );
-      })()}
 
-      <Anchor ta="center" c="gray" fz={em(13)} onClick={onClose}>
-        {t`Leave`}
-      </Anchor>
-    </Stack>
+            <Anchor ta="center" c="gray" fz={em(13)} onClick={onClose}>
+              {t`Leave`}
+            </Anchor>
+          </Stack>
+        );
+      }}
+    </WithCamera>
   );
 };
 

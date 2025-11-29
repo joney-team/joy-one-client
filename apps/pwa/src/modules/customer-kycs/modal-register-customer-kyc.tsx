@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { useCamera } from "@/components/camera";
+import { WithCamera } from "@/components/camera";
 import { EntityImage } from "@/components/entity-image";
 import { ModalTitle } from "@/components/modal-title";
 import { genders } from "@/constant";
@@ -37,7 +37,7 @@ import {
   IconTextScan2,
   IconUserScan,
 } from "@tabler/icons-react";
-import { FC, PropsWithChildren, ReactNode, useState } from "react";
+import { FC, Fragment, PropsWithChildren, ReactNode, useState } from "react";
 import { InputModalType, OnModalInput } from "../../modals/modal-input";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLang } from "../lang/lang-context";
@@ -45,15 +45,31 @@ import { useLocations } from "../locations/locations-context";
 import { decodeCid, registerCustomerKyc } from "./customer-kycs-service";
 import { CustomerKycDto } from "./customer-kycs-types";
 
-interface ModalRegisterCustomerKycProps {
+interface ModalRegisterCustomerKycArgs {
   customer: CustomerShortInfo;
   onDone?: () => void | Promise<void>;
 }
 
-export let OnModalRegisterCustomerKyc: (props: ModalRegisterCustomerKycProps) => void = () => {};
+const Session: FC<PropsWithChildren<{ name: ReactNode; icon: Icon }>> = (props) => {
+  return (
+    <Stack gap={5}>
+      <Group gap={3}>
+        <ThemeIcon variant="transparent" radius={100}>
+          <props.icon size={20} />
+        </ThemeIcon>
+        <Text fw={500}>{props.name}</Text>
+      </Group>
 
-export const ModalRegisterCustomerKyc: FC = () => {
-  const camera = useCamera();
+      <Card withBorder p={10} shadow="none">
+        {props.children}
+      </Card>
+    </Stack>
+  );
+};
+
+export const WithModalRegisterCustomerKyc: FC<{
+  children: (open: (args: ModalRegisterCustomerKycArgs) => void) => ReactNode;
+}> = ({ children }) => {
   const lang = useLang();
   const dateFormat = DateTime.getDateFormatString(lang.locale);
   const uploadFile = useUploadFile();
@@ -61,7 +77,7 @@ export const ModalRegisterCustomerKyc: FC = () => {
 
   const { vnLocations } = useLocations();
   const [opened, { open, close }] = useDisclosure(false);
-  const [props, setProps] = useState<ModalRegisterCustomerKycProps>();
+  const [props, setProps] = useState<ModalRegisterCustomerKycArgs>();
 
   const onClose = async () => close();
 
@@ -102,12 +118,6 @@ export const ModalRegisterCustomerKyc: FC = () => {
       },
     },
   });
-
-  OnModalRegisterCustomerKyc = async (p) => {
-    setProps(p);
-    form.reset();
-    open();
-  };
 
   const submit = useFormSubmit(form, {
     onSubmit: async (values) => {
@@ -150,206 +160,212 @@ export const ModalRegisterCustomerKyc: FC = () => {
   };
 
   return (
-    <Modal
-      title={<ModalTitle title={<Trans>Customer KYC</Trans>} icon={IconUserScan} />}
-      onClose={onClose}
-      opened={opened}
-      yOffset={20}
-      size="xl"
-    >
-      <Stack gap={16}>
-        <Session name={<Trans>ID images</Trans>} icon={IconCards}>
-          <Stack gap={10}>
-            <SimpleGrid cols={{ md: 2 }}>
-              <InputWrapper label={<Trans>Front of CID</Trans>}>
-                <EntityImage
-                  w="100%"
-                  src={form.values.frontOfCidImage}
-                  onChange={(file) => {
-                    form.setFieldValue("frontOfCidImage", file);
-                    if (file) detectKyc(file);
-                  }}
-                />
-              </InputWrapper>
+    <WithCamera>
+      {(camera) => {
+        return (
+          <Fragment>
+            <Modal
+              title={<ModalTitle title={<Trans>Customer KYC</Trans>} icon={IconUserScan} />}
+              onClose={onClose}
+              opened={opened}
+              yOffset={20}
+              size="xl"
+            >
+              <Stack gap={16}>
+                <Session name={<Trans>ID images</Trans>} icon={IconCards}>
+                  <Stack gap={10}>
+                    <SimpleGrid cols={{ md: 2 }}>
+                      <InputWrapper label={<Trans>Front of CID</Trans>}>
+                        <EntityImage
+                          w="100%"
+                          src={form.values.frontOfCidImage}
+                          onChange={(file) => {
+                            form.setFieldValue("frontOfCidImage", file);
+                            if (file) detectKyc(file);
+                          }}
+                        />
+                      </InputWrapper>
 
-              <InputWrapper label={<Trans>Back of CID</Trans>}>
-                <EntityImage
-                  w="100%"
-                  src={form.values.backOfCidImage}
-                  onChange={(file) => {
-                    form.setFieldValue("backOfCidImage", file);
-                  }}
-                />
-              </InputWrapper>
-            </SimpleGrid>
+                      <InputWrapper label={<Trans>Back of CID</Trans>}>
+                        <EntityImage
+                          w="100%"
+                          src={form.values.backOfCidImage}
+                          onChange={(file) => {
+                            form.setFieldValue("backOfCidImage", file);
+                          }}
+                        />
+                      </InputWrapper>
+                    </SimpleGrid>
 
-            <InputWrapper label={<Trans>Portrait image</Trans>}>
-              <EntityImage
-                w="100%"
-                src={form.values.portraitImage}
-                onChange={(file) => {
-                  form.setFieldValue("portraitImage", file);
-                }}
-              />
-            </InputWrapper>
-          </Stack>
-        </Session>
+                    <InputWrapper label={<Trans>Portrait image</Trans>}>
+                      <EntityImage
+                        w="100%"
+                        src={form.values.portraitImage}
+                        onChange={(file) => {
+                          form.setFieldValue("portraitImage", file);
+                        }}
+                      />
+                    </InputWrapper>
+                  </Stack>
+                </Session>
 
-        <Session name={<Trans>CID Infos</Trans>} icon={IconInfoCircle}>
-          <Stack>
-            <Group>
-              <Button
-                size="xs"
-                radius={100}
-                leftIcon={IconQrcode}
-                onClick={() =>
-                  camera.onScan({
-                    onCaputure: (data) => {
-                      console.log("data", data);
-                      const cid = decodeCid(data);
-                      console.log("cid", cid);
-                      return true;
-                    },
-                  })
-                }
-                variant="light"
-                fz={em(14)}
-              >
-                <Trans>Scan QR code</Trans>
-              </Button>
+                <Session name={<Trans>CID Infos</Trans>} icon={IconInfoCircle}>
+                  <Stack>
+                    <Group>
+                      <Button
+                        size="xs"
+                        radius={100}
+                        leftIcon={IconQrcode}
+                        onClick={() =>
+                          camera.onScan({
+                            onCaputure: (data) => {
+                              console.log("data", data);
+                              const cid = decodeCid(data);
+                              console.log("cid", cid);
+                              return true;
+                            },
+                          })
+                        }
+                        variant="light"
+                        fz={em(14)}
+                      >
+                        <Trans>Scan QR code</Trans>
+                      </Button>
 
-              <Button
-                size="xs"
-                radius={100}
-                leftIcon={IconTextScan2}
-                onClick={() =>
-                  OnModalInput({
-                    title: <Trans>Enter code</Trans>,
-                    type: InputModalType.TEXT,
-                    onDone(value) {
-                      const cid = decodeCid(value);
-                      Object.keys(cid).forEach((key) => {
-                        form.setFieldValue(key, (cid as any)[key]);
-                      });
-                    },
-                    icon: IconTextScan2,
-                  })
-                }
-                variant="light"
-                fz={em(14)}
-              >
-                <Trans>Enter code</Trans>
-              </Button>
-            </Group>
+                      <Button
+                        size="xs"
+                        radius={100}
+                        leftIcon={IconTextScan2}
+                        onClick={() =>
+                          OnModalInput({
+                            title: <Trans>Enter code</Trans>,
+                            type: InputModalType.TEXT,
+                            onDone(value) {
+                              const cid = decodeCid(value);
+                              Object.keys(cid).forEach((key) => {
+                                form.setFieldValue(key, (cid as any)[key]);
+                              });
+                            },
+                            icon: IconTextScan2,
+                          })
+                        }
+                        variant="light"
+                        fz={em(14)}
+                      >
+                        <Trans>Enter code</Trans>
+                      </Button>
+                    </Group>
 
-            <TextInput label={<Trans>ID number</Trans>} {...form.getInputProps("cidNumber")} />
-
-            <SimpleGrid cols={{ md: 2 }}>
-              <TextInput label={<Trans>Full name</Trans>} {...form.getInputProps("cidFullName")} />
-
-              <Select
-                label={<Trans>Gender</Trans>}
-                {...form.getInputProps("cidGender")}
-                data={Object.values(Gender).map((v) => ({ value: v, label: genders[v].name() }))}
-              />
-
-              <DateInput
-                label={<Trans>Birthday</Trans>}
-                valueFormat={dateFormat}
-                value={
-                  form.values.cidBirthday
-                    ? DateTime.normalizeDate(form.values.cidBirthday)
-                    : undefined
-                }
-                onChange={(date) => {
-                  if (!date) return;
-                  form.setFieldValue("cidBirthday", DateTime.toSeconds(date));
-                }}
-              />
-
-              <DateInput
-                label={<Trans>Issued date</Trans>}
-                valueFormat={dateFormat}
-                value={
-                  form.values.cidCreatedAt
-                    ? DateTime.normalizeDate(form.values.cidCreatedAt)
-                    : undefined
-                }
-                onChange={(date) => {
-                  if (!date) return;
-                  form.setFieldValue("cidCreatedAt", DateTime.toSeconds(date));
-                }}
-              />
-            </SimpleGrid>
-
-            <InputWrapper label={<Trans>Main location</Trans>}>
-              <Card p={8} withBorder>
-                <Stack>
-                  <SimpleGrid cols={{ base: 1, md: 2 }}>
-                    <Select
-                      label={<Trans>Province</Trans>}
-                      {...form.getInputProps(`cidVnLocation.provinceId`)}
-                      searchable
-                      data={vnLocations
-                        .filter((l) => l.type === "province")
-                        .map((l) => ({ value: l.id, label: l.name }))}
-                      onChange={(e) => {
-                        form.setFieldValue(`cidVnLocation.provinceId`, e!);
-                        form.setFieldValue(`cidVnLocation.wardId`, "");
-                      }}
-                      filter={optionsFilter}
+                    <TextInput
+                      label={<Trans>ID number</Trans>}
+                      {...form.getInputProps("cidNumber")}
                     />
 
-                    <Select
-                      label={<Trans>Ward</Trans>}
-                      {...form.getInputProps("cidVnLocation.wardId")}
-                      searchable
-                      data={vnLocations
-                        .filter(
-                          (l) =>
-                            l.type === "ward" &&
-                            l.parentId === form.values.cidVnLocation?.provinceId &&
-                            form.values.cidVnLocation?.provinceId
-                        )
-                        .map((l) => ({ value: l.id, label: l.fullName }))}
-                      flex={1}
-                      filter={optionsFilter}
-                    />
-                  </SimpleGrid>
+                    <SimpleGrid cols={{ md: 2 }}>
+                      <TextInput
+                        label={<Trans>Full name</Trans>}
+                        {...form.getInputProps("cidFullName")}
+                      />
 
-                  <TextInput
-                    label={<Trans>Address</Trans>}
-                    {...form.getInputProps("cidVnLocation.address")}
-                  />
-                </Stack>
-              </Card>
-            </InputWrapper>
-          </Stack>
-        </Session>
+                      <Select
+                        label={<Trans>Gender</Trans>}
+                        {...form.getInputProps("cidGender")}
+                        data={Object.values(Gender).map((v) => ({
+                          value: v,
+                          label: genders[v].name(),
+                        }))}
+                      />
 
-        <Group mt={10} justify="center">
-          <Button onClick={submit.handle} type="submit" miw={300} maw="100%">
-            <Trans>Complete</Trans>
-          </Button>
-        </Group>
-      </Stack>
-    </Modal>
-  );
-};
+                      <DateInput
+                        label={<Trans>Birthday</Trans>}
+                        valueFormat={dateFormat}
+                        value={
+                          form.values.cidBirthday
+                            ? DateTime.normalizeDate(form.values.cidBirthday)
+                            : undefined
+                        }
+                        onChange={(date) => {
+                          if (!date) return;
+                          form.setFieldValue("cidBirthday", DateTime.toSeconds(date));
+                        }}
+                      />
 
-const Session: FC<PropsWithChildren<{ name: ReactNode; icon: Icon }>> = (props) => {
-  return (
-    <Stack gap={5}>
-      <Group gap={3}>
-        <ThemeIcon variant="transparent" radius={100}>
-          <props.icon size={20} />
-        </ThemeIcon>
-        <Text fw={500}>{props.name}</Text>
-      </Group>
+                      <DateInput
+                        label={<Trans>Issued date</Trans>}
+                        valueFormat={dateFormat}
+                        value={
+                          form.values.cidCreatedAt
+                            ? DateTime.normalizeDate(form.values.cidCreatedAt)
+                            : undefined
+                        }
+                        onChange={(date) => {
+                          if (!date) return;
+                          form.setFieldValue("cidCreatedAt", DateTime.toSeconds(date));
+                        }}
+                      />
+                    </SimpleGrid>
 
-      <Card withBorder p={10} shadow="none">
-        {props.children}
-      </Card>
-    </Stack>
+                    <InputWrapper label={<Trans>Main location</Trans>}>
+                      <Card p={8} withBorder>
+                        <Stack>
+                          <SimpleGrid cols={{ base: 1, md: 2 }}>
+                            <Select
+                              label={<Trans>Province</Trans>}
+                              {...form.getInputProps(`cidVnLocation.provinceId`)}
+                              searchable
+                              data={vnLocations
+                                .filter((l) => l.type === "province")
+                                .map((l) => ({ value: l.id, label: l.name }))}
+                              onChange={(e) => {
+                                form.setFieldValue(`cidVnLocation.provinceId`, e!);
+                                form.setFieldValue(`cidVnLocation.wardId`, "");
+                              }}
+                              filter={optionsFilter}
+                            />
+
+                            <Select
+                              label={<Trans>Ward</Trans>}
+                              {...form.getInputProps("cidVnLocation.wardId")}
+                              searchable
+                              data={vnLocations
+                                .filter(
+                                  (l) =>
+                                    l.type === "ward" &&
+                                    l.parentId === form.values.cidVnLocation?.provinceId &&
+                                    form.values.cidVnLocation?.provinceId
+                                )
+                                .map((l) => ({ value: l.id, label: l.fullName }))}
+                              flex={1}
+                              filter={optionsFilter}
+                            />
+                          </SimpleGrid>
+
+                          <TextInput
+                            label={<Trans>Address</Trans>}
+                            {...form.getInputProps("cidVnLocation.address")}
+                          />
+                        </Stack>
+                      </Card>
+                    </InputWrapper>
+                  </Stack>
+                </Session>
+
+                <Group mt={10} justify="center">
+                  <Button onClick={submit.handle} type="submit" miw={300} maw="100%">
+                    <Trans>Complete</Trans>
+                  </Button>
+                </Group>
+              </Stack>
+            </Modal>
+
+            {children((p) => {
+              setProps(p);
+              form.reset();
+              open();
+            })}
+          </Fragment>
+        );
+      }}
+    </WithCamera>
   );
 };

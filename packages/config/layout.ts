@@ -3,7 +3,7 @@ export const zIndexes = {
   screenOverlay: 900,
   requireAuth: 200,
   requireWorkspace: 200,
-  camera: 10,
+  camera: 200,
   pannel: 100,
   bulkActions: 150,
   commonModals: 180,

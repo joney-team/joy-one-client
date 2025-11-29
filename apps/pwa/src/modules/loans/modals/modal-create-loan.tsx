@@ -8,11 +8,12 @@ import { useFormSubmit } from "@/hooks/use-form";
 import { useRouter } from "@/hooks/use-router";
 import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
 import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
-import { OnModalRegisterCustomerKyc } from "@/modules/customer-kycs/modal-register-customer-kyc";
+import { WithModalRegisterCustomerKyc } from "@/modules/customer-kycs/modal-register-customer-kyc";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import { CreateLoanDto } from "@/modules/loans/loan-dtos";
 import { createLoan, getLoans, renderLoanPeriod } from "@/modules/loans/loans-service";
@@ -55,7 +56,6 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, useState } from "react";
 import { loanAssetTypes } from "../loans-constants";
-import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 
 interface ModalCreateLoanProps {
   customer?: CustomerShortInfo;
@@ -281,18 +281,22 @@ export const ModalCreateLoan: FC = () => {
 
                   return (
                     <Group>
-                      <Button
-                        leftIcon={IconPlus}
-                        variant="outline"
-                        onClick={() =>
-                          OnModalRegisterCustomerKyc({
-                            customer,
-                            onDone: async () => initialize({ customer }),
-                          })
-                        }
-                      >
-                        <Trans>Add KYC</Trans>
-                      </Button>
+                      <WithModalRegisterCustomerKyc>
+                        {(openModal) => (
+                          <Button
+                            leftIcon={IconPlus}
+                            variant="outline"
+                            onClick={() =>
+                              openModal({
+                                customer,
+                                onDone: async () => initialize({ customer }),
+                              })
+                            }
+                          >
+                            <Trans>Add KYC</Trans>
+                          </Button>
+                        )}
+                      </WithModalRegisterCustomerKyc>
                     </Group>
                   );
                 })()}

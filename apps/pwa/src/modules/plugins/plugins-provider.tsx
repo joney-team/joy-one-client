@@ -117,12 +117,6 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
     });
   };
 
-  const onConnectMetaPages = async () => {
-    const authResponse = await onFacebookLogin();
-    const { pages } = await getPluginMetaPagesInfo(authResponse.accessToken);
-    OnConnectMetaPagesModal({ pages, accessToken: authResponse.accessToken });
-  };
-
   useEventsListener(
     [
       EventType.PLUGIN_MESSAGE_HUBS_NEW,
@@ -205,7 +199,6 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
         isHasPlugin,
         onCreateMessageHub,
         znsTemplateConfigs,
-        onConnectMetaPages,
         aiAssistants,
         plugins,
         getPlugin,

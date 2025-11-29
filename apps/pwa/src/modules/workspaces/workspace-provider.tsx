@@ -6,7 +6,6 @@ import { Fullscreen } from "@/components/fullscreen";
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
 import { getGlobal } from "@/global";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
-import { ConnectMetaPagesModal, OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getWorkspaceAuthSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
@@ -36,9 +35,6 @@ import {
   WorkspaceSettingEntity,
   WorkspaceView,
 } from "@/modules/workspace-settings/workspace-settings-types";
-import { WorkspaceArchived } from "@/modules/workspaces/components/workspace-archived";
-import { WorkspaceRequireBranches } from "@/modules/workspaces/components/workspace-require-branches";
-import WorkspaceInvitation from "@/modules/workspaces/workspace-invitation";
 import { workspaceInitialize } from "@/modules/workspaces/workspaces-service";
 import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
@@ -58,7 +54,6 @@ import { useRestQuery } from "../apis/use-rest-query";
 import { useLang } from "../lang/lang-context";
 import { Context } from "./workspace-context";
 import { useWorkspaceModules, WorkspaceModuleId } from "./workspace-modules";
-import { WorkspaceRequire } from "./workspace-require";
 import { getDefaultWorkspaceView } from "./workspace-view";
 import {
   WorkspaceContext,
@@ -68,6 +63,47 @@ import {
   WorkspaceType,
 } from "./workspaces-types";
 import { useApolloClient } from "@apollo/client/react";
+import dynamic from "next/dynamic";
+import { nonLoading } from "@/utils/non-loading";
+import { OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
+
+const WorkspaceInvitation = dynamic(() => import("./workspace-invitation"), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const WorkspaceRequire = dynamic(
+  () => import("./workspace-require").then((mod) => mod.WorkspaceRequire),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const WorkspaceArchived = dynamic(
+  () => import("./components/workspace-archived").then((mod) => mod.WorkspaceArchived),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const WorkspaceRequireBranches = dynamic(
+  () =>
+    import("./components/workspace-require-branches").then((mod) => mod.WorkspaceRequireBranches),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ConnectMetaPagesModal = dynamic(
+  () => import("@/modals/modal-connect-meta-pages").then((mod) => mod.ConnectMetaPagesModal),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();

@@ -1,19 +1,25 @@
 "use client";
 
-import { Stack } from "@mantine/core";
+import { Skeleton, Stack } from "@mantine/core";
 import { NextPage } from "next";
-import { lazy, Suspense } from "react";
+import dynamic from "next/dynamic";
 
-const Content = lazy(() =>
-  import("@/modules/loans/loan-list-tabs").then((m) => ({ default: m.LoanListTabs }))
+const Content = dynamic(
+  () => import("@/modules/loans/loan-list-tabs").then((m) => m.LoanListTabs),
+  {
+    ssr: false,
+    loading: () => (
+      <Stack p={16}>
+        <Skeleton height={500} />
+      </Stack>
+    ),
+  }
 );
 
 const Page: NextPage = () => {
   return (
     <Stack>
-      <Suspense>
-        <Content />
-      </Suspense>
+      <Content />
     </Stack>
   );
 };

@@ -1,12 +1,12 @@
 "use client";
 
 import { useLayout } from "@/layout/layout-context";
-import { Box, Group, Text } from "@mantine/core";
-import { FC, PropsWithChildren, createContext, useContext, useRef, useState } from "react";
-import { Camera } from "./camera";
 import { onError } from "@/utils/exceptions.utils";
-import { Scanner } from "./camera-scanner";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { Box, Group, Portal, Text } from "@mantine/core";
+import { FC, Fragment, ReactNode, useRef, useState } from "react";
+import { Camera } from "./camera";
+import { Scanner } from "./camera-scanner";
 
 interface ScanArgs {
   onCaputure: (data: string) => Promise<boolean | void> | void | boolean;
@@ -22,9 +22,9 @@ interface CameraContext {
   onTakePhoto: (args: TakePhotoArgs) => void;
 }
 
-const scanerContext = createContext<CameraContext>({} as any);
-
-const CameraProvider: FC<PropsWithChildren> = ({ children }) => {
+export const WithCamera: FC<{
+  children: (context: CameraContext) => ReactNode;
+}> = ({ children }) => {
   const [isActive, setIsActive] = useState(false);
   const [scanArgs, setScanArgs] = useState<ScanArgs | null>(null);
   const [takePhotoArgs, setTakePhotoArgs] = useState<TakePhotoArgs | null>(null);
@@ -64,51 +64,53 @@ const CameraProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   return (
-    <scanerContext.Provider value={context}>
-      {children}
+    <Fragment>
+      {children(context)}
 
       {isActive && !!scanArgs && (
-        <Box
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: viewport.width,
-            height: viewport.height,
-            zIndex: zIndexes.camera,
-            background: "black",
-          }}
-        >
-          <Scanner
-            onError={onError}
-            onScan={async (data) => {
-              if (isCapturing.current) return;
-              isCapturing.current = true;
-              try {
-                const isStop = await scanArgs.onCaputure(data);
-                if (isStop === true) setScanArgs(null);
-              } catch (error) {}
-              isCapturing.current = false;
-            }}
-            onClose={onClose}
-            aspectRatio={`${viewport.width}/${viewport.height}`}
-          />
+        <Portal>
           <Box
             style={{
-              position: "absolute",
-              padding: 30,
-              width: "100%",
-              zIndex: 1,
+              position: "fixed",
               top: 0,
+              left: 0,
+              width: viewport.width,
+              height: viewport.height,
+              zIndex: zIndexes.camera,
+              background: "black",
             }}
           >
-            <Group justify="center" align="center">
-              <Text ta="center" c="white" fw={800}>
-                Quét Mã
-              </Text>
-            </Group>
+            <Scanner
+              onError={onError}
+              onScan={async (data) => {
+                if (isCapturing.current) return;
+                isCapturing.current = true;
+                try {
+                  const isStop = await scanArgs.onCaputure(data);
+                  if (isStop === true) setScanArgs(null);
+                } catch (error) {}
+                isCapturing.current = false;
+              }}
+              onClose={onClose}
+              aspectRatio={`${viewport.width}/${viewport.height}`}
+            />
+            <Box
+              style={{
+                position: "absolute",
+                padding: 30,
+                width: "100%",
+                zIndex: 1,
+                top: 0,
+              }}
+            >
+              <Group justify="center" align="center">
+                <Text ta="center" c="white" fw={800}>
+                  Quét Mã
+                </Text>
+              </Group>
+            </Box>
           </Box>
-        </Box>
+        </Portal>
       )}
 
       {isActive && !!takePhotoArgs && (
@@ -150,10 +152,6 @@ const CameraProvider: FC<PropsWithChildren> = ({ children }) => {
           </Box>
         </Box>
       )}
-    </scanerContext.Provider>
+    </Fragment>
   );
 };
-
-export const useCamera = () => useContext(scanerContext);
-
-export default CameraProvider;

@@ -1,13 +1,13 @@
 "use client";
 
 import { ModalFiles } from "@/modules/files/modals/modal-files";
+import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Fragment, type FC } from "react";
 import { ModalBookingDetail } from "../modules/bookings/modals/modal-booking-detail";
 import { ModalNextBooking } from "../modules/bookings/modals/modal-next-booking";
 import { ModalCouponForm } from "../modules/coupons/modals/modal-coupon-form";
 import { ModalCouponRuleForm } from "../modules/coupons/modals/modal-coupon-rule-form";
-import { ModalRegisterCustomerKyc } from "../modules/customer-kycs/modal-register-customer-kyc";
 import { ModalCustomerRelationShipForm } from "../modules/customers/modals/modal-customer-relationship-form";
 import { ModalFileGallery } from "../modules/files/modals/modal-file-gallery";
 import { ModalLang } from "../modules/lang/modal-language";
@@ -31,7 +31,6 @@ import { ModalInstallWebAppTutorial } from "./modal-install-web-app-tutorial";
 import { ModalPrinter } from "./modal-printer";
 import { ModalSharelink } from "./modal-share-link";
 import { ModalUpgradeVersion } from "./modal-upgrade-version";
-import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 
 const Modals: FC = () => {
   const workspace = useWorkspace();
@@ -50,7 +49,6 @@ const Modals: FC = () => {
       <ModalCouponRuleForm />
       <ModalCreateLoan />
       <ModalSignLoan />
-      <ModalRegisterCustomerKyc />
       <ModalLoanAssetEstimationForm />
       <ModalWorkspaceSdkForm />
       <ModalNextBooking />
