@@ -259,7 +259,7 @@ export type Mutation = {
 
 
 export type MutationBulkUpdateTasksArgs = {
-  items: Array<TaskInput>;
+  items: Array<UpdateTaskInput>;
 };
 
 
@@ -619,28 +619,6 @@ export type Task = {
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
 
-export type TaskInput = {
-  _id: Scalars['String']['input'];
-  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
-  customerId?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  dueDate?: InputMaybe<Scalars['Float']['input']>;
-  estimatedTime?: InputMaybe<Scalars['Float']['input']>;
-  folderId?: InputMaybe<Scalars['String']['input']>;
-  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  order?: InputMaybe<Scalars['Float']['input']>;
-  parentId?: InputMaybe<Scalars['String']['input']>;
-  partnerIds?: InputMaybe<Array<Scalars['String']['input']>>;
-  points?: InputMaybe<Scalars['Float']['input']>;
-  priority?: InputMaybe<TaskPriority>;
-  startDate?: InputMaybe<Scalars['Float']['input']>;
-  status?: InputMaybe<Scalars['String']['input']>;
-  tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
-  timeTrackings?: InputMaybe<Array<TaskTimeTrackingInput>>;
-  workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
-};
-
 /** Available task priorities */
 export const TaskPriority = {
   High: 'HIGH',
@@ -675,6 +653,28 @@ export type TasksPaginated = {
   __typename?: 'TasksPaginated';
   count: Scalars['Float']['output'];
   data: Array<Task>;
+};
+
+export type UpdateTaskInput = {
+  _id: Scalars['String']['input'];
+  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  customerId?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  dueDate?: InputMaybe<Scalars['Float']['input']>;
+  estimatedTime?: InputMaybe<Scalars['Float']['input']>;
+  folderId?: InputMaybe<Scalars['String']['input']>;
+  isArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Scalars['Float']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  partnerIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  points?: InputMaybe<Scalars['Float']['input']>;
+  priority?: InputMaybe<TaskPriority>;
+  startDate?: InputMaybe<Scalars['Float']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  timeTrackings?: InputMaybe<Array<TaskTimeTrackingInput>>;
+  workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserAuthProvider = {

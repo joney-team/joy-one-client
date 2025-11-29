@@ -1,7 +1,7 @@
 import type * as Types from '../../../graphql/types.graphql.d';
 
 export type BulkUpdateTasksMutationVariables = Types.Exact<{
-  items: Array<Types.TaskInput> | Types.TaskInput;
+  items: Array<Types.UpdateTaskInput> | Types.UpdateTaskInput;
 }>;
 
 

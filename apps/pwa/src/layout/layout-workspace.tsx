@@ -12,7 +12,6 @@ import { Fragment, Suspense, useEffect, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 import { WorkspaceNavigationSplitter } from "./navigation/navigation-splitter";
-import { useColor } from "@/modules/theme/use-color";
 
 const AppNavigation = dynamic(
   () => import("./navigation/navigation").then((m) => m.AppNavigation),

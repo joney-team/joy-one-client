@@ -211,7 +211,7 @@ type LocationEntity {
 }
 
 type Mutation {
-  bulkUpdateTasks(items: [TaskInput!]!): [Task!]!
+  bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
   deleteCategory(id: String!): Boolean!
@@ -411,28 +411,6 @@ type Task {
   updatedAt: Float
 }
 
-input TaskInput {
-  _id: String!
-  assigneeUserIds: [String!]
-  customerId: String
-  description: String
-  dueDate: Float
-  estimatedTime: Float
-  folderId: String
-  isArchived: Boolean
-  name: String
-  order: Float
-  parentId: String
-  partnerIds: [String!]
-  points: Float
-  priority: TaskPriority
-  startDate: Float
-  status: String
-  tagIds: [String!]
-  timeTrackings: [TaskTimeTrackingInput!]
-  workspaceBranchId: String
-}
-
 """Available task priorities"""
 enum TaskPriority {
   HIGH
@@ -464,6 +442,28 @@ input TaskTimeTrackingInput {
 type TasksPaginated {
   count: Float!
   data: [Task!]!
+}
+
+input UpdateTaskInput {
+  _id: String!
+  assigneeUserIds: [String!]
+  customerId: String
+  description: String
+  dueDate: Float
+  estimatedTime: Float
+  folderId: String
+  isArchived: Boolean
+  name: String
+  order: Float
+  parentId: String
+  partnerIds: [String!]
+  points: Float
+  priority: TaskPriority
+  startDate: Float
+  status: String
+  tagIds: [String!]
+  timeTrackings: [TaskTimeTrackingInput!]
+  workspaceBranchId: String
 }
 
 type UserAuthProvider {

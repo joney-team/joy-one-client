@@ -34,10 +34,10 @@ export const combineMetadata = (args: {
         metadata = await fetch({ params, searchParams, locale });
       } catch (error) {}
 
-      const title = metadata?.title;
+      const title = metadata?.title || parentMetadata.title || "";
       const description = metadata?.description || parentMetadata.description || "";
       const images = metadata?.images || parentMetadata.openGraph?.images || [];
-      const icons = metadata?.icons;
+      const icons = metadata?.icons || parentMetadata.icons;
 
       return {
         title,

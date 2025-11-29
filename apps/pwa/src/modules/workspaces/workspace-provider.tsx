@@ -67,6 +67,7 @@ import {
   WorkspaceMemberInvitationState,
   WorkspaceType,
 } from "./workspaces-types";
+import { useApolloClient } from "@apollo/client/react";
 
 const syncSettings = (settings: WorkspaceSettingEntity) => {
   const global = getGlobal();
@@ -75,6 +76,7 @@ const syncSettings = (settings: WorkspaceSettingEntity) => {
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const { t } = useLingui();
+  const client = useApolloClient();
   const state = useRef<{
     roles: WorkspaceRoleEntity[];
     settings?: WorkspaceSettingEntity;
@@ -144,6 +146,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const select = async (workspaceId: string) => {
     startAppLoading("initial-workspace");
     setWorkspaceId(workspaceId);
+    client.cache.reset();
     await initialize();
   };
 

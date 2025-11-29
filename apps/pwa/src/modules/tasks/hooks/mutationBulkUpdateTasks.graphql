@@ -1,4 +1,4 @@
-mutation BulkUpdateTasks($items: [TaskInput!]!) {
+mutation BulkUpdateTasks($items: [UpdateTaskInput!]!) {
   bulkUpdateTasks(items: $items) {
     _id
   }
