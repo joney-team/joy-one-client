@@ -35,8 +35,9 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type FC, type ReactNode, Fragment, useState } from "react";
+import { type FC, type ReactNode, Fragment, useMemo, useState } from "react";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+import { getTaskView } from "@/modules/tasks/tasks-service";
 
 export const WorkspaceNavigationMenu: FC<{
   icon: Icon;
@@ -46,6 +47,7 @@ export const WorkspaceNavigationMenu: FC<{
   exact?: boolean;
   isBeta?: boolean;
 }> = (props) => {
+  const router = useRouter();
   const layout = useLayout();
   const workspaceLayout = useWorkspaceLayout();
   const pathname = usePathname();
@@ -68,16 +70,15 @@ export const WorkspaceNavigationMenu: FC<{
     pathname === props.route ||
     (!props.exact && pathname.startsWith(props.route) && !pathname.startsWith(props.route + "-"));
 
-  const router = useRouter();
+  const route = useMemo(() => {
+    if (!layout.isInitialized) return "";
 
-  const getRoute = () => {
     if (props.route === "/tasks") {
-      const currentView = pathname.split("/")[2];
-      return `/tasks/${currentView}/d`;
+      return `/tasks/${getTaskView()}/d`;
     }
 
     return props.route;
-  };
+  }, [props.route, layout.isInitialized, pathname]);
 
   if (layout.view === "mobile")
     return (
@@ -86,7 +87,7 @@ export const WorkspaceNavigationMenu: FC<{
         align="center"
         justify="center"
         gap={0}
-        onClick={() => router.push(getRoute())}
+        onClick={() => router.push(route)}
         style={{ cursor: "pointer", userSelect: "none", height: "100%" }}
         flex={1}
         h={workspaceLayoutConfig.mobileNavigationHeight}
@@ -126,7 +127,7 @@ export const WorkspaceNavigationMenu: FC<{
       <Fragment>
         <Group justify="center">
           <Tooltip label={props.label} position="right">
-            <Anchor component={Link} href={getRoute()} td="none">
+            <Anchor component={Link} href={route} td="none">
               <ActionIcon
                 size="xl"
                 variant={isActive ? "light" : "subtle"}
@@ -142,7 +143,7 @@ export const WorkspaceNavigationMenu: FC<{
 
   return (
     <Fragment>
-      <Anchor component={Link} href={getRoute()} td="none">
+      <Anchor key={route} component={Link} href={route} td="none">
         <Group
           id={id}
           justify="start"

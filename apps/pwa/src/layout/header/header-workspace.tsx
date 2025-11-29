@@ -32,10 +32,40 @@ import {
 } from "@tabler/icons-react";
 import { FC, memo } from "react";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
-import { WorkspaceHeaderAccount } from "./header-account";
-import { WorkspaceHeaderBreadcrumbs } from "./header-breadcrumbs";
-import { WorkspaceHeaderShortcuts } from "./header-shortcuts";
-import { WorkspaceHeaderTasksBreadcrumbs } from "./header-tasks-breadcrumbs";
+import dynamic from "next/dynamic";
+import { nonLoading } from "@/utils/non-loading";
+
+const WorkspaceHeaderShortcuts = dynamic(
+  () => import("./header-shortcuts").then((mod) => mod.WorkspaceHeaderShortcuts),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const WorkspaceHeaderTasksBreadcrumbs = dynamic(
+  () => import("./header-tasks-breadcrumbs").then((mod) => mod.WorkspaceHeaderTasksBreadcrumbs),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const WorkspaceHeaderBreadcrumbs = dynamic(
+  () => import("./header-breadcrumbs").then((mod) => mod.WorkspaceHeaderBreadcrumbs),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const WorkspaceHeaderAccount = dynamic(
+  () => import("./header-account").then((mod) => mod.WorkspaceHeaderAccount),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const HeaderWorkspace: FC = memo(() => {
   const router = useRouter();

@@ -1,10 +1,19 @@
 "use client";
 
+import { nonLoading } from "@/utils/non-loading";
 import dynamic, { DynamicOptionsLoadingProps } from "next/dynamic";
 import type { FC, JSX } from "react";
 
-const Skeleton = dynamic(() => import("@mantine/core").then((mod) => mod.Skeleton), { ssr: false });
-const Stack = dynamic(() => import("@mantine/core").then((mod) => mod.Stack), { ssr: false });
+const Skeleton = dynamic(() => import("@mantine/core").then((mod) => mod.Skeleton), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const Stack = dynamic(() => import("@mantine/core").then((mod) => mod.Stack), {
+  ssr: false,
+  loading: nonLoading,
+});
+
 interface LazyLoadProps {
   p?: number;
 }

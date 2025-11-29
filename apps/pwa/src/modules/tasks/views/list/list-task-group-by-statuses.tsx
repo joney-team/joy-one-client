@@ -14,13 +14,18 @@ import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useLazyQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Card, Group, Stack, Text } from "@mantine/core";
+import { ActionIcon, Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/icons-react";
 import { FC, useEffect, useMemo, useState } from "react";
-import { ListTaskRow } from "./list-task-row";
 import { ListTaskRowHead } from "./list-task-row-head";
 
 import styles from "./list-tasks.module.css";
+import dynamic from "next/dynamic";
+
+const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.ListTaskRow), {
+  ssr: false,
+  loading: () => <Skeleton height={22} w="100%" radius={0} />,
+});
 
 interface ListTaskGroupByStatusesProps {
   status: string;

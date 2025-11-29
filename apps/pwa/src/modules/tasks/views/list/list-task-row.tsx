@@ -26,7 +26,6 @@ import {
   Group,
   Portal,
   Progress,
-  rgba,
   Stack,
   Text,
   ThemeIcon,

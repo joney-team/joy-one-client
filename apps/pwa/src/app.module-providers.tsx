@@ -1,16 +1,12 @@
 "use client";
 
 import CameraProvider from "@/components/camera/camera-context";
-import OverlayResizing from "@/components/overlay-resizing";
-import PreloadResource from "@/components/preload-source";
 import { useLayout } from "@/layout/layout-context";
-import { LayoutWorkspace } from "@/layout/layout-workspace";
 import AuthProvider from "@/modules/auth/auth-provider";
 import { useLang } from "@/modules/lang/lang-context";
 import LoansProvider from "@/modules/loans/loans-provider";
 import PluginsProvider from "@/modules/plugins/plugins-provider";
 import { ReportsProvider } from "@/modules/reports/reports-provider";
-import { SearchEngine } from "@/modules/search/search-engine";
 import TagsProvider from "@/modules/tags/tags-provider";
 import { generateTheme } from "@/modules/theme/generate-theme";
 import WorkspaceProvider from "@/modules/workspaces/workspace-provider";
@@ -18,11 +14,38 @@ import { zIndexes } from "@joy-one-client/config/layout";
 import { MantineProvider } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import { ModalsProvider } from "@mantine/modals";
-import { Notifications } from "@mantine/notifications";
-import { FC, PropsWithChildren, Suspense } from "react";
+import dynamic from "next/dynamic";
+import { FC, Fragment, PropsWithChildren } from "react";
 import { useApp } from "./app.context";
 import { useRouteRule } from "./hooks/use-router";
-import Modals from "./modals";
+import { nonLoading } from "./utils/non-loading";
+import { LayoutWorkspace } from "./layout/layout-workspace";
+
+const Modals = dynamic(() => import("./modals"), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const PreloadResource = dynamic(() => import("./components/preload-source"), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const Notifications = dynamic(
+  () => import("@mantine/notifications").then((mod) => mod.Notifications),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const SearchEngine = dynamic(
+  () => import("@/modules/search/search-engine").then((mod) => mod.SearchEngine),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const AppModuleProviders: FC<PropsWithChildren> = (props) => {
   const app = useApp();
@@ -46,12 +69,12 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
                       <ModalsProvider>
                         {props.children}
                         {lang.isInitialized && (
-                          <Suspense>
+                          <Fragment>
                             {routeRule.workspace && <LayoutWorkspace />}
                             <Modals />
                             <PreloadResource />
                             <SearchEngine />
-                          </Suspense>
+                          </Fragment>
                         )}
                       </ModalsProvider>
                     </CameraProvider>
@@ -62,7 +85,6 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
           </WorkspaceProvider>
         </AuthProvider>
 
-        <OverlayResizing />
         <Notifications position="top-right" zIndex={zIndexes.notifications} />
       </DatesProvider>
     </MantineProvider>

@@ -3,11 +3,19 @@
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { autoScrollWindowForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
-import { Stack } from "@mantine/core";
+import { Skeleton, Stack } from "@mantine/core";
 import { FC, Fragment, memo, PropsWithChildren, useEffect, useMemo } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
 import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
-import { ListTaskGroupByStatuses } from "./list-task-group-by-statuses";
+import dynamic from "next/dynamic";
+
+const ListTaskGroupByStatuses = dynamic(
+  () => import("./list-task-group-by-statuses").then((mod) => mod.ListTaskGroupByStatuses),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={200} w="100%" />,
+  }
+);
 
 export const ListTasks: FC<PropsWithChildren> = memo((props) => {
   const { state, activatedFolder, statuses, isReady } = useTasks();

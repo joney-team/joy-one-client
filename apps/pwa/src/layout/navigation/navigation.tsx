@@ -25,8 +25,17 @@ import { IconDotsVertical } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { Renderer } from "../../components/renderer";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
-import { WorkspaceNavigationDrawer } from "./navigation-drawer";
 import { WorkspaceNavigationMenu } from "./navigation-menu";
+import { nonLoading } from "@/utils/non-loading";
+import dynamic from "next/dynamic";
+
+const WorkspaceNavigationDrawer = dynamic(
+  () => import("./navigation-drawer").then((mod) => mod.WorkspaceNavigationDrawer),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const AppNavigation: FC = () => {
   const layout = useLayout();
@@ -132,6 +141,7 @@ export const AppNavigation: FC = () => {
                     {group.moduleIds.map((modId) => {
                       const mod = workspace.getAvailableModule(modId as WorkspaceModuleId);
                       if (!mod) return null;
+
                       const isActive = router.pathname === mod.href;
                       const moduleColor = isActive ? color("primary") : "var(--mantine-color-text)";
 

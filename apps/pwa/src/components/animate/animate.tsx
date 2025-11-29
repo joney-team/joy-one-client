@@ -2,12 +2,13 @@
 
 import { CSSProperties, FC, useEffect, useState } from "react";
 
-import styles from "./animate.module.css";
+import { nonLoading } from "@/utils/non-loading";
 import dynamic from "next/dynamic";
+import styles from "./animate.module.css";
 
 const Lottie = dynamic(() => import("@lottielab/lottie-player/react"), {
   ssr: false,
-  loading: () => null,
+  loading: nonLoading,
 });
 
 export interface AnimateProps {

@@ -1,8 +1,8 @@
 "use client";
 
-import { NavigationTabs } from "@/components/navigation-tabs";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { Trans } from "@lingui/react/macro";
+import { Skeleton } from "@mantine/core";
 import {
   Icon,
   IconCalendar,
@@ -11,11 +11,24 @@ import {
   IconMist,
   IconStopwatch,
 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import { FC, Fragment, PropsWithChildren, ReactNode, useEffect } from "react";
 import { BulkTasksActions } from "../components/bulk-tasks-actions";
-import { TaskDetail } from "../task-detail";
 import { TaskView } from "./types";
+
+const TaskDetail = dynamic(() => import("../task-detail").then((mod) => mod.TaskDetail), {
+  ssr: false,
+  loading: () => null,
+});
+
+const NavigationTabs = dynamic(
+  () => import("@/components/navigation-tabs").then((mod) => mod.NavigationTabs),
+  {
+    ssr: false,
+    loading: () => <Skeleton height={44} radius={0} />,
+  }
+);
 
 const allTaskViews: {
   [key in TaskView]: {
@@ -52,7 +65,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
 
   // Auto redirect to the correct view
   useEffect(() => {
-    if (isReady) {
+    if (isReady && view) {
       if (location.pathname === "/tasks") {
         return router.replace(`/tasks/${view}/${activatedFolder?.slug || "d"}`);
       }
@@ -61,7 +74,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
         return router.replace(`/tasks/${view}/${params.slug || "d"}/${params.code}`);
       }
     }
-  }, [isReady, params]);
+  }, [isReady, params, view]);
 
   return (
     <Fragment>

@@ -8,15 +8,16 @@ import { zIndexes } from "@joy-one-client/config/layout";
 import { Stack } from "@mantine/core";
 import { useHeadroom } from "@mantine/hooks";
 import dynamic from "next/dynamic";
-import { Fragment, Suspense, useEffect, type FC } from "react";
+import { Fragment, useEffect, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
-import { WorkspaceNavigationSplitter } from "./navigation/navigation-splitter";
+import { nonLoading } from "@/utils/non-loading";
 
 const AppNavigation = dynamic(
   () => import("./navigation/navigation").then((m) => m.AppNavigation),
   {
     ssr: false,
+    loading: nonLoading,
   }
 );
 
@@ -24,6 +25,15 @@ const HeaderWorkspace = dynamic(
   () => import("./header/header-workspace").then((m) => m.HeaderWorkspace),
   {
     ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const WorkspaceNavigationSplitter = dynamic(
+  () => import("./navigation/navigation-splitter").then((m) => m.WorkspaceNavigationSplitter),
+  {
+    ssr: false,
+    loading: nonLoading,
   }
 );
 
@@ -91,11 +101,7 @@ export const LayoutWorkspace: FC = () => {
                 }
           }
         >
-          {workspace.isAvailable && (
-            <Suspense>
-              <HeaderWorkspace />
-            </Suspense>
-          )}
+          {workspace.isAvailable && <HeaderWorkspace />}
         </Stack>
       )}
 
@@ -128,15 +134,7 @@ export const LayoutWorkspace: FC = () => {
                 }
           }
         >
-          {workspace.isAvailable ? (
-            <Suspense>
-              <AppNavigation />
-            </Suspense>
-          ) : (
-            <Suspense>
-              <OverlayLoading enabled />
-            </Suspense>
-          )}
+          {workspace.isAvailable ? <AppNavigation /> : <OverlayLoading enabled />}
         </Stack>
       )}
 

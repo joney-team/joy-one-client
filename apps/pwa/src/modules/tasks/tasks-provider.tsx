@@ -6,7 +6,7 @@ import { EventType } from "@/modules/events/event-types";
 import {
   getTaskEntites,
   getTaskEntity,
-  getTaskViewFromPathname,
+  getTaskView,
   tasksEmitter,
 } from "@/modules/tasks/tasks-service";
 import { TaskEntity, TaskPriority, TasksContext } from "@/modules/tasks/tasks-types";
@@ -16,7 +16,7 @@ import { shiftSelect } from "@/utils/array.utils";
 import { NetworkStatus } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 import { useLocalStorage } from "@mantine/hooks";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { FC, PropsWithChildren, useMemo, useState } from "react";
 import { getSessionId } from "../auth/auth-service";
 import QUERY_TAG_BY_SLUG, {
@@ -47,6 +47,7 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
 
   const params = useParams<{ slug: string; code: string }>();
   const router = useRouter();
+  const pathname = usePathname();
 
   const { data: tagFolderData, networkStatus } = useQuery<TagBySlugQuery, TagBySlugQueryVariables>(
     QUERY_TAG_BY_SLUG,
@@ -63,10 +64,7 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
 
   const views = Object.values(TaskView);
 
-  const view = useMemo(() => {
-    const viewFromPathname = getTaskViewFromPathname(router.pathname);
-    return viewFromPathname ?? state.selectedView ?? TaskView.LIST;
-  }, [router.pathname, state.selectedView]);
+  const view = useMemo(() => getTaskView(pathname), [pathname, state.selectedView]);
 
   const setView = (selectedView: TaskView) => {
     setState((s) => ({ ...s, selectedView: selectedView }));
@@ -151,7 +149,7 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
       removeSelectedTasks,
       isReady: !isFolderLoading && workspace.isAvailable,
     };
-  }, [view, activatedFolder, workspace.settings, open, openFolder]);
+  }, [view, state, activatedFolder, workspace.settings, open, openFolder, pathname]);
 
   return <Context.Provider value={contextValue}>{props.children}</Context.Provider>;
 };
