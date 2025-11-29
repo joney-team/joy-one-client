@@ -1,3 +1,5 @@
+"use client";
+
 import { useApolloClient } from "@apollo/client/react";
 import MUTATION_BULK_UPDATE_TASKS, {
   type BulkUpdateTasksMutation,
@@ -9,7 +11,7 @@ import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
 } from "../queries/queryTasks.graphql";
-import type { TaskInput } from "@/graphql/types.graphql";
+import type { UpdateTaskInput } from "@/graphql/types.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useTasks } from "../tasks-context";
 import { useCallback, useEffect, useRef } from "react";
@@ -18,8 +20,8 @@ type UpdateTask = Partial<TasksQuery["tasks"]["data"][number]> & { _id: string }
 
 const normalizeTaskForSubmit = (
   task: Partial<TaskDataFragment> & { _id: string; description?: string | null }
-): TaskInput => {
-  let input: TaskInput = { _id: task._id };
+): UpdateTaskInput => {
+  let input: UpdateTaskInput = { _id: task._id };
 
   if ("name" in task) {
     input.name = task.name;
