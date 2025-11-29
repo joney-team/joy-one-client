@@ -1,6 +1,8 @@
+"use client";
+
 import { NavigationTabs } from "@/components/navigation-tabs";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Icon,
   IconCalendar,
@@ -9,7 +11,8 @@ import {
   IconMist,
   IconStopwatch,
 } from "@tabler/icons-react";
-import { FC, Fragment, PropsWithChildren, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { FC, Fragment, PropsWithChildren, ReactNode, useEffect } from "react";
 import { BulkTasksActions } from "../components/bulk-tasks-actions";
 import { TaskDetail } from "../task-detail";
 import { TaskView } from "./types";
@@ -17,62 +20,56 @@ import { TaskView } from "./types";
 const allTaskViews: {
   [key in TaskView]: {
     icon: Icon;
-    name: () => string;
+    name: ReactNode;
   };
 } = {
   [TaskView.LIST]: {
     icon: IconList,
-    name: () => t`List`,
+    name: <Trans>List</Trans>,
   },
   [TaskView.BOARD]: {
     icon: IconLayoutKanban,
-    name: () => t`Board`,
+    name: <Trans>Board</Trans>,
   },
   [TaskView.GANTT]: {
     icon: IconMist,
-    name: () => t`Gantt`,
+    name: <Trans>Gantt</Trans>,
   },
   [TaskView.TIME_TRACKINGS]: {
     icon: IconStopwatch,
-    name: () => t`Time trackings`,
+    name: <Trans>Time trackings</Trans>,
   },
   [TaskView.CALENDAR]: {
     icon: IconCalendar,
-    name: () => t`Calendar`,
+    name: <Trans>Calendar</Trans>,
   },
 };
 
 const TasksViews: FC<PropsWithChildren> = (props) => {
-  const { view, setView, views, router, getSelectedView, params } = useTasks();
+  const router = useRouter();
+  const params = useParams<{ slug: string; code: string }>();
+  const { view, setView, activatedFolder, isReady } = useTasks();
 
-  const redirecting = () => {
-    const selectedView = getSelectedView();
-    const folderTagSlug = params.slug || "d";
-    const taskCode = params.code;
-
-    if (router.pathname === "/tasks") {
-      return router.replace(`/tasks/${selectedView}/${folderTagSlug}`, { scroll: false });
-    }
-
-    if (params.code && !params.slug) {
-      return router.replace(`/tasks/${selectedView}/${folderTagSlug}/${taskCode}`, {
-        scroll: false,
-      });
-    }
-  };
-
+  // Auto redirect to the correct view
   useEffect(() => {
-    redirecting();
-  }, [router.pathname]);
+    if (isReady) {
+      if (location.pathname === "/tasks") {
+        return router.replace(`/tasks/${view}/${activatedFolder?.slug || "d"}`);
+      }
+
+      if (params.code && !params.slug) {
+        return router.replace(`/tasks/${view}/${params.slug || "d"}/${params.code}`);
+      }
+    }
+  }, [isReady, params]);
 
   return (
     <Fragment>
       <NavigationTabs
         activeTab={view}
-        tabs={views.map((key) => ({
+        tabs={Object.entries(allTaskViews).map(([key, value]) => ({
           id: key,
-          name: allTaskViews[key as TaskView]?.name(),
-          icon: allTaskViews[key as TaskView]?.icon,
+          ...value,
         }))}
         onChange={(view) => setView(view as TaskView)}
       />

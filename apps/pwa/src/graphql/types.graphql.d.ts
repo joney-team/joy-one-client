@@ -466,6 +466,8 @@ export type Query = {
   getFileInfo: File;
   getProductByIds: Array<Product>;
   pluginExternalStorage: Maybe<PluginExternalStorage>;
+  tagBySlug: TagEntity;
+  tags: Tags;
   task: Task;
   tasks: TasksPaginated;
 };
@@ -500,6 +502,16 @@ export type QueryGetFileInfoArgs = {
 
 export type QueryGetProductByIdsArgs = {
   ids: Array<Scalars['String']['input']>;
+};
+
+
+export type QueryTagBySlugArgs = {
+  slug: Scalars['String']['input'];
+};
+
+
+export type QueryTagsArgs = {
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -562,6 +574,12 @@ export const TagType = {
 } as const;
 
 export type TagType = typeof TagType[keyof typeof TagType];
+export type Tags = {
+  __typename?: 'Tags';
+  count: Scalars['Float']['output'];
+  data: Array<TagEntity>;
+};
+
 export type Task = {
   __typename?: 'Task';
   _id: Scalars['String']['output'];

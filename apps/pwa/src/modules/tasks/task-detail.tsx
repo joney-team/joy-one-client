@@ -45,7 +45,11 @@ export const TaskDetail: FC = () => {
 
   const onClose = () => {
     close();
-    router.push(`/tasks/${tasks.view}/${tasks.tagFolder?.slug || "d"}`, {}, { scroll: false });
+    router.push(
+      `/tasks/${tasks.view}/${tasks.activatedFolder?.slug || "d"}`,
+      {},
+      { scroll: false }
+    );
   };
 
   const onOpen = async (taskId: string) => {
@@ -148,7 +152,7 @@ export const TaskDetail: FC = () => {
                         <TaskForm
                           key={task._id + "form"}
                           task={task}
-                          // customer={task.customer}
+                          customer={task.customer as any}
                           folderId={task!.folderId}
                         />
 

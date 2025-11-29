@@ -12,11 +12,11 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useQuery } from "@apollo/client/react";
+import { useLazyQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Stack, Text } from "@mantine/core";
 import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/icons-react";
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { ListTaskRow } from "./list-task-row";
 import { ListTaskRowHead } from "./list-task-row-head";
 
@@ -30,7 +30,10 @@ interface ListTaskGroupByStatusesProps {
   folderId?: string;
 }
 
-export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props) => {
+export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
+  folderId,
+  ...props
+}) => {
   const workspace = useWorkspace();
   const ctx = useTasks();
 
@@ -38,7 +41,6 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
     typeof props.defaultVisible === "boolean" ? props.defaultVisible : true
   );
 
-  const folderId = props.folderId || "root";
   const isClosedTasks = props.status === DefaultTaskStatusId.CLOSED;
 
   const variables: TasksQueryVariables = useMemo(() => {
@@ -49,9 +51,13 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
     };
   }, [props.status, folderId]);
 
-  const { data } = useQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
-    variables,
+  const [getTasks, { data }] = useLazyQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
+    fetchPolicy: "cache-and-network",
   });
+
+  useEffect(() => {
+    getTasks({ variables });
+  }, [folderId]);
 
   const status =
     workspace.settings.taskStatuses.find((s) => s.id === props.status) ||
@@ -102,7 +108,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
             onClick={() =>
               OnModalCreateTask({
                 status: props.status,
-                folderId: props.folderId,
+                folderId: folderId,
               })
             }
           >
@@ -120,7 +126,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = (props)
               {tasks.map((task, index) => (
                 <ListTaskRow
                   task={task}
-                  key={task._id + props.folderId || "general"}
+                  key={task._id + folderId}
                   href={ctx.href(task)}
                   variables={variables}
                   lastRow={index === tasks.length - 1}

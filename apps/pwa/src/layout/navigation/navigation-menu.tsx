@@ -6,7 +6,6 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { WorkspaceNavigationTaskFolders } from "@/layout/navigation/navigation-task-folders";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
-import { useTags } from "@/modules/tags/tags-context";
 import { TagType } from "@/modules/tags/tags-types";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
@@ -47,7 +46,15 @@ export const WorkspaceNavigationMenu: FC<{
   exact?: boolean;
   isBeta?: boolean;
 }> = (props) => {
+  const layout = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
+  const pathname = usePathname();
+  const colorScheme = useColorScheme();
+  const color = useColor();
+  const { folders } = useTaskFolders();
+
   const id = `nav-route-${props.route.replace("/", "").replace(/\//g, "-")}`;
+
   const [isShowTaskFolder, setIsShowTaskFolder] = useState(
     localStorage.getItem(`task-folder`) === "true"
   );
@@ -57,22 +64,16 @@ export const WorkspaceNavigationMenu: FC<{
     localStorage.setItem(`task-folder`, (!isShowTaskFolder).toString());
   };
 
-  const layout = useLayout();
-  const workspaceLayout = useWorkspaceLayout();
-  const pathname = usePathname();
   const isActive =
     pathname === props.route ||
     (!props.exact && pathname.startsWith(props.route) && !pathname.startsWith(props.route + "-"));
+
   const router = useRouter();
-  const tags = useTags();
-  const taskFolderTags = tags.list.filter((v) => v.type === TagType.TASK_FOLDER);
-  const colorScheme = useColorScheme();
-  const color = useColor();
-  const taskFolders = useTaskFolders();
 
   const getRoute = () => {
     if (props.route === "/tasks") {
-      return `/tasks/${taskFolders.view}/d`;
+      const currentView = pathname.split("/")[2];
+      return `/tasks/${currentView}/d`;
     }
 
     return props.route;
@@ -246,7 +247,7 @@ export const WorkspaceNavigationMenu: FC<{
                     </MenuDropdown>
                   </Menu>
 
-                  {taskFolders.list.length > 0 && (
+                  {folders.length > 0 && (
                     <ActionIcon
                       variant="subtle"
                       color={color(isActive ? "primary" : "var(--mantine-color-text)")}
@@ -272,7 +273,7 @@ export const WorkspaceNavigationMenu: FC<{
         </Group>
       </Anchor>
 
-      <Renderer visible={props.route === "/tasks" && taskFolderTags.length > 0 && isShowTaskFolder}>
+      <Renderer visible={props.route === "/tasks" && folders.length > 0 && isShowTaskFolder}>
         <WorkspaceNavigationTaskFolders />
       </Renderer>
     </Fragment>

@@ -7,7 +7,7 @@ import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { ButtonProps, Group, ScrollArea } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import Link from "next/link";
-import { FC, Fragment } from "react";
+import { FC, Fragment, ReactNode } from "react";
 import { Button } from "./buttons/button";
 
 export const navigationTabsConfig = {
@@ -20,7 +20,7 @@ export interface NavigationTabsProps {
   tabs: {
     id: string;
     exact?: boolean;
-    name: string;
+    name: ReactNode;
     icon?: Icon;
     rightSection?: React.ReactNode;
   }[];

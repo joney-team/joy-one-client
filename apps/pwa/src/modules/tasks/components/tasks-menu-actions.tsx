@@ -8,8 +8,7 @@ import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { PartnerSelector } from "@/modules/partners/components/partner-selector";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
-import { useTags } from "@/modules/tags/tags-context";
-import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { TagType } from "@/modules/tags/tags-types";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTaskHistories } from "@/modules/tasks/task-history-context";
@@ -41,19 +40,18 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { type FC } from "react";
+import { useTaskFolders } from "../hooks/use-task-folders";
 import { taskPriorities } from "../task-constants";
 
 export const TaskMenuActions: FC = () => {
   const workspace = useWorkspace();
   const tasks = useTasks();
   const taskHistories = useTaskHistories();
-  const tags = useTags();
+  const { folders, exitFolder } = useTaskFolders();
 
   const color = useColor();
 
-  const [assignees, isAssigneesReady, setAssignee] = useWorkspaceMembers(
-    tasks.state.assigneeUserIds
-  );
+  const [assignees, isAssigneesReady] = useWorkspaceMembers(tasks.state.assigneeUserIds);
   const assigneesHover = useHover();
   const layout = useLayout();
   const tagsHover = useHover();
@@ -93,15 +91,15 @@ export const TaskMenuActions: FC = () => {
             icon={IconFolder}
             label={<Trans>Folder</Trans>}
             autoHideLabel
-            value={tasks.tagFolder?._id}
-            options={tasks.tagFolders.map((tagFolder) => ({
+            value={tasks.activatedFolder?._id}
+            options={folders.map((tagFolder) => ({
               value: tagFolder._id,
               label: tagFolder.name,
-              icon: tasks.tagFolder?._id === tagFolder._id ? IconFolderOpen : IconFolder,
+              icon: tasks.activatedFolder?._id === tagFolder._id ? IconFolderOpen : IconFolder,
               activeColor: tagFolder.color || "primary",
             }))}
-            onChange={(value) => tasks.openFolder(tasks.tagFolders.find((v) => v._id === value)!)}
-            onClear={() => tasks.removeFolder()}
+            onChange={(value) => tasks.openFolder(folders.find((v) => v._id === value)!)}
+            onClear={exitFolder}
           />
         )}
 
@@ -281,8 +279,9 @@ export const TaskMenuActions: FC = () => {
           }}
           target={(ctx) => {
             const selectedTags = (tasks.state.tagIds || [])
-              .map((tagId) => tags.list.find((tag) => tag._id === tagId))
-              .filter(Boolean) as TagEntity[];
+              .map((tagId) => folders.find((tag) => tag._id === tagId))
+              .filter((v) => typeof v !== "undefined");
+
             const isHasTag = selectedTags && selectedTags.length > 0;
 
             return (

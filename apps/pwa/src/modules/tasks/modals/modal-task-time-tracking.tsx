@@ -145,7 +145,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
       const result = await createTask({
         name,
         assigneeUserIds: [user.userId],
-        folderId: tasks.tagFolder?._id,
+        folderId: tasks.activatedFolder?._id,
         status: DefaultTaskStatusId.CLOSED,
         timeTrackings: [
           {
@@ -180,17 +180,17 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
 
   return (
     <Stack>
-      {tasks.tagFolder && (
+      {tasks.activatedFolder && (
         <Group gap={2} align="center" wrap="nowrap" ml={-8}>
           <Button
             size="compact-sm"
             variant="subtle"
-            color={color(tasks.tagFolder.color || "gray")}
+            color={color(tasks.activatedFolder.color || "gray")}
             fz={16}
             fw={500}
             leftIcon={IconFolder}
           >
-            {tasks.tagFolder.name}
+            {tasks.activatedFolder.name}
           </Button>
 
           <Text>/</Text>
@@ -370,7 +370,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
           onLabel={<IconCurrencyDollar size={16} strokeWidth={2} />}
           offLabel={<IconCurrencyDollarOff size={16} strokeWidth={2} />}
           size="md"
-          color={color(tasks.tagFolder?.color || "primary")}
+          color={color(tasks.activatedFolder?.color || "primary")}
         />
 
         <WorkspaceMemberInput
@@ -392,7 +392,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         onClick={onSubmit}
         action
         mt={10}
-        color={color(tasks.tagFolder?.color || "primary")}
+        color={color(tasks.activatedFolder?.color || "primary")}
       >
         {t`Add`}
       </Button>
@@ -408,7 +408,7 @@ export const ModalTaskTimeTracking: FC = () => {
   const props = useRef<TaskTimeTrackingModalProps | null>(null);
   const forceUpdate = useForceUpdate();
   const [opened, { open, close }] = useDisclosure(false);
-  const { tagFolder } = useTasks();
+  const { activatedFolder: tagFolder } = useTasks();
 
   OnModalTaskTimeTracking = (p) => {
     props.current = p || null;

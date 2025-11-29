@@ -13,7 +13,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
-import { useQuery } from "@apollo/client/react";
+import { useLazyQuery } from "@apollo/client/react";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
@@ -44,34 +44,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { updateTasks } = useUpdateTasks();
 
-  useEffect(() => {
-    if (!droppableRef.current || !scrollAreaRef.current) return;
-
-    return combine(
-      dropTargetForElements({
-        getData: () => ({
-          status: props.statusId,
-        }),
-        element: droppableRef.current,
-        onDragEnter: () => setIsOver(true),
-        onDragLeave: () => setIsOver(false),
-        onDrop: (args) => {
-          if (
-            args.location.current.dropTargets.length === 1 &&
-            args.location.current.dropTargets[0].data.status === props.statusId
-          ) {
-            const task = args.source.data.task as TaskEntity;
-            updateTasks({ _id: task._id, status: props.statusId });
-          }
-        },
-      }),
-      autoScrollForElements({
-        element: scrollAreaRef.current,
-      })
-    );
-  }, [props.statusId]);
-
-  const { tagFolder, isInitialized } = useTasks();
+  const { activatedFolder } = useTasks();
 
   const isClosedTasks = props.statusId === DefaultTaskStatusId.CLOSED;
   const isTodoStatus = props.statusId === DefaultTaskStatusId.TODO;
@@ -79,15 +52,21 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
   const variables: TasksQueryVariables = useMemo(() => {
     return {
       status: props.statusId,
-      folderId: tagFolder?._id,
+      folderId: activatedFolder?._id,
       parentId: "root",
     };
-  }, [props.statusId, tagFolder?._id]);
+  }, [props.statusId, activatedFolder?._id]);
 
-  const { data, loading, fetchMore } = useQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
-    skip: !isInitialized,
-    variables,
-  });
+  const [getTasks, { data, fetchMore, loading }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
+    QUERY_TASKS,
+    {
+      fetchPolicy: "cache-and-network",
+    }
+  );
+
+  useEffect(() => {
+    getTasks({ variables });
+  }, [activatedFolder?._id]);
 
   const onFetchMore = async () => {
     setIsFetchingMore(true);
@@ -126,6 +105,33 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
     workspace.settings.taskStatuses[0];
 
   const statusStyle = renderTaskStatusStyle(props.statusId, workspace.settings.taskStatuses);
+
+  useEffect(() => {
+    if (!droppableRef.current || !scrollAreaRef.current) return;
+
+    return combine(
+      dropTargetForElements({
+        getData: () => ({
+          status: props.statusId,
+        }),
+        element: droppableRef.current,
+        onDragEnter: () => setIsOver(true),
+        onDragLeave: () => setIsOver(false),
+        onDrop: (args) => {
+          if (
+            args.location.current.dropTargets.length === 1 &&
+            args.location.current.dropTargets[0].data.status === props.statusId
+          ) {
+            const task = args.source.data.task as TaskEntity;
+            updateTasks({ _id: task._id, status: props.statusId });
+          }
+        },
+      }),
+      autoScrollForElements({
+        element: scrollAreaRef.current,
+      })
+    );
+  }, [props.statusId]);
 
   return (
     <Stack
@@ -189,16 +195,18 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
               </Tooltip>
             )}
 
-            {/* {!isClosedTasks && (
+            {!isClosedTasks && (
               <ActionIcon
                 variant="subtle"
                 size="sm"
                 color="gray"
-                onClick={() => OnModalCreateTask({ status: status.id, folderId: tagFolder?._id })}
+                onClick={() =>
+                  OnModalCreateTask({ status: status.id, folderId: activatedFolder?._id })
+                }
               >
                 <IconPlus size={16} strokeWidth={1.6} />
               </ActionIcon>
-            )} */}
+            )}
           </Group>
         )}
       </Group>
@@ -245,7 +253,9 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
               size="compact-sm"
               variant="subtle"
               leftIcon={IconPlus}
-              onClick={() => OnModalCreateTask({ status: status.id, folderId: tagFolder?._id })}
+              onClick={() =>
+                OnModalCreateTask({ status: status.id, folderId: activatedFolder?._id })
+              }
             >
               <Trans>Create task</Trans>
             </Button>

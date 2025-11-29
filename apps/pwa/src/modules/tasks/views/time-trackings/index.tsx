@@ -63,7 +63,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
   };
 
   const tasks = useList<TaskEntity>({
-    id: `tc-${ctx.tagFolder?._id || "all"}`,
+    id: `tc-${ctx.activatedFolder?._id || "all"}`,
     fetch: (q) =>
       getTasks(
         objSelect(getQuery(q), ["fromTrackingTime", "toTrackingTime", "assigneeUserIds", "getAll"])
@@ -71,7 +71,9 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
     events: [EventType.TASKS_UPDATED, EventType.TASK_NEW, EventType.TASK_ARCHIVED],
   });
 
-  const _tasks = tasks.data.filter((v) => !ctx.tagFolder || v.folderId === ctx.tagFolder?._id);
+  const _tasks = tasks.data.filter(
+    (v) => !ctx.activatedFolder || v.folderId === ctx.activatedFolder?._id
+  );
   const query = getQuery(tasks.params);
 
   const timeTrackingUsers = _tasks.reduce((acc, task) => {

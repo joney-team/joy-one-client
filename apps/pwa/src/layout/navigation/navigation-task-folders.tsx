@@ -1,13 +1,10 @@
 "use client";
 
-import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
-import { TagEntity, TagType } from "@/modules/tags/tags-types";
-import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
+import { TaskFolder, useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { useColor } from "@/modules/theme/use-color";
 import { onActionLoad, onArchive } from "@/utils/actions";
-import { onError } from "@/utils/exceptions.utils";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -23,10 +20,7 @@ import { useParams } from "next/navigation";
 import { FC, Fragment, useState } from "react";
 
 export const WorkspaceNavigationTaskFolders: FC = () => {
-  const tags = useTags();
-  const taskFolderTags = tags.list
-    .filter((v) => v.type === TagType.TASK_FOLDER)
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  const { folders, openFolder } = useTaskFolders();
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -42,23 +36,23 @@ export const WorkspaceNavigationTaskFolders: FC = () => {
       onDragEnd={(e) => {
         const { active, over } = e;
         if (!over || active.id === over?.id) return;
-        let items = [...taskFolderTags];
+        let items = [...folders];
 
         const oldIndex = items.findIndex((v) => v._id === active.id.toString());
         const newIndex = items.findIndex((v) => v._id === over?.id.toString());
         items = arrayMove(items, oldIndex, newIndex);
 
-        tags.reorder(items.map((v, i) => ({ _id: v._id, order: i }))).catch(onError);
+        // TODO:
+        // tags.reorder(items.map((v, i) => ({ _id: v._id, order: i }))).catch(onError);
       }}
     >
       <Stack w="100%" py={5} px={10} pl={16}>
         <Stack gap={5}>
-          <SortableContext
-            items={taskFolderTags.map((v) => v._id)}
-            strategy={verticalListSortingStrategy}
-          >
-            {taskFolderTags.map((tag) => {
-              return <TaskFolderNavigationItem key={tag._id} tag={tag} />;
+          <SortableContext items={folders.map((v) => v._id)} strategy={verticalListSortingStrategy}>
+            {folders.map((tag) => {
+              return (
+                <TaskFolderNavigationItem key={tag._id} tag={tag} onOpen={() => openFolder(tag)} />
+              );
             })}
           </SortableContext>
         </Stack>
@@ -67,10 +61,11 @@ export const WorkspaceNavigationTaskFolders: FC = () => {
   );
 };
 
-const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (props) => {
+const TaskFolderNavigationItem: FC<{ tag: TaskFolder; overlay?: boolean; onOpen: () => void }> = (
+  props
+) => {
   const params = useParams();
   const tags = useTags();
-  const taskFolders = useTaskFolders();
 
   const color = useColor();
 
@@ -125,7 +120,7 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
         ref={sortable.setNodeRef}
         {...sortable.attributes}
         {...sortable.listeners}
-        onClick={() => taskFolders.openFolder(tag)}
+        onClick={props.onOpen}
         wrap="nowrap"
       >
         <Group gap={5} flex={1} wrap="nowrap">
@@ -151,7 +146,8 @@ const TaskFolderNavigationItem: FC<{ tag: TagEntity; overlay?: boolean }> = (pro
                 leftSection={<IconPencil strokeWidth={1.5} size={16} />}
                 onClick={(e) => {
                   e.stopPropagation();
-                  OnModalTagForm({ tag, type: TagType.TASK_FOLDER });
+                  // TODO:
+                  // OnModalTagForm({ tag, type: TagType.TASK_FOLDER });
                 }}
               >
                 <Text>

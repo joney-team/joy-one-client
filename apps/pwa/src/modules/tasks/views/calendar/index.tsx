@@ -38,7 +38,7 @@ import { IconCirclePlus, IconMinus, IconPlus, IconUsers, IconX } from "@tabler/i
 import { FC, PropsWithChildren, useEffect } from "react";
 
 export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
-  const { tagFolder } = useTasks();
+  const { activatedFolder: tagFolder } = useTasks();
   const layout = useLayout();
   const assigneesHover = useHover();
 

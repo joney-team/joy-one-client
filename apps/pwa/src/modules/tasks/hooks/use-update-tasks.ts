@@ -90,9 +90,9 @@ export const useUpdateTasks = () => {
   // Keep ref in sync with latest tagFolder value
   useEffect(() => {
     dynamicVariables.current = {
-      folderId: tasks.tagFolder?._id,
+      folderId: tasks.activatedFolder?._id,
     };
-  }, [tasks.tagFolder]);
+  }, [tasks.activatedFolder]);
 
   const updateTasks = useCallback(
     async (data: UpdateTask[] | UpdateTask) => {

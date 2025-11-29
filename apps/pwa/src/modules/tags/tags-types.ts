@@ -1,17 +1,17 @@
 import { BaseMongoEntity } from "@/types";
 
 export enum TagType {
-  CUSTOMER = 'CUSTOMER',
-  MESSAGE_BOX = 'MESSAGE_BOX',
-  TASK_FOLDER = 'TASK_FOLDER',
-  TASK = 'TASK',
+  CUSTOMER = "CUSTOMER",
+  MESSAGE_BOX = "MESSAGE_BOX",
+  TASK_FOLDER = "TASK_FOLDER",
+  TASK = "TASK",
 }
 
 export interface TagDto {
-  name: string
-  color?: string | null
-  order?: number
-  type: TagType
+  name: string;
+  color?: string | null;
+  order?: number;
+  type: TagType;
 }
 
 export interface TagEntity extends BaseMongoEntity {
@@ -19,8 +19,8 @@ export interface TagEntity extends BaseMongoEntity {
   slug: string;
   color?: string | null;
   workspaceId: string;
-  type: TagType
-  order?: number;
+  type: TagType;
+  order?: number | null;
 }
 
 export interface ReorderTag {

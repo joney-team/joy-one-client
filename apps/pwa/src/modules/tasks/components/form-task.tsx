@@ -113,7 +113,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
   const tags = useTags();
   const tagFolder = tags.list.find(
-    (v) => v._id === props.folderId || v._id === taskFolders.tagFolder?._id
+    (v) => v._id === props.folderId || v._id === taskFolders.activatedFolder?._id
   );
 
   const isInitialized = useRef(false);

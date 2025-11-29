@@ -1,7 +1,8 @@
+"use client";
+
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { useRouter } from "@/hooks/use-router";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
-import { useTags } from "@/modules/tags/tags-context";
 import { onRemoveTaskTagFolder } from "@/modules/tags/tags-service";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
@@ -16,22 +17,28 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
   const router = useRouter();
   const tagFolders = useTaskFolders();
   const hover = useHover();
-  const tags = useTags();
 
   const onChangeTaskFolderName = useDebouncedCallback((name: string) => {
-    if (!tagFolders.tagFolder) return;
-    tags.update(tagFolders.tagFolder._id, { ...tagFolders.tagFolder, name });
+    if (!tagFolders.activatedFolder) return;
+    // TODO:
+    // tags.update(tagFolders.activatedFolder._id, { ...tagFolders.activatedFolder, name });
   }, 500);
+
+  const onExitFolder = () => {
+    // TODO:
+    // tagFolders.exitFolder();
+  };
 
   if (!router.pathname.startsWith("/tasks")) return null;
 
   return (
     <Group gap={8}>
       <TaskTagFolderSelector
-        excludeIds={[tagFolders.tagFolder?._id || ""]}
+        excludeIds={[tagFolders.activatedFolder?._id || ""]}
         onSelect={(tag) => {
-          if (tag) tagFolders.openFolder(tag);
-          else tagFolders.exitFolder();
+          // TODO:
+          // if (tag) tagFolders.openFolder(tag);
+          // else tagFolders.exitFolder();
         }}
         render={(ctx) => {
           return (
@@ -43,8 +50,8 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                 ref={hover.ref}
                 bg={
                   hover.hovered
-                    ? tagFolders.tagFolder
-                      ? alpha(tagFolders.tagFolder?.color || "dark", 0.1)
+                    ? tagFolders.activatedFolder
+                      ? alpha(tagFolders.activatedFolder?.color || "dark", 0.1)
                       : "gray.1"
                     : undefined
                 }
@@ -53,7 +60,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                   <Tooltip label={<Trans>Select folder</Trans>} position="right">
                     <ActionIcon
                       variant="subtle"
-                      color={tagFolders.tagFolder?.color || "dark"}
+                      color={tagFolders.activatedFolder?.color || "dark"}
                       onClick={ctx.toggle}
                       style={{ cursor: "pointer" }}
                     >
@@ -61,12 +68,12 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                     </ActionIcon>
                   </Tooltip>
 
-                  {!!tagFolders.tagFolder ? (
+                  {!!tagFolders.activatedFolder ? (
                     <Group pr={8}>
                       <ContentEditable
                         fz={13}
                         fw={500}
-                        value={tagFolders.tagFolder.name}
+                        value={tagFolders.activatedFolder.name}
                         onChange={(value) => {
                           if (!value || typeof value !== "string") return;
                           onChangeTaskFolderName(value);
@@ -81,7 +88,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                 </Group>
               </Card>
 
-              {tagFolders.tagFolder && (
+              {tagFolders.activatedFolder && (
                 <Menu>
                   <Menu.Target>
                     <ActionIcon variant="subtle" color="dark">
@@ -94,7 +101,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                       leftSection={<IconLogout2 strokeWidth={2} size={18} />}
                       onClick={(e) => {
                         e.stopPropagation();
-                        tagFolders.exitFolder();
+                        onExitFolder();
                       }}
                     >
                       <Text fz={14}>
@@ -106,7 +113,12 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                       leftSection={<IconPencil strokeWidth={2} size={18} />}
                       onClick={(e) => {
                         e.stopPropagation();
-                        OnModalTagForm({ tag: tagFolders.tagFolder!, type: TagType.TASK_FOLDER });
+                        if (!tagFolders.activatedFolder) return;
+
+                        OnModalTagForm({
+                          tag: tagFolders.activatedFolder as any,
+                          type: TagType.TASK_FOLDER,
+                        });
                       }}
                     >
                       <Text fz={14}>
@@ -114,11 +126,12 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                       </Text>
                     </Menu.Item>
 
-                    <Menu.Item
+                    {/* TODO: */}
+                    {/* <Menu.Item
                       leftSection={<IconTrash strokeWidth={2} size={18} />}
                       onClick={(e) => {
                         e.stopPropagation();
-                        onRemoveTaskTagFolder(tagFolders.tagFolder!, () => {
+                        onRemoveTaskTagFolder(tagFolders.activatedFolder!, () => {
                           tagFolders.exitFolder();
                         });
                       }}
@@ -126,7 +139,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                       <Text fz={14}>
                         <Trans>Remove</Trans>
                       </Text>
-                    </Menu.Item>
+                    </Menu.Item> */}
                   </Menu.Dropdown>
                 </Menu>
               )}

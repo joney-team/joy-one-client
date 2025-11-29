@@ -325,6 +325,8 @@ type Query {
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
   pluginExternalStorage: PluginExternalStorage
+  tagBySlug(slug: String!): TagEntity!
+  tags(type: String): Tags!
   task(code: String!): Task!
   tasks(assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float, offset: Float, parentId: String, partnerIds: [String!], status: String, tagIds: [String!]): TasksPaginated!
 }
@@ -365,6 +367,11 @@ enum TagType {
   MESSAGE_BOX
   TASK
   TASK_FOLDER
+}
+
+type Tags {
+  count: Float!
+  data: [TagEntity!]!
 }
 
 type Task {

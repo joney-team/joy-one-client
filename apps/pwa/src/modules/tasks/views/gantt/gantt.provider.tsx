@@ -29,7 +29,7 @@ const oneDate = 24 * 60 * 60 * 1000;
 
 export const GanttProvider: FC<PropsWithChildren> = (props) => {
   const layout = useLayout();
-  const { state, tagFolder, statuses, tagFolders } = useTasks();
+  const { state, activatedFolder: tagFolder, statuses } = useTasks();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [_state, _setState] = useState<GanttState>({} as GanttState);
@@ -313,7 +313,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     setSidebarContentScrollPosition,
     sidebarContentWidth,
     setSidebarContentWidth,
-    tagFolders,
+    tagFolders: [],
     activatedTagFolder: tagFolder as any,
     tasks,
     sidebarWidth,

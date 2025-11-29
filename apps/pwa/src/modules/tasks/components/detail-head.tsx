@@ -97,9 +97,9 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
                     variant="subtle"
                     color="gray"
                     c="var(--mantine-color-dimmed)"
-                    fz={em(16)}
+                    fz={15}
                     fw={500}
-                    px={3}
+                    px={5}
                     onClick={ctx.toggle}
                   >
                     {tagFolder ? tagFolder.name : <Trans>General tasks</Trans>}
@@ -138,9 +138,8 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
 
           <Button
             component="div"
-            size="compact-md"
-            fz={em(14)}
-            fw={500}
+            size="compact-sm"
+            variant="light"
             leftIcon={IconShare2}
             onClick={() => OnModalShareLink({ task, url: `${config.APP_URL}/tasks/${task.code}` })}
           >

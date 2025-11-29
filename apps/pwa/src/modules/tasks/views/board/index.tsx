@@ -8,11 +8,18 @@ import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
-import { Card, Group, Stack } from "@mantine/core";
+import { Card, Group, Skeleton, Stack } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import { FC, PropsWithChildren, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import { FC, PropsWithChildren, Suspense, useEffect, useMemo, useRef } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
-import { BoardGroupByStatuses } from "./board-group-by-statuses";
+
+const BoardGroupByStatuses = dynamic(
+  () => import("./board-group-by-statuses").then((mod) => mod.BoardGroupByStatuses),
+  {
+    ssr: false,
+  }
+);
 
 export const TasksBoardView: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
@@ -40,7 +47,9 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
     }
   }, []);
 
-  const dynamicStatuses = workspace.settings.taskStatuses.filter((v) => !v.isDefault);
+  const dynamicStatuses = useMemo(() => {
+    return workspace.settings.taskStatuses.filter((v) => !v.isDefault);
+  }, [workspace.settings.taskStatuses]);
 
   return (
     <Stack id="TasksBoardView" gap={0} mih={0} flex={1} miw={0}>
@@ -50,68 +59,85 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
         </Group>
       )}
 
-      <Stack gap={0} flex={1} miw={0} style={{ overflow: "hidden" }}>
-        <Group
-          id="BoardHorizontalScroll"
-          w="100%"
-          align="stretch"
-          flex={1}
-          mih={0}
-          style={{
-            overflowX: "auto",
-            overflowY: "hidden",
-          }}
-        >
+      {tasks.isReady ? (
+        <Stack gap={0} flex={1} miw={0} style={{ overflow: "hidden" }}>
           <Group
-            ref={scrollAreaRef}
-            wrap="nowrap"
-            w="max-content"
+            id="BoardHorizontalScroll"
+            w="100%"
             align="stretch"
             flex={1}
-            pr={16}
-            pl={16}
             mih={0}
-            pb={16}
+            style={{
+              overflowX: "auto",
+              overflowY: "hidden",
+            }}
           >
-            <BoardGroupByStatuses statusId={DefaultTaskStatusId.TODO} />
+            <Group
+              ref={scrollAreaRef}
+              wrap="nowrap"
+              w="max-content"
+              align="stretch"
+              flex={1}
+              px={16}
+              mih={0}
+              pb={16}
+            >
+              <Suspense>
+                <BoardGroupByStatuses
+                  key={DefaultTaskStatusId.TODO}
+                  statusId={DefaultTaskStatusId.TODO}
+                />
+              </Suspense>
 
-            {dynamicStatuses.map((status) => (
-              <BoardGroupByStatuses key={status.id} statusId={status.id} />
-            ))}
+              <Suspense>
+                {dynamicStatuses.map((status) => (
+                  <BoardGroupByStatuses key={status.id} statusId={status.id} />
+                ))}
+              </Suspense>
 
-            {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-              <Card
-                withBorder
-                shadow="none"
-                p={10}
-                w={300}
-                style={{
-                  background: "transparent",
-                  border: "1px dashed rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <Group>
-                  <Button
-                    variant="light"
-                    color="gray"
-                    size="xs"
-                    leftIcon={IconPlus}
-                    iconSize={16}
-                    fz={12}
-                    onClick={() => OnTaskSatusesModal()}
-                  >
-                    <Trans>Add status</Trans>
-                  </Button>
-                </Group>
-              </Card>
-            )}
+              {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
+                <Card
+                  withBorder
+                  shadow="none"
+                  p={10}
+                  w={300}
+                  style={{
+                    background: "transparent",
+                    border: "1px dashed rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  <Group>
+                    <Button
+                      variant="light"
+                      color="gray"
+                      size="xs"
+                      leftIcon={IconPlus}
+                      iconSize={16}
+                      fz={12}
+                      onClick={() => OnTaskSatusesModal()}
+                    >
+                      <Trans>Add status</Trans>
+                    </Button>
+                  </Group>
+                </Card>
+              )}
 
-            {tasks.state.showClosed && (
-              <BoardGroupByStatuses statusId={DefaultTaskStatusId.CLOSED} />
-            )}
+              <Suspense>
+                {tasks.state.showClosed && (
+                  <BoardGroupByStatuses
+                    key={DefaultTaskStatusId.CLOSED}
+                    statusId={DefaultTaskStatusId.CLOSED}
+                  />
+                )}
+              </Suspense>
+            </Group>
           </Group>
-        </Group>
-      </Stack>
+        </Stack>
+      ) : (
+        <Stack px={16}>
+          <Skeleton height={500} />
+        </Stack>
+      )}
 
       {props.children}
     </Stack>

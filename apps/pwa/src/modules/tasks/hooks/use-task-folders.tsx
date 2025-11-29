@@ -1,37 +1,43 @@
 "use client";
 
-import { useRestQuery } from "@/modules/apis/use-rest-query";
-import { TagEntity, TagType } from "@/modules/tags/tags-types";
-import { ResponseList } from "@/types";
-import { useParams, usePathname } from "next/navigation";
-import { TaskView } from "../views/types";
-import { useRouter } from "@/hooks/use-router";
-import { useTaskRouter } from "./use-task-router";
+import QUERY_TAGS, {
+  type TagsQuery,
+  type TagsQueryVariables,
+} from "@/modules/tags/queries/queryTags.graphql";
+import { TagType } from "@/modules/tags/tags-types";
+import { useQuery } from "@apollo/client/react";
+import { useParams, useRouter } from "next/navigation";
+import { getTaskViewFromPathname } from "../tasks-service";
+
+export type TaskFolder = TagsQuery["tags"]["data"][number];
 
 export const useTaskFolders = () => {
-  const taskRouter = useTaskRouter();
-  const params = useParams();
-  const pathname = usePathname();
+  const params = useParams<{ slug: string }>();
   const router = useRouter();
-  const viewFromPathname = pathname.split("/")[2] as TaskView;
-  const view = Object.values(TaskView).includes(viewFromPathname)
-    ? viewFromPathname
-    : TaskView.LIST;
-
-  const tags = useRestQuery<ResponseList<TagEntity>>({
-    route: "/tags",
-    params: { type: TagType.TASK_FOLDER },
+  const { data } = useQuery<TagsQuery, TagsQueryVariables>(QUERY_TAGS, {
+    variables: { type: TagType.TASK_FOLDER },
   });
 
-  const tagFolder = tags.data?.data.find((v) => v.slug === params.slug);
+  const folders = Array.from(data?.tags.data ?? []).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+  const activatedFolder = folders.find((v) => v.slug === params.slug);
+
+  const openFolder = (folder: TaskFolder) => {
+    const view = getTaskViewFromPathname(location.pathname);
+    const url = `/tasks/${view}/${folder.slug}`;
+    router.push(url, { scroll: false });
+  };
+
+  const exitFolder = () => {
+    const view = getTaskViewFromPathname(location.pathname);
+    const url = `/tasks/${view}/d`;
+    router.push(url, { scroll: false });
+  };
 
   return {
-    list: tags.data?.data ?? [],
-    tagFolder,
-    ...taskRouter,
-    exitFolder: () => {
-      const url = `/tasks/${view}`;
-      router.push(url, {}, { scroll: false });
-    },
+    folders,
+    activatedFolder,
+    openFolder,
+    exitFolder,
   };
 };

@@ -29,6 +29,7 @@ import {
   TaskStatus,
 } from "./tasks-types";
 import { DateTime } from "@joy-one-client/utils/date-time";
+import { TaskView } from "./views/types";
 
 export const tasksEmitter = new EventEmitter();
 tasksEmitter.setMaxListeners(500);
@@ -240,3 +241,13 @@ export const isTaskOutdated = (task: Pick<TaskEntity, "dueDate" | "status">) => 
     task.status !== DefaultTaskStatusId.CLOSED
   );
 };
+
+export function getTaskViewFromPathname(pathname: string): TaskView | null {
+  const raw = pathname.split("/")[2] as TaskView;
+
+  if (pathname.includes("/tasks") && Object.values(TaskView).includes(raw)) {
+    return raw;
+  }
+
+  return null;
+}

@@ -1,0 +1,10 @@
+query TagBySlug($slug: String!) {
+  tagBySlug(slug: $slug) {
+    _id
+    name
+    color
+    type
+    slug
+    order
+  }
+}

@@ -1,11 +1,9 @@
-import type { AppRouter } from "@/hooks/use-router";
-import type { BaseMongoEntity } from "@/types";
 import type { CustomerShortInfo } from "@/modules/customers/customer-types";
 import type { PartnerEntity } from "@/modules/partners/partners-types";
 import type { TagEntity } from "@/modules/tags/tags-types";
 import type { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
+import type { BaseMongoEntity } from "@/types";
 import type { Params } from "next/dist/server/request/params";
-import type { Dispatch, SetStateAction } from "react";
 import type { TasksState } from "./tasks-provider";
 import type { TaskView } from "./views/types";
 
@@ -115,28 +113,20 @@ export interface TaskHistory {
 }
 
 export interface TasksContext {
-  views: TaskView[];
   view: TaskView;
   setView: (view: TaskView) => void;
   state: TasksState;
-  setState: Dispatch<SetStateAction<TasksState>>;
-  tagFolder?: TagEntity | null;
-  tagFolders: TagEntity[];
-  isInitialized: boolean;
+  setState: (val: TasksState | ((prevState: TasksState) => TasksState)) => void;
+  activatedFolder: Pick<TagEntity, "_id" | "name" | "slug" | "color"> | null;
   statuses: TaskStatus[];
   open: (task: Pick<TaskEntity, "_id" | "code">) => void;
-  openFolder: (tagFolder: TagEntity) => void;
-  removeFolder: () => void;
-  redirectToDefaultView: () => void;
-  viewFromPathname?: TaskView | null;
+  openFolder: (folder: Pick<TagEntity, "_id" | "name" | "slug" | "color">) => void;
   taskCode?: string | null;
-  router: AppRouter;
-  params: Params;
-  getSelectedView: () => TaskView;
   selectedTaskIds: string[];
   toggleSelectTask: (taskId: string, isShiftKey?: boolean) => void;
   removeSelectedTasks: (specificTaskIds?: string[]) => void;
   href: (task: Pick<TaskEntity, "_id" | "code">) => string;
+  isReady: boolean;
 }
 
 export interface TaskHistoriesContext {

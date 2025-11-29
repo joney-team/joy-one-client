@@ -76,6 +76,7 @@ export enum StorageKey {
   LAYOUT_NAVIGATION_WIDTH = "_l_nw",
   DASHBOARD_BOOKINGS_QUERY = "_db_bq",
   DEVICE_IDENTIFY_ID = "_di_id",
+  TASKS_STATE = "_ts_st",
 }
 
 export enum Period {
