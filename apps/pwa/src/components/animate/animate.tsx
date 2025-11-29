@@ -5,7 +5,10 @@ import { CSSProperties, FC, useEffect, useState } from "react";
 import styles from "./animate.module.css";
 import dynamic from "next/dynamic";
 
-const Lottie = dynamic(() => import("@lottielab/lottie-player/react"), { ssr: false });
+const Lottie = dynamic(() => import("@lottielab/lottie-player/react"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export interface AnimateProps {
   src: string;

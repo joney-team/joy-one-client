@@ -11,13 +11,14 @@ import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { FC, PropsWithChildren, Suspense, useEffect, useMemo, useRef } from "react";
+import { FC, PropsWithChildren, useEffect, useMemo, useRef } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
 
 const BoardGroupByStatuses = dynamic(
   () => import("./board-group-by-statuses").then((mod) => mod.BoardGroupByStatuses),
   {
     ssr: false,
+    loading: () => <Skeleton height={500} w={300} />,
   }
 );
 
@@ -82,18 +83,14 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
               mih={0}
               pb={16}
             >
-              <Suspense>
-                <BoardGroupByStatuses
-                  key={DefaultTaskStatusId.TODO}
-                  statusId={DefaultTaskStatusId.TODO}
-                />
-              </Suspense>
+              <BoardGroupByStatuses
+                key={DefaultTaskStatusId.TODO}
+                statusId={DefaultTaskStatusId.TODO}
+              />
 
-              <Suspense>
-                {dynamicStatuses.map((status) => (
-                  <BoardGroupByStatuses key={status.id} statusId={status.id} />
-                ))}
-              </Suspense>
+              {dynamicStatuses.map((status) => (
+                <BoardGroupByStatuses key={status.id} statusId={status.id} />
+              ))}
 
               {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
                 <Card
@@ -122,14 +119,12 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                 </Card>
               )}
 
-              <Suspense>
-                {tasks.state.showClosed && (
-                  <BoardGroupByStatuses
-                    key={DefaultTaskStatusId.CLOSED}
-                    statusId={DefaultTaskStatusId.CLOSED}
-                  />
-                )}
-              </Suspense>
+              {tasks.state.showClosed && (
+                <BoardGroupByStatuses
+                  key={DefaultTaskStatusId.CLOSED}
+                  statusId={DefaultTaskStatusId.CLOSED}
+                />
+              )}
             </Group>
           </Group>
         </Stack>

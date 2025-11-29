@@ -1,12 +1,15 @@
 "use client";
 
 import { useGradient } from "@/modules/theme/use-color";
-import { Card, Group, Stack, Text } from "@mantine/core";
+import { Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { Icon, IconReportAnalytics } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC } from "react";
 
-const Sparkline = dynamic(() => import("@mantine/charts").then((mod) => mod.Sparkline), { ssr: false });
+const Sparkline = dynamic(() => import("@mantine/charts").then((mod) => mod.Sparkline), {
+  ssr: false,
+  loading: () => <Skeleton height={200} />,
+});
 
 interface ReportCardProps {
   icon?: Icon;
@@ -18,7 +21,8 @@ interface ReportCardProps {
 export const ReportCard: FC<ReportCardProps> = (props) => {
   const Icon = props.icon || IconReportAnalytics;
   const gradient = useGradient();
-  const isShowSparkline = props.sparkline && !props.sparkline.every((v) => v === 0) && props.sparkline.length > 1;
+  const isShowSparkline =
+    props.sparkline && !props.sparkline.every((v) => v === 0) && props.sparkline.length > 1;
 
   return (
     <Card

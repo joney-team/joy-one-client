@@ -13,6 +13,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
+import { NetworkStatus } from "@apollo/client";
 import { useLazyQuery } from "@apollo/client/react";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
@@ -20,13 +21,18 @@ import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Skeleton, Stack, Text, Tooltip, alpha } from "@mantine/core";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
 } from "../../queries/queryTasks.graphql";
-import { BoardTaskCard } from "./board-task-card";
+
+const BoardTaskCard = dynamic(() => import("./board-task-card").then((res) => res.BoardTaskCard), {
+  ssr: false,
+  loading: () => <Skeleton mih={220} height={220} />,
+});
 
 interface BoardGroupByStatusesProps {
   statusId: string;
@@ -57,12 +63,12 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
     };
   }, [props.statusId, activatedFolder?._id]);
 
-  const [getTasks, { data, fetchMore, loading }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
-    QUERY_TASKS,
-    {
-      fetchPolicy: "cache-and-network",
-    }
-  );
+  const [getTasks, { data, fetchMore, loading, networkStatus }] = useLazyQuery<
+    TasksQuery,
+    TasksQueryVariables
+  >(QUERY_TASKS, {
+    fetchPolicy: "cache-and-network",
+  });
 
   useEffect(() => {
     getTasks({ variables });
@@ -215,7 +221,6 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
         flex={1}
         gap={8}
         mih={0}
-        miw={0}
         ref={scrollAreaRef}
         style={{
           overflow: "auto",
@@ -233,7 +238,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
             />
           ))}
 
-        {(loading || isFetchingMore) && (
+        {(networkStatus !== NetworkStatus.ready || isFetchingMore) && (
           <Fragment>
             <Skeleton height={200} />
             <Skeleton height={200} />
