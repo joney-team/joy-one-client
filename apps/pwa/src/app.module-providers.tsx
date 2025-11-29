@@ -1,6 +1,5 @@
 "use client";
 
-import CameraProvider from "@/components/camera/camera-context";
 import { useLayout } from "@/layout/layout-context";
 import AuthProvider from "@/modules/auth/auth-provider";
 import { useLang } from "@/modules/lang/lang-context";
@@ -18,8 +17,8 @@ import dynamic from "next/dynamic";
 import { FC, Fragment, PropsWithChildren } from "react";
 import { useApp } from "./app.context";
 import { useRouteRule } from "./hooks/use-router";
-import { nonLoading } from "./utils/non-loading";
 import { LayoutWorkspace } from "./layout/layout-workspace";
+import { nonLoading } from "./utils/non-loading";
 
 const Modals = dynamic(() => import("./modals"), {
   ssr: false,
