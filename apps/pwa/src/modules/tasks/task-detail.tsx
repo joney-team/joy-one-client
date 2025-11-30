@@ -6,7 +6,7 @@ import { useLayout } from "@/layout/layout-context";
 import { CommentBox } from "@/modules/comments/comment-box";
 import { TaskForm } from "@/modules/tasks/components/form-task";
 import { useColor } from "@/modules/theme/use-color";
-import { useQuery } from "@apollo/client/react";
+import { useLazyQuery } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import {
   Card,
@@ -23,7 +23,7 @@ import {
 import { useHover } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { DetailFooter } from "./components/detail-footer";
 
 import dynamic from "next/dynamic";
@@ -49,14 +49,18 @@ export const TaskDetail: FC = () => {
   const { code: taskCode } = useParams<{ code: string }>();
   const [version, setVersion] = useState(0);
 
-  const { data, loading } = useQuery<TaskByCodeQuery, TaskByCodeQueryVariables>(
+  const [getTask, { data, loading }] = useLazyQuery<TaskByCodeQuery, TaskByCodeQueryVariables>(
     QUERY_TASK_BY_CODE,
     {
-      skip: !taskCode,
-      variables: { code: taskCode },
       fetchPolicy: "cache-and-network",
     }
   );
+
+  useEffect(() => {
+    if (taskCode) {
+      getTask({ variables: { code: taskCode } });
+    }
+  }, [taskCode]);
 
   const onClose = () => {
     setVersion((v) => v + 1);
