@@ -29,11 +29,7 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
 
     return (
       <Fragment>
-        <ListTaskGroupByStatuses
-          key={activatedFolder?._id}
-          status={DefaultTaskStatusId.TODO}
-          folderId={activatedFolder?._id}
-        />
+        <ListTaskGroupByStatuses key={activatedFolder?._id} status={DefaultTaskStatusId.TODO} />
 
         {statuses
           .filter((v) => !v.isDefault)
@@ -42,7 +38,6 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
               key={activatedFolder?._id + status.id}
               status={status.id}
               hideWhenEmpty
-              folderId={activatedFolder?._id}
             />
           ))}
 
@@ -51,7 +46,6 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
             key={activatedFolder?._id + DefaultTaskStatusId.CLOSED}
             status={DefaultTaskStatusId.CLOSED}
             showEmptyMsg
-            folderId={activatedFolder?._id}
           />
         )}
       </Fragment>

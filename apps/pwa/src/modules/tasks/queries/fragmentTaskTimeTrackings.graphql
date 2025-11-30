@@ -1,0 +1,15 @@
+fragment TaskTimeTrackingData on TaskTimeTracking {
+  id
+  workspaceId
+  userId
+  user {
+    _id
+    name
+    color
+    avatar
+  }
+  billable
+  note
+  startAt
+  endAt
+}

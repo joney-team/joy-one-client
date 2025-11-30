@@ -5,12 +5,9 @@ import { ModalTitle } from "@/components/modal-title";
 import { Renderer } from "@/components/renderer";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { useTags } from "@/modules/tags/tags-context";
 import { TaskForm, TaskFormProps } from "@/modules/tasks/components/form-task";
-import { getTaskEntity } from "@/modules/tasks/tasks-service";
 import { String } from "@/utils/string.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { em, Group, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -22,18 +19,8 @@ export const ModalCreateTask: FC<{
 }> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
-
-  const tags = useTags();
   const layout = useLayout();
-
   const props = useRef<TaskFormProps | null>(null);
-
-  const parentTask = getTaskEntity(props.current?.task?.parentId || props.current?.parentId);
-  const parnetTagFolder = tags.list.find((v) => v._id === parentTask?.folderId);
-
-  const tagFolder = tags.list.find(
-    (v) => v._id === props.current?.folderId || v._id === parnetTagFolder?._id
-  );
 
   return (
     <Fragment>
@@ -46,16 +33,19 @@ export const ModalCreateTask: FC<{
         onClose={close}
         opened={opened}
         title={
-          <ModalTitle title={props.current?.task ? t`Task` : t`Create task`} icon={IconStackPush} />
+          <ModalTitle
+            title={props.current?.task ? <Trans>Task</Trans> : <Trans>Create task</Trans>}
+            icon={IconStackPush}
+          />
         }
         fullScreen={layout.view === "mobile"}
         size={830}
         zIndex={zIndexes.commonModals + 1}
       >
         <Stack gap={10} pb={layout.view === "mobile" ? 16 * 2 : 0}>
-          <Renderer visible={!!tagFolder || !!parentTask || !!parnetTagFolder}>
+          <Renderer visible={!!props.current?.initial?.folder}>
             <Group gap={5} align="center" wrap="nowrap" ml={-8} mt={5}>
-              {tagFolder && (
+              {props.current?.initial?.folder && (
                 <Button
                   size="compact-sm"
                   variant="subtle"
@@ -64,17 +54,19 @@ export const ModalCreateTask: FC<{
                   fw={500}
                   leftIcon={IconFolder}
                   onClick={() => {
-                    router.push(`/tasks?fs=${tagFolder._id}`);
+                    router.push(`/tasks?fs=${props.current?.initial?.folder?._id}`);
                     close();
                   }}
                 >
-                  {tagFolder.name}
+                  {props.current?.initial?.folder.name}
                 </Button>
               )}
 
-              {!!tagFolder && !!parentTask && <Text>/</Text>}
+              {!!props.current?.initial?.folder && !!props.current?.initial?.parent && (
+                <Text>/</Text>
+              )}
 
-              {parentTask && (
+              {props.current?.initial?.parent && (
                 <Button
                   fz={em(15)}
                   fw={500}
@@ -83,11 +75,14 @@ export const ModalCreateTask: FC<{
                   variant="subtle"
                   color="dark"
                   onClick={() => {
-                    router.push(`/tasks/${parentTask.code}`);
+                    router.push(`/tasks/${props.current?.initial?.parent?.code}`);
                     close();
                   }}
                 >
-                  {String.limitCharacters(parentTask.name, layout.view === "mobile" ? 15 : 30)}
+                  {String.limitCharacters(
+                    props.current?.initial?.parent?.name,
+                    layout.view === "mobile" ? 15 : 30
+                  )}
                 </Button>
               )}
 
@@ -102,12 +97,6 @@ export const ModalCreateTask: FC<{
           {opened && (
             <TaskForm
               {...props.current}
-              parentId={parentTask?._id}
-              folderId={tagFolder?._id}
-              onCreated={async (newTask) => {
-                await props.current?.onCreated?.(newTask);
-                close();
-              }}
               onClose={() => {
                 props.current?.onClose?.();
                 close();

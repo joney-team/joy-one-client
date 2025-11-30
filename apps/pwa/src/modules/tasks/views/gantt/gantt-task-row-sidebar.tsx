@@ -13,7 +13,6 @@ import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskEntity } from "@/modules/tasks/tasks-service";
-import { ReorderTaskPotision } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { t } from "@lingui/core/macro";
 import { ActionIcon, Box, Button, em, Group, rgba, ThemeIcon, Title, Tooltip } from "@mantine/core";
@@ -32,11 +31,10 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
 import { getTaskDragId, useDndTasks, useTaskDrag } from "../../tasks-dnd-provider";
-// import { ListTaskRowDropper } from "../list/list.task-row-dropper";
-import { ganttConfig } from "./gantt.config";
-import { useGantt } from "./gantt.context";
-import { useGanttTaskState } from "./gantt.hooks";
-import { SidebarRowSticky } from "./gantt.layout";
+import { ganttConfig } from "./gantt-tasks-config";
+import { useGantt } from "./gantt-tasks-context";
+import { useGanttTaskState } from "./gantt-tasks-hooks";
+import { SidebarRowSticky } from "./gantt-tasks-layout";
 
 export interface GanttTaskRowSidebarProps {
   id: string;

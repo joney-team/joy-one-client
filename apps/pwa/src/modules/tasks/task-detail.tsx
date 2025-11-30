@@ -1,16 +1,12 @@
 "use client";
 
 import { Renderer } from "@/components/renderer";
-import { useRouter } from "@/hooks/use-router";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { CommentBox } from "@/modules/comments/comment-box";
 import { TaskForm } from "@/modules/tasks/components/form-task";
-import { useTasks } from "@/modules/tasks/tasks-context";
-import { getTaskByCode, getTaskEntity, getTaskEntityByCode } from "@/modules/tasks/tasks-service";
-import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
-import { onError } from "@/utils/exceptions.utils";
+import { useQuery } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import {
   Card,
@@ -24,71 +20,58 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
-import { useDisclosure, useHover } from "@mantine/hooks";
+import { useHover } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
-import { useParams } from "next/navigation";
-import { FC, Fragment, useEffect, useState } from "react";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { FC, Fragment, useState } from "react";
 import { DetailFooter } from "./components/detail-footer";
-import { TaskDetailHead } from "./components/detail-head";
+
+import dynamic from "next/dynamic";
+import { TaskDataFragment } from "./queries/fragmentTask.graphql";
+import QUERY_TASK_BY_CODE, {
+  type TaskByCodeQuery,
+  type TaskByCodeQueryVariables,
+} from "./queries/queryTaskByCode.graphql";
+
+const TaskDetailHead = dynamic(
+  () => import("./components/detail-head").then((mod) => mod.TaskDetailHead),
+  {
+    ssr: false,
+    loading: () => <Skeleton h="100%" w="100%" />,
+  }
+);
 
 export const TaskDetail: FC = () => {
   const router = useRouter();
-  const params = useParams();
   const viewport = useLayout();
-  const taskCode = params.code as string;
   const workspaceLayout = useWorkspaceLayout();
+  const pathname = usePathname();
+  const { code: taskCode } = useParams<{ code: string }>();
+  const [version, setVersion] = useState(0);
 
-  const [taskId, setTaskId] = useState<string | null>(null);
-  const [opened, { open, close }] = useDisclosure(false);
-
-  const tasks = useTasks();
+  const { data, loading } = useQuery<TaskByCodeQuery, TaskByCodeQueryVariables>(
+    QUERY_TASK_BY_CODE,
+    {
+      skip: !taskCode,
+      variables: { code: taskCode },
+      fetchPolicy: "cache-and-network",
+    }
+  );
 
   const onClose = () => {
-    close();
-    router.push(
-      `/tasks/${tasks.view}/${tasks.activatedFolder?.slug || "d"}`,
-      {},
-      { scroll: false }
-    );
+    setVersion((v) => v + 1);
+    router.push(pathname.replace(`/${taskCode}`, ""), { scroll: false });
   };
-
-  const onOpen = async (taskId: string) => {
-    setTaskId(taskId);
-    open();
-  };
-
-  const fetchTaskByCode = async (code: string) => {
-    const entity = getTaskEntityByCode(code);
-    if (entity) {
-      onOpen(entity._id);
-    } else {
-      getTaskByCode(code)
-        .then((t) => onOpen(t._id))
-        .catch((error) => {
-          onError(error);
-          router.back();
-        });
-    }
-  };
-
-  useEffect(() => {
-    if (taskCode) {
-      fetchTaskByCode(taskCode);
-    } else {
-      close();
-    }
-  }, [taskCode]);
-
-  const task = getTaskEntity(taskId);
 
   const viewPadding = 25;
   const height = viewport.height - viewPadding * 4;
   const headerHeight = 50;
   const contentHeight = height - headerHeight;
+  const task = data?.taskByCode;
 
   return (
     <Modal
-      opened={opened}
+      opened={Boolean(taskCode)}
       onClose={onClose}
       withCloseButton={false}
       size={1600}
@@ -100,6 +83,8 @@ export const TaskDetail: FC = () => {
         },
       }}
     >
+      {loading && <Skeleton h={300} w="100%" />}
+
       {!!task ? (
         <Fragment>
           <Renderer views={["mobile", "tablet"]}>
@@ -117,12 +102,7 @@ export const TaskDetail: FC = () => {
               <Stack px={16} pb={16}>
                 <TaskCodeButton key={task._id + "code"} task={task} />
 
-                <TaskForm
-                  key={task._id + "form"}
-                  task={task}
-                  // customer={task.customer}
-                  folderId={task!.folderId}
-                />
+                <TaskForm key={task._id + version} task={task} />
 
                 <DetailFooter task={task} onClose={onClose} />
               </Stack>
@@ -149,13 +129,7 @@ export const TaskDetail: FC = () => {
                       <TaskCodeButton key={task._id + "code"} task={task} />
 
                       <Stack gap={30}>
-                        <TaskForm
-                          key={task._id + "form"}
-                          task={task}
-                          customer={task.customer as any}
-                          folderId={task!.folderId}
-                        />
-
+                        <TaskForm key={task._id + version} task={task} />
                         <DetailFooter task={task} onClose={onClose} />
                       </Stack>
                     </Container>
@@ -181,7 +155,7 @@ export const TaskDetail: FC = () => {
   );
 };
 
-const TaskCodeButton: FC<{ task: TaskEntity }> = (props) => {
+const TaskCodeButton: FC<{ task: TaskDataFragment }> = (props) => {
   const { task } = props;
   const hover = useHover();
   const color = useColor();

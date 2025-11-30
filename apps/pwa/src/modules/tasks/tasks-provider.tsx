@@ -25,10 +25,14 @@ import QUERY_TAG_BY_SLUG, {
 } from "../tags/queries/queryTagBySlug.graphql";
 import { Context } from "./tasks-context";
 import { TaskView } from "./views/types";
+import { type TasksQueryVariables } from "./queries/queryTasks.graphql";
 
 export interface TasksState {
   selectedView?: TaskView;
+  variables?: TasksQueryVariables;
   showClosed?: boolean;
+
+  // Remove
   assigneeUserIds?: string[];
   partnerIds?: string[];
   priority?: TaskPriority;

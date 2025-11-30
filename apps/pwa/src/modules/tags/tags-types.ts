@@ -15,9 +15,10 @@ export interface TagDto {
 }
 
 export interface TagEntity extends BaseMongoEntity {
+  __typename: "TagEntity";
   name: string;
   slug: string;
-  color?: string | null;
+  color: string | null;
   workspaceId: string;
   type: TagType;
   order?: number | null;

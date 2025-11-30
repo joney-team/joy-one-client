@@ -117,7 +117,7 @@ export interface TasksContext {
   setView: (view: TaskView) => void;
   state: TasksState;
   setState: (val: TasksState | ((prevState: TasksState) => TasksState)) => void;
-  activatedFolder: Pick<TagEntity, "_id" | "name" | "slug" | "color"> | null;
+  activatedFolder: Pick<TagEntity, "_id" | "name" | "slug" | "color" | "__typename"> | null;
   statuses: TaskStatus[];
   open: (task: Pick<TaskEntity, "_id" | "code">) => void;
   openFolder: (folder: Pick<TagEntity, "_id" | "name" | "slug" | "color">) => void;

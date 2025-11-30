@@ -24,10 +24,10 @@ import {
 import { useMergedRef, useMouse } from "@mantine/hooks";
 import { IconGripVertical, IconHourglassHigh } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useRef, useState } from "react";
-import { ganttConfig } from "./gantt.config";
-import { useGantt } from "./gantt.context";
-import { useGanttTaskState } from "./gantt.hooks";
-import { getRangeOfTasks } from "./gantt.utils";
+import { ganttConfig } from "./gantt-tasks-config";
+import { useGantt } from "./gantt-tasks-context";
+import { useGanttTaskState } from "./gantt-tasks-hooks";
+import { getRangeOfTasks } from "./gantt-tasks-utils";
 
 interface GanttTaskRowBodyProps {
   id: string;

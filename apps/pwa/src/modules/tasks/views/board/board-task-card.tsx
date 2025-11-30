@@ -42,6 +42,7 @@ import {
   Card,
   Group,
   Menu,
+  NavLink,
   Portal,
   Progress,
   Skeleton,
@@ -73,6 +74,7 @@ import QUERY_TASKS, {
   type TasksQueryVariables,
 } from "../../queries/queryTasks.graphql";
 import { taskPriorities } from "../../task-constants";
+import Link from "next/link";
 
 type Task = TasksQuery["tasks"]["data"][number];
 
@@ -305,7 +307,6 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
   if (!task) return null;
 
   const taskStatusStyle = renderTaskStatusStyle(task.status, tasks.statuses);
-  const goDetail = () => tasks.open(task);
 
   return (
     <Fragment>
@@ -314,29 +315,39 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
 
         <Card shadow="xs" p={10}>
           <Stack gap={5} ref={draggingRef}>
-            <Stack gap={2} style={{ cursor: "grab" }}>
-              <Group onClick={goDetail} justify="space-between" align="center" wrap="nowrap">
-                <Group flex={1} gap={5}>
-                  <Badge fz={10} color="gray" size="xs" variant="outline">
-                    {renderEntityCode(task.code)}
-                  </Badge>
-
-                  {task.folder && (
-                    <Badge fz={10} color={task.folder.color ?? "gray"} size="xs" variant="outline">
-                      {task.folder.name}
+            <Link
+              href={tasks.href(task)}
+              style={{ cursor: "grab", color: "unset", textDecoration: "none" }}
+            >
+              <Stack gap={2}>
+                <Group justify="space-between" align="center" wrap="nowrap">
+                  <Group flex={1} gap={5}>
+                    <Badge fz={10} color="gray" size="xs" variant="outline">
+                      {renderEntityCode(task.code)}
                     </Badge>
-                  )}
-                </Group>
-              </Group>
 
-              <Tooltip label={task.name} disabled={task.name.length < 60} maw="70dvw" multiline>
-                <Stack style={{ cursor: "pointer" }} onClick={goDetail}>
-                  <Text fz="sm" fw={500} lineClamp={2}>
-                    {task.name}
-                  </Text>
-                </Stack>
-              </Tooltip>
-            </Stack>
+                    {task.folder && (
+                      <Badge
+                        fz={10}
+                        color={task.folder.color ?? "gray"}
+                        size="xs"
+                        variant="outline"
+                      >
+                        {task.folder.name}
+                      </Badge>
+                    )}
+                  </Group>
+                </Group>
+
+                <Tooltip label={task.name} disabled={task.name.length < 60} maw="70dvw" multiline>
+                  <Stack style={{ cursor: "pointer" }}>
+                    <Text fz="sm" fw={500} lineClamp={2}>
+                      {task.name}
+                    </Text>
+                  </Stack>
+                </Tooltip>
+              </Stack>
+            </Link>
 
             <Stack gap={0}>
               {showStatus && (

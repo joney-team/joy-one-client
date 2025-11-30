@@ -351,7 +351,7 @@ type Query {
   tags(type: String): Tags!
   task(_id: String!): Task!
   taskByCode(code: String!): Task!
-  tasks(assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], status: String, tagIds: [String!]): TasksPaginated!
+  tasks(assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): TasksPaginated!
 }
 
 input RegisterDeviceDto {
@@ -414,6 +414,7 @@ type Task {
   estimatedTime: Float
   folder: TagEntity
   folderId: String
+  isArchived: Boolean
   name: String!
   order: Float!
   parent: Task

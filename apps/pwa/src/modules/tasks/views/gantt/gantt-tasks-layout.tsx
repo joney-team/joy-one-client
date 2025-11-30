@@ -10,7 +10,7 @@ import { TagType } from "@/modules/tags/tags-types";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useColor } from "@/modules/theme/use-color";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   em,
@@ -33,9 +33,9 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, useEffect } from "react";
-import { ganttConfig } from "./gantt.config";
-import { useGantt } from "./gantt.context";
-import { getWeeksFromRange } from "./gantt.utils";
+import { ganttConfig } from "./gantt-tasks-config";
+import { useGantt } from "./gantt-tasks-context";
+import { getWeeksFromRange } from "./gantt-tasks-utils";
 
 export const SidebarHead: FC = () => {
   const forceUpdate = useForceUpdate();
@@ -64,11 +64,19 @@ export const SidebarHead: FC = () => {
         borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
       }}
     >
-      <Text fz={em(13)}>{t`Name`}</Text>
+      <Text fz={em(13)}>
+        <Trans>Name</Trans>
+      </Text>
 
       <Group gap={5}>
         <Tooltip
-          label={gantt.state.isHideEstimateTime ? t`Show estimate time` : t`Hide estimate time`}
+          label={
+            gantt.state.isHideEstimateTime ? (
+              <Trans>Show estimate time</Trans>
+            ) : (
+              <Trans>Hide estimate time</Trans>
+            )
+          }
         >
           <ActionIcon
             variant="subtle"
@@ -89,7 +97,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t`Show task color by status`}>
+        <Tooltip label={<Trans>Show task color by status</Trans>}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -106,7 +114,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t`Scroll to today`}>
+        <Tooltip label={<Trans>Scroll to today</Trans>}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -119,7 +127,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t`Create folder`}>
+        <Tooltip label={<Trans>Create folder</Trans>}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -130,7 +138,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t`Create task`}>
+        <Tooltip label={<Trans>Create task</Trans>}>
           <QuickCreateTaskInput>
             <ActionIcon component="div" variant="subtle" size="sm" color="gray">
               <IconPlus size={16} />

@@ -2,11 +2,11 @@ fragment TaskData on Task {
   _id
   code
   name
+  description
   status
   order
 
   folderId
-  parentId
   childCount
 
   startDate
@@ -42,6 +42,7 @@ fragment TaskData on Task {
     phone
   }
 
+  parentId
   parent {
     _id
     name
@@ -59,4 +60,23 @@ fragment TaskData on Task {
     color
     name
   }
+
+  timeTrackings {
+    id
+    workspaceId
+    userId
+    user {
+      _id
+      name
+      color
+      avatar
+    }
+    billable
+    note
+    startAt
+    endAt
+  }
+
+  createdAt
+  isArchived
 }

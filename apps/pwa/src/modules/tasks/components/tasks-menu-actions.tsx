@@ -42,16 +42,28 @@ import {
 import { type FC } from "react";
 import { useTaskFolders } from "../hooks/use-task-folders";
 import { taskPriorities } from "../task-constants";
+import { useQuery } from "@apollo/client/react";
+import QUERY_TAGS, {
+  type TagsQuery,
+  type TagsQueryVariables,
+} from "@/modules/tags/queries/queryTags.graphql";
 
 export const TaskMenuActions: FC = () => {
+  const color = useColor();
   const workspace = useWorkspace();
   const tasks = useTasks();
   const taskHistories = useTaskHistories();
   const { folders, exitFolder } = useTaskFolders();
 
-  const color = useColor();
+  const taskTags = useQuery<TagsQuery, TagsQueryVariables>(QUERY_TAGS, {
+    variables: {
+      type: TagType.TASK,
+    },
+  });
 
-  const [assignees, isAssigneesReady] = useWorkspaceMembers(tasks.state.assigneeUserIds);
+  const [assignees, isAssigneesReady] = useWorkspaceMembers(
+    tasks.state.variables?.assigneeUserIds ?? []
+  );
   const assigneesHover = useHover();
   const layout = useLayout();
   const tagsHover = useHover();
@@ -116,15 +128,22 @@ export const TaskMenuActions: FC = () => {
         <WorkspaceMemberSelector
           onSelect={(user) => {
             if (!user) return;
-            tasks.setState((s) => ({
-              ...s,
-              assigneeUserIds: s.assigneeUserIds?.includes(user.userId)
-                ? s.assigneeUserIds?.filter((id) => id !== user.userId)
-                : [...(s.assigneeUserIds || []), user.userId],
-            }));
+            tasks.setState((s) => {
+              const assigneeUserIds = s.variables?.assigneeUserIds?.includes(user.userId)
+                ? (s.variables?.assigneeUserIds ?? []).filter((id) => id !== user.userId)
+                : [...(s.variables?.assigneeUserIds || []), user.userId];
+
+              return {
+                ...s,
+                variables: {
+                  ...s.variables,
+                  assigneeUserIds: assigneeUserIds.length > 0 ? assigneeUserIds : null,
+                },
+              };
+            });
           }}
           optionRightSection={(user) => {
-            const isSelected = tasks.state.assigneeUserIds?.includes(user.userId);
+            const isSelected = tasks.state.variables?.assigneeUserIds?.includes(user.userId);
 
             return (
               <Group>
@@ -141,7 +160,8 @@ export const TaskMenuActions: FC = () => {
           }}
           target={(ctx) => {
             const isHasAssignee =
-              tasks.state.assigneeUserIds && tasks.state.assigneeUserIds.length > 0;
+              tasks.state.variables?.assigneeUserIds &&
+              tasks.state.variables?.assigneeUserIds.length > 0;
 
             return (
               <Group
@@ -167,7 +187,7 @@ export const TaskMenuActions: FC = () => {
                     ) : (
                       isHasAssignee && (
                         <Group gap={5} mr={0}>
-                          {tasks.state.assigneeUserIds?.map((userId, i) => {
+                          {tasks.state.variables?.assigneeUserIds?.map((userId, i) => {
                             const assignee = assignees.find(
                               (assignee) => assignee.userId === userId
                             );
@@ -207,7 +227,13 @@ export const TaskMenuActions: FC = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
-                      tasks.setState((s) => ({ ...s, assigneeUserIds: undefined }));
+                      tasks.setState((s) => ({
+                        ...s,
+                        variables: {
+                          ...s.variables,
+                          assigneeUserIds: null,
+                        },
+                      }));
                     }}
                   >
                     <IconX size={7} strokeWidth={4} />
@@ -222,16 +248,23 @@ export const TaskMenuActions: FC = () => {
           createable={false}
           onSelect={(partner) => {
             if (partner) {
-              tasks.setState((s) => ({
-                ...s,
-                partnerIds: s.partnerIds?.includes(partner._id)
-                  ? s.partnerIds?.filter((id) => id !== partner._id)
-                  : [...(s.partnerIds || []), partner._id],
-              }));
+              tasks.setState((s) => {
+                const partnerIds = s.variables?.partnerIds?.includes(partner._id)
+                  ? (s.variables?.partnerIds ?? []).filter((id) => id !== partner._id)
+                  : [...(s.variables?.partnerIds || []), partner._id];
+
+                return {
+                  ...s,
+                  variables: {
+                    ...s.variables,
+                    partnerIds: partnerIds.length > 0 ? partnerIds : null,
+                  },
+                };
+              });
             }
           }}
           optionRightSection={(partner) => {
-            const isSelected = tasks.state.partnerIds?.includes(partner._id);
+            const isSelected = tasks.state.variables?.partnerIds?.includes(partner._id);
 
             return (
               <Group>
@@ -246,7 +279,7 @@ export const TaskMenuActions: FC = () => {
             );
           }}
           target={(ctx) => {
-            const selectedPartnerIds = tasks.state.partnerIds ?? [];
+            const selectedPartnerIds = tasks.state.variables?.partnerIds ?? [];
 
             return (
               <ButtonSelect
@@ -256,8 +289,10 @@ export const TaskMenuActions: FC = () => {
                 onClick={ctx.toggle}
                 isActive={selectedPartnerIds.length > 0}
                 quantity={selectedPartnerIds.length}
-                value={tasks.state.partnerIds}
-                onClear={() => tasks.setState((s) => ({ ...s, partnerIds: undefined }))}
+                value={tasks.state.variables?.partnerIds}
+                onClear={() =>
+                  tasks.setState((s) => ({ ...s, variables: { ...s.variables, partnerIds: null } }))
+                }
               />
             );
           }}
@@ -265,23 +300,30 @@ export const TaskMenuActions: FC = () => {
 
         <TagSelector
           type={TagType.TASK}
-          excludeIds={tasks.state.tagIds}
+          excludeIds={tasks.state.variables?.tagIds ?? []}
           createable={false}
           onSelect={(tag) => {
             if (tag) {
-              tasks.setState((s) => ({
-                ...s,
-                tagIds: s.tagIds?.includes(tag._id)
-                  ? s.tagIds?.filter((id) => id !== tag._id)
-                  : [...(s.tagIds || []), tag._id],
-              }));
+              tasks.setState((s) => {
+                const tagIds = s.variables?.tagIds?.includes(tag._id)
+                  ? (s.variables?.tagIds ?? []).filter((id) => id !== tag._id)
+                  : [...(s.variables?.tagIds || []), tag._id];
+
+                return {
+                  ...s,
+                  variables: {
+                    ...s.variables,
+                    tagIds: tagIds.length > 0 ? tagIds : null,
+                  },
+                };
+              });
             } else {
-              tasks.setState((s) => ({ ...s, tagIds: undefined }));
+              tasks.setState((s) => ({ ...s, variables: { ...s.variables, tagIds: null } }));
             }
           }}
           target={(ctx) => {
-            const selectedTags = (tasks.state.tagIds || [])
-              .map((tagId) => folders.find((tag) => tag._id === tagId))
+            const selectedTags = (tasks.state.variables?.tagIds ?? [])
+              .map((tagId) => taskTags.data?.tags.data.find((tag) => tag._id === tagId))
               .filter((v) => typeof v !== "undefined");
 
             const isHasTag = selectedTags && selectedTags.length > 0;
@@ -312,7 +354,10 @@ export const TaskMenuActions: FC = () => {
                             onRemove={() => {
                               tasks.setState((s) => ({
                                 ...s,
-                                tagIds: s.tagIds?.filter((id) => id !== tag._id),
+                                variables: {
+                                  ...s.variables,
+                                  tagIds: s.variables?.tagIds?.filter((id) => id !== tag._id),
+                                },
                               }));
                             }}
                           />
@@ -337,7 +382,10 @@ export const TaskMenuActions: FC = () => {
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
-                      tasks.setState((s) => ({ ...s, tagIds: undefined }));
+                      tasks.setState((s) => ({
+                        ...s,
+                        variables: { ...s.variables, tagIds: null },
+                      }));
                     }}
                   >
                     <IconX size={7} strokeWidth={4} />
@@ -352,7 +400,7 @@ export const TaskMenuActions: FC = () => {
           icon={IconFlag}
           label={<Trans>Priority</Trans>}
           autoHideLabel
-          value={tasks.state.priority}
+          value={tasks.state.variables?.priority}
           options={Object.values(TaskPriority)
             .reverse()
             .map((priority) => ({
@@ -361,8 +409,15 @@ export const TaskMenuActions: FC = () => {
               icon: IconFlagFilled,
               activeColor: getTaskPriorityColor(priority),
             }))}
-          onChange={(value) => tasks.setState((s) => ({ ...s, priority: value as TaskPriority }))}
-          onClear={() => tasks.setState((s) => ({ ...s, priority: undefined }))}
+          onChange={(value) =>
+            tasks.setState((s) => ({
+              ...s,
+              variables: { ...s.variables, priority: value as TaskPriority },
+            }))
+          }
+          onClear={() =>
+            tasks.setState((s) => ({ ...s, variables: { ...s.variables, priority: null } }))
+          }
         />
 
         <ButtonSelect

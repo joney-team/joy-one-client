@@ -11,39 +11,24 @@ import { EstimateTimeInput } from "@/components/inputs/estimate-time-input";
 import { TimeTrackingsInput } from "@/components/inputs/time-trackings-input";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { PartnersInput } from "@/modules/partners/components/partners-input";
-import { PartnerEntity } from "@/modules/partners/partners-types";
 import { TagsInput } from "@/modules/tags/components/tags-input";
-import { useTags } from "@/modules/tags/tags-context";
-import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import {
-  createTask,
-  getTaskProgress,
-  getTasks,
-  renderTaskStatusStyle,
-  updateTasks,
-} from "@/modules/tasks/tasks-service";
-import {
-  DefaultTaskStatusId,
-  TaskEntity,
-  TaskPriority,
-  TaskTimeTracking,
-} from "@/modules/tasks/tasks-types";
+import { getTaskProgress, getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
+import { DefaultTaskStatusId, TaskPriority } from "@/modules/tasks/tasks-types";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
+import { useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -54,14 +39,13 @@ import {
   Menu,
   Progress,
   SimpleGrid,
-  Skeleton,
   Stack,
   Text,
   ThemeIcon,
   Tooltip,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useDebouncedCallback, useForceUpdate, useHover } from "@mantine/hooks";
+import { useDebouncedCallback, useHover } from "@mantine/hooks";
 import {
   Icon,
   IconCalendar,
@@ -81,72 +65,77 @@ import {
   IconUserSquareRounded,
   IconX,
 } from "@tabler/icons-react";
-import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
+import { FC, PropsWithChildren, ReactNode, useState } from "react";
 import { CustomerInput } from "../../customers/components/customer-input";
 import { FilesBox } from "../../files/files-box";
-import { useTaskFolders } from "../hooks/use-task-folders";
+import { useUpdateTasks } from "../hooks/use-update-tasks";
+import { TaskDataFragment } from "../queries/fragmentTask.graphql";
+import CREATE_TASK_MUTATION, {
+  type CreateTaskMutation,
+  type CreateTaskMutationVariables,
+} from "../queries/mutationCreateTask.graphql";
+import QUERY_TASKS from "../queries/queryTasks.graphql";
 import { taskPriorities } from "../task-constants";
 import { TasksDndProvider } from "../tasks-dnd-provider";
 import { ListTaskRowHead } from "../views/list/list-task-row-head";
 
 export interface TaskFormProps {
-  task?: TaskEntity;
-  parentId?: string;
-  customer?: CustomerShortInfo;
+  task?: TaskDataFragment;
+  initial?: Partial<TaskDataFragment>;
   onClose?: () => void;
-  onCreated?: (task: TaskEntity) => Promise<unknown> | unknown;
-  status?: string;
-  order?: number;
-  dueDate?: number;
-  folderId?: string | null;
-  timeTrackings?: TaskTimeTracking[];
 }
 
 const formFieldHeight = 36;
 
 export const TaskForm: FC<TaskFormProps> = (props) => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
-  const taskFolders = useTaskFolders();
-  const id = props.task?._id || "new_task_id";
   const uploadFile = useUploadFile();
 
-  const tags = useTags();
-  const tagFolder = tags.list.find(
-    (v) => v._id === props.folderId || v._id === taskFolders.activatedFolder?._id
-  );
+  const id = props.task?._id || "new_task_id";
 
-  const isInitialized = useRef(false);
-  const forceUpdate = useForceUpdate();
+  const { updateTasks } = useUpdateTasks();
 
   const [rawFiles, setRawFiles] = useState<File[]>([]);
 
   const onUpdate = useDebouncedCallback((values: any) => {
-    if (!props.task?._id || !values.name || !isInitialized.current) return;
+    if (!props.task || !values.name) return;
+    const isDiff = JSON.stringify(props.task) !== JSON.stringify(values);
+    if (!isDiff) return;
+
     updateTasks([
       {
-        ...props.task,
+        _id: props.task._id,
         name: values.name,
         description: values.description,
         priority: values.priority,
         status: values.status,
         dueDate: values.dueDate,
         startDate: values.startDate,
-        customerId: values.relatedCustomer?._id,
-        assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMember) => user.userId),
-        partnerIds: values.partners.map((partner: PartnerEntity) => partner._id),
-        tagIds: values.tags.map((tag: TagEntity) => tag._id),
-        timeTrackings: values.timeTrackings || [],
+        customer: values.customer,
+        assigneeUsers: values.assigneeUsers,
+        partners: values.partners,
+        tags: values.tags,
         estimatedTime: values.estimatedTime,
       },
     ]);
   }, 500);
 
+  const initialTask: Partial<TaskDataFragment> = {
+    status: DefaultTaskStatusId.TODO,
+    ...props.initial,
+  };
+
   const form = useForm({
-    initialValues: {} as any,
+    initialValues: Object.assign(initialTask, props.task),
     onValuesChange: (values) => {
-      if (props.task?._id) onUpdate(values);
+      if (props.task) onUpdate(values);
     },
   });
+
+  const [createTask] = useMutation<CreateTaskMutation, CreateTaskMutationVariables>(
+    CREATE_TASK_MUTATION
+  );
 
   const onCreate = form.onSubmit(async (values) => {
     if (!!props.task?._id) return;
@@ -154,32 +143,40 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
     try {
       if (!values.name) throw Error(t`Task name is required`);
 
-      const task = await createTask({
-        name: values.name,
-        order: props.order,
-        parentId: props.parentId,
-        description: values.description,
-        priority: values.priority,
-        status: values.status,
-        dueDate: values.dueDate,
-        startDate: values.startDate,
-        assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMember) => user.userId),
-        partnerIds: values.partners.map((partner: PartnerEntity) => partner._id),
-        customerId: props.customer?._id,
-        folderId: tagFolder?._id,
-        tagIds: values.tags.map((tag: TagEntity) => tag._id),
-        timeTrackings: values.timeTrackings || [],
-        estimatedTime: values.estimatedTime,
+      const { data: newTask } = await createTask({
+        variables: {
+          input: {
+            name: values.name,
+            order: values.order,
+            parentId: values.parent?._id,
+            description: values.description,
+            priority: values.priority,
+            status: values.status,
+            dueDate: values.dueDate,
+            startDate: values.startDate,
+            assigneeUserIds: values.assigneeUsers?.map((user) => user.userId),
+            customerId: values.customer?._id,
+            estimatedTime: values.estimatedTime,
+            partnerIds: values.partners?.map((partner) => partner._id),
+            tagIds: values.tags?.map((tag) => tag._id),
+            timeTrackings: values.timeTrackings,
+            folderId: values.folder?._id,
+          },
+        },
+        refetchQueries: [QUERY_TASKS],
       });
+
+      if (!newTask) throw new Error(t`Failed to create task`);
 
       await Promise.all(
         rawFiles.map(async (file) =>
-          uploadFile(file, { refs: [`${AppEntity.TASKS}:${task._id}`] }).catch(onError)
+          uploadFile(file, { refs: [`${AppEntity.TASKS}:${newTask.createTask._id}`] }).catch(
+            onError
+          )
         )
       );
 
       props.onClose?.();
-      await props.onCreated?.(task);
     } catch (error) {
       onError(error);
     }
@@ -232,26 +229,6 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
   const currentStatusIndex = statuses.findIndex((v) => v.id === props.task?.status);
   const nextStatus = statuses[currentStatusIndex + 1];
 
-  useEffect(() => {
-    isInitialized.current = false;
-    form.setValues({
-      ...props.task,
-      tags: props.task?.tags || [],
-      name: props.task?.name || "",
-      partners: props.task?.partners || [],
-      assigneeUsers: props.task?.assigneeUsers || [workspace.userMember],
-      status: props.status || props.task?.status || DefaultTaskStatusId.TODO,
-      description: props.task?.description || "",
-      relatedCustomer: props.customer || props.task?.customer,
-      dueDate: props.dueDate || props.task?.dueDate,
-      timeTrackings: props.timeTrackings || props.task?.timeTrackings || [],
-    });
-    isInitialized.current = true;
-    forceUpdate();
-  }, [props.task?._id]);
-
-  if (!isInitialized.current) return <Skeleton height={300} mt={16} />;
-
   return (
     <form onSubmit={onCreate}>
       <Stack pt={10} gap={30}>
@@ -267,7 +244,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
           />
 
           <SimpleGrid cols={{ md: 2 }} spacing={3} maw="100%" w={900}>
-            <FormFieldWrapper icon={IconPlaystationCircle} label={t`Status`}>
+            <FormFieldWrapper icon={IconPlaystationCircle} label={<Trans>Status</Trans>}>
               <TaskStatusSelector
                 inputProps={{ flex: 1 }}
                 onSelect={(status) => form.setFieldValue("status", status.id)}
@@ -359,7 +336,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               />
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconUser} label={t`Assignee`}>
+            <FormFieldWrapper icon={IconUser} label={<Trans>Assignee</Trans>}>
               <FormField
                 canRemove={(form.values.assigneeUsers?.length || 0) > 0}
                 onRemove={() => form.setFieldValue("assigneeUsers", [])}
@@ -370,13 +347,13 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                   flex={1}
                   p={5}
                   value={form.values.assigneeUsers}
-                  onChange={(users) => form.setFieldValue("assigneeUsers", users)}
+                  onChange={(users) => form.setFieldValue("assigneeUsers", users as any)}
                   style={{ cursor: "pointer" }}
                 />
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconFlag} label={t`Priority`}>
+            <FormFieldWrapper icon={IconFlag} label={<Trans>Priority</Trans>}>
               <FormField
                 canRemove={!!form.values.priority}
                 onRemove={() => form.setFieldValue("priority", null)}
@@ -425,7 +402,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconCalendar} label={t`Due date`}>
+            <FormFieldWrapper icon={IconCalendar} label={<Trans>Due date</Trans>}>
               <FormField
                 onRemove={() => form.setValues({ ...form.values, dueDate: null, startDate: null })}
                 canRemove={!!form.values.dueDate || !!form.values.startDate}
@@ -487,7 +464,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconStopwatch} label={t`Time trackings`}>
+            <FormFieldWrapper icon={IconStopwatch} label={<Trans>Time trackings</Trans>}>
               <FormField
                 canRemove={!!form.values.timeTrackings?.length}
                 onRemove={() => form.setFieldValue("timeTrackings", [])}
@@ -495,13 +472,15 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                 <TimeTrackingsInput
                   p={5}
                   flex={1}
-                  value={form.values.timeTrackings}
-                  onChange={(timeTrackings) => form.setFieldValue("timeTrackings", timeTrackings)}
+                  value={form.values.timeTrackings as any}
+                  onChange={(timeTrackings) =>
+                    form.setFieldValue("timeTrackings", timeTrackings as any)
+                  }
                 />
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconHourglassHigh} label={t`Estimate time`}>
+            <FormFieldWrapper icon={IconHourglassHigh} label={<Trans>Estimate time</Trans>}>
               <FormField
                 canRemove={!!form.values.estimatedTime}
                 onRemove={() => form.setFieldValue("estimatedTime", null)}
@@ -509,27 +488,27 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                 <EstimateTimeInput
                   p={5}
                   flex={1}
-                  label={t`Estimate time`}
+                  label={<Trans>Estimate time</Trans>}
                   {...form.getInputProps("estimatedTime")}
                 />
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconUserSquareRounded} label={t`Customer`}>
+            <FormFieldWrapper icon={IconUserSquareRounded} label={<Trans>Customer</Trans>}>
               <FormField
-                canRemove={!!form.values.relatedCustomer}
-                onRemove={() => form.setFieldValue("relatedCustomer", null)}
+                canRemove={!!form.values.customer}
+                onRemove={() => form.setFieldValue("customer", null)}
               >
                 <CustomerInput
                   flex={1}
                   p={5}
-                  value={form.values.relatedCustomer}
-                  onSelect={(partners) => form.setFieldValue("relatedCustomer", partners)}
+                  value={form.values.customer as any}
+                  onSelect={(customer) => form.setFieldValue("customer", customer as any)}
                 />
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconTopologyStar3} label={t`Partners`}>
+            <FormFieldWrapper icon={IconTopologyStar3} label={<Trans>Partners</Trans>}>
               <FormField
                 canRemove={!!form.values.partners?.length}
                 onRemove={() => form.setFieldValue("partners", [])}
@@ -537,13 +516,13 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                 <PartnersInput
                   flex={1}
                   p={5}
-                  value={form.values.partners}
-                  onChange={(partners) => form.setFieldValue("partners", partners)}
+                  value={form.values.partners as any}
+                  onChange={(partners) => form.setFieldValue("partners", partners as any)}
                 />
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconTags} label={t`Tags`}>
+            <FormFieldWrapper icon={IconTags} label={<Trans>Tags</Trans>}>
               <FormField
                 canRemove={!!form.values.tags?.length}
                 onRemove={() => form.setFieldValue("tags", [])}
@@ -551,8 +530,8 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                 <TagsInput
                   flex={1}
                   type={TagType.TASK}
-                  value={form.values.tags}
-                  onChange={(tags) => form.setFieldValue("tags", tags)}
+                  value={form.values.tags as any}
+                  onChange={(tags) => form.setFieldValue("tags", tags as any)}
                 />
               </FormField>
             </FormFieldWrapper>
@@ -560,7 +539,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
           <Editor
             value={form.values.description}
-            onChangeHTML={(v) => form.setFieldValue("description", v)}
+            onChangeHTML={(v) => form.setFieldValue("description", v as any)}
             delay={300}
             placeholder={t`Task description`}
             uploadFileOptions={{
@@ -576,7 +555,9 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               <IconFiles strokeWidth={1.5} size={20} />
             </ThemeIcon>
 
-            <Text fw={500}>{t`Attachments`}</Text>
+            <Text fw={500}>
+              <Trans>Attachments</Trans>
+            </Text>
           </Group>
 
           {props.task ? (
@@ -594,7 +575,9 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                   <IconSubtask strokeWidth={1.5} size={20} />
                 </ThemeIcon>
 
-                <Text fw={500}>{t`Subtasks`}</Text>
+                <Text fw={500}>
+                  <Trans>Subtasks</Trans>
+                </Text>
               </Group>
 
               <Group gap={5}>
@@ -614,12 +597,13 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                     leftIcon={IconPlus}
                     onClick={() =>
                       open({
-                        parentId: props.task!._id,
-                        onCreated: () => subTaskList.fetch(true, { isSilient: true }),
+                        initial: {
+                          parent: props.task,
+                        },
                       })
                     }
                   >
-                    {t`Subtasks`}
+                    <Trans>Subtasks</Trans>
                   </Button>
                 )}
               </ModalCreateTask>
@@ -675,7 +659,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
 const FormFieldWrapper: FC<
   PropsWithChildren<{
-    label: string;
+    label: ReactNode;
     icon: Icon;
   }>
 > = (props) => {

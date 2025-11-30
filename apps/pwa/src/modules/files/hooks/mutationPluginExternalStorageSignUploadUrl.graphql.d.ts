@@ -2,7 +2,7 @@ import type * as Types from '../../../graphql/types.graphql.d';
 
 export type PluginExternalStorageSignUploadUrlMutationVariables = Types.Exact<{
   fileName: Types.Scalars['String']['input'];
-  refs?: Types.InputMaybe<Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input']>;
+  refs?: Types.InputMaybe<Array<Types.Scalars['String']['input']>>;
 }>;
 
 

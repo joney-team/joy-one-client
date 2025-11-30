@@ -49,6 +49,7 @@ const codeGenConfig: CodegenConfig = {
         },
         useTypeImports: true,
         nonOptionalTypename: true,
+        arrayInputCoercion: false,
       },
     },
   },

@@ -53,6 +53,7 @@ export const TaskTag: FC<TaskTagProps> = ({ id, h, fz, onRemove, editable = true
           <Group gap={3} mr={-10} wrap="nowrap">
             <Renderer visible={editable}>
               <ActionIcon
+                component="div"
                 radius={100}
                 variant="subtle"
                 size="sm"
@@ -64,7 +65,14 @@ export const TaskTag: FC<TaskTagProps> = ({ id, h, fz, onRemove, editable = true
             </Renderer>
 
             <Renderer visible={!!onRemove}>
-              <ActionIcon radius={100} variant="subtle" size="sm" color={color} onClick={onRemove}>
+              <ActionIcon
+                component="div"
+                radius={100}
+                variant="subtle"
+                size="sm"
+                color={color}
+                onClick={onRemove}
+              >
                 <IconMinus size={13} strokeWidth={2} />
               </ActionIcon>
             </Renderer>

@@ -16,10 +16,10 @@ import { useLazyQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { FC, useEffect, useMemo, useState } from "react";
 import { ListTaskRowHead } from "./list-task-row-head";
 
-import dynamic from "next/dynamic";
 import styles from "./list-tasks.module.css";
 
 const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.ListTaskRow), {
@@ -32,15 +32,11 @@ interface ListTaskGroupByStatusesProps {
   defaultVisible?: boolean;
   hideWhenEmpty?: boolean;
   showEmptyMsg?: boolean;
-  folderId?: string;
 }
 
-export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
-  folderId,
-  ...props
-}) => {
+export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({ ...props }) => {
   const workspace = useWorkspace();
-  const ctx = useTasks();
+  const { activatedFolder, href, state } = useTasks();
 
   const [isVisible, setIsVisible] = useState(
     typeof props.defaultVisible === "boolean" ? props.defaultVisible : true
@@ -50,19 +46,20 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
 
   const variables: TasksQueryVariables = useMemo(() => {
     return {
+      ...state.variables,
       status: props.status,
-      folderId,
+      folderId: activatedFolder?._id,
       parentId: "root",
     };
-  }, [props.status, folderId]);
+  }, [props.status, activatedFolder?._id, state]);
 
-  const [getTasks, { data, refetch }] = useLazyQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
+  const [getTasks, { data }] = useLazyQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
     fetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {
     getTasks({ variables });
-  }, [folderId]);
+  }, [activatedFolder?._id, variables]);
 
   const status =
     workspace.settings.taskStatuses.find((s) => s.id === props.status) ||
@@ -114,10 +111,11 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
                 fw={400}
                 onClick={() =>
                   open({
-                    status: props.status,
-                    folderId: folderId,
-                    order: (tasks[0]?.order ?? 1) / 2,
-                    onCreated: () => refetch(),
+                    initial: {
+                      status: props.status,
+                      folder: activatedFolder,
+                      order: (tasks[0]?.order ?? 1) / 2,
+                    },
                   })
                 }
               >
@@ -137,8 +135,8 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
               {tasks.map((task, index) => (
                 <ListTaskRow
                   task={task}
-                  key={task._id + folderId}
-                  href={ctx.href(task)}
+                  key={task._id}
+                  href={href(task)}
                   variables={variables}
                   lastRow={index === tasks.length - 1}
                   prevTask={tasks[index - 1]}

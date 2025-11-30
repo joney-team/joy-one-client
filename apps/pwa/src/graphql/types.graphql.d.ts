@@ -561,6 +561,7 @@ export type QueryTasksArgs = {
   offset?: InputMaybe<Scalars['Float']['input']>;
   parentId?: InputMaybe<Scalars['String']['input']>;
   partnerIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  priority?: InputMaybe<TaskPriority>;
   status?: InputMaybe<Scalars['String']['input']>;
   tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
@@ -631,6 +632,7 @@ export type Task = {
   estimatedTime: Maybe<Scalars['Float']['output']>;
   folder: Maybe<TagEntity>;
   folderId: Maybe<Scalars['String']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   order: Scalars['Float']['output'];
   parent: Maybe<Task>;

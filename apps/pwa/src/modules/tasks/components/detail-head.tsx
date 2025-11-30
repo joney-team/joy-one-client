@@ -8,7 +8,7 @@ import { ModalSharelink } from "@/modals/modal-share-link";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { getRelatedTasks, getTaskEntity, updateTasks } from "@/modules/tasks/tasks-service";
+import { getRelatedTasks, getTaskEntity } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { String } from "@/utils/string.utils";
 import config from "@joy-one-client/config";
@@ -17,22 +17,27 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconChevronDown, IconChevronUp, IconShare2, IconStack2, IconX } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
+import { TaskDataFragment } from "../queries/fragmentTask.graphql";
+import { usePathname, useRouter } from "next/navigation";
+import { useUpdateTasks } from "../hooks/use-update-tasks";
 
 interface TaskDetailHeadProps {
-  task: TaskEntity;
+  task: TaskDataFragment;
   close: () => void;
 }
 
 export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
   const { task } = props;
+  const router = useRouter();
+  const pathname = usePathname();
+  const { updateTasks } = useUpdateTasks();
+
   const [_, { themeColor, tagFolder }] = useTask(props.task._id);
 
   const viewport = useLayout();
   const tasks = useTasks();
 
-  const parentTask = getTaskEntity(task.parentId);
-
-  const relatedTasks = getRelatedTasks(task, { includeSelf: true });
+  const relatedTasks: TaskDataFragment[] = [];
 
   const indexOfTask = relatedTasks.findIndex((t) => t._id === task._id);
   const nextTask = relatedTasks[indexOfTask + 1];
@@ -86,7 +91,19 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
           <TaskTagFolderSelector
             excludeIds={[tagFolder?._id || "none"]}
             onSelect={(tag) => {
-              updateTasks([{ ...task, folderId: tag?._id }]);
+              updateTasks([
+                {
+                  _id: task._id,
+                  folder: tag
+                    ? {
+                        __typename: "TagEntity",
+                        _id: tag._id,
+                        color: tag.color,
+                        name: tag.name,
+                      }
+                    : null,
+                },
+              ]);
             }}
             render={(ctx) => {
               return (
@@ -109,7 +126,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
             }}
           />
 
-          {!!parentTask && (
+          {task.parent !== null && (
             <Fragment>
               <Text c="var(--mantine-color-dimmed)">/</Text>
 
@@ -121,9 +138,11 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
                 fz={em(16)}
                 fw={500}
                 px={3}
-                onClick={() => tasks.open(parentTask)}
+                onClick={() => {
+                  router.push(pathname.replace(`/${task.code}`, `/${task.parent?.code}`));
+                }}
               >
-                {String.limitCharacters(parentTask.name, viewport.view === "mobile" ? 15 : 30)}
+                {String.limitCharacters(task.parent.name, viewport.view === "mobile" ? 15 : 30)}
               </Button>
             </Fragment>
           )}
@@ -134,9 +153,11 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
         {(shareLink) => (
           <Group justify="end" wrap="nowrap" gap={8}>
             <Renderer views={["desktop"]}>
-              <Text fz={em(12)} c="var(--mantine-color-dimmed)" px={10}>
-                <Trans>Created at</Trans> <DateFormat value={task.createdAt} type="date-time" />
-              </Text>
+              {task.createdAt && (
+                <Text fz={em(12)} c="var(--mantine-color-dimmed)" px={10}>
+                  <Trans>Created at</Trans> <DateFormat value={task.createdAt} type="date-time" />
+                </Text>
+              )}
 
               <Button
                 component="div"

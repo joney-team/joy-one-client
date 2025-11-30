@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { TaskDataFragment } from "@/modules/tasks/queries/fragmentTask.graphql";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { zIndexes } from "@joy-one-client/config/layout";
@@ -23,7 +24,7 @@ import { IconCopy, IconShare2, IconX } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useRef, useState } from "react";
 
 interface ModalShareLinkState {
-  task?: TaskEntity;
+  task?: Pick<TaskDataFragment, "_id">;
   url: string;
 }
 

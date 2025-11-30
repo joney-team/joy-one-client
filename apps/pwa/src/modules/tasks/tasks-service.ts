@@ -100,17 +100,21 @@ export function renderTaskStatusStyle(statusId: string, workspaceStatuses: TaskS
   const status =
     workspaceStatuses.find((s) => s.id === statusId) ||
     workspaceStatuses.find((v) => v.id === DefaultTaskStatusId.TODO)!;
-  let icon =
+
+  const icon =
     status.icon && TaskIcons[status.icon]
       ? TaskIcons[status.icon]
       : TaskIcons[DefaultTaskStatusIcons[statusId]] || TaskIcons["IconCircleFilled"];
-  let name: string = status.name || defaultTaskStatusIds[statusId as DefaultTaskStatusId]?.label();
-  let color =
+
+  const name: string =
+    status.name || defaultTaskStatusIds[statusId as DefaultTaskStatusId]?.label();
+
+  const color =
     status.color || defaultTaskStatusIds[status.id as DefaultTaskStatusId]?.color || "gray";
 
   return {
     icon,
-    name: name.toUpperCase(),
+    name: name?.toUpperCase(),
     color,
   };
 }

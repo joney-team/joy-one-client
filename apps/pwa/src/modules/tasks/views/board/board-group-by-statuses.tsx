@@ -21,7 +21,7 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Skeleton, Stack, Text, Tooltip, alpha } from "@mantine/core";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import QUERY_TASKS, {
   type TasksQuery,
@@ -49,29 +49,30 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { updateTasks } = useUpdateTasks();
 
-  const { activatedFolder } = useTasks();
+  const { activatedFolder, state } = useTasks();
 
   const isClosedTasks = props.statusId === DefaultTaskStatusId.CLOSED;
   const isTodoStatus = props.statusId === DefaultTaskStatusId.TODO;
 
   const variables: TasksQueryVariables = useMemo(() => {
     return {
+      ...state.variables,
       status: props.statusId,
       folderId: activatedFolder?._id,
       parentId: "root",
     };
-  }, [props.statusId, activatedFolder?._id]);
+  }, [props.statusId, activatedFolder?._id, state]);
 
-  const [getTasks, { data, fetchMore, loading, refetch }] = useLazyQuery<
-    TasksQuery,
-    TasksQueryVariables
-  >(QUERY_TASKS, {
-    fetchPolicy: "cache-and-network",
-  });
+  const [getTasks, { data, fetchMore, loading }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
+    QUERY_TASKS,
+    {
+      fetchPolicy: "cache-and-network",
+    }
+  );
 
   useEffect(() => {
     getTasks({ variables });
-  }, [activatedFolder?._id]);
+  }, [activatedFolder?._id, variables]);
 
   const onFetchMore = async () => {
     setIsFetchingMore(true);
@@ -143,10 +144,11 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
       {(openCreateTask) => {
         const handleCreateTask = () => {
           openCreateTask({
-            status: status.id,
-            folderId: activatedFolder?._id,
-            order: (tasks[0]?.order ?? 1) / 2,
-            onCreated: () => refetch(),
+            initial: {
+              status: status.id,
+              folder: activatedFolder,
+              order: (tasks[0]?.order ?? 1) / 2,
+            },
           });
         };
 
@@ -243,12 +245,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                   />
                 ))}
 
-              {((loading && !data) || isFetchingMore) && (
-                <Fragment>
-                  <Skeleton height={200} />
-                  <Skeleton height={200} />
-                </Fragment>
-              )}
+              {((loading && !data) || isFetchingMore) && <Skeleton height={200} />}
 
               <WayPoint
                 scrollContainerRef={scrollAreaRef.current}

@@ -2,21 +2,23 @@
 
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { EventList } from "@/components/event-list";
-import { updateTasks } from "@/modules/tasks/tasks-service";
-import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconTimelineEvent } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
+import { useUpdateTasks } from "../hooks/use-update-tasks";
+import { TaskDataFragment } from "../queries/fragmentTask.graphql";
 
 interface DetailFooterProps {
-  task: TaskEntity;
+  task: TaskDataFragment;
   onClose: () => void;
 }
 
 export const DetailFooter: FC<DetailFooterProps> = (props) => {
   const { task, onClose } = props;
+  const { updateTasks } = useUpdateTasks();
+
   return (
     <Fragment>
       <Stack>
@@ -39,7 +41,7 @@ export const DetailFooter: FC<DetailFooterProps> = (props) => {
         name={t`Task`}
         process={async () => {
           if (!task) return;
-          await updateTasks([{ ...task, isArchived: true }]);
+          await updateTasks([{ _id: task._id, isArchived: true }]);
           onClose();
         }}
       />

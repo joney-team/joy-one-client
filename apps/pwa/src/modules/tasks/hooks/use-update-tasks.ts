@@ -4,7 +4,7 @@ import { useApolloClient } from "@apollo/client/react";
 import MUTATION_BULK_UPDATE_TASKS, {
   type BulkUpdateTasksMutation,
   type BulkUpdateTasksMutationVariables,
-} from "./mutationBulkUpdateTasks.graphql";
+} from "../queries/mutationBulkUpdateTasks.graphql";
 
 import type { UpdateTaskInput } from "@/graphql/types.graphql";
 import { onError } from "@/utils/exceptions.utils";
@@ -19,7 +19,7 @@ import { useTasks } from "../tasks-context";
 type UpdateTask = Partial<TasksQuery["tasks"]["data"][number]> & { _id: string };
 
 const normalizeTaskForSubmit = (
-  task: Partial<TaskDataFragment> & { _id: string; description?: string | null }
+  task: Partial<TaskDataFragment> & { _id: string }
 ): UpdateTaskInput => {
   let input: UpdateTaskInput = { _id: task._id };
 
@@ -79,20 +79,22 @@ const normalizeTaskForSubmit = (
     input.partnerIds = task.partners?.map((partner) => partner._id) ?? null;
   }
 
+  if ("isArchived" in task) {
+    input.isArchived = task.isArchived;
+  }
+
   return input;
 };
 
 export const useUpdateTasks = () => {
   const client = useApolloClient();
   const tasks = useTasks();
-  const dynamicVariables = useRef<{ folderId?: string }>({
-    folderId: undefined,
-  });
+  const dynamicVariables = useRef<TasksQueryVariables>({});
 
   // Keep ref in sync with latest tagFolder value
   useEffect(() => {
     dynamicVariables.current = {
-      folderId: tasks.activatedFolder?._id,
+      ...tasks.state.variables,
     };
   }, [tasks.activatedFolder]);
 

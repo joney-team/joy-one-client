@@ -24,12 +24,12 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { useTaskDrop } from "../../tasks-dnd-provider";
-import { ganttConfig } from "./gantt.config";
-import { useGantt } from "./gantt.context";
-import { SidebarRowSticky } from "./gantt.layout";
-import { GanttTaskRowBody } from "./gantt.task-row-body";
-import { GanttTaskRowSidebar } from "./gantt.task-row-sidebar";
-import { getRangeOfTasks } from "./gantt.utils";
+import { GanttTaskRowBody } from "./gantt-task-row-body";
+import { GanttTaskRowSidebar } from "./gantt-task-row-sidebar";
+import { ganttConfig } from "./gantt-tasks-config";
+import { useGantt } from "./gantt-tasks-context";
+import { SidebarRowSticky } from "./gantt-tasks-layout";
+import { getRangeOfTasks } from "./gantt-tasks-utils";
 
 interface GanttTaskGroupByFoldersProps {
   position: "sidebar" | "body";
