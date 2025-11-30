@@ -4247,7 +4247,7 @@ msgstr "Tên"
 
 #: src/modules/workspaces/workspace-module-setup.tsx:94
 msgid "Navigator"
-msgstr "Hoa tiêu"
+msgstr "Thanh điều hướng"
 
 #: src/modules/loans/modals/modal-create-loan.tsx:273
 msgid "Need customer information"
@@ -4263,7 +4263,7 @@ msgstr "Cần chọn ít nhất một trong các thời điểm nhận phòng ho
 
 #: src/modules/events/event-constants.ts:17
 msgid "Negative"
-msgstr "Tiêu cực"
+msgstr "Nguy hiểm"
 
 #: src/modules/events/event-constants.ts:171
 msgid "New customer form"
@@ -4326,7 +4326,7 @@ msgstr "Công việc mới"
 
 #: src/modals/modal-upgrade-version.tsx:40
 msgid "New version available!"
-msgstr ""
+msgstr "Phiên bản mới đã sẵn sàng"
 
 #: src/modules/events/event-constants.ts:130
 msgid "New voucher"
@@ -7068,7 +7068,7 @@ msgstr "Cập nhật mô hình"
 
 #: src/modals/modal-upgrade-version.tsx:54
 msgid "Update now"
-msgstr ""
+msgstr "Cập nhật ngay"
 
 #: src/modules/orders/order-card.tsx:51
 msgid "Update order"
@@ -7403,7 +7403,7 @@ msgstr "Chúng tôi đang phát triển tính năng này, sẽ sớm ra mắt."
 
 #: src/modals/modal-upgrade-version.tsx:43
 msgid "We are very grateful for your use of our product. We have made some improvements and bug fixes.<0/><1/>Reload the page to update."
-msgstr ""
+msgstr "Cảm ơn bạn đã luôn tin dùng sản phẩm của chúng tôi! 💛. Chúng tôi vừa cập nhật vài cải tiến và sửa lỗi nho nhỏ.<0/><1/>Vui lòng tải lại trang để cập nhật."
 
 #: src/components/error-boundary.tsx:41
 msgid "We couldn't find the page you were looking for."

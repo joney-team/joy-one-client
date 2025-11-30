@@ -1,7 +1,6 @@
 "use client";
 
 import { Renderer } from "@/components/renderer";
-import { useLayout } from "@/layout/layout-context";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { WorkspaceViewComponent } from "@/modules/workspace-settings/workspace-settings-types";
 import { WorkspaceModuleSelector } from "@/modules/workspaces/components/workspace-module-selector";
@@ -43,7 +42,6 @@ import { useAvailableWorkspaceModules, WorkspaceModuleId } from "./workspace-mod
 
 export const WorkspaceModuleSetup: FC = () => {
   const workspace = useWorkspace();
-  const layout = useLayout();
   const [components, handleComponents] = useListState(
     workspace.view.menu ?? getDefaultWorkspaceView(workspace.type).menu ?? []
   );
@@ -60,10 +58,6 @@ export const WorkspaceModuleSetup: FC = () => {
   const [debounced] = useDebouncedValue(components, 300);
 
   useEffect(() => {
-    layout.setComponents({
-      head: <Trans>Modules</Trans>,
-    });
-
     setTimeout(() => (isUpdateAble.current = true), 200);
   }, []);
 

@@ -52,7 +52,7 @@ const WorkspaceHeaderTasksBreadcrumbs = dynamic(
 );
 
 const WorkspaceHeaderBreadcrumbs = dynamic(
-  () => import("./header-breadcrumbs").then((mod) => mod.WorkspaceHeaderBreadcrumbs),
+  () => import("./workspace-header-breadcrumbs").then((mod) => mod.WorkspaceHeaderBreadcrumbs),
   {
     ssr: false,
     loading: nonLoading,

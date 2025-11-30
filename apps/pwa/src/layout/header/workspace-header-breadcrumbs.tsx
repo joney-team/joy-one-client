@@ -3,7 +3,6 @@
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import {
   useAvailableWorkspaceModules,
   useWorkspaceModules,
@@ -37,9 +36,9 @@ function getParentModules(pathname: string, modules: WorkspaceModule[]): Workspa
 }
 
 export const WorkspaceHeaderBreadcrumbs: FC = () => {
-  const { availableModules, getModuleByHref } = useAvailableWorkspaceModules();
   const router = useRouter();
   const layout = useLayout();
+  const { availableModules, getModuleByHref } = useAvailableWorkspaceModules();
 
   const activatedModule = getModuleByHref(router.pathname);
   const parentActivatedModule = availableModules.find(
@@ -79,7 +78,9 @@ export const WorkspaceHeaderBreadcrumbs: FC = () => {
               {layout.components.head}
             </Text>
           ) : (
-            layout.components.head
+            <Text fz={13} fw={500} px={8} truncate="end" component="div">
+              {layout.components.head}
+            </Text>
           )}
         </Fragment>
       )}

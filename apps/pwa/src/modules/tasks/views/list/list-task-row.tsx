@@ -288,7 +288,7 @@ export const ListTaskRow: FC<{
               <Group flex={1} gap={5} wrap="nowrap" style={{ overflow: "hidden" }}>
                 {isEditName ? (
                   <ContentEditable
-                    fz={16}
+                    fz={14}
                     fw={500}
                     autoFocus
                     value={task.name}
@@ -297,7 +297,7 @@ export const ListTaskRow: FC<{
                     onBlur={() => setIsEditName(false)}
                   />
                 ) : (
-                  <Text component={Link} href={href} fz={16} fw={500} truncate>
+                  <Text component={Link} href={href} fz={14} fw={500} truncate>
                     {task.name}
                   </Text>
                 )}
