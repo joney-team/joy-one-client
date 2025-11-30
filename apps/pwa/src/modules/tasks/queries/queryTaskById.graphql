@@ -1,7 +1,7 @@
-#import TaskData from "./fragmentTask.graphql"
+#import "./fragmentTask.graphql"
 
-query TaskById($_id: String!) {
-  task(_id: $_id) {
+query TaskById($id: String!) {
+  task(_id: $id) {
     ...TaskData
   }
 }

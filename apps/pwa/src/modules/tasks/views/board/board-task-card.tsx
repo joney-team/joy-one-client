@@ -327,31 +327,6 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                     </Badge>
                   )}
                 </Group>
-
-                <Group gap={0} wrap="nowrap">
-                  {!task.parentId && (
-                    <Tooltip label={t`Create subtask`}>
-                      <ModalCreateTask>
-                        {(open) => (
-                          <ActionIcon
-                            variant="subtle"
-                            color="gray"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              open({
-                                parentId: task._id,
-                                onClose: () => setIsShowSubTasks(true),
-                              });
-                            }}
-                          >
-                            <IconPlus size={16} />
-                          </ActionIcon>
-                        )}
-                      </ModalCreateTask>
-                    </Tooltip>
-                  )}
-                </Group>
               </Group>
 
               <Tooltip label={task.name} disabled={task.name.length < 60} maw="70dvw" multiline>

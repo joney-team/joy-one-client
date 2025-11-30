@@ -6,15 +6,15 @@ import MUTATION_BULK_UPDATE_TASKS, {
   type BulkUpdateTasksMutationVariables,
 } from "./mutationBulkUpdateTasks.graphql";
 
+import type { UpdateTaskInput } from "@/graphql/types.graphql";
+import { onError } from "@/utils/exceptions.utils";
+import { useCallback, useEffect, useRef } from "react";
 import TASK_FRAGMENT, { type TaskDataFragment } from "../queries/fragmentTask.graphql";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
 } from "../queries/queryTasks.graphql";
-import type { UpdateTaskInput } from "@/graphql/types.graphql";
-import { onError } from "@/utils/exceptions.utils";
 import { useTasks } from "../tasks-context";
-import { useCallback, useEffect, useRef } from "react";
 
 type UpdateTask = Partial<TasksQuery["tasks"]["data"][number]> & { _id: string };
 

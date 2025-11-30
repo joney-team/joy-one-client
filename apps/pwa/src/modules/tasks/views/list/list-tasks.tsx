@@ -4,10 +4,10 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { autoScrollWindowForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { Skeleton, Stack } from "@mantine/core";
+import dynamic from "next/dynamic";
 import { FC, Fragment, memo, PropsWithChildren, useEffect, useMemo } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
 import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
-import dynamic from "next/dynamic";
 
 const ListTaskGroupByStatuses = dynamic(
   () => import("./list-task-group-by-statuses").then((mod) => mod.ListTaskGroupByStatuses),

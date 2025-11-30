@@ -13,7 +13,6 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
-import { NetworkStatus } from "@apollo/client";
 import { useLazyQuery } from "@apollo/client/react";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
@@ -63,12 +62,12 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
     };
   }, [props.statusId, activatedFolder?._id]);
 
-  const [getTasks, { data, fetchMore, loading }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
-    QUERY_TASKS,
-    {
-      fetchPolicy: "cache-and-network",
-    }
-  );
+  const [getTasks, { data, fetchMore, loading, refetch }] = useLazyQuery<
+    TasksQuery,
+    TasksQueryVariables
+  >(QUERY_TASKS, {
+    fetchPolicy: "cache-and-network",
+  });
 
   useEffect(() => {
     getTasks({ variables });
@@ -141,137 +140,139 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
 
   return (
     <ModalCreateTask>
-      {(openCreateTask) => (
-        <Stack
-          ref={droppableRef}
-          w={300}
-          gap={0}
-          bg={alpha(color(statusStyle.color), isOver ? 0.1 : 0.05)}
-          pb={5}
-          style={{ borderRadius: wrapperRadius }}
-          mih={0}
-        >
-          <Group
-            p={wrapperPadding}
-            pb={wrapperPadding / 2}
-            gap={8}
-            align="start"
-            justify="space-between"
-            pos="sticky"
-            top={0}
-          >
-            <Group gap={8}>
-              <Button
-                key={status.id}
-                size="compact-sm"
-                variant={!isTodoStatus ? "filled" : "light"}
-                color={statusStyle.color}
-                leftSection={
-                  <TaskStatusIcon
-                    {...status}
-                    white={status.id !== DefaultTaskStatusId.TODO}
-                    size={16}
-                    mr={-4}
-                  />
-                }
-                tt="uppercase"
-                fz={10}
-                fw={800}
-              >
-                {statusStyle.name}
-              </Button>
+      {(openCreateTask) => {
+        const handleCreateTask = () => {
+          openCreateTask({
+            status: status.id,
+            folderId: activatedFolder?._id,
+            order: (tasks[0]?.order ?? 1) / 2,
+            onCreated: () => refetch(),
+          });
+        };
 
-              {data && data?.tasks.count > 0 && (
-                <Text c="gray" fz={10} fw={500}>
-                  <NumberFormat value={data?.tasks.count} />
-                </Text>
+        return (
+          <Stack
+            ref={droppableRef}
+            w={300}
+            gap={0}
+            bg={alpha(color(statusStyle.color), isOver ? 0.1 : 0.05)}
+            pb={5}
+            style={{ borderRadius: wrapperRadius }}
+            mih={0}
+          >
+            <Group
+              p={wrapperPadding}
+              pb={wrapperPadding / 2}
+              gap={8}
+              align="start"
+              justify="space-between"
+              pos="sticky"
+              top={0}
+            >
+              <Group gap={8}>
+                <Button
+                  key={status.id}
+                  size="compact-sm"
+                  variant={!isTodoStatus ? "filled" : "light"}
+                  color={statusStyle.color}
+                  leftSection={
+                    <TaskStatusIcon
+                      {...status}
+                      white={status.id !== DefaultTaskStatusId.TODO}
+                      size={16}
+                      mr={-4}
+                    />
+                  }
+                  tt="uppercase"
+                  fz={10}
+                  fw={800}
+                >
+                  {statusStyle.name}
+                </Button>
+
+                {data && data?.tasks.count > 0 && (
+                  <Text c="gray" fz={10} fw={500}>
+                    <NumberFormat value={data?.tasks.count} />
+                  </Text>
+                )}
+              </Group>
+
+              {(workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) ||
+                !isClosedTasks) && (
+                <Group justify="end" gap={0}>
+                  {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
+                    <Tooltip label={<Trans>Update task status</Trans>}>
+                      <ActionIcon
+                        variant="subtle"
+                        size="sm"
+                        color="gray"
+                        onClick={() => OnTaskSatusesModal()}
+                      >
+                        <IconPencil size={16} strokeWidth={1.6} />
+                      </ActionIcon>
+                    </Tooltip>
+                  )}
+
+                  {!isClosedTasks && (
+                    <ActionIcon variant="subtle" size="sm" color="gray" onClick={handleCreateTask}>
+                      <IconPlus size={16} strokeWidth={1.6} />
+                    </ActionIcon>
+                  )}
+                </Group>
               )}
             </Group>
 
-            {(workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) ||
-              !isClosedTasks) && (
-              <Group justify="end" gap={0}>
-                {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-                  <Tooltip label={<Trans>Update task status</Trans>}>
-                    <ActionIcon
-                      variant="subtle"
-                      size="sm"
-                      color="gray"
-                      onClick={() => OnTaskSatusesModal()}
-                    >
-                      <IconPencil size={16} strokeWidth={1.6} />
-                    </ActionIcon>
-                  </Tooltip>
-                )}
+            <Stack
+              flex={1}
+              gap={8}
+              mih={0}
+              ref={scrollAreaRef}
+              style={{
+                overflow: "auto",
+                padding: wrapperPadding,
+              }}
+            >
+              {tasks.length > 0 &&
+                tasks.map((task, index) => (
+                  <BoardTaskCard
+                    key={task._id}
+                    task={task}
+                    prevTask={tasks[index - 1]}
+                    nextTask={tasks[index + 1]}
+                    scrollContainerRef={scrollAreaRef.current}
+                  />
+                ))}
 
-                {!isClosedTasks && (
-                  <ActionIcon
-                    variant="subtle"
-                    size="sm"
+              {((loading && !data) || isFetchingMore) && (
+                <Fragment>
+                  <Skeleton height={200} />
+                  <Skeleton height={200} />
+                </Fragment>
+              )}
+
+              <WayPoint
+                scrollContainerRef={scrollAreaRef.current}
+                enabled={isCanFetchMore}
+                onReached={onFetchMore}
+              />
+
+              {!isClosedTasks && (
+                <Group>
+                  <Button
                     color="gray"
-                    onClick={() =>
-                      openCreateTask({ status: status.id, folderId: activatedFolder?._id })
-                    }
+                    size="compact-sm"
+                    variant="subtle"
+                    leftIcon={IconPlus}
+                    onClick={handleCreateTask}
                   >
-                    <IconPlus size={16} strokeWidth={1.6} />
-                  </ActionIcon>
-                )}
-              </Group>
-            )}
-          </Group>
-
-          <Stack
-            flex={1}
-            gap={8}
-            mih={0}
-            ref={scrollAreaRef}
-            style={{
-              overflow: "auto",
-              padding: wrapperPadding,
-            }}
-          >
-            {tasks.length > 0 &&
-              tasks.map((task, index) => (
-                <BoardTaskCard
-                  key={task._id}
-                  task={task}
-                  prevTask={tasks[index - 1]}
-                  nextTask={tasks[index + 1]}
-                  scrollContainerRef={scrollAreaRef.current}
-                />
-              ))}
-
-            {((loading && !data) || isFetchingMore) && (
-              <Fragment>
-                <Skeleton height={200} />
-                <Skeleton height={200} />
-              </Fragment>
-            )}
-
-            <WayPoint
-              scrollContainerRef={scrollAreaRef.current}
-              enabled={isCanFetchMore}
-              onReached={onFetchMore}
-            />
-
-            {!isClosedTasks && (
-              <Group>
-                <Button
-                  color="gray"
-                  size="compact-sm"
-                  variant="subtle"
-                  leftIcon={IconPlus}
-                  onClick={() =>
-                    openCreateTask({ status: status.id, folderId: activatedFolder?._id })
-                  }
-                >
-                  <Trans>Create task</Trans>
-                </Button>
-              </Group>
-            )}
+                    <Trans>Create task</Trans>
+                  </Button>
+                </Group>
+              )}
+            </Stack>
           </Stack>
-        </Stack>
-      )}
+        );
+      }}
     </ModalCreateTask>
   );
 };

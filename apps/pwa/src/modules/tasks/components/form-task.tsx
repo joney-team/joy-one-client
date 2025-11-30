@@ -94,7 +94,7 @@ export interface TaskFormProps {
   parentId?: string;
   customer?: CustomerShortInfo;
   onClose?: () => void;
-  onCreated?: (task: TaskEntity) => void;
+  onCreated?: (task: TaskEntity) => Promise<unknown> | unknown;
   status?: string;
   order?: number;
   dueDate?: number;
@@ -118,7 +118,6 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
   const isInitialized = useRef(false);
   const forceUpdate = useForceUpdate();
 
-  const isSubmitting = useRef(false);
   const [rawFiles, setRawFiles] = useState<File[]>([]);
 
   const onUpdate = useDebouncedCallback((values: any) => {
@@ -150,15 +149,12 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
   });
 
   const onCreate = form.onSubmit(async (values) => {
-    if (isSubmitting.current || !!props.task?._id) return;
+    if (!!props.task?._id) return;
 
     try {
-      isSubmitting.current = true;
-      forceUpdate();
-
       if (!values.name) throw Error(t`Task name is required`);
 
-      await createTask({
+      const task = await createTask({
         name: values.name,
         order: props.order,
         parentId: props.parentId,
@@ -174,20 +170,18 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         tagIds: values.tags.map((tag: TagEntity) => tag._id),
         timeTrackings: values.timeTrackings || [],
         estimatedTime: values.estimatedTime,
-      }).then(async (task) => {
-        await Promise.all(
-          rawFiles.map(async (file) =>
-            uploadFile(file, { refs: [`${AppEntity.TASKS}:${task._id}`] }).catch(onError)
-          )
-        );
-        props.onClose?.();
-        props.onCreated?.(task);
       });
+
+      await Promise.all(
+        rawFiles.map(async (file) =>
+          uploadFile(file, { refs: [`${AppEntity.TASKS}:${task._id}`] }).catch(onError)
+        )
+      );
+
+      props.onClose?.();
+      await props.onCreated?.(task);
     } catch (error) {
       onError(error);
-    } finally {
-      isSubmitting.current = false;
-      forceUpdate();
     }
   });
 
@@ -664,14 +658,13 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         <Renderer visible={!!!props.task}>
           <Center>
             <Button
-              loading={isSubmitting.current}
+              loading={form.submitting}
               onClick={onCreate}
-              leftSection={<IconCheck strokeWidth={1.2} />}
-              disabled={isSubmitting.current}
+              leftIcon={IconCheck}
               type="submit"
               action
             >
-              {t`Complete`}
+              <Trans>Complete</Trans>
             </Button>
           </Center>
         </Renderer>

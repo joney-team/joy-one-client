@@ -56,7 +56,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
     };
   }, [props.status, folderId]);
 
-  const [getTasks, { data }] = useLazyQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
+  const [getTasks, { data, refetch }] = useLazyQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
     fetchPolicy: "cache-and-network",
   });
 
@@ -116,6 +116,8 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
                   open({
                     status: props.status,
                     folderId: folderId,
+                    order: (tasks[0]?.order ?? 1) / 2,
+                    onCreated: () => refetch(),
                   })
                 }
               >

@@ -70,6 +70,27 @@ type Coordinates {
   lng: Float!
 }
 
+input CreateTaskInput {
+  assigneeUserIds: [String!]
+  customerId: String
+  description: String
+  dueDate: Float
+  estimatedTime: Float
+  folderId: String
+  isArchived: Boolean
+  name: String
+  order: Float
+  parentId: String
+  partnerIds: [String!]
+  points: Float
+  priority: TaskPriority
+  startDate: Float
+  status: String
+  tagIds: [String!]
+  timeTrackings: [TaskTimeTrackingInput!]
+  workspaceBranchId: String
+}
+
 type CustomField {
   config: JSONObject
   customFieldId: String!
@@ -214,6 +235,7 @@ type Mutation {
   bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
+  createTask(input: CreateTaskInput!): Task!
   deleteCategory(id: String!): Boolean!
   externalStorageVerifyDna(dna: String!): File!
   generateCategorySlug(name: String!): String!
@@ -318,7 +340,7 @@ enum ProductType {
 
 type Query {
   appConfig: AppConfig!
-  categoriesPaginated(limit: Float = 20, offset: Float = 0, query: JSONObject): CategoriesPaginated!
+  categoriesPaginated(limit: Float = 30, offset: Float, query: JSONObject): CategoriesPaginated!
   category(id: String!): Category!
   getCategoriesByIds(ids: [String!]!): [Category!]!
   getCategoryBySlug(slug: String!): Category!
@@ -329,7 +351,7 @@ type Query {
   tags(type: String): Tags!
   task(_id: String!): Task!
   taskByCode(code: String!): Task!
-  tasks(assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float, offset: Float, parentId: String, partnerIds: [String!], status: String, tagIds: [String!]): TasksPaginated!
+  tasks(assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], status: String, tagIds: [String!]): TasksPaginated!
 }
 
 input RegisterDeviceDto {

@@ -13,6 +13,7 @@ import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, PropsWithChildren, useEffect, useMemo, useRef } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
+import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 
 const BoardGroupByStatuses = dynamic(
   () => import("./board-group-by-statuses").then((mod) => mod.BoardGroupByStatuses),
@@ -26,11 +27,12 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
   const layout = useLayout();
   const tasks = useTasks();
+  const containerRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const pageLayout = document.getElementById("LayoutPage");
-    const scrollArea = scrollAreaRef.current;
+    const scrollArea = containerRef.current;
 
     if (pageLayout && scrollArea) {
       const calculateScrollArea = () => {
@@ -47,6 +49,14 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
         pageLayout.style.height = "auto";
       };
     }
+  }, []);
+
+  useEffect(() => {
+    if (!scrollAreaRef.current) return;
+    return autoScrollForElements({
+      element: scrollAreaRef.current,
+      getAllowedAxis: () => "horizontal",
+    });
   }, []);
 
   const dynamicStatuses = useMemo(() => {
@@ -69,13 +79,14 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
             align="stretch"
             flex={1}
             mih={0}
+            ref={scrollAreaRef}
             style={{
               overflowX: "auto",
               overflowY: "hidden",
             }}
           >
             <Group
-              ref={scrollAreaRef}
+              ref={containerRef}
               wrap="nowrap"
               w="max-content"
               align="stretch"

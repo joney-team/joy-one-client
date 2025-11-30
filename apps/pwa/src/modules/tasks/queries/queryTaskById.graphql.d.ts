@@ -1,7 +1,7 @@
 import type * as Types from '../../../graphql/types.graphql.d';
 
 export type TaskByIdQueryVariables = Types.Exact<{
-  _id: Types.Scalars['String']['input'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 

@@ -38,7 +38,7 @@ export const ModalCreateTask: FC<{
   return (
     <Fragment>
       {children((p) => {
-        props.current = p || null;
+        props.current = p ?? null;
         open();
       })}
 
@@ -104,6 +104,10 @@ export const ModalCreateTask: FC<{
               {...props.current}
               parentId={parentTask?._id}
               folderId={tagFolder?._id}
+              onCreated={async (newTask) => {
+                await props.current?.onCreated?.(newTask);
+                close();
+              }}
               onClose={() => {
                 props.current?.onClose?.();
                 close();
