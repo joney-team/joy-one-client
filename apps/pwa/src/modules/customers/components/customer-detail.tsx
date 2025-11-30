@@ -87,7 +87,7 @@ export const CustomerDetail = () => {
                 <Button
                   leftIcon={IconStackPush}
                   variant="outline"
-                  onClick={() => open({ customer })}
+                  onClick={() => open({ initial: { customer: customer as any } })}
                   size="xs"
                 >
                   <Trans>Task</Trans>
