@@ -38,7 +38,7 @@ import {
   IconUserScan,
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, ReactNode, useState } from "react";
-import { InputModalType, OnModalInput } from "../../modals/modal-input";
+import { InputModalType, ModalInput } from "../../modals/modal-input";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLang } from "../lang/lang-context";
 import { useLocations } from "../locations/locations-context";
@@ -232,28 +232,32 @@ export const WithModalRegisterCustomerKyc: FC<{
                         <Trans>Scan QR code</Trans>
                       </Button>
 
-                      <Button
-                        size="xs"
-                        radius={100}
-                        leftIcon={IconTextScan2}
-                        onClick={() =>
-                          OnModalInput({
-                            title: <Trans>Enter code</Trans>,
-                            type: InputModalType.TEXT,
-                            onDone(value) {
-                              const cid = decodeCid(value);
-                              Object.keys(cid).forEach((key) => {
-                                form.setFieldValue(key, (cid as any)[key]);
-                              });
-                            },
-                            icon: IconTextScan2,
-                          })
-                        }
-                        variant="light"
-                        fz={em(14)}
-                      >
-                        <Trans>Enter code</Trans>
-                      </Button>
+                      <ModalInput>
+                        {(open) => (
+                          <Button
+                            size="xs"
+                            radius={100}
+                            leftIcon={IconTextScan2}
+                            onClick={() =>
+                              open({
+                                title: <Trans>Enter code</Trans>,
+                                type: InputModalType.TEXT,
+                                onDone(value) {
+                                  const cid = decodeCid(value);
+                                  Object.keys(cid).forEach((key) => {
+                                    form.setFieldValue(key, (cid as any)[key]);
+                                  });
+                                },
+                                icon: IconTextScan2,
+                              })
+                            }
+                            variant="light"
+                            fz={em(14)}
+                          >
+                            <Trans>Enter code</Trans>
+                          </Button>
+                        )}
+                      </ModalInput>
                     </Group>
 
                     <TextInput

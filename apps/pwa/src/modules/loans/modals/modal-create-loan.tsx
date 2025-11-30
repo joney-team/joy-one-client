@@ -54,16 +54,18 @@ import {
   IconUser,
   IconUserScan,
 } from "@tabler/icons-react";
-import { FC, Fragment, PropsWithChildren, useState } from "react";
+import { FC, Fragment, PropsWithChildren, ReactNode, useState } from "react";
 import { loanAssetTypes } from "../loans-constants";
 
 interface ModalCreateLoanProps {
   customer?: CustomerShortInfo;
 }
 
-export let OnModalCreateLoan: (props?: ModalCreateLoanProps) => void = () => {};
+export type OpenModalCreateLoan = (props?: ModalCreateLoanProps) => void;
 
-export const ModalCreateLoan: FC = () => {
+export const ModalCreateLoan: FC<{
+  children: (open: OpenModalCreateLoan) => ReactNode;
+}> = ({ children }) => {
   const banks = useBanks();
   const router = useRouter();
   const workspace = useWorkspace();
@@ -132,20 +134,6 @@ export const ModalCreateLoan: FC = () => {
     setIsFetchingCustomerKyc(false);
   };
 
-  OnModalCreateLoan = async (p) => {
-    setIsInitialized(false);
-    setCustomer(p?.customer);
-    form.reset();
-    open();
-
-    initialize(p)
-      .then(() => setIsInitialized(true))
-      .catch((error) => {
-        onError(error);
-        close();
-      });
-  };
-
   const loanPackages = workspace.settings?.loanSettings?.loanPackages || [];
 
   const assetTypeOptions: LoanAssetType[] = loanPackages.reduce((output, p) => {
@@ -209,218 +197,234 @@ export const ModalCreateLoan: FC = () => {
   });
 
   return (
-    <Modal
-      title={<ModalTitle title={t`Create loan`} icon={IconCreditCardPay} />}
-      onClose={onClose}
-      opened={opened}
-      size={1000}
-      closeOnEscape={false}
-    >
-      <Stack gap={16}>
-        {(function () {
-          if (!isInitialized) return <Skeleton height={150} />;
+    <Fragment>
+      {children((p) => {
+        setIsInitialized(false);
+        setCustomer(p?.customer);
+        form.reset();
+        open();
 
-          return (
-            <Fragment>
-              <Session name={t`Customer`} icon={IconUser}>
-                <CustomerInput
-                  value={customer}
-                  onSelect={(c) => initialize({ customer: c as any })}
-                  renderValue={(ctx) => {
-                    if (ctx.value)
+        initialize(p)
+          .then(() => setIsInitialized(true))
+          .catch((error) => {
+            onError(error);
+            close();
+          });
+      })}
+      <Modal
+        title={<ModalTitle title={t`Create loan`} icon={IconCreditCardPay} />}
+        onClose={onClose}
+        opened={opened}
+        size={1000}
+        closeOnEscape={false}
+      >
+        <Stack gap={16}>
+          {(function () {
+            if (!isInitialized) return <Skeleton height={150} />;
+
+            return (
+              <Fragment>
+                <Session name={t`Customer`} icon={IconUser}>
+                  <CustomerInput
+                    value={customer}
+                    onSelect={(c) => initialize({ customer: c as any })}
+                    renderValue={(ctx) => {
+                      if (ctx.value)
+                        return (
+                          <Stack gap={8} w="100%">
+                            <CustomerCard
+                              customer={ctx.value as any}
+                              withBorder={false}
+                              shadow="xs"
+                              p={10}
+                              w="100%"
+                              flex={1}
+                              style={{ overflow: "visible" }}
+                              disableClick
+                            />
+
+                            <Group>
+                              <Button
+                                size="compact-sm"
+                                color="gray.5"
+                                fz={em(14)}
+                                leftIcon={IconArrowsExchange}
+                                variant="outline"
+                                onClick={ctx.toggle}
+                              >
+                                <Trans>Change customer</Trans>
+                              </Button>
+                            </Group>
+                          </Stack>
+                        );
+
                       return (
-                        <Stack gap={8} w="100%">
-                          <CustomerCard
-                            customer={ctx.value as any}
-                            withBorder={false}
-                            shadow="xs"
-                            p={10}
-                            w="100%"
-                            flex={1}
-                            style={{ overflow: "visible" }}
-                            disableClick
-                          />
+                        <Button leftIcon={IconPlus} variant="outline" onClick={ctx.toggle}>
+                          <Trans>Add customer information</Trans>
+                        </Button>
+                      );
+                    }}
+                  />
+                </Session>
 
-                          <Group>
-                            <Button
-                              size="compact-sm"
-                              color="gray.5"
-                              fz={em(14)}
-                              leftIcon={IconArrowsExchange}
-                              variant="outline"
-                              onClick={ctx.toggle}
-                            >
-                              <Trans>Change customer</Trans>
-                            </Button>
-                          </Group>
-                        </Stack>
+                <Session name="KYC" icon={IconUserScan}>
+                  {(function () {
+                    if (!customer)
+                      return <Empty hideBorder message={t`Need customer information`} />;
+                    if (isFetchingCustomerKyc) return <Skeleton height={50} />;
+                    if (customerKyc)
+                      return (
+                        <CustomerKycCard
+                          kyc={customerKyc}
+                          hideCustomer
+                          cardProps={{ p: 16, withBorder: false, shadow: "xs" }}
+                          onApproved={(kyc) => setCustomerKyc(kyc)}
+                        />
                       );
 
                     return (
-                      <Button leftIcon={IconPlus} variant="outline" onClick={ctx.toggle}>
-                        <Trans>Add customer information</Trans>
-                      </Button>
+                      <Group>
+                        <WithModalRegisterCustomerKyc>
+                          {(openModal) => (
+                            <Button
+                              leftIcon={IconPlus}
+                              variant="outline"
+                              onClick={() =>
+                                openModal({
+                                  customer,
+                                  onDone: async () => initialize({ customer }),
+                                })
+                              }
+                            >
+                              <Trans>Add KYC</Trans>
+                            </Button>
+                          )}
+                        </WithModalRegisterCustomerKyc>
+                      </Group>
                     );
-                  }}
-                />
-              </Session>
+                  })()}
+                </Session>
 
-              <Session name="KYC" icon={IconUserScan}>
-                {(function () {
-                  if (!customer) return <Empty hideBorder message={t`Need customer information`} />;
-                  if (isFetchingCustomerKyc) return <Skeleton height={50} />;
-                  if (customerKyc)
+                <Session name={t`Loan information`} icon={IconCreditCardPay}>
+                  {(function () {
+                    if (!customer || !customerKyc)
+                      return <Empty hideBorder message={t`Need customer information and KYC`} />;
                     return (
-                      <CustomerKycCard
-                        kyc={customerKyc}
-                        hideCustomer
-                        cardProps={{ p: 16, withBorder: false, shadow: "xs" }}
-                        onApproved={(kyc) => setCustomerKyc(kyc)}
-                      />
-                    );
-
-                  return (
-                    <Group>
-                      <WithModalRegisterCustomerKyc>
-                        {(openModal) => (
-                          <Button
-                            leftIcon={IconPlus}
-                            variant="outline"
-                            onClick={() =>
-                              openModal({
-                                customer,
-                                onDone: async () => initialize({ customer }),
-                              })
-                            }
-                          >
-                            <Trans>Add KYC</Trans>
-                          </Button>
-                        )}
-                      </WithModalRegisterCustomerKyc>
-                    </Group>
-                  );
-                })()}
-              </Session>
-
-              <Session name={t`Loan information`} icon={IconCreditCardPay}>
-                {(function () {
-                  if (!customer || !customerKyc)
-                    return <Empty hideBorder message={t`Need customer information and KYC`} />;
-                  return (
-                    <Card withBorder p={16} shadow="xs">
-                      <Stack>
-                        <SimpleGrid cols={{ md: 3 }}>
-                          <Select
-                            label={t`Asset type`}
-                            data={assetTypeOptions.map((type) => ({
-                              value: type,
-                              label: loanAssetTypes[type].label(),
-                            }))}
-                            {...form.getInputProps("assetType")}
-                          />
-
-                          <Select
-                            label={t`Loan period`}
-                            data={packageDaysOptions.map((d) => ({
-                              value: d.toString(),
-                              label: renderLoanPeriod(d),
-                            }))}
-                            {...form.getInputProps("packageDays")}
-                            value={form.values.packageDays?.toString()}
-                            onChange={(value) => form.setFieldValue("packageDays", +value!)}
-                          />
-
-                          <Select
-                            label={t`Loan payment periods`}
-                            data={packagePeriodDaysOptions.map((d) => ({
-                              value: d.toString(),
-                              label: renderLoanPeriod(d),
-                            }))}
-                            {...form.getInputProps("packagePeriodDays")}
-                            value={form.values.packagePeriodDays?.toString()}
-                            onChange={(value) => form.setFieldValue("packagePeriodDays", +value!)}
-                          />
-                        </SimpleGrid>
-
-                        <NumberInput
-                          label={t`Loan amount`}
-                          hideControls
-                          {...form.getInputProps("amount")}
-                        />
-
-                        <InputWrapper label={t`Loan payment account`}>
+                      <Card withBorder p={16} shadow="xs">
+                        <Stack>
                           <SimpleGrid cols={{ md: 3 }}>
                             <Select
-                              placeholder={t`Select bank`}
-                              searchable
-                              data={banks.map((v) => ({
-                                value: v.id.toString(),
-                                label: `${v.shortName}`,
-                                name: v.name,
-                                logo: v.logo,
+                              label={t`Asset type`}
+                              data={assetTypeOptions.map((type) => ({
+                                value: type,
+                                label: loanAssetTypes[type].label(),
                               }))}
-                              {...form.getInputProps("payment_accountBankId")}
-                              value={form.values.payment_accountBankId?.toString()}
-                              onChange={(value) =>
-                                form.setFieldValue("payment_accountBankId", +value!)
-                              }
-                              renderOption={renderBankSelectOption}
+                              {...form.getInputProps("assetType")}
                             />
 
-                            <TextInput
-                              placeholder={t`Bank account number`}
-                              {...form.getInputProps("payment_accountNumber")}
+                            <Select
+                              label={t`Loan period`}
+                              data={packageDaysOptions.map((d) => ({
+                                value: d.toString(),
+                                label: renderLoanPeriod(d),
+                              }))}
+                              {...form.getInputProps("packageDays")}
+                              value={form.values.packageDays?.toString()}
+                              onChange={(value) => form.setFieldValue("packageDays", +value!)}
                             />
 
-                            <TextInput
-                              placeholder={t`Bank account name`}
-                              {...form.getInputProps("payment_accountName")}
+                            <Select
+                              label={t`Loan payment periods`}
+                              data={packagePeriodDaysOptions.map((d) => ({
+                                value: d.toString(),
+                                label: renderLoanPeriod(d),
+                              }))}
+                              {...form.getInputProps("packagePeriodDays")}
+                              value={form.values.packagePeriodDays?.toString()}
+                              onChange={(value) => form.setFieldValue("packagePeriodDays", +value!)}
                             />
                           </SimpleGrid>
-                        </InputWrapper>
-                      </Stack>
+
+                          <NumberInput
+                            label={t`Loan amount`}
+                            hideControls
+                            {...form.getInputProps("amount")}
+                          />
+
+                          <InputWrapper label={t`Loan payment account`}>
+                            <SimpleGrid cols={{ md: 3 }}>
+                              <Select
+                                placeholder={t`Select bank`}
+                                searchable
+                                data={banks.map((v) => ({
+                                  value: v.id.toString(),
+                                  label: `${v.shortName}`,
+                                  name: v.name,
+                                  logo: v.logo,
+                                }))}
+                                {...form.getInputProps("payment_accountBankId")}
+                                value={form.values.payment_accountBankId?.toString()}
+                                onChange={(value) =>
+                                  form.setFieldValue("payment_accountBankId", +value!)
+                                }
+                                renderOption={renderBankSelectOption}
+                              />
+
+                              <TextInput
+                                placeholder={t`Bank account number`}
+                                {...form.getInputProps("payment_accountNumber")}
+                              />
+
+                              <TextInput
+                                placeholder={t`Bank account name`}
+                                {...form.getInputProps("payment_accountName")}
+                              />
+                            </SimpleGrid>
+                          </InputWrapper>
+                        </Stack>
+                      </Card>
+                    );
+                  })()}
+                </Session>
+
+                {form.values.assetType && !!customerKyc && (
+                  <Session name={t`Loan asset data`} icon={IconFileDots}>
+                    <Card withBorder p={16} shadow="xs">
+                      <LoanAssetDataInput
+                        assetType={form.values.assetType}
+                        value={form.values.assetData}
+                        onChange={(value) => form.setFieldValue("assetData", value)}
+                      />
                     </Card>
-                  );
-                })()}
-              </Session>
+                  </Session>
+                )}
 
-              {form.values.assetType && !!customerKyc && (
-                <Session name={t`Loan asset data`} icon={IconFileDots}>
-                  <Card withBorder p={16} shadow="xs">
-                    <LoanAssetDataInput
-                      assetType={form.values.assetType}
-                      value={form.values.assetData}
-                      onChange={(value) => form.setFieldValue("assetData", value)}
+                <Renderer visible={workspace.isShouldEnableBranches}>
+                  <Session name={t`Branch`} icon={IconBuildingSkyscraper}>
+                    <WorkspaceBranchInput
+                      value={form.values.workspaceBranch}
+                      onChange={(branch) => form.setFieldValue("workspaceBranch", branch)}
                     />
-                  </Card>
-                </Session>
-              )}
+                  </Session>
+                </Renderer>
 
-              <Renderer visible={workspace.isShouldEnableBranches}>
-                <Session name={t`Branch`} icon={IconBuildingSkyscraper}>
-                  <WorkspaceBranchInput
-                    value={form.values.workspaceBranch}
-                    onChange={(branch) => form.setFieldValue("workspaceBranch", branch)}
-                  />
-                </Session>
-              </Renderer>
-
-              <Group mt={10} justify="center">
-                <Button
-                  onClick={submit.handle}
-                  type="submit"
-                  miw={300}
-                  maw="100%"
-                  leftIcon={IconCheck}
-                >
-                  <Trans>Submit loan</Trans>
-                </Button>
-              </Group>
-            </Fragment>
-          );
-        })()}
-      </Stack>
-    </Modal>
+                <Group mt={10} justify="center">
+                  <Button
+                    onClick={submit.handle}
+                    type="submit"
+                    miw={300}
+                    maw="100%"
+                    leftIcon={IconCheck}
+                  >
+                    <Trans>Submit loan</Trans>
+                  </Button>
+                </Group>
+              </Fragment>
+            );
+          })()}
+        </Stack>
+      </Modal>
+    </Fragment>
   );
 };
 

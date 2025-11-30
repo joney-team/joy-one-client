@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { SectionTitle } from "@/components/session-title";
-import { InputModalType, OnModalInput } from "@/modals/modal-input";
+import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Card, Group, Stack, Textarea } from "@mantine/core";
 import {
@@ -183,26 +183,30 @@ export const AdminTools: FC = () => {
 
       <SectionTitle name="Modal Inputs" icon={IconClipboard} />
       <Card shadow="xs">
-        <Group align="start">
-          {Object.values(InputModalType).map((type) => (
-            <Button
-              key={type}
-              onClick={() =>
-                OnModalInput({
-                  type,
-                  onDone: console.log,
-                  options: [
-                    { label: "Option 1", value: "option1" },
-                    { label: "Option 2", value: "option2" },
-                    { label: "Option 3", value: "option3" },
-                  ],
-                })
-              }
-            >
-              {type}
-            </Button>
-          ))}
-        </Group>
+        <ModalInput>
+          {(open) => (
+            <Group align="start">
+              {Object.values(InputModalType).map((type) => (
+                <Button
+                  key={type}
+                  onClick={() =>
+                    open({
+                      type,
+                      onDone: console.log,
+                      options: [
+                        { label: "Option 1", value: "option1" },
+                        { label: "Option 2", value: "option2" },
+                        { label: "Option 3", value: "option3" },
+                      ],
+                    })
+                  }
+                >
+                  {type}
+                </Button>
+              ))}
+            </Group>
+          )}
+        </ModalInput>
       </Card>
     </Stack>
   );

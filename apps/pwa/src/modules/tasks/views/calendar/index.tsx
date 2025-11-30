@@ -8,7 +8,7 @@ import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity, TaskTimeTracking } from "@/modules/tasks/tasks-types";
@@ -234,19 +234,23 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                 if (isOutOfRange) return null;
 
                 return (
-                  <Group>
-                    <Tooltip label={t`Add task need to complete`}>
-                      <ActionIcon
-                        variant="subtle"
-                        radius={100}
-                        color="gray"
-                        onClick={() => OnModalCreateTask({ dueDate: DateTime.toSeconds(date) })}
-                        opacity={hovered || layout.view !== "desktop" ? 1 : 0}
-                      >
-                        <IconCirclePlus size={18} strokeWidth={1.5} />
-                      </ActionIcon>
-                    </Tooltip>
-                  </Group>
+                  <ModalCreateTask>
+                    {(open) => (
+                      <Group>
+                        <Tooltip label={t`Add task need to complete`}>
+                          <ActionIcon
+                            variant="subtle"
+                            radius={100}
+                            color="gray"
+                            onClick={() => open({ dueDate: DateTime.toSeconds(date) })}
+                            opacity={hovered || layout.view !== "desktop" ? 1 : 0}
+                          >
+                            <IconCirclePlus size={18} strokeWidth={1.5} />
+                          </ActionIcon>
+                        </Tooltip>
+                      </Group>
+                    )}
+                  </ModalCreateTask>
                 );
               }}
               renderDay={(date, _, isOutOfRange) => {

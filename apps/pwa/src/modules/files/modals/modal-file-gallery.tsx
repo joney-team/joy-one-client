@@ -14,6 +14,7 @@ import { useQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { formatBytes } from "@joy-one-client/utils/files";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -22,7 +23,6 @@ import {
   Loader,
   Modal,
   SimpleGrid,
-  Skeleton,
   Stack,
   Text,
 } from "@mantine/core";
@@ -35,7 +35,7 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons-react";
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, ReactNode, useEffect, useState } from "react";
 import { useFileSize } from "../files-hooks";
 import QUERY_FILE_INFO, {
   type GetFileInfoQuery,
@@ -51,9 +51,9 @@ interface ModalFileGalleryProps {
   background?: string;
 }
 
-export let OnModalFileGallery: (props: ModalFileGalleryProps) => void = () => {};
-
-export const ModalFileGallery: FC = () => {
+export const ModalFileGallery: FC<{
+  children: (open: (props: ModalFileGalleryProps) => void) => ReactNode;
+}> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalFileGalleryProps>();
   const [index, setIndex] = useState<number>(0);
@@ -62,12 +62,6 @@ export const ModalFileGallery: FC = () => {
   const activeFile = props?.files[index];
   const fileSize = useFileSize(renderFileUrl(activeFile?.url));
   const disabled = props?.disabled || props?.readonly;
-
-  OnModalFileGallery = (p) => {
-    setIndex(p.index || 0);
-    setProps(p);
-    open();
-  };
 
   const onNext = () => {
     if (!props) return;
@@ -106,8 +100,6 @@ export const ModalFileGallery: FC = () => {
     }
   }, [opened, onNext, onPrev, index]);
 
-  if (!props || !activeFile) return null;
-
   const onRemove = async () => {
     if (!activeFile || !activeFile._id) return;
     await removeFile(activeFile._id)
@@ -133,122 +125,143 @@ export const ModalFileGallery: FC = () => {
   };
 
   return (
-    <Modal
-      opened={opened}
-      onClose={close}
-      withCloseButton={false}
-      fullScreen={true}
-      styles={{
-        body: {
-          padding: 0,
-          overflow: "hidden",
-        },
-      }}
-      zIndex={zIndexes.commonModals + 200}
-    >
-      <Group h={head} justify="space-between" px={16} bg="dark.7" wrap="nowrap" w="100%">
-        <SimpleGrid cols={3} w="100%">
-          {fileInfo.loading ? (
-            <Loader size={28} type="dots" color="white" />
-          ) : (
-            <Group wrap="nowrap" gap={10}>
-              <Text c="white" truncate="end" maw={layout.view === "mobile" ? "30dvw" : "40dvw"}>
-                {fileInfo.data?.getFileInfo?.fileName ?? renderFile.name}
-              </Text>
+    <Fragment>
+      {children((p) => {
+        setIndex(p.index || 0);
+        setProps(p);
+        open();
+      })}
 
-              {fileSize.size && (
-                <Text fz={12} c="gray">
-                  {formatBytes(fileInfo.data?.getFileInfo?.size ?? fileSize.size)}
-                </Text>
-              )}
-            </Group>
-          )}
-
-          <Group justify="center" wrap="nowrap" w="100%">
-            <ActionIcon
-              component="div"
-              color={index === 0 ? "gray.8" : "white"}
-              variant="transparent"
-              onClick={onPrev}
-            >
-              <IconChevronLeft />
-            </ActionIcon>
-            <Text c="white">
-              <NumberFormat value={index + 1} />/{<NumberFormat value={props.files.length} />}
-            </Text>
-
-            <ActionIcon
-              component="div"
-              color={index + 1 >= props.files.length ? "gray.8" : "white"}
-              variant="transparent"
-              onClick={onNext}
-            >
-              <IconChevronRight />
-            </ActionIcon>
-          </Group>
-
-          <Group justify="end" wrap="nowrap" w="100%">
-            <ActionIcon component="div" variant="subtle" color="white" onClick={onDownload}>
-              <IconDownload strokeWidth={1.5} />
-            </ActionIcon>
-
-            {!disabled && (
-              <ActionIcon component="div" variant="subtle" color="white" onClick={onRemove}>
-                <IconTrash strokeWidth={1.5} />
-              </ActionIcon>
-            )}
-
-            <ActionIcon component="div" variant="subtle" color="white" onClick={close}>
-              <IconX strokeWidth={1.5} size={30} />
-            </ActionIcon>
-          </Group>
-        </SimpleGrid>
-      </Group>
-
-      <Stack
-        h={bodyHeight}
-        w="100%"
-        bg={props.background || "dark.4"}
-        style={{ overflow: "hidden" }}
-        align="center"
-        justify="center"
-        p={16}
+      <Modal
+        opened={opened}
+        onClose={close}
+        withCloseButton={false}
+        fullScreen={true}
+        styles={{
+          body: {
+            padding: 0,
+            overflow: "hidden",
+          },
+        }}
+        zIndex={zIndexes.commonModals + 200}
       >
-        {(function () {
-          if (renderFile.type === FileType.Photo)
-            return (
-              <Image
-                src={renderFileUrl(activeFile.url)}
-                w="100%"
-                h="100%"
-                maw="100%"
-                mah="100%"
-                fit="contain"
-                className="shadowItem"
-                styles={{
-                  root: {
-                    maxHeight: "100%",
-                    maxWidth: "100%",
-                  },
-                }}
-              />
-            );
+        {props && activeFile && (
+          <Fragment>
+            <Group h={head} justify="space-between" px={16} bg="dark.7" wrap="nowrap" w="100%">
+              <SimpleGrid cols={3} w="100%">
+                {fileInfo.loading ? (
+                  <Loader size={28} type="dots" color="white" />
+                ) : (
+                  <Group wrap="nowrap" gap={10}>
+                    <Text
+                      c="white"
+                      truncate="end"
+                      maw={layout.view === "mobile" ? "30dvw" : "40dvw"}
+                    >
+                      {fileInfo.data?.getFileInfo?.fileName ?? renderFile.name}
+                    </Text>
 
-          return (
-            <Stack justify="center" align="center">
-              <Text fz={em(15)} c="white">
-                {t`Cannot display file`}
-              </Text>
+                    {fileSize.size && (
+                      <Text fz={12} c="gray">
+                        {formatBytes(fileInfo.data?.getFileInfo?.size ?? fileSize.size)}
+                      </Text>
+                    )}
+                  </Group>
+                )}
 
-              <Anchor href={renderFileUrl(activeFile.url)} target="__blank" c="white" ta="center">
-                <Button rightSection={<IconBrowser strokeWidth={1.5} />}>
-                  {t`Open with browser`}
-                </Button>
-              </Anchor>
+                <Group justify="center" wrap="nowrap" w="100%">
+                  <ActionIcon
+                    component="div"
+                    color={index === 0 ? "gray.8" : "white"}
+                    variant="transparent"
+                    onClick={onPrev}
+                  >
+                    <IconChevronLeft />
+                  </ActionIcon>
+                  <Text c="white">
+                    <NumberFormat value={index + 1} />/{<NumberFormat value={props.files.length} />}
+                  </Text>
+
+                  <ActionIcon
+                    component="div"
+                    color={index + 1 >= props.files.length ? "gray.8" : "white"}
+                    variant="transparent"
+                    onClick={onNext}
+                  >
+                    <IconChevronRight />
+                  </ActionIcon>
+                </Group>
+
+                <Group justify="end" wrap="nowrap" w="100%">
+                  <ActionIcon component="div" variant="subtle" color="white" onClick={onDownload}>
+                    <IconDownload strokeWidth={1.5} />
+                  </ActionIcon>
+
+                  {!disabled && (
+                    <ActionIcon component="div" variant="subtle" color="white" onClick={onRemove}>
+                      <IconTrash strokeWidth={1.5} />
+                    </ActionIcon>
+                  )}
+
+                  <ActionIcon component="div" variant="subtle" color="white" onClick={close}>
+                    <IconX strokeWidth={1.5} size={30} />
+                  </ActionIcon>
+                </Group>
+              </SimpleGrid>
+            </Group>
+
+            <Stack
+              h={bodyHeight}
+              w="100%"
+              bg={props.background || "dark.4"}
+              style={{ overflow: "hidden" }}
+              align="center"
+              justify="center"
+              p={16}
+            >
+              {(function () {
+                if (renderFile.type === FileType.Photo)
+                  return (
+                    <Image
+                      src={renderFileUrl(activeFile.url)}
+                      w="100%"
+                      h="100%"
+                      maw="100%"
+                      mah="100%"
+                      fit="contain"
+                      className="shadowItem"
+                      styles={{
+                        root: {
+                          maxHeight: "100%",
+                          maxWidth: "100%",
+                        },
+                      }}
+                    />
+                  );
+
+                return (
+                  <Stack justify="center" align="center">
+                    <Text fz={em(15)} c="white">
+                      <Trans>Cannot display file</Trans>
+                    </Text>
+
+                    <Anchor
+                      href={renderFileUrl(activeFile.url)}
+                      target="__blank"
+                      c="white"
+                      ta="center"
+                    >
+                      <Button rightSection={<IconBrowser strokeWidth={1.5} />}>
+                        <Trans>Open with browser</Trans>
+                      </Button>
+                    </Anchor>
+                  </Stack>
+                );
+              })()}
             </Stack>
-          );
-        })()}
-      </Stack>
-    </Modal>
+          </Fragment>
+        )}
+      </Modal>
+    </Fragment>
   );
 };

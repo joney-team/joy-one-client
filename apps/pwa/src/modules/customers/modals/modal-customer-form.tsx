@@ -21,7 +21,7 @@ import { Anchor, Grid, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconMessageUser } from "@tabler/icons-react";
 import { FC } from "react";
-import { InputModalType, OnModalInput } from "../../../modals/modal-input";
+import { InputModalType, ModalInput } from "../../../modals/modal-input";
 
 interface CustomerFormModalProps {
   _id: string;
@@ -77,25 +77,7 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
     }
   };
 
-  const onCancel = async () => {
-    OnModalInput({
-      type: InputModalType.TEXTAREA,
-      title: t`Cancel reason`,
-      color: "red",
-      required: true,
-      onDone: async (value) => {
-        try {
-          await updateCustomerForm(props._id, {
-            ...customerForm.data!,
-            status: CustomerFormStatus.CANCELLED,
-            cancelReason: value,
-          });
-        } catch (error) {
-          onError(error);
-        }
-      },
-    });
-  };
+  const onCancel = async () => {};
 
   return (
     <Stack>
@@ -114,9 +96,35 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
         if (customerForm.data.status === CustomerFormStatus.PENDING) {
           return (
             <Group justify="center" mt={12}>
-              <Button variant="outline" color="gray" onClick={onCancel}>
-                <Trans>Cancel</Trans>
-              </Button>
+              <ModalInput>
+                {(openInput) => (
+                  <Button
+                    variant="outline"
+                    color="gray"
+                    onClick={() => {
+                      openInput({
+                        type: InputModalType.TEXTAREA,
+                        title: t`Cancel reason`,
+                        color: "red",
+                        required: true,
+                        onDone: async (value) => {
+                          try {
+                            await updateCustomerForm(props._id, {
+                              ...customerForm.data!,
+                              status: CustomerFormStatus.CANCELLED,
+                              cancelReason: value,
+                            });
+                          } catch (error) {
+                            onError(error);
+                          }
+                        },
+                      });
+                    }}
+                  >
+                    <Trans>Cancel</Trans>
+                  </Button>
+                )}
+              </ModalInput>
 
               <Button action rightIcon={IconCheck} onClick={onComplete}>
                 <Trans>Complete</Trans>

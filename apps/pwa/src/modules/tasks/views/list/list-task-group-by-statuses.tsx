@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
@@ -19,8 +19,8 @@ import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/ico
 import { FC, useEffect, useMemo, useState } from "react";
 import { ListTaskRowHead } from "./list-task-row-head";
 
-import styles from "./list-tasks.module.css";
 import dynamic from "next/dynamic";
+import styles from "./list-tasks.module.css";
 
 const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.ListTaskRow), {
   ssr: false,
@@ -104,21 +104,25 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
         )}
 
         {!isClosedTasks && (
-          <Button
-            variant="subtle"
-            size="compact-xs"
-            color="gray"
-            leftIcon={IconPlus}
-            fw={400}
-            onClick={() =>
-              OnModalCreateTask({
-                status: props.status,
-                folderId: folderId,
-              })
-            }
-          >
-            <Trans>Create task</Trans>
-          </Button>
+          <ModalCreateTask>
+            {(open) => (
+              <Button
+                variant="subtle"
+                size="compact-xs"
+                color="gray"
+                leftIcon={IconPlus}
+                fw={400}
+                onClick={() =>
+                  open({
+                    status: props.status,
+                    folderId: folderId,
+                  })
+                }
+              >
+                <Trans>Create task</Trans>
+              </Button>
+            )}
+          </ModalCreateTask>
         )}
       </Group>
 

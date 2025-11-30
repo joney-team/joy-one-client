@@ -1,6 +1,6 @@
 "use client";
 
-import { OnModalCheckInLocationForm } from "@/modals/modal-check-in-location-form";
+import { ModalCheckInLocationForm } from "@/modals/modal-check-in-location-form";
 import { CheckInLocation } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { calculateDistance, getGeolocation } from "@/modules/locations/locations-service";
 import { Coordinates } from "@/types";
@@ -148,23 +148,27 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
         })}
 
         {props.onChange && (
-          <Group>
-            <Button
-              size="compact-xs"
-              variant="outline"
-              onClick={() =>
-                OnModalCheckInLocationForm({
-                  onDone: (checkInLocation) => {
-                    props.onChange?.([...locations, checkInLocation]);
-                  },
-                })
-              }
-              leftSection={<IconPlus size={16} style={{ marginRight: -8 }} />}
-              fz={em(13)}
-            >
-              <Trans>Add location</Trans>
-            </Button>
-          </Group>
+          <ModalCheckInLocationForm>
+            {(open) => (
+              <Group>
+                <Button
+                  size="compact-xs"
+                  variant="outline"
+                  onClick={() =>
+                    open({
+                      onDone: (checkInLocation) => {
+                        props.onChange?.([...locations, checkInLocation]);
+                      },
+                    })
+                  }
+                  leftSection={<IconPlus size={16} style={{ marginRight: -8 }} />}
+                  fz={em(13)}
+                >
+                  <Trans>Add location</Trans>
+                </Button>
+              </Group>
+            )}
+          </ModalCheckInLocationForm>
         )}
       </Stack>
     </InputWrapper>

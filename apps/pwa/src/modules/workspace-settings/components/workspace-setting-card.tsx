@@ -1,7 +1,9 @@
 "use client";
 
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
+import {
+  useAvailableWorkspaceModules,
+  WorkspaceModuleId,
+} from "@/modules/workspaces/workspace-modules";
 import { ActionIcon, Card, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconArrowRight } from "@tabler/icons-react";
@@ -16,8 +18,8 @@ export interface WorkspaceSettingCardProps {
 
 export const WorkspaceSettingCard: FC<WorkspaceSettingCardProps> = (props) => {
   const hover = useHover();
-  const workspace = useWorkspace();
-  const workspaceModule = workspace.getAvailableModule(props.moduleId);
+  const { getAvailableModule } = useAvailableWorkspaceModules();
+  const workspaceModule = getAvailableModule(props.moduleId);
 
   if (!workspaceModule) {
     throw new Error(`Workspace module ${props.moduleId} not found`);

@@ -141,8 +141,6 @@ export const HrmMemberTimekeepings: FC = () => {
               radius={150}
               color="dark.2"
               onClick={() => {
-                console.log("query", query);
-                console.log("query", +query.toTime + 10000);
                 timekeepings.setParams({ date: +query.toTime + 10000 });
               }}
             >

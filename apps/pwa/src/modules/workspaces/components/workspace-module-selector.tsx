@@ -3,8 +3,10 @@
 import { Button } from "@/components/buttons/button";
 import { SelectOption, Selector, SelectorContext } from "@/components/selector";
 import { searchArray } from "@/modules/search/search-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceModule } from "@/modules/workspaces/workspace-modules";
+import {
+  useAvailableWorkspaceModules,
+  WorkspaceModule,
+} from "@/modules/workspaces/workspace-modules";
 import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
@@ -20,8 +22,8 @@ interface WorkspaceModuleSelectorProps {
 }
 
 export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props) => {
-  const workspace = useWorkspace();
-  const options: WorkspaceModuleOption[] = workspace.availableModules
+  const { availableModules } = useAvailableWorkspaceModules();
+  const options: WorkspaceModuleOption[] = availableModules
     .map((v) => ({ ...v, plainName: v.name }))
     .filter(
       (v) =>

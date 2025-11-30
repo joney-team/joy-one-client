@@ -22,7 +22,7 @@ import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import {
   createTask,
   getTaskProgress,
@@ -87,7 +87,6 @@ import { FilesBox } from "../../files/files-box";
 import { useTaskFolders } from "../hooks/use-task-folders";
 import { taskPriorities } from "../task-constants";
 import { TasksDndProvider } from "../tasks-dnd-provider";
-import { ListTaskRow } from "../views/list/list-task-row";
 import { ListTaskRowHead } from "../views/list/list-task-row-head";
 
 export interface TaskFormProps {
@@ -611,21 +610,25 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                 <Progress value={progress.percent} w={70} color={progress.status.color || "dark"} />
               </Group>
 
-              <Button
-                size="compact-xs"
-                color="gray.5"
-                variant="outline"
-                radius={100}
-                leftIcon={IconPlus}
-                onClick={() =>
-                  OnModalCreateTask({
-                    parentId: props.task!._id,
-                    onCreated: () => subTaskList.fetch(true, { isSilient: true }),
-                  })
-                }
-              >
-                {t`Subtasks`}
-              </Button>
+              <ModalCreateTask>
+                {(open) => (
+                  <Button
+                    size="compact-xs"
+                    color="gray.5"
+                    variant="outline"
+                    radius={100}
+                    leftIcon={IconPlus}
+                    onClick={() =>
+                      open({
+                        parentId: props.task!._id,
+                        onCreated: () => subTaskList.fetch(true, { isSilient: true }),
+                      })
+                    }
+                  >
+                    {t`Subtasks`}
+                  </Button>
+                )}
+              </ModalCreateTask>
             </Group>
 
             {subTasks.length > 0 && (

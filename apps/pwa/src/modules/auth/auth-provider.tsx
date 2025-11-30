@@ -2,10 +2,9 @@
 
 import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
 import { useApp } from "@/app.context";
-import { Fullscreen } from "@/components/fullscreen";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
-import { useRouter, useRouteRule } from "@/hooks/use-router";
+import { useRouter } from "@/hooks/use-router";
 import {
   initializeDevice,
   setDeviceLocale,
@@ -13,17 +12,13 @@ import {
 } from "@/modules/devices/devices-service";
 import { type DeviceEntity } from "@/modules/devices/devices-types";
 import {
-  addEventsListener,
   onReconnected,
-  removeEventsListner,
   useEventsListener,
   useUserEventsListner,
 } from "@/modules/events/event-service";
-import { EventEntity, EventType } from "@/modules/events/event-types";
+import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
 import { getClientLocale } from "@/modules/lang/lang-service";
-import { showInAppNotification } from "@/modules/notifications/notification-service";
-import { NotificationEntity } from "@/modules/notifications/notification-types";
 import { getTimeZones } from "@/modules/times/times-service";
 import { setUserLocale } from "@/modules/users/users-service";
 import { UpdateUserProfileDto } from "@/modules/users/users-types";
@@ -31,12 +26,10 @@ import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
-import { zIndexes } from "@joy-one-client/config/layout";
 import { useLingui } from "@lingui/react/macro";
-import { useMantineTheme } from "@mantine/core";
 import * as Sentry from "@sentry/react";
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getToken, onMessage } from "firebase/messaging";
+import { getToken } from "firebase/messaging";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { getGlobal } from "../../global";
@@ -64,19 +57,10 @@ import type {
   AuthSignUpWithEmailPasswordDto,
   UserAuthResult,
 } from "./auth-types";
-import dynamic from "next/dynamic";
-import { nonLoading } from "@/utils/non-loading";
-
-const AuthRequire = dynamic(() => import("./auth-require").then((mod) => mod.AuthRequire), {
-  ssr: false,
-  loading: nonLoading,
-});
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const client = useApolloClient();
   const router = useRouter();
-  const routeRule = useRouteRule();
-  const theme = useMantineTheme();
   const lang = useLang();
   const app = useApp();
   const { t } = useLingui();
@@ -97,7 +81,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     }
   };
 
-  const handleInitializeMeta = async () => {
+  const initializeMetaPages = async () => {
     await new Promise((resolve, reject) => {
       const action = async (retry: number) => {
         try {
@@ -130,7 +114,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   const initialize = async (type: "reconnect" | "init" | "auth") => {
     let authResult: UserAuthResult | undefined = undefined;
-    handleInitializeMeta();
+    initializeMetaPages();
     setSessionId(uuid());
 
     if (type === "auth") {
@@ -292,19 +276,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     }
   };
 
-  const listenNotification = async () => {
-    const firebaseMessaging = getFirebaseMessaging();
-
-    onMessage(firebaseMessaging, (payload) => {
-      try {
-        const notification = JSON.parse(payload.data?.raw!) as NotificationEntity;
-        showInAppNotification(notification, router, theme);
-      } catch (error) {
-        console.log("Error when handling notification >", error);
-      }
-    });
-  };
-
   const detectTimeZone = async () => {
     try {
       if (!user) return;
@@ -373,22 +344,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   );
 
   useEffect(() => {
-    if (!!device?.notificationToken && "Notification" in window) {
-      listenNotification();
-    } else {
-      const onNewNotification = (ev: EventEntity) => {
-        showInAppNotification(ev.data, router, theme);
-      };
-
-      addEventsListener(EventType.NOTIFICATION_NEW, onNewNotification);
-
-      return () => {
-        removeEventsListner(EventType.NOTIFICATION_NEW, onNewNotification);
-      };
-    }
-  }, [device?.notificationToken, device?.locale, lang.locale]);
-
-  useEffect(() => {
     if (user?._id) app.joinSocket();
   }, [user?._id]);
 
@@ -431,17 +386,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     uploadAvatar,
   };
 
-  return (
-    <Context.Provider value={ctx}>
-      {isInitialized && !user && routeRule.auth !== "public" && (
-        <Fullscreen zIndex={zIndexes.requireAuth}>
-          <AuthRequire />
-        </Fullscreen>
-      )}
-
-      {props.children}
-    </Context.Provider>
-  );
+  return <Context.Provider value={ctx}>{props.children}</Context.Provider>;
 };
 
 export default AuthProvider;

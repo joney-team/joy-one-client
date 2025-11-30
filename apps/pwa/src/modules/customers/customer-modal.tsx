@@ -1,23 +1,45 @@
 "use client";
 
 import { ModalTitle } from "@/components/modal-title";
-import { modals } from "@mantine/modals";
 import { IconUser, IconUserPlus } from "@tabler/icons-react";
 
-import { getView } from "@/layout/layout-service";
+import { useLayout } from "@/layout/layout-context";
 import { CustomerForm, CustomerFormProps } from "@/modules/customers/components/form-customer";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
+import { Modal } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { FC, Fragment, ReactNode, useState } from "react";
 
-export const OnCustomerModal = (props?: CustomerFormProps) =>
-  modals.open({
-    modalId: "CustomerForm",
-    title: (
-      <ModalTitle
-        title={props?.customer ? `${t`Update customer`}` : `${t`Create customer`}`}
-        icon={props?.customer ? IconUser : IconUserPlus}
-      />
-    ),
-    children: <CustomerForm {...props} onClose={() => modals.close("CustomerForm")} />,
-    fullScreen: getView() === "mobile",
-    size: "lg",
-  });
+export const ModalCustomer: FC<{
+  children: (open: (props?: CustomerFormProps) => void) => ReactNode;
+}> = ({ children }) => {
+  const layout = useLayout();
+  const [opened, { open, close }] = useDisclosure(false);
+  const [props, setProps] = useState<CustomerFormProps>();
+
+  return (
+    <Fragment>
+      {children((p) => {
+        setProps(p);
+        open();
+      })}
+
+      <Modal
+        opened={opened}
+        onClose={close}
+        title={
+          <ModalTitle
+            title={
+              props?.customer ? <Trans>Update customer</Trans> : <Trans>Create customer</Trans>
+            }
+            icon={props?.customer ? IconUser : IconUserPlus}
+          />
+        }
+        size="lg"
+        fullScreen={layout.view === "mobile"}
+      >
+        <CustomerForm {...props} onClose={() => close()} />
+      </Modal>
+    </Fragment>
+  );
+};

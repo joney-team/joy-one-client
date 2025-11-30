@@ -6,8 +6,9 @@ import { NumberFormat } from "@/components/format/number-format";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
+import { FileType } from "@/graphql/enums.graphql";
 import { OnModalPrompt } from "@/modals/modal-prompt";
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import {
   approveLoan,
@@ -48,7 +49,6 @@ import {
 import { FC } from "react";
 import { loanAssetTypes } from "../loans-constants";
 import { LoanRowInfo } from "./loan-row-info";
-import { FileType } from "@/graphql/enums.graphql";
 
 interface LoanDocumentsProps {
   loan: LoanEntity;
@@ -217,45 +217,49 @@ export const SignareCard: FC<{ url: string }> = (props) => {
   const hover = useHover();
 
   return (
-    <Card
-      withBorder
-      shadow="none"
-      w={200}
-      p={5}
-      style={{ position: "relative", overflow: "visible", cursor: "pointer" }}
-    >
-      <Stack w="100%" gap={5}>
-        <Stack ref={hover.ref} style={{ position: "relative" }}>
-          <Image src={url} w="100%" h={100} mih={100} mah={100} fit="contain" bg="gray.1" />
+    <ModalFileGallery>
+      {(openGallery) => (
+        <Card
+          withBorder
+          shadow="none"
+          w={200}
+          p={5}
+          style={{ position: "relative", overflow: "visible", cursor: "pointer" }}
+        >
+          <Stack w="100%" gap={5}>
+            <Stack ref={hover.ref} style={{ position: "relative" }}>
+              <Image src={url} w="100%" h={100} mih={100} mah={100} fit="contain" bg="gray.1" />
 
-          {hover.hovered && (
-            <Stack
-              justify="center"
-              align="center"
-              style={{
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgba(0, 0, 0, 0.3)",
-                top: 0,
-                left: 0,
-                borderRadius: theme.defaultRadius,
-              }}
-              onClick={() => {
-                OnModalFileGallery({
-                  files: [{ url, fileName: t`Signature`, type: FileType.Photo }],
-                  disabled: true,
-                  background: "white",
-                });
-              }}
-            >
-              <ThemeIcon color="white" variant="transparent" size="sm">
-                <IconArrowsDiagonal />
-              </ThemeIcon>
+              {hover.hovered && (
+                <Stack
+                  justify="center"
+                  align="center"
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "rgba(0, 0, 0, 0.3)",
+                    top: 0,
+                    left: 0,
+                    borderRadius: theme.defaultRadius,
+                  }}
+                  onClick={() => {
+                    openGallery({
+                      files: [{ url, fileName: t`Signature`, type: FileType.Photo }],
+                      disabled: true,
+                      background: "white",
+                    });
+                  }}
+                >
+                  <ThemeIcon color="white" variant="transparent" size="sm">
+                    <IconArrowsDiagonal />
+                  </ThemeIcon>
+                </Stack>
+              )}
             </Stack>
-          )}
-        </Stack>
-      </Stack>
-    </Card>
+          </Stack>
+        </Card>
+      )}
+    </ModalFileGallery>
   );
 };

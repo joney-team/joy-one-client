@@ -5,7 +5,7 @@ import { Errored } from "@/components/errored";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
 import { removeFileFromRelativePath } from "@/modules/files/file-service";
-import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
+import { ModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { getPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -162,16 +162,20 @@ export const PartnerDetail: FC = () => {
           </Stack>
 
           {workspace.hasPermission(WorkspacePermission.PARTNERS_WRITE) && (
-            <Group justify="flex-end">
-              <ActionIcon
-                variant="transparent"
-                color="gray"
-                onClick={() => OnModalParnterForm({ partner })}
-                style={{ marginRight: -5, marginTop: -3 }}
-              >
-                <IconPencil size={22} strokeWidth={1.5} />
-              </ActionIcon>
-            </Group>
+            <ModalParnterForm>
+              {(open) => (
+                <Group justify="flex-end">
+                  <ActionIcon
+                    variant="transparent"
+                    color="gray"
+                    onClick={() => open({ partner })}
+                    style={{ marginRight: -5, marginTop: -3 }}
+                  >
+                    <IconPencil size={22} strokeWidth={1.5} />
+                  </ActionIcon>
+                </Group>
+              )}
+            </ModalParnterForm>
           )}
         </Group>
       </Card>

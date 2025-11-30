@@ -15,23 +15,23 @@ import { ProductSelector } from "@/modules/products/components/product-selector"
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Input, InputWrapper, Modal, NumberInput, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { FC, useRef } from "react";
+import { FC, Fragment, ReactNode, useRef } from "react";
 
-interface ModalProductStockOutProps {
+interface ModalProductStockOutArgs {
   stock?: ProductStockEntity;
 }
 
-export let OnModalProductStockOut: (props?: ModalProductStockOutProps) => any = () => {};
-
-export const ModalProductStockOut: FC = () => {
+export const ModalProductStockOut: FC<{
+  children: (open: (args?: ModalProductStockOutArgs) => void) => ReactNode;
+}> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const color = useColor();
-  const props = useRef<ModalProductStockOutProps | null>(null);
+  const props = useRef<ModalProductStockOutArgs | null>(null);
+  const { t } = useLingui();
 
   const form = useForm<{
     product?: ProductEntity;
@@ -41,15 +41,6 @@ export const ModalProductStockOut: FC = () => {
     initialValues: {},
     validate: {},
   });
-
-  OnModalProductStockOut = (_props) => {
-    props.current = _props || null;
-    form.setInitialValues({
-      product: _props?.stock?.product,
-    });
-    form.reset();
-    open();
-  };
 
   const onClose = () => {
     form.reset();
@@ -73,62 +64,73 @@ export const ModalProductStockOut: FC = () => {
   });
 
   return (
-    <Modal
-      title={
-        <ModalTitle
-          title={t`Stock out`}
-          icon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].icon}
-          color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].color)}
-        />
-      }
-      onClose={onClose}
-      opened={opened}
-    >
-      <Stack gap={10}>
-        <Stack>
-          <ProductSelector
-            type={ProductType.PRODUCT}
-            isStockCheck
-            excludeIds={form.values.product?._id ? [form.values.product?._id] : []}
-            onSelect={(product) => form.setFieldValue("product", product)}
-            target={(ctx) => {
-              return (
-                <InputWrapper flex={1} label={t`Product`}>
-                  <Input
-                    onClick={ctx.toggle}
-                    flex={1}
-                    value={form.values.product?.name || ""}
-                    onChange={() => false}
-                    placeholder={t`Select product`}
-                    disabled={!!props.current?.stock}
-                  />
-                </InputWrapper>
-              );
-            }}
-          />
+    <Fragment>
+      {children((args) => {
+        props.current = args || null;
+        form.setInitialValues({
+          product: args?.stock?.product,
+        });
+        form.reset();
+        open();
+      })}
 
-          <NumberInput
-            label={t`Quantity`}
-            {...form.getInputProps("quantity")}
-            min={0}
-            max={props.current?.stock ? props.current.stock.remainQuantity : undefined}
-          />
-
-          <Textarea label={t`Note`} {...form.getInputProps("note")} />
-        </Stack>
-
-        <Stack align="center" mt={16}>
-          <Button
-            action
-            rightIcon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].icon}
+      <Modal
+        title={
+          <ModalTitle
+            title={<Trans>Stock out</Trans>}
+            icon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].icon}
             color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].color)}
-            loading={form.submitting}
-            onClick={onSubmit}
-          >
-            <Trans>Complete</Trans>
-          </Button>
+          />
+        }
+        onClose={onClose}
+        opened={opened}
+      >
+        <Stack gap={10}>
+          <Stack>
+            <ProductSelector
+              type={ProductType.PRODUCT}
+              isStockCheck
+              excludeIds={form.values.product?._id ? [form.values.product?._id] : []}
+              onSelect={(product) => form.setFieldValue("product", product)}
+              target={(ctx) => {
+                return (
+                  <InputWrapper flex={1} label={<Trans>Product</Trans>}>
+                    <Input
+                      onClick={ctx.toggle}
+                      flex={1}
+                      value={form.values.product?.name || ""}
+                      onChange={() => false}
+                      placeholder={t`Select product`}
+                      disabled={!!props.current?.stock}
+                    />
+                  </InputWrapper>
+                );
+              }}
+            />
+
+            <NumberInput
+              label={<Trans>Quantity</Trans>}
+              {...form.getInputProps("quantity")}
+              min={0}
+              max={props.current?.stock ? props.current.stock.remainQuantity : undefined}
+            />
+
+            <Textarea label={<Trans>Note</Trans>} {...form.getInputProps("note")} />
+          </Stack>
+
+          <Stack align="center" mt={16}>
+            <Button
+              action
+              rightIcon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].icon}
+              color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].color)}
+              loading={form.submitting}
+              onClick={onSubmit}
+            >
+              <Trans>Complete</Trans>
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
-    </Modal>
+      </Modal>
+    </Fragment>
   );
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
 import { api } from "@/modules/apis";
@@ -11,7 +13,7 @@ import { Trans } from "@lingui/react/macro";
 import { Blockquote, Center, Modal, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconBuildingSkyscraper } from "@tabler/icons-react";
-import { FC, useRef, useState } from "react";
+import { FC, Fragment, ReactNode, useRef, useState } from "react";
 
 type ModalUpdateWorkspaceBranchProps = {
   entity?: AppEntity;
@@ -28,23 +30,15 @@ export const permissionRequireds: Partial<{
   [AppEntity.CUSTOMER_FORMS]: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
 };
 
-export let OnModalUpdateWorkspaceBranch: (
-  props: ModalUpdateWorkspaceBranchProps
-) => void = () => {};
-
-export const ModalUpdateWorkspaceBranch: FC = () => {
+export const ModalUpdateWorkspaceBranch: FC<{
+  children: (open: (p: ModalUpdateWorkspaceBranchProps) => void) => ReactNode;
+}> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const props = useRef<ModalUpdateWorkspaceBranchProps | null>(null);
   const [branch, setBranch] = useState<Pick<
     WorkspaceBranchEntity,
     "_id" | "name" | "hotline"
   > | null>(null);
-
-  OnModalUpdateWorkspaceBranch = (p) => {
-    props.current = p;
-    setBranch(p.workspaceBranch || null);
-    open();
-  };
 
   const entity = props.current?.entity;
   const ids = props.current?.ids ?? [];
@@ -84,30 +78,38 @@ export const ModalUpdateWorkspaceBranch: FC = () => {
   };
 
   return (
-    <Modal
-      opened={opened}
-      onClose={close}
-      title={<ModalTitle title={t`Move workspace branch`} icon={IconBuildingSkyscraper} />}
-    >
-      <Stack align="stretch">
-        {entity === AppEntity.LOANS && (
-          <Blockquote variant="light" color="orange" p={16} py={8} fz={14}>
-            <Trans>All receipts of the payment plans will also be moved to the new branch</Trans>
+    <Fragment>
+      {children((p) => {
+        props.current = p;
+        setBranch(p.workspaceBranch || null);
+        open();
+      })}
+
+      <Modal
+        opened={opened}
+        onClose={close}
+        title={<ModalTitle title={t`Move workspace branch`} icon={IconBuildingSkyscraper} />}
+      >
+        <Stack align="stretch">
+          {entity === AppEntity.LOANS && (
+            <Blockquote variant="light" color="orange" p={16} py={8} fz={14}>
+              <Trans>All receipts of the payment plans will also be moved to the new branch</Trans>
+            </Blockquote>
+          )}
+
+          <Blockquote variant="light" color="gray" p={16} py={8} fz={14}>
+            <Trans>Leave blank to use main office</Trans>
           </Blockquote>
-        )}
 
-        <Blockquote variant="light" color="gray" p={16} py={8} fz={14}>
-          <Trans>Leave blank to use main office</Trans>
-        </Blockquote>
+          <WorkspaceBranchInput value={branch} onChange={(v) => setBranch(v)} />
 
-        <WorkspaceBranchInput value={branch} onChange={(v) => setBranch(v)} />
-
-        <Center>
-          <Button action onClick={onSubmit}>
-            <Trans>Confirm</Trans>
-          </Button>
-        </Center>
-      </Stack>
-    </Modal>
+          <Center>
+            <Button action onClick={onSubmit}>
+              <Trans>Confirm</Trans>
+            </Button>
+          </Center>
+        </Stack>
+      </Modal>
+    </Fragment>
   );
 };

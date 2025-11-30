@@ -10,6 +10,7 @@ import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventEntity, EventType } from "@/modules/events/event-types";
 import { FilesBox } from "@/modules/files/files-box";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { getLoan } from "@/modules/loans/loans-service";
 import {
   getStaticQrCode,
@@ -27,11 +28,12 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { getWorkspaceBranchById } from "@/modules/workspace-branches/workspace-branches-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { loadImage } from "@joy-one-client/utils/assets";
+import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { round } from "@/utils/number.utils";
 import { removeAccents } from "@/utils/string.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
+import { loadImage } from "@joy-one-client/utils/assets";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -53,12 +55,10 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck, IconClipboardCheck, IconRefresh } from "@tabler/icons-react";
-import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { FC, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { PrintButton } from "../../../modals/modal-printer";
 import { receiptPaymentMethods } from "../receipt-constants";
 import { OnReceiptDetailModal } from "./modal-receipt-detail";
-import { AppEntity } from "@/types";
-import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 
 export interface ModalPayReceiptProps {
   receipt: Pick<ReceiptEntity, "id">;
@@ -511,41 +511,43 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
   );
 };
 
-export let OnModalPayReceipt: (props: ModalPayReceiptProps) => void = () => {};
-
-export const ModalPayReceipt: FC = () => {
+export const ModalPayReceipt: FC<{
+  children: (open: (props: ModalPayReceiptProps) => void) => ReactNode;
+}> = ({ children }) => {
   const props = useRef<ModalPayReceiptProps | null>(null);
   const layout = useLayout();
   const [opened, { open, close }] = useDisclosure(false);
 
-  OnModalPayReceipt = (p) => {
-    props.current = p || null;
-    open();
-  };
-
   return (
-    <Modal
-      withCloseButton={false}
-      zIndex={zIndexes.commonModals + 1}
-      opened={opened}
-      onClose={close}
-      size={550}
-      yOffset={layout.view === "mobile" ? 10 : undefined}
-    >
-      {props.current && (
-        <ModalPayReceiptContent
-          key={props.current.receipt.id}
-          {...props.current}
-          onClosed={() => {
-            props.current?.onClosed?.();
-            close();
-          }}
-          onPaid={() => {
-            props.current?.onPaid?.();
-            close();
-          }}
-        />
-      )}
-    </Modal>
+    <Fragment>
+      {children((p) => {
+        props.current = p || null;
+        open();
+      })}
+
+      <Modal
+        withCloseButton={false}
+        zIndex={zIndexes.commonModals + 1}
+        opened={opened}
+        onClose={close}
+        size={550}
+        yOffset={layout.view === "mobile" ? 10 : undefined}
+      >
+        {props.current && (
+          <ModalPayReceiptContent
+            key={props.current.receipt.id}
+            {...props.current}
+            onClosed={() => {
+              props.current?.onClosed?.();
+              close();
+            }}
+            onPaid={() => {
+              props.current?.onPaid?.();
+              close();
+            }}
+          />
+        )}
+      </Modal>
+    </Fragment>
   );
 };

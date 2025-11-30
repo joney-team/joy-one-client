@@ -13,16 +13,16 @@ import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 import { nonLoading } from "@/utils/non-loading";
 
-const AppNavigation = dynamic(
-  () => import("./navigation/navigation").then((m) => m.AppNavigation),
+const WorkspaceNavigation = dynamic(
+  () => import("./navigation/workspace-navigation").then((m) => m.WorkspaceNavigation),
   {
     ssr: false,
     loading: nonLoading,
   }
 );
 
-const HeaderWorkspace = dynamic(
-  () => import("./header/header-workspace").then((m) => m.HeaderWorkspace),
+const WorkspaceHeader = dynamic(
+  () => import("./header/workspace-header").then((m) => m.WorkspaceHeader),
   {
     ssr: false,
     loading: nonLoading,
@@ -101,7 +101,7 @@ export const LayoutWorkspace: FC = () => {
                 }
           }
         >
-          {workspace.isAvailable && <HeaderWorkspace />}
+          {workspace.isAvailable && <WorkspaceHeader />}
         </Stack>
       )}
 
@@ -134,7 +134,7 @@ export const LayoutWorkspace: FC = () => {
                 }
           }
         >
-          {workspace.isAvailable ? <AppNavigation /> : <OverlayLoading enabled />}
+          {workspace.isAvailable ? <WorkspaceNavigation /> : <OverlayLoading enabled />}
         </Stack>
       )}
 

@@ -75,7 +75,6 @@ export const AdminPlayground: FC = () => {
                   ),
                   onConfirm: async () => {
                     await wait(2000);
-                    console.log("debug");
                   },
                 })
               }
@@ -96,7 +95,6 @@ export const AdminPlayground: FC = () => {
                   ),
                   onConfirm: async () => {
                     await wait(2000);
-                    console.log("debug");
                   },
                 })
               }
@@ -117,7 +115,6 @@ export const AdminPlayground: FC = () => {
                   ),
                   onConfirm: async () => {
                     await wait(2000);
-                    console.log("debug");
                   },
                   inverse: true,
                 })

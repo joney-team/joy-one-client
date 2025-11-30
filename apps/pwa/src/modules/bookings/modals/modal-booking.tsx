@@ -22,7 +22,7 @@ import { IconArrowDown, IconCalendar, IconCalendarTime, IconCheck } from "@table
 import { FormSession } from "@/components/form-session";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { WorkSlotCreateEventDto, WorkSlotsInput } from "@/components/inputs/work-slots-input";
-import { getView } from "@/layout/layout-service";
+import { useLayout } from "@/layout/layout-context";
 import {
   createBooking,
   getBookings,
@@ -37,12 +37,12 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { onError } from "@/utils/exceptions.utils";
-import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { FC, Fragment, useEffect, useState } from "react";
+import { useDisclosure } from "@mantine/hooks";
+import { FC, Fragment, ReactNode, useEffect, useState } from "react";
 
-interface ModalBookingProps {
+interface ModalBookingArgs {
   onDone?: (booking: BookingEntity) => any | Promise<any>;
   customer?: CustomerShortInfo;
   booking?: BookingEntity;
@@ -50,7 +50,7 @@ interface ModalBookingProps {
   creatingData?: WorkSlotCreateEventDto;
 }
 
-export const ModalBooking: FC<ModalBookingProps> = (props) => {
+export const ModalBookingContent: FC<ModalBookingArgs> = (props) => {
   const workspace = useWorkspace();
   const { t } = useLingui();
   const color = useColor();
@@ -343,27 +343,51 @@ export const ModalBooking: FC<ModalBookingProps> = (props) => {
   );
 };
 
-export const OnModalBooking = (props?: ModalBookingProps) => {
-  return modals.open({
-    modalId: "ModalBooking",
-    title: (
-      <ModalTitle
+export const ModalBooking: FC<{
+  children: (open: (args?: ModalBookingArgs) => void) => ReactNode;
+}> = ({ children }) => {
+  const layout = useLayout();
+  const [opened, { open, close }] = useDisclosure(false);
+  const [args, setArgs] = useState<ModalBookingArgs>();
+
+  return (
+    <Fragment>
+      {children((p) => {
+        setArgs(p);
+        open();
+      })}
+
+      <Modal
+        fullScreen={layout.view === "mobile"}
+        opened={opened}
+        onClose={close}
+        size={args?.booking ? undefined : 1200}
+        yOffset={15}
         title={
-          props?.booking ? (
-            <Trans>Update booking</Trans>
-          ) : props?.reschedule ? (
-            <Trans>Reschedule booking</Trans>
-          ) : (
-            <Trans>Create booking</Trans>
-          )
+          <ModalTitle
+            title={
+              args?.booking ? (
+                <Trans>Update booking</Trans>
+              ) : args?.reschedule ? (
+                <Trans>Reschedule booking</Trans>
+              ) : (
+                <Trans>Create booking</Trans>
+              )
+            }
+            icon={args?.reschedule ? IconCalendarTime : IconCalendar}
+          />
         }
-        icon={props?.reschedule ? IconCalendarTime : IconCalendar}
-      />
-    ),
-    children: <ModalBooking {...props} />,
-    fullScreen: getView() === "mobile",
-    zIndex: zIndexes.commonModals,
-    size: props?.booking ? undefined : 1200,
-    yOffset: 15,
-  });
+      >
+        {opened && (
+          <ModalBookingContent
+            {...args}
+            onDone={(e) => {
+              args?.onDone?.(e);
+              close();
+            }}
+          />
+        )}
+      </Modal>
+    </Fragment>
+  );
 };

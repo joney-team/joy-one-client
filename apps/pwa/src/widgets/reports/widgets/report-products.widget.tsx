@@ -41,6 +41,7 @@ import {
 import Link from "next/link";
 import { FC, useRef, useState } from "react";
 import { ReportWidgetsContext } from "../types";
+import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 
 export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (props) => {
   const filterState = useRef<any>({});
@@ -248,10 +249,10 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
 
 const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
   const [isShow, setIsShow] = useState(false);
+  const { getAvailableModule } = useAvailableWorkspaceModules();
   const { t } = useLingui();
 
-  const workspace = useWorkspace();
-  const moduleOrder = workspace.getAvailableModule("orders");
+  const moduleOrder = getAvailableModule("orders");
   const relatedEntity = t`Receipts`.toLowerCase();
 
   if (!moduleOrder) return null;

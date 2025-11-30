@@ -2,20 +2,23 @@
 
 import { Image } from "@/components/image";
 import { ModalTitle } from "@/components/modal-title";
-import { WithConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
+import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
+import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { connectPluginZalo } from "@/modules/plugins/zalo-oas/zalo-oas-service";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Stack, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconPuzzle } from "@tabler/icons-react";
+import { IconMessage, IconPuzzle } from "@tabler/icons-react";
 import { FC } from "react";
 import { onFacebookLogin } from "../auth/auth-service";
+import { useWorkspace } from "../workspaces/workspace-context";
 import { getPluginMetaPagesInfo } from "./meta-pages/meta-pages-service";
 
 const ModalConnectPlugins: FC = () => {
   const plugins = usePlugins();
+  const workspace = useWorkspace();
 
   const close = () => {
     modals.close("ModalConnectPlugins");
@@ -60,21 +63,33 @@ const ModalConnectPlugins: FC = () => {
         </Group>
       </Card>
 
-      <Card
-        withBorder
-        shadow="none"
-        p={10}
-        style={{ cursor: "pointer" }}
-        onClick={() => {
-          close();
-          plugins.onCreateMessageHub();
-        }}
-      >
-        <Group>
-          <Image w={40} src="/images/plugins-message-hubs.svg" />
-          <Text>Message Hub</Text>
-        </Group>
-      </Card>
+      <ModalInput>
+        {(openInput) => (
+          <Card
+            withBorder
+            shadow="none"
+            p={10}
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              close();
+              openInput({
+                type: InputModalType.TEXT,
+                title: <Trans>Enter name</Trans>,
+                icon: IconMessage,
+                value: workspace.userMember.name,
+                onDone: async (name) => {
+                  await plugins.onCreateMessageHub(name);
+                },
+              });
+            }}
+          >
+            <Group>
+              <Image w={40} src="/images/plugins-message-hubs.svg" />
+              <Text>Message Hub</Text>
+            </Group>
+          </Card>
+        )}
+      </ModalInput>
     </Stack>
   );
 };

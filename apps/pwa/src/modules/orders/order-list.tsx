@@ -8,23 +8,24 @@ import { statusColumn } from "@/components/list/columns/status-column";
 import { customerColumn } from "@/modules/customers/components/customer-column";
 import { EventType } from "@/modules/events/event-types";
 import { OrderCard } from "@/modules/orders/order-card";
-import { onPayOrder } from "@/modules/orders/orders-service";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
 import { userColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { ActionIcon, Stack, Tooltip } from "@mantine/core";
 import { IconCalendarDown, IconCashRegister, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
+import { ModalPayReceipt } from "../receipts/modals/modal-pay-receipt";
+import { useAvailableWorkspaceModules } from "../workspaces/workspace-modules";
 import { OrderEntity } from "./order-entity";
 import { OrderItemsColumn } from "./order-items-columns";
 import { orderPaymentStatuses } from "./orders-constants";
+import { payOrder } from "./orders-service";
 
 export const OrderList: FC = () => {
-  const workspace = useWorkspace();
-  const workspaceModule = workspace.getAvailableModule("orders");
+  const { getAvailableModule } = useAvailableWorkspaceModules();
+  const workspaceModule = getAvailableModule("orders");
 
   if (!workspaceModule) return null;
 
@@ -64,11 +65,24 @@ export const OrderList: FC = () => {
             rightSection: (order) => {
               if (order.paymentStatus === OrderPaymentStatus.PROCESSING) {
                 return (
-                  <Tooltip label={t`Pay`}>
-                    <ActionIcon onClick={() => onPayOrder(order)}>
-                      <IconCashRegister size={16} />
-                    </ActionIcon>
-                  </Tooltip>
+                  <ModalPayReceipt>
+                    {(onPayReceipt) => {
+                      const onPayOrder = async () => {
+                        const receipt = await payOrder(order.id, {
+                          amount: order.totalAmount - order.paidAmount,
+                        });
+                        onPayReceipt({ receipt });
+                      };
+
+                      return (
+                        <Tooltip label={t`Pay`}>
+                          <ActionIcon onClick={onPayOrder}>
+                            <IconCashRegister size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      );
+                    }}
+                  </ModalPayReceipt>
                 );
               }
             },

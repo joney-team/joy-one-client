@@ -17,6 +17,7 @@ import {
   InputWrapper,
   Modal,
   NumberInput,
+  Portal,
   Select,
   Slider,
   Stack,
@@ -28,7 +29,7 @@ import { TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { Icon, IconCalendar, IconCheck, IconClock, IconCursorText } from "@tabler/icons-react";
-import { FC, ReactNode, useRef, useState } from "react";
+import { FC, Fragment, ReactNode, useRef, useState } from "react";
 
 export enum InputModalType {
   TEXT = "Text",
@@ -38,8 +39,6 @@ export enum InputModalType {
   SELECT = "Select",
   DATE_TIME = "DateTime",
 }
-
-export let OnModalInput: (props: InputModalProps) => any = () => {};
 
 export interface InputModalProps {
   type: InputModalType;
@@ -60,7 +59,9 @@ export interface InputModalProps {
   required?: boolean;
 }
 
-export const ModalInput: FC = () => {
+export const ModalInput: FC<{
+  children: (open: (props: InputModalProps) => void) => ReactNode;
+}> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<InputModalProps>();
   const workspace = useWorkspace();
@@ -87,21 +88,6 @@ export const ModalInput: FC = () => {
     },
   });
 
-  OnModalInput = (p) => {
-    const initialValue =
-      p.type === InputModalType.MONEY
-        ? Currency.normalize(p.value, workspace.settings.currencyCode)
-        : p.value;
-
-    form.setInitialValues({ value: initialValue });
-    form.reset();
-    setProps(p);
-    open();
-    setTimeout(() => {
-      focusInputRef.current?.focus();
-    }, 100);
-  };
-
   const onSubmit = form.onSubmit(async (values) => {
     try {
       await props?.onDone?.(values.value);
@@ -122,166 +108,185 @@ export const ModalInput: FC = () => {
   };
 
   return (
-    <Modal
-      title={
-        <ModalTitle
-          color={props?.color}
-          title={props?.title || t`Enter data`}
-          icon={props?.icon || IconCursorText}
-        />
-      }
-      onClose={close}
-      opened={opened}
-      yOffset={16}
-      zIndex={zIndexes.commonModals + 10}
-    >
-      <form onSubmit={onSubmit}>
-        <Stack gap={16}>
-          {(function () {
-            if (props?.type === InputModalType.DATE_TIME) {
-              return (
-                <Group wrap="nowrap" w="100%">
-                  <DateInput
-                    leftSection={<IconCalendar size={18} strokeWidth={1.5} />}
-                    flex={1}
-                    value={form.values.value}
-                    onChange={(d) => {
-                      if (!d) return;
-                      form.setFieldValue("value", d);
-                    }}
-                  />
+    <Fragment>
+      {children((p) => {
+        const initialValue =
+          p.type === InputModalType.MONEY
+            ? Currency.normalize(p.value, workspace.settings.currencyCode)
+            : p.value;
 
-                  <TimeInput
-                    leftSection={<IconClock size={18} strokeWidth={1.5} />}
-                    w={100}
-                    defaultValue={
-                      form.values.value
-                        ? DateTime.format(form.values.value * 1000, {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                        : undefined
-                    }
-                    onChange={(d) => {
-                      if (!d || !d.target.value) return;
-                      const [hours, mins] = d.target.value.split(":");
-                      if (Number.isNaN(+hours) || Number.isNaN(+mins)) return;
-                      const date = DateTime.normalizeDate(form.values.value).setHours(
-                        +hours,
-                        +mins,
-                        0,
-                        0
-                      );
-                      form.setFieldValue("value", DateTime.toSeconds(date));
-                    }}
-                  />
-                </Group>
-              );
-            }
+        form.setInitialValues({ value: initialValue });
+        form.reset();
+        setProps(p);
+        open();
+        setTimeout(() => {
+          focusInputRef.current?.focus();
+        }, 100);
+      })}
 
-            if (props?.type === InputModalType.MONEY) {
-              return (
-                <InputWrapper label={props?.label}>
-                  <Stack>
-                    {args.min && args.max && (
-                      <Stack gap={0}>
-                        <Group w="100%" px={0}>
-                          <Slider
-                            w="100%"
-                            label={null}
-                            min={args.min}
-                            max={args.max}
-                            {...form.getInputProps("value")}
-                            step={currency?.stepPrice}
-                          />
-                        </Group>
+      <Portal>
+        <Modal
+          title={
+            <ModalTitle
+              color={props?.color}
+              title={props?.title || t`Enter data`}
+              icon={props?.icon || IconCursorText}
+            />
+          }
+          onClose={close}
+          opened={opened}
+          yOffset={16}
+          zIndex={zIndexes.commonModals + 10}
+        >
+          <form onSubmit={onSubmit}>
+            <Stack gap={16}>
+              {(function () {
+                if (props?.type === InputModalType.DATE_TIME) {
+                  return (
+                    <Group wrap="nowrap" w="100%">
+                      <DateInput
+                        leftSection={<IconCalendar size={18} strokeWidth={1.5} />}
+                        flex={1}
+                        value={form.values.value}
+                        onChange={(d) => {
+                          if (!d) return;
+                          form.setFieldValue("value", d);
+                        }}
+                      />
 
-                        <Group justify="space-between">
-                          <Text fz={12} c="gray" ta="left">
-                            <CurrencyFormat value={args.min} />
-                          </Text>
-                          <Text fz={12} c="gray" ta="right">
-                            <CurrencyFormat value={args.max} />
-                          </Text>
-                        </Group>
+                      <TimeInput
+                        leftSection={<IconClock size={18} strokeWidth={1.5} />}
+                        w={100}
+                        defaultValue={
+                          form.values.value
+                            ? DateTime.format(form.values.value * 1000, {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : undefined
+                        }
+                        onChange={(d) => {
+                          if (!d || !d.target.value) return;
+                          const [hours, mins] = d.target.value.split(":");
+                          if (Number.isNaN(+hours) || Number.isNaN(+mins)) return;
+                          const date = DateTime.normalizeDate(form.values.value).setHours(
+                            +hours,
+                            +mins,
+                            0,
+                            0
+                          );
+                          form.setFieldValue("value", DateTime.toSeconds(date));
+                        }}
+                      />
+                    </Group>
+                  );
+                }
+
+                if (props?.type === InputModalType.MONEY) {
+                  return (
+                    <InputWrapper label={props?.label}>
+                      <Stack>
+                        {args.min && args.max && (
+                          <Stack gap={0}>
+                            <Group w="100%" px={0}>
+                              <Slider
+                                w="100%"
+                                label={null}
+                                min={args.min}
+                                max={args.max}
+                                {...form.getInputProps("value")}
+                                step={currency?.stepPrice}
+                              />
+                            </Group>
+
+                            <Group justify="space-between">
+                              <Text fz={12} c="gray" ta="left">
+                                <CurrencyFormat value={args.min} />
+                              </Text>
+                              <Text fz={12} c="gray" ta="right">
+                                <CurrencyFormat value={args.max} />
+                              </Text>
+                            </Group>
+                          </Stack>
+                        )}
+
+                        <NumberInput
+                          {...form.getInputProps("value")}
+                          min={args.min}
+                          max={args.max}
+                          ref={focusInputRef as any}
+                          step={currency?.stepPrice}
+                          hideControls
+                        />
                       </Stack>
-                    )}
+                    </InputWrapper>
+                  );
+                }
 
-                    <NumberInput
+                if (props?.type === InputModalType.SELECT) {
+                  return (
+                    <Select
+                      label={props?.label}
+                      placeholder={placeholder}
+                      data={props.options?.map((o) => ({ label: o.label, value: o.value })) || []}
                       {...form.getInputProps("value")}
-                      min={args.min}
-                      max={args.max}
-                      ref={focusInputRef as any}
-                      step={currency?.stepPrice}
-                      hideControls
                     />
-                  </Stack>
-                </InputWrapper>
-              );
-            }
+                  );
+                }
 
-            if (props?.type === InputModalType.SELECT) {
-              return (
-                <Select
-                  label={props?.label}
-                  placeholder={placeholder}
-                  data={props.options?.map((o) => ({ label: o.label, value: o.value })) || []}
-                  {...form.getInputProps("value")}
-                />
-              );
-            }
+                if (props?.type === InputModalType.TEXT) {
+                  return (
+                    <TextInput
+                      label={props?.label}
+                      placeholder={placeholder}
+                      {...form.getInputProps("value")}
+                      ref={focusInputRef as any}
+                    />
+                  );
+                }
 
-            if (props?.type === InputModalType.TEXT) {
-              return (
-                <TextInput
-                  label={props?.label}
-                  placeholder={placeholder}
-                  {...form.getInputProps("value")}
-                  ref={focusInputRef as any}
-                />
-              );
-            }
+                if (props?.type === InputModalType.NUMBER) {
+                  return (
+                    <NumberInput
+                      label={props?.label}
+                      placeholder={placeholder}
+                      {...form.getInputProps("value")}
+                      hideControls
+                      ref={focusInputRef as any}
+                    />
+                  );
+                }
 
-            if (props?.type === InputModalType.NUMBER) {
-              return (
-                <NumberInput
-                  label={props?.label}
-                  placeholder={placeholder}
-                  {...form.getInputProps("value")}
-                  hideControls
-                  ref={focusInputRef as any}
-                />
-              );
-            }
+                return (
+                  <Textarea
+                    ref={focusInputRef as any}
+                    label={props?.label}
+                    placeholder={placeholder}
+                    {...form.getInputProps("value")}
+                    styles={{
+                      input: {
+                        minHeight: 150,
+                      },
+                    }}
+                  />
+                );
+              })()}
 
-            return (
-              <Textarea
-                ref={focusInputRef as any}
-                label={props?.label}
-                placeholder={placeholder}
-                {...form.getInputProps("value")}
-                styles={{
-                  input: {
-                    minHeight: 150,
-                  },
-                }}
-              />
-            );
-          })()}
+              <Stack align="center">
+                <Button type="submit" leftIcon={IconCheck} action color={color(props?.color)}>
+                  {props?.doneLabel || t`Complete`}
+                </Button>
 
-          <Stack align="center">
-            <Button type="submit" leftIcon={IconCheck} action color={color(props?.color)}>
-              {props?.doneLabel || t`Complete`}
-            </Button>
-
-            {!!props?.onClear && !!form.values.value && (
-              <Anchor onClick={onClear} c="gray" fz={12}>
-                {t`Clear`}
-              </Anchor>
-            )}
-          </Stack>
-        </Stack>
-      </form>
-    </Modal>
+                {!!props?.onClear && !!form.values.value && (
+                  <Anchor onClick={onClear} c="gray" fz={12}>
+                    {t`Clear`}
+                  </Anchor>
+                )}
+              </Stack>
+            </Stack>
+          </form>
+        </Modal>
+      </Portal>
+    </Fragment>
   );
 };

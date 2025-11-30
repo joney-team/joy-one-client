@@ -13,14 +13,13 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
 import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";
-import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { useLoans } from "@/modules/loans/loans-context";
 import { archiveLoan, getLoanByCode, updateLoanAssetData } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
-import { OnModalSignLoan } from "@/modules/loans/modals/modal-sign-loan";
+import { ModalSignLoan } from "@/modules/loans/modals/modal-sign-loan";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -61,6 +60,7 @@ import { NextPage } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import { ModalCustomer } from "../customers/customer-modal";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
@@ -241,19 +241,23 @@ export const LoanDetail: NextPage = () => {
                 )}
 
                 {workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO) && (
-                  <Anchor
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      OnCustomerModal({
-                        customer: customer.data,
-                        onDone: async () => {},
-                      });
-                    }}
-                  >
-                    <ActionIcon size="lg" radius={100} variant="outline" color="gray.6">
-                      <IconEdit size={18} strokeWidth={1.5} />
-                    </ActionIcon>
-                  </Anchor>
+                  <ModalCustomer>
+                    {(open) => (
+                      <Anchor
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          open({
+                            customer: customer.data,
+                            onDone: async () => {},
+                          });
+                        }}
+                      >
+                        <ActionIcon size="lg" radius={100} variant="outline" color="gray.6">
+                          <IconEdit size={18} strokeWidth={1.5} />
+                        </ActionIcon>
+                      </Anchor>
+                    )}
+                  </ModalCustomer>
                 )}
               </Group>
             </Group>
@@ -400,9 +404,13 @@ export const LoanDetail: NextPage = () => {
                   </Text>
                   <Renderer visible={workspace.hasPermission(WorkspacePermission.LOANS_CREATOR)}>
                     <Center>
-                      <Button color="orange" onClick={() => OnModalSignLoan({ loan: loan.data! })}>
-                        <Trans>Sign contract</Trans>
-                      </Button>
+                      <ModalSignLoan>
+                        {(open) => (
+                          <Button color="orange" onClick={() => open({ loan: loan.data! })}>
+                            <Trans>Sign contract</Trans>
+                          </Button>
+                        )}
+                      </ModalSignLoan>
                     </Center>
                   </Renderer>
                 </Stack>

@@ -67,7 +67,7 @@ const WorkspaceHeaderAccount = dynamic(
   }
 );
 
-export const HeaderWorkspace: FC = memo(() => {
+export const WorkspaceHeader: FC = memo(() => {
   const router = useRouter();
   const layout = useLayout();
   const workspace = useWorkspace();

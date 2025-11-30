@@ -1,13 +1,14 @@
 "use client";
 
 import { Renderer } from "@/components/renderer";
+import { FileType } from "@/graphql/enums.graphql";
 import {
   detectFileIdFromUrl,
   detectFileType,
   getFileSizeFromUrl,
 } from "@/modules/files/file-service";
 import { FileEntity } from "@/modules/files/file-types";
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { formatBytes, getFileName } from "@/utils/file.utils";
 import { t } from "@lingui/core/macro";
 import {
@@ -36,7 +37,6 @@ import {
 import { FC, useEffect, useState } from "react";
 import { api } from "../apis";
 import { renderFileUrl } from "./files-utils";
-import { FileType } from "@/graphql/enums.graphql";
 
 interface FileCardProps extends CardProps {
   src: File | string;
@@ -100,15 +100,11 @@ export const FileCard: FC<FileCardProps> = ({
 
   const Icon = getIconFile();
 
-  const onViewModal = () => {
-    OnModalFileGallery({ files: [{ url: fileUri, ...file }], readonly: true });
-  };
-
   useEffect(() => {
     initialize().catch(() => null);
   }, []);
 
-  const Stat: FC<{ embbedAvatar?: boolean }> = (props) => {
+  const Stat: FC<{ embbedAvatar?: boolean; onView: () => void }> = (props) => {
     return (
       <Group gap={8} wrap="nowrap">
         <Avatar
@@ -116,7 +112,7 @@ export const FileCard: FC<FileCardProps> = ({
           w={40}
           h={40}
           radius={6}
-          onClick={onViewModal}
+          onClick={props.onView}
           style={{ cursor: "pointer" }}
         >
           <Icon size={20} strokeWidth={1.5} />
@@ -133,7 +129,7 @@ export const FileCard: FC<FileCardProps> = ({
 
         <Group gap={0} wrap="nowrap">
           <Renderer visible={!!viewable}>
-            <ActionIcon variant="subtle" color="gray.6" onClick={onViewModal}>
+            <ActionIcon variant="subtle" color="gray.6" onClick={props.onView}>
               <IconEye size={16} />
             </ActionIcon>
           </Renderer>
@@ -160,29 +156,46 @@ export const FileCard: FC<FileCardProps> = ({
 
   if (type === "preview") {
     return (
-      <Card withBorder shadow="none" p={0} w={300} {...rest}>
-        <Avatar
-          src={fileUri}
-          radius={8}
-          onClick={onViewModal}
-          style={{ cursor: "pointer" }}
-          mih={168}
-          w="100%"
-          {...thumbnail}
-        >
-          <Icon size={20} strokeWidth={1.5} />
-        </Avatar>
+      <ModalFileGallery>
+        {(openGallery) => {
+          return (
+            <Card withBorder shadow="none" p={0} w={300} {...rest}>
+              <Avatar
+                src={fileUri}
+                radius={8}
+                onClick={() => openGallery({ files: [{ url: fileUri, ...file }], readonly: true })}
+                style={{ cursor: "pointer" }}
+                mih={168}
+                w="100%"
+                {...thumbnail}
+              >
+                <Icon size={20} strokeWidth={1.5} />
+              </Avatar>
 
-        <Stack p={8} w="100%">
-          <Stat />
-        </Stack>
-      </Card>
+              <Stack p={8} w="100%">
+                <Stat
+                  onView={() => {
+                    openGallery({ files: [{ url: fileUri, ...file }], readonly: true });
+                  }}
+                />
+              </Stack>
+            </Card>
+          );
+        }}
+      </ModalFileGallery>
     );
   }
 
   return (
-    <Card withBorder shadow="none" p={3} maw="100%" {...rest}>
-      <Stat embbedAvatar />
-    </Card>
+    <ModalFileGallery>
+      {(openGallery) => (
+        <Card withBorder shadow="none" p={3} maw="100%" {...rest}>
+          <Stat
+            embbedAvatar
+            onView={() => openGallery({ files: [{ url: fileUri, ...file }], readonly: true })}
+          />
+        </Card>
+      )}
+    </ModalFileGallery>
   );
 };

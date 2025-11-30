@@ -1,9 +1,7 @@
 "use client";
 
 import { useRouter } from "@/hooks/use-router";
-import { OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
-import { InputModalType, OnModalInput } from "@/modals/modal-input";
-import { onFacebookLogin } from "@/modules/auth/auth-service";
+import { InputModalType } from "@/modals/modal-input";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { getClientLocale } from "@/modules/lang/lang-service";
@@ -18,7 +16,7 @@ import { getPluginAiAssistants } from "./ai-assistants/plugin-ai-assistants-serv
 import { PluginAiAssistantEntity } from "./ai-assistants/plugin-ai-assistants-types";
 import { createPluginMessageHub, getPluginMessageHubs } from "./message-hubs/message-hubs-service";
 import { PluginMessageHubEntity } from "./message-hubs/message-hubs-types";
-import { getPluginMetaPages, getPluginMetaPagesInfo } from "./meta-pages/meta-pages-service";
+import { getPluginMetaPages } from "./meta-pages/meta-pages-service";
 import { PluginMetaPageEntity } from "./meta-pages/meta-pages-types";
 import { Context } from "./plugins-context";
 import { Plugin } from "./plugins-types";
@@ -83,38 +81,63 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
     setIsInitialized(true);
   };
 
-  const onCreateMessageHub = () => {
-    OnModalInput({
-      type: InputModalType.TEXT,
-      title: t`Enter name`,
-      icon: IconMessage,
-      value: workspace.userMember.name,
-      onDone: async (name) => {
-        if (!name || name.length === 0) return;
-        await createPluginMessageHub({
-          name,
-          widgetSettings: {
-            color: parsedPrimaryColor.value,
-            brandName: workspace.userMember.workspace.name,
-            brandLogo: workspace.userMember.workspace.logo,
-            locale: workspace.userMember.workspace.locale || getClientLocale(),
-            position: "right",
-            welcomMessage: t`Welcome to ${workspace.userMember.workspace.name}`,
-            welcomSubMessage: t`You need advice! Start chatting with us now.`,
-            welcomeInputs: [
-              {
-                id: uuid(),
-                type: "name",
-                label: t`Your name`,
-                description: `Let us call you by your most affectionate name!`,
-                isRequired: true,
-              },
-            ],
+  const onCreateMessageHub = async (name: string) => {
+    if (!name || name.length === 0) return;
+    await createPluginMessageHub({
+      name,
+      widgetSettings: {
+        color: parsedPrimaryColor.value,
+        brandName: workspace.userMember.workspace.name,
+        brandLogo: workspace.userMember.workspace.logo,
+        locale: workspace.userMember.workspace.locale || getClientLocale(),
+        position: "right",
+        welcomMessage: t`Welcome to ${workspace.userMember.workspace.name}`,
+        welcomSubMessage: t`You need advice! Start chatting with us now.`,
+        welcomeInputs: [
+          {
+            id: uuid(),
+            type: "name",
+            label: t`Your name`,
+            description: `Let us call you by your most affectionate name!`,
+            isRequired: true,
           },
-        });
-        router.push(`/workspace-settings/plugins/message-hubs`);
+        ],
       },
     });
+
+    router.push(`/workspace-settings/plugins/message-hubs`);
+
+    // OnModalInput({
+    //   type: InputModalType.TEXT,
+    //   title: t`Enter name`,
+    //   icon: IconMessage,
+    //   value: workspace.userMember.name,
+    //   onDone: async (name) => {
+    //     if (!name || name.length === 0) return;
+    //     await createPluginMessageHub({
+    //       name,
+    //       widgetSettings: {
+    //         color: parsedPrimaryColor.value,
+    //         brandName: workspace.userMember.workspace.name,
+    //         brandLogo: workspace.userMember.workspace.logo,
+    //         locale: workspace.userMember.workspace.locale || getClientLocale(),
+    //         position: "right",
+    //         welcomMessage: t`Welcome to ${workspace.userMember.workspace.name}`,
+    //         welcomSubMessage: t`You need advice! Start chatting with us now.`,
+    //         welcomeInputs: [
+    //           {
+    //             id: uuid(),
+    //             type: "name",
+    //             label: t`Your name`,
+    //             description: `Let us call you by your most affectionate name!`,
+    //             isRequired: true,
+    //           },
+    //         ],
+    //       },
+    //     });
+    //     router.push(`/workspace-settings/plugins/message-hubs`);
+    //   },
+    // });
   };
 
   useEventsListener(

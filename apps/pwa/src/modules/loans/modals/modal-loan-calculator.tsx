@@ -34,9 +34,9 @@ import { IconCalculator } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useEffect, useState } from "react";
 import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
 
-export let OnModalLoanCalculator: () => any = () => {};
-
-export const ModalLoanCalculator: FC = () => {
+export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode }> = ({
+  children,
+}) => {
   const workspace = useWorkspace();
   const loans = useLoans();
 
@@ -49,10 +49,6 @@ export const ModalLoanCalculator: FC = () => {
   const [_packageDays, setPackageDays] = useState<any>(180);
   const [_packagePeriodDays, setPackagePeriodDays] = useState<any>(30);
   const [startTime, setStartTime] = useState(DateTime.toSeconds(new Date()));
-
-  OnModalLoanCalculator = () => {
-    open();
-  };
 
   const onClose = async () => {
     close();
@@ -128,185 +124,191 @@ export const ModalLoanCalculator: FC = () => {
   if (!loans.isInitialized || !loans.assetEstimations) return null;
 
   return (
-    <Modal
-      title={<ModalTitle title={t`Loan package calculator`} icon={IconCalculator} />}
-      onClose={onClose}
-      opened={opened}
-      size={1000}
-    >
-      <Stack gap={16}>
-        <Group>
-          <NumberInput
-            flex={1}
-            label={t`Loan amount`}
-            placeholder={t`Enter loan amount`}
-            hideControls
-            value={amount}
-            onChange={(value) => setAmount(+value)}
-          />
+    <Fragment>
+      {children(open)}
 
-          <DateTimePicker
-            flex={1}
-            label={t`Fulfill at`}
-            value={startTime ? new Date(startTime * 1000) : null}
-            onChange={(d) => {
-              if (!d) return;
-              setStartTime(DateTime.toSeconds(d));
-            }}
-          />
-        </Group>
+      <Modal
+        title={<ModalTitle title={t`Loan package calculator`} icon={IconCalculator} />}
+        onClose={onClose}
+        opened={opened}
+        size={1000}
+      >
+        <Stack gap={16}>
+          <Group>
+            <NumberInput
+              flex={1}
+              label={t`Loan amount`}
+              placeholder={t`Enter loan amount`}
+              hideControls
+              value={amount}
+              onChange={(value) => setAmount(+value)}
+            />
 
-        <SimpleGrid cols={{ md: 3 }}>
-          <Select
-            label={t`Asset type`}
-            data={assetTypeOptions.map((type) => ({
-              value: type,
-              label: loanAssetTypes[type].label(),
-            }))}
-            value={assetType}
-            onChange={(e) => {
-              setAssetType(e as any);
-              setPackageDays(undefined);
-              setPackagePeriodDays(undefined);
-            }}
-          />
+            <DateTimePicker
+              flex={1}
+              label={t`Fulfill at`}
+              value={startTime ? new Date(startTime * 1000) : null}
+              onChange={(d) => {
+                if (!d) return;
+                setStartTime(DateTime.toSeconds(d));
+              }}
+            />
+          </Group>
 
-          <Select
-            label={t`Loan period`}
-            data={packageDaysOptions.map((d) => ({
-              value: d.toString(),
-              label: renderLoanPeriod(d),
-            }))}
-            value={packageDays?.toString()}
-            onChange={(value) => {
-              setPackageDays(+value!);
-              setPackagePeriodDays(undefined);
-            }}
-          />
+          <SimpleGrid cols={{ md: 3 }}>
+            <Select
+              label={t`Asset type`}
+              data={assetTypeOptions.map((type) => ({
+                value: type,
+                label: loanAssetTypes[type].label(),
+              }))}
+              value={assetType}
+              onChange={(e) => {
+                setAssetType(e as any);
+                setPackageDays(undefined);
+                setPackagePeriodDays(undefined);
+              }}
+            />
 
-          <Select
-            label={t`Payment period`}
-            data={loanPackage?.periodDaysOptions.map((d) => ({
-              value: d.toString(),
-              label: renderLoanPeriod(d),
-            }))}
-            value={packagePeriodDays?.toString()}
-            onChange={(value) => {
-              setPackagePeriodDays(+value!);
-            }}
-          />
-        </SimpleGrid>
+            <Select
+              label={t`Loan period`}
+              data={packageDaysOptions.map((d) => ({
+                value: d.toString(),
+                label: renderLoanPeriod(d),
+              }))}
+              value={packageDays?.toString()}
+              onChange={(value) => {
+                setPackageDays(+value!);
+                setPackagePeriodDays(undefined);
+              }}
+            />
 
-        {calculating && <Skeleton height={200} />}
+            <Select
+              label={t`Payment period`}
+              data={loanPackage?.periodDaysOptions.map((d) => ({
+                value: d.toString(),
+                label: renderLoanPeriod(d),
+              }))}
+              value={packagePeriodDays?.toString()}
+              onChange={(value) => {
+                setPackagePeriodDays(+value!);
+              }}
+            />
+          </SimpleGrid>
 
-        {paymentPeriods.length > 0 && (
-          <InputWrapper label={t`Payment periods`}>
-            <Table withTableBorder striped withColumnBorders withRowBorders>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>{t`Period`}</Table.Th>
-                  <Table.Th>{t`Time`}</Table.Th>
-                  <Table.Th>{t`Principal amount`}</Table.Th>
-                  <Table.Th>{t`Remaining principal`}</Table.Th>
-                  <Table.Th>{t`Interest`}</Table.Th>
-                  <Table.Th ta="right">{t`Payment amount`}</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
+          {calculating && <Skeleton height={200} />}
 
-              <Table.Tbody>
-                {paymentPeriods.map((p, i) => {
-                  return (
-                    <Table.Tr key={i}>
-                      <Table.Td>{p.period === 0 ? t`Fee` : p.period}</Table.Td>
+          {paymentPeriods.length > 0 && (
+            <InputWrapper label={t`Payment periods`}>
+              <Table withTableBorder striped withColumnBorders withRowBorders>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>{t`Period`}</Table.Th>
+                    <Table.Th>{t`Time`}</Table.Th>
+                    <Table.Th>{t`Principal amount`}</Table.Th>
+                    <Table.Th>{t`Remaining principal`}</Table.Th>
+                    <Table.Th>{t`Interest`}</Table.Th>
+                    <Table.Th ta="right">{t`Payment amount`}</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
 
-                      <Table.Td>
-                        {(function () {
-                          if (p.period === 0) return "-";
-                          if (!p.startTime || !p.endTime) return "-";
-                          return (
-                            <Fragment>
-                              <DateFormat value={p.startTime} type="date" />
-                              {" - "}
-                              <DateFormat value={p.endTime} type="date" />
-                            </Fragment>
-                          );
-                        })()}
-                      </Table.Td>
+                <Table.Tbody>
+                  {paymentPeriods.map((p, i) => {
+                    return (
+                      <Table.Tr key={i}>
+                        <Table.Td>{p.period === 0 ? t`Fee` : p.period}</Table.Td>
 
-                      <Table.Td>
-                        <CurrencyFormat value={p.capitalAmount} />
-                      </Table.Td>
+                        <Table.Td>
+                          {(function () {
+                            if (p.period === 0) return "-";
+                            if (!p.startTime || !p.endTime) return "-";
+                            return (
+                              <Fragment>
+                                <DateFormat value={p.startTime} type="date" />
+                                {" - "}
+                                <DateFormat value={p.endTime} type="date" />
+                              </Fragment>
+                            );
+                          })()}
+                        </Table.Td>
 
-                      <Table.Td>
-                        <CurrencyFormat value={p.remainCapitalAmount || 0} />
-                      </Table.Td>
+                        <Table.Td>
+                          <CurrencyFormat value={p.capitalAmount} />
+                        </Table.Td>
 
-                      <Table.Td>
-                        <CurrencyFormat value={p.fee || 0} />
-                      </Table.Td>
+                        <Table.Td>
+                          <CurrencyFormat value={p.remainCapitalAmount || 0} />
+                        </Table.Td>
 
-                      <Table.Td ta="right">
-                        <CurrencyFormat value={p.totalAmount} />
-                      </Table.Td>
-                    </Table.Tr>
-                  );
-                })}
+                        <Table.Td>
+                          <CurrencyFormat value={p.fee || 0} />
+                        </Table.Td>
 
-                <Table.Tr>
-                  <Table.Td colSpan={5} ta="left">
-                    {t`Total`}
-                  </Table.Td>
-                  <Table.Td fw={700} ta="right">
-                    <CurrencyFormat value={paymentPeriods.reduce((a, b) => a + b.totalAmount, 0)} />
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
-            </Table>
-          </InputWrapper>
-        )}
+                        <Table.Td ta="right">
+                          <CurrencyFormat value={p.totalAmount} />
+                        </Table.Td>
+                      </Table.Tr>
+                    );
+                  })}
 
-        {loanPackage && (
-          <InputWrapper label={t`Loan package`}>
-            <Card withBorder shadow="none" p={8} maw="100%" w={350}>
-              <Stack gap={5}>
-                <Anchor fw={600}>{loanPackage.id}</Anchor>
+                  <Table.Tr>
+                    <Table.Td colSpan={5} ta="left">
+                      {t`Total`}
+                    </Table.Td>
+                    <Table.Td fw={700} ta="right">
+                      <CurrencyFormat
+                        value={paymentPeriods.reduce((a, b) => a + b.totalAmount, 0)}
+                      />
+                    </Table.Td>
+                  </Table.Tr>
+                </Table.Tbody>
+              </Table>
+            </InputWrapper>
+          )}
 
-                <RowInfo
-                  label={t`Asset types`}
-                  value={loanPackage.assetTypes.map((v) => loanAssetTypes[v].label()).join(", ")}
-                />
+          {loanPackage && (
+            <InputWrapper label={t`Loan package`}>
+              <Card withBorder shadow="none" p={8} maw="100%" w={350}>
+                <Stack gap={5}>
+                  <Anchor fw={600}>{loanPackage.id}</Anchor>
 
-                <RowInfo
-                  label={t`Loan package type`}
-                  value={
-                    <Badge color={loanPackageTypes[loanPackage.type].color}>
-                      {loanPackageTypes[loanPackage.type].label()}
-                    </Badge>
-                  }
-                />
+                  <RowInfo
+                    label={t`Asset types`}
+                    value={loanPackage.assetTypes.map((v) => loanAssetTypes[v].label()).join(", ")}
+                  />
 
-                <RowInfo
-                  label={t`Loan period`}
-                  value={
-                    <Text ta="right">
-                      <NumberFormat value={loanPackage.days / 30} /> <Trans>months</Trans>
-                    </Text>
-                  }
-                />
-                <RowInfo
-                  label={t`Contract fee`}
-                  value={
-                    <Text ta="right">
-                      <CurrencyFormat value={loanPackage.contractFee} />
-                    </Text>
-                  }
-                />
-              </Stack>
-            </Card>
-          </InputWrapper>
-        )}
-      </Stack>
-    </Modal>
+                  <RowInfo
+                    label={t`Loan package type`}
+                    value={
+                      <Badge color={loanPackageTypes[loanPackage.type].color}>
+                        {loanPackageTypes[loanPackage.type].label()}
+                      </Badge>
+                    }
+                  />
+
+                  <RowInfo
+                    label={t`Loan period`}
+                    value={
+                      <Text ta="right">
+                        <NumberFormat value={loanPackage.days / 30} /> <Trans>months</Trans>
+                      </Text>
+                    }
+                  />
+                  <RowInfo
+                    label={t`Contract fee`}
+                    value={
+                      <Text ta="right">
+                        <CurrencyFormat value={loanPackage.contractFee} />
+                      </Text>
+                    }
+                  />
+                </Stack>
+              </Card>
+            </InputWrapper>
+          )}
+        </Stack>
+      </Modal>
+    </Fragment>
   );
 };
 

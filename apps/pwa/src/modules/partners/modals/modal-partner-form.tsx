@@ -13,16 +13,16 @@ import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconTopologyStar3, IconUpload } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, ReactNode, useState } from "react";
 
 interface ModalParnterFormProps {
   partner?: PartnerEntity;
   onDone?: (partner: PartnerEntity) => Promise<any> | any;
 }
 
-export let OnModalParnterForm: (props: ModalParnterFormProps) => void = () => {};
-
-export const ModalParnterForm: FC = () => {
+export const ModalParnterForm: FC<{
+  children: (open: (props?: ModalParnterFormProps) => void) => ReactNode;
+}> = ({ children }) => {
   const [props, setProps] = useState<ModalParnterFormProps>();
   const [opened, { open, close }] = useDisclosure(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,13 +42,6 @@ export const ModalParnterForm: FC = () => {
       },
     },
   });
-
-  OnModalParnterForm = (_props) => {
-    setProps(_props);
-    form.reset();
-    form.setValues(_props.partner || {});
-    open();
-  };
 
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
@@ -74,64 +67,72 @@ export const ModalParnterForm: FC = () => {
   });
 
   return (
-    <Modal
-      opened={opened}
-      onClose={close}
-      title={
-        <ModalTitle
-          title={props?.partner ? t`Update partner` : t`Create partner`}
-          icon={IconTopologyStar3}
-        />
-      }
-      zIndex={400}
-    >
-      <Stack>
-        <Group>
-          <Dropzone
-            accept={IMAGE_MIME_TYPE}
-            onDrop={(files) => {
-              setAvatar(files[0]);
-            }}
-          >
-            <Group gap={8} style={{ cursor: "pointer" }}>
-              <Avatar
-                src={avatar ? URL.createObjectURL(avatar) : form.values.logo}
-                size={65}
-                fz={10}
-                styles={{
-                  placeholder: {
-                    fontSize: 10,
-                  },
-                }}
-              >
-                PT
-              </Avatar>
+    <Fragment>
+      {children((p) => {
+        setProps(p);
+        form.reset();
+        form.setValues(p?.partner || {});
+        open();
+      })}
+      <Modal
+        opened={opened}
+        onClose={close}
+        title={
+          <ModalTitle
+            title={props?.partner ? t`Update partner` : t`Create partner`}
+            icon={IconTopologyStar3}
+          />
+        }
+        zIndex={400}
+      >
+        <Stack>
+          <Group>
+            <Dropzone
+              accept={IMAGE_MIME_TYPE}
+              onDrop={(files) => {
+                setAvatar(files[0]);
+              }}
+            >
+              <Group gap={8} style={{ cursor: "pointer" }}>
+                <Avatar
+                  src={avatar ? URL.createObjectURL(avatar) : form.values.logo}
+                  size={65}
+                  fz={10}
+                  styles={{
+                    placeholder: {
+                      fontSize: 10,
+                    },
+                  }}
+                >
+                  PT
+                </Avatar>
 
-              <Group gap={5}>
-                <ThemeIcon variant="transparent" color="dark" size="md">
-                  <IconUpload size={18} strokeWidth={1.2} />
-                </ThemeIcon>
-                <Text fz={em(10)}>{t`Click to change`}</Text>
+                <Group gap={5}>
+                  <ThemeIcon variant="transparent" color="dark" size="md">
+                    <IconUpload size={18} strokeWidth={1.2} />
+                  </ThemeIcon>
+                  <Text fz={em(10)}>{t`Click to change`}</Text>
+                </Group>
               </Group>
-            </Group>
-          </Dropzone>
-        </Group>
+            </Dropzone>
+          </Group>
 
-        <TextInput withAsterisk label={t`Name`} {...form.getInputProps("name")} />
-        <TextInput label={t`Phone`} {...form.getInputProps("phone")} />
-        <TextInput label="Email" {...form.getInputProps("email")} />
+          <TextInput withAsterisk label={t`Name`} {...form.getInputProps("name")} />
+          <TextInput label={t`Phone`} {...form.getInputProps("phone")} />
+          <TextInput label="Email" {...form.getInputProps("email")} />
 
-        <Button
-          mt={10}
-          loading={isSubmitting}
-          onClick={onSubmit}
-          leftSection={<IconCheck strokeWidth={1.2} />}
-          disabled={!form.isDirty() && !avatar}
-          type="submit"
-        >
-          {t`Complete`}
-        </Button>
-      </Stack>
-    </Modal>
+          <Button
+            mt={10}
+            loading={isSubmitting}
+            onClick={onSubmit}
+            leftSection={<IconCheck strokeWidth={1.2} />}
+            disabled={!form.isDirty() && !avatar}
+            type="submit"
+          >
+            {t`Complete`}
+          </Button>
+        </Stack>
+      </Modal>
+    </Fragment>
   );
 };

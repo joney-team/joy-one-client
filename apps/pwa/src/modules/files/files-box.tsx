@@ -7,7 +7,7 @@ import { EventType } from "@/modules/events/event-types";
 import { detectFileType, getFiles, removeFile } from "@/modules/files/file-service";
 import { FileEntity } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -32,16 +32,6 @@ import { Renderer } from "../../components/renderer";
 import { useUploadFile } from "./hooks/use-upload-file";
 
 interface FilesBoxProps {
-  // query?: {
-  //   relatedCustomerId?: string;
-  //   relatedTicketId?: string;
-  //   relatedTaskId?: string;
-  //   relatedReceiptId?: string;
-  //   relatedHrmTimekeepingId?: string;
-  //   ref?: string;
-  //   entity?: AppEntity;
-  //   entityId?: string;
-  // };
   refs?: string[];
   rawFiles?: File[];
   onChangeRawFiles?: (files: File[]) => void;
@@ -134,99 +124,103 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
   const disabled = props.disabled || props.readonly;
 
   return (
-    <Dropzone
-      onDrop={(_files) => addFile(_files)}
-      disabled={disabled}
-      activateOnClick={false}
-      openRef={openRef}
-      {...props.props}
-    >
-      <Card
-        withBorder
-        shadow="none"
-        p={0}
-        onClick={() => openRef.current?.()}
-        bg={length > 0 ? "var(--mantine-color-gray-outline-hover)" : "transparent"}
-        style={{
-          position: "relative",
-          cursor: "pointer",
-          borderStyle: length > 0 ? "solid" : "dashed",
-          ...props.wrapperStyle,
-        }}
-      >
-        <Stack
-          p={8}
-          gap={8}
-          style={{ borderRadius: 8, position: "relative" }}
-          {...props.filesWrapperProps}
+    <ModalFileGallery>
+      {(openGallery) => (
+        <Dropzone
+          onDrop={(_files) => addFile(_files)}
+          disabled={disabled}
+          activateOnClick={false}
+          openRef={openRef}
+          {...props.props}
         >
-          <Renderer visible={length > 0}>
-            <Group gap={10}>
-              {uploadedFiles.data.map((file, index) => {
-                const specificDisabled = props.specificDisabledRelated?.find(
-                  (v) => !!(file as any)[v]
-                );
+          <Card
+            withBorder
+            shadow="none"
+            p={0}
+            onClick={() => openRef.current?.()}
+            bg={length > 0 ? "var(--mantine-color-gray-outline-hover)" : "transparent"}
+            style={{
+              position: "relative",
+              cursor: "pointer",
+              borderStyle: length > 0 ? "solid" : "dashed",
+              ...props.wrapperStyle,
+            }}
+          >
+            <Stack
+              p={8}
+              gap={8}
+              style={{ borderRadius: 8, position: "relative" }}
+              {...props.filesWrapperProps}
+            >
+              <Renderer visible={length > 0}>
+                <Group gap={10}>
+                  {uploadedFiles.data.map((file, index) => {
+                    const specificDisabled = props.specificDisabledRelated?.find(
+                      (v) => !!(file as any)[v]
+                    );
 
-                return (
-                  <FileBoxCard
-                    key={file._id}
-                    file={file}
-                    disabled={disabled || !!specificDisabled}
-                    onRemove={() => onRemove(file)}
-                    onGallery={() =>
-                      OnModalFileGallery({
-                        files: uploadedFiles.data,
-                        index,
-                        disabled: props.disabled,
-                      })
-                    }
-                    cardProps={props.itemCardProps}
-                  />
-                );
-              })}
+                    return (
+                      <FileBoxCard
+                        key={file._id}
+                        file={file}
+                        disabled={disabled || !!specificDisabled}
+                        onRemove={() => onRemove(file)}
+                        onGallery={() =>
+                          openGallery({
+                            files: uploadedFiles.data,
+                            index,
+                            disabled: props.disabled,
+                          })
+                        }
+                        cardProps={props.itemCardProps}
+                      />
+                    );
+                  })}
 
-              {rawFiles.map((file, index) => {
-                return (
-                  <FileBoxCard
-                    disabled={disabled}
-                    key={index}
-                    file={file}
-                    onRemove={() => onRemove(file)}
-                    cardProps={props.itemCardProps}
-                  />
-                );
-              })}
-            </Group>
-          </Renderer>
+                  {rawFiles.map((file, index) => {
+                    return (
+                      <FileBoxCard
+                        disabled={disabled}
+                        key={index}
+                        file={file}
+                        onRemove={() => onRemove(file)}
+                        cardProps={props.itemCardProps}
+                      />
+                    );
+                  })}
+                </Group>
+              </Renderer>
 
-          <Renderer visible={length === 0 && !!props.empty}>{props.empty}</Renderer>
+              <Renderer visible={length === 0 && !!props.empty}>{props.empty}</Renderer>
 
-          <Renderer visible={!disabled}>
-            <Dropzone.Accept>
-              <Group gap={5} justify="center" py={5} pb={length > 0 ? 0 : 5}>
-                <ThemeIcon variant="transparent" color="gray.5">
-                  <IconUpload strokeWidth={1.5} size={18} />
-                </ThemeIcon>
-                <Text c="gray.5" fz={em(13)} fw={300}>
-                  {props.placeholder ?? <Trans>Drop files here</Trans>}
-                </Text>
-              </Group>
-            </Dropzone.Accept>
+              <Renderer visible={!disabled}>
+                <Dropzone.Accept>
+                  <Group gap={5} justify="center" py={5} pb={length > 0 ? 0 : 5}>
+                    <ThemeIcon variant="transparent" color="gray.5">
+                      <IconUpload strokeWidth={1.5} size={18} />
+                    </ThemeIcon>
+                    <Text c="gray.5" fz={em(13)} fw={300}>
+                      {props.placeholder ?? <Trans>Drop files here</Trans>}
+                    </Text>
+                  </Group>
+                </Dropzone.Accept>
 
-            <Dropzone.Idle>
-              <Group gap={5} justify="center" py={5} pb={length > 0 ? 0 : 5}>
-                <ThemeIcon variant="transparent" color="gray.5">
-                  <IconUpload strokeWidth={1.5} size={18} />
-                </ThemeIcon>
-                <Text c="gray.5" fz={em(13)} fw={300}>
-                  {props.placeholder ?? <Trans>Drop or click to choose file</Trans>}
-                </Text>
-              </Group>
-            </Dropzone.Idle>
-          </Renderer>
-        </Stack>
-      </Card>
-    </Dropzone>
+                <Dropzone.Idle>
+                  <Group gap={5} justify="center" py={5} pb={length > 0 ? 0 : 5}>
+                    <ThemeIcon variant="transparent" color="gray.5">
+                      <IconUpload strokeWidth={1.5} size={18} />
+                    </ThemeIcon>
+                    <Text c="gray.5" fz={em(13)} fw={300}>
+                      {props.placeholder ?? <Trans>Drop or click to choose file</Trans>}
+                    </Text>
+                  </Group>
+                </Dropzone.Idle>
+              </Renderer>
+            </Stack>
+          </Card>
+        </Dropzone>
+      )}
+    </ModalFileGallery>
   );
 });
 
@@ -244,146 +238,151 @@ export const FileBoxCard: FC<{
   const radius = 5;
 
   return (
-    <Card
-      withBorder
-      shadow="none"
-      w={150}
-      p={5}
-      style={{ position: "relative", overflow: "visible", cursor: "pointer" }}
-      ref={hover.ref}
-      {...props.cardProps}
-    >
-      <Stack w="100%" mih="100%" gap={5}>
-        <Stack mih="100%" style={{ position: "relative" }}>
-          {(function () {
-            const url = file instanceof File ? URL.createObjectURL(file) : renderFileUrl(file.url);
+    <ModalFileGallery>
+      {(openGallery) => (
+        <Card
+          withBorder
+          shadow="none"
+          w={150}
+          p={5}
+          style={{ position: "relative", overflow: "visible", cursor: "pointer" }}
+          ref={hover.ref}
+          {...props.cardProps}
+        >
+          <Stack w="100%" mih="100%" gap={5}>
+            <Stack mih="100%" style={{ position: "relative" }}>
+              {(function () {
+                const url =
+                  file instanceof File ? URL.createObjectURL(file) : renderFileUrl(file.url);
 
-            if (fileType === FileType.Photo)
-              return (
-                <Image
-                  src={url}
-                  w="100%"
-                  h={100}
-                  mih={100}
-                  mah={100}
-                  fit="contain"
-                  bg="gray.1"
-                  style={{ borderTopRightRadius: radius, borderTopLeftRadius: radius }}
-                />
-              );
+                if (fileType === FileType.Photo)
+                  return (
+                    <Image
+                      src={url}
+                      w="100%"
+                      h={100}
+                      mih={100}
+                      mah={100}
+                      fit="contain"
+                      bg="gray.1"
+                      style={{ borderTopRightRadius: radius, borderTopLeftRadius: radius }}
+                    />
+                  );
 
-            if (fileType === FileType.Video)
-              return (
-                <Fragment>
-                  <video
-                    src={url}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      backgroundColor: "#f1f1f1",
-                    }}
-                    autoPlay={false}
-                  />
+                if (fileType === FileType.Video)
+                  return (
+                    <Fragment>
+                      <video
+                        src={url}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: "#f1f1f1",
+                        }}
+                        autoPlay={false}
+                      />
 
+                      <Center
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          zIndex: 2,
+                          width: "100%",
+                          height: 100,
+                          backgroundColor: "#f1f1f1",
+                        }}
+                      >
+                        <ThemeIcon color="gray" variant="transparent" size="lg">
+                          <IconVideo strokeWidth={1.2} />
+                        </ThemeIcon>
+                      </Center>
+                    </Fragment>
+                  );
+
+                return (
                   <Center
                     style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      zIndex: 2,
-                      width: "100%",
                       height: 100,
                       backgroundColor: "#f1f1f1",
                     }}
                   >
                     <ThemeIcon color="gray" variant="transparent" size="lg">
-                      <IconVideo strokeWidth={1.2} />
+                      <IconFile strokeWidth={1.2} />
                     </ThemeIcon>
                   </Center>
-                </Fragment>
-              );
+                );
+              })()}
 
-            return (
-              <Center
-                style={{
-                  height: 100,
-                  backgroundColor: "#f1f1f1",
-                }}
-              >
-                <ThemeIcon color="gray" variant="transparent" size="lg">
-                  <IconFile strokeWidth={1.2} />
-                </ThemeIcon>
-              </Center>
-            );
-          })()}
+              {hover.hovered && (
+                <Stack
+                  justify="center"
+                  align="center"
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "rgba(0, 0, 0, 0.3)",
+                    top: 0,
+                    left: 0,
+                    borderTopRightRadius: radius,
+                    borderTopLeftRadius: radius,
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
 
-          {hover.hovered && (
-            <Stack
-              justify="center"
-              align="center"
+                    if (props.onGallery) return props.onGallery();
+
+                    if (file instanceof File) {
+                      const _file: FileEntity = {
+                        fileName: file.name,
+                        type: detectFileType(file.name),
+                        url: URL.createObjectURL(file),
+                        _id: "",
+                        createdAt: DateTime.toSeconds(new Date()),
+                        relativePath: "",
+                        size: file.size,
+                        path: "",
+                      };
+                      openGallery({ files: [_file], disabled: props.disabled });
+                    } else {
+                      openGallery({ files: [file], disabled: props.disabled });
+                    }
+                  }}
+                >
+                  <ThemeIcon color="white" variant="transparent" size="sm">
+                    <IconArrowsDiagonal />
+                  </ThemeIcon>
+                </Stack>
+              )}
+            </Stack>
+
+            <Text ta="center" truncate="end" fz={em(10)} fw={500}>
+              {fileName}
+            </Text>
+          </Stack>
+
+          <Renderer visible={!props.disabled && hover.hovered}>
+            <ActionIcon
+              color="dark.3"
+              size="xs"
               style={{
                 position: "absolute",
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgba(0, 0, 0, 0.3)",
-                top: 0,
-                left: 0,
-                borderTopRightRadius: radius,
-                borderTopLeftRadius: radius,
+                top: 10,
+                right: 10,
               }}
+              radius={100}
               onClick={(e) => {
-                e.preventDefault();
                 e.stopPropagation();
-
-                if (props.onGallery) return props.onGallery();
-
-                if (file instanceof File) {
-                  const _file: FileEntity = {
-                    fileName: file.name,
-                    type: detectFileType(file.name),
-                    url: URL.createObjectURL(file),
-                    _id: "",
-                    createdAt: DateTime.toSeconds(new Date()),
-                    relativePath: "",
-                    size: file.size,
-                    path: "",
-                  };
-                  OnModalFileGallery({ files: [_file], disabled: props.disabled });
-                } else {
-                  OnModalFileGallery({ files: [file], disabled: props.disabled });
-                }
+                props.onRemove?.();
               }}
             >
-              <ThemeIcon color="white" variant="transparent" size="sm">
-                <IconArrowsDiagonal />
-              </ThemeIcon>
-            </Stack>
-          )}
-        </Stack>
-
-        <Text ta="center" truncate="end" fz={em(10)} fw={500}>
-          {fileName}
-        </Text>
-      </Stack>
-
-      <Renderer visible={!props.disabled && hover.hovered}>
-        <ActionIcon
-          color="dark.3"
-          size="xs"
-          style={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-          }}
-          radius={100}
-          onClick={(e) => {
-            e.stopPropagation();
-            props.onRemove?.();
-          }}
-        >
-          <IconX strokeWidth={2} size={12} />
-        </ActionIcon>
-      </Renderer>
-    </Card>
+              <IconX strokeWidth={2} size={12} />
+            </ActionIcon>
+          </Renderer>
+        </Card>
+      )}
+    </ModalFileGallery>
   );
 };

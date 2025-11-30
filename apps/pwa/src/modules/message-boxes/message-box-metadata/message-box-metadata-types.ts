@@ -6,8 +6,11 @@ import type { FC } from "react";
 export type AccordionItemComponent = FC<{ customer: CustomerEntity }>;
 
 export type AccordionItem = {
-  moduleId: WorkspaceModuleId,
-  component: AccordionItemComponent,
-  workspaceTypes?: WorkspaceType[],
-  onCreate?: (customer: CustomerEntity) => void,
-}
+  moduleId: WorkspaceModuleId;
+  component: AccordionItemComponent;
+  workspaceTypes?: WorkspaceType[];
+  onCreate?: (
+    customer: CustomerEntity,
+    context: { actions: { createLoan: () => void; createBooking: () => void } }
+  ) => void;
+};

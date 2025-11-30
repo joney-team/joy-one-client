@@ -8,10 +8,11 @@ import Superscript from "@tiptap/extension-superscript";
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
 
+import { FileType } from "@/graphql/enums.graphql";
 import { UploadFileOptions } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { OnModalFiles } from "@/modules/files/modals/modal-files";
+import { ModalFiles } from "@/modules/files/modals/modal-files";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
 import { alpha, Box, Group, Loader, Text, ThemeIcon } from "@mantine/core";
@@ -23,7 +24,6 @@ import { Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import { ClipboardEventHandler, FC, useState } from "react";
 import { ImageResize } from "./image-resize";
-import { FileType } from "@/graphql/enums.graphql";
 
 interface EditorProps {
   value?: string | JSONContent | undefined | null;
@@ -49,28 +49,32 @@ const extensions: Extensions = [
 function InsertImageControl() {
   const { editor } = useRichTextEditorContext();
   return (
-    <RichTextEditor.Control
-      onClick={() => {
-        OnModalFiles({
-          fileTypes: [FileType.Photo],
-          onSelectedFiles: (files) => {
-            files.forEach((file) => {
-              editor?.commands.insertContent({
-                type: "image",
-                attrs: {
-                  src: renderFileUrl(file.path),
-                  style: "width: 500px; height: auto;",
-                },
-              });
+    <ModalFiles>
+      {(openFiles) => (
+        <RichTextEditor.Control
+          onClick={() => {
+            openFiles({
+              fileTypes: [FileType.Photo],
+              onSelectedFiles: (files) => {
+                files.forEach((file) => {
+                  editor?.commands.insertContent({
+                    type: "image",
+                    attrs: {
+                      src: renderFileUrl(file.path),
+                      style: "width: 500px; height: auto;",
+                    },
+                  });
+                });
+              },
             });
-          },
-        });
-      }}
-      aria-label="Insert star emoji"
-      title="Insert star emoji"
-    >
-      <IconPhoto stroke={1.5} size="1rem" />
-    </RichTextEditor.Control>
+          }}
+          aria-label="Insert star emoji"
+          title="Insert star emoji"
+        >
+          <IconPhoto stroke={1.5} size="1rem" />
+        </RichTextEditor.Control>
+      )}
+    </ModalFiles>
   );
 }
 

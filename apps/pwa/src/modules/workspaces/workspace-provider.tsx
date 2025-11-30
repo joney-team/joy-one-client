@@ -2,15 +2,12 @@
 
 import { useApp } from "@/app.context";
 import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
-import { Fullscreen } from "@/components/fullscreen";
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
-import { getGlobal } from "@/global";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getWorkspaceAuthSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
 import {
   getMyWorkspaceMembers,
   joinWorkspaceMember,
@@ -39,80 +36,34 @@ import { workspaceInitialize } from "@/modules/workspaces/workspaces-service";
 import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { useApolloClient } from "@apollo/client/react";
 import { Currency } from "@joy-one-client/utils/currency";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 import { useLingui } from "@lingui/react/macro";
 import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
 import * as Sentry from "@sentry/react";
-import { AxiosError } from "axios";
-import { useParams, useRouter } from "next/navigation";
-import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { api } from "../apis";
 import { useRestQuery } from "../apis/use-rest-query";
-import { useLang } from "../lang/lang-context";
 import { Context } from "./workspace-context";
-import { useWorkspaceModules, WorkspaceModuleId } from "./workspace-modules";
 import { getDefaultWorkspaceView } from "./workspace-view";
 import {
   WorkspaceContext,
   WorkspaceDto,
   WorkspaceEntity,
   WorkspaceMemberInvitationState,
-  WorkspaceType,
 } from "./workspaces-types";
-import { useApolloClient } from "@apollo/client/react";
-import dynamic from "next/dynamic";
-import { nonLoading } from "@/utils/non-loading";
-import { OnConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
-
-const WorkspaceInvitation = dynamic(() => import("./workspace-invitation"), {
-  ssr: false,
-  loading: nonLoading,
-});
-
-const WorkspaceRequire = dynamic(
-  () => import("./workspace-require").then((mod) => mod.WorkspaceRequire),
-  {
-    ssr: false,
-    loading: nonLoading,
-  }
-);
-
-const WorkspaceArchived = dynamic(
-  () => import("./components/workspace-archived").then((mod) => mod.WorkspaceArchived),
-  {
-    ssr: false,
-    loading: nonLoading,
-  }
-);
-
-const WorkspaceRequireBranches = dynamic(
-  () =>
-    import("./components/workspace-require-branches").then((mod) => mod.WorkspaceRequireBranches),
-  {
-    ssr: false,
-    loading: nonLoading,
-  }
-);
-
-const ConnectMetaPagesModal = dynamic(
-  () => import("@/modals/modal-connect-meta-pages").then((mod) => mod.ConnectMetaPagesModal),
-  {
-    ssr: false,
-    loading: nonLoading,
-  }
-);
-
-const syncSettings = (settings: WorkspaceSettingEntity) => {
-  const global = getGlobal();
-  global._workspaceSettings = settings;
-};
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const { t } = useLingui();
   const client = useApolloClient();
+  const forceUpdate = useForceUpdate();
+  const auth = useAuth();
+  const router = useRouter();
+  const app = useApp();
+
   const state = useRef<{
     roles: WorkspaceRoleEntity[];
     settings?: WorkspaceSettingEntity;
@@ -121,15 +72,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     roles: [],
     workspaceMembers: [],
   });
-
-  const forceUpdate = useForceUpdate();
-  const auth = useAuth();
-  const router = useRouter();
-  const lang = useLang();
-  const params = useParams();
-  const inviteCode = params.inviteCode as string;
-  const app = useApp();
-  const { workspaceModules } = useWorkspaceModules();
 
   const [isInitialized, _setIsInitialized] = useState(false);
   const [isCreateNew, setIsCreateNew] = useState(false);
@@ -166,7 +108,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const fetchSettings = async () => {
     const result = await getWorkspaceSettings();
-    syncSettings(result);
     state.current.settings = result;
     forceUpdate();
     return result;
@@ -174,7 +115,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const updateSettings = async (settings: WorkspaceSettingEntity) => {
     state.current.settings = settings;
-    syncSettings(settings);
     forceUpdate();
     await setWorkspaceSettings(settings).catch(onError);
   };
@@ -227,7 +167,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         leave();
       }
 
-      syncSettings(initial.settings);
       forceUpdate();
     } catch (error) {
       console.error(error);
@@ -310,7 +249,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       ...state.current.settings,
       ...(dto as any),
     } as WorkspaceSettingEntity;
-    syncSettings(state.current.settings);
     forceUpdate();
     if (exec) await setWorkspaceSettings(state.current.settings);
     else onChangeSettings(state.current.settings);
@@ -327,33 +265,12 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     return { ...output };
   };
 
-  const availableModules = useMemo(() => {
-    return workspaceModules.filter((workspaceModule) => {
-      const userMemberPermissions = userMember?.permissions || [];
-      const ableToAccess =
-        (workspaceModule && !workspaceModule.permissions) ||
-        workspaceModule.permissions
-          ?.toString()
-          .split(",")
-          .every((p) => userMemberPermissions.includes(p as WorkspacePermission));
-
-      const isAvailableType =
-        !workspaceModule.workspaceTypes ||
-        workspaceModule.workspaceTypes.includes(
-          userMember?.workspace?.type || WorkspaceType.BUSINESS
-        );
-
-      return ableToAccess && isAvailableType;
-    });
-  }, [workspaceModules, userMember?.permissions, userMember?.workspace?.type, lang.locale]);
-
   const isUserOnline = (userId: string) => {
     return !!onlineStatus.data?.[userId] || false;
   };
 
   const setView = async (_view: WorkspaceView) => {
     state.current.settings = { ...state.current.settings!, view: { ..._view } };
-    syncSettings(state.current.settings);
     forceUpdate();
     await setSettings({ ...state.current.settings!, view: { ..._view } }, true);
     return getWorkspaceDisplayView(_view);
@@ -361,26 +278,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const resetView = async () => {
     state.current.settings = { ...state.current.settings!, view: undefined };
-    syncSettings(state.current.settings);
     forceUpdate();
     await setSettings({ ...state.current.settings!, view: undefined }, true);
     return getWorkspaceDisplayView({});
-  };
-
-  const onConnectMetaPages = async (accessToken: string) => {
-    try {
-      const { pages } = await getPluginMetaPagesInfo(accessToken);
-      const canConnectPages = pages.filter((v) => v.status !== "CONNECTED");
-      if (canConnectPages.length > 0)
-        OnConnectMetaPagesModal({ pages: canConnectPages, accessToken });
-      else localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
-    } catch (error) {
-      if (error instanceof AxiosError && error.status === 400) {
-        localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
-      } else {
-        console.error(error);
-      }
-    }
   };
 
   useEventsListener([EventType.WORKSPACE_SETTING_UPDATED], fetchSettings, [workspaceId]);
@@ -434,13 +334,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   }, [userMember]);
 
   useEffect(() => {
-    if (userMember && userMember.permissions.includes(WorkspacePermission.WORKSPACE_SETTINGS)) {
-      const accessToken = localStorage.getItem(StorageKey.META_ACCESS_TOKEN);
-      if (accessToken) onConnectMetaPages(accessToken);
-    }
-  }, [userMember?.workspaceId, userMember]);
-
-  useEffect(() => {
     if (auth.isInitialized) {
       if (auth.user?._id) {
         initialize();
@@ -455,19 +348,13 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const defaultWorkspaceRoles: WorkspaceRoleEntity[] = [
     {
       _id: WorkspaceSpecialRoleId.ADMIN,
-      name: `role_${WorkspaceSpecialRoleId.ADMIN}`,
+      name: WorkspaceSpecialRoleId.ADMIN,
       color: "primary",
       permissions: Object.values(WorkspacePermission),
       workspaceId: "",
       createdAt: Date.now(),
     },
   ];
-
-  const isRequireBranches =
-    userMember &&
-    userMember?.workspace.branches > 0 &&
-    !userMember.workspaceBranches.length &&
-    !userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS);
 
   const isShouldEnableBranches =
     !!userMember &&
@@ -477,8 +364,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const contextValue: WorkspaceContext = {
     onlineStatus: onlineStatus.data || {},
-    availableModules,
-    getAvailableModule: (id: WorkspaceModuleId) => workspaceModules.find((m) => m.id === id)!,
     type: userMember?.workspace?.type!,
     updateSettings,
     permissions: userMember?.permissions!,
@@ -520,14 +405,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     isAvailable: isInitialized && !!auth.user && !!userMember && !!state.current.settings,
   };
 
-  const Component = useMemo(() => {
-    if (!isInitialized || !auth.user) return null;
-    if (inviteCode) return <WorkspaceInvitation inviteCode={inviteCode} />;
-    if (!userMember) return <WorkspaceRequire />;
-    if (isRequireBranches) return <WorkspaceRequireBranches />;
-    if (userMember.workspace.isArchived) return <WorkspaceArchived />;
-  }, [isInitialized, inviteCode, userMember, isRequireBranches, auth.user]);
-
   useEffect(() => {
     if (isInitialized && contextValue.userMembers.length > 0) {
       const query = new URLSearchParams(window.location.search);
@@ -550,14 +427,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     }
   }, [contextValue.userMember]);
 
-  return (
-    <Context.Provider value={contextValue}>
-      {Component && <Fullscreen zIndex={zIndexes.requireWorkspace}>{Component}</Fullscreen>}
-
-      {props.children}
-      <ConnectMetaPagesModal />
-    </Context.Provider>
-  );
+  return <Context.Provider value={contextValue}>{props.children}</Context.Provider>;
 };
 
 export default WorkspaceProvider;

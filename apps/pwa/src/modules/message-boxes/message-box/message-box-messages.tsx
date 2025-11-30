@@ -18,7 +18,7 @@ import {
 } from "@/modules/message-boxes/message-boxes-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
+import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { String } from "@/utils/string.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -237,25 +237,29 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
 
                   <Renderer visible={msg.type === MessageType.SEND}>
                     <Renderer visible={isFirstSession || needToShowDivider}>
-                      <Group gap={3}>
-                        <Anchor
-                          fz={12}
-                          c="gray.6"
-                          ta="right"
-                          onClick={() => {
-                            if (!senderMember?.userId) return;
-                            OnModalUserInformation(senderMember?.userId || "");
-                          }}
-                        >
-                          {msg.resource === MessageResource.AI_ASSISTANT
-                            ? t`AI assistant`
-                            : senderMember?.name || ""}
-                        </Anchor>
+                      <ModalUserInformation>
+                        {(open) => (
+                          <Group gap={3}>
+                            <Anchor
+                              fz={12}
+                              c="gray.6"
+                              ta="right"
+                              onClick={() => {
+                                if (!senderMember?.userId) return;
+                                open(senderMember?.userId || "");
+                              }}
+                            >
+                              {msg.resource === MessageResource.AI_ASSISTANT
+                                ? t`AI assistant`
+                                : senderMember?.name || ""}
+                            </Anchor>
 
-                        <Text fz={12} c="gray.6" ta="right">
-                          • {getTime()}
-                        </Text>
-                      </Group>
+                            <Text fz={12} c="gray.6" ta="right">
+                              • {getTime()}
+                            </Text>
+                          </Group>
+                        )}
+                      </ModalUserInformation>
                     </Renderer>
                   </Renderer>
 

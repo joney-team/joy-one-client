@@ -11,6 +11,7 @@ import {
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { OnModalTransferOwner } from "@/modules/workspaces/modals/modal-transfer-workspace-owner";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 import { Trans } from "@lingui/react/macro";
 import { Group, Stack } from "@mantine/core";
 import { IconTransfer, IconUsersPlus } from "@tabler/icons-react";
@@ -19,7 +20,9 @@ import { NextPage } from "next";
 const Page: NextPage = () => {
   const workspace = useWorkspace();
   const router = useRouter();
-  const modSettingRoles = workspace.getAvailableModule("workspaceSettingsRoles");
+
+  const { getAvailableModule } = useAvailableWorkspaceModules();
+  const modSettingRoles = getAvailableModule("workspaceSettingsRoles");
 
   return (
     <Stack gap={0}>

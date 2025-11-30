@@ -23,23 +23,25 @@ import { EventList } from "@/components/event-list";
 import { SectionTitle } from "@/components/session-title";
 import { CustomerTasks } from "@/modules/customers/customer-tasks";
 import { FilesBox } from "@/modules/files/files-box";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 
 import { Archived } from "@/components/archived";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { CtasWrapper } from "@/components/cta-wrapper";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
+import { ModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
 import { CustomerKyc } from "@/modules/customers/components/customer-kyc-list";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { Trans } from "@lingui/react/macro";
+import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 
 export const CustomerDetail = () => {
   const workspace = useWorkspace();
+  const { getAvailableModule } = useAvailableWorkspaceModules();
   const layout = useLayout();
 
   const params = useParams();
@@ -66,24 +68,32 @@ export const CustomerDetail = () => {
         navigation: (
           <Fragment>
             {workspace.hasPermission(WorkspacePermission.BOOKING_MANAGER) && (
-              <Button
-                leftIcon={IconCalendarPlus}
-                variant="outline"
-                onClick={() => OnModalCreateBooking({ customer })}
-                size="xs"
-              >
-                <Trans>Booking</Trans>
-              </Button>
+              <ModalCreateBooking>
+                {(open) => (
+                  <Button
+                    leftIcon={IconCalendarPlus}
+                    variant="outline"
+                    onClick={() => open({ customer })}
+                    size="xs"
+                  >
+                    <Trans>Booking</Trans>
+                  </Button>
+                )}
+              </ModalCreateBooking>
             )}
 
-            <Button
-              leftIcon={IconStackPush}
-              variant="outline"
-              onClick={() => OnModalCreateTask({ customer })}
-              size="xs"
-            >
-              <Trans>Task</Trans>
-            </Button>
+            <ModalCreateTask>
+              {(open) => (
+                <Button
+                  leftIcon={IconStackPush}
+                  variant="outline"
+                  onClick={() => open({ customer })}
+                  size="xs"
+                >
+                  <Trans>Task</Trans>
+                </Button>
+              )}
+            </ModalCreateTask>
           </Fragment>
         ),
       });
@@ -113,18 +123,18 @@ export const CustomerDetail = () => {
       <Stack gap={30} p={16}>
         <CustomerInformations customer={customer} />
 
-        <Renderer visible={!!workspace.getAvailableModule("customerKYCs")}>
+        <Renderer visible={!!getAvailableModule("customerKYCs")}>
           <Stack gap={10}>
             <SectionTitle name="KYC" icon={IconUserScan} />
             <CustomerKyc customer={customer} />
           </Stack>
         </Renderer>
 
-        <Renderer visible={!!workspace.getAvailableModule("bookings")}>
+        <Renderer visible={!!getAvailableModule("bookings")}>
           <CustomerBookings customer={customer} />
         </Renderer>
 
-        <Renderer visible={!!workspace.getAvailableModule("tasks")}>
+        <Renderer visible={!!getAvailableModule("tasks")}>
           <CustomerTasks customer={customer} />
         </Renderer>
 
@@ -150,7 +160,7 @@ export const CustomerDetail = () => {
       </Stack>
 
       <CtasWrapper>
-        <Renderer visible={!!workspace.getAvailableModule("prescriptions")}>
+        <Renderer visible={!!getAvailableModule("prescriptions")}>
           <ActionIcon
             radius={150}
             size="xl"

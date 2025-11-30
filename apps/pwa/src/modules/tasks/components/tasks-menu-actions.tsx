@@ -10,7 +10,7 @@ import { PartnerSelector } from "@/modules/partners/components/partner-selector"
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTaskHistories } from "@/modules/tasks/task-history-context";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
@@ -84,7 +84,9 @@ export const TaskMenuActions: FC = () => {
   return (
     <Group justify="space-between" wrap="nowrap" flex={1}>
       <Group gap={10}>
-        <ButtonPlus iconSize={16} size={26} onClick={() => OnModalCreateTask()} />
+        <ModalCreateTask>
+          {(open) => <ButtonPlus iconSize={16} size={26} onClick={() => open()} />}
+        </ModalCreateTask>
 
         {layout.view === "mobile" && (
           <ButtonSelect

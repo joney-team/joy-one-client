@@ -7,7 +7,7 @@ import { NumberFormat, numberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
 import { PromotionDescription } from "@/modules/promotions/components/promotion-description";
 import { useColor } from "@/modules/theme/use-color";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Indicator, Modal, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -16,8 +16,8 @@ import { ReactNode, type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
 
 export const OrderSalePromotions: FC = () => {
-  const workspace = useWorkspace();
-  const workspaceModule = workspace.getAvailableModule("promotions");
+  const { getAvailableModule } = useAvailableWorkspaceModules();
+  const workspaceModule = getAvailableModule("promotions");
   const color = useColor();
   const [opened, { open, close }] = useDisclosure(false);
   const { availablePromotions, activeOrder, updateOrder } = userOrdersManagement();

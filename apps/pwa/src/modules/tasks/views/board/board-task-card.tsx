@@ -10,7 +10,7 @@ import { TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import {
   getTaskPriorityColor,
@@ -331,20 +331,24 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                 <Group gap={0} wrap="nowrap">
                   {!task.parentId && (
                     <Tooltip label={t`Create subtask`}>
-                      <ActionIcon
-                        variant="subtle"
-                        color="gray"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          OnModalCreateTask({
-                            parentId: task._id,
-                            onClose: () => setIsShowSubTasks(true),
-                          });
-                        }}
-                      >
-                        <IconPlus size={16} />
-                      </ActionIcon>
+                      <ModalCreateTask>
+                        {(open) => (
+                          <ActionIcon
+                            variant="subtle"
+                            color="gray"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              open({
+                                parentId: task._id,
+                                onClose: () => setIsShowSubTasks(true),
+                              });
+                            }}
+                          >
+                            <IconPlus size={16} />
+                          </ActionIcon>
+                        )}
+                      </ModalCreateTask>
                     </Tooltip>
                   )}
                 </Group>

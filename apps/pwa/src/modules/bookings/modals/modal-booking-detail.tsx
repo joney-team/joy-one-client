@@ -2,7 +2,7 @@
 
 import { Anchor, Modal, Stack, ThemeIcon, Title, em } from "@mantine/core";
 import { IconCalendar, IconEye, IconUser, IconUserScreen } from "@tabler/icons-react";
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, ReactNode, useState } from "react";
 
 import { Button } from "@/components/buttons/button";
 import { SectionTitle } from "@/components/session-title";
@@ -19,18 +19,13 @@ interface ModalBookingDetailProps {
   booking: BookingEntity;
 }
 
-export let OnModalBookingDetail: (props: ModalBookingDetailProps) => void = () => {};
-
-export const ModalBookingDetail: FC = () => {
+export const ModalBookingDetail: FC<{
+  children: (open: (props: ModalBookingDetailProps) => void) => ReactNode;
+}> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalBookingDetailProps>();
   const router = useRouter();
   const color = useColor();
-
-  OnModalBookingDetail = (p) => {
-    setProps(p);
-    open();
-  };
 
   const onClose = () => {
     close();
@@ -46,57 +41,64 @@ export const ModalBookingDetail: FC = () => {
   };
 
   return (
-    <Modal opened={opened} onClose={onClose} size="md" withCloseButton={false} yOffset={20}>
-      {props?.booking && (
-        <Stack>
-          <Stack gap={16} mb={10}>
-            <Stack gap={0} align="center">
-              <ThemeIcon variant="subtle" radius={100} size={50} color={color("primary")}>
-                <IconUserScreen size={45} strokeWidth={1.8} />
-              </ThemeIcon>
+    <Fragment>
+      {children((p) => {
+        setProps(p);
+        open();
+      })}
 
-              <Title fz={em(20)} fw={700} c={color("primary")} ta="center">
-                <Trans>Booking information</Trans>
-              </Title>
-            </Stack>
+      <Modal opened={opened} onClose={onClose} size="md" withCloseButton={false} yOffset={20}>
+        {props?.booking && (
+          <Stack>
+            <Stack gap={16} mb={10}>
+              <Stack gap={0} align="center">
+                <ThemeIcon variant="subtle" radius={100} size={50} color={color("primary")}>
+                  <IconUserScreen size={45} strokeWidth={1.8} />
+                </ThemeIcon>
 
-            {props?.booking.customer && (
-              <Fragment>
-                <SectionTitle mb={-10} name={<Trans>Customer</Trans>} icon={IconUser} />
-                <CustomerCard
-                  customer={props?.booking.customer}
-                  withBorder
-                  shadow="none"
-                  onClick={() => {}}
-                />
-              </Fragment>
-            )}
+                <Title fz={em(20)} fw={700} c={color("primary")} ta="center">
+                  <Trans>Booking information</Trans>
+                </Title>
+              </Stack>
 
-            <SectionTitle mb={-10} name={<Trans>Booking</Trans>} icon={IconCalendar} />
-
-            <BookingCard
-              booking={props?.booking}
-              hideCustomerInfo
-              withBorder
-              shadow="none"
-              hideCtas
-              onClick={() => {}}
-            />
-
-            <Stack justify="center" align="center" mt={10}>
-              {props.booking.customer && (
-                <Button leftIcon={IconEye} radius={100} onClick={onViewDetail}>
-                  <Trans>Customer detail</Trans>
-                </Button>
+              {props?.booking.customer && (
+                <Fragment>
+                  <SectionTitle mb={-10} name={<Trans>Customer</Trans>} icon={IconUser} />
+                  <CustomerCard
+                    customer={props?.booking.customer}
+                    withBorder
+                    shadow="none"
+                    onClick={() => {}}
+                  />
+                </Fragment>
               )}
 
-              <Anchor c="gray" fz={em(14)} onClick={onClose}>
-                <Trans>Close</Trans>
-              </Anchor>
+              <SectionTitle mb={-10} name={<Trans>Booking</Trans>} icon={IconCalendar} />
+
+              <BookingCard
+                booking={props?.booking}
+                hideCustomerInfo
+                withBorder
+                shadow="none"
+                hideCtas
+                onClick={() => {}}
+              />
+
+              <Stack justify="center" align="center" mt={10}>
+                {props.booking.customer && (
+                  <Button leftIcon={IconEye} radius={100} onClick={onViewDetail}>
+                    <Trans>Customer detail</Trans>
+                  </Button>
+                )}
+
+                <Anchor c="gray" fz={em(14)} onClick={onClose}>
+                  <Trans>Close</Trans>
+                </Anchor>
+              </Stack>
             </Stack>
           </Stack>
-        </Stack>
-      )}
-    </Modal>
+        )}
+      </Modal>
+    </Fragment>
   );
 };

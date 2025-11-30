@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { useApp } from "@/app.context";
@@ -5,6 +7,7 @@ import { getAppConfig } from "@/service";
 import { Anchor, Group, Modal, Stack, Text, Title, em } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { FC, useEffect } from "react";
+import { Trans } from "@lingui/react/macro";
 
 export const ModalUpgradeVersion: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -34,23 +37,26 @@ export const ModalUpgradeVersion: FC = () => {
       <Stack align="center" p={20}>
         <Image src="/images/upgrade-version.png" w={200} />
         <Title c="primary" ta="center" fz={em(25)} tt="capitalize" fw={500}>
-          Có phiên bản mới xịn hơn!
+          <Trans>New version available!</Trans>
         </Title>
         <Text ta="center">
-          Đội ngũ Joy One rất cảm ơn bạn đã sử dụng sản phẩm, chúng mình đã thực hiện một số cải tiến và sửa lỗi.
-          <br />
-          <br />
-          Tải lại trang để cập nhật.
+          <Trans>
+            We are very grateful for your use of our product. We have made some improvements and bug
+            fixes.
+            <br />
+            <br />
+            Reload the page to update.
+          </Trans>
         </Text>
 
         <Group justify="center">
           <Button color="joyone" onClick={() => window.location.reload()}>
-            Cập nhật ngay
+            <Trans>Update now</Trans>
           </Button>
         </Group>
 
         <Anchor c="gray" fz={em(12)} onClick={() => close()}>
-          Bỏ qua
+          <Trans>Skip</Trans>
         </Anchor>
       </Stack>
     </Modal>

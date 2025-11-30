@@ -51,66 +51,7 @@ import {
   IconUser,
   IconX,
 } from "@tabler/icons-react";
-import { FC, ReactNode, useRef, useState } from "react";
-
-export let OnModalUserInformation: (userId: string) => void = () => {};
-
-export const ModalUserInformation: FC = () => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const userId = useRef<string | null>(null);
-
-  const userInformation = useFetch({
-    autoFetch: false,
-    fetch: async () => {
-      if (!userId.current) throw Error("Unaccessable");
-      return getUserPublicInformation(userId.current!).catch((error) => {
-        onError(error);
-        close();
-      });
-    },
-    refetchEvents: {
-      types: [
-        EventType.WORKSPACE_MEMBER_UPDATED,
-        EventType.WORKSPACE_MEMBER_LEAVED,
-        EventType.WORKSPACE_MEMBER_TRANSFER_OWNER,
-      ],
-      condition: () => !!userId.current,
-    },
-  });
-
-  const onClose = () => {
-    userInformation.reset();
-    close();
-  };
-
-  OnModalUserInformation = async (id) => {
-    userId.current = id;
-    userInformation.fetch();
-    open();
-  };
-
-  return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      withCloseButton={false}
-      size="xl"
-      zIndex={zIndexes.commonModals}
-    >
-      <Stack>
-        {!!userInformation.data && userInformation.data._id === userId.current && (
-          <UserInformation user={userInformation.data} onClose={onClose} />
-        )}
-
-        {userInformation.isFetching && (
-          <Stack p={16}>
-            <Skeleton height={200} />
-          </Stack>
-        )}
-      </Stack>
-    </Modal>
-  );
-};
+import { FC, Fragment, ReactNode, useRef, useState } from "react";
 
 const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> = (props) => {
   const { user } = props;
@@ -397,5 +338,66 @@ const ShortInfoSession: FC<{
         </Group>
       )}
     </Stack>
+  );
+};
+
+export const ModalUserInformation: FC<{
+  children: (open: (userId: string) => void) => ReactNode;
+}> = ({ children }) => {
+  const [opened, { open, close }] = useDisclosure(false);
+  const userId = useRef<string | null>(null);
+
+  const userInformation = useFetch({
+    autoFetch: false,
+    fetch: async () => {
+      if (!userId.current) throw Error("Unaccessable");
+      return getUserPublicInformation(userId.current!).catch((error) => {
+        onError(error);
+        close();
+      });
+    },
+    refetchEvents: {
+      types: [
+        EventType.WORKSPACE_MEMBER_UPDATED,
+        EventType.WORKSPACE_MEMBER_LEAVED,
+        EventType.WORKSPACE_MEMBER_TRANSFER_OWNER,
+      ],
+      condition: () => !!userId.current,
+    },
+  });
+
+  const onClose = () => {
+    userInformation.reset();
+    close();
+  };
+
+  return (
+    <Fragment>
+      {children((id) => {
+        userId.current = id;
+        userInformation.fetch();
+        open();
+      })}
+
+      <Modal
+        opened={opened}
+        onClose={onClose}
+        withCloseButton={false}
+        size="xl"
+        zIndex={zIndexes.commonModals}
+      >
+        <Stack>
+          {!!userInformation.data && userInformation.data._id === userId.current && (
+            <UserInformation user={userInformation.data} onClose={onClose} />
+          )}
+
+          {userInformation.isFetching && (
+            <Stack p={16}>
+              <Skeleton height={200} />
+            </Stack>
+          )}
+        </Stack>
+      </Modal>
+    </Fragment>
   );
 };

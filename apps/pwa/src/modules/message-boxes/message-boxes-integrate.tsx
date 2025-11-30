@@ -3,6 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
+import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { PluginMetaPages } from "@/modules/plugins/meta-pages/plugin-meta-pages";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { PluginZaloOAs } from "@/modules/plugins/zalo-oas/zalo-oas";
@@ -10,7 +11,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
 import { Card, em, Grid, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
-import { IconCirclesRelation, IconPlus } from "@tabler/icons-react";
+import { IconCirclesRelation, IconMessage, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 
 export const MessageBoxesIntegrate: FC = () => {
@@ -66,14 +67,28 @@ export const MessageBoxesIntegrate: FC = () => {
                 </Trans>
               </Text>
 
-              <Button
-                mt={10}
-                type="submit"
-                leftIcon={IconPlus}
-                onClick={plugins.onCreateMessageHub}
-              >
-                <Trans>Create new</Trans>
-              </Button>
+              <ModalInput>
+                {(openInput) => (
+                  <Button
+                    mt={10}
+                    type="submit"
+                    leftIcon={IconPlus}
+                    onClick={() =>
+                      openInput({
+                        type: InputModalType.TEXT,
+                        title: <Trans>Enter name</Trans>,
+                        icon: IconMessage,
+                        value: workspace.userMember.name,
+                        onDone: async (name) => {
+                          await plugins.onCreateMessageHub(name);
+                        },
+                      })
+                    }
+                  >
+                    <Trans>Create new</Trans>
+                  </Button>
+                )}
+              </ModalInput>
             </Stack>
           </Card>
         </Grid.Col>

@@ -2,7 +2,7 @@
 
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { InputModalType, OnModalInput } from "@/modals/modal-input";
+import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { WorkspaceViewComponent } from "@/modules/workspace-settings/workspace-settings-types";
 import { WorkspaceModuleSelector } from "@/modules/workspaces/components/workspace-module-selector";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -39,6 +39,7 @@ import {
 } from "@tabler/icons-react";
 import { type FC, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
+import { useAvailableWorkspaceModules, WorkspaceModuleId } from "./workspace-modules";
 
 export const WorkspaceModuleSetup: FC = () => {
   const workspace = useWorkspace();
@@ -54,18 +55,6 @@ export const WorkspaceModuleSetup: FC = () => {
       },
     })
   );
-
-  const onAddDivier = () => {
-    OnModalInput({
-      type: InputModalType.TEXT,
-      title: <Trans>Divider</Trans>,
-      label: <Trans>Name</Trans>,
-      icon: IconSeparator,
-      onDone: (v) => {
-        handleComponents.append({ id: uuid(), moduleId: v, type: "DIVIDER", dividerName: v });
-      },
-    });
-  };
 
   const isUpdateAble = useRef(false);
   const [debounced] = useDebouncedValue(components, 300);
@@ -93,86 +82,109 @@ export const WorkspaceModuleSetup: FC = () => {
 
   return (
     <Container size={600} p={16}>
-      <Stack gap={10}>
-        <Group justify="space-between">
-          <Group gap={10} flex={1}>
-            <ThemeIcon variant="light">
-              <IconLayout size={20} />
-            </ThemeIcon>
+      <ModalInput>
+        {(openInput) => (
+          <Stack gap={10}>
+            <Group justify="space-between">
+              <Group gap={10} flex={1}>
+                <ThemeIcon variant="light">
+                  <IconLayout size={20} />
+                </ThemeIcon>
 
-            <Text fw={600}>
-              <Trans>Navigator</Trans>
-            </Text>
-          </Group>
+                <Text fw={600}>
+                  <Trans>Navigator</Trans>
+                </Text>
+              </Group>
 
-          <Group gap={3}>
-            <Tooltip label={<Trans>Reset default</Trans>}>
-              <ActionIcon variant="subtle" color="dark" onClick={onReset}>
-                <IconRefresh strokeWidth={1.5} size={18} />
-              </ActionIcon>
-            </Tooltip>
+              <Group gap={3}>
+                <Tooltip label={<Trans>Reset default</Trans>}>
+                  <ActionIcon variant="subtle" color="dark" onClick={onReset}>
+                    <IconRefresh strokeWidth={1.5} size={18} />
+                  </ActionIcon>
+                </Tooltip>
 
-            <Tooltip label={<Trans>Add divider</Trans>}>
-              <ActionIcon variant="subtle" color="dark" onClick={onAddDivier}>
-                <IconPlus strokeWidth={1.5} size={18} />
-              </ActionIcon>
-            </Tooltip>
+                <Tooltip label={<Trans>Add divider</Trans>}>
+                  <ActionIcon
+                    variant="subtle"
+                    color="dark"
+                    onClick={() => {
+                      openInput({
+                        type: InputModalType.TEXT,
+                        title: <Trans>Divider</Trans>,
+                        label: <Trans>Name</Trans>,
+                        icon: IconSeparator,
+                        onDone: (v) => {
+                          handleComponents.append({
+                            id: uuid(),
+                            moduleId: v,
+                            type: "DIVIDER",
+                            dividerName: v,
+                          });
+                        },
+                      });
+                    }}
+                  >
+                    <IconPlus strokeWidth={1.5} size={18} />
+                  </ActionIcon>
+                </Tooltip>
 
-            <WorkspaceModuleSelector
-              restrictDisplay={["navigation"]}
-              excludeIds={components
-                .filter((v) => v.type === "MODULE" && !!v.moduleId)
-                .map((v) => v.moduleId!!)}
-              onSelect={(mo) => {
-                handleComponents.append({ id: uuid(), moduleId: mo.id as any, type: "MODULE" });
-              }}
-              target={(ctx) => {
-                return (
-                  <Tooltip label={<Trans>Add modules</Trans>}>
-                    <ActionIcon variant="subtle" color="dark" onClick={ctx.toggle}>
-                      <IconLibraryPlus strokeWidth={1.5} size={18} />
-                    </ActionIcon>
-                  </Tooltip>
-                );
-              }}
-            />
-          </Group>
-        </Group>
+                <WorkspaceModuleSelector
+                  restrictDisplay={["navigation"]}
+                  excludeIds={components
+                    .filter((v) => v.type === "MODULE" && !!v.moduleId)
+                    .map((v) => v.moduleId!!)}
+                  onSelect={(mo) => {
+                    handleComponents.append({ id: uuid(), moduleId: mo.id as any, type: "MODULE" });
+                  }}
+                  target={(ctx) => {
+                    return (
+                      <Tooltip label={<Trans>Add modules</Trans>}>
+                        <ActionIcon variant="subtle" color="dark" onClick={ctx.toggle}>
+                          <IconLibraryPlus strokeWidth={1.5} size={18} />
+                        </ActionIcon>
+                      </Tooltip>
+                    );
+                  }}
+                />
+              </Group>
+            </Group>
 
-        <Card withBorder p={10}>
-          <DndContext
-            sensors={sensors}
-            onDragEnd={(e) => {
-              const { active, over } = e;
-              if (!over || active.id === over?.id) return;
-              let items = [...components];
+            <Card withBorder p={10}>
+              <DndContext
+                sensors={sensors}
+                onDragEnd={(e) => {
+                  const { active, over } = e;
+                  if (!over || active.id === over?.id) return;
+                  let items = [...components];
 
-              const oldIndex = items.findIndex((v) => v.id === active.id.toString());
-              const newIndex = items.findIndex((v) => v.id === over?.id.toString());
-              items = arrayMove(items, oldIndex, newIndex);
-              handleComponents.setState(items);
-            }}
-          >
-            <Stack gap={5}>
-              <SortableContext
-                items={components.map((v) => v.id)}
-                strategy={verticalListSortingStrategy}
+                  const oldIndex = items.findIndex((v) => v.id === active.id.toString());
+                  const newIndex = items.findIndex((v) => v.id === over?.id.toString());
+                  items = arrayMove(items, oldIndex, newIndex);
+                  handleComponents.setState(items);
+                }}
               >
-                {components.map((cpn) => {
-                  return (
-                    <ComponentItem
-                      key={cpn.id}
-                      cpn={cpn}
-                      components={components}
-                      handler={handleComponents}
-                    />
-                  );
-                })}
-              </SortableContext>
-            </Stack>
-          </DndContext>
-        </Card>
-      </Stack>
+                <Stack gap={5}>
+                  <SortableContext
+                    items={components.map((v) => v.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {components.map((cpn) => {
+                      return (
+                        <ComponentItem
+                          key={cpn.id}
+                          cpn={cpn}
+                          components={components}
+                          handler={handleComponents}
+                        />
+                      );
+                    })}
+                  </SortableContext>
+                </Stack>
+              </DndContext>
+            </Card>
+          </Stack>
+        )}
+      </ModalInput>
     </Container>
   );
 };
@@ -182,11 +194,11 @@ const ComponentItem: FC<{
   components: WorkspaceViewComponent[];
   handler: UseListStateHandlers<WorkspaceViewComponent>;
 }> = (props) => {
-  const workspace = useWorkspace();
+  const { getAvailableModule } = useAvailableWorkspaceModules();
   const { cpn } = props;
   const sortable = useSortable({ id: cpn.id, data: cpn });
   const [isHovered, setIsHovered] = useState(false);
-  const workspaceModule = cpn.moduleId ? workspace.getAvailableModule(cpn.moduleId) : null;
+  const workspaceModule = getAvailableModule(cpn.moduleId as WorkspaceModuleId);
 
   const style = {
     transform: CSS.Transform.toString(sortable.transform),

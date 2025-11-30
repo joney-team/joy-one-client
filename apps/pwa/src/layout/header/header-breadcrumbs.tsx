@@ -4,7 +4,11 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceModule } from "@/modules/workspaces/workspace-modules";
+import {
+  useAvailableWorkspaceModules,
+  useWorkspaceModules,
+  WorkspaceModule,
+} from "@/modules/workspaces/workspace-modules";
 import { Card, Group, Text, ThemeIcon } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconChevronRight } from "@tabler/icons-react";
@@ -33,16 +37,16 @@ function getParentModules(pathname: string, modules: WorkspaceModule[]): Workspa
 }
 
 export const WorkspaceHeaderBreadcrumbs: FC = () => {
-  const workspace = useWorkspace();
+  const { availableModules, getModuleByHref } = useAvailableWorkspaceModules();
   const router = useRouter();
   const layout = useLayout();
 
-  const activatedModule = workspace.availableModules.find((m) => m.href === router.pathname);
-  const parentActivatedModule = workspace.availableModules.find(
+  const activatedModule = getModuleByHref(router.pathname);
+  const parentActivatedModule = availableModules.find(
     (m) => m.href === `/${router.pathname.split("/")[1]}` && m.id !== activatedModule?.id
   );
 
-  const parentModules = getParentModules(router.pathname, workspace.availableModules);
+  const parentModules = getParentModules(router.pathname, availableModules);
 
   const ignoreModules = ["tasks"];
 
@@ -58,13 +62,13 @@ export const WorkspaceHeaderBreadcrumbs: FC = () => {
         parentModules.map((mo) => {
           return (
             <Fragment key={mo.id}>
-              <BreadcrumbItem mod={mo} />
+              <BreadcrumbItem moduleId={mo.id} />
               <BreadcrumbDivider enabled={!!activatedModule} />
             </Fragment>
           );
         })}
 
-      {!!activatedModule && <BreadcrumbItem mod={activatedModule} />}
+      {!!activatedModule && <BreadcrumbItem moduleId={activatedModule.id} />}
 
       {layout.components.head && (
         <Fragment>
@@ -83,24 +87,29 @@ export const WorkspaceHeaderBreadcrumbs: FC = () => {
   );
 };
 
-const BreadcrumbItem: FC<{ mod: WorkspaceModule }> = ({ mod }) => {
+const BreadcrumbItem: FC<{ moduleId: string }> = ({ moduleId }) => {
   const hover = useHover();
   const router = useRouter();
   const color = useColor();
 
+  const { getModule } = useWorkspaceModules();
+  const workspaceModule = getModule(moduleId);
+
+  if (!workspaceModule) return null;
+
   return (
-    <Link href={mod.href} style={{ textDecoration: "none" }}>
+    <Link href={workspaceModule.href} style={{ textDecoration: "none" }}>
       <Card
         withBorder={false}
         shadow="none"
         ref={hover.ref}
         bg={color(hover.hovered ? "var(--mantine-color-default-hover)" : "transparent")}
-        onClick={() => router.push(mod.href)}
+        onClick={() => router.push(workspaceModule.href)}
         p={2}
       >
         <Group gap={0}>
           <Text fz={13} fw={500} px={4}>
-            {mod.name}
+            {workspaceModule.name}
           </Text>
         </Group>
       </Card>

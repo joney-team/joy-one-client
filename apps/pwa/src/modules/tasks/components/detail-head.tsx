@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalShareLink } from "@/modals/modal-share-link";
+import { ModalSharelink } from "@/modals/modal-share-link";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useTask } from "@/modules/tasks/hooks/use-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
@@ -130,36 +130,46 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
         </Group>
       </Group>
 
-      <Group justify="end" wrap="nowrap" gap={8}>
-        <Renderer views={["desktop"]}>
-          <Text fz={em(12)} c="var(--mantine-color-dimmed)" px={10}>
-            <Trans>Created at</Trans> <DateFormat value={task.createdAt} type="date-time" />
-          </Text>
+      <ModalSharelink>
+        {(shareLink) => (
+          <Group justify="end" wrap="nowrap" gap={8}>
+            <Renderer views={["desktop"]}>
+              <Text fz={em(12)} c="var(--mantine-color-dimmed)" px={10}>
+                <Trans>Created at</Trans> <DateFormat value={task.createdAt} type="date-time" />
+              </Text>
 
-          <Button
-            component="div"
-            size="compact-sm"
-            variant="light"
-            leftIcon={IconShare2}
-            onClick={() => OnModalShareLink({ task, url: `${config.APP_URL}/tasks/${task.code}` })}
-          >
-            <Trans>Share</Trans>
-          </Button>
-        </Renderer>
+              <Button
+                component="div"
+                size="compact-sm"
+                variant="light"
+                leftIcon={IconShare2}
+                onClick={() => shareLink({ task, url: `${config.APP_URL}/tasks/${task.code}` })}
+              >
+                <Trans>Share</Trans>
+              </Button>
+            </Renderer>
 
-        <Renderer views={["mobile", "tablet"]}>
-          <ActionIcon
-            onClick={() => OnModalShareLink({ task, url: `${config.APP_URL}/tasks/${task.code}` })}
-            component="div"
-          >
-            <IconShare2 strokeWidth={1.5} size={18} />
-          </ActionIcon>
-        </Renderer>
+            <Renderer views={["mobile", "tablet"]}>
+              <ActionIcon
+                onClick={() => shareLink({ task, url: `${config.APP_URL}/tasks/${task.code}` })}
+                component="div"
+              >
+                <IconShare2 strokeWidth={1.5} size={18} />
+              </ActionIcon>
+            </Renderer>
 
-        <ActionIcon component="div" variant="subtle" size="lg" color="dark" onClick={props.close}>
-          <IconX strokeWidth={1.5} size={18} />
-        </ActionIcon>
-      </Group>
+            <ActionIcon
+              component="div"
+              variant="subtle"
+              size="lg"
+              color="dark"
+              onClick={props.close}
+            >
+              <IconX strokeWidth={1.5} size={18} />
+            </ActionIcon>
+          </Group>
+        )}
+      </ModalSharelink>
     </Group>
   );
 };

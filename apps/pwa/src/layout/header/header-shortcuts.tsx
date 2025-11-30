@@ -2,15 +2,18 @@
 
 import { type AppRouter, useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { OnModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
-import { OnCustomerModal } from "@/modules/customers/customer-modal";
-import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
-import { OnModalLoanCalculator } from "@/modules/loans/modals/modal-loan-calculator";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { ModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
+import { ModalCustomer } from "@/modules/customers/customer-modal";
+import { ModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
+import { ModalLoanCalculator } from "@/modules/loans/modals/modal-loan-calculator";
+import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
+import {
+  useAvailableWorkspaceModules,
+  WorkspaceModuleId,
+} from "@/modules/workspaces/workspace-modules";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Menu } from "@mantine/core";
@@ -26,15 +29,27 @@ import {
   IconUserPlus,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { type FC, Fragment, memo } from "react";
+import { type FC, Fragment } from "react";
 import { Button } from "../../components/buttons/button";
+
+type ShortcutModals = {
+  createLoan: () => void;
+  createBooking: () => void;
+  createTask: () => void;
+  createCustomer: () => void;
+};
 
 type Shortcut = {
   icon: Icon;
   permission?: WorkspacePermission;
   moduleId?: WorkspaceModuleId;
   workspaceType?: WorkspaceType;
-} & ({ onClick: (router: AppRouter) => void } | { href: string });
+} & (
+  | {
+      onClick: (context: { router: AppRouter; modals: ShortcutModals }) => void;
+    }
+  | { href: string }
+);
 
 const shortcuts: Shortcut[] = [
   {
@@ -42,16 +57,17 @@ const shortcuts: Shortcut[] = [
     moduleId: "loans",
     workspaceType: WorkspaceType.CREDIT,
     permission: WorkspacePermission.LOANS_CREATOR,
-    onClick: () => OnModalCreateLoan(),
+    onClick: (context) => {
+      context.modals.createLoan();
+    },
   },
   {
     icon: IconUserPlus,
     moduleId: "customers",
     permission: WorkspacePermission.CUSTOMERS_CREATE,
-    onClick: (router: AppRouter) =>
-      OnCustomerModal({
-        onDone: (customer) => router.push(`/customers/${customer.code}`),
-      }),
+    onClick: (context) => {
+      context.modals.createCustomer();
+    },
   },
   {
     moduleId: "orders",
@@ -62,27 +78,30 @@ const shortcuts: Shortcut[] = [
   {
     moduleId: "tasks",
     icon: IconStackPush,
-    onClick: () => OnModalCreateTask(),
+    onClick: (context) => {
+      context.modals.createTask();
+    },
   },
   {
     moduleId: "bookings",
     permission: WorkspacePermission.BOOKING_MANAGER,
     icon: IconCalendarPlus,
-    onClick: () => OnModalCreateBooking(),
+    onClick: (context) => {
+      context.modals.createBooking();
+    },
   },
 ];
 
-export const WorkspaceHeaderShortcuts: FC = memo(() => {
+export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = ({ modals }) => {
   const workspace = useWorkspace();
+  const { isModuleAvailable, getModule } = useAvailableWorkspaceModules();
   const layout = useLayout();
   const router = useRouter();
   const color = useColor();
 
   const availableShortcuts = shortcuts.filter((shortcut) => {
     const isHasPermission = !shortcut.permission || workspace.hasPermission(shortcut.permission);
-    const isModuleActive = shortcut.moduleId
-      ? !!workspace.getAvailableModule(shortcut.moduleId)
-      : true;
+    const isModuleActive = shortcut.moduleId ? !!isModuleAvailable(shortcut.moduleId) : true;
     const isMatchWorkspaceType = shortcut.workspaceType
       ? workspace.type === shortcut.workspaceType
       : true;
@@ -101,28 +120,28 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
 
         <Menu.Dropdown>
           {availableShortcuts.map((shortcut) => {
-            const mod = workspace.getAvailableModule(shortcut.moduleId as WorkspaceModuleId);
-            if (!mod) return null;
+            const workspaceModule = getModule(shortcut.moduleId as string);
+            if (!workspaceModule) return null;
 
             if ("onClick" in shortcut) {
               return (
                 <Menu.Item
-                  key={mod.id}
+                  key={workspaceModule.id}
                   leftSection={<shortcut.icon size={18} />}
-                  onClick={() => shortcut.onClick(router)}
+                  onClick={() => shortcut.onClick({ router, modals })}
                 >
-                  {mod.name}
+                  {workspaceModule.name}
                 </Menu.Item>
               );
             }
             return (
               <Menu.Item
-                key={mod.id}
+                key={workspaceModule.id}
                 leftSection={<shortcut.icon size={18} />}
                 component={Link}
                 href={shortcut.href}
               >
-                {mod.name}
+                {workspaceModule.name}
               </Menu.Item>
             );
           })}
@@ -134,15 +153,19 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
   return (
     <Fragment>
       {workspace.type === WorkspaceType.CREDIT && (
-        <Button
-          id="create-credit"
-          variant="outline"
-          size="xs"
-          onClick={() => OnModalLoanCalculator()}
-          leftIcon={IconCalculator}
-        >
-          <Trans>Loan calculator</Trans>
-        </Button>
+        <ModalLoanCalculator>
+          {(open) => (
+            <Button
+              id="create-credit"
+              variant="outline"
+              size="xs"
+              onClick={open}
+              leftIcon={IconCalculator}
+            >
+              <Trans>Loan calculator</Trans>
+            </Button>
+          )}
+        </ModalLoanCalculator>
       )}
 
       {availableShortcuts.length > 0 && (
@@ -157,28 +180,28 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
 
           <Menu.Dropdown>
             {availableShortcuts.map((shortcut) => {
-              const mod = workspace.getAvailableModule(shortcut.moduleId as WorkspaceModuleId);
-              if (!mod) return null;
+              const workspaceModule = getModule(shortcut.moduleId as string);
+              if (!workspaceModule) return null;
 
               if ("onClick" in shortcut) {
                 return (
                   <Menu.Item
-                    key={mod.id}
+                    key={workspaceModule.id}
                     leftSection={<shortcut.icon size={18} />}
-                    onClick={() => shortcut.onClick(router)}
+                    onClick={() => shortcut.onClick({ router, modals })}
                   >
-                    {mod.name}
+                    {workspaceModule.name}
                   </Menu.Item>
                 );
               }
               return (
                 <Menu.Item
-                  key={mod.id}
+                  key={workspaceModule.id}
                   leftSection={<shortcut.icon size={18} />}
                   component={Link}
                   href={shortcut.href}
                 >
-                  {mod.name}
+                  {workspaceModule.name}
                 </Menu.Item>
               );
             })}
@@ -187,4 +210,33 @@ export const WorkspaceHeaderShortcuts: FC = memo(() => {
       )}
     </Fragment>
   );
-});
+};
+
+export const WorkspaceHeaderShortcuts: FC = () => {
+  return (
+    <ModalCreateBooking>
+      {(openModalCreateBooking) => (
+        <ModalCreateTask>
+          {(openModalCreateTask) => (
+            <ModalCreateLoan>
+              {(openModalCreateLoan) => (
+                <ModalCustomer>
+                  {(openModalCustomer) => (
+                    <WorkspaceHeaderShortcutsContent
+                      modals={{
+                        createLoan: () => openModalCreateLoan(),
+                        createBooking: () => openModalCreateBooking(),
+                        createTask: () => openModalCreateTask(),
+                        createCustomer: () => openModalCustomer(),
+                      }}
+                    />
+                  )}
+                </ModalCustomer>
+              )}
+            </ModalCreateLoan>
+          )}
+        </ModalCreateTask>
+      )}
+    </ModalCreateBooking>
+  );
+};

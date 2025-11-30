@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ButtonPlus } from "@/components/buttons/button-plus";
@@ -5,6 +7,7 @@ import { Container } from "@/components/container";
 import { Image } from "@/components/image";
 import { LazyLoad } from "@/components/lazy-load";
 import { SectionTitle } from "@/components/session-title";
+import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { MessageHubCard } from "@/modules/plugins/message-hubs/message-hub-card";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
@@ -47,9 +50,28 @@ export const WorkspaceSettingMessageHubs: FC = () => {
               <Trans>Setup nhanh gọn và dễ dàng</Trans>
             </Text>
 
-            <Button mt={10} type="submit" leftIcon={IconPlus} onClick={plugins.onCreateMessageHub}>
-              <Trans>Create new</Trans>
-            </Button>
+            <ModalInput>
+              {(openInput) => (
+                <Button
+                  mt={10}
+                  type="submit"
+                  leftIcon={IconPlus}
+                  onClick={() =>
+                    openInput({
+                      type: InputModalType.TEXT,
+                      title: <Trans>Enter name</Trans>,
+                      icon: IconMessage,
+                      value: workspace.userMember.name,
+                      onDone: async (name) => {
+                        await plugins.onCreateMessageHub(name);
+                      },
+                    })
+                  }
+                >
+                  <Trans>Create new</Trans>
+                </Button>
+              )}
+            </ModalInput>
           </Stack>
         </Card>
       </Container>
@@ -60,7 +82,25 @@ export const WorkspaceSettingMessageHubs: FC = () => {
     <Container p={16}>
       <Stack>
         <SectionTitle icon={IconMessage} name="Message Hubs" iconColor="primary">
-          <ButtonPlus onClick={plugins.onCreateMessageHub} size="sm" iconSize={16} />
+          <ModalInput>
+            {(openInput) => (
+              <ButtonPlus
+                size="sm"
+                iconSize={16}
+                onClick={() =>
+                  openInput({
+                    type: InputModalType.TEXT,
+                    title: <Trans>Enter name</Trans>,
+                    icon: IconMessage,
+                    value: workspace.userMember.name,
+                    onDone: async (name) => {
+                      await plugins.onCreateMessageHub(name);
+                    },
+                  })
+                }
+              />
+            )}
+          </ModalInput>
         </SectionTitle>
 
         {plugins.messageHubs.map((messageHub) => {

@@ -5,16 +5,18 @@ import { Button } from "@/components/buttons/button";
 import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { TechIllustration } from "@/components/illustrations/tech";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { OnModalBooking } from "@/modules/bookings/modals/modal-booking";
+import { ModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { OnModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
+import { ModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
 import { setCustomerToMessageBox } from "@/modules/message-boxes/message-boxes-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { useFetch } from "@/utils/use-fetch.util";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Accordion,
   ActionIcon,
@@ -32,20 +34,19 @@ import { useMessageBoxes } from "../message-boxes-context";
 import { MessageBoxMetadataBookings } from "./message-box-metadata-bookings";
 import { MessageBoxMetadataLoans } from "./message-box-metadata-loans";
 import { AccordionItem } from "./message-box-metadata-types";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 
 const accordionItems: AccordionItem[] = [
   {
     moduleId: "loans",
     component: MessageBoxMetadataLoans,
-    onCreate: (customer) => OnModalCreateLoan({ customer }),
+    onCreate: (_, context) => context.actions.createLoan(),
     workspaceTypes: [WorkspaceType.CREDIT],
   },
   {
     moduleId: "bookings",
     component: MessageBoxMetadataBookings,
-    onCreate: (customer) => OnModalBooking({ customer }),
+    onCreate: (_, context) => context.actions.createBooking(),
   },
   // TODO: Add orders
   // {
@@ -58,6 +59,7 @@ export const MetadataMessageBox: FC = () => {
   const messageBoxes = useMessageBoxes();
   const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
+  const { getAvailableModule } = useAvailableWorkspaceModules();
   const { messageBox } = messageBoxes;
 
   const customer = useFetch<CustomerEntity | null>({
@@ -134,37 +136,57 @@ export const MetadataMessageBox: FC = () => {
                       return true;
                     })
                     .map((item) => {
-                      const mod = workspace.availableModules.find((m) => m.id === item.moduleId);
+                      const workspaceModule = getAvailableModule(item.moduleId);
+
                       const isInView = (
                         workspace.view.menu ??
                         getDefaultWorkspaceView(workspace.type).menu ??
                         []
                       ).some((v) => v.moduleId === item.moduleId);
 
-                      if (!mod || !isInView) return null;
+                      if (!workspaceModule || !isInView) return null;
                       return (
-                        <Accordion.Item key={mod.id} value={mod.id}>
+                        <Accordion.Item key={workspaceModule.id} value={workspaceModule.id}>
                           <Accordion.Control>
                             <Group gap={8}>
                               <ActionIcon variant="subtle" color="dark" component="div">
-                                <mod.icon size={18} />
+                                <workspaceModule.icon size={18} />
                               </ActionIcon>
-                              <Text>{mod.name}</Text>
+                              <Text>{workspaceModule.name}</Text>
 
                               {item.onCreate && (
-                                <ActionIcon
-                                  variant="light"
-                                  color="gray"
-                                  size="sm"
-                                  component="div"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    item.onCreate!(customer.data!);
-                                  }}
-                                >
-                                  <IconPlus size={14} />
-                                </ActionIcon>
+                                <ModalCreateBooking>
+                                  {(createBooking) => (
+                                    <ModalCreateLoan>
+                                      {(createLoan) => (
+                                        <ActionIcon
+                                          variant="light"
+                                          color="gray"
+                                          size="sm"
+                                          component="div"
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            const customerData = customer.data;
+                                            if (!customerData) return;
+
+                                            item.onCreate?.(customerData, {
+                                              actions: {
+                                                createLoan: () =>
+                                                  createLoan({ customer: customerData }),
+
+                                                createBooking: () =>
+                                                  createBooking({ customer: customerData }),
+                                              },
+                                            });
+                                          }}
+                                        >
+                                          <IconPlus size={14} />
+                                        </ActionIcon>
+                                      )}
+                                    </ModalCreateLoan>
+                                  )}
+                                </ModalCreateBooking>
                               )}
                             </Group>
                           </Accordion.Control>

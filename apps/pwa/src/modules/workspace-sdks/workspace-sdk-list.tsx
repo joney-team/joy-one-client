@@ -8,7 +8,7 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Stack, Text } from "@mantine/core";
 import { IconPlus, IconPuzzle, IconTrash } from "@tabler/icons-react";
 import { FC } from "react";
-import { OnModalWorkspaceSdkForm } from "./modals/modal-workspace-sdk-form";
+import { ModalWorkspaceSdkForm } from "./modals/modal-workspace-sdk-form";
 import { getWorkspaceSdks, removeWorkspaceSdk } from "./workspace-sdks-service";
 import { WorkspaceSdkEntity } from "./workspace-sdks-types";
 
@@ -63,15 +63,17 @@ export const WorkspaceSdkList: FC = () => {
         })}
 
       <Group justify="center">
-        <Button
-          variant="outline"
-          leftIcon={IconPlus}
-          onClick={() =>
-            OnModalWorkspaceSdkForm({ onFinish: () => sdks.fetch(true, { isSilient: true }) })
-          }
-        >
-          <Trans>Create SDK</Trans>
-        </Button>
+        <ModalWorkspaceSdkForm>
+          {(open) => (
+            <Button
+              variant="outline"
+              leftIcon={IconPlus}
+              onClick={() => open({ onFinish: () => sdks.fetch(true, { isSilient: true }) })}
+            >
+              <Trans>Create SDK</Trans>
+            </Button>
+          )}
+        </ModalWorkspaceSdkForm>
       </Group>
     </Stack>
   );

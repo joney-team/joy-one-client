@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  ModalPayReceiptProps,
-  OnModalPayReceipt,
-} from "@/modules/receipts/modals/modal-pay-receipt";
 import { ResponseList } from "@/types";
-import { onActionLoad } from "@/utils/actions";
-import { Trans } from "@lingui/react/macro";
 import { api } from "../apis";
 import { ReceiptEntity } from "../receipts/receipts-types";
 import { OrderEntity } from "./order-entity";
@@ -68,28 +62,4 @@ export const orderPaymentStatusOptions: {
   [OrderPaymentStatus.COMPLETED]: {
     color: "green",
   },
-};
-
-export const onPayOrder = async (
-  order: OrderEntity,
-  args?: Pick<ModalPayReceiptProps, "onClosed" | "onPaid"> & {
-    tipAmount?: number;
-    isWithoutActionLoad?: boolean;
-  }
-) => {
-  const process = async () => {
-    const receipt = await payOrder(order.id, {
-      amount: order.totalAmount - order.paidAmount,
-      tipAmount: args?.tipAmount,
-    });
-    OnModalPayReceipt({ receipt, onClosed: args?.onClosed, onPaid: args?.onPaid });
-  };
-
-  if (args?.isWithoutActionLoad) return process();
-
-  return onActionLoad({
-    name: <Trans>Pay order</Trans>,
-    isShowCompleted: false,
-    process,
-  });
 };

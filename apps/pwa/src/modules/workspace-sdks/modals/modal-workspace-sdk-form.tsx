@@ -10,16 +10,16 @@ import { Modal, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconPuzzle } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, ReactNode, useState } from "react";
 
 interface ModalWorkspaceSdkFormProps {
   sdk?: WorkspaceSdkEntity;
   onFinish?: (sdk: WorkspaceSdkEntity) => Promise<any> | any;
 }
 
-export let OnModalWorkspaceSdkForm: (props: ModalWorkspaceSdkFormProps) => void = () => {};
-
-export const ModalWorkspaceSdkForm: FC = () => {
+export const ModalWorkspaceSdkForm: FC<{
+  children: (open: (props?: ModalWorkspaceSdkFormProps) => void) => ReactNode;
+}> = ({ children }) => {
   const [props, setProps] = useState<ModalWorkspaceSdkFormProps>();
   const [opened, { open, close }] = useDisclosure(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,13 +34,6 @@ export const ModalWorkspaceSdkForm: FC = () => {
       },
     },
   });
-
-  OnModalWorkspaceSdkForm = (_props) => {
-    setProps(_props);
-    form.reset();
-    form.setValues(_props.sdk || {});
-    open();
-  };
 
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
@@ -57,25 +50,34 @@ export const ModalWorkspaceSdkForm: FC = () => {
   });
 
   return (
-    <Modal
-      opened={opened}
-      onClose={close}
-      title={<ModalTitle title={props?.sdk ? t`Update SDK` : t`Create SDK`} icon={IconPuzzle} />}
-      zIndex={400}
-    >
-      <Stack>
-        <TextInput withAsterisk label={t`Name`} {...form.getInputProps("name")} />
+    <Fragment>
+      {children((p) => {
+        setProps(p);
+        form.reset();
+        form.setValues(p?.sdk || {});
+        open();
+      })}
 
-        <Button
-          mt={10}
-          loading={isSubmitting}
-          onClick={onSubmit}
-          leftSection={<IconCheck strokeWidth={1.2} />}
-          type="submit"
-        >
-          {t`Complete`}
-        </Button>
-      </Stack>
-    </Modal>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title={<ModalTitle title={props?.sdk ? t`Update SDK` : t`Create SDK`} icon={IconPuzzle} />}
+        zIndex={400}
+      >
+        <Stack>
+          <TextInput withAsterisk label={t`Name`} {...form.getInputProps("name")} />
+
+          <Button
+            mt={10}
+            loading={isSubmitting}
+            onClick={onSubmit}
+            leftSection={<IconCheck strokeWidth={1.2} />}
+            type="submit"
+          >
+            {t`Complete`}
+          </Button>
+        </Stack>
+      </Modal>
+    </Fragment>
   );
 };

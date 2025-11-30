@@ -6,6 +6,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
+import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 import { ResponseList } from "@/types";
 import { onArchive } from "@/utils/actions";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -21,7 +22,7 @@ import {
   getOrderByCode,
   getOrderById,
   getOrderList,
-  onPayOrder,
+  payOrder,
   updateOrder,
 } from "../orders-service";
 import { OrderEntityCalculated } from "../orders-types";
@@ -181,14 +182,6 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     }
   };
 
-  const payOrder = async () => {
-    if (!activeOrder || totalAmount === 0) return;
-    if (!activeOrder.isSaved || activeOrder.isDirty) await saveOrder();
-    const order = await getOrderById(activeOrder.id);
-    await onPayOrder(order, { isWithoutActionLoad: true });
-    await fetchOrder(activeOrder.id);
-  };
-
   const availablePromotions = useRestQuery<ResponseList<PromotionEntity>>({
     isSkip: !activeOrder?.relatedCustomer?._id,
     route: `/promotions/customers/${activeOrder?.relatedCustomer?._id}`,
@@ -199,85 +192,6 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     isSkip: !activeOrder?.relatedCustomer?._id,
   });
 
-  const context: OrdersManagementContext = {
-    isInitialized,
-    orders: state.orders,
-    availableCombos,
-    availablePromotions,
-    activeOrder,
-    calculating,
-    activeOrderId: state.activeOrderId,
-    setActiveOrderId: (orderId) => {
-      setState((s) => ({ ...s, activeOrderId: orderId }));
-    },
-    addOrder: (order) => {
-      const _order = order ? normalizeEntityToOrder(order) : generateInitialOrderSale();
-      _order.createdAt = DateTime.toSeconds(new Date());
-      setState((s) => ({ ...s, orders: [...s.orders, _order], activeOrderId: _order.id }));
-    },
-    addProduct: (product) => {
-      let _state = getCurrentState();
-      const orderIndex = _state.orders.findIndex((i) => i.id === state.activeOrderId);
-      if (orderIndex === -1) return;
-
-      const qtyPerUse = product.defaultQtyPerUse ?? 1;
-      const isAlreadyAdded = _state.orders[orderIndex].items.some(
-        (i) => i.product._id === product._id
-      );
-
-      if (isAlreadyAdded) {
-        _state.orders[orderIndex].items = _state.orders[orderIndex].items.map((i) =>
-          i.product._id === product._id ? { ...i, quantity: i.quantity + qtyPerUse } : i
-        );
-      } else {
-        const price = product.minPrice ? (product.minPrice + product.price) / 2 : product.price;
-        _state.orders[orderIndex].items.push({
-          product,
-          quantity: qtyPerUse,
-          price,
-          assigneeUsers: [],
-        });
-      }
-      _state.orders[orderIndex].isDirty = true;
-      setState(_state);
-    },
-    removeProduct: (productId) => {
-      let _state = getCurrentState();
-      const orderIndex = _state.orders.findIndex((i) => i.id === state.activeOrderId);
-      if (orderIndex === -1) return;
-
-      _state.orders[orderIndex].items = _state.orders[orderIndex].items.filter(
-        (i) => i.product._id !== productId
-      );
-      _state.orders[orderIndex].isDirty = true;
-      setState(_state);
-    },
-    updateProductItem: (productId, item) => {
-      let _state = getCurrentState();
-      const orderIndex = _state.orders.findIndex((i) => i.id === state.activeOrderId);
-      if (orderIndex === -1) return;
-
-      _state.orders[orderIndex].items = _state.orders[orderIndex].items.map((i) =>
-        i.product._id === productId ? { ...i, ...item } : i
-      );
-      _state.orders[orderIndex].isDirty = true;
-      setState(_state);
-    },
-    updateOrder: (value) => {
-      let _state = getCurrentState();
-      const orderIndex = _state.orders.findIndex((i) => i.id === state.activeOrderId);
-      if (orderIndex === -1) return;
-
-      _state.orders[orderIndex] = { ..._state.orders[orderIndex], ...value };
-      _state.orders[orderIndex].isDirty = true;
-      setState(_state);
-    },
-    closeOrder,
-    removeOrder,
-    payOrder,
-    saveOrder,
-  };
-
   useEventsListener(
     [EventType.ORDER_SYNCED, EventType.ORDER_UPDATED],
     (e) => {
@@ -287,5 +201,105 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     [state.orders]
   );
 
-  return <Context.Provider value={context}>{props.children}</Context.Provider>;
+  return (
+    <ModalPayReceipt>
+      {(onPayReceipt) => {
+        const handlePayOrder = async () => {
+          if (!activeOrder || totalAmount === 0) return;
+          if (!activeOrder.isSaved || activeOrder.isDirty) await saveOrder();
+
+          const order = await getOrderById(activeOrder.id);
+
+          const receipt = await payOrder(order.id, {
+            amount: order.totalAmount - order.paidAmount,
+          });
+
+          onPayReceipt({ receipt, onPaid: () => fetchOrder(activeOrder.id) });
+        };
+
+        const context: OrdersManagementContext = {
+          isInitialized,
+          orders: state.orders,
+          availableCombos,
+          availablePromotions,
+          activeOrder,
+          calculating,
+          activeOrderId: state.activeOrderId,
+          setActiveOrderId: (orderId) => {
+            setState((s) => ({ ...s, activeOrderId: orderId }));
+          },
+          addOrder: (order) => {
+            const _order = order ? normalizeEntityToOrder(order) : generateInitialOrderSale();
+            _order.createdAt = DateTime.toSeconds(new Date());
+            setState((s) => ({ ...s, orders: [...s.orders, _order], activeOrderId: _order.id }));
+          },
+          addProduct: (product) => {
+            let _state = getCurrentState();
+            const orderIndex = _state.orders.findIndex((i) => i.id === state.activeOrderId);
+            if (orderIndex === -1) return;
+
+            const qtyPerUse = product.defaultQtyPerUse ?? 1;
+            const isAlreadyAdded = _state.orders[orderIndex].items.some(
+              (i) => i.product._id === product._id
+            );
+
+            if (isAlreadyAdded) {
+              _state.orders[orderIndex].items = _state.orders[orderIndex].items.map((i) =>
+                i.product._id === product._id ? { ...i, quantity: i.quantity + qtyPerUse } : i
+              );
+            } else {
+              const price = product.minPrice
+                ? (product.minPrice + product.price) / 2
+                : product.price;
+              _state.orders[orderIndex].items.push({
+                product,
+                quantity: qtyPerUse,
+                price,
+                assigneeUsers: [],
+              });
+            }
+            _state.orders[orderIndex].isDirty = true;
+            setState(_state);
+          },
+          removeProduct: (productId) => {
+            let _state = getCurrentState();
+            const orderIndex = _state.orders.findIndex((i) => i.id === state.activeOrderId);
+            if (orderIndex === -1) return;
+
+            _state.orders[orderIndex].items = _state.orders[orderIndex].items.filter(
+              (i) => i.product._id !== productId
+            );
+            _state.orders[orderIndex].isDirty = true;
+            setState(_state);
+          },
+          updateProductItem: (productId, item) => {
+            let _state = getCurrentState();
+            const orderIndex = _state.orders.findIndex((i) => i.id === state.activeOrderId);
+            if (orderIndex === -1) return;
+
+            _state.orders[orderIndex].items = _state.orders[orderIndex].items.map((i) =>
+              i.product._id === productId ? { ...i, ...item } : i
+            );
+            _state.orders[orderIndex].isDirty = true;
+            setState(_state);
+          },
+          updateOrder: (value) => {
+            let _state = getCurrentState();
+            const orderIndex = _state.orders.findIndex((i) => i.id === state.activeOrderId);
+            if (orderIndex === -1) return;
+
+            _state.orders[orderIndex] = { ..._state.orders[orderIndex], ...value };
+            _state.orders[orderIndex].isDirty = true;
+            setState(_state);
+          },
+          closeOrder,
+          removeOrder,
+          payOrder: handlePayOrder,
+          saveOrder,
+        };
+
+        return <Context.Provider value={context}>{props.children}</Context.Provider>;
+      }}
+    </ModalPayReceipt>
+  );
 };

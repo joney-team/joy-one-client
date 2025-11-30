@@ -20,11 +20,11 @@ import {
   SearchResult,
 } from "@/modules/search/search-types";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
-import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
+import { useLingui } from "@lingui/react/macro";
 import { Badge, Card, Center, Loader, rem, Stack, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { Spotlight, SpotlightActionData, SpotlightActionGroupData } from "@mantine/spotlight";
@@ -44,10 +44,16 @@ import { type FC, useMemo, useState } from "react";
 import { loanStatuses } from "../loans/loans-constants";
 import { productTypes } from "../products/products-constants";
 import { useTaskRouter } from "../tasks/hooks/use-task-router";
-import { useLingui } from "@lingui/react/macro";
+import {
+  useAvailableWorkspaceModules,
+  useWorkspaceModules,
+  WorkspaceModule,
+} from "../workspaces/workspace-modules";
 
 export const SearchEngine: FC = () => {
   const workspace = useWorkspace();
+  const { getModule } = useWorkspaceModules();
+  const { isModuleAvailable, availableModules } = useAvailableWorkspaceModules();
   const router = useRouter();
   const taskRouter = useTaskRouter();
   const { i18n, t } = useLingui();
@@ -59,13 +65,18 @@ export const SearchEngine: FC = () => {
   const isHasSearchResult =
     !!query && query.length > 0 && !!searchResult && Object.keys(searchResult).length > 0;
 
-  const isMessageBoxesEnabled = workspace.getAvailableModule("messageBoxes");
-  const searchModules = workspace.availableModules.filter(
-    (m) => !m.restrictDisplay || m.restrictDisplay.includes("spotlight")
-  );
-  const matchedModules =
+  const isMessageBoxesEnabled = isModuleAvailable("messageBoxes");
+
+  const searchModules = availableModules.filter((workspaceModule) => {
+    return (
+      workspaceModule &&
+      (!workspaceModule.restrictDisplay || workspaceModule.restrictDisplay.includes("spotlight"))
+    );
+  });
+
+  const matchedModules: WorkspaceModule[] =
     query && query.length > 0
-      ? searchArray(searchModules, [], query, (m) => m.name + m.description)
+      ? searchArray(searchModules, [], query, (mod) => mod.name + (mod.description || ""))
       : [];
 
   const strictSearchEntity = (entity: AppEntity) => {
@@ -269,7 +280,8 @@ export const SearchEngine: FC = () => {
                 description: [doc.phone, doc.email].filter((v) => !!v).join(" - "),
                 leftSection: <Avatar user={doc} size={30} />,
                 onClick: async () => {
-                  return OnModalUserInformation(doc.userId);
+                  // TODO: Implement page member information
+                  return router.push(`/members/${doc.userId}`);
                 },
               };
             }),
@@ -318,20 +330,21 @@ export const SearchEngine: FC = () => {
     if (matchedModules.length > 0) {
       actionGroups.push({
         group: t`Modules`,
-        actions: matchedModules.map((mod) => {
-          const parent = workspace.availableModules.find(
-            (v) => v.href === `/${mod.href.split("/")[1]}` && v.id !== mod.id
-          );
+        actions: matchedModules.map((matchedModule) => {
+          const parentId = availableModules.find((v) => {
+            return v.href === `/${matchedModule.href.split("/")[1]}` && v.id !== matchedModule.id;
+          });
 
-          const label = parent ? `${parent.name} > ${mod.name}` : mod.name;
+          const parent = parentId ? getModule(parentId.id) : undefined;
+          const label = parent ? `${parent.name} > ${matchedModule.name}` : matchedModule.name;
 
           return {
-            id: mod.id,
+            id: matchedModule.id,
             label,
-            description: mod.description,
-            leftSection: <ActionIcon icon={mod.icon} />,
+            description: matchedModule.description,
+            leftSection: <ActionIcon icon={matchedModule.icon} />,
             onClick: async () => {
-              return router.push(mod.href);
+              return router.push(matchedModule.href);
             },
           };
         }),

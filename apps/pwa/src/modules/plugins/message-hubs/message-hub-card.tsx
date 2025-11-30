@@ -4,8 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { EntityImage } from "@/components/entity-image";
 import { Renderer } from "@/components/renderer";
 import { configs } from "@/configs/layout.config";
-import { useLayout } from "@/layout/layout-context";
-import { InputModalType, OnModalInput } from "@/modals/modal-input";
+import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { localeNames } from "@/modules/lang/lang-service";
 import { AppLocale } from "@/modules/lang/lang-types";
@@ -115,20 +114,6 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
     }
   }, [debouced]);
 
-  const onChangeName = () => {
-    OnModalInput({
-      type: InputModalType.TEXT,
-      title: t`Change name`,
-      icon: IconMessage,
-      value: messageHub.name,
-      onDone: (name) => {
-        if (name.length > 0) {
-          updatePluginMessageHub(messageHub._id, { ...messageHub, name });
-        }
-      },
-    });
-  };
-
   const onRemove = () => {
     onArchive({
       name: "Message Hub",
@@ -146,11 +131,32 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
             </ThemeIcon>
             <Text fw={600}>{messageHub.name}</Text>
 
-            <Tooltip label={t`Change name`}>
-              <ActionIcon size="sm" color="gray" variant="subtle" onClick={onChangeName}>
-                <IconEdit strokeWidth={1.5} />
-              </ActionIcon>
-            </Tooltip>
+            <ModalInput>
+              {(openInput) => (
+                <Tooltip label={t`Change name`}>
+                  <ActionIcon
+                    size="sm"
+                    color="gray"
+                    variant="subtle"
+                    onClick={() => {
+                      openInput({
+                        type: InputModalType.TEXT,
+                        title: t`Change name`,
+                        icon: IconMessage,
+                        value: messageHub.name,
+                        onDone: (name) => {
+                          if (name.length > 0) {
+                            updatePluginMessageHub(messageHub._id, { ...messageHub, name });
+                          }
+                        },
+                      });
+                    }}
+                  >
+                    <IconEdit strokeWidth={1.5} />
+                  </ActionIcon>
+                </Tooltip>
+              )}
+            </ModalInput>
           </Group>
 
           <Button

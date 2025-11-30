@@ -7,11 +7,11 @@ import { Group, Stack, Text } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
 import {
-  getWorkspaceMemberRoleLabel,
   getWorkspaceMemberByIds,
+  getWorkspaceMemberRoleLabel,
 } from "../workspace-members/workspace-members-service";
 import { WorkspaceMemberInfo } from "../workspace-members/workspace-members-types";
-import { OnModalUserInformation } from "./modals/modal-user-information";
+import { ModalUserInformation } from "./modals/modal-user-information";
 
 export interface UserColumnArgs extends Omit<Column, "render"> {
   optionalValuePath?: string;
@@ -26,22 +26,21 @@ export const userColumn = (args?: UserColumnArgs): Column => {
       const user = value as WorkspaceMemberInfo;
 
       return (
-        <Group
-          gap={8}
-          className="clickable"
-          onClick={() => OnModalUserInformation(user.userId)}
-          wrap="nowrap"
-        >
-          <Avatar user={user} size="sm" />
-          <Stack gap={0} flex={1}>
-            <Text fz={16} fw={500} truncate>
-              {user.name}
-            </Text>
-            <Text fz={10} c="gray" truncate>
-              {getWorkspaceMemberRoleLabel(user)}
-            </Text>
-          </Stack>
-        </Group>
+        <ModalUserInformation>
+          {(open) => (
+            <Group gap={8} className="clickable" onClick={() => open(user.userId)} wrap="nowrap">
+              <Avatar user={user} size="sm" />
+              <Stack gap={0} flex={1}>
+                <Text fz={16} fw={500} truncate>
+                  {user.name}
+                </Text>
+                <Text fz={10} c="gray" truncate>
+                  {getWorkspaceMemberRoleLabel(user)}
+                </Text>
+              </Stack>
+            </Group>
+          )}
+        </ModalUserInformation>
       );
     },
     filter: {

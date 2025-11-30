@@ -52,6 +52,7 @@ import { MantineColor } from "@mantine/core";
 import { usePathname } from "next/navigation";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { WorkspaceType } from "./workspaces-types";
+import { useWorkspace } from "./workspace-context";
 
 export interface WorkspaceModuleConfig {
   name: MacroMessageDescriptor;
@@ -495,7 +496,39 @@ export const useWorkspaceModules = () => {
 
   return {
     workspaceModules,
-    getModule: (id: WorkspaceModuleId) => workspaceModules.find((m) => m.id === id)!,
+    getModule: (id: string) => workspaceModules.find((m) => m.id === id),
+    getModuleByHref: (href: string) => workspaceModules.find((m) => m.href === href),
+  };
+};
+
+export const useAvailableWorkspaceModules = () => {
+  const { userMember } = useWorkspace();
+  const { workspaceModules, ...rest } = useWorkspaceModules();
+
+  const availableModules = useMemo(() => {
+    return workspaceModules.filter((m) => {
+      const userMemberPermissions = userMember?.permissions || [];
+
+      const isAbleToAccess =
+        !m.permissions ||
+        m.permissions
+          .toString()
+          .split(",")
+          .every((p) => userMemberPermissions.includes(p as WorkspacePermission));
+
+      const isAvailableType =
+        !m.workspaceTypes ||
+        m.workspaceTypes.includes(userMember?.workspace?.type || WorkspaceType.BUSINESS);
+
+      return isAbleToAccess && isAvailableType;
+    });
+  }, [userMember?.permissions, userMember?.workspace?.type]);
+
+  return {
+    availableModules,
+    isModuleAvailable: (id: WorkspaceModuleId) => availableModules.some((m) => m.id === id),
+    getAvailableModule: (id: WorkspaceModuleId) => availableModules.find((m) => m.id === id),
+    ...rest,
   };
 };
 

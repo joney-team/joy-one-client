@@ -11,7 +11,7 @@ import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
-import { OnModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
@@ -349,19 +349,23 @@ export const ListTaskRow: FC<{
 
               <Group gap={2} wrap="nowrap" pl={35} className={styles.HoverToActive}>
                 {!task.parentId && (
-                  <Tooltip label={<Trans>Create subtask</Trans>}>
-                    <ActionIcon
-                      variant="subtle"
-                      color="gray.6"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        OnModalCreateTask({ parentId: task._id });
-                      }}
-                    >
-                      <IconPlus size={16} />
-                    </ActionIcon>
-                  </Tooltip>
+                  <ModalCreateTask>
+                    {(open) => (
+                      <Tooltip label={<Trans>Create subtask</Trans>}>
+                        <ActionIcon
+                          variant="subtle"
+                          color="gray.6"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            open({ parentId: task._id });
+                          }}
+                        >
+                          <IconPlus size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                    )}
+                  </ModalCreateTask>
                 )}
 
                 {allowEditName && (

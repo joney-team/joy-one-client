@@ -36,7 +36,6 @@ import { FilesBox } from "@/modules/files/files-box";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnModalDisburesementReceipt } from "@/modules/receipts/modals/modal-disburesement-receipt";
-import { OnModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
 import {
   archiveReceipt,
@@ -56,6 +55,7 @@ import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import Link from "next/link";
+import { ModalPayReceipt } from "./modals/modal-pay-receipt";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
 
 interface ReceiptCardProps {
@@ -493,13 +493,17 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
             </Renderer>
 
             {receipt.status !== ReceiptStatus.PAID && (
-              <Button
-                size="xs"
-                leftIcon={IconCashRegister}
-                onClick={() => OnModalPayReceipt({ receipt: receipt })}
-              >
-                {t`Pay`}
-              </Button>
+              <ModalPayReceipt>
+                {(open) => (
+                  <Button
+                    size="xs"
+                    leftIcon={IconCashRegister}
+                    onClick={() => open({ receipt: receipt })}
+                  >
+                    {t`Pay`}
+                  </Button>
+                )}
+              </ModalPayReceipt>
             )}
           </Group>
         )}

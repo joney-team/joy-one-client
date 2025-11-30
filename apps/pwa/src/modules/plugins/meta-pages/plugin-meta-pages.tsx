@@ -1,7 +1,7 @@
 "use client";
 
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { WithConnectMetaPagesModal } from "@/modals/modal-connect-meta-pages";
+import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
 import {
   disconnectPluginMetaPage,

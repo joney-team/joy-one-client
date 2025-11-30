@@ -8,14 +8,14 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useRouter } from "@/hooks/use-router";
-import { InputModalType, OnModalInput } from "@/modals/modal-input";
+import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { useLoans } from "@/modules/loans/loans-context";
 import {
   LoanAssetEstimation,
   LoanAssetEstimations,
   LoanAssetType,
 } from "@/modules/loans/loans-types";
-import { OnModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loan-asset-estimation-form";
+import { ModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loan-asset-estimation-form";
 import { convertExcelToJson } from "@/modules/tools/tools-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
@@ -152,194 +152,207 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
     (workspace.settings?.loanSettings?.assetEstimationPriceSpreadRate || 100) / 100;
 
   return (
-    <Stack p={16}>
-      <Group>
-        <Button leftIcon={IconPlus} onClick={() => OnModalLoanAssetEstimationForm({})}>
-          <Trans>Add asset estimation</Trans>
-        </Button>
+    <ModalLoanAssetEstimationForm>
+      {(openLoanAssetEstimationForm) => (
+        <Stack p={16}>
+          <Group>
+            <Button leftIcon={IconPlus} onClick={() => openLoanAssetEstimationForm()}>
+              <Trans>Add asset estimation</Trans>
+            </Button>
 
-        <Dropzone
-          accept={[MIME_TYPES.xls, MIME_TYPES.xlsx]}
-          onDrop={(files) => {
-            onConfirmModal({
-              title: <Trans>Import asset estimations</Trans>,
-              icon: IconFileImport,
-              content: <Trans>Are you sure you want to import the asset estimations?</Trans>,
-              type: "warning",
-              onConfirm: () => importEstimations(files[0]),
-            });
-          }}
-        >
-          <Button leftIcon={IconFile} loading={importing}>
-            <Trans>Import asset estimations from file</Trans>
-          </Button>
-        </Dropzone>
-      </Group>
+            <Dropzone
+              accept={[MIME_TYPES.xls, MIME_TYPES.xlsx]}
+              onDrop={(files) => {
+                onConfirmModal({
+                  title: <Trans>Import asset estimations</Trans>,
+                  icon: IconFileImport,
+                  content: <Trans>Are you sure you want to import the asset estimations?</Trans>,
+                  type: "warning",
+                  onConfirm: () => importEstimations(files[0]),
+                });
+              }}
+            >
+              <Button leftIcon={IconFile} loading={importing}>
+                <Trans>Import asset estimations from file</Trans>
+              </Button>
+            </Dropzone>
+          </Group>
 
-      <Group>
-        <ButtonSelect
-          icon={IconFilter}
-          label={t`Asset type`}
-          iconStrokeWidth={1.8}
-          value={searchs.get("assetType")}
-          options={[LoanAssetType.CAR_REGISTRATION, LoanAssetType.MOTOBIKE_REGISTRATION].map(
-            (v) => ({
-              label: loanAssetTypes[v].label(),
-              value: v,
-            })
-          )}
-          onChange={(value) => {
-            router.setQuery("assetType", value as string, true);
-          }}
-          onClear={() => router.removeQuery("assetType", true)}
-        />
+          <Group>
+            <ButtonSelect
+              icon={IconFilter}
+              label={t`Asset type`}
+              iconStrokeWidth={1.8}
+              value={searchs.get("assetType")}
+              options={[LoanAssetType.CAR_REGISTRATION, LoanAssetType.MOTOBIKE_REGISTRATION].map(
+                (v) => ({
+                  label: loanAssetTypes[v].label(),
+                  value: v,
+                })
+              )}
+              onChange={(value) => {
+                router.setQuery("assetType", value as string, true);
+              }}
+              onClear={() => router.removeQuery("assetType", true)}
+            />
 
-        <ButtonSelect
-          icon={IconFilter}
-          label={t`Brand name`}
-          iconStrokeWidth={1.8}
-          value={searchs.get("brandId")}
-          options={loans.assetEstimations.brands
-            .filter((v) => {
-              if (!searchs.get("assetType")) return true;
-              return v.assetType === searchs.get("assetType");
-            })
-            .map((brand) => ({ value: brand.id, label: brand.name }))}
-          onChange={(value) => {
-            router.setQuery("brandId", value as string, true);
-          }}
-          onClear={() => router.removeQuery("brandId", true)}
-        />
+            <ButtonSelect
+              icon={IconFilter}
+              label={t`Brand name`}
+              iconStrokeWidth={1.8}
+              value={searchs.get("brandId")}
+              options={loans.assetEstimations.brands
+                .filter((v) => {
+                  if (!searchs.get("assetType")) return true;
+                  return v.assetType === searchs.get("assetType");
+                })
+                .map((brand) => ({ value: brand.id, label: brand.name }))}
+              onChange={(value) => {
+                router.setQuery("brandId", value as string, true);
+              }}
+              onClear={() => router.removeQuery("brandId", true)}
+            />
 
-        <ButtonSelect
-          icon={IconFilter}
-          label={t`Asset model`}
-          iconStrokeWidth={1.8}
-          value={searchs.get("modelId")}
-          options={loans.assetEstimations.models
-            .filter((v) => {
-              if (!searchs.get("brandId")) return true;
-              return v.brandId === searchs.get("brandId");
-            })
-            .map((brand) => ({ value: brand.id, label: brand.name }))}
-          onChange={(value) => {
-            router.setQuery("modelId", value as string, true);
-          }}
-          onClear={() => router.removeQuery("modelId", true)}
-        />
-      </Group>
+            <ButtonSelect
+              icon={IconFilter}
+              label={t`Asset model`}
+              iconStrokeWidth={1.8}
+              value={searchs.get("modelId")}
+              options={loans.assetEstimations.models
+                .filter((v) => {
+                  if (!searchs.get("brandId")) return true;
+                  return v.brandId === searchs.get("brandId");
+                })
+                .map((brand) => ({ value: brand.id, label: brand.name }))}
+              onChange={(value) => {
+                router.setQuery("modelId", value as string, true);
+              }}
+              onClear={() => router.removeQuery("modelId", true)}
+            />
+          </Group>
 
-      <InfiniteScroll
-        loadMore={async () => {
-          await fetchMore();
-        }}
-        hasMore={isAbleToLoadMore}
-      >
-        {loans.assetEstimations.estimations.length === 0 ? (
-          <Empty message={t`No asset estimation`} />
-        ) : (
-          <Card p={0} shadow="xs">
-            <Table>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>#</Table.Th>
-                  <Table.Th>{t`Type`}</Table.Th>
-                  <Table.Th>{t`Brand`}</Table.Th>
-                  <Table.Th>{t`Model`}</Table.Th>
-                  <Table.Th>{t`Name`}</Table.Th>
-                  <Table.Th>{t`Manufacturing year`}</Table.Th>
-                  <Table.Th>{t`Estimation price`}</Table.Th>
-                  <Table.Th></Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-
-              <Table.Tbody>
-                {list.map((estimation, index) => {
-                  return (
-                    <Table.Tr key={estimation.id}>
-                      <Table.Td>{index + 1}</Table.Td>
-                      <Table.Td>{loanAssetTypes[estimation.assetType].label()}</Table.Td>
-                      <Table.Td>
-                        {
-                          loans.assetEstimations.brands.find(
-                            (brand) => brand.id === estimation.brandId
-                          )?.name
-                        }
-                      </Table.Td>
-                      <Table.Td>
-                        {
-                          loans.assetEstimations.models.find(
-                            (model) => model.id === estimation.modelId
-                          )?.name
-                        }
-                      </Table.Td>
-                      <Table.Td>{estimation.productName || "--"}</Table.Td>
-                      <Table.Td>
-                        {estimation.productManufacturingDate
-                          ? new Date(estimation.productManufacturingDate * 1000).getFullYear()
-                          : "--"}{" "}
-                      </Table.Td>
-                      <Table.Td>
-                        <Stack gap={5}>
-                          <ContentEditHover
-                            onEdit={() =>
-                              OnModalInput({
-                                title: "Nhập giá thẩm định",
-                                type: InputModalType.NUMBER,
-                                onDone: (value) =>
-                                  loans.updateEstimation({ ...estimation, estimatePrice: value }),
-                                value: estimation.estimatePrice,
-                              })
-                            }
-                          >
-                            <CurrencyFormat value={estimation.estimatePrice} />
-                          </ContentEditHover>
-
-                          {assetEstimationPriceSpreadRate > 0 && (
-                            <Tooltip label={t`Display price for users`}>
-                              <Text fz={em(13)} c="gray">
-                                <CurrencyFormat
-                                  value={estimation.estimatePrice * assetEstimationPriceSpreadRate}
-                                />
-                                (
-                                <NumberFormat
-                                  value={assetEstimationPriceSpreadRate * 100}
-                                  suffix="%"
-                                />
-                                )
-                              </Text>
-                            </Tooltip>
-                          )}
-                        </Stack>
-                      </Table.Td>
-
-                      <Table.Td w={90}>
-                        <Group gap={5}>
-                          <ActionIcon
-                            variant="subtle"
-                            color="gray"
-                            onClick={() => OnModalLoanAssetEstimationForm({ estimation })}
-                          >
-                            <IconPencil size={18} />
-                          </ActionIcon>
-
-                          <ActionIcon
-                            variant="subtle"
-                            color="red"
-                            onClick={() => loans.removeEstimation(estimation.id)}
-                          >
-                            <IconX size={18} />
-                          </ActionIcon>
-                        </Group>
-                      </Table.Td>
+          <InfiniteScroll
+            loadMore={async () => {
+              await fetchMore();
+            }}
+            hasMore={isAbleToLoadMore}
+          >
+            {loans.assetEstimations.estimations.length === 0 ? (
+              <Empty message={t`No asset estimation`} />
+            ) : (
+              <Card p={0} shadow="xs">
+                <Table>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>#</Table.Th>
+                      <Table.Th>{t`Type`}</Table.Th>
+                      <Table.Th>{t`Brand`}</Table.Th>
+                      <Table.Th>{t`Model`}</Table.Th>
+                      <Table.Th>{t`Name`}</Table.Th>
+                      <Table.Th>{t`Manufacturing year`}</Table.Th>
+                      <Table.Th>{t`Estimation price`}</Table.Th>
+                      <Table.Th></Table.Th>
                     </Table.Tr>
-                  );
-                })}
-              </Table.Tbody>
-            </Table>
-          </Card>
-        )}
-      </InfiniteScroll>
-    </Stack>
+                  </Table.Thead>
+
+                  <Table.Tbody>
+                    {list.map((estimation, index) => {
+                      return (
+                        <Table.Tr key={estimation.id}>
+                          <Table.Td>{index + 1}</Table.Td>
+                          <Table.Td>{loanAssetTypes[estimation.assetType].label()}</Table.Td>
+                          <Table.Td>
+                            {
+                              loans.assetEstimations.brands.find(
+                                (brand) => brand.id === estimation.brandId
+                              )?.name
+                            }
+                          </Table.Td>
+                          <Table.Td>
+                            {
+                              loans.assetEstimations.models.find(
+                                (model) => model.id === estimation.modelId
+                              )?.name
+                            }
+                          </Table.Td>
+                          <Table.Td>{estimation.productName || "--"}</Table.Td>
+                          <Table.Td>
+                            {estimation.productManufacturingDate
+                              ? new Date(estimation.productManufacturingDate * 1000).getFullYear()
+                              : "--"}{" "}
+                          </Table.Td>
+                          <Table.Td>
+                            <Stack gap={5}>
+                              <ModalInput>
+                                {(openInput) => (
+                                  <ContentEditHover
+                                    onEdit={() =>
+                                      openInput({
+                                        title: "Nhập giá thẩm định",
+                                        type: InputModalType.NUMBER,
+                                        onDone: (value) =>
+                                          loans.updateEstimation({
+                                            ...estimation,
+                                            estimatePrice: value,
+                                          }),
+                                        value: estimation.estimatePrice,
+                                      })
+                                    }
+                                  >
+                                    <CurrencyFormat value={estimation.estimatePrice} />
+                                  </ContentEditHover>
+                                )}
+                              </ModalInput>
+
+                              {assetEstimationPriceSpreadRate > 0 && (
+                                <Tooltip label={t`Display price for users`}>
+                                  <Text fz={em(13)} c="gray">
+                                    <CurrencyFormat
+                                      value={
+                                        estimation.estimatePrice * assetEstimationPriceSpreadRate
+                                      }
+                                    />
+                                    (
+                                    <NumberFormat
+                                      value={assetEstimationPriceSpreadRate * 100}
+                                      suffix="%"
+                                    />
+                                    )
+                                  </Text>
+                                </Tooltip>
+                              )}
+                            </Stack>
+                          </Table.Td>
+
+                          <Table.Td w={90}>
+                            <Group gap={5}>
+                              <ActionIcon
+                                variant="subtle"
+                                color="gray"
+                                onClick={() => openLoanAssetEstimationForm({ estimation })}
+                              >
+                                <IconPencil size={18} />
+                              </ActionIcon>
+
+                              <ActionIcon
+                                variant="subtle"
+                                color="red"
+                                onClick={() => loans.removeEstimation(estimation.id)}
+                              >
+                                <IconX size={18} />
+                              </ActionIcon>
+                            </Group>
+                          </Table.Td>
+                        </Table.Tr>
+                      );
+                    })}
+                  </Table.Tbody>
+                </Table>
+              </Card>
+            )}
+          </InfiniteScroll>
+        </Stack>
+      )}
+    </ModalLoanAssetEstimationForm>
   );
 };

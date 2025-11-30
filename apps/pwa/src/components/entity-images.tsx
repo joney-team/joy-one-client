@@ -1,7 +1,7 @@
 "use client";
 
 import { FileType } from "@/graphql/enums.graphql";
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
@@ -101,80 +101,109 @@ const EntityImage: FC<EntityImageProps> = (props) => {
   const src = props.imgSrc;
   const hover = useHover();
 
-  const onViewDetail = (e: any) => {
-    e?.stopPropagation();
-    OnModalFileGallery({
-      files: props.images!.map((src) => ({
-        fileName: `${props.name || "image"} ${props.index + 1}`,
-        url: src instanceof File ? URL.createObjectURL(src) : (src as string),
-        type: FileType.Photo,
-      })),
-      index: props.index,
-      disabled: true,
-    });
-  };
-
   return (
-    <Card
-      ref={hover.ref}
-      withBorder
-      shadow="none"
-      pos="relative"
-      style={{ overflow: "hidden" }}
-      w={w}
-      h={h}
-      p={0}
-      onClick={onViewDetail}
-    >
-      <Renderer visible={hover.hovered}>
-        <Stack
-          gap={10}
-          align="center"
-          justify="center"
-          bg="#00000098"
-          h="100%"
-          w="100%"
-          style={{ position: "absolute", top: 0, left: 0, bottom: 0, right: 0 }}
-        >
-          <Renderer visible={!props.disabled}>
-            <Group gap={0} style={{ position: "absolute", top: 0, right: 0 }} p={2}>
-              <ActionIcon
-                variant="subtle"
-                color="white"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  props.onRemove?.();
-                }}
-              >
-                <IconX strokeWidth={1.5} size={18} />
-              </ActionIcon>
-            </Group>
-          </Renderer>
+    <ModalFileGallery>
+      {(openGallery) => {
+        const onViewDetail = () => {
+          openGallery({
+            files: props.images!.map((src) => ({
+              fileName: `${props.name || "image"} ${props.index + 1}`,
+              url: src instanceof File ? URL.createObjectURL(src) : (src as string),
+              type: FileType.Photo,
+            })),
+          });
+        };
 
-          <Group
-            gap={0}
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%,-50%)",
+        return (
+          <Card
+            ref={hover.ref}
+            withBorder
+            shadow="none"
+            pos="relative"
+            style={{ overflow: "hidden" }}
+            w={w}
+            h={h}
+            p={0}
+            onClick={(e) => {
+              e?.stopPropagation();
+              openGallery({
+                files: props.images!.map((src) => ({
+                  fileName: `${props.name || "image"} ${props.index + 1}`,
+                  url: src instanceof File ? URL.createObjectURL(src) : (src as string),
+                  type: FileType.Photo,
+                })),
+                index: props.index,
+                disabled: true,
+              });
             }}
-            p={2}
           >
-            <ActionIcon variant="subtle" color="white" onClick={onViewDetail}>
-              <IconEye strokeWidth={1.5} size={18} />
-            </ActionIcon>
-          </Group>
-        </Stack>
-      </Renderer>
+            <Renderer visible={hover.hovered}>
+              <Stack
+                gap={10}
+                align="center"
+                justify="center"
+                bg="#00000098"
+                h="100%"
+                w="100%"
+                style={{ position: "absolute", top: 0, left: 0, bottom: 0, right: 0 }}
+              >
+                <Renderer visible={!props.disabled}>
+                  <Group gap={0} style={{ position: "absolute", top: 0, right: 0 }} p={2}>
+                    <ActionIcon
+                      variant="subtle"
+                      color="white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        props.onRemove?.();
+                      }}
+                    >
+                      <IconX strokeWidth={1.5} size={18} />
+                    </ActionIcon>
+                  </Group>
+                </Renderer>
 
-      <Image
-        src={src instanceof File ? URL.createObjectURL(src) : src}
-        h={h}
-        w={w}
-        fit={props.fit || "cover"}
-        flex={1}
-      />
-    </Card>
+                <Group
+                  gap={0}
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%,-50%)",
+                  }}
+                  p={2}
+                >
+                  <ActionIcon
+                    variant="subtle"
+                    color="white"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openGallery({
+                        files: props.images!.map((src) => ({
+                          fileName: `${props.name || "image"} ${props.index + 1}`,
+                          url: src instanceof File ? URL.createObjectURL(src) : (src as string),
+                          type: FileType.Photo,
+                        })),
+                        index: props.index,
+                        disabled: true,
+                      });
+                    }}
+                  >
+                    <IconEye strokeWidth={1.5} size={18} />
+                  </ActionIcon>
+                </Group>
+              </Stack>
+            </Renderer>
+
+            <Image
+              src={src instanceof File ? URL.createObjectURL(src) : src}
+              h={h}
+              w={w}
+              fit={props.fit || "cover"}
+              flex={1}
+            />
+          </Card>
+        );
+      }}
+    </ModalFileGallery>
   );
 };

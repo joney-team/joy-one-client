@@ -94,8 +94,6 @@ export interface WorkspaceContext {
   isCreateNew: boolean;
   setIsCreateNew: Dispatch<SetStateAction<boolean>>;
   archive: () => Promise<void>;
-  availableModules: WorkspaceModule[];
-  getAvailableModule: (id: WorkspaceModuleId) => WorkspaceModule | null;
   join: (code: string) => Promise<void>;
   ref: string;
   onlineStatus: WorkspaceMemberOnlineStatus;

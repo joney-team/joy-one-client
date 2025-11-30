@@ -24,23 +24,25 @@ import {
 } from "@tabler/icons-react";
 import { type FC, Fragment, ReactNode, useState } from "react";
 
-interface OnConnectMetaPagesDto {
+interface ModalConnectMetaPagesArgs {
   pages: PluginMetaPageInfo[];
   accessToken: string;
 }
 
-export let OnConnectMetaPagesModal: (dto: OnConnectMetaPagesDto) => void = () => {};
+export type OnModalConnectMetaPages = (dto: ModalConnectMetaPagesArgs) => void;
 
-export const ConnectMetaPagesModal: FC = () => {
+export const ModalConnectMetaPages: FC<{
+  children: (open: OnModalConnectMetaPages) => ReactNode;
+}> = ({ children }) => {
   const workspace = useWorkspace();
   const router = useRouter();
 
   const [opened, { open, close }] = useDisclosure(false);
-  const [dto, setDto] = useState<OnConnectMetaPagesDto>({ pages: [], accessToken: "" });
+  const [dto, setDto] = useState<ModalConnectMetaPagesArgs>({ pages: [], accessToken: "" });
   const color = useColor();
   const [status, setStatus] = useState<"CONNECTING" | "CONNECTED" | "FAILED">("CONNECTING");
 
-  const onConnect = async (dto: OnConnectMetaPagesDto) => {
+  const onConnect = async (dto: ModalConnectMetaPagesArgs) => {
     try {
       await api.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
       localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
@@ -70,170 +72,178 @@ export const ConnectMetaPagesModal: FC = () => {
     close();
   };
 
-  OnConnectMetaPagesModal = (p) => {
-    setStatus("CONNECTING");
-    setDto(p);
-    onConnect(p);
-    open();
-  };
-
   return (
-    <Modal
-      opened={opened}
-      onClose={close}
-      withCloseButton={false}
-      closeOnEscape={false}
-      closeOnClickOutside={false}
-      size="xl"
-    >
-      {opened && (
-        <Stack align="center" p={16}>
-          <Renderer visible={dto.pages.length > 0}>
-            {(function () {
-              if (status === "CONNECTED") {
+    <Fragment>
+      {children((p) => {
+        setStatus("CONNECTING");
+        setDto(p);
+        onConnect(p);
+        open();
+      })}
+
+      <Modal
+        opened={opened}
+        onClose={close}
+        withCloseButton={false}
+        closeOnEscape={false}
+        closeOnClickOutside={false}
+        size="xl"
+      >
+        {opened && (
+          <Stack align="center" p={16}>
+            <Renderer visible={dto.pages.length > 0}>
+              {(function () {
+                if (status === "CONNECTED") {
+                  return (
+                    <Stack gap={8}>
+                      <Title ta="center" c={color("primary")} fz={em(25)}>
+                        <Trans>Connect success</Trans>
+                      </Title>
+                      <Text ta="center" fz={em(16)}>
+                        <Trans>
+                          Now you can use the <strong>Messages</strong> feature to communicate with
+                          customers on Facebook.
+                        </Trans>
+                      </Text>
+                    </Stack>
+                  );
+                }
+
+                if (status === "FAILED") {
+                  return (
+                    <Fragment>
+                      <Stack gap={8}>
+                        <Title ta="center" c={color("dark")} fz={em(25)}>
+                          <Trans>Failed to connect with Meta.</Trans>
+                        </Title>
+                        <Text ta="center" fz={em(16)}>
+                          <Trans>Please try again later.</Trans>
+                        </Text>
+                      </Stack>
+
+                      <Button
+                        onClick={onRetry}
+                        mt={20}
+                        leftIcon={IconRefresh}
+                        size="md"
+                        radius={200}
+                      >
+                        <Trans>Retry now</Trans>
+                      </Button>
+
+                      <Anchor c="gray" fz={em(12)} onClick={close}>
+                        <Trans>Skip for now</Trans>
+                      </Anchor>
+                    </Fragment>
+                  );
+                }
+
                 return (
                   <Stack gap={8}>
                     <Title ta="center" c={color("primary")} fz={em(25)}>
-                      <Trans>Connect success</Trans>
+                      <Trans>Connect Meta page</Trans>
                     </Title>
                     <Text ta="center" fz={em(16)}>
                       <Trans>
-                        Now you can use the <strong>Messages</strong> feature to communicate with
-                        customers on Facebook.
+                        The system is automatically connecting to your Facebook pages. Please wait
+                        for a moment.
                       </Trans>
                     </Text>
                   </Stack>
                 );
-              }
+              })()}
 
-              if (status === "FAILED") {
-                return (
-                  <Fragment>
-                    <Stack gap={8}>
-                      <Title ta="center" c={color("dark")} fz={em(25)}>
-                        <Trans>Failed to connect with Meta.</Trans>
-                      </Title>
-                      <Text ta="center" fz={em(16)}>
-                        <Trans>Please try again later.</Trans>
-                      </Text>
-                    </Stack>
+              {status === "CONNECTING" && (
+                <Group gap={30}>
+                  <Avatar workspace={workspace.userMember.workspace} size={55} />
 
-                    <Button onClick={onRetry} mt={20} leftIcon={IconRefresh} size="md" radius={200}>
-                      <Trans>Retry now</Trans>
-                    </Button>
+                  <ThemeIcon variant="transparent" size="lg" color="dark">
+                    <IconCirclesRelation size={50} className="animPulse" />
+                  </ThemeIcon>
 
-                    <Anchor c="gray" fz={em(12)} onClick={close}>
-                      <Trans>Skip for now</Trans>
-                    </Anchor>
-                  </Fragment>
-                );
-              }
+                  <Image w={55} src="/images/plugins-meta-pages.svg" />
+                </Group>
+              )}
 
-              return (
-                <Stack gap={8}>
-                  <Title ta="center" c={color("primary")} fz={em(25)}>
-                    <Trans>Connect Meta page</Trans>
-                  </Title>
-                  <Text ta="center" fz={em(16)}>
-                    <Trans>
-                      The system is automatically connecting to your Facebook pages. Please wait for
-                      a moment.
-                    </Trans>
-                  </Text>
-                </Stack>
-              );
-            })()}
+              {status === "CONNECTED" && (
+                <Fragment>
+                  <Stack align="center" gap={5}>
+                    <Group>
+                      {dto.pages.map((page) => {
+                        return (
+                          <Card key={page.pageId} withBorder shadow="none" p={10}>
+                            <Group gap={10} wrap="nowrap">
+                              <Avatar src={page.avatar} size={40}>
+                                <IconStack />
+                              </Avatar>
 
-            {status === "CONNECTING" && (
-              <Group gap={30}>
-                <Avatar workspace={workspace.userMember.workspace} size={55} />
+                              <Stack gap={0}>
+                                <Text fw={500}>{page.name}</Text>
+                                <Text fz={12} c="gray">
+                                  {page.categories.map((v) => v.name).join(" • ")}
+                                </Text>
+                              </Stack>
+                            </Group>
+                          </Card>
+                        );
+                      })}
+                    </Group>
+                  </Stack>
 
-                <ThemeIcon variant="transparent" size="lg" color="dark">
-                  <IconCirclesRelation size={50} className="animPulse" />
-                </ThemeIcon>
+                  <Button
+                    onClick={onOpenMessages}
+                    mt={20}
+                    leftIcon={IconMessageCircle}
+                    size="md"
+                    radius={200}
+                  >
+                    <Trans>Open messages</Trans>
+                  </Button>
 
-                <Image w={55} src="/images/plugins-meta-pages.svg" />
-              </Group>
-            )}
+                  <Anchor c="gray" fz={em(12)} onClick={close}>
+                    <Trans>Skip for now</Trans>
+                  </Anchor>
+                </Fragment>
+              )}
+            </Renderer>
 
-            {status === "CONNECTED" && (
-              <Fragment>
-                <Stack align="center" gap={5}>
-                  <Group>
-                    {dto.pages.map((page) => {
-                      return (
-                        <Card key={page.pageId} withBorder shadow="none" p={10}>
-                          <Group gap={10} wrap="nowrap">
-                            <Avatar src={page.avatar} size={40}>
-                              <IconStack />
-                            </Avatar>
+            <Renderer visible={dto.pages.length === 0}>
+              <Stack gap={8}>
+                <Title ta="center" c={color("primary")} fz={em(25)}>
+                  <Trans>Failed to connect with Meta.</Trans>
+                </Title>
+                <Text ta="center" fz={em(16)}>
+                  <Trans>Please try again later.</Trans>
+                </Text>
+              </Stack>
 
-                            <Stack gap={0}>
-                              <Text fw={500}>{page.name}</Text>
-                              <Text fz={12} c="gray">
-                                {page.categories.map((v) => v.name).join(" • ")}
-                              </Text>
-                            </Stack>
-                          </Group>
-                        </Card>
-                      );
-                    })}
-                  </Group>
-                </Stack>
+              <Button onClick={onRetry} mt={20} leftIcon={IconRefresh} size="md" radius={200}>
+                <Trans>Retry now</Trans>
+              </Button>
 
-                <Button
-                  onClick={onOpenMessages}
-                  mt={20}
-                  leftIcon={IconMessageCircle}
-                  size="md"
-                  radius={200}
-                >
-                  <Trans>Open messages</Trans>
-                </Button>
-
-                <Anchor c="gray" fz={em(12)} onClick={close}>
-                  <Trans>Skip for now</Trans>
-                </Anchor>
-              </Fragment>
-            )}
-          </Renderer>
-
-          <Renderer visible={dto.pages.length === 0}>
-            <Stack gap={8}>
-              <Title ta="center" c={color("primary")} fz={em(25)}>
-                <Trans>Failed to connect with Meta.</Trans>
-              </Title>
-              <Text ta="center" fz={em(16)}>
-                <Trans>Please try again later.</Trans>
-              </Text>
-            </Stack>
-
-            <Button onClick={onRetry} mt={20} leftIcon={IconRefresh} size="md" radius={200}>
-              <Trans>Retry now</Trans>
-            </Button>
-
-            <Anchor c="gray" fz={em(12)} onClick={close}>
-              <Trans>Skip for now</Trans>
-            </Anchor>
-          </Renderer>
-        </Stack>
-      )}
-    </Modal>
+              <Anchor c="gray" fz={em(12)} onClick={close}>
+                <Trans>Skip for now</Trans>
+              </Anchor>
+            </Renderer>
+          </Stack>
+        )}
+      </Modal>
+    </Fragment>
   );
 };
 
 export const WithConnectMetaPagesModal: FC<{
-  children: (open: (dto: OnConnectMetaPagesDto) => void) => ReactNode;
+  children: (open: (dto: ModalConnectMetaPagesArgs) => void) => ReactNode;
 }> = ({ children }) => {
   const workspace = useWorkspace();
   const router = useRouter();
 
   const [opened, { open, close }] = useDisclosure(false);
-  const [dto, setDto] = useState<OnConnectMetaPagesDto>({ pages: [], accessToken: "" });
+  const [dto, setDto] = useState<ModalConnectMetaPagesArgs>({ pages: [], accessToken: "" });
   const color = useColor();
   const [status, setStatus] = useState<"CONNECTING" | "CONNECTED" | "FAILED">("CONNECTING");
 
-  const onConnect = async (dto: OnConnectMetaPagesDto) => {
+  const onConnect = async (dto: ModalConnectMetaPagesArgs) => {
     try {
       await api.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
       localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);

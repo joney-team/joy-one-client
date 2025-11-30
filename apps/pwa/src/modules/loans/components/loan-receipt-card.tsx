@@ -11,7 +11,7 @@ import { InputModalType } from "@/modals/modal-input";
 import { useInspectLoanReceipt } from "@/modules/loans/hooks/use-inspect-loan-receipt";
 import { LoanEntity } from "@/modules/loans/loans-types";
 import { OnModalPartialPayment } from "@/modules/receipts/modals/modal-partial-payment";
-import { OnModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
+import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
 import { updateReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
@@ -327,13 +327,17 @@ export const LoanReceiptCard: FC<{
                 )}
 
                 <Group justify="center">
-                  <Button
-                    onClick={() => OnModalPayReceipt({ receipt })}
-                    leftIcon={IconCashRegister}
-                    disabled={!isAbleToPay}
-                  >
-                    <Trans>Pay</Trans>
-                  </Button>
+                  <ModalPayReceipt>
+                    {(open) => (
+                      <Button
+                        onClick={() => open({ receipt })}
+                        leftIcon={IconCashRegister}
+                        disabled={!isAbleToPay}
+                      >
+                        <Trans>Pay</Trans>
+                      </Button>
+                    )}
+                  </ModalPayReceipt>
                 </Group>
 
                 <Renderer visible={!isLiquidation && isAbleToPay && !data.lateInterest}>

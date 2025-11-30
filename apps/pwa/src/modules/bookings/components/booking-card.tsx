@@ -8,7 +8,7 @@ import {
   inProgressBooking,
 } from "@/modules/bookings/booking-service";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
-import { OnModalBookingDetail } from "@/modules/bookings/modals/modal-booking-detail";
+import { ModalBookingDetail } from "@/modules/bookings/modals/modal-booking-detail";
 import { OnModalCancelBooking } from "@/modules/bookings/modals/modal-cancel-booking";
 import { OnModalUpdateBooking } from "@/modules/bookings/modals/modal-update-booking";
 import { useColor } from "@/modules/theme/use-color";
@@ -88,263 +88,271 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
   const bookingColor = getBookingStatusColor(booking.status);
 
   return (
-    <Card
-      p={10}
-      key={booking._id}
-      onClick={() => {
-        if (props.onClick) props.onClick();
-        else OnModalBookingDetail({ booking });
-      }}
-      style={{ cursor: "pointer" }}
-      withBorder
-      shadow="none"
-      maw="100%"
-      {...rest}
-    >
-      <Group wrap="nowrap" align="start">
-        <Stack gap={5} align="center">
-          <Card bg={color(bookingColor)} w={85} p={5}>
-            <Stack gap={0}>
-              <Text fz={10} c="white" ta="center" fw={500} tt="uppercase">
-                <DateFormat value={startTime} type="custom" format={{ weekday: "long" }} />
-              </Text>
-              <Text fz={30} my={-5} c="white" ta="center" fw={500}>
-                <DateFormat value={startTime} type="custom" format={{ day: "2-digit" }} />
-              </Text>
-              <Text fz={10} c="white" ta="center" fw={500} tt="capitalize">
-                <DateFormat
-                  value={startTime}
-                  type="custom"
-                  format={{ month: "2-digit", year: "numeric" }}
-                />
-              </Text>
-            </Stack>
-          </Card>
+    <ModalBookingDetail>
+      {(open) => (
+        <Card
+          p={10}
+          key={booking._id}
+          onClick={() => {
+            if (props.onClick) props.onClick();
+            else open({ booking });
+          }}
+          style={{ cursor: "pointer" }}
+          withBorder
+          shadow="none"
+          maw="100%"
+          {...rest}
+        >
+          <Group wrap="nowrap" align="start">
+            <Stack gap={5} align="center">
+              <Card bg={color(bookingColor)} w={85} p={5}>
+                <Stack gap={0}>
+                  <Text fz={10} c="white" ta="center" fw={500} tt="uppercase">
+                    <DateFormat value={startTime} type="custom" format={{ weekday: "long" }} />
+                  </Text>
+                  <Text fz={30} my={-5} c="white" ta="center" fw={500}>
+                    <DateFormat value={startTime} type="custom" format={{ day: "2-digit" }} />
+                  </Text>
+                  <Text fz={10} c="white" ta="center" fw={500} tt="capitalize">
+                    <DateFormat
+                      value={startTime}
+                      type="custom"
+                      format={{ month: "2-digit", year: "numeric" }}
+                    />
+                  </Text>
+                </Stack>
+              </Card>
 
-          <Text ta="center" tt="capitalize" fz={8} fw={500}>
-            <RelativeTimeFormat value={startTime} />
-          </Text>
-
-          <Badge color={color(bookingColor)} size="xs" variant="light">
-            {bookingStatuses[booking.status].label()}
-          </Badge>
-        </Stack>
-
-        <Stack flex={1} gap={8}>
-          <Group align="start">
-            <Stack gap={8} flex={1}>
-              <Text fz={15} fw={500}>
-                {getBookingTitle(booking)}
+              <Text ta="center" tt="capitalize" fz={8} fw={500}>
+                <RelativeTimeFormat value={startTime} />
               </Text>
-              {booking.note && (
-                <Text fz={12} c="gray" flex={1}>
-                  {booking.note}
-                </Text>
-              )}
+
+              <Badge color={color(bookingColor)} size="xs" variant="light">
+                {bookingStatuses[booking.status].label()}
+              </Badge>
             </Stack>
 
-            <Group gap={10}>
-              {!props.hideCtas && (
-                <Popover withArrow shadow="xs" zIndex={1} opened={opened}>
-                  <Popover.Target>
-                    <ActionIcon
-                      radius={100}
-                      color="gray"
-                      variant="subtle"
-                      size="md"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setOpened(!opened);
-                      }}
-                    >
-                      <IconDots strokeWidth={1.2} size={18} />
-                    </ActionIcon>
-                  </Popover.Target>
+            <Stack flex={1} gap={8}>
+              <Group align="start">
+                <Stack gap={8} flex={1}>
+                  <Text fz={15} fw={500}>
+                    {getBookingTitle(booking)}
+                  </Text>
+                  {booking.note && (
+                    <Text fz={12} c="gray" flex={1}>
+                      {booking.note}
+                    </Text>
+                  )}
+                </Stack>
 
-                  <Popover.Dropdown
-                    ref={ref}
-                    onClick={(e) => e.stopPropagation()}
-                    style={{ zIndex: 500 }}
-                  >
-                    <Stack>
-                      <Divider label={<Trans>Actions</Trans>} labelPosition="left" />
-                      {booking.customer && (
-                        <Anchor
-                          href={`tel:${booking.customer.phone}`}
-                          c="dark"
-                          onClick={(e) => e.stopPropagation()}
+                <Group gap={10}>
+                  {!props.hideCtas && (
+                    <Popover withArrow shadow="xs" zIndex={1} opened={opened}>
+                      <Popover.Target>
+                        <ActionIcon
+                          radius={100}
+                          color="gray"
+                          variant="subtle"
+                          size="md"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setOpened(!opened);
+                          }}
                         >
-                          <Group gap={10} style={{ cursor: "pointer", userSelect: "none" }}>
+                          <IconDots strokeWidth={1.2} size={18} />
+                        </ActionIcon>
+                      </Popover.Target>
+
+                      <Popover.Dropdown
+                        ref={ref}
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ zIndex: 500 }}
+                      >
+                        <Stack>
+                          <Divider label={<Trans>Actions</Trans>} labelPosition="left" />
+                          {booking.customer && (
+                            <Anchor
+                              href={`tel:${booking.customer.phone}`}
+                              c="dark"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Group gap={10} style={{ cursor: "pointer", userSelect: "none" }}>
+                                <ThemeIcon size="sm" radius={100} color="primary">
+                                  <IconPhone color="white" size={12} />
+                                </ThemeIcon>
+
+                                <Text fz={12} fw={500}>
+                                  <Trans>Call customer</Trans>
+                                </Text>
+                              </Group>
+                            </Anchor>
+                          )}
+
+                          <Divider label={<Trans>Status</Trans>} labelPosition="left" />
+                          <Group
+                            gap={10}
+                            style={{ cursor: "pointer", userSelect: "none" }}
+                            onClick={() => {
+                              close();
+                              checkinBooking(booking._id);
+                            }}
+                          >
                             <ThemeIcon size="sm" radius={100} color="primary">
-                              <IconPhone color="white" size={12} />
+                              <IconUserCheck size={16} />
                             </ThemeIcon>
 
                             <Text fz={12} fw={500}>
-                              <Trans>Call customer</Trans>
+                              {bookingStatuses[BookingStatus.CHECK_IN].label()}
                             </Text>
                           </Group>
-                        </Anchor>
-                      )}
 
-                      <Divider label={<Trans>Status</Trans>} labelPosition="left" />
-                      <Group
-                        gap={10}
-                        style={{ cursor: "pointer", userSelect: "none" }}
-                        onClick={() => {
-                          close();
-                          checkinBooking(booking._id);
-                        }}
-                      >
-                        <ThemeIcon size="sm" radius={100} color="primary">
-                          <IconUserCheck size={16} />
-                        </ThemeIcon>
+                          <Group
+                            gap={10}
+                            style={{ cursor: "pointer", userSelect: "none" }}
+                            onClick={() => {
+                              close();
+                              inProgressBooking(booking._id);
+                            }}
+                          >
+                            <ThemeIcon size="sm" radius={100} color="orange">
+                              <IconAnalyze color="white" size={16} />
+                            </ThemeIcon>
 
-                        <Text fz={12} fw={500}>
-                          {bookingStatuses[BookingStatus.CHECK_IN].label()}
-                        </Text>
-                      </Group>
+                            <Text fz={12} fw={500}>
+                              {bookingStatuses[BookingStatus.IN_PROGRESS].label()}
+                            </Text>
+                          </Group>
 
-                      <Group
-                        gap={10}
-                        style={{ cursor: "pointer", userSelect: "none" }}
-                        onClick={() => {
-                          close();
-                          inProgressBooking(booking._id);
-                        }}
-                      >
-                        <ThemeIcon size="sm" radius={100} color="orange">
-                          <IconAnalyze color="white" size={16} />
-                        </ThemeIcon>
+                          <Group
+                            gap={10}
+                            style={{ cursor: "pointer", userSelect: "none" }}
+                            onClick={() => {
+                              close();
+                              completeBooking(booking._id);
+                            }}
+                          >
+                            <ThemeIcon size="sm" radius={100} color="green">
+                              <IconCheck size={16} />
+                            </ThemeIcon>
 
-                        <Text fz={12} fw={500}>
-                          {bookingStatuses[BookingStatus.IN_PROGRESS].label()}
-                        </Text>
-                      </Group>
+                            <Text fz={12} fw={500}>
+                              {bookingStatuses[BookingStatus.COMPLETED].label()}
+                            </Text>
+                          </Group>
 
-                      <Group
-                        gap={10}
-                        style={{ cursor: "pointer", userSelect: "none" }}
-                        onClick={() => {
-                          close();
-                          completeBooking(booking._id);
-                        }}
-                      >
-                        <ThemeIcon size="sm" radius={100} color="green">
-                          <IconCheck size={16} />
-                        </ThemeIcon>
+                          <Group
+                            gap={10}
+                            style={{ cursor: "pointer", userSelect: "none" }}
+                            onClick={() => {
+                              close();
+                              OnModalCancelBooking({ booking });
+                            }}
+                          >
+                            <ThemeIcon size="sm" radius={100} color="red" variant="outline">
+                              <IconX size={16} />
+                            </ThemeIcon>
 
-                        <Text fz={12} fw={500}>
-                          {bookingStatuses[BookingStatus.COMPLETED].label()}
-                        </Text>
-                      </Group>
+                            <Text fz={12} fw={500}>
+                              <Trans>Cancel booking</Trans>
+                            </Text>
+                          </Group>
 
-                      <Group
-                        gap={10}
-                        style={{ cursor: "pointer", userSelect: "none" }}
-                        onClick={() => {
-                          close();
-                          OnModalCancelBooking({ booking });
-                        }}
-                      >
-                        <ThemeIcon size="sm" radius={100} color="red" variant="outline">
-                          <IconX size={16} />
-                        </ThemeIcon>
+                          <Divider label={<Trans>Update</Trans>} labelPosition="left" />
 
-                        <Text fz={12} fw={500}>
-                          <Trans>Cancel booking</Trans>
-                        </Text>
-                      </Group>
+                          <Group
+                            gap={10}
+                            style={{ cursor: "pointer", userSelect: "none" }}
+                            onClick={() => {
+                              close();
+                              OnModalUpdateBooking(booking);
+                            }}
+                          >
+                            <ThemeIcon size="sm" radius={100} color="dark" variant="transparent">
+                              <IconPencil strokeWidth={1.5} size={20} />
+                            </ThemeIcon>
 
-                      <Divider label={<Trans>Update</Trans>} labelPosition="left" />
+                            <Text fz={12} fw={500}>
+                              <Trans>Update information</Trans>
+                            </Text>
+                          </Group>
 
-                      <Group
-                        gap={10}
-                        style={{ cursor: "pointer", userSelect: "none" }}
-                        onClick={() => {
-                          close();
-                          OnModalUpdateBooking(booking);
-                        }}
-                      >
-                        <ThemeIcon size="sm" radius={100} color="dark" variant="transparent">
-                          <IconPencil strokeWidth={1.5} size={20} />
-                        </ThemeIcon>
+                          <Group
+                            gap={10}
+                            style={{ cursor: "pointer", userSelect: "none" }}
+                            onClick={() => {
+                              close();
+                              OnModalRescheduleBooking(booking);
+                            }}
+                          >
+                            <ThemeIcon size="sm" radius={100} color="dark" variant="transparent">
+                              <IconCalendarTime strokeWidth={1.5} size={20} />
+                            </ThemeIcon>
 
-                        <Text fz={12} fw={500}>
-                          <Trans>Update information</Trans>
-                        </Text>
-                      </Group>
-
-                      <Group
-                        gap={10}
-                        style={{ cursor: "pointer", userSelect: "none" }}
-                        onClick={() => {
-                          close();
-                          OnModalRescheduleBooking(booking);
-                        }}
-                      >
-                        <ThemeIcon size="sm" radius={100} color="dark" variant="transparent">
-                          <IconCalendarTime strokeWidth={1.5} size={20} />
-                        </ThemeIcon>
-
-                        <Text fz={12} fw={500}>
-                          <Trans>Reschedule booking</Trans>
-                        </Text>
-                      </Group>
-                    </Stack>
-                  </Popover.Dropdown>
-                </Popover>
-              )}
-            </Group>
-          </Group>
-
-          <Group flex={1} gap={30} align="start">
-            <Timeline active={3} bulletSize={10} lineWidth={1} mt={5} mb={-12} color="grey">
-              <Timeline.Item title={<DateFormat value={startTime} type="time" />} fz={13} />
-              <Timeline.Item title={<DateFormat value={endTime} type="time" />} fz={13} />
-            </Timeline>
-
-            <Stack gap={0} align="start">
-              <Text fz={10} c="gray">
-                <Trans>Duration</Trans>
-              </Text>
-
-              <Group gap={0} mt={-3}>
-                <ThemeIcon color="dark" variant="transparent" ml={-8} mr={-3}>
-                  <IconClock size={16} strokeWidth={1.5} />
-                </ThemeIcon>
-                <Text fz={13} fw={500}>
-                  {DateTime.toHHMM(booking.endTime - booking.startTime)}
-                </Text>
+                            <Text fz={12} fw={500}>
+                              <Trans>Reschedule booking</Trans>
+                            </Text>
+                          </Group>
+                        </Stack>
+                      </Popover.Dropdown>
+                    </Popover>
+                  )}
+                </Group>
               </Group>
+
+              <Group flex={1} gap={30} align="start">
+                <Timeline active={3} bulletSize={10} lineWidth={1} mt={5} mb={-12} color="grey">
+                  <Timeline.Item title={<DateFormat value={startTime} type="time" />} fz={13} />
+                  <Timeline.Item title={<DateFormat value={endTime} type="time" />} fz={13} />
+                </Timeline>
+
+                <Stack gap={0} align="start">
+                  <Text fz={10} c="gray">
+                    <Trans>Duration</Trans>
+                  </Text>
+
+                  <Group gap={0} mt={-3}>
+                    <ThemeIcon color="dark" variant="transparent" ml={-8} mr={-3}>
+                      <IconClock size={16} strokeWidth={1.5} />
+                    </ThemeIcon>
+                    <Text fz={13} fw={500}>
+                      {DateTime.toHHMM(booking.endTime - booking.startTime)}
+                    </Text>
+                  </Group>
+                </Stack>
+              </Group>
+
+              <Group align="start" mt={12}>
+                {booking.customer && !hideCustomerInfo && (
+                  <Group flex={1}>
+                    <CustomerInput
+                      label={<Trans>Customer</Trans>}
+                      value={booking.customer}
+                      disabled
+                    />
+                  </Group>
+                )}
+
+                {booking.assigneeUsers && booking.assigneeUsers.length > 0 && (
+                  <Group flex={1}>
+                    <WorkspaceMembersInput
+                      label={<Trans>Attendees</Trans>}
+                      value={booking.assigneeUsers}
+                      collapsed={memberCollapsed}
+                      disabled
+                    />
+                  </Group>
+                )}
+              </Group>
+
+              {booking.status === BookingStatus.CANCELLED && booking.reasonForCancellation && (
+                <Blockquote cite={<Trans>Cancel reason</Trans>} color="red" p={8} fz={13}>
+                  {booking.reasonForCancellation}
+                </Blockquote>
+              )}
             </Stack>
           </Group>
-
-          <Group align="start" mt={12}>
-            {booking.customer && !hideCustomerInfo && (
-              <Group flex={1}>
-                <CustomerInput label={<Trans>Customer</Trans>} value={booking.customer} disabled />
-              </Group>
-            )}
-
-            {booking.assigneeUsers && booking.assigneeUsers.length > 0 && (
-              <Group flex={1}>
-                <WorkspaceMembersInput
-                  label={<Trans>Attendees</Trans>}
-                  value={booking.assigneeUsers}
-                  collapsed={memberCollapsed}
-                  disabled
-                />
-              </Group>
-            )}
-          </Group>
-
-          {booking.status === BookingStatus.CANCELLED && booking.reasonForCancellation && (
-            <Blockquote cite={<Trans>Cancel reason</Trans>} color="red" p={8} fz={13}>
-              {booking.reasonForCancellation}
-            </Blockquote>
-          )}
-        </Stack>
-      </Group>
-    </Card>
+        </Card>
+      )}
+    </ModalBookingDetail>
   );
 };

@@ -13,15 +13,15 @@ import { Trans } from "@lingui/react/macro";
 import { Center, Modal, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCreditCardPay } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, ReactNode, useState } from "react";
 
 interface ModalSignLoanProps {
   loan: LoanEntity;
 }
 
-export let OnModalSignLoan: (props: ModalSignLoanProps) => void = () => {};
-
-export const ModalSignLoan: FC = () => {
+export const ModalSignLoan: FC<{
+  children: (open: (props: ModalSignLoanProps) => void) => ReactNode;
+}> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalSignLoanProps>();
   const [signature, setSignature] = useState<File>();
@@ -40,32 +40,34 @@ export const ModalSignLoan: FC = () => {
     }
   };
 
-  OnModalSignLoan = async (p) => {
-    setProps(p);
-    open();
-  };
-
   return (
-    <Modal
-      title={
-        <ModalTitle
-          title={t`Sign loan #${renderEntityCode(props?.loan.code)}`}
-          icon={IconCreditCardPay}
-        />
-      }
-      onClose={onClose}
-      opened={opened}
-      size={1000}
-    >
-      <Stack gap={16}>
-        <SignatureInput onChange={setSignature} />
+    <Fragment>
+      {children((p) => {
+        setProps(p);
+        open();
+      })}
 
-        <Center>
-          <Button disabled={!signature} onClick={onSubmit}>
-            <Trans>Sign contract</Trans>
-          </Button>
-        </Center>
-      </Stack>
-    </Modal>
+      <Modal
+        title={
+          <ModalTitle
+            title={t`Sign loan #${renderEntityCode(props?.loan.code)}`}
+            icon={IconCreditCardPay}
+          />
+        }
+        onClose={onClose}
+        opened={opened}
+        size={1000}
+      >
+        <Stack gap={16}>
+          <SignatureInput onChange={setSignature} />
+
+          <Center>
+            <Button disabled={!signature} onClick={onSubmit}>
+              <Trans>Sign contract</Trans>
+            </Button>
+          </Center>
+        </Stack>
+      </Modal>
+    </Fragment>
   );
 };

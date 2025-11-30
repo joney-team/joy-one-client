@@ -21,15 +21,15 @@ import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tas
 import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { OnModalUserInformation } from "@/modules/users/modals/modal-user-information";
+import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Avatar } from "./avatar";
 import { ButtonViewMore } from "./buttons/button-view-more";
 import { Errored } from "./errored";
 import { DateFormat, RelativeTimeFormat } from "./format/date-format";
-import { DateTime } from "@joy-one-client/utils/date-time";
 
 interface EventListProps extends StackProps {
   ref?: string;
@@ -110,17 +110,21 @@ export const EventItem: FC<{ event: EventEntity }> = (props) => {
       <Stack>
         <Group gap={5}>
           {props.event.user && (
-            <Group
-              gap={5}
-              style={{ cursor: "pointer" }}
-              onClick={() => OnModalUserInformation(props.event.user!._id)}
-            >
-              <Avatar user={props.event.user} size={18} hideOnlineStatus />
+            <ModalUserInformation>
+              {(open) => (
+                <Group
+                  gap={5}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => open(props.event.user!._id)}
+                >
+                  <Avatar user={props.event.user} size={18} hideOnlineStatus />
 
-              <Text fz={10} c="gray" fw={500}>
-                {props.event.user?.name}
-              </Text>
-            </Group>
+                  <Text fz={10} c="gray" fw={500}>
+                    {props.event.user?.name}
+                  </Text>
+                </Group>
+              )}
+            </ModalUserInformation>
           )}
 
           <Text fz={10} c="gray">

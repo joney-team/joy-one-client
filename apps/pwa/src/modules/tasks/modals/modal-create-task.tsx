@@ -15,11 +15,11 @@ import { Trans } from "@lingui/react/macro";
 import { em, Group, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";
-import { FC, useRef } from "react";
+import { FC, Fragment, ReactNode, useRef } from "react";
 
-export let OnModalCreateTask: (props?: TaskFormProps) => void = () => {};
-
-export const ModalCreateTask: FC = () => {
+export const ModalCreateTask: FC<{
+  children: (open: (props?: TaskFormProps) => void) => ReactNode;
+}> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
 
@@ -35,81 +35,83 @@ export const ModalCreateTask: FC = () => {
     (v) => v._id === props.current?.folderId || v._id === parnetTagFolder?._id
   );
 
-  OnModalCreateTask = (p) => {
-    props.current = p || null;
-    open();
-  };
-
   return (
-    <Modal
-      onClose={close}
-      opened={opened}
-      title={
-        <ModalTitle title={props.current?.task ? t`Task` : t`Create task`} icon={IconStackPush} />
-      }
-      fullScreen={layout.view === "mobile"}
-      size={830}
-      zIndex={zIndexes.commonModals + 1}
-    >
-      <Stack gap={10} pb={layout.view === "mobile" ? 16 * 2 : 0}>
-        <Renderer visible={!!tagFolder || !!parentTask || !!parnetTagFolder}>
-          <Group gap={5} align="center" wrap="nowrap" ml={-8} mt={5}>
-            {tagFolder && (
-              <Button
-                size="compact-sm"
-                variant="subtle"
-                color="dark"
-                fz={em(15)}
-                fw={500}
-                leftIcon={IconFolder}
-                onClick={() => {
-                  router.push(`/tasks?fs=${tagFolder._id}`);
-                  close();
-                }}
-              >
-                {tagFolder.name}
-              </Button>
-            )}
+    <Fragment>
+      {children((p) => {
+        props.current = p || null;
+        open();
+      })}
 
-            {!!tagFolder && !!parentTask && <Text>/</Text>}
+      <Modal
+        onClose={close}
+        opened={opened}
+        title={
+          <ModalTitle title={props.current?.task ? t`Task` : t`Create task`} icon={IconStackPush} />
+        }
+        fullScreen={layout.view === "mobile"}
+        size={830}
+        zIndex={zIndexes.commonModals + 1}
+      >
+        <Stack gap={10} pb={layout.view === "mobile" ? 16 * 2 : 0}>
+          <Renderer visible={!!tagFolder || !!parentTask || !!parnetTagFolder}>
+            <Group gap={5} align="center" wrap="nowrap" ml={-8} mt={5}>
+              {tagFolder && (
+                <Button
+                  size="compact-sm"
+                  variant="subtle"
+                  color="dark"
+                  fz={em(15)}
+                  fw={500}
+                  leftIcon={IconFolder}
+                  onClick={() => {
+                    router.push(`/tasks?fs=${tagFolder._id}`);
+                    close();
+                  }}
+                >
+                  {tagFolder.name}
+                </Button>
+              )}
 
-            {parentTask && (
-              <Button
-                fz={em(15)}
-                fw={500}
-                leftIcon={IconStack2}
-                size="compact-sm"
-                variant="subtle"
-                color="dark"
-                onClick={() => {
-                  router.push(`/tasks/${parentTask.code}`);
-                  close();
-                }}
-              >
-                {String.limitCharacters(parentTask.name, layout.view === "mobile" ? 15 : 30)}
-              </Button>
-            )}
+              {!!tagFolder && !!parentTask && <Text>/</Text>}
 
-            <Text>/</Text>
+              {parentTask && (
+                <Button
+                  fz={em(15)}
+                  fw={500}
+                  leftIcon={IconStack2}
+                  size="compact-sm"
+                  variant="subtle"
+                  color="dark"
+                  onClick={() => {
+                    router.push(`/tasks/${parentTask.code}`);
+                    close();
+                  }}
+                >
+                  {String.limitCharacters(parentTask.name, layout.view === "mobile" ? 15 : 30)}
+                </Button>
+              )}
 
-            <Text px={8} fz={em(14)} fw={300}>
-              <Trans>New Task</Trans>
-            </Text>
-          </Group>
-        </Renderer>
+              <Text>/</Text>
 
-        {opened && (
-          <TaskForm
-            {...props.current}
-            parentId={parentTask?._id}
-            folderId={tagFolder?._id}
-            onClose={() => {
-              props.current?.onClose?.();
-              close();
-            }}
-          />
-        )}
-      </Stack>
-    </Modal>
+              <Text px={8} fz={em(14)} fw={300}>
+                <Trans>New Task</Trans>
+              </Text>
+            </Group>
+          </Renderer>
+
+          {opened && (
+            <TaskForm
+              {...props.current}
+              parentId={parentTask?._id}
+              folderId={tagFolder?._id}
+              onClose={() => {
+                props.current?.onClose?.();
+                close();
+              }}
+            />
+          )}
+        </Stack>
+      </Modal>
+    </Fragment>
   );
 };

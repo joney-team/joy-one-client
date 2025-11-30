@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { OnModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
+import { ModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -31,57 +31,61 @@ export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
   const _createable = createable && workspace.hasPermission(WorkspacePermission.PARTNERS_WRITE);
 
   return (
-    <Selector<PartnerEntity>
-      {...rest}
-      onSearch={(q) => searchEntity<PartnerEntity>(AppEntity.PARTNERS, q)}
-      listRoute="/partners"
-      renderOption={(item) => {
-        return (
-          <Combobox.Option value={item._id} key={item._id}>
-            <Group gap={8} justify="space-between">
-              <Group gap={8}>
-                <Avatar partner={item} size={em(28)} />
-                <Stack gap={3}>
-                  <Text>{item.name}</Text>
-                  {!!item.phone && (
-                    <Group gap={3}>
-                      <IconPhone size={13} strokeWidth={1.5} />
-                      <Text fz={em(12)}>{item.phone}</Text>
-                    </Group>
-                  )}
-                </Stack>
-              </Group>
-              {optionRightSection?.(item)}
-            </Group>
-          </Combobox.Option>
-        );
-      }}
-      target={(ctx) => {
-        const { toggle } = ctx;
-        if (target) return target(ctx);
-        return (
-          <Button
-            tt="capitalize"
-            size="xs"
-            variant="light"
-            radius={100}
-            leftIcon={IconPlus}
-            fz={em(14)}
-            fw={500}
-            onClick={toggle}
-          >
-            <Trans>Select</Trans>
-          </Button>
-        );
-      }}
-      onCreate={
-        _createable
-          ? (ctx) =>
-              OnModalParnterForm({
-                onDone: (partner) => props.onSelect?.(partner, ctx),
-              })
-          : undefined
-      }
-    />
+    <ModalParnterForm>
+      {(open) => (
+        <Selector<PartnerEntity>
+          {...rest}
+          onSearch={(q) => searchEntity<PartnerEntity>(AppEntity.PARTNERS, q)}
+          listRoute="/partners"
+          renderOption={(item) => {
+            return (
+              <Combobox.Option value={item._id} key={item._id}>
+                <Group gap={8} justify="space-between">
+                  <Group gap={8}>
+                    <Avatar partner={item} size={em(28)} />
+                    <Stack gap={3}>
+                      <Text>{item.name}</Text>
+                      {!!item.phone && (
+                        <Group gap={3}>
+                          <IconPhone size={13} strokeWidth={1.5} />
+                          <Text fz={em(12)}>{item.phone}</Text>
+                        </Group>
+                      )}
+                    </Stack>
+                  </Group>
+                  {optionRightSection?.(item)}
+                </Group>
+              </Combobox.Option>
+            );
+          }}
+          target={(ctx) => {
+            const { toggle } = ctx;
+            if (target) return target(ctx);
+            return (
+              <Button
+                tt="capitalize"
+                size="xs"
+                variant="light"
+                radius={100}
+                leftIcon={IconPlus}
+                fz={em(14)}
+                fw={500}
+                onClick={toggle}
+              >
+                <Trans>Select</Trans>
+              </Button>
+            );
+          }}
+          onCreate={
+            _createable
+              ? (ctx) =>
+                  open({
+                    onDone: (partner) => props.onSelect?.(partner, ctx),
+                  })
+              : undefined
+          }
+        />
+      )}
+    </ModalParnterForm>
   );
 };

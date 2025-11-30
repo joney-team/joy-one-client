@@ -1,7 +1,8 @@
 "use client";
 
+import { FileType } from "@/graphql/enums.graphql";
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Box, Card, Center, Image, Stack, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
@@ -10,7 +11,6 @@ import { Icon, IconEye, IconPhoto, IconProps, IconUpload } from "@tabler/icons-r
 import { FC, useRef, useState } from "react";
 import { Button } from "./buttons/button";
 import { Renderer } from "./renderer";
-import { FileType } from "@/graphql/enums.graphql";
 
 interface EntityImageProps {
   src?: string | File | null;
@@ -38,138 +38,152 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
   const openRef = useRef<() => void>(null);
   const [loadFailed, setLoadFailed] = useState(false);
 
-  const onView = () => {
-    if (!src) return;
-    if (props.onView) return props.onView();
-    OnModalFileGallery({
-      files: [{ url: src, fileName: props.name || "image", type: FileType.Photo }],
-      disabled: true,
-    });
-  };
-
   const ableView = !!props.src && !loadFailed;
-  const hovered = hover.hovered && ableView;
+  const hovered = hover.hovered && (ableView || !props.readonly);
   const radius = props.radius ?? 10;
 
   return (
-    <Dropzone
-      accept={IMAGE_MIME_TYPE}
-      onDrop={(files) => props.onChange && props.onChange(files[0])}
-      disabled={disabled}
-      multiple={false}
-      openRef={openRef}
-      activateOnClick={false}
-    >
-      <Card
-        ref={hover.ref}
-        p={0}
-        bg="gray.1"
-        maw="100%"
-        mah="100%"
-        h={h}
-        w={w}
-        pos="relative"
-        radius={radius}
-        style={{
-          cursor: disabled || !src ? "default" : "pointer",
-          overflow: "hidden",
-        }}
-        onClick={() => {
-          if (disabled) {
-            if (!src) return;
-
-            return OnModalFileGallery({
-              files: [{ url: src, fileName: props.name || "image", type: FileType.Photo }],
-            });
-          }
-
-          return openRef.current?.();
-        }}
-        withBorder
-        shadow="none"
-      >
-        <Renderer visible={ableView}>
-          <Image
-            src={src}
-            h="100%"
-            w="100%"
-            fit={props.fit || "cover"}
-            flex={1}
-            onError={() => setLoadFailed(true)}
-          />
-        </Renderer>
-
-        <Renderer visible={!ableView}>
-          <Center h="100%">
-            <ThemeIcon size={size} color="gray.5" variant="transparent">
-              <Icon strokeWidth={1.2} {...props.iconProps} />
-            </ThemeIcon>
-          </Center>
-        </Renderer>
-
-        <Renderer visible={hovered}>
-          <Stack
-            gap={10}
-            align="center"
-            justify="center"
-            bg="#00000098"
-            h="100%"
-            w="100%"
+    <ModalFileGallery>
+      {(openGallery) => (
+        <Dropzone
+          accept={IMAGE_MIME_TYPE}
+          onDrop={(files) => props.onChange && props.onChange(files[0])}
+          disabled={disabled}
+          multiple={false}
+          openRef={openRef}
+          activateOnClick={false}
+        >
+          <Card
+            id="EntityImage"
+            ref={hover.ref}
+            p={0}
+            bg="gray.1"
+            maw="100%"
+            mah="100%"
+            h={h}
+            w={w}
+            pos="relative"
+            radius={radius}
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              bottom: 0,
-              right: 0,
-              borderRadius: radius,
+              cursor: disabled || !src ? "default" : "pointer",
+              overflow: "hidden",
             }}
-            onClick={(e) => {
+            onClick={() => {
               if (disabled) {
-                e.stopPropagation();
-                onView();
+                if (!src) return;
+
+                return openGallery({
+                  files: [{ url: src, fileName: props.name || "image", type: FileType.Photo }],
+                });
               }
+
+              return openRef.current?.();
             }}
+            withBorder
+            shadow="none"
           >
-            <Renderer visible={!!props.src}>
-              <Box
-                style={
-                  disabled
-                    ? {
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                      }
-                    : {
-                        position: "absolute",
-                        top: 0,
-                        right: 0,
-                      }
-                }
-                p={5}
-              >
-                <ActionIcon
-                  component="div"
-                  variant="subtle"
-                  color="white"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onView();
-                  }}
-                >
-                  <IconEye strokeWidth={1.3} />
-                </ActionIcon>
-              </Box>
+            <Renderer visible={ableView}>
+              <Image
+                src={src}
+                h="100%"
+                w="100%"
+                fit={props.fit || "cover"}
+                flex={1}
+                onError={() => setLoadFailed(true)}
+              />
             </Renderer>
 
-            <Renderer visible={!disabled}>
-              <Button leftIcon={IconUpload} size="xs" variant="transparent" color="white" fw={400}>
-                <Trans>Upload</Trans>
-              </Button>
+            <Renderer visible={!ableView}>
+              <Center h="100%">
+                <ThemeIcon size={size} color="gray.5" variant="transparent">
+                  <Icon strokeWidth={1.2} {...props.iconProps} />
+                </ThemeIcon>
+              </Center>
             </Renderer>
-          </Stack>
-        </Renderer>
-      </Card>
-    </Dropzone>
+
+            <Renderer visible={hovered}>
+              <Stack
+                gap={10}
+                align="center"
+                justify="center"
+                bg="#00000098"
+                h="100%"
+                w="100%"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: 0,
+                  borderRadius: radius,
+                }}
+                onClick={(e) => {
+                  if (disabled) {
+                    e.stopPropagation();
+                    if (!src) return;
+                    if (props.onView) return props.onView();
+                    openGallery({
+                      files: [{ url: src, fileName: props.name || "image", type: FileType.Photo }],
+                      disabled: true,
+                    });
+                  }
+                }}
+              >
+                <Renderer visible={!!props.src}>
+                  <Box
+                    style={
+                      disabled
+                        ? {
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                          }
+                        : {
+                            position: "absolute",
+                            top: 0,
+                            right: 0,
+                          }
+                    }
+                    p={5}
+                  >
+                    <ActionIcon
+                      component="div"
+                      variant="subtle"
+                      color="white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!src) return;
+                        if (props.onView) return props.onView();
+                        openGallery({
+                          files: [
+                            { url: src, fileName: props.name || "image", type: FileType.Photo },
+                          ],
+                          disabled: true,
+                        });
+                      }}
+                    >
+                      <IconEye strokeWidth={1.3} />
+                    </ActionIcon>
+                  </Box>
+                </Renderer>
+
+                <Renderer visible={!disabled}>
+                  <Button
+                    leftIcon={IconUpload}
+                    size="xs"
+                    variant="transparent"
+                    color="white"
+                    fw={400}
+                  >
+                    <Trans>Upload</Trans>
+                  </Button>
+                </Renderer>
+              </Stack>
+            </Renderer>
+          </Card>
+        </Dropzone>
+      )}
+    </ModalFileGallery>
   );
 };

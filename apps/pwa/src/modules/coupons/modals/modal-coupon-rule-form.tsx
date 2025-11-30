@@ -39,20 +39,21 @@ import {
 import { useForm } from "@mantine/form";
 import { useDisclosure, useListState } from "@mantine/hooks";
 import { IconNotes, IconPlus, IconX } from "@tabler/icons-react";
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, ReactNode, useState } from "react";
 import { couponRuleBenefitTypes, discountTypes } from "../coupon-constants";
 
-interface ModalCouponRuleFormProps {
+interface ModalCouponRuleFormArgs {
   rule?: CouponRuleEntity;
   onDone?: (rule: CouponRuleEntity) => void | Promise<void>;
 }
 
-export let OnModalCouponRuleForm: (props?: ModalCouponRuleFormProps) => void = () => {};
 const initialBenefits: CouponRuleBenefit[] = [{ type: CouponRuleBenefitType.FREE_ON_PRODUCT }];
 
-export const ModalCouponRuleForm: FC = () => {
+export const ModalCouponRuleForm: FC<{
+  children: (open: (args?: ModalCouponRuleFormArgs) => void) => ReactNode;
+}> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [props, setProps] = useState<ModalCouponRuleFormProps>();
+  const [props, setProps] = useState<ModalCouponRuleFormArgs>();
 
   const [benefits, benefitsHandler] = useListState(props?.rule?.benefits || initialBenefits);
 
@@ -69,18 +70,6 @@ export const ModalCouponRuleForm: FC = () => {
       },
     },
   });
-
-  OnModalCouponRuleForm = async (p) => {
-    form.reset();
-    setProps(p);
-
-    if (p && p.rule) {
-      form.setValues(p.rule);
-      benefitsHandler.setState(p.rule.benefits);
-    }
-
-    open();
-  };
 
   const submit = useFormSubmit(form, {
     onSubmit: async (values) => {
@@ -112,91 +101,104 @@ export const ModalCouponRuleForm: FC = () => {
   });
 
   return (
-    <Modal
-      title={
-        <ModalTitle
-          title={`${props?.rule ? t`Update coupon rule` : t`Create coupon rule`}`}
-          icon={IconNotes}
-        />
-      }
-      onClose={onClose}
-      opened={opened}
-      size={1000}
-    >
-      <Stack gap={16}>
-        <TextInput label={t`Name`} {...form.getInputProps("name")} />
+    <Fragment>
+      {children((p) => {
+        form.reset();
+        setProps(p);
 
-        <InputWrapper label={t`Description`} {...form.getInputProps("description")}>
-          <Editor
-            value={form.values.description}
-            onChangeHTML={(v) => form.setFieldValue("description", v)}
-            placeholder={t`Description`}
+        if (p && p.rule) {
+          form.setValues(p.rule);
+          benefitsHandler.setState(p.rule.benefits);
+        }
+
+        open();
+      })}
+      <Modal
+        title={
+          <ModalTitle
+            title={`${props?.rule ? t`Update coupon rule` : t`Create coupon rule`}`}
+            icon={IconNotes}
           />
-        </InputWrapper>
+        }
+        onClose={onClose}
+        opened={opened}
+        size={1000}
+      >
+        <Stack gap={16}>
+          <TextInput label={t`Name`} {...form.getInputProps("name")} />
 
-        <InputWrapper label={t`Settings`}>
-          <Card withBorder p={8} mt={5}>
-            <Group>
-              <Switch
-                label={t`Allow cumulative coupon rules`}
-                checked={form.values.isCumulative}
-                onChange={(v) => form.setFieldValue("isCumulative", v)}
-              />
-            </Group>
-          </Card>
-        </InputWrapper>
+          <InputWrapper label={t`Description`} {...form.getInputProps("description")}>
+            <Editor
+              value={form.values.description}
+              onChangeHTML={(v) => form.setFieldValue("description", v)}
+              placeholder={t`Description`}
+            />
+          </InputWrapper>
 
-        <Stack mt={5}>
-          {benefits.map((benefit, i) => (
-            <Card key={i} withBorder shadow="none" p={10}>
-              <Stack gap={5}>
-                <Group justify="space-between">
-                  <Text fz="xs" fw={700}>
-                    {t`Rule`} {benefits.length === 1 ? "" : i + 1}
-                  </Text>
-
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    disabled={benefits.length === 1}
-                    onClick={() => benefitsHandler.remove(i)}
-                  >
-                    <IconX size={16} />
-                  </ActionIcon>
-                </Group>
-                <Box flex={1}>
-                  <RuleBenfitForm
-                    key={i}
-                    benefit={benefit}
-                    onChange={(v) => benefitsHandler.setItem(i, v)}
-                    onRemove={() => benefitsHandler.remove(i)}
-                  />
-                </Box>
-              </Stack>
+          <InputWrapper label={t`Settings`}>
+            <Card withBorder p={8} mt={5}>
+              <Group>
+                <Switch
+                  label={t`Allow cumulative coupon rules`}
+                  checked={form.values.isCumulative}
+                  onChange={(v) => form.setFieldValue("isCumulative", v)}
+                />
+              </Group>
             </Card>
-          ))}
+          </InputWrapper>
 
-          <Group>
-            <Button
-              size="xs"
-              leftSection={<IconPlus size={16} style={{ marginRight: -5 }} />}
-              variant="light"
-              radius={100}
-              fz={em(14)}
-              onClick={() => benefitsHandler.append(initialBenefits[0])}
-            >
-              <Trans>Add rule</Trans>
+          <Stack mt={5}>
+            {benefits.map((benefit, i) => (
+              <Card key={i} withBorder shadow="none" p={10}>
+                <Stack gap={5}>
+                  <Group justify="space-between">
+                    <Text fz="xs" fw={700}>
+                      {t`Rule`} {benefits.length === 1 ? "" : i + 1}
+                    </Text>
+
+                    <ActionIcon
+                      variant="subtle"
+                      color="gray"
+                      disabled={benefits.length === 1}
+                      onClick={() => benefitsHandler.remove(i)}
+                    >
+                      <IconX size={16} />
+                    </ActionIcon>
+                  </Group>
+                  <Box flex={1}>
+                    <RuleBenfitForm
+                      key={i}
+                      benefit={benefit}
+                      onChange={(v) => benefitsHandler.setItem(i, v)}
+                      onRemove={() => benefitsHandler.remove(i)}
+                    />
+                  </Box>
+                </Stack>
+              </Card>
+            ))}
+
+            <Group>
+              <Button
+                size="xs"
+                leftSection={<IconPlus size={16} style={{ marginRight: -5 }} />}
+                variant="light"
+                radius={100}
+                fz={em(14)}
+                onClick={() => benefitsHandler.append(initialBenefits[0])}
+              >
+                <Trans>Add rule</Trans>
+              </Button>
+            </Group>
+          </Stack>
+
+          <Group justify="center" mt={10}>
+            <Button type="submit" miw={200} onClick={submit.handle} loading={submit.isSubmitting}>
+              <Trans>Complete</Trans>
             </Button>
           </Group>
         </Stack>
-
-        <Group justify="center" mt={10}>
-          <Button type="submit" miw={200} onClick={submit.handle} loading={submit.isSubmitting}>
-            <Trans>Complete</Trans>
-          </Button>
-        </Group>
-      </Stack>
-    </Modal>
+      </Modal>
+    </Fragment>
   );
 };
 

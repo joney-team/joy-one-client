@@ -4,7 +4,6 @@ import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { useLayout } from "@/layout/layout-context";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
-import { OnCustomerModal } from "@/modules/customers/customer-modal";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
@@ -54,6 +53,7 @@ import {
 import { FC, Fragment, useState } from "react";
 import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
+import { ModalCustomer } from "../customer-modal";
 import { assignCustomer, renderGener, renderGenerIcon, updateCustomer } from "../customer-service";
 import { CustomerLocations } from "./customer-locations";
 
@@ -416,14 +416,18 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
 
         {workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO) && (
           <Group justify="flex-end">
-            <ActionIcon
-              variant="transparent"
-              color="gray"
-              onClick={() => OnCustomerModal({ customer: customer, onDone: () => {} })}
-              style={{ marginRight: -5, marginTop: -3 }}
-            >
-              <IconPencil size={22} strokeWidth={1.5} />
-            </ActionIcon>
+            <ModalCustomer>
+              {(open) => (
+                <ActionIcon
+                  variant="transparent"
+                  color="gray"
+                  onClick={() => open({ customer: customer, onDone: () => {} })}
+                  style={{ marginRight: -5, marginTop: -3 }}
+                >
+                  <IconPencil size={22} strokeWidth={1.5} />
+                </ActionIcon>
+              )}
+            </ModalCustomer>
           </Group>
         )}
       </Group>

@@ -1,6 +1,7 @@
 "use client";
 
 import { DateFormat } from "@/components/format/date-format";
+import { FileType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import {
@@ -11,7 +12,7 @@ import {
   type CustomerKycEntity,
   CustomerKycStatus,
 } from "@/modules/customer-kycs/customer-kycs-types";
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { useLocations } from "@/modules/locations/locations-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -40,7 +41,6 @@ import { Button } from "../../../components/buttons/button";
 import { EntityImage } from "../../../components/entity-image";
 import { Image } from "../../../components/image";
 import { Renderer } from "../../../components/renderer";
-import { FileType } from "@/graphql/enums.graphql";
 
 interface CustomerKycCardProps {
   kyc: CustomerKycEntity;
@@ -58,33 +58,6 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
   const { renderVnLocation: renderLocation } = useLocations();
 
   if (!lastVersion) return null;
-
-  const onView = (index = 0) => {
-    OnModalFileGallery({
-      index,
-      disabled: true,
-      files: [
-        {
-          url: lastVersion.frontOfCidImage,
-          _id: "1",
-          fileName: t`Front of CID`,
-          type: FileType.Photo,
-        },
-        {
-          url: lastVersion.backOfCidImage,
-          _id: "2",
-          fileName: t`Back of CID`,
-          type: FileType.Photo,
-        },
-        {
-          url: lastVersion.portraitImage,
-          _id: "3",
-          fileName: t`Portrait image`,
-          type: FileType.Photo,
-        },
-      ],
-    });
-  };
 
   const onApprove = async () => {
     await onActionLoad({
@@ -109,109 +82,150 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
   };
 
   return (
-    <Card className="CustomerKycCard" withBorder shadow="none" {...props.cardProps}>
-      <Stack align="stretch">
-        <Text fz={em(12)}>
-          <DateFormat value={lastVersion.createdAt} type="date" />
-        </Text>
+    <ModalFileGallery>
+      {(openGallery) => {
+        const onView = (index = 0) => {
+          openGallery({
+            index,
+            disabled: true,
+            files: [
+              {
+                url: lastVersion.frontOfCidImage,
+                _id: "1",
+                fileName: t`Front of CID`,
+                type: FileType.Photo,
+              },
+              {
+                url: lastVersion.backOfCidImage,
+                _id: "2",
+                fileName: t`Back of CID`,
+                type: FileType.Photo,
+              },
+              {
+                url: lastVersion.portraitImage,
+                _id: "3",
+                fileName: t`Portrait image`,
+                type: FileType.Photo,
+              },
+            ],
+          });
+        };
 
-        <Renderer visible={!props.hideCustomer}>
-          <Group justify="space-between">
-            <Text fz={em(15)}>{t`Customer`}</Text>
-            <Anchor fw={500} onClick={() => router.push(`/customers/${customer.code}`)}>
-              {customer.name}
-            </Anchor>
-          </Group>
+        return (
+          <Card className="CustomerKycCard" withBorder shadow="none" {...props.cardProps}>
+            <Stack align="stretch">
+              <Text fz={em(12)}>
+                <DateFormat value={lastVersion.createdAt} type="date" />
+              </Text>
 
-          <Group justify="space-between">
-            <Text fz={em(15)}>{t`Phone`}</Text>
-            <Text fz={em(15)} fw={500}>
-              {customer.phone || "--"}
-            </Text>
-          </Group>
-        </Renderer>
+              <Renderer visible={!props.hideCustomer}>
+                <Group justify="space-between">
+                  <Text fz={em(15)}>{t`Customer`}</Text>
+                  <Anchor fw={500} onClick={() => router.push(`/customers/${customer.code}`)}>
+                    {customer.name}
+                  </Anchor>
+                </Group>
 
-        {lastVersion.cidNumber && (
-          <Group justify="space-between">
-            <Text fz={em(15)}>{t`CID number`}</Text>
-            <Text fz={em(15)} fw={500}>
-              {lastVersion.cidNumber}
-            </Text>
-          </Group>
-        )}
+                <Group justify="space-between">
+                  <Text fz={em(15)}>{t`Phone`}</Text>
+                  <Text fz={em(15)} fw={500}>
+                    {customer.phone || "--"}
+                  </Text>
+                </Group>
+              </Renderer>
 
-        {lastVersion.cidFullName && (
-          <Group justify="space-between" wrap="nowrap">
-            <Text fz={em(15)}>{t`Full name`}</Text>
-            <Text fz={em(15)} fw={500} ta="right">
-              {lastVersion.cidFullName}
-            </Text>
-          </Group>
-        )}
+              {lastVersion.cidNumber && (
+                <Group justify="space-between">
+                  <Text fz={em(15)}>{t`CID number`}</Text>
+                  <Text fz={em(15)} fw={500}>
+                    {lastVersion.cidNumber}
+                  </Text>
+                </Group>
+              )}
 
-        {lastVersion.cidVnLocation && Object.keys(lastVersion.cidVnLocation).length > 0 && (
-          <Group justify="space-between">
-            <Text fz={em(15)}>{t`Address`}</Text>
-            <Text fz={em(15)} fw={500}>
-              {renderLocation(lastVersion.cidVnLocation, { shortProvine: true, shortWard: true })}
-            </Text>
-          </Group>
-        )}
+              {lastVersion.cidFullName && (
+                <Group justify="space-between" wrap="nowrap">
+                  <Text fz={em(15)}>{t`Full name`}</Text>
+                  <Text fz={em(15)} fw={500} ta="right">
+                    {lastVersion.cidFullName}
+                  </Text>
+                </Group>
+              )}
 
-        <Divider />
+              {lastVersion.cidVnLocation && Object.keys(lastVersion.cidVnLocation).length > 0 && (
+                <Group justify="space-between">
+                  <Text fz={em(15)}>{t`Address`}</Text>
+                  <Text fz={em(15)} fw={500}>
+                    {renderLocation(lastVersion.cidVnLocation, {
+                      shortProvine: true,
+                      shortWard: true,
+                    })}
+                  </Text>
+                </Group>
+              )}
 
-        <SimpleGrid cols={{ md: 3 }}>
-          <Stack gap={5}>
-            <Text fz={em(13)}>{t`Front of CID`}</Text>
-            <EntityImage w="100%" src={lastVersion.frontOfCidImage} onView={() => onView(0)} />
-          </Stack>
+              <Divider />
 
-          <Stack gap={5}>
-            <Text fz={em(13)}>{t`Back of CID`}</Text>
-            <EntityImage w="100%" src={lastVersion.backOfCidImage} onView={() => onView(1)} />
-          </Stack>
+              <SimpleGrid cols={{ md: 3 }}>
+                <Stack gap={5}>
+                  <Text fz={em(13)}>{t`Front of CID`}</Text>
+                  <EntityImage
+                    w="100%"
+                    src={lastVersion.frontOfCidImage}
+                    onView={() => onView(0)}
+                  />
+                </Stack>
 
-          <Stack gap={5}>
-            <Text fz={em(13)}>{t`Portrait image`}</Text>
-            <EntityImage w="100%" src={lastVersion.portraitImage} onView={() => onView(2)} />
-          </Stack>
-        </SimpleGrid>
+                <Stack gap={5}>
+                  <Text fz={em(13)}>{t`Back of CID`}</Text>
+                  <EntityImage w="100%" src={lastVersion.backOfCidImage} onView={() => onView(1)} />
+                </Stack>
 
-        {(function () {
-          if (kyc.status === CustomerKycStatus.APPROVED)
-            return (
-              <Stack align="end">
-                <Badge color="green">{t`Approved`}</Badge>
-              </Stack>
-            );
+                <Stack gap={5}>
+                  <Text fz={em(13)}>{t`Portrait image`}</Text>
+                  <EntityImage w="100%" src={lastVersion.portraitImage} onView={() => onView(2)} />
+                </Stack>
+              </SimpleGrid>
 
-          if (kyc.status === CustomerKycStatus.REJECTED)
-            return (
-              <Stack align="end" gap={5}>
-                <Badge color="red">{t`Rejected`}</Badge>
+              {(function () {
+                if (kyc.status === CustomerKycStatus.APPROVED)
+                  return (
+                    <Stack align="end">
+                      <Badge color="green">{t`Approved`}</Badge>
+                    </Stack>
+                  );
 
-                <Text fz={em(13)} fw={500} c="red">
-                  {t`Reason`}: {lastVersion.rejectReason || t`Unknown reason`}
-                </Text>
-              </Stack>
-            );
+                if (kyc.status === CustomerKycStatus.REJECTED)
+                  return (
+                    <Stack align="end" gap={5}>
+                      <Badge color="red">{t`Rejected`}</Badge>
 
-          if (!workspace.hasPermission(WorkspacePermission.CUSTOMER_KYCS_MANAGER)) return null;
+                      <Text fz={em(13)} fw={500} c="red">
+                        {t`Reason`}: {lastVersion.rejectReason || t`Unknown reason`}
+                      </Text>
+                    </Stack>
+                  );
 
-          return (
-            <Group justify="end">
-              <Button leftIcon={IconCheck} onClick={onApprove}>
-                {t`Approve`}
-              </Button>
+                if (!workspace.hasPermission(WorkspacePermission.CUSTOMER_KYCS_MANAGER))
+                  return null;
 
-              <Button variant="outline" color="gray" onClick={onReject}>
-                {t`Reject`}
-              </Button>
-            </Group>
-          );
-        })()}
-      </Stack>
-    </Card>
+                return (
+                  <Group justify="end">
+                    <Button leftIcon={IconCheck} onClick={onApprove}>
+                      {t`Approve`}
+                    </Button>
+
+                    <Button variant="outline" color="gray" onClick={onReject}>
+                      {t`Reject`}
+                    </Button>
+                  </Group>
+                );
+              })()}
+            </Stack>
+          </Card>
+        );
+      }}
+    </ModalFileGallery>
   );
 };
 

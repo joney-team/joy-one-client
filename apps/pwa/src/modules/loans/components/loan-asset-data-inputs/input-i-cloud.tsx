@@ -1,7 +1,7 @@
 "use client";
 
 import { EntityImages } from "@/components/entity-images";
-import { InputModalType, OnModalInput } from "@/modals/modal-input";
+import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { api } from "@/modules/apis";
 import { useLang } from "@/modules/lang/lang-context";
 import { LoanAssetType } from "@/modules/loans/loans-types";
@@ -22,15 +22,6 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
       })}`,
     });
     props.onChange?.({ ...(props.value as any), deviceSecretKey: hash });
-  };
-
-  const onInputDeviceKey = () => {
-    OnModalInput({
-      type: InputModalType.TEXT,
-      onDone: (value) => {
-        props.onChange?.({ ...(props.value as any), deviceSecretKey: value });
-      },
-    });
   };
 
   return (
@@ -95,11 +86,27 @@ export const InputICloud: FC<LoanAssetDataInputProps<LoanAssetType.ICLOUD>> = (p
                 })
               }
             />
-            <Tooltip label={t`Enter device key`}>
-              <ActionIcon size={34} variant="outline" color="gray" onClick={onInputDeviceKey}>
-                <IconCursorText size={18} />
-              </ActionIcon>
-            </Tooltip>
+            <ModalInput>
+              {(openInput) => (
+                <Tooltip label={t`Enter device key`}>
+                  <ActionIcon
+                    size={34}
+                    variant="outline"
+                    color="gray"
+                    onClick={() => {
+                      openInput({
+                        type: InputModalType.TEXT,
+                        onDone: (value) => {
+                          props.onChange?.({ ...(props.value as any), deviceSecretKey: value });
+                        },
+                      });
+                    }}
+                  >
+                    <IconCursorText size={18} />
+                  </ActionIcon>
+                </Tooltip>
+              )}
+            </ModalInput>
             <Tooltip label={t`Generate device key`}>
               <ActionIcon size={34} variant="outline" color="gray" onClick={retreiveDeviceKey}>
                 <IconLockPlus size={18} />

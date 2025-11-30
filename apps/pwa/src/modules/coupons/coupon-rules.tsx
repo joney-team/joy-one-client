@@ -5,7 +5,7 @@ import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { getCouponRules } from "@/modules/coupons/coupon-service";
-import { OnModalCouponRuleForm } from "@/modules/coupons/modals/modal-coupon-rule-form";
+import { ModalCouponRuleForm } from "@/modules/coupons/modals/modal-coupon-rule-form";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -35,10 +35,11 @@ export const CouponRules: FC = () => {
     <InfiniteScroll loadMore={() => rules.fetch()} hasMore={rules.isAbleToLoadMore}>
       <Stack>
         <Group gap={10}>
-          <ButtonPlus
-            onClick={() => OnModalCouponRuleForm()}
-            permission={WorkspacePermission.COUPONS_MANAGER}
-          />
+          <ModalCouponRuleForm>
+            {(open) => (
+              <ButtonPlus onClick={() => open()} permission={WorkspacePermission.COUPONS_MANAGER} />
+            )}
+          </ModalCouponRuleForm>
 
           <Badge variant="light" size="xl" fz={em(12)} style={{ borderRadius: 100 }}>
             <Trans>QTY</Trans>

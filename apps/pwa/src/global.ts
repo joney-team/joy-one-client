@@ -1,4 +1,3 @@
-import type { WorkspaceSettingEntity } from "./modules/workspace-settings/workspace-settings-types";
 import type { AppConfig, AppMetadata, ViewportType } from "./types";
 
 export interface Global extends Window {
@@ -8,7 +7,6 @@ export interface Global extends Window {
   _appConfig: AppConfig;
   _metadata: AppMetadata;
   _sessionId: string;
-  _workspaceSettings: WorkspaceSettingEntity;
   _view: ViewportType;
 }
 

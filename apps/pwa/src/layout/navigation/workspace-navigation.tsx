@@ -5,8 +5,13 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceModuleId } from "@/modules/workspaces/workspace-modules";
+import {
+  useAvailableWorkspaceModules,
+  useWorkspaceModules,
+  WorkspaceModuleId,
+} from "@/modules/workspaces/workspace-modules";
 import { getDefaultWorkspaceView, getNavigationGroups } from "@/modules/workspaces/workspace-view";
+import { nonLoading } from "@/utils/non-loading";
 import { String } from "@/utils/string.utils";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -22,12 +27,11 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDotsVertical } from "@tabler/icons-react";
-import { FC, Fragment } from "react";
+import dynamic from "next/dynamic";
+import { FC, Fragment, useMemo } from "react";
 import { Renderer } from "../../components/renderer";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
-import { WorkspaceNavigationMenu } from "./navigation-menu";
-import { nonLoading } from "@/utils/non-loading";
-import dynamic from "next/dynamic";
+import { WorkspaceNavigationMenu } from "./workspace-navigation-menu";
 
 const WorkspaceNavigationDrawer = dynamic(
   () => import("./navigation-drawer").then((mod) => mod.WorkspaceNavigationDrawer),
@@ -37,9 +41,12 @@ const WorkspaceNavigationDrawer = dynamic(
   }
 );
 
-export const AppNavigation: FC = () => {
+export const WorkspaceNavigation: FC = () => {
   const layout = useLayout();
   const workspace = useWorkspace();
+  const { availableModules, isModuleAvailable, getAvailableModule } =
+    useAvailableWorkspaceModules();
+  const { getModule } = useWorkspaceModules();
   const workspaceLayout = useWorkspaceLayout();
   const router = useRouter();
   const color = useColor();
@@ -51,7 +58,7 @@ export const AppNavigation: FC = () => {
     getDefaultWorkspaceView(workspace.type).menu ??
     []
   ).filter((v) => {
-    if (v.type === "MODULE") return !!workspace.getAvailableModule(v.moduleId as WorkspaceModuleId);
+    if (v.type === "MODULE") return !!isModuleAvailable(v.moduleId as WorkspaceModuleId);
     return true;
   });
 
@@ -69,7 +76,7 @@ export const AppNavigation: FC = () => {
     const mainCpns = components.filter((v) => v.type === "MODULE").slice(0, maxModules);
     const navigationGroup = getNavigationGroups(
       components.filter((v) => !mainCpns.some((m) => m.id === v.id)),
-      workspace.availableModules
+      availableModules
     );
 
     return (
@@ -81,7 +88,7 @@ export const AppNavigation: FC = () => {
         align="start"
       >
         {mainCpns.map((v) => {
-          const mod = workspace.getAvailableModule(v.moduleId as WorkspaceModuleId);
+          const mod = getAvailableModule(v.moduleId as WorkspaceModuleId);
           if (!mod) return null;
 
           return (
@@ -139,7 +146,7 @@ export const AppNavigation: FC = () => {
                     />
 
                     {group.moduleIds.map((modId) => {
-                      const mod = workspace.getAvailableModule(modId as WorkspaceModuleId);
+                      const mod = getAvailableModule(modId as WorkspaceModuleId);
                       if (!mod) return null;
 
                       const isActive = router.pathname === mod.href;
@@ -188,7 +195,9 @@ export const AppNavigation: FC = () => {
     );
   }
 
-  const navigationGroup = getNavigationGroups(components, workspace.availableModules);
+  const navigationGroup = useMemo(() => {
+    return getNavigationGroups(components, availableModules);
+  }, [components, availableModules]);
 
   return (
     <Fragment>
@@ -229,7 +238,7 @@ export const AppNavigation: FC = () => {
                 </Renderer>
 
                 {group.moduleIds.map((moduleId) => {
-                  const module = workspace.getAvailableModule(moduleId as WorkspaceModuleId);
+                  const module = getModule(moduleId);
                   if (!module) return null;
 
                   return (

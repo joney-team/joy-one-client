@@ -1,8 +1,10 @@
+"use client";
+
 import { FileType } from "@/graphql/enums.graphql";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { OnModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { OnModalFiles } from "@/modules/files/modals/modal-files";
+import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFiles } from "@/modules/files/modals/modal-files";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
@@ -45,144 +47,157 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
   const disabled =
     propsDisabled || (props.permission && !workspace.hasPermission(props.permission));
 
-  const onView = () => {
-    if (!value) return;
-    OnModalFileGallery({
-      files: [{ url: value, fileName: "image", type: FileType.Photo }],
-      disabled: true,
-    });
-  };
-
   return (
-    <InputWrapper {...rest}>
-      <Dropzone
-        accept={IMAGE_MIME_TYPE}
-        onDrop={async (files) => {
-          if (files.length === 0) return;
-          const file = files[0];
-          const res = await uploadFile(file);
-          onChange?.(res.path);
-        }}
-        disabled={disabled}
-        multiple={false}
-        activateOnClick={false}
-        openRef={openRef}
-      >
-        <Card
-          pos="relative"
-          ref={hover.ref}
-          p={0}
-          bg="gray.1"
-          maw="100%"
-          mah="100%"
-          h={h}
-          w={w}
-          radius={props.radius ?? 10}
-          className="clickable"
-          onClick={() => {
-            if (disabled) {
-              OnModalFileGallery({
-                files: [{ url: value || "", fileName: "image", type: FileType.Photo }],
-              });
-              return;
-            } else {
-              OnModalFiles({
-                fileTypes: [FileType.Photo],
-                length: 1,
-                onSelectedFiles: (files) => {
-                  if (files.length === 0) return;
-                  const file = files[0];
-                  onChange?.(file.path);
-                },
-              });
-            }
-          }}
-          withBorder
-          shadow="none"
-          style={{ borderColor: "var(--mantine-color-default-border)", overflow: "hidden" }}
-        >
-          {ableView && (
-            <Image
-              src={renderFileUrl(value)}
-              h="100%"
-              w="100%"
-              fit="cover"
-              flex={1}
-              onError={() => setLoadFailed(true)}
-            />
-          )}
+    <ModalFileGallery>
+      {(openGallery) => {
+        const onView = () => {
+          if (!value) return;
+          openGallery({
+            files: [{ url: value, fileName: "image", type: FileType.Photo }],
+            disabled: true,
+          });
+        };
 
-          {!ableView && !hover.hovered && (
-            <Center h="100%" w="100%">
-              <IconPhoto size={20} color="gray" strokeWidth={1.5} />
-            </Center>
-          )}
-
-          {hover.hovered && (
-            <Stack
-              gap={10}
-              align="center"
-              justify="center"
-              bg="#00000098"
-              h="100%"
-              w="100%"
-              style={{ position: "absolute", top: 0, left: 0, bottom: 0, right: 0 }}
-              onClick={(e) => {
-                if (disabled) {
-                  e.stopPropagation();
-                  onView();
-                }
+        return (
+          <InputWrapper {...rest}>
+            <Dropzone
+              accept={IMAGE_MIME_TYPE}
+              onDrop={async (files) => {
+                if (files.length === 0) return;
+                const file = files[0];
+                const res = await uploadFile(file);
+                onChange?.(res.path);
               }}
+              disabled={disabled}
+              multiple={false}
+              activateOnClick={false}
+              openRef={openRef}
             >
-              <Renderer visible={!!value}>
-                <Box
-                  style={
-                    disabled
-                      ? {
-                          position: "absolute",
-                          top: "50%",
-                          left: "50%",
-                          transform: "translate(-50%, -50%)",
-                        }
-                      : {
-                          position: "absolute",
-                          top: 0,
-                          right: 0,
-                        }
-                  }
-                  p={5}
-                >
-                  <ActionIcon
-                    variant="subtle"
-                    color="white"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onView();
+              <ModalFiles>
+                {(openFiles) => (
+                  <Card
+                    pos="relative"
+                    ref={hover.ref}
+                    p={0}
+                    bg="gray.1"
+                    maw="100%"
+                    mah="100%"
+                    h={h}
+                    w={w}
+                    radius={props.radius ?? 10}
+                    className="clickable"
+                    onClick={() => {
+                      if (disabled) {
+                        openGallery({
+                          files: [{ url: value || "", fileName: "image", type: FileType.Photo }],
+                        });
+                        return;
+                      } else {
+                        openFiles({
+                          fileTypes: [FileType.Photo],
+                          length: 1,
+                          onSelectedFiles: (files) => {
+                            if (files.length === 0) return;
+                            const file = files[0];
+                            onChange?.(file.path);
+                          },
+                        });
+                      }
+                    }}
+                    withBorder
+                    shadow="none"
+                    style={{
+                      borderColor: "var(--mantine-color-default-border)",
+                      overflow: "hidden",
                     }}
                   >
-                    <IconEye strokeWidth={1.3} />
-                  </ActionIcon>
-                </Box>
-              </Renderer>
+                    {ableView && (
+                      <Image
+                        src={renderFileUrl(value)}
+                        h="100%"
+                        w="100%"
+                        fit="cover"
+                        flex={1}
+                        onError={() => setLoadFailed(true)}
+                      />
+                    )}
 
-              <Renderer visible={!disabled}>
-                <Button
-                  leftIcon={value ? IconPencil : IconUpload}
-                  size="xs"
-                  iconSize={16}
-                  variant="transparent"
-                  color="white"
-                  fw={400}
-                  fz={14}
-                  iconSpacing={-8}
-                >
-                  {value ? <Trans>Change</Trans> : <Trans>Upload</Trans>}
-                </Button>
-              </Renderer>
-            </Stack>
-          )}
-        </Card>
-      </Dropzone>
-    </InputWrapper>
+                    {!ableView && !hover.hovered && (
+                      <Center h="100%" w="100%">
+                        <IconPhoto size={20} color="gray" strokeWidth={1.5} />
+                      </Center>
+                    )}
+
+                    {hover.hovered && (
+                      <Stack
+                        gap={10}
+                        align="center"
+                        justify="center"
+                        bg="#00000098"
+                        h="100%"
+                        w="100%"
+                        style={{ position: "absolute", top: 0, left: 0, bottom: 0, right: 0 }}
+                        onClick={(e) => {
+                          if (disabled) {
+                            e.stopPropagation();
+                            onView();
+                          }
+                        }}
+                      >
+                        <Renderer visible={!!value}>
+                          <Box
+                            style={
+                              disabled
+                                ? {
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                  }
+                                : {
+                                    position: "absolute",
+                                    top: 0,
+                                    right: 0,
+                                  }
+                            }
+                            p={5}
+                          >
+                            <ActionIcon
+                              variant="subtle"
+                              color="white"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onView();
+                              }}
+                            >
+                              <IconEye strokeWidth={1.3} />
+                            </ActionIcon>
+                          </Box>
+                        </Renderer>
+
+                        <Renderer visible={!disabled}>
+                          <Button
+                            leftIcon={value ? IconPencil : IconUpload}
+                            size="xs"
+                            iconSize={16}
+                            variant="transparent"
+                            color="white"
+                            fw={400}
+                            fz={14}
+                            iconSpacing={-8}
+                          >
+                            {value ? <Trans>Change</Trans> : <Trans>Upload</Trans>}
+                          </Button>
+                        </Renderer>
+                      </Stack>
+                    )}
+                  </Card>
+                )}
+              </ModalFiles>
+            </Dropzone>
+          </InputWrapper>
+        );
+      }}
+    </ModalFileGallery>
   );
 };

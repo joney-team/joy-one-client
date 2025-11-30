@@ -24,20 +24,20 @@ import { DateTimePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconNotes } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, Fragment, ReactNode, useState } from "react";
 import { CouponBenefits } from "../coupon-benefits";
-import { OnModalCouponRuleForm } from "./modal-coupon-rule-form";
+import { ModalCouponRuleForm } from "./modal-coupon-rule-form";
 
-interface ModalCouponFormProps {
+interface ModalCouponFormArgs {
   coupon?: CouponEntity;
   onDone?: (coupon: CouponEntity) => void | Promise<void>;
 }
 
-export let OnModalCouponForm: (props?: ModalCouponFormProps) => void = () => {};
-
-export const ModalCouponForm: FC = () => {
+export const ModalCouponForm: FC<{
+  children: (open: (args?: ModalCouponFormArgs) => void) => ReactNode;
+}> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [props, setProps] = useState<ModalCouponFormProps>();
+  const [props, setProps] = useState<ModalCouponFormArgs>();
 
   const onClose = async () => close();
 
@@ -54,13 +54,6 @@ export const ModalCouponForm: FC = () => {
       },
     },
   });
-
-  OnModalCouponForm = async (p) => {
-    form.reset();
-    setProps(p);
-    if (p?.coupon) form.setValues(p.coupon);
-    open();
-  };
 
   const submit = useFormSubmit(form, {
     onSubmit: async (values) => {
@@ -82,89 +75,102 @@ export const ModalCouponForm: FC = () => {
   });
 
   return (
-    <Modal
-      title={
-        <ModalTitle
-          title={`${props?.coupon ? t`Update coupon` : t`Create coupon`}`}
-          icon={IconNotes}
-        />
-      }
-      onClose={onClose}
-      opened={opened}
-    >
-      <Stack gap={16}>
-        <SimpleGrid cols={{ md: 1 }}>
-          <SearchSelectInput
-            withAsterisk
-            label={t`Coupon rule`}
-            {...form.getInputProps("rule")}
-            value={form.values.rule?._id}
-            onChange={(v) => form.setFieldValue("rule", v?.data)}
-            onSearch={(q) =>
-              getCouponRules({ q }).then(({ data }) =>
-                data.map((r) => ({ label: r.name, id: r._id, data: r }))
-              )
-            }
-            onEdit={() =>
-              OnModalCouponRuleForm({
-                rule: form.values.rule,
-                onDone: (rule) => form.setFieldValue("rule", rule),
-              })
-            }
-            onCreate={() =>
-              OnModalCouponRuleForm({
-                onDone: (rule) => form.setFieldValue("rule", rule),
-              })
-            }
+    <Fragment>
+      {children((p) => {
+        form.reset();
+        setProps(p);
+        if (p?.coupon) form.setValues(p.coupon);
+        open();
+      })}
+
+      <Modal
+        title={
+          <ModalTitle
+            title={`${props?.coupon ? t`Update coupon` : t`Create coupon`}`}
+            icon={IconNotes}
           />
-
-          {!!form.values.rule && <CouponBenefits benefits={form.values.rule.benefits} />}
-
-          <TextInput label={t`Code`} {...form.getInputProps("code")} />
-
-          <NumberInput
-            withAsterisk
-            label={t`Quantity`}
-            description={t`Quantity of coupon, leave blank or fill in 0 if unlimited`}
-            {...form.getInputProps("quantity")}
-          />
-
-          <InputWrapper label={t`Limit settings`}>
-            <Card withBorder p={8}>
-              <Stack gap={10}>
+        }
+        onClose={onClose}
+        opened={opened}
+      >
+        <Stack gap={16}>
+          <SimpleGrid cols={{ md: 1 }}>
+            <ModalCouponRuleForm>
+              {(open) => (
                 <SearchSelectInput
-                  label={t`Customer`}
+                  withAsterisk
+                  label={t`Coupon rule`}
+                  {...form.getInputProps("rule")}
+                  value={form.values.rule?._id}
+                  onChange={(v) => form.setFieldValue("rule", v?.data)}
                   onSearch={(q) =>
-                    getCustomers({ q }).then(({ data }) =>
-                      data.map((r) => ({
-                        label: `${r.name} ${r.phone || r.email}`.trim(),
-                        id: r._id,
-                        data: r,
-                      }))
+                    getCouponRules({ q }).then(({ data }) =>
+                      data.map((r) => ({ label: r.name, id: r._id, data: r }))
                     )
                   }
-                  {...form.getInputProps("customer")}
-                />
-
-                <DateTimePicker
-                  label={t`Expire at`}
-                  {...form.getInputProps("expiredAt")}
-                  value={DateTime.normalizeDate(form.values.expiredAt)}
-                  onChange={(v) =>
-                    form.setFieldValue("expiredAt", v ? DateTime.toSeconds(v) : null)
+                  onEdit={() =>
+                    open({
+                      rule: form.values.rule,
+                      onDone: (rule) => form.setFieldValue("rule", rule),
+                    })
+                  }
+                  onCreate={() =>
+                    open({
+                      onDone: (rule) => form.setFieldValue("rule", rule),
+                    })
                   }
                 />
-              </Stack>
-            </Card>
-          </InputWrapper>
-        </SimpleGrid>
+              )}
+            </ModalCouponRuleForm>
 
-        <Group justify="center" mt={10}>
-          <Button type="submit" miw={200} onClick={submit.handle} loading={submit.isSubmitting}>
-            {t`Complete`}
-          </Button>
-        </Group>
-      </Stack>
-    </Modal>
+            {!!form.values.rule && <CouponBenefits benefits={form.values.rule.benefits} />}
+
+            <TextInput label={t`Code`} {...form.getInputProps("code")} />
+
+            <NumberInput
+              withAsterisk
+              label={t`Quantity`}
+              description={t`Quantity of coupon, leave blank or fill in 0 if unlimited`}
+              {...form.getInputProps("quantity")}
+            />
+
+            <InputWrapper label={t`Limit settings`}>
+              <Card withBorder p={8}>
+                <Stack gap={10}>
+                  <SearchSelectInput
+                    label={t`Customer`}
+                    onSearch={(q) =>
+                      getCustomers({ q }).then(({ data }) =>
+                        data.map((r) => ({
+                          label: `${r.name} ${r.phone || r.email}`.trim(),
+                          id: r._id,
+                          data: r,
+                        }))
+                      )
+                    }
+                    {...form.getInputProps("customer")}
+                  />
+
+                  <DateTimePicker
+                    label={t`Expire at`}
+                    {...form.getInputProps("expiredAt")}
+                    value={DateTime.normalizeDate(form.values.expiredAt)}
+                    onChange={(v) =>
+                      form.setFieldValue("expiredAt", v ? DateTime.toSeconds(v) : null)
+                    }
+                  />
+                </Stack>
+              </Card>
+            </InputWrapper>
+          </SimpleGrid>
+
+          <Group justify="center" mt={10}>
+            <Button type="submit" miw={200} onClick={submit.handle} loading={submit.isSubmitting}>
+              {t`Complete`}
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+    </Fragment>
   );
 };

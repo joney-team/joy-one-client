@@ -12,8 +12,7 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/modules/events/event-types";
 import { getOrderById } from "@/modules/orders/orders-service";
-import { OnModalProductStockIn } from "@/modules/product-stocks/modals/modal-product-stock-in";
-import { OnModalProductStockOut } from "@/modules/product-stocks/modals/modal-product-stock-out";
+import { ModalProductStockOut } from "@/modules/product-stocks/modals/modal-product-stock-out";
 import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { ProductColumn } from "@/modules/products/components/product-column";
@@ -34,6 +33,7 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { type FC, Fragment, useEffect } from "react";
+import { ModalProductStockIn } from "../product-stocks/modals/modal-product-stock-in";
 import { productStockRecordTypes } from "../product-stocks/product-stocks-constants";
 import {
   ProductStockEntity,
@@ -89,54 +89,63 @@ export const ProductDetail: FC = () => {
 
             {product.data.isStockCheck && (
               <Fragment>
-                <List<ProductStockEntity>
-                  id={`product-stocks-${productId}`}
-                  icon={IconBuildingWarehouse}
-                  name="product_stocks"
-                  route="/product-stocks"
-                  fixedParams={{ productId, sortExpireAt: 1 }}
-                  columns={{
-                    createdAt: dateTimeColumn({ sortable: true, name: "time" }),
-                    code: { name: "product_stock_code", filter: { text: true } },
-                    createdByUserId: userColumn({
-                      name: "member",
-                      valuePath: "createdByUser",
-                    }),
-                    quantity: {
-                      sortable: true,
-                      render: ({ data }) => {
-                        return (
-                          <Text>
-                            <NumberFormat value={data.remainQuantity} /> /{" "}
-                            <NumberFormat value={data.quantity} />
-                          </Text>
-                        );
-                      },
-                    },
-                    expireAt: dateTimeColumn({
-                      name: "expire_at",
-                      emptyText: "--",
-                      hideTime: true,
-                      isShowRelativeTime: true,
-                    }),
-                    costPrice: numberColumn({ name: "costPrice", type: "money" }),
-                    note: { defaultHidden: true },
-                  }}
-                  creatable={{
-                    onCreate: () => OnModalProductStockIn({ product: product.data }),
-                    permission: WorkspacePermission.PRODUCT_STOCK_IN,
-                    label: `product_stock_record_type_${ProductStockRecordType.STOCK_IN}`,
-                  }}
-                  events={events}
-                  actions={[
-                    {
-                      label: productStockRecordTypes[ProductStockRecordType.STOCK_OUT].label(),
-                      icon: productStockRecordTypes[ProductStockRecordType.STOCK_OUT].icon,
-                      onClick: (data) => OnModalProductStockOut({ stock: data }),
-                      disabled: (data) => data.remainQuantity <= 0,
-                    },
-                  ]}
-                />
+                <ModalProductStockIn>
+                  {(openModalStockIn) => (
+                    <ModalProductStockOut>
+                      {(openProductStockOut) => (
+                        <List<ProductStockEntity>
+                          id={`product-stocks-${productId}`}
+                          icon={IconBuildingWarehouse}
+                          name="product_stocks"
+                          route="/product-stocks"
+                          fixedParams={{ productId, sortExpireAt: 1 }}
+                          columns={{
+                            createdAt: dateTimeColumn({ sortable: true, name: "time" }),
+                            code: { name: "product_stock_code", filter: { text: true } },
+                            createdByUserId: userColumn({
+                              name: "member",
+                              valuePath: "createdByUser",
+                            }),
+                            quantity: {
+                              sortable: true,
+                              render: ({ data }) => {
+                                return (
+                                  <Text>
+                                    <NumberFormat value={data.remainQuantity} /> /{" "}
+                                    <NumberFormat value={data.quantity} />
+                                  </Text>
+                                );
+                              },
+                            },
+                            expireAt: dateTimeColumn({
+                              name: "expire_at",
+                              emptyText: "--",
+                              hideTime: true,
+                              isShowRelativeTime: true,
+                            }),
+                            costPrice: numberColumn({ name: "costPrice", type: "money" }),
+                            note: { defaultHidden: true },
+                          }}
+                          creatable={{
+                            onCreate: () => openModalStockIn({ product: product.data }),
+                            permission: WorkspacePermission.PRODUCT_STOCK_IN,
+                            label: `product_stock_record_type_${ProductStockRecordType.STOCK_IN}`,
+                          }}
+                          events={events}
+                          actions={[
+                            {
+                              label:
+                                productStockRecordTypes[ProductStockRecordType.STOCK_OUT].label(),
+                              icon: productStockRecordTypes[ProductStockRecordType.STOCK_OUT].icon,
+                              onClick: (data) => openProductStockOut({ stock: data }),
+                              disabled: (data) => data.remainQuantity <= 0,
+                            },
+                          ]}
+                        />
+                      )}
+                    </ModalProductStockOut>
+                  )}
+                </ModalProductStockIn>
 
                 <List<ProductStockRecordEntity>
                   id={`product-stock-records-${productId}`}

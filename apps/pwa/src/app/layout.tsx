@@ -22,6 +22,7 @@ import "@xyflow/react/dist/style.css";
 
 import "../styles/app.style.css";
 import "../styles/react-big-calendar.css";
+
 import { isExtendedApp } from "@/service";
 import { ApolloProvider } from "@/modules/apollo/apollo-provider";
 
