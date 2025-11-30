@@ -1,7 +1,7 @@
 #import TaskData from "./fragmentTask.graphql"
 
-query Task($code: String!) {
-  task(code: $code) {
+query TaskByCode($code: String!) {
+  taskByCode(code: $code) {
     ...TaskData
   }
 }

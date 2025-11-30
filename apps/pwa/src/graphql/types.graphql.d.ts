@@ -469,6 +469,7 @@ export type Query = {
   tagBySlug: TagEntity;
   tags: Tags;
   task: Task;
+  taskByCode: Task;
   tasks: TasksPaginated;
 };
 
@@ -516,6 +517,11 @@ export type QueryTagsArgs = {
 
 
 export type QueryTaskArgs = {
+  _id: Scalars['String']['input'];
+};
+
+
+export type QueryTaskByCodeArgs = {
   code: Scalars['String']['input'];
 };
 

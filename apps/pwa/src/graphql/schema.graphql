@@ -327,7 +327,8 @@ type Query {
   pluginExternalStorage: PluginExternalStorage
   tagBySlug(slug: String!): TagEntity!
   tags(type: String): Tags!
-  task(code: String!): Task!
+  task(_id: String!): Task!
+  taskByCode(code: String!): Task!
   tasks(assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float, offset: Float, parentId: String, partnerIds: [String!], status: String, tagIds: [String!]): TasksPaginated!
 }
 

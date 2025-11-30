@@ -1,6 +1,7 @@
 "use client";
 
 import { useTasks } from "@/modules/tasks/tasks-context";
+import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import { Skeleton } from "@mantine/core";
 import {
@@ -19,7 +20,7 @@ import { TaskView } from "./types";
 
 const TaskDetail = dynamic(() => import("../task-detail").then((mod) => mod.TaskDetail), {
   ssr: false,
-  loading: () => null,
+  loading: nonLoading,
 });
 
 const NavigationTabs = dynamic(
@@ -27,6 +28,14 @@ const NavigationTabs = dynamic(
   {
     ssr: false,
     loading: () => <Skeleton height={44} radius={0} />,
+  }
+);
+
+const TasksRealtimeEvents = dynamic(
+  () => import("../tasks-realtime-events").then((mod) => mod.TasksRealtimeEvents),
+  {
+    ssr: false,
+    loading: nonLoading,
   }
 );
 
@@ -89,6 +98,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
 
       {props.children}
 
+      <TasksRealtimeEvents />
       <TaskDetail />
       <BulkTasksActions />
     </Fragment>

@@ -63,12 +63,12 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
     };
   }, [props.statusId, activatedFolder?._id]);
 
-  const [getTasks, { data, fetchMore, loading, networkStatus }] = useLazyQuery<
-    TasksQuery,
-    TasksQueryVariables
-  >(QUERY_TASKS, {
-    fetchPolicy: "cache-and-network",
-  });
+  const [getTasks, { data, fetchMore, loading }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
+    QUERY_TASKS,
+    {
+      fetchPolicy: "cache-and-network",
+    }
+  );
 
   useEffect(() => {
     getTasks({ variables });
@@ -241,7 +241,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                 />
               ))}
 
-            {(networkStatus !== NetworkStatus.ready || isFetchingMore) && (
+            {((loading && !data) || isFetchingMore) && (
               <Fragment>
                 <Skeleton height={200} />
                 <Skeleton height={200} />

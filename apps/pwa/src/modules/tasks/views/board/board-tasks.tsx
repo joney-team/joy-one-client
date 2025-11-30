@@ -30,20 +30,21 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
 
   useEffect(() => {
     const pageLayout = document.getElementById("LayoutPage");
+    const scrollArea = scrollAreaRef.current;
 
-    if (pageLayout && scrollAreaRef.current) {
-      const container = scrollAreaRef.current.getBoundingClientRect();
-
-      scrollAreaRef.current.style.height = `calc(100dvh - ${container.top}px)`;
-
-      if (pageLayout) {
+    if (pageLayout && scrollArea) {
+      const calculateScrollArea = () => {
+        const container = scrollArea.getBoundingClientRect();
+        scrollArea.style.height = `calc(100dvh - ${container.top}px)`;
         pageLayout.style.height = "100dvh";
-      }
+      };
+
+      window.addEventListener("resize", calculateScrollArea);
+      calculateScrollArea();
 
       return () => {
-        if (pageLayout) {
-          pageLayout.style.height = "auto";
-        }
+        window.removeEventListener("resize", calculateScrollArea);
+        pageLayout.style.height = "auto";
       };
     }
   }, []);
