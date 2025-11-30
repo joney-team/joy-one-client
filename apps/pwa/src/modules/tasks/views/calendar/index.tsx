@@ -242,7 +242,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                             variant="subtle"
                             radius={100}
                             color="gray"
-                            onClick={() => open({ dueDate: DateTime.toSeconds(date) })}
+                            onClick={() => open({ initial: { dueDate: DateTime.toSeconds(date) } })}
                             opacity={hovered || layout.view !== "desktop" ? 1 : 0}
                           >
                             <IconCirclePlus size={18} strokeWidth={1.5} />

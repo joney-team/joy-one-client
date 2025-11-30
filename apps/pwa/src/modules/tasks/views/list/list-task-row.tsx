@@ -358,7 +358,7 @@ export const ListTaskRow: FC<{
                           size="sm"
                           onClick={(e) => {
                             e.stopPropagation();
-                            open({ parentId: task._id });
+                            open({ initial: { parent: task } });
                           }}
                         >
                           <IconPlus size={16} />
