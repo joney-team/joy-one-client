@@ -22,7 +22,7 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Skeleton, Stack, Text, Tooltip, alpha } from "@mantine/core";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import QUERY_TASKS, {
   type TasksQuery,
@@ -40,6 +40,7 @@ interface BoardGroupByStatusesProps {
 
 const wrapperPadding = 8;
 const wrapperRadius = 8;
+const limit = 5;
 
 export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
   const workspace = useWorkspace();
@@ -60,7 +61,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
       ...state.variables,
       status: props.statusId,
       folderId: activatedFolder?._id,
-      limit: 5,
+      limit,
       parentId: "root",
     };
   }, [props.statusId, activatedFolder?._id, state]);
@@ -255,7 +256,15 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                   />
                 ))}
 
-              {((loading && !data) || isFetchingMore) && <Skeleton w="100%" height={200} />}
+              {(loading || isFetchingMore) && (
+                <Fragment>
+                  {new Array(Math.min(limit, data ? data.tasks.count - tasks.length : limit))
+                    .fill(0)
+                    .map((_, index) => (
+                      <Skeleton key={index} mih={220} />
+                    ))}
+                </Fragment>
+              )}
 
               {isCanFetchMore && (
                 <WayPoint

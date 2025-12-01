@@ -16,7 +16,7 @@ interface WayPointProps {
 export const WayPoint: FC<WayPointProps> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
   const enabled = typeof props.enabled === "boolean" ? props.enabled : true;
-  const offset = typeof props.offset === "number" ? props.offset : 0;
+  const offset = typeof props.offset === "number" ? props.offset : 300;
   const throttle = typeof props.throttle === "number" ? props.throttle : 1000;
 
   const onReached = useThrottledCallback(() => {
