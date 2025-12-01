@@ -8,13 +8,12 @@ import MUTATION_BULK_UPDATE_TASKS, {
 
 import type { UpdateTaskInput } from "@/graphql/types.graphql";
 import { onError } from "@/utils/exceptions.utils";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback } from "react";
 import TASK_FRAGMENT, { type TaskDataFragment } from "../queries/fragmentTask.graphql";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
 } from "../queries/queryTasks.graphql";
-import { useTasks } from "../tasks-context";
 
 export interface UpdateTaskContext {
   fromGroupVariables?: TasksQueryVariables;
@@ -96,15 +95,6 @@ const normalizeTaskForSubmit = (
 
 export const useUpdateTasks = () => {
   const client = useApolloClient();
-  const tasks = useTasks();
-  const dynamicVariables = useRef<TasksQueryVariables>({});
-
-  // Keep ref in sync with latest tagFolder value
-  useEffect(() => {
-    dynamicVariables.current = {
-      ...tasks.state.variables,
-    };
-  }, [tasks.activatedFolder]);
 
   const updateTasks = useCallback(
     async (data: UpdateTask[] | UpdateTask) => {

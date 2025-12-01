@@ -560,7 +560,6 @@ export type QueryTaskByCodeArgs = {
 
 
 export type QueryTasksArgs = {
-  all?: InputMaybe<Scalars['Boolean']['input']>;
   assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
   folderId?: InputMaybe<Scalars['String']['input']>;
   ids?: InputMaybe<Array<Scalars['String']['input']>>;

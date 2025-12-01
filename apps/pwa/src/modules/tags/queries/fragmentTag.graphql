@@ -5,4 +5,5 @@ fragment TagData on TagEntity {
   type
   slug
   order
+  type
 }

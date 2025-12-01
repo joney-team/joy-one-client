@@ -10,8 +10,8 @@ import { Dispatch } from "react";
 
 import { RefObject } from "react";
 
-export type ScrollDirection = 'vertical' | 'horizontal';
-export type Pointer = 'sidebar' | 'body' | null;
+export type ScrollDirection = "vertical" | "horizontal";
+export type Pointer = "sidebar" | "body" | null;
 
 export interface GanttState {
   fromDate: Date;
@@ -40,9 +40,11 @@ export interface GanttFolderStates {
   [folderId: string]: GanttFolderState;
 }
 
-export type GanttLayout = 'sidebar' | 'body' | 'sidebar-head' | 'body-head';
+export type GanttLayout = "sidebar" | "body" | "sidebar-head" | "body-head";
 
-export type ScrollToDateArgs = (args: (Date | number) | { date: Date | number, offset?: number, behavior?: 'smooth' | 'instant' }) => void
+export type ScrollToDateArgs = (
+  args: (Date | number) | { date: Date | number; offset?: number; behavior?: "smooth" | "instant" }
+) => void;
 
 export type UseGantt = {
   state: GanttState;
@@ -63,8 +65,6 @@ export type UseGantt = {
   setSidebarContentScrollPosition: Dispatch<SetStateAction<number>>;
   scrollToDate: ScrollToDateArgs;
   tasks: TaskEntity[];
-  activatedTagFolder?: TagEntity;
-  tagFolders: TagEntity[];
   dates: Date[];
   toggleSisplayTaskStatusColor: () => void;
   statuses: TaskStatus[];
@@ -72,4 +72,4 @@ export type UseGantt = {
   activeLayout: GanttLayout | null;
   scrollDirection: ScrollDirection | null;
   isScrolling: boolean;
-}
+};

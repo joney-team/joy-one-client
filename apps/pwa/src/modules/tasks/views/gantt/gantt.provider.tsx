@@ -1,5 +1,3 @@
-"use client";
-
 import { useList } from "@/components/list/use-list";
 import { useLayout } from "@/layout/layout-context";
 import { onTasksUpdated } from "@/modules/tasks/hooks/use-task";
@@ -10,8 +8,8 @@ import { wait } from "@/utils/common.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { useForceUpdate, useThrottledCallback } from "@mantine/hooks";
 import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
-import { ganttConfig } from "./gantt-tasks-config";
-import { Context } from "./gantt-tasks-context";
+import { ganttConfig } from "./gantt.config";
+import { Context } from "./gantt.context";
 import type {
   GanttFolderState,
   GanttFolderStates,
@@ -23,8 +21,8 @@ import type {
   ScrollDirection,
   ScrollToDateArgs,
   UseGantt,
-} from "./gantt-tasks-types";
-import { getDatesFromRange } from "./gantt-tasks-utils";
+} from "./gantt.types";
+import { getDatesFromRange } from "./gantt.utils";
 
 let scrollTop = -1;
 const oneDate = 24 * 60 * 60 * 1000;
@@ -315,8 +313,6 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     setSidebarContentScrollPosition,
     sidebarContentWidth,
     setSidebarContentWidth,
-    tagFolders: [],
-    activatedTagFolder: tagFolder as any,
     tasks,
     sidebarWidth,
     setSidebarWidth,

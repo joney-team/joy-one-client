@@ -24,25 +24,26 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { useTaskDrop } from "../../tasks-dnd-provider";
-import { GanttTaskRowBody } from "./gantt-task-row-body";
-import { GanttTaskRowSidebar } from "./gantt-task-row-sidebar";
-import { ganttConfig } from "./gantt-tasks-config";
-import { useGantt } from "./gantt-tasks-context";
-import { SidebarRowSticky } from "./gantt-tasks-layout";
-import { getRangeOfTasks } from "./gantt-tasks-utils";
+import { ganttConfig } from "./gantt.config";
+import { useGantt } from "./gantt.context";
+import { SidebarRowSticky } from "./gantt.layout";
+import { GanttTaskRowBody } from "./gantt.task-row-body";
+import { GanttTaskRowSidebar } from "./gantt.task-row-sidebar";
+import { getRangeOfTasks } from "./gantt.utils";
+import { useTaskFolders } from "../../hooks/use-task-folders";
 
 interface GanttTaskGroupByFoldersProps {
   position: "sidebar" | "body";
 }
 
 export const GanttTaskGroupByFolders: FC<GanttTaskGroupByFoldersProps> = (props) => {
-  const tasks = useGantt();
+  const { activatedFolder, folders } = useTaskFolders();
 
-  if (tasks.activatedTagFolder) {
-    return <GanttTaskGroupByFolder {...props} index={0} tagFolder={tasks.activatedTagFolder} />;
+  if (activatedFolder) {
+    return <GanttTaskGroupByFolder {...props} index={0} tagFolder={activatedFolder as any} />;
   }
 
-  if (tasks.tagFolders.length === 0) {
+  if (folders.length === 0) {
     return <GanttTaskGroupByFolder {...props} index={0} pure />;
   }
 
@@ -50,11 +51,11 @@ export const GanttTaskGroupByFolders: FC<GanttTaskGroupByFoldersProps> = (props)
     <Fragment>
       <GanttTaskGroupByFolder {...props} index={0} />
 
-      {tasks.tagFolders.map((tagFolder, index) => (
+      {folders.map((tagFolder, index) => (
         <GanttTaskGroupByFolder
           key={tagFolder._id}
           {...props}
-          tagFolder={tagFolder}
+          tagFolder={tagFolder as any}
           index={index + 1}
         />
       ))}
@@ -63,7 +64,7 @@ export const GanttTaskGroupByFolders: FC<GanttTaskGroupByFoldersProps> = (props)
 };
 
 interface GanttTaskGroupByFolderProps extends GanttTaskGroupByFoldersProps {
-  tagFolder?: TagEntity;
+  tagFolder?: Pick<TagEntity, "_id" | "name" | "slug" | "color" | "type">;
   pure?: boolean;
   index?: number;
 }
@@ -153,7 +154,10 @@ export const GanttTaskGroupByFolder: FC<GanttTaskGroupByFolderProps> = (props) =
                           color="gray"
                           opacity={hover.hovered ? 1 : 0}
                           onClick={() =>
-                            OnModalTagForm({ tag: props.tagFolder!, type: props.tagFolder!.type })
+                            OnModalTagForm({
+                              tag: props.tagFolder! as any,
+                              type: props.tagFolder!.type as any,
+                            })
                           }
                         >
                           <IconPencil size={13} />
@@ -328,7 +332,7 @@ export const ChangeTagFolderDrop: FC<{ folderId?: string; visible?: boolean }> =
   const color = useColor();
   const tagFolder = tags.list.find((v) => v._id === props.folderId);
 
-  const droppable = useTaskDrop(`${props.folderId}-tag-folder`, {
+  const droppable = useTaskDrop(`${props.folderId}-folder`, {
     folderId: props.folderId || "root",
   });
 

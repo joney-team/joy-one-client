@@ -9,11 +9,11 @@ import { useElementSize } from "@mantine/hooks";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, useEffect } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
-import { ganttConfig } from "./gantt-tasks-config";
-import { useGantt } from "./gantt-tasks-context";
-import { BodyHead, GridColumns, SidebarHead } from "./gantt-tasks-layout";
-import { GanttProvider } from "./gantt-tasks-provider";
-import { GanttTaskGroupByFolders } from "./gantt-tasks-group-by-folder";
+import { ganttConfig } from "./gantt.config";
+import { useGantt } from "./gantt.context";
+import { BodyHead, GridColumns, SidebarHead } from "./gantt.layout";
+import { GanttProvider } from "./gantt.provider";
+import { GanttTaskGroupByFolders } from "./gantt.task-group-by-folder";
 import { TasksDndProvider } from "../../tasks-dnd-provider";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 
@@ -159,7 +159,7 @@ const Content: FC = () => {
   );
 };
 
-export const TasksGanttView: FC<PropsWithChildren> = (props) => {
+export const TasksGantt: FC<PropsWithChildren> = (props) => {
   return (
     <TasksDndProvider>
       <GanttProvider>

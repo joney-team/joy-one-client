@@ -68,7 +68,7 @@ const getBoardTasks = () =>
   });
 
 const getGanttTasks = () =>
-  dynamic(() => import("./gantt/gantt-tasks").then((mod) => mod.GanttTasks), {
+  dynamic(() => import("./gantt").then((mod) => mod.TasksGantt), {
     ssr: false,
     loading: viewLoader,
   });
