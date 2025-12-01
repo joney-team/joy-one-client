@@ -69,7 +69,7 @@ export const ModalInput: FC<{
   const color = useColor();
 
   const focusInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
-  const currency = Currency.get(workspace.settings.currencyCode);
+  const currency = Currency.get(workspace.settings?.currencyCode ?? "USD");
   const placeholder = props?.placeholder;
 
   const form = useForm({
