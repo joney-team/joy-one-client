@@ -20,7 +20,7 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
-import { useHover } from "@mantine/hooks";
+import { useDisclosure, useHover } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, useEffect, useState } from "react";
@@ -49,6 +49,7 @@ export const TaskDetail: FC = () => {
   const pathname = usePathname();
   const { code: taskCode } = useParams<{ code: string }>();
   const [version, setVersion] = useState(0);
+  const [opened, { open, close }] = useDisclosure(false);
 
   const [getTask, { data, loading }] = useLazyQuery<TaskByCodeQuery, TaskByCodeQueryVariables>(
     QUERY_TASK_BY_CODE,
@@ -60,6 +61,9 @@ export const TaskDetail: FC = () => {
   useEffect(() => {
     if (taskCode) {
       getTask({ variables: { code: taskCode } });
+      open();
+    } else {
+      close();
     }
   }, [taskCode]);
 
@@ -76,7 +80,7 @@ export const TaskDetail: FC = () => {
 
   return (
     <Modal
-      opened={Boolean(taskCode)}
+      opened={opened}
       onClose={onClose}
       withCloseButton={false}
       size={1600}

@@ -27,11 +27,23 @@ export const GanttTasks: FC = () => {
 
   useEffect(() => {
     if (containerRef.current) {
-      const sized = containerRef.current.getBoundingClientRect();
-      const width = document.documentElement.clientWidth - sized.left;
-      const height = document.documentElement.clientHeight - sized.top;
-      setContainerSize({ width, height });
-      setIsInitialized(true);
+      const calculateSize = () => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const sized = container.getBoundingClientRect();
+        const width = document.documentElement.clientWidth - sized.left;
+        const height = document.documentElement.clientHeight - sized.top;
+        setContainerSize({ width, height });
+      };
+
+      calculateSize();
+
+      window.addEventListener("resize", calculateSize);
+
+      return () => {
+        window.removeEventListener("resize", calculateSize);
+      };
     }
   }, [containerRef]);
 

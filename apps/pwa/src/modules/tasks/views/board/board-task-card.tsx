@@ -10,7 +10,6 @@ import { TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
-import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import {
   getTaskPriorityColor,
@@ -42,7 +41,6 @@ import {
   Card,
   Group,
   Menu,
-  NavLink,
   Portal,
   Progress,
   Skeleton,
@@ -74,7 +72,6 @@ import QUERY_TASKS, {
   type TasksQueryVariables,
 } from "../../queries/queryTasks.graphql";
 import { taskPriorities } from "../../task-constants";
-import Link from "next/link";
 
 type Task = TasksQuery["tasks"]["data"][number];
 
@@ -275,16 +272,12 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
 
           if (closestEdge === "top") {
             const order = (task.order + (prevTask?.order ?? 0)) / 2;
-            updateTasks([
-              { _id: sourceTask._id, order, status: task.status, parentId: task.parentId },
-            ]);
+            updateTasks([{ _id: sourceTask._id, order, status: task.status }]);
           }
 
           if (closestEdge === "bottom") {
             const order = (task.order + (nextTask?.order ?? 0.5)) / 2;
-            updateTasks([
-              { _id: sourceTask._id, order, status: task.status, parentId: task.parentId },
-            ]);
+            updateTasks([{ _id: sourceTask._id, order, status: task.status }]);
           }
         },
       })
@@ -315,39 +308,37 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
 
         <Card shadow="xs" p={10}>
           <Stack gap={5} ref={draggingRef}>
-            <Link
-              href={tasks.href(task)}
+            <Stack
+              gap={2}
               style={{ cursor: "grab", color: "unset", textDecoration: "none" }}
+              onClick={(e) => {
+                const openNewTab = e.altKey || e.ctrlKey || e.metaKey;
+                if (openNewTab) window.open(tasks.href(task), "_blank");
+                else tasks.open(task);
+              }}
             >
-              <Stack gap={2}>
-                <Group justify="space-between" align="center" wrap="nowrap">
-                  <Group flex={1} gap={5}>
-                    <Badge fz={10} color="gray" size="xs" variant="outline">
-                      {renderEntityCode(task.code)}
+              <Group justify="space-between" align="center" wrap="nowrap">
+                <Group flex={1} gap={5}>
+                  <Badge fz={10} color="gray" size="xs" variant="outline">
+                    {renderEntityCode(task.code)}
+                  </Badge>
+
+                  {task.folder && (
+                    <Badge fz={10} color={task.folder.color ?? "gray"} size="xs" variant="outline">
+                      {task.folder.name}
                     </Badge>
-
-                    {task.folder && (
-                      <Badge
-                        fz={10}
-                        color={task.folder.color ?? "gray"}
-                        size="xs"
-                        variant="outline"
-                      >
-                        {task.folder.name}
-                      </Badge>
-                    )}
-                  </Group>
+                  )}
                 </Group>
+              </Group>
 
-                <Tooltip label={task.name} disabled={task.name.length < 60} maw="70dvw" multiline>
-                  <Stack style={{ cursor: "pointer" }}>
-                    <Text fz="sm" fw={500} lineClamp={2}>
-                      {task.name}
-                    </Text>
-                  </Stack>
-                </Tooltip>
-              </Stack>
-            </Link>
+              <Tooltip label={task.name} disabled={task.name.length < 60} maw="70dvw" multiline>
+                <Stack style={{ cursor: "pointer" }}>
+                  <Text fz="sm" fw={500} lineClamp={2}>
+                    {task.name}
+                  </Text>
+                </Stack>
+              </Tooltip>
+            </Stack>
 
             <Stack gap={0}>
               {showStatus && (
