@@ -3,7 +3,7 @@
 import { Layout, PageProps, renderPage } from "@/layout/layout-page";
 
 const View = renderPage(() =>
-  import("@/modules/tasks/views/gantt/gantt-tasks").then((res) => res.TasksGanttView)
+  import("@/modules/tasks/views/gantt/gantt-tasks").then((res) => res.GanttTasks)
 );
 
 export default (props: PageProps) => <Layout {...props} component={View} nested />;

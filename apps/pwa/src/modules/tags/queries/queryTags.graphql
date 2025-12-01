@@ -1,13 +1,10 @@
+#import "./fragmentTag.graphql"
+
 query Tags($type: String) {
   tags(type: $type) {
     count
     data {
-      _id
-      name
-      color
-      type
-      slug
-      order
+      ...TagData
     }
   }
 }

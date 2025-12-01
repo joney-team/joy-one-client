@@ -14,7 +14,8 @@ export type TaskFolder = TagsQuery["tags"]["data"][number];
 export const useTaskFolders = () => {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
-  const { data } = useQuery<TagsQuery, TagsQueryVariables>(QUERY_TAGS, {
+
+  const { data, loading } = useQuery<TagsQuery, TagsQueryVariables>(QUERY_TAGS, {
     variables: { type: TagType.TASK_FOLDER },
   });
 
@@ -39,5 +40,6 @@ export const useTaskFolders = () => {
     activatedFolder,
     openFolder,
     exitFolder,
+    loading,
   };
 };

@@ -85,6 +85,7 @@
     "react-resizable": "^3.0.5",
     "react-signature-pad-wrapper": "^4.1.0",
     "react-to-print": "^3.1.1",
+    "react-window": "^2.2.3",
     "reactour": "^1.19.4",
     "recharts": "^3.1.2",
     "signature_pad": "^5.0.9",

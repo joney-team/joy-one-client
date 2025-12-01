@@ -1,0 +1,8 @@
+fragment TagData on TagEntity {
+  _id
+  name
+  color
+  type
+  slug
+  order
+}
