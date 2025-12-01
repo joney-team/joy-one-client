@@ -15,7 +15,7 @@ import dynamic from "next/dynamic";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, PropsWithChildren, ReactNode, useEffect, useMemo } from "react";
 import { BulkTasksActions } from "../components/bulk-tasks-actions";
-import { getTaskView } from "../tasks-service";
+import { parseTaskPath, updateTaskPath } from "../tasks-route-helpers";
 import { TaskView } from "./types";
 
 const TaskDetail = dynamic(() => import("../task-detail").then((mod) => mod.TaskDetail), {
@@ -39,8 +39,8 @@ const TasksRealtimeEvents = dynamic(
   }
 );
 
-const TaskViewComponent = dynamic(
-  () => import("./task-view").then((mod) => mod.TaskViewComponent),
+const TaskViewGateway = dynamic(
+  () => import("./task-views-gateway").then((mod) => mod.TaskViewsGateway),
   {
     ssr: false,
     loading: nonLoading,
@@ -74,7 +74,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const view = useMemo(() => getTaskView(pathname), [pathname]);
+  const { view } = useMemo(() => parseTaskPath(pathname), [pathname]);
   const params = useParams<{ slug: string; code: string }>();
 
   // Auto redirect to the correct view
@@ -85,13 +85,13 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
       }
 
       if (params.code && !params.slug) {
-        return router.replace(`/tasks/${view}/${params.slug || "d"}/${params.code}`);
+        return router.replace(updateTaskPath(pathname, { slug: params.slug, code: params.code }));
       }
     }
   }, [params, view, router]);
 
   const setView = (selectedView: string) => {
-    router.replace(pathname.replace(`/${view}`, `/${selectedView}`));
+    router.replace(updateTaskPath(pathname, { view: selectedView as TaskView }));
   };
 
   return (
@@ -108,7 +108,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
 
       {props.children}
 
-      <TaskViewComponent view={view} />
+      <TaskViewGateway view={view} />
 
       <TasksRealtimeEvents />
       <TaskDetail />

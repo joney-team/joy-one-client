@@ -3,12 +3,7 @@
 import { useRouter } from "@/hooks/use-router";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/modules/events/event-types";
-import {
-  getTaskEntites,
-  getTaskEntity,
-  getTaskView,
-  tasksEmitter,
-} from "@/modules/tasks/tasks-service";
+import { getTaskEntites, getTaskEntity, tasksEmitter } from "@/modules/tasks/tasks-service";
 import { TaskEntity, TaskPriority, TasksContext } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { StorageKey } from "@/types";
@@ -23,9 +18,10 @@ import QUERY_TAG_BY_SLUG, {
   type TagBySlugQuery,
   type TagBySlugQueryVariables,
 } from "../tags/queries/queryTagBySlug.graphql";
-import { Context } from "./tasks-context";
-import { TaskView } from "./views/types";
 import { type TasksQueryVariables } from "./queries/queryTasks.graphql";
+import { Context } from "./tasks-context";
+import { parseTaskPath } from "./tasks-route-helpers";
+import { TaskView } from "./views/types";
 
 export interface TasksState {
   selectedView?: TaskView;
@@ -68,7 +64,7 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
 
   const views = Object.values(TaskView);
 
-  const view = useMemo(() => getTaskView(pathname), [pathname, state.selectedView]);
+  const { view } = useMemo(() => parseTaskPath(pathname), [pathname]);
 
   const setView = (selectedView: TaskView) => {
     setState((s) => ({ ...s, selectedView }));

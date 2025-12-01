@@ -7,7 +7,7 @@ import QUERY_TAGS, {
 import { TagType } from "@/modules/tags/tags-types";
 import { useQuery } from "@apollo/client/react";
 import { useParams, useRouter } from "next/navigation";
-import { getTaskView } from "../tasks-service";
+import { parseTaskPath } from "../tasks-route-helpers";
 
 export type TaskFolder = TagsQuery["tags"]["data"][number];
 
@@ -24,13 +24,13 @@ export const useTaskFolders = () => {
   const activatedFolder = folders.find((v) => v.slug === params.slug);
 
   const openFolder = (folder: TaskFolder) => {
-    const view = getTaskView();
+    const { view } = parseTaskPath(location.pathname);
     const url = `/tasks/${view}/${folder.slug}`;
     router.push(url, { scroll: false });
   };
 
   const exitFolder = () => {
-    const view = getTaskView();
+    const { view } = parseTaskPath(location.pathname);
     const url = `/tasks/${view}/d`;
     router.push(url, { scroll: false });
   };

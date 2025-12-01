@@ -53,7 +53,7 @@ const allTaskViews: {
   [TaskView.CALENDAR]: { loader: getCalendarTasks },
 };
 
-export const TaskViewComponent: FC<{ view: TaskView }> = ({ view }) => {
+export const TaskViewsGateway: FC<{ view: TaskView }> = ({ view }) => {
   // Lazy load component only when view is active, with caching
   const ViewComponent = useMemo(() => {
     const viewConfig = allTaskViews[view];

@@ -1,6 +1,7 @@
 "use client";
 
-import { ResponseList, StorageKey } from "@/types";
+import { ResponseList } from "@/types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import {
   Icon,
   IconApiApp,
@@ -28,10 +29,6 @@ import {
   TaskPriority,
   TaskStatus,
 } from "./tasks-types";
-import { DateTime } from "@joy-one-client/utils/date-time";
-import { TaskView } from "./views/types";
-import { readLocalStorageValue } from "@mantine/hooks";
-import { TasksState } from "./tasks-provider";
 
 export const tasksEmitter = new EventEmitter();
 tasksEmitter.setMaxListeners(500);
@@ -247,16 +244,3 @@ export const isTaskOutdated = (task: Pick<TaskEntity, "dueDate" | "status">) => 
     task.status !== DefaultTaskStatusId.CLOSED
   );
 };
-
-export function getTaskView(pathname?: string): TaskView {
-  if (typeof location === "undefined") return TaskView.LIST;
-
-  const raw = (pathname || location.pathname).split("/")[2] as TaskView;
-
-  if (location.pathname.includes("/tasks") && raw && Object.values(TaskView).includes(raw)) {
-    return raw;
-  }
-
-  const taskState = readLocalStorageValue<TasksState>({ key: StorageKey.TASKS_STATE });
-  return taskState?.selectedView ?? TaskView.LIST;
-}

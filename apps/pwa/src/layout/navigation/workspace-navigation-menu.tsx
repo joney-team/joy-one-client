@@ -9,7 +9,7 @@ import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { getTaskView } from "@/modules/tasks/tasks-service";
+import { parseTaskPath } from "@/modules/tasks/tasks-route-helpers";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { Trans } from "@lingui/react/macro";
@@ -74,7 +74,8 @@ export const WorkspaceNavigationMenu: FC<{
     if (!layout.isInitialized) return "";
 
     if (props.route === "/tasks") {
-      return `/tasks/${getTaskView()}/d`;
+      const { view } = parseTaskPath(pathname);
+      return `/tasks/${view}/d`;
     }
 
     return props.route;
