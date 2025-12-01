@@ -137,10 +137,13 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({ ...p
                   task={task}
                   key={task._id}
                   href={href(task)}
-                  variables={variables}
+                  groupVariables={variables}
                   lastRow={index === tasks.length - 1}
                   prevTask={tasks[index - 1]}
                   nextTask={tasks[index + 1]}
+                  droppableOptions={{
+                    inherits: ["status", "parentId", "folderId"],
+                  }}
                 />
               ))}
             </Stack>

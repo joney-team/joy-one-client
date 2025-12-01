@@ -493,6 +493,7 @@ export type Query = {
   getFileInfo: File;
   getProductByIds: Array<Product>;
   pluginExternalStorage: Maybe<PluginExternalStorage>;
+  siblingTasks: SiblingTasks;
   tagBySlug: TagEntity;
   tags: Tags;
   task: Task;
@@ -530,6 +531,11 @@ export type QueryGetFileInfoArgs = {
 
 export type QueryGetProductByIdsArgs = {
   ids: Array<Scalars['String']['input']>;
+};
+
+
+export type QuerySiblingTasksArgs = {
+  _id: Scalars['String']['input'];
 };
 
 
@@ -577,6 +583,12 @@ export type RelatedEntity = {
   entity: Scalars['String']['output'];
   id: Maybe<Scalars['String']['output']>;
   index: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type SiblingTasks = {
+  __typename?: 'SiblingTasks';
+  next: Maybe<Task>;
+  previous: Maybe<Task>;
 };
 
 export type SignUploadUrlResponse = {

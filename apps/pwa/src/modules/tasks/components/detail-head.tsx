@@ -6,59 +6,66 @@ import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { ModalSharelink } from "@/modals/modal-share-link";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
-import { useTask } from "@/modules/tasks/hooks/use-task";
-import { useTasks } from "@/modules/tasks/tasks-context";
-import { getRelatedTasks, getTaskEntity } from "@/modules/tasks/tasks-service";
-import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { String } from "@/utils/string.utils";
+import { useQuery } from "@apollo/client/react";
 import config from "@joy-one-client/config";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, em, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconChevronDown, IconChevronUp, IconShare2, IconStack2, IconX } from "@tabler/icons-react";
-import { FC, Fragment } from "react";
-import { TaskDataFragment } from "../queries/fragmentTask.graphql";
 import { usePathname, useRouter } from "next/navigation";
+import { FC, Fragment } from "react";
 import { useUpdateTasks } from "../hooks/use-update-tasks";
+import { TaskDataFragment } from "../queries/fragmentTask.graphql";
+import QUERY_SIBLING_TASKS, {
+  type SiblingTasksQuery,
+  type SiblingTasksQueryVariables,
+} from "../queries/querySiblingTasks.graphql";
 
 interface TaskDetailHeadProps {
   task: TaskDataFragment;
   close: () => void;
 }
 
-export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
-  const { task } = props;
+export const TaskDetailHead: FC<TaskDetailHeadProps> = ({ task, close }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const viewport = useLayout();
   const { updateTasks } = useUpdateTasks();
 
-  const [_, { themeColor, tagFolder }] = useTask(props.task._id);
+  const siblingTasks = useQuery<SiblingTasksQuery, SiblingTasksQueryVariables>(
+    QUERY_SIBLING_TASKS,
+    {
+      variables: {
+        id: task._id,
+      },
+    }
+  );
 
-  const viewport = useLayout();
-  const tasks = useTasks();
-
-  const relatedTasks: TaskDataFragment[] = [];
-
-  const indexOfTask = relatedTasks.findIndex((t) => t._id === task._id);
-  const nextTask = relatedTasks[indexOfTask + 1];
-  const prevTask = relatedTasks[indexOfTask - 1];
-
-  const isCanNext = !!nextTask;
-  const isCanPrev = !!prevTask;
+  const isCanNext = siblingTasks.data?.siblingTasks.next !== null;
+  const isCanPrev = siblingTasks.data?.siblingTasks.previous !== null;
 
   const onNext = () => {
-    if (nextTask) tasks.open(nextTask);
+    if (siblingTasks.data?.siblingTasks.next) {
+      router.push(
+        pathname.replace(`/${task.code}`, `/${siblingTasks.data?.siblingTasks.next.code}`)
+      );
+    }
   };
 
   const onPrev = () => {
-    if (prevTask) tasks.open(prevTask);
+    if (siblingTasks.data?.siblingTasks.previous) {
+      router.push(
+        pathname.replace(`/${task.code}`, `/${siblingTasks.data?.siblingTasks.previous.code}`)
+      );
+    }
   };
 
   return (
     <Group justify="space-between" wrap="nowrap" h="100%">
       <Group gap={3} wrap="nowrap">
         <Group gap={0} mr={8}>
-          <Tooltip label={prevTask?.name} disabled={!isCanPrev}>
+          <Tooltip label={siblingTasks.data?.siblingTasks.previous?.name} disabled={!isCanPrev}>
             <ActionIcon
               component="div"
               variant={isCanPrev ? "subtle" : "transparent"}
@@ -70,7 +77,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
             </ActionIcon>
           </Tooltip>
 
-          <Tooltip label={nextTask?.name} disabled={!isCanNext}>
+          <Tooltip label={siblingTasks.data?.siblingTasks.next?.name} disabled={!isCanNext}>
             <ActionIcon
               component="div"
               variant={isCanNext ? "subtle" : "transparent"}
@@ -83,13 +90,13 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
           </Tooltip>
         </Group>
 
-        <ThemeIcon variant="light" color={themeColor}>
+        <ThemeIcon variant="light" color={task.folder?.color ?? "gray"}>
           <IconStack2 />
         </ThemeIcon>
 
         <Group gap={5} align="center" wrap="nowrap">
           <TaskTagFolderSelector
-            excludeIds={[tagFolder?._id || "none"]}
+            excludeIds={[task.folder?._id || "none"]}
             onSelect={(tag) => {
               updateTasks([
                 {
@@ -119,7 +126,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
                     px={5}
                     onClick={ctx.toggle}
                   >
-                    {tagFolder ? tagFolder.name : <Trans>General tasks</Trans>}
+                    {task.folder ? task.folder.name : <Trans>General tasks</Trans>}
                   </Button>
                 </Tooltip>
               );
@@ -179,13 +186,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = (props) => {
               </ActionIcon>
             </Renderer>
 
-            <ActionIcon
-              component="div"
-              variant="subtle"
-              size="lg"
-              color="dark"
-              onClick={props.close}
-            >
+            <ActionIcon component="div" variant="subtle" size="lg" color="dark" onClick={close}>
               <IconX strokeWidth={1.5} size={18} />
             </ActionIcon>
           </Group>

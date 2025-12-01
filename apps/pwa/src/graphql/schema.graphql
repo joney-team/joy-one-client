@@ -347,6 +347,7 @@ type Query {
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
   pluginExternalStorage: PluginExternalStorage
+  siblingTasks(_id: String!): SiblingTasks!
   tagBySlug(slug: String!): TagEntity!
   tags(type: String): Tags!
   task(_id: String!): Task!
@@ -364,6 +365,11 @@ type RelatedEntity {
   entity: String!
   id: String
   index: Boolean
+}
+
+type SiblingTasks {
+  next: Task
+  previous: Task
 }
 
 type SignUploadUrlResponse {

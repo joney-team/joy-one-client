@@ -1,0 +1,15 @@
+query SiblingTasks($id: String!) {
+  siblingTasks(_id: $id) {
+    previous {
+      _id
+      code
+      name
+    }
+
+    next {
+      _id
+      code
+      name
+    }
+  }
+}

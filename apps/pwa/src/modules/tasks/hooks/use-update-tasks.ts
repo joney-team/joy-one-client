@@ -16,7 +16,15 @@ import QUERY_TASKS, {
 } from "../queries/queryTasks.graphql";
 import { useTasks } from "../tasks-context";
 
-type UpdateTask = Partial<TasksQuery["tasks"]["data"][number]> & { _id: string };
+export interface UpdateTaskContext {
+  fromGroupVariables?: TasksQueryVariables;
+  toGroupVariables?: TasksQueryVariables;
+}
+
+type UpdateTask = Partial<TasksQuery["tasks"]["data"][number]> & {
+  _id: string;
+  context?: UpdateTaskContext;
+};
 
 const normalizeTaskForSubmit = (
   task: Partial<TaskDataFragment> & { _id: string }
@@ -126,16 +134,16 @@ export const useUpdateTasks = () => {
           });
 
           // Change status
-          if (updatedTask.status) {
+          if (
+            updatedTask.status &&
+            updatedTask.context?.fromGroupVariables &&
+            updatedTask.context?.toGroupVariables
+          ) {
             // Remove from current status group
             client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
               {
                 query: QUERY_TASKS,
-                variables: {
-                  ...dynamicVariables.current,
-                  status: currentData.status,
-                  parentId: currentData.parentId ?? "root",
-                },
+                variables: updatedTask.context.fromGroupVariables,
                 overwrite: true,
               },
               (prev) => {
@@ -154,11 +162,7 @@ export const useUpdateTasks = () => {
             client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
               {
                 query: QUERY_TASKS,
-                variables: {
-                  ...dynamicVariables.current,
-                  status: updatedTask.status,
-                  parentId: updatedTask.parentId ?? "root",
-                },
+                variables: updatedTask.context.toGroupVariables,
                 overwrite: true,
               },
               (prev) => {

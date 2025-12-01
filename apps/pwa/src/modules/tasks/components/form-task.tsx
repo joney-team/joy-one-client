@@ -567,7 +567,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
           )}
         </Stack>
 
-        {!!props.task && !props.task.parentId && (
+        {/* {!!props.task && !props.task.parentId && (
           <Stack gap={5}>
             <Group justify="start">
               <Group gap={8}>
@@ -620,7 +620,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
                       <Divider />
 
-                      {/* {subTasks.map((task, index) => {
+                      {subTasks.map((task, index) => {
                         return (
                           <ListTaskRow
                             key={task._id}
@@ -630,14 +630,14 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                             allowEditName={false}
                           />
                         );
-                      })} */}
+                      })}
                     </Stack>
                   </Card>
                 </Stack>
               </TasksDndProvider>
             )}
           </Stack>
-        )}
+        )} */}
 
         <Renderer visible={!!!props.task}>
           <Center>

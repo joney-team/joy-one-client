@@ -32,6 +32,7 @@ import QUERY_TASK_BY_CODE, {
   type TaskByCodeQuery,
   type TaskByCodeQueryVariables,
 } from "./queries/queryTaskByCode.graphql";
+import { TaskDetailSubtasks } from "./task-detail-subtasks";
 
 const TaskDetailHead = dynamic(
   () => import("./components/detail-head").then((mod) => mod.TaskDetailHead),
@@ -105,9 +106,7 @@ export const TaskDetail: FC = () => {
 
               <Stack px={16} pb={16}>
                 <TaskCodeButton key={task._id + "code"} task={task} />
-
                 <TaskForm key={task._id + version} task={task} />
-
                 <DetailFooter task={task} onClose={onClose} />
               </Stack>
             </Stack>
@@ -134,6 +133,7 @@ export const TaskDetail: FC = () => {
 
                       <Stack gap={30}>
                         <TaskForm key={task._id + version} task={task} />
+                        <TaskDetailSubtasks parent={task} />
                         <DetailFooter task={task} onClose={onClose} />
                       </Stack>
                     </Container>

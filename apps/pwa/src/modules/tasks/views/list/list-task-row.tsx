@@ -62,7 +62,7 @@ import {
   extractClosestEdge,
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { motion } from "framer-motion";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
+import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import { useTaskSelections } from "../../modules/task-selections/task-selections-context";
 import styles from "./list-tasks.module.css";
 
@@ -98,11 +98,26 @@ export const ListTaskRow: FC<{
   href: string;
   allowEditName?: boolean;
   lastRow?: boolean;
-  variables?: TasksQueryVariables;
-}> = ({ task, allowEditName = true, href, variables, lastRow = false, prevTask, nextTask }) => {
+  groupVariables?: TasksQueryVariables;
+  isMarkAsChild?: boolean;
+  droppableOptions?: {
+    inherits?: (keyof Task)[];
+  };
+}> = ({
+  task,
+  allowEditName = true,
+  href,
+  groupVariables,
+  lastRow = false,
+  prevTask,
+  nextTask,
+  isMarkAsChild = false,
+  droppableOptions = {},
+}) => {
   const droppableRef = useRef<HTMLDivElement | null>(null);
-  const draggingRef = useRef<HTMLButtonElement | null>(null);
+  const draggingRef = useRef<HTMLDivElement | null>(null);
   const draggingRefContainer = useRef<HTMLElement | null>(null);
+
   const [isDragging, setIsDragging] = useState(false);
   const { updateTasks } = useUpdateTasks();
 
@@ -120,7 +135,7 @@ export const ListTaskRow: FC<{
     return combine(
       draggable({
         element: draggingRef.current,
-        getInitialData: () => ({ task }),
+        getInitialData: () => ({ task, groupVariables }),
         onDrop() {
           setIsDragging(false);
         },
@@ -180,15 +195,28 @@ export const ListTaskRow: FC<{
           const closestEdge = extractClosestEdge(self.data);
           if (!closestEdge) return;
 
+          const inherits =
+            droppableOptions.inherits?.reduce<Partial<Task>>(
+              (acc, key) => ({
+                ...acc,
+                [key]: task[key],
+              }),
+              {}
+            ) ?? {};
+
+          const context: UpdateTaskContext = {
+            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            toGroupVariables: groupVariables,
+          };
+
           if (closestEdge === "top") {
             const order = (task.order + (prevTask?.order ?? 0)) / 2;
             updateTasks([
               {
                 _id: sourceTask._id,
                 order,
-                status: task.status,
-                parentId: task.parentId,
-                folderId: task.folderId,
+                ...inherits,
+                context,
               },
             ]);
           }
@@ -199,9 +227,8 @@ export const ListTaskRow: FC<{
               {
                 _id: sourceTask._id,
                 order,
-                status: task.status,
-                parentId: task.parentId,
-                folderId: task.folderId,
+                ...inherits,
+                context,
               },
             ]);
           }
@@ -230,7 +257,7 @@ export const ListTaskRow: FC<{
     // TODO: Toggle subtasks
     // setIsSubTasksVisible((s) => !s)
   };
-  const indexSpacing = task.parentId ? 16 : 0;
+  const indexSpacing = isMarkAsChild ? 16 : 0;
 
   return (
     <Fragment>
@@ -253,6 +280,7 @@ export const ListTaskRow: FC<{
         >
           <ActionIcon
             ref={draggingRef}
+            component="div"
             variant="transparent"
             color="gray"
             style={{ cursor: "move", outline: "none" }}
@@ -260,10 +288,10 @@ export const ListTaskRow: FC<{
             <IconGripVertical size={16} strokeWidth={1.2} />
           </ActionIcon>
 
-          <TaskSelection task={task} variables={variables} />
+          <TaskSelection task={task} variables={groupVariables} />
 
           <Group pl={indexSpacing} flex={1} py={5} gap={5} wrap="nowrap" miw={0}>
-            <Renderer visible={!!task.parentId}>
+            <Renderer visible={isMarkAsChild}>
               <ThemeIcon size="xs" color="gray" variant="transparent">
                 <IconCornerDownRight strokeWidth={1.5} />
               </ThemeIcon>
@@ -297,7 +325,14 @@ export const ListTaskRow: FC<{
                     onBlur={() => setIsEditName(false)}
                   />
                 ) : (
-                  <Text component={Link} href={href} fz={14} fw={500} truncate>
+                  <Text
+                    component={Link}
+                    href={href}
+                    fz={14}
+                    fw={500}
+                    truncate
+                    style={{ outline: "none" }}
+                  >
                     {task.name}
                   </Text>
                 )}
