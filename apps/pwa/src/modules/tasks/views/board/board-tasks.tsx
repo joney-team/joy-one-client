@@ -50,7 +50,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
         pageLayout.style.removeProperty("height");
       };
     }
-  }, []);
+  }, [tasks.isReady]);
 
   useEffect(() => {
     if (!scrollAreaRef.current) return;
