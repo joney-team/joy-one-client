@@ -1,11 +1,11 @@
 "use client";
 
-import { Skeleton } from "@mantine/core";
+import { nonLoading } from "@/utils/non-loading";
 import dynamic from "next/dynamic";
 
 const ErrorBoundary = dynamic(() => import("@/components/error-boundary"), {
   ssr: false,
-  loading: () => <Skeleton height={500} />,
+  loading: nonLoading,
 });
 
 export default function GlobalError({
