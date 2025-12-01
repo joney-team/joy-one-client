@@ -39,6 +39,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
         const container = scrollArea.getBoundingClientRect();
         scrollArea.style.minHeight = `calc(100dvh - ${container.top}px)`;
         scrollArea.style.maxHeight = `calc(100dvh - ${container.top}px)`;
+        pageLayout.style.height = "100dvh";
       };
 
       window.addEventListener("resize", calculateScrollArea);
@@ -46,6 +47,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
 
       return () => {
         window.removeEventListener("resize", calculateScrollArea);
+        pageLayout.style.removeProperty("height");
       };
     }
   }, []);
