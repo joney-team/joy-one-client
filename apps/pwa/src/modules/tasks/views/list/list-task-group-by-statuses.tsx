@@ -44,7 +44,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({ ...p
 
   const isClosedTasks = props.status === DefaultTaskStatusId.CLOSED;
 
-  const variables: TasksQueryVariables = useMemo(() => {
+  const groupVariables: TasksQueryVariables = useMemo(() => {
     return {
       ...state.variables,
       status: props.status,
@@ -58,8 +58,8 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({ ...p
   });
 
   useEffect(() => {
-    getTasks({ variables });
-  }, [activatedFolder?._id, variables]);
+    getTasks({ variables: groupVariables });
+  }, [activatedFolder?._id, groupVariables]);
 
   const status =
     workspace.settings.taskStatuses.find((s) => s.id === props.status) ||
@@ -137,7 +137,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({ ...p
                   task={task}
                   key={task._id}
                   href={href(task)}
-                  groupVariables={variables}
+                  groupVariables={groupVariables}
                   lastRow={index === tasks.length - 1}
                   prevTask={tasks[index - 1]}
                   nextTask={tasks[index + 1]}

@@ -16,7 +16,7 @@ import {
   isTaskOutdated,
   renderTaskStatusStyle,
 } from "@/modules/tasks/tasks-service";
-import { TaskEntity, TaskPriority } from "@/modules/tasks/tasks-types";
+import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -66,7 +66,7 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
+import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
@@ -142,6 +142,7 @@ interface BoardTaskCardProps {
   nextTask?: Task | null;
   showStatus?: boolean;
   scrollContainerRef?: HTMLDivElement | null;
+  groupVariables?: TasksQueryVariables;
 }
 
 export const BoardTaskCard: FC<BoardTaskCardProps> = ({
@@ -150,6 +151,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
   prevTask,
   showStatus,
   scrollContainerRef,
+  groupVariables,
 }) => {
   const tasks = useTasks();
   const { updateTasks } = useUpdateTasks();
@@ -210,6 +212,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
         getInitialData: ({ element }) => ({
           task,
           rect: element.getBoundingClientRect(),
+          groupVariables,
         }),
         onDrop() {
           setIsDragging(false);
@@ -231,7 +234,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
           return attachClosestEdge({ task }, { element, input, allowedEdges: ["top", "bottom"] });
         },
         onDragEnter({ source, self }) {
-          const sourceTask = source.data.task as TaskEntity;
+          const sourceTask = source.data.task as Task;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -241,7 +244,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
           setOver({ edge: closestEdge, rect: source.data.rect as DOMRect });
         },
         onDragLeave({ source }) {
-          const sourceTask = source.data.task as TaskEntity;
+          const sourceTask = source.data.task as Task;
           if (!sourceTask) return;
           if (sourceTask._id === task._id) return;
 
@@ -270,19 +273,24 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
           const closestEdge = extractClosestEdge(self.data);
           if (!closestEdge) return;
 
+          const context: UpdateTaskContext = {
+            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            toGroupVariables: groupVariables,
+          };
+
           if (closestEdge === "top") {
             const order = (task.order + (prevTask?.order ?? 0)) / 2;
-            updateTasks([{ _id: sourceTask._id, order, status: task.status }]);
+            updateTasks([{ _id: sourceTask._id, order, status: task.status, context }]);
           }
 
           if (closestEdge === "bottom") {
-            const order = (task.order + (nextTask?.order ?? 0.5)) / 2;
-            updateTasks([{ _id: sourceTask._id, order, status: task.status }]);
+            const order = (task.order + (nextTask?.order ?? task.order + 1)) / 2;
+            updateTasks([{ _id: sourceTask._id, order, status: task.status, context }]);
           }
         },
       })
     );
-  }, [task]);
+  }, [task, groupVariables]);
 
   const droppableShadow = useMemo(() => {
     if (!over) return null;

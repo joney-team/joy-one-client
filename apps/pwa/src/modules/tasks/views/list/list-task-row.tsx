@@ -135,7 +135,11 @@ export const ListTaskRow: FC<{
     return combine(
       draggable({
         element: draggingRef.current,
-        getInitialData: () => ({ task, groupVariables }),
+        getInitialData: ({ element }) => ({
+          task,
+          groupVariables,
+          rect: element.getBoundingClientRect(),
+        }),
         onDrop() {
           setIsDragging(false);
         },
@@ -153,7 +157,10 @@ export const ListTaskRow: FC<{
       dropTargetForElements({
         element: droppableRef.current,
         getData: ({ element, input }) => {
-          return attachClosestEdge({ task }, { element, input, allowedEdges: ["top", "bottom"] });
+          return attachClosestEdge(
+            { task, groupVariables },
+            { element, input, allowedEdges: ["top", "bottom"] }
+          );
         },
         onDragEnter({ source, self }) {
           const sourceTask = source.data.task as Task;
@@ -235,7 +242,7 @@ export const ListTaskRow: FC<{
         },
       })
     );
-  }, [task]);
+  }, [task, groupVariables]);
 
   const droppableShadow = useMemo(() => {
     if (!over) return null;

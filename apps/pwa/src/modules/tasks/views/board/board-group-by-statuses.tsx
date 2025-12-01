@@ -3,12 +3,13 @@
 import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { WayPoint } from "@/components/way-point";
+import { Task } from "@/graphql/types.graphql";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
-import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
+import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -22,7 +23,7 @@ import { ActionIcon, Group, Skeleton, Stack, Text, Tooltip, alpha } from "@manti
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
+import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
@@ -54,7 +55,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
   const isClosedTasks = props.statusId === DefaultTaskStatusId.CLOSED;
   const isTodoStatus = props.statusId === DefaultTaskStatusId.TODO;
 
-  const variables: TasksQueryVariables = useMemo(() => {
+  const groupVariables: TasksQueryVariables = useMemo(() => {
     return {
       ...state.variables,
       status: props.statusId,
@@ -71,14 +72,14 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
   );
 
   useEffect(() => {
-    getTasks({ variables });
-  }, [activatedFolder?._id, variables]);
+    getTasks({ variables: groupVariables });
+  }, [activatedFolder?._id, groupVariables]);
 
   const onFetchMore = async () => {
     setIsFetchingMore(true);
     await fetchMore({
       variables: {
-        ...variables,
+        ...groupVariables,
         offset: data?.tasks.data.length || 0,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -123,13 +124,19 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
         element: droppableRef.current,
         onDragEnter: () => setIsOver(true),
         onDragLeave: () => setIsOver(false),
-        onDrop: (args) => {
+        onDrop: ({ source, location }) => {
           if (
-            args.location.current.dropTargets.length === 1 &&
-            args.location.current.dropTargets[0].data.status === props.statusId
+            location.current.dropTargets.length === 1 &&
+            location.current.dropTargets[0].data.status === props.statusId
           ) {
-            const task = args.source.data.task as TaskEntity;
-            updateTasks({ _id: task._id, status: props.statusId });
+            const sourceTask = source.data.task as Task;
+
+            const context: UpdateTaskContext = {
+              fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+              toGroupVariables: groupVariables,
+            };
+
+            updateTasks({ _id: sourceTask._id, status: props.statusId, context });
           }
         },
       }),
@@ -137,7 +144,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
         element: scrollAreaRef.current,
       })
     );
-  }, [props.statusId]);
+  }, [props.statusId, groupVariables]);
 
   return (
     <ModalCreateTask>
@@ -242,6 +249,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                     prevTask={tasks[index - 1]}
                     nextTask={tasks[index + 1]}
                     scrollContainerRef={scrollAreaRef.current}
+                    groupVariables={groupVariables}
                   />
                 ))}
 
