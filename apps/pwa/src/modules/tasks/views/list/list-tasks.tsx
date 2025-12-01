@@ -33,19 +33,24 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
 
         {statuses
           .filter((v) => !v.isDefault)
-          .map((status) => (
-            <ListTaskGroupByStatuses
-              key={activatedFolder?._id + status.id}
-              status={status.id}
-              hideWhenEmpty
-            />
-          ))}
+          .map((status, index) => {
+            const prevStatus = statuses[index - 1];
+            return (
+              <ListTaskGroupByStatuses
+                key={status.id}
+                status={status.id}
+                hideWhenEmpty
+                lazyLoadId={prevStatus?.id ?? DefaultTaskStatusId.TODO}
+              />
+            );
+          })}
 
         {state.showClosed && (
           <ListTaskGroupByStatuses
-            key={activatedFolder?._id + DefaultTaskStatusId.CLOSED}
+            key={DefaultTaskStatusId.CLOSED}
             status={DefaultTaskStatusId.CLOSED}
             showEmptyMsg
+            lazyLoadId={DefaultTaskStatusId.TODO}
           />
         )}
       </Fragment>

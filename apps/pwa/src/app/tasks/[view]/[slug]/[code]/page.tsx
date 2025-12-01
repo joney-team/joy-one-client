@@ -1,5 +1,5 @@
+import { tasksMetadata } from "@/modules/tasks/task-metadata";
 import { Fragment } from "react";
-import { tasksMetadata } from "@/app/tasks/_metadata";
 
 export const generateMetadata = tasksMetadata;
 

@@ -2,7 +2,7 @@
 
 import { Skeleton, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
-import { ComponentType, ReactNode, useMemo, useRef, type FC } from "react";
+import { ComponentType, ReactNode, useMemo, type FC } from "react";
 import { TaskView } from "./types";
 
 const viewLoader = () => (
@@ -54,10 +54,6 @@ const allTaskViews: {
 };
 
 export const TaskViewComponent: FC<{ view: TaskView }> = ({ view }) => {
-  const cachedComponents = useRef<
-    Partial<Record<TaskView, ComponentType<{ children?: ReactNode | undefined }>>>
-  >({});
-
   // Lazy load component only when view is active, with caching
   const ViewComponent = useMemo(() => {
     const viewConfig = allTaskViews[view];
@@ -65,19 +61,13 @@ export const TaskViewComponent: FC<{ view: TaskView }> = ({ view }) => {
       return null;
     }
 
-    if (cachedComponents.current[view]) {
-      return cachedComponents.current[view];
-    }
-
     // Load and cache the component
-    const Component = viewConfig.loader();
-    cachedComponents.current[view] = Component;
-    return Component;
+    return viewConfig.loader();
   }, [view]);
 
   if (!ViewComponent) {
     return null;
   }
 
-  return <ViewComponent />;
+  return <ViewComponent key={view} />;
 };

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
+import { WayPoint } from "@/components/way-point";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import QUERY_TASKS, {
@@ -12,14 +13,16 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onError } from "@/utils/exceptions.utils";
 import { useLazyQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Card, Group, Skeleton, Stack, Text } from "@mantine/core";
+import { ActionIcon, Card, Group, Loader, Skeleton, Stack, Text } from "@mantine/core";
 import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useMemo, useState } from "react";
 import { ListTaskRowHead } from "./list-task-row-head";
 
+import { useElementLazyLoad, useWaitElementLazyLoad } from "@/hooks/use-element-lazy-load";
 import styles from "./list-tasks.module.css";
 
 const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.ListTaskRow), {
@@ -32,11 +35,18 @@ interface ListTaskGroupByStatusesProps {
   defaultVisible?: boolean;
   hideWhenEmpty?: boolean;
   showEmptyMsg?: boolean;
+  lazyLoadId?: string;
 }
 
-export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({ ...props }) => {
+export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
+  lazyLoadId,
+  ...props
+}) => {
   const workspace = useWorkspace();
   const { activatedFolder, href, state } = useTasks();
+
+  const [isReadyToFetch, setIsReadyToFetch] = useState(!lazyLoadId);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
 
   const [isVisible, setIsVisible] = useState(
     typeof props.defaultVisible === "boolean" ? props.defaultVisible : true
@@ -49,17 +59,53 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({ ...p
       ...state.variables,
       status: props.status,
       folderId: activatedFolder?._id,
+      limit: 15,
       parentId: "root",
     };
   }, [props.status, activatedFolder?._id, state]);
 
-  const [getTasks, { data }] = useLazyQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
-    fetchPolicy: "cache-and-network",
-  });
+  const [getTasks, { loading, data, fetchMore }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
+    QUERY_TASKS,
+    {
+      fetchPolicy: "network-only",
+    }
+  );
 
   useEffect(() => {
-    getTasks({ variables: groupVariables });
-  }, [activatedFolder?._id, groupVariables]);
+    if (isReadyToFetch) {
+      getTasks({ variables: groupVariables });
+    }
+  }, [groupVariables, isReadyToFetch]);
+
+  const onFetchMore = async () => {
+    setIsFetchingMore(true);
+    await fetchMore({
+      variables: {
+        ...groupVariables,
+        offset: data?.tasks.data.length || 0,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          ...prev,
+          tasks: {
+            ...prev.tasks,
+            count: fetchMoreResult.tasks.count,
+            data: [
+              ...prev.tasks.data,
+              ...fetchMoreResult.tasks.data.filter(
+                (task) => !prev.tasks.data.some((t) => t._id === task._id)
+              ),
+            ],
+          },
+        };
+      },
+    })
+      .catch(onError)
+      .finally(() => setIsFetchingMore(false));
+  };
+
+  const isCanFetchMore = data && data.tasks.data.length < data.tasks.count;
 
   const status =
     workspace.settings.taskStatuses.find((s) => s.id === props.status) ||
@@ -71,10 +117,21 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({ ...p
     return Array.from(data?.tasks.data ?? []).sort((a, b) => a.order - b.order);
   }, [data]);
 
+  useWaitElementLazyLoad({
+    id: lazyLoadId,
+    onLoaded: () => setIsReadyToFetch(true),
+  });
+
+  const elementLazyLoadId = useElementLazyLoad({
+    id: props.status,
+    delay: 300,
+    isLoaded: !!data,
+  });
+
   if (props.hideWhenEmpty && (data?.tasks.count ?? 0) === 0) return null;
 
   return (
-    <Stack gap={4}>
+    <Stack gap={4} id={elementLazyLoadId}>
       <Group gap={10}>
         <Group gap={0} onClick={() => setIsVisible((s) => !s)}>
           <ActionIcon radius={100} variant="transparent" color="gray" ml={-10}>
@@ -146,6 +203,14 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({ ...p
                   }}
                 />
               ))}
+
+              {((loading && !data) || isFetchingMore) && (
+                <Group px={10} py={5}>
+                  <Loader type="dots" color="gray" size="xs" />
+                </Group>
+              )}
+
+              {isCanFetchMore && <WayPoint enabled={isCanFetchMore} onReached={onFetchMore} />}
             </Stack>
           </Card>
         </Stack>

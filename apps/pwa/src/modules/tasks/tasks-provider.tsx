@@ -71,7 +71,7 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
   const view = useMemo(() => getTaskView(pathname), [pathname, state.selectedView]);
 
   const setView = (selectedView: TaskView) => {
-    setState((s) => ({ ...s, selectedView: selectedView }));
+    setState((s) => ({ ...s, selectedView }));
     router.push(`/tasks/${selectedView}/${activatedFolder?.slug ?? "d"}`);
   };
 

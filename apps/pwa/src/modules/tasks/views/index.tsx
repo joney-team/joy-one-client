@@ -1,6 +1,5 @@
 "use client";
 
-import { useTasks } from "@/modules/tasks/tasks-context";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import { Skeleton } from "@mantine/core";
@@ -13,9 +12,10 @@ import {
   IconStopwatch,
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { useParams, useRouter } from "next/navigation";
-import { ComponentType, FC, Fragment, PropsWithChildren, ReactNode, useEffect } from "react";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { FC, Fragment, PropsWithChildren, ReactNode, useEffect, useMemo } from "react";
 import { BulkTasksActions } from "../components/bulk-tasks-actions";
+import { getTaskView } from "../tasks-service";
 import { TaskView } from "./types";
 
 const TaskDetail = dynamic(() => import("../task-detail").then((mod) => mod.TaskDetail), {
@@ -47,15 +47,7 @@ const TaskViewComponent = dynamic(
   }
 );
 
-const allTaskViews: {
-  [key in TaskView]: {
-    icon: Icon;
-    name: ReactNode;
-    loader?: () => ComponentType<{
-      children?: ReactNode | undefined;
-    }>;
-  };
-} = {
+const allTaskViews: Record<TaskView, { icon: Icon; name: ReactNode }> = {
   [TaskView.LIST]: {
     icon: IconList,
     name: <Trans>List</Trans>,
@@ -80,21 +72,27 @@ const allTaskViews: {
 
 const TasksViews: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const view = useMemo(() => getTaskView(pathname), [pathname]);
   const params = useParams<{ slug: string; code: string }>();
-  const { view, setView, activatedFolder, isReady } = useTasks();
 
   // Auto redirect to the correct view
   useEffect(() => {
-    if (isReady && view) {
+    if (view) {
       if (location.pathname === "/tasks") {
-        return router.replace(`/tasks/${view}/${activatedFolder?.slug || "d"}`);
+        return router.replace(`/tasks/${view}/d`);
       }
 
       if (params.code && !params.slug) {
         return router.replace(`/tasks/${view}/${params.slug || "d"}/${params.code}`);
       }
     }
-  }, [isReady, params, view, activatedFolder?.slug, router]);
+  }, [params, view, router]);
+
+  const setView = (selectedView: string) => {
+    router.replace(pathname.replace(`/${view}`, `/${selectedView}`));
+  };
 
   return (
     <Fragment>
@@ -105,12 +103,13 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
           icon: value.icon,
           name: value.name,
         }))}
-        onChange={(view) => setView(view as TaskView)}
+        onChange={setView}
       />
 
       {props.children}
 
       <TaskViewComponent view={view} />
+
       <TasksRealtimeEvents />
       <TaskDetail />
       <BulkTasksActions />

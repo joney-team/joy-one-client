@@ -47,6 +47,7 @@ export const WayPoint: FC<WayPointProps> = (props) => {
       };
 
       setTimeout(() => {
+        handleScroll();
         scrollContainer.addEventListener("scroll", handleScroll);
       }, 300);
 

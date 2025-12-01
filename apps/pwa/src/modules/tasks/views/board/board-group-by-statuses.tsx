@@ -60,6 +60,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
       ...state.variables,
       status: props.statusId,
       folderId: activatedFolder?._id,
+      limit: 5,
       parentId: "root",
     };
   }, [props.statusId, activatedFolder?._id, state]);
@@ -67,16 +68,17 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
   const [getTasks, { data, fetchMore, loading }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
     QUERY_TASKS,
     {
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "network-only",
     }
   );
 
   useEffect(() => {
     getTasks({ variables: groupVariables });
-  }, [activatedFolder?._id, groupVariables]);
+  }, [groupVariables]);
 
   const onFetchMore = async () => {
     setIsFetchingMore(true);
+
     await fetchMore({
       variables: {
         ...groupVariables,
@@ -103,9 +105,9 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
       .finally(() => setIsFetchingMore(false));
   };
 
-  const tasks = Array.from(data?.tasks.data ?? []).sort((a, b) => a.order - b.order);
-
   const isCanFetchMore = data && data.tasks.data.length < data.tasks.count;
+
+  const tasks = Array.from(data?.tasks.data ?? []).sort((a, b) => a.order - b.order);
 
   const status =
     workspace.settings.taskStatuses.find((s) => s.id === props.statusId) ||
@@ -253,13 +255,15 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                   />
                 ))}
 
-              {((loading && !data) || isFetchingMore) && <Skeleton height={200} />}
+              {((loading && !data) || isFetchingMore) && <Skeleton w="100%" height={200} />}
 
-              <WayPoint
-                scrollContainerRef={scrollAreaRef.current}
-                enabled={isCanFetchMore}
-                onReached={onFetchMore}
-              />
+              {isCanFetchMore && (
+                <WayPoint
+                  scrollContainerRef={scrollAreaRef.current}
+                  enabled={isCanFetchMore}
+                  onReached={onFetchMore}
+                />
+              )}
 
               {!isClosedTasks && (
                 <Group>
