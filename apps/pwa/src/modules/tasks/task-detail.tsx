@@ -49,7 +49,6 @@ export const TaskDetail: FC = () => {
   const pathname = usePathname();
   const { code: taskCode } = useParams<{ code: string }>();
   const [version, setVersion] = useState(0);
-  const [opened, { open, close }] = useDisclosure(false);
 
   const [getTask, { data, loading }] = useLazyQuery<TaskByCodeQuery, TaskByCodeQueryVariables>(
     QUERY_TASK_BY_CODE,
@@ -61,9 +60,6 @@ export const TaskDetail: FC = () => {
   useEffect(() => {
     if (taskCode) {
       getTask({ variables: { code: taskCode } });
-      open();
-    } else {
-      close();
     }
   }, [taskCode]);
 
@@ -80,7 +76,7 @@ export const TaskDetail: FC = () => {
 
   return (
     <Modal
-      opened={opened}
+      opened={!!taskCode}
       onClose={onClose}
       withCloseButton={false}
       size={1600}

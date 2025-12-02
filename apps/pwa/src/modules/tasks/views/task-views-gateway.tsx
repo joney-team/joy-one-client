@@ -4,6 +4,7 @@ import { Skeleton, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { ComponentType, ReactNode, useMemo, type FC } from "react";
 import { TaskView } from "./types";
+import config from "@joy-one-client/config";
 
 const viewLoader = () => (
   <Stack p={16}>
@@ -23,8 +24,14 @@ const getBoardTasks = () =>
     loading: viewLoader,
   });
 
+const getGanttTasksLegacy = () =>
+  dynamic(() => import("./gantt-legacy").then((mod) => mod.TasksGantt), {
+    ssr: false,
+    loading: viewLoader,
+  });
+
 const getGanttTasks = () =>
-  dynamic(() => import("./gantt").then((mod) => mod.TasksGantt), {
+  dynamic(() => import("./gantt/gantt-tasks").then((mod) => mod.GanttTasks), {
     ssr: false,
     loading: viewLoader,
   });
@@ -48,7 +55,7 @@ const allTaskViews: {
 } = {
   [TaskView.LIST]: { loader: getListTasks },
   [TaskView.BOARD]: { loader: getBoardTasks },
-  [TaskView.GANTT]: { loader: getGanttTasks },
+  [TaskView.GANTT]: { loader: config.ENV === "development" ? getGanttTasks : getGanttTasksLegacy },
   [TaskView.TIME_TRACKINGS]: { loader: getTimeTrackingsTasks },
   [TaskView.CALENDAR]: { loader: getCalendarTasks },
 };
