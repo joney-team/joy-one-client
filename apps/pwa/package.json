@@ -69,6 +69,7 @@
     "browser-image-compression": "^2.0.2",
     "cookies-next": "^5.1.0",
     "dayjs": "^1.11.18",
+    "dhtmlx-gantt": "^9.1.0",
     "firebase": "^11.9.0",
     "framer-motion": "^11.18.2",
     "graphql": "^16.12.0",

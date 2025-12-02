@@ -191,6 +191,9 @@ importers:
       dayjs:
         specifier: ^1.11.18
         version: 1.11.18
+      dhtmlx-gantt:
+        specifier: ^9.1.0
+        version: 9.1.0
       firebase:
         specifier: ^11.9.0
         version: 11.10.0
@@ -4091,6 +4094,9 @@ packages:
 
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
+
+  dhtmlx-gantt@9.1.0:
+    resolution: {integrity: sha512-vgzACaJdzp899c6ZpKRhGeFFUnUWFBWRSdzNH3owjz7gcvnaIC2DGevawmuPrm3y3DamLJjI87/HRFnOLuGq3Q==}
 
   dir-glob@3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
@@ -11258,6 +11264,8 @@ snapshots:
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
+
+  dhtmlx-gantt@9.1.0: {}
 
   dir-glob@3.0.1:
     dependencies:

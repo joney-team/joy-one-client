@@ -1,0 +1,16 @@
+.GanttTasks {
+  opacity: 1;
+
+  & :global(.gantt_layout_root) {
+    border: none;
+  }
+
+  & :global(.gantt_task_content) {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 90%;
+    padding-left: 0.6rem;
+    text-align: left;
+  }
+}

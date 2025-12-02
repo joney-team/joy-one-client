@@ -11,6 +11,7 @@ query Tasks(
   $partnerIds: [String!]
   $tagIds: [String!]
   $priority: TaskPriority
+  $all: Boolean
 ) {
   tasks(
     folderId: $folderId
@@ -23,6 +24,7 @@ query Tasks(
     partnerIds: $partnerIds
     tagIds: $tagIds
     priority: $priority
+    all: $all
   ) {
     count
     data {
