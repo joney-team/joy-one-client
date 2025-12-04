@@ -127,7 +127,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   const initialize = () => {
     const now = Date.now();
     const fromDate = now - oneDate * ganttConfig.rangeDates;
-    const toDate = now + oneDate * ganttConfig.rangeDates;
+    const toDate = now + oneDate * ganttConfig.rangeDates * 2;
 
     setGanttState((s) => ({
       ...s,
@@ -197,7 +197,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
           // Extend time range when scrolling horizontally on body
           if (scrollDirection === "horizontal") {
-            onExtendTimeRange();
+            // onExtendTimeRange();
           }
 
           setScrollDirection(scrollDirection);
@@ -229,36 +229,66 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     if (!isInitialized) return;
 
-    syncBodySize();
-
     const sidebarContainerMutationObserver = new MutationObserver(syncBodySize);
     sidebarContainerMutationObserver.observe(refs.sidebarContainer.current, {
       childList: true,
       subtree: true,
     });
 
-    const onBodyWheel = (ev: WheelEvent) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      refs.bodyContainer.current.scrollLeft += ev.deltaX;
-      refs.bodyContainer.current.scrollTop += ev.deltaY;
-      refs.sidebarContainer.current.scrollTop += ev.deltaY;
-    };
-
-    const onSidebarWheel = (ev: WheelEvent) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      refs.sidebarContainer.current.scrollTop += ev.deltaY;
-      refs.bodyContainer.current.scrollTop += ev.deltaY;
-    };
-
-    refs.bodyContainer.current.addEventListener("wheel", onBodyWheel, { passive: false });
-    refs.sidebarContainer.current.addEventListener("wheel", onSidebarWheel, { passive: false });
-
     return () => {
       sidebarContainerMutationObserver.disconnect();
-      refs.bodyContainer.current?.removeEventListener("wheel", onBodyWheel);
-      refs.sidebarContainer.current?.removeEventListener("wheel", onSidebarWheel);
+    };
+  }, [isInitialized]);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const body = refs.bodyContainer.current;
+    const sidebar = refs.sidebarContainer.current;
+
+    if (!body || !sidebar) return;
+
+    // --- STATE ---
+    let pendingDeltaX = 0;
+    let pendingDeltaY = 0;
+    let ticking = false;
+
+    // --- WHEEL EVENT HANDLER ---
+    const onWheel = (ev: WheelEvent) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      pendingDeltaX += ev.deltaX;
+      pendingDeltaY += ev.deltaY;
+
+      if (!ticking) {
+        ticking = true;
+
+        requestAnimationFrame(() => {
+          if (pendingDeltaX !== 0) {
+            body.scrollLeft += pendingDeltaX;
+          }
+
+          if (pendingDeltaY !== 0) {
+            body.scrollTop += pendingDeltaY;
+            sidebar.scrollTop += pendingDeltaY;
+          }
+
+          pendingDeltaX = 0;
+          pendingDeltaY = 0;
+          ticking = false;
+        });
+      }
+    };
+
+    // --- ADD LISTENER ---
+    body.addEventListener("wheel", onWheel, { passive: false });
+    sidebar.addEventListener("wheel", onWheel, { passive: false });
+
+    // --- CLEANUP ---
+    return () => {
+      body.removeEventListener("wheel", onWheel);
+      sidebar.removeEventListener("wheel", onWheel);
     };
   }, [isInitialized]);
 
