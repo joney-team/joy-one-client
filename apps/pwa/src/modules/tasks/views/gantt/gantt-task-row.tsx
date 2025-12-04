@@ -1,6 +1,6 @@
 "use client";
 
-import { ActionIcon, Card, Group, Portal, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import { ActionIcon, Card, Group, Portal, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {
   FC,
   Fragment,
@@ -17,12 +17,13 @@ import { ganttConfig } from "./gantt-tasks-config";
 
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { useColor } from "@/modules/theme/use-color";
-import { useLazyQuery } from "@apollo/client/react";
+import { useLazyQuery, useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
   IconArrowRight,
+  IconCopyPlus,
   IconGripVertical,
   IconMaximize,
   IconPlus,
@@ -51,6 +52,13 @@ import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/el
 import { ModalConfirm } from "@/modals/modal-confirm";
 import { limitCharacters } from "@joy-one-client/utils/string";
 import styles from "./gantt-tasks.module.css";
+import MUTATION_DUPLICATE_TASK, {
+  type DuplicateTaskMutation,
+  type DuplicateTaskMutationVariables,
+} from "../../queries/mutationDuplicateTask.graphql";
+import { onError } from "@/utils/exceptions.utils";
+import { t } from "@lingui/core/macro";
+import { NumberFormat } from "@/components/format/number-format";
 
 interface GanttTaskRowProps {
   task: TaskDataFragment;
@@ -105,6 +113,11 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
       all: true,
     };
   }, [task._id]);
+
+  const [duplicate, { loading: isDuplicating }] = useMutation<
+    DuplicateTaskMutation,
+    DuplicateTaskMutationVariables
+  >(MUTATION_DUPLICATE_TASK);
 
   useEffect(() => {
     if (isShowSubtasks && task.childCount > 0) {
@@ -319,10 +332,6 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     updateTasks({ _id: task._id, name });
   }, 500);
 
-  const openTask = () => {
-    router.push(updateTaskPath(location.pathname, { code: task.code }));
-  };
-
   useEffect(() => {
     if (!taskTimelineRef.current || !taskRowDataRef.current) return;
 
@@ -422,18 +431,26 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     [taskTimelineRef.current, estimatingPointerRef.current, gantt.state.columnSize, gantt.columns]
   );
 
-  const onTaskTimelineMouseEnter: MouseEventHandler<HTMLDivElement> = useCallback(() => {
+  const onTaskTimelineMouseEnter = useCallback(() => {
     taskRowDataRef.current?.setAttribute("hovered", "true");
   }, [taskTimelineRef.current, actionsRef.current]);
 
-  const onTaskTimelineMouseLeave: MouseEventHandler<HTMLDivElement> = useCallback(() => {
+  const onTaskTimelineMouseLeave = useCallback(() => {
     taskRowDataRef.current?.removeAttribute("hovered");
     movePointerRef.current?.style.setProperty("opacity", "0");
   }, [taskTimelineRef.current, actionsRef.current]);
 
-  const onTaskTimelineWheel: MouseEventHandler<HTMLDivElement> = useCallback(() => {
+  const onTaskTimelineWheel = useCallback(() => {
     movePointerRef.current?.style.setProperty("opacity", "0");
   }, [taskTimelineRef.current, actionsRef.current]);
+
+  const onOnActions = () => {
+    actionsRef.current?.style.setProperty("display", "flex");
+  };
+
+  const onOffActions = () => {
+    actionsRef.current?.style.setProperty("display", "none");
+  };
 
   const estimated = useMemo(() => {
     if (task.startDate && task.dueDate) {
@@ -464,6 +481,33 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     }
   }, [task.startDate, task.dueDate, gantt.columns, gantt.state.columnSize]);
 
+  const duplicateTask = async () => {
+    try {
+      await duplicate({
+        variables: {
+          id: task._id,
+          overwrite: {
+            name: `${task.name} ${t`Copy`}`,
+            order: ((nextTask?.order ?? task.order * 2) + task.order) / 2,
+          },
+        },
+        refetchQueries: [
+          {
+            query: TASKS_QUERY,
+            variables: groupVariables,
+          },
+        ],
+      });
+    } catch (error) {
+      onError(error);
+    }
+  };
+
+  const openTask = () => {
+    onOffActions();
+    router.push(updateTaskPath(location.pathname, { code: task.code }));
+  };
+
   return (
     <Fragment>
       <Group
@@ -481,11 +525,11 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
         }}
         onMouseEnter={() => {
           taskTimelineRef.current?.setAttribute("hovered", "true");
-          actionsRef.current?.style.setProperty("display", "flex");
+          onOnActions();
         }}
         onMouseLeave={() => {
           taskTimelineRef.current?.removeAttribute("hovered");
-          actionsRef.current?.style.setProperty("display", "none");
+          onOffActions();
         }}
         wrap="nowrap"
         py={8}
@@ -540,6 +584,16 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
             <IconMaximize size={16} />
           </ActionIcon>
 
+          <ActionIcon
+            variant="subtle"
+            size="sm"
+            color="gray"
+            loading={isDuplicating}
+            onClick={duplicateTask}
+          >
+            <IconCopyPlus size={16} />
+          </ActionIcon>
+
           <ModalConfirm>
             {(open) => (
               <ActionIcon
@@ -550,15 +604,29 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
                 disabled={task.isArchived ?? false}
                 onClick={() => {
                   const taskName = limitCharacters(task.name, 30);
+                  onOffActions();
 
                   open({
                     color: "red",
                     children: (
-                      <Text>
-                        <Trans>
-                          Are you sure you want to archive <strong>{taskName}</strong>?
-                        </Trans>
-                      </Text>
+                      <Stack>
+                        <Text>
+                          <Trans>
+                            Are you sure you want to archive <strong>{taskName}</strong>?
+                          </Trans>
+                        </Text>
+
+                        {task.childCount > 0 && (
+                          <Text>
+                            <Trans>
+                              <strong>
+                                <NumberFormat value={task.childCount} />
+                              </strong>{" "}
+                              subtask(s) will be archived as well.
+                            </Trans>
+                          </Text>
+                        )}
+                      </Stack>
                     ),
                     onConfirm: () =>
                       updateTasks({
@@ -583,14 +651,16 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
                     color="gray"
                     component="div"
                     size="sm"
-                    onClick={() =>
+                    onClick={() => {
+                      onOffActions();
                       open({
                         initial: { parent: task },
                         onCreated: () => {
                           setIsShowSubtasks(true);
+                          getSubtasks({ variables: subTasksGroupVariables });
                         },
-                      })
-                    }
+                      });
+                    }}
                   >
                     <IconPlus size={16} />
                   </ActionIcon>

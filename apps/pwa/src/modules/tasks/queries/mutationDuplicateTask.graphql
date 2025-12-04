@@ -1,0 +1,5 @@
+mutation DuplicateTask($id: String!, $overwrite: CreateTaskInput) {
+  duplicateTask(_id: $id, overwrite: $overwrite) {
+    _id
+  }
+}

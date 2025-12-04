@@ -267,6 +267,7 @@ export type Mutation = {
   createProduct: Product;
   createTask: Task;
   deleteCategory: Scalars['Boolean']['output'];
+  duplicateTask: Task;
   externalStorageVerifyDna: File;
   generateCategorySlug: Scalars['String']['output'];
   healthcheckPluginExternalStorage: Scalars['Boolean']['output'];
@@ -336,6 +337,12 @@ export type MutationCreateTaskArgs = {
 
 export type MutationDeleteCategoryArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationDuplicateTaskArgs = {
+  _id: Scalars['String']['input'];
+  overwrite?: InputMaybe<CreateTaskInput>;
 };
 
 

@@ -47,7 +47,7 @@ export const ModalConfirm: FC<{
         }}
       >
         <Stack align="stretch" gap={0}>
-          <Group p="md" wrap="nowrap">
+          <Group p="md" wrap="nowrap" align="start">
             <ThemeIcon color={color(argsRef.current?.color)} variant="light" size="xl">
               <IconAlertTriangle />
             </ThemeIcon>

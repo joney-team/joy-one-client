@@ -237,6 +237,7 @@ type Mutation {
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
   createTask(input: CreateTaskInput!): Task!
   deleteCategory(id: String!): Boolean!
+  duplicateTask(_id: String!, overwrite: CreateTaskInput): Task!
   externalStorageVerifyDna(dna: String!): File!
   generateCategorySlug(name: String!): String!
   healthcheckPluginExternalStorage: Boolean!
