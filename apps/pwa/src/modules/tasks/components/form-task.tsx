@@ -154,6 +154,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
           },
         },
         refetchQueries: [QUERY_TASKS],
+        awaitRefetchQueries: true,
       });
 
       if (!newTask) throw new Error(t`Failed to create task`);
