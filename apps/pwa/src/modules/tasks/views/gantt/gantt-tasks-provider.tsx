@@ -197,7 +197,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
           // Extend time range when scrolling horizontally on body
           if (scrollDirection === "horizontal") {
-            // onExtendTimeRange();
+            onExtendTimeRange();
           }
 
           setScrollDirection(scrollDirection);
