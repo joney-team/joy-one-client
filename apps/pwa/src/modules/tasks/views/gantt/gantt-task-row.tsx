@@ -21,7 +21,14 @@ import { useLazyQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { IconGripVertical, IconMaximize, IconPlus, IconSubtask } from "@tabler/icons-react";
+import {
+  IconArrowRight,
+  IconGripVertical,
+  IconMaximize,
+  IconPlus,
+  IconSubtask,
+  IconTrash,
+} from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import { ModalCreateTask } from "../../modals/modal-create-task";
@@ -41,6 +48,8 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
 
+import { ModalConfirm } from "@/modals/modal-confirm";
+import { limitCharacters } from "@joy-one-client/utils/string";
 import styles from "./gantt-tasks.module.css";
 
 interface GanttTaskRowProps {
@@ -49,13 +58,16 @@ interface GanttTaskRowProps {
   nextTask?: TaskDataFragment;
   nextParentTask?: TaskDataFragment;
   groupVariables?: TasksQueryVariables;
+  isAllowTopDroppable?: boolean;
 }
 
 export const GanttTaskRow: FC<GanttTaskRowProps> = ({
   task,
   nextTask,
+  prevTask,
   nextParentTask,
   groupVariables,
+  isAllowTopDroppable,
 }) => {
   const color = useColor();
   const gantt = useGantt();
@@ -67,7 +79,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
 
   const [isNameEditing, setIsNameEditing] = useState(false);
 
-  const taskDataRef = useRef<HTMLDivElement>(null);
+  const taskRowDataRef = useRef<HTMLDivElement>(null);
   const taskTimelineRef = useRef<HTMLDivElement>(null);
   const movePointerRef = useRef<HTMLDivElement>(null);
   const estimatingPointerRef = useRef<HTMLDivElement>(null);
@@ -95,15 +107,24 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
   }, [task._id]);
 
   useEffect(() => {
-    if (isShowSubtasks) getSubtasks({ variables: subTasksGroupVariables });
+    if (isShowSubtasks && task.childCount > 0) {
+      getSubtasks({ variables: subTasksGroupVariables });
+    }
   }, [task._id, subTasksGroupVariables]);
 
   const [isDragging, setIsDragging] = useState(false);
   const draggingRef = useRef<HTMLDivElement>(null);
   const draggingRefContainer = useRef<HTMLElement | null>(null);
 
+  const droppableTopSiblingRef = useRef<HTMLDivElement>(null);
+  const droppableTopChildrenRef = useRef<HTMLDivElement>(null);
+
   const droppableBottomSiblingRef = useRef<HTMLDivElement>(null);
   const droppableBottomChildrenRef = useRef<HTMLDivElement>(null);
+
+  const droppableIndicatorTopRef = useRef<HTMLDivElement>(null);
+  const droppableIndicatorTopIndentRef = useRef<HTMLDivElement>(null);
+
   const droppableIndicatorBottomRef = useRef<HTMLDivElement>(null);
   const droppableIndicatorBottomIndentRef = useRef<HTMLDivElement>(null);
 
@@ -112,7 +133,8 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     if (
       !draggingRef.current ||
       !droppableBottomSiblingRef.current ||
-      !droppableBottomChildrenRef.current
+      !droppableBottomChildrenRef.current ||
+      !droppableTopSiblingRef.current
     )
       return;
 
@@ -136,7 +158,45 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
           });
         },
       }),
-      // Sibling bottom drop target
+      // Sibling Top drop target
+      dropTargetForElements({
+        element: droppableTopSiblingRef.current,
+        canDrop({ source }) {
+          const sourceTask = source.data.task as TaskDataFragment;
+          if (!sourceTask || !isAllowTopDroppable) return false;
+
+          return (
+            sourceTask._id !== task._id &&
+            sourceTask._id !== task.parentId &&
+            sourceTask._id !== nextTask?._id &&
+            !task.parentId
+          );
+        },
+        onDragEnter() {
+          droppableIndicatorTopRef.current?.style.setProperty("display", "block");
+        },
+        onDragLeave() {
+          droppableIndicatorTopRef.current?.style.setProperty("display", "none");
+        },
+        onDrop({ source }) {
+          const sourceTask = source.data.task as TaskDataFragment;
+          if (!sourceTask) return;
+
+          const context: UpdateTaskContext = {
+            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            toGroupVariables: groupVariables,
+          };
+
+          return updateTasks({
+            _id: sourceTask._id,
+            parent: null,
+            order: ((prevTask?.order ?? task.order / 2) + task.order) / 2,
+            folder: task.folder ?? null,
+            context,
+          });
+        },
+      }),
+      // Sibling Bottom drop target
       dropTargetForElements({
         element: droppableBottomSiblingRef.current,
         canDrop({ source }) {
@@ -190,7 +250,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
           });
         },
       }),
-      // Children bottom drop target
+      // Children Bottom drop target
       dropTargetForElements({
         element: droppableBottomChildrenRef.current,
         canDrop({ source }) {
@@ -218,7 +278,11 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
             toGroupVariables: task.parent ? groupVariables : subTasksGroupVariables,
           };
 
-          const newOrder = ((nextTask?.order ?? task.order * 2) + task.order) / 2;
+          const newOrder = !task.parent
+            ? task.childOrders && task.childOrders[0]
+              ? task.childOrders[0] / 2
+              : 1
+            : ((nextTask?.order ?? task.order * 2) + task.order) / 2;
 
           return updateTasks({
             _id: sourceTask._id,
@@ -231,12 +295,18 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
       }),
       monitorForElements({
         onDragStart: () => {
+          droppableTopSiblingRef.current?.style.setProperty("display", "block");
+          droppableTopChildrenRef.current?.style.setProperty("display", "block");
           droppableBottomSiblingRef.current?.style.setProperty("display", "block");
           droppableBottomChildrenRef.current?.style.setProperty("display", "block");
         },
         onDrop() {
+          droppableTopSiblingRef.current?.style.setProperty("display", "none");
+          droppableTopChildrenRef.current?.style.setProperty("display", "none");
           droppableBottomSiblingRef.current?.style.setProperty("display", "none");
           droppableBottomChildrenRef.current?.style.setProperty("display", "none");
+          droppableIndicatorTopRef.current?.style.setProperty("display", "none");
+          droppableIndicatorTopIndentRef.current?.style.setProperty("display", "none");
           droppableIndicatorBottomRef.current?.style.setProperty("display", "none");
           droppableIndicatorBottomIndentRef.current?.style.setProperty("display", "none");
         },
@@ -253,15 +323,20 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     router.push(updateTaskPath(location.pathname, { code: task.code }));
   };
 
-  const syncPosition = useCallback(() => {
-    const offsetTop = taskDataRef.current?.offsetTop ?? 0;
-    const top = offsetTop - ganttConfig.headHeight;
-    taskTimelineRef.current?.style.setProperty("top", `${top}px`);
-    taskTimelineRef.current?.style.setProperty("opacity", `1`);
-  }, [taskDataRef, taskTimelineRef]);
-
   useEffect(() => {
-    if (!taskTimelineRef.current || !taskDataRef.current) return;
+    if (!taskTimelineRef.current || !taskRowDataRef.current) return;
+
+    const syncPosition = async () => {
+      const offsetTop = taskRowDataRef.current?.offsetTop ?? 0;
+      const top = offsetTop - ganttConfig.headHeight;
+
+      taskTimelineRef.current?.style.setProperty("top", `${top}px`);
+      taskTimelineRef.current?.style.setProperty("opacity", `1`);
+      taskTimelineRef.current?.style.setProperty(
+        "height",
+        `${taskRowDataRef.current?.offsetHeight}px`
+      );
+    };
 
     syncPosition();
 
@@ -272,10 +347,14 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
       subtree: true,
     });
 
+    const resizeObserver = new ResizeObserver(syncPosition);
+    resizeObserver.observe(taskRowDataRef.current);
+
     return () => {
       mutationObserver.disconnect();
+      resizeObserver.disconnect();
     };
-  }, [task._id, syncPosition]);
+  }, [task._id]);
 
   const onTaskTimelineMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!taskTimelineRef.current) return;
@@ -297,7 +376,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
 
   const onTaskTimelineMouseDown: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      if (!taskTimelineRef.current || !estimatingPointerRef.current) return;
+      if (!taskTimelineRef.current || !estimatingPointerRef.current || e.button !== 0) return;
       const rect = e.currentTarget.getBoundingClientRect();
 
       const x = Math.max(0, Math.round(e.pageX - rect.left - (window.scrollX || window.scrollX)));
@@ -316,7 +395,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
 
   const onTaskTimelineMouseUp: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
-      if (!taskTimelineRef.current || !estimatingStartRef.current) return;
+      if (!taskTimelineRef.current || !estimatingStartRef.current || e.button !== 0) return;
       const rect = e.currentTarget.getBoundingClientRect();
 
       const x = Math.max(0, Math.round(e.pageX - rect.left - (window.scrollX || window.scrollX)));
@@ -342,6 +421,19 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     },
     [taskTimelineRef.current, estimatingPointerRef.current, gantt.state.columnSize, gantt.columns]
   );
+
+  const onTaskTimelineMouseEnter: MouseEventHandler<HTMLDivElement> = useCallback(() => {
+    taskRowDataRef.current?.setAttribute("hovered", "true");
+  }, [taskTimelineRef.current, actionsRef.current]);
+
+  const onTaskTimelineMouseLeave: MouseEventHandler<HTMLDivElement> = useCallback(() => {
+    taskRowDataRef.current?.removeAttribute("hovered");
+    movePointerRef.current?.style.setProperty("opacity", "0");
+  }, [taskTimelineRef.current, actionsRef.current]);
+
+  const onTaskTimelineWheel: MouseEventHandler<HTMLDivElement> = useCallback(() => {
+    movePointerRef.current?.style.setProperty("opacity", "0");
+  }, [taskTimelineRef.current, actionsRef.current]);
 
   const estimated = useMemo(() => {
     if (task.startDate && task.dueDate) {
@@ -375,7 +467,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
   return (
     <Fragment>
       <Group
-        ref={taskDataRef}
+        ref={taskRowDataRef}
         className={styles.TaskRowData}
         w="100%"
         bg={isDragging ? "gray.1" : "transparent"}
@@ -383,8 +475,8 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
         gap={0}
         style={{
           position: "relative",
-          minHeight: ganttConfig.rowHeight,
-          maxHeight: ganttConfig.rowHeight,
+          overflow: "visible",
+          height: "max-content",
           borderBottom: `1px solid var(--app-divider-color)`,
         }}
         onMouseEnter={() => {
@@ -396,6 +488,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
           actionsRef.current?.style.setProperty("display", "none");
         }}
         wrap="nowrap"
+        py={8}
       >
         <ActionIcon
           ref={draggingRef}
@@ -414,17 +507,21 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
           </ThemeIcon>
         )}
 
-        {isNameEditing ? (
-          <ContentEditable
-            fz={14}
-            fw={500}
-            value={task.name}
-            autoFocus
-            onChange={onUpdateName}
-            onBlur={() => setIsNameEditing(false)}
-          />
-        ) : (
-          <Tooltip label={task._id}>
+        <Group miw={0} flex={1} pr={8}>
+          {isNameEditing ? (
+            <ContentEditable
+              fz={14}
+              fw={500}
+              value={task.name}
+              autoFocus
+              onChange={onUpdateName}
+              onBlur={(value) => {
+                onUpdateName(value);
+                setIsNameEditing(false);
+              }}
+              onEscape={() => setIsNameEditing(false)}
+            />
+          ) : (
             <Text
               fz={14}
               fw={500}
@@ -433,15 +530,49 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
               onClick={() => setIsNameEditing(true)}
               className="clickable"
             >
-              {task.name}{" "}
+              {task.name}
             </Text>
-          </Tooltip>
-        )}
+          )}
+        </Group>
 
         <Group ref={actionsRef} px={8} style={{ display: "none" }} gap={2}>
           <ActionIcon variant="subtle" size="sm" color="gray" onClick={openTask}>
             <IconMaximize size={16} />
           </ActionIcon>
+
+          <ModalConfirm>
+            {(open) => (
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                component="div"
+                size="sm"
+                disabled={task.isArchived ?? false}
+                onClick={() => {
+                  const taskName = limitCharacters(task.name, 30);
+
+                  open({
+                    color: "red",
+                    children: (
+                      <Text>
+                        <Trans>
+                          Are you sure you want to archive <strong>{taskName}</strong>?
+                        </Trans>
+                      </Text>
+                    ),
+                    onConfirm: () =>
+                      updateTasks({
+                        _id: task._id,
+                        isArchived: true,
+                        context: { fromGroupVariables: groupVariables },
+                      }),
+                  });
+                }}
+              >
+                <IconTrash size={16} />
+              </ActionIcon>
+            )}
+          </ModalConfirm>
 
           {!task.parent && (
             <ModalCreateTask>
@@ -467,17 +598,70 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
               )}
             </ModalCreateTask>
           )}
+
+          <Tooltip.Floating
+            label={
+              task.startDate ? (
+                <Trans>Scroll to task</Trans>
+              ) : (
+                <Trans>You need to set the start date before</Trans>
+              )
+            }
+            position="top"
+            offset={16}
+          >
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              component="div"
+              size="sm"
+              disabled={!task.startDate}
+              onClick={() => {
+                if (!task.startDate) return;
+                gantt.scrollToDate({ date: task.startDate, behavior: "smooth" });
+              }}
+            >
+              <IconArrowRight size={16} />
+            </ActionIcon>
+          </Tooltip.Floating>
         </Group>
+
+        <div
+          ref={droppableIndicatorTopRef}
+          style={{
+            position: "absolute",
+            height: ganttConfig.rowDroppableIndicatorHeight,
+            background: color("primary"),
+            width: "100%",
+            right: 0,
+            top: 0,
+            display: "none",
+          }}
+        />
+
+        <div
+          ref={droppableIndicatorTopIndentRef}
+          style={{
+            position: "absolute",
+            height: ganttConfig.rowDroppableIndicatorHeight,
+            background: color("orange"),
+            width: "calc(100% - 46px)",
+            right: 0,
+            top: 0,
+            display: "none",
+          }}
+        />
 
         <div
           ref={droppableIndicatorBottomRef}
           style={{
             position: "absolute",
-            height: 2,
+            height: ganttConfig.rowDroppableIndicatorHeight,
             background: color("primary"),
             width: "100%",
             right: 0,
             bottom: 0,
+            transform: "translateY(100%)",
             display: "none",
           }}
         />
@@ -486,9 +670,10 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
           ref={droppableIndicatorBottomIndentRef}
           style={{
             position: "absolute",
-            height: 2,
+            height: ganttConfig.rowDroppableIndicatorHeight,
             background: color("orange"),
             width: "calc(100% - 46px)",
+            transform: "translateY(100%)",
             right: 0,
             bottom: 0,
             display: "none",
@@ -496,15 +681,40 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
         />
 
         <div
+          ref={droppableTopSiblingRef}
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            height: "50%",
+            width: "100%",
+            display: "none",
+            zIndex: 1,
+          }}
+        />
+
+        <div
+          ref={droppableTopChildrenRef}
+          style={{
+            position: "absolute",
+            left: "20%",
+            top: 0,
+            height: "50%",
+            width: "100%",
+            display: "none",
+            zIndex: 2,
+          }}
+        />
+
+        <div
           ref={droppableBottomSiblingRef}
           style={{
             position: "absolute",
-            top: 0,
             left: 0,
-            right: 0,
             bottom: 0,
+            height: "50%",
+            width: "100%",
             display: "none",
-            opacity: 0,
             zIndex: 1,
           }}
         />
@@ -513,14 +723,12 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
           ref={droppableBottomChildrenRef}
           style={{
             position: "absolute",
-            top: 0,
             left: "20%",
-            right: 0,
             bottom: 0,
+            height: "50%",
+            width: "100%",
             display: "none",
-            opacity: 0,
             zIndex: 2,
-            overflow: "visible",
           }}
         />
       </Group>
@@ -533,8 +741,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
               className={styles.TaskRowTimeline}
               style={{
                 position: "absolute",
-                minHeight: ganttConfig.rowHeight,
-                maxHeight: ganttConfig.rowHeight,
+                height: taskRowDataRef.current?.offsetHeight,
                 width: "100%",
                 left: 0,
                 zIndex: 1,
@@ -543,13 +750,9 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
               onMouseMove={onTaskTimelineMouseMove}
               onMouseDown={onTaskTimelineMouseDown}
               onMouseUp={onTaskTimelineMouseUp}
-              onMouseEnter={() => {
-                taskDataRef.current?.setAttribute("hovered", "true");
-              }}
-              onMouseLeave={() => {
-                taskDataRef.current?.removeAttribute("hovered");
-                movePointerRef.current?.style.setProperty("opacity", `0`);
-              }}
+              onMouseEnter={onTaskTimelineMouseEnter}
+              onMouseLeave={onTaskTimelineMouseLeave}
+              onWheel={onTaskTimelineWheel}
             >
               <div
                 ref={movePointerRef}
@@ -585,7 +788,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
           <Card
             shadow="xs"
             px={16}
-            style={{ width: taskDataRef.current?.getBoundingClientRect().width }}
+            style={{ width: taskRowDataRef.current?.getBoundingClientRect().width }}
           >
             <Text fz="sm" fw={500} truncate>
               {task.name}
@@ -597,7 +800,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
       {isShowSubtasks &&
         subtasks.map((subtask, subtaskIndex) => (
           <GanttTaskRow
-            key={subtask._id + subtaskIndex + "subtask"}
+            key={subtask._id}
             task={subtask}
             prevTask={subtasks[subtaskIndex - 1]}
             nextTask={subtasks[subtaskIndex + 1]}

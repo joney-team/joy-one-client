@@ -275,6 +275,7 @@ export type Mutation = {
   registerDevice: DeviceEntity;
   removePluginExternalStorage: Scalars['Boolean']['output'];
   setPluginExternalStorage: PluginExternalStorage;
+  syncTask: Task;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateCategory: Category;
 };
@@ -371,6 +372,11 @@ export type MutationSetPluginExternalStorageArgs = {
   provider: PluginExternalStorageProvider;
   region?: InputMaybe<Scalars['String']['input']>;
   secretAccessKey?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationSyncTaskArgs = {
+  _id: Scalars['String']['input'];
 };
 
 
@@ -634,7 +640,7 @@ export type Task = {
   assigneeUsers: Array<WorkspaceMemberInfo>;
   childCount: Scalars['Float']['output'];
   childOrders: Maybe<Array<Scalars['Float']['output']>>;
-  childProgress: Maybe<Scalars['Float']['output']>;
+  childProgress: Scalars['Float']['output'];
   closedAt: Maybe<Scalars['Float']['output']>;
   code: Scalars['String']['output'];
   createdAt: Maybe<Scalars['Float']['output']>;
@@ -656,7 +662,7 @@ export type Task = {
   partners: Array<PartnerEntity>;
   points: Maybe<Scalars['Float']['output']>;
   priority: Maybe<TaskPriority>;
-  progress: Maybe<Scalars['Float']['output']>;
+  progress: Scalars['Float']['output'];
   refs: Maybe<Array<Scalars['String']['output']>>;
   relatedUserIds: Array<Scalars['String']['output']>;
   startDate: Maybe<Scalars['Float']['output']>;
@@ -680,7 +686,7 @@ export const TaskPriority = {
 export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
 export type TaskTimeTracking = {
   __typename?: 'TaskTimeTracking';
-  billable: Scalars['Boolean']['output'];
+  billable: Maybe<Scalars['Boolean']['output']>;
   endAt: Maybe<Scalars['Float']['output']>;
   id: Scalars['String']['output'];
   note: Maybe<Scalars['String']['output']>;
@@ -691,7 +697,7 @@ export type TaskTimeTracking = {
 };
 
 export type TaskTimeTrackingInput = {
-  billable: Scalars['Boolean']['input'];
+  billable?: InputMaybe<Scalars['Boolean']['input']>;
   endAt?: InputMaybe<Scalars['Float']['input']>;
   id: Scalars['String']['input'];
   note?: InputMaybe<Scalars['String']['input']>;

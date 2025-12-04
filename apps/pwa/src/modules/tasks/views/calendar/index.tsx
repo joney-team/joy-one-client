@@ -80,23 +80,6 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
     [tagFolder?._id]
   );
 
-  useEventsListener(
-    [EventType.TASKS_UPDATED],
-    (ev) => {
-      const _tasks = ev.data.tasks as TaskEntity[];
-      if (_tasks) {
-        tasks.setData(
-          tasks.data.map((t) => {
-            const updatedTask = _tasks.find((nt) => nt._id === t._id);
-            if (updatedTask) return updatedTask;
-            return t;
-          })
-        );
-      }
-    },
-    [tagFolder, tasks.data]
-  );
-
   useEffect(() => {
     if (tasks.isInitialized)
       tasks.fetch(true, {

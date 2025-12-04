@@ -149,6 +149,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   const scrollToDate: ScrollToDateArgs = useCallback(
     (args) => {
       const date = typeof args === "number" ? args : (args as { date: Date | number }).date;
+
       const offset =
         typeof args === "number"
           ? -ganttState.columnSize * 0.8
@@ -156,8 +157,10 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
       const behavior =
         typeof args === "number"
-          ? "instant"
-          : (args as { behavior?: "smooth" | "instant" }).behavior || "smooth";
+          ? "smooth"
+          : "behavior" in args
+          ? (args as { behavior?: "smooth" | "instant" }).behavior
+          : "smooth";
 
       const scrollDate = DateTime.normalizeDate(date);
 
@@ -174,12 +177,18 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
         });
       }
     },
-    [columns, ganttState.columnSize]
+    [columns, ganttState.columnSize, isInitialized, ganttState]
   );
 
   useEffect(() => {
     initialize();
   }, []);
+
+  useEffect(() => {
+    if (isInitialized) {
+      scrollToDate({ date: Date.now(), behavior: "instant" });
+    }
+  }, [isInitialized]);
 
   useEffect(() => {
     if (isInitialized) {
@@ -243,10 +252,10 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     if (!isInitialized) return;
 
-    const body = refs.bodyContainer.current;
-    const sidebar = refs.sidebarContainer.current;
+    const bodyContainer = refs.bodyContainer.current;
+    const sidebarContainer = refs.sidebarContainer.current;
 
-    if (!body || !sidebar) return;
+    if (!bodyContainer || !sidebarContainer) return;
 
     // --- STATE ---
     let pendingDeltaX = 0;
@@ -266,12 +275,12 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
         requestAnimationFrame(() => {
           if (pendingDeltaX !== 0) {
-            body.scrollLeft += pendingDeltaX;
+            bodyContainer.scrollLeft += pendingDeltaX;
           }
 
           if (pendingDeltaY !== 0) {
-            body.scrollTop += pendingDeltaY;
-            sidebar.scrollTop += pendingDeltaY;
+            bodyContainer.scrollTop += pendingDeltaY;
+            sidebarContainer.scrollTop += pendingDeltaY;
           }
 
           pendingDeltaX = 0;
@@ -282,13 +291,23 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     };
 
     // --- ADD LISTENER ---
-    body.addEventListener("wheel", onWheel, { passive: false });
-    sidebar.addEventListener("wheel", onWheel, { passive: false });
+    bodyContainer.addEventListener("wheel", onWheel, { passive: false });
+    sidebarContainer.addEventListener("wheel", onWheel, { passive: false });
+
+    const onWindowWheel = (ev: WheelEvent) => {
+      console.log("onWindowWheel", ev);
+      ev.preventDefault();
+    };
+
+    window.addEventListener("wheel", onWindowWheel, { passive: false });
+    document.body.style.setProperty("overscroll-behavior-x", "none");
 
     // --- CLEANUP ---
     return () => {
-      body.removeEventListener("wheel", onWheel);
-      sidebar.removeEventListener("wheel", onWheel);
+      bodyContainer.removeEventListener("wheel", onWheel);
+      sidebarContainer.removeEventListener("wheel", onWheel);
+      window.removeEventListener("wheel", onWindowWheel);
+      document.body.style.removeProperty("overscroll-behavior-x");
     };
   }, [isInitialized]);
 

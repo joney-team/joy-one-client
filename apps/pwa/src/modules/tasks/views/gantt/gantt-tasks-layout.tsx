@@ -244,12 +244,10 @@ export const BodyHead: FC = () => {
               h="100%"
               justify="center"
             >
-              <Text ta="center" fz={10}>
-                <DateFormat
-                  value={column.start}
-                  type="custom"
-                  format={{ weekday: "narrow", day: "2-digit", month: "2-digit" }}
-                />
+              <Text ta="center" fz={10} fw={500}>
+                <DateFormat value={column.start} type="custom" format={{ weekday: "narrow" }} />
+                {"-"}
+                <DateFormat value={column.start} type="custom" format={{ day: "2-digit" }} />
               </Text>
             </Group>
           );
@@ -291,8 +289,8 @@ export const GridColumns: FC = () => {
               width: gantt.state.columnSize,
               borderLeft: first
                 ? undefined
-                : `${isToday ? 2 : 1}px solid ${
-                    isToday ? color("primary.1") : `var(--app-divider-color)`
+                : `${isToday ? 1 : 1}px solid ${
+                    isToday ? color("primary.2") : `var(--app-divider-color)`
                   }`,
               position: "relative",
               height: "100%",

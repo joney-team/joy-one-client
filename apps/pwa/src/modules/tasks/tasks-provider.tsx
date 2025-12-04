@@ -1,9 +1,7 @@
 "use client";
 
 import { useRouter } from "@/hooks/use-router";
-import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
-import { getTaskEntites, getTaskEntity, tasksEmitter } from "@/modules/tasks/tasks-service";
+import { getTaskEntites, getTaskEntity } from "@/modules/tasks/tasks-service";
 import { TaskEntity, TaskPriority, TasksContext } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { StorageKey } from "@/types";
@@ -13,7 +11,6 @@ import { useQuery } from "@apollo/client/react";
 import { useLocalStorage } from "@mantine/hooks";
 import { useParams, usePathname } from "next/navigation";
 import { FC, PropsWithChildren, useMemo, useState } from "react";
-import { getSessionId } from "../auth/auth-service";
 import QUERY_TAG_BY_SLUG, {
   type TagBySlugQuery,
   type TagBySlugQueryVariables,
@@ -117,18 +114,6 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
       );
     }
   };
-
-  useEventsListener(
-    [EventType.TASKS_UPDATED, EventType.TASK_SYNCED],
-    (ev) => {
-      const sessionId = getSessionId();
-      if (ev.sessionId !== sessionId) {
-        const _tasks = ev.data.tasks as TaskEntity[];
-        tasksEmitter.emit("update", _tasks);
-      }
-    },
-    []
-  );
 
   const contextValue = useMemo<TasksContext>(() => {
     return {

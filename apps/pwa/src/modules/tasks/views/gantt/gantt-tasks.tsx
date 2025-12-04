@@ -42,10 +42,6 @@ const Content: FC = () => {
     };
   }, [container.ref.current]);
 
-  useEffect(() => {
-    gantt.scrollToDate(Date.now());
-  }, []);
-
   const sidebar = useMemo(() => {
     if (activatedFolder) {
       return <GanttTasksGroup folder={activatedFolder} isDefaultOpen />;

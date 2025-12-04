@@ -43,7 +43,12 @@ export const ModalCreateTask: FC<{
         zIndex={zIndexes.commonModals + 1}
       >
         <Stack gap={10} pb={layout.view === "mobile" ? 16 * 2 : 0}>
-          <Renderer visible={Boolean(props.current?.initial)}>
+          <Renderer
+            visible={
+              Boolean(props.current?.initial) &&
+              (!!props.current?.initial?.parent || !!props.current?.initial?.folder)
+            }
+          >
             <Group gap={4} align="center" wrap="nowrap" pt={8}>
               {props.current?.initial?.folder && (
                 <Button
@@ -84,11 +89,14 @@ export const ModalCreateTask: FC<{
                 </Button>
               )}
 
-              <Text c="gray">/</Text>
-
-              <Text px={5} fz={12} fw={300}>
-                <Trans>New Task</Trans>
-              </Text>
+              {props.current?.initial?.parent && (
+                <Fragment>
+                  <Text c="gray">/</Text>
+                  <Text px={5} fz={12} fw={300}>
+                    <Trans>New Task</Trans>
+                  </Text>
+                </Fragment>
+              )}
             </Group>
           </Renderer>
 

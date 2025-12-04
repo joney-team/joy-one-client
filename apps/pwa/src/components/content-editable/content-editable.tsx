@@ -15,6 +15,7 @@ interface ContentEditableProps {
   onChange?: (value: string) => void;
   onEnter?: () => void;
   onBlur?: (value: string) => void;
+  onEscape?: () => void;
   onClick?: () => void;
   autoFocus?: boolean;
   mt?: number;
@@ -65,6 +66,12 @@ export const ContentEditable: FC<ContentEditableProps> = (props) => {
     // Prevent formatting
     if (["b", "i", "u"].includes(key) && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
+    }
+
+    if (key === "Escape") {
+      e.preventDefault();
+      e.currentTarget.blur();
+      props.onEscape?.();
     }
   };
 

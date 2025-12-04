@@ -172,6 +172,7 @@ export const useUpdateTasks = () => {
             );
           }
 
+          // Change parent
           if (
             updatedTask.parent &&
             updatedTask.parent._id !== currentData.parent?._id &&
@@ -212,6 +213,27 @@ export const useUpdateTasks = () => {
                       ...prev.tasks.data.filter((t) => t._id !== updatedTask._id),
                       updatedData,
                     ],
+                  },
+                };
+              }
+            );
+          }
+
+          // Archive
+          if (updatedTask.isArchived && updatedTask.context?.fromGroupVariables) {
+            client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
+              {
+                query: QUERY_TASKS,
+                variables: updatedTask.context.fromGroupVariables,
+                overwrite: true,
+              },
+              (prev) => {
+                if (!prev) return prev;
+                return {
+                  ...prev,
+                  tasks: {
+                    ...prev.tasks,
+                    data: [...prev.tasks.data.filter((t) => t._id !== updatedTask._id)],
                   },
                 };
               }

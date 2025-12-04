@@ -245,6 +245,7 @@ type Mutation {
   registerDevice(input: RegisterDeviceDto!): DeviceEntity!
   removePluginExternalStorage: Boolean!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
+  syncTask(_id: String!): Task!
   toggleDisablePluginExternalStorage: Boolean!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
 }
@@ -409,7 +410,7 @@ type Task {
   assigneeUsers: [WorkspaceMemberInfo!]!
   childCount: Float!
   childOrders: [Float!]
-  childProgress: Float
+  childProgress: Float!
   closedAt: Float
   code: String!
   createdAt: Float
@@ -431,7 +432,7 @@ type Task {
   partners: [PartnerEntity!]!
   points: Float
   priority: TaskPriority
-  progress: Float
+  progress: Float!
   refs: [String!]
   relatedUserIds: [String!]!
   startDate: Float
@@ -452,7 +453,7 @@ enum TaskPriority {
 }
 
 type TaskTimeTracking {
-  billable: Boolean!
+  billable: Boolean
   endAt: Float
   id: String!
   note: String
@@ -463,7 +464,7 @@ type TaskTimeTracking {
 }
 
 input TaskTimeTrackingInput {
-  billable: Boolean!
+  billable: Boolean
   endAt: Float
   id: String!
   note: String

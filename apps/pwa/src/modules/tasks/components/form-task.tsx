@@ -84,8 +84,6 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
   const workspace = useWorkspace();
   const uploadFile = useUploadFile();
 
-  const id = props.task?._id || "new_task_id";
-
   const { updateTasks } = useUpdateTasks();
 
   const [rawFiles, setRawFiles] = useState<File[]>([]);
@@ -181,44 +179,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
     props.task &&
     props.task.status !== DefaultTaskStatusId.CLOSED;
 
-  const subTaskList = useList({
-    id: `sub-tasks-${id}`,
-    fetch: (q) =>
-      getTasks({
-        ...q,
-        parentId: id,
-        getAll: true,
-      }),
-  });
-
-  useEventsListener(
-    EventType.TASK_STATUS_UPDATED,
-    (e) => {
-      if (props.task && props.task._id === e.ref && e.data?.toStatus) {
-        form.setFieldValue("status", e.data.toStatus);
-      }
-    },
-    [props.task?._id]
-  );
-
-  useEventsListener(
-    [EventType.TASK_ARCHIVED, EventType.TASKS_UPDATED, EventType.TASK_NEW],
-    () => {
-      if (props.task?._id) {
-        subTaskList.fetch(true, { isSilient: true });
-      }
-    },
-    [props.task?._id]
-  );
-
   const statuses = workspace.settings.taskStatuses;
-
-  const subTasks = subTaskList.data
-    .filter((t) => t.parentId && t.parentId === props.task?._id)
-    .sort((a, b) => a.order - b.order);
-
-  const progress = getTaskProgress(subTasks, statuses);
-
   const currentStatusIndex = statuses.findIndex((v) => v.id === props.task?.status);
   const nextStatus = statuses[currentStatusIndex + 1];
 

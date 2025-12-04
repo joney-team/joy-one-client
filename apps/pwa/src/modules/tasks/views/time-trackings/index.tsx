@@ -68,6 +68,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
       getTasks(
         objSelect(getQuery(q), ["fromTrackingTime", "toTrackingTime", "assigneeUserIds", "getAll"])
       ),
+    isIgnoreEventActionType: true,
     events: [EventType.TASKS_UPDATED, EventType.TASK_NEW, EventType.TASK_ARCHIVED],
   });
 

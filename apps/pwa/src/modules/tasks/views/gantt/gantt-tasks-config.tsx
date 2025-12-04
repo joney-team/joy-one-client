@@ -5,4 +5,5 @@ export const ganttConfig = {
   maxColumnSize: 300,
   rowHeight: 46,
   rangeDates: 10,
+  rowDroppableIndicatorHeight: 3,
 };

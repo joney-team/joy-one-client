@@ -1,12 +1,19 @@
 .GanttTasks {
+  overflow-x: hidden;
+  overflow-y: hidden;
+
   & .SidebarContainer {
     scrollbar-width: none;
     -ms-overflow-style: none;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   & .BodyContainer {
     scrollbar-width: none;
     -ms-overflow-style: none;
+    overflow-x: hidden;
+    overflow-y: hidden;
 
     & .Body {
       position: relative;
