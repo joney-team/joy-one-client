@@ -2,26 +2,13 @@
 
 import { DateFormat } from "@/components/format/date-format";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { useLayout } from "@/layout/layout-context";
-import { getClientLocale } from "@/modules/lang/lang-service";
-import { AppLocale } from "@/modules/lang/lang-types";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useColor } from "@/modules/theme/use-color";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import {
-  ActionIcon,
-  em,
-  getThemeColor,
-  Group,
-  rgba,
-  Stack,
-  Text,
-  Tooltip,
-  useMantineTheme,
-} from "@mantine/core";
+import { Trans } from "@lingui/react/macro";
+import { ActionIcon, Group, rgba, Stack, Text, Tooltip } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import {
   IconCalendarDown,
@@ -33,9 +20,8 @@ import {
   IconPlus,
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, useEffect } from "react";
-import { ganttConfig } from "./gantt.config";
-import { useGantt } from "./gantt.context";
-import { getWeeksFromRange } from "./gantt.utils";
+import { ganttConfig } from "./gantt-tasks-config";
+import { useGantt } from "./gantt-tasks-context";
 
 export const SidebarHead: FC = () => {
   const forceUpdate = useForceUpdate();
@@ -57,18 +43,26 @@ export const SidebarHead: FC = () => {
         top: 0,
         left: 0,
         zIndex: 10,
-        maxWidth: gantt.sidebarRef.current?.getBoundingClientRect().width,
+        maxWidth: "100%",
         transition: "max-width 0.3s ease-in-out",
         minHeight: ganttConfig.headHeight,
         maxHeight: ganttConfig.headHeight,
         borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
       }}
     >
-      <Text fz={em(13)}>{t`Name`}</Text>
+      <Text fz={13}>
+        <Trans>Name</Trans>
+      </Text>
 
       <Group gap={5}>
         <Tooltip
-          label={gantt.state.isHideEstimateTime ? t`Show estimate time` : t`Hide estimate time`}
+          label={
+            gantt.state.isHideEstimateTime ? (
+              <Trans>Show estimate time</Trans>
+            ) : (
+              <Trans>Hide estimate time</Trans>
+            )
+          }
         >
           <ActionIcon
             variant="subtle"
@@ -89,7 +83,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t`Show task color by status`}>
+        <Tooltip label={<Trans>Show task color by status</Trans>}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -106,7 +100,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t`Scroll to today`}>
+        <Tooltip label={<Trans>Scroll to today</Trans>}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -119,7 +113,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t`Create folder`}>
+        <Tooltip label={<Trans>Create folder</Trans>}>
           <ActionIcon
             variant="subtle"
             size="sm"
@@ -130,7 +124,7 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={t`Create task`}>
+        <Tooltip label={<Trans>Create task</Trans>}>
           <QuickCreateTaskInput>
             <ActionIcon component="div" variant="subtle" size="sm" color="gray">
               <IconPlus size={16} />
@@ -144,13 +138,7 @@ export const SidebarHead: FC = () => {
 
 export const BodyHead: FC = () => {
   const gantt = useGantt();
-  const layout = useLayout();
   const workspaceLayout = useWorkspaceLayout();
-  const weeks = getWeeksFromRange(
-    gantt.state.fromDate,
-    gantt.state.toDate,
-    getClientLocale() === AppLocale.VI
-  );
 
   return (
     <Stack
@@ -175,14 +163,14 @@ export const BodyHead: FC = () => {
         wrap="nowrap"
         style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
       >
-        {weeks.map((week, index) => {
+        {gantt.range.weeks.map((week, index) => {
           const first = index === 0;
 
           return (
             <Group
               key={index}
-              w={`${gantt.state.columnSize * week.dates.length}px`}
-              maw={`${gantt.state.columnSize * week.dates.length}px`}
+              w={`${gantt.state.columnSize * week.dates}px`}
+              maw={`${gantt.state.columnSize * week.dates}px`}
               style={{
                 borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}`,
               }}
@@ -192,17 +180,21 @@ export const BodyHead: FC = () => {
               gap={5}
               wrap="nowrap"
             >
-              {week.dates.length > 4 && (
-                <Text tt="capitalize" ta="center" fz={em(9)} fw={700}>
+              {week.dates > 4 && (
+                <Text tt="capitalize" ta="center" fz={9} fw={700}>
                   {(function () {
-                    const isSameMonth = DateTime.isSame(week.from, week.to, "month");
+                    const isSameMonth = DateTime.isSame(week.start, week.end, "month");
                     if (isSameMonth) {
                       return (
                         <Fragment>
-                          <DateFormat value={week.from} type="custom" format={{ day: "2-digit" }} />
+                          <DateFormat
+                            value={week.start}
+                            type="custom"
+                            format={{ day: "2-digit" }}
+                          />
                           {" - "}
                           <DateFormat
-                            value={week.to}
+                            value={week.end}
                             type="custom"
                             format={{ day: "2-digit", month: "long" }}
                           />
@@ -213,13 +205,13 @@ export const BodyHead: FC = () => {
                     return (
                       <Fragment>
                         <DateFormat
-                          value={week.from}
+                          value={week.start}
                           type="custom"
                           format={{ day: "2-digit", month: "short" }}
                         />
                         {" - "}
                         <DateFormat
-                          value={week.to}
+                          value={week.end}
                           type="custom"
                           format={{ day: "2-digit", month: "short" }}
                         />
@@ -229,8 +221,8 @@ export const BodyHead: FC = () => {
                 </Text>
               )}
 
-              <Text tt="capitalize" ta="center" fz={em(10)} fw={700}>
-                <DateFormat value={week.from} type="custom" format={{ year: "numeric" }} />
+              <Text tt="capitalize" ta="center" fz={10} fw={700}>
+                <DateFormat value={week.start} type="custom" format={{ year: "numeric" }} />
               </Text>
             </Group>
           );
@@ -238,22 +230,23 @@ export const BodyHead: FC = () => {
       </Group>
 
       <Group flex={1} gap={0} w="max-content" wrap="nowrap">
-        {gantt.dates.map((date, index) => {
+        {gantt.columns.map((column, index) => {
           const first = index === 0;
 
           return (
             <Group
               key={index}
-              w={gantt.state.columnSize}
               style={{
                 borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}`,
+                width: gantt.state.columnSize,
               }}
+              data-column-index={index}
               h="100%"
               justify="center"
             >
-              <Text ta="center" fz={em(10)}>
+              <Text ta="center" fz={10}>
                 <DateFormat
-                  value={date}
+                  value={column.start}
                   type="custom"
                   format={{ weekday: "narrow", day: "2-digit", month: "2-digit" }}
                 />
@@ -268,34 +261,30 @@ export const BodyHead: FC = () => {
 
 export const GridColumns: FC = () => {
   const gantt = useGantt();
-  const layout = useLayout();
-  const theme = useMantineTheme();
-  const workspaceLayout = useWorkspaceLayout();
   const color = useColor();
 
   return (
-    <Group
+    <div
       className="GanttBodyGridColumns"
-      w="max-content"
-      h="100%"
-      gap={0}
       style={{
         position: "absolute",
         top: 0,
         bottom: 0,
         left: 0,
         right: 0,
+        borderBottom: `1px solid var(--app-divider-color)`,
+        display: "flex",
       }}
     >
-      {gantt.dates.map((date, index) => {
-        const id = `column-${new Date(date).getTime()}`;
+      {gantt.columns.map((column, index) => {
+        const id = `column-${column.start.getTime()}`;
         const first = index === 0;
-        const isToday = DateTime.isSame(date, new Date(), "day");
-        const day = DateTime.normalizeDate(date).getDay();
+        const isToday = DateTime.isSame(column.start, new Date(), "day");
+        const day = DateTime.normalizeDate(column.start).getDay();
         const isWeekend = day === 0 || day === 6;
 
         return (
-          <Stack
+          <div
             id={id}
             key={index}
             style={{
@@ -303,19 +292,16 @@ export const GridColumns: FC = () => {
               borderLeft: first
                 ? undefined
                 : `${isToday ? 2 : 1}px solid ${
-                    isToday
-                      ? getThemeColor(color("primary.3"), theme)
-                      : workspaceLayout.dividerColor
+                    isToday ? color("primary.3") : `var(--app-divider-color)`
                   }`,
               position: "relative",
+              height: "100%",
+              background: isWeekend ? "var(--mantine-color-default-hover)" : undefined,
             }}
-            h="100%"
-            justify="start"
-            bg={isWeekend ? "var(--mantine-color-default-hover)" : undefined}
           />
         );
       })}
-    </Group>
+    </div>
   );
 };
 

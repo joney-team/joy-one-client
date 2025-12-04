@@ -1,17 +1,16 @@
 "use client";
 
 import OverlayLoading from "@/components/overlay-loading";
-import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { useWorkspaceStyles } from "@/modules/theme/use-workspace-styles";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { backgroundColors, backgroundPatternColors } from "@joy-one-client/config/colors";
+import { nonLoading } from "@/utils/non-loading";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { Stack } from "@mantine/core";
 import { useHeadroom } from "@mantine/hooks";
 import dynamic from "next/dynamic";
-import { Fragment, useEffect, type FC } from "react";
+import { Fragment, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
-import { nonLoading } from "@/utils/non-loading";
 
 const WorkspaceNavigation = dynamic(
   () => import("./navigation/workspace-navigation").then((m) => m.WorkspaceNavigation),
@@ -41,7 +40,8 @@ export const LayoutWorkspace: FC = () => {
   const layout = useLayout();
   const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
-  const colorScheme = useColorScheme();
+
+  useWorkspaceStyles();
 
   const headroom = useHeadroom({
     fixedAt:
@@ -52,21 +52,6 @@ export const LayoutWorkspace: FC = () => {
 
   const headPinned =
     layout.view === "mobile" && !layout.isStandalone ? !layout.isBrowerCollapsed : headroom;
-
-  useEffect(() => {
-    const backgroundColor = backgroundColors[colorScheme];
-    const patternColor = backgroundPatternColors[colorScheme];
-
-    document.body.style.backgroundColor = backgroundColor;
-    document.body.style.backgroundImage = `radial-gradient(${patternColor} 0.6px, ${backgroundColor} 0.6px)`;
-    document.body.style.backgroundSize = "12px 12px";
-
-    return () => {
-      document.body.style.backgroundColor = "var(--mantine-color-body)";
-      document.body.style.backgroundImage = "none";
-      document.body.style.backgroundSize = "none";
-    };
-  }, [colorScheme]);
 
   return (
     <Fragment>

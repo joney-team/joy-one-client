@@ -4,7 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor";
 import { DateFormat } from "@/components/format/date-format";
-import { NumberFormat } from "@/components/format/number-format";
 import { Hovered } from "@/components/hovered";
 import { DueDateInput } from "@/components/inputs/due-date-input";
 import { EstimateTimeInput } from "@/components/inputs/estimate-time-input";
@@ -19,7 +18,6 @@ import { TagsInput } from "@/modules/tags/components/tags-input";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
-import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { getTaskProgress, getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskPriority } from "@/modules/tasks/tasks-types";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
@@ -31,13 +29,10 @@ import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
-  Card,
   Center,
-  Divider,
   em,
   Group,
   Menu,
-  Progress,
   SimpleGrid,
   Stack,
   Text,
@@ -56,9 +51,7 @@ import {
   IconFlagFilled,
   IconHourglassHigh,
   IconPlaystationCircle,
-  IconPlus,
   IconStopwatch,
-  IconSubtask,
   IconTags,
   IconTopologyStar3,
   IconUser,
@@ -76,8 +69,6 @@ import CREATE_TASK_MUTATION, {
 } from "../queries/mutationCreateTask.graphql";
 import QUERY_TASKS from "../queries/queryTasks.graphql";
 import { taskPriorities } from "../task-constants";
-import { TasksDndProvider } from "../tasks-dnd-provider";
-import { ListTaskRowHead } from "../views/list/list-task-row-head";
 
 export interface TaskFormProps {
   task?: TaskDataFragment;

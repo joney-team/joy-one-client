@@ -53,6 +53,7 @@ export const LayoutSplit: FC<PropsWithChildren<LayoutSplitProps>> = (props) => {
       ref={mouse.ref}
       style={{
         cursor: isResizing ? "col-resize" : undefined,
+        zIndex: 10,
       }}
     >
       {props.children}
@@ -68,6 +69,7 @@ export const LayoutSplit: FC<PropsWithChildren<LayoutSplitProps>> = (props) => {
             left: `${pointerX.current * 100}%`,
             transform: "translateX(-50%)",
             cursor: "col-resize",
+            zIndex: 10,
           }}
         />
       )}
@@ -80,6 +82,7 @@ export const LayoutSplit: FC<PropsWithChildren<LayoutSplitProps>> = (props) => {
         style={{
           left: `${value * 100}%`,
           transform: "translateX(-50%)",
+          zIndex: 10,
         }}
         align="center"
         justify="center"

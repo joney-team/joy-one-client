@@ -62,6 +62,10 @@ export const WorkspaceNavigation: FC = () => {
     return true;
   });
 
+  const navigationGroup = useMemo(() => {
+    return getNavigationGroups(components, availableModules);
+  }, [components, availableModules]);
+
   if (!workspace.isAvailable) return null;
 
   if (layout.view === "mobile") {
@@ -194,10 +198,6 @@ export const WorkspaceNavigation: FC = () => {
       </Group>
     );
   }
-
-  const navigationGroup = useMemo(() => {
-    return getNavigationGroups(components, availableModules);
-  }, [components, availableModules]);
 
   return (
     <Fragment>

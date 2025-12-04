@@ -4,5 +4,5 @@ export const ganttConfig = {
   minColumnSize: 80,
   maxColumnSize: 300,
   rowHeight: 46,
-  rangeDates: 15,
+  rangeDates: 10,
 };

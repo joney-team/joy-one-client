@@ -1,19 +1,14 @@
-import { TaskStatus } from "@/modules/tasks/tasks-types";
-
-import { TaskEntity } from "@/modules/tasks/tasks-types";
-
-import { TagEntity } from "@/modules/tags/tags-types";
+import { DateTimeUnit } from "@joy-one-client/utils/date-time";
 
 import { SetStateAction } from "react";
 
 import { Dispatch } from "react";
-
-import { RefObject } from "react";
+import { getDateRangeBreakdown } from "./gantt-tasks-utils";
 
 export type ScrollDirection = "vertical" | "horizontal";
-export type Pointer = "sidebar" | "body" | null;
 
 export interface GanttState {
+  unit: DateTimeUnit;
   fromDate: Date;
   toDate: Date;
   columnSize: number;
@@ -50,13 +45,7 @@ export type UseGantt = {
   state: GanttState;
   setState: (state: GanttState) => void;
   dividerPosition: number;
-  sidebarRef: RefObject<HTMLDivElement | null>;
-  contentBodyRef: RefObject<HTMLDivElement | null>;
   changeColumnSize: (size: number) => void;
-  tasksState: GanttTaskStates;
-  setTaskState: (taskId: string, state?: GanttTaskState) => void;
-  foldersState: GanttFolderStates;
-  setFolderState: (folderId: string, state?: GanttFolderState) => void;
   sidebarWidth: number;
   setSidebarWidth: Dispatch<SetStateAction<number>>;
   sidebarContentWidth: number;
@@ -64,12 +53,11 @@ export type UseGantt = {
   sidebarContentScrollPosition: number;
   setSidebarContentScrollPosition: Dispatch<SetStateAction<number>>;
   scrollToDate: ScrollToDateArgs;
-  tasks: TaskEntity[];
-  dates: Date[];
   toggleSisplayTaskStatusColor: () => void;
-  statuses: TaskStatus[];
   setActiveLayout: (layout?: GanttLayout) => void;
   activeLayout: GanttLayout | null;
   scrollDirection: ScrollDirection | null;
   isScrolling: boolean;
+  range: ReturnType<typeof getDateRangeBreakdown>;
+  columns: { start: Date; end: Date }[];
 };

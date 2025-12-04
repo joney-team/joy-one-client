@@ -1,16 +1,66 @@
 .GanttTasks {
-  opacity: 1;
-
-  & :global(.gantt_layout_root) {
-    border: none;
+  & .SidebarContainer {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
-  & :global(.gantt_task_content) {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 90%;
-    padding-left: 0.6rem;
-    text-align: left;
+  & .BodyContainer {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    & .Body {
+      position: relative;
+    }
+  }
+
+  & .TaskRowData {
+    & .DragHandle {
+      opacity: 0;
+    }
+
+    &[hovered="true"],
+    &:hover {
+      background: var(--mantine-color-gray-outline-hover);
+
+      & .DragHandle {
+        opacity: 1;
+      }
+    }
+  }
+
+  & .TaskRowTimeline {
+    position: relative;
+
+    &[hovered="true"],
+    &:hover {
+      background: var(--mantine-color-gray-outline-hover);
+    }
+
+    & .MovePointer {
+      position: absolute;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-width: 2px;
+      border-style: solid;
+      top: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      border-radius: 20rem;
+    }
+
+    & .EstimatingPointer {
+      position: absolute;
+      height: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 5rem;
+    }
+
+    & .EstimatedRange {
+      position: absolute;
+      height: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 5rem;
+    }
   }
 }
