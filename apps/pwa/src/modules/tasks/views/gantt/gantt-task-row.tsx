@@ -497,6 +497,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
             variables: groupVariables,
           },
         ],
+        awaitRefetchQueries: true,
       });
     } catch (error) {
       onError(error);
