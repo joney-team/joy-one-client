@@ -408,6 +408,8 @@ type Task {
   assigneeUserIds: [String!]!
   assigneeUsers: [WorkspaceMemberInfo!]!
   childCount: Float!
+  childOrders: [Float!]
+  childProgress: Float
   closedAt: Float
   code: String!
   createdAt: Float

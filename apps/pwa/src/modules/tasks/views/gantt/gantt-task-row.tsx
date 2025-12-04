@@ -1,6 +1,6 @@
 "use client";
 
-import { ActionIcon, Group, Text } from "@mantine/core";
+import { ActionIcon, Card, Group, Portal, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {
   FC,
   Fragment,
@@ -17,25 +17,53 @@ import { ganttConfig } from "./gantt-tasks-config";
 
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { useColor } from "@/modules/theme/use-color";
+import { useLazyQuery } from "@apollo/client/react";
+import { DateTime } from "@joy-one-client/utils/date-time";
+import { Trans } from "@lingui/react/macro";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { IconGripVertical, IconMaximize } from "@tabler/icons-react";
+import { IconGripVertical, IconMaximize, IconPlus, IconSubtask } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
+import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
+import { ModalCreateTask } from "../../modals/modal-create-task";
+import TASKS_QUERY, {
+  type TasksQuery,
+  type TasksQueryVariables,
+} from "../../queries/queryTasks.graphql";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { useGantt } from "./gantt-tasks-context";
 import { useGanttRefs } from "./gantt-tasks-refs";
+
+import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
+import {
+  draggable,
+  dropTargetForElements,
+  monitorForElements,
+} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
+
 import styles from "./gantt-tasks.module.css";
-import { DateTime } from "@joy-one-client/utils/date-time";
 
 interface GanttTaskRowProps {
   task: TaskDataFragment;
+  prevTask?: TaskDataFragment;
+  nextTask?: TaskDataFragment;
+  nextParentTask?: TaskDataFragment;
+  groupVariables?: TasksQueryVariables;
 }
 
-export const GanttTaskRow: FC<GanttTaskRowProps> = ({ task }) => {
+export const GanttTaskRow: FC<GanttTaskRowProps> = ({
+  task,
+  nextTask,
+  nextParentTask,
+  groupVariables,
+}) => {
+  const color = useColor();
   const gantt = useGantt();
   const router = useRouter();
   const ganttRefs = useGanttRefs();
   const { updateTasks } = useUpdateTasks();
+
+  const isLastChild = Boolean(task.parent) && !nextTask;
 
   const [isNameEditing, setIsNameEditing] = useState(false);
 
@@ -45,9 +73,176 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({ task }) => {
   const estimatingPointerRef = useRef<HTMLDivElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
   const estimatedRangeRef = useRef<HTMLDivElement>(null);
-
-  const color = useColor();
   const estimatingStartRef = useRef<number | null>(null);
+
+  const [isShowSubtasks, setIsShowSubtasks] = useState(true);
+  const [getSubtasks, { data: subtasksData }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
+    TASKS_QUERY,
+    {
+      nextFetchPolicy: "cache-and-network",
+    }
+  );
+
+  const subtasks = useMemo(() => {
+    return Array.from(subtasksData?.tasks.data ?? []).sort((a, b) => a.order - b.order);
+  }, [subtasksData?.tasks.data]);
+
+  const subTasksGroupVariables = useMemo<TasksQueryVariables>(() => {
+    return {
+      parentId: task._id,
+      all: true,
+    };
+  }, [task._id]);
+
+  useEffect(() => {
+    if (isShowSubtasks) getSubtasks({ variables: subTasksGroupVariables });
+  }, [task._id, subTasksGroupVariables]);
+
+  const [isDragging, setIsDragging] = useState(false);
+  const draggingRef = useRef<HTMLDivElement>(null);
+  const draggingRefContainer = useRef<HTMLElement | null>(null);
+
+  const droppableBottomSiblingRef = useRef<HTMLDivElement>(null);
+  const droppableBottomChildrenRef = useRef<HTMLDivElement>(null);
+  const droppableIndicatorBottomRef = useRef<HTMLDivElement>(null);
+  const droppableIndicatorBottomIndentRef = useRef<HTMLDivElement>(null);
+
+  // Drag drop handlers
+  useEffect(() => {
+    if (
+      !draggingRef.current ||
+      !droppableBottomSiblingRef.current ||
+      !droppableBottomChildrenRef.current
+    )
+      return;
+
+    return combine(
+      draggable({
+        element: draggingRef.current,
+        getInitialData() {
+          return { task, groupVariables };
+        },
+        onDrop() {
+          setIsDragging(false);
+        },
+        onGenerateDragPreview: ({ nativeSetDragImage }) => {
+          setCustomNativeDragPreview({
+            nativeSetDragImage,
+            getOffset: () => ({ x: 24, y: 24 }),
+            render: ({ container }) => {
+              draggingRefContainer.current = container;
+              setIsDragging(true);
+            },
+          });
+        },
+      }),
+      // Sibling bottom drop target
+      dropTargetForElements({
+        element: droppableBottomSiblingRef.current,
+        canDrop({ source }) {
+          const sourceTask = source.data.task as TaskDataFragment;
+          if (!sourceTask) return false;
+
+          if (isLastChild && !sourceTask.parentId && sourceTask._id !== task.parentId) {
+            return true;
+          }
+
+          return (
+            sourceTask._id !== task._id &&
+            sourceTask._id !== task.parentId &&
+            sourceTask._id !== nextTask?._id &&
+            !task.parentId
+          );
+        },
+        onDragEnter() {
+          droppableIndicatorBottomRef.current?.style.setProperty("display", "block");
+        },
+        onDragLeave() {
+          droppableIndicatorBottomRef.current?.style.setProperty("display", "none");
+        },
+        onDrop({ source }) {
+          const sourceTask = source.data.task as TaskDataFragment;
+          if (!sourceTask) return;
+
+          const context: UpdateTaskContext = {
+            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            toGroupVariables: groupVariables,
+          };
+
+          if (isLastChild) {
+            if (!task.parent) return;
+
+            return updateTasks({
+              _id: sourceTask._id,
+              parent: null,
+              folder: task.parent.folder ?? null,
+              order: ((nextParentTask?.order ?? task.parent.order * 2) + task.parent.order) / 2,
+              context,
+            });
+          }
+
+          return updateTasks({
+            _id: sourceTask._id,
+            parent: null,
+            order: ((nextTask?.order ?? task.order * 2) + task.order) / 2,
+            folder: task.folder ?? null,
+            context,
+          });
+        },
+      }),
+      // Children bottom drop target
+      dropTargetForElements({
+        element: droppableBottomChildrenRef.current,
+        canDrop({ source }) {
+          const sourceTask = source.data.task as TaskDataFragment;
+          if (!sourceTask) return false;
+
+          return (
+            sourceTask._id !== task._id &&
+            sourceTask._id !== task.parentId &&
+            sourceTask.childCount === 0
+          );
+        },
+        onDragEnter() {
+          droppableIndicatorBottomIndentRef.current?.style.setProperty("display", "block");
+        },
+        onDragLeave() {
+          droppableIndicatorBottomIndentRef.current?.style.setProperty("display", "none");
+        },
+        onDrop({ source }) {
+          const sourceTask = source.data.task as TaskDataFragment;
+          if (!sourceTask) return;
+
+          const context: UpdateTaskContext = {
+            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            toGroupVariables: task.parent ? groupVariables : subTasksGroupVariables,
+          };
+
+          const newOrder = ((nextTask?.order ?? task.order * 2) + task.order) / 2;
+
+          return updateTasks({
+            _id: sourceTask._id,
+            parent: task.parent ?? task,
+            folder: task.folder ?? null,
+            order: newOrder,
+            context,
+          });
+        },
+      }),
+      monitorForElements({
+        onDragStart: () => {
+          droppableBottomSiblingRef.current?.style.setProperty("display", "block");
+          droppableBottomChildrenRef.current?.style.setProperty("display", "block");
+        },
+        onDrop() {
+          droppableBottomSiblingRef.current?.style.setProperty("display", "none");
+          droppableBottomChildrenRef.current?.style.setProperty("display", "none");
+          droppableIndicatorBottomRef.current?.style.setProperty("display", "none");
+          droppableIndicatorBottomIndentRef.current?.style.setProperty("display", "none");
+        },
+      })
+    );
+  }, [task, nextTask, nextParentTask, groupVariables, subTasksGroupVariables]);
 
   const onUpdateName = useDebouncedCallback((name: string) => {
     if (!task._id || name === task.name) return;
@@ -58,15 +253,15 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({ task }) => {
     router.push(updateTaskPath(location.pathname, { code: task.code }));
   };
 
+  const syncPosition = useCallback(() => {
+    const offsetTop = taskDataRef.current?.offsetTop ?? 0;
+    const top = offsetTop - ganttConfig.headHeight;
+    taskTimelineRef.current?.style.setProperty("top", `${top}px`);
+    taskTimelineRef.current?.style.setProperty("opacity", `1`);
+  }, [taskDataRef, taskTimelineRef]);
+
   useEffect(() => {
     if (!taskTimelineRef.current || !taskDataRef.current) return;
-
-    const syncPosition = () => {
-      const offsetTop = taskDataRef.current?.offsetTop ?? 0;
-      const top = offsetTop - ganttConfig.headHeight;
-      taskTimelineRef.current?.style.setProperty("top", `${top}px`);
-      taskTimelineRef.current?.style.setProperty("opacity", `1`);
-    };
 
     syncPosition();
 
@@ -80,7 +275,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({ task }) => {
     return () => {
       mutationObserver.disconnect();
     };
-  }, [task._id]);
+  }, [task._id, syncPosition]);
 
   const onTaskTimelineMouseMove: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!taskTimelineRef.current) return;
@@ -183,6 +378,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({ task }) => {
         ref={taskDataRef}
         className={styles.TaskRowData}
         w="100%"
+        bg={isDragging ? "gray.1" : "transparent"}
         miw={0}
         gap={0}
         style={{
@@ -202,13 +398,21 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({ task }) => {
         wrap="nowrap"
       >
         <ActionIcon
+          ref={draggingRef}
           className={styles.DragHandle}
           variant="transparent"
           color="gray"
+          component="div"
           style={{ cursor: "move", outline: "none" }}
         >
           <IconGripVertical size={16} strokeWidth={1.2} />
         </ActionIcon>
+
+        {task.parent && (
+          <ThemeIcon color="gray" variant="transparent" ml={10}>
+            <IconSubtask size={16} strokeWidth={1.5} />
+          </ThemeIcon>
+        )}
 
         {isNameEditing ? (
           <ContentEditable
@@ -220,78 +424,187 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({ task }) => {
             onBlur={() => setIsNameEditing(false)}
           />
         ) : (
-          <Text
-            fz={14}
-            fw={500}
-            flex={1}
-            truncate
-            onClick={() => setIsNameEditing(true)}
-            className="clickable"
-          >
-            {task.name}
-          </Text>
+          <Tooltip label={task._id}>
+            <Text
+              fz={14}
+              fw={500}
+              flex={1}
+              truncate
+              onClick={() => setIsNameEditing(true)}
+              className="clickable"
+            >
+              {task.name}{" "}
+            </Text>
+          </Tooltip>
         )}
 
-        <Group ref={actionsRef} px={8} style={{ display: "none" }}>
-          <ActionIcon variant="subtle" color="gray" onClick={openTask}>
+        <Group ref={actionsRef} px={8} style={{ display: "none" }} gap={2}>
+          <ActionIcon variant="subtle" size="sm" color="gray" onClick={openTask}>
             <IconMaximize size={16} />
           </ActionIcon>
+
+          {!task.parent && (
+            <ModalCreateTask>
+              {(open) => (
+                <Tooltip.Floating label={<Trans>Create subtask</Trans>} offset={16}>
+                  <ActionIcon
+                    variant="subtle"
+                    color="gray"
+                    component="div"
+                    size="sm"
+                    onClick={() =>
+                      open({
+                        initial: { parent: task },
+                        onCreated: () => {
+                          setIsShowSubtasks(true);
+                        },
+                      })
+                    }
+                  >
+                    <IconPlus size={16} />
+                  </ActionIcon>
+                </Tooltip.Floating>
+              )}
+            </ModalCreateTask>
+          )}
         </Group>
+
+        <div
+          ref={droppableIndicatorBottomRef}
+          style={{
+            position: "absolute",
+            height: 2,
+            background: color("primary"),
+            width: "100%",
+            right: 0,
+            bottom: 0,
+            display: "none",
+          }}
+        />
+
+        <div
+          ref={droppableIndicatorBottomIndentRef}
+          style={{
+            position: "absolute",
+            height: 2,
+            background: color("orange"),
+            width: "calc(100% - 46px)",
+            right: 0,
+            bottom: 0,
+            display: "none",
+          }}
+        />
+
+        <div
+          ref={droppableBottomSiblingRef}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: "none",
+            opacity: 0,
+            zIndex: 1,
+          }}
+        />
+
+        <div
+          ref={droppableBottomChildrenRef}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: "20%",
+            right: 0,
+            bottom: 0,
+            display: "none",
+            opacity: 0,
+            zIndex: 2,
+            overflow: "visible",
+          }}
+        />
       </Group>
 
-      {createPortal(
-        <Fragment>
-          <div
-            ref={taskTimelineRef}
-            className={styles.TaskRowTimeline}
-            style={{
-              position: "absolute",
-              minHeight: ganttConfig.rowHeight,
-              maxHeight: ganttConfig.rowHeight,
-              width: "100%",
-              left: 0,
-              zIndex: 1,
-              opacity: 0,
-            }}
-            onMouseMove={onTaskTimelineMouseMove}
-            onMouseDown={onTaskTimelineMouseDown}
-            onMouseUp={onTaskTimelineMouseUp}
-            onMouseEnter={() => {
-              taskDataRef.current?.setAttribute("hovered", "true");
-            }}
-            onMouseLeave={() => {
-              taskDataRef.current?.removeAttribute("hovered");
-              movePointerRef.current?.style.setProperty("opacity", `0`);
-            }}
-          >
+      {ganttRefs.body.current &&
+        createPortal(
+          <Fragment>
             <div
-              ref={movePointerRef}
-              className={styles.MovePointer}
-              style={{ borderColor: color("primary.3"), opacity: 0 }}
-            />
-
-            <div
-              ref={estimatingPointerRef}
-              className={styles.EstimatingPointer}
-              style={{ background: color("primary.3"), opacity: 0 }}
-            />
-
-            {estimated && (
+              ref={taskTimelineRef}
+              className={styles.TaskRowTimeline}
+              style={{
+                position: "absolute",
+                minHeight: ganttConfig.rowHeight,
+                maxHeight: ganttConfig.rowHeight,
+                width: "100%",
+                left: 0,
+                zIndex: 1,
+                opacity: 0,
+              }}
+              onMouseMove={onTaskTimelineMouseMove}
+              onMouseDown={onTaskTimelineMouseDown}
+              onMouseUp={onTaskTimelineMouseUp}
+              onMouseEnter={() => {
+                taskDataRef.current?.setAttribute("hovered", "true");
+              }}
+              onMouseLeave={() => {
+                taskDataRef.current?.removeAttribute("hovered");
+                movePointerRef.current?.style.setProperty("opacity", `0`);
+              }}
+            >
               <div
-                ref={estimatedRangeRef}
-                className={styles.EstimatedRange}
-                style={{
-                  left: estimated?.left,
-                  width: estimated?.width,
-                  background: color("primary.4"),
-                }}
+                ref={movePointerRef}
+                className={styles.MovePointer}
+                style={{ borderColor: color("primary.3"), opacity: 0 }}
               />
-            )}
-          </div>
-        </Fragment>,
-        ganttRefs.body.current,
-        task._id + "-timeline"
+
+              <div
+                ref={estimatingPointerRef}
+                className={styles.EstimatingPointer}
+                style={{ background: color("primary.3"), opacity: 0 }}
+              />
+
+              {estimated && (
+                <div
+                  ref={estimatedRangeRef}
+                  className={styles.EstimatedRange}
+                  style={{
+                    left: estimated?.left,
+                    width: estimated?.width,
+                    background: color("primary.4"),
+                  }}
+                />
+              )}
+            </div>
+          </Fragment>,
+          ganttRefs.body.current,
+          task._id + "-timeline"
+        )}
+
+      {isDragging && draggingRefContainer.current && (
+        <Portal target={draggingRefContainer.current}>
+          <Card
+            shadow="xs"
+            px={16}
+            style={{ width: taskDataRef.current?.getBoundingClientRect().width }}
+          >
+            <Text fz="sm" fw={500} truncate>
+              {task.name}
+            </Text>
+          </Card>
+        </Portal>
       )}
+
+      {isShowSubtasks &&
+        subtasks.map((subtask, subtaskIndex) => (
+          <GanttTaskRow
+            key={subtask._id + subtaskIndex + "subtask"}
+            task={subtask}
+            prevTask={subtasks[subtaskIndex - 1]}
+            nextTask={subtasks[subtaskIndex + 1]}
+            nextParentTask={nextTask}
+            groupVariables={subTasksGroupVariables}
+          />
+        ))}
     </Fragment>
   );
 };

@@ -15,7 +15,7 @@ import { IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useRef } from "react";
 
 export const ModalCreateTask: FC<{
-  children: (open: (props?: TaskFormProps) => void) => ReactNode;
+  children: (open: (args?: TaskFormProps) => void) => ReactNode;
 }> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
@@ -24,8 +24,8 @@ export const ModalCreateTask: FC<{
 
   return (
     <Fragment>
-      {children((p) => {
-        props.current = p ?? null;
+      {children((args) => {
+        props.current = args ?? null;
         open();
       })}
 
@@ -43,8 +43,8 @@ export const ModalCreateTask: FC<{
         zIndex={zIndexes.commonModals + 1}
       >
         <Stack gap={10} pb={layout.view === "mobile" ? 16 * 2 : 0}>
-          <Renderer visible={!!props.current?.initial?.folder}>
-            <Group gap={5} align="center" wrap="nowrap" ml={-8} mt={5}>
+          <Renderer visible={Boolean(props.current?.initial)}>
+            <Group gap={4} align="center" wrap="nowrap" pt={8}>
               {props.current?.initial?.folder && (
                 <Button
                   size="compact-sm"
@@ -63,13 +63,11 @@ export const ModalCreateTask: FC<{
               )}
 
               {!!props.current?.initial?.folder && !!props.current?.initial?.parent && (
-                <Text>/</Text>
+                <Text c="gray">/</Text>
               )}
 
               {props.current?.initial?.parent && (
                 <Button
-                  fz={em(15)}
-                  fw={500}
                   leftIcon={IconStack2}
                   size="compact-sm"
                   variant="subtle"
@@ -86,9 +84,9 @@ export const ModalCreateTask: FC<{
                 </Button>
               )}
 
-              <Text>/</Text>
+              <Text c="gray">/</Text>
 
-              <Text px={8} fz={em(14)} fw={300}>
+              <Text px={5} fz={12} fw={300}>
                 <Trans>New Task</Trans>
               </Text>
             </Group>

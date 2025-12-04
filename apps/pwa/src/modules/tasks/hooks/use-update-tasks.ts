@@ -74,12 +74,12 @@ const normalizeTaskForSubmit = (
     input.estimatedTime = task.estimatedTime;
   }
 
-  if ("folderId" in task) {
-    input.folderId = task.folderId;
+  if ("folder" in task) {
+    input.folderId = task.folder?._id ?? null;
   }
 
-  if ("parentId" in task) {
-    input.parentId = task.parentId;
+  if ("parent" in task) {
+    input.parentId = task.parent?._id ?? null;
   }
 
   if ("partners" in task) {
@@ -126,6 +126,7 @@ export const useUpdateTasks = () => {
           // Change status
           if (
             updatedTask.status &&
+            updatedTask.context?.fromGroupVariables?.status &&
             updatedTask.context?.fromGroupVariables &&
             updatedTask.context?.toGroupVariables
           ) {
@@ -153,6 +154,52 @@ export const useUpdateTasks = () => {
               {
                 query: QUERY_TASKS,
                 variables: updatedTask.context.toGroupVariables,
+                overwrite: true,
+              },
+              (prev) => {
+                if (!prev) return prev;
+                return {
+                  ...prev,
+                  tasks: {
+                    ...prev.tasks,
+                    data: [
+                      ...prev.tasks.data.filter((t) => t._id !== updatedData._id),
+                      updatedData,
+                    ],
+                  },
+                };
+              }
+            );
+          }
+
+          if (
+            updatedTask.parent &&
+            updatedTask.parent._id !== currentData.parent?._id &&
+            updatedTask.context?.fromGroupVariables &&
+            updatedTask.context?.toGroupVariables
+          ) {
+            client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
+              {
+                query: QUERY_TASKS,
+                variables: updatedTask.context?.fromGroupVariables,
+                overwrite: true,
+              },
+              (prev) => {
+                if (!prev) return prev;
+                return {
+                  ...prev,
+                  tasks: {
+                    ...prev.tasks,
+                    data: [...prev.tasks.data.filter((t) => t._id !== currentData._id)],
+                  },
+                };
+              }
+            );
+
+            client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
+              {
+                query: QUERY_TASKS,
+                variables: updatedTask.context?.toGroupVariables,
                 overwrite: true,
               },
               (prev) => {

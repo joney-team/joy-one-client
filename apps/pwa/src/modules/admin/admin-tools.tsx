@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { SectionTitle } from "@/components/session-title";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { Card, Group, Stack, Textarea } from "@mantine/core";
+import { Card, Divider, Group, Stack, Textarea } from "@mantine/core";
 import {
   IconCalendar,
   IconClipboard,
@@ -48,7 +48,13 @@ export const AdminTools: FC = () => {
             Migrate Tag Folder ID to Folder ID
           </Button>
 
+          <Button onClick={() => api.patch(`/tasks/trigger-sync-all-tasks`)}>
+            Trigger Sync All Tasks
+          </Button>
+
           <Button onClick={() => api.patch(`/files/migrate-file-refs`)}>Migrate file refs</Button>
+
+          <Divider miw="100%" />
 
           <Button onClick={() => api.patch(`/loans/migrate-created-at`)}>
             Migrate Loan Created At

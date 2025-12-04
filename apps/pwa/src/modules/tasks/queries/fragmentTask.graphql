@@ -8,6 +8,7 @@ fragment TaskData on Task {
 
   folderId
   childCount
+  childOrders
 
   startDate
   dueDate
@@ -15,6 +16,7 @@ fragment TaskData on Task {
 
   priority
   progress
+  childProgress
 
   partners {
     _id
@@ -47,6 +49,14 @@ fragment TaskData on Task {
     _id
     name
     code
+    order
+    folderId
+
+    folder {
+      _id
+      color
+      name
+    }
   }
 
   tags {

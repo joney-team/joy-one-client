@@ -20,27 +20,19 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
-import { useDisclosure, useHover } from "@mantine/hooks";
+import { useHover } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, useEffect, useState } from "react";
 import { DetailFooter } from "./components/detail-footer";
 
-import dynamic from "next/dynamic";
+import { TaskDetailHead } from "./components/detail-head";
 import { TaskDataFragment } from "./queries/fragmentTask.graphql";
 import QUERY_TASK_BY_CODE, {
   type TaskByCodeQuery,
   type TaskByCodeQueryVariables,
 } from "./queries/queryTaskByCode.graphql";
 import { TaskDetailSubtasks } from "./task-detail-subtasks";
-
-const TaskDetailHead = dynamic(
-  () => import("./components/detail-head").then((mod) => mod.TaskDetailHead),
-  {
-    ssr: false,
-    loading: () => <Skeleton h="100%" w="100%" />,
-  }
-);
 
 export const TaskDetail: FC = () => {
   const router = useRouter();

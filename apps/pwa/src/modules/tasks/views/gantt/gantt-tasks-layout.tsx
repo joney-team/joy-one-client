@@ -292,7 +292,7 @@ export const GridColumns: FC = () => {
               borderLeft: first
                 ? undefined
                 : `${isToday ? 2 : 1}px solid ${
-                    isToday ? color("primary.3") : `var(--app-divider-color)`
+                    isToday ? color("primary.1") : `var(--app-divider-color)`
                   }`,
               position: "relative",
               height: "100%",

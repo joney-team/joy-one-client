@@ -633,6 +633,8 @@ export type Task = {
   assigneeUserIds: Array<Scalars['String']['output']>;
   assigneeUsers: Array<WorkspaceMemberInfo>;
   childCount: Scalars['Float']['output'];
+  childOrders: Maybe<Array<Scalars['Float']['output']>>;
+  childProgress: Maybe<Scalars['Float']['output']>;
   closedAt: Maybe<Scalars['Float']['output']>;
   code: Scalars['String']['output'];
   createdAt: Maybe<Scalars['Float']['output']>;

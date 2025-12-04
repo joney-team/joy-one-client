@@ -87,6 +87,9 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: A
         },
       }),
       Tooltip: Tooltip.extend({
+        defaultProps: {
+          openDelay: 300,
+        },
         styles: {
           tooltip: {
             fontSize: 13,

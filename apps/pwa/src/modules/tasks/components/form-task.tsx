@@ -73,6 +73,7 @@ import { taskPriorities } from "../task-constants";
 export interface TaskFormProps {
   task?: TaskDataFragment;
   initial?: Partial<TaskDataFragment>;
+  onCreated?: (id: string) => void;
   onClose?: () => void;
 }
 
@@ -167,6 +168,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         )
       );
 
+      props.onCreated?.(newTask.createTask._id);
       props.onClose?.();
     } catch (error) {
       onError(error);

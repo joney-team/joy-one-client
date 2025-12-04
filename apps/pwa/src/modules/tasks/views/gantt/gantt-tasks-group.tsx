@@ -6,7 +6,7 @@ import { useLazyQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Text } from "@mantine/core";
 import { IconFolder, IconFolderOpen, IconPlus } from "@tabler/icons-react";
-import { Fragment, useEffect, useState, type FC } from "react";
+import { Fragment, useEffect, useMemo, useState, type FC } from "react";
 import { ModalCreateTask } from "../../modals/modal-create-task";
 import QUERY_TASKS, {
   type TasksQuery,
@@ -36,11 +36,22 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
     fetchPolicy: "network-only",
   });
 
+  const tasks = useMemo(() => {
+    return Array.from(data?.tasks.data ?? []).sort((a, b) => a.order - b.order);
+  }, [data]);
+
+  const groupVariables = useMemo(() => {
+    return {
+      folderId: folder?._id ?? "none",
+      parentId: "root",
+    };
+  }, [folder?._id]);
+
   useEffect(() => {
     if (opened) {
-      getTasks({ variables: { folderId: folder?._id ?? null, parentId: "root" } });
+      getTasks({ variables: groupVariables });
     }
-  }, [folder?._id, opened]);
+  }, [folder?._id, opened, groupVariables]);
 
   return (
     <Fragment>
@@ -86,7 +97,16 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
         </ModalCreateTask>
       )}
 
-      {opened && data?.tasks.data.map((task) => <GanttTaskRow key={task._id} task={task} />)}
+      {opened &&
+        tasks.map((task, taskIndex) => (
+          <GanttTaskRow
+            key={task._id + taskIndex + "root"}
+            task={task}
+            prevTask={tasks[taskIndex - 1]}
+            nextTask={tasks[taskIndex + 1]}
+            groupVariables={groupVariables}
+          />
+        ))}
     </Fragment>
   );
 };
