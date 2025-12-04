@@ -258,7 +258,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
 
               {(loading || isFetchingMore) && (
                 <Fragment>
-                  {new Array(Math.min(limit, data ? data.tasks.count - tasks.length : limit))
+                  {new Array(Math.min(limit, data ? data.tasks.count - tasks.length : limit, 0))
                     .fill(0)
                     .map((_, index) => (
                       <Skeleton key={index} mih={220} />
