@@ -8,7 +8,10 @@ fragment TaskData on Task {
 
   folderId
   childCount
-  childOrders
+  childOrder {
+    first
+    last
+  }
 
   startDate
   dueDate

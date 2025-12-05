@@ -27,6 +27,7 @@ export const TasksRealtimeEvents: FC = () => {
         variables: {
           id: ev.ref,
         },
+        fetchPolicy: "network-only",
       });
 
       if (task.data?.task) {
@@ -40,7 +41,7 @@ export const TasksRealtimeEvents: FC = () => {
             id: identifiedId,
             fragment: TASK_FRAGMENT,
           },
-          () => task.data?.task
+          (prev) => task.data?.task ?? prev
         );
       }
     },

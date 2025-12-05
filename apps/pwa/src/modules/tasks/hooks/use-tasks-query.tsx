@@ -35,12 +35,12 @@ export const useTasksQuery = ({
     fetchTasksCount({ variables });
   }, [fetchTasksCount, variables, isSkipLoadCount]);
 
-  const [fetchTasks, { data, loading, fetchMore }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
-    QUERY_TASKS,
-    {
-      fetchPolicy: "network-only",
-    }
-  );
+  const [fetchTasks, { data, loading, fetchMore, error }] = useLazyQuery<
+    TasksQuery,
+    TasksQueryVariables
+  >(QUERY_TASKS, {
+    fetchPolicy: "network-only",
+  });
 
   const tasks = useMemo(() => {
     return Array.from(data?.tasks.data ?? []).sort((a, b) => a.order - b.order);
@@ -65,9 +65,7 @@ export const useTasksQuery = ({
           }
         );
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch {}
   }, [fetchTasks, variables]);
 
   const handleLoadMore = useCallback(async () => {
@@ -154,5 +152,6 @@ export const useTasksQuery = ({
     loadMore: handleLoadMore,
     isCanLoadMore,
     isLoadingMore,
+    error,
   };
 };

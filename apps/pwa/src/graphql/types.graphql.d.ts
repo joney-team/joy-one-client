@@ -276,7 +276,7 @@ export type Mutation = {
   registerDevice: DeviceEntity;
   removePluginExternalStorage: Scalars['Boolean']['output'];
   setPluginExternalStorage: PluginExternalStorage;
-  syncTask: Task;
+  syncTask: SyncTaskResult;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateCategory: Category;
 };
@@ -627,6 +627,12 @@ export type SignUploadUrlResponse = {
   signedUrl: Scalars['String']['output'];
 };
 
+export type SyncTaskResult = {
+  __typename?: 'SyncTaskResult';
+  task: Task;
+  updateInfos: Array<Scalars['String']['output']>;
+};
+
 export type TagEntity = {
   __typename?: 'TagEntity';
   _id: Scalars['String']['output'];
@@ -662,7 +668,7 @@ export type Task = {
   assigneeUserIds: Array<Scalars['String']['output']>;
   assigneeUsers: Array<WorkspaceMemberInfo>;
   childCount: Scalars['Float']['output'];
-  childOrders: Maybe<Array<Scalars['Float']['output']>>;
+  childOrder: TaskChildOrder;
   childProgress: Scalars['Float']['output'];
   closedAt: Maybe<Scalars['Float']['output']>;
   code: Scalars['String']['output'];
@@ -696,6 +702,12 @@ export type Task = {
   tags: Array<TagEntity>;
   timeTrackings: Maybe<Array<TaskTimeTracking>>;
   updatedAt: Maybe<Scalars['Float']['output']>;
+};
+
+export type TaskChildOrder = {
+  __typename?: 'TaskChildOrder';
+  first: Maybe<Scalars['Float']['output']>;
+  last: Maybe<Scalars['Float']['output']>;
 };
 
 /** Available task priorities */

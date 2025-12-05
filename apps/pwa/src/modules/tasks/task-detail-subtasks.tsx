@@ -14,6 +14,7 @@ import { TaskDataFragment } from "./queries/fragmentTask.graphql";
 import { type TasksQueryVariables } from "./queries/queryTasks.graphql";
 import { ListTaskRow } from "./views/list/list-task-row";
 import { ListTaskRowHead } from "./views/list/list-task-row-head";
+import { updateTaskPath } from "./tasks-route-helpers";
 
 export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => {
   const pathname = usePathname();
@@ -57,9 +58,9 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
 
         <Group gap={5}>
           <Text fz={15}>
-            <NumberFormat value={task.progress ?? 0} suffix="%" />
+            <NumberFormat value={task.childProgress ?? 0} suffix="%" />
           </Text>
-          <Progress value={task.progress ?? 0} w={70} color={"dark"} />
+          <Progress value={task.childProgress ?? 0} w={70} color={"dark"} />
         </Group>
 
         <ModalCreateTask>
@@ -105,7 +106,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
                     task={task}
                     prevTask={subTasks[index - 1]}
                     nextTask={subTasks[index + 1]}
-                    href={pathname.replace(`/${task.code}`, `/${task.code}`)}
+                    href={updateTaskPath(pathname, { code: task.code })}
                   />
                 ))}
             </Stack>

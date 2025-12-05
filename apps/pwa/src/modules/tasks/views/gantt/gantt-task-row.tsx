@@ -285,9 +285,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
           };
 
           const newOrder = !task.parent
-            ? task.childOrders && task.childOrders[0]
-              ? task.childOrders[0] / 2
-              : 1
+            ? (task.childOrder.first ?? 2) / 2
             : ((nextTask?.order ?? task.order * 2) + task.order) / 2;
 
           return updateTasks({
@@ -376,6 +374,13 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     }
   };
 
+  const resetEstimating = () => {
+    estimatingStartRef.current = null;
+    estimatingPointerRef.current?.style.setProperty("opacity", `0`);
+    estimatingPointerRef.current?.style.removeProperty("width");
+    estimatedRangeRef.current?.style.setProperty("display", `block`);
+  };
+
   const onTaskTimelineMouseDown: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
       if (!taskTimelineRef.current || !estimatingPointerRef.current || e.button !== 0) return;
@@ -415,11 +420,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
         });
       }
 
-      // Reset
-      estimatingStartRef.current = null;
-      estimatingPointerRef.current?.style.setProperty("opacity", `0`);
-      estimatingPointerRef.current?.style.removeProperty("width");
-      estimatedRangeRef.current?.style.setProperty("display", `block`);
+      resetEstimating();
     },
     [taskTimelineRef.current, estimatingPointerRef.current, gantt.state.columnSize, gantt.columns]
   );
@@ -431,6 +432,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
   const onTaskTimelineMouseLeave = useCallback(() => {
     taskRowDataRef.current?.removeAttribute("hovered");
     movePointerRef.current?.style.setProperty("opacity", "0");
+    resetEstimating();
   }, [taskTimelineRef.current, actionsRef.current]);
 
   const onTaskTimelineWheel = useCallback(() => {

@@ -246,7 +246,7 @@ type Mutation {
   registerDevice(input: RegisterDeviceDto!): DeviceEntity!
   removePluginExternalStorage: Boolean!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
-  syncTask(_id: String!): Task!
+  syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
 }
@@ -380,6 +380,11 @@ type SignUploadUrlResponse {
   signedUrl: String!
 }
 
+type SyncTaskResult {
+  task: Task!
+  updateInfos: [String!]!
+}
+
 type TagEntity {
   _id: String!
   color: String
@@ -411,7 +416,7 @@ type Task {
   assigneeUserIds: [String!]!
   assigneeUsers: [WorkspaceMemberInfo!]!
   childCount: Float!
-  childOrders: [Float!]
+  childOrder: TaskChildOrder!
   childProgress: Float!
   closedAt: Float
   code: String!
@@ -444,6 +449,11 @@ type Task {
   tags: [TagEntity!]!
   timeTrackings: [TaskTimeTracking!]
   updatedAt: Float
+}
+
+type TaskChildOrder {
+  first: Float
+  last: Float
 }
 
 """Available task priorities"""

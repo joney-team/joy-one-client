@@ -86,13 +86,14 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
                     {...buttonProps}
                     leftIcon={tab.icon}
                     onClick={() => props.onChange?.(tab.id!)}
+                    component="div"
                   >
                     {tab.name}
                     {tab.rightSection}
                   </Button>
                 ) : (
                   <Link href={tab.id}>
-                    <Button {...buttonProps} leftIcon={tab.icon}>
+                    <Button {...buttonProps} leftIcon={tab.icon} component="div">
                       {tab.name}
                       {tab.rightSection}
                     </Button>

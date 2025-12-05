@@ -489,14 +489,12 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                       <NumberFormat value={task.childCount} /> <Trans>subtasks</Trans>
                     </Button>
 
-                    {subtasks.loading && <Loader type="dots" color="gray" size="xs" />}
-
-                    {task.progress && (
+                    {task.childProgress && (
                       <Group flex={1} justify="end" gap={5}>
                         <Text fz={10}>
-                          <NumberFormat value={task.progress} suffix="%" />
+                          <NumberFormat value={task.childProgress} suffix="%" />
                         </Text>
-                        <Progress value={task.progress} w={60} color={"dark"} />
+                        <Progress value={task.childProgress} w={60} color={"dark"} />
                       </Group>
                     )}
                   </Group>

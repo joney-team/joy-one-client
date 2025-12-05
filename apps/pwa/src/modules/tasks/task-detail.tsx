@@ -82,7 +82,7 @@ export const TaskDetail: FC = () => {
     >
       {loading && <Skeleton h={300} w="100%" />}
 
-      {!!task ? (
+      {!!task && (
         <Fragment>
           <Renderer views={["mobile", "tablet"]}>
             <Stack>
@@ -144,8 +144,6 @@ export const TaskDetail: FC = () => {
             </Stack>
           </Renderer>
         </Fragment>
-      ) : (
-        <Skeleton h={300} w="100%" />
       )}
     </Modal>
   );
