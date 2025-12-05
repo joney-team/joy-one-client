@@ -51,7 +51,7 @@ import { ModalConfirm } from "@/modals/modal-confirm";
 import { onError } from "@/utils/exceptions.utils";
 import { limitCharacters } from "@joy-one-client/utils/string";
 import { t } from "@lingui/core/macro";
-import { useQueryTasks } from "../../hooks/use-query-tasks";
+import { useTasksQuery } from "../../hooks/use-tasks-query";
 import MUTATION_DUPLICATE_TASK, {
   type DuplicateTaskMutation,
   type DuplicateTaskMutationVariables,
@@ -102,7 +102,10 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     };
   }, [task._id]);
 
-  const { getTasks: getSubtasks, tasks: subtasks } = useQueryTasks(subTasksGroupVariables);
+  const { getTasks: getSubtasks, tasks: subtasks } = useTasksQuery({
+    variables: subTasksGroupVariables,
+    isSkipLoadCount: task.childCount === 0,
+  });
 
   const [duplicate, { loading: isDuplicating }] = useMutation<
     DuplicateTaskMutation,

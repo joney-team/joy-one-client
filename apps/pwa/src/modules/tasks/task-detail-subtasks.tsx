@@ -8,7 +8,7 @@ import { Card, Divider, Group, Progress, Stack, Text, ThemeIcon } from "@mantine
 import { IconPlus, IconSubtask } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { useMemo, type FC } from "react";
-import { useQueryTasks } from "./hooks/use-query-tasks";
+import { useTasksQuery } from "./hooks/use-tasks-query";
 import { ModalCreateTask } from "./modals/modal-create-task";
 import { TaskDataFragment } from "./queries/fragmentTask.graphql";
 import { type TasksQueryVariables } from "./queries/queryTasks.graphql";
@@ -26,7 +26,7 @@ export const TaskDetailSubtasks: FC<{ parent: TaskDataFragment }> = ({ parent })
     [parent._id]
   );
 
-  const { tasks: subTasks, loading } = useQueryTasks(groupVariables);
+  const { tasks: subTasks, loading } = useTasksQuery(groupVariables);
 
   if (parent.parent) return null;
 

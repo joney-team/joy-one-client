@@ -21,7 +21,7 @@ import { ActionIcon, Group, Skeleton, Stack, Text, Tooltip, alpha } from "@manti
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import { useQueryTasks } from "../../hooks/use-query-tasks";
+import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import { type TasksQueryVariables } from "../../queries/queryTasks.graphql";
 
@@ -61,8 +61,9 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
     };
   }, [props.statusId, activatedFolder?._id, state]);
 
-  const { getTasks, tasks, loading, loadMore, isCanLoadMore, isLoadingMore, count } =
-    useQueryTasks(groupVariables);
+  const { getTasks, tasks, loading, loadMore, isCanLoadMore, isLoadingMore, count } = useTasksQuery(
+    { variables: groupVariables }
+  );
 
   useEffect(() => {
     getTasks();

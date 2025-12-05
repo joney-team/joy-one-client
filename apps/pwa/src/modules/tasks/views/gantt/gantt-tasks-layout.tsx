@@ -14,19 +14,24 @@ import {
   IconCalendarDown,
   IconDroplet,
   IconDropletFilled,
+  IconFolder,
+  IconFolderMinus,
+  IconFolderOpen,
   IconFolderPlus,
   IconHourglassHigh,
   IconHourglassOff,
   IconPlus,
 } from "@tabler/icons-react";
-import { FC, Fragment, PropsWithChildren, useEffect } from "react";
+import { FC, Fragment, PropsWithChildren, useEffect, useState } from "react";
 import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
+import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 
 export const SidebarHead: FC = () => {
   const forceUpdate = useForceUpdate();
   const gantt = useGantt();
   const workspaceLayout = useWorkspaceLayout();
+  const [isOpenedAllFolder, setIsOpenedAllFolder] = useState(false);
 
   useEffect(() => {
     setTimeout(forceUpdate, 100);
@@ -55,6 +60,28 @@ export const SidebarHead: FC = () => {
       </Text>
 
       <Group gap={5}>
+        <Tooltip
+          label={
+            isOpenedAllFolder ? <Trans>Close all folders</Trans> : <Trans>Open all folders</Trans>
+          }
+        >
+          <ActionIcon
+            variant="subtle"
+            size="sm"
+            color="gray"
+            onClick={() => {
+              setIsOpenedAllFolder(!isOpenedAllFolder);
+              if (isOpenedAllFolder) {
+                emitInternalEvent(InternalEvent.GANTT_TASKS_CLOSE_ALL_FOLDER);
+              } else {
+                emitInternalEvent(InternalEvent.GANTT_TASKS_OPEN_ALL_FOLDER);
+              }
+            }}
+          >
+            {isOpenedAllFolder ? <IconFolderMinus size={16} /> : <IconFolderOpen size={16} />}
+          </ActionIcon>
+        </Tooltip>
+
         <Tooltip
           label={
             gantt.state.isHideEstimateTime ? (

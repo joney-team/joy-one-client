@@ -7,10 +7,11 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Loader, Text } from "@mantine/core";
 import { IconFolder, IconFolderOpen, IconPlus } from "@tabler/icons-react";
 import { Fragment, useEffect, useMemo, useState, type FC } from "react";
-import { useQueryTasks } from "../../hooks/use-query-tasks";
+import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { ModalCreateTask } from "../../modals/modal-create-task";
 import { GanttTaskRow } from "./gantt-task-row";
 import { ganttConfig } from "./gantt-tasks-config";
+import { InternalEvent, onInternalEvent } from "@/hooks/use-internal-event";
 
 interface GanttTasksGroupProps {
   folder?: TagDataFragment;
@@ -36,11 +37,19 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
     };
   }, [folder?._id]);
 
-  const { getTasks, tasks, loading, count } = useQueryTasks(groupVariables);
+  const { getTasks, tasks, loading, count } = useTasksQuery({ variables: groupVariables });
 
   useEffect(() => {
     if (opened) getTasks();
   }, [opened, getTasks]);
+
+  useEffect(() => {
+    return onInternalEvent(InternalEvent.GANTT_TASKS_OPEN_ALL_FOLDER, () => setIsOpened(true));
+  }, []);
+
+  useEffect(() => {
+    return onInternalEvent(InternalEvent.GANTT_TASKS_CLOSE_ALL_FOLDER, () => setIsOpened(false));
+  }, []);
 
   return (
     <Fragment>

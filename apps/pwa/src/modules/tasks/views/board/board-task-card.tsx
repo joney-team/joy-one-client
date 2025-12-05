@@ -65,7 +65,7 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
-import { useQueryTasks } from "../../hooks/use-query-tasks";
+import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import { TaskDataFragment } from "../../queries/fragmentTask.graphql";
 import { type TasksQueryVariables } from "../../queries/queryTasks.graphql";
@@ -166,7 +166,10 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
     };
   }, [task._id]);
 
-  const subtasks = useQueryTasks(subtaskVariables);
+  const subtasks = useTasksQuery({
+    variables: subtaskVariables,
+    isSkipLoadCount: task.childCount === 0,
+  });
 
   useEffect(() => {
     if (!draggingRef.current || !droppableRef.current) return;

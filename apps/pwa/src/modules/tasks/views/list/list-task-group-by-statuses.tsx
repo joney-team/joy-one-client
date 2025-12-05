@@ -18,7 +18,7 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { ListTaskRowHead } from "./list-task-row-head";
 
 import { useElementLazyLoad, useWaitElementLazyLoad } from "@/hooks/use-element-lazy-load";
-import { useQueryTasks } from "../../hooks/use-query-tasks";
+import { useTasksQuery } from "../../hooks/use-tasks-query";
 import styles from "./list-tasks.module.css";
 
 const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.ListTaskRow), {
@@ -58,8 +58,9 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
     };
   }, [props.status, activatedFolder?._id, state]);
 
-  const { getTasks, tasks, loading, loadMore, isCanLoadMore, isLoadingMore, count } =
-    useQueryTasks(groupVariables);
+  const { getTasks, tasks, loading, loadMore, isCanLoadMore, isLoadingMore, count } = useTasksQuery(
+    { variables: groupVariables }
+  );
 
   useEffect(() => {
     if (isReadyToFetch) getTasks();

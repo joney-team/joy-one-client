@@ -13,7 +13,13 @@ import QUERY_TASKS_COUNT, {
   type TasksCountQueryVariables,
 } from "../queries/queryTasksCount.graphql";
 
-export const useQueryTasks = (variables: TasksQueryVariables) => {
+export const useTasksQuery = ({
+  variables,
+  isSkipLoadCount = false,
+}: {
+  variables: TasksQueryVariables;
+  isSkipLoadCount?: boolean;
+}) => {
   const client = useApolloClient();
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -25,8 +31,9 @@ export const useQueryTasks = (variables: TasksQueryVariables) => {
   });
 
   useEffect(() => {
+    if (isSkipLoadCount) return;
     fetchTasksCount({ variables });
-  }, [fetchTasksCount, variables]);
+  }, [fetchTasksCount, variables, isSkipLoadCount]);
 
   const [fetchTasks, { data, loading, fetchMore }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
     QUERY_TASKS,
@@ -40,22 +47,26 @@ export const useQueryTasks = (variables: TasksQueryVariables) => {
   }, [data]);
 
   const getTasks = useCallback(async () => {
-    const result = await fetchTasks({ variables });
+    try {
+      const result = await fetchTasks({ variables });
 
-    if (result.data?.tasks.count !== dataCount?.tasksCount) {
-      client.cache.updateQuery<TasksCountQuery, TasksCountQueryVariables>(
-        {
-          query: QUERY_TASKS_COUNT,
-          variables,
-        },
-        (prev) => {
-          if (!prev) return prev;
-          return {
-            ...prev,
-            tasksCount: result.data?.tasks.count ?? 0,
-          };
-        }
-      );
+      if (result.data?.tasks.count !== dataCount?.tasksCount) {
+        client.cache.updateQuery<TasksCountQuery, TasksCountQueryVariables>(
+          {
+            query: QUERY_TASKS_COUNT,
+            variables,
+          },
+          (prev) => {
+            if (!prev) return prev;
+            return {
+              ...prev,
+              tasksCount: result.data?.tasks.count ?? 0,
+            };
+          }
+        );
+      }
+    } catch (error) {
+      console.error(error);
     }
   }, [fetchTasks, variables]);
 
