@@ -418,6 +418,7 @@ type Task {
   childCount: Float!
   childOrder: TaskChildOrder!
   childProgress: Float!
+  childTimeline: TaskChildTimeline
   closedAt: Float
   code: String!
   createdAt: Float
@@ -454,6 +455,11 @@ type Task {
 type TaskChildOrder {
   first: Float
   last: Float
+}
+
+type TaskChildTimeline {
+  dueDate: Float
+  startDate: Float
 }
 
 """Available task priorities"""

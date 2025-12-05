@@ -1,6 +1,16 @@
 "use client";
 
-import { ActionIcon, Card, Group, Portal, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Card,
+  Group,
+  Portal,
+  Stack,
+  Text,
+  ThemeIcon,
+  Tooltip,
+} from "@mantine/core";
 import {
   FC,
   Fragment,
@@ -57,6 +67,7 @@ import MUTATION_DUPLICATE_TASK, {
   type DuplicateTaskMutationVariables,
 } from "../../queries/mutationDuplicateTask.graphql";
 import styles from "./gantt-tasks.module.css";
+import { classNames } from "@/utils/ui.utils";
 
 interface GanttTaskRowProps {
   task: TaskDataFragment;
@@ -134,6 +145,10 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
   const droppableIndicatorBottomRef = useRef<HTMLDivElement>(null);
   const droppableIndicatorBottomIndentRef = useRef<HTMLDivElement>(null);
 
+  const isCanEstimate = useMemo(() => {
+    return !gantt.isGrabbing && (!task.childTimeline?.startDate || !task.childTimeline?.dueDate);
+  }, [task.childTimeline, gantt.isGrabbing]);
+
   // Drag drop handlers
   useEffect(() => {
     if (
@@ -162,6 +177,9 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
               setIsDragging(true);
             },
           });
+        },
+        canDrag() {
+          return !gantt.isGrabbing;
         },
       }),
       // Sibling Top drop target
@@ -316,7 +334,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
         },
       })
     );
-  }, [task, nextTask, nextParentTask, groupVariables, subTasksGroupVariables]);
+  }, [task, nextTask, nextParentTask, groupVariables, subTasksGroupVariables, gantt.isGrabbing]);
 
   const onUpdateName = useDebouncedCallback((name: string) => {
     if (!task._id || name === task.name) return;
@@ -378,8 +396,13 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     estimatingStartRef.current = null;
     estimatingPointerRef.current?.style.setProperty("opacity", `0`);
     estimatingPointerRef.current?.style.removeProperty("width");
-    estimatedRangeRef.current?.style.setProperty("display", `block`);
+    estimatedRangeRef.current?.style.setProperty("display", "flex");
+    movePointerRef.current?.style.setProperty("opacity", `0`);
   };
+
+  useEffect(() => {
+    if (!isCanEstimate) resetEstimating();
+  }, [isCanEstimate]);
 
   const onTaskTimelineMouseDown: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -425,16 +448,6 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     [taskTimelineRef.current, estimatingPointerRef.current, gantt.state.columnSize, gantt.columns]
   );
 
-  const onTaskTimelineMouseEnter = useCallback(() => {
-    taskRowDataRef.current?.setAttribute("hovered", "true");
-  }, [taskTimelineRef.current, actionsRef.current]);
-
-  const onTaskTimelineMouseLeave = useCallback(() => {
-    taskRowDataRef.current?.removeAttribute("hovered");
-    movePointerRef.current?.style.setProperty("opacity", "0");
-    resetEstimating();
-  }, [taskTimelineRef.current, actionsRef.current]);
-
   const onTaskTimelineWheel = useCallback(() => {
     movePointerRef.current?.style.setProperty("opacity", "0");
   }, [taskTimelineRef.current, actionsRef.current]);
@@ -448,9 +461,12 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
   };
 
   const estimated = useMemo(() => {
-    if (task.startDate && task.dueDate) {
-      const startDate = DateTime.toSeconds(task.startDate);
-      const dueDate = DateTime.toSeconds(task.dueDate);
+    const rawStartDate = task.childTimeline?.startDate ?? task.startDate;
+    const rawDueDate = task.childTimeline?.dueDate ?? task.dueDate;
+
+    if (rawStartDate && rawDueDate) {
+      const startDate = DateTime.toSeconds(rawStartDate);
+      const dueDate = DateTime.toSeconds(rawDueDate);
 
       const startIndexCaptured = gantt.columns.findIndex(
         (column) =>
@@ -472,9 +488,10 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
         endIndex,
         left: startIndex * gantt.state.columnSize,
         width: (endIndex - startIndex + 1) * gantt.state.columnSize,
+        isChildSummary: !!task.childTimeline?.startDate && !!task.childTimeline?.dueDate,
       };
     }
-  }, [task.startDate, task.dueDate, gantt.columns, gantt.state.columnSize]);
+  }, [task.startDate, task.dueDate, task.childTimeline, gantt.columns, gantt.state.columnSize]);
 
   const duplicateTask = async () => {
     try {
@@ -504,13 +521,23 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     router.push(updateTaskPath(location.pathname, { code: task.code }));
   };
 
+  const onRowMouseEnter = () => {
+    taskTimelineRef.current?.setAttribute("hovered", "true");
+    taskRowDataRef.current?.setAttribute("hovered", "true");
+  };
+
+  const onRowMouseLeave = () => {
+    taskTimelineRef.current?.removeAttribute("hovered");
+    taskRowDataRef.current?.removeAttribute("hovered");
+  };
+
   return (
     <Fragment>
       <Group
         ref={taskRowDataRef}
         className={styles.TaskRowData}
         w="100%"
-        bg={isDragging ? "gray.1" : "transparent"}
+        bg={isDragging ? "gray.1" : undefined}
         miw={0}
         gap={0}
         style={{
@@ -520,11 +547,11 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
           borderBottom: `1px solid var(--app-divider-color)`,
         }}
         onMouseEnter={() => {
-          taskTimelineRef.current?.setAttribute("hovered", "true");
+          onRowMouseEnter();
           onOnActions();
         }}
         onMouseLeave={() => {
-          taskTimelineRef.current?.removeAttribute("hovered");
+          onRowMouseLeave();
           onOffActions();
         }}
         wrap="nowrap"
@@ -812,12 +839,17 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
                 zIndex: 1,
                 opacity: 0,
               }}
-              onMouseMove={onTaskTimelineMouseMove}
-              onMouseDown={onTaskTimelineMouseDown}
-              onMouseUp={onTaskTimelineMouseUp}
-              onMouseEnter={onTaskTimelineMouseEnter}
-              onMouseLeave={onTaskTimelineMouseLeave}
-              onWheel={onTaskTimelineWheel}
+              onMouseMove={isCanEstimate ? onTaskTimelineMouseMove : undefined}
+              onMouseDown={isCanEstimate ? onTaskTimelineMouseDown : undefined}
+              onMouseUp={isCanEstimate ? onTaskTimelineMouseUp : undefined}
+              onMouseEnter={() => {
+                onRowMouseEnter();
+              }}
+              onMouseLeave={() => {
+                onRowMouseLeave();
+                resetEstimating();
+              }}
+              onWheel={isCanEstimate ? onTaskTimelineWheel : undefined}
             >
               <div
                 ref={movePointerRef}
@@ -834,13 +866,34 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
               {estimated && (
                 <div
                   ref={estimatedRangeRef}
-                  className={styles.EstimatedRange}
+                  className={classNames(styles.EstimatedRange, {
+                    [styles.isChildSummary]: estimated.isChildSummary,
+                  })}
                   style={{
                     left: estimated?.left,
                     width: estimated?.width,
-                    background: color("primary.4"),
+                    background: estimated.isChildSummary ? "transparent" : color("primary.4"),
                   }}
-                />
+                >
+                  {estimated.isChildSummary ? (
+                    <Stack gap={2} miw={0} w="100%">
+                      <Text px={5} fz={11} fw={600} truncate c="orange" maw="100%">
+                        {task.name}
+                      </Text>
+
+                      <Box
+                        w="100%"
+                        h={5}
+                        bg={color("orange.3")}
+                        className={styles.EstimatedRangeChildSummaryProgress}
+                      />
+                    </Stack>
+                  ) : (
+                    <Text px={8} fz={11} fw={500} truncate c="white" maw="100%">
+                      {task.name}
+                    </Text>
+                  )}
+                </div>
               )}
             </div>
           </Fragment>,

@@ -2,6 +2,24 @@
   overflow-x: hidden;
   overflow-y: hidden;
 
+  &.isGrab {
+    cursor: grab;
+    user-select: none;
+
+    * {
+      cursor: grab;
+      user-select: none;
+    }
+  }
+
+  &[gantt-event="grabbing"] {
+    cursor: grabbing !important;
+
+    * {
+      cursor: grabbing !important;
+    }
+  }
+
   & .SidebarContainer {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -64,10 +82,17 @@
 
     & .EstimatedRange {
       position: absolute;
-      height: 1.5rem;
+      min-height: 1.5rem;
       top: 50%;
       transform: translateY(-50%);
-      border-radius: 5rem;
+      border-radius: 0.4rem;
+      display: flex;
+      min-width: 0;
+      align-items: center;
+
+      & .EstimatedRangeChildSummaryProgress {
+        border-radius: 5rem;
+      }
     }
   }
 }

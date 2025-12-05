@@ -6,6 +6,7 @@ interface GanttRefs {
   sidebarContainer: RefObject<HTMLDivElement>;
   bodyContainer: RefObject<HTMLDivElement>;
   body: RefObject<HTMLDivElement>;
+  root: RefObject<HTMLDivElement>;
 }
 
 const Context = createContext({} as GanttRefs);
@@ -14,6 +15,7 @@ export const GanttRefsProvider: FC<PropsWithChildren> = ({ children }) => {
   const sidebarContainerRef = useRef<HTMLDivElement | null>(null);
   const bodyContainerRef = useRef<HTMLDivElement | null>(null);
   const bodyRef = useRef<HTMLDivElement | null>(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
 
   return (
     <Context.Provider
@@ -21,6 +23,7 @@ export const GanttRefsProvider: FC<PropsWithChildren> = ({ children }) => {
         sidebarContainer: sidebarContainerRef as RefObject<HTMLDivElement>,
         bodyContainer: bodyContainerRef as RefObject<HTMLDivElement>,
         body: bodyRef as RefObject<HTMLDivElement>,
+        root: rootRef as RefObject<HTMLDivElement>,
       }}
     >
       {children}

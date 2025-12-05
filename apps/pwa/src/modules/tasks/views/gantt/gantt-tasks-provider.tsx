@@ -25,8 +25,11 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   const { i18n } = useLingui();
   const layout = useLayout();
   const refs = useGanttRefs();
+  const [version, setVersion] = useState(0);
+  const rerender = () => setVersion((s) => s + 1);
 
   const [isInitialized, setIsInitialized] = useState(false);
+  const isGrabbingRef = useRef(false);
 
   const [ganttState, setGanttState] = useState<GanttState>({
     unit: "day",
@@ -295,7 +298,6 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     sidebarContainer.addEventListener("wheel", onWheel, { passive: false });
 
     const onWindowWheel = (ev: WheelEvent) => {
-      console.log("onWindowWheel", ev);
       ev.preventDefault();
     };
 
@@ -310,6 +312,90 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
       document.body.style.removeProperty("overscroll-behavior-x");
     };
   }, [isInitialized]);
+
+  useEffect(() => {
+    if (!isInitialized || !refs.root.current) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (isGrabbingRef.current) return;
+
+      if (e.code === "Space") {
+        isGrabbingRef.current = true;
+        rerender();
+      }
+    };
+
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (!isGrabbingRef.current) return;
+
+      if (e.code === "Space") {
+        isGrabbingRef.current = false;
+        rerender();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, [isInitialized]);
+
+  useEffect(() => {
+    if (isGrabbingRef.current) {
+      const el = refs.bodyContainer.current;
+      if (!el) return;
+
+      let isGrabbingEventEnabled = false;
+
+      let startX = 0;
+      let startY = 0;
+      let scrollLeft = 0;
+      let scrollTop = 0;
+
+      const onMouseDown = (e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        isGrabbingEventEnabled = true;
+        refs.root.current?.setAttribute("gantt-event", "grabbing");
+
+        startX = e.pageX - el.offsetLeft;
+        startY = e.pageY - el.offsetTop;
+
+        scrollLeft = el.scrollLeft;
+        scrollTop = el.scrollTop;
+      };
+
+      const onMouseUp = (e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        isGrabbingEventEnabled = false;
+        refs.root.current?.removeAttribute("gantt-event");
+      };
+
+      const onMouseMove = (e: MouseEvent) => {
+        if (!isGrabbingEventEnabled) return;
+
+        e.preventDefault();
+
+        const x = e.pageX - el.offsetLeft;
+        const walkX = x - startX;
+        el.scrollLeft = scrollLeft - walkX;
+      };
+
+      window.addEventListener("mousedown", onMouseDown);
+      window.addEventListener("mouseup", onMouseUp);
+      el.addEventListener("mousemove", onMouseMove);
+
+      return () => {
+        window.removeEventListener("mousedown", onMouseDown);
+        window.removeEventListener("mouseup", onMouseUp);
+        el.removeEventListener("mousemove", onMouseMove);
+      };
+    }
+  }, [isGrabbingRef.current, version]);
 
   const contextValue: UseGantt = {
     columns,
@@ -335,6 +421,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     toggleSisplayTaskStatusColor,
     scrollDirection,
     isScrolling: scrollDirection !== null,
+    isGrabbing: isGrabbingRef.current,
   };
 
   return (

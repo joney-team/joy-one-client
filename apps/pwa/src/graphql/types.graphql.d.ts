@@ -670,6 +670,7 @@ export type Task = {
   childCount: Scalars['Float']['output'];
   childOrder: TaskChildOrder;
   childProgress: Scalars['Float']['output'];
+  childTimeline: Maybe<TaskChildTimeline>;
   closedAt: Maybe<Scalars['Float']['output']>;
   code: Scalars['String']['output'];
   createdAt: Maybe<Scalars['Float']['output']>;
@@ -708,6 +709,12 @@ export type TaskChildOrder = {
   __typename?: 'TaskChildOrder';
   first: Maybe<Scalars['Float']['output']>;
   last: Maybe<Scalars['Float']['output']>;
+};
+
+export type TaskChildTimeline = {
+  __typename?: 'TaskChildTimeline';
+  dueDate: Maybe<Scalars['Float']['output']>;
+  startDate: Maybe<Scalars['Float']['output']>;
 };
 
 /** Available task priorities */

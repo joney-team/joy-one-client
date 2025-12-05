@@ -60,4 +60,5 @@ export type UseGantt = {
   isScrolling: boolean;
   range: ReturnType<typeof getDateRangeBreakdown>;
   columns: { start: Date; end: Date }[];
+  isGrabbing: boolean;
 };

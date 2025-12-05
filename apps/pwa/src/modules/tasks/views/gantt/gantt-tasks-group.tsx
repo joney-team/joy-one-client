@@ -1,6 +1,7 @@
 "use client";
 
 import { NumberFormat } from "@/components/format/number-format";
+import { InternalEvent, onInternalEvent } from "@/hooks/use-internal-event";
 import { TagDataFragment } from "@/modules/tags/queries/fragmentTag.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
@@ -10,8 +11,6 @@ import { Fragment, useEffect, useMemo, useState, type FC } from "react";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { ModalCreateTask } from "../../modals/modal-create-task";
 import { GanttTaskRow } from "./gantt-task-row";
-import { ganttConfig } from "./gantt-tasks-config";
-import { InternalEvent, onInternalEvent } from "@/hooks/use-internal-event";
 
 interface GanttTasksGroupProps {
   folder?: TagDataFragment;
@@ -59,12 +58,11 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
             <Group
               w="100%"
               miw={0}
-              px={8}
+              p={8}
+              mih={46}
               gap="xs"
               style={{
                 position: "relative",
-                minHeight: ganttConfig.rowHeight,
-                maxHeight: ganttConfig.rowHeight,
                 borderBottom: `1px solid var(--app-divider-color)`,
               }}
               onClick={() => setIsOpened(!opened)}

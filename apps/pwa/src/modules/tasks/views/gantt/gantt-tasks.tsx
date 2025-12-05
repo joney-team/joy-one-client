@@ -14,18 +14,18 @@ import { GanttProvider } from "./gantt-tasks-provider";
 
 import { GanttRefsProvider, useGanttRefs } from "./gantt-tasks-refs";
 import styles from "./gantt-tasks.module.css";
+import { classNames } from "@/utils/ui.utils";
 
 const Content: FC = () => {
   const ganttRefs = useGanttRefs();
   const gantt = useGantt();
-  const container = useElementSize();
   const { activatedFolder, folders } = useTaskFolders();
   const [sized, setSized] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     const calculateContainerSize = () => {
-      if (!container.ref.current) return;
-      const rect = container.ref.current!.getBoundingClientRect();
+      if (!ganttRefs.root.current) return;
+      const rect = ganttRefs.root.current!.getBoundingClientRect();
 
       setSized({
         width: document.documentElement.clientWidth - rect.left,
@@ -40,7 +40,7 @@ const Content: FC = () => {
     return () => {
       window.removeEventListener("resize", calculateContainerSize);
     };
-  }, [container.ref.current]);
+  }, [ganttRefs.root.current]);
 
   const sidebar = useMemo(() => {
     if (activatedFolder) {
@@ -64,8 +64,10 @@ const Content: FC = () => {
 
   return (
     <Stack
-      ref={container.ref}
-      className={styles.GanttTasks}
+      ref={ganttRefs.root}
+      className={classNames(styles.GanttTasks, {
+        [styles.isGrab]: gantt.isGrabbing,
+      })}
       pos="relative"
       bg="var(--mantine-color-body)"
     >

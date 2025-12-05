@@ -131,7 +131,7 @@ export const useTasksQuery = ({
         variables: {
           ...variables,
           offset: 0,
-          limit: data.tasks.data.length,
+          limit: variables.all ? undefined : data.tasks.data.length,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev;
