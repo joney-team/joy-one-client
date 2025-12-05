@@ -1,6 +1,7 @@
 "use client";
 
 import { DateFormat } from "@/components/format/date-format";
+import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
@@ -14,7 +15,6 @@ import {
   IconCalendarDown,
   IconDroplet,
   IconDropletFilled,
-  IconFolder,
   IconFolderMinus,
   IconFolderOpen,
   IconFolderPlus,
@@ -25,7 +25,6 @@ import {
 import { FC, Fragment, PropsWithChildren, useEffect, useState } from "react";
 import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
-import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 
 export const SidebarHead: FC = () => {
   const forceUpdate = useForceUpdate();
@@ -228,8 +227,9 @@ export const BodyHead: FC = () => {
                           <DateFormat
                             value={week.end}
                             type="custom"
-                            format={{ day: "2-digit", month: "long" }}
-                          />
+                            format={{ day: "2-digit" }}
+                          />{" "}
+                          <DateFormat value={week.end} type="custom" format={{ month: "long" }} />
                         </Fragment>
                       );
                     }
