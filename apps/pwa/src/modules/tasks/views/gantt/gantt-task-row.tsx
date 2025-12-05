@@ -17,7 +17,7 @@ import { ganttConfig } from "./gantt-tasks-config";
 
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { useColor } from "@/modules/theme/use-color";
-import { useLazyQuery, useMutation } from "@apollo/client/react";
+import { useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -33,10 +33,7 @@ import {
 import { useRouter } from "next/navigation";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import { ModalCreateTask } from "../../modals/modal-create-task";
-import TASKS_QUERY, {
-  type TasksQuery,
-  type TasksQueryVariables,
-} from "../../queries/queryTasks.graphql";
+import TASKS_QUERY, { type TasksQueryVariables } from "../../queries/queryTasks.graphql";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { useGantt } from "./gantt-tasks-context";
 import { useGanttRefs } from "./gantt-tasks-refs";
@@ -49,16 +46,17 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { ModalConfirm } from "@/modals/modal-confirm";
+import { onError } from "@/utils/exceptions.utils";
 import { limitCharacters } from "@joy-one-client/utils/string";
-import styles from "./gantt-tasks.module.css";
+import { t } from "@lingui/core/macro";
+import { useQueryTasks } from "../../hooks/use-query-tasks";
 import MUTATION_DUPLICATE_TASK, {
   type DuplicateTaskMutation,
   type DuplicateTaskMutationVariables,
 } from "../../queries/mutationDuplicateTask.graphql";
-import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { NumberFormat } from "@/components/format/number-format";
+import styles from "./gantt-tasks.module.css";
 
 interface GanttTaskRowProps {
   task: TaskDataFragment;
@@ -96,16 +94,6 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
   const estimatingStartRef = useRef<number | null>(null);
 
   const [isShowSubtasks, setIsShowSubtasks] = useState(true);
-  const [getSubtasks, { data: subtasksData }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
-    TASKS_QUERY,
-    {
-      nextFetchPolicy: "cache-and-network",
-    }
-  );
-
-  const subtasks = useMemo(() => {
-    return Array.from(subtasksData?.tasks.data ?? []).sort((a, b) => a.order - b.order);
-  }, [subtasksData?.tasks.data]);
 
   const subTasksGroupVariables = useMemo<TasksQueryVariables>(() => {
     return {
@@ -114,6 +102,8 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     };
   }, [task._id]);
 
+  const { getTasks: getSubtasks, tasks: subtasks } = useQueryTasks(subTasksGroupVariables);
+
   const [duplicate, { loading: isDuplicating }] = useMutation<
     DuplicateTaskMutation,
     DuplicateTaskMutationVariables
@@ -121,9 +111,9 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
 
   useEffect(() => {
     if (isShowSubtasks && task.childCount > 0) {
-      getSubtasks({ variables: subTasksGroupVariables });
+      getSubtasks();
     }
-  }, [task._id, subTasksGroupVariables]);
+  }, [task._id, getSubtasks]);
 
   const [isDragging, setIsDragging] = useState(false);
   const draggingRef = useRef<HTMLDivElement>(null);
@@ -658,7 +648,6 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
                         initial: { parent: task },
                         onCreated: () => {
                           setIsShowSubtasks(true);
-                          getSubtasks({ variables: subTasksGroupVariables });
                         },
                       });
                     }}

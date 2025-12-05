@@ -3,32 +3,30 @@
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
-import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Divider, Group, Progress, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus, IconSubtask } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
-import { type FC } from "react";
+import { useMemo, type FC } from "react";
+import { useQueryTasks } from "./hooks/use-query-tasks";
 import { ModalCreateTask } from "./modals/modal-create-task";
 import { TaskDataFragment } from "./queries/fragmentTask.graphql";
-import SUB_TASKS_QUERY, {
-  type TasksQuery,
-  type TasksQueryVariables,
-} from "./queries/queryTasks.graphql";
+import { type TasksQueryVariables } from "./queries/queryTasks.graphql";
 import { ListTaskRow } from "./views/list/list-task-row";
 import { ListTaskRowHead } from "./views/list/list-task-row-head";
 
 export const TaskDetailSubtasks: FC<{ parent: TaskDataFragment }> = ({ parent }) => {
   const pathname = usePathname();
 
-  const { data, loading } = useQuery<TasksQuery, TasksQueryVariables>(SUB_TASKS_QUERY, {
-    skip: !!parent.parent,
-    variables: {
+  const groupVariables: TasksQueryVariables = useMemo(
+    () => ({
       parentId: parent._id,
-    },
-  });
+      all: true,
+    }),
+    [parent._id]
+  );
 
-  const subTasks = Array.from(data?.tasks.data ?? []).sort((a, b) => a.order - b.order);
+  const { tasks: subTasks, loading } = useQueryTasks(groupVariables);
 
   if (parent.parent) return null;
 

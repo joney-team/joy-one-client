@@ -512,6 +512,7 @@ export type Query = {
   task: Task;
   taskByCode: Task;
   tasks: TasksPaginated;
+  tasksCount: Scalars['Float']['output'];
 };
 
 
@@ -573,6 +574,21 @@ export type QueryTaskByCodeArgs = {
 
 
 export type QueryTasksArgs = {
+  all?: InputMaybe<Scalars['Boolean']['input']>;
+  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  folderId?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  partnerIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  priority?: InputMaybe<TaskPriority>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryTasksCountArgs = {
   all?: InputMaybe<Scalars['Boolean']['input']>;
   assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
   folderId?: InputMaybe<Scalars['String']['input']>;

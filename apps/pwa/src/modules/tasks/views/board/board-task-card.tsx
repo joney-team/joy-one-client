@@ -20,8 +20,6 @@ import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { renderEntityCode } from "@/modules/workspaces/utils";
-import { onError } from "@/utils/exceptions.utils";
-import { useQuery } from "@apollo/client/react";
 import {
   type Edge,
   attachClosestEdge,
@@ -40,6 +38,7 @@ import {
   Badge,
   Card,
   Group,
+  Loader,
   Menu,
   Portal,
   Progress,
@@ -66,14 +65,11 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
+import { useQueryTasks } from "../../hooks/use-query-tasks";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
-import QUERY_TASKS, {
-  type TasksQuery,
-  type TasksQueryVariables,
-} from "../../queries/queryTasks.graphql";
+import { TaskDataFragment } from "../../queries/fragmentTask.graphql";
+import { type TasksQueryVariables } from "../../queries/queryTasks.graphql";
 import { taskPriorities } from "../../task-constants";
-
-type Task = TasksQuery["tasks"]["data"][number];
 
 const CtaSection: FC<
   PropsWithChildren<{
@@ -137,9 +133,9 @@ const CtaSection: FC<
 };
 
 interface BoardTaskCardProps {
-  task: Task;
-  prevTask?: Task | null;
-  nextTask?: Task | null;
+  task: TaskDataFragment;
+  prevTask?: TaskDataFragment | null;
+  nextTask?: TaskDataFragment | null;
   showStatus?: boolean;
   scrollContainerRef?: HTMLDivElement | null;
   groupVariables?: TasksQueryVariables;
@@ -163,45 +159,14 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
   const [isShowSubTasks, setIsShowSubTasks] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [over, setOver] = useState<{ edge: Edge; rect: DOMRect } | null>(null);
-  const [isFetchingMoreChildTasks, setIsFetchingMoreChildTasks] = useState(false);
 
-  const childTasksVariables: TasksQueryVariables = useMemo(() => {
+  const subtaskVariables: TasksQueryVariables = useMemo(() => {
     return {
       parentId: task._id,
     };
   }, [task._id]);
 
-  const childTasks = useQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
-    skip: !isShowSubTasks,
-    variables: childTasksVariables,
-  });
-
-  const onFetchMoreChildTasks = async () => {
-    setIsFetchingMoreChildTasks(true);
-    await childTasks
-      .fetchMore({
-        variables: {
-          ...childTasksVariables,
-          offset: childTasks.data?.tasks.data.length || 0,
-        },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return prev;
-          return {
-            ...prev,
-            tasks: {
-              ...prev.tasks,
-              data: [...prev.tasks.data, ...fetchMoreResult.tasks.data],
-            },
-          };
-        },
-      })
-      .catch(onError)
-      .finally(() => setIsFetchingMoreChildTasks(false));
-  };
-
-  const isCanFetchMoreChildTasks = useMemo(() => {
-    return childTasks.data && childTasks.data?.tasks.data.length < childTasks.data?.tasks.count;
-  }, [childTasks.data]);
+  const subtasks = useQueryTasks(subtaskVariables);
 
   useEffect(() => {
     if (!draggingRef.current || !droppableRef.current) return;
@@ -234,7 +199,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
           return attachClosestEdge({ task }, { element, input, allowedEdges: ["top", "bottom"] });
         },
         onDragEnter({ source, self }) {
-          const sourceTask = source.data.task as Task;
+          const sourceTask = source.data.task as TaskDataFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -244,14 +209,14 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
           setOver({ edge: closestEdge, rect: source.data.rect as DOMRect });
         },
         onDragLeave({ source }) {
-          const sourceTask = source.data.task as Task;
+          const sourceTask = source.data.task as TaskDataFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id) return;
 
           setOver(null);
         },
         onDrag({ source, self }) {
-          const sourceTask = source.data.task as Task;
+          const sourceTask = source.data.task as TaskDataFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -266,7 +231,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
         onDrop({ source, self }) {
           setOver(null);
 
-          const sourceTask = source.data.task as Task;
+          const sourceTask = source.data.task as TaskDataFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -291,6 +256,10 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
       })
     );
   }, [task, groupVariables]);
+
+  useEffect(() => {
+    if (isShowSubTasks) subtasks.getTasks();
+  }, [subtasks.getTasks, isShowSubTasks]);
 
   const droppableShadow = useMemo(() => {
     if (!over) return null;
@@ -506,7 +475,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                   applyCollapse
                   isCollapsed={isShowSubTasks}
                 >
-                  <Group justify="space-between" gap={5} flex={1}>
+                  <Group justify="space-between" gap={8} flex={1}>
                     <Button
                       size="compact-xs"
                       fw={400}
@@ -516,6 +485,8 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                     >
                       <NumberFormat value={task.childCount} /> <Trans>subtasks</Trans>
                     </Button>
+
+                    {subtasks.loading && <Loader type="dots" color="gray" size="xs" />}
 
                     {task.progress && (
                       <Group flex={1} justify="end" gap={5}>
@@ -537,31 +508,29 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
 
       {isShowSubTasks && (
         <Fragment>
-          {childTasks.data && childTasks.data?.tasks.data.length > 0 && (
+          {subtasks.tasks.length > 0 && (
             <Stack gap={10} pl={20}>
-              {childTasks.data?.tasks.data.map((subTask, subTaskIndex) => (
+              {subtasks.tasks.map((subTask, subTaskIndex) => (
                 <BoardTaskCard
                   key={subTask._id}
                   task={subTask}
                   showStatus
-                  prevTask={childTasks.data?.tasks.data[subTaskIndex - 1]}
-                  nextTask={childTasks.data?.tasks.data[subTaskIndex + 1]}
+                  prevTask={subtasks.tasks[subTaskIndex - 1]}
+                  nextTask={subtasks.tasks[subTaskIndex + 1]}
                 />
               ))}
             </Stack>
           )}
 
-          {(childTasks.loading || isFetchingMoreChildTasks) && (
+          {(subtasks.loading || subtasks.isLoadingMore) && (
             <Stack gap={10} pl={20}>
               <Skeleton height={200} />
             </Stack>
           )}
 
-          <WayPoint
-            scrollContainerRef={scrollContainerRef}
-            enabled={isCanFetchMoreChildTasks}
-            onReached={onFetchMoreChildTasks}
-          />
+          {subtasks.isCanLoadMore && (
+            <WayPoint scrollContainerRef={scrollContainerRef} onReached={subtasks.loadMore} />
+          )}
         </Fragment>
       )}
 

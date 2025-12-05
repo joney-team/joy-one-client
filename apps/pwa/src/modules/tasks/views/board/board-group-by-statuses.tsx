@@ -13,8 +13,6 @@ import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { onError } from "@/utils/exceptions.utils";
-import { useLazyQuery } from "@apollo/client/react";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
@@ -22,16 +20,14 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Skeleton, Stack, Text, Tooltip, alpha } from "@mantine/core";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { useQueryTasks } from "../../hooks/use-query-tasks";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
-import QUERY_TASKS, {
-  type TasksQuery,
-  type TasksQueryVariables,
-} from "../../queries/queryTasks.graphql";
+import { type TasksQueryVariables } from "../../queries/queryTasks.graphql";
 
 const BoardTaskCard = dynamic(() => import("./board-task-card").then((res) => res.BoardTaskCard), {
   ssr: false,
-  loading: () => <Skeleton mih={220} height={220} />,
+  loading: () => <Skeleton mih={220} height={220} miw="100%" />,
 });
 
 interface BoardGroupByStatusesProps {
@@ -48,7 +44,6 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
   const droppableRef = useRef<HTMLDivElement | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const [isOver, setIsOver] = useState(false);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { updateTasks } = useUpdateTasks();
 
   const { activatedFolder, state } = useTasks();
@@ -66,49 +61,12 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
     };
   }, [props.statusId, activatedFolder?._id, state]);
 
-  const [getTasks, { data, fetchMore, loading }] = useLazyQuery<TasksQuery, TasksQueryVariables>(
-    QUERY_TASKS,
-    {
-      fetchPolicy: "network-only",
-    }
-  );
+  const { getTasks, tasks, loading, loadMore, isCanLoadMore, isLoadingMore, count } =
+    useQueryTasks(groupVariables);
 
   useEffect(() => {
-    getTasks({ variables: groupVariables });
-  }, [groupVariables]);
-
-  const onFetchMore = async () => {
-    setIsFetchingMore(true);
-
-    await fetchMore({
-      variables: {
-        ...groupVariables,
-        offset: data?.tasks.data.length || 0,
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prev;
-        return {
-          ...prev,
-          tasks: {
-            ...prev.tasks,
-            count: fetchMoreResult.tasks.count,
-            data: [
-              ...prev.tasks.data,
-              ...fetchMoreResult.tasks.data.filter(
-                (task) => !prev.tasks.data.some((t) => t._id === task._id)
-              ),
-            ],
-          },
-        };
-      },
-    })
-      .catch(onError)
-      .finally(() => setIsFetchingMore(false));
-  };
-
-  const isCanFetchMore = data && data.tasks.data.length < data.tasks.count;
-
-  const tasks = Array.from(data?.tasks.data ?? []).sort((a, b) => a.order - b.order);
+    getTasks();
+  }, [getTasks]);
 
   const status =
     workspace.settings.taskStatuses.find((s) => s.id === props.statusId) ||
@@ -202,9 +160,9 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                   {statusStyle.name}
                 </Button>
 
-                {data && data?.tasks.count > 0 && (
+                {count && count > 0 && (
                   <Text c="gray" fz={10} fw={500}>
-                    <NumberFormat value={data?.tasks.count} />
+                    <NumberFormat value={count} />
                   </Text>
                 )}
               </Group>
@@ -256,21 +214,13 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                   />
                 ))}
 
-              {(loading || isFetchingMore) && (
-                <Fragment>
-                  {new Array(Math.min(limit, data ? data.tasks.count - tasks.length : limit, 0))
-                    .fill(0)
-                    .map((_, index) => (
-                      <Skeleton key={index} mih={220} />
-                    ))}
-                </Fragment>
-              )}
+              {(loading || isLoadingMore) && <Skeleton mih={220} miw="100%" />}
 
-              {isCanFetchMore && (
+              {isCanLoadMore && (
                 <WayPoint
                   scrollContainerRef={scrollAreaRef.current}
-                  enabled={isCanFetchMore}
-                  onReached={onFetchMore}
+                  enabled={isCanLoadMore}
+                  onReached={loadMore}
                 />
               )}
 

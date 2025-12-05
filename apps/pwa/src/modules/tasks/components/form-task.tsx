@@ -8,17 +8,15 @@ import { Hovered } from "@/components/hovered";
 import { DueDateInput } from "@/components/inputs/due-date-input";
 import { EstimateTimeInput } from "@/components/inputs/estimate-time-input";
 import { TimeTrackingsInput } from "@/components/inputs/time-trackings-input";
-import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
-import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { PartnersInput } from "@/modules/partners/components/partners-input";
 import { TagsInput } from "@/modules/tags/components/tags-input";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
 import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
-import { getTaskProgress, getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
+import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskPriority } from "@/modules/tasks/tasks-types";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -67,7 +65,6 @@ import CREATE_TASK_MUTATION, {
   type CreateTaskMutation,
   type CreateTaskMutationVariables,
 } from "../queries/mutationCreateTask.graphql";
-import QUERY_TASKS from "../queries/queryTasks.graphql";
 import { taskPriorities } from "../task-constants";
 
 export interface TaskFormProps {
@@ -88,12 +85,12 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
   const [rawFiles, setRawFiles] = useState<File[]>([]);
 
-  const onUpdate = useDebouncedCallback((values: any) => {
+  const onUpdate = useDebouncedCallback(async (values: any) => {
     if (!props.task || !values.name) return;
     const isDiff = JSON.stringify(props.task) !== JSON.stringify(values);
     if (!isDiff) return;
 
-    updateTasks([
+    await updateTasks([
       {
         _id: props.task._id,
         name: values.name,
@@ -109,6 +106,8 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         estimatedTime: values.estimatedTime,
       },
     ]);
+
+    emitInternalEvent(InternalEvent.REFETCH_TASKS);
   }, 500);
 
   const initialTask: Partial<TaskDataFragment> = {
@@ -153,9 +152,9 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
             folderId: values.folder?._id,
           },
         },
-        refetchQueries: [QUERY_TASKS],
-        awaitRefetchQueries: true,
       });
+
+      emitInternalEvent(InternalEvent.REFETCH_TASKS);
 
       if (!newTask) throw new Error(t`Failed to create task`);
 

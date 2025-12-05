@@ -1,17 +1,14 @@
 "use client";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { TagDataFragment } from "@/modules/tags/queries/fragmentTag.graphql";
 import { useColor } from "@/modules/theme/use-color";
-import { useLazyQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Group, Loader, Skeleton, Stack, Text } from "@mantine/core";
+import { ActionIcon, Group, Loader, Text } from "@mantine/core";
 import { IconFolder, IconFolderOpen, IconPlus } from "@tabler/icons-react";
 import { Fragment, useEffect, useMemo, useState, type FC } from "react";
+import { useQueryTasks } from "../../hooks/use-query-tasks";
 import { ModalCreateTask } from "../../modals/modal-create-task";
-import QUERY_TASKS, {
-  type TasksQuery,
-  type TasksQueryVariables,
-} from "../../queries/queryTasks.graphql";
 import { GanttTaskRow } from "./gantt-task-row";
 import { ganttConfig } from "./gantt-tasks-config";
 
@@ -32,14 +29,6 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
 
   const folderColor = folder?.color ?? "gray";
 
-  const [getTasks, { data, loading }] = useLazyQuery<TasksQuery, TasksQueryVariables>(QUERY_TASKS, {
-    fetchPolicy: "network-only",
-  });
-
-  const tasks = useMemo(() => {
-    return Array.from(data?.tasks.data ?? []).sort((a, b) => a.order - b.order);
-  }, [data]);
-
   const groupVariables = useMemo(() => {
     return {
       folderId: folder?._id ?? "none",
@@ -47,11 +36,11 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
     };
   }, [folder?._id]);
 
+  const { getTasks, tasks, loading, count } = useQueryTasks(groupVariables);
+
   useEffect(() => {
-    if (opened) {
-      getTasks({ variables: groupVariables });
-    }
-  }, [folder?._id, opened, groupVariables]);
+    if (opened) getTasks();
+  }, [opened, getTasks]);
 
   return (
     <Fragment>
@@ -78,8 +67,14 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
                 </ActionIcon>
 
                 <Text fz={14} fw={500} truncate>
-                  {folder?.name ?? <Trans>General tasks</Trans>}
+                  {folder?.name ?? <Trans>General tasks</Trans>}{" "}
                 </Text>
+
+                {count && count > 0 && (
+                  <Text fz={12} c="gray.5">
+                    <NumberFormat value={count} />
+                  </Text>
+                )}
 
                 {loading && <Loader type="dots" size="xs" color="gray" />}
               </Group>

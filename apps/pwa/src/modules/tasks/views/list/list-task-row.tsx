@@ -51,7 +51,7 @@ import { taskPriorities } from "../../task-constants";
 import { Button } from "@/components/buttons/button";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
 import Link from "next/link";
-import { TasksQuery, TasksQueryVariables } from "../../queries/queryTasks.graphql";
+import { TasksQueryVariables } from "../../queries/queryTasks.graphql";
 import { isTaskOutdated } from "../../tasks-service";
 
 import { useColor } from "@/modules/theme/use-color";
@@ -64,12 +64,11 @@ import {
 import { motion } from "framer-motion";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import { useTaskSelections } from "../../modules/task-selections/task-selections-context";
+import { TaskDataFragment } from "../../queries/fragmentTask.graphql";
 import styles from "./list-tasks.module.css";
 
-type Task = TasksQuery["tasks"]["data"][number];
-
 const TaskSelection: FC<{
-  task: Task;
+  task: TaskDataFragment;
   variables?: TasksQueryVariables;
 }> = ({ task, variables }) => {
   const color = useColor();
@@ -92,16 +91,16 @@ const TaskSelection: FC<{
 };
 
 export const ListTaskRow: FC<{
-  task: Task;
-  prevTask?: Task | null;
-  nextTask?: Task | null;
+  task: TaskDataFragment;
+  prevTask?: TaskDataFragment | null;
+  nextTask?: TaskDataFragment | null;
   href: string;
   allowEditName?: boolean;
   lastRow?: boolean;
   groupVariables?: TasksQueryVariables;
   isMarkAsChild?: boolean;
   droppableOptions?: {
-    inherits?: (keyof Task)[];
+    inherits?: (keyof TaskDataFragment)[];
   };
 }> = ({
   task,
@@ -163,7 +162,7 @@ export const ListTaskRow: FC<{
           );
         },
         onDragEnter({ source, self }) {
-          const sourceTask = source.data.task as Task;
+          const sourceTask = source.data.task as TaskDataFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -172,15 +171,21 @@ export const ListTaskRow: FC<{
 
           setOver({ edge: closestEdge, rect: source.data.rect as DOMRect });
         },
+        canDrop({ source }) {
+          const sourceTask = source.data.task as TaskDataFragment;
+          if (!sourceTask) return false;
+          if (sourceTask._id === task._id || sourceTask._id === task.parentId) return false;
+          return true;
+        },
         onDragLeave({ source }) {
-          const sourceTask = source.data.task as Task;
+          const sourceTask = source.data.task as TaskDataFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id) return;
 
           setOver(null);
         },
         onDrag({ source, self }) {
-          const sourceTask = source.data.task as Task;
+          const sourceTask = source.data.task as TaskDataFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -195,7 +200,7 @@ export const ListTaskRow: FC<{
         onDrop({ source, self }) {
           setOver(null);
 
-          const sourceTask = source.data.task as Task;
+          const sourceTask = source.data.task as TaskDataFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -203,7 +208,7 @@ export const ListTaskRow: FC<{
           if (!closestEdge) return;
 
           const inherits =
-            droppableOptions.inherits?.reduce<Partial<Task>>(
+            droppableOptions.inherits?.reduce<Partial<TaskDataFragment>>(
               (acc, key) => ({
                 ...acc,
                 [key]: task[key],
