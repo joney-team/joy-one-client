@@ -17,6 +17,8 @@ import type {
   UseGantt,
 } from "./gantt-tasks-types";
 import { getDateRangeBreakdown } from "./gantt-tasks-utils";
+import { usePathname } from "next/navigation";
+import { parseTaskPath } from "../../tasks-route-helpers";
 
 let scrollTop = -1;
 const oneDate = 24 * 60 * 60 * 1000;
@@ -25,11 +27,14 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   const { i18n } = useLingui();
   const layout = useLayout();
   const refs = useGanttRefs();
+  const pathname = usePathname();
   const [version, setVersion] = useState(0);
   const rerender = () => setVersion((s) => s + 1);
 
   const [isInitialized, setIsInitialized] = useState(false);
   const isGrabbingRef = useRef(false);
+
+  const { code: taskCode } = useMemo(() => parseTaskPath(pathname), [pathname]);
 
   const [ganttState, setGanttState] = useState<GanttState>({
     unit: "day",
@@ -253,7 +258,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   }, [isInitialized]);
 
   useEffect(() => {
-    if (!isInitialized) return;
+    if (!isInitialized || Boolean(taskCode)) return;
 
     const bodyContainer = refs.bodyContainer.current;
     const sidebarContainer = refs.sidebarContainer.current;
@@ -311,7 +316,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
       window.removeEventListener("wheel", onWindowWheel);
       document.body.style.removeProperty("overscroll-behavior-x");
     };
-  }, [isInitialized]);
+  }, [isInitialized, taskCode]);
 
   useEffect(() => {
     if (!isInitialized || !refs.root.current) return;
