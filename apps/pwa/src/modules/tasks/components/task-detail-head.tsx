@@ -107,6 +107,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = ({ task, close }) => {
                         _id: tag._id,
                         color: tag.color,
                         name: tag.name,
+                        slug: tag.slug,
                       }
                     : null,
                 },

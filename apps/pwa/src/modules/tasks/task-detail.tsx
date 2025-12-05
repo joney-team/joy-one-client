@@ -26,7 +26,7 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, useEffect, useState } from "react";
 import { DetailFooter } from "./components/detail-footer";
 
-import { TaskDetailHead } from "./components/detail-head";
+import { TaskDetailHead } from "./components/task-detail-head";
 import { TaskDataFragment } from "./queries/fragmentTask.graphql";
 import QUERY_TASK_BY_CODE, {
   type TaskByCodeQuery,

@@ -129,7 +129,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
   const initialize = () => {
     const now = Date.now();
-    const fromDate = now - oneDate * ganttConfig.rangeDates;
+    const fromDate = now - oneDate * 7;
     const toDate = now + oneDate * ganttConfig.rangeDates * 2;
 
     setGanttState((s) => ({

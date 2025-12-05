@@ -3,6 +3,6 @@ export const ganttConfig = {
   dividerSize: 10,
   minColumnSize: 60,
   maxColumnSize: 300,
-  rangeDates: 15,
+  rangeDates: 30,
   rowDroppableIndicatorHeight: 3,
 };
