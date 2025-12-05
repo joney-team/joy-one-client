@@ -69,6 +69,7 @@ export const SidebarHead: FC = () => {
             variant="subtle"
             size="sm"
             color="gray"
+            component="div"
             onClick={() => {
               setIsOpenedAllFolder(!isOpenedAllFolder);
               if (isOpenedAllFolder) {
@@ -94,6 +95,7 @@ export const SidebarHead: FC = () => {
           <ActionIcon
             variant="subtle"
             size="sm"
+            component="div"
             color={gantt.state.isHideEstimateTime ? "gray" : "gray"}
             onClick={() => {
               gantt.setState({
@@ -110,10 +112,11 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={<Trans>Show task color by status</Trans>}>
+        <Tooltip label={<Trans>Show/hide task color by status</Trans>}>
           <ActionIcon
             variant="subtle"
             size="sm"
+            component="div"
             color={gantt.state.displayTaskStatusColor ? "primary" : "gray"}
             onClick={() => {
               gantt.toggleSisplayTaskStatusColor();
@@ -132,6 +135,7 @@ export const SidebarHead: FC = () => {
             variant="subtle"
             size="sm"
             color="gray"
+            component="div"
             onClick={() => {
               gantt.scrollToDate({ date: new Date(), behavior: "smooth" });
             }}
@@ -145,6 +149,7 @@ export const SidebarHead: FC = () => {
             variant="subtle"
             size="sm"
             color="gray"
+            component="div"
             onClick={() => OnModalTagForm({ type: TagType.TASK_FOLDER })}
           >
             <IconFolderPlus size={16} />
@@ -272,8 +277,6 @@ export const BodyHead: FC = () => {
               justify="center"
             >
               <Text ta="center" fz={10} fw={500}>
-                <DateFormat value={column.start} type="custom" format={{ weekday: "narrow" }} />
-                {"-"}
                 <DateFormat value={column.start} type="custom" format={{ day: "2-digit" }} />
               </Text>
             </Group>

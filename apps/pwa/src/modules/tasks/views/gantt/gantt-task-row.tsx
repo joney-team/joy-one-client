@@ -2,10 +2,12 @@
 
 import {
   ActionIcon,
+  alpha,
   Box,
   Card,
   Group,
   Portal,
+  Progress,
   Stack,
   Text,
   ThemeIcon,
@@ -531,6 +533,29 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     taskRowDataRef.current?.removeAttribute("hovered");
   };
 
+  const taskStatus = useMemo(() => {
+    return task.statuses.find((v) => v.id === task.status) || task.statuses[0];
+  }, [task.status, task.statuses]);
+
+  const childProgressColor = useMemo(() => {
+    if (task.childProgress === 100) return task.statuses[task.statuses.length - 1]?.color ?? "teal";
+    return task.childProgress > 0 ? "orange" : "gray";
+  }, [task.childProgress, task.statuses]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        resetEstimating();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
+
   return (
     <Fragment>
       <Group
@@ -854,13 +879,13 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
               <div
                 ref={movePointerRef}
                 className={styles.MovePointer}
-                style={{ borderColor: color("primary.3"), opacity: 0 }}
+                style={{ borderColor: color("primary.2"), opacity: 0 }}
               />
 
               <div
                 ref={estimatingPointerRef}
                 className={styles.EstimatingPointer}
-                style={{ background: color("primary.3"), opacity: 0 }}
+                style={{ background: color("primary.2"), opacity: 0 }}
               />
 
               {estimated && (
@@ -872,20 +897,33 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
                   style={{
                     left: estimated?.left,
                     width: estimated?.width,
-                    background: estimated.isChildSummary ? "transparent" : color("primary.4"),
+                    background: estimated.isChildSummary
+                      ? "transparent"
+                      : gantt.state.displayTaskStatusColor
+                      ? alpha(color(taskStatus.color ?? "gray"), 0.8)
+                      : color("primary.4"),
                   }}
                 >
                   {estimated.isChildSummary ? (
                     <Stack gap={2} miw={0} w="100%">
-                      <Text px={5} fz={11} fw={600} truncate c="orange" maw="100%">
-                        {task.name}
-                      </Text>
+                      <Group gap={5} px={5} miw={0} w="100%" wrap="nowrap" justify="space-between">
+                        <Text fz={11} fw={600} truncate c={childProgressColor} maw="100%">
+                          {task.name}
+                        </Text>
 
-                      <Box
-                        w="100%"
-                        h={5}
-                        bg={color("orange.3")}
-                        className={styles.EstimatedRangeChildSummaryProgress}
+                        <Text fz={11} fw={400} truncate c={childProgressColor} maw="100%">
+                          <NumberFormat
+                            value={task.childProgress / 100}
+                            format={{ style: "percent" }}
+                          />
+                        </Text>
+                      </Group>
+
+                      <Progress
+                        miw="100%"
+                        value={task.childProgress}
+                        color={childProgressColor}
+                        animated={task.childProgress > 0 && task.childProgress < 100}
                       />
                     </Stack>
                   ) : (

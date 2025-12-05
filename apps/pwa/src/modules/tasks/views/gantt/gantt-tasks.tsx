@@ -129,7 +129,7 @@ const Content: FC = () => {
       </LayoutSplit>
 
       {/* Zoom In / Out CTAs */}
-      <Card
+      {/* <Card
         shadow="md"
         p={0}
         radius={5}
@@ -164,7 +164,7 @@ const Content: FC = () => {
             <IconMinus size={16} />
           </ActionIcon>
         </Stack>
-      </Card>
+      </Card> */}
     </Stack>
   );
 };

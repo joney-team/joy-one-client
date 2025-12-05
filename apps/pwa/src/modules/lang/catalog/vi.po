@@ -43,7 +43,7 @@ msgstr "<0/> liên quan đến {relatedEntity} / {0}"
 msgid "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 msgstr "<0><1/></0> công việc liên quan sẽ được đổi trạng thái sang <2>{0}</2>"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:617
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:669
 msgid "<0><1/></0> subtask(s) will be archived as well."
 msgstr "<0><1/></0> công việc con cũng sẽ bị xoá."
 
@@ -560,7 +560,7 @@ msgstr "{0} đã bị xoá"
 msgid "Archived order"
 msgstr "Xoá đơn hàng"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:610
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:662
 msgid "Are you sure you want to archive <0>{taskName}</0>?"
 msgstr "Bạn có chắc muốn xoá <0>{taskName}</0>?"
 
@@ -1085,7 +1085,7 @@ msgid "Change customer"
 msgstr "Thay đổi khách hàng"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:211
-#: src/modules/tasks/components/detail-head.tsx:117
+#: src/modules/tasks/components/task-detail-head.tsx:118
 msgid "Change folder"
 msgstr "Thay đổi thư mục"
 
@@ -1564,7 +1564,7 @@ msgid "Copied"
 msgstr "Đã sao chép"
 
 #: src/modals/modal-share-link.tsx:97
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:485
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:504
 msgid "Copy"
 msgstr "Sao chép"
 
@@ -1678,7 +1678,7 @@ msgid "Create file"
 msgstr "Tạo tệp tin"
 
 #: src/layout/navigation/workspace-navigation-menu.tsx:248
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:143
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:147
 msgid "Create folder"
 msgstr "Tạo thư mục"
 
@@ -1766,7 +1766,7 @@ msgid "Create SDK"
 msgstr "Tạo SDK"
 
 #: src/modules/tasks/components/quick-create-task-input.tsx:27
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:644
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:696
 #: src/modules/tasks/views/list/list-task-row.tsx:401
 msgid "Create subtask"
 msgstr "Tạo công việc con"
@@ -1779,9 +1779,9 @@ msgstr "Tạo thẻ"
 #: src/modules/events/event-constants.ts:62
 #: src/modules/tasks/components/quick-create-task-input.tsx:27
 #: src/modules/tasks/components/quick-create-task-input.tsx:44
-#: src/modules/tasks/modals/modal-create-task.tsx:37
+#: src/modules/tasks/modals/modal-create-task.tsx:82
 #: src/modules/tasks/views/board/board-group-by-statuses.tsx:237
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:154
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:159
 #: src/modules/tasks/views/list/list-task-group-by-statuses.tsx:134
 msgid "Create task"
 msgstr "Tạo công việc"
@@ -1798,7 +1798,7 @@ msgstr "Đã tạo"
 #: src/modules/e-invoices/e-invoice-list.tsx:40
 #: src/modules/loans/loan-list.tsx:354
 #: src/modules/receipts/receipt-list.tsx:66
-#: src/modules/tasks/components/detail-head.tsx:165
+#: src/modules/tasks/components/task-detail-head.tsx:166
 msgid "Created at"
 msgstr "Thời gian tạo"
 
@@ -2824,8 +2824,8 @@ msgstr "Tổng quan"
 msgid "General Settings"
 msgstr "Cài đặt chung"
 
-#: src/modules/tasks/components/detail-head.tsx:129
-#: src/modules/tasks/views/gantt/gantt-tasks-group.tsx:79
+#: src/modules/tasks/components/task-detail-head.tsx:130
+#: src/modules/tasks/views/gantt/gantt-tasks-group.tsx:77
 msgid "General tasks"
 msgstr "Công việc chung"
 
@@ -2890,7 +2890,7 @@ msgstr "Ẩn trong hóa đơn khi không có giá"
 msgid "Hide closed"
 msgstr "Ẩn đã đóng"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:90
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:91
 msgid "Hide estimate time"
 msgstr "Ẩn thời gian ước tính"
 
@@ -4327,7 +4327,7 @@ msgstr "Bài viết mới"
 msgid "New task"
 msgstr "Công việc mới"
 
-#: src/modules/tasks/modals/modal-create-task.tsx:96
+#: src/modules/tasks/modals/modal-create-task.tsx:65
 msgid "New Task"
 msgstr "Công việc mới"
 
@@ -5849,11 +5849,11 @@ msgstr "Lưu mẫu đơn thuốc"
 msgid "Scan QR code"
 msgstr "Quét mã QR"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:670
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:722
 msgid "Scroll to task"
 msgstr "Di chuyển đến công việc"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:130
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:133
 msgid "Scroll to today"
 msgstr "Di chuyển đến ngày hôm nay"
 
@@ -6137,7 +6137,7 @@ msgid "Setup nhanh gọn và dễ dàng"
 msgstr "Setup nhanh gọn và dễ dàng"
 
 #: src/modals/modal-share-link.tsx:67
-#: src/modules/tasks/components/detail-head.tsx:176
+#: src/modules/tasks/components/task-detail-head.tsx:177
 msgid "Share"
 msgstr "Chia sẻ"
 
@@ -6166,13 +6166,13 @@ msgstr "Hiển thị tiền tệ"
 msgid "Show customer"
 msgstr "Hiển thị khách hàng"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:88
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:89
 msgid "Show estimate time"
 msgstr "Hiển thị thời gian ước tính"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:113
-msgid "Show task color by status"
-msgstr "Hiển thị màu công việc theo trạng thái"
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:115
+msgid "Show/hide task color by status"
+msgstr "Ẩn/hiện màu công việc theo trạng thái"
 
 #: src/modules/loans/loan-detail.tsx:410
 #: src/modules/loans/modals/modal-sign-loan.tsx:66
@@ -6459,7 +6459,7 @@ msgstr "Chụp ảnh lại"
 #: src/modules/customers/components/customer-detail.tsx:93
 #: src/modules/tags/tags-constants.ts:10
 #: src/modules/tasks/components/detail-footer.tsx:41
-#: src/modules/tasks/modals/modal-create-task.tsx:37
+#: src/modules/tasks/modals/modal-create-task.tsx:82
 msgid "Task"
 msgstr "Công việc"
 
@@ -7629,7 +7629,7 @@ msgstr "Bạn cần lời khuyên! Bắt đầu trò chuyện với chúng tôi 
 msgid "You need to create a DNS Record with domain <0>{0}</0>"
 msgstr "Bạn cần tạo Bản ghi DNS có miền <0>{0}</0>"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:672
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:724
 msgid "You need to set the start date before"
 msgstr "Bạn cần chọn ngày bắt đầu công việc"
 

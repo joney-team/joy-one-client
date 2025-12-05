@@ -697,6 +697,7 @@ export type Task = {
   relatedUserIds: Array<Scalars['String']['output']>;
   startDate: Maybe<Scalars['Float']['output']>;
   status: Scalars['String']['output'];
+  statuses: Array<TaskStatus>;
   /** @deprecated Use folderId instead */
   tagFolderId: Maybe<Scalars['String']['output']>;
   tagIds: Array<Scalars['String']['output']>;
@@ -726,6 +727,15 @@ export const TaskPriority = {
 } as const;
 
 export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
+export type TaskStatus = {
+  __typename?: 'TaskStatus';
+  color: Maybe<Scalars['String']['output']>;
+  icon: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  name: Maybe<Scalars['String']['output']>;
+  order: Maybe<Scalars['Float']['output']>;
+};
+
 export type TaskTimeTracking = {
   __typename?: 'TaskTimeTracking';
   billable: Maybe<Scalars['Boolean']['output']>;

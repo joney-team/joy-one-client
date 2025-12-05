@@ -74,7 +74,7 @@
 
     & .EstimatingPointer {
       position: absolute;
-      height: 1.5rem;
+      height: 1rem;
       top: 50%;
       transform: translateY(-50%);
       border-radius: 5rem;
@@ -82,7 +82,7 @@
 
     & .EstimatedRange {
       position: absolute;
-      min-height: 1.5rem;
+      min-height: 1.6rem;
       top: 50%;
       transform: translateY(-50%);
       border-radius: 0.4rem;

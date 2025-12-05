@@ -96,6 +96,13 @@ fragment TaskData on Task {
     endAt
   }
 
+  statuses {
+    id
+    name
+    color
+    order
+  }
+
   createdAt
   isArchived
 }

@@ -17,7 +17,8 @@
     "ws:apps:start": "NEXT_PUBLIC_EXTENDED_APP=true next start",
     "codegen:compile": "pnpm run codegen:schema && pnpm run codegen",
     "codegen:schema": "graphql-codegen --config ./codegen-schema.ts",
-    "codegen": "graphql-codegen --config ./codegen.ts"
+    "codegen": "graphql-codegen --config ./codegen.ts",
+    "compile": "pnpm run codegen:compile && pnpm run translate && pnpm run translate:compile"
   },
   "dependencies": {
     "@apollo/client": "^4.0.9",

@@ -42,7 +42,7 @@ msgstr "<0/> related to {relatedEntity} / {0}"
 msgid "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 msgstr "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:617
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:669
 msgid "<0><1/></0> subtask(s) will be archived as well."
 msgstr "<0><1/></0> subtask(s) will be archived as well."
 
@@ -559,7 +559,7 @@ msgstr "Archived {0}"
 msgid "Archived order"
 msgstr "Archived order"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:610
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:662
 msgid "Are you sure you want to archive <0>{taskName}</0>?"
 msgstr "Are you sure you want to archive <0>{taskName}</0>?"
 
@@ -1084,7 +1084,7 @@ msgid "Change customer"
 msgstr "Change customer"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:211
-#: src/modules/tasks/components/detail-head.tsx:117
+#: src/modules/tasks/components/task-detail-head.tsx:118
 msgid "Change folder"
 msgstr "Change folder"
 
@@ -1563,7 +1563,7 @@ msgid "Copied"
 msgstr "Copied"
 
 #: src/modals/modal-share-link.tsx:97
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:485
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:504
 msgid "Copy"
 msgstr "Copy"
 
@@ -1677,7 +1677,7 @@ msgid "Create file"
 msgstr "Create file"
 
 #: src/layout/navigation/workspace-navigation-menu.tsx:248
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:143
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:147
 msgid "Create folder"
 msgstr "Create folder"
 
@@ -1765,7 +1765,7 @@ msgid "Create SDK"
 msgstr "Create SDK"
 
 #: src/modules/tasks/components/quick-create-task-input.tsx:27
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:644
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:696
 #: src/modules/tasks/views/list/list-task-row.tsx:401
 msgid "Create subtask"
 msgstr "Create subtask"
@@ -1778,9 +1778,9 @@ msgstr "Create tag"
 #: src/modules/events/event-constants.ts:62
 #: src/modules/tasks/components/quick-create-task-input.tsx:27
 #: src/modules/tasks/components/quick-create-task-input.tsx:44
-#: src/modules/tasks/modals/modal-create-task.tsx:37
+#: src/modules/tasks/modals/modal-create-task.tsx:82
 #: src/modules/tasks/views/board/board-group-by-statuses.tsx:237
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:154
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:159
 #: src/modules/tasks/views/list/list-task-group-by-statuses.tsx:134
 msgid "Create task"
 msgstr "Create task"
@@ -1797,7 +1797,7 @@ msgstr "Created"
 #: src/modules/e-invoices/e-invoice-list.tsx:40
 #: src/modules/loans/loan-list.tsx:354
 #: src/modules/receipts/receipt-list.tsx:66
-#: src/modules/tasks/components/detail-head.tsx:165
+#: src/modules/tasks/components/task-detail-head.tsx:166
 msgid "Created at"
 msgstr "Created at"
 
@@ -2823,8 +2823,8 @@ msgstr "General"
 msgid "General Settings"
 msgstr "General Settings"
 
-#: src/modules/tasks/components/detail-head.tsx:129
-#: src/modules/tasks/views/gantt/gantt-tasks-group.tsx:79
+#: src/modules/tasks/components/task-detail-head.tsx:130
+#: src/modules/tasks/views/gantt/gantt-tasks-group.tsx:77
 msgid "General tasks"
 msgstr "General tasks"
 
@@ -2889,7 +2889,7 @@ msgstr "Hidden in receipt when no price"
 msgid "Hide closed"
 msgstr "Hide closed"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:90
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:91
 msgid "Hide estimate time"
 msgstr "Hide estimate time"
 
@@ -4326,7 +4326,7 @@ msgstr "New Post"
 msgid "New task"
 msgstr "New task"
 
-#: src/modules/tasks/modals/modal-create-task.tsx:96
+#: src/modules/tasks/modals/modal-create-task.tsx:65
 msgid "New Task"
 msgstr "New Task"
 
@@ -5848,11 +5848,11 @@ msgstr "Save prescription template"
 msgid "Scan QR code"
 msgstr "Scan QR code"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:670
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:722
 msgid "Scroll to task"
 msgstr "Scroll to task"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:130
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:133
 msgid "Scroll to today"
 msgstr "Scroll to today"
 
@@ -6136,7 +6136,7 @@ msgid "Setup nhanh gọn và dễ dàng"
 msgstr "Setup nhanh gọn và dễ dàng"
 
 #: src/modals/modal-share-link.tsx:67
-#: src/modules/tasks/components/detail-head.tsx:176
+#: src/modules/tasks/components/task-detail-head.tsx:177
 msgid "Share"
 msgstr "Share"
 
@@ -6165,13 +6165,13 @@ msgstr "Show currency"
 msgid "Show customer"
 msgstr "Show customer"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:88
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:89
 msgid "Show estimate time"
 msgstr "Show estimate time"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:113
-msgid "Show task color by status"
-msgstr "Show task color by status"
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:115
+msgid "Show/hide task color by status"
+msgstr "Show/hide task color by status"
 
 #: src/modules/loans/loan-detail.tsx:410
 #: src/modules/loans/modals/modal-sign-loan.tsx:66
@@ -6458,7 +6458,7 @@ msgstr "Take photo again"
 #: src/modules/customers/components/customer-detail.tsx:93
 #: src/modules/tags/tags-constants.ts:10
 #: src/modules/tasks/components/detail-footer.tsx:41
-#: src/modules/tasks/modals/modal-create-task.tsx:37
+#: src/modules/tasks/modals/modal-create-task.tsx:82
 msgid "Task"
 msgstr "Task"
 
@@ -7628,7 +7628,7 @@ msgstr "You need advice! Start chatting with us now."
 msgid "You need to create a DNS Record with domain <0>{0}</0>"
 msgstr "You need to create a DNS Record with domain <0>{0}</0>"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:672
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:724
 msgid "You need to set the start date before"
 msgstr "You need to set the start date before"
 
