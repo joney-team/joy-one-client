@@ -125,7 +125,7 @@ export const TaskDetail: FC = () => {
 
                       <Stack gap={30}>
                         <TaskForm key={task._id + version} task={task} />
-                        <TaskDetailSubtasks parent={task} />
+                        <TaskDetailSubtasks task={task} />
                         <DetailFooter task={task} onClose={onClose} />
                       </Stack>
                     </Container>

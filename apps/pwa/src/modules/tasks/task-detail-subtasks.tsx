@@ -7,7 +7,7 @@ import { Trans } from "@lingui/react/macro";
 import { Card, Divider, Group, Progress, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus, IconSubtask } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
-import { useMemo, type FC } from "react";
+import { useEffect, useMemo, type FC } from "react";
 import { useTasksQuery } from "./hooks/use-tasks-query";
 import { ModalCreateTask } from "./modals/modal-create-task";
 import { TaskDataFragment } from "./queries/fragmentTask.graphql";
@@ -15,20 +15,32 @@ import { type TasksQueryVariables } from "./queries/queryTasks.graphql";
 import { ListTaskRow } from "./views/list/list-task-row";
 import { ListTaskRowHead } from "./views/list/list-task-row-head";
 
-export const TaskDetailSubtasks: FC<{ parent: TaskDataFragment }> = ({ parent }) => {
+export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => {
   const pathname = usePathname();
 
   const groupVariables: TasksQueryVariables = useMemo(
     () => ({
-      parentId: parent._id,
+      parentId: task._id,
       all: true,
     }),
-    [parent._id]
+    [task._id]
   );
 
-  const { tasks: subTasks, loading } = useTasksQuery(groupVariables);
+  const {
+    getTasks: getSubtasks,
+    tasks: subTasks,
+    loading,
+  } = useTasksQuery({
+    variables: groupVariables,
+    isSkipLoadCount: task.childCount === 0,
+  });
 
-  if (parent.parent) return null;
+  useEffect(() => {
+    if (task.parentId) return;
+    getSubtasks();
+  }, [getSubtasks]);
+
+  if (task.parent) return null;
 
   return (
     <Stack gap={5}>
@@ -45,9 +57,9 @@ export const TaskDetailSubtasks: FC<{ parent: TaskDataFragment }> = ({ parent })
 
         <Group gap={5}>
           <Text fz={15}>
-            <NumberFormat value={parent.progress ?? 0} suffix="%" />
+            <NumberFormat value={task.progress ?? 0} suffix="%" />
           </Text>
-          <Progress value={parent.progress ?? 0} w={70} color={"dark"} />
+          <Progress value={task.progress ?? 0} w={70} color={"dark"} />
         </Group>
 
         <ModalCreateTask>
@@ -61,7 +73,7 @@ export const TaskDetailSubtasks: FC<{ parent: TaskDataFragment }> = ({ parent })
               onClick={() =>
                 open({
                   initial: {
-                    parent,
+                    parent: task,
                   },
                 })
               }
@@ -93,7 +105,7 @@ export const TaskDetailSubtasks: FC<{ parent: TaskDataFragment }> = ({ parent })
                     task={task}
                     prevTask={subTasks[index - 1]}
                     nextTask={subTasks[index + 1]}
-                    href={pathname.replace(`/${parent.code}`, `/${task.code}`)}
+                    href={pathname.replace(`/${task.code}`, `/${task.code}`)}
                   />
                 ))}
             </Stack>
