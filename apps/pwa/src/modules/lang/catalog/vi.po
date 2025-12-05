@@ -34,7 +34,7 @@ msgid "+<0/> new one"
 msgstr "+<0/> mới"
 
 #. placeholder {0}: moduleOrder.name
-#: src/widgets/reports/widgets/report-products.widget.tsx:266
+#: src/widgets/reports/widgets/report-products.widget.tsx:267
 msgid "<0/> related to {relatedEntity} / {0}"
 msgstr "<0/> liên quan đến {relatedEntity} / {0}"
 
@@ -42,6 +42,10 @@ msgstr "<0/> liên quan đến {relatedEntity} / {0}"
 #: src/modules/tasks/task-status-modal.tsx:239
 msgid "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 msgstr "<0><1/></0> công việc liên quan sẽ được đổi trạng thái sang <2>{0}</2>"
+
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:617
+msgid "<0><1/></0> subtask(s) will be archived as well."
+msgstr "<0><1/></0> công việc con cũng sẽ bị xoá."
 
 #: src/modules/loans/modals/modal-loan-package-form.tsx:140
 msgid "1 month"
@@ -132,7 +136,7 @@ msgstr "Đang hoạt động"
 msgid "Active at"
 msgstr "Kích hoạt lúc"
 
-#: src/modules/tasks/components/detail-footer.tsx:29
+#: src/modules/tasks/components/detail-footer.tsx:31
 msgid "Activities"
 msgstr "Hoạt động"
 
@@ -142,7 +146,7 @@ msgstr "Hoạt động"
 
 #: src/components/inputs/time-trackings-input.tsx:533
 #: src/components/inputs/work-slot-settings-input.tsx:277
-#: src/modules/customers/components/customer-information.tsx:382
+#: src/modules/customers/components/customer-information.tsx:381
 #: src/modules/loans/modals/modal-loan-package-form.tsx:316
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:49
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:149
@@ -181,12 +185,12 @@ msgstr "Thêm liên hệ"
 msgid "Add customer information"
 msgstr "Thêm thông tin khách hàng"
 
-#: src/modules/workspaces/workspace-module-setup.tsx:105
+#: src/modules/workspaces/workspace-module-setup.tsx:100
 msgid "Add divider"
 msgstr "Thêm đường phân cách"
 
-#: src/modules/tasks/components/form-task.tsx:475
-#: src/modules/tasks/views/board/board-task-card.tsx:445
+#: src/modules/tasks/components/form-task.tsx:400
+#: src/modules/tasks/views/board/board-task-card.tsx:402
 msgid "Add due date"
 msgstr "Thêm thời hạn"
 
@@ -214,7 +218,7 @@ msgstr "Thêm gói vay"
 msgid "Add location"
 msgstr "Thêm vị trí"
 
-#: src/modules/workspaces/workspace-module-setup.tsx:140
+#: src/modules/workspaces/workspace-module-setup.tsx:135
 msgid "Add modules"
 msgstr "Thêm chức năng"
 
@@ -227,8 +231,8 @@ msgstr "Thêm ghi chú"
 msgid "Add pill"
 msgstr "Thêm thuốc"
 
-#: src/modules/tasks/components/form-task.tsx:423
-#: src/modules/tasks/views/board/board-task-card.tsx:497
+#: src/modules/tasks/components/form-task.tsx:348
+#: src/modules/tasks/views/board/board-task-card.tsx:454
 msgid "Add priority"
 msgstr "Thêm độ ưu tiên"
 
@@ -250,7 +254,7 @@ msgstr "Thêm hoá đơn"
 msgid "Add rule"
 msgstr "Thêm quy tắc"
 
-#: src/modules/tasks/views/board/index.tsx:116
+#: src/modules/tasks/views/board/board-tasks.tsx:129
 msgid "Add status"
 msgstr "Thêm trạng thái"
 
@@ -258,25 +262,21 @@ msgstr "Thêm trạng thái"
 msgid "Add Status"
 msgstr "Thêm trạng thái"
 
-#: src/modules/tasks/views/board/board-task-card.tsx:408
+#: src/modules/tasks/views/board/board-task-card.tsx:365
 msgid "Add tag"
 msgstr "Thêm thẻ"
 
 #: src/modules/tags/components/tags-input.tsx:56
-#: src/modules/tasks/views/list/list-task-row.tsx:398
+#: src/modules/tasks/views/list/list-task-row.tsx:445
 msgid "Add tags"
 msgstr "Thêm thẻ"
 
-#: src/modules/tasks/views/calendar/index.tsx:240
+#: src/modules/tasks/views/calendar/index.tsx:223
 msgid "Add task need to complete"
 msgstr "Thêm công việc cần hoàn thành"
 
-#: src/modules/tasks/views/gantt/gantt.task-group-by-folder.tsx:164
-msgid "Add tasks"
-msgstr "Thêm công việc"
-
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:424
-#: src/modules/tasks/views/time-trackings/index.tsx:266
+#: src/modules/tasks/views/time-trackings/index.tsx:267
 msgid "Add time trackings"
 msgstr "Thêm thời gian làm việc"
 
@@ -357,7 +357,7 @@ msgstr "Cập nhật trợ lý AI"
 msgid "AI assistants"
 msgstr "Trợ lý AI"
 
-#: src/modules/workspaces/workspace-modules.tsx:439
+#: src/modules/workspaces/workspace-modules.tsx:440
 msgid "AI Assistants"
 msgstr "Trợ lý AI"
 
@@ -428,7 +428,7 @@ msgstr "Tạo App APIs"
 msgid "API App updated"
 msgstr "Cập nhật App APIs"
 
-#: src/modules/workspaces/workspace-modules.tsx:339
+#: src/modules/workspaces/workspace-modules.tsx:340
 msgid "API Apps"
 msgstr "Ứng dụng API"
 
@@ -441,7 +441,7 @@ msgstr "Mã API"
 msgid "APIs System"
 msgstr "Hệ thống API"
 
-#: src/modules/workspaces/workspace-modules.tsx:283
+#: src/modules/workspaces/workspace-modules.tsx:284
 #: src/modules/workspaces/workspace.tsx:57
 msgid "App settings"
 msgstr "Cài đặt App"
@@ -559,6 +559,10 @@ msgstr "{0} đã bị xoá"
 #: src/modules/events/event-constants.ts:154
 msgid "Archived order"
 msgstr "Xoá đơn hàng"
+
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:610
+msgid "Are you sure you want to archive <0>{taskName}</0>?"
+msgstr "Bạn có chắc muốn xoá <0>{taskName}</0>?"
 
 #: src/modules/receipts/receipt-e-invoices.tsx:45
 msgid "Are you sure you want to cancel the e-invoice? This action cannot be undone. The e-invoice will be deleted."
@@ -686,9 +690,9 @@ msgstr "Giao việc cho"
 #: src/modules/customers/components/form-customer.tsx:252
 #: src/modules/message-boxes/message-box/message-box-head.tsx:95
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:170
-#: src/modules/tasks/components/form-task.tsx:368
-#: src/modules/tasks/components/tasks-menu-actions.tsx:162
-#: src/modules/tasks/views/board/board-task-card.tsx:507
+#: src/modules/tasks/components/form-task.tsx:293
+#: src/modules/tasks/components/tasks-menu-actions.tsx:182
+#: src/modules/tasks/views/board/board-task-card.tsx:464
 #: src/modules/tasks/views/list/list-task-row-head.tsx:15
 msgid "Assignee"
 msgstr "Phụ trách"
@@ -715,7 +719,7 @@ msgstr "Chỉ định một nhánh làm việc"
 msgid "At the time of loan signing"
 msgstr "Tại thời điểm ký hồ sơ vay"
 
-#: src/modules/tasks/components/form-task.tsx:585
+#: src/modules/tasks/components/form-task.tsx:513
 msgid "Attachments"
 msgstr "Tệp đính kèm"
 
@@ -744,7 +748,7 @@ msgstr "Tự động"
 msgid "Auto create mode"
 msgstr "Chế độ tự động tạo"
 
-#: src/modules/workspaces/workspace-modules.tsx:440
+#: src/modules/workspaces/workspace-modules.tsx:441
 msgid "Auto reply messages according to the script"
 msgstr "Trả lời tin nhắn tự động theo kịch bản"
 
@@ -827,7 +831,7 @@ msgstr "Giao dịch ngân hàng"
 msgid "Bank Transfer"
 msgstr "CK ngân hàng"
 
-#: src/modules/workspaces/workspace-modules.tsx:394
+#: src/modules/workspaces/workspace-modules.tsx:395
 msgid "Banks"
 msgstr "Ngân hàng"
 
@@ -861,12 +865,12 @@ msgstr "Ngày sinh"
 msgid "Birthday"
 msgstr "Ngày sinh"
 
-#: src/modules/tasks/views/index.tsx:45
+#: src/modules/tasks/views/task-views.tsx:57
 msgid "Board"
 msgstr "Bảng"
 
 #: src/modules/bookings/modals/modal-booking-detail.tsx:76
-#: src/modules/customers/components/customer-detail.tsx:77
+#: src/modules/customers/components/customer-detail.tsx:79
 #: src/modules/plugins/zalo-oas/zalo-oas-constants.ts:7
 msgid "Booking"
 msgstr "Lịch hẹn"
@@ -893,7 +897,7 @@ msgstr "Thông tin lịch hẹn"
 #: src/modules/users/modals/modal-user-information.tsx:191
 #: src/modules/workspace-roles/workspace-roles-config.ts:106
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:210
-#: src/modules/workspaces/workspace-modules.tsx:153
+#: src/modules/workspaces/workspace-modules.tsx:154
 msgid "Bookings"
 msgstr "Lịch hẹn"
 
@@ -915,7 +919,7 @@ msgstr "Chi nhánh"
 #: src/layout/navigation/navigation-drawer.tsx:265
 #: src/modules/users/components/user-workspace-settings-form.tsx:140
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:216
-#: src/modules/workspaces/workspace-modules.tsx:320
+#: src/modules/workspaces/workspace-modules.tsx:321
 msgid "Branches"
 msgstr "Chi nhánh"
 
@@ -945,7 +949,7 @@ msgstr "Kinh doanh"
 msgid "Business permit"
 msgstr "Giấy phép kinh doanh"
 
-#: src/modules/tasks/views/index.tsx:57
+#: src/modules/tasks/views/task-views.tsx:69
 msgid "Calendar"
 msgstr "Lịch"
 
@@ -959,6 +963,7 @@ msgstr "Có thể để trống 1 trong 2 thời gian check-in hoặc check-out 
 
 #: src/hooks/use-confirm-modal.tsx:104
 #: src/hooks/use-confirm-modal.tsx:110
+#: src/modals/modal-confirm.tsx:59
 #: src/modules/bookings/components/form-booking.tsx:410
 #: src/modules/customers/modals/modal-customer-form.tsx:124
 #: src/modules/receipts/receipt-e-invoices.tsx:122
@@ -1029,7 +1034,7 @@ msgstr "Người thu"
 #: src/modules/categories/category-list.tsx:21
 #: src/modules/products/components/form-product.tsx:310
 #: src/modules/workspace-roles/workspace-roles-config.ts:253
-#: src/modules/workspaces/workspace-modules.tsx:357
+#: src/modules/workspaces/workspace-modules.tsx:358
 msgid "Categories"
 msgstr "Danh mục"
 
@@ -1080,7 +1085,7 @@ msgid "Change customer"
 msgstr "Thay đổi khách hàng"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:211
-#: src/modules/tasks/components/detail-head.tsx:93
+#: src/modules/tasks/components/detail-head.tsx:117
 msgid "Change folder"
 msgstr "Thay đổi thư mục"
 
@@ -1261,13 +1266,17 @@ msgstr "Phòng khám"
 msgid "Close"
 msgstr "Đóng"
 
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:65
+msgid "Close all folders"
+msgstr "Đóng tất cả thư mục"
+
 #: src/modules/message-boxes/message-boxes-contants.tsx:11
 #: src/modules/promotions/promotions-constants.ts:23
 #: src/modules/tasks/task-constants.tsx:39
 msgid "Closed"
 msgstr "Đã đóng"
 
-#: src/modules/workspaces/workspace-modules.tsx:457
+#: src/modules/workspaces/workspace-modules.tsx:458
 msgid "Cloud Storage"
 msgstr "Cloud Storage"
 
@@ -1313,7 +1322,7 @@ msgstr "Combo"
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:47
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:80
 #: src/modules/product-combos/product-combos-layout.tsx:58
-#: src/modules/workspaces/workspace-modules.tsx:185
+#: src/modules/workspaces/workspace-modules.tsx:186
 msgid "Combos"
 msgstr "Combos"
 
@@ -1372,7 +1381,7 @@ msgstr "Chi nhánh"
 #: src/modules/receipts/modals/modal-partial-payment.tsx:117
 #: src/modules/receipts/modals/modal-receipt-form.tsx:157
 #: src/modules/tags/modals/modal-tag-form.tsx:118
-#: src/modules/tasks/components/form-task.tsx:674
+#: src/modules/tasks/components/form-task.tsx:605
 #: src/modules/workspace-sdks/modals/modal-workspace-sdk-form.tsx:77
 #: src/modules/workspaces/workspace-require.tsx:365
 msgid "Complete"
@@ -1404,6 +1413,7 @@ msgstr "Cấu hình"
 
 #: src/hooks/use-confirm-modal.tsx:100
 #: src/hooks/use-confirm-modal.tsx:113
+#: src/modals/modal-confirm.tsx:62
 #: src/modules/bookings/components/form-booking.tsx:416
 #: src/modules/dashboard/dashboard-suggestions.tsx:183
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:161
@@ -1502,7 +1512,7 @@ msgstr "Kết nối thành công"
 msgid "Consumables"
 msgstr "Vật tư tiêu hao"
 
-#: src/modules/customers/components/customer-information.tsx:235
+#: src/modules/customers/components/customer-information.tsx:234
 #: src/modules/customers/components/customer-relationship-contact-input.tsx:52
 #: src/modules/customers/modals/modal-customer-relationship-contacts.tsx:64
 msgid "Contact relatives"
@@ -1512,7 +1522,7 @@ msgstr "Liên hệ người thân"
 msgid "Contact support"
 msgstr "Liên hệ hỗ trợ"
 
-#: src/modules/customers/components/customer-information.tsx:216
+#: src/modules/customers/components/customer-information.tsx:215
 #: src/modules/customers/modals/modal-customer-contacts.tsx:179
 #: src/modules/loans/components/loan-customer-kyc.tsx:141
 #: src/modules/loans/components/loan-customer-kyc.tsx:178
@@ -1549,15 +1559,16 @@ msgstr "Chuyển đổi địa chỉ"
 msgid "Coordinates"
 msgstr "Tọa độ"
 
-#: src/modals/modal-share-link.tsx:96
+#: src/modals/modal-share-link.tsx:97
 msgid "Copied"
 msgstr "Đã sao chép"
 
-#: src/modals/modal-share-link.tsx:96
+#: src/modals/modal-share-link.tsx:97
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:485
 msgid "Copy"
 msgstr "Sao chép"
 
-#: src/modules/tasks/task-detail.tsx:193
+#: src/modules/tasks/task-detail.tsx:161
 msgid "Copy code"
 msgstr "Sao chép code"
 
@@ -1622,7 +1633,7 @@ msgstr "Tạo"
 msgid "Create {entity}"
 msgstr "Tạo {entity}"
 
-#: src/modules/workspaces/workspace-modules.tsx:284
+#: src/modules/workspaces/workspace-modules.tsx:285
 msgid "Create an application with a custom domain, customize the application name, icon, color."
 msgstr "Tạo ứng dụng với tên miền riêng, tuỳ biến tên ứng dụng, biểu tượng, màu sắc."
 
@@ -1666,8 +1677,8 @@ msgstr "Điều kiện tạo HĐĐT"
 msgid "Create file"
 msgstr "Tạo tệp tin"
 
-#: src/layout/navigation/navigation-menu.tsx:247
-#: src/modules/tasks/views/gantt/gantt.layout.tsx:122
+#: src/layout/navigation/workspace-navigation-menu.tsx:248
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:143
 msgid "Create folder"
 msgstr "Tạo thư mục"
 
@@ -1754,10 +1765,9 @@ msgstr "Tạo vai trò"
 msgid "Create SDK"
 msgstr "Tạo SDK"
 
-#: src/modules/tasks/components/quick-create-task-input.tsx:26
-#: src/modules/tasks/views/board/board-task-card.tsx:333
-#: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:241
-#: src/modules/tasks/views/list/list-task-row.tsx:354
+#: src/modules/tasks/components/quick-create-task-input.tsx:27
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:644
+#: src/modules/tasks/views/list/list-task-row.tsx:401
 msgid "Create subtask"
 msgstr "Tạo công việc con"
 
@@ -1765,14 +1775,14 @@ msgstr "Tạo công việc con"
 msgid "Create tag"
 msgstr "Tạo thẻ"
 
-#: src/layout/navigation/navigation-menu.tsx:233
+#: src/layout/navigation/workspace-navigation-menu.tsx:234
 #: src/modules/events/event-constants.ts:62
-#: src/modules/tasks/components/quick-create-task-input.tsx:26
-#: src/modules/tasks/components/quick-create-task-input.tsx:43
-#: src/modules/tasks/modals/modal-create-task.tsx:49
-#: src/modules/tasks/views/board/board-group-by-statuses.tsx:268
-#: src/modules/tasks/views/gantt/gantt.layout.tsx:133
-#: src/modules/tasks/views/list/list-task-group-by-statuses.tsx:122
+#: src/modules/tasks/components/quick-create-task-input.tsx:27
+#: src/modules/tasks/components/quick-create-task-input.tsx:44
+#: src/modules/tasks/modals/modal-create-task.tsx:37
+#: src/modules/tasks/views/board/board-group-by-statuses.tsx:237
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:154
+#: src/modules/tasks/views/list/list-task-group-by-statuses.tsx:134
 msgid "Create task"
 msgstr "Tạo công việc"
 
@@ -1780,7 +1790,7 @@ msgstr "Tạo công việc"
 msgid "Create/update loan"
 msgstr "Tạo/cập nhật hồ sơ vay"
 
-#: src/modules/tasks/views/calendar/index.tsx:273
+#: src/modules/tasks/views/calendar/index.tsx:256
 msgid "Created"
 msgstr "Đã tạo"
 
@@ -1788,7 +1798,7 @@ msgstr "Đã tạo"
 #: src/modules/e-invoices/e-invoice-list.tsx:40
 #: src/modules/loans/loan-list.tsx:354
 #: src/modules/receipts/receipt-list.tsx:66
-#: src/modules/tasks/components/detail-head.tsx:138
+#: src/modules/tasks/components/detail-head.tsx:165
 msgid "Created at"
 msgstr "Thời gian tạo"
 
@@ -1810,7 +1820,7 @@ msgstr "Tín dụng"
 msgid "Credit report"
 msgstr "Báo cáo tín dụng"
 
-#: src/modules/workspaces/workspace-modules.tsx:311
+#: src/modules/workspaces/workspace-modules.tsx:312
 msgid "Credit settings"
 msgstr "Cài đặt tín dụng"
 
@@ -1853,7 +1863,7 @@ msgstr "Cập nhật trường tùy chỉnh"
 
 #: src/modules/custom-fields/custom-field-list.tsx:20
 #: src/modules/products/components/form-product.tsx:589
-#: src/modules/workspaces/workspace-modules.tsx:366
+#: src/modules/workspaces/workspace-modules.tsx:367
 msgid "Custom fields"
 msgstr "Trường tùy chỉnh"
 
@@ -1872,8 +1882,8 @@ msgstr "Tùy chỉnh thời gian giải ngân"
 #: src/modules/coupons/coupon-card.tsx:44
 #: src/modules/coupons/modals/modal-coupon-form.tsx:141
 #: src/modules/customers/components/customer-column.tsx:21
-#: src/modules/customers/components/customer-detail.tsx:117
-#: src/modules/customers/components/customer-detail.tsx:152
+#: src/modules/customers/components/customer-detail.tsx:119
+#: src/modules/customers/components/customer-detail.tsx:154
 #: src/modules/customers/components/customer-kyc-card.tsx:123
 #: src/modules/loans/components/loan-card.tsx:52
 #: src/modules/loans/modals/modal-create-loan.tsx:227
@@ -1885,7 +1895,7 @@ msgstr "Tùy chỉnh thời gian giải ngân"
 #: src/modules/product-vouchers/product-voucher-card.tsx:73
 #: src/modules/receipts/modals/modal-receipt-form.tsx:131
 #: src/modules/tags/tags-constants.ts:7
-#: src/modules/tasks/components/form-task.tsx:524
+#: src/modules/tasks/components/form-task.tsx:451
 #: src/modules/tasks/views/list/list-task-row-head.tsx:18
 #: src/widgets/reports/widgets/report-credit.widget.tsx:369
 msgid "Customer"
@@ -1932,7 +1942,7 @@ msgid "Customer forms"
 msgstr "Form khách hàng"
 
 #: src/constant.ts:8
-#: src/modules/workspaces/workspace-modules.tsx:140
+#: src/modules/workspaces/workspace-modules.tsx:141
 msgid "Customer Forms"
 msgstr "Form khách hàng"
 
@@ -1963,9 +1973,9 @@ msgstr "Cập nhật khách hàng"
 
 #: src/constant.ts:7
 #: src/modules/customers/customer-list.tsx:39
-#: src/modules/search/search-engine.tsx:123
+#: src/modules/search/search-engine.tsx:135
 #: src/modules/workspace-roles/workspace-roles-config.ts:55
-#: src/modules/workspaces/workspace-modules.tsx:134
+#: src/modules/workspaces/workspace-modules.tsx:135
 msgid "Customers"
 msgstr "Khách hàng"
 
@@ -1973,7 +1983,7 @@ msgstr "Khách hàng"
 msgid "Customers limit rule"
 msgstr "Quy tắc giới hạn khách hàng"
 
-#: src/modules/workspaces/workspace-modules.tsx:266
+#: src/modules/workspaces/workspace-modules.tsx:267
 msgid "Customize the features needed on the navigation bar"
 msgstr "Tuỳ chỉnh ẩn/hiện các tính năng cần thiết trên thanh điều hướng"
 
@@ -1989,7 +1999,7 @@ msgstr "Tùy chỉnh cài đặt ngôn ngữ và khu vực của bạn"
 msgid "Dark mode"
 msgstr "Chế độ tối"
 
-#: src/modules/workspaces/workspace-modules.tsx:88
+#: src/modules/workspaces/workspace-modules.tsx:89
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -2200,7 +2210,7 @@ msgstr "Tên hiển thị trong Workspace"
 msgid "Display price for users"
 msgstr "Hiển thị giá cho người dùng"
 
-#: src/modules/workspaces/workspace-module-setup.tsx:112
+#: src/modules/workspaces/workspace-module-setup.tsx:107
 msgid "Divider"
 msgstr "Phân cách"
 
@@ -2208,7 +2218,7 @@ msgstr "Phân cách"
 msgid "Docs"
 msgstr "Tài liệu"
 
-#: src/modules/workspaces/workspace-modules.tsx:301
+#: src/modules/workspaces/workspace-modules.tsx:302
 msgid "Documents"
 msgstr "Tài liệu"
 
@@ -2219,10 +2229,6 @@ msgstr "Tên miền"
 #: src/modules/posts/components/form-post.tsx:139
 msgid "Draft"
 msgstr "Bản nháp"
-
-#: src/modules/tasks/views/gantt/gantt.task-row-body.tsx:243
-msgid "Drag and drop"
-msgstr "Kéo và thả"
 
 #: src/modules/bookings/modals/modal-booking.tsx:187
 msgid "Drag and drop to select the appropriate time and enter the content if any"
@@ -2270,9 +2276,9 @@ msgstr "Thả hoặc nhấp để chọn tập tin"
 
 #: src/components/inputs/due-date-input.tsx:148
 #: src/modules/receipts/receipt-card.tsx:245
-#: src/modules/tasks/components/form-task.tsx:434
-#: src/modules/tasks/views/board/board-task-card.tsx:421
-#: src/modules/tasks/views/calendar/index.tsx:284
+#: src/modules/tasks/components/form-task.tsx:359
+#: src/modules/tasks/views/board/board-task-card.tsx:378
+#: src/modules/tasks/views/calendar/index.tsx:267
 #: src/modules/tasks/views/list/list-task-row-head.tsx:21
 msgid "Due date"
 msgstr "Ngày đến hạn"
@@ -2292,8 +2298,8 @@ msgstr "HĐĐT đã xóa"
 #: src/modules/e-invoices/e-invoice-list.tsx:29
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-list.tsx:52
 #: src/modules/receipts/receipt-e-invoices.tsx:83
-#: src/modules/workspaces/workspace-modules.tsx:223
-#: src/modules/workspaces/workspace-modules.tsx:448
+#: src/modules/workspaces/workspace-modules.tsx:224
+#: src/modules/workspaces/workspace-modules.tsx:449
 msgid "E-Invoices"
 msgstr "HĐĐT"
 
@@ -2337,8 +2343,7 @@ msgstr "Chỉnh sửa ghi chú"
 msgid "Edit promotion"
 msgstr "Chỉnh sửa khuyến mãi"
 
-#: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:298
-#: src/modules/tasks/views/list/list-task-row.tsx:372
+#: src/modules/tasks/views/list/list-task-row.tsx:419
 msgid "Edit task name"
 msgstr "Chỉnh sửa tên công việc"
 
@@ -2475,8 +2480,8 @@ msgstr "Nhập nguồn cung cấp sản phẩm"
 msgid "Enter reject reason"
 msgstr "Nhập lý do từ chối"
 
-#: src/modules/tasks/components/form-task.tsx:269
-#: src/modules/tasks/components/quick-create-task-input.tsx:35
+#: src/modules/tasks/components/form-task.tsx:194
+#: src/modules/tasks/components/quick-create-task-input.tsx:36
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:207
 msgid "Enter task name"
 msgstr "Nhập tên công việc"
@@ -2523,9 +2528,8 @@ msgid "Estimate price"
 msgstr "Định giá"
 
 #: src/components/inputs/estimate-time-input.tsx:131
-#: src/modules/tasks/components/form-task.tsx:510
-#: src/modules/tasks/components/form-task.tsx:518
-#: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:280
+#: src/modules/tasks/components/form-task.tsx:437
+#: src/modules/tasks/components/form-task.tsx:445
 msgid "Estimate time"
 msgstr "Ước tính thời gian"
 
@@ -2653,6 +2657,10 @@ msgstr "Không thể lấy được vị trí địa lý, vui lòng thử lại 
 msgid "Failed to connect with Meta."
 msgstr "Không thể kết nối với Meta."
 
+#: src/modules/tasks/components/form-task.tsx:159
+msgid "Failed to create task"
+msgstr "Tạo công việc không thành công"
+
 #: src/modules/loans/modals/modal-loan-calculator.tsx:219
 msgid "Fee"
 msgstr "Phí"
@@ -2681,7 +2689,7 @@ msgstr "Tài liệu"
 msgid "File downloading"
 msgstr "Tải tập tin"
 
-#: src/modules/workspaces/workspace-modules.tsx:375
+#: src/modules/workspaces/workspace-modules.tsx:376
 msgid "File manager"
 msgstr "Quản lí tệp tin"
 
@@ -2704,13 +2712,13 @@ msgstr "Vốn cố định"
 
 #: src/layout/navigation/navigation-task-folders.tsx:91
 #: src/modules/tags/tags-service.tsx:52
-#: src/modules/tasks/components/tasks-menu-actions.tsx:94
+#: src/modules/tasks/components/tasks-menu-actions.tsx:106
 #: src/widgets/reports/widgets/report-time-trackings.widget.tsx:64
 msgid "Folder"
 msgstr "Thư mục"
 
 #: src/modules/workspace-api-apps/workspace-api-app-list.tsx:45
-#: src/modules/workspaces/workspace-modules.tsx:340
+#: src/modules/workspaces/workspace-modules.tsx:341
 msgid "For developers, manipulate data through APIs"
 msgstr "Dành cho nhà phát triển, thao tác với dữ liệu thông qua APIs"
 
@@ -2795,7 +2803,7 @@ msgstr "Ngày giải ngân"
 msgid "Full name"
 msgstr "Tên đầy đủ"
 
-#: src/modules/tasks/views/index.tsx:49
+#: src/modules/tasks/views/task-views.tsx:61
 msgid "Gantt"
 msgstr "Gantt"
 
@@ -2807,17 +2815,17 @@ msgstr "Gantt"
 msgid "Gender"
 msgstr "Giới tính"
 
-#: src/layout/navigation/navigation.tsx:137
+#: src/layout/navigation/workspace-navigation.tsx:148
 #: src/modules/categories/category-constants.ts:6
 msgid "General"
 msgstr "Tổng quan"
 
-#: src/modules/workspaces/workspace-modules.tsx:256
+#: src/modules/workspaces/workspace-modules.tsx:257
 msgid "General Settings"
 msgstr "Cài đặt chung"
 
-#: src/modules/tasks/components/detail-head.tsx:105
-#: src/modules/tasks/views/gantt/gantt.task-group-by-folder.tsx:81
+#: src/modules/tasks/components/detail-head.tsx:129
+#: src/modules/tasks/views/gantt/gantt-tasks-group.tsx:79
 msgid "General tasks"
 msgstr "Công việc chung"
 
@@ -2878,11 +2886,11 @@ msgstr "Xin chào!"
 msgid "Hidden in receipt when no price"
 msgstr "Ẩn trong hóa đơn khi không có giá"
 
-#: src/modules/tasks/components/tasks-menu-actions.tsx:370
+#: src/modules/tasks/components/tasks-menu-actions.tsx:425
 msgid "Hide closed"
 msgstr "Ẩn đã đóng"
 
-#: src/modules/tasks/views/gantt/gantt.layout.tsx:71
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:90
 msgid "Hide estimate time"
 msgstr "Ẩn thời gian ước tính"
 
@@ -2923,7 +2931,7 @@ msgstr "Hình ảnh CCCD"
 msgid "ID number"
 msgstr "Số CCCD"
 
-#: src/modules/workspaces/workspace-modules.tsx:422
+#: src/modules/workspaces/workspace-modules.tsx:423
 msgid "Identify brand through Email. Help you take better care of customers through Email."
 msgstr "Nhận diện thương hiệu thông qua Email. Giúp bạn chăm sóc khách hàng qua Email tốt hơn."
 
@@ -2945,7 +2953,7 @@ msgstr "Đang tải hình ảnh"
 msgid "Images / Documents"
 msgstr "Hình ảnh/Tài liệu"
 
-#: src/modules/customers/components/customer-detail.tsx:140
+#: src/modules/customers/components/customer-detail.tsx:142
 msgid "Images & Documents"
 msgstr "Hình ảnh và tài liệu"
 
@@ -3049,7 +3057,7 @@ msgstr "Cài đặt ứng dụng web"
 msgid "Installment"
 msgstr "Trả góp"
 
-#: src/modules/workspaces/workspace-modules.tsx:395
+#: src/modules/workspaces/workspace-modules.tsx:396
 msgid "Integrate bank accounts to receive and pay money."
 msgstr "Tích hợp tài khoản ngân hàng nhận tiền, thanh toán."
 
@@ -3061,20 +3069,20 @@ msgstr "Tích hợp các kênh như Zalo, Facebook, Websites,... để tập tru
 msgid "Integrate ChatBox into your website <0/> Easy & quick setup"
 msgstr "Tích hợp ChatBox vào trang web của bạn <0/> Thiết lập dễ dàng và nhanh chóng"
 
-#: src/modules/workspaces/workspace-modules.tsx:431
+#: src/modules/workspaces/workspace-modules.tsx:432
 msgid "Integrate ChatBox into your website."
 msgstr "Tích hợp ChatBox vào website của bạn."
 
-#: src/modules/workspaces/workspace-modules.tsx:413
+#: src/modules/workspaces/workspace-modules.tsx:414
 msgid "Integrate Fanpage Facebook, manage Messenger messages."
 msgstr "Tích hợp Fanpage Facebook, quản lí tin nhắn Messenger."
 
-#: src/modules/workspaces/workspace-modules.tsx:386
+#: src/modules/workspaces/workspace-modules.tsx:387
 msgid "Integrate other services / utilities"
 msgstr "Tích hợp các dịch vụ / tiện ích khác"
 
 #: src/modules/plugins/storage/plugin-storage.tsx:118
-#: src/modules/workspaces/workspace-modules.tsx:458
+#: src/modules/workspaces/workspace-modules.tsx:459
 msgid "Integrate with cloud storage services: S3, ..."
 msgstr "Tích hợp với các dịch vụ lưu trữ đám mây: S3, ..."
 
@@ -3082,7 +3090,7 @@ msgstr "Tích hợp với các dịch vụ lưu trữ đám mây: S3, ..."
 msgid "Integrate with E-Invoices services: <0>MatBao</0>, ..."
 msgstr "Tích hợp với các dịch vụ Hóa đơn điện tử: <0>Mắt Bảo</0>, ..."
 
-#: src/modules/workspaces/workspace-modules.tsx:449
+#: src/modules/workspaces/workspace-modules.tsx:450
 msgid "Integrate with E-Invoices services: MatBao, ..."
 msgstr "Tích hợp với các dịch vụ HDDT Mắt Bão, ..."
 
@@ -3090,7 +3098,7 @@ msgstr "Tích hợp với các dịch vụ HDDT Mắt Bão, ..."
 msgid "Integrate with LLM models"
 msgstr "Tích hợp với các mô hình LLM"
 
-#: src/modules/workspaces/workspace-modules.tsx:402
+#: src/modules/workspaces/workspace-modules.tsx:403
 msgid "Integrate Zalo OA, manage customer interactions."
 msgstr "Tích hợp Zalo OA, quản lí tương tác với khách hàng."
 
@@ -3137,7 +3145,7 @@ msgstr "Số CID không hợp lệ"
 msgid "Invalid domain"
 msgstr "Tên miền không hợp lệ"
 
-#: src/modules/workspaces/workspace-provider.tsx:210
+#: src/modules/workspaces/workspace-provider.tsx:195
 msgid "Invalid invitation"
 msgstr "Lời mời không hợp lệ"
 
@@ -3165,7 +3173,7 @@ msgstr "Mã workspace không hợp lệ"
 msgid "Invalid year"
 msgstr "Năm không hợp lệ"
 
-#: src/app/members/page-content.tsx:35
+#: src/app/members/page-content.tsx:38
 #: src/layout/navigation/navigation-drawer.tsx:252
 #: src/modules/workspace-members/workspace-invite-member.tsx:107
 msgid "Invite members"
@@ -3221,7 +3229,7 @@ msgstr "KYC đang chờ xử lý"
 msgid "KYC rejected"
 msgstr "KYC bị từ chối"
 
-#: src/modules/workspaces/workspace-modules.tsx:147
+#: src/modules/workspaces/workspace-modules.tsx:148
 msgid "KYCs"
 msgstr "KYCs"
 
@@ -3380,11 +3388,11 @@ msgstr "Giới hạn cài đặt"
 msgid "Limit storage"
 msgstr "Giới hạn lưu trữ"
 
-#: src/modals/modal-share-link.tsx:82
+#: src/modals/modal-share-link.tsx:83
 msgid "Link"
 msgstr "Liên kết"
 
-#: src/modules/message-boxes/message-box-metadata/index.tsx:217
+#: src/modules/message-boxes/message-box-metadata/index.tsx:220
 msgid "Link customer"
 msgstr "Liên kết khách hàng"
 
@@ -3422,7 +3430,7 @@ msgstr "Hồ sơ tất toán"
 #: src/modules/orders/orders-sale/orders-sale.tsx:94
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:122
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:127
-#: src/modules/tasks/views/index.tsx:41
+#: src/modules/tasks/views/task-views.tsx:53
 msgid "List"
 msgstr "Danh sách"
 
@@ -3470,7 +3478,7 @@ msgstr "Dữ liệu tài sản cho vay"
 msgid "Loan asset estimations"
 msgstr "Ước tính tài sản cho vay"
 
-#: src/modules/workspaces/workspace-modules.tsx:237
+#: src/modules/workspaces/workspace-modules.tsx:238
 msgid "Loan Asset Estimations"
 msgstr "Định giá tài sản"
 
@@ -3481,7 +3489,7 @@ msgstr "Định giá tài sản"
 msgid "Loan asset type"
 msgstr "Loại tài sản cho vay"
 
-#: src/layout/header/header-shortcuts.tsx:163
+#: src/layout/header/header-shortcuts.tsx:165
 msgid "Loan calculator"
 msgstr "Tính hồ sơ vay"
 
@@ -3595,9 +3603,9 @@ msgstr "Hoàn tác từ chối"
 
 #: src/constant.ts:17
 #: src/modules/loans/loan-list.tsx:72
-#: src/modules/search/search-engine.tsx:216
+#: src/modules/search/search-engine.tsx:228
 #: src/modules/workspace-roles/workspace-roles-config.ts:7
-#: src/modules/workspaces/workspace-modules.tsx:231
+#: src/modules/workspaces/workspace-modules.tsx:232
 #: src/widgets/reports/modules.ts:238
 msgid "Loans"
 msgstr "Hồ sơ vay"
@@ -3694,7 +3702,7 @@ msgstr "Kinh độ"
 msgid "Low"
 msgstr "Thấp"
 
-#: src/modules/workspaces/workspace-modules.tsx:421
+#: src/modules/workspaces/workspace-modules.tsx:422
 msgid "Mailer"
 msgstr "Mailer"
 
@@ -3750,7 +3758,7 @@ msgstr "Quản lý coupons"
 msgid "Manage custom fields"
 msgstr "Quản lý trường tùy chỉnh"
 
-#: src/modules/workspaces/workspace-modules.tsx:367
+#: src/modules/workspaces/workspace-modules.tsx:368
 msgid "Manage custom fields for objects: product, service, post, ..."
 msgstr "Quản lí trường tùy chỉnh cho các đối tượng: sản phẩm, dịch vụ, bài viết, ..."
 
@@ -3766,7 +3774,7 @@ msgstr "Quản lý tương tác khách hàng qua Zalo OA"
 msgid "Manage customer KYC"
 msgstr "Quản lý KYC của khách hàng"
 
-#: src/modules/workspaces/workspace-modules.tsx:330
+#: src/modules/workspaces/workspace-modules.tsx:331
 msgid "Manage member roles and access permissions"
 msgstr "Quản lý vai trò, quyền truy cập của thành viên"
 
@@ -3790,7 +3798,7 @@ msgstr "Quản lý bài viết"
 msgid "Manage prescriptions"
 msgstr "Quản lý đơn thuốc"
 
-#: src/modules/workspaces/workspace-modules.tsx:358
+#: src/modules/workspaces/workspace-modules.tsx:359
 msgid "Manage product, service, post, ..."
 msgstr "Quản lí danh mục sản phẩm, dịch vụ, bài viết, ..."
 
@@ -3811,11 +3819,11 @@ msgid "Manage tables"
 msgstr "Quản lý bảng"
 
 #: src/modules/workspace-branches/workspace-branch-list.tsx:65
-#: src/modules/workspaces/workspace-modules.tsx:321
+#: src/modules/workspaces/workspace-modules.tsx:322
 msgid "Manage the branches of the Workspace"
 msgstr "Quản lý các chi nhánh của Workspace"
 
-#: src/modules/workspaces/workspace-modules.tsx:246
+#: src/modules/workspaces/workspace-modules.tsx:247
 msgid "Manage the settings of the Workspace"
 msgstr "Quản lí cài đặt Workspace"
 
@@ -3827,7 +3835,7 @@ msgstr "Quản lý chứng từ"
 msgid "Manage widgets"
 msgstr "Quản lý tiện ích"
 
-#: src/modules/workspaces/workspace-modules.tsx:468
+#: src/modules/workspaces/workspace-modules.tsx:469
 msgid "Manage your profile settings"
 msgstr "Quản lí thông tin tài khoản"
 
@@ -3925,13 +3933,13 @@ msgstr "Đã cập nhật thành viên"
 #: src/modules/hrm-timekeepings/hrm-timekeeping-list.tsx:188
 #: src/modules/hrm-timekeepings/hrm-timekeepings-summary.tsx:104
 #: src/modules/plugins/zalo-oas/components/zalo-oa-gmf-groups.tsx:43
-#: src/modules/search/search-engine.tsx:263
-#: src/modules/tasks/views/calendar/index.tsx:165
-#: src/modules/tasks/views/time-trackings/index.tsx:164
+#: src/modules/search/search-engine.tsx:275
+#: src/modules/tasks/views/calendar/index.tsx:148
+#: src/modules/tasks/views/time-trackings/index.tsx:165
 #: src/modules/workspace-members/workspace-member-list.tsx:48
 #: src/modules/workspace-roles/workspace-roles-config.ts:226
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:175
-#: src/modules/workspaces/workspace-modules.tsx:120
+#: src/modules/workspaces/workspace-modules.tsx:121
 #: src/widgets/reports/index.tsx:247
 msgid "Members"
 msgstr "Thành viên"
@@ -3962,12 +3970,12 @@ msgid "Message box waiting"
 msgstr "Hộp tin nhắn đang chờ"
 
 #: src/modules/message-boxes/message-box/message-box-head.tsx:60
-#: src/modules/search/search-engine.tsx:86
+#: src/modules/search/search-engine.tsx:98
 msgid "Message boxes"
 msgstr "Hộp tin nhắn"
 
 #: src/constant.ts:25
-#: src/modules/workspaces/workspace-modules.tsx:159
+#: src/modules/workspaces/workspace-modules.tsx:160
 msgid "Message Boxes"
 msgstr "Tin nhắn"
 
@@ -3984,7 +3992,7 @@ msgid "Message hub updated"
 msgstr "Đã cập nhật trung tâm tin nhắn"
 
 #: src/modules/message-boxes/message-boxes-integrate.tsx:61
-#: src/modules/workspaces/workspace-modules.tsx:430
+#: src/modules/workspaces/workspace-modules.tsx:431
 msgid "Message Hubs"
 msgstr "Message Hubs"
 
@@ -4000,7 +4008,7 @@ msgstr "Đã cập nhật tin nhắn"
 msgid "Messages"
 msgstr "Tin nhắn"
 
-#: src/modules/workspaces/workspace-modules.tsx:348
+#: src/modules/workspaces/workspace-modules.tsx:349
 msgid "Messages settings"
 msgstr "Cài đặt tin nhắn"
 
@@ -4008,7 +4016,7 @@ msgstr "Cài đặt tin nhắn"
 msgid "Meta pages"
 msgstr "Trang meta"
 
-#: src/modules/workspaces/workspace-modules.tsx:412
+#: src/modules/workspaces/workspace-modules.tsx:413
 msgid "Meta Pages"
 msgstr "Meta Pages"
 
@@ -4064,10 +4072,9 @@ msgid "Model name"
 msgstr "Tên mẫu"
 
 #: src/layout/navigation/navigation-drawer.tsx:188
-#: src/modules/search/search-engine.tsx:320
+#: src/modules/search/search-engine.tsx:332
 #: src/modules/users/user-profile.tsx:129
-#: src/modules/workspaces/workspace-module-setup.tsx:63
-#: src/modules/workspaces/workspace-modules.tsx:265
+#: src/modules/workspaces/workspace-modules.tsx:266
 msgid "Modules"
 msgstr "Chức năng"
 
@@ -4226,7 +4233,7 @@ msgstr "Workspace chung"
 #: src/modules/promotions/promostion-list.tsx:33
 #: src/modules/services/service-list.tsx:50
 #: src/modules/tags/modals/modal-tag-form.tsx:78
-#: src/modules/tasks/views/gantt/gantt.layout.tsx:67
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:59
 #: src/modules/tasks/views/list/list-task-row-head.tsx:11
 #: src/modules/users/user-profile-settings.tsx:123
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:205
@@ -4239,13 +4246,13 @@ msgstr "Workspace chung"
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:214
 #: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:251
 #: src/modules/workspaces/components/workspace-information.tsx:92
-#: src/modules/workspaces/workspace-module-setup.tsx:113
+#: src/modules/workspaces/workspace-module-setup.tsx:108
 #: src/modules/workspaces/workspace-require.tsx:304
-#: src/widgets/reports/widgets/report-products.widget.tsx:184
+#: src/widgets/reports/widgets/report-products.widget.tsx:185
 msgid "Name"
 msgstr "Tên"
 
-#: src/modules/workspaces/workspace-module-setup.tsx:94
+#: src/modules/workspaces/workspace-module-setup.tsx:89
 msgid "Navigator"
 msgstr "Thanh điều hướng"
 
@@ -4312,7 +4319,7 @@ msgstr "Thông báo mới"
 msgid "New password"
 msgstr "Mật khẩu mới"
 
-#: src/modules/workspaces/workspace-modules.tsx:103
+#: src/modules/workspaces/workspace-modules.tsx:104
 msgid "New Post"
 msgstr "Bài viết mới"
 
@@ -4320,7 +4327,7 @@ msgstr "Bài viết mới"
 msgid "New task"
 msgstr "Công việc mới"
 
-#: src/modules/tasks/modals/modal-create-task.tsx:97
+#: src/modules/tasks/modals/modal-create-task.tsx:96
 msgid "New Task"
 msgstr "Công việc mới"
 
@@ -4348,7 +4355,7 @@ msgstr "Khách hàng tiếp theo"
 msgid "Next payment deadline"
 msgstr "Thời hạn thanh toán tiếp theo"
 
-#: src/modules/tasks/components/form-task.tsx:320
+#: src/modules/tasks/components/form-task.tsx:245
 msgid "Next status"
 msgstr "Trạng thái tiếp theo"
 
@@ -4421,9 +4428,13 @@ msgstr "Không có tin nhắn"
 msgid "No results"
 msgstr "Không có kết quả"
 
-#: src/modules/search/search-engine.tsx:381
+#: src/modules/search/search-engine.tsx:394
 msgid "No search results"
 msgstr "Không có kết quả tìm kiếm"
+
+#: src/modules/tasks/task-detail-subtasks.tsx:99
+msgid "No subtasks"
+msgstr "Không có công việc phụ"
 
 #: src/widgets/index.tsx:279
 msgid "No widgets"
@@ -4535,6 +4546,10 @@ msgstr "Oops! Không tìm thấy trang"
 msgid "Oops! Something went wrong..."
 msgstr "Ồ! Có gì đó không ổn..."
 
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:65
+msgid "Open all folders"
+msgstr "Mở tất cả thư mục"
+
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:167
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:243
 msgid "Open app"
@@ -4557,7 +4572,7 @@ msgstr "Mở tin nhắn"
 msgid "Open with browser"
 msgstr "Mở bằng trình duyệt"
 
-#: src/modules/workspaces/workspace-modules.tsx:274
+#: src/modules/workspaces/workspace-modules.tsx:275
 #: src/modules/workspaces/workspace.tsx:52
 msgid "Operation settings"
 msgstr "Cài đặt vận hành"
@@ -4599,11 +4614,11 @@ msgstr "Đơn hàng đã được đồng bộ"
 
 #: src/constant.ts:20
 #: src/modules/orders/order-hooks.tsx:25
-#: src/modules/search/search-engine.tsx:283
-#: src/modules/search/search-engine.tsx:288
+#: src/modules/search/search-engine.tsx:295
+#: src/modules/search/search-engine.tsx:300
 #: src/modules/workspace-roles/workspace-roles-config.ts:157
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:132
-#: src/modules/workspaces/workspace-modules.tsx:211
+#: src/modules/workspaces/workspace-modules.tsx:212
 msgid "Orders"
 msgstr "Đơn hàng"
 
@@ -4684,11 +4699,11 @@ msgstr "Thanh toán một phần"
 
 #: src/constant.ts:9
 #: src/modules/partners/partner-list.tsx:31
-#: src/modules/search/search-engine.tsx:246
-#: src/modules/tasks/components/form-task.tsx:538
-#: src/modules/tasks/components/tasks-menu-actions.tsx:254
+#: src/modules/search/search-engine.tsx:258
+#: src/modules/tasks/components/form-task.tsx:465
+#: src/modules/tasks/components/tasks-menu-actions.tsx:287
 #: src/modules/workspace-roles/workspace-roles-config.ts:222
-#: src/modules/workspaces/workspace-modules.tsx:192
+#: src/modules/workspaces/workspace-modules.tsx:193
 msgid "Partners"
 msgstr "Đối tác"
 
@@ -4954,7 +4969,7 @@ msgstr "Plugin"
 
 #: src/layout/navigation/navigation-drawer.tsx:198
 #: src/modules/users/user-profile.tsx:133
-#: src/modules/workspaces/workspace-modules.tsx:385
+#: src/modules/workspaces/workspace-modules.tsx:386
 msgid "Plugins"
 msgstr "Tích hợp"
 
@@ -4996,9 +5011,9 @@ msgstr "Bài viết đã cập nhật"
 #: src/constant.ts:27
 #: src/modules/categories/category-constants.ts:8
 #: src/modules/posts/posts-list.tsx:28
-#: src/modules/search/search-engine.tsx:103
+#: src/modules/search/search-engine.tsx:115
 #: src/modules/workspace-roles/workspace-roles-config.ts:243
-#: src/modules/workspaces/workspace-modules.tsx:96
+#: src/modules/workspaces/workspace-modules.tsx:97
 msgid "Posts"
 msgstr "Bài viết"
 
@@ -5029,9 +5044,9 @@ msgid "Prescription updated"
 msgstr "Đã cập nhật đơn thuốc"
 
 #: src/constant.ts:16
-#: src/modules/search/search-engine.tsx:302
+#: src/modules/search/search-engine.tsx:314
 #: src/modules/workspace-roles/workspace-roles-config.ts:217
-#: src/modules/workspaces/workspace-modules.tsx:198
+#: src/modules/workspaces/workspace-modules.tsx:199
 msgid "Prescriptions"
 msgstr "Đơn thuốc"
 
@@ -5106,9 +5121,9 @@ msgid "Printed at"
 msgstr "In lúc"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:246
-#: src/modules/tasks/components/form-task.tsx:385
-#: src/modules/tasks/components/tasks-menu-actions.tsx:353
-#: src/modules/tasks/views/board/board-task-card.tsx:472
+#: src/modules/tasks/components/form-task.tsx:310
+#: src/modules/tasks/components/tasks-menu-actions.tsx:401
+#: src/modules/tasks/views/board/board-task-card.tsx:429
 #: src/modules/tasks/views/list/list-task-row-head.tsx:24
 msgid "Priority"
 msgstr "Ưu tiên"
@@ -5198,7 +5213,7 @@ msgstr "Voucher sản phẩm"
 #: src/modules/products/components/form-product.tsx:442
 #: src/modules/products/components/form-product.tsx:497
 #: src/modules/products/product-list.tsx:28
-#: src/modules/workspaces/workspace-modules.tsx:167
+#: src/modules/workspaces/workspace-modules.tsx:168
 msgid "Products"
 msgstr "Sản phẩm"
 
@@ -5209,7 +5224,7 @@ msgstr "Sản phẩm dịch vụ"
 #: src/modules/orders/order-items-columns.tsx:11
 #: src/modules/product-combos/product-combo-list.tsx:42
 #: src/modules/workspace-roles/workspace-roles-config.ts:179
-#: src/widgets/reports/widgets/report-products.widget.tsx:116
+#: src/widgets/reports/widgets/report-products.widget.tsx:117
 msgid "Products/Services"
 msgstr "Sản phẩm/Dịch vụ"
 
@@ -5225,11 +5240,11 @@ msgstr "Hồ sơ"
 
 #: src/layout/header/header-account.tsx:69
 #: src/modules/users/user-profile-settings.tsx:57
-#: src/modules/workspaces/workspace-modules.tsx:467
+#: src/modules/workspaces/workspace-modules.tsx:468
 msgid "Profile settings"
 msgstr "Cài đặt tài khoản"
 
-#: src/widgets/reports/widgets/report-products.widget.tsx:194
+#: src/widgets/reports/widgets/report-products.widget.tsx:195
 msgid "Profit"
 msgstr "Lợi nhuận"
 
@@ -5254,7 +5269,7 @@ msgstr "Khuyến mãi được cập nhật"
 #: src/modules/orders/orders-sale/components/order-sale-promotions.tsx:75
 #: src/modules/promotions/promostion-list.tsx:30
 #: src/modules/workspace-roles/workspace-roles-config.ts:93
-#: src/modules/workspaces/workspace-modules.tsx:111
+#: src/modules/workspaces/workspace-modules.tsx:112
 msgid "Promotions"
 msgstr "Khuyến mãi"
 
@@ -5298,8 +5313,8 @@ msgstr "Ngày phát hành"
 #: src/modules/coupons/coupon-rules.tsx:45
 #: src/modules/customer-kycs/customer-kyc-list.tsx:54
 #: src/modules/prescriptions/prescription-list.tsx:52
-#: src/widgets/reports/widgets/report-products.widget.tsx:187
-#: src/widgets/reports/widgets/report-products.widget.tsx:308
+#: src/widgets/reports/widgets/report-products.widget.tsx:188
+#: src/widgets/reports/widgets/report-products.widget.tsx:309
 msgid "QTY"
 msgstr "SL"
 
@@ -5322,7 +5337,7 @@ msgstr "Số lượng coupon để trống hoặc điền số 0 nếu không gi
 msgid "Quantity of free product, leave blank or fill in 0 if you want to be free all."
 msgstr "Số lượng sản phẩm miễn phí, để trống hoặc điền số 0 nếu bạn muốn được miễn phí tất cả."
 
-#: src/layout/header/header-shortcuts.tsx:174
+#: src/layout/header/header-shortcuts.tsx:176
 msgid "Quick Creation"
 msgstr "Tạo nhanh"
 
@@ -5373,9 +5388,9 @@ msgstr "Lý do hủy bỏ"
 #: src/modules/receipts/modals/modal-receipt-detail.tsx:24
 #: src/modules/receipts/receipt-card.tsx:283
 #: src/modules/receipts/receipt-detail.tsx:142
-#: src/modules/search/search-engine.tsx:185
+#: src/modules/search/search-engine.tsx:197
 #: src/widgets/reports/widgets/report-credit.widget.tsx:406
-#: src/widgets/reports/widgets/report-products.widget.tsx:297
+#: src/widgets/reports/widgets/report-products.widget.tsx:298
 msgid "Receipt"
 msgstr "Hoá đơn"
 
@@ -5408,10 +5423,10 @@ msgstr "Hoá đơn đã khôi phục"
 #: src/constant.ts:13
 #: src/modules/loans/components/loan-payments.tsx:153
 #: src/modules/receipts/receipt-list.tsx:56
-#: src/modules/search/search-engine.tsx:180
+#: src/modules/search/search-engine.tsx:192
 #: src/modules/workspace-roles/workspace-roles-config.ts:119
-#: src/modules/workspaces/workspace-modules.tsx:217
-#: src/widgets/reports/widgets/report-products.widget.tsx:255
+#: src/modules/workspaces/workspace-modules.tsx:218
+#: src/widgets/reports/widgets/report-products.widget.tsx:256
 msgid "Receipts"
 msgstr "Hoá đơn"
 
@@ -5434,7 +5449,7 @@ msgstr "Gần đây"
 msgid "Reconnect"
 msgstr "Kết nối lại"
 
-#: src/modules/tasks/components/tasks-menu-actions.tsx:406
+#: src/modules/tasks/components/tasks-menu-actions.tsx:461
 msgid "Redo"
 msgstr "Làm lại"
 
@@ -5609,7 +5624,7 @@ msgid "Report synced"
 msgstr "Đã đồng bộ hóa báo cáo"
 
 #: src/modules/workspace-roles/workspace-roles-config.ts:263
-#: src/modules/workspaces/workspace-modules.tsx:477
+#: src/modules/workspaces/workspace-modules.tsx:478
 #: src/widgets/reports/widgets/report-credit.widget.tsx:545
 msgid "Reports"
 msgstr "Báo cáo"
@@ -5666,7 +5681,7 @@ msgid "Reset"
 msgstr "Đặt lại"
 
 #: src/components/list/components/reset-default-button.tsx:14
-#: src/modules/workspaces/workspace-module-setup.tsx:99
+#: src/modules/workspaces/workspace-module-setup.tsx:94
 #: src/widgets/index.tsx:307
 msgid "Reset default"
 msgstr "Đặt lại mặc định"
@@ -5711,7 +5726,7 @@ msgstr "Trở về"
 
 #: src/widgets/reports/modules.ts:39
 #: src/widgets/reports/modules.ts:98
-#: src/widgets/reports/widgets/report-products.widget.tsx:190
+#: src/widgets/reports/widgets/report-products.widget.tsx:191
 msgid "Revenue"
 msgstr "Doanh thu"
 
@@ -5789,7 +5804,7 @@ msgid "Role updated"
 msgstr "Đã cập nhật vai trò"
 
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:209
-#: src/modules/workspaces/workspace-modules.tsx:329
+#: src/modules/workspaces/workspace-modules.tsx:330
 msgid "Roles"
 msgstr "Phân quyền"
 
@@ -5834,18 +5849,18 @@ msgstr "Lưu mẫu đơn thuốc"
 msgid "Scan QR code"
 msgstr "Quét mã QR"
 
-#: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:313
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:670
 msgid "Scroll to task"
 msgstr "Di chuyển đến công việc"
 
-#: src/modules/tasks/views/gantt/gantt.layout.tsx:109
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:130
 msgid "Scroll to today"
 msgstr "Di chuyển đến ngày hôm nay"
 
 #: src/components/selector.tsx:301
-#: src/layout/header/header-workspace.tsx:102
-#: src/layout/header/header-workspace.tsx:188
-#: src/modules/search/search-engine.tsx:369
+#: src/layout/header/workspace-header.tsx:102
+#: src/layout/header/workspace-header.tsx:188
+#: src/modules/search/search-engine.tsx:382
 #: src/modules/tasks/components/task-status-options.tsx:49
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:258
 #: src/widgets/components/manage-widgets.tsx:35
@@ -5896,11 +5911,11 @@ msgstr "Bảo mật"
 #: src/modules/prescriptions/components/prescription-selector.tsx:58
 #: src/modules/tags/components/tag-selector.tsx:60
 #: src/modules/tasks/components/task-tag-folder-selector.tsx:50
-#: src/modules/theme/generate-theme.tsx:158
+#: src/modules/theme/generate-theme.tsx:161
 #: src/modules/workspace-branches/workspace-branch-selector.tsx:83
 #: src/modules/workspace-branches/workspace-branches-selector.tsx:50
 #: src/modules/workspace-roles/components/workspace-roles-selector.tsx:71
-#: src/modules/workspaces/components/workspace-module-selector.tsx:66
+#: src/modules/workspaces/components/workspace-module-selector.tsx:68
 #: src/modules/workspaces/workspace-require.tsx:151
 msgid "Select"
 msgstr "Chọn"
@@ -6069,7 +6084,7 @@ msgstr "Dịch vụ"
 #: src/modules/products/components/form-product.tsx:442
 #: src/modules/products/components/form-product.tsx:497
 #: src/modules/services/service-list.tsx:25
-#: src/modules/workspaces/workspace-modules.tsx:173
+#: src/modules/workspaces/workspace-modules.tsx:174
 msgid "Services"
 msgstr "Dịch vụ"
 
@@ -6082,11 +6097,11 @@ msgstr "Phiên đã hết hạn, vui lòng đăng nhập lại"
 msgid "Set default"
 msgstr "Đặt mặc định"
 
-#: src/modules/workspaces/workspace-modules.tsx:312
+#: src/modules/workspaces/workspace-modules.tsx:313
 msgid "Set loan package, interest, late payment penalty, ..."
 msgstr "Thiết lập gói vay, lãi, phạt trả chậm, ..."
 
-#: src/modules/workspaces/workspace-modules.tsx:257
+#: src/modules/workspaces/workspace-modules.tsx:258
 msgid "Set name, address, Hotline, Workspace type, ..."
 msgstr "Cài đặt tên, địa chỉ, Hotline, loại hình workspace, ..."
 
@@ -6104,7 +6119,7 @@ msgstr "Đặt thẻ"
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:138
 #: src/modules/products/components/form-product.tsx:222
 #: src/modules/products/components/form-product.tsx:318
-#: src/modules/tasks/components/tasks-menu-actions.tsx:111
+#: src/modules/tasks/components/tasks-menu-actions.tsx:123
 #: src/modules/users/user-profile.tsx:125
 msgid "Settings"
 msgstr "Cài đặt"
@@ -6121,12 +6136,12 @@ msgstr "Cài đặt"
 msgid "Setup nhanh gọn và dễ dàng"
 msgstr "Setup nhanh gọn và dễ dàng"
 
-#: src/modals/modal-share-link.tsx:66
-#: src/modules/tasks/components/detail-head.tsx:148
+#: src/modals/modal-share-link.tsx:67
+#: src/modules/tasks/components/detail-head.tsx:176
 msgid "Share"
 msgstr "Chia sẻ"
 
-#: src/modals/modal-share-link.tsx:65
+#: src/modals/modal-share-link.tsx:66
 msgid "Share this task"
 msgstr "Chia sẻ công việc này"
 
@@ -6138,7 +6153,7 @@ msgstr "Sự thay đổi"
 msgid "Should not be empty"
 msgstr "Không nên để trống"
 
-#: src/modules/tasks/components/tasks-menu-actions.tsx:370
+#: src/modules/tasks/components/tasks-menu-actions.tsx:425
 msgid "Show closed"
 msgstr "Hiển thị đã đóng"
 
@@ -6151,11 +6166,11 @@ msgstr "Hiển thị tiền tệ"
 msgid "Show customer"
 msgstr "Hiển thị khách hàng"
 
-#: src/modules/tasks/views/gantt/gantt.layout.tsx:71
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:88
 msgid "Show estimate time"
 msgstr "Hiển thị thời gian ước tính"
 
-#: src/modules/tasks/views/gantt/gantt.layout.tsx:92
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:113
 msgid "Show task color by status"
 msgstr "Hiển thị màu công việc theo trạng thái"
 
@@ -6274,8 +6289,8 @@ msgstr "Thời gian bắt đầu phải trước thời gian kết thúc"
 #: src/modules/promotions/promostion-list.tsx:117
 #: src/modules/receipts/receipt-list.tsx:102
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:154
-#: src/modules/tasks/components/form-task.tsx:276
-#: src/modules/tasks/views/board/board-task-card.tsx:368
+#: src/modules/tasks/components/form-task.tsx:201
+#: src/modules/tasks/views/board/board-task-card.tsx:325
 msgid "Status"
 msgstr "Trạng thái"
 
@@ -6319,7 +6334,7 @@ msgid "Stock out reverted"
 msgstr "Hoàn tác xuất hàng"
 
 #: src/modules/product-stocks/product-stock-list.tsx:29
-#: src/modules/workspaces/workspace-modules.tsx:179
+#: src/modules/workspaces/workspace-modules.tsx:180
 msgid "Stocks"
 msgstr "Kho"
 
@@ -6335,13 +6350,13 @@ msgstr "Đăng ký / thanh toán"
 msgid "Subscription updated"
 msgstr "Đã cập nhật đăng ký"
 
-#: src/modules/tasks/views/board/board-task-card.tsx:532
+#: src/modules/tasks/views/board/board-task-card.tsx:489
 msgid "subtasks"
 msgstr "công việc phụ"
 
-#: src/modules/tasks/components/form-task.tsx:603
-#: src/modules/tasks/components/form-task.tsx:628
-#: src/modules/tasks/views/board/board-task-card.tsx:520
+#: src/modules/tasks/task-detail-subtasks.tsx:55
+#: src/modules/tasks/task-detail-subtasks.tsx:82
+#: src/modules/tasks/views/board/board-task-card.tsx:477
 msgid "Subtasks"
 msgstr "Công việc phụ"
 
@@ -6362,11 +6377,11 @@ msgstr "Thành công"
 msgid "Suggest time"
 msgstr "Đề xuất thời gian"
 
-#: src/modules/workspaces/workspace-modules.tsx:349
+#: src/modules/workspaces/workspace-modules.tsx:350
 msgid "Summarize customer messages from various channels: Zalo, Facebook, Landing Page, ..."
 msgstr "Tổng hợp tin nhắn của khách hàng từ các kênh: Zalo, Facebook, Landing Page, ..."
 
-#: src/modules/workspaces/workspace-modules.tsx:376
+#: src/modules/workspaces/workspace-modules.tsx:377
 msgid "Summarize images / documents / files, ..."
 msgstr "Tổng hợp hình ảnh / tài liệu / tệp tin, ..."
 
@@ -6374,7 +6389,7 @@ msgstr "Tổng hợp hình ảnh / tài liệu / tệp tin, ..."
 msgid "Sunday"
 msgstr "Chủ nhật"
 
-#: src/modules/workspaces/workspace-modules.tsx:293
+#: src/modules/workspaces/workspace-modules.tsx:294
 msgid "Support GPS Check-in, summarize working hours, late, overtime and support salary calculation."
 msgstr "Hỗ trợ chấm công GPS, tổng hợp giờ làm việc, giờ trễ, giờ tăng ca và hỗ trợ tính lương."
 
@@ -6408,17 +6423,16 @@ msgstr "Đã tạo khe bảng"
 msgid "Table slot updated"
 msgstr "Đã cập nhật khe bảng"
 
-#: src/modules/customers/components/customer-information.tsx:329
-#: src/modules/customers/components/customer-information.tsx:401
-#: src/modules/tasks/views/gantt/gantt.task-row-sidebar.tsx:257
+#: src/modules/customers/components/customer-information.tsx:328
+#: src/modules/customers/components/customer-information.tsx:400
 msgid "Tag"
 msgstr "Thẻ"
 
 #: src/constant.ts:18
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:200
-#: src/modules/tasks/components/form-task.tsx:552
-#: src/modules/tasks/components/tasks-menu-actions.tsx:301
-#: src/modules/tasks/views/board/board-task-card.tsx:391
+#: src/modules/tasks/components/form-task.tsx:479
+#: src/modules/tasks/components/tasks-menu-actions.tsx:343
+#: src/modules/tasks/views/board/board-task-card.tsx:348
 msgid "Tags"
 msgstr "Thẻ"
 
@@ -6442,10 +6456,10 @@ msgstr "Chụp ảnh"
 msgid "Take photo again"
 msgstr "Chụp ảnh lại"
 
-#: src/modules/customers/components/customer-detail.tsx:91
+#: src/modules/customers/components/customer-detail.tsx:93
 #: src/modules/tags/tags-constants.ts:10
-#: src/modules/tasks/components/detail-footer.tsx:39
-#: src/modules/tasks/modals/modal-create-task.tsx:49
+#: src/modules/tasks/components/detail-footer.tsx:41
+#: src/modules/tasks/modals/modal-create-task.tsx:37
 msgid "Task"
 msgstr "Công việc"
 
@@ -6454,15 +6468,15 @@ msgstr "Công việc"
 msgid "Task assigned"
 msgstr "Công việc được giao"
 
-#: src/modules/tasks/views/calendar/index.tsx:295
+#: src/modules/tasks/views/calendar/index.tsx:278
 msgid "Task closed"
 msgstr "Công việc đã đóng"
 
-#: src/modules/tasks/components/form-task.tsx:342
+#: src/modules/tasks/components/form-task.tsx:267
 msgid "Task complete"
 msgstr "Công việc hoàn thành"
 
-#: src/modules/tasks/components/form-task.tsx:571
+#: src/modules/tasks/components/form-task.tsx:498
 msgid "Task description"
 msgstr "Mô tả công việc"
 
@@ -6470,7 +6484,7 @@ msgstr "Mô tả công việc"
 msgid "Task folder"
 msgstr "Thư mục công việc"
 
-#: src/modules/tasks/components/form-task.tsx:159
+#: src/modules/tasks/components/form-task.tsx:133
 msgid "Task name is required"
 msgstr "Tên công việc là bắt buộc"
 
@@ -6488,8 +6502,8 @@ msgstr "Đã đồng bộ hóa công việc"
 
 #: src/constant.ts:10
 #: src/modules/customers/customer-tasks.tsx:65
-#: src/modules/search/search-engine.tsx:199
-#: src/modules/workspaces/workspace-modules.tsx:205
+#: src/modules/search/search-engine.tsx:211
+#: src/modules/workspaces/workspace-modules.tsx:206
 #: src/widgets/reports/modules.ts:138
 msgid "Tasks"
 msgstr "Công việc"
@@ -6546,7 +6560,7 @@ msgstr "Điều khoản dịch vụ"
 msgid "Terms of use"
 msgstr "Điều khoản sử dụng"
 
-#: src/modules/workspaces/workspace-modules.tsx:302
+#: src/modules/workspaces/workspace-modules.tsx:303
 msgid "Terms of use, privacy policy, user manual, ..."
 msgstr "Điều khoản sử dụng, chính sách bảo mật, hướng dẫn sử dụng, ..."
 
@@ -6703,8 +6717,8 @@ msgid "Time settings for your profile"
 msgstr "Cài đặt thời gian cho hồ sơ của bạn"
 
 #: src/components/inputs/time-trackings-input.tsx:172
-#: src/modules/tasks/components/form-task.tsx:496
-#: src/modules/tasks/views/index.tsx:53
+#: src/modules/tasks/components/form-task.tsx:421
+#: src/modules/tasks/views/task-views.tsx:65
 #: src/widgets/reports/widgets/report-time-trackings.widget.tsx:111
 msgid "Time trackings"
 msgstr "Thời gian làm"
@@ -6723,7 +6737,7 @@ msgstr "Thiết lập chấm công"
 
 #: src/constant.ts:30
 #: src/modules/hrm-timekeepings/hrm-timekeeping-button.tsx:59
-#: src/modules/workspaces/workspace-modules.tsx:126
+#: src/modules/workspaces/workspace-modules.tsx:127
 msgid "Timekeepings"
 msgstr "Chấm công"
 
@@ -6731,7 +6745,7 @@ msgstr "Chấm công"
 msgid "Timekeepings history"
 msgstr "Lịch sử chấm công"
 
-#: src/modules/workspaces/workspace-modules.tsx:292
+#: src/modules/workspaces/workspace-modules.tsx:293
 msgid "Timekeepings settings"
 msgstr "Cài đặt chấm công"
 
@@ -6869,7 +6883,7 @@ msgstr "Xử lý giao dịch"
 msgid "Transfer owner"
 msgstr "Chuyển chủ sở hữu"
 
-#: src/app/members/page-content.tsx:61
+#: src/app/members/page-content.tsx:64
 #: src/modules/workspaces/modals/modal-transfer-workspace-owner.tsx:56
 msgid "Transfer ownership"
 msgstr "Chuyển quyền sở hữu"
@@ -6907,7 +6921,7 @@ msgid "Type and press [enter]"
 msgstr "Nhập và nhấn [enter]"
 
 #: src/components/selector.tsx:345
-#: src/modules/search/search-engine.tsx:383
+#: src/modules/search/search-engine.tsx:396
 msgid "Type something to search"
 msgstr "Nhập nội dung nào đó để tìm kiếm"
 
@@ -6919,7 +6933,7 @@ msgstr "Bỏ chỉ định người dùng"
 msgid "Unassigned from"
 msgstr "Đã bỏ chỉ định từ"
 
-#: src/modules/tasks/components/tasks-menu-actions.tsx:392
+#: src/modules/tasks/components/tasks-menu-actions.tsx:447
 #: src/modules/tasks/task-history-provider.tsx:54
 msgid "Undo"
 msgstr "Hoàn tác"
@@ -6970,7 +6984,7 @@ msgstr "Không giới hạn"
 msgid "Unlimited customers"
 msgstr "Khách hàng không giới hạn"
 
-#: src/modules/message-boxes/message-box-metadata/index.tsx:111
+#: src/modules/message-boxes/message-box-metadata/index.tsx:113
 msgid "Unlink"
 msgstr "Hủy liên kết"
 
@@ -7046,7 +7060,6 @@ msgid "Update customer info"
 msgstr "Cập nhật thông tin khách hàng"
 
 #: src/modules/bookings/components/booking-card.tsx:275
-#: src/modules/tasks/views/gantt/gantt.task-group-by-folder.tsx:149
 msgid "Update information"
 msgstr "Cập nhật thông tin"
 
@@ -7127,7 +7140,7 @@ msgid "Update task priority"
 msgstr "Cập nhật mức độ ưu tiên của công việc"
 
 #: src/modules/events/event-constants.ts:137
-#: src/modules/tasks/views/board/board-group-by-statuses.tsx:195
+#: src/modules/tasks/views/board/board-group-by-statuses.tsx:175
 msgid "Update task status"
 msgstr "Cập nhật trạng thái công việc"
 
@@ -7331,7 +7344,7 @@ msgstr "Xem hoá đơn"
 msgid "View reports"
 msgstr "Xem báo cáo"
 
-#: src/modules/workspaces/workspace-modules.tsx:478
+#: src/modules/workspaces/workspace-modules.tsx:479
 msgid "View reports and analytics"
 msgstr "Xem báo cáo và phân tích"
 
@@ -7481,7 +7494,7 @@ msgstr "Khung giờ làm việc áp dụng cho các tính năng đặt lịch h�
 msgid "Working time type"
 msgstr "Loại thời gian làm việc"
 
-#: src/modules/workspaces/workspace-modules.tsx:275
+#: src/modules/workspaces/workspace-modules.tsx:276
 msgid "Working time, invoice, service voucher, payment method, search settings, ..."
 msgstr "Thời gian làm việc, hóa đơn, phiếu dịch vụ, phương thức thanh toán, cài đặt tìm kiếm, ..."
 
@@ -7528,7 +7541,7 @@ msgstr "Đã cập nhật tùy chọn cài đặt workspace"
 msgid "Workspace settings"
 msgstr "Cài đặt workspace"
 
-#: src/modules/workspaces/workspace-modules.tsx:248
+#: src/modules/workspaces/workspace-modules.tsx:249
 msgid "Workspace Settings"
 msgstr "Cài đặt Workspace"
 
@@ -7616,6 +7629,10 @@ msgstr "Bạn cần lời khuyên! Bắt đầu trò chuyện với chúng tôi 
 msgid "You need to create a DNS Record with domain <0>{0}</0>"
 msgstr "Bạn cần tạo Bản ghi DNS có miền <0>{0}</0>"
 
+#: src/modules/tasks/views/gantt/gantt-task-row.tsx:672
+msgid "You need to set the start date before"
+msgstr "Bạn cần chọn ngày bắt đầu công việc"
+
 #: src/modules/plugins/mailer/plugin-mailer-form.tsx:113
 msgid "You please be patient and wait <0/> it may take 1 - 2 minutes to send the test email."
 msgstr "Các bạn hãy kiên nhẫn đợi <0/> có thể mất 1 - 2 phút để gửi email kiểm tra."
@@ -7656,7 +7673,7 @@ msgstr "Zalo OA không hoạt động"
 msgid "Zalo OA updated"
 msgstr "Zalo OA đã cập nhật"
 
-#: src/modules/workspaces/workspace-modules.tsx:404
+#: src/modules/workspaces/workspace-modules.tsx:405
 msgid "Zalo OAs"
 msgstr "Zalo OAs"
 
