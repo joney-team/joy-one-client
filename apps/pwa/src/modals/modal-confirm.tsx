@@ -3,41 +3,63 @@
 import { Button } from "@/components/buttons/button";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
-import { Divider, Group, Modal, Stack, ThemeIcon } from "@mantine/core";
+import { Divider, Group, Modal, ModalProps, Stack, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconAlertTriangle } from "@tabler/icons-react";
-import { FC, Fragment, ReactNode, useRef } from "react";
+import { IconAlertTriangle, type Icon as TablerIcon } from "@tabler/icons-react";
+import { forwardRef, Fragment, ReactNode, useImperativeHandle, useRef } from "react";
 
 interface ModalConfirmArgs {
   children: ReactNode;
-  onConfirm: () => Promise<void>;
+  onConfirm: () => Promise<void | unknown> | void | unknown;
   onCancel?: () => void;
   confirmLabel?: ReactNode;
   color?: string;
+  customModalProps?: Partial<ModalProps>;
+  icon?: TablerIcon;
 }
 
-export const ModalConfirm: FC<{
-  children: (open: (args: ModalConfirmArgs) => void) => ReactNode;
-}> = ({ children }) => {
+export interface ModalConfirmRef {
+  open: (args: ModalConfirmArgs) => void;
+}
+
+interface ModalConfirmProps {
+  children?: (open: (args: ModalConfirmArgs) => void) => ReactNode;
+}
+
+export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((props, ref) => {
+  const { children } = props;
   const color = useColor();
   const [opened, { open, close }] = useDisclosure(false);
   const argsRef = useRef<ModalConfirmArgs | null>(null);
+
+  const handleOpen = (args: ModalConfirmArgs) => {
+    argsRef.current = args;
+    open();
+  };
+
+  useImperativeHandle(ref, () => ({
+    open: handleOpen,
+  }));
 
   const onConfirm = async () => {
     await argsRef.current?.onConfirm();
     close();
   };
 
+  const onCancel = () => {
+    argsRef.current?.onCancel?.();
+    close();
+  };
+
+  const IconComponent = argsRef.current?.icon || IconAlertTriangle;
+
   return (
     <Fragment>
-      {children((args) => {
-        argsRef.current = args;
-        open();
-      })}
+      {typeof children === "function" ? children(handleOpen) : null}
 
       <Modal
         opened={opened}
-        onClose={close}
+        onClose={onCancel}
         withCloseButton={false}
         centered
         styles={{
@@ -45,17 +67,18 @@ export const ModalConfirm: FC<{
             padding: 0,
           },
         }}
+        {...argsRef.current?.customModalProps}
       >
         <Stack align="stretch" gap={0}>
           <Group p="md" wrap="nowrap" align="start">
             <ThemeIcon color={color(argsRef.current?.color)} variant="light" size="xl">
-              <IconAlertTriangle />
+              <IconComponent />
             </ThemeIcon>
             <Stack>{argsRef.current?.children}</Stack>
           </Group>
           <Divider miw="100%" opacity={0.5} />
-          <Group justify="end" p="md">
-            <Button color="gray" variant="outline" onClick={close}>
+          <Group justify="end" p="sm" gap="sm">
+            <Button color="gray" variant="outline" onClick={onCancel} component="div">
               <Trans>Cancel</Trans>
             </Button>
             <Button color={color(argsRef.current?.color)} onClick={onConfirm}>
@@ -66,4 +89,6 @@ export const ModalConfirm: FC<{
       </Modal>
     </Fragment>
   );
-};
+});
+
+ModalConfirm.displayName = "ModalConfirm";

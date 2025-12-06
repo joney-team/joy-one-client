@@ -364,7 +364,8 @@ const GanttTaskContent: FC = () => {
                 zIndex: 1,
               }}
             >
-              {timeline ? <GanttTaskTimeline /> : <GanttTaskDrawTimeline />}
+              <GanttTaskDrawTimeline />
+              <GanttTaskTimeline />
             </div>
           </Fragment>,
           ganttRefs.body.current,

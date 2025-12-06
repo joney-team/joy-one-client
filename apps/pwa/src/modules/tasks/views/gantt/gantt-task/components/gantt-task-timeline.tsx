@@ -163,6 +163,26 @@ export const GanttTaskTimeline: FC = () => {
     };
   }, [timeline, gantt.columns, task._id, updateTasks, taskMenu]);
 
+  useEffect(() => {
+    if (!timeline) return;
+
+    const onMouseEnter = () => {
+      ganttTaskAreaRef.current?.setAttribute("data-timeline-event", "hovering");
+    };
+
+    const onMouseLeave = () => {
+      ganttTaskAreaRef.current?.removeAttribute("data-timeline-event");
+    };
+
+    timelineRef.current?.addEventListener("mouseenter", onMouseEnter);
+    timelineRef.current?.addEventListener("mouseleave", onMouseLeave);
+
+    return () => {
+      timelineRef.current?.removeEventListener("mouseenter", onMouseEnter);
+      timelineRef.current?.removeEventListener("mouseleave", onMouseLeave);
+    };
+  }, [timeline]);
+
   if (!timeline) return null;
 
   return (
