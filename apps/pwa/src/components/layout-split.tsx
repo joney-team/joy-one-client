@@ -46,8 +46,8 @@ export const LayoutSplit: FC<PropsWithChildren<LayoutSplitProps>> = (props) => {
     <Group
       className={isResizing ? "unselectable" : undefined}
       gap={0}
-      {...rest}
       w="100%"
+      {...rest}
       wrap="nowrap"
       pos="relative"
       ref={mouse.ref}

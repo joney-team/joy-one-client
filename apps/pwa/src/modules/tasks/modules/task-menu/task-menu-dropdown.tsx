@@ -24,7 +24,7 @@ const MenuItem: FC<{
     <Group
       className={styles.TaskMenuItem}
       gap={6}
-      pr={8}
+      pr={12}
       pl={6}
       py={6}
       align="center"

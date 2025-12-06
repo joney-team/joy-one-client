@@ -3,5 +3,9 @@ export const ganttConfig = {
   dividerSize: 10,
   columnSize: 60,
   rangeDates: 30,
-  rowDroppableIndicatorHeight: 3,
+  droppableIndicatorHeight: 3,
+  scrollbarSize: {
+    horizontal: 20,
+    vertical: 16,
+  },
 };

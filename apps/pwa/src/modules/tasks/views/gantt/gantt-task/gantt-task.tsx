@@ -176,7 +176,7 @@ const GanttTaskContent: FC = () => {
           borderBottom: `1px solid var(--app-divider-color)`,
         }}
         wrap="nowrap"
-        py={8}
+        py={5}
       >
         <GanttTaskDraggable>
           {(draggingRef) => (

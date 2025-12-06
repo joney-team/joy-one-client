@@ -1,21 +1,64 @@
 "use client";
 
 import { LayoutSplit } from "@/components/layout-split";
-import { ActionIcon, Card, Divider, Stack } from "@mantine/core";
-import { useElementSize } from "@mantine/hooks";
-import { IconMinus, IconPlus } from "@tabler/icons-react";
+import { Group, Stack } from "@mantine/core";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { useTaskFolders } from "../../hooks/use-task-folders";
 import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
-import { GanttTasksGroup } from "./gantt-tasks-group";
-import { BodyHead, GridColumns, SidebarHead } from "./gantt-tasks-layout";
 import { GanttProvider } from "./gantt-tasks-provider";
 
+import { nonLoading } from "@/utils/non-loading";
+import { classNames } from "@/utils/ui.utils";
+import dynamic from "next/dynamic";
+import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
 import { GanttRefsProvider, useGanttRefs } from "./gantt-tasks-refs";
 import styles from "./gantt-tasks.module.css";
-import { classNames } from "@/utils/ui.utils";
-import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
+
+const SidebarHead = dynamic(() => import("./gantt-tasks-layout").then((mod) => mod.SidebarHead), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const BodyHead = dynamic(() => import("./gantt-tasks-layout").then((mod) => mod.BodyHead), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const GridColumns = dynamic(() => import("./gantt-tasks-layout").then((mod) => mod.GridColumns), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const GanttTasksGroup = dynamic(
+  () => import("./gantt-tasks-group").then((mod) => mod.GanttTasksGroup),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const GanttTasksVerticalScrollbar = dynamic(
+  () =>
+    import("./scrollbar/gantt-tasks-vertical-scrollbar").then(
+      (mod) => mod.GanttTasksVerticalScrollbar
+    ),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const GanttTasksHorizontalScrollbar = dynamic(
+  () =>
+    import("./scrollbar/gantt-tasks-horizontal-scrollbar").then(
+      (mod) => mod.GanttTasksHorizontalScrollbar
+    ),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const Content: FC = () => {
   const ganttRefs = useGanttRefs();
@@ -63,6 +106,13 @@ const Content: FC = () => {
     );
   }, [activatedFolder, folders]);
 
+  const contentSized = useMemo(() => {
+    return {
+      width: sized.width - ganttConfig.scrollbarSize.vertical,
+      height: sized.height - ganttConfig.scrollbarSize.horizontal,
+    };
+  }, [sized]);
+
   return (
     <Stack
       ref={ganttRefs.root}
@@ -71,101 +121,71 @@ const Content: FC = () => {
       })}
       pos="relative"
       bg="var(--mantine-color-body)"
+      gap={0}
     >
-      <LayoutSplit
-        h={sized.height}
-        value={gantt.dividerPosition}
-        onChange={(value) =>
-          gantt.setState({
-            ...gantt.state,
-            dividerPosition: value,
-          })
-        }
-      >
-        {/* Sidebar */}
-        <Stack
-          h={sized.height}
-          style={{
-            borderRight: `1px solid var(--app-divider-color)`,
-            width: `${gantt.dividerPosition * 100}%`,
-            overflow: "hidden",
-          }}
-        >
-          <Stack gap={0} bg="var(--mantine-color-body)" id="GantSideBar">
+      <Group gap={0} w={sized.width} h={sized.height} style={{ overflow: "hidden" }}>
+        <Stack gap={0}>
+          <LayoutSplit
+            h={contentSized.height}
+            w={contentSized.width}
+            value={gantt.dividerPosition}
+            onChange={(value) =>
+              gantt.setState({
+                ...gantt.state,
+                dividerPosition: value,
+              })
+            }
+          >
+            {/* Sidebar */}
             <Stack
-              gap={0}
-              className={styles.SidebarContainer}
-              ref={ganttRefs.sidebarContainer}
+              h={contentSized.height}
               style={{
+                borderRight: `1px solid var(--app-divider-color)`,
+                width: `${gantt.dividerPosition * 100}%`,
                 overflow: "hidden",
-                maxHeight: sized.height,
               }}
             >
-              <SidebarHead />
-              {sidebar}
+              <Stack gap={0} bg="var(--mantine-color-body)" id="GantSideBar">
+                <Stack
+                  gap={0}
+                  className={styles.SidebarContainer}
+                  ref={ganttRefs.sidebarContainer}
+                  style={{
+                    overflow: "hidden",
+                    maxHeight: contentSized.height,
+                  }}
+                >
+                  <SidebarHead />
+                  {sidebar}
+                </Stack>
+              </Stack>
             </Stack>
-          </Stack>
+
+            {/* Body */}
+            <Stack
+              gap={0}
+              pos="relative"
+              ref={ganttRefs.bodyContainer}
+              className={styles.BodyContainer}
+              align="stretch"
+              style={{
+                overflow: "hidden",
+                width: `${(1 - gantt.dividerPosition) * 100}%`,
+                height: contentSized.height,
+                maxHeight: contentSized.height,
+              }}
+            >
+              <BodyHead />
+
+              <div ref={ganttRefs.body} className={styles.Body} style={{ position: "relative" }}>
+                <GridColumns />
+              </div>
+            </Stack>
+          </LayoutSplit>
+          <GanttTasksHorizontalScrollbar />
         </Stack>
-
-        {/* Body */}
-        <Stack
-          gap={0}
-          pos="relative"
-          ref={ganttRefs.bodyContainer}
-          className={styles.BodyContainer}
-          align="stretch"
-          style={{
-            overflow: "hidden",
-            width: `${(1 - gantt.dividerPosition) * 100}%`,
-            height: sized.height,
-            maxHeight: sized.height,
-          }}
-        >
-          <BodyHead />
-
-          <div ref={ganttRefs.body} className={styles.Body} style={{ position: "relative" }}>
-            <GridColumns />
-          </div>
-        </Stack>
-      </LayoutSplit>
-
-      {/* Zoom In / Out CTAs */}
-      {/* <Card
-        shadow="md"
-        p={0}
-        radius={5}
-        style={{
-          position: "absolute",
-          top: ganttConfig.headHeight + 16,
-          right: 16,
-          border: `1px solid var(--app-divider-color)`,
-          zIndex: 10,
-        }}
-      >
-        <Stack gap={0}>
-          <ActionIcon
-            variant="subtle"
-            color="gray"
-            radius={0}
-            onClick={() => gantt.changeColumnSize(gantt.state.columnSize + 20)}
-            disabled={gantt.state.columnSize >= ganttConfig.maxColumnSize}
-          >
-            <IconPlus size={16} />
-          </ActionIcon>
-
-          <Divider />
-
-          <ActionIcon
-            variant="subtle"
-            color="gray"
-            radius={0}
-            onClick={() => gantt.changeColumnSize(gantt.state.columnSize - 20)}
-            disabled={gantt.state.columnSize <= ganttConfig.minColumnSize}
-          >
-            <IconMinus size={16} />
-          </ActionIcon>
-        </Stack>
-      </Card> */}
+        <GanttTasksVerticalScrollbar />
+      </Group>
     </Stack>
   );
 };

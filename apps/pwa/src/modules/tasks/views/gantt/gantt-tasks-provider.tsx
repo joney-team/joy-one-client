@@ -139,7 +139,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
   const initialize = () => {
     const now = Date.now();
-    const fromDate = now - oneDate * 7;
+    const fromDate = now - oneDate * ganttConfig.rangeDates;
     const toDate = now + oneDate * ganttConfig.rangeDates * 2;
 
     setGanttState((s) => ({
@@ -199,8 +199,10 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
   useEffect(() => {
     if (isInitialized) {
-      scrollToDate({ date: Date.now(), behavior: "instant" });
       taskMenu.setRoot(refs.bodyContainer.current);
+      setTimeout(() => {
+        scrollToDate({ date: Date.now(), behavior: "instant" });
+      }, 300);
     }
   }, [isInitialized]);
 

@@ -249,7 +249,7 @@ export const GanttTaskDraggable: FC<{
         ref={droppableIndicatorTopRef}
         style={{
           position: "absolute",
-          height: ganttConfig.rowDroppableIndicatorHeight,
+          height: ganttConfig.droppableIndicatorHeight,
           background: color("primary"),
           width: "100%",
           right: 0,
@@ -262,7 +262,7 @@ export const GanttTaskDraggable: FC<{
         ref={droppableIndicatorTopIndentRef}
         style={{
           position: "absolute",
-          height: ganttConfig.rowDroppableIndicatorHeight,
+          height: ganttConfig.droppableIndicatorHeight,
           background: color("orange"),
           width: "calc(100% - 46px)",
           right: 0,
@@ -275,7 +275,7 @@ export const GanttTaskDraggable: FC<{
         ref={droppableIndicatorBottomRef}
         style={{
           position: "absolute",
-          height: ganttConfig.rowDroppableIndicatorHeight,
+          height: ganttConfig.droppableIndicatorHeight,
           background: color("primary"),
           width: "100%",
           right: 0,
@@ -289,7 +289,7 @@ export const GanttTaskDraggable: FC<{
         ref={droppableIndicatorBottomIndentRef}
         style={{
           position: "absolute",
-          height: ganttConfig.rowDroppableIndicatorHeight,
+          height: ganttConfig.droppableIndicatorHeight,
           background: color("orange"),
           width: "calc(100% - 46px)",
           transform: "translateY(100%)",
