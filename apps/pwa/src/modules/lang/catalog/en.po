@@ -42,7 +42,7 @@ msgstr "<0/> related to {relatedEntity} / {0}"
 msgid "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 msgstr "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:669
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:273
 msgid "<0><1/></0> subtask(s) will be archived as well."
 msgstr "<0><1/></0> subtask(s) will be archived as well."
 
@@ -266,7 +266,7 @@ msgid "Add tag"
 msgstr "Add tag"
 
 #: src/modules/tags/components/tags-input.tsx:56
-#: src/modules/tasks/views/list/list-task-row.tsx:445
+#: src/modules/tasks/views/list/list-task-row.tsx:423
 msgid "Add tags"
 msgstr "Add tags"
 
@@ -559,13 +559,17 @@ msgstr "Archived {0}"
 msgid "Archived order"
 msgstr "Archived order"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:662
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:266
 msgid "Are you sure you want to archive <0>{taskName}</0>?"
 msgstr "Are you sure you want to archive <0>{taskName}</0>?"
 
 #: src/modules/receipts/receipt-e-invoices.tsx:45
 msgid "Are you sure you want to cancel the e-invoice? This action cannot be undone. The e-invoice will be deleted."
 msgstr "Are you sure you want to cancel the e-invoice? This action cannot be undone. The e-invoice will be deleted."
+
+#: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:122
+msgid "Are you sure you want to change the timeline?"
+msgstr "Are you sure you want to change the timeline?"
 
 #: src/modules/notifications/user-notifications.tsx:89
 msgid "Are you sure you want to clean up the notifications? This action cannot be undone."
@@ -864,7 +868,7 @@ msgstr "Birhtday"
 msgid "Birthday"
 msgstr "Birthday"
 
-#: src/modules/tasks/views/task-views.tsx:57
+#: src/modules/tasks/views/task-views.tsx:65
 msgid "Board"
 msgstr "Board"
 
@@ -948,7 +952,7 @@ msgstr "Business"
 msgid "Business permit"
 msgstr "Business permit"
 
-#: src/modules/tasks/views/task-views.tsx:69
+#: src/modules/tasks/views/task-views.tsx:77
 msgid "Calendar"
 msgstr "Calendar"
 
@@ -962,7 +966,7 @@ msgstr "Can leave one of the check-in or check-out times blank if you have alrea
 
 #: src/hooks/use-confirm-modal.tsx:104
 #: src/hooks/use-confirm-modal.tsx:110
-#: src/modals/modal-confirm.tsx:59
+#: src/modals/modal-confirm.tsx:82
 #: src/modules/bookings/components/form-booking.tsx:410
 #: src/modules/customers/modals/modal-customer-form.tsx:124
 #: src/modules/receipts/receipt-e-invoices.tsx:122
@@ -1123,6 +1127,10 @@ msgstr "Change settings"
 msgid "Change status"
 msgstr "Change status"
 
+#: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:135
+msgid "Change to"
+msgstr "Change to"
+
 #: src/modules/users/user-profile-settings.tsx:156
 msgid "Change your language settings"
 msgstr "Change your language settings"
@@ -1226,6 +1234,10 @@ msgstr "Clear"
 msgid "Clear filter"
 msgstr "Clear filter"
 
+#: src/modules/tasks/modules/task-menu/task-menu-dropdown.tsx:62
+msgid "Clear time"
+msgstr "Clear time"
+
 #: src/widgets/index.tsx:281
 msgid "Click right mouse button to add Widgets"
 msgstr "Click right mouse button to add Widgets"
@@ -1265,7 +1277,7 @@ msgstr "Clinic"
 msgid "Close"
 msgstr "Close"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:65
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:64
 msgid "Close all folders"
 msgstr "Close all folders"
 
@@ -1412,7 +1424,7 @@ msgstr "Configuration"
 
 #: src/hooks/use-confirm-modal.tsx:100
 #: src/hooks/use-confirm-modal.tsx:113
-#: src/modals/modal-confirm.tsx:62
+#: src/modals/modal-confirm.tsx:85
 #: src/modules/bookings/components/form-booking.tsx:416
 #: src/modules/dashboard/dashboard-suggestions.tsx:183
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:161
@@ -1563,7 +1575,7 @@ msgid "Copied"
 msgstr "Copied"
 
 #: src/modals/modal-share-link.tsx:97
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:504
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:141
 msgid "Copy"
 msgstr "Copy"
 
@@ -1677,7 +1689,7 @@ msgid "Create file"
 msgstr "Create file"
 
 #: src/layout/navigation/workspace-navigation-menu.tsx:248
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:147
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:146
 msgid "Create folder"
 msgstr "Create folder"
 
@@ -1765,8 +1777,8 @@ msgid "Create SDK"
 msgstr "Create SDK"
 
 #: src/modules/tasks/components/quick-create-task-input.tsx:27
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:696
-#: src/modules/tasks/views/list/list-task-row.tsx:401
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:300
+#: src/modules/tasks/views/list/list-task-row.tsx:379
 msgid "Create subtask"
 msgstr "Create subtask"
 
@@ -1780,7 +1792,7 @@ msgstr "Create tag"
 #: src/modules/tasks/components/quick-create-task-input.tsx:44
 #: src/modules/tasks/modals/modal-create-task.tsx:82
 #: src/modules/tasks/views/board/board-group-by-statuses.tsx:237
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:159
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:158
 #: src/modules/tasks/views/list/list-task-group-by-statuses.tsx:134
 msgid "Create task"
 msgstr "Create task"
@@ -1843,6 +1855,10 @@ msgstr "Current password"
 #: src/modules/users/user-profile-settings.tsx:175
 msgid "Current time"
 msgstr "Current time"
+
+#: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:126
+msgid "Current timeline"
+msgstr "Current timeline"
 
 #: src/layout/navigation/navigation-drawer.tsx:208
 msgid "Custom domain"
@@ -2342,7 +2358,7 @@ msgstr "Edit note"
 msgid "Edit promotion"
 msgstr "Edit promotion"
 
-#: src/modules/tasks/views/list/list-task-row.tsx:419
+#: src/modules/tasks/views/list/list-task-row.tsx:397
 msgid "Edit task name"
 msgstr "Edit task name"
 
@@ -2802,7 +2818,7 @@ msgstr "Fulfilled at"
 msgid "Full name"
 msgstr "Full name"
 
-#: src/modules/tasks/views/task-views.tsx:61
+#: src/modules/tasks/views/task-views.tsx:69
 msgid "Gantt"
 msgstr "Gantt"
 
@@ -2889,7 +2905,7 @@ msgstr "Hidden in receipt when no price"
 msgid "Hide closed"
 msgstr "Hide closed"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:91
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:90
 msgid "Hide estimate time"
 msgstr "Hide estimate time"
 
@@ -3429,7 +3445,7 @@ msgstr "Liquidation statement"
 #: src/modules/orders/orders-sale/orders-sale.tsx:94
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:122
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:127
-#: src/modules/tasks/views/task-views.tsx:53
+#: src/modules/tasks/views/task-views.tsx:61
 msgid "List"
 msgstr "List"
 
@@ -4232,7 +4248,7 @@ msgstr "Mutual workspaces"
 #: src/modules/promotions/promostion-list.tsx:33
 #: src/modules/services/service-list.tsx:50
 #: src/modules/tags/modals/modal-tag-form.tsx:78
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:59
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:58
 #: src/modules/tasks/views/list/list-task-row-head.tsx:11
 #: src/modules/users/user-profile-settings.tsx:123
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:205
@@ -4545,7 +4561,7 @@ msgstr "Oops! Page not found"
 msgid "Oops! Something went wrong..."
 msgstr "Oops! Something went wrong..."
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:65
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:64
 msgid "Open all folders"
 msgstr "Open all folders"
 
@@ -5848,11 +5864,11 @@ msgstr "Save prescription template"
 msgid "Scan QR code"
 msgstr "Scan QR code"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:722
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:325
 msgid "Scroll to task"
 msgstr "Scroll to task"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:133
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:132
 msgid "Scroll to today"
 msgstr "Scroll to today"
 
@@ -6165,11 +6181,11 @@ msgstr "Show currency"
 msgid "Show customer"
 msgstr "Show customer"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:89
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:88
 msgid "Show estimate time"
 msgstr "Show estimate time"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:115
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:114
 msgid "Show/hide task color by status"
 msgstr "Show/hide task color by status"
 
@@ -6717,7 +6733,7 @@ msgstr "Time settings for your profile"
 
 #: src/components/inputs/time-trackings-input.tsx:172
 #: src/modules/tasks/components/form-task.tsx:421
-#: src/modules/tasks/views/task-views.tsx:65
+#: src/modules/tasks/views/task-views.tsx:73
 #: src/widgets/reports/widgets/report-time-trackings.widget.tsx:111
 msgid "Time trackings"
 msgstr "Time trackings"
@@ -7299,6 +7315,10 @@ msgstr "View customer phone number and contact"
 msgid "View customers"
 msgstr "View customers"
 
+#: src/modules/tasks/modules/task-menu/task-menu-dropdown.tsx:53
+msgid "View detail"
+msgstr "View detail"
+
 #: src/modules/e-invoices/e-invoice-list.tsx:63
 msgid "View E-Invoice"
 msgstr "View E-Invoice"
@@ -7628,7 +7648,7 @@ msgstr "You need advice! Start chatting with us now."
 msgid "You need to create a DNS Record with domain <0>{0}</0>"
 msgstr "You need to create a DNS Record with domain <0>{0}</0>"
 
-#: src/modules/tasks/views/gantt/gantt-task-row.tsx:724
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:327
 msgid "You need to set the start date before"
 msgstr "You need to set the start date before"
 
