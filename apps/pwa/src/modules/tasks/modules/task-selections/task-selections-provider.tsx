@@ -19,11 +19,11 @@ export const TaskSelectionsProvider: FC<PropsWithChildren> = ({ children }) => {
   const [selected, setSelected] = useState<SelectedTask[]>([]);
 
   const toggleSelectTask: TasksSelectionContextType["toggleSelect"] = (args) => {
-    const { task, isShiftKey, groupVariables: variables } = args;
+    const { task, isShiftKey, groupVariables } = args;
 
     const data = client.cache.readQuery<TasksQuery, TasksQueryVariables>({
       query: QUERY_TASKS,
-      variables,
+      variables: groupVariables ?? undefined,
     });
 
     if (isShiftKey && data) {

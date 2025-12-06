@@ -1,0 +1,8 @@
+.TaskMenuItem {
+  cursor: pointer;
+  border-radius: var(--mantine-radius-default);
+
+  &:hover {
+    background-color: var(--mantine-color-gray-0);
+  }
+}

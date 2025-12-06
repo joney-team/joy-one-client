@@ -11,7 +11,6 @@ export interface GanttState {
   unit: DateTimeUnit;
   fromDate: Date;
   toDate: Date;
-  columnSize: number;
   displayTaskStatusColor?: boolean;
   dividerPosition?: number;
   isHideEstimateTime?: boolean;

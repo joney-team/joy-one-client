@@ -107,6 +107,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
                     prevTask={subTasks[index - 1]}
                     nextTask={subTasks[index + 1]}
                     href={updateTaskPath(pathname, { code: task.code })}
+                    groupVariables={groupVariables}
                   />
                 ))}
             </Stack>

@@ -19,6 +19,7 @@ import type {
 import { getDateRangeBreakdown } from "./gantt-tasks-utils";
 import { usePathname } from "next/navigation";
 import { parseTaskPath } from "../../tasks-route-helpers";
+import { useTaskMenu } from "../../modules/task-menu/task-menu";
 
 let scrollTop = -1;
 const oneDate = 24 * 60 * 60 * 1000;
@@ -28,6 +29,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   const layout = useLayout();
   const refs = useGanttRefs();
   const pathname = usePathname();
+  const taskMenu = useTaskMenu();
   const [version, setVersion] = useState(0);
   const rerender = () => setVersion((s) => s + 1);
 
@@ -40,7 +42,6 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     unit: "day",
     fromDate: new Date(),
     toDate: new Date(),
-    columnSize: ganttConfig.minColumnSize,
   });
 
   const range = useMemo(
@@ -114,7 +115,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
         });
 
         await wait(100);
-        const distance = ganttConfig.rangeDates * ganttState.columnSize;
+        const distance = ganttConfig.rangeDates * ganttConfig.columnSize;
         refs.bodyContainer.current.scrollTo({
           left: distance + currentScrollLeft,
           behavior: "instant",
@@ -164,8 +165,8 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
       const offset =
         typeof args === "number"
-          ? -ganttState.columnSize * 0.8
-          : (args as { offset?: number }).offset || -ganttState.columnSize * 0.8;
+          ? -ganttConfig.columnSize * 0.8
+          : (args as { offset?: number }).offset || -ganttConfig.columnSize * 0.8;
 
       const behavior =
         typeof args === "number"
@@ -180,7 +181,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
         (column) => column.start <= scrollDate && column.end >= scrollDate
       );
 
-      const scrollLeft = columnIndex * ganttState.columnSize;
+      const scrollLeft = columnIndex * ganttConfig.columnSize;
 
       if (columnIndex >= 0) {
         refs.bodyContainer.current.scrollTo({
@@ -189,7 +190,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
         });
       }
     },
-    [columns, ganttState.columnSize, isInitialized, ganttState]
+    [columns, isInitialized, ganttState]
   );
 
   useEffect(() => {
@@ -199,6 +200,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     if (isInitialized) {
       scrollToDate({ date: Date.now(), behavior: "instant" });
+      taskMenu.setRoot(refs.bodyContainer.current);
     }
   }, [isInitialized]);
 

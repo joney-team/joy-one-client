@@ -8,7 +8,7 @@ import { useTaskSelections } from "./task-selections-context";
 
 export const TaskSelectionBox: FC<{
   task: TaskDataFragment;
-  groupVariables?: TasksQueryVariables;
+  groupVariables: TasksQueryVariables | null;
   className?: string;
 }> = ({ task, groupVariables, className }) => {
   const color = useColor();
@@ -20,9 +20,7 @@ export const TaskSelectionBox: FC<{
       component="div"
       color={isSelected ? color("primary") : "gray"}
       variant="subtle"
-      onClick={(e) =>
-        toggleSelect({ task, isShiftKey: e.shiftKey, groupVariables: groupVariables })
-      }
+      onClick={(e) => toggleSelect({ task, isShiftKey: e.shiftKey, groupVariables })}
       className={className}
       data-selected={isSelected}
     >

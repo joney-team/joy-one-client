@@ -47,6 +47,14 @@ const TaskViewGateway = dynamic(
   }
 );
 
+const TaskMenuProvider = dynamic(
+  () => import("../modules/task-menu/task-menu-provider").then((mod) => mod.TaskMenuProvider),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
 const allTaskViews: Record<TaskView, { icon: Icon; name: ReactNode }> = {
   [TaskView.LIST]: {
     icon: IconList,
@@ -108,11 +116,12 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
 
       {props.children}
 
-      <TaskViewGateway view={view} />
-
-      <TasksRealtimeEvents />
-      <TaskDetail />
-      <BulkTasksActions />
+      <TaskMenuProvider>
+        <TaskViewGateway view={view} />
+        <TasksRealtimeEvents />
+        <TaskDetail />
+        <BulkTasksActions />
+      </TaskMenuProvider>
     </Fragment>
   );
 };

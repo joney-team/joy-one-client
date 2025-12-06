@@ -200,8 +200,8 @@ export const BodyHead: FC = () => {
           return (
             <Group
               key={index}
-              w={`${gantt.state.columnSize * week.dates}px`}
-              maw={`${gantt.state.columnSize * week.dates}px`}
+              w={`${ganttConfig.columnSize * week.dates}px`}
+              maw={`${ganttConfig.columnSize * week.dates}px`}
               style={{
                 borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}`,
               }}
@@ -270,7 +270,7 @@ export const BodyHead: FC = () => {
               key={index}
               style={{
                 borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}`,
-                width: gantt.state.columnSize,
+                width: ganttConfig.columnSize,
               }}
               data-column-index={index}
               h="100%"
@@ -294,7 +294,7 @@ export const GridColumns: FC = () => {
   const columnHighlights = useMemo(() => {
     return gantt.columns.reduce<ReactNode[]>((acc, column, columnIndex) => {
       const day = DateTime.normalizeDate(column.start).getDay();
-      const left = columnIndex * gantt.state.columnSize;
+      const left = columnIndex * ganttConfig.columnSize;
 
       const isWeekend = day === 0 || day === 6;
       if (isWeekend) {
@@ -306,7 +306,7 @@ export const GridColumns: FC = () => {
               top: 0,
               bottom: 0,
               left,
-              width: gantt.state.columnSize,
+              width: ganttConfig.columnSize,
               background: alpha("var(--app-divider-color)", 0.3),
             }}
           />
@@ -315,6 +315,9 @@ export const GridColumns: FC = () => {
 
       const isToday = DateTime.isSame(column.start, new Date(), "day");
       if (isToday) {
+        const timePassed = DateTime.diff(column.start, new Date(), "second");
+        const timePassedWidth = (timePassed / (24 * 60 * 60)) * ganttConfig.columnSize;
+
         acc.push(
           <div
             key={columnIndex + "today"}
@@ -322,7 +325,7 @@ export const GridColumns: FC = () => {
               position: "absolute",
               top: 0,
               bottom: 0,
-              left: left - 1,
+              left: left - 1 + timePassedWidth,
               width: 2,
               background: alpha(color("primary"), 0.2),
             }}
@@ -350,7 +353,7 @@ export const GridColumns: FC = () => {
       var(--app-divider-color) 0,
       var(--app-divider-color) 1px,
       transparent 1px,
-      transparent ${gantt.state.columnSize}px
+      transparent ${ganttConfig.columnSize}px
     )`,
         }}
       >

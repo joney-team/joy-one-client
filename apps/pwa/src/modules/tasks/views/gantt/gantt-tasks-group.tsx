@@ -10,7 +10,7 @@ import { IconFolder, IconFolderOpen, IconPlus } from "@tabler/icons-react";
 import { Fragment, useEffect, useMemo, useState, type FC } from "react";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { ModalCreateTask } from "../../modals/modal-create-task";
-import { GanttTaskRow } from "./gantt-task-row";
+import { GanttTask } from "./gantt-task/gantt-task";
 
 interface GanttTasksGroupProps {
   folder?: TagDataFragment;
@@ -105,7 +105,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
 
       {opened &&
         tasks.map((task, taskIndex) => (
-          <GanttTaskRow
+          <GanttTask
             key={task._id}
             task={task}
             prevTask={tasks[taskIndex - 1]}

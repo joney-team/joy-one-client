@@ -16,8 +16,8 @@ import QUERY_TASKS, {
 } from "../queries/queryTasks.graphql";
 
 export interface UpdateTaskContext {
-  fromGroupVariables?: TasksQueryVariables;
-  toGroupVariables?: TasksQueryVariables;
+  fromGroupVariables?: TasksQueryVariables | null;
+  toGroupVariables?: TasksQueryVariables | null;
 }
 
 export type UpdateTask = Partial<TasksQuery["tasks"]["data"][number]> & {

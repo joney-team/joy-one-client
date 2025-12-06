@@ -71,7 +71,7 @@ export const ListTaskRow: FC<{
   href: string;
   allowEditName?: boolean;
   lastRow?: boolean;
-  groupVariables?: TasksQueryVariables;
+  groupVariables: TasksQueryVariables | null;
   isMarkAsChild?: boolean;
   droppableOptions?: {
     inherits?: (keyof TaskDataFragment)[];

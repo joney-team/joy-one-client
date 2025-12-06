@@ -8,7 +8,7 @@ export interface TasksSelectionContextType {
   toggleSelect: (args: {
     task: SelectedTask;
     isShiftKey: boolean;
-    groupVariables?: TasksQueryVariables;
+    groupVariables: TasksQueryVariables | null;
   }) => void;
 }
 
