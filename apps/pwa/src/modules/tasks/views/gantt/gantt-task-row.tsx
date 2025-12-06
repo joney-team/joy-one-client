@@ -3,7 +3,6 @@
 import {
   ActionIcon,
   alpha,
-  Box,
   Card,
   Group,
   Portal,
@@ -35,6 +34,8 @@ import { Trans } from "@lingui/react/macro";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
   IconArrowRight,
+  IconChevronCompactLeft,
+  IconChevronCompactRight,
   IconCopyPlus,
   IconGripVertical,
   IconMaximize,
@@ -43,7 +44,7 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
+import { UpdateTask, UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import { ModalCreateTask } from "../../modals/modal-create-task";
 import TASKS_QUERY, { type TasksQueryVariables } from "../../queries/queryTasks.graphql";
 import { updateTaskPath } from "../../tasks-route-helpers";
@@ -61,15 +62,16 @@ import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/el
 import { NumberFormat } from "@/components/format/number-format";
 import { ModalConfirm } from "@/modals/modal-confirm";
 import { onError } from "@/utils/exceptions.utils";
+import { classNames } from "@/utils/ui.utils";
 import { limitCharacters } from "@joy-one-client/utils/string";
 import { t } from "@lingui/core/macro";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
+import { TaskSelectionBox } from "../../modules/task-selections/task-selection-box";
 import MUTATION_DUPLICATE_TASK, {
   type DuplicateTaskMutation,
   type DuplicateTaskMutationVariables,
 } from "../../queries/mutationDuplicateTask.graphql";
 import styles from "./gantt-tasks.module.css";
-import { classNames } from "@/utils/ui.utils";
 
 interface GanttTaskRowProps {
   task: TaskDataFragment;
@@ -146,10 +148,6 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
 
   const droppableIndicatorBottomRef = useRef<HTMLDivElement>(null);
   const droppableIndicatorBottomIndentRef = useRef<HTMLDivElement>(null);
-
-  const isCanEstimate = useMemo(() => {
-    return !gantt.isGrabbing && (!task.childTimeline?.startDate || !task.childTimeline?.dueDate);
-  }, [task.childTimeline, gantt.isGrabbing]);
 
   // Drag drop handlers
   useEffect(() => {
@@ -394,6 +392,149 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     }
   };
 
+  const estimated = useMemo(() => {
+    const rawStartDate = task.childTimeline?.startDate ?? task.startDate;
+    const rawDueDate = task.childTimeline?.dueDate ?? task.dueDate;
+
+    if (rawStartDate && rawDueDate) {
+      const startDate = DateTime.toSeconds(rawStartDate);
+      const dueDate = DateTime.toSeconds(rawDueDate);
+
+      const startIndexCaptured = gantt.columns.findIndex(
+        (column) =>
+          DateTime.toSeconds(column.start) >= startDate ||
+          DateTime.toSeconds(column.end) >= startDate
+      );
+
+      const startIndex = startIndexCaptured >= 0 ? startIndexCaptured : 0;
+
+      const endIndexCaptured = gantt.columns.findIndex(
+        (column) =>
+          DateTime.toSeconds(column.end) >= dueDate || DateTime.toSeconds(column.start) >= dueDate
+      );
+
+      const endIndex = endIndexCaptured >= 0 ? endIndexCaptured : gantt.columns.length - 1;
+
+      return {
+        startIndex,
+        endIndex,
+        left: startIndex * gantt.state.columnSize,
+        width: (endIndex - startIndex + 1) * gantt.state.columnSize,
+        isChildSummary: !!task.childTimeline?.startDate && !!task.childTimeline?.dueDate,
+        isCanMove: !gantt.isGrabbing,
+      };
+    }
+  }, [
+    task.startDate,
+    task.dueDate,
+    task.childTimeline,
+    gantt.columns,
+    gantt.isGrabbing,
+    gantt.state.columnSize,
+  ]);
+
+  // Handle moving estimated
+  useEffect(() => {
+    const estimatedRange = estimatedRangeRef.current;
+
+    if (!estimated?.isCanMove || !estimatedRange) return;
+
+    let dragging = false;
+    let initialX = 0;
+
+    const resetMove = () => {
+      estimatedRange.style.setProperty("left", `${estimated.left}px`);
+      dragging = false;
+    };
+
+    const onMouseDown = (e: MouseEvent) => {
+      dragging = true;
+      initialX = e.pageX;
+    };
+
+    const onMouseUp = (e: MouseEvent) => {
+      if (!dragging) return;
+
+      dragging = false;
+
+      // Calculate the distance moved
+      const distance = e.pageX - initialX;
+      const newLeft = estimated.left + distance;
+
+      // Calculate the new column indices
+      const newStartIndex = Math.max(0, Math.floor(newLeft / gantt.state.columnSize));
+      const numberOfColumns = estimated.endIndex - estimated.startIndex + 1;
+      const newEndIndex = Math.min(gantt.columns.length - 1, newStartIndex + numberOfColumns - 1);
+
+      // Get the columns for the new position
+      const startColumn = gantt.columns[newStartIndex];
+      const endColumn = gantt.columns[newEndIndex];
+
+      if (!startColumn && endColumn) return resetMove();
+
+      if (estimated.isChildSummary) {
+        const oneDay = 86400;
+        const distanceIndex = newStartIndex - estimated.startIndex;
+        const distanceTime = distanceIndex * oneDay;
+
+        updateTasks(
+          subtasks.reduce<UpdateTask[]>((acc, subtask) => {
+            if (subtask.startDate && subtask.dueDate) {
+              acc.push({
+                _id: subtask._id,
+                startDate: subtask.startDate + distanceTime,
+                dueDate: subtask.dueDate + distanceTime,
+              });
+            }
+
+            return acc;
+          }, [])
+        );
+      } else {
+        const startDate = DateTime.toSeconds(startColumn.start);
+        const endDate = DateTime.toSeconds(endColumn.end);
+
+        updateTasks({
+          _id: task._id,
+          startDate,
+          dueDate: endDate,
+        });
+      }
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!dragging) return;
+      const distance = e.pageX - initialX;
+      estimatedRange.style.setProperty("left", `${estimated.left + distance}px`);
+    };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        resetMove();
+      }
+    };
+
+    estimatedRange.addEventListener("mousedown", onMouseDown);
+    estimatedRange.addEventListener("mouseup", onMouseUp);
+    estimatedRange.addEventListener("mouseleave", resetMove);
+
+    taskTimelineRef.current?.addEventListener("mousemove", onMouseMove);
+    taskTimelineRef.current?.addEventListener("mouseleave", resetMove);
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      estimatedRange.removeEventListener("mousedown", onMouseDown);
+      estimatedRange.removeEventListener("mouseup", onMouseUp);
+      estimatedRange.removeEventListener("mouseleave", resetMove);
+
+      taskTimelineRef.current?.removeEventListener("mousemove", onMouseMove);
+      taskTimelineRef.current?.removeEventListener("mouseleave", resetMove);
+
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [estimated, gantt.state.columnSize, gantt.columns, task._id, updateTasks]);
+
   const resetEstimating = () => {
     estimatingStartRef.current = null;
     estimatingPointerRef.current?.style.setProperty("opacity", `0`);
@@ -402,9 +543,238 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     movePointerRef.current?.style.setProperty("opacity", `0`);
   };
 
+  const isCanEstimate = useMemo(() => {
+    return (
+      !estimated &&
+      !gantt.isGrabbing &&
+      (!task.childTimeline?.startDate || !task.childTimeline?.dueDate)
+    );
+  }, [task.childTimeline, gantt.isGrabbing, estimated]);
+
   useEffect(() => {
     if (!isCanEstimate) resetEstimating();
   }, [isCanEstimate]);
+
+  // Resize pointers
+  const resizeLeftPointerRef = useRef<HTMLDivElement>(null);
+  const resizeRightPointerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const estimatedRange = estimatedRangeRef.current;
+    if (!estimated || !estimatedRange || !taskTimelineRef.current) return;
+
+    let resizingDirection: "LEFT" | "RIGHT" | null = null;
+    let resizing = false;
+    let initialX = 0;
+    let initialLeft = estimated.left;
+    let initialWidth = estimated.width;
+    let initialStartIndex = estimated.startIndex;
+    let initialEndIndex = estimated.endIndex;
+
+    const resetResize = () => {
+      if (!estimatedRange) return;
+      estimatedRange.style.setProperty("left", `${estimated.left}px`);
+      estimatedRange.style.setProperty("width", `${estimated.width}px`);
+      resizing = false;
+      resizingDirection = null;
+    };
+
+    const onMouseDown = (direction: "LEFT" | "RIGHT") => {
+      return (e: MouseEvent) => {
+        if (!estimated || !estimatedRange || !taskTimelineRef.current) return;
+        e.preventDefault();
+        e.stopPropagation();
+        resizingDirection = direction;
+        resizing = true;
+        initialX = e.pageX;
+        initialLeft = estimated.left;
+        initialWidth = estimated.width;
+        initialStartIndex = estimated.startIndex;
+        initialEndIndex = estimated.endIndex;
+      };
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!resizing || !resizingDirection || !estimatedRange || !estimated) return;
+
+      const distance = e.pageX - initialX;
+
+      if (resizingDirection === "LEFT") {
+        // Resizing left edge
+        const newLeft = Math.max(0, initialLeft + distance);
+        const newWidth = initialWidth - distance;
+
+        // Ensure minimum width
+        if (newWidth < gantt.state.columnSize) return;
+
+        estimatedRange.style.setProperty("left", `${newLeft}px`);
+        estimatedRange.style.setProperty("width", `${newWidth}px`);
+      } else if (resizingDirection === "RIGHT") {
+        // Resizing right edge
+        const newWidth = initialWidth + distance;
+
+        // Ensure minimum width
+        if (newWidth < gantt.state.columnSize) return;
+
+        // Ensure we don't go beyond the timeline
+        const maxWidth = gantt.columns.length * gantt.state.columnSize - initialLeft;
+        const clampedWidth = Math.min(newWidth, maxWidth);
+
+        estimatedRange.style.setProperty("width", `${clampedWidth}px`);
+      }
+    };
+
+    const onMouseUp = (e: MouseEvent) => {
+      if (!resizing || !resizingDirection || !estimated || !estimatedRange) {
+        resetResize();
+        return;
+      }
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      const distance = e.pageX - initialX;
+      const rect = taskTimelineRef.current?.getBoundingClientRect();
+      if (!rect) {
+        resetResize();
+        return;
+      }
+
+      if (resizingDirection === "LEFT") {
+        // Calculate new start index (keep end index fixed)
+        const newLeft = Math.max(0, initialLeft + distance);
+        const newStartIndex = Math.max(0, Math.floor(newLeft / gantt.state.columnSize));
+
+        // Ensure start index doesn't exceed end index
+        if (newStartIndex >= initialEndIndex) {
+          resetResize();
+          return;
+        }
+
+        const startColumn = gantt.columns[newStartIndex];
+        const endColumn = gantt.columns[initialEndIndex];
+
+        if (!startColumn || !endColumn) {
+          resetResize();
+          return;
+        }
+
+        if (estimated.isChildSummary) {
+          const oneDay = 86400;
+          const distanceIndex = newStartIndex - initialStartIndex;
+          const distanceTime = distanceIndex * oneDay;
+
+          updateTasks(
+            subtasks.reduce<UpdateTask[]>((acc, subtask) => {
+              if (subtask.startDate && subtask.dueDate) {
+                acc.push({
+                  _id: subtask._id,
+                  startDate: subtask.startDate + distanceTime,
+                  dueDate: subtask.dueDate,
+                });
+              }
+              return acc;
+            }, [])
+          );
+        } else {
+          const startDate = DateTime.toSeconds(startColumn.start);
+          const endDate = DateTime.toSeconds(endColumn.end);
+
+          updateTasks({
+            _id: task._id,
+            startDate,
+            dueDate: endDate,
+          });
+        }
+      } else if (resizingDirection === "RIGHT") {
+        // Calculate new end index
+        const newWidth = initialWidth + distance;
+        const newEndIndex = Math.min(
+          gantt.columns.length - 1,
+          Math.floor((initialLeft + newWidth) / gantt.state.columnSize)
+        );
+
+        // Ensure end index is not before start index
+        if (newEndIndex < initialStartIndex) {
+          resetResize();
+          return;
+        }
+
+        const startColumn = gantt.columns[initialStartIndex];
+        const endColumn = gantt.columns[newEndIndex];
+
+        if (!startColumn || !endColumn) {
+          resetResize();
+          return;
+        }
+
+        if (estimated.isChildSummary) {
+          const oneDay = 86400;
+          const distanceIndex = newEndIndex - initialEndIndex;
+          const distanceTime = distanceIndex * oneDay;
+
+          updateTasks(
+            subtasks.reduce<UpdateTask[]>((acc, subtask) => {
+              if (subtask.startDate && subtask.dueDate) {
+                acc.push({
+                  _id: subtask._id,
+                  startDate: subtask.startDate,
+                  dueDate: subtask.dueDate + distanceTime,
+                });
+              }
+              return acc;
+            }, [])
+          );
+        } else {
+          const startDate = DateTime.toSeconds(startColumn.start);
+          const endDate = DateTime.toSeconds(endColumn.end);
+
+          updateTasks({
+            _id: task._id,
+            startDate,
+            dueDate: endDate,
+          });
+        }
+      }
+
+      resetResize();
+    };
+
+    const onMouseLeave = () => {
+      if (resizing) {
+        resetResize();
+      }
+    };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && resizing) {
+        resetResize();
+      }
+    };
+
+    const leftPointer = resizeLeftPointerRef.current;
+    const rightPointer = resizeRightPointerRef.current;
+
+    leftPointer?.addEventListener("mousedown", onMouseDown("LEFT"));
+    rightPointer?.addEventListener("mousedown", onMouseDown("RIGHT"));
+
+    taskTimelineRef.current.addEventListener("mousemove", onMouseMove);
+    taskTimelineRef.current.addEventListener("mouseup", onMouseUp);
+    taskTimelineRef.current.addEventListener("mouseleave", onMouseLeave);
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      leftPointer?.removeEventListener("mousedown", onMouseDown("LEFT"));
+      rightPointer?.removeEventListener("mousedown", onMouseDown("RIGHT"));
+
+      taskTimelineRef.current?.removeEventListener("mousemove", onMouseMove);
+      taskTimelineRef.current?.removeEventListener("mouseup", onMouseUp);
+      taskTimelineRef.current?.removeEventListener("mouseleave", onMouseLeave);
+
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [estimated, gantt.state.columnSize, gantt.columns, task._id, updateTasks, subtasks]);
 
   const onTaskTimelineMouseDown: MouseEventHandler<HTMLDivElement> = useCallback(
     (e) => {
@@ -462,39 +832,6 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     actionsRef.current?.style.setProperty("display", "none");
   };
 
-  const estimated = useMemo(() => {
-    const rawStartDate = task.childTimeline?.startDate ?? task.startDate;
-    const rawDueDate = task.childTimeline?.dueDate ?? task.dueDate;
-
-    if (rawStartDate && rawDueDate) {
-      const startDate = DateTime.toSeconds(rawStartDate);
-      const dueDate = DateTime.toSeconds(rawDueDate);
-
-      const startIndexCaptured = gantt.columns.findIndex(
-        (column) =>
-          DateTime.toSeconds(column.start) >= startDate ||
-          DateTime.toSeconds(column.end) >= startDate
-      );
-
-      const startIndex = startIndexCaptured >= 0 ? startIndexCaptured : 0;
-
-      const endIndexCaptured = gantt.columns.findIndex(
-        (column) =>
-          DateTime.toSeconds(column.end) >= dueDate || DateTime.toSeconds(column.start) >= dueDate
-      );
-
-      const endIndex = endIndexCaptured >= 0 ? endIndexCaptured : gantt.columns.length - 1;
-
-      return {
-        startIndex,
-        endIndex,
-        left: startIndex * gantt.state.columnSize,
-        width: (endIndex - startIndex + 1) * gantt.state.columnSize,
-        isChildSummary: !!task.childTimeline?.startDate && !!task.childTimeline?.dueDate,
-      };
-    }
-  }, [task.startDate, task.dueDate, task.childTimeline, gantt.columns, gantt.state.columnSize]);
-
   const duplicateTask = async () => {
     try {
       await duplicate({
@@ -523,12 +860,12 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
     router.push(updateTaskPath(location.pathname, { code: task.code }));
   };
 
-  const onRowMouseEnter = () => {
+  const onRowHover = () => {
     taskTimelineRef.current?.setAttribute("hovered", "true");
     taskRowDataRef.current?.setAttribute("hovered", "true");
   };
 
-  const onRowMouseLeave = () => {
+  const onRowLeave = () => {
     taskTimelineRef.current?.removeAttribute("hovered");
     taskRowDataRef.current?.removeAttribute("hovered");
   };
@@ -572,11 +909,11 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
           borderBottom: `1px solid var(--app-divider-color)`,
         }}
         onMouseEnter={() => {
-          onRowMouseEnter();
+          onRowHover();
           onOnActions();
         }}
         onMouseLeave={() => {
-          onRowMouseLeave();
+          onRowLeave();
           onOffActions();
         }}
         wrap="nowrap"
@@ -592,6 +929,12 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
         >
           <IconGripVertical size={16} strokeWidth={1.2} />
         </ActionIcon>
+
+        <TaskSelectionBox
+          className={styles.TaskSelectionBox}
+          task={task}
+          groupVariables={groupVariables}
+        />
 
         {task.parent && (
           <ThemeIcon color="gray" variant="transparent" ml={10}>
@@ -868,10 +1211,10 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
               onMouseDown={isCanEstimate ? onTaskTimelineMouseDown : undefined}
               onMouseUp={isCanEstimate ? onTaskTimelineMouseUp : undefined}
               onMouseEnter={() => {
-                onRowMouseEnter();
+                onRowHover();
               }}
               onMouseLeave={() => {
-                onRowMouseLeave();
+                onRowLeave();
                 resetEstimating();
               }}
               onWheel={isCanEstimate ? onTaskTimelineWheel : undefined}
@@ -893,6 +1236,7 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
                   ref={estimatedRangeRef}
                   className={classNames(styles.EstimatedRange, {
                     [styles.isChildSummary]: estimated.isChildSummary,
+                    [styles.Draggable]: estimated.isCanMove,
                   })}
                   style={{
                     left: estimated?.left,
@@ -927,9 +1271,35 @@ export const GanttTaskRow: FC<GanttTaskRowProps> = ({
                       />
                     </Stack>
                   ) : (
-                    <Text px={8} fz={11} fw={500} truncate c="white" maw="100%">
-                      {task.name}
-                    </Text>
+                    <Group miw={0} w="100%" gap={0} h="100%" align="stretch">
+                      <Group
+                        h="100%"
+                        align="center"
+                        w={16}
+                        justify="center"
+                        ref={resizeLeftPointerRef}
+                        className={styles.ResizePointer}
+                      >
+                        <IconChevronCompactLeft size={12} color="white" />
+                      </Group>
+
+                      <Group h="100%" miw={0} flex={1} align="center">
+                        <Text fz={11} fw={500} truncate c="white" maw="100%" flex={1}>
+                          {task.name}
+                        </Text>
+                      </Group>
+
+                      <Group
+                        h="100%"
+                        align="center"
+                        w={16}
+                        justify="center"
+                        className={styles.ResizePointer}
+                        ref={resizeRightPointerRef}
+                      >
+                        <IconChevronCompactRight size={12} color="white" />
+                      </Group>
+                    </Group>
                   )}
                 </div>
               )}

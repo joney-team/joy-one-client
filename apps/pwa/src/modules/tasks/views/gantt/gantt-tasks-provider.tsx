@@ -93,15 +93,16 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   const onExtendTimeRange = useThrottledCallback(async () => {
     if (columnResizing.current) return;
 
-    const contentBody = refs.bodyContainer.current!;
+    const bodyContainer = refs.bodyContainer.current;
     columnResizing.current = true;
 
     const offset = 100;
 
     // Detect scroll to the end of left or right
-    const isEndLeft = contentBody.scrollLeft <= 0 + offset;
+    const isEndLeft = bodyContainer.scrollLeft <= 0 + offset;
     const isEndRight =
-      contentBody.scrollLeft >= contentBody.scrollWidth - contentBody.clientWidth - offset;
+      bodyContainer.scrollLeft >= bodyContainer.scrollWidth - bodyContainer.clientWidth - offset;
+    const currentScrollLeft = bodyContainer.scrollLeft;
 
     if (isEndLeft || isEndRight) {
       if (isEndLeft) {
@@ -114,7 +115,10 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
         await wait(100);
         const distance = ganttConfig.rangeDates * ganttState.columnSize;
-        contentBody.scrollLeft = distance;
+        refs.bodyContainer.current.scrollTo({
+          left: distance + currentScrollLeft,
+          behavior: "instant",
+        });
       }
 
       if (isEndRight) {

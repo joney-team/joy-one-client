@@ -20,7 +20,7 @@ export interface UpdateTaskContext {
   toGroupVariables?: TasksQueryVariables;
 }
 
-type UpdateTask = Partial<TasksQuery["tasks"]["data"][number]> & {
+export type UpdateTask = Partial<TasksQuery["tasks"]["data"][number]> & {
   _id: string;
   context?: UpdateTaskContext;
 };

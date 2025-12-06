@@ -15,6 +15,7 @@ import { GanttProvider } from "./gantt-tasks-provider";
 import { GanttRefsProvider, useGanttRefs } from "./gantt-tasks-refs";
 import styles from "./gantt-tasks.module.css";
 import { classNames } from "@/utils/ui.utils";
+import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
 
 const Content: FC = () => {
   const ganttRefs = useGanttRefs();
@@ -173,7 +174,10 @@ export const GanttTasks: FC<PropsWithChildren> = (props) => {
   return (
     <GanttRefsProvider>
       <GanttProvider>
-        <Content />
+        <TaskSelectionsProvider>
+          <Content />
+        </TaskSelectionsProvider>
+
         {props.children}
       </GanttProvider>
     </GanttRefsProvider>

@@ -9,7 +9,7 @@ import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-ta
 import { useColor } from "@/modules/theme/use-color";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Group, rgba, Stack, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, alpha, Group, rgba, Stack, Text, Tooltip } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import {
   IconCalendarDown,
@@ -22,7 +22,7 @@ import {
   IconHourglassOff,
   IconPlus,
 } from "@tabler/icons-react";
-import { FC, Fragment, PropsWithChildren, useEffect, useState } from "react";
+import { FC, Fragment, PropsWithChildren, ReactNode, useEffect, useMemo, useState } from "react";
 import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
 
@@ -291,45 +291,72 @@ export const GridColumns: FC = () => {
   const gantt = useGantt();
   const color = useColor();
 
-  return (
-    <div
-      className="GanttBodyGridColumns"
-      style={{
-        position: "absolute",
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        borderBottom: `1px solid var(--app-divider-color)`,
-        display: "flex",
-      }}
-    >
-      {gantt.columns.map((column, index) => {
-        const id = `column-${column.start.getTime()}`;
-        const first = index === 0;
-        const isToday = DateTime.isSame(column.start, new Date(), "day");
-        const day = DateTime.normalizeDate(column.start).getDay();
-        const isWeekend = day === 0 || day === 6;
+  const columnHighlights = useMemo(() => {
+    return gantt.columns.reduce<ReactNode[]>((acc, column, columnIndex) => {
+      const day = DateTime.normalizeDate(column.start).getDay();
+      const left = columnIndex * gantt.state.columnSize;
 
-        return (
+      const isWeekend = day === 0 || day === 6;
+      if (isWeekend) {
+        acc.push(
           <div
-            id={id}
-            key={index}
+            key={columnIndex + "weekend"}
             style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left,
               width: gantt.state.columnSize,
-              borderLeft: first
-                ? undefined
-                : `${isToday ? 1 : 1}px solid ${
-                    isToday ? color("primary.2") : `var(--app-divider-color)`
-                  }`,
-              position: "relative",
-              height: "100%",
-              background: isWeekend ? "var(--mantine-color-default-hover)" : undefined,
+              background: alpha("var(--app-divider-color)", 0.3),
             }}
           />
         );
-      })}
-    </div>
+      }
+
+      const isToday = DateTime.isSame(column.start, new Date(), "day");
+      if (isToday) {
+        acc.push(
+          <div
+            key={columnIndex + "today"}
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: left - 1,
+              width: 2,
+              background: alpha(color("primary"), 0.2),
+            }}
+          />
+        );
+      }
+
+      return acc;
+    }, []);
+  }, [gantt.columns]);
+
+  return (
+    <Fragment>
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          borderBottom: `1px solid var(--app-divider-color)`,
+          display: "flex",
+          background: `repeating-linear-gradient(
+      to right,
+      var(--app-divider-color) 0,
+      var(--app-divider-color) 1px,
+      transparent 1px,
+      transparent ${gantt.state.columnSize}px
+    )`,
+        }}
+      >
+        {columnHighlights}
+      </div>
+    </Fragment>
   );
 };
 

@@ -40,8 +40,6 @@ import {
   IconGripVertical,
   IconPencil,
   IconPlus,
-  IconSquareCheckFilled,
-  IconSquareDashed,
   IconSubtask,
   IconTagPlus,
 } from "@tabler/icons-react";
@@ -54,7 +52,6 @@ import Link from "next/link";
 import { TasksQueryVariables } from "../../queries/queryTasks.graphql";
 import { isTaskOutdated } from "../../tasks-service";
 
-import { useColor } from "@/modules/theme/use-color";
 import { classNames } from "@/utils/ui.utils";
 import {
   type Edge,
@@ -63,32 +60,9 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { motion } from "framer-motion";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
-import { useTaskSelections } from "../../modules/task-selections/task-selections-context";
+import { TaskSelectionBox } from "../../modules/task-selections/task-selection-box";
 import { TaskDataFragment } from "../../queries/fragmentTask.graphql";
 import styles from "./list-tasks.module.css";
-
-const TaskSelection: FC<{
-  task: TaskDataFragment;
-  variables?: TasksQueryVariables;
-}> = ({ task, variables }) => {
-  const color = useColor();
-  const { selected, toggleSelect } = useTaskSelections();
-  const isSelected = selected.some((v) => v._id === task._id);
-
-  return (
-    <ActionIcon
-      color={isSelected ? color("primary") : "gray"}
-      variant="subtle"
-      onClick={(e) => toggleSelect({ task, isShiftKey: e.shiftKey, variables })}
-    >
-      {isSelected ? (
-        <IconSquareCheckFilled size={18} />
-      ) : (
-        <IconSquareDashed strokeWidth={1.5} size={18} />
-      )}
-    </ActionIcon>
-  );
-};
 
 export const ListTaskRow: FC<{
   task: TaskDataFragment;
@@ -300,7 +274,11 @@ export const ListTaskRow: FC<{
             <IconGripVertical size={16} strokeWidth={1.2} />
           </ActionIcon>
 
-          <TaskSelection task={task} variables={groupVariables} />
+          <TaskSelectionBox
+            className={styles.TaskSelectionBox}
+            task={task}
+            groupVariables={groupVariables}
+          />
 
           <Group pl={indexSpacing} flex={1} py={5} gap={5} wrap="nowrap" miw={0}>
             <Renderer visible={isMarkAsChild}>
