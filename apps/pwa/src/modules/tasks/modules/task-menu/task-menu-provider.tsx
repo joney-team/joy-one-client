@@ -14,7 +14,7 @@ export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLElement>(null);
 
-  const close = () => {
+  const onClose = () => {
     setTaskMenu(undefined);
   };
 
@@ -34,13 +34,21 @@ export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
       const onMouseDown = (e: MouseEvent) => {
         if (e.target && !menuRef.current?.contains(e.target as Node)) {
-          close();
+          onClose();
         }
       };
 
       document.addEventListener("mousedown", onMouseDown);
       rootRef.current?.addEventListener("scroll", placeMenu);
       window.addEventListener("resize", placeMenu);
+
+      const onKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          onClose();
+        }
+      };
+
+      window.addEventListener("keydown", onKeyDown);
 
       return () => {
         menuRef.current?.style.setProperty("display", "none");
@@ -49,9 +57,10 @@ export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
         document.removeEventListener("mousedown", onMouseDown);
         rootRef.current?.removeEventListener("scroll", placeMenu);
         window.removeEventListener("resize", placeMenu);
+        window.removeEventListener("keydown", onKeyDown);
       };
     }
-  }, [menuRef.current, taskMenu, version, close]);
+  }, [menuRef.current, taskMenu, version, onClose]);
 
   return (
     <TaskMenuContext.Provider
@@ -73,7 +82,7 @@ export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
           ref={menuRef}
           style={{ display: "none", position: "fixed", zIndex: zIndexes.taskMenu }}
         >
-          {taskMenu && <TaskMenuDropdown {...taskMenu} onClose={close} />}
+          {taskMenu && <TaskMenuDropdown {...taskMenu} onClose={onClose} />}
         </div>
       </Portal>
     </TaskMenuContext.Provider>
