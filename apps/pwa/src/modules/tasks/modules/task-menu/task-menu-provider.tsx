@@ -10,6 +10,7 @@ import type { TaskMenu } from "./task-menu-types";
 export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [version, setVersion] = useState(0);
   const [taskMenu, setTaskMenu] = useState<TaskMenu>();
+
   const menuRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLElement>(null);
 
@@ -62,6 +63,7 @@ export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setRoot: (root) => {
           rootRef.current = root as HTMLDivElement;
         },
+        isOpened: !!taskMenu,
       }}
     >
       {children}

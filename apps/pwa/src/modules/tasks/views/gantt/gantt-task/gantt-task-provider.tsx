@@ -70,6 +70,8 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
         width: (endIndex - startIndex + 1) * ganttConfig.columnSize,
         isChildSummary: !!task.childTimeline?.startDate && !!task.childTimeline?.dueDate,
         isCanMove: !gantt.isGrabbing,
+        startDate,
+        dueDate,
       };
     }
 

@@ -37,7 +37,7 @@ export const GanttTaskTimeline: FC = () => {
 
   // Handle moving estimated
   useEffect(() => {
-    if (!timeline?.isCanMove || !timelineRef.current) return;
+    if (!timeline?.isCanMove || !timelineRef.current || taskMenu.isOpened) return;
 
     let dragging = false;
     let initialX = 0;
@@ -160,6 +160,7 @@ export const GanttTaskTimeline: FC = () => {
       ganttTaskAreaRef.current?.removeEventListener("mouseleave", resetMove);
 
       window.removeEventListener("keydown", onKeyDown);
+      resetMove();
     };
   }, [timeline, gantt.columns, task._id, updateTasks, taskMenu]);
 
@@ -183,6 +184,12 @@ export const GanttTaskTimeline: FC = () => {
     };
   }, [timeline]);
 
+  const taskColor = useMemo(() => {
+    return gantt.state.displayTaskStatusColor
+      ? color(taskStatus.color ?? "gray")
+      : color("primary.4");
+  }, [gantt.state.displayTaskStatusColor, taskStatus.color]);
+
   if (!timeline) return null;
 
   return (
@@ -195,13 +202,21 @@ export const GanttTaskTimeline: FC = () => {
       style={{
         left: timeline.left,
         width: timeline.width,
-        background: timeline.isChildSummary
-          ? "transparent"
-          : gantt.state.displayTaskStatusColor
-          ? alpha(color(taskStatus.color ?? "gray"), 0.8)
-          : color("primary.4"),
+        background: timeline.isChildSummary ? "transparent" : alpha(taskColor, 0.6),
       }}
     >
+      <div
+        className={styles.GanttTaskTimelineProgress}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: `${task.progress}%`,
+          height: "100%",
+          background: alpha(taskColor, 0.6),
+        }}
+      />
+
       {timeline.isChildSummary ? (
         <GanttTaskTimelineChildSummary />
       ) : (

@@ -90,6 +90,7 @@
       min-width: 0;
       align-items: center;
       z-index: 2;
+      overflow: hidden;
 
       & .GanttTaskTimelineChildSummaryProgress {
         border-radius: 5rem;

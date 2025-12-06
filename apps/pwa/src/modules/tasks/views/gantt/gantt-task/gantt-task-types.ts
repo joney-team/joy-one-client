@@ -17,4 +17,6 @@ export type GanttTaskTimeline = {
   width: number;
   isChildSummary: boolean;
   isCanMove: boolean;
+  startDate: number;
+  dueDate: number;
 };

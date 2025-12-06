@@ -321,7 +321,7 @@ const GanttTaskContent: FC = () => {
 
                 <Tooltip.Floating
                   label={
-                    task.startDate ? (
+                    timeline?.startDate ? (
                       <Trans>Scroll to task</Trans>
                     ) : (
                       <Trans>You need to set the start date before</Trans>
@@ -337,8 +337,8 @@ const GanttTaskContent: FC = () => {
                     size="sm"
                     disabled={!task.startDate}
                     onClick={() => {
-                      if (!task.startDate) return;
-                      gantt.scrollToDate({ date: task.startDate, behavior: "smooth" });
+                      if (!timeline?.startDate) return;
+                      gantt.scrollToDate({ date: timeline?.startDate, behavior: "smooth" });
                     }}
                   >
                     <IconArrowRight size={16} />
@@ -364,8 +364,8 @@ const GanttTaskContent: FC = () => {
                 zIndex: 1,
               }}
             >
-              <GanttTaskDrawTimeline />
-              <GanttTaskTimeline />
+              <GanttTaskDrawTimeline key={timeline?.startDate + "drawer"} />
+              <GanttTaskTimeline key={timeline?.startDate + "timeline"} />
             </div>
           </Fragment>,
           ganttRefs.body.current,

@@ -14,6 +14,7 @@ import { ganttConfig } from "../../gantt-tasks-config";
 import { useGantt } from "../../gantt-tasks-context";
 import styles from "../../gantt-tasks.module.css";
 import { useGanttTaskRow } from "../gantt-task-provider";
+import { useTaskMenu } from "@/modules/tasks/modules/task-menu/task-menu";
 
 export const GanttTaskDrawTimeline: FC = () => {
   const color = useColor();
@@ -22,13 +23,14 @@ export const GanttTaskDrawTimeline: FC = () => {
 
   const { updateTasks } = useUpdateTasks();
   const { ganttTaskAreaRef, timeline, task } = useGanttTaskRow();
+  const taskMenu = useTaskMenu();
 
   const estimatingMovingPointerRef = useRef<HTMLDivElement>(null);
   const estimatingPointerRef = useRef<HTMLDivElement>(null);
 
   const isAvailable = useMemo(() => {
-    return !gantt.isGrabbing && !timeline?.isChildSummary;
-  }, [task.childTimeline, gantt.isGrabbing, timeline]);
+    return !gantt.isGrabbing && !timeline?.isChildSummary && !taskMenu.isOpened;
+  }, [task.childTimeline, gantt.isGrabbing, timeline, taskMenu.isOpened]);
 
   useEffect(() => {
     if (!isAvailable) return;

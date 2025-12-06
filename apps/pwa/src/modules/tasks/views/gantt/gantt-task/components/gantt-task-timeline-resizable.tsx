@@ -255,7 +255,7 @@ export const GanttTaskTimelineResizable: FC<{
   }, [timeline, gantt.columns, task._id, updateTasks]);
 
   return (
-    <Group miw={0} w="100%" gap={0} h="100%" align="stretch">
+    <Group miw={0} w="100%" gap={0} h="100%" align="stretch" pos="relative" style={{ zIndex: 1 }}>
       <Group
         h="100%"
         align="center"

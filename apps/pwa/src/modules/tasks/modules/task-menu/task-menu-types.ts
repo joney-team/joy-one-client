@@ -12,4 +12,5 @@ export interface TaskMenu {
 export interface TaskMenuContextType {
   open: (menu: TaskMenu) => void;
   setRoot: (root: HTMLElement | null) => void;
+  isOpened: boolean;
 }
