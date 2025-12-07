@@ -1,8 +1,10 @@
 "use client";
 
+import { nonLoading } from "@/utils/non-loading";
 import { useApolloClient } from "@apollo/client/react";
 import { shiftSelect } from "@joy-one-client/utils/array";
-import { FC, PropsWithChildren, useState } from "react";
+import dynamic from "next/dynamic";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
@@ -12,6 +14,14 @@ import {
   TaskSelectionsContext,
   TasksSelectionContextType,
 } from "./task-selections-context";
+
+const TaskSelectionMenu = dynamic(
+  () => import("./task-selection-menu").then((mod) => mod.TaskSelectionMenu),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const TaskSelectionsProvider: FC<PropsWithChildren> = ({ children }) => {
   const client = useApolloClient();
@@ -57,6 +67,28 @@ export const TaskSelectionsProvider: FC<PropsWithChildren> = ({ children }) => {
     );
   };
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.shiftKey) {
+        document.body.classList.add("ShiftSelect");
+      } else {
+        document.body.classList.remove("ShiftSelect");
+      }
+    };
+
+    const onKeyUp = () => {
+      document.body.classList.remove("ShiftSelect");
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+    };
+  }, []);
+
   return (
     <TaskSelectionsContext.Provider
       value={{
@@ -66,6 +98,7 @@ export const TaskSelectionsProvider: FC<PropsWithChildren> = ({ children }) => {
       }}
     >
       {children}
+      <TaskSelectionMenu />
     </TaskSelectionsContext.Provider>
   );
 };

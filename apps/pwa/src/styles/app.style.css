@@ -586,3 +586,11 @@ body {
     cursor: grabbing;
   }
 }
+
+.ShiftSelect {
+  user-select: none !important;
+
+  * {
+    user-select: none !important;
+  }
+}
