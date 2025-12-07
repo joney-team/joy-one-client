@@ -84,6 +84,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
           p={8}
           mih={46}
           gap="xs"
+          wrap="nowrap"
           style={{
             position: "relative",
             borderBottom: `1px solid var(--app-divider-color)`,
@@ -101,7 +102,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
           }}
           className="clickable unselectable"
         >
-          <Group gap={6} flex={1} miw={0}>
+          <Group gap={6} flex={1} miw={0} wrap="nowrap">
             <ActionIcon component="div" color={color(folderColor)} variant="light" size="sm">
               {opened ? <IconFolderOpen size={14} /> : <IconFolder size={14} />}
             </ActionIcon>

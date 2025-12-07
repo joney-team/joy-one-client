@@ -39,8 +39,12 @@
   }
 
   & .GanttTask {
+    & .TaskRowActions {
+      display: none;
+      visibility: hidden;
+    }
+
     & .DragHandle,
-    & .TaskRowActions,
     & .TaskSelectionBox[data-selected="false"] {
       opacity: 0;
     }
@@ -53,6 +57,11 @@
       & .TaskRowActions,
       & .TaskSelectionBox[data-selected="false"] {
         opacity: 1;
+      }
+
+      & .TaskRowActions {
+        display: flex;
+        visibility: visible;
       }
     }
 

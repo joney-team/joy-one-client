@@ -42,6 +42,8 @@ export const SidebarHead: FC = () => {
       justify="space-between"
       bg="var(--mantine-color-body)"
       h="100%"
+      wrap="nowrap"
+      miw={0}
       style={{
         position: "sticky",
         top: 0,
@@ -54,11 +56,11 @@ export const SidebarHead: FC = () => {
         borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
       }}
     >
-      <Text fz={13}>
+      <Text fz={13} truncate>
         <Trans>Name</Trans>
       </Text>
 
-      <Group gap={5}>
+      <Group gap={5} wrap="nowrap" miw={0}>
         <Tooltip
           label={
             isOpenedAllFolder ? <Trans>Close all folders</Trans> : <Trans>Open all folders</Trans>

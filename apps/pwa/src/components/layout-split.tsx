@@ -3,7 +3,7 @@
 import { useColor } from "@/modules/theme/use-color";
 import { Group, GroupProps, Stack } from "@mantine/core";
 import { useForceUpdate, useMouse } from "@mantine/hooks";
-import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
+import { FC, Fragment, PropsWithChildren, useEffect, useRef, useState } from "react";
 
 interface LayoutSplitProps extends Omit<GroupProps, "value" | "onChange"> {
   value: number;
@@ -59,19 +59,33 @@ export const LayoutSplit: FC<PropsWithChildren<LayoutSplitProps>> = (props) => {
       {props.children}
 
       {isResizing && (
-        <Stack
-          pos="absolute"
-          top={0}
-          bottom={0}
-          w={2}
-          bg={color("primary.7")}
-          style={{
-            left: `${pointerX.current * 100}%`,
-            transform: "translateX(-50%)",
-            cursor: "col-resize",
-            zIndex: 10,
-          }}
-        />
+        <Fragment>
+          <Stack
+            pos="absolute"
+            top={0}
+            bottom={0}
+            left={0}
+            right={0}
+            bg="transparent"
+            style={{
+              zIndex: 5,
+            }}
+          />
+
+          <Stack
+            pos="absolute"
+            top={0}
+            bottom={0}
+            w={2}
+            bg={color("primary.7")}
+            style={{
+              left: `${pointerX.current * 100}%`,
+              transform: "translateX(-50%)",
+              cursor: "col-resize",
+              zIndex: 10,
+            }}
+          />
+        </Fragment>
       )}
 
       <Stack
