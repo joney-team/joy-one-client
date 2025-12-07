@@ -41,7 +41,7 @@ msgstr "<0/> related to {relatedEntity} / {0}"
 msgid "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 msgstr "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:273
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:295
 msgid "<0><1/></0> subtask(s) will be archived as well."
 msgstr "<0><1/></0> subtask(s) will be archived as well."
 
@@ -252,7 +252,7 @@ msgstr "Add receipt"
 msgid "Add rule"
 msgstr "Add rule"
 
-#: src/modules/tasks/views/board/board-tasks.tsx:145
+#: src/modules/tasks/views/board/board-tasks.tsx:149
 msgid "Add status"
 msgstr "Add status"
 
@@ -265,7 +265,7 @@ msgid "Add tag"
 msgstr "Add tag"
 
 #: src/modules/tags/components/tags-input.tsx:56
-#: src/modules/tasks/views/list/list-task-row.tsx:423
+#: src/modules/tasks/views/list/list-task-row.tsx:441
 msgid "Add tags"
 msgstr "Add tags"
 
@@ -338,15 +338,15 @@ msgstr "AI Assistant"
 msgid "AI Assistant {0}"
 msgstr "AI Assistant {0}"
 
-#: src/modules/events/event-constants.ts:158
+#: src/modules/events/event-constants.ts:157
 msgid "AI assistant created"
 msgstr "AI assistant created"
 
-#: src/modules/events/event-constants.ts:160
+#: src/modules/events/event-constants.ts:159
 msgid "AI assistant removed"
 msgstr "AI assistant removed"
 
-#: src/modules/events/event-constants.ts:159
+#: src/modules/events/event-constants.ts:158
 msgid "AI assistant updated"
 msgstr "AI assistant updated"
 
@@ -414,15 +414,15 @@ msgstr "Analytics"
 msgid "Another name displayed on the ticket, invoice sent to customers. Not required"
 msgstr "Another name displayed on the ticket, invoice sent to customers. Not required"
 
-#: src/modules/events/event-constants.ts:182
+#: src/modules/events/event-constants.ts:181
 msgid "API App archived"
 msgstr "API App archived"
 
-#: src/modules/events/event-constants.ts:180
+#: src/modules/events/event-constants.ts:179
 msgid "API App created"
 msgstr "API App created"
 
-#: src/modules/events/event-constants.ts:181
+#: src/modules/events/event-constants.ts:180
 msgid "API App updated"
 msgstr "API App updated"
 
@@ -488,7 +488,7 @@ msgstr "Approve all"
 msgid "Approve Expense"
 msgstr "Approve Expense"
 
-#: src/modules/events/event-constants.ts:127
+#: src/modules/events/event-constants.ts:126
 #: src/modules/workspace-roles/workspace-roles-constants.ts:48
 msgid "Approve loan"
 msgstr "Approve loan"
@@ -528,20 +528,20 @@ msgstr "Archive loan"
 msgid "Archive order / service ticket"
 msgstr "Archive order / service ticket"
 
-#: src/modules/events/event-constants.ts:70
+#: src/modules/events/event-constants.ts:69
 msgid "Archive partner"
 msgstr "Archive partner"
 
-#: src/modules/events/event-constants.ts:62
+#: src/modules/events/event-constants.ts:61
 msgid "Archive product"
 msgstr "Archive product"
 
-#: src/modules/events/event-constants.ts:79
+#: src/modules/events/event-constants.ts:78
 #: src/modules/workspace-roles/workspace-roles-constants.ts:126
 msgid "Archive receipt"
 msgstr "Archive receipt"
 
-#: src/modules/events/event-constants.ts:72
+#: src/modules/events/event-constants.ts:71
 msgid "Archive task"
 msgstr "Archive task"
 
@@ -554,11 +554,11 @@ msgstr "Archived"
 msgid "Archived {0}"
 msgstr "Archived {0}"
 
-#: src/modules/events/event-constants.ts:165
+#: src/modules/events/event-constants.ts:164
 msgid "Archived order"
 msgstr "Archived order"
 
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:266
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:288
 msgid "Are you sure you want to archive <0>{taskName}</0>?"
 msgstr "Are you sure you want to archive <0>{taskName}</0>?"
 
@@ -566,7 +566,7 @@ msgstr "Are you sure you want to archive <0>{taskName}</0>?"
 msgid "Are you sure you want to cancel the e-invoice? This action cannot be undone. The e-invoice will be deleted."
 msgstr "Are you sure you want to cancel the e-invoice? This action cannot be undone. The e-invoice will be deleted."
 
-#: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:122
+#: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:120
 msgid "Are you sure you want to change the timeline?"
 msgstr "Are you sure you want to change the timeline?"
 
@@ -613,9 +613,13 @@ msgid "Are you sure you want to reject the expense? This action cannot be undone
 msgstr "Are you sure you want to reject the expense? This action cannot be undone. The receipt will be deleted."
 
 #. placeholder {0}: tag.name
-#: src/layout/navigation/workspace-navigation-task-folders.tsx:55
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:77
 msgid "Are you sure you want to remove <0>{0}</0> folder?"
 msgstr "Are you sure you want to remove <0>{0}</0> folder?"
+
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:45
+msgid "Are you sure you want to remove all selected tasks?"
+msgstr "Are you sure you want to remove all selected tasks?"
 
 #: src/modules/loans/components/loan-payments.tsx:81
 msgid "Are you sure you want to revert the liquidation?"
@@ -682,6 +686,8 @@ msgstr "Assign customer to member"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:176
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:311
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:225
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:359
 msgid "Assign task"
 msgstr "Assign task"
 
@@ -850,11 +856,11 @@ msgstr "Beauty salon"
 msgid "Billings"
 msgstr "Billings"
 
-#: src/modules/events/event-constants.ts:108
+#: src/modules/events/event-constants.ts:107
 msgid "Billings deposited"
 msgstr "Billings deposited"
 
-#: src/modules/events/event-constants.ts:109
+#: src/modules/events/event-constants.ts:108
 msgid "Billings withdrawn"
 msgstr "Billings withdrawn"
 
@@ -1024,7 +1030,7 @@ msgstr "Cash"
 msgid "Cashback"
 msgstr "Cashback"
 
-#: src/modules/events/event-constants.ts:111
+#: src/modules/events/event-constants.ts:110
 msgid "Cashback created"
 msgstr "Cashback created"
 
@@ -1051,15 +1057,15 @@ msgstr "Categories"
 msgid "Category"
 msgstr "Category"
 
-#: src/modules/events/event-constants.ts:194
+#: src/modules/events/event-constants.ts:193
 msgid "Category archived"
 msgstr "Category archived"
 
-#: src/modules/events/event-constants.ts:192
+#: src/modules/events/event-constants.ts:191
 msgid "Category created"
 msgstr "Category created"
 
-#: src/modules/events/event-constants.ts:193
+#: src/modules/events/event-constants.ts:192
 msgid "Category updated"
 msgstr "Category updated"
 
@@ -1093,6 +1099,7 @@ msgstr "Change customer"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:211
 #: src/modules/tasks/components/task-detail-head.tsx:110
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:259
 msgid "Change folder"
 msgstr "Change folder"
 
@@ -1100,7 +1107,7 @@ msgstr "Change folder"
 msgid "Change fulfilled at"
 msgstr "Change fulfilled at"
 
-#: src/modules/events/event-constants.ts:176
+#: src/modules/events/event-constants.ts:175
 #: src/modules/workspace-roles/workspace-roles-constants.ts:24
 msgid "Change loan workspace branch"
 msgstr "Change loan workspace branch"
@@ -1114,11 +1121,15 @@ msgstr "Change name"
 msgid "Change password"
 msgstr "Change password"
 
+#: src/modules/tasks/modules/task-menu/task-menu-dropdown.tsx:69
+msgid "Change priority"
+msgstr "Change priority"
+
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:130
 msgid "Change provider"
 msgstr "Change provider"
 
-#: src/modules/events/event-constants.ts:178
+#: src/modules/events/event-constants.ts:177
 msgid "Change receipt workspace branch"
 msgstr "Change receipt workspace branch"
 
@@ -1128,10 +1139,12 @@ msgstr "Change settings"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:142
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:300
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:191
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:348
 msgid "Change status"
 msgstr "Change status"
 
-#: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:135
+#: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:133
 msgid "Change to"
 msgstr "Change to"
 
@@ -1221,7 +1234,7 @@ msgstr "CID number"
 msgid "Clean"
 msgstr "Clean"
 
-#: src/modules/events/event-constants.ts:67
+#: src/modules/events/event-constants.ts:66
 msgid "Clean notifications"
 msgstr "Clean notifications"
 
@@ -1238,7 +1251,7 @@ msgstr "Clear"
 msgid "Clear filter"
 msgstr "Clear filter"
 
-#: src/modules/tasks/modules/task-menu/task-menu-dropdown.tsx:62
+#: src/modules/tasks/modules/task-menu/task-menu-dropdown.tsx:155
 msgid "Clear time"
 msgstr "Clear time"
 
@@ -1281,7 +1294,7 @@ msgstr "Clinic"
 msgid "Close"
 msgstr "Close"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:64
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:66
 msgid "Close all folders"
 msgstr "Close all folders"
 
@@ -1308,9 +1321,10 @@ msgstr "Code"
 msgid "Collapse"
 msgstr "Collapse"
 
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:145
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:290
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:238
-#: src/modules/tags/modals/modal-tag-form.tsx:174
+#: src/modules/tags/modals/modal-tag-form.tsx:152
 #: src/modules/users/components/user-workspace-settings-form.tsx:94
 msgid "Color"
 msgstr "Color"
@@ -1405,7 +1419,7 @@ msgstr "Complete"
 msgid "Complete booking"
 msgstr "Complete booking"
 
-#: src/modules/events/event-constants.ts:131
+#: src/modules/events/event-constants.ts:130
 msgid "Complete loan"
 msgstr "Complete loan"
 
@@ -1578,7 +1592,7 @@ msgid "Copied"
 msgstr "Copied"
 
 #: src/modals/modal-share-link.tsx:97
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:141
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:145
 msgid "Copy"
 msgstr "Copy"
 
@@ -1603,12 +1617,12 @@ msgstr "Cost price"
 msgid "Coupon"
 msgstr "Coupon"
 
-#: src/modules/events/event-constants.ts:133
+#: src/modules/events/event-constants.ts:132
 msgid "Coupon archived"
 msgstr "Coupon archived"
 
-#: src/modules/events/event-constants.ts:134
-#: src/modules/events/event-constants.ts:136
+#: src/modules/events/event-constants.ts:133
+#: src/modules/events/event-constants.ts:135
 msgid "Coupon created"
 msgstr "Coupon created"
 
@@ -1620,11 +1634,11 @@ msgstr "Coupon rule"
 msgid "Coupon rules"
 msgstr "Coupon rules"
 
-#: src/modules/events/event-constants.ts:135
+#: src/modules/events/event-constants.ts:134
 msgid "Coupon updated"
 msgstr "Coupon updated"
 
-#: src/modules/events/event-constants.ts:137
+#: src/modules/events/event-constants.ts:136
 msgid "Coupon used"
 msgstr "Coupon used"
 
@@ -1644,7 +1658,7 @@ msgstr "Create"
 
 #: src/modules/categories/components/quick-create-category.tsx:29
 #: src/modules/categories/components/quick-create-category.tsx:46
-#: src/modules/tags/modals/modal-tag-form.tsx:158
+#: src/modules/tags/modals/modal-tag-form.tsx:140
 msgid "Create {entity}"
 msgstr "Create {entity}"
 
@@ -1688,12 +1702,12 @@ msgstr "Create customer"
 msgid "Create E-Invoice criteria"
 msgstr "Create E-Invoice criteria"
 
-#: src/modules/events/event-constants.ts:73
+#: src/modules/events/event-constants.ts:72
 msgid "Create file"
 msgstr "Create file"
 
-#: src/layout/navigation/workspace-navigation-menu.tsx:266
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:148
+#: src/layout/navigation/workspace-navigation-menu.tsx:267
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:150
 msgid "Create folder"
 msgstr "Create folder"
 
@@ -1721,7 +1735,7 @@ msgstr "Create new"
 msgid "Create new {entity}"
 msgstr "Create new {entity}"
 
-#: src/modules/events/event-constants.ts:132
+#: src/modules/events/event-constants.ts:131
 msgid "Create new loan contract"
 msgstr "Create new loan contract"
 
@@ -1734,7 +1748,7 @@ msgstr "Create new product"
 msgid "Create new workspace"
 msgstr "Create new workspace"
 
-#: src/modules/events/event-constants.ts:161
+#: src/modules/events/event-constants.ts:160
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:99
 msgid "Create new workspace branch"
 msgstr "Create new workspace branch"
@@ -1748,12 +1762,12 @@ msgstr "Create order"
 msgid "Create order / service ticket"
 msgstr "Create order / service ticket"
 
-#: src/modules/events/event-constants.ts:68
+#: src/modules/events/event-constants.ts:67
 #: src/modules/partners/modals/modal-partner-form.tsx:82
 msgid "Create partner"
 msgstr "Create partner"
 
-#: src/modules/events/event-constants.ts:60
+#: src/modules/events/event-constants.ts:59
 msgid "Create product"
 msgstr "Create product"
 
@@ -1765,7 +1779,7 @@ msgstr "Create product/service"
 msgid "Create promotion"
 msgstr "Create promotion"
 
-#: src/modules/events/event-constants.ts:75
+#: src/modules/events/event-constants.ts:74
 #: src/modules/receipts/modals/modal-receipt-form.tsx:167
 #: src/modules/workspace-roles/workspace-roles-constants.ts:72
 msgid "Create receipt"
@@ -1781,18 +1795,18 @@ msgid "Create SDK"
 msgstr "Create SDK"
 
 #: src/modules/tasks/components/quick-create-task-input.tsx:27
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:300
-#: src/modules/tasks/views/list/list-task-row.tsx:379
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:322
+#: src/modules/tasks/views/list/list-task-row.tsx:397
 msgid "Create subtask"
 msgstr "Create subtask"
 
-#: src/layout/navigation/workspace-navigation-menu.tsx:249
-#: src/modules/events/event-constants.ts:71
+#: src/layout/navigation/workspace-navigation-menu.tsx:250
+#: src/modules/events/event-constants.ts:70
 #: src/modules/tasks/components/quick-create-task-input.tsx:27
 #: src/modules/tasks/components/quick-create-task-input.tsx:44
 #: src/modules/tasks/modals/modal-create-task.tsx:101
-#: src/modules/tasks/views/board/board-group-by-statuses.tsx:237
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:162
+#: src/modules/tasks/views/board/board-group-by-statuses.tsx:244
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:164
 #: src/modules/tasks/views/list/list-task-group-by-statuses.tsx:134
 msgid "Create task"
 msgstr "Create task"
@@ -1817,7 +1831,7 @@ msgstr "Created at"
 msgid "Created by"
 msgstr "Created by"
 
-#: src/modules/events/event-constants.ts:163
+#: src/modules/events/event-constants.ts:162
 msgid "Created order"
 msgstr "Created order"
 
@@ -1856,7 +1870,7 @@ msgstr "Current password"
 msgid "Current time"
 msgstr "Current time"
 
-#: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:126
+#: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:124
 msgid "Current timeline"
 msgstr "Current timeline"
 
@@ -1920,7 +1934,7 @@ msgstr "Custom fulfilled at"
 msgid "Customer"
 msgstr "Customer"
 
-#: src/modules/events/event-constants.ts:152
+#: src/modules/events/event-constants.ts:151
 msgid "Customer archived"
 msgstr "Customer archived"
 
@@ -1932,7 +1946,7 @@ msgstr "Customer birthday"
 msgid "Customer checkin"
 msgstr "Customer checkin"
 
-#: src/modules/events/event-constants.ts:140
+#: src/modules/events/event-constants.ts:139
 msgid "Customer contacts updated"
 msgstr "Customer contacts updated"
 
@@ -1944,7 +1958,7 @@ msgstr "Customer created"
 msgid "Customer detail"
 msgstr "Customer detail"
 
-#: src/modules/events/event-constants.ts:186
+#: src/modules/events/event-constants.ts:185
 msgid "Customer form archived"
 msgstr "Customer form archived"
 
@@ -1952,7 +1966,7 @@ msgstr "Customer form archived"
 msgid "Customer form link"
 msgstr "Customer form link"
 
-#: src/modules/events/event-constants.ts:185
+#: src/modules/events/event-constants.ts:184
 msgid "Customer form updated"
 msgstr "Customer form updated"
 
@@ -2167,7 +2181,7 @@ msgstr "Direct discount"
 msgid "Disable"
 msgstr "Disable"
 
-#: src/modules/events/event-constants.ts:78
+#: src/modules/events/event-constants.ts:77
 #: src/modules/loans/loan-detail.tsx:462
 msgid "Disbursement"
 msgstr "Disbursement"
@@ -2306,11 +2320,11 @@ msgstr "Due date"
 msgid "Duration"
 msgstr "Duration"
 
-#: src/modules/events/event-constants.ts:207
+#: src/modules/events/event-constants.ts:206
 msgid "E-invoice created"
 msgstr "E-invoice created"
 
-#: src/modules/events/event-constants.ts:208
+#: src/modules/events/event-constants.ts:207
 msgid "E-invoice removed"
 msgstr "E-invoice removed"
 
@@ -2331,7 +2345,6 @@ msgid "Easy & quick setup"
 msgstr "Easy & quick setup"
 
 #: src/layout/header/header-tasks-breadcrumbs.tsx:127
-#: src/layout/navigation/workspace-navigation-task-folders.tsx:112
 #: src/modules/categories/category-list.tsx:51
 #: src/modules/custom-fields/custom-field-list.tsx:51
 #: src/modules/orders/order-card.tsx:258
@@ -2362,7 +2375,7 @@ msgstr "Edit note"
 msgid "Edit promotion"
 msgstr "Edit promotion"
 
-#: src/modules/tasks/views/list/list-task-row.tsx:397
+#: src/modules/tasks/views/list/list-task-row.tsx:415
 msgid "Edit task name"
 msgstr "Edit task name"
 
@@ -2802,7 +2815,7 @@ msgstr "Front of CID"
 msgid "Fulfill at"
 msgstr "Fulfill at"
 
-#: src/modules/events/event-constants.ts:130
+#: src/modules/events/event-constants.ts:129
 #: src/modules/workspace-roles/workspace-roles-constants.ts:51
 msgid "Fulfill loan"
 msgstr "Fulfill loan"
@@ -2844,7 +2857,7 @@ msgid "General Settings"
 msgstr "General Settings"
 
 #: src/modules/tasks/components/task-detail-head.tsx:122
-#: src/modules/tasks/views/gantt/gantt-tasks-group.tsx:77
+#: src/modules/tasks/views/gantt/gantt-tasks-group.tsx:111
 msgid "General tasks"
 msgstr "General tasks"
 
@@ -2909,7 +2922,7 @@ msgstr "Hidden in receipt when no price"
 msgid "Hide closed"
 msgstr "Hide closed"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:90
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:92
 msgid "Hide estimate time"
 msgstr "Hide estimate time"
 
@@ -3236,15 +3249,15 @@ msgstr "Keep"
 msgid "Key"
 msgstr "Key"
 
-#: src/modules/events/event-constants.ts:122
+#: src/modules/events/event-constants.ts:121
 msgid "KYC approved"
 msgstr "KYC approved"
 
-#: src/modules/events/event-constants.ts:121
+#: src/modules/events/event-constants.ts:120
 msgid "KYC pending"
 msgstr "KYC pending"
 
-#: src/modules/events/event-constants.ts:123
+#: src/modules/events/event-constants.ts:122
 msgid "KYC rejected"
 msgstr "KYC rejected"
 
@@ -3485,7 +3498,7 @@ msgstr "Loan application"
 msgid "Loan application does not have bank account information"
 msgstr "Loan application does not have bank account information"
 
-#: src/modules/events/event-constants.ts:198
+#: src/modules/events/event-constants.ts:197
 msgid "Loan approved reverted"
 msgstr "Loan approved reverted"
 
@@ -3526,7 +3539,7 @@ msgstr "Loan disbursement"
 msgid "Loan fulfilled"
 msgstr "Loan fulfilled"
 
-#: src/modules/events/event-constants.ts:205
+#: src/modules/events/event-constants.ts:204
 msgid "Loan fulfilled reverted"
 msgstr "Loan fulfilled reverted"
 
@@ -3534,7 +3547,7 @@ msgstr "Loan fulfilled reverted"
 msgid "Loan information"
 msgstr "Loan information"
 
-#: src/modules/events/event-constants.ts:125
+#: src/modules/events/event-constants.ts:124
 msgid "Loan is signed by customer, waiting for approval"
 msgstr "Loan is signed by customer, waiting for approval"
 
@@ -3612,7 +3625,7 @@ msgstr "Loan receipt partial pay"
 msgid "Loan receipt remind"
 msgstr "Loan receipt remind"
 
-#: src/modules/events/event-constants.ts:200
+#: src/modules/events/event-constants.ts:199
 msgid "Loan rejected reverted"
 msgstr "Loan rejected reverted"
 
@@ -3633,7 +3646,7 @@ msgstr "Loans"
 msgid "Loans activated contracts"
 msgstr "Loans activated contracts"
 
-#: src/modules/events/event-constants.ts:138
+#: src/modules/events/event-constants.ts:137
 msgid "Loans archived"
 msgstr "Loans archived"
 
@@ -3663,7 +3676,7 @@ msgstr "Loans fulfilled amount chart"
 msgid "Loans fulfilled new"
 msgstr "Loans fulfilled new"
 
-#: src/modules/events/event-constants.ts:139
+#: src/modules/events/event-constants.ts:138
 msgid "Loans liquidation"
 msgstr "Loans liquidation"
 
@@ -3683,7 +3696,7 @@ msgstr "Loans overdue contracts"
 msgid "Loans pending contracts"
 msgstr "Loans pending contracts"
 
-#: src/modules/events/event-constants.ts:168
+#: src/modules/events/event-constants.ts:167
 msgid "Loans synced"
 msgstr "Loans synced"
 
@@ -3858,7 +3871,7 @@ msgstr "Manage widgets"
 msgid "Manage your profile settings"
 msgstr "Manage your profile settings"
 
-#: src/modules/events/event-constants.ts:90
+#: src/modules/events/event-constants.ts:89
 msgid "Manual approval timekeeping"
 msgstr "Manual approval timekeeping"
 
@@ -3875,7 +3888,7 @@ msgstr "Manufacturing year"
 msgid "Mark as billable"
 msgstr "Mark as billable"
 
-#: src/modules/events/event-constants.ts:65
+#: src/modules/events/event-constants.ts:64
 msgid "Mark as read"
 msgstr "Mark as read"
 
@@ -3913,11 +3926,11 @@ msgstr "Medium"
 msgid "Member"
 msgstr "Member"
 
-#: src/modules/events/event-constants.ts:88
+#: src/modules/events/event-constants.ts:87
 msgid "Member check in"
 msgstr "Member check in"
 
-#: src/modules/events/event-constants.ts:89
+#: src/modules/events/event-constants.ts:88
 msgid "Member check out"
 msgstr "Member check out"
 
@@ -3967,24 +3980,24 @@ msgstr "Members"
 msgid "Message box"
 msgstr "Message box"
 
-#: src/modules/events/event-constants.ts:106
+#: src/modules/events/event-constants.ts:105
 #: src/modules/message-boxes/message-box/message-box-head.tsx:117
 msgid "Message box closed"
 msgstr "Message box closed"
 
-#: src/modules/events/event-constants.ts:104
+#: src/modules/events/event-constants.ts:103
 msgid "Message box in progress"
 msgstr "Message box in progress"
 
-#: src/modules/events/event-constants.ts:105
+#: src/modules/events/event-constants.ts:104
 msgid "Message box removed"
 msgstr "Message box removed"
 
-#: src/modules/events/event-constants.ts:107
+#: src/modules/events/event-constants.ts:106
 msgid "Message box updated"
 msgstr "Message box updated"
 
-#: src/modules/events/event-constants.ts:102
+#: src/modules/events/event-constants.ts:101
 msgid "Message box waiting"
 msgstr "Message box waiting"
 
@@ -4002,11 +4015,11 @@ msgstr "Message Boxes"
 msgid "Message hub position"
 msgstr "Message hub position"
 
-#: src/modules/events/event-constants.ts:144
+#: src/modules/events/event-constants.ts:143
 msgid "Message hub removed"
 msgstr "Message hub removed"
 
-#: src/modules/events/event-constants.ts:143
+#: src/modules/events/event-constants.ts:142
 msgid "Message hub updated"
 msgstr "Message hub updated"
 
@@ -4019,7 +4032,7 @@ msgstr "Message Hubs"
 msgid "Message sending"
 msgstr "Message sending"
 
-#: src/modules/events/event-constants.ts:100
+#: src/modules/events/event-constants.ts:99
 msgid "Message updated"
 msgstr "Message updated"
 
@@ -4039,11 +4052,11 @@ msgstr "Meta pages"
 msgid "Meta Pages"
 msgstr "Meta Pages"
 
-#: src/modules/events/event-constants.ts:87
+#: src/modules/events/event-constants.ts:86
 msgid "Meta pages disconnected"
 msgstr "Meta pages disconnected"
 
-#: src/modules/events/event-constants.ts:86
+#: src/modules/events/event-constants.ts:85
 msgid "Meta pages updated"
 msgstr "Meta pages updated"
 
@@ -4149,6 +4162,8 @@ msgstr "Moto registration"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:223
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:322
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:271
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:370
 msgid "Move"
 msgstr "Move"
 
@@ -4210,7 +4225,7 @@ msgstr "Multi select"
 #: src/modules/products/components/form-product.tsx:183
 #: src/modules/promotions/components/form-promotion.tsx:61
 #: src/modules/promotions/components/form-promotion.tsx:64
-#: src/modules/tags/modals/modal-tag-form.tsx:75
+#: src/modules/tags/modals/modal-tag-form.tsx:63
 #: src/modules/users/components/update-password.tsx:22
 #: src/modules/users/components/update-password.tsx:26
 #: src/modules/users/components/update-password.tsx:30
@@ -4251,8 +4266,8 @@ msgstr "Mutual workspaces"
 #: src/modules/promotions/components/form-promotion.tsx:117
 #: src/modules/promotions/promostion-list.tsx:33
 #: src/modules/services/service-list.tsx:50
-#: src/modules/tags/modals/modal-tag-form.tsx:169
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:58
+#: src/modules/tags/modals/modal-tag-form.tsx:149
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:60
 #: src/modules/tasks/views/list/list-task-row-head.tsx:11
 #: src/modules/users/user-profile-settings.tsx:123
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:205
@@ -4291,7 +4306,7 @@ msgstr "Need to select at least one of the check-in or check-out times"
 msgid "Negative"
 msgstr "Negative"
 
-#: src/modules/events/event-constants.ts:184
+#: src/modules/events/event-constants.ts:183
 msgid "New customer form"
 msgstr "New customer form"
 
@@ -4313,23 +4328,23 @@ msgstr "New customers chart"
 msgid "New loan contracts"
 msgstr "New loan contracts"
 
-#: src/modules/events/event-constants.ts:99
+#: src/modules/events/event-constants.ts:98
 msgid "New message"
 msgstr "New message"
 
-#: src/modules/events/event-constants.ts:101
+#: src/modules/events/event-constants.ts:100
 msgid "New message box"
 msgstr "New message box"
 
-#: src/modules/events/event-constants.ts:142
+#: src/modules/events/event-constants.ts:141
 msgid "New message hub"
 msgstr "New message hub"
 
-#: src/modules/events/event-constants.ts:103
+#: src/modules/events/event-constants.ts:102
 msgid "New message in box"
 msgstr "New message in box"
 
-#: src/modules/events/event-constants.ts:64
+#: src/modules/events/event-constants.ts:63
 msgid "New notification"
 msgstr "New notification"
 
@@ -4354,7 +4369,7 @@ msgstr "New Task"
 msgid "New version available!"
 msgstr "New version available!"
 
-#: src/modules/events/event-constants.ts:141
+#: src/modules/events/event-constants.ts:140
 msgid "New voucher"
 msgstr "New voucher"
 
@@ -4565,7 +4580,7 @@ msgstr "Oops! Page not found"
 msgid "Oops! Something went wrong..."
 msgstr "Oops! Something went wrong..."
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:64
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:66
 msgid "Open all folders"
 msgstr "Open all folders"
 
@@ -4627,7 +4642,7 @@ msgstr "Order"
 msgid "Order sale"
 msgstr "Order sale"
 
-#: src/modules/events/event-constants.ts:167
+#: src/modules/events/event-constants.ts:166
 msgid "Order synced"
 msgstr "Order synced"
 
@@ -4773,7 +4788,7 @@ msgstr "Pay expire"
 msgid "Pay loan"
 msgstr "Pay loan"
 
-#: src/modules/events/event-constants.ts:76
+#: src/modules/events/event-constants.ts:75
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:268
 msgid "Pay receipt"
 msgstr "Pay receipt"
@@ -4801,7 +4816,7 @@ msgstr "Payment amount"
 msgid "Payment code"
 msgstr "Payment code"
 
-#: src/modules/events/event-constants.ts:110
+#: src/modules/events/event-constants.ts:109
 msgid "Payment created"
 msgstr "Payment created"
 
@@ -4828,7 +4843,7 @@ msgstr "Payment method"
 msgid "Payment Method"
 msgstr "Payment Method"
 
-#: src/modules/events/event-constants.ts:112
+#: src/modules/events/event-constants.ts:111
 msgid "Payment paid"
 msgstr "Payment paid"
 
@@ -5015,15 +5030,15 @@ msgstr "Positive"
 msgid "Post"
 msgstr "Post"
 
-#: src/modules/events/event-constants.ts:191
+#: src/modules/events/event-constants.ts:190
 msgid "Post archived"
 msgstr "Post archived"
 
-#: src/modules/events/event-constants.ts:189
+#: src/modules/events/event-constants.ts:188
 msgid "Post created"
 msgstr "Post created"
 
-#: src/modules/events/event-constants.ts:190
+#: src/modules/events/event-constants.ts:189
 msgid "Post updated"
 msgstr "Post updated"
 
@@ -5046,7 +5061,7 @@ msgstr "Preparing everything for you. Please wait for a moment"
 msgid "Prescription"
 msgstr "Prescription"
 
-#: src/modules/events/event-constants.ts:96
+#: src/modules/events/event-constants.ts:95
 msgid "Prescription created"
 msgstr "Prescription created"
 
@@ -5054,11 +5069,11 @@ msgstr "Prescription created"
 msgid "Prescription name"
 msgstr "Prescription name"
 
-#: src/modules/events/event-constants.ts:98
+#: src/modules/events/event-constants.ts:97
 msgid "Prescription removed"
 msgstr "Prescription removed"
 
-#: src/modules/events/event-constants.ts:97
+#: src/modules/events/event-constants.ts:96
 msgid "Prescription updated"
 msgstr "Prescription updated"
 
@@ -5142,6 +5157,7 @@ msgstr "Printed at"
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:246
 #: src/modules/tasks/components/form-task.tsx:310
 #: src/modules/tasks/components/tasks-menu-actions.tsx:401
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:294
 #: src/modules/tasks/views/board/board-task-card.tsx:429
 #: src/modules/tasks/views/list/list-task-row-head.tsx:24
 msgid "Priority"
@@ -5175,11 +5191,11 @@ msgstr "Processing tasks"
 msgid "Product"
 msgstr "Product"
 
-#: src/modules/events/event-constants.ts:174
+#: src/modules/events/event-constants.ts:173
 msgid "Product combo new"
 msgstr "Product combo new"
 
-#: src/modules/events/event-constants.ts:166
+#: src/modules/events/event-constants.ts:165
 msgid "Product combo updated"
 msgstr "Product combo updated"
 
@@ -5217,7 +5233,7 @@ msgstr "Product stocks"
 msgid "Product supplies"
 msgstr "Product supplies"
 
-#: src/modules/events/event-constants.ts:80
+#: src/modules/events/event-constants.ts:79
 msgid "Product supply record created"
 msgstr "Product supply record created"
 
@@ -5267,11 +5283,11 @@ msgstr "Profile settings"
 msgid "Profit"
 msgstr "Profit"
 
-#: src/modules/events/event-constants.ts:197
+#: src/modules/events/event-constants.ts:196
 msgid "Promotion archived"
 msgstr "Promotion archived"
 
-#: src/modules/events/event-constants.ts:195
+#: src/modules/events/event-constants.ts:194
 msgid "Promotion created"
 msgstr "Promotion created"
 
@@ -5279,7 +5295,7 @@ msgstr "Promotion created"
 msgid "Promotion status not editable"
 msgstr "Promotion status not editable"
 
-#: src/modules/events/event-constants.ts:196
+#: src/modules/events/event-constants.ts:195
 msgid "Promotion updated"
 msgstr "Promotion updated"
 
@@ -5427,15 +5443,15 @@ msgstr "Receipt file"
 msgid "Receipt images required"
 msgstr "Receipt images required"
 
-#: src/modules/events/event-constants.ts:199
+#: src/modules/events/event-constants.ts:198
 msgid "Receipt revert payment"
 msgstr "Receipt revert payment"
 
-#: src/modules/events/event-constants.ts:188
+#: src/modules/events/event-constants.ts:187
 msgid "Receipt synced"
 msgstr "Receipt synced"
 
-#: src/modules/events/event-constants.ts:150
+#: src/modules/events/event-constants.ts:149
 msgid "Receipt unarchived"
 msgstr "Receipt unarchived"
 
@@ -5509,7 +5525,7 @@ msgstr "Reject"
 msgid "Reject Expense"
 msgstr "Reject Expense"
 
-#: src/modules/events/event-constants.ts:128
+#: src/modules/events/event-constants.ts:127
 #: src/modules/loans/components/loan-documents.tsx:84
 msgid "Reject loan"
 msgstr "Reject loan"
@@ -5522,7 +5538,7 @@ msgstr "Reject loan"
 msgid "Rejected"
 msgstr "Rejected"
 
-#: src/modules/events/event-constants.ts:91
+#: src/modules/events/event-constants.ts:90
 msgid "Rejected timekeeping"
 msgstr "Rejected timekeeping"
 
@@ -5571,13 +5587,14 @@ msgstr "Reminder time"
 
 #: src/components/inputs/work-slot-settings-input.tsx:296
 #: src/components/list/components/bulk-actions.tsx:109
-#: src/layout/navigation/workspace-navigation-task-folders.tsx:123
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:158
 #: src/modals/modal-date-picker.tsx:89
 #: src/modals/modal-date-picker.tsx:142
 #: src/modals/modal-date-picker.tsx:194
 #: src/modals/modal-date-picker.tsx:245
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:301
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:264
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:312
 #: src/modules/users/components/user-workspace-settings-form.tsx:184
 msgid "Remove"
 msgstr "Remove"
@@ -5588,6 +5605,7 @@ msgid "Remove {0}"
 msgstr "Remove {0}"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:289
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:337
 msgid "Remove all"
 msgstr "Remove all"
 
@@ -5599,7 +5617,7 @@ msgstr "Remove comment"
 msgid "Remove data"
 msgstr "Remove data"
 
-#: src/modules/events/event-constants.ts:74
+#: src/modules/events/event-constants.ts:73
 #: src/modules/files/file-service.tsx:61
 msgid "Remove file"
 msgstr "Remove file"
@@ -5613,9 +5631,13 @@ msgstr "Remove folder"
 msgid "Remove widget"
 msgstr "Remove widget"
 
-#: src/modules/events/event-constants.ts:92
+#: src/modules/events/event-constants.ts:91
 msgid "Removed timekeeping"
 msgstr "Removed timekeeping"
+
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:132
+msgid "Rename"
+msgstr "Rename"
 
 #: src/widgets/reports/widgets/report-credit.widget.tsx:574
 msgid "Report income and expenditure"
@@ -5633,11 +5655,11 @@ msgstr "Report loans expense"
 msgid "Report loans fee"
 msgstr "Report loans fee"
 
-#: src/modules/events/event-constants.ts:183
+#: src/modules/events/event-constants.ts:182
 msgid "Report realtime synced"
 msgstr "Report realtime synced"
 
-#: src/modules/events/event-constants.ts:63
+#: src/modules/events/event-constants.ts:62
 msgid "Report synced"
 msgstr "Report synced"
 
@@ -5769,7 +5791,7 @@ msgstr "Revert fulfilled"
 msgid "Revert history"
 msgstr "Revert history"
 
-#: src/modules/events/event-constants.ts:151
+#: src/modules/events/event-constants.ts:150
 #: src/modules/loans/components/loan-payments.tsx:115
 msgid "Revert liquidation"
 msgstr "Revert liquidation"
@@ -5809,15 +5831,15 @@ msgstr "Right"
 msgid "Role"
 msgstr "Role"
 
-#: src/modules/events/event-constants.ts:93
+#: src/modules/events/event-constants.ts:92
 msgid "Role created"
 msgstr "Role created"
 
-#: src/modules/events/event-constants.ts:95
+#: src/modules/events/event-constants.ts:94
 msgid "Role removed"
 msgstr "Role removed"
 
-#: src/modules/events/event-constants.ts:94
+#: src/modules/events/event-constants.ts:93
 msgid "Role updated"
 msgstr "Role updated"
 
@@ -5851,7 +5873,7 @@ msgstr "Sale price"
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:212
 #: src/modules/plugins/storage/plugin-storage-modal.tsx:108
 #: src/modules/promotions/components/form-promotion.tsx:175
-#: src/modules/tags/modals/modal-tag-form.tsx:193
+#: src/modules/tags/modals/modal-tag-form.tsx:177
 #: src/modules/tasks/task-status-modal.tsx:183
 msgid "Save"
 msgstr "Save"
@@ -5868,11 +5890,11 @@ msgstr "Save prescription template"
 msgid "Scan QR code"
 msgstr "Scan QR code"
 
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:325
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:347
 msgid "Scroll to task"
 msgstr "Scroll to task"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:132
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:134
 msgid "Scroll to today"
 msgstr "Scroll to today"
 
@@ -5930,7 +5952,7 @@ msgstr "Secure"
 #: src/modules/prescriptions/components/prescription-selector.tsx:58
 #: src/modules/tags/components/tag-selector.tsx:60
 #: src/modules/tasks/components/task-tag-folder-selector.tsx:50
-#: src/modules/theme/generate-theme.tsx:161
+#: src/modules/theme/generate-theme.tsx:164
 #: src/modules/workspace-branches/workspace-branch-selector.tsx:83
 #: src/modules/workspace-branches/workspace-branches-selector.tsx:50
 #: src/modules/workspace-roles/components/workspace-roles-selector.tsx:71
@@ -5968,6 +5990,7 @@ msgstr "Select brand"
 msgid "Select category"
 msgstr "Select category"
 
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:108
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:291
 #: src/modules/tasks/task-status-modal.tsx:335
 msgid "Select color"
@@ -6047,6 +6070,7 @@ msgstr "Select year"
 
 #: src/components/list/components/bulk-actions.tsx:56
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:129
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:178
 msgid "Selected"
 msgstr "Selected"
 
@@ -6127,10 +6151,13 @@ msgstr "Set name, address, Hotline, Workspace type, ..."
 #: src/components/event-list.tsx:235
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:234
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:333
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:282
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:381
 msgid "Set priority"
 msgstr "Set priority"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:188
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:236
 msgid "Set tag"
 msgstr "Set tag"
 
@@ -6185,11 +6212,11 @@ msgstr "Show currency"
 msgid "Show customer"
 msgstr "Show customer"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:88
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:90
 msgid "Show estimate time"
 msgstr "Show estimate time"
 
-#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:114
+#: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:116
 msgid "Show/hide task color by status"
 msgstr "Show/hide task color by status"
 
@@ -6309,6 +6336,7 @@ msgstr "Start time must be before end time"
 #: src/modules/receipts/receipt-list.tsx:102
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:154
 #: src/modules/tasks/components/form-task.tsx:201
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:203
 #: src/modules/tasks/views/board/board-task-card.tsx:325
 msgid "Status"
 msgstr "Status"
@@ -6325,7 +6353,7 @@ msgstr "Stock check"
 msgid "Stock code"
 msgstr "Stock code"
 
-#: src/modules/events/event-constants.ts:169
+#: src/modules/events/event-constants.ts:168
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:121
 #: src/modules/product-stocks/product-stock-list.tsx:77
 #: src/modules/product-stocks/product-stocks-constants.tsx:11
@@ -6333,22 +6361,22 @@ msgstr "Stock code"
 msgid "Stock in"
 msgstr "Stock in"
 
-#: src/modules/events/event-constants.ts:173
+#: src/modules/events/event-constants.ts:172
 msgid "Stock in multiple"
 msgstr "Stock in multiple"
 
-#: src/modules/events/event-constants.ts:170
+#: src/modules/events/event-constants.ts:169
 msgid "Stock in reverted"
 msgstr "Stock in reverted"
 
-#: src/modules/events/event-constants.ts:171
+#: src/modules/events/event-constants.ts:170
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:80
 #: src/modules/product-stocks/product-stocks-constants.tsx:16
 #: src/modules/workspace-roles/workspace-roles-constants.ts:150
 msgid "Stock out"
 msgstr "Stock out"
 
-#: src/modules/events/event-constants.ts:172
+#: src/modules/events/event-constants.ts:171
 msgid "Stock out reverted"
 msgstr "Stock out reverted"
 
@@ -6365,7 +6393,7 @@ msgstr "Submit loan"
 msgid "Subscription / billings"
 msgstr "Subscription / billings"
 
-#: src/modules/events/event-constants.ts:113
+#: src/modules/events/event-constants.ts:112
 msgid "Subscription updated"
 msgstr "Subscription updated"
 
@@ -6421,24 +6449,20 @@ msgstr "Switch"
 msgid "Switch workspace"
 msgstr "Switch workspace"
 
-#: src/modules/events/event-constants.ts:59
-msgid "Sync tags"
-msgstr "Sync tags"
-
 #: src/components/list/components/filter-modes.tsx:53
 #: src/components/list/components/toggle-view.tsx:19
 msgid "Table"
 msgstr "Table"
 
-#: src/modules/events/event-constants.ts:116
+#: src/modules/events/event-constants.ts:115
 msgid "Table slot archived"
 msgstr "Table slot archived"
 
-#: src/modules/events/event-constants.ts:114
+#: src/modules/events/event-constants.ts:113
 msgid "Table slot created"
 msgstr "Table slot created"
 
-#: src/modules/events/event-constants.ts:115
+#: src/modules/events/event-constants.ts:114
 msgid "Table slot updated"
 msgstr "Table slot updated"
 
@@ -6451,11 +6475,12 @@ msgstr "Tag"
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:200
 #: src/modules/tasks/components/form-task.tsx:479
 #: src/modules/tasks/components/tasks-menu-actions.tsx:343
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:248
 #: src/modules/tasks/views/board/board-task-card.tsx:348
 msgid "Tags"
 msgstr "Tags"
 
-#: src/modules/events/event-constants.ts:146
+#: src/modules/events/event-constants.ts:145
 msgid "Tags archived"
 msgstr "Tags archived"
 
@@ -6483,7 +6508,7 @@ msgid "Task"
 msgstr "Task"
 
 #: src/components/event-list.tsx:349
-#: src/modules/events/event-constants.ts:149
+#: src/modules/events/event-constants.ts:148
 msgid "Task assigned"
 msgstr "Task assigned"
 
@@ -6511,7 +6536,7 @@ msgstr "Task status"
 msgid "Task statuses"
 msgstr "Task statuses"
 
-#: src/modules/events/event-constants.ts:187
+#: src/modules/events/event-constants.ts:186
 msgid "Task synced"
 msgstr "Task synced"
 
@@ -6541,7 +6566,7 @@ msgstr "Tasks completed rate chart"
 msgid "Tasks time trackings"
 msgstr "Tasks time trackings"
 
-#: src/modules/events/event-constants.ts:147
+#: src/modules/events/event-constants.ts:146
 msgid "Tasks updated"
 msgstr "Tasks updated"
 
@@ -6874,19 +6899,19 @@ msgstr "Total summary"
 msgid "Total time"
 msgstr "Total time"
 
-#: src/modules/events/event-constants.ts:119
+#: src/modules/events/event-constants.ts:118
 msgid "Transaction cancelled"
 msgstr "Transaction cancelled"
 
-#: src/modules/events/event-constants.ts:120
+#: src/modules/events/event-constants.ts:119
 msgid "Transaction failed"
 msgstr "Transaction failed"
 
-#: src/modules/events/event-constants.ts:118
+#: src/modules/events/event-constants.ts:117
 msgid "Transaction fulfilled"
 msgstr "Transaction fulfilled"
 
-#: src/modules/events/event-constants.ts:117
+#: src/modules/events/event-constants.ts:116
 msgid "Transaction paid"
 msgstr "Transaction paid"
 
@@ -7010,6 +7035,8 @@ msgstr "Unnamed"
 #: src/components/list/components/bulk-actions.tsx:113
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:267
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:343
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:315
+#: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:391
 msgid "Unselect all"
 msgstr "Unselect all"
 
@@ -7030,7 +7057,7 @@ msgstr "Unset priority"
 msgid "Update"
 msgstr "Update"
 
-#: src/modules/tags/modals/modal-tag-form.tsx:158
+#: src/modules/tags/modals/modal-tag-form.tsx:140
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:128
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:261
 msgid "Update {entity}"
@@ -7078,7 +7105,7 @@ msgstr "Update customer info"
 msgid "Update information"
 msgstr "Update information"
 
-#: src/modules/events/event-constants.ts:129
+#: src/modules/events/event-constants.ts:128
 msgid "Update loan"
 msgstr "Update loan"
 
@@ -7106,7 +7133,7 @@ msgstr "Update order"
 msgid "Update order / service ticket"
 msgstr "Update order / service ticket"
 
-#: src/modules/events/event-constants.ts:69
+#: src/modules/events/event-constants.ts:68
 #: src/modules/partners/modals/modal-partner-form.tsx:82
 msgid "Update partner"
 msgstr "Update partner"
@@ -7115,7 +7142,7 @@ msgstr "Update partner"
 msgid "Update password"
 msgstr "Update password"
 
-#: src/modules/events/event-constants.ts:61
+#: src/modules/events/event-constants.ts:60
 #: src/modules/products/modals/modal-product.tsx:19
 msgid "Update product"
 msgstr "Update product"
@@ -7124,7 +7151,7 @@ msgstr "Update product"
 msgid "Update promotion status"
 msgstr "Update promotion status"
 
-#: src/modules/events/event-constants.ts:77
+#: src/modules/events/event-constants.ts:76
 #: src/modules/receipts/receipt-detail.tsx:61
 #: src/modules/workspace-roles/workspace-roles-constants.ts:129
 msgid "Update receipt"
@@ -7138,24 +7165,24 @@ msgstr "Update role"
 msgid "Update SDK"
 msgstr "Update SDK"
 
-#: src/modules/events/event-constants.ts:154
+#: src/modules/events/event-constants.ts:153
 msgid "Update task description"
 msgstr "Update task description"
 
-#: src/modules/events/event-constants.ts:153
+#: src/modules/events/event-constants.ts:152
 msgid "Update task name"
 msgstr "Update task name"
 
-#: src/modules/events/event-constants.ts:155
+#: src/modules/events/event-constants.ts:154
 msgid "Update task priority"
 msgstr "Update task priority"
 
-#: src/modules/events/event-constants.ts:148
+#: src/modules/events/event-constants.ts:147
 #: src/modules/tasks/views/board/board-group-by-statuses.tsx:175
 msgid "Update task status"
 msgstr "Update task status"
 
-#: src/modules/events/event-constants.ts:156
+#: src/modules/events/event-constants.ts:155
 msgid "Update user profile"
 msgstr "Update user profile"
 
@@ -7163,7 +7190,7 @@ msgstr "Update user profile"
 msgid "Update workspace API app"
 msgstr "Update workspace API app"
 
-#: src/modules/events/event-constants.ts:162
+#: src/modules/events/event-constants.ts:161
 msgid "Update workspace branch"
 msgstr "Update workspace branch"
 
@@ -7171,7 +7198,7 @@ msgstr "Update workspace branch"
 msgid "Updated at"
 msgstr "Updated at"
 
-#: src/modules/events/event-constants.ts:164
+#: src/modules/events/event-constants.ts:163
 msgid "Updated order"
 msgstr "Updated order"
 
@@ -7227,11 +7254,11 @@ msgstr "Use existed combo"
 msgid "User disbursement"
 msgstr "User disbursement"
 
-#: src/modules/events/event-constants.ts:204
+#: src/modules/events/event-constants.ts:203
 msgid "User offline"
 msgstr "User offline"
 
-#: src/modules/events/event-constants.ts:203
+#: src/modules/events/event-constants.ts:202
 msgid "User online"
 msgstr "User online"
 
@@ -7311,7 +7338,7 @@ msgstr "View customer phone number and contact"
 msgid "View customers"
 msgstr "View customers"
 
-#: src/modules/tasks/modules/task-menu/task-menu-dropdown.tsx:53
+#: src/modules/tasks/modules/task-menu/task-menu-dropdown.tsx:146
 msgid "View detail"
 msgstr "View detail"
 
@@ -7331,7 +7358,7 @@ msgstr "View members"
 msgid "View more"
 msgstr "View more"
 
-#: src/modules/events/event-constants.ts:66
+#: src/modules/events/event-constants.ts:65
 msgid "View notification list"
 msgstr "View notification list"
 
@@ -7517,7 +7544,7 @@ msgstr "Working time, invoice, service voucher, payment method, search settings,
 msgid "Workspace"
 msgstr "Workspace"
 
-#: src/modules/events/event-constants.ts:145
+#: src/modules/events/event-constants.ts:144
 #: src/modules/workspaces/components/workspace-archived.tsx:31
 msgid "Workspace archived"
 msgstr "Workspace archived"
@@ -7526,7 +7553,7 @@ msgstr "Workspace archived"
 msgid "Workspace branch"
 msgstr "Workspace branch"
 
-#: src/modules/events/event-constants.ts:175
+#: src/modules/events/event-constants.ts:174
 msgid "Workspace branch archived"
 msgstr "Workspace branch archived"
 
@@ -7534,15 +7561,15 @@ msgstr "Workspace branch archived"
 msgid "Workspace created"
 msgstr "Workspace created"
 
-#: src/modules/events/event-constants.ts:157
+#: src/modules/events/event-constants.ts:156
 msgid "Workspace invite code updated"
 msgstr "Workspace invite code updated"
 
-#: src/modules/events/event-constants.ts:202
+#: src/modules/events/event-constants.ts:201
 msgid "Workspace member offline"
 msgstr "Workspace member offline"
 
-#: src/modules/events/event-constants.ts:201
+#: src/modules/events/event-constants.ts:200
 msgid "Workspace member online"
 msgstr "Workspace member online"
 
@@ -7560,7 +7587,7 @@ msgstr "Workspace settings"
 msgid "Workspace Settings"
 msgstr "Workspace Settings"
 
-#: src/modules/events/event-constants.ts:206
+#: src/modules/events/event-constants.ts:205
 msgid "Workspace stats updated"
 msgstr "Workspace stats updated"
 
@@ -7644,7 +7671,7 @@ msgstr "You need advice! Start chatting with us now."
 msgid "You need to create a DNS Record with domain <0>{0}</0>"
 msgstr "You need to create a DNS Record with domain <0>{0}</0>"
 
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:327
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:349
 msgid "You need to set the start date before"
 msgstr "You need to set the start date before"
 
@@ -7668,23 +7695,23 @@ msgstr "Your name"
 msgid "Your personal information"
 msgstr "Your personal information"
 
-#: src/modules/events/event-constants.ts:81
+#: src/modules/events/event-constants.ts:80
 msgid "Zalo OA active"
 msgstr "Zalo OA active"
 
-#: src/modules/events/event-constants.ts:85
+#: src/modules/events/event-constants.ts:84
 msgid "Zalo OA disabled"
 msgstr "Zalo OA disabled"
 
-#: src/modules/events/event-constants.ts:84
+#: src/modules/events/event-constants.ts:83
 msgid "Zalo OA enabled"
 msgstr "Zalo OA enabled"
 
-#: src/modules/events/event-constants.ts:82
+#: src/modules/events/event-constants.ts:81
 msgid "Zalo OA inactive"
 msgstr "Zalo OA inactive"
 
-#: src/modules/events/event-constants.ts:83
+#: src/modules/events/event-constants.ts:82
 msgid "Zalo OA updated"
 msgstr "Zalo OA updated"
 
