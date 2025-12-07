@@ -200,9 +200,6 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     if (isInitialized) {
       taskMenu.setRoot(refs.bodyContainer.current);
-      setTimeout(() => {
-        scrollToDate({ date: Date.now(), behavior: "instant" });
-      }, 300);
     }
   }, [isInitialized]);
 

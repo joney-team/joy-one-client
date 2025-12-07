@@ -341,6 +341,12 @@ export const GridColumns: FC = () => {
     }, []);
   }, [gantt.columns]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      gantt.scrollToDate({ date: Date.now(), behavior: "instant" });
+    }, 300);
+  }, []);
+
   return (
     <Fragment>
       <div

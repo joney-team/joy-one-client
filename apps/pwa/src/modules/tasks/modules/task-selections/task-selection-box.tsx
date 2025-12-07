@@ -1,7 +1,9 @@
-import { ActionIcon, Group } from "@mantine/core";
-import { type FC } from "react";
+"use client";
+
 import { useColor } from "@/modules/theme/use-color";
+import { Group } from "@mantine/core";
 import { IconSquareCheckFilled, IconSquareDashed } from "@tabler/icons-react";
+import { type FC } from "react";
 import { type TaskDataFragment } from "../../queries/fragmentTask.graphql";
 import { type TasksQueryVariables } from "../../queries/queryTasks.graphql";
 import { useTaskSelections } from "./task-selections-context";
