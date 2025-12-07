@@ -44,6 +44,8 @@ import { GanttTaskDraggable } from "./components/gantt-task-draggable";
 import { GanttTaskRowProvider, useGanttTaskRow } from "./gantt-task-provider";
 import { GanttTaskProps } from "./gantt-task-types";
 import { classNames } from "@/utils/ui.utils";
+import { useTaskMenu } from "@/modules/tasks/modules/task-menu/task-menu";
+import { TaskMenuAction } from "@/modules/tasks/modules/task-menu/task-menu-types";
 
 const GanttTaskTimeline = dynamic(
   () => import("./components/gantt-task-timeline").then((mod) => mod.GanttTaskTimeline),
@@ -65,9 +67,10 @@ const GanttTaskContent: FC = () => {
   const { task, nextTask, groupVariables } = useGanttTaskRow();
   const gantt = useGantt();
   const router = useRouter();
+  const taskMenu = useTaskMenu();
   const ganttRefs = useGanttRefs();
 
-  const { rootRef, ganttTaskAreaRef, timeline } = useGanttTaskRow();
+  const { rootRef, ganttTaskAreaRef, timeline, taskStatus } = useGanttTaskRow();
 
   const { updateTasks } = useUpdateTasks();
 
@@ -206,7 +209,23 @@ const GanttTaskContent: FC = () => {
                 </ThemeIcon>
               )}
 
-              <Group miw={0} flex={1} pr={8}>
+              <Group miw={0} flex={1} pr={8} gap={5}>
+                <Tooltip label={taskStatus.name}>
+                  <div
+                    className={styles.TaskStatus}
+                    onClick={(e) => {
+                      taskMenu.open({
+                        groupVariables,
+                        target: e.currentTarget,
+                        task,
+                        action: TaskMenuAction.CHANGE_STATUS,
+                      });
+                    }}
+                  >
+                    <div className={styles.TaskStatusIcon} />
+                  </div>
+                </Tooltip>
+
                 {isNameEditing ? (
                   <ContentEditable
                     fz={14}

@@ -38,9 +38,12 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
   pure,
   isDefaultOpen = false,
 }) => {
+  const [isOpened, setIsOpened] = useState(
+    isDefaultOpen || Boolean(localStorage.getItem(`gtg-${folder?._id ?? "d"}`))
+  );
+
   const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
   const { unselect } = useTaskSelections();
-  const [isOpened, setIsOpened] = useState(isDefaultOpen);
   const opened = pure ?? isOpened;
   const color = useColor();
 
@@ -85,7 +88,17 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
             position: "relative",
             borderBottom: `1px solid var(--app-divider-color)`,
           }}
-          onClick={() => setIsOpened(!opened)}
+          onClick={() => {
+            setIsOpened(!opened);
+
+            if (folder?._id) {
+              if (!opened) {
+                localStorage.setItem(`gtg-${folder?._id}`, "true");
+              } else {
+                localStorage.removeItem(`gtg-${folder?._id}`);
+              }
+            }
+          }}
           className="clickable unselectable"
         >
           <Group gap={6} flex={1} miw={0}>

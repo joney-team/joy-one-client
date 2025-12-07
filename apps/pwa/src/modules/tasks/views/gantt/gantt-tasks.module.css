@@ -55,6 +55,27 @@
         opacity: 1;
       }
     }
+
+    & .TaskStatus {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.1rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: 5px;
+
+      & .TaskStatusIcon {
+        width: 0.6rem;
+        height: 0.6rem;
+        background: var(--task-status-color);
+        border-radius: 3px;
+      }
+
+      &:hover {
+        border-color: var(--task-status-color);
+      }
+    }
   }
 
   & .GanttTaskArea {

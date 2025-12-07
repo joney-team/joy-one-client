@@ -6,6 +6,6 @@ export type TaskStatusesQueryVariables = Types.Exact<{
 }>;
 
 
-export type TaskStatusesQuery = { __typename: 'Query', taskStatuses: Array<{ __typename: 'TaskStatus', id: string, name: string | null, color: string | null, icon: string | null, order: number | null }> };
+export type TaskStatusesQuery = { __typename: 'Query', taskStatuses: Array<{ __typename: 'TaskStatus', id: string, name: string | null, color: string | null, order: number | null }> };
 
 declare const Document: import("graphql").DocumentNode; export default Document;

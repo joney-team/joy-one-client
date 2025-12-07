@@ -13,11 +13,17 @@ import { type TasksQueryVariables } from "../../../queries/queryTasks.graphql";
 import { ganttConfig } from "../gantt-tasks-config";
 import { useGantt } from "../gantt-tasks-context";
 import type { GanttTaskProps, GanttTaskTimeline } from "./gantt-task-types";
+import { useColor } from "@/modules/theme/use-color";
+import { defaultTaskStatusIds } from "@/modules/tasks/task-constants";
+import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
+import { TaskStatus } from "@/graphql/types.graphql";
+import { useTaskStatuses } from "@/modules/tasks/hooks/use-task-statuses";
 
 type GanttTaskRowRefs = {
   rootRef: RefObject<HTMLDivElement | null>;
   ganttTaskAreaRef: RefObject<HTMLDivElement | null>;
 
+  taskStatus: TaskStatus;
   subTasksGroupVariables: TasksQueryVariables;
   timeline: GanttTaskTimeline | null;
 } & GanttTaskProps;
@@ -30,6 +36,7 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
   ...props
 }) => {
   const gantt = useGantt();
+  const color = useColor();
   const rootRef = useRef<HTMLDivElement>(null);
   const ganttTaskAreaRef = useRef<HTMLDivElement>(null);
 
@@ -104,6 +111,12 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
     };
   }, [ganttTaskAreaRef.current, rootRef.current]);
 
+  const { status } = useTaskStatuses(task);
+
+  useEffect(() => {
+    rootRef.current?.style.setProperty("--task-status-color", status.color);
+  }, [status]);
+
   return (
     <Context.Provider
       value={{
@@ -112,6 +125,7 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
         subTasksGroupVariables,
         task,
         timeline,
+        taskStatus: status,
         ...props,
       }}
     >

@@ -998,7 +998,6 @@ export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
 export type TaskStatus = {
   __typename?: 'TaskStatus';
   color: Maybe<Scalars['String']['output']>;
-  icon: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   name: Maybe<Scalars['String']['output']>;
   order: Maybe<Scalars['Float']['output']>;

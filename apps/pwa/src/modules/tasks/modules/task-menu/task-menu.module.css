@@ -6,3 +6,16 @@
     background-color: var(--mantine-color-gray-0);
   }
 }
+
+.TaskMenuDropdown {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+
+  &.AnimatedIn {
+    transition: opacity 100ms ease-out, transform 100ms ease-out;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}

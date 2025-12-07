@@ -7,6 +7,9 @@ import { TaskMenuContext } from "./task-menu";
 import { TaskMenuDropdown } from "./task-menu-dropdown";
 import type { TaskMenu } from "./task-menu-types";
 
+import styles from "./task-menu.module.css";
+import { classNames } from "@/utils/ui.utils";
+
 export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [version, setVersion] = useState(0);
   const [taskMenu, setTaskMenu] = useState<TaskMenu>();
@@ -15,7 +18,14 @@ export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const rootRef = useRef<HTMLElement>(null);
 
   const onClose = () => {
-    setTaskMenu(undefined);
+    if (menuRef.current) {
+      menuRef.current.classList.remove(styles.AnimatedIn);
+      menuRef.current?.style.setProperty("display", "none");
+      menuRef.current?.style.removeProperty("left");
+      menuRef.current?.style.removeProperty("top");
+      menuRef.current?.classList.remove(styles.AnimatedOut);
+      setTaskMenu(undefined);
+    }
   };
 
   useEffect(() => {
@@ -30,7 +40,13 @@ export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
       };
 
       placeMenu();
-      menuRef.current?.style.setProperty("display", "block");
+
+      // Make menu visible and trigger animation
+      menuRef.current.style.setProperty("display", "block");
+      // Use requestAnimationFrame to ensure the display change is applied before animation
+      requestAnimationFrame(() => {
+        menuRef.current?.classList.add(styles.AnimatedIn);
+      });
 
       const onMouseDown = (e: MouseEvent) => {
         if (e.target && !menuRef.current?.contains(e.target as Node)) {
@@ -38,8 +54,8 @@ export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
         }
       };
 
-      document.addEventListener("mousedown", onMouseDown);
       rootRef.current?.addEventListener("scroll", placeMenu);
+      document.addEventListener("mousedown", onMouseDown);
       window.addEventListener("resize", placeMenu);
 
       const onKeyDown = (e: KeyboardEvent) => {
@@ -51,9 +67,7 @@ export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
       window.addEventListener("keydown", onKeyDown);
 
       return () => {
-        menuRef.current?.style.setProperty("display", "none");
-        menuRef.current?.style.removeProperty("left");
-        menuRef.current?.style.removeProperty("top");
+        onClose();
         document.removeEventListener("mousedown", onMouseDown);
         rootRef.current?.removeEventListener("scroll", placeMenu);
         window.removeEventListener("resize", placeMenu);
@@ -80,6 +94,7 @@ export const TaskMenuProvider: FC<{ children: ReactNode }> = ({ children }) => {
       <Portal>
         <div
           ref={menuRef}
+          className={classNames(styles.TaskMenu, styles.TaskMenuDropdown)}
           style={{ display: "none", position: "fixed", zIndex: zIndexes.taskMenu }}
         >
           {taskMenu && <TaskMenuDropdown {...taskMenu} onClose={onClose} />}

@@ -703,7 +703,6 @@ enum TaskPriority {
 
 type TaskStatus {
   color: String
-  icon: String
   id: String!
   name: String
   order: Float

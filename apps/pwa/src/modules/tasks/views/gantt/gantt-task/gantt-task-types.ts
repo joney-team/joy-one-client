@@ -1,3 +1,4 @@
+import { TaskStatus } from "@/graphql/types.graphql";
 import { TaskDataFragment } from "../../../queries/fragmentTask.graphql";
 import { TasksQueryVariables } from "../../../queries/queryTasks.graphql";
 
