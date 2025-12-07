@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Clickable } from "@/components/clickable";
 import { BranchesIllustration } from "@/components/illustrations/branches";
 import { List } from "@/components/list";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { OnWorkspaceBranchModal } from "@/modules/workspace-branches/modals/modal-workspace-branch";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -54,7 +54,7 @@ export const WorkspaceBranchList: FC = () => {
             onClick: (data) => OnWorkspaceBranchModal(data),
           },
         ]}
-        events={[EventType.WORKSPACE_BRANCH_NEW, EventType.WORKSPACE_BRANCH_UPDATED]}
+        events={[EventType.WorkspaceBranchNew, EventType.WorkspaceBranchUpdated]}
         components={{
           empty: workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)
             ? () => (

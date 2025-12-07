@@ -1,36 +1,36 @@
+"use client";
+
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { EventType } from "@/modules/events/event-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getPreviousTimeKeeping } from "./hrm-timekeepings-service";
 import { HrmTimekeepingType } from "./hrm-timekeepings-types";
+import { EventType } from "@/graphql/enums.graphql";
 
 export const useHrmTimekeeping = () => {
   const workspace = useWorkspace();
 
   const prevTimekeeping = useFetch({
     fetch: () => getPreviousTimeKeeping(),
-    refetchEvents: [
-      EventType.HRM_TIMEKEEPING_MEMBER_CHECK_IN,
-      EventType.HRM_TIMEKEEPING_MEMBER_CHECK_OUT,
-    ]
+    refetchEvents: [EventType.HrmTimekeepingMemberCheckIn, EventType.HrmTimekeepingMemberCheckOut],
   });
 
   const load = async () => {
     try {
-      await Promise.all([
-        prevTimekeeping.fetch(),
-      ])
+      await Promise.all([prevTimekeeping.fetch()]);
       return true;
     } catch (error) {
       onError(error);
       return false;
     } finally {
     }
-  }
+  };
 
   const prevType = prevTimekeeping.data?.type || HrmTimekeepingType.CHECK_OUT;
-  const nextType = prevType === HrmTimekeepingType.CHECK_IN ? HrmTimekeepingType.CHECK_OUT : HrmTimekeepingType.CHECK_IN;
+  const nextType =
+    prevType === HrmTimekeepingType.CHECK_IN
+      ? HrmTimekeepingType.CHECK_OUT
+      : HrmTimekeepingType.CHECK_IN;
 
   return {
     load,
@@ -39,5 +39,5 @@ export const useHrmTimekeeping = () => {
     prevType,
     nextType,
     isAvailable: workspace.isHrmTimekeepingAvailable,
-  }
-}
+  };
+};

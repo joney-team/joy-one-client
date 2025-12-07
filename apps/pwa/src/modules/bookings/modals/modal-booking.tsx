@@ -32,7 +32,7 @@ import {
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
@@ -88,12 +88,12 @@ export const ModalBookingContent: FC<ModalBookingArgs> = (props) => {
 
   useEventsListener(
     [
-      EventType.BOOKING_NEW,
-      EventType.BOOKING_UPDATED,
-      EventType.BOOKING_CHECKIN,
-      EventType.BOOKING_IN_PROGRESS,
-      EventType.BOOKING_COMPLETED,
-      EventType.BOOKING_CANCELLED,
+      EventType.BookingNew,
+      EventType.BookingUpdated,
+      EventType.BookingCheckin,
+      EventType.BookingInProgress,
+      EventType.BookingCompleted,
+      EventType.BookingCancelled,
     ],
     () => {
       fetchRelatedBookings();

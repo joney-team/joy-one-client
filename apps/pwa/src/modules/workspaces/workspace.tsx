@@ -5,7 +5,7 @@ import { Container } from "@/components/container";
 import { EventList } from "@/components/event-list";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { WorkspaceAppSettings } from "@/modules/workspace-settings/components/workspace-setting-app";
 import { WorkspaceSettingCreditOperation } from "@/modules/workspace-settings/components/workspace-setting-credit-operation";
@@ -64,7 +64,7 @@ export const Workspace: FC = () => {
             <WorkspaceTermsAndPolicies />
           </Card>
 
-          <EventList type={EventType.WORKSPACE_SETTING_UPDATED} />
+          <EventList type={EventType.WorkspaceSettingUpdated} />
 
           <ButtonArchive
             mt={16}

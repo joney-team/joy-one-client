@@ -1,14 +1,20 @@
 import { ResponseList } from "@/types";
 import { useFetch } from "@/utils/use-fetch.util";
 import { api } from "../apis";
-import { EventType } from "../events/event-types";
 import {
-  MessageAttachmentType, MessageBoxEntity, MessageBoxPlatformType, MessageBoxStatus,
-  MessageEntity, SendMemberFileMessageDto, SendMemberImageMessageDto, SendMemberTextMessageDto
+  MessageAttachmentType,
+  MessageBoxEntity,
+  MessageBoxPlatformType,
+  MessageBoxStatus,
+  MessageEntity,
+  SendMemberFileMessageDto,
+  SendMemberImageMessageDto,
+  SendMemberTextMessageDto,
 } from "./message-boxes-types";
+import { EventType } from "@/graphql/enums.graphql";
 
 export async function getMessageBoxes(query?: any) {
-  return api.get<ResponseList<MessageBoxEntity>>('/message-boxes', { params: query });
+  return api.get<ResponseList<MessageBoxEntity>>("/message-boxes", { params: query });
 }
 
 export async function getMessageBox(id: string) {
@@ -16,7 +22,7 @@ export async function getMessageBox(id: string) {
 }
 
 export async function getMessages(query?: any) {
-  return api.get<ResponseList<MessageEntity>>('/messages', { params: query });
+  return api.get<ResponseList<MessageEntity>>("/messages", { params: query });
 }
 
 export async function getMessageBoxesByIds(ids: string[]) {
@@ -57,47 +63,53 @@ export async function removeMessageBox(id: string) {
 }
 
 export const messageBoxStatusColors: { [key in MessageBoxStatus]: string } = {
-  CLOSED: 'gray',
-  EXPIRED: 'gray',
-  IN_PROGRESS: 'primary',
-  WAITING: 'orange',
-}
+  CLOSED: "gray",
+  EXPIRED: "gray",
+  IN_PROGRESS: "primary",
+  WAITING: "orange",
+};
 
 export const useMessageBox = (id: string) => {
-  const box = useFetch({
-    id: `message-box-${id}`,
-    skip: !id,
-    fetch: async () => {
-      if (!id) return;
-      return getMessageBox(id);
+  const box = useFetch(
+    {
+      id: `message-box-${id}`,
+      skip: !id,
+      fetch: async () => {
+        if (!id) return;
+        return getMessageBox(id);
+      },
+      refetchEvents: [
+        EventType.MessageBoxInProgress,
+        EventType.MessageBoxClosed,
+        EventType.MessageBoxWaiting,
+        EventType.MessageBoxUpdated,
+        EventType.CustomerUpdated,
+      ],
     },
-    refetchEvents: [
-      EventType.MESSAGE_BOX_IN_PROGRESS,
-      EventType.MESSAGE_BOX_CLOSED,
-      EventType.MESSAGE_BOX_WAITING,
-      EventType.MESSAGE_BOX_UPDATED,
-      EventType.CUSTOMER_UPDATED,
-    ]
-  }, [id])
+    [id]
+  );
 
   return box;
-}
+};
 
 export const detectMessageAttachmentType = (url: string) => {
-  const extension = url.split('.').pop();
+  const extension = url.split(".").pop();
   if (extension) {
-    if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'ico'].includes(extension)) return MessageAttachmentType.IMAGE;
-    if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm'].includes(extension)) return MessageAttachmentType.VIDEO;
-    if (['mp3', 'wav', 'ogg', 'aac', 'm4a'].includes(extension)) return MessageAttachmentType.AUDIO;
-    if (['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(extension)) return MessageAttachmentType.FILE;
+    if (["jpg", "jpeg", "png", "gif", "bmp", "tiff", "ico"].includes(extension))
+      return MessageAttachmentType.IMAGE;
+    if (["mp4", "avi", "mov", "wmv", "flv", "webm"].includes(extension))
+      return MessageAttachmentType.VIDEO;
+    if (["mp3", "wav", "ogg", "aac", "m4a"].includes(extension)) return MessageAttachmentType.AUDIO;
+    if (["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx"].includes(extension))
+      return MessageAttachmentType.FILE;
   }
   return MessageAttachmentType.UNKNOWN;
-}
+};
 
 export const messageBoxPlatformImages: {
   [key in MessageBoxPlatformType]: string;
 } = {
-  [MessageBoxPlatformType.ZALO]: '/images/plugins-zalo-oa.svg',
-  [MessageBoxPlatformType.META_PAGE]: '/images/plugins-meta-pages.svg',
-  [MessageBoxPlatformType.MESSAGE_HUB]: '/images/plugins-message-hubs.svg',
-}
+  [MessageBoxPlatformType.ZALO]: "/images/plugins-zalo-oa.svg",
+  [MessageBoxPlatformType.META_PAGE]: "/images/plugins-meta-pages.svg",
+  [MessageBoxPlatformType.MESSAGE_HUB]: "/images/plugins-message-hubs.svg",
+};

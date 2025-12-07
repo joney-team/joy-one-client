@@ -10,7 +10,7 @@ import {
   updateCustomerForm,
 } from "@/modules/customer-forms/customer-form-service";
 import { CustomerFormStatus } from "@/modules/customer-forms/customer-form-types";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { useLocations } from "@/modules/locations/locations-context";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
@@ -57,9 +57,9 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
     id: props._id,
     fetch: () => getCustomerForm(props._id),
     refetchEvents: [
-      EventType.CUSTOMER_FORM_NEW,
-      EventType.CUSTOMER_FORM_UPDATED,
-      EventType.CUSTOMER_FORM_ARCHIVED,
+      EventType.CustomerFormNew,
+      EventType.CustomerFormUpdated,
+      EventType.CustomerFormArchived,
     ],
   });
 

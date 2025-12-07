@@ -5,9 +5,9 @@ import { Button } from "@/components/buttons/button";
 import { Calendar } from "@/components/calendar";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
+import { EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
@@ -73,7 +73,7 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
   const assigneeUserIds: string[] = query.assigneeUserIds || [];
 
   useEventsListener(
-    [EventType.TASK_NEW, EventType.TASK_ARCHIVED],
+    [EventType.TaskNew, EventType.TaskArchived],
     () => {
       tasks.fetch(true, { isSilient: true });
     },

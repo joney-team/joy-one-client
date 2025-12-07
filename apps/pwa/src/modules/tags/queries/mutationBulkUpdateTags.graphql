@@ -1,0 +1,5 @@
+mutation BulkUpdateTags($items: [UpdateTagInput!]!) {
+  bulkUpdateTags(items: $items) {
+    _id
+  }
+}

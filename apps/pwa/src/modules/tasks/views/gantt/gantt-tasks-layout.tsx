@@ -3,7 +3,6 @@
 import { DateFormat } from "@/components/format/date-format";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useColor } from "@/modules/theme/use-color";
@@ -25,6 +24,7 @@ import {
 import { FC, Fragment, PropsWithChildren, ReactNode, useEffect, useMemo, useState } from "react";
 import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
+import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 
 export const SidebarHead: FC = () => {
   const forceUpdate = useForceUpdate();
@@ -143,17 +143,21 @@ export const SidebarHead: FC = () => {
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label={<Trans>Create folder</Trans>}>
-          <ActionIcon
-            variant="subtle"
-            size="sm"
-            color="gray"
-            component="div"
-            onClick={() => OnModalTagForm({ type: TagType.TASK_FOLDER })}
-          >
-            <IconFolderPlus size={16} />
-          </ActionIcon>
-        </Tooltip>
+        <ModalTagForm>
+          {(open) => (
+            <Tooltip label={<Trans>Create folder</Trans>}>
+              <ActionIcon
+                variant="subtle"
+                size="sm"
+                color="gray"
+                component="div"
+                onClick={() => open({ type: TagType.TASK_FOLDER })}
+              >
+                <IconFolderPlus size={16} />
+              </ActionIcon>
+            </Tooltip>
+          )}
+        </ModalTagForm>
 
         <Tooltip label={<Trans>Create task</Trans>}>
           <QuickCreateTaskInput>

@@ -14,7 +14,7 @@ import { Badge, Combobox, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconCheck, IconEdit } from "@tabler/icons-react";
 import { Fragment } from "react";
 import { api } from "../apis";
-import { EventType } from "../events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { PromotionDescription } from "./components/promotion-description";
 import { OnPromotionModal } from "./modals/modal-promotion";
@@ -201,11 +201,7 @@ export const PromostionList = () => {
           permission: WorkspacePermission.PROMOTIONS_MANAGER,
           onCreate: () => OnPromotionModal({}),
         }}
-        events={[
-          EventType.PROMOTION_NEW,
-          EventType.PROMOTION_UPDATED,
-          EventType.PROMOTION_ARCHIVED,
-        ]}
+        events={[EventType.PromotionNew, EventType.PromotionUpdated, EventType.PromotionArchived]}
         actions={[
           {
             label: t`Edit`,

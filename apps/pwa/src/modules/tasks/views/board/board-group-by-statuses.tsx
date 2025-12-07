@@ -177,6 +177,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                         variant="subtle"
                         size="sm"
                         color="gray"
+                        component="div"
                         onClick={() => OnTaskSatusesModal()}
                       >
                         <IconPencil size={16} strokeWidth={1.6} />
@@ -185,7 +186,13 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                   )}
 
                   {!isClosedTasks && (
-                    <ActionIcon variant="subtle" size="sm" color="gray" onClick={handleCreateTask}>
+                    <ActionIcon
+                      component="div"
+                      variant="subtle"
+                      size="sm"
+                      color="gray"
+                      onClick={handleCreateTask}
+                    >
                       <IconPlus size={16} strokeWidth={1.6} />
                     </ActionIcon>
                   )}

@@ -2,7 +2,7 @@
 
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { useRouter } from "@/hooks/use-router";
-import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
+import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { onRemoveTaskTagFolder } from "@/modules/tags/tags-service";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
@@ -109,22 +109,26 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                       </Text>
                     </Menu.Item>
 
-                    <Menu.Item
-                      leftSection={<IconPencil strokeWidth={2} size={18} />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (!tagFolders.activatedFolder) return;
+                    <ModalTagForm>
+                      {(open) => (
+                        <Menu.Item
+                          leftSection={<IconPencil strokeWidth={2} size={18} />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!tagFolders.activatedFolder) return;
 
-                        OnModalTagForm({
-                          tag: tagFolders.activatedFolder as any,
-                          type: TagType.TASK_FOLDER,
-                        });
-                      }}
-                    >
-                      <Text fz={14}>
-                        <Trans>Edit</Trans>
-                      </Text>
-                    </Menu.Item>
+                            open({
+                              tag: tagFolders.activatedFolder,
+                              type: TagType.TASK_FOLDER,
+                            });
+                          }}
+                        >
+                          <Text fz={14}>
+                            <Trans>Edit</Trans>
+                          </Text>
+                        </Menu.Item>
+                      )}
+                    </ModalTagForm>
 
                     {/* TODO: */}
                     {/* <Menu.Item

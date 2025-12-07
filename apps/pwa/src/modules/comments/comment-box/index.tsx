@@ -3,12 +3,12 @@
 import { CommentsIllustration } from "@/components/illustrations/comments";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
+import { EventType } from "@/graphql/enums.graphql";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { Comment } from "@/modules/comments/comment-box/components/comment";
 import { createComment, getComments } from "@/modules/comments/comment-service";
 import { CommentEntity } from "@/modules/comments/comment-types";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { em, Group, ScrollArea, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -46,7 +46,7 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
   }, []);
 
   useEventsListener(
-    [EventType.COMMENT_REMOVED],
+    [EventType.CommentRemoved],
     (e) => {
       const comment = e.data as CommentEntity;
       if (comment.ref === props.ref) {
@@ -57,7 +57,7 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
   );
 
   useEventsListener(
-    [EventType.COMMENT_NEW, EventType.COMMENT_UPDATED],
+    [EventType.CommentNew, EventType.CommentUpdated],
     (e) => {
       const comment = e.data as CommentEntity;
       if (comment.ref === props.ref) {

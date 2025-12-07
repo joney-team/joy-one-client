@@ -1,0 +1,6 @@
+mutation CreateTag($input: TagDto!) {
+  createTag(input: $input) {
+    _id
+    slug
+  }
+}

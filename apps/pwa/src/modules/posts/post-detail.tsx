@@ -6,9 +6,9 @@ import { Stack } from "@mantine/core";
 import { useParams } from "next/navigation";
 import { type FC } from "react";
 import { useRestQuery } from "../apis/use-rest-query";
-import { EventType } from "../events/event-types";
 import { FormPost } from "./components/form-post";
 import { PostEntity } from "./posts-types";
+import { EventType } from "@/graphql/enums.graphql";
 
 export const PostDetail: FC = () => {
   const params = useParams();
@@ -16,7 +16,7 @@ export const PostDetail: FC = () => {
 
   const post = useRestQuery<PostEntity>({
     route: `/posts/${id}`,
-    refetchEvents: [EventType.POST_UPDATED],
+    refetchEvents: [EventType.PostUpdated],
   });
 
   if (post.isLoading) return <PageLazyLoad />;

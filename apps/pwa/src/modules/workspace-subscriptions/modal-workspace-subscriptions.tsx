@@ -15,7 +15,7 @@ import {
   BankTransactionType,
 } from "@/modules/bank-transactions/bank-transaction-types";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { getSubscriptions } from "@/modules/subscriptions/subscriptions-service";
 import { SubscriptionEntity } from "@/modules/subscriptions/subscriptions-types";
 import { getBillingBankAccount } from "@/modules/workspace-billings/workspace-billings-service";
@@ -111,10 +111,10 @@ export const ModalWorkspaceSubscription: FC = () => {
 
   useEventsListener(
     [
-      EventType.BANK_TRANSACTION_CANCELLED,
-      EventType.BANK_TRANSACTION_FAILED,
-      EventType.BANK_TRANSACTION_PAID,
-      EventType.BANK_TRANSACTION_FULFILLED,
+      EventType.BankTransactionCancelled,
+      EventType.BankTransactionFailed,
+      EventType.BankTransactionPaid,
+      EventType.BankTransactionFulfilled,
     ],
     (ev) => {
       const _bankTransaction = ev.data as BankTransactionEntity;

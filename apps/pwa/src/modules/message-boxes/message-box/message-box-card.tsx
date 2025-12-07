@@ -5,7 +5,7 @@ import { DateFormat } from "@/components/format/date-format";
 import { useList } from "@/components/list/use-list";
 import { TextOverflow } from "@/components/text-overflow";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import {
   getMessages,
   messageBoxPlatformImages,
@@ -50,7 +50,7 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
       }),
   });
 
-  useEventsListener([EventType.MESSAGE_NEW], (e) => {
+  useEventsListener([EventType.MessageNew], (e) => {
     if (e.relatedEntities?.some((r) => r.id === box._id)) {
       newLatestMessage.fetch(true, { isSilient: true });
     }

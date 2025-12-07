@@ -8,7 +8,6 @@ import { useList } from "@/components/list/use-list";
 import { SectionTitle } from "@/components/session-title";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import {
   HrmTimekeepingsCalendar,
   TimekeepingsCalendarExplain,
@@ -49,6 +48,7 @@ import { useRouter } from "next/navigation";
 import { type FC } from "react";
 import { getTimekeepings } from "./hrm-timekeepings-service";
 import { HrmTimekeepingEntity, HrmTimekeepingStatus } from "./hrm-timekeepings-types";
+import { EventType } from "@/graphql/enums.graphql";
 
 export const HrmTimekeepingList: FC = () => {
   const workspace = useWorkspace();
@@ -85,11 +85,11 @@ export const HrmTimekeepingList: FC = () => {
 
   useEventsListener(
     [
-      EventType.HRM_TIMEKEEPING_MEMBER_CHECK_IN,
-      EventType.HRM_TIMEKEEPING_MEMBER_CHECK_OUT,
-      EventType.HRM_TIMEKEEPING_MANUAL_APPROVAL,
-      EventType.HRM_TIMEKEEPING_REJECTED,
-      EventType.HRM_TIMEKEEPING_REMOVED,
+      EventType.HrmTimekeepingMemberCheckIn,
+      EventType.HrmTimekeepingMemberCheckOut,
+      EventType.HrmTimekeepingManualApproval,
+      EventType.HrmTimekeepingRejected,
+      EventType.HrmTimekeepingRemoved,
     ],
     () => {
       timekeepings.fetch(true, { isSilient: true });

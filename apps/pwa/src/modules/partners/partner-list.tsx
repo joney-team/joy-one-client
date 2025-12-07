@@ -1,6 +1,8 @@
+"use client";
+
 import { Avatar } from "@/components/avatar";
 import { List } from "@/components/list";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { PartnerCard } from "@/modules/partners/components/partner-card";
 import { ModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -36,7 +38,7 @@ export const PartnerList: FC = () => {
               onCreate: () => open(),
               permission: WorkspacePermission.PARTNERS_WRITE,
             }}
-            events={[EventType.PARTNER_NEW, EventType.PARTNER_UPDATED, EventType.PARTNER_ARCHIVED]}
+            events={[EventType.PartnerNew, EventType.PartnerUpdated, EventType.PartnerArchived]}
             actions={[
               {
                 label: t`Edit`,

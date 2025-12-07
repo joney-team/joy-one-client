@@ -1,6 +1,7 @@
+"use client";
+
 import { ModalTitle } from "@/components/modal-title";
-import { eventTypes } from "@/modules/events/event-constants";
-import { EventType } from "@/modules/events/event-types";
+import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import { IconCategory } from "@tabler/icons-react";
 import { FormCategory, FormCategoryProps } from "../components/form-category";
@@ -8,16 +9,7 @@ import { FormCategory, FormCategoryProps } from "../components/form-category";
 export const OnModalCategory = (props?: FormCategoryProps) => {
   return modals.open({
     modalId: "modal-category",
-    title: (
-      <ModalTitle
-        title={
-          props?.category
-            ? eventTypes[EventType.CATEGORY_UPDATED].name()
-            : eventTypes[EventType.CATEGORY_NEW].name()
-        }
-        icon={IconCategory}
-      />
-    ),
+    title: <ModalTitle title={<Trans>Category</Trans>} icon={IconCategory} />,
     children: (
       <FormCategory
         {...props}

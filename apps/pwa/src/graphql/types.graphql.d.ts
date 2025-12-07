@@ -148,8 +148,8 @@ export type CustomFieldValueInput = {
   value?: InputMaybe<Scalars['AnyType']['input']>;
 };
 
-export type CustomerEntity = {
-  __typename?: 'CustomerEntity';
+export type Customer = {
+  __typename?: 'Customer';
   _id: Scalars['String']['output'];
   assigneeUserIds: Maybe<Array<Scalars['String']['output']>>;
   avatar: Maybe<Scalars['String']['output']>;
@@ -193,6 +193,228 @@ export type DeviceEntity = {
   userId: Maybe<Scalars['String']['output']>;
 };
 
+export type Event = {
+  __typename?: 'Event';
+  _id: Scalars['String']['output'];
+  actionType: Maybe<EventDataActionType>;
+  channel: EventChannel;
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  data: Maybe<Scalars['JSONObject']['output']>;
+  persist: Maybe<Scalars['Boolean']['output']>;
+  ref: Maybe<Scalars['String']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  sessionId: Maybe<Scalars['String']['output']>;
+  time: Scalars['Float']['output'];
+  type: EventType;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+  userId: Maybe<Scalars['String']['output']>;
+  variant: Maybe<EventVariant>;
+};
+
+/** Available event channels */
+export const EventChannel = {
+  None: 'NONE',
+  Personal: 'PERSONAL',
+  Workspace: 'WORKSPACE'
+} as const;
+
+export type EventChannel = typeof EventChannel[keyof typeof EventChannel];
+/** Available event data action types */
+export const EventDataActionType = {
+  Archived: 'ARCHIVED',
+  Create: 'CREATE',
+  Update: 'UPDATE'
+} as const;
+
+export type EventDataActionType = typeof EventDataActionType[keyof typeof EventDataActionType];
+/** Available event types */
+export const EventType = {
+  BankTransactionCancelled: 'BANK_TRANSACTION_CANCELLED',
+  BankTransactionFailed: 'BANK_TRANSACTION_FAILED',
+  BankTransactionFulfilled: 'BANK_TRANSACTION_FULFILLED',
+  BankTransactionPaid: 'BANK_TRANSACTION_PAID',
+  BookingCancelled: 'BOOKING_CANCELLED',
+  BookingCheckin: 'BOOKING_CHECKIN',
+  BookingCompleted: 'BOOKING_COMPLETED',
+  BookingInProgress: 'BOOKING_IN_PROGRESS',
+  BookingNew: 'BOOKING_NEW',
+  BookingUpdated: 'BOOKING_UPDATED',
+  CategoryArchived: 'CATEGORY_ARCHIVED',
+  CategoryNew: 'CATEGORY_NEW',
+  CategoryUpdated: 'CATEGORY_UPDATED',
+  CommentNew: 'COMMENT_NEW',
+  CommentPinned: 'COMMENT_PINNED',
+  CommentRemoved: 'COMMENT_REMOVED',
+  CommentUnpinned: 'COMMENT_UNPINNED',
+  CommentUpdated: 'COMMENT_UPDATED',
+  CouponsCreated: 'COUPONS_CREATED',
+  CouponsUsed: 'COUPONS_USED',
+  CouponRulesArchived: 'COUPON_RULES_ARCHIVED',
+  CouponRulesCreated: 'COUPON_RULES_CREATED',
+  CouponRulesUpdated: 'COUPON_RULES_UPDATED',
+  CustomerArchived: 'CUSTOMER_ARCHIVED',
+  CustomerAssignToUser: 'CUSTOMER_ASSIGN_TO_USER',
+  CustomerBulkUpdateWorkspaceBranch: 'CUSTOMER_BULK_UPDATE_WORKSPACE_BRANCH',
+  CustomerContactsUpdated: 'CUSTOMER_CONTACTS_UPDATED',
+  CustomerFormArchived: 'CUSTOMER_FORM_ARCHIVED',
+  CustomerFormNew: 'CUSTOMER_FORM_NEW',
+  CustomerFormUpdated: 'CUSTOMER_FORM_UPDATED',
+  CustomerKycApproved: 'CUSTOMER_KYC_APPROVED',
+  CustomerKycPending: 'CUSTOMER_KYC_PENDING',
+  CustomerKycRejected: 'CUSTOMER_KYC_REJECTED',
+  CustomerNew: 'CUSTOMER_NEW',
+  CustomerUnassignUser: 'CUSTOMER_UNASSIGN_USER',
+  CustomerUpdated: 'CUSTOMER_UPDATED',
+  CustomFieldsNew: 'CUSTOM_FIELDS_NEW',
+  CustomFieldsRemoved: 'CUSTOM_FIELDS_REMOVED',
+  CustomFieldsUpdated: 'CUSTOM_FIELDS_UPDATED',
+  EInvoiceCreated: 'E_INVOICE_CREATED',
+  EInvoiceRemoved: 'E_INVOICE_REMOVED',
+  FileNew: 'FILE_NEW',
+  FileRemoved: 'FILE_REMOVED',
+  HrmTimekeepingManualApproval: 'HRM_TIMEKEEPING_MANUAL_APPROVAL',
+  HrmTimekeepingMemberCheckIn: 'HRM_TIMEKEEPING_MEMBER_CHECK_IN',
+  HrmTimekeepingMemberCheckOut: 'HRM_TIMEKEEPING_MEMBER_CHECK_OUT',
+  HrmTimekeepingRejected: 'HRM_TIMEKEEPING_REJECTED',
+  HrmTimekeepingRemoved: 'HRM_TIMEKEEPING_REMOVED',
+  LoansApproved: 'LOANS_APPROVED',
+  LoansApprovedReverted: 'LOANS_APPROVED_REVERTED',
+  LoansArchived: 'LOANS_ARCHIVED',
+  LoansChangeWorkspaceBranch: 'LOANS_CHANGE_WORKSPACE_BRANCH',
+  LoansCompleted: 'LOANS_COMPLETED',
+  LoansFulfilled: 'LOANS_FULFILLED',
+  LoansFulfilledReverted: 'LOANS_FULFILLED_REVERTED',
+  LoansJustCreated: 'LOANS_JUST_CREATED',
+  LoansLiquidation: 'LOANS_LIQUIDATION',
+  LoansPending: 'LOANS_PENDING',
+  LoansRejected: 'LOANS_REJECTED',
+  LoansRevertLiquidation: 'LOANS_REVERT_LIQUIDATION',
+  LoansRevertRejected: 'LOANS_REVERT_REJECTED',
+  LoansSynced: 'LOANS_SYNCED',
+  LoansUpdated: 'LOANS_UPDATED',
+  MessageBoxClosed: 'MESSAGE_BOX_CLOSED',
+  MessageBoxInProgress: 'MESSAGE_BOX_IN_PROGRESS',
+  MessageBoxNew: 'MESSAGE_BOX_NEW',
+  MessageBoxNewMessage: 'MESSAGE_BOX_NEW_MESSAGE',
+  MessageBoxRemoved: 'MESSAGE_BOX_REMOVED',
+  MessageBoxUpdated: 'MESSAGE_BOX_UPDATED',
+  MessageBoxWaiting: 'MESSAGE_BOX_WAITING',
+  MessageNew: 'MESSAGE_NEW',
+  MessageUpdated: 'MESSAGE_UPDATED',
+  NotificationCleaned: 'NOTIFICATION_CLEANED',
+  NotificationListViewed: 'NOTIFICATION_LIST_VIEWED',
+  NotificationNew: 'NOTIFICATION_NEW',
+  NotificationReaded: 'NOTIFICATION_READED',
+  OrderArchived: 'ORDER_ARCHIVED',
+  OrderNew: 'ORDER_NEW',
+  OrderSynced: 'ORDER_SYNCED',
+  OrderUpdated: 'ORDER_UPDATED',
+  PartnerArchived: 'PARTNER_ARCHIVED',
+  PartnerNew: 'PARTNER_NEW',
+  PartnerUpdated: 'PARTNER_UPDATED',
+  PluginAiAssistantsNew: 'PLUGIN_AI_ASSISTANTS_NEW',
+  PluginAiAssistantsRemoved: 'PLUGIN_AI_ASSISTANTS_REMOVED',
+  PluginAiAssistantsUpdated: 'PLUGIN_AI_ASSISTANTS_UPDATED',
+  PluginMessageHubsNew: 'PLUGIN_MESSAGE_HUBS_NEW',
+  PluginMessageHubsRemoved: 'PLUGIN_MESSAGE_HUBS_REMOVED',
+  PluginMessageHubsUpdated: 'PLUGIN_MESSAGE_HUBS_UPDATED',
+  PluginMetaPagesDisconnected: 'PLUGIN_META_PAGES_DISCONNECTED',
+  PluginMetaPagesUpdated: 'PLUGIN_META_PAGES_UPDATED',
+  PluginZaloOaActive: 'PLUGIN_ZALO_OA_ACTIVE',
+  PluginZaloOaDisabled: 'PLUGIN_ZALO_OA_DISABLED',
+  PluginZaloOaEnabled: 'PLUGIN_ZALO_OA_ENABLED',
+  PluginZaloOaInactive: 'PLUGIN_ZALO_OA_INACTIVE',
+  PluginZaloOaUpdated: 'PLUGIN_ZALO_OA_UPDATED',
+  PostArchived: 'POST_ARCHIVED',
+  PostNew: 'POST_NEW',
+  PostUpdated: 'POST_UPDATED',
+  PrescriptionsNew: 'PRESCRIPTIONS_NEW',
+  PrescriptionsRemoved: 'PRESCRIPTIONS_REMOVED',
+  PrescriptionsUpdated: 'PRESCRIPTIONS_UPDATED',
+  ProductArchived: 'PRODUCT_ARCHIVED',
+  ProductComboNew: 'PRODUCT_COMBO_NEW',
+  ProductComboUpdate: 'PRODUCT_COMBO_UPDATE',
+  ProductNew: 'PRODUCT_NEW',
+  ProductStockIn: 'PRODUCT_STOCK_IN',
+  ProductStockInMultiple: 'PRODUCT_STOCK_IN_MULTIPLE',
+  ProductStockInRevert: 'PRODUCT_STOCK_IN_REVERT',
+  ProductStockOut: 'PRODUCT_STOCK_OUT',
+  ProductStockOutRevert: 'PRODUCT_STOCK_OUT_REVERT',
+  ProductSupplyRecordNew: 'PRODUCT_SUPPLY_RECORD_NEW',
+  ProductUpdate: 'PRODUCT_UPDATE',
+  ProductVouchersNew: 'PRODUCT_VOUCHERS_NEW',
+  PromotionArchived: 'PROMOTION_ARCHIVED',
+  PromotionNew: 'PROMOTION_NEW',
+  PromotionUpdated: 'PROMOTION_UPDATED',
+  ReceiptArchived: 'RECEIPT_ARCHIVED',
+  ReceiptChangeWorkspaceBranch: 'RECEIPT_CHANGE_WORKSPACE_BRANCH',
+  ReceiptDisbursement: 'RECEIPT_DISBURSEMENT',
+  ReceiptNew: 'RECEIPT_NEW',
+  ReceiptPaid: 'RECEIPT_PAID',
+  ReceiptRevertPayment: 'RECEIPT_REVERT_PAYMENT',
+  ReceiptSynced: 'RECEIPT_SYNCED',
+  ReceiptUnarchived: 'RECEIPT_UNARCHIVED',
+  ReceiptUpdated: 'RECEIPT_UPDATED',
+  ReportRangeSynced: 'REPORT_RANGE_SYNCED',
+  ReportRealtimeSynced: 'REPORT_REALTIME_SYNCED',
+  TableSlotArchived: 'TABLE_SLOT_ARCHIVED',
+  TableSlotNew: 'TABLE_SLOT_NEW',
+  TableSlotUpdated: 'TABLE_SLOT_UPDATED',
+  TagsArchived: 'TAGS_ARCHIVED',
+  TagsUpdated: 'TAGS_UPDATED',
+  TagNew: 'TAG_NEW',
+  TasksUpdated: 'TASKS_UPDATED',
+  TaskArchived: 'TASK_ARCHIVED',
+  TaskAssigned: 'TASK_ASSIGNED',
+  TaskDescriptionUpdated: 'TASK_DESCRIPTION_UPDATED',
+  TaskNameUpdated: 'TASK_NAME_UPDATED',
+  TaskNew: 'TASK_NEW',
+  TaskPriorityUpdated: 'TASK_PRIORITY_UPDATED',
+  TaskStatusUpdated: 'TASK_STATUS_UPDATED',
+  TaskSynced: 'TASK_SYNCED',
+  UserOffline: 'USER_OFFLINE',
+  UserOnline: 'USER_ONLINE',
+  UserProfileUpdated: 'USER_PROFILE_UPDATED',
+  WorkspaceApiAppArchived: 'WORKSPACE_API_APP_ARCHIVED',
+  WorkspaceApiAppCreated: 'WORKSPACE_API_APP_CREATED',
+  WorkspaceApiAppUpdated: 'WORKSPACE_API_APP_UPDATED',
+  WorkspaceArchived: 'WORKSPACE_ARCHIVED',
+  WorkspaceBillingsCashbackNew: 'WORKSPACE_BILLINGS_CASHBACK_NEW',
+  WorkspaceBillingsDeposited: 'WORKSPACE_BILLINGS_DEPOSITED',
+  WorkspaceBillingsPaymentNew: 'WORKSPACE_BILLINGS_PAYMENT_NEW',
+  WorkspaceBillingsPaymentPaid: 'WORKSPACE_BILLINGS_PAYMENT_PAID',
+  WorkspaceBillingsWithdrawn: 'WORKSPACE_BILLINGS_WITHDRAWN',
+  WorkspaceBranchArchived: 'WORKSPACE_BRANCH_ARCHIVED',
+  WorkspaceBranchNew: 'WORKSPACE_BRANCH_NEW',
+  WorkspaceBranchUpdated: 'WORKSPACE_BRANCH_UPDATED',
+  WorkspaceInviteCodeUpdated: 'WORKSPACE_INVITE_CODE_UPDATED',
+  WorkspaceMemberJoined: 'WORKSPACE_MEMBER_JOINED',
+  WorkspaceMemberLeaved: 'WORKSPACE_MEMBER_LEAVED',
+  WorkspaceMemberOffline: 'WORKSPACE_MEMBER_OFFLINE',
+  WorkspaceMemberOnline: 'WORKSPACE_MEMBER_ONLINE',
+  WorkspaceMemberTransferOwner: 'WORKSPACE_MEMBER_TRANSFER_OWNER',
+  WorkspaceMemberUpdated: 'WORKSPACE_MEMBER_UPDATED',
+  WorkspaceNew: 'WORKSPACE_NEW',
+  WorkspaceRolesNew: 'WORKSPACE_ROLES_NEW',
+  WorkspaceRolesRemoved: 'WORKSPACE_ROLES_REMOVED',
+  WorkspaceRolesUpdated: 'WORKSPACE_ROLES_UPDATED',
+  WorkspaceSettingUpdated: 'WORKSPACE_SETTING_UPDATED',
+  WorkspaceStatsUpdated: 'WORKSPACE_STATS_UPDATED',
+  WorkspaceSubscriptionUpdated: 'WORKSPACE_SUBSCRIPTION_UPDATED',
+  WorkspaceUpdated: 'WORKSPACE_UPDATED'
+} as const;
+
+export type EventType = typeof EventType[keyof typeof EventType];
+/** Available event variants */
+export const EventVariant = {
+  Info: 'INFO',
+  Negative: 'NEGATIVE',
+  Positive: 'POSITIVE',
+  Warning: 'WARNING'
+} as const;
+
+export type EventVariant = typeof EventVariant[keyof typeof EventVariant];
 export type File = {
   __typename?: 'File';
   _id: Scalars['String']['output'];
@@ -262,9 +484,11 @@ export type LocationEntity = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  bulkUpdateTags: Array<Tag>;
   bulkUpdateTasks: Array<Task>;
   createCategory: Category;
   createProduct: Product;
+  createTag: Tag;
   createTask: Task;
   deleteCategory: Scalars['Boolean']['output'];
   duplicateTask: Task;
@@ -275,10 +499,17 @@ export type Mutation = {
   pluginExternalStorageSignUploadUrl: SignUploadUrlResponse;
   registerDevice: DeviceEntity;
   removePluginExternalStorage: Scalars['Boolean']['output'];
+  removeTag: Scalars['Boolean']['output'];
   setPluginExternalStorage: PluginExternalStorage;
+  setTaskStatuses: Array<TaskStatus>;
   syncTask: SyncTaskResult;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateCategory: Category;
+};
+
+
+export type MutationBulkUpdateTagsArgs = {
+  items: Array<UpdateTagInput>;
 };
 
 
@@ -330,6 +561,11 @@ export type MutationCreateProductArgs = {
 };
 
 
+export type MutationCreateTagArgs = {
+  input: TagDto;
+};
+
+
 export type MutationCreateTaskArgs = {
   input: CreateTaskInput;
 };
@@ -372,6 +608,11 @@ export type MutationRegisterDeviceArgs = {
 };
 
 
+export type MutationRemoveTagArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationSetPluginExternalStorageArgs = {
   accessKeyId?: InputMaybe<Scalars['String']['input']>;
   bucketName?: InputMaybe<Scalars['String']['input']>;
@@ -379,6 +620,13 @@ export type MutationSetPluginExternalStorageArgs = {
   provider: PluginExternalStorageProvider;
   region?: InputMaybe<Scalars['String']['input']>;
   secretAccessKey?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationSetTaskStatusesArgs = {
+  contextId?: InputMaybe<Scalars['String']['input']>;
+  contextType?: InputMaybe<TaskStatusesContextType>;
+  statuses: Array<TaskStatusInput>;
 };
 
 
@@ -501,16 +749,18 @@ export type Query = {
   appConfig: AppConfig;
   categoriesPaginated: CategoriesPaginated;
   category: Category;
+  event: Event;
   getCategoriesByIds: Array<Category>;
   getCategoryBySlug: Category;
   getFileInfo: File;
   getProductByIds: Array<Product>;
   pluginExternalStorage: Maybe<PluginExternalStorage>;
   siblingTasks: SiblingTasks;
-  tagBySlug: TagEntity;
+  tagBySlug: Tag;
   tags: Tags;
   task: Task;
   taskByCode: Task;
+  taskStatuses: Array<TaskStatus>;
   tasks: TasksPaginated;
   tasksCount: Scalars['Float']['output'];
 };
@@ -524,6 +774,11 @@ export type QueryCategoriesPaginatedArgs = {
 
 
 export type QueryCategoryArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryEventArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -570,6 +825,12 @@ export type QueryTaskArgs = {
 
 export type QueryTaskByCodeArgs = {
   code: Scalars['String']['input'];
+};
+
+
+export type QueryTaskStatusesArgs = {
+  contextId?: InputMaybe<Scalars['String']['input']>;
+  contextType?: InputMaybe<TaskStatusesContextType>;
 };
 
 
@@ -633,18 +894,25 @@ export type SyncTaskResult = {
   updateInfos: Array<Scalars['String']['output']>;
 };
 
-export type TagEntity = {
-  __typename?: 'TagEntity';
+export type Tag = {
+  __typename?: 'Tag';
   _id: Scalars['String']['output'];
   color: Maybe<Scalars['String']['output']>;
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   name: Scalars['String']['output'];
-  order: Maybe<Scalars['Float']['output']>;
+  order: Scalars['Float']['output'];
   refs: Maybe<Array<Scalars['String']['output']>>;
   slug: Scalars['String']['output'];
   type: TagType;
   updatedAt: Maybe<Scalars['Float']['output']>;
+};
+
+export type TagDto = {
+  color?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  order?: InputMaybe<Scalars['Float']['input']>;
+  type: TagType;
 };
 
 /** Available tag types */
@@ -659,7 +927,7 @@ export type TagType = typeof TagType[keyof typeof TagType];
 export type Tags = {
   __typename?: 'Tags';
   count: Scalars['Float']['output'];
-  data: Array<TagEntity>;
+  data: Array<Tag>;
 };
 
 export type Task = {
@@ -676,12 +944,12 @@ export type Task = {
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   customFields: Array<CustomField>;
-  customer: Maybe<CustomerEntity>;
+  customer: Maybe<Customer>;
   customerId: Maybe<Scalars['String']['output']>;
   description: Maybe<Scalars['String']['output']>;
   dueDate: Maybe<Scalars['Float']['output']>;
   estimatedTime: Maybe<Scalars['Float']['output']>;
-  folder: Maybe<TagEntity>;
+  folder: Maybe<Tag>;
   folderId: Maybe<Scalars['String']['output']>;
   isArchived: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
@@ -701,7 +969,7 @@ export type Task = {
   /** @deprecated Use folderId instead */
   tagFolderId: Maybe<Scalars['String']['output']>;
   tagIds: Array<Scalars['String']['output']>;
-  tags: Array<TagEntity>;
+  tags: Array<Tag>;
   timeTrackings: Maybe<Array<TaskTimeTracking>>;
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
@@ -736,6 +1004,20 @@ export type TaskStatus = {
   order: Maybe<Scalars['Float']['output']>;
 };
 
+export type TaskStatusInput = {
+  color?: InputMaybe<Scalars['String']['input']>;
+  icon?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Scalars['Float']['input']>;
+};
+
+/** Available task statuses context types */
+export const TaskStatusesContextType = {
+  Folder: 'FOLDER'
+} as const;
+
+export type TaskStatusesContextType = typeof TaskStatusesContextType[keyof typeof TaskStatusesContextType];
 export type TaskTimeTracking = {
   __typename?: 'TaskTimeTracking';
   billable: Maybe<Scalars['Boolean']['output']>;
@@ -761,6 +1043,13 @@ export type TasksPaginated = {
   __typename?: 'TasksPaginated';
   count: Scalars['Float']['output'];
   data: Array<Task>;
+};
+
+export type UpdateTagInput = {
+  _id: Scalars['String']['input'];
+  color?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type UpdateTaskInput = {

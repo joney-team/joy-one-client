@@ -11,52 +11,69 @@ import { Trans } from "@lingui/react/macro";
 import { em, Group, Modal, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconChevronRight, IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";
-import { FC, Fragment, ReactNode, useMemo, useRef } from "react";
+import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useRef } from "react";
 import { updateTaskPath } from "../tasks-route-helpers";
 
-export const ModalCreateTask: FC<{
-  children: (open: (args?: TaskFormProps) => void) => ReactNode;
-}> = ({ children }) => {
+export interface ModalCreateTaskRef {
+  open: (args?: TaskFormProps) => void;
+}
+
+export const ModalCreateTask = forwardRef<
+  ModalCreateTaskRef,
+  {
+    children?: (open: (args?: TaskFormProps) => void) => ReactNode;
+  }
+>((props, ref) => {
   const [opened, { open, close }] = useDisclosure(false);
   const router = useRouter();
   const layout = useLayout();
-  const props = useRef<TaskFormProps | null>(null);
+  const args = useRef<TaskFormProps | null>(null);
+
+  useImperativeHandle(ref, () => ({
+    open: (a) => {
+      args.current = a ?? null;
+      open();
+    },
+    close: () => {
+      args.current = null;
+    },
+  }));
 
   const breadcrumbs = useMemo(() => {
     return [
-      props.current?.initial?.folder && (
+      args.current?.initial?.folder && (
         <Button
           size="compact-sm"
           variant="light"
-          color={props.current?.initial?.folder?.color ?? "dark"}
+          color={args.current?.initial?.folder?.color ?? "dark"}
           fz={em(15)}
           fw={500}
           leftIcon={IconFolder}
           onClick={() => {
             router.push(
               updateTaskPath(location.pathname, {
-                slug: props.current?.initial?.folder?.slug,
+                slug: args.current?.initial?.folder?.slug,
               })
             );
             close();
           }}
         >
-          {props.current?.initial?.folder.name}
+          {args.current?.initial?.folder.name}
         </Button>
       ),
-      props.current?.initial?.parent && (
+      args.current?.initial?.parent && (
         <Button
           leftIcon={IconStack2}
           size="compact-sm"
           variant="subtle"
           color="dark"
           onClick={() => {
-            router.push(`/tasks/${props.current?.initial?.parent?.code}`);
+            router.push(`/tasks/${args.current?.initial?.parent?.code}`);
             close();
           }}
         >
           {String.limitCharacters(
-            props.current?.initial?.parent?.name,
+            args.current?.initial?.parent?.name,
             layout.view === "mobile" ? 15 : 30
           )}
         </Button>
@@ -65,21 +82,23 @@ export const ModalCreateTask: FC<{
         <Trans>New Task</Trans>
       </Text>,
     ].filter(Boolean);
-  }, [props.current?.initial?.folder, opened]);
+  }, [args.current?.initial?.folder, opened]);
 
   return (
     <Fragment>
-      {children((args) => {
-        props.current = args ?? null;
-        open();
-      })}
+      {typeof props.children === "function"
+        ? props.children((a) => {
+            args.current = a ?? null;
+            open();
+          })
+        : null}
 
       <Modal
         onClose={close}
         opened={opened}
         title={
           <ModalTitle
-            title={props.current?.task ? <Trans>Task</Trans> : <Trans>Create task</Trans>}
+            title={args.current?.task ? <Trans>Task</Trans> : <Trans>Create task</Trans>}
             icon={IconStackPush}
           />
         }
@@ -103,9 +122,9 @@ export const ModalCreateTask: FC<{
 
           {opened && (
             <TaskForm
-              {...props.current}
+              {...args.current}
               onClose={() => {
-                props.current?.onClose?.();
+                args.current?.onClose?.();
                 close();
               }}
             />
@@ -114,4 +133,4 @@ export const ModalCreateTask: FC<{
       </Modal>
     </Fragment>
   );
-};
+});

@@ -1,10 +1,10 @@
 "use client";
 
+import { EventType } from "@/graphql/enums.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { searchWithoutAccents } from "@/utils/string.utils";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { useEventsListener } from "../events/event-service";
-import { EventType } from "../events/event-types";
 import { Context, TagsContext } from "./tags-context";
 import { createTag, getTags, removeTag, reorderTags, updateTag } from "./tags-service";
 import { ReorderTag, TagEntity } from "./tags-types";
@@ -54,7 +54,7 @@ const TagsProvider: FC<PropsWithChildren> = (props) => {
     },
   };
 
-  useEventsListener([EventType.SYNC_TAGS], () => {
+  useEventsListener([EventType.TagNew, EventType.TagsUpdated, EventType.TagsArchived], () => {
     fetch();
   });
 

@@ -6,7 +6,7 @@ import { Errored } from "@/components/errored";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { ModalTitle } from "@/components/modal-title";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { ProductComboHistoryEntity } from "@/modules/product-combos/product-combos-entity";
 import {
@@ -51,7 +51,7 @@ export const ModalProductCombo: FC<{
     id: propsRef.current?.id,
     skip: !!!propsRef.current?.id,
     fetch: () => getProductCombo(propsRef.current!.id),
-    refetchEvents: [EventType.PRODUCT_COMBO_UPDATE],
+    refetchEvents: [EventType.ProductComboUpdate],
   });
 
   const onRevertHistory = (historyId: string) => {

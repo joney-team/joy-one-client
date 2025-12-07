@@ -1,4 +1,6 @@
-import { Box } from "@mantine/core";
+"use client";
+
+import { Box, BoxProps } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { ClipboardEvent, FC, useEffect, useRef } from "react";
 import { placeCaretAtEnd } from "./utils";
@@ -6,11 +8,9 @@ import { classNames } from "@/utils/ui.utils";
 
 import styles from "./content-editable.module.css";
 
-interface ContentEditableProps {
+interface ContentEditableProps extends BoxProps {
   placeholder?: string;
   value?: string;
-  fz?: number;
-  fw?: number;
   disabled?: boolean;
   onChange?: (value: string) => void;
   onEnter?: () => void;
@@ -18,20 +18,34 @@ interface ContentEditableProps {
   onEscape?: () => void;
   onClick?: () => void;
   autoFocus?: boolean;
-  mt?: number;
   placeHolderFontSize?: number;
+  fz?: number;
+  fw?: number;
+  onDoubleClick?: () => void;
 }
 
-export const ContentEditable: FC<ContentEditableProps> = (props) => {
+export const ContentEditable: FC<ContentEditableProps> = ({
+  placeholder,
+  value,
+  disabled = false,
+  onChange,
+  onEnter,
+  onBlur,
+  onEscape,
+  onClick,
+  autoFocus,
+  placeHolderFontSize,
+  onDoubleClick,
+  ...props
+}) => {
   const inputRef = useRef<HTMLDivElement>(null);
   const fz = props.fz || 16;
-  const disabled = typeof props.disabled !== "undefined" ? props.disabled : false;
   const forceUpdate = useForceUpdate();
 
-  const onChange = () => {
+  const handleOnChange = () => {
     if (!inputRef.current) return;
-    if (props.onChange) {
-      props.onChange?.(inputRef.current.textContent || "");
+    if (onChange) {
+      onChange(inputRef.current.textContent || "");
     } else {
       forceUpdate();
     }
@@ -39,7 +53,7 @@ export const ContentEditable: FC<ContentEditableProps> = (props) => {
 
   const onInput = (_: React.FormEvent<HTMLDivElement>) => {
     if (!inputRef.current) return;
-    onChange();
+    handleOnChange();
   };
 
   const onPaste = (event: ClipboardEvent<HTMLDivElement>) => {
@@ -50,7 +64,7 @@ export const ContentEditable: FC<ContentEditableProps> = (props) => {
     if (text) inputRef.current.textContent = `${inputRef.current?.textContent || ""}${text}`;
     placeCaretAtEnd(inputRef.current);
 
-    onChange();
+    handleOnChange();
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -60,7 +74,7 @@ export const ContentEditable: FC<ContentEditableProps> = (props) => {
     if (key === "Enter") {
       e.preventDefault();
       e.currentTarget.blur();
-      props.onEnter?.();
+      onEnter?.();
     }
 
     // Prevent formatting
@@ -71,40 +85,40 @@ export const ContentEditable: FC<ContentEditableProps> = (props) => {
     if (key === "Escape") {
       e.preventDefault();
       e.currentTarget.blur();
-      props.onEscape?.();
+      onEscape?.();
     }
   };
 
-  const onBlur = () => {
+  const handleOnBlur = () => {
     if (!inputRef.current) return;
-    props.onBlur?.(inputRef.current.textContent || "");
+    onBlur?.(inputRef.current.textContent || "");
   };
 
   // Sync value
   useEffect(() => {
     if (
-      typeof props.value !== "undefined" &&
+      typeof value !== "undefined" &&
       inputRef.current &&
-      inputRef.current.textContent !== props.value
+      inputRef.current.textContent !== value
     ) {
       // Set value
-      inputRef.current.textContent = props.value || "";
+      inputRef.current.textContent = value || "";
     }
-  }, [props.value]);
+  }, [value]);
 
   // Auto focus
   useEffect(() => {
     setTimeout(() => {
-      if (props.autoFocus && inputRef.current) {
+      if (autoFocus && inputRef.current) {
         inputRef.current?.focus();
         placeCaretAtEnd(inputRef.current);
       }
     }, 100);
-  }, [props.autoFocus]);
+  }, [autoFocus, disabled]);
 
   // Sync value for development hot reload
   useEffect(() => {
-    if (props.value !== inputRef.current?.textContent) {
+    if (value !== inputRef.current?.textContent) {
       forceUpdate();
     }
   }, []);
@@ -113,17 +127,18 @@ export const ContentEditable: FC<ContentEditableProps> = (props) => {
     <Box
       className={classNames({
         [styles.ContentEditable]: true,
-        [styles.isActive]: !props.disabled,
+        [styles.isActive]: !disabled,
+        [styles.isDoubleClickable]: !!onDoubleClick,
       })}
       mih={fz}
       style={{ position: "relative" }}
       flex={1}
-      onClick={props.onClick}
-      mt={props.mt}
+      onClick={onClick}
+      onDoubleClick={onDoubleClick}
     >
-      {!!props.placeholder && !inputRef.current?.textContent && !props.value && (
+      {!!placeholder && !inputRef.current?.textContent && !value && (
         <Box
-          fz={typeof props.placeHolderFontSize === "number" ? props.placeHolderFontSize : fz * 0.9}
+          fz={typeof placeHolderFontSize === "number" ? placeHolderFontSize : fz * 0.9}
           fw={300}
           style={{
             position: "absolute",
@@ -135,7 +150,7 @@ export const ContentEditable: FC<ContentEditableProps> = (props) => {
           }}
           opacity={0.5}
         >
-          {props.placeholder}
+          {placeholder}
         </Box>
       )}
 
@@ -146,15 +161,16 @@ export const ContentEditable: FC<ContentEditableProps> = (props) => {
         onInput={onInput}
         onPaste={onPaste}
         onKeyDown={onKeyDown}
-        onBlur={onBlur}
+        onBlur={handleOnBlur}
         w="100%"
         fz={fz}
         mih={fz}
+        fw={props.fw}
+        pos="relative"
         style={{
-          fontWeight: props.fw,
-          position: "relative",
           zIndex: 1,
         }}
+        {...props}
       />
     </Box>
   );

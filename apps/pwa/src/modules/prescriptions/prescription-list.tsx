@@ -4,8 +4,8 @@ import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
+import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { getPrescriptions } from "@/modules/prescriptions/prescriptions-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -35,7 +35,7 @@ export const PrescriptionList: FC = () => {
   });
 
   useEventsListener(
-    [EventType.PRESCRIPTIONS_NEW, EventType.PRESCRIPTIONS_UPDATED, EventType.PRESCRIPTIONS_REMOVED],
+    [EventType.PrescriptionsNew, EventType.PrescriptionsUpdated, EventType.PrescriptionsRemoved],
     () => prescriptions.fetch(true, { isSilient: true })
   );
 

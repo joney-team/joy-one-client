@@ -16,7 +16,6 @@ import {
   useEventsListener,
   useUserEventsListner,
 } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { getTimeZones } from "@/modules/times/times-service";
@@ -57,6 +56,7 @@ import type {
   AuthSignUpWithEmailPasswordDto,
   UserAuthResult,
 } from "./auth-types";
+import { EventType } from "@/graphql/enums.graphql";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const client = useApolloClient();
@@ -318,7 +318,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   }, [user, lang.isInitialized, lang.locale]);
 
   useEventsListener(
-    [EventType.USER_PROFILE_UPDATED],
+    [EventType.UserProfileUpdated],
     (event) => {
       const sessionId = getSessionId();
       if (event.userId === user?._id && event.sessionId !== sessionId) {

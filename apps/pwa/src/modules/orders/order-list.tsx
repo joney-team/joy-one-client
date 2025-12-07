@@ -6,7 +6,6 @@ import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { numberColumn } from "@/components/list/columns/number-column";
 import { statusColumn } from "@/components/list/columns/status-column";
 import { customerColumn } from "@/modules/customers/components/customer-column";
-import { EventType } from "@/modules/events/event-types";
 import { OrderCard } from "@/modules/orders/order-card";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
 import { userColumn } from "@/modules/users/user-column";
@@ -22,6 +21,7 @@ import { OrderEntity } from "./order-entity";
 import { OrderItemsColumn } from "./order-items-columns";
 import { orderPaymentStatuses } from "./orders-constants";
 import { payOrder } from "./orders-service";
+import { EventType } from "@/graphql/enums.graphql";
 
 export const OrderList: FC = () => {
   const { getAvailableModule } = useAvailableWorkspaceModules();
@@ -100,10 +100,10 @@ export const OrderList: FC = () => {
           },
         ]}
         events={[
-          EventType.ORDER_NEW,
-          EventType.ORDER_UPDATED,
-          EventType.ORDER_ARCHIVED,
-          EventType.ORDER_SYNCED,
+          EventType.OrderNew,
+          EventType.OrderUpdated,
+          EventType.OrderArchived,
+          EventType.OrderSynced,
         ]}
         creatable={{
           href: "/orders/sale?mode=new",

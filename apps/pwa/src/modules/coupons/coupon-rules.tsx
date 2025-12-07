@@ -4,10 +4,10 @@ import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
+import { EventType } from "@/graphql/enums.graphql";
 import { getCouponRules } from "@/modules/coupons/coupon-service";
 import { ModalCouponRuleForm } from "@/modules/coupons/modals/modal-coupon-rule-form";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Trans } from "@lingui/react/macro";
 import { Badge, em, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
@@ -23,11 +23,7 @@ export const CouponRules: FC = () => {
   });
 
   useEventsListener(
-    [
-      EventType.COUPON_RULES_ARCHIVED,
-      EventType.COUPON_RULES_CREATED,
-      EventType.COUPON_RULES_UPDATED,
-    ],
+    [EventType.CouponRulesArchived, EventType.CouponRulesCreated, EventType.CouponRulesUpdated],
     () => rules.fetch(true)
   );
 

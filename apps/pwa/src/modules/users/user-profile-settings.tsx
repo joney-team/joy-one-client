@@ -13,7 +13,7 @@ import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { useLang } from "@/modules/lang/lang-context";
 import { localeNames } from "@/modules/lang/lang-service";
 import { AppLocale } from "@/modules/lang/lang-types";
@@ -64,7 +64,7 @@ export const UserProfileSettings: FC = () => {
   });
 
   useEventsListener(
-    [EventType.USER_PROFILE_UPDATED],
+    [EventType.UserProfileUpdated],
     (event) => {
       const sessionId = getSessionId();
       if (event.userId === auth.user!._id && event.sessionId !== sessionId) {

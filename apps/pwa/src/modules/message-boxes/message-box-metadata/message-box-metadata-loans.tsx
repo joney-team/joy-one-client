@@ -1,25 +1,27 @@
-import { useList } from "@/components/list/use-list";
-import { AccordionItemComponent } from "./message-box-metadata-types";
-import { getLoans } from "@/modules/loans/loans-service";
-import { EventType } from "@/modules/events/event-types";
-import { Stack } from "@mantine/core";
+"use client";
+
 import { Empty } from "@/components/empty";
+import { useList } from "@/components/list/use-list";
+import { EventType } from "@/graphql/enums.graphql";
 import { LoanCard } from "@/modules/loans/components/loan-card";
+import { getLoans } from "@/modules/loans/loans-service";
+import { Stack } from "@mantine/core";
+import { AccordionItemComponent } from "./message-box-metadata-types";
 
 export const MessageBoxMetadataLoans: AccordionItemComponent = ({ customer }) => {
   const loans = useList({
     fetch: async () => getLoans({ customerId: customer._id }),
     events: [
-      EventType.LOANS_JUST_CREATED,
-      EventType.LOANS_PENDING,
-      EventType.LOANS_APPROVED,
-      EventType.LOANS_REJECTED,
-      EventType.LOANS_UPDATED,
-      EventType.LOANS_SYNCED,
-      EventType.LOANS_FULFILLED,
-      EventType.LOANS_COMPLETED,
-      EventType.LOANS_ARCHIVED,
-      EventType.LOANS_LIQUIDATION,
+      EventType.LoansJustCreated,
+      EventType.LoansPending,
+      EventType.LoansApproved,
+      EventType.LoansRejected,
+      EventType.LoansUpdated,
+      EventType.LoansSynced,
+      EventType.LoansFulfilled,
+      EventType.LoansCompleted,
+      EventType.LoansArchived,
+      EventType.LoansLiquidation,
     ],
   });
 

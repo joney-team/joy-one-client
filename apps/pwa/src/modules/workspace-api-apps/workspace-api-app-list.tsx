@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
 import { TeammatesIllustration } from "@/components/illustrations/teammates";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Trans } from "@lingui/react/macro";
@@ -22,9 +22,9 @@ export const WorkspaceApiAppList: FC = () => {
     default: [],
     fetch: () => getWorkspaceApiApps({ getAll: true }).then((res) => res.data),
     refetchEvents: [
-      EventType.WORKSPACE_API_APP_CREATED,
-      EventType.WORKSPACE_API_APP_UPDATED,
-      EventType.WORKSPACE_API_APP_ARCHIVED,
+      EventType.WorkspaceApiAppCreated,
+      EventType.WorkspaceApiAppUpdated,
+      EventType.WorkspaceApiAppArchived,
     ],
   });
 

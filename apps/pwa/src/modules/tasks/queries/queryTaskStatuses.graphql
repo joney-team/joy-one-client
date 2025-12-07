@@ -1,0 +1,9 @@
+query TaskStatuses($contextType: TaskStatusesContextType, $contextId: String) {
+  taskStatuses(contextType: $contextType, contextId: $contextId) {
+    id
+    name
+    color
+    icon
+    order
+  }
+}

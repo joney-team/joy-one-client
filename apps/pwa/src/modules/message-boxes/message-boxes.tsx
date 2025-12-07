@@ -7,8 +7,8 @@ import { Errored } from "@/components/errored";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { WayPoint } from "@/components/way-point";
+import { EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
-import { EventType } from "@/modules/events/event-types";
 import { getMessageBoxes } from "@/modules/message-boxes/message-boxes-service";
 import { MessageBoxStatus } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
@@ -34,14 +34,14 @@ export const MessageBoxList = () => {
         sortLastInteractionAt: -1,
       }),
     events: [
-      EventType.MESSAGE_NEW,
-      EventType.MESSAGE_BOX_NEW,
-      EventType.MESSAGE_BOX_IN_PROGRESS,
-      EventType.MESSAGE_BOX_CLOSED,
-      EventType.MESSAGE_BOX_WAITING,
-      EventType.MESSAGE_BOX_REMOVED,
-      EventType.MESSAGE_BOX_UPDATED,
-      EventType.CUSTOMER_UPDATED,
+      EventType.MessageNew,
+      EventType.MessageBoxNew,
+      EventType.MessageBoxInProgress,
+      EventType.MessageBoxClosed,
+      EventType.MessageBoxWaiting,
+      EventType.MessageBoxRemoved,
+      EventType.MessageBoxUpdated,
+      EventType.CustomerUpdated,
     ],
   });
 

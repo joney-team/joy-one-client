@@ -2,7 +2,9 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
+import { useList } from "@/components/list/use-list";
 import { ModalTitle } from "@/components/modal-title";
+import { EventType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { CommentCard } from "@/modules/comments/comment-card";
@@ -10,9 +12,8 @@ import { createComment, getComments } from "@/modules/comments/comment-service";
 import { CommentEntity } from "@/modules/comments/comment-types";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import { onError } from "@/utils/exceptions.utils";
-import { useList } from "@/components/list/use-list";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Box,
@@ -35,7 +36,6 @@ import { useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
 import { type FC, Fragment, useEffect, useState } from "react";
-import { t } from "@lingui/core/macro";
 
 interface CommentsProps {
   customer?: CustomerEntity;
@@ -92,11 +92,11 @@ export const Comments: FC<CommentsProps> = (props) => {
 
   useEventsListener(
     [
-      EventType.COMMENT_NEW,
-      EventType.COMMENT_UPDATED,
-      EventType.COMMENT_REMOVED,
-      EventType.COMMENT_PINNED,
-      EventType.COMMENT_UNPINNED,
+      EventType.CommentNew,
+      EventType.CommentUpdated,
+      EventType.CommentRemoved,
+      EventType.CommentPinned,
+      EventType.CommentUnpinned,
     ],
     () => {
       comments.fetch(true);

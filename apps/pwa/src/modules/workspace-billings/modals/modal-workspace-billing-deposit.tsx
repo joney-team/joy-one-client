@@ -16,7 +16,7 @@ import {
   BankTransactionType,
 } from "@/modules/bank-transactions/bank-transaction-types";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -43,10 +43,10 @@ export const ModalWorkspaceBillingDeposit: FC = () => {
 
   useEventsListener(
     [
-      EventType.BANK_TRANSACTION_CANCELLED,
-      EventType.BANK_TRANSACTION_FAILED,
-      EventType.BANK_TRANSACTION_PAID,
-      EventType.BANK_TRANSACTION_FULFILLED,
+      EventType.BankTransactionCancelled,
+      EventType.BankTransactionFailed,
+      EventType.BankTransactionPaid,
+      EventType.BankTransactionFulfilled,
     ],
     (ev) => {
       const _bankTransaction = ev.data as BankTransactionEntity;

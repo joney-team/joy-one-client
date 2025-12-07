@@ -3,7 +3,7 @@
 import { useRouter } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { useReports } from "@/modules/reports/reports-context";
 import { ReportEntity } from "@/modules/reports/reports-entity";
 import { exportPeriodReport } from "@/modules/reports/reports-services";
@@ -77,7 +77,7 @@ export const DashboardWidgets: FC = () => {
   );
 
   useEventsListener(
-    [EventType.REPORT_RANGE_SYNCED],
+    [EventType.ReportRangeSynced],
     (e) => {
       const _report = e.data as ReportEntity<RangeReport>;
 

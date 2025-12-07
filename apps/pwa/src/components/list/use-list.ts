@@ -1,18 +1,19 @@
 "use client";
 
+import { EventDataActionType, EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
-import { EventDataActionType, EventEntity, EventType } from "@/modules/events/event-types";
+import { EventEntity } from "@/modules/events/event-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceId } from "@/modules/workspaces/workspaces-service";
+import { removeParams, setParams } from "@joy-one-client/utils/location-query";
+import { useLingui } from "@lingui/react/macro";
 import { CanceledError } from "axios";
 import { usePathname, useSearchParams } from "next/navigation";
 import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import { isPlural } from "../../utils/string.utils";
-import { BaseData } from "./types";
 import { getId } from "./list-utils";
-import { removeParams, setParams } from "@joy-one-client/utils/location-query";
-import { useLingui } from "@lingui/react/macro";
+import { BaseData } from "./types";
 
 export interface UseListFetchReponse<T = any> {
   data: T[];
@@ -291,11 +292,11 @@ export const useList = <T extends BaseData>({
         return fetch(true, { isSilient: true });
       }
 
-      if (e.actionType === EventDataActionType.ARCHIVED) {
+      if (e.actionType === EventDataActionType.Archived) {
         return;
       }
 
-      if (e.actionType === EventDataActionType.CREATE) {
+      if (e.actionType === EventDataActionType.Create) {
         const response = await args.fetch(
           { ...params, ...stateQuery.current },
           new AbortController()

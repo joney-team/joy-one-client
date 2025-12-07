@@ -2,7 +2,7 @@ import { ResponseList } from "@/types";
 import { useEffect, useState } from "react";
 import { api } from "../apis";
 import { useEventsListener } from "../events/event-service";
-import { EventType } from "../events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { PrescriptionDto, PrescriptionEntity } from "./prescriptions-types";
 
 export async function createPrescription(dto: PrescriptionDto) {
@@ -12,7 +12,7 @@ export async function createPrescription(dto: PrescriptionDto) {
 export async function updatePrescription(id: string, dto: PrescriptionDto) {
   return api.put<PrescriptionEntity>(`/prescriptions/${id}`, dto);
 }
- 
+
 export async function removePrescription(id: string) {
   return api.delete(`/prescriptions/${id}`);
 }
@@ -32,18 +32,17 @@ export const usePrescriptions = () => {
         cached = res.data;
         setPrescriptions(res.data);
       })
-      .catch(() => false)
-  ]
+      .catch(() => false),
+  ];
 
-  useEventsListener([
-    EventType.PRESCRIPTIONS_NEW,
-    EventType.PRESCRIPTIONS_UPDATED,
-    EventType.PRESCRIPTIONS_REMOVED,
-  ], () => fetch())
+  useEventsListener(
+    [EventType.PrescriptionsNew, EventType.PrescriptionsUpdated, EventType.PrescriptionsRemoved],
+    () => fetch()
+  );
 
   useEffect(() => {
     fetch();
-  }, [])
+  }, []);
 
   return [prescriptions, fetch] as const;
-}
+};

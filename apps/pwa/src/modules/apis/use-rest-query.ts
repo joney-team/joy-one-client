@@ -6,7 +6,8 @@ import { AxiosError } from "axios";
 import { useMemo } from "react";
 import { api } from ".";
 import { onReconnected, useEventsListener } from "../events/event-service";
-import { EventEntity, EventType } from "../events/event-types";
+import { EventEntity } from "../events/event-types";
+import { EventType } from "@/graphql/types.graphql";
 
 export interface UseRestQueryArgs<T, P = Record<string, any>> {
   params?: P;

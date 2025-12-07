@@ -121,7 +121,7 @@ input CustomFieldValueInput {
   value: AnyType
 }
 
-type CustomerEntity {
+type Customer {
   _id: String!
   assigneeUserIds: [String!]
   avatar: String
@@ -162,6 +162,223 @@ type DeviceEntity {
   updatedAt: Float
   userAgent: String!
   userId: String
+}
+
+type Event {
+  _id: String!
+  actionType: EventDataActionType
+  channel: EventChannel!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  data: JSONObject
+  persist: Boolean
+  ref: String
+  refs: [String!]
+  sessionId: String
+  time: Float!
+  type: EventType!
+  updatedAt: Float
+  userId: String
+  variant: EventVariant
+}
+
+"""Available event channels"""
+enum EventChannel {
+  NONE
+  PERSONAL
+  WORKSPACE
+}
+
+"""Available event data action types"""
+enum EventDataActionType {
+  ARCHIVED
+  CREATE
+  UPDATE
+}
+
+"""Available event types"""
+enum EventType {
+  BANK_TRANSACTION_CANCELLED
+  BANK_TRANSACTION_FAILED
+  BANK_TRANSACTION_FULFILLED
+  BANK_TRANSACTION_PAID
+  BOOKING_CANCELLED
+  BOOKING_CHECKIN
+  BOOKING_COMPLETED
+  BOOKING_IN_PROGRESS
+  BOOKING_NEW
+  BOOKING_UPDATED
+  CATEGORY_ARCHIVED
+  CATEGORY_NEW
+  CATEGORY_UPDATED
+  COMMENT_NEW
+  COMMENT_PINNED
+  COMMENT_REMOVED
+  COMMENT_UNPINNED
+  COMMENT_UPDATED
+  COUPONS_CREATED
+  COUPONS_USED
+  COUPON_RULES_ARCHIVED
+  COUPON_RULES_CREATED
+  COUPON_RULES_UPDATED
+  CUSTOMER_ARCHIVED
+  CUSTOMER_ASSIGN_TO_USER
+  CUSTOMER_BULK_UPDATE_WORKSPACE_BRANCH
+  CUSTOMER_CONTACTS_UPDATED
+  CUSTOMER_FORM_ARCHIVED
+  CUSTOMER_FORM_NEW
+  CUSTOMER_FORM_UPDATED
+  CUSTOMER_KYC_APPROVED
+  CUSTOMER_KYC_PENDING
+  CUSTOMER_KYC_REJECTED
+  CUSTOMER_NEW
+  CUSTOMER_UNASSIGN_USER
+  CUSTOMER_UPDATED
+  CUSTOM_FIELDS_NEW
+  CUSTOM_FIELDS_REMOVED
+  CUSTOM_FIELDS_UPDATED
+  E_INVOICE_CREATED
+  E_INVOICE_REMOVED
+  FILE_NEW
+  FILE_REMOVED
+  HRM_TIMEKEEPING_MANUAL_APPROVAL
+  HRM_TIMEKEEPING_MEMBER_CHECK_IN
+  HRM_TIMEKEEPING_MEMBER_CHECK_OUT
+  HRM_TIMEKEEPING_REJECTED
+  HRM_TIMEKEEPING_REMOVED
+  LOANS_APPROVED
+  LOANS_APPROVED_REVERTED
+  LOANS_ARCHIVED
+  LOANS_CHANGE_WORKSPACE_BRANCH
+  LOANS_COMPLETED
+  LOANS_FULFILLED
+  LOANS_FULFILLED_REVERTED
+  LOANS_JUST_CREATED
+  LOANS_LIQUIDATION
+  LOANS_PENDING
+  LOANS_REJECTED
+  LOANS_REVERT_LIQUIDATION
+  LOANS_REVERT_REJECTED
+  LOANS_SYNCED
+  LOANS_UPDATED
+  MESSAGE_BOX_CLOSED
+  MESSAGE_BOX_IN_PROGRESS
+  MESSAGE_BOX_NEW
+  MESSAGE_BOX_NEW_MESSAGE
+  MESSAGE_BOX_REMOVED
+  MESSAGE_BOX_UPDATED
+  MESSAGE_BOX_WAITING
+  MESSAGE_NEW
+  MESSAGE_UPDATED
+  NOTIFICATION_CLEANED
+  NOTIFICATION_LIST_VIEWED
+  NOTIFICATION_NEW
+  NOTIFICATION_READED
+  ORDER_ARCHIVED
+  ORDER_NEW
+  ORDER_SYNCED
+  ORDER_UPDATED
+  PARTNER_ARCHIVED
+  PARTNER_NEW
+  PARTNER_UPDATED
+  PLUGIN_AI_ASSISTANTS_NEW
+  PLUGIN_AI_ASSISTANTS_REMOVED
+  PLUGIN_AI_ASSISTANTS_UPDATED
+  PLUGIN_MESSAGE_HUBS_NEW
+  PLUGIN_MESSAGE_HUBS_REMOVED
+  PLUGIN_MESSAGE_HUBS_UPDATED
+  PLUGIN_META_PAGES_DISCONNECTED
+  PLUGIN_META_PAGES_UPDATED
+  PLUGIN_ZALO_OA_ACTIVE
+  PLUGIN_ZALO_OA_DISABLED
+  PLUGIN_ZALO_OA_ENABLED
+  PLUGIN_ZALO_OA_INACTIVE
+  PLUGIN_ZALO_OA_UPDATED
+  POST_ARCHIVED
+  POST_NEW
+  POST_UPDATED
+  PRESCRIPTIONS_NEW
+  PRESCRIPTIONS_REMOVED
+  PRESCRIPTIONS_UPDATED
+  PRODUCT_ARCHIVED
+  PRODUCT_COMBO_NEW
+  PRODUCT_COMBO_UPDATE
+  PRODUCT_NEW
+  PRODUCT_STOCK_IN
+  PRODUCT_STOCK_IN_MULTIPLE
+  PRODUCT_STOCK_IN_REVERT
+  PRODUCT_STOCK_OUT
+  PRODUCT_STOCK_OUT_REVERT
+  PRODUCT_SUPPLY_RECORD_NEW
+  PRODUCT_UPDATE
+  PRODUCT_VOUCHERS_NEW
+  PROMOTION_ARCHIVED
+  PROMOTION_NEW
+  PROMOTION_UPDATED
+  RECEIPT_ARCHIVED
+  RECEIPT_CHANGE_WORKSPACE_BRANCH
+  RECEIPT_DISBURSEMENT
+  RECEIPT_NEW
+  RECEIPT_PAID
+  RECEIPT_REVERT_PAYMENT
+  RECEIPT_SYNCED
+  RECEIPT_UNARCHIVED
+  RECEIPT_UPDATED
+  REPORT_RANGE_SYNCED
+  REPORT_REALTIME_SYNCED
+  TABLE_SLOT_ARCHIVED
+  TABLE_SLOT_NEW
+  TABLE_SLOT_UPDATED
+  TAGS_ARCHIVED
+  TAGS_UPDATED
+  TAG_NEW
+  TASKS_UPDATED
+  TASK_ARCHIVED
+  TASK_ASSIGNED
+  TASK_DESCRIPTION_UPDATED
+  TASK_NAME_UPDATED
+  TASK_NEW
+  TASK_PRIORITY_UPDATED
+  TASK_STATUS_UPDATED
+  TASK_SYNCED
+  USER_OFFLINE
+  USER_ONLINE
+  USER_PROFILE_UPDATED
+  WORKSPACE_API_APP_ARCHIVED
+  WORKSPACE_API_APP_CREATED
+  WORKSPACE_API_APP_UPDATED
+  WORKSPACE_ARCHIVED
+  WORKSPACE_BILLINGS_CASHBACK_NEW
+  WORKSPACE_BILLINGS_DEPOSITED
+  WORKSPACE_BILLINGS_PAYMENT_NEW
+  WORKSPACE_BILLINGS_PAYMENT_PAID
+  WORKSPACE_BILLINGS_WITHDRAWN
+  WORKSPACE_BRANCH_ARCHIVED
+  WORKSPACE_BRANCH_NEW
+  WORKSPACE_BRANCH_UPDATED
+  WORKSPACE_INVITE_CODE_UPDATED
+  WORKSPACE_MEMBER_JOINED
+  WORKSPACE_MEMBER_LEAVED
+  WORKSPACE_MEMBER_OFFLINE
+  WORKSPACE_MEMBER_ONLINE
+  WORKSPACE_MEMBER_TRANSFER_OWNER
+  WORKSPACE_MEMBER_UPDATED
+  WORKSPACE_NEW
+  WORKSPACE_ROLES_NEW
+  WORKSPACE_ROLES_REMOVED
+  WORKSPACE_ROLES_UPDATED
+  WORKSPACE_SETTING_UPDATED
+  WORKSPACE_STATS_UPDATED
+  WORKSPACE_SUBSCRIPTION_UPDATED
+  WORKSPACE_UPDATED
+}
+
+"""Available event variants"""
+enum EventVariant {
+  INFO
+  NEGATIVE
+  POSITIVE
+  WARNING
 }
 
 type File {
@@ -232,9 +449,11 @@ type LocationEntity {
 }
 
 type Mutation {
+  bulkUpdateTags(items: [UpdateTagInput!]!): [Tag!]!
   bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
+  createTag(input: TagDto!): Tag!
   createTask(input: CreateTaskInput!): Task!
   deleteCategory(id: String!): Boolean!
   duplicateTask(_id: String!, overwrite: CreateTaskInput): Task!
@@ -245,7 +464,9 @@ type Mutation {
   pluginExternalStorageSignUploadUrl(fileName: String!, refs: [String!]): SignUploadUrlResponse!
   registerDevice(input: RegisterDeviceDto!): DeviceEntity!
   removePluginExternalStorage: Boolean!
+  removeTag(id: String!): Boolean!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
+  setTaskStatuses(contextId: String, contextType: TaskStatusesContextType, statuses: [TaskStatusInput!]!): [TaskStatus!]!
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
@@ -344,16 +565,18 @@ type Query {
   appConfig: AppConfig!
   categoriesPaginated(limit: Float = 30, offset: Float, query: JSONObject): CategoriesPaginated!
   category(id: String!): Category!
+  event(id: String!): Event!
   getCategoriesByIds(ids: [String!]!): [Category!]!
   getCategoryBySlug(slug: String!): Category!
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
   pluginExternalStorage: PluginExternalStorage
   siblingTasks(_id: String!): SiblingTasks!
-  tagBySlug(slug: String!): TagEntity!
+  tagBySlug(slug: String!): Tag!
   tags(type: String): Tags!
   task(_id: String!): Task!
   taskByCode(code: String!): Task!
+  taskStatuses(contextId: String, contextType: TaskStatusesContextType): [TaskStatus!]!
   tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): TasksPaginated!
   tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): Float!
 }
@@ -385,17 +608,24 @@ type SyncTaskResult {
   updateInfos: [String!]!
 }
 
-type TagEntity {
+type Tag {
   _id: String!
   color: String
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   name: String!
-  order: Float
+  order: Float!
   refs: [String!]
   slug: String!
   type: TagType!
   updatedAt: Float
+}
+
+input TagDto {
+  color: String
+  name: String!
+  order: Float
+  type: TagType!
 }
 
 """Available tag types"""
@@ -408,7 +638,7 @@ enum TagType {
 
 type Tags {
   count: Float!
-  data: [TagEntity!]!
+  data: [Tag!]!
 }
 
 type Task {
@@ -424,12 +654,12 @@ type Task {
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   customFields: [CustomField!]!
-  customer: CustomerEntity
+  customer: Customer
   customerId: String
   description: String
   dueDate: Float
   estimatedTime: Float
-  folder: TagEntity
+  folder: Tag
   folderId: String
   isArchived: Boolean
   name: String!
@@ -448,7 +678,7 @@ type Task {
   statuses: [TaskStatus!]!
   tagFolderId: String @deprecated(reason: "Use folderId instead")
   tagIds: [String!]!
-  tags: [TagEntity!]!
+  tags: [Tag!]!
   timeTrackings: [TaskTimeTracking!]
   updatedAt: Float
 }
@@ -479,6 +709,19 @@ type TaskStatus {
   order: Float
 }
 
+input TaskStatusInput {
+  color: String
+  icon: String
+  id: String!
+  name: String
+  order: Float
+}
+
+"""Available task statuses context types"""
+enum TaskStatusesContextType {
+  FOLDER
+}
+
 type TaskTimeTracking {
   billable: Boolean
   endAt: Float
@@ -502,6 +745,13 @@ input TaskTimeTrackingInput {
 type TasksPaginated {
   count: Float!
   data: [Task!]!
+}
+
+input UpdateTagInput {
+  _id: String!
+  color: String
+  name: String
+  order: Float
 }
 
 input UpdateTaskInput {

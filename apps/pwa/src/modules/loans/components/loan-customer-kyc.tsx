@@ -3,12 +3,12 @@
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
+import { EventType } from "@/graphql/enums.graphql";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
 import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";
 import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
-import { EventType } from "@/modules/events/event-types";
 import { useLocations } from "@/modules/locations/locations-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -40,13 +40,13 @@ interface LoanCustomerKycProps {
 export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
   const { customer } = props;
   const workspace = useWorkspace();
-  const { renderVnLocation: renderLocation, getGoogleMapLink } = useLocations();
+  const { getGoogleMapLink } = useLocations();
 
   const contacts = useFetch({
     id: `customer-contacts-${customer._id}`,
     skip: !workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT),
     fetch: () => getCustomerContacts(customer._id),
-    refetchEvents: [EventType.CUSTOMER_CONTACTS_UPDATED],
+    refetchEvents: [EventType.CustomerContactsUpdated],
   });
 
   const kyc = props.kyc?.versions[props.kyc?.versions.length - 1];

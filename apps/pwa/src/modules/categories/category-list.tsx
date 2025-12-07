@@ -3,11 +3,11 @@
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { enumColumn } from "@/components/list/columns/enum-column";
+import { EventType } from "@/graphql/enums.graphql";
 import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconCategory, IconEdit, IconOutlet } from "@tabler/icons-react";
 import { type FC } from "react";
-import { EventType } from "../events/event-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { categoryTypes } from "./category-constants";
 import { CategoryEntity, CategoryType } from "./category-types";
@@ -55,7 +55,7 @@ export const CategoryList: FC = () => {
             },
           },
         ]}
-        events={[EventType.CATEGORY_NEW, EventType.CATEGORY_UPDATED, EventType.CATEGORY_ARCHIVED]}
+        events={[EventType.CategoryNew, EventType.CategoryUpdated, EventType.CategoryArchived]}
         creatable={{
           onCreate: () => OnModalCategory(),
         }}

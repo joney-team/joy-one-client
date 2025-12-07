@@ -3,7 +3,7 @@
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { statusColumn } from "@/components/list/columns/status-column";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { ModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
 import { workspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -68,9 +68,9 @@ export const CustomerFormList: FC = () => {
               }),
             }}
             events={[
-              EventType.CUSTOMER_FORM_NEW,
-              EventType.CUSTOMER_FORM_UPDATED,
-              EventType.CUSTOMER_FORM_ARCHIVED,
+              EventType.CustomerFormNew,
+              EventType.CustomerFormUpdated,
+              EventType.CustomerFormArchived,
             ]}
             bulkActions={[
               {

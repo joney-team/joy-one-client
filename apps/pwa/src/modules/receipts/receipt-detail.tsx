@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { archiveReceipt, getReceipt, updateReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptStatus, UpdateReceiptDto } from "@/modules/receipts/receipts-types";
@@ -38,12 +38,12 @@ export const ReceiptDetail: FC<{
     },
     refetchEvents: {
       types: [
-        EventType.RECEIPT_PAID,
-        EventType.RECEIPT_DISBURSEMENT,
-        EventType.RECEIPT_ARCHIVED,
-        EventType.RECEIPT_UPDATED,
-        EventType.RECEIPT_CHANGE_WORKSPACE_BRANCH,
-        EventType.RECEIPT_REVERT_PAYMENT,
+        EventType.ReceiptPaid,
+        EventType.ReceiptDisbursement,
+        EventType.ReceiptArchived,
+        EventType.ReceiptUpdated,
+        EventType.ReceiptChangeWorkspaceBranch,
+        EventType.ReceiptRevertPayment,
       ],
       condition: (e, _receipt) =>
         e.ref === _receipt.id ||

@@ -6,9 +6,9 @@ import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { numberColumn } from "@/components/list/columns/number-column";
 import { statusColumn } from "@/components/list/columns/status-column";
+import { EventType } from "@/graphql/enums.graphql";
 import { ModalPrinter } from "@/modals/modal-printer";
 import { customerColumn } from "@/modules/customers/components/customer-column";
-import { EventType } from "@/modules/events/event-types";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
 import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
@@ -136,13 +136,13 @@ export const ReceiptList: FC = () => {
                   },
                 ]}
                 events={[
-                  EventType.RECEIPT_NEW,
-                  EventType.RECEIPT_PAID,
-                  EventType.RECEIPT_UPDATED,
-                  EventType.RECEIPT_DISBURSEMENT,
-                  EventType.RECEIPT_ARCHIVED,
-                  EventType.RECEIPT_UNARCHIVED,
-                  EventType.RECEIPT_REVERT_PAYMENT,
+                  EventType.ReceiptNew,
+                  EventType.ReceiptPaid,
+                  EventType.ReceiptUpdated,
+                  EventType.ReceiptDisbursement,
+                  EventType.ReceiptArchived,
+                  EventType.ReceiptUnarchived,
+                  EventType.ReceiptRevertPayment,
                 ]}
                 actions={[
                   {

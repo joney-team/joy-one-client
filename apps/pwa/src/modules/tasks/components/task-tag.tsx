@@ -10,7 +10,6 @@ import { useHover } from "@mantine/hooks";
 import { IconPencil } from "@tabler/icons-react";
 import { FC } from "react";
 import { Renderer } from "../../../components/renderer";
-import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 
 interface TaskTagProps extends CardProps {
   id: string;
@@ -58,7 +57,7 @@ export const TaskTag: FC<TaskTagProps> = ({ id, h, fz, onRemove, editable = true
                 variant="subtle"
                 size="sm"
                 color={color}
-                onClick={() => OnModalTagForm({ tag: tag, type: tag.type })}
+                onClick={() => {}}
               >
                 <IconPencil size={13} strokeWidth={2} />
               </ActionIcon>

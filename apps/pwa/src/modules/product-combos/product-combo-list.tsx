@@ -5,7 +5,6 @@ import { List } from "@/components/list";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { statusColumn } from "@/components/list/columns/status-column";
 import { customerColumn } from "@/modules/customers/components/customer-column";
-import { EventType } from "@/modules/events/event-types";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { ModalProductCombo } from "@/modules/product-combos/modals/modal-product-combo";
 import { productComboStatusOptions } from "@/modules/product-combos/product-combos-service";
@@ -17,6 +16,7 @@ import { IconHistory, IconPackage } from "@tabler/icons-react";
 import { type FC } from "react";
 import { productComboStatuses } from "./product-combos-constants";
 import { ProductComboEntity } from "./product-combos-entity";
+import { EventType } from "@/graphql/enums.graphql";
 
 export const ProductComboList: FC = () => {
   const color = useColor();
@@ -86,7 +86,7 @@ export const ProductComboList: FC = () => {
                   onClick: (data) => openProductCombo({ id: data.id }),
                 },
               ]}
-              events={[EventType.PRODUCT_COMBO_UPDATE]}
+              events={[EventType.ProductComboUpdate]}
             />
           );
         }}

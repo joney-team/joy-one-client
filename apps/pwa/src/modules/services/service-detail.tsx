@@ -2,7 +2,7 @@
 
 import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { archiveProduct, getProduct } from "@/modules/products/products-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
@@ -30,7 +30,7 @@ export const ServiceDetail: FC = () => {
   const product = useFetch({
     fetch: async () => getProduct(serviceId),
     refetchEvents: {
-      types: [EventType.PRODUCT_NEW, EventType.PRODUCT_UPDATE, EventType.PRODUCT_ARCHIVED],
+      types: [EventType.ProductNew, EventType.ProductUpdate, EventType.ProductArchived],
       condition: (e, _product) =>
         e.ref === _product._id || (e.relatedEntities || []).some((v) => v.id === _product._id),
     },

@@ -6,7 +6,7 @@ import { Calendar } from "@/components/calendar";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { OnModalTaskTimeTracking } from "@/modules/tasks/modals/modal-task-time-tracking";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTasks, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
@@ -69,7 +69,7 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
         objSelect(getQuery(q), ["fromTrackingTime", "toTrackingTime", "assigneeUserIds", "getAll"])
       ),
     isIgnoreEventActionType: true,
-    events: [EventType.TASKS_UPDATED, EventType.TASK_NEW, EventType.TASK_ARCHIVED],
+    events: [EventType.TasksUpdated, EventType.TaskNew, EventType.TaskArchived],
   });
 
   const _tasks = tasks.data.filter(

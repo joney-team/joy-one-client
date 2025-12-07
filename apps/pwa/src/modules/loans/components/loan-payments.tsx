@@ -6,7 +6,6 @@ import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { api } from "@/modules/apis";
-import { EventType } from "@/modules/events/event-types";
 import { healthCheckLoan, revertLiquidationLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
@@ -29,6 +28,7 @@ import {
 import { FC, Fragment } from "react";
 import { LoanReceiptCard } from "./loan-receipt-card";
 import { LoanRowInfo } from "./loan-row-info";
+import { EventType } from "@/graphql/enums.graphql";
 
 interface LoanPaymentsProps {
   loan: UseFetch<LoanEntity>;
@@ -48,13 +48,13 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
         getAll: true,
       }).then((res) => res.data),
     refetchEvents: [
-      EventType.RECEIPT_NEW,
-      EventType.RECEIPT_PAID,
-      EventType.RECEIPT_UPDATED,
-      EventType.RECEIPT_DISBURSEMENT,
-      EventType.RECEIPT_ARCHIVED,
-      EventType.RECEIPT_UNARCHIVED,
-      EventType.RECEIPT_CHANGE_WORKSPACE_BRANCH,
+      EventType.ReceiptNew,
+      EventType.ReceiptPaid,
+      EventType.ReceiptUpdated,
+      EventType.ReceiptDisbursement,
+      EventType.ReceiptArchived,
+      EventType.ReceiptUnarchived,
+      EventType.ReceiptChangeWorkspaceBranch,
     ],
   });
 

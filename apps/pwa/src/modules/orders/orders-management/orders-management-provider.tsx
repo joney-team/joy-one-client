@@ -3,7 +3,7 @@
 import { useRouter } from "@/hooks/use-router";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
 import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
@@ -193,7 +193,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
   });
 
   useEventsListener(
-    [EventType.ORDER_SYNCED, EventType.ORDER_UPDATED],
+    [EventType.OrderSynced, EventType.OrderUpdated],
     (e) => {
       const relatedOrder = state.orders.find((o) => o.id === e.ref);
       if (relatedOrder) fetchOrder(relatedOrder.id);

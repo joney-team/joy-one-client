@@ -1,0 +1,22 @@
+.TaskFolderNavigationItem {
+  cursor: pointer;
+  border-radius: var(--mantine-radius-default);
+  outline: none;
+
+  & .ActionsMenu {
+    opacity: 0;
+  }
+
+  &[data-activated="true"],
+  &:hover {
+    background-color: color-mix(
+      in srgb,
+      var(--active-color) 10%,
+      transparent 90%
+    );
+
+    & .ActionsMenu {
+      opacity: 1;
+    }
+  }
+}

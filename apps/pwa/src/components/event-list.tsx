@@ -4,7 +4,7 @@ import { FC, ReactNode } from "react";
 
 import { useList } from "@/components/list/use-list";
 import { getEvents } from "@/modules/events/event-service";
-import { EventEntity, EventType, EventVariant } from "@/modules/events/event-types";
+import { EventEntity, EventVariant } from "@/modules/events/event-types";
 import { Badge, Group, Stack, StackProps, Text, ThemeIcon, Timeline, Tooltip } from "@mantine/core";
 import {
   IconArrowRight,
@@ -25,11 +25,12 @@ import { ModalUserInformation } from "@/modules/users/modals/modal-user-informat
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Avatar } from "./avatar";
 import { ButtonViewMore } from "./buttons/button-view-more";
 import { Errored } from "./errored";
 import { DateFormat, RelativeTimeFormat } from "./format/date-format";
+import { EventType } from "@/graphql/enums.graphql";
 
 interface EventListProps extends StackProps {
   ref?: string;
@@ -144,7 +145,7 @@ function renderBullet(ev: EventEntity) {
   const color = useColor();
   const colorScheme = useColorScheme();
 
-  if (ev.type === EventType.CUSTOMER_ASSIGN_TO_USER) {
+  if (ev.type === EventType.CustomerAssignToUser) {
     return (
       <ThemeIcon size={23} radius={100} color="violet">
         <IconUserPlus strokeWidth={1.5} size={14} />
@@ -152,7 +153,7 @@ function renderBullet(ev: EventEntity) {
     );
   }
 
-  if (ev.type === EventType.CUSTOMER_UNASSIGN_USER) {
+  if (ev.type === EventType.CustomerUnassignUser) {
     return (
       <ThemeIcon size={23} radius={100} color="gray">
         <IconUserMinus strokeWidth={1.5} size={14} />
@@ -160,7 +161,7 @@ function renderBullet(ev: EventEntity) {
     );
   }
 
-  if (ev.type === EventType.RECEIPT_PAID) {
+  if (ev.type === EventType.ReceiptPaid) {
     return (
       <ThemeIcon size={23} radius={100} color="teal">
         <IconCashRegister strokeWidth={1.5} size={14} />
@@ -186,6 +187,7 @@ function renderBullet(ev: EventEntity) {
 }
 
 function EventItemTitle(props: { event: EventEntity }) {
+  const { t } = useLingui();
   const { event } = props;
   const workspace = useWorkspace();
 
@@ -201,7 +203,7 @@ function EventItemTitle(props: { event: EventEntity }) {
 
   const [wokspaceMembers] = useWorkspaceMembers(workspaceMembersIds);
 
-  if (event.type === EventType.TASK_PRIORITY_UPDATED && event.data) {
+  if (event.type === EventType.TaskPriorityUpdated && event.data) {
     const toPriority = event.data.toPriority as TaskPriority;
     const fromPriority = event.data.fromPriority as TaskPriority;
 
@@ -248,7 +250,7 @@ function EventItemTitle(props: { event: EventEntity }) {
   }
 
   if (
-    event.type === EventType.TASK_STATUS_UPDATED &&
+    event.type === EventType.TaskStatusUpdated &&
     event.data &&
     event.data.fromStatus &&
     event.data.toStatus
@@ -286,7 +288,7 @@ function EventItemTitle(props: { event: EventEntity }) {
   }
 
   if (
-    event.type === EventType.TASK_ASSIGNED &&
+    event.type === EventType.TaskAssigned &&
     event.data &&
     event.data.fromAssigneeUserIds &&
     event.data.toAssigneeUserIds
@@ -352,7 +354,11 @@ function EventItemTitle(props: { event: EventEntity }) {
 
   return (
     <Group>
-      <Text fz={14}>{eventTypes[props.event.type]?.name() ?? props.event.type}</Text>
+      <Text fz={14}>
+        {eventTypes[props.event.type]?.name
+          ? t(eventTypes[props.event.type]!.name)
+          : props.event.type}
+      </Text>
     </Group>
   );
 }

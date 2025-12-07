@@ -9,7 +9,7 @@ import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-custom
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/modal-customer-relationship-contacts";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
+import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
@@ -92,7 +92,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
     }
   };
 
-  const toggleTag = async (tag: TagEntity) => {
+  const toggleTag = async (tag: any) => {
     if (customer.tagIds?.includes(tag._id)) {
       updateCustomer(customer._id, {
         ...customer,
@@ -107,155 +107,176 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
   };
 
   return (
-    <Card
-      p={10}
-      {...(props.withBorder
-        ? {
-            shadow: "none",
-            withBorder: true,
-          }
-        : {
-            shadow: "xs",
-          })}
-    >
-      <Group align="start" wrap="nowrap" justify="space-between">
-        <Stack gap={8}>
-          <Group wrap="nowrap" align="start" gap={10}>
-            <EntityImage
-              src={customer.avatar}
-              onChange={(file) => uploadAvatar(file)}
-              name={customer.name}
-              icon={IconUserSquareRounded}
-              readonly={!isCanUpdateInfo}
-            />
+    <ModalTagForm>
+      {(openTagForm) => (
+        <Card
+          p={10}
+          {...(props.withBorder
+            ? {
+                shadow: "none",
+                withBorder: true,
+              }
+            : {
+                shadow: "xs",
+              })}
+        >
+          <Group align="start" wrap="nowrap" justify="space-between">
+            <Stack gap={8}>
+              <Group wrap="nowrap" align="start" gap={10}>
+                <EntityImage
+                  src={customer.avatar}
+                  onChange={(file) => uploadAvatar(file)}
+                  name={customer.name}
+                  icon={IconUserSquareRounded}
+                  readonly={!isCanUpdateInfo}
+                />
 
-            <Stack gap={5}>
-              <Group>
-                <Anchor
-                  onClick={() => {
-                    if (!isCanUpdateInfo) return;
+                <Stack gap={5}>
+                  <Group>
+                    <Anchor
+                      onClick={() => {
+                        if (!isCanUpdateInfo) return;
 
-                    OnModalCustomerPlainCodeForm({
-                      customer,
-                      onDone: () => {},
-                    });
-                  }}
-                  mb={-3}
-                >
-                  <Text pl={5} fw={700} fz={em(13)}>
-                    {renderEntityCode(customer.code, customer.plainCode)}
+                        OnModalCustomerPlainCodeForm({
+                          customer,
+                          onDone: () => {},
+                        });
+                      }}
+                      mb={-3}
+                    >
+                      <Text pl={5} fw={700} fz={em(13)}>
+                        {renderEntityCode(customer.code, customer.plainCode)}
+                      </Text>
+                    </Anchor>
+
+                    {config.ENV === "development" && (
+                      <Badge color="gray" variant="transparent">
+                        #{customer._id}
+                      </Badge>
+                    )}
+                  </Group>
+
+                  <Text fw={500} fz={em(18)}>
+                    {customer.name}
                   </Text>
-                </Anchor>
 
-                {config.ENV === "development" && (
-                  <Badge color="gray" variant="transparent">
-                    #{customer._id}
-                  </Badge>
-                )}
+                  <Group gap={16}>
+                    {customer.birthday && (
+                      <Group gap={1} wrap="nowrap">
+                        <ThemeIcon color="dark" variant="transparent">
+                          <IconCake strokeWidth={1.5} size={18} />
+                        </ThemeIcon>
+                        <Text fz={em(15)}>
+                          <DateFormat value={customer.birthday} type="date" />
+                        </Text>
+                      </Group>
+                    )}
+
+                    {customer.gender && (
+                      <Group gap={1} wrap="nowrap">
+                        <ThemeIcon color="dark" variant="transparent">
+                          <IconGender strokeWidth={1.5} size={18} />
+                        </ThemeIcon>
+                        <Text fz={em(15)}>{renderGener(customer.gender)}</Text>
+                      </Group>
+                    )}
+
+                    {customer.phone && (
+                      <Anchor
+                        href={`tel:${customer.phone}`}
+                        c="dark"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Group gap={1} wrap="nowrap">
+                          <ThemeIcon color="dark" variant="transparent">
+                            <IconPhone strokeWidth={1.5} size={18} />
+                          </ThemeIcon>
+                          <Text fz={em(15)}>{customer.phone}</Text>
+                        </Group>
+                      </Anchor>
+                    )}
+
+                    <Renderer
+                      visible={
+                        workspace.type === WorkspaceType.CREDIT &&
+                        workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)
+                      }
+                    >
+                      <Anchor
+                        c="dark"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          OnModalCustomerContacts({ contacts: contacts.data! });
+                        }}
+                      >
+                        <Group gap={1} wrap="nowrap">
+                          <ThemeIcon color="dark" variant="transparent">
+                            <IconAddressBook strokeWidth={1.5} size={18} />
+                          </ThemeIcon>
+                          <Text fz={em(15)}>
+                            <Trans>Contacts</Trans>
+                            {": "}
+                            <NumberFormat value={contacts.data?.contacts.length ?? 0} />
+                          </Text>
+                        </Group>
+                      </Anchor>
+
+                      <Anchor
+                        c="dark"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          OnModalCustomerRelationshipContacts({ customer });
+                        }}
+                      >
+                        <Group gap={1} wrap="nowrap">
+                          <ThemeIcon color="dark" variant="transparent">
+                            <IconAddressBook strokeWidth={1.5} size={18} />
+                          </ThemeIcon>
+                          <Text fz={em(15)}>
+                            <Trans>Contact relatives</Trans>
+                            {": "}
+                            <NumberFormat value={customer.relationshipContacts?.length ?? 0} />
+                          </Text>
+                        </Group>
+                      </Anchor>
+                    </Renderer>
+
+                    {customer.email && (
+                      <Anchor
+                        href={`mailto:${customer.email}`}
+                        c="dark"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Group gap={1} wrap="nowrap">
+                          <ThemeIcon color="dark" variant="transparent">
+                            <IconMail strokeWidth={1.5} size={18} />
+                          </ThemeIcon>
+                          <Text fz={em(15)}>{customer.email}</Text>
+                        </Group>
+                      </Anchor>
+                    )}
+                  </Group>
+
+                  {viewport.view !== "mobile" && (
+                    <Fragment>
+                      {customer.medicalHistory.length > 0 && (
+                        <Group gap={1} wrap="nowrap">
+                          <ThemeIcon color="dark" variant="transparent">
+                            <IconClipboardHeart strokeWidth={1.5} size={20} />
+                          </ThemeIcon>
+                          <Text fz={16}>
+                            {customer.medicalHistory.toString().replace(/,/g, ", ")}
+                          </Text>
+                        </Group>
+                      )}
+
+                      <CustomerLocations customer={customer} />
+                    </Fragment>
+                  )}
+                </Stack>
               </Group>
 
-              <Text fw={500} fz={em(18)}>
-                {customer.name}
-              </Text>
-
-              <Group gap={16}>
-                {customer.birthday && (
-                  <Group gap={1} wrap="nowrap">
-                    <ThemeIcon color="dark" variant="transparent">
-                      <IconCake strokeWidth={1.5} size={18} />
-                    </ThemeIcon>
-                    <Text fz={em(15)}>
-                      <DateFormat value={customer.birthday} type="date" />
-                    </Text>
-                  </Group>
-                )}
-
-                {customer.gender && (
-                  <Group gap={1} wrap="nowrap">
-                    <ThemeIcon color="dark" variant="transparent">
-                      <IconGender strokeWidth={1.5} size={18} />
-                    </ThemeIcon>
-                    <Text fz={em(15)}>{renderGener(customer.gender)}</Text>
-                  </Group>
-                )}
-
-                {customer.phone && (
-                  <Anchor
-                    href={`tel:${customer.phone}`}
-                    c="dark"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Group gap={1} wrap="nowrap">
-                      <ThemeIcon color="dark" variant="transparent">
-                        <IconPhone strokeWidth={1.5} size={18} />
-                      </ThemeIcon>
-                      <Text fz={em(15)}>{customer.phone}</Text>
-                    </Group>
-                  </Anchor>
-                )}
-
-                <Renderer
-                  visible={
-                    workspace.type === WorkspaceType.CREDIT &&
-                    workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)
-                  }
-                >
-                  <Anchor
-                    c="dark"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      OnModalCustomerContacts({ contacts: contacts.data! });
-                    }}
-                  >
-                    <Group gap={1} wrap="nowrap">
-                      <ThemeIcon color="dark" variant="transparent">
-                        <IconAddressBook strokeWidth={1.5} size={18} />
-                      </ThemeIcon>
-                      <Text fz={em(15)}>
-                        <Trans>Contacts</Trans>
-                        {": "}
-                        <NumberFormat value={contacts.data?.contacts.length ?? 0} />
-                      </Text>
-                    </Group>
-                  </Anchor>
-
-                  <Anchor
-                    c="dark"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      OnModalCustomerRelationshipContacts({ customer });
-                    }}
-                  >
-                    <Group gap={1} wrap="nowrap">
-                      <ThemeIcon color="dark" variant="transparent">
-                        <IconAddressBook strokeWidth={1.5} size={18} />
-                      </ThemeIcon>
-                      <Text fz={em(15)}>
-                        <Trans>Contact relatives</Trans>
-                        {": "}
-                        <NumberFormat value={customer.relationshipContacts?.length ?? 0} />
-                      </Text>
-                    </Group>
-                  </Anchor>
-                </Renderer>
-
-                {customer.email && (
-                  <Anchor
-                    href={`mailto:${customer.email}`}
-                    c="dark"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Group gap={1} wrap="nowrap">
-                      <ThemeIcon color="dark" variant="transparent">
-                        <IconMail strokeWidth={1.5} size={18} />
-                      </ThemeIcon>
-                      <Text fz={em(15)}>{customer.email}</Text>
-                    </Group>
-                  </Anchor>
-                )}
-              </Group>
-
-              {viewport.view !== "mobile" && (
+              {viewport.view === "mobile" && (
                 <Fragment>
                   {customer.medicalHistory.length > 0 && (
                     <Group gap={1} wrap="nowrap">
@@ -269,168 +290,153 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                   <CustomerLocations customer={customer} />
                 </Fragment>
               )}
-            </Stack>
-          </Group>
 
-          {viewport.view === "mobile" && (
-            <Fragment>
-              {customer.medicalHistory.length > 0 && (
-                <Group gap={1} wrap="nowrap">
-                  <ThemeIcon color="dark" variant="transparent">
-                    <IconClipboardHeart strokeWidth={1.5} size={20} />
-                  </ThemeIcon>
-                  <Text fz={16}>{customer.medicalHistory.toString().replace(/,/g, ", ")}</Text>
-                </Group>
-              )}
+              <Group gap={1} wrap="nowrap">
+                <ThemeIcon color="dark" variant="transparent">
+                  <IconTags strokeWidth={1.5} size={18} />
+                </ThemeIcon>
+                <Group gap={5} wrap="nowrap">
+                  {tags.list.length > 0 ? (
+                    <Fragment>
+                      {tags.list
+                        .filter(
+                          (v) =>
+                            v._id &&
+                            customer.tagIds?.includes(v._id) === true &&
+                            v.type === TagType.CUSTOMER
+                        )
+                        .map((tag) => (
+                          <Badge
+                            key={tag._id}
+                            color={tag.color || ""}
+                            style={{ cursor: "pointer" }}
+                            size="sm"
+                            tt="none"
+                            onClick={() => openTagForm({ tag })}
+                          >
+                            {tag.name}
+                          </Badge>
+                        ))}
 
-              <CustomerLocations customer={customer} />
-            </Fragment>
-          )}
-
-          <Group gap={1} wrap="nowrap">
-            <ThemeIcon color="dark" variant="transparent">
-              <IconTags strokeWidth={1.5} size={18} />
-            </ThemeIcon>
-            <Group gap={5} wrap="nowrap">
-              {tags.list.length > 0 ? (
-                <Fragment>
-                  {tags.list
-                    .filter(
-                      (v) =>
-                        v._id &&
-                        customer.tagIds?.includes(v._id) === true &&
-                        v.type === TagType.CUSTOMER
-                    )
-                    .map((tag) => (
-                      <Badge
-                        key={tag._id}
-                        color={tag.color || ""}
-                        style={{ cursor: "pointer" }}
-                        size="sm"
-                        tt="none"
-                        onClick={() => OnModalTagForm({ tag, type: TagType.CUSTOMER })}
-                      >
-                        {tag.name}
-                      </Badge>
-                    ))}
-
-                  <Popover opened={tagListOpened}>
-                    <Popover.Target>
-                      <Group
-                        gap={0}
-                        onClick={() => setTagListOpened(true)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <ThemeIcon size={13} variant="transparent" color="gray">
-                          <IconPlus size={13} />
-                        </ThemeIcon>
-                        <Text c="gray" fz={12}>
-                          <Trans>Tag</Trans>
-                        </Text>
-                      </Group>
-                    </Popover.Target>
-                    <Popover.Dropdown p={8} ref={ref}>
-                      <Stack gap={16}>
-                        {tags.list
-                          .filter((v) => v._id && v.type === TagType.CUSTOMER)
-                          .map((tag) => {
-                            const isTagged = customer.tagIds?.includes(tag._id);
-
-                            return (
-                              <Group
-                                gap={5}
-                                key={tag._id}
-                                onClick={() => toggleTag(tag)}
-                                style={{ cursor: "pointer" }}
-                              >
-                                <Center w={20}>
-                                  <ColorSwatch color={tag.color || ""} size={20}>
-                                    {isTagged && (
-                                      <CheckIcon
-                                        color="white"
-                                        style={{ width: rem(6), height: rem(6) }}
-                                      />
-                                    )}
-                                  </ColorSwatch>
-                                </Center>
-                                <Text fz={10} fw={500}>
-                                  {tag.name}
-                                </Text>
-                              </Group>
-                            );
-                          })}
-
-                        <Group
-                          gap={5}
-                          onClick={() => {
-                            OnModalTagForm({
-                              onDone: (tag) => toggleTag(tag),
-                              type: TagType.CUSTOMER,
-                            });
-                            setTagListOpened(false);
-                          }}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <Center w={20}>
-                            <ThemeIcon size={20} variant="outline" color="gray" radius={100}>
-                              <IconPlus size={12} />
+                      <Popover opened={tagListOpened}>
+                        <Popover.Target>
+                          <Group
+                            gap={0}
+                            onClick={() => setTagListOpened(true)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <ThemeIcon size={13} variant="transparent" color="gray">
+                              <IconPlus size={13} />
                             </ThemeIcon>
-                          </Center>
+                            <Text c="gray" fz={12}>
+                              <Trans>Tag</Trans>
+                            </Text>
+                          </Group>
+                        </Popover.Target>
+                        <Popover.Dropdown p={8} ref={ref}>
+                          <Stack gap={16}>
+                            {tags.list
+                              .filter((v) => v._id && v.type === TagType.CUSTOMER)
+                              .map((tag) => {
+                                const isTagged = customer.tagIds?.includes(tag._id);
 
-                          <Text fz={10} fw={500}>
-                            <Trans>Add</Trans>
-                          </Text>
-                        </Group>
-                      </Stack>
-                    </Popover.Dropdown>
-                  </Popover>
-                </Fragment>
-              ) : (
-                <Group
-                  gap={0}
-                  onClick={() =>
-                    OnModalTagForm({ onDone: (tag) => toggleTag(tag), type: TagType.CUSTOMER })
-                  }
-                  style={{ cursor: "pointer" }}
-                >
-                  <ThemeIcon size={13} variant="transparent" color="gray">
-                    <IconPlus size={13} />
-                  </ThemeIcon>
-                  <Text c="gray" fz={12}>
-                    <Trans>Tag</Trans>
-                  </Text>
+                                return (
+                                  <Group
+                                    gap={5}
+                                    key={tag._id}
+                                    onClick={() => toggleTag(tag)}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    <Center w={20}>
+                                      <ColorSwatch color={tag.color || ""} size={20}>
+                                        {isTagged && (
+                                          <CheckIcon
+                                            color="white"
+                                            style={{ width: rem(6), height: rem(6) }}
+                                          />
+                                        )}
+                                      </ColorSwatch>
+                                    </Center>
+                                    <Text fz={10} fw={500}>
+                                      {tag.name}
+                                    </Text>
+                                  </Group>
+                                );
+                              })}
+
+                            <Group
+                              gap={5}
+                              onClick={() => {
+                                openTagForm({
+                                  onCreated: (tag) => toggleTag(tag),
+                                  type: TagType.CUSTOMER,
+                                });
+                                setTagListOpened(false);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            >
+                              <Center w={20}>
+                                <ThemeIcon size={20} variant="outline" color="gray" radius={100}>
+                                  <IconPlus size={12} />
+                                </ThemeIcon>
+                              </Center>
+
+                              <Text fz={10} fw={500}>
+                                <Trans>Add</Trans>
+                              </Text>
+                            </Group>
+                          </Stack>
+                        </Popover.Dropdown>
+                      </Popover>
+                    </Fragment>
+                  ) : (
+                    <Group
+                      gap={0}
+                      onClick={() =>
+                        openTagForm({ onCreated: (tag) => toggleTag(tag), type: TagType.CUSTOMER })
+                      }
+                      style={{ cursor: "pointer" }}
+                    >
+                      <ThemeIcon size={13} variant="transparent" color="gray">
+                        <IconPlus size={13} />
+                      </ThemeIcon>
+                      <Text c="gray" fz={12}>
+                        <Trans>Tag</Trans>
+                      </Text>
+                    </Group>
+                  )}
                 </Group>
-              )}
-            </Group>
-          </Group>
+              </Group>
 
-          <WorkspaceMembersInput
-            showMainResponsible
-            value={customer.assigneeUsers}
-            onChange={(users) =>
-              assignCustomer(customer._id, { userIds: users.map((v) => v.userId) })
-            }
-            disabled={!workspace.hasPermission(WorkspacePermission.CUSTOMERS_ASSIGN)}
-          />
-        </Stack>
+              <WorkspaceMembersInput
+                showMainResponsible
+                value={customer.assigneeUsers}
+                onChange={(users) =>
+                  assignCustomer(customer._id, { userIds: users.map((v) => v.userId) })
+                }
+                disabled={!workspace.hasPermission(WorkspacePermission.CUSTOMERS_ASSIGN)}
+              />
+            </Stack>
 
-        {workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO) && (
-          <Group justify="flex-end">
-            <ModalCustomer>
-              {(open) => (
-                <ActionIcon
-                  variant="transparent"
-                  color="gray"
-                  onClick={() => open({ customer: customer, onDone: () => {} })}
-                  style={{ marginRight: -5, marginTop: -3 }}
-                >
-                  <IconPencil size={22} strokeWidth={1.5} />
-                </ActionIcon>
-              )}
-            </ModalCustomer>
+            {workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO) && (
+              <Group justify="flex-end">
+                <ModalCustomer>
+                  {(open) => (
+                    <ActionIcon
+                      variant="transparent"
+                      color="gray"
+                      onClick={() => open({ customer: customer, onDone: () => {} })}
+                      style={{ marginRight: -5, marginTop: -3 }}
+                    >
+                      <IconPencil size={22} strokeWidth={1.5} />
+                    </ActionIcon>
+                  )}
+                </ModalCustomer>
+              </Group>
+            )}
           </Group>
-        )}
-      </Group>
-    </Card>
+        </Card>
+      )}
+    </ModalTagForm>
   );
 };

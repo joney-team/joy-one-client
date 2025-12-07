@@ -3,11 +3,11 @@
 import { useApp } from "@/app.context";
 import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
+import { EventType } from "@/graphql/enums.graphql";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getWorkspaceAuthSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import {
   getMyWorkspaceMembers,
   joinWorkspaceMember,
@@ -87,10 +87,10 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     isSkip: !userMember,
     route: "/workspace-members/online-status",
     refetchEvents: [
-      EventType.WORKSPACE_MEMBER_LEAVED,
-      EventType.WORKSPACE_MEMBER_JOINED,
-      EventType.WORKSPACE_MEMBER_ONLINE,
-      EventType.WORKSPACE_MEMBER_OFFLINE,
+      EventType.WorkspaceMemberLeaved,
+      EventType.WorkspaceMemberJoined,
+      EventType.WorkspaceMemberOnline,
+      EventType.WorkspaceMemberOffline,
     ],
   });
 
@@ -283,18 +283,18 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     return getWorkspaceDisplayView({});
   };
 
-  useEventsListener([EventType.WORKSPACE_SETTING_UPDATED], fetchSettings, [workspaceId]);
+  useEventsListener([EventType.WorkspaceSettingUpdated], fetchSettings, [workspaceId]);
 
   useEventsListener(
     [
-      EventType.WORKSPACE_ARCHIVED,
-      EventType.WORKSPACE_ROLES_NEW,
-      EventType.WORKSPACE_ROLES_UPDATED,
-      EventType.WORKSPACE_ROLES_REMOVED,
-      EventType.WORKSPACE_SETTING_UPDATED,
-      EventType.WORKSPACE_INVITE_CODE_UPDATED,
-      EventType.WORKSPACE_MEMBER_TRANSFER_OWNER,
-      EventType.WORKSPACE_BRANCH_NEW,
+      EventType.WorkspaceArchived,
+      EventType.WorkspaceRolesNew,
+      EventType.WorkspaceRolesUpdated,
+      EventType.WorkspaceRolesRemoved,
+      EventType.WorkspaceSettingUpdated,
+      EventType.WorkspaceInviteCodeUpdated,
+      EventType.WorkspaceMemberTransferOwner,
+      EventType.WorkspaceBranchNew,
     ],
     () => {
       fetchRoles();
@@ -304,13 +304,13 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   useEventsListener(
     [
-      EventType.WORKSPACE_UPDATED,
-      EventType.WORKSPACE_MEMBER_JOINED,
-      EventType.WORKSPACE_MEMBER_LEAVED,
-      EventType.WORKSPACE_MEMBER_UPDATED,
-      EventType.WORKSPACE_MEMBER_TRANSFER_OWNER,
-      EventType.WORKSPACE_BRANCH_NEW,
-      EventType.WORKSPACE_BRANCH_UPDATED,
+      EventType.WorkspaceUpdated,
+      EventType.WorkspaceMemberJoined,
+      EventType.WorkspaceMemberLeaved,
+      EventType.WorkspaceMemberUpdated,
+      EventType.WorkspaceMemberTransferOwner,
+      EventType.WorkspaceBranchNew,
+      EventType.WorkspaceBranchUpdated,
     ],
     () => fetchRelatedData()
   );

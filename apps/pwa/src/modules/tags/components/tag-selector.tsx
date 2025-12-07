@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { Selector, SelectorProps } from "@/components/selector";
 import { searchEntity } from "@/modules/search/search-service";
-import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
+// import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { interactTag } from "@/modules/tags/tags-service";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { AppEntity } from "@/types";
@@ -68,11 +68,13 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
       }}
       onCreate={
         createable
-          ? (ctx) =>
-              OnModalTagForm({
-                type: props.type,
-                onDone: (tag) => props.onSelect?.(tag, ctx),
-              })
+          ? (ctx) => {
+              // TODO:
+              // OnModalTagForm({
+              //   type: props.type,
+              //   onDone: (tag) => props.onSelect?.(tag, ctx),
+              // });
+            }
           : undefined
       }
     />

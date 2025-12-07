@@ -8,6 +8,7 @@ import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { Selector } from "@/components/selector";
 import { useCalendarProps } from "@/configs/calendar.config";
+import { EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import {
   bookingActiveStatus,
@@ -16,7 +17,6 @@ import {
 } from "@/modules/bookings/booking-service";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
-import { EventType } from "@/modules/events/event-types";
 import { useLang } from "@/modules/lang/lang-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
@@ -112,12 +112,12 @@ export const BookingList: FC = () => {
     },
     isIgnoreEventActionType: true,
     events: [
-      EventType.BOOKING_NEW,
-      EventType.BOOKING_UPDATED,
-      EventType.BOOKING_CHECKIN,
-      EventType.BOOKING_IN_PROGRESS,
-      EventType.BOOKING_COMPLETED,
-      EventType.BOOKING_CANCELLED,
+      EventType.BookingNew,
+      EventType.BookingUpdated,
+      EventType.BookingCheckin,
+      EventType.BookingInProgress,
+      EventType.BookingCompleted,
+      EventType.BookingCancelled,
     ],
   });
 

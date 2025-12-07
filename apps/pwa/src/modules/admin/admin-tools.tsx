@@ -38,15 +38,7 @@ export const AdminTools: FC = () => {
       <SectionTitle name="Migrations" icon={IconTools} />
       <Card shadow="xs">
         <Stack align="start">
-          <Button onClick={() => api.patch(`/tasks/migrate-timekeepings`)}>
-            Migrate Task TimeTrackings
-          </Button>
-
           <Button onClick={() => api.patch(`/tasks/rebalance-order`)}>Rebalance Task Order</Button>
-
-          <Button onClick={() => api.patch(`/tasks/migrate-tag-folder-id-to-folder-id`)}>
-            Migrate Tag Folder ID to Folder ID
-          </Button>
 
           <Button onClick={() => api.patch(`/tasks/trigger-sync-all-tasks`)}>
             Trigger Sync All Tasks

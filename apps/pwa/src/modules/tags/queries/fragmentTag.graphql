@@ -1,4 +1,4 @@
-fragment TagData on TagEntity {
+fragment TagData on Tag {
   _id
   name
   color

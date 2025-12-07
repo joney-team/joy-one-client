@@ -5,7 +5,7 @@ import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-selector-filter";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
@@ -205,9 +205,9 @@ export const WorkspaceMemberList: FC = () => {
         }}
         card={({ data }) => <MemberCard member={data} />}
         events={[
-          EventType.WORKSPACE_MEMBER_UPDATED,
-          EventType.WORKSPACE_MEMBER_LEAVED,
-          EventType.WORKSPACE_MEMBER_TRANSFER_OWNER,
+          EventType.WorkspaceMemberUpdated,
+          EventType.WorkspaceMemberLeaved,
+          EventType.WorkspaceMemberTransferOwner,
         ]}
       />
     </Stack>

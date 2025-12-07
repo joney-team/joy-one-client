@@ -6,7 +6,7 @@ import { appEntities } from "@/constant";
 import { Badge, Group, Stack } from "@mantine/core";
 import { IconEdit, IconForms } from "@tabler/icons-react";
 import { type FC } from "react";
-import { EventType } from "../events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { customFieldTypes } from "./custom-field-constants";
 import { CustomFieldEntity, CustomFieldType } from "./custom-field-types";
 import { OnModalCustomField } from "./modals/modal-custom-field";
@@ -56,9 +56,9 @@ export const CustomFieldList: FC = () => {
           },
         ]}
         events={[
-          EventType.CUSTOM_FIELDS_NEW,
-          EventType.CUSTOM_FIELDS_UPDATED,
-          EventType.CUSTOM_FIELDS_REMOVED,
+          EventType.CustomFieldsNew,
+          EventType.CustomFieldsUpdated,
+          EventType.CustomFieldsRemoved,
         ]}
         creatable={{
           onCreate: () => OnModalCustomField(),

@@ -6,7 +6,7 @@ import { List } from "@/components/list";
 import { codeColumn } from "@/components/list/columns/code-column";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { numberColumn } from "@/components/list/columns/number-column";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { ProductColumn } from "@/modules/products/components/product-column";
 import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -77,11 +77,11 @@ export const ProductStockList: FC = () => {
               label: t`Stock in`,
             }}
             events={[
-              EventType.PRODUCT_STOCK_IN,
-              EventType.PRODUCT_STOCK_OUT,
-              EventType.PRODUCT_STOCK_IN_MULTIPLE,
-              EventType.PRODUCT_STOCK_IN_REVERT,
-              EventType.PRODUCT_STOCK_OUT_REVERT,
+              EventType.ProductStockIn,
+              EventType.ProductStockOut,
+              EventType.ProductStockInMultiple,
+              EventType.ProductStockInRevert,
+              EventType.ProductStockOutRevert,
             ]}
           />
         </Stack>

@@ -10,7 +10,7 @@ import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { Renderer } from "@/components/renderer";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { customerColumn } from "@/modules/customers/components/customer-column";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { LoanCard } from "@/modules/loans/components/loan-card";
 import {
   archiveLoans,
@@ -430,21 +430,21 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 },
               ]}
               events={[
-                EventType.LOANS_JUST_CREATED,
-                EventType.LOANS_PENDING,
-                EventType.LOANS_APPROVED,
-                EventType.LOANS_REJECTED,
-                EventType.LOANS_UPDATED,
-                EventType.LOANS_FULFILLED,
-                EventType.LOANS_COMPLETED,
-                EventType.LOANS_ARCHIVED,
-                EventType.LOANS_LIQUIDATION,
-                EventType.LOANS_REVERT_LIQUIDATION,
-                EventType.LOANS_FULFILLED_REVERTED,
-                EventType.LOANS_SYNCED,
-                EventType.LOANS_CHANGE_WORKSPACE_BRANCH,
-                EventType.LOANS_APPROVED_REVERTED,
-                EventType.LOANS_REVERT_REJECTED,
+                EventType.LoansJustCreated,
+                EventType.LoansPending,
+                EventType.LoansApproved,
+                EventType.LoansRejected,
+                EventType.LoansUpdated,
+                EventType.LoansFulfilled,
+                EventType.LoansCompleted,
+                EventType.LoansArchived,
+                EventType.LoansLiquidation,
+                EventType.LoansRevertLiquidation,
+                EventType.LoansFulfilledReverted,
+                EventType.LoansSynced,
+                EventType.LoansChangeWorkspaceBranch,
+                EventType.LoansApprovedReverted,
+                EventType.LoansRevertRejected,
               ]}
               card={LoanCard}
               filterModes={[

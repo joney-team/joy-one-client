@@ -7,7 +7,6 @@ import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import {
   cleanNotifications,
   getNotificationStat,
@@ -32,6 +31,7 @@ import { Errored } from "../../components/errored";
 import { Renderer } from "../../components/renderer";
 import { useLang } from "../lang/lang-context";
 import { NotificationCard } from "./notification-card";
+import { EventType } from "@/graphql/enums.graphql";
 
 const EmptyNotification: FC<{ visible: boolean }> = ({ visible }) => {
   if (!visible) return null;
@@ -97,10 +97,10 @@ export const UserNotifications: FC = () => {
 
   useEventsListener(
     [
-      EventType.NOTIFICATION_LIST_VIEWED,
-      EventType.NOTIFICATION_READED,
-      EventType.NOTIFICATION_NEW,
-      EventType.NOTIFICATION_CLEANED,
+      EventType.NotificationListViewed,
+      EventType.NotificationReaded,
+      EventType.NotificationNew,
+      EventType.NotificationCleaned,
     ],
     () => {
       notifications.fetch(true, { isSilient: true });

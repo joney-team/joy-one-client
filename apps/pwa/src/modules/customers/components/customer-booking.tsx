@@ -1,3 +1,5 @@
+"use client";
+
 import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
@@ -7,7 +9,7 @@ import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, SimpleGrid, Stack, Text } from "@mantine/core";
@@ -40,12 +42,12 @@ export const CustomerBookings: FC<CustomerBookingsProps> = (props) => {
         orderStartTime: 1,
       }),
     events: [
-      EventType.BOOKING_NEW,
-      EventType.BOOKING_UPDATED,
-      EventType.BOOKING_CHECKIN,
-      EventType.BOOKING_IN_PROGRESS,
-      EventType.BOOKING_COMPLETED,
-      EventType.BOOKING_CANCELLED,
+      EventType.BookingNew,
+      EventType.BookingUpdated,
+      EventType.BookingCheckin,
+      EventType.BookingInProgress,
+      EventType.BookingCompleted,
+      EventType.BookingCancelled,
     ],
   });
 

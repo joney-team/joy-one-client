@@ -1,12 +1,14 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { TaskStatusesContextType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useQuery } from "@apollo/client/react";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack } from "@mantine/core";
@@ -14,6 +16,10 @@ import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, PropsWithChildren, useEffect, useMemo, useRef } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
+import QUERY_TASK_STATUSES, {
+  type TaskStatusesQuery,
+  type TaskStatusesQueryVariables,
+} from "../../queries/queryTaskStatuses.graphql";
 
 const BoardGroupByStatuses = dynamic(
   () => import("./board-group-by-statuses").then((mod) => mod.BoardGroupByStatuses),
@@ -60,9 +66,23 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
     });
   }, []);
 
-  const dynamicStatuses = useMemo(() => {
-    return workspace.settings.taskStatuses.filter((v) => !v.isDefault);
-  }, [workspace.settings.taskStatuses]);
+  const taskStatusesData = useQuery<TaskStatusesQuery, TaskStatusesQueryVariables>(
+    QUERY_TASK_STATUSES,
+    {
+      variables: tasks.activatedFolder
+        ? {
+            contextType: TaskStatusesContextType.Folder,
+            contextId: tasks.activatedFolder?._id,
+          }
+        : {},
+    }
+  );
+
+  const dynamicTaskStatuses = useMemo(() => {
+    return (taskStatusesData.data?.taskStatuses ?? []).filter(
+      (v) => !Object.values<string>(DefaultTaskStatusId).includes(v.id)
+    );
+  }, [taskStatusesData.data]);
 
   return (
     <Stack id="TasksBoardView" gap={0} mih={0} flex={1} miw={0}>
@@ -101,7 +121,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                 statusId={DefaultTaskStatusId.TODO}
               />
 
-              {dynamicStatuses.map((status) => (
+              {dynamicTaskStatuses.map((status) => (
                 <BoardGroupByStatuses key={status.id} statusId={status.id} />
               ))}
 

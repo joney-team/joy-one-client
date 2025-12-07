@@ -64,7 +64,7 @@ export const TaskSatusesModal: FC<TaskSatusesModalProps> = (props) => {
 
   return (
     <Stack gap={10}>
-      <Divider label={t`Pending statuses group`} labelPosition="left" />
+      <Divider label={<Trans>Pending statuses group</Trans>} labelPosition="left" />
       <StatusCard status={workspace.settings.taskStatuses[0]} disabledOrder />
 
       <DndContext
@@ -98,7 +98,7 @@ export const TaskSatusesModal: FC<TaskSatusesModalProps> = (props) => {
 
       <Space />
 
-      <Divider label={t`Completed statuses group`} labelPosition="left" />
+      <Divider label={<Trans>Completed statuses group</Trans>} labelPosition="left" />
 
       <StatusCard
         status={workspace.settings.taskStatuses[workspace.settings.taskStatuses.length - 1]}

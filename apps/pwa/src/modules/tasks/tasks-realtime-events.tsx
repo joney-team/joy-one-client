@@ -1,10 +1,10 @@
 "use client";
 
+import { EventType } from "@/graphql/enums.graphql";
+import { useApolloClient } from "@apollo/client/react";
 import { type FC } from "react";
 import { useEventsListener } from "../events/event-service";
-import { EventType } from "../events/event-types";
 import { useTasks } from "./tasks-context";
-import { useApolloClient } from "@apollo/client/react";
 
 import TASK_FRAGMENT, { type TaskDataFragment } from "./queries/fragmentTask.graphql";
 
@@ -18,7 +18,7 @@ export const TasksRealtimeEvents: FC = () => {
   const client = useApolloClient();
 
   useEventsListener(
-    [EventType.TASKS_UPDATED, EventType.TASK_SYNCED],
+    [EventType.TasksUpdated, EventType.TaskSynced],
     async (ev) => {
       if (!ev.ref) return;
 

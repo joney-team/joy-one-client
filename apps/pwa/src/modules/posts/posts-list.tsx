@@ -12,10 +12,10 @@ import { IconArchive, IconNews } from "@tabler/icons-react";
 import { type FC } from "react";
 import { api } from "../apis";
 import { CategoryColumn } from "../categories/components/category-column";
-import { EventType } from "../events/event-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { PostEntity } from "./posts-types";
 import { Trans } from "@lingui/react/macro";
+import { EventType } from "@/graphql/enums.graphql";
 
 export const PostsList: FC = () => {
   const router = useRouter();
@@ -53,7 +53,7 @@ export const PostsList: FC = () => {
           permission: WorkspacePermission.POSTS_MANAGER,
           onCreate: () => router.push("/posts/new"),
         }}
-        events={[EventType.POST_NEW, EventType.POST_UPDATED, EventType.POST_ARCHIVED]}
+        events={[EventType.PostNew, EventType.PostUpdated, EventType.PostArchived]}
         bulkActions={[
           {
             type: "archive",

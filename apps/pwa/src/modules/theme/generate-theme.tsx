@@ -1,8 +1,11 @@
+"use client";
+
 import { type AppMetadata } from "@/types";
 import { primaryColors } from "@joy-one-client/config/colors";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import {
+  ActionIcon,
   Card,
   Checkbox,
   ComboboxItem,
@@ -159,6 +162,11 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: A
       Select: Select.extend({
         defaultProps: {
           placeholder: t`Select`,
+        },
+      }),
+      ActionIcon: ActionIcon.extend({
+        defaultProps: {
+          component: "div",
         },
       }),
     },

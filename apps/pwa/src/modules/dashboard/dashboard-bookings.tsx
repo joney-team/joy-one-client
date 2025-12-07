@@ -13,9 +13,9 @@ import { useLocalStorage } from "@mantine/hooks";
 import { IconAnalyze, IconClipboardList } from "@tabler/icons-react";
 import { FC } from "react";
 import { useRestQuery } from "../apis/use-rest-query";
-import { EventType } from "../events/event-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
+import { EventType } from "@/graphql/enums.graphql";
 
 export const DashboardBookings: FC = () => {
   const workspace = useWorkspace();
@@ -33,12 +33,12 @@ export const DashboardBookings: FC = () => {
       getAll: true,
     },
     refetchEvents: [
-      EventType.BOOKING_NEW,
-      EventType.BOOKING_UPDATED,
-      EventType.BOOKING_CHECKIN,
-      EventType.BOOKING_IN_PROGRESS,
-      EventType.BOOKING_COMPLETED,
-      EventType.BOOKING_CANCELLED,
+      EventType.BookingNew,
+      EventType.BookingUpdated,
+      EventType.BookingCheckin,
+      EventType.BookingInProgress,
+      EventType.BookingCompleted,
+      EventType.BookingCancelled,
     ],
   });
 

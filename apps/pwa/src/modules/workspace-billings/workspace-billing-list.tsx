@@ -10,7 +10,7 @@ import { useList } from "@/components/list/use-list";
 import { SectionTitle } from "@/components/session-title";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { useGradient } from "@/modules/theme/use-color";
 import { OnModalWorkspaceBillingDeposit } from "@/modules/workspace-billings/modals/modal-workspace-billing-deposit";
 import { calculateWorkspaceSubscriptionBillings } from "@/modules/workspace-subscriptions/workspace-subscriptions-service";
@@ -83,16 +83,16 @@ export const WorkspaceBillingList: FC = () => {
 
   useEventsListener(
     [
-      EventType.BANK_TRANSACTION_CANCELLED,
-      EventType.BANK_TRANSACTION_FAILED,
-      EventType.BANK_TRANSACTION_PAID,
-      EventType.BANK_TRANSACTION_FULFILLED,
+      EventType.BankTransactionCancelled,
+      EventType.BankTransactionFailed,
+      EventType.BankTransactionPaid,
+      EventType.BankTransactionFulfilled,
 
-      EventType.WORKSPACE_BILLINGS_DEPOSITED,
-      EventType.WORKSPACE_BILLINGS_WITHDRAWN,
-      EventType.WORKSPACE_BILLINGS_PAYMENT_NEW,
-      EventType.WORKSPACE_BILLINGS_CASHBACK_NEW,
-      EventType.WORKSPACE_BILLINGS_PAYMENT_PAID,
+      EventType.WorkspaceBillingsDeposited,
+      EventType.WorkspaceBillingsWithdrawn,
+      EventType.WorkspaceBillingsPaymentNew,
+      EventType.WorkspaceBillingsCashbackNew,
+      EventType.WorkspaceBillingsPaymentPaid,
     ],
     () => {
       billings.fetch(true, { isSilient: true });

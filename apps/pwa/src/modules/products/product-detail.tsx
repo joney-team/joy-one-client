@@ -10,7 +10,7 @@ import { enumColumn } from "@/components/list/columns/enum-column";
 import { numberColumn } from "@/components/list/columns/number-column";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { ModalProductStockOut } from "@/modules/product-stocks/modals/modal-product-stock-out";
 import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
@@ -41,15 +41,15 @@ import {
 } from "../product-stocks/product-stocks-entity";
 
 const events = [
-  EventType.PRODUCT_NEW,
-  EventType.PRODUCT_UPDATE,
-  EventType.PRODUCT_ARCHIVED,
+  EventType.ProductNew,
+  EventType.ProductUpdate,
+  EventType.ProductArchived,
 
-  EventType.PRODUCT_STOCK_IN,
-  EventType.PRODUCT_STOCK_IN_REVERT,
-  EventType.PRODUCT_STOCK_OUT,
-  EventType.PRODUCT_STOCK_OUT_REVERT,
-  EventType.PRODUCT_STOCK_IN_MULTIPLE,
+  EventType.ProductStockIn,
+  EventType.ProductStockInRevert,
+  EventType.ProductStockOut,
+  EventType.ProductStockOutRevert,
+  EventType.ProductStockInMultiple,
 ];
 
 export const ProductDetail: FC = () => {

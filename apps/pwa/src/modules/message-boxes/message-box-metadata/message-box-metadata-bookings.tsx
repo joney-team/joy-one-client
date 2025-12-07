@@ -1,8 +1,10 @@
-import { BookingCard } from "@/modules/bookings/components/booking-card";
+"use client";
+
 import { Empty } from "@/components/empty";
-import { getBookings } from "@/modules/bookings/booking-service";
-import { EventType } from "@/modules/events/event-types";
 import { useList } from "@/components/list/use-list";
+import { EventType } from "@/graphql/enums.graphql";
+import { getBookings } from "@/modules/bookings/booking-service";
+import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Stack } from "@mantine/core";
 import { AccordionItemComponent } from "./message-box-metadata-types";
 
@@ -10,12 +12,12 @@ export const MessageBoxMetadataBookings: AccordionItemComponent = ({ customer })
   const bookings = useList({
     fetch: async () => getBookings({ customerId: customer._id }),
     events: [
-      EventType.BOOKING_NEW,
-      EventType.BOOKING_CANCELLED,
-      EventType.BOOKING_CHECKIN,
-      EventType.BOOKING_COMPLETED,
-      EventType.BOOKING_IN_PROGRESS,
-      EventType.BOOKING_UPDATED,
+      EventType.BookingNew,
+      EventType.BookingCancelled,
+      EventType.BookingCheckin,
+      EventType.BookingCompleted,
+      EventType.BookingInProgress,
+      EventType.BookingUpdated,
     ],
   });
 

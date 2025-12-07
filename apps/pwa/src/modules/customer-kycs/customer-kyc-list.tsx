@@ -7,7 +7,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyzeFilled } from "@tabler/icons-react";
@@ -24,11 +24,7 @@ export const CustomerKycList: FC = () => {
   });
 
   useEventsListener(
-    [
-      EventType.CUSTOMER_KYC_APPROVED,
-      EventType.CUSTOMER_KYC_REJECTED,
-      EventType.CUSTOMER_KYC_PENDING,
-    ],
+    [EventType.CustomerKycApproved, EventType.CustomerKycRejected, EventType.CustomerKycPending],
     () => kycs.fetch(true, { isSilient: true })
   );
 

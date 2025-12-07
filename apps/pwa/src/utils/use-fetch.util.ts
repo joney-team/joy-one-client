@@ -1,6 +1,7 @@
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventEntity, EventType } from "@/modules/events/event-types";
+import { EventEntity } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { StorageKey } from "@/types";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -13,15 +14,17 @@ export interface UseFetchArgs<T = any> {
   reset?: boolean;
   skip?: boolean;
   autoFetch?: boolean;
-  refetchEvents?: EventType[] | ({
-    types: EventType[];
-    condition?: (data: EventEntity, currentData: T) => boolean;
-  }),
+  refetchEvents?:
+    | EventType[]
+    | {
+        types: EventType[];
+        condition?: (data: EventEntity, currentData: T) => boolean;
+      };
   default?: T;
   isAlwayRefetchWhenReconnect?: boolean;
 }
 
-let dataCached: any = {}
+let dataCached: any = {};
 
 export interface UseFetchOptions {
   isSilient?: boolean;
@@ -46,17 +49,17 @@ export interface UseFetch<T = any> {
 
 export function useFetch<T = any>(args: UseFetchArgs<T>, deps?: any[]): UseFetch<T> {
   const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
-  const fetchKey = args.id ? args.id.replace(/-/g, '') + workspaceId : workspaceId;
-  const cacheId = args.id ? `${args.id.replace(/-/g, '')}-${workspaceId}` : '';
-  const autoFetch = typeof args.autoFetch === 'boolean' ? args.autoFetch : true;
-  const isReadyToFetch = typeof args.skip === 'boolean' ? !args.skip : true;
+  const fetchKey = args.id ? args.id.replace(/-/g, "") + workspaceId : workspaceId;
+  const cacheId = args.id ? `${args.id.replace(/-/g, "")}-${workspaceId}` : "";
+  const autoFetch = typeof args.autoFetch === "boolean" ? args.autoFetch : true;
+  const isReadyToFetch = typeof args.skip === "boolean" ? !args.skip : true;
 
   const controller = useRef(new AbortController());
 
-  const cached: T = args.initialData || dataCached[cacheId || 'none'];
+  const cached: T = args.initialData || dataCached[cacheId || "none"];
 
   const [version, setVersion] = useState(0);
-  const forceUpdate = () => setVersion(s => s + 1);
+  const forceUpdate = () => setVersion((s) => s + 1);
 
   const status = useRef({
     isFetching: !cached,
@@ -64,13 +67,13 @@ export function useFetch<T = any>(args: UseFetchArgs<T>, deps?: any[]): UseFetch
   });
 
   const [state, setState] = useState<{
-    data?: T,
-    error?: string,
-    errorStatus?: number,
+    data?: T;
+    error?: string;
+    errorStatus?: number;
   }>({ data: cached || args.default });
 
   const fetch: UseFetchFetch<T> = async (options) => {
-    const isSilient = typeof options?.isSilient === 'boolean' ? options.isSilient : false;
+    const isSilient = typeof options?.isSilient === "boolean" ? options.isSilient : false;
     const query = options?.query || {};
 
     if (!isSilient) {
@@ -98,19 +101,19 @@ export function useFetch<T = any>(args: UseFetchArgs<T>, deps?: any[]): UseFetch
       status.current.isInitialized = true;
       if (!isSilient) forceUpdate();
     }
-  }
+  };
 
   // Sync cache data
   useEffect(() => {
     if (cacheId && state.data && status.current.isInitialized) {
       dataCached[cacheId] = state.data;
     }
-  }, [cacheId, state.data, status.current.isInitialized])
+  }, [cacheId, state.data, status.current.isInitialized]);
 
   // Auto fetch when component is mounted
   useEffect(() => {
     if (autoFetch && isReadyToFetch && !args.skip) fetch({ isSilient: true });
-  }, [autoFetch, isReadyToFetch, fetchKey, args.skip, ...(deps || [])])
+  }, [autoFetch, isReadyToFetch, fetchKey, args.skip, ...(deps || [])]);
 
   // Auto fetch when server reconnected
   // onReconnected(() => {
@@ -123,20 +126,29 @@ export function useFetch<T = any>(args: UseFetchArgs<T>, deps?: any[]): UseFetch
   useEffect(() => {
     return () => {
       controller.current?.abort();
-    }
-  }, [])
+    };
+  }, []);
 
   // Event listener
   const isReadyToEventListen = isReadyToFetch && state.data;
-  const events = Array.isArray(args.refetchEvents) ? args.refetchEvents : args.refetchEvents?.types || [];
-  
-  useEventsListener(events, (e) => {
-    if (state.data) {
-      const condition = args.refetchEvents && 'condition' in args.refetchEvents ? args.refetchEvents.condition : undefined;
-      if (condition && !condition(e, state.data) || !isReadyToEventListen) return;
-      fetch({ isSilient: true });
-    }
-  }, [args.refetchEvents, state.data, isReadyToEventListen, fetchKey])
+  const events = Array.isArray(args.refetchEvents)
+    ? args.refetchEvents
+    : args.refetchEvents?.types || [];
+
+  useEventsListener(
+    events,
+    (e) => {
+      if (state.data) {
+        const condition =
+          args.refetchEvents && "condition" in args.refetchEvents
+            ? args.refetchEvents.condition
+            : undefined;
+        if ((condition && !condition(e, state.data)) || !isReadyToEventListen) return;
+        fetch({ isSilient: true });
+      }
+    },
+    [args.refetchEvents, state.data, isReadyToEventListen, fetchKey]
+  );
 
   return objClean({
     ...status.current,
@@ -147,5 +159,5 @@ export function useFetch<T = any>(args: UseFetchArgs<T>, deps?: any[]): UseFetch
     data: state.data as T,
     error: state.error,
     errorStatus: state.errorStatus,
-  })
+  });
 }

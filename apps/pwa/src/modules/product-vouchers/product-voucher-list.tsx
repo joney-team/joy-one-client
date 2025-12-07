@@ -6,7 +6,7 @@ import { ListQty } from "@/components/list-qty";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { getProducts } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -22,7 +22,7 @@ export const ProductVoucherList: FC = () => {
   });
 
   useEventsListener(
-    [EventType.PRODUCT_ARCHIVED, EventType.PRODUCT_UPDATE, EventType.PRODUCT_NEW],
+    [EventType.ProductArchived, EventType.ProductUpdate, EventType.ProductNew],
     () => vouchers.fetch(true, { isSilient: true })
   );
 

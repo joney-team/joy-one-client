@@ -15,7 +15,7 @@ import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
 import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { useLoans } from "@/modules/loans/loans-context";
 import { archiveLoan, getLoanByCode, updateLoanAssetData } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
@@ -105,20 +105,20 @@ export const LoanDetail: NextPage = () => {
     },
     refetchEvents: {
       types: [
-        EventType.LOANS_JUST_CREATED,
-        EventType.LOANS_PENDING,
-        EventType.LOANS_APPROVED,
-        EventType.LOANS_REJECTED,
-        EventType.LOANS_UPDATED,
-        EventType.LOANS_FULFILLED,
-        EventType.LOANS_COMPLETED,
-        EventType.LOANS_ARCHIVED,
-        EventType.LOANS_LIQUIDATION,
-        EventType.LOANS_REVERT_LIQUIDATION,
-        EventType.LOANS_SYNCED,
-        EventType.LOANS_CHANGE_WORKSPACE_BRANCH,
-        EventType.LOANS_APPROVED_REVERTED,
-        EventType.LOANS_FULFILLED_REVERTED,
+        EventType.LoansJustCreated,
+        EventType.LoansPending,
+        EventType.LoansApproved,
+        EventType.LoansRejected,
+        EventType.LoansUpdated,
+        EventType.LoansFulfilled,
+        EventType.LoansCompleted,
+        EventType.LoansArchived,
+        EventType.LoansLiquidation,
+        EventType.LoansRevertLiquidation,
+        EventType.LoansSynced,
+        EventType.LoansChangeWorkspaceBranch,
+        EventType.LoansApprovedReverted,
+        EventType.LoansFulfilledReverted,
       ],
       condition: (e, _loan) => {
         return e.ref === _loan.id || (e.relatedEntities || []).some((v) => v.id === _loan.id);
@@ -130,7 +130,7 @@ export const LoanDetail: NextPage = () => {
     skip: !loan.data,
     id: `customer-${loan.data?.customerId}`,
     fetch: () => getCustomer(loan.data!.customerId),
-    refetchEvents: [EventType.CUSTOMER_UPDATED],
+    refetchEvents: [EventType.CustomerUpdated],
   });
 
   const handleUpdateAssetData = useDebouncedCallback((assetData) => {
@@ -154,11 +154,7 @@ export const LoanDetail: NextPage = () => {
   }, [loan.data]);
 
   useEventsListener(
-    [
-      EventType.CUSTOMER_KYC_APPROVED,
-      EventType.CUSTOMER_KYC_REJECTED,
-      EventType.CUSTOMER_KYC_PENDING,
-    ],
+    [EventType.CustomerKycApproved, EventType.CustomerKycRejected, EventType.CustomerKycPending],
     () => {
       if (loan.data) fetchCustomerKyc(loan.data.customerId);
     },

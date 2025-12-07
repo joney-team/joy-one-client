@@ -1,16 +1,17 @@
 "use client";
 
 import { getFirebaseMessaging } from "@/configs/firebase.config";
-import { onMessage } from "firebase/messaging";
-import { useEffect, type FC } from "react";
-import { NotificationEntity } from "./notification-types";
-import { showInAppNotification } from "./notification-service";
+import { EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useMantineTheme } from "@mantine/core";
+import { onMessage } from "firebase/messaging";
+import { useEffect, type FC } from "react";
 import { useAuth } from "../auth/auth-context";
-import { EventEntity, EventType } from "../events/event-types";
 import { addEventsListener, removeEventsListner } from "../events/event-service";
+import { EventEntity } from "../events/event-types";
 import { useLang } from "../lang/lang-context";
+import { showInAppNotification } from "./notification-service";
+import { NotificationEntity } from "./notification-types";
 
 export const InAppNotification: FC = () => {
   const router = useRouter();
@@ -39,10 +40,10 @@ export const InAppNotification: FC = () => {
         showInAppNotification(ev.data, router, theme);
       };
 
-      addEventsListener(EventType.NOTIFICATION_NEW, onNewNotification);
+      addEventsListener(EventType.NotificationNew, onNewNotification);
 
       return () => {
-        removeEventsListner(EventType.NOTIFICATION_NEW, onNewNotification);
+        removeEventsListner(EventType.NotificationNew, onNewNotification);
       };
     }
   }, [device?.notificationToken, device?.locale, lang.locale]);

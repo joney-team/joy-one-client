@@ -11,7 +11,7 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
 import { getUserPublicInformation } from "@/modules/users/users-service";
@@ -358,9 +358,9 @@ export const ModalUserInformation: FC<{
     },
     refetchEvents: {
       types: [
-        EventType.WORKSPACE_MEMBER_UPDATED,
-        EventType.WORKSPACE_MEMBER_LEAVED,
-        EventType.WORKSPACE_MEMBER_TRANSFER_OWNER,
+        EventType.WorkspaceMemberUpdated,
+        EventType.WorkspaceMemberLeaved,
+        EventType.WorkspaceMemberTransferOwner,
       ],
       condition: () => !!userId.current,
     },

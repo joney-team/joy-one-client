@@ -1,15 +1,13 @@
 "use client";
 
+import { EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
-import { InputModalType } from "@/modals/modal-input";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onErrorLog } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { parseThemeColor, useMantineTheme } from "@mantine/core";
-import { IconMessage } from "@tabler/icons-react";
 import { type FC, type PropsWithChildren, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { getPluginAiAssistants } from "./ai-assistants/plugin-ai-assistants-service";
@@ -142,9 +140,9 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
 
   useEventsListener(
     [
-      EventType.PLUGIN_MESSAGE_HUBS_NEW,
-      EventType.PLUGIN_MESSAGE_HUBS_UPDATED,
-      EventType.PLUGIN_MESSAGE_HUBS_REMOVED,
+      EventType.PluginMessageHubsNew,
+      EventType.PluginMessageHubsUpdated,
+      EventType.PluginMessageHubsRemoved,
     ],
     () => fetchMessageHubs(),
     [workspace.userMember?.workspaceId]
@@ -152,9 +150,9 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
 
   useEventsListener(
     [
-      EventType.PLUGIN_AI_ASSISTANTS_NEW,
-      EventType.PLUGIN_AI_ASSISTANTS_UPDATED,
-      EventType.PLUGIN_AI_ASSISTANTS_REMOVED,
+      EventType.PluginAiAssistantsNew,
+      EventType.PluginAiAssistantsUpdated,
+      EventType.PluginAiAssistantsRemoved,
     ],
     () => fetchAiAssistants(),
     [workspace.userMember?.workspaceId]
@@ -162,18 +160,18 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
 
   useEventsListener(
     [
-      EventType.PLUGIN_ZALO_OA_ACTIVE,
-      EventType.PLUGIN_ZALO_OA_INACTIVE,
-      EventType.PLUGIN_ZALO_OA_UPDATED,
-      EventType.PLUGIN_ZALO_OA_ENABLED,
-      EventType.PLUGIN_ZALO_OA_DISABLED,
+      EventType.PluginZaloOaActive,
+      EventType.PluginZaloOaInactive,
+      EventType.PluginZaloOaUpdated,
+      EventType.PluginZaloOaEnabled,
+      EventType.PluginZaloOaDisabled,
     ],
     () => fetchZaloOas(),
     [workspace.userMember?.workspaceId]
   );
 
   useEventsListener(
-    [EventType.PLUGIN_META_PAGES_UPDATED, EventType.PLUGIN_META_PAGES_DISCONNECTED],
+    [EventType.PluginMetaPagesUpdated, EventType.PluginMetaPagesDisconnected],
     () => fetchMetaPages(),
     [workspace.userMember?.workspaceId]
   );

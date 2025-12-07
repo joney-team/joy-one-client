@@ -5,9 +5,9 @@ import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { useList } from "@/components/list/use-list";
 import { SessionLoader } from "@/components/session-loader";
+import { EventType } from "@/graphql/enums.graphql";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { Trans } from "@lingui/react/macro";
@@ -52,7 +52,7 @@ export const CustomerTasks: FC<CustomerTasksProps> = (props) => {
   }, [isCollapsed]);
 
   useEventsListener(
-    [EventType.TASK_NEW, EventType.TASK_ARCHIVED],
+    [EventType.TaskNew, EventType.TaskArchived],
     () => {
       tasks.fetch(true, { isSilient: true });
       getTotals();

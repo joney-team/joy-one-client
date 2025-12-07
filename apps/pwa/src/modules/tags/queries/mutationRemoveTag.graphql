@@ -1,0 +1,3 @@
+mutation RemoveTag($id: String!) {
+  removeTag(id: $id)
+}

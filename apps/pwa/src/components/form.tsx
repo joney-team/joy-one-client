@@ -7,9 +7,12 @@ interface FormProps {
   autoFocus?: boolean;
 }
 
-export const Form: FC<PropsWithChildren<FormProps>> = (props) => {
+export const Form: FC<PropsWithChildren<FormProps>> = ({
+  autoFocus = true,
+  onSubmit,
+  children,
+}) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const autoFocus = props.autoFocus ?? true;
 
   useEffect(() => {
     if (autoFocus) {
@@ -24,10 +27,10 @@ export const Form: FC<PropsWithChildren<FormProps>> = (props) => {
       ref={formRef}
       onSubmit={(e) => {
         e.preventDefault();
-        props.onSubmit?.(e);
+        onSubmit?.(e);
       }}
     >
-      {props.children}
+      {children}
     </form>
   );
 };

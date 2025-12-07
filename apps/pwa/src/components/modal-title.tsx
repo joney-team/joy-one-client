@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { Group, Text, ThemeIcon } from "@mantine/core";
+import { Group, Text, TextProps, ThemeIcon } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 
@@ -11,6 +11,7 @@ interface Props {
   px?: number;
   color?: any;
   rightSection?: React.ReactNode;
+  titleProps?: TextProps;
 }
 
 export const ModalTitle: FC<Props> = (props) => {
@@ -22,7 +23,7 @@ export const ModalTitle: FC<Props> = (props) => {
         {props.icon && <props.icon stroke={1.8} size={18} />}
       </ThemeIcon>
 
-      <Text fw="700" fz={16} c={color(props.color || "primary")}>
+      <Text fw="700" fz={16} c={color(props.color || "primary")} {...props.titleProps}>
         {props.title}
       </Text>
 

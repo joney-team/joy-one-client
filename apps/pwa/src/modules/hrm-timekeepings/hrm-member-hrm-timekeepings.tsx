@@ -5,7 +5,7 @@ import { useList } from "@/components/list/use-list";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import {
   HrmTimekeepingsCalendar,
   TimekeepingsCalendarExplain,
@@ -65,11 +65,11 @@ export const HrmMemberTimekeepings: FC = () => {
 
   useEventsListener(
     [
-      EventType.HRM_TIMEKEEPING_MEMBER_CHECK_IN,
-      EventType.HRM_TIMEKEEPING_MEMBER_CHECK_OUT,
-      EventType.HRM_TIMEKEEPING_MANUAL_APPROVAL,
-      EventType.HRM_TIMEKEEPING_REJECTED,
-      EventType.HRM_TIMEKEEPING_REMOVED,
+      EventType.HrmTimekeepingMemberCheckIn,
+      EventType.HrmTimekeepingMemberCheckOut,
+      EventType.HrmTimekeepingManualApproval,
+      EventType.HrmTimekeepingRejected,
+      EventType.HrmTimekeepingRemoved,
     ],
     () => {
       timekeepings.fetch(true, { isSilient: true });

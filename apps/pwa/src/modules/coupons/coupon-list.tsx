@@ -7,7 +7,7 @@ import { useList } from "@/components/list/use-list";
 import { getCoupons } from "@/modules/coupons/coupon-service";
 import { ModalCouponForm } from "@/modules/coupons/modals/modal-coupon-form";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Trans } from "@lingui/react/macro";
 import { Badge, em, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
@@ -24,11 +24,11 @@ export const CouponList: FC = () => {
 
   useEventsListener(
     [
-      EventType.COUPON_RULES_ARCHIVED,
-      EventType.COUPON_RULES_CREATED,
-      EventType.COUPON_RULES_UPDATED,
-      EventType.COUPONS_CREATED,
-      EventType.COUPONS_USED,
+      EventType.CouponRulesArchived,
+      EventType.CouponRulesCreated,
+      EventType.CouponRulesUpdated,
+      EventType.CouponsCreated,
+      EventType.CouponsUsed,
     ],
     () => coupons.fetch(true)
   );

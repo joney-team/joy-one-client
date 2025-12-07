@@ -10,7 +10,7 @@ import { Stack } from "@mantine/core";
 import { IconEye, IconFileInvoice } from "@tabler/icons-react";
 import { type FC } from "react";
 import { useRestQuery } from "../apis/use-rest-query";
-import { EventType } from "../events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { PluginEInvoicesProviderInformations } from "../plugins/e-invoices/plugin-e-invoices.types";
 import { OnReceiptDetailModal } from "../receipts/modals/modal-receipt-detail";
@@ -66,13 +66,13 @@ export const EInvoiceList: FC = () => {
           },
         }}
         events={[
-          EventType.RECEIPT_NEW,
-          EventType.RECEIPT_PAID,
-          EventType.RECEIPT_UPDATED,
-          EventType.RECEIPT_DISBURSEMENT,
-          EventType.RECEIPT_ARCHIVED,
-          EventType.RECEIPT_UNARCHIVED,
-          EventType.RECEIPT_REVERT_PAYMENT,
+          EventType.ReceiptNew,
+          EventType.ReceiptPaid,
+          EventType.ReceiptUpdated,
+          EventType.ReceiptDisbursement,
+          EventType.ReceiptArchived,
+          EventType.ReceiptUnarchived,
+          EventType.ReceiptRevertPayment,
         ]}
       />
     </Stack>

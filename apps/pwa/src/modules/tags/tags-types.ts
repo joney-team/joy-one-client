@@ -15,13 +15,13 @@ export interface TagDto {
 }
 
 export interface TagEntity extends BaseMongoEntity {
-  __typename: "TagEntity";
+  __typename: "Tag";
   name: string;
   slug: string;
   color: string | null;
   workspaceId: string;
   type: TagType;
-  order?: number | null;
+  order: number;
 }
 
 export interface ReorderTag {

@@ -4,14 +4,14 @@ import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { WorkspaceNavigationTaskFolders } from "@/layout/navigation/navigation-task-folders";
-import { OnModalTagForm } from "@/modules/tags/modals/modal-tag-form";
+import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { parseTaskPath } from "@/modules/tasks/tasks-route-helpers";
+import { parseTaskPath, updateTaskPath } from "@/modules/tasks/tasks-route-helpers";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -34,10 +34,22 @@ import {
   IconFolderPlus,
   IconPlus,
 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type FC, type ReactNode, Fragment, useMemo, useState } from "react";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+
+const WorkspaceNavigationTaskFolders = dynamic(
+  () =>
+    import("@/layout/navigation/workspace-navigation-task-folders").then(
+      (mod) => mod.WorkspaceNavigationTaskFolders
+    ),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const WorkspaceNavigationMenu: FC<{
   icon: Icon;
@@ -81,7 +93,7 @@ export const WorkspaceNavigationMenu: FC<{
     return props.route;
   }, [props.route, layout.isInitialized, pathname]);
 
-  if (layout.view === "mobile")
+  if (layout.view === "mobile") {
     return (
       <Stack
         id={id}
@@ -122,6 +134,7 @@ export const WorkspaceNavigationMenu: FC<{
         </Text>
       </Stack>
     );
+  }
 
   if (workspaceLayout.isNavbarCollapsed)
     return (
@@ -189,13 +202,14 @@ export const WorkspaceNavigationMenu: FC<{
                   <props.icon strokeWidth={isActive ? 1.8 : 1.5} size={22} />
                 </ActionIcon>
 
-                <Group gap={5} justify="space-between" flex={1}>
-                  <Group gap={5}>
+                <Group gap={5} justify="space-between" flex={1} miw={0}>
+                  <Group gap={5} wrap="nowrap" miw={0}>
                     <Text
                       tt="capitalize"
                       fz={14}
                       fw={500}
                       c={color(isActive ? "primary" : "var(--mantine-color-text)")}
+                      truncate
                     >
                       {props.label}
                     </Text>
@@ -208,69 +222,76 @@ export const WorkspaceNavigationMenu: FC<{
                   </Group>
 
                   <Renderer visible={props.route === "/tasks"}>
-                    <Group gap={0} onClick={(e) => e.stopPropagation()}>
-                      <Menu>
-                        <Menu.Target>
-                          <ActionIcon
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault();
-                            }}
-                            variant="subtle"
-                            color={color(isActive ? "primary" : "var(--mantine-color-text)")}
-                            size="sm"
-                            radius={5}
-                          >
-                            <IconPlus strokeWidth={1.5} size={16} />
-                          </ActionIcon>
-                        </Menu.Target>
+                    <ModalTagForm>
+                      {(openTagForm) => (
+                        <Group gap={0} onClick={(e) => e.stopPropagation()}>
+                          <Menu>
+                            <Menu.Target>
+                              <ActionIcon
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
+                                }}
+                                variant="subtle"
+                                color={color(isActive ? "primary" : "var(--mantine-color-text)")}
+                                size="sm"
+                                radius={5}
+                              >
+                                <IconPlus strokeWidth={1.5} size={16} />
+                              </ActionIcon>
+                            </Menu.Target>
 
-                        <MenuDropdown>
-                          <Menu.Item
-                            leftSection={<IconPlus size={16} />}
-                            onClick={() => openCreateTask()}
-                          >
-                            <Text tt="capitalize" fz={em(14)}>
-                              <Trans>Create task</Trans>
-                            </Text>
-                          </Menu.Item>
+                            <MenuDropdown>
+                              <Menu.Item
+                                leftSection={<IconPlus size={16} />}
+                                onClick={() => openCreateTask()}
+                              >
+                                <Text tt="capitalize" fz={em(14)}>
+                                  <Trans>Create task</Trans>
+                                </Text>
+                              </Menu.Item>
 
-                          <Menu.Item
-                            leftSection={<IconFolderPlus size={16} />}
-                            onClick={() =>
-                              OnModalTagForm({
-                                type: TagType.TASK_FOLDER,
-                                onDone: (tag) => router.push(`/tasks?fs=${tag._id}`),
-                              })
-                            }
-                          >
-                            <Text tt="capitalize" fz={em(14)}>
-                              <Trans>Create folder</Trans>
-                            </Text>
-                          </Menu.Item>
-                        </MenuDropdown>
-                      </Menu>
+                              <Menu.Item
+                                leftSection={<IconFolderPlus size={16} />}
+                                onClick={() =>
+                                  openTagForm({
+                                    type: TagType.TASK_FOLDER,
+                                    onCreated: (tag) =>
+                                      router.push(
+                                        updateTaskPath(location.pathname, { slug: tag.slug })
+                                      ),
+                                  })
+                                }
+                              >
+                                <Text tt="capitalize" fz={em(14)}>
+                                  <Trans>Create folder</Trans>
+                                </Text>
+                              </Menu.Item>
+                            </MenuDropdown>
+                          </Menu>
 
-                      {folders.length > 0 && (
-                        <ActionIcon
-                          variant="subtle"
-                          color={color(isActive ? "primary" : "var(--mantine-color-text)")}
-                          size="sm"
-                          radius={5}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            onToggleShowTaskFolders();
-                          }}
-                        >
-                          {isShowTaskFolder ? (
-                            <IconChevronUp strokeWidth={1.5} size={16} />
-                          ) : (
-                            <IconChevronDown strokeWidth={1.5} size={16} />
+                          {folders.length > 0 && (
+                            <ActionIcon
+                              variant="subtle"
+                              color={color(isActive ? "primary" : "var(--mantine-color-text)")}
+                              size="sm"
+                              radius={5}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                onToggleShowTaskFolders();
+                              }}
+                            >
+                              {isShowTaskFolder ? (
+                                <IconChevronUp strokeWidth={1.5} size={16} />
+                              ) : (
+                                <IconChevronDown strokeWidth={1.5} size={16} />
+                              )}
+                            </ActionIcon>
                           )}
-                        </ActionIcon>
+                        </Group>
                       )}
-                    </Group>
+                    </ModalTagForm>
                   </Renderer>
                 </Group>
               </Group>

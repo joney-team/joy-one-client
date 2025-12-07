@@ -4,18 +4,18 @@ import { Clickable } from "@/components/clickable";
 import { EntityImage } from "@/components/entity-image";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { List } from "@/components/list";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { t } from "@lingui/core/macro";
 import { Stack, Text } from "@mantine/core";
 import { IconCategory2, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
 import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
 import { getProductIcon } from "../products/products-service";
-import { t } from "@lingui/core/macro";
 
 export const ServiceList: FC = () => {
   return (
@@ -89,7 +89,7 @@ export const ServiceList: FC = () => {
           },
         }}
         card={({ data }) => <ProductCard product={data} />}
-        events={[EventType.PRODUCT_NEW, EventType.PRODUCT_UPDATE, EventType.PRODUCT_ARCHIVED]}
+        events={[EventType.ProductNew, EventType.ProductUpdate, EventType.ProductArchived]}
         actions={[
           {
             label: t`Edit`,

@@ -1,13 +1,13 @@
 "use client";
 
 import { useRestQuery } from "@/modules/apis/use-rest-query";
-import { EventType } from "@/modules/events/event-types";
 import { AppEntity, ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Card, InputWrapper, SimpleGrid, Switch } from "@mantine/core";
 import { FC, Fragment, ReactNode } from "react";
 import { CustomField, CustomFieldEntity, CustomFieldType } from "../custom-field-types";
 import { customFieldInputs } from "../inputs/_index";
+import { EventType } from "@/graphql/enums.graphql";
 
 export interface CustomFieldInputProps {
   customField: CustomFieldEntity;
@@ -30,9 +30,9 @@ export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
       getAll: true,
     },
     refetchEvents: [
-      EventType.CUSTOM_FIELDS_NEW,
-      EventType.CUSTOM_FIELDS_UPDATED,
-      EventType.CUSTOM_FIELDS_REMOVED,
+      EventType.CustomFieldsNew,
+      EventType.CustomFieldsUpdated,
+      EventType.CustomFieldsRemoved,
     ],
   });
 

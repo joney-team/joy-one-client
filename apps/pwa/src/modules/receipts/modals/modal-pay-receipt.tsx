@@ -8,7 +8,8 @@ import { Renderer } from "@/components/renderer";
 import { Timer } from "@/components/timer";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventEntity, EventType } from "@/modules/events/event-types";
+import { EventEntity } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { getLoan } from "@/modules/loans/loans-service";
@@ -214,7 +215,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
     initialize();
   }, []);
 
-  useEventsListener([EventType.RECEIPT_PAID], (ev: EventEntity) => {
+  useEventsListener([EventType.ReceiptPaid], (ev: EventEntity) => {
     if (ev.ref === receipt?.id) fetchReceipt();
   });
 

@@ -52,6 +52,7 @@ export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((prop
   };
 
   const IconComponent = argsRef.current?.icon || IconAlertTriangle;
+  const modalColor = color(argsRef.current?.color ?? "orange");
 
   return (
     <Fragment>
@@ -71,7 +72,7 @@ export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((prop
       >
         <Stack align="stretch" gap={0}>
           <Group p="md" wrap="nowrap" align="start">
-            <ThemeIcon color={color(argsRef.current?.color)} variant="light" size="xl">
+            <ThemeIcon color={modalColor} variant="light" size="xl">
               <IconComponent />
             </ThemeIcon>
             <Stack>{argsRef.current?.children}</Stack>
@@ -81,7 +82,7 @@ export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((prop
             <Button color="gray" variant="outline" onClick={onCancel} component="div">
               <Trans>Cancel</Trans>
             </Button>
-            <Button color={color(argsRef.current?.color)} onClick={onConfirm}>
+            <Button color={modalColor} onClick={onConfirm}>
               {argsRef.current?.confirmLabel ?? <Trans>Confirm</Trans>}
             </Button>
           </Group>

@@ -1,6 +1,7 @@
+"use client";
+
 import { ModalTitle } from "@/components/modal-title";
-import { eventTypes } from "@/modules/events/event-constants";
-import { EventType } from "@/modules/events/event-types";
+import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import { IconForms } from "@tabler/icons-react";
 import { FormCustomField, FormCustomFieldProps } from "../components/form-custom-field";
@@ -8,16 +9,7 @@ import { FormCustomField, FormCustomFieldProps } from "../components/form-custom
 export const OnModalCustomField = (props?: FormCustomFieldProps) => {
   return modals.open({
     modalId: "modal-custom-field",
-    title: (
-      <ModalTitle
-        title={
-          props?.customField
-            ? eventTypes[EventType.CUSTOM_FIELDS_UPDATED].name()
-            : eventTypes[EventType.CUSTOM_FIELDS_NEW].name()
-        }
-        icon={IconForms}
-      />
-    ),
+    title: <ModalTitle title={<Trans>Custom field</Trans>} icon={IconForms} />,
     children: (
       <FormCustomField
         {...props}

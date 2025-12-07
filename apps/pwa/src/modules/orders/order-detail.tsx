@@ -5,12 +5,12 @@ import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
 import { OrderCard } from "@/modules/orders/order-card";
 import { useLayout } from "@/layout/layout-context";
-import { EventType } from "@/modules/events/event-types";
 import { getOrderByCode } from "@/modules/orders/orders-service";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Skeleton } from "@mantine/core";
 import { useParams } from "next/navigation";
 import { Fragment, useEffect, type FC } from "react";
+import { EventType } from "@/graphql/enums.graphql";
 
 export const OrderDetail: FC = () => {
   const params = useParams();
@@ -22,7 +22,7 @@ export const OrderDetail: FC = () => {
       id: `orders-${code}`,
       fetch: () => getOrderByCode(code),
       refetchEvents: {
-        types: [EventType.ORDER_SYNCED, EventType.ORDER_UPDATED],
+        types: [EventType.OrderSynced, EventType.OrderUpdated],
         condition: (e, _order) => {
           return e.ref === _order.id;
         },

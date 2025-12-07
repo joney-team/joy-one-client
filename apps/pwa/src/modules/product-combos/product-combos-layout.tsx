@@ -3,7 +3,7 @@
 import { Errored } from "@/components/errored";
 import { NavigationTabs } from "@/components/navigation-tabs";
 import { useRouter } from "@/hooks/use-router";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { ProductType } from "@/modules/products/products-types";
 import { t } from "@lingui/core/macro";
 import { Skeleton, Stack } from "@mantine/core";
@@ -21,7 +21,7 @@ export const ProductComboLayout: FC<PropsWithChildren> = (props) => {
       limit: 1,
       type: ProductType.COMBO,
     },
-    refetchEvents: [EventType.PRODUCT_NEW, EventType.PRODUCT_UPDATE, EventType.PRODUCT_ARCHIVED],
+    refetchEvents: [EventType.ProductNew, EventType.ProductUpdate, EventType.ProductArchived],
   });
 
   if (checkCombos.isFetching)

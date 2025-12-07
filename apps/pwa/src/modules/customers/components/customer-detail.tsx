@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
+import { EventType } from "@/graphql/enums.graphql";
 import { CustomerBookings } from "@/modules/customers/components/customer-booking";
 import { CustomerInformations } from "@/modules/customers/components/customer-information";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { EventType } from "@/modules/events/event-types";
 import { useFetch } from "@/utils/use-fetch.util";
 import { ActionIcon, Group, Skeleton, Stack } from "@mantine/core";
 import {
@@ -35,9 +35,9 @@ import { CustomerKyc } from "@/modules/customers/components/customer-kyc-list";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 import { AppEntity } from "@/types";
 import { Trans } from "@lingui/react/macro";
-import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 
 export const CustomerDetail = () => {
   const workspace = useWorkspace();
@@ -53,7 +53,7 @@ export const CustomerDetail = () => {
       return getCustomerByCode(customerCode);
     },
     refetchEvents: {
-      types: [EventType.CUSTOMER_UPDATED],
+      types: [EventType.CustomerUpdated],
       condition: (e, data) =>
         data?._id === e.ref || (e.relatedEntities || []).some((v) => v.id === data?._id),
     },

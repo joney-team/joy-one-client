@@ -3,7 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { Errored } from "@/components/errored";
 import { useLayout } from "@/layout/layout-context";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { removeFileFromRelativePath } from "@/modules/files/file-service";
 import { ModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { getPartner, updatePartner } from "@/modules/partners/partners-service";
@@ -40,7 +40,7 @@ export const PartnerDetail: FC = () => {
     id: `partners-${partnerId}`,
     fetch: async () => getPartner(partnerId as string),
     refetchEvents: {
-      types: [EventType.PARTNER_UPDATED, EventType.PARTNER_ARCHIVED],
+      types: [EventType.PartnerUpdated, EventType.PartnerArchived],
       condition: (e, _partner) => e.ref === _partner._id,
     },
   });

@@ -101,15 +101,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = ({ task, close }) => {
               updateTasks([
                 {
                   _id: task._id,
-                  folder: tag
-                    ? {
-                        __typename: "TagEntity",
-                        _id: tag._id,
-                        color: tag.color,
-                        name: tag.name,
-                        slug: tag.slug,
-                      }
-                    : null,
+                  folder: tag,
                 },
               ]);
             }}

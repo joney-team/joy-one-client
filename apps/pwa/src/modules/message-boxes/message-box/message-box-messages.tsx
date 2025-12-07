@@ -6,7 +6,7 @@ import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { FileType } from "@/graphql/enums.graphql";
 import { eventsEmitter, useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { FileCard } from "@/modules/files/file-card";
 import { parseFile } from "@/modules/files/files-utils";
 import { getMessages } from "@/modules/message-boxes/message-boxes-service";
@@ -83,7 +83,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
   }, []);
 
   useEventsListener(
-    [EventType.MESSAGE_NEW, EventType.MESSAGE_UPDATED],
+    [EventType.MessageNew, EventType.MessageUpdated],
     (msgEvent) => {
       if (msgEvent.data && msgEvent.data.boxId === props.box._id) {
         const isAtBottom =

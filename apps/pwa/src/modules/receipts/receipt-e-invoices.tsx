@@ -1,7 +1,10 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Empty } from "@/components/empty";
 import { DateFormat } from "@/components/format/date-format";
+import { EventType } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { ResponseList } from "@/types";
 import { String } from "@/utils/string.utils";
@@ -12,7 +15,6 @@ import { IconArchive, IconEye, IconFileInvoice } from "@tabler/icons-react";
 import { useMemo, type FC } from "react";
 import { api } from "../apis";
 import { useRestQuery } from "../apis/use-rest-query";
-import { EventType } from "../events/event-types";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
@@ -30,11 +32,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
     params: {
       receiptId: receipt.id,
     },
-    refetchEvents: [
-      EventType.E_INVOICE_CREATED,
-      EventType.E_INVOICE_REMOVED,
-      EventType.RECEIPT_PAID,
-    ],
+    refetchEvents: [EventType.EInvoiceCreated, EventType.EInvoiceRemoved, EventType.ReceiptPaid],
   });
 
   const handleArchiveEInvoice = (invoice: PluginEInvoicesEntity) => {

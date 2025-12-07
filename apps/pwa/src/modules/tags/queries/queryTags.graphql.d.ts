@@ -5,6 +5,6 @@ export type TagsQueryVariables = Types.Exact<{
 }>;
 
 
-export type TagsQuery = { __typename: 'Query', tags: { __typename: 'Tags', count: number, data: Array<{ __typename: 'TagEntity', _id: string, name: string, color: string | null, type: Types.TagType, slug: string, order: number | null }> } };
+export type TagsQuery = { __typename: 'Query', tags: { __typename: 'Tags', count: number, data: Array<{ __typename: 'Tag', _id: string, name: string, color: string | null, type: Types.TagType, slug: string, order: number }> } };
 
 declare const Document: import("graphql").DocumentNode; export default Document;

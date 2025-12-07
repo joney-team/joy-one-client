@@ -6,12 +6,11 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { codeColumn } from "@/components/list/columns/code-column";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Stack, Text } from "@mantine/core";
 import { IconBox, IconBuildingWarehouse, IconEdit } from "@tabler/icons-react";
@@ -115,7 +114,7 @@ export const ProductList: FC = () => {
           },
         }}
         card={({ data }) => <ProductCard product={data} />}
-        events={[EventType.PRODUCT_NEW, EventType.PRODUCT_UPDATE, EventType.PRODUCT_ARCHIVED]}
+        events={[EventType.ProductNew, EventType.ProductUpdate, EventType.ProductArchived]}
         actions={[
           {
             label: <Trans>Edit</Trans>,

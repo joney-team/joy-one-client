@@ -1,7 +1,9 @@
+"use client";
+
+import { EventType } from "@/graphql/enums.graphql";
 import { useFetch } from "@/utils/use-fetch.util";
 import { FC, PropsWithChildren } from "react";
 import { useEventsListener } from "../events/event-service";
-import { EventType } from "../events/event-types";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { Context } from "./reports-context";
 import { getRealtimeReport } from "./reports-services";
@@ -19,7 +21,7 @@ export const ReportsProvider: FC<PropsWithChildren> = (props) => {
   );
 
   useEventsListener(
-    [EventType.REPORT_REALTIME_SYNCED],
+    [EventType.ReportRealtimeSynced],
     (e) => {
       if (
         e.data &&

@@ -212,9 +212,18 @@ export const WorkspaceNavigation: FC = () => {
         }}
       />
 
-      <ScrollArea.Autosize type="never" scrollbars="y">
+      <ScrollArea.Autosize
+        type="never"
+        scrollbars="y"
+        styles={{
+          content: {
+            minWidth: 0,
+          },
+        }}
+      >
         <Stack
-          w="100%"
+          // w="100%"
+          miw={0}
           id="app-navigation"
           gap={workspaceLayout.isNavbarCollapsed ? 5 : 0}
           pb={16}

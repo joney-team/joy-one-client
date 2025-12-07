@@ -6,8 +6,7 @@ import { DateFormat } from "@/components/format/date-format";
 import { SlotTime } from "@/components/inputs/work-slot-settings-input";
 import { Renderer } from "@/components/renderer";
 import { appEntities } from "@/constant";
-import { useLayout } from "@/layout/layout-context";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { receiptPaymentMethods } from "@/modules/receipts/receipt-constants";
 import { ReceiptPaymentMethod } from "@/modules/receipts/receipts-types";
 import { searchGetAvailableEntities } from "@/modules/search/search-service";
@@ -45,13 +44,12 @@ export const slotGroupColors = ["primary", "orange", "teal"];
 
 export const WorkspaceOperationSettings: FC = () => {
   const workspace = useWorkspace();
-  const layout = useLayout();
   const color = useColor();
 
   const searchAvailableEntities = useFetch({
     id: "search-available-entities",
     fetch: async () => searchGetAvailableEntities(),
-    refetchEvents: [EventType.WORKSPACE_SETTING_UPDATED],
+    refetchEvents: [EventType.WorkspaceSettingUpdated],
   });
 
   const workDaySlots = useWorkDaySlots();

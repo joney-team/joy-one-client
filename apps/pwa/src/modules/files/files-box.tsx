@@ -3,7 +3,7 @@
 import { useList } from "@/components/list/use-list";
 import { FileType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { detectFileType, getFiles, removeFile } from "@/modules/files/file-service";
 import { FileEntity } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
@@ -108,7 +108,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
     }
   };
 
-  useEventsListener([EventType.FILE_NEW, EventType.FILE_REMOVED], () =>
+  useEventsListener([EventType.FileNew, EventType.FileRemoved], () =>
     uploadedFiles.fetch(true, { isSilient: true })
   );
 

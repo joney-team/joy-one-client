@@ -4,7 +4,6 @@ import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { api } from "@/modules/apis";
-import { EventType } from "@/modules/events/event-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
@@ -13,13 +12,14 @@ import { ActionIcon, Anchor, Card, Group, Stack, Switch, Text } from "@mantine/c
 import { IconExternalLink } from "@tabler/icons-react";
 import { type FC } from "react";
 import { ZaloOaGmfGroup } from "../zalo-oas-types";
+import { EventType } from "@/graphql/enums.graphql";
 
 export const ZaloOaGmfGroups: FC = () => {
   const workspace = useWorkspace();
 
   const { data, count } = useList({
     fetch: async () => api.get<ResponseList<ZaloOaGmfGroup>>("/plugins/zalo-oas/gmf-groups"),
-    events: [EventType.WORKSPACE_SETTING_UPDATED],
+    events: [EventType.WorkspaceSettingUpdated],
   });
 
   return (

@@ -7,8 +7,8 @@ import { codeColumn } from "@/components/list/columns/code-column";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { genders } from "@/constant";
+import { EventType } from "@/graphql/enums.graphql";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
-import { EventType } from "@/modules/events/event-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Gender } from "@/types";
 import { Trans } from "@lingui/react/macro";
@@ -121,10 +121,10 @@ export const CustomerList: FC = () => {
               },
             ]}
             events={[
-              EventType.CUSTOMER_NEW,
-              EventType.CUSTOMER_UPDATED,
-              EventType.CUSTOMER_ARCHIVED,
-              EventType.CUSTOMER_BULK_UPDATE_WORKSPACE_BRANCH,
+              EventType.CustomerNew,
+              EventType.CustomerUpdated,
+              EventType.CustomerArchived,
+              EventType.CustomerBulkUpdateWorkspaceBranch,
             ]}
           />
         </Stack>

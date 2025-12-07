@@ -2,7 +2,7 @@ import { Empty } from "@/components/empty";
 import { ListQty } from "@/components/list-qty";
 import { ProductVoucherCard } from "@/modules/product-vouchers/product-voucher-card";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/modules/events/event-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { getProductVouchers } from "@/modules/product-vouchers/product-vouchers-service";
 import { useList } from "@/components/list/use-list";
 import { Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
@@ -19,7 +19,7 @@ export const ReleasedProductVoucherList: FC = () => {
       }),
   });
 
-  useEventsListener([EventType.PRODUCT_VOUCHERS_NEW, EventType.PRODUCT_UPDATE], () =>
+  useEventsListener([EventType.ProductVouchersNew, EventType.ProductUpdate], () =>
     productVouchers.fetch(true)
   );
 

@@ -1,12 +1,20 @@
 .ContentEditable {
-  .Input {
+  min-width: 0;
+
+  & .Input {
     border: 0.5px solid transparent;
     border-radius: var(--mantine-radius-md);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &.isActive {
-    .Input {
+    & .Input {
       padding: 0 0.4rem;
+      overflow: unset;
+      text-overflow: unset;
+      white-space: unset;
 
       &:focus {
         border: 0.5px solid var(--mantine-color-default-border);
@@ -16,6 +24,14 @@
         background-color: var(--mantine-color-default-hover);
         opacity: 0.5;
       }
+    }
+  }
+
+  &.isDoubleClickable {
+    user-select: none;
+
+    & * {
+      user-select: none;
     }
   }
 }

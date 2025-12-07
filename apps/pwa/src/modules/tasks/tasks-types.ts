@@ -3,7 +3,6 @@ import type { PartnerEntity } from "@/modules/partners/partners-types";
 import type { TagEntity } from "@/modules/tags/tags-types";
 import type { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import type { BaseMongoEntity } from "@/types";
-import type { Params } from "next/dist/server/request/params";
 import type { TasksState } from "./tasks-provider";
 import type { TaskView } from "./views/types";
 
