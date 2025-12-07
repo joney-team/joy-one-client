@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Divider, Group, MantineColor, Portal, Stack, Text } from "@mantine/core";
-import { Icon, IconClockHour3, IconMaximize } from "@tabler/icons-react";
+import { Icon, IconClockHour3, IconFlagFilled, IconMaximize } from "@tabler/icons-react";
 import { Fragment, ReactNode, useEffect, useRef, useState, type FC } from "react";
 import { TaskMenuAction, type TaskMenu } from "./task-menu-types";
 
@@ -21,6 +21,8 @@ import {
   InternalEvent,
   removeInternalEventsListner,
 } from "@/hooks/use-internal-event";
+import { TaskPriority } from "@/graphql/enums.graphql";
+import { taskPriorities } from "../../task-constants";
 
 const MenuItem: FC<{
   icon: Icon;
@@ -55,8 +57,46 @@ export const TaskMenuDropdownContent: FC<TaskMenu & { onClose: () => void }> = (
   action,
 }) => {
   const router = useRouter();
+  const color = useColor();
   const { updateTasks } = useUpdateTasks();
   const { statuses } = useTaskStatuses(task);
+
+  if (action === TaskMenuAction.CHANGE_PRIORITY) {
+    return (
+      <Card p={0} shadow="md">
+        <Stack gap={3} py={8}>
+          <Text fz={13}>
+            <Trans>Change priority</Trans>
+          </Text>
+
+          {Object.values(TaskPriority).map((priority) => {
+            const priorityConstant = taskPriorities[priority];
+            return (
+              <Group
+                className={styles.TaskMenuItem}
+                gap={6}
+                pr={16}
+                pl={8}
+                py={6}
+                align="center"
+                onClick={() => {
+                  onClose();
+                  updateTasks({
+                    _id: task._id,
+                    priority: priority,
+                    context: { fromGroupVariables: groupVariables },
+                  });
+                }}
+              >
+                <IconFlagFilled size={16} color={color(priorityConstant.color)} />
+                <Text fz={13}>{priorityConstant.label()}</Text>
+              </Group>
+            );
+          })}
+        </Stack>
+      </Card>
+    );
+  }
 
   if (action === TaskMenuAction.CHANGE_STATUS) {
     return (

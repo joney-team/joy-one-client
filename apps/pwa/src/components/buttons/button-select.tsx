@@ -25,7 +25,7 @@ interface ButtonSelectProps {
   isActive?: boolean;
   activeColor?: string;
   inactiveColor?: string;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
   onClear?: () => void;
   quantity?: number;
   iconClassName?: string;
@@ -104,7 +104,7 @@ export const ButtonSelect: FC<ButtonSelectProps> = (props) => {
   const _onModal = (e?: any) => {
     e?.preventDefault();
     e?.stopPropagation();
-    if (props.onClick) props.onClick();
+    if (props.onClick) props.onClick(e);
     open();
   };
 

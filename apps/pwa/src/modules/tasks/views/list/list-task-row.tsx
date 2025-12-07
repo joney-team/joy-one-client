@@ -508,7 +508,7 @@ export const ListTaskRow: FC<{
               />
             </Group>
 
-            <Group w={70} px={10} justify="center" style={{ overflow: "hidden" }}>
+            <Group w={70} px={10} justify="center" style={{ overflow: "visible" }}>
               <ButtonSelect
                 inactiveColor="gray.4"
                 size={32}
