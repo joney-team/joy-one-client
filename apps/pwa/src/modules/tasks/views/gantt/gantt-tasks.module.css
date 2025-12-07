@@ -116,6 +116,11 @@
       & .GanttTaskTimelineChildSummaryProgress {
         border-radius: 5rem;
       }
+
+      &.isChildSummary {
+        border-radius: 0;
+        overflow: visible;
+      }
     }
 
     & .GanttTaskTimelineResizePointer {
