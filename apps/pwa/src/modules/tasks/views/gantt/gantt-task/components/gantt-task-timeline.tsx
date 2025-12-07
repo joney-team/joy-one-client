@@ -37,7 +37,7 @@ export const GanttTaskTimeline: FC = () => {
 
   // Handle moving estimated
   useEffect(() => {
-    if (!timeline?.isCanMove || !timelineRef.current || taskMenu.isOpened) return;
+    if (!timeline?.isCanMove || !timelineRef.current) return;
 
     let dragging = false;
     let initialX = 0;
