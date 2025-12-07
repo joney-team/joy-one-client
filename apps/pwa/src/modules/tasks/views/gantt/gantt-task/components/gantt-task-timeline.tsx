@@ -1,7 +1,7 @@
 "use client";
 
 import { classNames } from "@/utils/ui.utils";
-import { useEffect, useMemo, useRef, type FC } from "react";
+import { Fragment, useEffect, useMemo, useRef, type FC } from "react";
 import { useGanttTaskRow } from "../gantt-task-provider";
 
 import { UpdateTask, useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
@@ -205,29 +205,31 @@ export const GanttTaskTimeline: FC = () => {
         background: timeline.isChildSummary ? "transparent" : alpha(taskColor, 0.6),
       }}
     >
-      <div
-        className={styles.GanttTaskTimelineProgress}
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: `${task.progress}%`,
-          height: "100%",
-          background: alpha(taskColor, 0.6),
-          transition: "width 0.2s ease-in-out",
-        }}
-      />
-
       {timeline.isChildSummary ? (
         <GanttTaskTimelineChildSummary />
       ) : (
-        <GanttTaskTimelineResizable timelineRef={timelineRef}>
-          <Group h="100%" miw={0} flex={1} align="center">
-            <Text fz={11} fw={500} truncate c="white" maw="100%" flex={1}>
-              {task.name}
-            </Text>
-          </Group>
-        </GanttTaskTimelineResizable>
+        <Fragment>
+          <GanttTaskTimelineResizable timelineRef={timelineRef}>
+            <Group h="100%" miw={0} flex={1} align="center">
+              <Text fz={11} fw={500} truncate c="white" maw="100%" flex={1}>
+                {task.name}
+              </Text>
+            </Group>
+          </GanttTaskTimelineResizable>
+
+          <div
+            className={styles.GanttTaskTimelineProgress}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: `${task.progress}%`,
+              height: "100%",
+              background: alpha(taskColor, 0.6),
+              transition: "width 0.2s ease-in-out",
+            }}
+          />
+        </Fragment>
       )}
     </div>
   );
