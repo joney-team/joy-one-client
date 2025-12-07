@@ -17,7 +17,7 @@ export interface TaskStatus {
   color?: string | null;
   icon?: string | null;
   isDefault?: boolean;
-  order?: number;
+  order: number;
 }
 
 export enum TaskPriority {
