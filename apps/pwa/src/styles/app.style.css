@@ -1,5 +1,5 @@
 /* Start Color Scheme */
-:where([data-mantine-color-scheme='light']) {
+:where([data-mantine-color-scheme="light"]) {
   --color-bg-content: var(--mantine-color-white);
 
   /* Illustrations */
@@ -9,7 +9,7 @@
   --color-illustration-character-hair: rgb(31, 31, 31);
 }
 
-:where([data-mantine-color-scheme='dark']) {
+:where([data-mantine-color-scheme="dark"]) {
   --color-bg-content: var(--mantine-color-dark-6);
 
   /* Illustrations */
@@ -558,7 +558,7 @@ body {
   position: relative;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -575,4 +575,14 @@ body {
   flex-direction: column;
   gap: 0;
   max-width: 100%;
+}
+
+.Draggable {
+  user-select: none;
+  cursor: grab;
+  outline: none;
+
+  &:active {
+    cursor: grabbing;
+  }
 }

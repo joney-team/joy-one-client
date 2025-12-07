@@ -1,4 +1,4 @@
-import { ActionIcon } from "@mantine/core";
+import { ActionIcon, Group } from "@mantine/core";
 import { type FC } from "react";
 import { useColor } from "@/modules/theme/use-color";
 import { IconSquareCheckFilled, IconSquareDashed } from "@tabler/icons-react";
@@ -16,19 +16,20 @@ export const TaskSelectionBox: FC<{
   const isSelected = selected.some((v) => v._id === task._id);
 
   return (
-    <ActionIcon
+    <Group
       component="div"
-      color={isSelected ? color("primary") : "gray"}
-      variant="subtle"
+      variant="transparent"
       onClick={(e) => toggleSelect({ task, isShiftKey: e.shiftKey, groupVariables })}
       className={className}
       data-selected={isSelected}
+      w={26}
+      h={26}
     >
       {isSelected ? (
-        <IconSquareCheckFilled size={18} />
+        <IconSquareCheckFilled size={18} color={color("primary")} />
       ) : (
-        <IconSquareDashed strokeWidth={1.5} size={18} />
+        <IconSquareDashed strokeWidth={1.5} size={18} color={color("gray")} />
       )}
-    </ActionIcon>
+    </Group>
   );
 };

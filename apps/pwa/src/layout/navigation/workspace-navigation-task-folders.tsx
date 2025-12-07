@@ -201,7 +201,15 @@ const TaskFolderNavigationItem: FC<{
         </Group>
 
         <Group gap={5} justify="end">
-          <Menu opened={isMenuOpen} onChange={setIsMenuOpen} closeOnItemClick={false}>
+          <Menu
+            opened={isMenuOpen}
+            closeOnItemClick={false}
+            onOpen={() => {
+              setIsMenuOpen(true);
+              setIsColorPickerOpen(false);
+            }}
+            onClose={() => setIsMenuOpen(false)}
+          >
             <Menu.Target>
               <ActionIcon
                 className={styles.ActionsMenu}

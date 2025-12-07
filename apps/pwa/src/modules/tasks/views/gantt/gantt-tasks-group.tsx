@@ -11,6 +11,7 @@ import { Fragment, useEffect, useMemo, useState, type FC } from "react";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { ModalCreateTask } from "../../modals/modal-create-task";
 import { GanttTask } from "./gantt-task/gantt-task";
+import { useTaskSelections } from "../../modules/task-selections/task-selections-context";
 
 interface GanttTasksGroupProps {
   folder?: TagDataFragment;
@@ -23,6 +24,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
   pure,
   isDefaultOpen = false,
 }) => {
+  const { unselect } = useTaskSelections();
   const [isOpened, setIsOpened] = useState(isDefaultOpen);
   const opened = pure ?? isOpened;
   const color = useColor();
@@ -41,6 +43,11 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
   useEffect(() => {
     if (opened) getTasks();
   }, [opened, getTasks]);
+
+  // Unselect tasks when group is closed
+  useEffect(() => {
+    if (!opened) unselect(...tasks.map((v) => v._id));
+  }, [tasks, opened]);
 
   useEffect(() => {
     return onInternalEvent(InternalEvent.GANTT_TASKS_OPEN_ALL_FOLDER, () => setIsOpened(true));

@@ -58,7 +58,13 @@ export const TaskSelectionsProvider: FC<PropsWithChildren> = ({ children }) => {
   };
 
   return (
-    <TaskSelectionsContext.Provider value={{ selected, toggleSelect: toggleSelectTask }}>
+    <TaskSelectionsContext.Provider
+      value={{
+        selected,
+        toggleSelect: toggleSelectTask,
+        unselect: (...ids) => setSelected((prev) => prev.filter((v) => !ids.includes(v._id))),
+      }}
+    >
       {children}
     </TaskSelectionsContext.Provider>
   );

@@ -43,6 +43,7 @@ import styles from "../gantt-tasks.module.css";
 import { GanttTaskDraggable } from "./components/gantt-task-draggable";
 import { GanttTaskRowProvider, useGanttTaskRow } from "./gantt-task-provider";
 import { GanttTaskProps } from "./gantt-task-types";
+import { classNames } from "@/utils/ui.utils";
 
 const GanttTaskTimeline = dynamic(
   () => import("./components/gantt-task-timeline").then((mod) => mod.GanttTaskTimeline),
@@ -181,22 +182,23 @@ const GanttTaskContent: FC = () => {
         <GanttTaskDraggable>
           {(draggingRef) => (
             <Fragment>
-              <ActionIcon
-                ref={draggingRef}
-                className={styles.DragHandle}
-                variant="transparent"
-                color="gray"
-                component="div"
-                style={{ cursor: "move", outline: "none" }}
-              >
-                <IconGripVertical size={16} strokeWidth={1.2} />
-              </ActionIcon>
+              <Group gap={0}>
+                <ActionIcon
+                  ref={draggingRef}
+                  className={classNames("Draggable", styles.TaskSelectionBox)}
+                  variant="transparent"
+                  color="gray"
+                  component="div"
+                >
+                  <IconGripVertical size={16} strokeWidth={1.2} />
+                </ActionIcon>
 
-              <TaskSelectionBox
-                className={styles.TaskSelectionBox}
-                task={task}
-                groupVariables={groupVariables}
-              />
+                <TaskSelectionBox
+                  className={styles.TaskSelectionBox}
+                  task={task}
+                  groupVariables={groupVariables}
+                />
+              </Group>
 
               {task.parent && (
                 <ThemeIcon color="gray" variant="transparent" ml={10}>

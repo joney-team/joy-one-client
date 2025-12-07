@@ -10,11 +10,13 @@ export interface TasksSelectionContextType {
     isShiftKey: boolean;
     groupVariables: TasksQueryVariables | null;
   }) => void;
+  unselect: (...ids: string[]) => void;
 }
 
 export const TaskSelectionsContext = createContext<TasksSelectionContextType>({
   selected: [],
   toggleSelect: () => {},
+  unselect: () => {},
 });
 
 export const useTaskSelections = () => {
