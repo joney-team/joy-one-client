@@ -94,7 +94,7 @@ export const TaskStatusOptions: FC<TaskStatusOptionsProps> = (props) => {
 };
 
 export const TaskStatusIcon: FC<
-  TaskStatus & {
+  Pick<TaskStatus, "id" | "color" | "name"> & {
     size?: number;
     onClick?: MouseEventHandler<HTMLDivElement> | undefined;
     mr?: number;

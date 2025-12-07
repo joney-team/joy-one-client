@@ -47,8 +47,8 @@ const TaskViewGateway = dynamic(
   }
 );
 
-const TaskMenuProvider = dynamic(
-  () => import("../modules/task-menu/task-menu-provider").then((mod) => mod.TaskMenuProvider),
+const TaskMenuDropdown = dynamic(
+  () => import("../modules/task-menu/task-menu-dropdown").then((mod) => mod.TaskMenuDropdown),
   {
     ssr: false,
     loading: nonLoading,
@@ -116,12 +116,11 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
 
       {props.children}
 
-      <TaskMenuProvider>
-        <TaskViewGateway view={view} />
-        <TasksRealtimeEvents />
-        <TaskDetail />
-        <BulkTasksActions />
-      </TaskMenuProvider>
+      <TaskViewGateway view={view} />
+      <TasksRealtimeEvents />
+      <TaskDetail />
+      <BulkTasksActions />
+      <TaskMenuDropdown />
     </Fragment>
   );
 };

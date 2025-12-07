@@ -9,7 +9,7 @@ import { Renderer } from "@/components/renderer";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
 import { TagType } from "@/modules/tags/tags-types";
-import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
+import { TaskStatusIcon, TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { TaskPriority } from "@/modules/tasks/tasks-types";
@@ -63,6 +63,9 @@ import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks"
 import { TaskSelectionBox } from "../../modules/task-selections/task-selection-box";
 import { TaskDataFragment } from "../../queries/fragmentTask.graphql";
 import styles from "./list-tasks.module.css";
+import { useTaskMenu } from "../../modules/task-menu/task-menu";
+import { useTaskStatuses } from "../../hooks/use-task-statuses";
+import { TaskMenuAction } from "../../modules/task-menu/task-menu-types";
 
 export const ListTaskRow: FC<{
   task: TaskDataFragment;
@@ -87,6 +90,7 @@ export const ListTaskRow: FC<{
   isMarkAsChild = false,
   droppableOptions = {},
 }) => {
+  const taskMenu = useTaskMenu();
   const droppableRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef<HTMLDivElement | null>(null);
   const draggingRefContainer = useRef<HTMLElement | null>(null);
@@ -245,6 +249,8 @@ export const ListTaskRow: FC<{
   };
   const indexSpacing = isMarkAsChild ? 16 : 0;
 
+  const { status } = useTaskStatuses(task);
+
   return (
     <Fragment>
       <Stack gap={0} className={styles.ListTaskRowContainer} ref={droppableRef}>
@@ -287,10 +293,22 @@ export const ListTaskRow: FC<{
               </ThemeIcon>
             </Renderer>
 
-            <TaskStatusOptions
-              task={task}
-              onSelect={(s) => updateTasks({ _id: task._id, status: s })}
-            />
+            <ActionIcon
+              variant="subtle"
+              color={status.color}
+              component="div"
+              onClick={(e) =>
+                taskMenu.open({
+                  task,
+                  groupVariables,
+                  action: TaskMenuAction.CHANGE_STATUS,
+                  target: e.currentTarget,
+                  offset: { y: 5 },
+                })
+              }
+            >
+              <TaskStatusIcon {...status} />
+            </ActionIcon>
 
             <Group
               flex={1}

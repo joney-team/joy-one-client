@@ -214,6 +214,7 @@ export const GanttTaskTimeline: FC = () => {
           width: `${task.progress}%`,
           height: "100%",
           background: alpha(taskColor, 0.6),
+          transition: "width 0.2s ease-in-out",
         }}
       />
 

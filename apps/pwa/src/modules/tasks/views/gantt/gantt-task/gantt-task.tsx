@@ -219,6 +219,7 @@ const GanttTaskContent: FC = () => {
                         target: e.currentTarget,
                         task,
                         action: TaskMenuAction.CHANGE_STATUS,
+                        offset: { y: 5 },
                       });
                     }}
                   >
