@@ -7,11 +7,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
-} from "../queries/queryTasks.graphql";
+} from "../graphql/queryTasks.graphql";
 import QUERY_TASKS_COUNT, {
   type TasksCountQuery,
   type TasksCountQueryVariables,
-} from "../queries/queryTasksCount.graphql";
+} from "../graphql/queryTasksCount.graphql";
 
 export const useTasksQuery = ({
   variables,

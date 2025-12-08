@@ -8,7 +8,6 @@ import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
   draggable,
@@ -37,6 +36,7 @@ import {
   IconPlus,
   IconSubtask,
   IconTagPlus,
+  IconUsers,
 } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { taskPriorities } from "../../task-constants";
@@ -44,9 +44,9 @@ import { taskPriorities } from "../../task-constants";
 import { Button } from "@/components/buttons/button";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
 import Link from "next/link";
-import { TasksQueryVariables } from "../../queries/queryTasks.graphql";
-import { isTaskOutdated } from "../../tasks-service";
+import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 
+import { Avatar } from "@/components/avatar";
 import { useColor } from "@/modules/theme/use-color";
 import { classNames } from "@/utils/ui.utils";
 import {
@@ -56,12 +56,12 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { motion } from "framer-motion";
+import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import { useTaskMenu } from "../../modules/task-menu/task-menu";
 import { TaskMenuAction } from "../../modules/task-menu/task-menu-types";
 import { TaskSelectionBox } from "../../modules/task-selections/task-selection-box";
-import { TaskDataFragment } from "../../queries/fragmentTask.graphql";
 import styles from "./list-tasks.module.css";
 
 export const ListTaskRow: FC<{
@@ -88,7 +88,7 @@ export const ListTaskRow: FC<{
   droppableOptions = {},
 }) => {
   const color = useColor();
-  const taskMenu = useTaskMenu(task);
+  const taskMenu = useTaskMenu(task, groupVariables);
   const droppableRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef<HTMLDivElement | null>(null);
   const draggingRefContainer = useRef<HTMLElement | null>(null);
@@ -234,13 +234,13 @@ export const ListTaskRow: FC<{
           height: 38,
           width: "100%",
           background: "var(--mantine-color-gray-outline-hover)",
+          borderBottom: `1px solid var(--mantine-color-gray-light)`,
         }}
         animate={{ height: 44, transition: { duration: 0.2 } }}
       />
     );
   }, [over]);
 
-  const isOutdated = isTaskOutdated(task);
   const toggleSubTasks = () => {
     // TODO: Toggle subtasks
     // setIsSubTasksVisible((s) => !s)
@@ -301,7 +301,6 @@ export const ListTaskRow: FC<{
               component="div"
               onClick={(e) =>
                 taskMenu.open({
-                  groupVariables,
                   action: TaskMenuAction.CHANGE_STATUS,
                   target: e.currentTarget,
                   offset: { y: 5 },
@@ -436,7 +435,6 @@ export const ListTaskRow: FC<{
                     e.stopPropagation();
                     taskMenu.open({
                       target: e.currentTarget,
-                      groupVariables,
                       action: TaskMenuAction.CHANGE_TAGS,
                     });
                   }}
@@ -446,17 +444,28 @@ export const ListTaskRow: FC<{
               </Group>
             </Group>
 
-            <Group w={150} px={10}>
-              <WorkspaceMembersInput
-                collapsed
-                value={task.assigneeUsers}
-                onChange={(users) =>
-                  updateTasks({
-                    _id: task._id,
-                    assigneeUsers: users as any,
-                  })
-                }
-              />
+            <Group
+              w={150}
+              px={6}
+              gap={3}
+              className={styles.TaskCell}
+              onClick={(e) => {
+                e.stopPropagation();
+                taskMenu.open({
+                  target: e.currentTarget,
+                  action: TaskMenuAction.CHANGE_ASSIGNEE,
+                });
+              }}
+            >
+              {task.assigneeUsers.length > 0 ? (
+                task.assigneeUsers.map((member) => {
+                  return <Avatar key={member._id} size={22} user={member} hideOnlineStatus />;
+                })
+              ) : (
+                <Group px={2}>
+                  <IconUsers size={16} color={color("gray.4")} />
+                </Group>
+              )}
             </Group>
 
             <Group w={200} px={10}>
@@ -483,7 +492,6 @@ export const ListTaskRow: FC<{
                 e.stopPropagation();
                 taskMenu.open({
                   target: e.currentTarget,
-                  groupVariables,
                   action: TaskMenuAction.CHANGE_ESTIMATED_TIME,
                 });
               }}
@@ -512,7 +520,6 @@ export const ListTaskRow: FC<{
               onClick={(e) => {
                 taskMenu.open({
                   target: e.currentTarget,
-                  groupVariables,
                   action: TaskMenuAction.CHANGE_PRIORITY,
                 });
               }}

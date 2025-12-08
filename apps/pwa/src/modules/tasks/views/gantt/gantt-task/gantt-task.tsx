@@ -19,33 +19,33 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import TASKS_QUERY, { type TasksQueryVariables } from "../../../graphql/queryTasks.graphql";
 import { useUpdateTasks } from "../../../hooks/use-update-tasks";
 import { ModalCreateTask } from "../../../modals/modal-create-task";
-import TASKS_QUERY, { type TasksQueryVariables } from "../../../queries/queryTasks.graphql";
 import { updateTaskPath } from "../../../tasks-route-helpers";
 import { useGantt } from "../gantt-tasks-context";
 import { useGanttRefs } from "../gantt-tasks-refs";
 
 import { NumberFormat } from "@/components/format/number-format";
 import { ModalConfirm } from "@/modals/modal-confirm";
+import { useTaskMenu } from "@/modules/tasks/modules/task-menu/task-menu";
+import { TaskMenuAction } from "@/modules/tasks/modules/task-menu/task-menu-types";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
+import { classNames } from "@/utils/ui.utils";
 import { limitCharacters } from "@joy-one-client/utils/string";
 import { t } from "@lingui/core/macro";
 import dynamic from "next/dynamic";
-import { useTasksQuery } from "../../../hooks/use-tasks-query";
-import { TaskSelectionBox } from "../../../modules/task-selections/task-selection-box";
 import MUTATION_DUPLICATE_TASK, {
   type DuplicateTaskMutation,
   type DuplicateTaskMutationVariables,
-} from "../../../queries/mutationDuplicateTask.graphql";
+} from "../../../graphql/mutationDuplicateTask.graphql";
+import { useTasksQuery } from "../../../hooks/use-tasks-query";
+import { TaskSelectionBox } from "../../../modules/task-selections/task-selection-box";
 import styles from "../gantt-tasks.module.css";
 import { GanttTaskDraggable } from "./components/gantt-task-draggable";
 import { GanttTaskRowProvider, useGanttTaskRow } from "./gantt-task-provider";
 import { GanttTaskProps } from "./gantt-task-types";
-import { classNames } from "@/utils/ui.utils";
-import { useTaskMenu } from "@/modules/tasks/modules/task-menu/task-menu";
-import { TaskMenuAction } from "@/modules/tasks/modules/task-menu/task-menu-types";
 
 const GanttTaskTimeline = dynamic(
   () => import("./components/gantt-task-timeline").then((mod) => mod.GanttTaskTimeline),
@@ -67,7 +67,7 @@ const GanttTaskContent: FC = () => {
   const { task, nextTask, groupVariables } = useGanttTaskRow();
   const gantt = useGantt();
   const router = useRouter();
-  const taskMenu = useTaskMenu(task);
+  const taskMenu = useTaskMenu(task, groupVariables);
   const ganttRefs = useGanttRefs();
 
   const { rootRef, ganttTaskAreaRef, timeline, taskStatus } = useGanttTaskRow();
@@ -216,7 +216,6 @@ const GanttTaskContent: FC = () => {
                     className={styles.TaskStatus}
                     onClick={(e) => {
                       taskMenu.open({
-                        groupVariables,
                         target: e.currentTarget,
                         action: TaskMenuAction.CHANGE_STATUS,
                         offset: { y: 5 },

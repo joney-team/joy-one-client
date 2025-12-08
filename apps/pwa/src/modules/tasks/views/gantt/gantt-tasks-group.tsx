@@ -2,7 +2,7 @@
 
 import { NumberFormat } from "@/components/format/number-format";
 import { InternalEvent, onInternalEvent } from "@/hooks/use-internal-event";
-import { TagDataFragment } from "@/modules/tags/queries/fragmentTag.graphql";
+import { TagDataFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";

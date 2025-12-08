@@ -1,5 +1,6 @@
 .TaskMenuItem {
   cursor: pointer;
+  user-select: none;
   border-radius: var(--mantine-radius-default);
 
   &:hover {

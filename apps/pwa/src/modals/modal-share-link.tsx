@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { TaskDataFragment } from "@/modules/tasks/queries/fragmentTask.graphql";
+import { TaskDataFragment } from "@/modules/tasks/graphql/fragmentTask.graphql";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { zIndexes } from "@joy-one-client/config/layout";

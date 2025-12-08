@@ -1,0 +1,10 @@
+#import "./fragmentWorkspaceMember.graphql"
+
+query WorkspaceMembers($ignoreSelf: Boolean) {
+  workspaceMembers(ignoreSelf: $ignoreSelf) {
+    data {
+      ...WorkspaceMemberData
+    }
+    count
+  }
+}

@@ -27,11 +27,11 @@ import { FC, Fragment, useEffect, useState } from "react";
 import { DetailFooter } from "./components/detail-footer";
 
 import { TaskDetailHead } from "./components/task-detail-head";
-import { TaskDataFragment } from "./queries/fragmentTask.graphql";
+import { TaskDataFragment } from "./graphql/fragmentTask.graphql";
 import QUERY_TASK_BY_CODE, {
   type TaskByCodeQuery,
   type TaskByCodeQueryVariables,
-} from "./queries/queryTaskByCode.graphql";
+} from "./graphql/queryTaskByCode.graphql";
 import { TaskDetailSubtasks } from "./task-detail-subtasks";
 
 export const TaskDetail: FC = () => {

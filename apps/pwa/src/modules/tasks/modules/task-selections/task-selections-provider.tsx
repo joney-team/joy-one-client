@@ -8,7 +8,7 @@ import { FC, PropsWithChildren, useEffect, useState } from "react";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
-} from "../../queries/queryTasks.graphql";
+} from "../../graphql/queryTasks.graphql";
 import {
   SelectedTask,
   TaskSelectionsContext,

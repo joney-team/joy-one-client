@@ -8,6 +8,13 @@ import dynamic from "next/dynamic";
 import { FC, Fragment, memo, PropsWithChildren, useEffect, useMemo } from "react";
 import { TaskMenuActions } from "../../components/tasks-menu-actions";
 import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
+import { useQuery } from "@apollo/client/react";
+import QUERY_TASK_STATUSES, {
+  type TaskStatusesQuery,
+  type TaskStatusesQueryVariables,
+} from "../../graphql/queryTaskStatuses.graphql";
+import { TaskStatusesContextType } from "@/graphql/enums.graphql";
+import { combineTaskStatuses } from "../../task-constants";
 
 const ListTaskGroupByStatuses = dynamic(
   () => import("./list-task-group-by-statuses").then((mod) => mod.ListTaskGroupByStatuses),
@@ -18,7 +25,19 @@ const ListTaskGroupByStatuses = dynamic(
 );
 
 export const ListTasks: FC<PropsWithChildren> = memo((props) => {
-  const { state, activatedFolder, statuses, isReady } = useTasks();
+  const { state, activatedFolder, isReady } = useTasks();
+
+  const taskStatusesData = useQuery<TaskStatusesQuery, TaskStatusesQueryVariables>(
+    QUERY_TASK_STATUSES,
+    {
+      variables: activatedFolder
+        ? {
+            contextType: TaskStatusesContextType.Folder,
+            contextId: activatedFolder?._id,
+          }
+        : {},
+    }
+  );
 
   useEffect(() => {
     return autoScrollWindowForElements();
@@ -27,35 +46,37 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
   const content = useMemo(() => {
     if (!isReady) return null;
 
+    const statuses = combineTaskStatuses(taskStatusesData.data?.taskStatuses ?? []);
+    const dynamicStatuses = statuses.filter(
+      (status) => !Object.values(DefaultTaskStatusId).includes(status.id as any)
+    );
+
     return (
       <Fragment>
-        <ListTaskGroupByStatuses key={activatedFolder?._id} status={DefaultTaskStatusId.TODO} />
+        <ListTaskGroupByStatuses key={activatedFolder?._id} status={statuses[0]} />
 
-        {statuses
-          .filter((v) => !v.isDefault)
-          .map((status, index) => {
-            const prevStatus = statuses[index - 1];
-            return (
-              <ListTaskGroupByStatuses
-                key={status.id}
-                status={status.id}
-                hideWhenEmpty
-                lazyLoadId={prevStatus?.id ?? DefaultTaskStatusId.TODO}
-              />
-            );
-          })}
+        {dynamicStatuses.map((status) => {
+          return (
+            <ListTaskGroupByStatuses
+              key={status.id}
+              status={status}
+              hideWhenEmpty
+              lazyLoadId={DefaultTaskStatusId.TODO}
+            />
+          );
+        })}
 
         {state.showClosed && (
           <ListTaskGroupByStatuses
-            key={DefaultTaskStatusId.CLOSED}
-            status={DefaultTaskStatusId.CLOSED}
+            key={statuses[statuses.length - 1].id}
+            status={statuses[statuses.length - 1]}
             showEmptyMsg
             lazyLoadId={DefaultTaskStatusId.TODO}
           />
         )}
       </Fragment>
     );
-  }, [activatedFolder, statuses, isReady]);
+  }, [activatedFolder, taskStatusesData.data?.taskStatuses, isReady]);
 
   return (
     <TaskSelectionsProvider>

@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { type TaskDataFragment } from "../../queries/fragmentTask.graphql";
-import { TasksQueryVariables } from "../../queries/queryTasks.graphql";
+import { type TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 
 export enum TaskMenuAction {
   CHANGE_STATUS = "CHANGE_STATUS",
@@ -24,7 +24,7 @@ export interface TaskMenu {
 }
 
 export interface TaskMenuContextType {
-  open: (menu: Omit<TaskMenu, "task">) => void;
+  open: (menu: Omit<TaskMenu, "task" | "groupVariables">) => void;
   close: () => void;
   isOpened: boolean;
 }

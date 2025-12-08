@@ -16,11 +16,11 @@ import { IconChevronDown, IconChevronUp, IconShare2, IconStack2, IconX } from "@
 import { usePathname, useRouter } from "next/navigation";
 import { FC, Fragment } from "react";
 import { useUpdateTasks } from "../hooks/use-update-tasks";
-import { TaskDataFragment } from "../queries/fragmentTask.graphql";
+import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
 import QUERY_SIBLING_TASKS, {
   type SiblingTasksQuery,
   type SiblingTasksQueryVariables,
-} from "../queries/querySiblingTasks.graphql";
+} from "../graphql/querySiblingTasks.graphql";
 
 interface TaskDetailHeadProps {
   task: TaskDataFragment;

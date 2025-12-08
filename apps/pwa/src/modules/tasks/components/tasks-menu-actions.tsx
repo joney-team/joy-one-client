@@ -46,7 +46,7 @@ import { useQuery } from "@apollo/client/react";
 import QUERY_TAGS, {
   type TagsQuery,
   type TagsQueryVariables,
-} from "@/modules/tags/queries/queryTags.graphql";
+} from "@/modules/tags/graphql/queryTags.graphql";
 
 export const TaskMenuActions: FC = () => {
   const color = useColor();

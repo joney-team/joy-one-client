@@ -1,0 +1,13 @@
+fragment WorkspaceMemberData on WorkspaceMember {
+  _id
+  userId
+  name
+  color
+  avatar
+  memberId
+  roles {
+    _id
+    name
+    color
+  }
+}

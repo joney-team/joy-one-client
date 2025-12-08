@@ -12,16 +12,16 @@ import { ActionIcon, ColorInput, Modal, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useState } from "react";
-import { TagDataFragment } from "../queries/fragmentTag.graphql";
+import { TagDataFragment } from "../graphql/fragmentTag.graphql";
 import BULK_UPDATE_TAGS_MUTATION, {
   type BulkUpdateTagsMutation,
   type BulkUpdateTagsMutationVariables,
-} from "../queries/mutationBulkUpdateTags.graphql";
+} from "../graphql/mutationBulkUpdateTags.graphql";
 import CREATE_TAG_MUTATION, {
   type CreateTagMutation,
   type CreateTagMutationVariables,
-} from "../queries/mutationCreateTag.graphql";
-import QUERY_TAGS from "../queries/queryTags.graphql";
+} from "../graphql/mutationCreateTag.graphql";
+import QUERY_TAGS from "../graphql/queryTags.graphql";
 import { tagTypes } from "../tags-constants";
 
 type ModalTagFormProps =

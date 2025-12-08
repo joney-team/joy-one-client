@@ -9,7 +9,7 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { type TasksQueryVariables } from "../../../queries/queryTasks.graphql";
+import { type TasksQueryVariables } from "../../../graphql/queryTasks.graphql";
 import { ganttConfig } from "../gantt-tasks-config";
 import { useGantt } from "../gantt-tasks-context";
 import type { GanttTaskProps, GanttTaskTimeline } from "./gantt-task-types";

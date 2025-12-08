@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { type TasksQueryVariables, type TasksQuery } from "../../queries/queryTasks.graphql";
+import { type TasksQueryVariables, type TasksQuery } from "../../graphql/queryTasks.graphql";
 
 export type SelectedTask = Pick<TasksQuery["tasks"]["data"][number], "_id" | "parentId">;
 

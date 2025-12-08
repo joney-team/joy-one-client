@@ -2,15 +2,15 @@
 
 import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
-import { TagDataFragment } from "@/modules/tags/queries/fragmentTag.graphql";
+import { TagDataFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import BULK_UPDATE_TAGS_MUTATION, {
   type BulkUpdateTagsMutation,
   type BulkUpdateTagsMutationVariables,
-} from "@/modules/tags/queries/mutationBulkUpdateTags.graphql";
+} from "@/modules/tags/graphql/mutationBulkUpdateTags.graphql";
 import QUERY_TAGS, {
   type TagsQuery,
   type TagsQueryVariables,
-} from "@/modules/tags/queries/queryTags.graphql";
+} from "@/modules/tags/graphql/queryTags.graphql";
 import { TagType } from "@/modules/tags/tags-types";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { useParams, useRouter } from "next/navigation";

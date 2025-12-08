@@ -4,12 +4,13 @@ import { classNames } from "@/utils/ui.utils";
 import { Fragment, useEffect, useMemo, useRef, type FC } from "react";
 import { useGanttTaskRow } from "../gantt-task-provider";
 
-import { UpdateTask, useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
-import { useTaskMenu } from "@/modules/tasks/modules/task-menu/task-menu";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
-} from "@/modules/tasks/queries/queryTasks.graphql";
+} from "@/modules/tasks/graphql/queryTasks.graphql";
+import { UpdateTask, useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
+import { useTaskMenu } from "@/modules/tasks/modules/task-menu/task-menu";
+import { TaskMenuAction } from "@/modules/tasks/modules/task-menu/task-menu-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useApolloClient } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -19,7 +20,6 @@ import { useGantt } from "../../gantt-tasks-context";
 import styles from "../../gantt-tasks.module.css";
 import { GanttTaskTimelineChildSummary } from "./gantt-task-timeline-child-symmary";
 import { GanttTaskTimelineResizable } from "./gantt-task-timeline-resizable";
-import { TaskMenuAction } from "@/modules/tasks/modules/task-menu/task-menu-types";
 
 export const GanttTaskTimeline: FC = () => {
   const client = useApolloClient();
@@ -28,7 +28,7 @@ export const GanttTaskTimeline: FC = () => {
   const { updateTasks } = useUpdateTasks();
   const { timeline, task, subTasksGroupVariables, ganttTaskAreaRef, groupVariables } =
     useGanttTaskRow();
-  const taskMenu = useTaskMenu(task);
+  const taskMenu = useTaskMenu(task, groupVariables);
 
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -134,7 +134,6 @@ export const GanttTaskTimeline: FC = () => {
 
         taskMenu.open({
           action: TaskMenuAction.GANTT_TIMELINE,
-          groupVariables,
           target: timelineRef.current,
           offset: { x: Math.abs(timelineRef.current.getBoundingClientRect().x - mouseX), y: 5 },
         });

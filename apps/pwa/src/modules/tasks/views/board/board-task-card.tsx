@@ -1,14 +1,8 @@
 "use client";
 
-import { Button } from "@/components/buttons/button";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { DueDateInput } from "@/components/inputs/due-date-input";
 import { WayPoint } from "@/components/way-point";
-import { TagSelector } from "@/modules/tags/components/tag-selector";
-import { TagType } from "@/modules/tags/tags-types";
-import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
-import { TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import {
@@ -18,7 +12,6 @@ import {
 } from "@/modules/tasks/tasks-service";
 import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
-import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import {
   type Edge,
@@ -38,8 +31,7 @@ import {
   Badge,
   Card,
   Group,
-  Loader,
-  Menu,
+  GroupProps,
   Portal,
   Progress,
   Skeleton,
@@ -65,70 +57,90 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
+import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
-import { TaskDataFragment } from "../../queries/fragmentTask.graphql";
-import { type TasksQueryVariables } from "../../queries/queryTasks.graphql";
+import { useTaskMenu } from "../../modules/task-menu/task-menu";
+import { TaskMenuAction } from "../../modules/task-menu/task-menu-types";
 import { taskPriorities } from "../../task-constants";
 
-const CtaSection: FC<
-  PropsWithChildren<{
-    icon: Icon;
-    iconColor?: string;
-    label: string;
-    onRemove?: () => void;
-    canRemove?: boolean;
-    applyCollapse?: boolean;
-    isCollapsed?: boolean;
-    onClick?: () => void;
-  }>
-> = (props) => {
+import { Avatar } from "@/components/avatar";
+import styles from "./board-tasks.module.css";
+
+const CardProperty: FC<
+  PropsWithChildren<
+    {
+      icon: Icon;
+      iconColor?: string;
+      label: string;
+      onRemove?: () => void;
+      canRemove?: boolean;
+      applyCollapse?: boolean;
+      isCollapsed?: boolean;
+    } & GroupProps
+  >
+> = ({
+  icon: Icon,
+  iconColor,
+  label,
+  onRemove,
+  canRemove,
+  applyCollapse,
+  isCollapsed,
+  ...props
+}) => {
   const hover = useHover();
   const color = useColor();
 
   const icon = useMemo(() => {
-    if (props.applyCollapse && props.isCollapsed) {
-      return <IconCaretDownFilled size={16} />;
+    if (applyCollapse && isCollapsed) {
+      return <IconCaretDownFilled size={18} />;
     }
 
-    if (props.applyCollapse && !props.isCollapsed && hover.hovered) {
-      return <IconCaretRightFilled size={16} />;
+    if (applyCollapse && !isCollapsed && hover.hovered) {
+      return <IconCaretRightFilled size={18} />;
     }
 
-    return <props.icon strokeWidth={1.8} />;
-  }, [props.applyCollapse, props.isCollapsed, hover.hovered]);
+    return <Icon strokeWidth={1.8} size={18} />;
+  }, [applyCollapse, isCollapsed, hover.hovered]);
 
   return (
-    <Tooltip label={props.label} disabled position="left">
-      <Group flex={1} w="100%" gap={0} onClick={props.onClick}>
-        <Group gap={5}>
-          <ThemeIcon variant="transparent" color={color(props.iconColor || "gray")} size="xs">
-            {icon}
-          </ThemeIcon>
-        </Group>
+    <Group flex={1} w="100%" gap={3} {...props} className={styles.CardProperty}>
+      <Group gap={5}>
+        <ThemeIcon variant="transparent" color={color(iconColor || "gray")} size="xs">
+          {icon}
+        </ThemeIcon>
+      </Group>
 
-        <Group gap={5} flex={1} ref={hover.ref} p={4} style={{ borderRadius: 5 }}>
-          <Group justify="space-between" w="100%">
-            {props.children}
+      <Group
+        gap={5}
+        flex={1}
+        ref={hover.ref}
+        p={4}
+        style={{ borderRadius: 5 }}
+        className={styles.CardPropertyContent}
+      >
+        <Group w="100%" mih={24} gap={3} flex={1}>
+          {props.children}
 
-            {!!props.onRemove && hover.hovered && props.canRemove && (
-              <ActionIcon
-                size="sm"
-                variant="subtle"
-                color="gray"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  props.onRemove?.();
-                }}
-              >
-                <IconX size={16} />
-              </ActionIcon>
-            )}
-          </Group>
+          {!!onRemove && hover.hovered && canRemove && (
+            <ActionIcon
+              size="sm"
+              variant="subtle"
+              color="gray.4"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onRemove?.();
+              }}
+            >
+              <IconX size={14} />
+            </ActionIcon>
+          )}
         </Group>
       </Group>
-    </Tooltip>
+    </Group>
   );
 };
 
@@ -138,7 +150,7 @@ interface BoardTaskCardProps {
   nextTask?: TaskDataFragment | null;
   showStatus?: boolean;
   scrollContainerRef?: HTMLDivElement | null;
-  groupVariables?: TasksQueryVariables;
+  groupVariables: TasksQueryVariables | null;
 }
 
 export const BoardTaskCard: FC<BoardTaskCardProps> = ({
@@ -151,6 +163,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
 }) => {
   const tasks = useTasks();
   const { updateTasks } = useUpdateTasks();
+  const taskMenu = useTaskMenu(task, groupVariables);
 
   const droppableRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef<HTMLDivElement | null>(null);
@@ -286,7 +299,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
       <Stack ref={droppableRef} gap={10} opacity={isDragging ? 0.5 : 1} pos="relative">
         {over && over.edge === "top" && droppableShadow}
 
-        <Card shadow="xs" p={10}>
+        <Card shadow="xs" p={10} className={styles.BoardCard}>
           <Stack gap={5} ref={draggingRef}>
             <Stack
               gap={2}
@@ -313,7 +326,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
 
               <Tooltip label={task.name} disabled={task.name.length < 60} maw="70dvw" multiline>
                 <Stack style={{ cursor: "pointer" }}>
-                  <Text fz="sm" fw={500} lineClamp={2}>
+                  <Text fz={14} fw={500} lineClamp={2}>
                     {task.name}
                   </Text>
                 </Stack>
@@ -322,172 +335,138 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
 
             <Stack gap={0}>
               {showStatus && (
-                <CtaSection icon={IconPlaystationCircle} label={t`Status`}>
-                  <Group gap={0}>
-                    <TaskStatusOptions
-                      task={task}
-                      target={
-                        <Button color={taskStatusStyle.color} variant="subtle" size="compact-sm">
-                          {taskStatusStyle.name}
-                        </Button>
-                      }
-                      onSelect={(s) => updateTasks([{ ...task, status: s }])}
-                    />
-                  </Group>
-                </CtaSection>
+                <CardProperty
+                  icon={IconPlaystationCircle}
+                  iconColor={taskStatusStyle.color}
+                  label={t`Status`}
+                  onClick={(e) => {
+                    taskMenu.open({
+                      action: TaskMenuAction.CHANGE_STATUS,
+                      target: e.currentTarget,
+                      offset: { x: 10 },
+                    });
+                  }}
+                >
+                  <Text fz={13} fw={500} c={taskStatusStyle.color}>
+                    {taskStatusStyle.name}
+                  </Text>
+                </CardProperty>
               )}
 
-              <TagSelector
-                type={TagType.TASK}
-                onSelect={(t) => {
-                  if (!t) return;
-                  updateTasks([{ ...task, tags: [...(task.tags || []), t as any] }]);
+              <CardProperty
+                icon={IconTags}
+                label={t`Tags`}
+                onClick={(e) => {
+                  taskMenu.open({
+                    action: TaskMenuAction.CHANGE_TAGS,
+                    target: e.currentTarget,
+                    offset: { x: 10 },
+                  });
                 }}
-                target={(selector) => {
-                  return (
-                    <CtaSection icon={IconTags} label={t`Tags`} onClick={selector.toggle}>
-                      <Group
-                        gap={3}
-                        flex={1}
-                        style={{ cursor: "pointer" }}
-                        className="unselectable"
-                      >
-                        {task.tags.length ? (
-                          task.tags.map((tag) => <TaskTag key={tag._id} id={tag._id} h={26} />)
-                        ) : (
-                          <Button
-                            color="gray"
-                            variant="subtle"
-                            leftIcon={IconPlus}
-                            size="compact-xs"
-                            fw={400}
-                          >
-                            <Trans>Add tag</Trans>
-                          </Button>
-                        )}
-                      </Group>
-                    </CtaSection>
-                  );
-                }}
-              />
+              >
+                {task.tags.length ? (
+                  task.tags.map((tag) => (
+                    <TaskTag key={tag._id} id={tag._id} h={22} editable={false} />
+                  ))
+                ) : (
+                  <Group color="gray" variant="subtle" fz={12} c="gray" gap={2}>
+                    <IconPlus size={14} strokeWidth={1.5} />
+                    <Trans>Add tag</Trans>
+                  </Group>
+                )}
+              </CardProperty>
 
-              <CtaSection
+              <CardProperty
                 icon={IconCalendar}
                 onRemove={() => updateTasks([{ ...task, dueDate: null, startDate: null }])}
                 canRemove={!!task.dueDate || !!task.startDate}
+                onClick={(e) => {
+                  taskMenu.open({
+                    action: TaskMenuAction.CHANGE_ESTIMATED_TIME,
+                    target: e.currentTarget,
+                    offset: { x: 10 },
+                  });
+                }}
                 label={t`Due date`}
               >
-                <Menu shadow="xs">
-                  <Menu.Target>
-                    <Group style={{ cursor: "pointer" }} flex={1}>
-                      {(function () {
-                        if (task.dueDate) {
-                          return (
-                            <Text
-                              c={isTaskOutdated(task) ? "red" : "var(--mantine-primary-color-text)"}
-                            >
-                              <DateFormat value={task.dueDate} type="date" />
-                            </Text>
-                          );
-                        }
+                {task.dueDate ? (
+                  <Text
+                    flex={1}
+                    fz={14}
+                    fw={500}
+                    c={isTaskOutdated(task) ? "red" : "var(--mantine-color-text)"}
+                  >
+                    <DateFormat value={task.dueDate} />
+                  </Text>
+                ) : (
+                  <Group color="gray" variant="subtle" fz={12} c="gray" gap={2}>
+                    <IconPlus size={14} strokeWidth={1.5} />
+                    <Trans>Add due date</Trans>
+                  </Group>
+                )}
+              </CardProperty>
 
-                        return (
-                          <Button
-                            color="gray"
-                            variant="subtle"
-                            leftIcon={IconPlus}
-                            size="compact-xs"
-                            fw={400}
-                          >
-                            <Trans>Add due date</Trans>
-                          </Button>
-                        );
-                      })()}
-                    </Group>
-                  </Menu.Target>
-
-                  <Menu.Dropdown>
-                    <DueDateInput
-                      p={5}
-                      startDate={task.startDate}
-                      dueDate={task.dueDate}
-                      onChange={(e) => {
-                        updateTasks([{ _id: task._id, ...e }]);
-                      }}
-                    />
-                  </Menu.Dropdown>
-                </Menu>
-              </CtaSection>
-
-              <TaskPrioritySelector
-                onSelect={(priority) => updateTasks([{ _id: task._id, priority }])}
-                render={(selector) => {
-                  return (
-                    <CtaSection
-                      icon={task.priority ? IconFlagFilled : IconFlag}
-                      iconColor={task.priority ? getTaskPriorityColor(task.priority) : undefined}
-                      label={t`Priority`}
-                      canRemove={!!task.priority}
-                      onRemove={() => updateTasks([{ _id: task._id, priority: null }])}
-                      onClick={selector.toggle}
-                    >
-                      <Group style={{ cursor: "pointer" }} flex={1}>
-                        {(function () {
-                          if (task.priority) {
-                            return (
-                              <Group gap={1}>
-                                <Text>
-                                  {taskPriorities[task.priority as TaskPriority]?.label()}
-                                </Text>
-                              </Group>
-                            );
-                          }
-
-                          return (
-                            <Button
-                              color="gray"
-                              variant="subtle"
-                              leftIcon={IconPlus}
-                              size="compact-xs"
-                              fw={400}
-                            >
-                              <Trans>Add priority</Trans>
-                            </Button>
-                          );
-                        })()}
-                      </Group>
-                    </CtaSection>
-                  );
+              <CardProperty
+                icon={task.priority ? IconFlagFilled : IconFlag}
+                iconColor={task.priority ? getTaskPriorityColor(task.priority) : undefined}
+                label={t`Priority`}
+                canRemove={!!task.priority}
+                onRemove={() => updateTasks([{ _id: task._id, priority: null }])}
+                onClick={(e) => {
+                  taskMenu.open({
+                    action: TaskMenuAction.CHANGE_PRIORITY,
+                    target: e.currentTarget,
+                    offset: { x: 10 },
+                  });
                 }}
-              />
+              >
+                {task.priority ? (
+                  <Text flex={1} fz={14} fw={500} c={getTaskPriorityColor(task.priority)}>
+                    {taskPriorities[task.priority as TaskPriority]?.label()}
+                  </Text>
+                ) : (
+                  <Group color="gray" variant="subtle" fz={12} c="gray" gap={2}>
+                    <IconPlus size={14} strokeWidth={1.5} />
+                    <Trans>Add priority</Trans>
+                  </Group>
+                )}
+              </CardProperty>
 
-              <CtaSection icon={IconUser} label={t`Assignee`}>
-                <WorkspaceMembersInput
-                  collapsed
-                  value={task.assigneeUsers}
-                  onChange={(users) => {
-                    updateTasks([{ _id: task._id, assigneeUsers: users as any }]);
-                  }}
-                />
-              </CtaSection>
+              <CardProperty
+                icon={IconUser}
+                label={t`Assignee`}
+                onClick={(e) => {
+                  taskMenu.open({
+                    action: TaskMenuAction.CHANGE_ASSIGNEE,
+                    target: e.currentTarget,
+                    offset: { x: 10 },
+                  });
+                }}
+              >
+                {task.assigneeUsers.length > 0 ? (
+                  task.assigneeUsers.map((member) => (
+                    <Avatar key={member._id} size={22} user={member} hideOnlineStatus />
+                  ))
+                ) : (
+                  <Group color="gray" variant="subtle" fz={12} c="gray" gap={2}>
+                    <IconPlus size={14} strokeWidth={1.5} />
+                    <Trans>Add assignee</Trans>
+                  </Group>
+                )}
+              </CardProperty>
 
               {task.childCount > 0 && (
-                <CtaSection
+                <CardProperty
                   icon={IconSubtask}
                   label={t`Subtasks`}
                   applyCollapse
                   isCollapsed={isShowSubTasks}
+                  onClick={() => setIsShowSubTasks((s) => !s)}
                 >
                   <Group justify="space-between" gap={8} flex={1}>
-                    <Button
-                      size="compact-xs"
-                      fw={400}
-                      color="gray.8"
-                      variant="subtle"
-                      onClick={() => setIsShowSubTasks((s) => !s)}
-                    >
+                    <Text fz={14}>
                       <NumberFormat value={task.childCount} /> <Trans>subtasks</Trans>
-                    </Button>
+                    </Text>
 
                     {task.childProgress && (
                       <Group flex={1} justify="end" gap={5}>
@@ -498,7 +477,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                       </Group>
                     )}
                   </Group>
-                </CtaSection>
+                </CardProperty>
               )}
             </Stack>
           </Stack>
@@ -518,6 +497,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                   showStatus
                   prevTask={subtasks.tasks[subTaskIndex - 1]}
                   nextTask={subtasks.tasks[subTaskIndex + 1]}
+                  groupVariables={subtaskVariables}
                 />
               ))}
             </Stack>

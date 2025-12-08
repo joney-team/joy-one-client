@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { TaskDataFragment } from "../queries/fragmentTask.graphql";
+import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
 import { useMemo } from "react";
 import { defaultTaskStatusIds } from "../task-constants";
 import { DefaultTaskStatusId } from "../tasks-types";

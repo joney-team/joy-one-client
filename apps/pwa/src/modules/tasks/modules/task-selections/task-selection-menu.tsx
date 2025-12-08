@@ -31,7 +31,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, useCallback, useRef } from "react";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
-import TASK_FRAGMENT, { type TaskDataFragment } from "../../queries/fragmentTask.graphql";
+import TASK_FRAGMENT, { type TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { useTaskSelections } from "./task-selections-context";
 
 export const TaskSelectionMenu: FC = () => {

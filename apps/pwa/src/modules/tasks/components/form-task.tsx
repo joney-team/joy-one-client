@@ -60,11 +60,11 @@ import { FC, PropsWithChildren, ReactNode, useState } from "react";
 import { CustomerInput } from "../../customers/components/customer-input";
 import { FilesBox } from "../../files/files-box";
 import { useUpdateTasks } from "../hooks/use-update-tasks";
-import { TaskDataFragment } from "../queries/fragmentTask.graphql";
+import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
 import CREATE_TASK_MUTATION, {
   type CreateTaskMutation,
   type CreateTaskMutationVariables,
-} from "../queries/mutationCreateTask.graphql";
+} from "../graphql/mutationCreateTask.graphql";
 import { taskPriorities } from "../task-constants";
 
 export interface TaskFormProps {

@@ -11,7 +11,7 @@ import { UpdateTask, useUpdateTasks } from "../../../../hooks/use-update-tasks";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
-} from "../../../../queries/queryTasks.graphql";
+} from "../../../../graphql/queryTasks.graphql";
 import { ganttConfig } from "../../gantt-tasks-config";
 import { useGantt } from "../../gantt-tasks-context";
 import styles from "../../gantt-tasks.module.css";

@@ -1,6 +1,6 @@
 import { TaskStatus } from "@/graphql/types.graphql";
-import { TaskDataFragment } from "../../../queries/fragmentTask.graphql";
-import { TasksQueryVariables } from "../../../queries/queryTasks.graphql";
+import { TaskDataFragment } from "../../../graphql/fragmentTask.graphql";
+import { TasksQueryVariables } from "../../../graphql/queryTasks.graphql";
 
 export interface GanttTaskProps {
   task: TaskDataFragment;

@@ -52,12 +52,21 @@ const TaskMenuTags = dynamic(() => import("./task-menu-tags").then((mod) => mod.
   loading: () => <Skeleton w={130} h={200} />,
 });
 
+const TaskMenuAssignee = dynamic(
+  () => import("./task-menu-assignee").then((mod) => mod.TaskMenuAssignee),
+  {
+    ssr: false,
+    loading: () => <Skeleton w={130} h={75} />,
+  }
+);
+
 const menuComponents: Partial<Record<TaskMenuAction, ComponentType<TaskMenuComponentProps>>> = {
   [TaskMenuAction.CHANGE_PRIORITY]: TaskMenuPriority,
   [TaskMenuAction.CHANGE_ESTIMATED_TIME]: TaskMenuTimeline,
   [TaskMenuAction.GANTT_TIMELINE]: TaskMenuGanttTimeline,
   [TaskMenuAction.CHANGE_STATUS]: TaskMenuStatus,
   [TaskMenuAction.CHANGE_TAGS]: TaskMenuTags,
+  [TaskMenuAction.CHANGE_ASSIGNEE]: TaskMenuAssignee,
 };
 
 export const TaskMenuDropdown: FC = ({}) => {
@@ -168,7 +177,11 @@ export const TaskMenuDropdown: FC = ({}) => {
 
       // Click outside of menu to close
       const onMouseDown = (e: MouseEvent) => {
-        if (e.target && !menuRef.current?.contains(e.target as Node)) {
+        if (
+          e.target &&
+          !menuRef.current?.contains(e.target as Node) &&
+          !taskMenu.target.contains(e.target as Node)
+        ) {
           onClose();
         }
       };
@@ -209,6 +222,10 @@ export const TaskMenuDropdown: FC = ({}) => {
   useEffect(() => {
     const onMenuOpen = (event: unknown) => {
       const { menu } = event as { menu: TaskMenu };
+      if (taskMenu && menu.task._id === taskMenu.task._id && menu.action === taskMenu.action) {
+        return onClose();
+      }
+
       setTaskMenu(menu);
     };
 
@@ -224,7 +241,7 @@ export const TaskMenuDropdown: FC = ({}) => {
       removeInternalEventsListner(InternalEvent.TASK_MENU_OPEN, onMenuOpen);
       removeInternalEventsListner(InternalEvent.TASK_MENU_SET_ROOT, onMenuSetRoot);
     };
-  }, []);
+  }, [taskMenu, onClose]);
 
   const DropdownMenu = useMemo(() => {
     if (!taskMenu) return null;

@@ -14,8 +14,8 @@ import { FC, PropsWithChildren, useMemo, useState } from "react";
 import QUERY_TAG_BY_SLUG, {
   type TagBySlugQuery,
   type TagBySlugQueryVariables,
-} from "../tags/queries/queryTagBySlug.graphql";
-import { type TasksQueryVariables } from "./queries/queryTasks.graphql";
+} from "../tags/graphql/queryTagBySlug.graphql";
+import { type TasksQueryVariables } from "./graphql/queryTasks.graphql";
 import { Context } from "./tasks-context";
 import { parseTaskPath } from "./tasks-route-helpers";
 import { TaskView } from "./views/types";

@@ -763,6 +763,8 @@ export type Query = {
   taskStatuses: Array<TaskStatus>;
   tasks: TasksPaginated;
   tasksCount: Scalars['Float']['output'];
+  userWorkspaceMember: WorkspaceMember;
+  workspaceMembers: WorkspaceMembersPaginated;
 };
 
 
@@ -863,6 +865,14 @@ export type QueryTasksCountArgs = {
   tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+
+export type QueryWorkspaceMembersArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  ignoreSelf?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+};
+
 export type RegisterDeviceDto = {
   identifyId: Scalars['String']['input'];
   locale?: InputMaybe<AppLocale>;
@@ -934,7 +944,7 @@ export type Task = {
   __typename?: 'Task';
   _id: Scalars['String']['output'];
   assigneeUserIds: Array<Scalars['String']['output']>;
-  assigneeUsers: Array<WorkspaceMemberInfo>;
+  assigneeUsers: Array<WorkspaceMember>;
   childCount: Scalars['Float']['output'];
   childOrder: TaskChildOrder;
   childProgress: Scalars['Float']['output'];
@@ -1024,7 +1034,7 @@ export type TaskTimeTracking = {
   id: Scalars['String']['output'];
   note: Maybe<Scalars['String']['output']>;
   startAt: Scalars['Float']['output'];
-  user: Maybe<WorkspaceMemberInfo>;
+  user: Maybe<WorkspaceMember>;
   userId: Scalars['String']['output'];
   workspaceId: Scalars['String']['output'];
 };
@@ -1080,16 +1090,16 @@ export type UserAuthProvider = {
   username: Scalars['String']['output'];
 };
 
-export type WorkspaceMemberInfo = {
-  __typename?: 'WorkspaceMemberInfo';
+export type WorkspaceMember = {
+  __typename?: 'WorkspaceMember';
   _id: Scalars['String']['output'];
   avatar: Maybe<Scalars['String']['output']>;
   color: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
-  memberDisplayName: Scalars['String']['output'];
+  memberDisplayName: Maybe<Scalars['String']['output']>;
   memberId: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  phone: Scalars['String']['output'];
+  phone: Maybe<Scalars['String']['output']>;
   roles: Array<WorkspaceMemberRole>;
   userId: Scalars['String']['output'];
 };
@@ -1099,4 +1109,10 @@ export type WorkspaceMemberRole = {
   _id: Scalars['String']['output'];
   color: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
+};
+
+export type WorkspaceMembersPaginated = {
+  __typename?: 'WorkspaceMembersPaginated';
+  count: Scalars['Float']['output'];
+  data: Array<WorkspaceMember>;
 };

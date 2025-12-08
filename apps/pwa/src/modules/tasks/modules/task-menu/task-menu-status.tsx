@@ -42,7 +42,9 @@ export const TaskMenuStatus: TaskMenuComponent = ({ task, onClose, groupVariable
                   }}
                 >
                   <TaskStatusIcon size={16} color={status.color} id={status.id} />
-                  <Text fz={13}>{status.name}</Text>
+                  <Text tt="uppercase" fz={13}>
+                    {status.name}
+                  </Text>
                 </Group>
               </Stack>
 

@@ -5,11 +5,8 @@ import { NumberFormat } from "@/components/format/number-format";
 import { WayPoint } from "@/components/way-point";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { type TasksQueryVariables } from "@/modules/tasks/queries/queryTasks.graphql";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Loader, Skeleton, Stack, Text } from "@mantine/core";
 import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/icons-react";
@@ -17,7 +14,9 @@ import dynamic from "next/dynamic";
 import { FC, useEffect, useMemo, useState } from "react";
 import { ListTaskRowHead } from "./list-task-row-head";
 
+import { TaskStatus } from "@/graphql/types.graphql";
 import { useElementLazyLoad, useWaitElementLazyLoad } from "@/hooks/use-element-lazy-load";
+import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import styles from "./list-tasks.module.css";
 
@@ -27,7 +26,7 @@ const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.Li
 });
 
 interface ListTaskGroupByStatusesProps {
-  status: string;
+  status: TaskStatus;
   defaultVisible?: boolean;
   hideWhenEmpty?: boolean;
   showEmptyMsg?: boolean;
@@ -38,7 +37,6 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
   lazyLoadId,
   ...props
 }) => {
-  const workspace = useWorkspace();
   const { activatedFolder, href, state } = useTasks();
   const [isReadyToFetch, setIsReadyToFetch] = useState(!lazyLoadId);
 
@@ -46,12 +44,12 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
     typeof props.defaultVisible === "boolean" ? props.defaultVisible : true
   );
 
-  const isClosedTasks = props.status === DefaultTaskStatusId.CLOSED;
+  const isClosedTasks = props.status.id === DefaultTaskStatusId.CLOSED;
 
   const groupVariables: TasksQueryVariables = useMemo(() => {
     return {
       ...state.variables,
-      status: props.status,
+      status: props.status.id,
       folderId: activatedFolder?._id,
       limit: 15,
       parentId: "root",
@@ -66,24 +64,16 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
     if (isReadyToFetch) getTasks();
   }, [getTasks, isReadyToFetch]);
 
-  const status =
-    workspace.settings.taskStatuses.find((s) => s.id === props.status) ||
-    workspace.settings.taskStatuses[0];
-
-  const statusStyle = renderTaskStatusStyle(props.status, workspace.settings.taskStatuses);
-
   useWaitElementLazyLoad({
     id: lazyLoadId,
     onLoaded: () => setIsReadyToFetch(true),
   });
 
   const elementLazyLoadId = useElementLazyLoad({
-    id: props.status,
+    id: props.status.id,
     delay: 300,
-    isLoaded: !!tasks.length,
+    isLoaded: !loading,
   });
-
-  if (props.hideWhenEmpty && (count ?? 0) === 0) return null;
 
   return (
     <Stack gap={4} id={elementLazyLoadId}>
@@ -95,14 +85,25 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
 
           <Button
             size="compact-sm"
-            variant={isClosedTasks || !status.isDefault ? "filled" : "light"}
-            color={statusStyle.color}
+            variant={
+              isClosedTasks || Object.values(DefaultTaskStatusId).includes(props.status.id as any)
+                ? "filled"
+                : "light"
+            }
+            color={props.status.color ?? "gray"}
             leftSection={
-              <TaskStatusIcon {...status} white={isClosedTasks || !status.isDefault} size={16} />
+              <TaskStatusIcon
+                {...props.status}
+                white={
+                  isClosedTasks ||
+                  Object.values(DefaultTaskStatusId).includes(props.status.id as any)
+                }
+                size={16}
+              />
             }
             tt="uppercase"
           >
-            {statusStyle.name}
+            {props.status.name}
           </Button>
         </Group>
 
@@ -124,7 +125,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
                 onClick={() =>
                   open({
                     initial: {
-                      status: props.status,
+                      status: props.status.id,
                       folder: activatedFolder,
                       order: (tasks[0]?.order ?? 1) / 2,
                     },

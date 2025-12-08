@@ -2,12 +2,12 @@
 
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { ModalConfirm, ModalConfirmRef } from "@/modals/modal-confirm";
-import { TagDataFragment } from "@/modules/tags/queries/fragmentTag.graphql";
+import { TagDataFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import REMOVE_TAG_MUTATION, {
   type RemoveTagMutation,
   type RemoveTagMutationVariables,
-} from "@/modules/tags/queries/mutationRemoveTag.graphql";
-import GET_TAGS_QUERY from "@/modules/tags/queries/queryTags.graphql";
+} from "@/modules/tags/graphql/mutationRemoveTag.graphql";
+import GET_TAGS_QUERY from "@/modules/tags/graphql/queryTags.graphql";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
 import { updateTaskPath } from "@/modules/tasks/tasks-route-helpers";
 import { useColor } from "@/modules/theme/use-color";

@@ -8,7 +8,7 @@ import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconTimelineEvent } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { useUpdateTasks } from "../hooks/use-update-tasks";
-import { TaskDataFragment } from "../queries/fragmentTask.graphql";
+import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
 
 interface DetailFooterProps {
   task: TaskDataFragment;

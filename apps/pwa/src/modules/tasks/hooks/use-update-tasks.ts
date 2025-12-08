@@ -4,16 +4,16 @@ import { useApolloClient } from "@apollo/client/react";
 import MUTATION_BULK_UPDATE_TASKS, {
   type BulkUpdateTasksMutation,
   type BulkUpdateTasksMutationVariables,
-} from "../queries/mutationBulkUpdateTasks.graphql";
+} from "../graphql/mutationBulkUpdateTasks.graphql";
 
 import type { UpdateTaskInput } from "@/graphql/types.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useCallback } from "react";
-import TASK_FRAGMENT, { type TaskDataFragment } from "../queries/fragmentTask.graphql";
+import TASK_FRAGMENT, { type TaskDataFragment } from "../graphql/fragmentTask.graphql";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
-} from "../queries/queryTasks.graphql";
+} from "../graphql/queryTasks.graphql";
 
 export interface UpdateTaskContext {
   fromGroupVariables?: TasksQueryVariables | null;
@@ -110,6 +110,7 @@ export const useUpdateTasks = () => {
           const currentData = client.cache.readFragment<TaskDataFragment>({
             id: identifiedId,
             fragment: TASK_FRAGMENT,
+            fragmentName: "TaskData",
           });
 
           if (!currentData) return;
@@ -121,6 +122,7 @@ export const useUpdateTasks = () => {
             fragment: TASK_FRAGMENT,
             data: updatedData,
             id: identifiedId,
+            fragmentName: "TaskData",
           });
 
           // Change status

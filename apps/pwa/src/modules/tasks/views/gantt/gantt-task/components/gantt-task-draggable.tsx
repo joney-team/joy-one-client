@@ -2,10 +2,10 @@
 
 import { Card, Portal, Text } from "@mantine/core";
 import { FC, Fragment, ReactNode, RefObject, useEffect, useRef, useState } from "react";
-import { TaskDataFragment } from "../../../../queries/fragmentTask.graphql";
+import { TaskDataFragment } from "../../../../graphql/fragmentTask.graphql";
 
 import { UpdateTaskContext, useUpdateTasks } from "../../../../hooks/use-update-tasks";
-import { type TasksQueryVariables } from "../../../../queries/queryTasks.graphql";
+import { type TasksQueryVariables } from "../../../../graphql/queryTasks.graphql";
 import { useGantt } from "../../gantt-tasks-context";
 
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";

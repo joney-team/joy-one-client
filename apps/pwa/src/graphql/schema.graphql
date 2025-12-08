@@ -579,6 +579,8 @@ type Query {
   taskStatuses(contextId: String, contextType: TaskStatusesContextType): [TaskStatus!]!
   tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): TasksPaginated!
   tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): Float!
+  userWorkspaceMember: WorkspaceMember!
+  workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float): WorkspaceMembersPaginated!
 }
 
 input RegisterDeviceDto {
@@ -644,7 +646,7 @@ type Tags {
 type Task {
   _id: String!
   assigneeUserIds: [String!]!
-  assigneeUsers: [WorkspaceMemberInfo!]!
+  assigneeUsers: [WorkspaceMember!]!
   childCount: Float!
   childOrder: TaskChildOrder!
   childProgress: Float!
@@ -727,7 +729,7 @@ type TaskTimeTracking {
   id: String!
   note: String
   startAt: Float!
-  user: WorkspaceMemberInfo
+  user: WorkspaceMember
   userId: String!
   workspaceId: String!
 }
@@ -781,15 +783,15 @@ type UserAuthProvider {
   username: String!
 }
 
-type WorkspaceMemberInfo {
+type WorkspaceMember {
   _id: String!
   avatar: String
   color: String
   email: String!
-  memberDisplayName: String!
+  memberDisplayName: String
   memberId: String!
   name: String!
-  phone: String!
+  phone: String
   roles: [WorkspaceMemberRole!]!
   userId: String!
 }
@@ -798,4 +800,9 @@ type WorkspaceMemberRole {
   _id: String!
   color: String
   name: String!
+}
+
+type WorkspaceMembersPaginated {
+  count: Float!
+  data: [WorkspaceMember!]!
 }

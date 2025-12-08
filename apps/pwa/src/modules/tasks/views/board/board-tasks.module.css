@@ -1,0 +1,13 @@
+.BoardCard {
+  & .CardProperty {
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      & .CardPropertyContent {
+        background-color: var(--mantine-color-default-hover);
+        border-radius: var(--mantine-radius-default);
+      }
+    }
+  }
+}

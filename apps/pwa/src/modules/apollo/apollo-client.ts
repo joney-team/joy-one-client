@@ -1,3 +1,5 @@
+"use client";
+
 import { getGlobal } from "@/global";
 import { getLocalStorage } from "@/hooks/use-local-storage";
 import { StorageKey } from "@/types";
@@ -111,6 +113,11 @@ export const apolloClient = new ApolloClient({
     typePolicies: {
       Task: {
         keyFields: ["_id"],
+        fields: {
+          assigneeUsers: {
+            merge: false,
+          },
+        },
       },
     },
   }),

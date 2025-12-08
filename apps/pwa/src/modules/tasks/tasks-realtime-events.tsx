@@ -6,12 +6,12 @@ import { type FC } from "react";
 import { useEventsListener } from "../events/event-service";
 import { useTasks } from "./tasks-context";
 
-import TASK_FRAGMENT, { type TaskDataFragment } from "./queries/fragmentTask.graphql";
+import TASK_FRAGMENT, { type TaskDataFragment } from "./graphql/fragmentTask.graphql";
 
 import QUERY_TASK_BY_ID, {
   type TaskByIdQuery,
   type TaskByIdQueryVariables,
-} from "./queries/queryTaskById.graphql";
+} from "./graphql/queryTaskById.graphql";
 
 export const TasksRealtimeEvents: FC = () => {
   const { state } = useTasks();
@@ -40,6 +40,7 @@ export const TasksRealtimeEvents: FC = () => {
           {
             id: identifiedId,
             fragment: TASK_FRAGMENT,
+            fragmentName: "TaskData",
           },
           (prev) => task.data?.task ?? prev
         );

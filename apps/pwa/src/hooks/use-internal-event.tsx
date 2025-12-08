@@ -12,6 +12,7 @@ export const InternalEvent = {
 export type InternalEvent = (typeof InternalEvent)[keyof typeof InternalEvent];
 
 const eventsEmitter = new EventEmitter();
+eventsEmitter.setMaxListeners(500);
 
 export const addInternalEventsListener = (
   type: InternalEvent,

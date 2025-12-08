@@ -19,7 +19,8 @@ import { TaskMenuActions } from "../../components/tasks-menu-actions";
 import QUERY_TASK_STATUSES, {
   type TaskStatusesQuery,
   type TaskStatusesQueryVariables,
-} from "../../queries/queryTaskStatuses.graphql";
+} from "../../graphql/queryTaskStatuses.graphql";
+import { combineTaskStatuses } from "../../task-constants";
 
 const BoardGroupByStatuses = dynamic(
   () => import("./board-group-by-statuses").then((mod) => mod.BoardGroupByStatuses),
@@ -78,11 +79,16 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
     }
   );
 
+  const statuses = useMemo(
+    () => combineTaskStatuses(taskStatusesData.data?.taskStatuses ?? []),
+    [taskStatusesData.data]
+  );
+
   const dynamicTaskStatuses = useMemo(() => {
-    return (taskStatusesData.data?.taskStatuses ?? []).filter(
-      (v) => !Object.values<string>(DefaultTaskStatusId).includes(v.id)
+    return statuses.filter(
+      (status) => !Object.values(DefaultTaskStatusId).includes(status.id as any)
     );
-  }, [taskStatusesData.data]);
+  }, [statuses]);
 
   return (
     <Stack id="TasksBoardView" gap={0} mih={0} flex={1} miw={0}>
@@ -116,13 +122,10 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
               mih={0}
               pb={16}
             >
-              <BoardGroupByStatuses
-                key={DefaultTaskStatusId.TODO}
-                statusId={DefaultTaskStatusId.TODO}
-              />
+              <BoardGroupByStatuses key={DefaultTaskStatusId.TODO} status={statuses[0]} />
 
               {dynamicTaskStatuses.map((status) => (
-                <BoardGroupByStatuses key={status.id} statusId={status.id} />
+                <BoardGroupByStatuses key={status.id} status={status} />
               ))}
 
               {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
@@ -155,7 +158,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
               {tasks.state.showClosed && (
                 <BoardGroupByStatuses
                   key={DefaultTaskStatusId.CLOSED}
-                  statusId={DefaultTaskStatusId.CLOSED}
+                  status={statuses[statuses.length - 1]}
                 />
               )}
             </Group>

@@ -48,7 +48,7 @@ export const TaskTag: FC<TaskTagProps> = ({ id, h, fz, onRemove, editable = true
           {tag.name}
         </Text>
 
-        <Renderer visible={hover.hovered}>
+        <Renderer visible={hover.hovered && (editable || !!onRemove)}>
           <Group gap={3} mr={-10} wrap="nowrap">
             <Renderer visible={editable}>
               <ActionIcon
