@@ -6,7 +6,7 @@ import { FC } from "react";
 
 export const ListTaskRowHead: FC = () => {
   return (
-    <Group justify="space-between" gap={5} wrap="nowrap" py={3} miw={0}>
+    <Group justify="space-between" gap={5} wrap="nowrap" py={3} miw={0} pr={6}>
       <Text flex={1} truncate px={10} fz={12} fw={500} c="gray">
         <Trans>Name</Trans>
       </Text>

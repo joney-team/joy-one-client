@@ -1,18 +1,13 @@
 "use client";
 
-import { ButtonSelect } from "@/components/buttons/button-select";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { DueDateInput } from "@/components/inputs/due-date-input";
 import { Renderer } from "@/components/renderer";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
-import { TagSelector } from "@/modules/tags/components/tag-selector";
-import { TagType } from "@/modules/tags/tags-types";
-import { TaskStatusIcon, TaskStatusOptions } from "@/modules/tasks/components/task-status-options";
+import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
@@ -52,20 +47,22 @@ import Link from "next/link";
 import { TasksQueryVariables } from "../../queries/queryTasks.graphql";
 import { isTaskOutdated } from "../../tasks-service";
 
+import { useColor } from "@/modules/theme/use-color";
 import { classNames } from "@/utils/ui.utils";
 import {
   type Edge,
   attachClosestEdge,
   extractClosestEdge,
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { motion } from "framer-motion";
+import { useTaskStatuses } from "../../hooks/use-task-statuses";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
+import { useTaskMenu } from "../../modules/task-menu/task-menu";
+import { TaskMenuAction } from "../../modules/task-menu/task-menu-types";
 import { TaskSelectionBox } from "../../modules/task-selections/task-selection-box";
 import { TaskDataFragment } from "../../queries/fragmentTask.graphql";
 import styles from "./list-tasks.module.css";
-import { useTaskMenu } from "../../modules/task-menu/task-menu";
-import { useTaskStatuses } from "../../hooks/use-task-statuses";
-import { TaskMenuAction } from "../../modules/task-menu/task-menu-types";
 
 export const ListTaskRow: FC<{
   task: TaskDataFragment;
@@ -90,7 +87,8 @@ export const ListTaskRow: FC<{
   isMarkAsChild = false,
   droppableOptions = {},
 }) => {
-  const taskMenu = useTaskMenu();
+  const color = useColor();
+  const taskMenu = useTaskMenu(task);
   const droppableRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef<HTMLDivElement | null>(null);
   const draggingRefContainer = useRef<HTMLElement | null>(null);
@@ -263,28 +261,32 @@ export const ListTaskRow: FC<{
           h={44}
           w="100%"
           opacity={isDragging ? 0.5 : 1}
+          pr={6}
           style={{
             position: "relative",
           }}
           className={classNames(styles.ListTaskRow, {
             [styles.isLastRow]: lastRow,
           })}
+          data-task-menu-opened={taskMenu.isOpened}
         >
-          <ActionIcon
-            ref={draggingRef}
-            component="div"
-            variant="transparent"
-            color="gray"
-            style={{ cursor: "move", outline: "none" }}
-          >
-            <IconGripVertical size={16} strokeWidth={1.2} />
-          </ActionIcon>
+          <Group h="100%" align="center" gap={0}>
+            <ActionIcon
+              ref={draggingRef}
+              component="div"
+              variant="transparent"
+              color="gray"
+              style={{ cursor: "move", outline: "none" }}
+            >
+              <IconGripVertical size={16} strokeWidth={1.2} />
+            </ActionIcon>
 
-          <TaskSelectionBox
-            className={styles.TaskSelectionBox}
-            task={task}
-            groupVariables={groupVariables}
-          />
+            <TaskSelectionBox
+              className={styles.TaskSelectionBox}
+              task={task}
+              groupVariables={groupVariables}
+            />
+          </Group>
 
           <Group pl={indexSpacing} flex={1} py={5} gap={5} wrap="nowrap" miw={0}>
             <Renderer visible={isMarkAsChild}>
@@ -299,7 +301,6 @@ export const ListTaskRow: FC<{
               component="div"
               onClick={(e) =>
                 taskMenu.open({
-                  task,
                   groupVariables,
                   action: TaskMenuAction.CHANGE_STATUS,
                   target: e.currentTarget,
@@ -427,34 +428,21 @@ export const ListTaskRow: FC<{
                   </Tooltip>
                 )}
 
-                <TagSelector
-                  type={TagType.TASK}
-                  onSelect={(tag) => {
-                    if (!tag) return;
-                    updateTasks({
-                      _id: task._id,
-                      tags: [...(task.tags.filter((v) => v._id !== tag._id) || []), tag as any],
+                <ActionIcon
+                  variant="subtle"
+                  color="gray.6"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    taskMenu.open({
+                      target: e.currentTarget,
+                      groupVariables,
+                      action: TaskMenuAction.CHANGE_TAGS,
                     });
                   }}
-                  target={(selector) => {
-                    return (
-                      <Tooltip label={<Trans>Add tags</Trans>}>
-                        <ActionIcon
-                          variant="subtle"
-                          color="gray.6"
-                          size="sm"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            selector.toggle();
-                          }}
-                        >
-                          <IconTagPlus size={16} />
-                        </ActionIcon>
-                      </Tooltip>
-                    );
-                  }}
-                />
+                >
+                  <IconTagPlus size={16} />
+                </ActionIcon>
               </Group>
             </Group>
 
@@ -486,49 +474,54 @@ export const ListTaskRow: FC<{
               />
             </Group>
 
-            <Group w={150} px={10} style={{ overflow: "hidden" }}>
-              <ButtonSelect
-                inactiveColor="gray.4"
-                size={32}
-                icon={IconCalendar}
-                label={task.dueDate ? <DateFormat value={task.dueDate} type="date" /> : ""}
-                activeColor={isOutdated ? "red" : "blue"}
-                isActive={!!task.dueDate}
-                dropdown={() => (
-                  <DueDateInput
-                    p={5}
-                    startDate={task.startDate}
-                    dueDate={task.dueDate}
-                    onChange={(e) => {
-                      updateTasks([{ _id: task._id, ...e }]);
-                    }}
-                  />
+            <Group
+              w={150}
+              px={8}
+              className={styles.TaskCell}
+              gap={3}
+              onClick={(e) => {
+                e.stopPropagation();
+                taskMenu.open({
+                  target: e.currentTarget,
+                  groupVariables,
+                  action: TaskMenuAction.CHANGE_ESTIMATED_TIME,
+                });
+              }}
+            >
+              <IconCalendar
+                size={16}
+                color={color(
+                  task.dueDate
+                    ? task.dueDate < DateTime.getNowInSeconds()
+                      ? "red"
+                      : "primary.3"
+                    : "gray.4"
                 )}
-                onClear={() => updateTasks([{ _id: task._id, dueDate: null, startDate: null }])}
               />
+              {task.dueDate && (
+                <Text fz={12} fw={500} c="gray">
+                  <DateFormat value={task.dueDate} type="date" />
+                </Text>
+              )}
             </Group>
 
-            <Group w={70} px={10} justify="center" style={{ overflow: "visible" }}>
-              <ButtonSelect
-                inactiveColor="gray.4"
-                size={32}
-                icon={task.priority ? IconFlagFilled : IconFlag}
-                value={task.priority}
-                isActive={!!task.priority}
-                hideOptionLabel
-                options={Object.values(TaskPriority)
-                  .reverse()
-                  .map((priority) => ({
-                    value: priority,
-                    label: taskPriorities[priority].label(),
-                    icon: IconFlagFilled,
-                    activeColor: taskPriorities[priority].color,
-                  }))}
-                onChange={(value) => {
-                  updateTasks([{ _id: task._id, priority: value as any }]);
-                }}
-                onClear={() => updateTasks([{ _id: task._id, priority: null }])}
-              />
+            <Group
+              w={70}
+              px={8}
+              className={styles.TaskCell}
+              onClick={(e) => {
+                taskMenu.open({
+                  target: e.currentTarget,
+                  groupVariables,
+                  action: TaskMenuAction.CHANGE_PRIORITY,
+                });
+              }}
+            >
+              {task.priority ? (
+                <IconFlagFilled size={16} color={color(taskPriorities[task.priority].color)} />
+              ) : (
+                <IconFlag size={16} color={color("gray.4")} />
+              )}
             </Group>
           </Group>
         </Group>

@@ -117,6 +117,9 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
                   borderColor: pointed === "start" ? theme.colors.primary[6] : undefined,
                   cursor: "pointer",
                 },
+                label: {
+                  fontSize: 11,
+                },
               }}
               placeholder={DateTime.getDateFormatString(lang.locale)}
               onClick={() => {
@@ -156,6 +159,9 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
                 input: {
                   borderColor: pointed === "due" ? theme.colors.primary[6] : undefined,
                   cursor: "pointer",
+                },
+                label: {
+                  fontSize: 11,
                 },
               }}
               onClick={() => {

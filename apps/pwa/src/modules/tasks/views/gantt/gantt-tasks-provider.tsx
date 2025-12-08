@@ -5,7 +5,10 @@ import { wait } from "@/utils/common.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { useLingui } from "@lingui/react/macro";
 import { useForceUpdate, useThrottledCallback } from "@mantine/hooks";
+import { usePathname } from "next/navigation";
 import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { setTaskMenuRoot } from "../../modules/task-menu/task-menu";
+import { parseTaskPath } from "../../tasks-route-helpers";
 import { ganttConfig } from "./gantt-tasks-config";
 import { Context } from "./gantt-tasks-context";
 import { useGanttRefs } from "./gantt-tasks-refs";
@@ -17,9 +20,6 @@ import type {
   UseGantt,
 } from "./gantt-tasks-types";
 import { getDateRangeBreakdown } from "./gantt-tasks-utils";
-import { usePathname } from "next/navigation";
-import { parseTaskPath } from "../../tasks-route-helpers";
-import { useTaskMenu } from "../../modules/task-menu/task-menu";
 
 let scrollTop = -1;
 const oneDate = 24 * 60 * 60 * 1000;
@@ -29,7 +29,6 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   const layout = useLayout();
   const refs = useGanttRefs();
   const pathname = usePathname();
-  const taskMenu = useTaskMenu();
   const [version, setVersion] = useState(0);
   const rerender = () => setVersion((s) => s + 1);
 
@@ -199,7 +198,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
   useEffect(() => {
     if (isInitialized) {
-      taskMenu.setRoot(refs.bodyContainer.current);
+      setTaskMenuRoot(refs.bodyContainer.current);
     }
   }, [isInitialized]);
 

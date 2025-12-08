@@ -19,15 +19,16 @@ import { useGantt } from "../../gantt-tasks-context";
 import styles from "../../gantt-tasks.module.css";
 import { GanttTaskTimelineChildSummary } from "./gantt-task-timeline-child-symmary";
 import { GanttTaskTimelineResizable } from "./gantt-task-timeline-resizable";
+import { TaskMenuAction } from "@/modules/tasks/modules/task-menu/task-menu-types";
 
 export const GanttTaskTimeline: FC = () => {
   const client = useApolloClient();
   const color = useColor();
   const gantt = useGantt();
-  const taskMenu = useTaskMenu();
   const { updateTasks } = useUpdateTasks();
   const { timeline, task, subTasksGroupVariables, ganttTaskAreaRef, groupVariables } =
     useGanttTaskRow();
+  const taskMenu = useTaskMenu(task);
 
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -132,7 +133,7 @@ export const GanttTaskTimeline: FC = () => {
         const mouseX = e.clientX;
 
         taskMenu.open({
-          task,
+          action: TaskMenuAction.GANTT_TIMELINE,
           groupVariables,
           target: timelineRef.current,
           offset: { x: Math.abs(timelineRef.current.getBoundingClientRect().x - mouseX), y: 5 },

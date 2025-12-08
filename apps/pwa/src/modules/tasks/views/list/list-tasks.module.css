@@ -1,8 +1,10 @@
 .ListTaskRows {
   display: flex;
 
-  .ListTaskRowContainer {
-    .ListTaskRow {
+  & .ListTaskRowContainer {
+    & .ListTaskRow {
+      align-items: stretch;
+
       &:not(.isLastRow) {
         border-bottom: 1px solid var(--mantine-color-gray-light);
       }
@@ -11,11 +13,23 @@
         opacity: 0;
       }
 
-      &:hover {
+      &:hover,
+      &[data-task-menu-opened="true"] {
         background: var(--mantine-color-gray-outline-hover);
 
         & .HoverToActive {
           opacity: 1;
+        }
+      }
+
+      & .TaskCell {
+        cursor: pointer;
+        border: 1px solid transparent;
+        height: 100%;
+        border-radius: var(--mantine-radius-default);
+
+        &:hover {
+          border-color: var(--mantine-color-gray-light);
         }
       }
     }

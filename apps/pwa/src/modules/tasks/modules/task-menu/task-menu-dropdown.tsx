@@ -1,171 +1,63 @@
 "use client";
 
-import { Card, Divider, Group, MantineColor, Portal, Stack, Text } from "@mantine/core";
-import { Icon, IconClockHour3, IconFlagFilled, IconMaximize } from "@tabler/icons-react";
-import { Fragment, ReactNode, useEffect, useRef, useState, type FC } from "react";
-import { TaskMenuAction, type TaskMenu } from "./task-menu-types";
+import { Portal, Skeleton } from "@mantine/core";
+import { ComponentType, useEffect, useMemo, useRef, useState, type FC } from "react";
+import { TaskMenuAction, TaskMenuComponentProps, type TaskMenu } from "./task-menu-types";
 
-import { useColor } from "@/modules/theme/use-color";
-import { Trans } from "@lingui/react/macro";
-import { useRouter } from "next/navigation";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
-import { updateTaskPath } from "../../tasks-route-helpers";
-import styles from "./task-menu.module.css";
-import { useTaskStatuses } from "../../hooks/use-task-statuses";
-import { TaskStatusIcon } from "../../components/task-status-options";
-import { DefaultTaskStatusId } from "../../tasks-types";
-import { classNames } from "@/utils/ui.utils";
-import { zIndexes } from "@joy-one-client/config/layout";
 import {
   addInternalEventsListener,
+  emitInternalEvent,
   InternalEvent,
   removeInternalEventsListner,
 } from "@/hooks/use-internal-event";
-import { TaskPriority } from "@/graphql/enums.graphql";
-import { taskPriorities } from "../../task-constants";
+import { classNames } from "@/utils/ui.utils";
+import { zIndexes } from "@joy-one-client/config/layout";
+import dynamic from "next/dynamic";
+import styles from "./task-menu.module.css";
 
-const MenuItem: FC<{
-  icon: Icon;
-  label: ReactNode;
-  onClick: () => void;
-  iconColor?: MantineColor;
-}> = ({ icon: Icon, iconColor, label, onClick }) => {
-  const color = useColor();
-
-  return (
-    <Group
-      className={styles.TaskMenuItem}
-      gap={6}
-      pr={12}
-      pl={6}
-      py={6}
-      align="center"
-      onClick={onClick}
-    >
-      <Icon size={16} color={color(iconColor ?? "gray")} />
-      <Text component="div" fz={13}>
-        {label}
-      </Text>
-    </Group>
-  );
-};
-
-export const TaskMenuDropdownContent: FC<TaskMenu & { onClose: () => void }> = ({
-  task,
-  onClose,
-  groupVariables,
-  action,
-}) => {
-  const router = useRouter();
-  const color = useColor();
-  const { updateTasks } = useUpdateTasks();
-  const { statuses } = useTaskStatuses(task);
-
-  if (action === TaskMenuAction.CHANGE_PRIORITY) {
-    return (
-      <Card p={0} shadow="md">
-        <Stack gap={3} py={8}>
-          <Text fz={13}>
-            <Trans>Change priority</Trans>
-          </Text>
-
-          {Object.values(TaskPriority).map((priority) => {
-            const priorityConstant = taskPriorities[priority];
-            return (
-              <Group
-                className={styles.TaskMenuItem}
-                gap={6}
-                pr={16}
-                pl={8}
-                py={6}
-                align="center"
-                onClick={() => {
-                  onClose();
-                  updateTasks({
-                    _id: task._id,
-                    priority: priority,
-                    context: { fromGroupVariables: groupVariables },
-                  });
-                }}
-              >
-                <IconFlagFilled size={16} color={color(priorityConstant.color)} />
-                <Text fz={13}>{priorityConstant.label()}</Text>
-              </Group>
-            );
-          })}
-        </Stack>
-      </Card>
-    );
+const TaskMenuPriority = dynamic(
+  () => import("./task-menu-priority").then((mod) => mod.TaskMenuPriority),
+  {
+    ssr: false,
+    loading: () => <Skeleton w={130} h={200} />,
   }
+);
 
-  if (action === TaskMenuAction.CHANGE_STATUS) {
-    return (
-      <Card p={0} shadow="md">
-        <Stack gap={3} py={8}>
-          {statuses.map((status) => {
-            return (
-              <Fragment key={status.id}>
-                {status.id === DefaultTaskStatusId.CLOSED && (
-                  <Divider my={3} miw="100%" opacity={0.5} />
-                )}
-
-                <Stack px={8}>
-                  <Group
-                    className={styles.TaskMenuItem}
-                    gap={6}
-                    pr={16}
-                    pl={8}
-                    py={6}
-                    align="center"
-                    onClick={() => {
-                      onClose();
-                      updateTasks({
-                        _id: task._id,
-                        status: status.id,
-                        context: { fromGroupVariables: groupVariables },
-                      });
-                    }}
-                  >
-                    <TaskStatusIcon size={16} color={status.color} id={status.id} />
-                    <Text fz={13}>{status.name}</Text>
-                  </Group>
-                </Stack>
-              </Fragment>
-            );
-          })}
-        </Stack>
-      </Card>
-    );
+const TaskMenuTimeline = dynamic(
+  () => import("./task-menu-timeline").then((mod) => mod.TaskMenuTimeline),
+  {
+    ssr: false,
+    loading: () => <Skeleton w={480} h={400} />,
   }
+);
 
-  return (
-    <Card p={0} shadow="md">
-      <Stack gap={0} p={5}>
-        <MenuItem
-          icon={IconMaximize}
-          label={<Trans>View detail</Trans>}
-          onClick={() => {
-            router.push(updateTaskPath(location.pathname, { code: task.code }));
-            onClose();
-          }}
-        />
+const TaskMenuGanttTimeline = dynamic(
+  () => import("./task-menu-gantt-timeline").then((mod) => mod.TaskMenuGanttTimeline),
+  {
+    ssr: false,
+    loading: () => <Skeleton w={130} h={75} />,
+  }
+);
 
-        <MenuItem
-          icon={IconClockHour3}
-          label={<Trans>Clear time</Trans>}
-          onClick={() => {
-            onClose();
-            updateTasks({
-              _id: task._id,
-              startDate: null,
-              dueDate: null,
-              context: { fromGroupVariables: groupVariables },
-            });
-          }}
-        />
-      </Stack>
-    </Card>
-  );
+const TaskMenuStatus = dynamic(
+  () => import("./task-menu-status").then((mod) => mod.TaskMenuStatus),
+  {
+    ssr: false,
+    loading: () => <Skeleton w={170} h={200} />,
+  }
+);
+
+const TaskMenuTags = dynamic(() => import("./task-menu-tags").then((mod) => mod.TaskMenuTags), {
+  ssr: false,
+  loading: () => <Skeleton w={130} h={200} />,
+});
+
+const menuComponents: Partial<Record<TaskMenuAction, ComponentType<TaskMenuComponentProps>>> = {
+  [TaskMenuAction.CHANGE_PRIORITY]: TaskMenuPriority,
+  [TaskMenuAction.CHANGE_ESTIMATED_TIME]: TaskMenuTimeline,
+  [TaskMenuAction.GANTT_TIMELINE]: TaskMenuGanttTimeline,
+  [TaskMenuAction.CHANGE_STATUS]: TaskMenuStatus,
+  [TaskMenuAction.CHANGE_TAGS]: TaskMenuTags,
 };
 
 export const TaskMenuDropdown: FC = ({}) => {
@@ -184,52 +76,132 @@ export const TaskMenuDropdown: FC = ({}) => {
     }
 
     setTaskMenu(undefined);
+    emitInternalEvent(InternalEvent.TASK_MENU_CLOSE);
   };
 
   useEffect(() => {
     if (taskMenu && menuRef.current) {
       const placeMenu = () => {
-        const { x, y } = taskMenu.target.getBoundingClientRect();
-        const { height } = taskMenu.target.getBoundingClientRect();
-        const placeX = taskMenu.position?.x ?? x + (taskMenu.offset?.x ?? 0);
-        const placeY = taskMenu.position?.y ?? y + height + (taskMenu.offset?.y ?? 0);
-        menuRef.current?.style.setProperty("left", `${placeX}px`);
-        menuRef.current?.style.setProperty("top", `${placeY}px`);
-      };
+        if (!menuRef.current) return;
 
-      placeMenu();
+        const targetRect = taskMenu.target.getBoundingClientRect();
+
+        // Get menu dimensions - use offsetWidth/offsetHeight as fallback for more reliable measurement
+        const menuRect = menuRef.current.getBoundingClientRect();
+        const menuWidth = menuRect.width || menuRef.current.offsetWidth || 0;
+        const menuHeight = menuRect.height || menuRef.current.offsetHeight || 0;
+
+        // If menu has no dimensions yet, skip positioning
+        if (menuWidth === 0 || menuHeight === 0) {
+          // Retry on next frame if dimensions aren't ready
+          requestAnimationFrame(placeMenu);
+          return;
+        }
+
+        // Viewport dimensions
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        // Padding from viewport edges
+        const padding = 16;
+
+        // Default offset values
+        const offsetX = taskMenu.offset?.x ?? 0;
+        const offsetY = taskMenu.offset?.y ?? 0;
+
+        // Calculate initial position (below target by default)
+        let placeX = targetRect.x + offsetX;
+        let placeY = targetRect.y + targetRect.height + offsetY;
+
+        // Check if menu overflows bottom of viewport
+        const wouldOverflowBottom = placeY + menuHeight + padding > viewportHeight;
+        // Check if menu overflows top of viewport (when flipped)
+        const wouldOverflowTop = placeY - menuHeight - padding < 0;
+
+        // Vertical positioning: prefer bottom, flip to top if needed
+        if (wouldOverflowBottom && !wouldOverflowTop) {
+          // Flip to top
+          placeY = targetRect.y - menuHeight - offsetY;
+        } else if (wouldOverflowBottom && wouldOverflowTop) {
+          // If both overflow, choose the side with more space
+          const spaceBelow = viewportHeight - (targetRect.y + targetRect.height);
+          const spaceAbove = targetRect.y;
+
+          if (spaceAbove > spaceBelow) {
+            placeY = targetRect.y - menuHeight - offsetY;
+          } else {
+            // Keep bottom but clamp to viewport
+            placeY = viewportHeight - menuHeight - padding;
+          }
+        }
+
+        // Horizontal positioning: adjust to prevent overflow
+        const wouldOverflowRight = placeX + menuWidth + padding > viewportWidth;
+        const wouldOverflowLeft = placeX - padding < 0;
+
+        if (wouldOverflowRight && !wouldOverflowLeft) {
+          // Shift left to fit
+          placeX = viewportWidth - menuWidth - padding;
+        } else if (wouldOverflowLeft && !wouldOverflowRight) {
+          // Shift right to fit
+          placeX = padding;
+        } else if (wouldOverflowRight && wouldOverflowLeft) {
+          // If menu is wider than viewport, center it
+          placeX = Math.max(padding, (viewportWidth - menuWidth) / 2);
+        }
+
+        // Ensure position is within viewport bounds
+        placeX = Math.max(padding, Math.min(placeX, viewportWidth - menuWidth - padding));
+        placeY = Math.max(padding, Math.min(placeY, viewportHeight - menuHeight - padding));
+
+        menuRef.current.style.setProperty("left", `${placeX}px`);
+        menuRef.current.style.setProperty("top", `${placeY}px`);
+      };
 
       // Make menu visible and trigger animation
       menuRef.current.style.setProperty("display", "block");
       // Use requestAnimationFrame to ensure the display change is applied before animation
       requestAnimationFrame(() => {
         menuRef.current?.classList.add(styles.AnimatedIn);
+        placeMenu();
       });
 
+      // Click outside of menu to close
       const onMouseDown = (e: MouseEvent) => {
         if (e.target && !menuRef.current?.contains(e.target as Node)) {
           onClose();
         }
       };
 
-      rootRef.current?.addEventListener("scroll", onClose);
-      document.addEventListener("mousedown", onMouseDown);
-      window.addEventListener("resize", placeMenu);
-
-      const onKeyDown = (e: KeyboardEvent) => {
+      // Escape key to close
+      const onWindowKeyDown = (e: KeyboardEvent) => {
         if (e.key === "Escape") {
           onClose();
         }
       };
 
-      window.addEventListener("keydown", onKeyDown);
+      window.addEventListener("resize", placeMenu);
+
+      rootRef.current?.addEventListener("scroll", onClose);
+      window.addEventListener("scroll", onClose);
+
+      document.addEventListener("mousedown", onMouseDown);
+      window.addEventListener("keydown", onWindowKeyDown);
+
+      const observer = new ResizeObserver(placeMenu);
+      observer.observe(menuRef.current);
 
       return () => {
         onClose();
-        document.removeEventListener("mousedown", onMouseDown);
-        rootRef.current?.removeEventListener("scroll", placeMenu);
         window.removeEventListener("resize", placeMenu);
-        window.removeEventListener("keydown", onKeyDown);
+
+        rootRef.current?.removeEventListener("scroll", onClose);
+        window.removeEventListener("scroll", onClose);
+
+        document.removeEventListener("mousedown", onMouseDown);
+        window.removeEventListener("keydown", onWindowKeyDown);
+
+        observer.disconnect();
       };
     }
   }, [menuRef.current, taskMenu, onClose]);
@@ -254,6 +226,11 @@ export const TaskMenuDropdown: FC = ({}) => {
     };
   }, []);
 
+  const DropdownMenu = useMemo(() => {
+    if (!taskMenu) return null;
+    return menuComponents[taskMenu.action];
+  }, [taskMenu]);
+
   return (
     <Portal>
       <div
@@ -261,7 +238,7 @@ export const TaskMenuDropdown: FC = ({}) => {
         className={classNames(styles.TaskMenu, styles.TaskMenuDropdown)}
         style={{ display: "none", position: "fixed", zIndex: zIndexes.taskMenu }}
       >
-        {taskMenu && <TaskMenuDropdownContent {...taskMenu} onClose={onClose} />}
+        {taskMenu && DropdownMenu ? <DropdownMenu {...taskMenu} onClose={onClose} /> : null}
       </div>
     </Portal>
   );

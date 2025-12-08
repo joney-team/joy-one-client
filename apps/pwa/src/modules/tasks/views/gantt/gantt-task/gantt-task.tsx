@@ -67,7 +67,7 @@ const GanttTaskContent: FC = () => {
   const { task, nextTask, groupVariables } = useGanttTaskRow();
   const gantt = useGantt();
   const router = useRouter();
-  const taskMenu = useTaskMenu();
+  const taskMenu = useTaskMenu(task);
   const ganttRefs = useGanttRefs();
 
   const { rootRef, ganttTaskAreaRef, timeline, taskStatus } = useGanttTaskRow();
@@ -181,6 +181,7 @@ const GanttTaskContent: FC = () => {
         }}
         wrap="nowrap"
         py={5}
+        data-task-menu-opened={taskMenu.isOpened}
       >
         <GanttTaskDraggable>
           {(draggingRef) => (
@@ -217,7 +218,6 @@ const GanttTaskContent: FC = () => {
                       taskMenu.open({
                         groupVariables,
                         target: e.currentTarget,
-                        task,
                         action: TaskMenuAction.CHANGE_STATUS,
                         offset: { y: 5 },
                       });
@@ -385,6 +385,7 @@ const GanttTaskContent: FC = () => {
                 left: 0,
                 zIndex: 1,
               }}
+              data-task-menu-opened={taskMenu.isOpened}
             >
               <GanttTaskDrawTimeline key={timeline?.startDate + "drawer"} />
               <GanttTaskTimeline key={timeline?.startDate + "timeline"} />

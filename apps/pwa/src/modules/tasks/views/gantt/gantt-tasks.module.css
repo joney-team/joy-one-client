@@ -50,6 +50,7 @@
     }
 
     &[hovered="true"],
+    &[data-task-menu-opened="true"],
     &:hover {
       background: var(--mantine-color-gray-outline-hover);
 
@@ -140,6 +141,7 @@
     }
 
     &[hovered="true"],
+    &[data-task-menu-opened="true"],
     &:hover {
       background: var(--mantine-color-gray-outline-hover);
 
