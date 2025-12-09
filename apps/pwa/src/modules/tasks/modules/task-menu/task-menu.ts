@@ -6,7 +6,7 @@ import {
 } from "@/hooks/use-internal-event";
 import { useEffect, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
-import { TaskMenu, TaskMenuContextType } from "./task-menu-types";
+import { TaskMenu, TaskMenuAction, TaskMenuContextType } from "./task-menu-types";
 import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 
 export function setTaskMenuRoot(root: HTMLElement | null) {
@@ -17,11 +17,11 @@ export const useTaskMenu: (
   task: TaskDataFragment,
   groupVariables: TasksQueryVariables | null
 ) => TaskMenuContextType = (task, groupVariables) => {
-  const [isOpened, setIsOpened] = useState(false);
+  const [activatedAction, setActivatedAction] = useState<TaskMenuAction | null>(null);
 
   useEffect(() => {
-    if (isOpened) {
-      const onClosed = () => setIsOpened(false);
+    if (activatedAction) {
+      const onClosed = () => setActivatedAction(null);
 
       addInternalEventsListener(InternalEvent.TASK_MENU_CLOSE, onClosed);
 
@@ -32,7 +32,7 @@ export const useTaskMenu: (
       const onOpened = (event: unknown) => {
         const { menu } = event as { menu: TaskMenu };
         if (menu.task._id === task._id) {
-          setIsOpened(true);
+          setActivatedAction(menu.action);
         }
       };
 
@@ -42,7 +42,7 @@ export const useTaskMenu: (
         removeInternalEventsListner(InternalEvent.TASK_MENU_OPEN, onOpened);
       };
     }
-  }, [isOpened, task._id]);
+  }, [activatedAction, task._id]);
 
   return {
     open(menu) {
@@ -51,6 +51,7 @@ export const useTaskMenu: (
     close() {
       emitInternalEvent(InternalEvent.TASK_MENU_CLOSE);
     },
-    isOpened,
+    isOpened: !!activatedAction,
+    activatedAction,
   };
 };

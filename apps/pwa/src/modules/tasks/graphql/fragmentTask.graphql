@@ -38,6 +38,7 @@ fragment TaskData on Task {
 
   customer {
     _id
+    code
     name
     avatar
     phone

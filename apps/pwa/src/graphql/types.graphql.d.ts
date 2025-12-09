@@ -178,6 +178,12 @@ export type Customer = {
   vnSecondaryLocation: Maybe<LocationEntity>;
 };
 
+export type CustomersPaginated = {
+  __typename?: 'CustomersPaginated';
+  count: Scalars['Float']['output'];
+  data: Array<Customer>;
+};
+
 export type DeviceEntity = {
   __typename?: 'DeviceEntity';
   _id: Scalars['String']['output'];
@@ -749,6 +755,7 @@ export type Query = {
   appConfig: AppConfig;
   categoriesPaginated: CategoriesPaginated;
   category: Category;
+  customers: CustomersPaginated;
   event: Event;
   getCategoriesByIds: Array<Category>;
   getCategoryBySlug: Category;
@@ -777,6 +784,13 @@ export type QueryCategoriesPaginatedArgs = {
 
 export type QueryCategoryArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type QueryCustomersArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
 

@@ -150,6 +150,11 @@ type Customer {
   vnSecondaryLocation: LocationEntity
 }
 
+type CustomersPaginated {
+  count: Float!
+  data: [Customer!]!
+}
+
 type DeviceEntity {
   _id: String!
   createdAt: Float
@@ -565,6 +570,7 @@ type Query {
   appConfig: AppConfig!
   categoriesPaginated(limit: Float = 30, offset: Float, query: JSONObject): CategoriesPaginated!
   category(id: String!): Category!
+  customers(ids: [String!], limit: Float = 30, offset: Float): CustomersPaginated!
   event(id: String!): Event!
   getCategoriesByIds(ids: [String!]!): [Category!]!
   getCategoryBySlug(slug: String!): Category!

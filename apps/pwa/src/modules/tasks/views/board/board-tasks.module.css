@@ -3,7 +3,8 @@
     cursor: pointer;
     user-select: none;
 
-    &:hover {
+    &:hover,
+    &[data-activated="true"] {
       & .CardPropertyContent {
         background-color: var(--mantine-color-default-hover);
         border-radius: var(--mantine-radius-default);

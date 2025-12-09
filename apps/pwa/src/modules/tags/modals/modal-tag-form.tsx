@@ -29,7 +29,7 @@ type ModalTagFormProps =
       tag: TagDataFragment;
     }
   | {
-      onCreated?: (tag: Pick<TagDataFragment, "_id" | "slug">) => void | Promise<void>;
+      onCreated?: (tag: TagDataFragment) => void | Promise<void>;
       type: TagType;
     };
 

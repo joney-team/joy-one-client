@@ -14,6 +14,7 @@ import { classNames } from "@/utils/ui.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import dynamic from "next/dynamic";
 import styles from "./task-menu.module.css";
+import { TaskMenuCustomer } from "./task-menu-customer";
 
 const TaskMenuPriority = dynamic(
   () => import("./task-menu-priority").then((mod) => mod.TaskMenuPriority),
@@ -67,6 +68,7 @@ const menuComponents: Partial<Record<TaskMenuAction, ComponentType<TaskMenuCompo
   [TaskMenuAction.CHANGE_STATUS]: TaskMenuStatus,
   [TaskMenuAction.CHANGE_TAGS]: TaskMenuTags,
   [TaskMenuAction.CHANGE_ASSIGNEE]: TaskMenuAssignee,
+  [TaskMenuAction.CHANGE_CUSTOMER]: TaskMenuCustomer,
 };
 
 export const TaskMenuDropdown: FC = ({}) => {
@@ -255,7 +257,9 @@ export const TaskMenuDropdown: FC = ({}) => {
         className={classNames(styles.TaskMenu, styles.TaskMenuDropdown)}
         style={{ display: "none", position: "fixed", zIndex: zIndexes.taskMenu }}
       >
-        {taskMenu && DropdownMenu ? <DropdownMenu {...taskMenu} onClose={onClose} /> : null}
+        {taskMenu && DropdownMenu ? (
+          <DropdownMenu key={taskMenu.task._id} {...taskMenu} onClose={onClose} />
+        ) : null}
       </div>
     </Portal>
   );

@@ -1,0 +1,12 @@
+query TaskCustomers($ids: [String!], $limit: Float, $offset: Float) {
+  customers(ids: $ids, limit: $limit, offset: $offset) {
+    count
+    data {
+      _id
+      code
+      name
+      avatar
+      phone
+    }
+  }
+}

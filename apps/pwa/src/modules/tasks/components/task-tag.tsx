@@ -19,7 +19,7 @@ interface TaskTagProps extends CardProps {
   editable?: boolean;
 }
 
-export const TaskTag: FC<TaskTagProps> = ({ id, h, fz, onRemove, editable = true, ...rest }) => {
+export const TaskTag: FC<TaskTagProps> = ({ id, h, fz, onRemove, editable = false, ...rest }) => {
   const tags = useTags();
   const tag = tags.list.find((v) => v._id === id);
   const hover = useHover();

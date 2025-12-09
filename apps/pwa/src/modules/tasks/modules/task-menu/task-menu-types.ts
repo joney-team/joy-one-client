@@ -8,10 +8,7 @@ export enum TaskMenuAction {
   CHANGE_ESTIMATED_TIME = "CHANGE_ESTIMATED_TIME",
   CHANGE_ASSIGNEE = "CHANGE_ASSIGNEE",
   CHANGE_TAGS = "CHANGE_TAGS",
-  CHANGE_CUSTOM_FIELDS = "CHANGE_CUSTOM_FIELDS",
-  CHANGE_DESCRIPTION = "CHANGE_DESCRIPTION",
-  CHANGE_NAME = "CHANGE_NAME",
-  CHANGE_ORDER = "CHANGE_ORDER",
+  CHANGE_CUSTOMER = "CHANGE_CUSTOMER",
   GANTT_TIMELINE = "GANTT_TIMELINE",
 }
 
@@ -26,6 +23,7 @@ export interface TaskMenu {
 export interface TaskMenuContextType {
   open: (menu: Omit<TaskMenu, "task" | "groupVariables">) => void;
   close: () => void;
+  activatedAction: TaskMenuAction | null;
   isOpened: boolean;
 }
 

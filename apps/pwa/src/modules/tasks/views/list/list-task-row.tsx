@@ -4,9 +4,7 @@ import { ContentEditable } from "@/components/content-editable/content-editable"
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
-import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
-import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
@@ -16,6 +14,7 @@ import {
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
+  Badge,
   Card,
   Group,
   Portal,
@@ -36,6 +35,7 @@ import {
   IconPlus,
   IconSubtask,
   IconTagPlus,
+  IconUser,
   IconUsers,
 } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
@@ -346,21 +346,29 @@ export const ListTaskRow: FC<{
                 )}
 
                 {task.tags.length > 0 && (
-                  <Group gap={3} wrap="nowrap">
+                  <Group
+                    gap={3}
+                    wrap="nowrap"
+                    className="clickable"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      taskMenu.open({
+                        action: TaskMenuAction.CHANGE_TAGS,
+                        target: e.currentTarget,
+                      });
+                    }}
+                  >
                     {task.tags.map((tag) => (
-                      <TaskTag
+                      <Badge
+                        className="clickable"
+                        color={tag.color || "gray"}
                         key={tag._id}
-                        id={tag._id}
-                        h={22}
-                        px={8}
-                        fz={10}
-                        onRemove={() => {
-                          updateTasks({
-                            _id: task._id,
-                            tags: task.tags.filter((v) => v._id !== tag._id),
-                          });
-                        }}
-                      />
+                        size="xs"
+                        variant="light"
+                      >
+                        {tag.name}
+                      </Badge>
                     ))}
                   </Group>
                 )}
@@ -393,15 +401,16 @@ export const ListTaskRow: FC<{
               <Group gap={2} wrap="nowrap" pl={35} className={styles.HoverToActive}>
                 {!task.parentId && (
                   <ModalCreateTask>
-                    {(open) => (
+                    {(onCreateTask) => (
                       <Tooltip label={<Trans>Create subtask</Trans>}>
                         <ActionIcon
                           variant="subtle"
                           color="gray.6"
                           size="sm"
                           onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
-                            open({ initial: { parent: task } });
+                            onCreateTask({ initial: { parent: task } });
                           }}
                         >
                           <IconPlus size={16} />
@@ -468,19 +477,26 @@ export const ListTaskRow: FC<{
               )}
             </Group>
 
-            <Group w={200} px={10}>
-              <CustomerInput
-                value={task.customer}
-                onSelect={(customer) =>
-                  updateTasks([
-                    {
-                      _id: task._id,
-                      customer: (customer ?? null) as any,
-                    },
-                  ])
-                }
-                clearable
-              />
+            <Group
+              w={200}
+              px={8}
+              miw={0}
+              className={styles.TaskCell}
+              gap={3}
+              onClick={(e) => {
+                e.stopPropagation();
+                taskMenu.open({
+                  target: e.currentTarget,
+                  action: TaskMenuAction.CHANGE_CUSTOMER,
+                });
+              }}
+            >
+              <IconUser size={16} color={color(task.customer ? "primary.3" : "gray.4")} />
+              {task.customer && (
+                <Text fz={12} fw={500} c="gray" truncate>
+                  {task.customer.name}
+                </Text>
+              )}
             </Group>
 
             <Group

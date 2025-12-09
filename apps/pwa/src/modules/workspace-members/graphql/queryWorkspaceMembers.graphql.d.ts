@@ -3,6 +3,8 @@ import type * as Types from '../../../graphql/types.graphql.d';
 export type WorkspaceMembersQueryVariables = Types.Exact<{
   ignoreSelf?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
   ids?: Types.InputMaybe<Array<Types.Scalars['String']['input']>>;
+  limit?: Types.InputMaybe<Types.Scalars['Float']['input']>;
+  offset?: Types.InputMaybe<Types.Scalars['Float']['input']>;
 }>;
 
 

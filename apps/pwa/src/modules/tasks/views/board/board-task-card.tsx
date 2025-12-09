@@ -78,6 +78,7 @@ const CardProperty: FC<
       canRemove?: boolean;
       applyCollapse?: boolean;
       isCollapsed?: boolean;
+      isActivated?: boolean;
     } & GroupProps
   >
 > = ({
@@ -88,6 +89,7 @@ const CardProperty: FC<
   canRemove,
   applyCollapse,
   isCollapsed,
+  isActivated,
   ...props
 }) => {
   const hover = useHover();
@@ -106,7 +108,14 @@ const CardProperty: FC<
   }, [applyCollapse, isCollapsed, hover.hovered]);
 
   return (
-    <Group flex={1} w="100%" gap={3} {...props} className={styles.CardProperty}>
+    <Group
+      flex={1}
+      w="100%"
+      gap={3}
+      {...props}
+      className={styles.CardProperty}
+      data-activated={isActivated}
+    >
       <Group gap={5}>
         <ThemeIcon variant="transparent" color={color(iconColor || "gray")} size="xs">
           {icon}
@@ -338,6 +347,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                 <CardProperty
                   icon={IconPlaystationCircle}
                   iconColor={taskStatusStyle.color}
+                  isActivated={taskMenu.activatedAction === TaskMenuAction.CHANGE_STATUS}
                   label={t`Status`}
                   onClick={(e) => {
                     taskMenu.open({
@@ -356,6 +366,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
               <CardProperty
                 icon={IconTags}
                 label={t`Tags`}
+                isActivated={taskMenu.activatedAction === TaskMenuAction.CHANGE_TAGS}
                 onClick={(e) => {
                   taskMenu.open({
                     action: TaskMenuAction.CHANGE_TAGS,
@@ -366,7 +377,15 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
               >
                 {task.tags.length ? (
                   task.tags.map((tag) => (
-                    <TaskTag key={tag._id} id={tag._id} h={22} editable={false} />
+                    <Badge
+                      className="clickable"
+                      color={tag.color || "gray"}
+                      key={tag._id}
+                      size="xs"
+                      variant="light"
+                    >
+                      {tag.name}
+                    </Badge>
                   ))
                 ) : (
                   <Group color="gray" variant="subtle" fz={12} c="gray" gap={2}>
@@ -380,6 +399,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                 icon={IconCalendar}
                 onRemove={() => updateTasks([{ ...task, dueDate: null, startDate: null }])}
                 canRemove={!!task.dueDate || !!task.startDate}
+                isActivated={taskMenu.activatedAction === TaskMenuAction.CHANGE_ESTIMATED_TIME}
                 onClick={(e) => {
                   taskMenu.open({
                     action: TaskMenuAction.CHANGE_ESTIMATED_TIME,
@@ -412,6 +432,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                 label={t`Priority`}
                 canRemove={!!task.priority}
                 onRemove={() => updateTasks([{ _id: task._id, priority: null }])}
+                isActivated={taskMenu.activatedAction === TaskMenuAction.CHANGE_PRIORITY}
                 onClick={(e) => {
                   taskMenu.open({
                     action: TaskMenuAction.CHANGE_PRIORITY,
@@ -435,6 +456,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
               <CardProperty
                 icon={IconUser}
                 label={t`Assignee`}
+                isActivated={taskMenu.activatedAction === TaskMenuAction.CHANGE_ASSIGNEE}
                 onClick={(e) => {
                   taskMenu.open({
                     action: TaskMenuAction.CHANGE_ASSIGNEE,

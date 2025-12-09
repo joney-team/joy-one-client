@@ -1,0 +1,23 @@
+fragment CustomerData on Customer {
+  refs
+  createdAt
+  updatedAt
+  _id
+  code
+  codePrefix
+  plainCode
+  name
+  birthday
+  birthdayDate
+  birthdayMonth
+  phone
+  avatar
+  email
+  presenterCustomerId
+  gender
+  medicalHistory
+  assigneeUserIds
+  tagIds
+  salaryAmount
+  relatedCustomerIds
+}

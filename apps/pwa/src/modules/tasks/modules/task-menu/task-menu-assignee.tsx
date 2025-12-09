@@ -1,30 +1,31 @@
 "use client";
 
-import { useLazyQuery, useQuery } from "@apollo/client/react";
+import { useLazyQuery } from "@apollo/client/react";
 import { Card, Group, Loader, ScrollArea, Stack, Text, TextInput } from "@mantine/core";
 import { TaskMenuComponent } from "./task-menu-types";
 
+import { AutoFocus } from "@/components/auto-focus";
 import { Avatar } from "@/components/avatar";
+import { WayPoint } from "@/components/way-point";
+import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import QUERY_WORKSPACE_MEMBERS, {
   type WorkspaceMembersQuery,
   type WorkspaceMembersQueryVariables,
 } from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
+import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
 import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { AppEntity } from "@/types";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
+import { useDebouncedState } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import styles from "./task-menu.module.css";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { Trans } from "@lingui/react/macro";
-import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
-import { searchEntity } from "@/modules/search/search-service";
-import { AppEntity } from "@/types";
-import { useDebouncedCallback, useDebouncedState, useThrottledCallback } from "@mantine/hooks";
 
-const MenuAssignee = ({
+const MenuItem = ({
   member,
   isSelected,
   onClick,
@@ -79,11 +80,14 @@ const MenuAssignee = ({
 
 export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) => {
   const { userWorkspaceMember } = useUserWorkspaceMember();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const [selected, setSelected] = useState<TaskDataFragment["assigneeUsers"]>(task.assigneeUsers);
   const [textSearch, setTextSearch] = useDebouncedState("", 300);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [isSearchEmpty, setIsSearchEmpty] = useState(false);
 
-  const [getMembers, { data, loading }] = useLazyQuery<
+  const [getMembers, { data, loading, fetchMore }] = useLazyQuery<
     WorkspaceMembersQuery,
     WorkspaceMembersQueryVariables
   >(QUERY_WORKSPACE_MEMBERS, { fetchPolicy: "network-only" });
@@ -92,18 +96,45 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
     async (q: string) => {
       if (q.length > 0) {
         const searchResult = await searchEntity(AppEntity.WORKSPACE_MEMBERS, q);
-        if (searchResult.length === 0) return;
+        if (searchResult.length === 0) return setIsSearchEmpty(true);
 
         await getMembers({
           variables: { ignoreSelf: true, ids: searchResult.map((result) => result._id) },
         });
-        return;
+        return setIsSearchEmpty(false);
       }
 
-      await getMembers({ variables: { ignoreSelf: true } });
+      await getMembers({ variables: { ignoreSelf: true, limit: 10 } });
+      return setIsSearchEmpty(false);
     },
     [getMembers]
   );
+
+  const onFetchMore = useCallback(async () => {
+    if (!data || isFetchingMore) return;
+    setIsFetchingMore(true);
+    await fetchMore({
+      variables: { ignoreSelf: true, offset: data.workspaceMembers.data.length },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          ...prev,
+          workspaceMembers: {
+            ...prev.workspaceMembers,
+            data: [...prev.workspaceMembers.data, ...fetchMoreResult.workspaceMembers.data],
+          },
+        };
+      },
+    });
+    setIsFetchingMore(false);
+  }, [fetchMore, data, isFetchingMore]);
+
+  const isCanFetchMore =
+    !isFetchingMore &&
+    !loading &&
+    data &&
+    data.workspaceMembers.data.length < data.workspaceMembers.count &&
+    textSearch.length === 0;
 
   useEffect(() => {
     onGetMembers(textSearch);
@@ -113,13 +144,16 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
 
   return (
     <Card p={0} shadow="md" style={{ overflow: "hidden" }} withBorder>
-      <Group p={8} pb={0}>
+      <AutoFocus as={Group} p={8} pb={0}>
         <TextInput
-          radius={8}
+          radius={6}
+          autoFocus
           leftSection={<IconSearch size={16} />}
           placeholder={t`Search`}
           onChange={(e) => setTextSearch(e.target.value)}
-          rightSection={loading ? <Loader size="xs" type="dots" color="gray" /> : undefined}
+          rightSection={
+            !data && loading ? <Loader size="xs" type="dots" color="gray" /> : undefined
+          }
           styles={{
             input: {
               backgroundColor: "var(--mantine-color-default-hover)",
@@ -127,13 +161,14 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
             },
           }}
         />
-      </Group>
-      <ScrollArea.Autosize mah={220} offsetScrollbars scrollbarSize={6}>
+      </AutoFocus>
+
+      <ScrollArea.Autosize mah={220} offsetScrollbars scrollbarSize={6} viewportRef={scrollRef}>
         <Stack py={5} px={5} gap={0}>
           {textSearch.length === 0 && (
             <Fragment>
               {userWorkspaceMember && (
-                <MenuAssignee
+                <MenuItem
                   isSelf
                   member={userWorkspaceMember}
                   isSelected={selected.some((u) => u._id === userWorkspaceMember._id)}
@@ -155,7 +190,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
 
               {selected.map((member) => {
                 return (
-                  <MenuAssignee
+                  <MenuItem
                     isSelf={member.userId === userWorkspaceMember?.userId}
                     key={member._id}
                     member={member}
@@ -176,31 +211,42 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
             </Fragment>
           )}
 
-          {data?.workspaceMembers.data.map((member) => {
-            const isSelected = selected.some((u) => u._id === member._id);
-            if (textSearch.length === 0 && isSelected) return null;
+          {!isSearchEmpty &&
+            data?.workspaceMembers.data.map((member) => {
+              const isSelected = selected.some((u) => u._id === member._id);
+              if (textSearch.length === 0 && isSelected) return null;
 
-            return (
-              <MenuAssignee
-                isSelf={member.userId === userWorkspaceMember?.userId}
-                key={member._id}
-                member={member}
-                isSelected={isSelected}
-                onClick={() => {
-                  const data = isSelected
-                    ? selected.filter((t) => t._id !== member._id)
-                    : [...selected, member];
+              return (
+                <MenuItem
+                  isSelf={member.userId === userWorkspaceMember?.userId}
+                  key={member._id}
+                  member={member}
+                  isSelected={isSelected}
+                  onClick={() => {
+                    const data = isSelected
+                      ? selected.filter((t) => t._id !== member._id)
+                      : [...selected, member];
 
-                  setSelected(data);
-                  updateTasks({
-                    _id: task._id,
-                    assigneeUsers: data,
-                    context: { fromGroupVariables: groupVariables },
-                  });
-                }}
-              />
-            );
-          })}
+                    setSelected(data);
+                    updateTasks({
+                      _id: task._id,
+                      assigneeUsers: data,
+                      context: { fromGroupVariables: groupVariables },
+                    });
+                  }}
+                />
+              );
+            })}
+
+          {isSearchEmpty && (
+            <Text fz={12} c="gray" ta="center" py={5}>
+              <Trans>No assignees found</Trans>
+            </Text>
+          )}
+
+          {isCanFetchMore && (
+            <WayPoint scrollContainerRef={scrollRef.current} onReached={onFetchMore} />
+          )}
         </Stack>
       </ScrollArea.Autosize>
     </Card>
