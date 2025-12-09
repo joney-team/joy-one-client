@@ -115,7 +115,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
     <Card p={0} shadow="md" style={{ overflow: "hidden" }} withBorder>
       <Group p={8} pb={0}>
         <TextInput
-          radius={50}
+          radius={8}
           leftSection={<IconSearch size={16} />}
           placeholder={t`Search`}
           onChange={(e) => setTextSearch(e.target.value)}
