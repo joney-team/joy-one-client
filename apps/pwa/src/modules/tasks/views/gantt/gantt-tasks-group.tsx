@@ -67,13 +67,33 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
     if (!opened) unselect(...tasks.map((v) => v._id));
   }, [tasks, opened]);
 
-  useEffect(() => {
-    return onInternalEvent(InternalEvent.GANTT_TASKS_OPEN_ALL_FOLDER, () => setIsOpened(true));
-  }, []);
+  const onOpen = () => {
+    if (pure) return;
+
+    if (folder?._id) {
+      localStorage.setItem(`gtg-${folder?._id}`, "true");
+    }
+
+    setIsOpened(true);
+  };
+
+  const onClose = () => {
+    if (pure) return;
+
+    if (folder?._id) {
+      localStorage.removeItem(`gtg-${folder?._id}`);
+    }
+
+    setIsOpened(false);
+  };
 
   useEffect(() => {
-    return onInternalEvent(InternalEvent.GANTT_TASKS_CLOSE_ALL_FOLDER, () => setIsOpened(false));
-  }, []);
+    return onInternalEvent(InternalEvent.GANTT_TASKS_OPEN_ALL_FOLDER, onOpen);
+  }, [onOpen]);
+
+  useEffect(() => {
+    return onInternalEvent(InternalEvent.GANTT_TASKS_CLOSE_ALL_FOLDER, onClose);
+  }, [onClose]);
 
   return (
     <Fragment>
@@ -90,14 +110,10 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
             borderBottom: `1px solid var(--app-divider-color)`,
           }}
           onClick={() => {
-            setIsOpened(!opened);
-
-            if (folder?._id) {
-              if (!opened) {
-                localStorage.setItem(`gtg-${folder?._id}`, "true");
-              } else {
-                localStorage.removeItem(`gtg-${folder?._id}`);
-              }
+            if (opened) {
+              onClose();
+            } else {
+              onOpen();
             }
           }}
           className="clickable unselectable"
