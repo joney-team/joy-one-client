@@ -191,6 +191,8 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
   const nextStatus = statuses[currentStatusIndex + 1];
   const completedStatus = statuses.find((v) => v.id === DefaultTaskStatusId.CLOSED);
 
+  console.log("completedStatus", completedStatus);
+
   const taskMenu = useTaskMenu({
     task,
     groupVariables: null,
@@ -207,7 +209,7 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
           onChange={(value) => form.setFieldValue("name", value)}
         />
 
-        <SimpleGrid cols={{ md: 2 }} spacing={3} maw="100%" w={900}>
+        <SimpleGrid cols={{ md: 2 }} spacing={5} maw="100%" w={800}>
           {status && (
             <FormField
               icon={IconPlaystationCircle}
@@ -240,7 +242,7 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
                     align="center"
                     justify="center"
                     style={{
-                      borderRight: `1px solid #00000020`,
+                      borderRight: nextStatus ? `1px solid #00000020` : "none",
                     }}
                   >
                     <Text c="white" fz={13} fw={500} tt="uppercase">
