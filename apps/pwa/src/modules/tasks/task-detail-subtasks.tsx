@@ -105,6 +105,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
                     href={updateTaskPath({ code: task.code })}
                     groupVariables={groupVariables}
                     hidden={["customer", "priority"]}
+                    hideSelection
                   />
                 ))}
             </Stack>

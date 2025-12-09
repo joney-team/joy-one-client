@@ -76,6 +76,7 @@ export const ListTaskRow: FC<
     lastRow?: boolean;
     groupVariables: TasksQueryVariables | null;
     isMarkAsChild?: boolean;
+    hideSelection?: boolean;
     droppableOptions?: {
       inherits?: (keyof TaskDataFragment)[];
     };
@@ -90,6 +91,7 @@ export const ListTaskRow: FC<
   nextTask,
   isMarkAsChild = false,
   droppableOptions = {},
+  hideSelection = false,
   hidden = [],
 }) => {
   const color = useColor();
@@ -286,11 +288,13 @@ export const ListTaskRow: FC<
               <IconGripVertical size={16} strokeWidth={1.2} />
             </ActionIcon>
 
-            <TaskSelectionBox
-              className={styles.TaskSelectionBox}
-              task={task}
-              groupVariables={groupVariables}
-            />
+            {!hideSelection && (
+              <TaskSelectionBox
+                className={styles.TaskSelectionBox}
+                task={task}
+                groupVariables={groupVariables}
+              />
+            )}
           </Group>
 
           <Group pl={indexSpacing} flex={1} py={5} gap={5} wrap="nowrap" miw={0}>
