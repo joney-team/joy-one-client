@@ -355,7 +355,7 @@ export const WithModalRegisterCustomerKyc: FC<{
                 </Session>
 
                 <Group mt={10} justify="center">
-                  <Button onClick={submit.handle} type="submit" miw={300} maw="100%">
+                  <Button onClick={() => submit.handle()} type="submit" miw={300} maw="100%">
                     <Trans>Complete</Trans>
                   </Button>
                 </Group>

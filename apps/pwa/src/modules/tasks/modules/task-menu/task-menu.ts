@@ -17,7 +17,7 @@ export function setTaskMenuRoot(root: HTMLElement | null) {
 }
 
 export const useTaskMenu: (args: {
-  task?: TaskDataFragment;
+  task?: Partial<TaskDataFragment> & { _id: string };
   groupVariables: TasksQueryVariables | null;
   updateTask?: (task: UpdateTask) => Promise<void>;
   zIndex?: number;

@@ -110,14 +110,14 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                     </Menu.Item>
 
                     <ModalTagForm>
-                      {(open) => (
+                      {(modalTagForm) => (
                         <Menu.Item
                           leftSection={<IconPencil strokeWidth={2} size={18} />}
                           onClick={(e) => {
                             e.stopPropagation();
                             if (!tagFolders.activatedFolder) return;
 
-                            open({
+                            modalTagForm.open({
                               tag: tagFolders.activatedFolder,
                               type: TagType.TASK_FOLDER,
                             });

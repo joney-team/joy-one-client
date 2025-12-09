@@ -6,19 +6,16 @@ import { NumberFormat } from "@/components/format/number-format";
 import { Trans } from "@lingui/react/macro";
 import { Card, Divider, Group, Progress, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus, IconSubtask } from "@tabler/icons-react";
-import { usePathname } from "next/navigation";
 import { useEffect, useMemo, type FC } from "react";
-import { useTasksQuery } from "./hooks/use-tasks-query";
-import { ModalCreateTask } from "./modals/modal-create-task";
 import { TaskDataFragment } from "./graphql/fragmentTask.graphql";
 import { type TasksQueryVariables } from "./graphql/queryTasks.graphql";
+import { useTasksQuery } from "./hooks/use-tasks-query";
+import { ModalCreateTask } from "./modals/modal-create-task";
+import { updateTaskPath } from "./tasks-route-helpers";
 import { ListTaskRow } from "./views/list/list-task-row";
 import { ListTaskRowHead } from "./views/list/list-task-row-head";
-import { updateTaskPath } from "./tasks-route-helpers";
 
 export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => {
-  const pathname = usePathname();
-
   const groupVariables: TasksQueryVariables = useMemo(
     () => ({
       parentId: task._id,
@@ -105,7 +102,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
                     task={task}
                     prevTask={subTasks[index - 1]}
                     nextTask={subTasks[index + 1]}
-                    href={updateTaskPath(pathname, { code: task.code })}
+                    href={updateTaskPath({ code: task.code })}
                     groupVariables={groupVariables}
                   />
                 ))}

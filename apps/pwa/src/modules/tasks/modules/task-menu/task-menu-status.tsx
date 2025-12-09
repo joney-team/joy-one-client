@@ -3,10 +3,10 @@
 import { Card, Divider, Group, Stack, Text } from "@mantine/core";
 import { Fragment } from "react";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import { TaskMenuComponent } from "./task-menu-types";
 
 import { TaskStatusIcon } from "../../components/task-status-options";
+import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { DefaultTaskStatusId } from "../../tasks-types";
 import styles from "./task-menu.module.css";
 
@@ -16,7 +16,10 @@ export const TaskMenuStatus: TaskMenuComponent = ({
   groupVariables,
   updateTask,
 }) => {
-  const { statuses } = useTaskStatuses(task);
+  const { statuses } = useTaskStatuses({
+    status: task.status ?? DefaultTaskStatusId.TODO,
+    statuses: task.statuses ?? [],
+  } as Pick<TaskDataFragment, "status" | "statuses">);
 
   return (
     <Card p={0} shadow="md" withBorder>

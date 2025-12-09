@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { DateInput } from "@/components/inputs/date-input";
 import { ModalTitle } from "@/components/modal-title";
@@ -149,7 +151,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
         <Button
           action
           loading={isSubmitting}
-          onClick={onSubmit}
+          onClick={() => onSubmit()}
           leftIcon={IconCheck}
           disabled={!form.isDirty()}
           color={color(receiptTypeColors[form.values.type])}

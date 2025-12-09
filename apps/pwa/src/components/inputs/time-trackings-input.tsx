@@ -529,8 +529,8 @@ export const TimeTrackingForm: FC<{
           />
 
           <Renderer visible={!!!props.timeTracking}>
-            <Button onClick={onSubmit} leftIcon={IconPlus}>
-              {t`Add`}
+            <Button onClick={() => onSubmit()} leftIcon={IconPlus}>
+              <Trans>Add</Trans>
             </Button>
           </Renderer>
         </Group>

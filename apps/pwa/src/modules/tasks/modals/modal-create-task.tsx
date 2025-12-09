@@ -1,23 +1,27 @@
 "use client";
 
-import { Button } from "@/components/buttons/button";
 import { ModalTitle } from "@/components/modal-title";
-import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { type TaskFormProps } from "@/modules/tasks/components/form-task";
-import { String } from "@/utils/string.utils";
+import { type TaskFormProps } from "@/modules/tasks/components/task-form";
+import { useColor } from "@/modules/theme/use-color";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans } from "@lingui/react/macro";
-import { em, Group, Modal, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Group, Modal, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconChevronRight, IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useState } from "react";
-import { updateTaskPath } from "../tasks-route-helpers";
 
-const TaskForm = dynamic(() => import("../components/form-task").then((mod) => mod.TaskForm), {
-  ssr: false,
-  loading: () => <Skeleton miw="100%" h={250} />,
-});
+const CreateTaskForm = dynamic(
+  () => import("./modal-create-task-form").then((mod) => mod.CreateTaskForm),
+  {
+    ssr: false,
+    loading: () => (
+      <Stack px={16}>
+        <Skeleton height={200} />
+      </Stack>
+    ),
+  }
+);
 
 export interface ModalCreateTaskRef {
   open: (args?: TaskFormProps) => void;
@@ -29,7 +33,7 @@ export const ModalCreateTask = forwardRef<
     children?: (open: (args?: TaskFormProps) => void) => ReactNode;
   }
 >((props, ref) => {
-  const router = useRouter();
+  const color = useColor();
   const layout = useLayout();
   const [args, setArgs] = useState<TaskFormProps | null>(null);
 
@@ -45,40 +49,22 @@ export const ModalCreateTask = forwardRef<
   const breadcrumbs = useMemo(() => {
     return [
       args?.initial?.folder && (
-        <Button
-          size="compact-sm"
-          variant="light"
-          color={args?.initial?.folder?.color ?? "dark"}
-          fz={em(15)}
-          fw={500}
-          leftIcon={IconFolder}
-          onClick={() => {
-            router.push(
-              updateTaskPath(location.pathname, {
-                slug: args?.initial?.folder?.slug,
-              })
-            );
-            setArgs(null);
-          }}
-        >
-          {args?.initial?.folder.name}
-        </Button>
+        <Group color={args?.initial?.folder?.color ?? "dark"} gap={5}>
+          <IconFolder size={16} color={color(args?.initial?.folder?.color ?? "dark")} />
+          <Text fz={13} fw={400}>
+            {args?.initial?.folder.name}
+          </Text>
+        </Group>
       ),
       args?.initial?.parent && (
-        <Button
-          leftIcon={IconStack2}
-          size="compact-sm"
-          variant="subtle"
-          color="dark"
-          onClick={() => {
-            router.push(`/tasks/${args?.initial?.parent?.code}`);
-            setArgs(null);
-          }}
-        >
-          {String.limitCharacters(args?.initial?.parent?.name, layout.view === "mobile" ? 15 : 30)}
-        </Button>
+        <Group color={args?.initial?.folder?.color ?? "dark"} gap={5}>
+          <IconStack2 size={16} color={color(args?.initial?.folder?.color ?? "dark")} />
+          <Text fz={13} fw={400}>
+            {args?.initial?.folder?.name}
+          </Text>
+        </Group>
       ),
-      <Text fz={12} fw={300}>
+      <Text fz={13} fw={400} c="gray">
         <Trans>New Task</Trans>
       </Text>,
     ].filter(Boolean);
@@ -93,8 +79,8 @@ export const ModalCreateTask = forwardRef<
         : null}
 
       <Modal
-        onClose={() => setArgs(null)}
         opened={!!args}
+        onClose={() => setArgs(null)}
         title={
           <ModalTitle
             title={args?.task ? <Trans>Task</Trans> : <Trans>Create task</Trans>}
@@ -102,11 +88,16 @@ export const ModalCreateTask = forwardRef<
           />
         }
         fullScreen={layout.view === "mobile"}
-        size={830}
+        size={600}
         zIndex={zIndexes.commonModals + 1}
+        styles={{
+          body: {
+            padding: 0,
+          },
+        }}
       >
-        <Stack gap={0} pb={layout.view === "mobile" ? 16 * 2 : 0}>
-          <Group gap={0}>
+        <Stack gap={16} pb={16}>
+          <Group gap={0} px={16}>
             {breadcrumbs.map((breadcrumb, index) => (
               <Fragment key={index}>
                 {breadcrumb}
@@ -119,15 +110,7 @@ export const ModalCreateTask = forwardRef<
             ))}
           </Group>
 
-          {args && (
-            <TaskForm
-              {...args}
-              onClose={() => {
-                args?.onClose?.();
-                setArgs(null);
-              }}
-            />
-          )}
+          {args && <CreateTaskForm {...args} />}
         </Stack>
       </Modal>
     </Fragment>

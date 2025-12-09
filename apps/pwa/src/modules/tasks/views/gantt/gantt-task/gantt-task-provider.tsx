@@ -1,3 +1,8 @@
+"use client";
+
+import { TaskStatus } from "@/graphql/types.graphql";
+import { useTaskStatuses } from "@/modules/tasks/hooks/use-task-statuses";
+import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import {
   createContext,
@@ -13,11 +18,6 @@ import { type TasksQueryVariables } from "../../../graphql/queryTasks.graphql";
 import { ganttConfig } from "../gantt-tasks-config";
 import { useGantt } from "../gantt-tasks-context";
 import type { GanttTaskProps, GanttTaskTimeline } from "./gantt-task-types";
-import { useColor } from "@/modules/theme/use-color";
-import { defaultTaskStatusIds } from "@/modules/tasks/task-constants";
-import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
-import { TaskStatus } from "@/graphql/types.graphql";
-import { useTaskStatuses } from "@/modules/tasks/hooks/use-task-statuses";
 
 type GanttTaskRowRefs = {
   rootRef: RefObject<HTMLDivElement | null>;
@@ -36,7 +36,6 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
   ...props
 }) => {
   const gantt = useGantt();
-  const color = useColor();
   const rootRef = useRef<HTMLDivElement>(null);
   const ganttTaskAreaRef = useRef<HTMLDivElement>(null);
 
@@ -114,7 +113,7 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
   const { status } = useTaskStatuses(task);
 
   useEffect(() => {
-    rootRef.current?.style.setProperty("--task-status-color", status.color);
+    rootRef.current?.style.setProperty("--task-status-color", status?.color ?? "");
   }, [status]);
 
   return (
@@ -125,7 +124,7 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
         subTasksGroupVariables,
         task,
         timeline,
-        taskStatus: status,
+        taskStatus: status ?? { id: DefaultTaskStatusId.TODO, name: "", color: "gray", order: 0 },
         ...props,
       }}
     >

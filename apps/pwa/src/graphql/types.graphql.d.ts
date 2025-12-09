@@ -830,6 +830,9 @@ export type QueryTagBySlugArgs = {
 
 
 export type QueryTagsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
 };
 

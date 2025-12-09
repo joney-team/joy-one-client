@@ -13,6 +13,7 @@ import {
   WorkspaceBranchEntity,
 } from "@/modules/workspace-branches/workspace-branches-types";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Stack, Tabs, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -81,10 +82,10 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
             action
             leftIcon={branch ? IconCheck : IconPlus}
             loading={loading}
-            onClick={onSubmit}
+            onClick={() => onSubmit()}
             type="submit"
           >
-            {branch ? t`Edit` : t`Create`}
+            {branch ? <Trans>Edit</Trans> : <Trans>Create</Trans>}
           </Button>
         </Stack>
       </Stack>

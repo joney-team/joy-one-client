@@ -6,6 +6,7 @@ import { createWorkspaceSdk } from "@/modules/workspace-sdks/workspace-sdks-serv
 import { WorkspaceSdkEntity } from "@/modules/workspace-sdks/workspace-sdks-types";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Modal, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -61,20 +62,25 @@ export const ModalWorkspaceSdkForm: FC<{
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle title={props?.sdk ? t`Update SDK` : t`Create SDK`} icon={IconPuzzle} />}
+        title={
+          <ModalTitle
+            title={props?.sdk ? <Trans>Update SDK</Trans> : <Trans>Create SDK</Trans>}
+            icon={IconPuzzle}
+          />
+        }
         zIndex={400}
       >
         <Stack>
-          <TextInput withAsterisk label={t`Name`} {...form.getInputProps("name")} />
+          <TextInput withAsterisk label={<Trans>Name</Trans>} {...form.getInputProps("name")} />
 
           <Button
             mt={10}
             loading={isSubmitting}
-            onClick={onSubmit}
+            onClick={() => onSubmit()}
             leftSection={<IconCheck strokeWidth={1.2} />}
             type="submit"
           >
-            {t`Complete`}
+            <Trans>Complete</Trans>
           </Button>
         </Stack>
       </Modal>

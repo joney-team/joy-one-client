@@ -6,7 +6,6 @@ import { ProductComboEntity } from "@/modules/product-combos/product-combos-enti
 import { useProductCombo } from "@/modules/product-combos/product-combos-service";
 import { UseProductComboDto } from "@/modules/product-combos/product-combos-types";
 import { onFormError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Center, Modal, NumberInput, Stack, Table, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -68,7 +67,7 @@ export const ModalProductComboUsing: FC<{
         key={propsRef.current?.combo.id}
         opened={opened}
         onClose={close}
-        title={<ModalTitle title={t`Add combo history`} icon={IconPackage} />}
+        title={<ModalTitle title={<Trans>Add combo history</Trans>} icon={IconPackage} />}
         size="lg"
         yOffset={80}
       >
@@ -104,10 +103,10 @@ export const ModalProductComboUsing: FC<{
             </Table.Tbody>
           </Table>
 
-          <Textarea label={t`Note`} {...form.getInputProps("note")} />
+          <Textarea label={<Trans>Note</Trans>} {...form.getInputProps("note")} />
 
           <Center>
-            <Button action onClick={onSubmit} loading={form.submitting}>
+            <Button action onClick={() => onSubmit()} loading={form.submitting}>
               <Trans>Add</Trans>
             </Button>
           </Center>

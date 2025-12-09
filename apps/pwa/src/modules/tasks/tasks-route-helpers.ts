@@ -1,3 +1,5 @@
+"use client";
+
 import { TaskView } from "./views/types";
 
 type TaskRouteParams = {
@@ -24,8 +26,8 @@ export function buildTaskPath(params: TaskRouteParams): string {
   return `/tasks/${params.view}/${params.slug}/${params.code}`;
 }
 
-export function updateTaskPath(pathname: string, updates: Partial<TaskRouteParams>): string {
-  const current = parseTaskPath(pathname);
+export function updateTaskPath(updates: Partial<TaskRouteParams> & { pathname?: string }): string {
+  const current = parseTaskPath(updates.pathname ?? document.location.pathname);
   const next = { ...current, ...updates };
 
   return buildTaskPath(next);

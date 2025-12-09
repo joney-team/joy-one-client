@@ -78,7 +78,7 @@ export const ModalPrompt: FC<ModalPromptProps> = (props) => {
       <Button
         mt={10}
         loading={isSubmitting}
-        onClick={onSubmit}
+        onClick={() => onSubmit()}
         leftSection={<IconCheck strokeWidth={1.2} />}
         disabled={!form.isDirty()}
         type="submit"

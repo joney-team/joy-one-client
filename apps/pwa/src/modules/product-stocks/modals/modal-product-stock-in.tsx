@@ -295,7 +295,7 @@ export const ModalProductStockIn: FC<{
               leftIcon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_IN].icon}
               color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_IN].color)}
               loading={form.submitting}
-              onClick={onSubmit}
+              onClick={() => onSubmit()}
             >
               <Trans>Complete</Trans>
             </Button>

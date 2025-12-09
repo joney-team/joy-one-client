@@ -322,13 +322,13 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
         {workspace.hasPermission(WorkspacePermission.PRESCRIPTIONS_WRITE) && !props.customer && (
           <Button
             loading={isSubmitting}
-            onClick={onSubmit}
+            onClick={() => onSubmit()}
             rightSection={<IconArrowDown strokeWidth={1.2} />}
             type="submit"
             maw="100%"
             radius={200}
           >
-            {t`Save prescription template`}
+            <Trans>Save prescription template</Trans>
           </Button>
         )}
       </Group>
@@ -351,7 +351,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
             }
           >
             <Text fz={12} fw={400}>
-              {t`Delete`}
+              <Trans>Delete</Trans>
             </Text>
           </Button>
         </Center>
@@ -363,7 +363,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 export const OnModalPrescriptionForm = (props: ModalPrescriptionFormProps) => {
   return modals.open({
     modalId: "ModalPrescriptionForm",
-    title: <ModalTitle title={t`Prescription`} icon={IconPill} />,
+    title: <ModalTitle title={<Trans>Prescription</Trans>} icon={IconPill} />,
     children: <ModalPrescriptionForm {...props} />,
     size: "xl",
     fullScreen: getView() === "mobile",

@@ -251,7 +251,7 @@ export const WorkspaceAppSettings: FC = () => {
       </SimpleGrid>
 
       <Center>
-        <Button type="submit" onClick={onSubmit} loading={isSubmitting} miw={150}>
+        <Button type="submit" onClick={() => onSubmit()} loading={isSubmitting} miw={150}>
           <Trans>Update</Trans>
         </Button>
       </Center>

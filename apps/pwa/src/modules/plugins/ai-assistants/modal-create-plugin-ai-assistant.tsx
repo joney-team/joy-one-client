@@ -14,6 +14,7 @@ import {
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Card,
   Group,
@@ -205,11 +206,11 @@ export const ModalCreatePluginAiAssistant: FC<{
         <Button
           action
           leftIcon={plugin ? IconCheck : IconLinkPlus}
-          onClick={onSubmit}
+          onClick={() => onSubmit()}
           loading={loading}
           color="violet.9"
         >
-          {plugin ? t`Save` : t`Connect`}
+          {plugin ? <Trans>Save</Trans> : <Trans>Connect</Trans>}
         </Button>
 
         {plugin && (

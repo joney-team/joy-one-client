@@ -35,6 +35,7 @@ import { modals } from "@mantine/modals";
 import { IconAccessible, IconCheck, IconLock } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { workspacePermissions, workspaceSpecialRoleIds } from "../workspace-roles-constants";
+import { Trans } from "@lingui/react/macro";
 
 interface ModalWorkspaceRoleFormProps {
   roleId?: string;
@@ -230,12 +231,12 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
         <Button
           mt={10}
           loading={isSubmitting}
-          onClick={onSubmit}
+          onClick={() => onSubmit()}
           leftIcon={IconCheck}
           disabled={!form.isDirty()}
           action
         >
-          {props.roleId ? t`Update` : t`Create`}
+          {props.roleId ? <Trans>Update</Trans> : <Trans>Create</Trans>}
         </Button>
       )}
 

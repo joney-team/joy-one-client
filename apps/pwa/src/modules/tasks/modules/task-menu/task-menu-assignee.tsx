@@ -81,7 +81,9 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
   const { userWorkspaceMember } = useUserWorkspaceMember();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const [selected, setSelected] = useState<TaskDataFragment["assigneeUsers"]>(task.assigneeUsers);
+  const [selected, setSelected] = useState<TaskDataFragment["assigneeUsers"]>(
+    task.assigneeUsers ?? []
+  );
   const [textSearch, setTextSearch] = useDebouncedState("", 300);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isSearchEmpty, setIsSearchEmpty] = useState(false);
@@ -141,10 +143,11 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
 
   return (
     <Card p={0} shadow="md" style={{ overflow: "hidden" }} withBorder>
-      <AutoFocus as={Group} p={8} pb={0}>
+      <AutoFocus as={Group} p={6}>
         <TextInput
-          radius={6}
+          radius={4}
           autoFocus
+          size="xs"
           leftSection={<IconSearch size={16} />}
           placeholder={t`Search`}
           onChange={(e) => setTextSearch(e.target.value)}
@@ -161,7 +164,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
       </AutoFocus>
 
       <ScrollArea.Autosize mah={220} offsetScrollbars scrollbarSize={6} viewportRef={scrollRef}>
-        <Stack py={5} px={5} gap={0}>
+        <Stack px={5} gap={0}>
           {textSearch.length === 0 && (
             <Fragment>
               {userWorkspaceMember && (

@@ -28,7 +28,6 @@ const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.Li
 interface ListTaskGroupByStatusesProps {
   status: TaskStatus;
   defaultVisible?: boolean;
-  hideWhenEmpty?: boolean;
   showEmptyMsg?: boolean;
   lazyLoadId?: string;
 }

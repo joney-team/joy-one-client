@@ -162,7 +162,7 @@ const GanttTaskContent: FC = () => {
   };
 
   const openTask = () => {
-    router.push(updateTaskPath(location.pathname, { code: task.code }));
+    router.push(updateTaskPath({ code: task.code }));
   };
 
   return (

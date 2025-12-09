@@ -108,7 +108,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
 
   return (
     <ModalTagForm>
-      {(openTagForm) => (
+      {(modalTagForm) => (
         <Card
           p={10}
           {...(props.withBorder
@@ -312,7 +312,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                             style={{ cursor: "pointer" }}
                             size="sm"
                             tt="none"
-                            onClick={() => openTagForm({ tag })}
+                            onClick={() => modalTagForm.open({ tag })}
                           >
                             {tag.name}
                           </Badge>
@@ -367,7 +367,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                             <Group
                               gap={5}
                               onClick={() => {
-                                openTagForm({
+                                modalTagForm.open({
                                   onCreated: (tag) => toggleTag(tag),
                                   type: TagType.CUSTOMER,
                                 });
@@ -393,7 +393,10 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                     <Group
                       gap={0}
                       onClick={() =>
-                        openTagForm({ onCreated: (tag) => toggleTag(tag), type: TagType.CUSTOMER })
+                        modalTagForm.open({
+                          onCreated: (tag) => toggleTag(tag),
+                          type: TagType.CUSTOMER,
+                        })
                       }
                       style={{ cursor: "pointer" }}
                     >

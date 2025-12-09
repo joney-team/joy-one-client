@@ -81,7 +81,7 @@ const TaskFolderNavigationItem: FC<{
       ),
       onConfirm: async () => {
         await removeTag({ variables: { id: tag._id } });
-        return router.push(updateTaskPath(location.pathname, { slug: "d" }));
+        return router.push(updateTaskPath({ slug: "d" }));
       },
     });
   };

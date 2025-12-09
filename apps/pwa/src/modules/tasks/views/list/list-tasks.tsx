@@ -60,7 +60,6 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
             <ListTaskGroupByStatuses
               key={status.id}
               status={status}
-              hideWhenEmpty
               lazyLoadId={DefaultTaskStatusId.TODO}
             />
           );
@@ -70,13 +69,12 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
           <ListTaskGroupByStatuses
             key={statuses[statuses.length - 1].id}
             status={statuses[statuses.length - 1]}
-            showEmptyMsg
             lazyLoadId={DefaultTaskStatusId.TODO}
           />
         )}
       </Fragment>
     );
-  }, [activatedFolder, taskStatusesData.data?.taskStatuses, isReady]);
+  }, [activatedFolder, taskStatusesData.data?.taskStatuses, isReady, state.showClosed]);
 
   return (
     <TaskSelectionsProvider>

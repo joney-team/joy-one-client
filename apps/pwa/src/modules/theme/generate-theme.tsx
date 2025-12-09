@@ -4,6 +4,7 @@ import { type AppMetadata } from "@/types";
 import { primaryColors } from "@joy-one-client/config/colors";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
+import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
   Card,
@@ -28,7 +29,6 @@ import {
 import { LayoutContext } from "../../layout/layout-context";
 import { String } from "../../utils/string.utils";
 import { AppLocale } from "../lang/lang-types";
-import { t } from "@lingui/core/macro";
 
 export const getColorShape = (shape?: number) => {
   if (typeof shape === "number" && shape >= 0 && shape <= 9) {

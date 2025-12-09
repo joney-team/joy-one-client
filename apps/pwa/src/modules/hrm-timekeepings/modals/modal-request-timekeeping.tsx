@@ -43,7 +43,7 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
     },
   });
 
-  const onRequest = requestForm.onSubmit(async (values) => {
+  const onSubmit = requestForm.onSubmit(async (values) => {
     let checkInAt: Date | undefined = undefined;
     let checkOutAt: Date | undefined = undefined;
 
@@ -154,7 +154,7 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
         <Button
           type="submit"
           rightSection={<IconCheck size={18} />}
-          onClick={onRequest}
+          onClick={() => onSubmit()}
           loading={isSubmitting}
           action
         >

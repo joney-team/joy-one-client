@@ -51,13 +51,13 @@ export const ModalCustomerPlainCodeForm: FC<ModalCustomerPlainCodeFormProps> = (
 
   return (
     <Stack>
-      <TextInput label="Mã khách hàng" {...form.getInputProps("plainCode")} />
+      <TextInput label={<Trans>Customer plain code</Trans>} {...form.getInputProps("plainCode")} />
 
       <Button
         mt={10}
         type="submit"
         loading={isSubmitting}
-        onClick={onSubmit}
+        onClick={() => onSubmit()}
         leftSection={<IconCheck strokeWidth={1.2} />}
         disabled={!form.isDirty()}
       >

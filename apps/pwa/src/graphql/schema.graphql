@@ -579,7 +579,7 @@ type Query {
   pluginExternalStorage: PluginExternalStorage
   siblingTasks(_id: String!): SiblingTasks!
   tagBySlug(slug: String!): Tag!
-  tags(type: String): Tags!
+  tags(ids: [String!], limit: Float = 30, offset: Float, type: String): Tags!
   task(_id: String!): Task!
   taskByCode(code: String!): Task!
   taskStatuses(contextId: String, contextType: TaskStatusesContextType): [TaskStatus!]!

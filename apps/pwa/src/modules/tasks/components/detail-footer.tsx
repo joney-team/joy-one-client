@@ -38,7 +38,7 @@ export const DetailFooter: FC<DetailFooterProps> = (props) => {
       </Stack>
 
       <ButtonArchive
-        name={t`Task`}
+        name={<Trans>Task</Trans>}
         process={async () => {
           if (!task) return;
           await updateTasks([{ _id: task._id, isArchived: true }]);

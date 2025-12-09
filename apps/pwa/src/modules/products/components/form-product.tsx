@@ -613,8 +613,13 @@ export const FormProduct: FC<
 
       {[FormProductTab.SETTING, FormProductTab.POST].includes(tab) && (
         <Stack mt={25} align="center" justify="center" gap={10}>
-          <Button loading={isSubmitting} onClick={onSubmit} leftIcon={IconCheck} type="submit">
-            {product ? t`Update` : t`Create new`}
+          <Button
+            loading={isSubmitting}
+            onClick={() => onSubmit()}
+            leftIcon={IconCheck}
+            type="submit"
+          >
+            {product ? <Trans>Update</Trans> : <Trans>Create new</Trans>}
           </Button>
 
           {product?._id && (

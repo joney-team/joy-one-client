@@ -107,11 +107,11 @@ export const ModalCheckInLocationForm: FC<{
           <Button
             mt={10}
             type="submit"
-            onClick={onSubmit}
+            onClick={() => onSubmit()}
             leftSection={<IconCheck strokeWidth={1.2} />}
             disabled={!form.isDirty()}
           >
-            {t`Complete`}
+            <Trans>Complete</Trans>
           </Button>
         </Stack>
       </Modal>

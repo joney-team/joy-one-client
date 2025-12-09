@@ -32,6 +32,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCoins, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
 import { loanAssetTypes } from "../loans-constants";
+import { Trans } from "@lingui/react/macro";
 
 interface ModalLoanAssetEstimationFormProps {
   estimation?: LoanAssetEstimation;
@@ -127,7 +128,7 @@ export const ModalLoanAssetEstimationForm: FC<{
             <Stack gap={16}>
               <SimpleGrid cols={{ md: 2 }}>
                 <Select
-                  label={t`Asset`}
+                  label={<Trans>Asset</Trans>}
                   placeholder={t`Select asset`}
                   data={[LoanAssetType.MOTOBIKE_REGISTRATION, LoanAssetType.CAR_REGISTRATION].map(
                     (type) => ({
@@ -143,7 +144,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                   <Select
                     withAsterisk
                     flex={1}
-                    label={t`Brand`}
+                    label={<Trans>Brand</Trans>}
                     placeholder={t`Select brand`}
                     data={loans.assetEstimations.brands
                       .filter((v) => v.assetType === form.values.assetType)
@@ -371,22 +372,25 @@ export const ModalLoanAssetEstimationForm: FC<{
                   valueFormat="YYYY"
                 />
 
-                <TextInput label={t`Product name`} {...form.getInputProps("productName")} />
+                <TextInput
+                  label={<Trans>Product name</Trans>}
+                  {...form.getInputProps("productName")}
+                />
               </SimpleGrid>
 
               <NumberInput
                 withAsterisk
-                label={t`Estimate price`}
+                label={<Trans>Estimate price</Trans>}
                 hideControls
                 {...form.getInputProps("estimatePrice")}
               />
 
-              <InputWrapper label={t`Product images`}>
+              <InputWrapper label={<Trans>Product images</Trans>}>
                 <FilesBox refs={[`loan-asset-estimations-${form.values.id}`]} autoUpload />
               </InputWrapper>
 
-              <Button onClick={submitting.handle} loading={submitting.isSubmitting} mt={10}>
-                {props?.estimation ? t`Update` : t`Create`}
+              <Button onClick={() => submitting.handle()} loading={submitting.isSubmitting} mt={10}>
+                {props?.estimation ? <Trans>Update</Trans> : <Trans>Create</Trans>}
               </Button>
             </Stack>
           </Modal>

@@ -153,7 +153,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
             <Button
               disabled={!form.isDirty()}
-              onClick={onSubmit}
+              onClick={() => onSubmit()}
               loading={form.submitting}
               leftIcon={IconCheck}
               radius={150}

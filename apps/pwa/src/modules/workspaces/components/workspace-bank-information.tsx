@@ -2,22 +2,23 @@
 
 import { getBanks } from "@/modules/plugins/banks/banks.services";
 import { BankInformation } from "@/modules/plugins/banks/banks.types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Badge,
   Box,
   Card,
+  em,
   Group,
   Select,
   SelectProps,
   SimpleGrid,
   Stack,
   Text,
-  ThemeIcon,
-  em,
   TextInput,
+  ThemeIcon,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheck, IconInfoCircle, IconLockCheck } from "@tabler/icons-react";
@@ -26,6 +27,7 @@ import { Button } from "../../../components/buttons/button";
 import { Image } from "../../../components/image";
 
 export const WorkspaceBankInformation: FC = () => {
+  const { t } = useLingui();
   const [banks, setBanks] = useState<BankInformation[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const workspace = useWorkspace();
@@ -40,10 +42,10 @@ export const WorkspaceBankInformation: FC = () => {
     initialValues: workspace.settings.bankAccount || ({} as any),
     validate: {
       bankId: (value) => {
-        if (!value) return "Chọn ngân hàng";
+        if (!value) return t`Select bank`;
       },
       accountNumber: (value) => {
-        if (!value) return "Nhập số tài khoản";
+        if (!value) return t`Enter account number`;
       },
     },
   });
@@ -130,10 +132,10 @@ export const WorkspaceBankInformation: FC = () => {
           <Button
             type="submit"
             loading={isSubmitting}
-            onClick={onSubmit}
+            onClick={() => onSubmit()}
             disabled={!form.isDirty()}
           >
-            Cập nhật
+            <Trans>Update</Trans>
           </Button>
         </Group>
       </Stack>

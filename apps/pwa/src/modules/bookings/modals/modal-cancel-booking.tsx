@@ -48,8 +48,8 @@ export const ModalCancelBooking: FC<ModalCancelBookingProps> = (props) => {
         {...form.getInputProps("reasonForCancellation")}
       />
 
-      <Button loading={isSubmitting} onClick={onSubmit} color="red" type="submit">
-        {t`Confirm cancellation`}
+      <Button loading={isSubmitting} onClick={() => onSubmit()} color="red" type="submit">
+        <Trans>Confirm cancellation</Trans>
       </Button>
     </Stack>
   );

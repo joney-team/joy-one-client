@@ -3,7 +3,7 @@
 import { FC, PropsWithChildren, useEffect, useRef } from "react";
 
 interface FormProps {
-  onSubmit: (event?: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit?: (event?: React.FormEvent<HTMLFormElement>) => void;
   autoFocus?: boolean;
 }
 

@@ -9,7 +9,6 @@ import { Avatar } from "@/components/avatar";
 import { WayPoint } from "@/components/way-point";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
-import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
 import { AppEntity } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -17,7 +16,6 @@ import { useDebouncedState } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import QUERY_TASK_CUSTOMERS, {
   type TaskCustomersQuery,
   type TaskCustomersQueryVariables,
@@ -76,7 +74,7 @@ const MenuItem = ({
 export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const [selected, setSelected] = useState<TaskDataFragment["customer"]>(task.customer);
+  const [selected, setSelected] = useState<TaskDataFragment["customer"]>(task.customer ?? null);
   const [textSearch, setTextSearch] = useDebouncedState("", 300);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isSearchEmpty, setIsSearchEmpty] = useState(false);
@@ -136,9 +134,10 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
 
   return (
     <Card p={0} shadow="md" style={{ overflow: "hidden" }} withBorder>
-      <AutoFocus as={Group} p={8} pb={0} enabled={!!data && data.customers.count > 0}>
+      <AutoFocus as={Group} p={6} enabled={!!data && data.customers.count > 0}>
         <TextInput
-          radius={6}
+          radius={4}
+          size="xs"
           leftSection={<IconSearch size={16} />}
           placeholder={t`Search`}
           onChange={(e) => setTextSearch(e.target.value)}
@@ -153,7 +152,7 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
       </AutoFocus>
 
       <ScrollArea.Autosize mah={220} offsetScrollbars scrollbarSize={6} viewportRef={scrollRef}>
-        <Stack py={5} px={5} gap={0}>
+        <Stack px={5} gap={0}>
           {textSearch.length === 0 && selected && (
             <Fragment>
               <MenuItem

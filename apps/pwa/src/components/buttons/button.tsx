@@ -8,7 +8,7 @@ import {
   MantineSize,
 } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
-import { FC, ReactNode, useMemo, useState } from "react";
+import { FC, MouseEvent, ReactNode, useMemo, useState } from "react";
 
 type ButtonSize = MantineSize | `compact-${MantineSize}` | (string & {});
 
@@ -17,7 +17,7 @@ export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
   children?: ReactNode;
   component?: any;
   href?: string;
-  onClick?: any;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   weight?: string | number;
   type?: "button" | "submit" | "reset";
   isGradient?: boolean;
@@ -86,7 +86,7 @@ export const Button: FC<ButtonProps> = (props) => {
   const [funcLoading, setFuncLoading] = useState(false);
   const color = useColor();
 
-  const onClick = async (e: any) => {
+  const onClick = async (e: MouseEvent<HTMLButtonElement>) => {
     if (!propsOnClick) return;
     setFuncLoading(true);
 

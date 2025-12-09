@@ -14,8 +14,23 @@ import { classNames } from "@/utils/ui.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import dynamic from "next/dynamic";
 import styles from "./task-menu.module.css";
-import { TaskMenuCustomer } from "./task-menu-customer";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
+
+const TaskMenuEstimateTime = dynamic(
+  () => import("./task-menu-estimate-time").then((mod) => mod.TaskMenuEstimateTime),
+  {
+    ssr: false,
+    loading: () => <Skeleton w={130} h={200} />,
+  }
+);
+
+const TaskMenuCustomer = dynamic(
+  () => import("./task-menu-customer").then((mod) => mod.TaskMenuCustomer),
+  {
+    ssr: false,
+    loading: () => <Skeleton w={130} h={200} />,
+  }
+);
 
 const TaskMenuPriority = dynamic(
   () => import("./task-menu-priority").then((mod) => mod.TaskMenuPriority),
@@ -70,6 +85,7 @@ const menuComponents: Partial<Record<TaskMenuAction, ComponentType<TaskMenuCompo
   [TaskMenuAction.CHANGE_TAGS]: TaskMenuTags,
   [TaskMenuAction.CHANGE_ASSIGNEE]: TaskMenuAssignee,
   [TaskMenuAction.CHANGE_CUSTOMER]: TaskMenuCustomer,
+  [TaskMenuAction.CHANGE_ESTIMATE_TIME]: TaskMenuEstimateTime,
 };
 
 export const TaskMenuDropdown: FC = ({}) => {
@@ -78,6 +94,7 @@ export const TaskMenuDropdown: FC = ({}) => {
 
   const menuRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLElement>(null);
+  const clickOutsideToCloseEnabled = useRef(true);
 
   const onClose = () => {
     if (menuRef.current) {
@@ -182,6 +199,7 @@ export const TaskMenuDropdown: FC = ({}) => {
       // Click outside of menu to close
       const onMouseDown = (e: MouseEvent) => {
         if (
+          clickOutsideToCloseEnabled.current &&
           e.target &&
           !menuRef.current?.contains(e.target as Node) &&
           !taskMenu.target.contains(e.target as Node)
@@ -202,6 +220,7 @@ export const TaskMenuDropdown: FC = ({}) => {
 
       rootRef.current?.addEventListener("scroll", onClose);
       window.addEventListener("scroll", onClose);
+      window.document.body.style.setProperty("overflow", "hidden");
 
       document.addEventListener("mousedown", onMouseDown);
       window.addEventListener("keydown", onWindowKeyDown);
@@ -215,6 +234,7 @@ export const TaskMenuDropdown: FC = ({}) => {
 
         rootRef.current?.removeEventListener("scroll", onClose);
         window.removeEventListener("scroll", onClose);
+        window.document.body.style.removeProperty("overflow");
 
         document.removeEventListener("mousedown", onMouseDown);
         window.removeEventListener("keydown", onWindowKeyDown);
@@ -275,6 +295,9 @@ export const TaskMenuDropdown: FC = ({}) => {
               }
 
               return updateTasks(task);
+            }}
+            setClickOutsideToClose={(enabled) => {
+              clickOutsideToCloseEnabled.current = enabled;
             }}
           />
         ) : null}

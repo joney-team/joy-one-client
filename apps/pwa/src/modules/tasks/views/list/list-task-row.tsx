@@ -296,20 +296,22 @@ export const ListTaskRow: FC<{
               </ThemeIcon>
             </Renderer>
 
-            <ActionIcon
-              variant="subtle"
-              color={status.color}
-              component="div"
-              onClick={(e) =>
-                taskMenu.open({
-                  action: TaskMenuAction.CHANGE_STATUS,
-                  target: e.currentTarget,
-                  offset: { y: 5 },
-                })
-              }
-            >
-              <TaskStatusIcon {...status} />
-            </ActionIcon>
+            {status && (
+              <ActionIcon
+                variant="subtle"
+                color={status.color ?? "gray"}
+                component="div"
+                onClick={(e) =>
+                  taskMenu.open({
+                    action: TaskMenuAction.CHANGE_STATUS,
+                    target: e.currentTarget,
+                    offset: { y: 5 },
+                  })
+                }
+              >
+                <TaskStatusIcon {...status} />
+              </ActionIcon>
+            )}
 
             <Group
               flex={1}

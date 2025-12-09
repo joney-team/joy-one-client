@@ -2,6 +2,9 @@ import type * as Types from '../../../graphql/types.graphql.d';
 
 export type TagsQueryVariables = Types.Exact<{
   type?: Types.InputMaybe<Types.Scalars['String']['input']>;
+  offset?: Types.InputMaybe<Types.Scalars['Float']['input']>;
+  limit?: Types.InputMaybe<Types.Scalars['Float']['input']>;
+  ids?: Types.InputMaybe<Array<Types.Scalars['String']['input']>>;
 }>;
 
 

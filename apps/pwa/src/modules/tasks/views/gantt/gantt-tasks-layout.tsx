@@ -146,14 +146,14 @@ export const SidebarHead: FC = () => {
         </Tooltip>
 
         <ModalTagForm>
-          {(open) => (
+          {(modalTagForm) => (
             <Tooltip label={<Trans>Create folder</Trans>}>
               <ActionIcon
                 variant="subtle"
                 size="sm"
                 color="gray"
                 component="div"
-                onClick={() => open({ type: TagType.TASK_FOLDER })}
+                onClick={() => modalTagForm.open({ type: TagType.TASK_FOLDER })}
               >
                 <IconFolderPlus size={16} />
               </ActionIcon>

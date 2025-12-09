@@ -93,7 +93,7 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
 
             <PasswordInput label={t`Application password`} {...form.getInputProps("pass")} />
 
-            <Button type="submit" loading={isSubmitting} onClick={onSubmit}>
+            <Button type="submit" loading={isSubmitting} onClick={() => onSubmit()}>
               <Trans>Continue</Trans>
             </Button>
 
@@ -132,7 +132,7 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
               <Button
                 type="submit"
                 loading={isSubmitting}
-                onClick={onSubmit}
+                onClick={() => onSubmit()}
                 fullWidth
                 rightSection={<IconSend strokeWidth={1.5} />}
               >
@@ -161,7 +161,7 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
               </Trans>
             </Text>
 
-            <Button mt={10} type="submit" loading={isSubmitting} onClick={onSubmit}>
+            <Button mt={10} type="submit" loading={isSubmitting} onClick={() => onSubmit()}>
               <Trans>Confirm and apply</Trans>
             </Button>
 

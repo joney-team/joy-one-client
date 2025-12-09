@@ -8,6 +8,7 @@ import { createPartner, updatePartner } from "@/modules/partners/partners-servic
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { em, Group, Modal, Stack, Text, TextInput, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
@@ -124,12 +125,12 @@ export const ModalParnterForm: FC<{
           <Button
             mt={10}
             loading={isSubmitting}
-            onClick={onSubmit}
+            onClick={() => onSubmit()}
             leftSection={<IconCheck strokeWidth={1.2} />}
             disabled={!form.isDirty() && !avatar}
             type="submit"
           >
-            {t`Complete`}
+            <Trans>Complete</Trans>
           </Button>
         </Stack>
       </Modal>

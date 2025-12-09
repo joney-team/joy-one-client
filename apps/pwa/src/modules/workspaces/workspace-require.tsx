@@ -290,10 +290,10 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
 
       <Stack gap={3}>
         <Title ta="center" fw={500} fz={30}>
-          {t`Create`} Workspace
+          <Trans>Create</Trans> Workspace
         </Title>
         <Text ta="center" fz="xs" c="gray">
-          {t`Company`} / {t`Company branch`}
+          <Trans>Company</Trans> / <Trans>Company branch</Trans>
         </Text>
       </Stack>
 
@@ -301,7 +301,7 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
         <Group align="start">
           <TextInput
             flex={1}
-            label={t`Name`}
+            label={<Trans>Name</Trans>}
             placeholder="Gold Dental"
             {...form.getInputProps("name")}
             onChange={onChangeName}
@@ -310,7 +310,7 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
           <TextInput
             label={
               <Group gap={5}>
-                {t`Code`}
+                <Trans>Code</Trans>
 
                 <Tooltip
                   label={t`The Workspace code is unique and used to quickly identify the Workspace and data related to the Workspace`}
@@ -361,7 +361,13 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
       </Stack>
 
       <Stack align="center" mt={16}>
-        <Button onClick={onSubmit} loading={isSubmitting} action leftIcon={IconCheck} radius={100}>
+        <Button
+          onClick={() => onSubmit()}
+          loading={isSubmitting}
+          action
+          leftIcon={IconCheck}
+          radius={100}
+        >
           <Trans>Complete</Trans>
         </Button>
 

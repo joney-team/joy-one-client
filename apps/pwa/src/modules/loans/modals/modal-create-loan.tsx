@@ -410,7 +410,7 @@ export const ModalCreateLoan: FC<{
 
                 <Group mt={10} justify="center">
                   <Button
-                    onClick={submit.handle}
+                    onClick={() => submit.handle()}
                     type="submit"
                     miw={300}
                     maw="100%"

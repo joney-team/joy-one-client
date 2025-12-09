@@ -5,12 +5,11 @@ import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor";
 import { Hovered } from "@/components/hovered";
-import { EstimateTimeInput } from "@/components/inputs/estimate-time-input";
+import { formatDuration } from "@/components/inputs/estimate-time-input/estimate-time-input-utils";
 import { TimeTrackingsInput } from "@/components/inputs/time-trackings-input";
 import { Renderer } from "@/components/renderer";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { PartnersInput } from "@/modules/partners/components/partners-input";
 import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
@@ -18,16 +17,12 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
-import { zIndexes } from "@joy-one-client/config/layout";
-import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
   Center,
-  em,
   Group,
-  GroupProps,
   SimpleGrid,
   Stack,
   Text,
@@ -49,7 +44,6 @@ import {
   IconPlus,
   IconStopwatch,
   IconTags,
-  IconTopologyStar3,
   IconUser,
   IconUserSquareRounded,
   IconX,
@@ -74,72 +68,22 @@ export interface TaskFormProps {
   onClose?: () => void;
 }
 
-const FormFieldWrapper: FC<
-  PropsWithChildren<
-    {
-      label: ReactNode;
-      icon: Icon;
-      iconColor?: string;
-      onClick?: (contentRef: HTMLDivElement) => void;
-    } & Omit<GroupProps, "onClick">
-  >
-> = ({ icon: Icon, label, children, onClick, iconColor, ...props }) => {
-  const color = useColor();
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  return (
-    <Group
-      flex={1}
-      w="100%"
-      gap={0}
-      className="clickable"
-      {...props}
-      onClick={() => {
-        if (!contentRef.current) return;
-        onClick?.(contentRef.current);
-      }}
-    >
-      <Group gap={5} w={140}>
-        <ThemeIcon variant="transparent" color={color(iconColor || "gray")} size="sm">
-          <Icon strokeWidth={1.5} />
-        </ThemeIcon>
-        <Text c="var(--mantine-color-text)" fz={em(13)}>
-          {label}
-        </Text>
-      </Group>
-
-      <Group flex={1} p={0} ref={contentRef}>
-        {children}
-      </Group>
-    </Group>
-  );
-};
-
 const formFieldHeight = 36;
 
 const FormField: FC<
-  PropsWithChildren<
-    {
-      onClick?: () => void;
-      onRemove?: () => void;
-      canRemove?: boolean;
-      isNestedClickable?: boolean;
-      placeholder?: ReactNode;
-      value?: ReactNode;
-    } & GroupProps
-  >
-> = ({
-  onClick,
-  isNestedClickable = true,
-  onRemove,
-  canRemove,
-  children,
-  placeholder,
-  value,
-  ...props
-}) => {
+  PropsWithChildren<{
+    label: ReactNode;
+    icon: Icon;
+    iconColor?: string;
+    onClick: (contentRef: HTMLDivElement) => void;
+    onRemove?: () => void;
+    placeholder?: ReactNode;
+    value?: ReactNode;
+  }>
+> = ({ label, icon: Icon, iconColor, onClick, onRemove, placeholder, value, children }) => {
   const hover = useHover();
   const color = useColor();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const content = useMemo(() => {
     if (value) {
@@ -163,77 +107,98 @@ const FormField: FC<
     }
 
     return children;
-  }, [value, children, placeholder]);
+  }, [value, placeholder]);
 
   return (
     <Group
       flex={1}
-      gap={5}
       w="100%"
-      ref={hover.ref}
-      className="unselectable"
-      bg={hover.hovered ? "var(--mantine-color-default-hover)" : "transparent"}
-      mih={formFieldHeight}
-      style={{
-        borderRadius: 10,
-        cursor: onClick || isNestedClickable ? "pointer" : "default",
+      gap={0}
+      className="clickable"
+      onClick={() => {
+        if (!contentRef.current) return;
+        onClick(contentRef.current);
       }}
-      onClick={onClick}
     >
-      <Group flex={1} miw={0} gap={5} {...props}>
-        {content}
+      <Group gap={5} w={140}>
+        <ThemeIcon variant="transparent" color={color(iconColor || "gray")} size="sm">
+          <Icon strokeWidth={1.5} />
+        </ThemeIcon>
+
+        <Text c="var(--mantine-color-text)" fz={13}>
+          {label}
+        </Text>
       </Group>
 
-      {!!onRemove && canRemove && (
-        <Group px={8} opacity={hover.hovered ? 1 : 0} align="center">
-          <ActionIcon
-            variant="subtle"
-            color="gray.5"
-            size="sm"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onRemove?.();
-            }}
-          >
-            <IconX size={16} strokeWidth={1.5} />
-          </ActionIcon>
+      <Group flex={1} p={0} ref={contentRef}>
+        <Group
+          flex={1}
+          gap={5}
+          w="100%"
+          ref={hover.ref}
+          className="unselectable"
+          bg={hover.hovered ? "var(--mantine-color-default-hover)" : "transparent"}
+          mih={formFieldHeight}
+          style={{
+            borderRadius: 10,
+            cursor: "pointer",
+          }}
+        >
+          <Group flex={1} miw={0} gap={5} ref={contentRef}>
+            {content}
+          </Group>
+
+          {!!onRemove && !!value && (
+            <Group px={8} opacity={hover.hovered ? 1 : 0} align="center">
+              <ActionIcon
+                variant="subtle"
+                color="gray.5"
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onRemove?.();
+                }}
+              >
+                <IconX size={16} strokeWidth={1.5} />
+              </ActionIcon>
+            </Group>
+          )}
         </Group>
-      )}
+      </Group>
     </Group>
   );
 };
 
 export const TaskForm: FC<TaskFormProps> = (props) => {
   const { t } = useLingui();
+  const { updateTasks } = useUpdateTasks();
+
   const workspace = useWorkspace();
   const uploadFile = useUploadFile();
-
-  const { updateTasks } = useUpdateTasks();
 
   const [rawFiles, setRawFiles] = useState<File[]>([]);
 
   const onUpdate = useDebouncedCallback(async (values: any) => {
     if (!props.task || !values.name) return;
+
     const isDiff = JSON.stringify(props.task) !== JSON.stringify(values);
     if (!isDiff) return;
 
-    await updateTasks([
-      {
-        _id: props.task._id,
-        name: values.name,
-        description: values.description,
-        priority: values.priority,
-        status: values.status,
-        dueDate: values.dueDate,
-        startDate: values.startDate,
-        customer: values.customer,
-        assigneeUsers: values.assigneeUsers,
-        partners: values.partners,
-        tags: values.tags,
-        estimatedTime: values.estimatedTime,
-      },
-    ]);
+    await updateTasks({
+      _id: props.task._id,
+      name: values.name,
+      description: values.description,
+      priority: values.priority,
+      status: values.status,
+      dueDate: values.dueDate,
+      startDate: values.startDate,
+      customer: values.customer,
+      assigneeUsers: values.assigneeUsers,
+      partners: values.partners,
+      tags: values.tags,
+      estimatedTime: values.estimatedTime,
+    });
 
     emitInternalEvent(InternalEvent.REFETCH_TASKS);
   }, 500);
@@ -335,8 +300,8 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
   return (
     <form onSubmit={onCreate}>
-      <Stack pt={10} gap={30}>
-        <Stack>
+      <Stack gap={30}>
+        <Stack pt={12}>
           <ContentEditable
             fz={25}
             fw={500}
@@ -348,7 +313,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
           />
 
           <SimpleGrid cols={{ md: 2 }} spacing={3} maw="100%" w={900}>
-            <FormFieldWrapper
+            <FormField
               icon={IconPlaystationCircle}
               label={<Trans>Status</Trans>}
               onClick={(e) =>
@@ -359,7 +324,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                 })
               }
             >
-              <FormField gap={5} px={8} wrap="nowrap">
+              <Group px={8} gap={5}>
                 <Group
                   gap={0}
                   bg={statusStyled.color}
@@ -428,12 +393,20 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                     )}
                   </Hovered>
                 )}
-              </FormField>
-            </FormFieldWrapper>
+              </Group>
+            </FormField>
 
-            <FormFieldWrapper
+            <FormField
               icon={IconUser}
               label={<Trans>Assignee</Trans>}
+              placeholder={<Trans>Add assignee</Trans>}
+              value={
+                form.values.assigneeUsers.length > 0
+                  ? form.values.assigneeUsers?.map((member) => (
+                      <Avatar key={member._id} size={26} user={member} hideOnlineStatus />
+                    ))
+                  : null
+              }
               onClick={(e) =>
                 taskMenu.open({
                   action: TaskMenuAction.CHANGE_ASSIGNEE,
@@ -441,30 +414,24 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                   offset: { x: 10 },
                 })
               }
-            >
-              <FormField
-                gap={3}
-                value={
-                  form.values.assigneeUsers.length > 0
-                    ? form.values.assigneeUsers?.map((member) => (
-                        <Avatar key={member._id} size={26} user={member} hideOnlineStatus />
-                      ))
-                    : null
-                }
-                placeholder={<Trans>Add assignee</Trans>}
-                canRemove={(form.values.assigneeUsers?.length ?? 0) > 0}
-                onRemove={() => form.setFieldValue("assigneeUsers", [])}
-              />
-            </FormFieldWrapper>
+              onRemove={() => form.setFieldValue("assigneeUsers", [])}
+            />
 
-            <FormFieldWrapper
+            <FormField
+              label={<Trans>Priority</Trans>}
+              placeholder={<Trans>Add priority</Trans>}
               icon={form.values.priority ? IconFlagFilled : IconFlag}
               iconColor={
                 form.values.priority
                   ? taskPriorities[form.values.priority as TaskPriority]?.color
                   : "gray"
               }
-              label={<Trans>Priority</Trans>}
+              onRemove={() => form.setFieldValue("priority", null)}
+              value={
+                form.values.priority
+                  ? taskPriorities[form.values.priority as TaskPriority]?.label()
+                  : undefined
+              }
               onClick={(e) =>
                 taskMenu.open({
                   action: TaskMenuAction.CHANGE_PRIORITY,
@@ -472,22 +439,18 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                   offset: { x: 10 },
                 })
               }
-            >
-              <FormField
-                canRemove={!!form.values.priority}
-                onRemove={() => form.setFieldValue("priority", null)}
-                value={
-                  form.values.priority
-                    ? taskPriorities[form.values.priority as TaskPriority]?.label()
-                    : undefined
-                }
-                placeholder={<Trans>Add priority</Trans>}
-              />
-            </FormFieldWrapper>
+            />
 
-            <FormFieldWrapper
-              icon={IconCalendar}
+            <FormField
               label={<Trans>Due date</Trans>}
+              placeholder={<Trans>Add due date</Trans>}
+              icon={IconCalendar}
+              onRemove={() => form.setValues({ ...form.values, dueDate: null, startDate: null })}
+              value={
+                form.values.dueDate || form.values.startDate ? (
+                  <TaskTimeline task={form.values} />
+                ) : null
+              }
               onClick={(e) =>
                 taskMenu.open({
                   action: TaskMenuAction.CHANGE_TIMELINE,
@@ -495,52 +458,41 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                   offset: { x: 10 },
                 })
               }
+            />
+
+            <FormField
+              icon={IconStopwatch}
+              label={<Trans>Time trackings</Trans>}
+              onRemove={() => form.setFieldValue("timeTrackings", [])}
+              onClick={() => {}}
             >
-              <FormField
-                onRemove={() => form.setValues({ ...form.values, dueDate: null, startDate: null })}
-                canRemove={!!form.values.dueDate || !!form.values.startDate}
-                value={
-                  form.values.dueDate || form.values.startDate ? (
-                    <TaskTimeline task={form.values} />
-                  ) : null
+              <TimeTrackingsInput
+                p={5}
+                flex={1}
+                value={form.values.timeTrackings as any}
+                onChange={(timeTrackings) =>
+                  form.setFieldValue("timeTrackings", timeTrackings as any)
                 }
-                placeholder={<Trans>Add due date</Trans>}
               />
-            </FormFieldWrapper>
+            </FormField>
 
-            <FormFieldWrapper icon={IconStopwatch} label={<Trans>Time trackings</Trans>}>
-              <FormField
-                canRemove={!!form.values.timeTrackings?.length}
-                onRemove={() => form.setFieldValue("timeTrackings", [])}
-              >
-                <TimeTrackingsInput
-                  p={5}
-                  flex={1}
-                  value={form.values.timeTrackings as any}
-                  onChange={(timeTrackings) =>
-                    form.setFieldValue("timeTrackings", timeTrackings as any)
-                  }
-                />
-              </FormField>
-            </FormFieldWrapper>
+            <FormField
+              icon={IconHourglassHigh}
+              label={<Trans>Estimate time</Trans>}
+              placeholder={<Trans>Add estimate time</Trans>}
+              onRemove={() => form.setFieldValue("estimatedTime", null)}
+              value={form.values.estimatedTime ? formatDuration(form.values.estimatedTime) : null}
+              onClick={(e) => {
+                taskMenu.open({ action: TaskMenuAction.CHANGE_ESTIMATE_TIME, target: e });
+              }}
+            />
 
-            <FormFieldWrapper icon={IconHourglassHigh} label={<Trans>Estimate time</Trans>}>
-              <FormField
-                canRemove={!!form.values.estimatedTime}
-                onRemove={() => form.setFieldValue("estimatedTime", null)}
-              >
-                <EstimateTimeInput
-                  p={5}
-                  flex={1}
-                  label={<Trans>Estimate time</Trans>}
-                  {...form.getInputProps("estimatedTime")}
-                />
-              </FormField>
-            </FormFieldWrapper>
-
-            <FormFieldWrapper
-              icon={IconUserSquareRounded}
+            <FormField
               label={<Trans>Customer</Trans>}
+              placeholder={<Trans>Add customer</Trans>}
+              icon={IconUserSquareRounded}
+              onRemove={() => form.setFieldValue("customer", null)}
+              value={form.values.customer ? form.values.customer.name : null}
               onClick={(e) =>
                 taskMenu.open({
                   action: TaskMenuAction.CHANGE_CUSTOMER,
@@ -548,32 +500,12 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                   offset: { x: 10 },
                 })
               }
-            >
-              <FormField
-                canRemove={!!form.values.customer}
-                onRemove={() => form.setFieldValue("customer", null)}
-                value={form.values.customer ? form.values.customer.name : null}
-                placeholder={<Trans>Add customer</Trans>}
-              />
-            </FormFieldWrapper>
+            />
 
-            <FormFieldWrapper icon={IconTopologyStar3} label={<Trans>Partners</Trans>}>
-              <FormField
-                canRemove={!!form.values.partners?.length}
-                onRemove={() => form.setFieldValue("partners", [])}
-              >
-                <PartnersInput
-                  flex={1}
-                  p={5}
-                  value={form.values.partners as any}
-                  onChange={(partners) => form.setFieldValue("partners", partners as any)}
-                />
-              </FormField>
-            </FormFieldWrapper>
-
-            <FormFieldWrapper
+            <FormField
               icon={IconTags}
               label={<Trans>Tags</Trans>}
+              placeholder={<Trans>Add tags</Trans>}
               onClick={(e) =>
                 taskMenu.open({
                   action: TaskMenuAction.CHANGE_TAGS,
@@ -581,22 +513,17 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
                   offset: { x: 10 },
                 })
               }
-            >
-              <FormField
-                canRemove={!!form.values.tags?.length}
-                onRemove={() => form.setFieldValue("tags", [])}
-                value={
-                  form.values.tags && form.values.tags.length > 0
-                    ? form.values.tags?.map((tag) => (
-                        <Badge key={tag._id} color={tag.color || "gray"} size="sm" variant="light">
-                          {tag.name}
-                        </Badge>
-                      ))
-                    : null
-                }
-                placeholder={<Trans>Add tags</Trans>}
-              />
-            </FormFieldWrapper>
+              onRemove={() => form.setFieldValue("tags", [])}
+              value={
+                form.values.tags && form.values.tags.length > 0
+                  ? form.values.tags?.map((tag) => (
+                      <Badge key={tag._id} color={tag.color || "gray"} size="sm" variant="light">
+                        {tag.name}
+                      </Badge>
+                    ))
+                  : null
+              }
+            />
           </SimpleGrid>
 
           <Editor
@@ -631,13 +558,7 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
 
         <Renderer visible={!!!props.task}>
           <Center>
-            <Button
-              loading={form.submitting}
-              onClick={onCreate}
-              leftIcon={IconCheck}
-              type="submit"
-              action
-            >
+            <Button loading={form.submitting} leftIcon={IconCheck} type="submit" action>
               <Trans>Complete</Trans>
             </Button>
           </Center>

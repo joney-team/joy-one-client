@@ -10,6 +10,7 @@ import { getCustomers } from "@/modules/customers/customer-service";
 import { onError } from "@/utils/exceptions.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Card,
   Group,
@@ -165,8 +166,13 @@ export const ModalCouponForm: FC<{
           </SimpleGrid>
 
           <Group justify="center" mt={10}>
-            <Button type="submit" miw={200} onClick={submit.handle} loading={submit.isSubmitting}>
-              {t`Complete`}
+            <Button
+              type="submit"
+              miw={200}
+              onClick={() => submit.handle()}
+              loading={submit.isSubmitting}
+            >
+              <Trans>Complete</Trans>
             </Button>
           </Group>
         </Stack>

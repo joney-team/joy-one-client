@@ -52,7 +52,7 @@ export const TaskMenuGanttTimeline: TaskMenuComponent = ({
           icon={IconMaximize}
           label={<Trans>View detail</Trans>}
           onClick={() => {
-            router.push(updateTaskPath(location.pathname, { code: task.code }));
+            router.push(updateTaskPath({ code: task.code }));
             onClose();
           }}
         />

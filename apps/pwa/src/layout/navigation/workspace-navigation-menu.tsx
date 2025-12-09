@@ -223,7 +223,7 @@ export const WorkspaceNavigationMenu: FC<{
 
                   <Renderer visible={props.route === "/tasks"}>
                     <ModalTagForm>
-                      {(openTagForm) => (
+                      {(modalTagForm) => (
                         <Group gap={0} onClick={(e) => e.stopPropagation()}>
                           <Menu>
                             <Menu.Target>
@@ -244,7 +244,11 @@ export const WorkspaceNavigationMenu: FC<{
                             <MenuDropdown>
                               <Menu.Item
                                 leftSection={<IconPlus size={16} />}
-                                onClick={() => openCreateTask()}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
+                                  openCreateTask();
+                                }}
                               >
                                 <Text tt="capitalize" fz={em(14)}>
                                   <Trans>Create task</Trans>
@@ -253,15 +257,15 @@ export const WorkspaceNavigationMenu: FC<{
 
                               <Menu.Item
                                 leftSection={<IconFolderPlus size={16} />}
-                                onClick={() =>
-                                  openTagForm({
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
+                                  modalTagForm.open({
                                     type: TagType.TASK_FOLDER,
                                     onCreated: (tag) =>
-                                      router.push(
-                                        updateTaskPath(location.pathname, { slug: tag.slug })
-                                      ),
-                                  })
-                                }
+                                      router.push(updateTaskPath({ slug: tag.slug })),
+                                  });
+                                }}
                               >
                                 <Text tt="capitalize" fz={em(14)}>
                                   <Trans>Create folder</Trans>

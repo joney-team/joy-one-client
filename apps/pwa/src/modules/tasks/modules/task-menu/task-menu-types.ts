@@ -11,11 +11,12 @@ export enum TaskMenuAction {
   CHANGE_TAGS = "CHANGE_TAGS",
   CHANGE_CUSTOMER = "CHANGE_CUSTOMER",
   GANTT_TIMELINE = "GANTT_TIMELINE",
+  CHANGE_ESTIMATE_TIME = "CHANGE_ESTIMATE_TIME",
 }
 
 export interface TaskMenu {
   action: TaskMenuAction;
-  task: TaskDataFragment;
+  task: Partial<TaskDataFragment> & { _id: string };
   groupVariables: TasksQueryVariables | null;
   target: HTMLElement;
   offset?: { x?: number; y?: number };
@@ -33,6 +34,7 @@ export interface TaskMenuContextType {
 export type TaskMenuComponentProps = Pick<TaskMenu, "task" | "groupVariables"> & {
   onClose: () => void;
   updateTask: (task: UpdateTask) => Promise<void>;
+  setClickOutsideToClose: (enabled: boolean) => void;
 };
 
 export type TaskMenuComponent = FC<TaskMenuComponentProps>;

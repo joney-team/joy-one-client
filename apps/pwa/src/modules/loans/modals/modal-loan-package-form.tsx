@@ -331,7 +331,7 @@ export const ModalLoanPackageForm: FC<{
           <Center mt={12}>
             <Button
               action
-              onClick={submitting.handle}
+              onClick={() => submitting.handle()}
               loading={submitting.isSubmitting}
               leftIcon={IconCheck}
             >

@@ -11,6 +11,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { isPhoneNumber } from "@/utils/phone.utils";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Checkbox, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -104,12 +105,12 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
       <Button
         mt={10}
         loading={isSubmitting}
-        onClick={onSubmit}
+        onClick={() => onSubmit()}
         leftSection={<IconSend strokeWidth={1.2} />}
         disabled={!form.isDirty()}
         type="submit"
       >
-        {t`Send`}
+        <Trans>Send</Trans>
       </Button>
     </Stack>
   );
@@ -118,7 +119,7 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
 export const OnModalZaloOaSendZns = (props: ModalZaloOaSendZnsProps) => {
   return modals.open({
     modalId: "ModalZaloOaSendZns",
-    title: <ModalTitle title={t`Send ZNS`} icon={IconPuzzle} />,
+    title: <ModalTitle title={<Trans>Send ZNS</Trans>} icon={IconPuzzle} />,
     children: <ModalZaloOaSendZns {...props} />,
   });
 };

@@ -4,7 +4,7 @@ import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { CommentBox } from "@/modules/comments/comment-box";
-import { TaskForm } from "@/modules/tasks/components/form-task";
+import { TaskForm } from "@/modules/tasks/components/task-form";
 import { useColor } from "@/modules/theme/use-color";
 import { useLazyQuery } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
@@ -14,7 +14,6 @@ import {
   CopyButton,
   Group,
   Modal,
-  ScrollArea,
   Skeleton,
   Stack,
   Text,
@@ -22,7 +21,7 @@ import {
 } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FC, Fragment, useEffect, useState } from "react";
 import { DetailFooter } from "./components/detail-footer";
 
@@ -32,14 +31,14 @@ import QUERY_TASK_BY_CODE, {
   type TaskByCodeQuery,
   type TaskByCodeQueryVariables,
 } from "./graphql/queryTaskByCode.graphql";
-import { TaskDetailSubtasks } from "./task-detail-subtasks";
 import { useTaskMenu } from "./modules/task-menu/task-menu";
+import { TaskDetailSubtasks } from "./task-detail-subtasks";
+import { updateTaskPath } from "./tasks-route-helpers";
 
 export const TaskDetail: FC = () => {
   const router = useRouter();
   const viewport = useLayout();
   const workspaceLayout = useWorkspaceLayout();
-  const pathname = usePathname();
   const { code: taskCode } = useParams<{ code: string }>();
   const [version, setVersion] = useState(0);
 
@@ -58,7 +57,7 @@ export const TaskDetail: FC = () => {
 
   const onClose = () => {
     setVersion((v) => v + 1);
-    router.push(pathname.replace(`/${taskCode}`, ""), { scroll: false });
+    router.push(updateTaskPath({ code: undefined }), { scroll: false });
   };
 
   const viewPadding = 25;
@@ -75,6 +74,7 @@ export const TaskDetail: FC = () => {
       onClose={onClose}
       withCloseButton={false}
       closeOnEscape={!taskMenu.isOpened}
+      removeScrollProps={{ enabled: !taskMenu.isOpened }}
       size={1600}
       yOffset={viewPadding}
       fullScreen={viewport.view !== "desktop"}
@@ -84,7 +84,7 @@ export const TaskDetail: FC = () => {
         },
       }}
     >
-      {loading && <Skeleton h={300} w="100%" />}
+      {loading && !task && <Skeleton h={300} w="100%" />}
 
       {!!task && (
         <Fragment>
@@ -100,7 +100,7 @@ export const TaskDetail: FC = () => {
                 <TaskDetailHead key={task._id + "head"} task={task} close={onClose} />
               </Stack>
 
-              <Stack px={16} pb={16}>
+              <Stack>
                 <TaskCodeButton key={task._id + "code"} task={task} />
                 <TaskForm key={task._id} task={task} />
                 <DetailFooter task={task} onClose={onClose} />
@@ -122,18 +122,16 @@ export const TaskDetail: FC = () => {
               </Stack>
 
               <Group h={contentHeight} w="100%" gap={0} wrap="nowrap">
-                <Stack flex={1} h={contentHeight}>
-                  <ScrollArea.Autosize mah="100%" scrollbarSize={8}>
-                    <Container pt={10} pb={16} px={32}>
-                      <TaskCodeButton key={task._id + "code"} task={task} />
+                <Stack flex={1} h={contentHeight} style={{ overflow: "auto" }}>
+                  <Container pt={10} pb={16} px={32}>
+                    <TaskCodeButton key={task._id + "code"} task={task} />
 
-                      <Stack gap={30}>
-                        <TaskForm key={task._id + version} task={task} />
-                        {!task.parent && <TaskDetailSubtasks task={task} />}
-                        <DetailFooter task={task} onClose={onClose} />
-                      </Stack>
-                    </Container>
-                  </ScrollArea.Autosize>
+                    <Stack gap={30}>
+                      <TaskForm key={task._id + version} task={task} />
+                      {!task.parent && <TaskDetailSubtasks task={task} />}
+                      <DetailFooter task={task} onClose={onClose} />
+                    </Stack>
+                  </Container>
                 </Stack>
 
                 <Stack

@@ -5,6 +5,7 @@ import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
 import { useMemo } from "react";
 import { defaultTaskStatusIds } from "../task-constants";
 import { DefaultTaskStatusId } from "../tasks-types";
+import { TaskStatus } from "@/graphql/types.graphql";
 
 export const useTaskStatuses = (task: Pick<TaskDataFragment, "status" | "statuses">) => {
   const color = useColor();
@@ -19,7 +20,7 @@ export const useTaskStatuses = (task: Pick<TaskDataFragment, "status" | "statuse
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
   }, [task.statuses, color]);
 
-  const status = useMemo(() => {
+  const status = useMemo<TaskStatus | null>(() => {
     return taskStatuses.find((s) => s.id === task.status) ?? taskStatuses[0];
   }, [task.status, taskStatuses]);
 

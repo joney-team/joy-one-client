@@ -27,9 +27,11 @@ import { tagTypes } from "../tags-constants";
 type ModalTagFormProps =
   | {
       tag: TagDataFragment;
+      onClose?: () => void;
     }
   | {
       onCreated?: (tag: TagDataFragment) => void | Promise<void>;
+      onClose?: () => void;
       type: TagType;
     };
 
@@ -40,7 +42,11 @@ export interface ModalTagFormRef {
 export const ModalTagForm = forwardRef<
   ModalTagFormRef,
   {
-    children: (open: (args?: ModalTagFormProps) => void) => ReactNode;
+    children: (modal: {
+      isOpened: boolean;
+      onClose: () => void;
+      open: (args?: ModalTagFormProps) => void;
+    }) => ReactNode;
   }
 >((props, ref) => {
   const [args, setArgs] = useState<ModalTagFormProps | null>(null);
@@ -72,6 +78,7 @@ export const ModalTagForm = forwardRef<
   };
 
   const onClose = () => {
+    args?.onClose?.();
     setArgs(null);
   };
 
@@ -130,7 +137,9 @@ export const ModalTagForm = forwardRef<
 
   return (
     <Fragment>
-      {typeof props.children === "function" ? props.children(onOpen) : null}
+      {typeof props.children === "function"
+        ? props.children({ isOpened: Boolean(args), onClose, open: onOpen })
+        : null}
 
       <Modal
         opened={!!args}
@@ -170,9 +179,8 @@ export const ModalTagForm = forwardRef<
               <Button
                 mt="md"
                 leftIcon={IconCheck}
-                type="submit"
                 loading={form.submitting}
-                onClick={onSubmit}
+                onClick={() => onSubmit()}
               >
                 <Trans>Save</Trans>
               </Button>

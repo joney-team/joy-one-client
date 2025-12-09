@@ -6,7 +6,7 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { updatePassword } from "@/modules/users/users-service";
 import { UpdateUserPasswordDto } from "@/modules/users/users-types";
 import { onSuccess } from "@/utils/actions";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Card, Group, PasswordInput, SimpleGrid, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconLock } from "@tabler/icons-react";
@@ -14,6 +14,7 @@ import { FC } from "react";
 
 export const UpdatePassword: FC = () => {
   const auth = useAuth();
+  const { t } = useLingui();
 
   const form = useForm<UpdateUserPasswordDto & { confirmPassword: string }>({
     validate: {
@@ -50,7 +51,7 @@ export const UpdatePassword: FC = () => {
       <Stack>
         {auth.user.isPasswordProvided && (
           <PasswordInput
-            label={t`Current password`}
+            label={<Trans>Current password</Trans>}
             placeholder={t`Enter your current password`}
             {...form.getInputProps("password")}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
@@ -59,14 +60,16 @@ export const UpdatePassword: FC = () => {
 
         <SimpleGrid cols={{ md: 2 }}>
           <PasswordInput
-            label={auth.user.isPasswordProvided ? t`New password` : t`Password`}
+            label={
+              auth.user.isPasswordProvided ? <Trans>New password</Trans> : <Trans>Password</Trans>
+            }
             placeholder={t`Password must contain at least ${6} characters`}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
             {...form.getInputProps("plainPassword")}
           />
 
           <PasswordInput
-            label={t`Confirm password`}
+            label={<Trans>Confirm password</Trans>}
             placeholder={t`Enter your confirm password`}
             leftSection={<IconLock strokeWidth={1.5} size={18} />}
             {...form.getInputProps("confirmPassword")}
@@ -74,8 +77,8 @@ export const UpdatePassword: FC = () => {
         </SimpleGrid>
 
         <Group justify="center" mt={10}>
-          <Button onClick={submitting.handle} disabled={!form.isDirty()}>
-            {t`Update`}
+          <Button onClick={() => submitting.handle()} disabled={!form.isDirty()}>
+            <Trans>Update</Trans>
           </Button>
         </Group>
       </Stack>

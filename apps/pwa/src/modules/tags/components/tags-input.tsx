@@ -4,7 +4,7 @@ import { Renderer } from "@/components/renderer";
 import { TagEntity, TagType } from "@/modules/tags/tags-types";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { Trans } from "@lingui/react/macro";
-import { em, Group, InputWrapperProps, Text, ThemeIcon } from "@mantine/core";
+import { Divider, em, Group, InputWrapperProps, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { TagSelector } from "./tag-selector";

@@ -192,7 +192,12 @@ export const ModalCouponRuleForm: FC<{
           </Stack>
 
           <Group justify="center" mt={10}>
-            <Button type="submit" miw={200} onClick={submit.handle} loading={submit.isSubmitting}>
+            <Button
+              type="submit"
+              miw={200}
+              onClick={() => submit.handle()}
+              loading={submit.isSubmitting}
+            >
               <Trans>Complete</Trans>
             </Button>
           </Group>
@@ -212,7 +217,7 @@ const RuleBenfitForm: FC<{
   return (
     <Stack>
       <Select
-        label={t`Type`}
+        label={<Trans>Type</Trans>}
         data={Object.values(CouponRuleBenefitType).map((v) => ({
           value: v,
           label: couponRuleBenefitTypes[v].label(),
@@ -263,7 +268,7 @@ const RuleBenfitForm: FC<{
                   return (
                     <TextInput
                       flex={1}
-                      label={t`Product`}
+                      label={<Trans>Product</Trans>}
                       value={data.product?.name}
                       onChange={() => false}
                       readOnly
@@ -275,7 +280,7 @@ const RuleBenfitForm: FC<{
 
               <SimpleGrid cols={{ md: 2 }}>
                 <Select
-                  label={t`Type`}
+                  label={<Trans>Type</Trans>}
                   data={Object.values(DiscountType).map((v) => ({
                     value: v,
                     label: discountTypes[v].label(),
@@ -290,7 +295,7 @@ const RuleBenfitForm: FC<{
                 />
 
                 <NumberInput
-                  label={t`Value`}
+                  label={<Trans>Value</Trans>}
                   hideControls
                   value={data.value}
                   onChange={(v) => onChange({ ...benefit, data: { ...data, value: v } })}
@@ -314,7 +319,7 @@ const RuleBenfitForm: FC<{
                   return (
                     <TextInput
                       flex={1}
-                      label={t`Product`}
+                      label={<Trans>Product</Trans>}
                       value={data.product?.name}
                       onChange={() => false}
                       readOnly
@@ -325,7 +330,7 @@ const RuleBenfitForm: FC<{
               />
 
               <NumberInput
-                label={t`Product quantity`}
+                label={<Trans>Product quantity</Trans>}
                 description={t`Quantity of free product, leave blank or fill in 0 if you want to be free all.`}
                 hideControls
                 value={data.quantity}

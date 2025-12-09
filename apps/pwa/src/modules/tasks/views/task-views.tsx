@@ -89,17 +89,17 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     if (view) {
       if (location.pathname === "/tasks") {
-        return router.replace(`/tasks/${view}/d`);
+        return router.replace(updateTaskPath({ view }));
       }
 
       if (params.code && !params.slug) {
-        return router.replace(updateTaskPath(pathname, { slug: params.slug, code: params.code }));
+        return router.replace(updateTaskPath({ slug: params.slug, code: params.code }));
       }
     }
   }, [params, view, router]);
 
   const setView = (selectedView: string) => {
-    router.replace(updateTaskPath(pathname, { view: selectedView as TaskView }));
+    router.replace(updateTaskPath({ view: selectedView as TaskView }));
   };
 
   return (
