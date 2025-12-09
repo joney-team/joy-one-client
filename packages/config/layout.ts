@@ -10,5 +10,5 @@ export const zIndexes = {
   modalPayReceipt: 181,
   modalPrinter: 182,
   modalConfirmation: 200,
-  taskMenu: 10,
+  taskMenu: 190,
 };

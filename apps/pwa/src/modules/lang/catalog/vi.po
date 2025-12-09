@@ -6542,7 +6542,7 @@ msgstr "Công việc đã đóng"
 
 #: src/modules/tasks/components/form-task.tsx:419
 msgid "Task complete"
-msgstr "Công việc hoàn thành"
+msgstr "Hoàn thành công việc"
 
 #: src/modules/tasks/components/form-task.tsx:613
 msgid "Task description"

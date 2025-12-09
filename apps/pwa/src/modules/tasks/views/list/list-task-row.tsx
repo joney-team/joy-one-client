@@ -63,6 +63,7 @@ import { useTaskMenu } from "../../modules/task-menu/task-menu";
 import { TaskMenuAction } from "../../modules/task-menu/task-menu-types";
 import { TaskSelectionBox } from "../../modules/task-selections/task-selection-box";
 import styles from "./list-tasks.module.css";
+import { DefaultTaskStatusId } from "../../tasks-types";
 
 export const ListTaskRow: FC<{
   task: TaskDataFragment;
@@ -516,7 +517,8 @@ export const ListTaskRow: FC<{
                 size={16}
                 color={color(
                   task.dueDate
-                    ? task.dueDate < DateTime.getNowInSeconds()
+                    ? task.dueDate < DateTime.getNowInSeconds() &&
+                      task.status !== DefaultTaskStatusId.CLOSED
                       ? "red"
                       : "primary.3"
                     : "gray.4"

@@ -311,12 +311,6 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
     }
   });
 
-  const isOutdated =
-    form.values.dueDate &&
-    form.values.dueDate < DateTime.toSeconds(new Date()) &&
-    props.task &&
-    props.task.status !== DefaultTaskStatusId.CLOSED;
-
   const statuses = workspace.settings.taskStatuses;
   const currentStatusIndex = statuses.findIndex((v) => v.id === props.task?.status);
   const nextStatus = statuses[currentStatusIndex + 1];
@@ -334,7 +328,6 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
   const taskMenu = useTaskMenu({
     task: form.values,
     groupVariables: null,
-    zIndex: zIndexes.commonModals + 100,
     updateTask: async (task) => {
       form.setValues({ ...form.getValues(), ...task });
     },
