@@ -2,7 +2,6 @@
 
 import { ModalTitle } from "@/components/modal-title";
 import { useLayout } from "@/layout/layout-context";
-import { type TaskFormProps } from "@/modules/tasks/components/task-form";
 import { useColor } from "@/modules/theme/use-color";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans } from "@lingui/react/macro";
@@ -10,6 +9,7 @@ import { Group, Modal, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconChevronRight, IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useState } from "react";
+import type { CreateTaskFormProps } from "./modal-create-task-form";
 
 const CreateTaskForm = dynamic(
   () => import("./modal-create-task-form").then((mod) => mod.CreateTaskForm),
@@ -24,18 +24,18 @@ const CreateTaskForm = dynamic(
 );
 
 export interface ModalCreateTaskRef {
-  open: (args?: TaskFormProps) => void;
+  open: (args?: CreateTaskFormProps) => void;
 }
 
 export const ModalCreateTask = forwardRef<
   ModalCreateTaskRef,
   {
-    children?: (open: (args?: TaskFormProps) => void) => ReactNode;
+    children?: (open: (args?: CreateTaskFormProps) => void) => ReactNode;
   }
 >((props, ref) => {
   const color = useColor();
   const layout = useLayout();
-  const [args, setArgs] = useState<TaskFormProps | null>(null);
+  const [args, setArgs] = useState<CreateTaskFormProps | null>(null);
 
   useImperativeHandle(ref, () => ({
     open: (a) => {
@@ -81,12 +81,7 @@ export const ModalCreateTask = forwardRef<
       <Modal
         opened={!!args}
         onClose={() => setArgs(null)}
-        title={
-          <ModalTitle
-            title={args?.task ? <Trans>Task</Trans> : <Trans>Create task</Trans>}
-            icon={IconStackPush}
-          />
-        }
+        title={<ModalTitle title={<Trans>Create task</Trans>} icon={IconStackPush} />}
         fullScreen={layout.view === "mobile"}
         size={600}
         zIndex={zIndexes.commonModals + 1}
@@ -110,7 +105,7 @@ export const ModalCreateTask = forwardRef<
             ))}
           </Group>
 
-          {args && <CreateTaskForm {...args} />}
+          {args && <CreateTaskForm {...args} onClose={() => setArgs(null)} />}
         </Stack>
       </Modal>
     </Fragment>

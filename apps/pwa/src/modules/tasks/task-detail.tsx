@@ -4,7 +4,7 @@ import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { CommentBox } from "@/modules/comments/comment-box";
-import { TaskForm } from "@/modules/tasks/components/task-form";
+import { TaskDetailForm } from "@/modules/tasks/components/task-detail-form";
 import { useColor } from "@/modules/theme/use-color";
 import { useLazyQuery } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
@@ -46,6 +46,7 @@ export const TaskDetail: FC = () => {
     QUERY_TASK_BY_CODE,
     {
       fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "network-only",
     }
   );
 
@@ -74,7 +75,7 @@ export const TaskDetail: FC = () => {
       onClose={onClose}
       withCloseButton={false}
       closeOnEscape={!taskMenu.isOpened}
-      removeScrollProps={{ enabled: !taskMenu.isOpened }}
+      removeScrollProps={taskCode ? { enabled: !taskMenu.isOpened } : undefined}
       size={1600}
       yOffset={viewPadding}
       fullScreen={viewport.view !== "desktop"}
@@ -102,7 +103,7 @@ export const TaskDetail: FC = () => {
 
               <Stack>
                 <TaskCodeButton key={task._id + "code"} task={task} />
-                <TaskForm key={task._id} task={task} />
+                <TaskDetailForm key={task._id} task={task} />
                 <DetailFooter task={task} onClose={onClose} />
               </Stack>
             </Stack>
@@ -127,7 +128,7 @@ export const TaskDetail: FC = () => {
                     <TaskCodeButton key={task._id + "code"} task={task} />
 
                     <Stack gap={30}>
-                      <TaskForm key={task._id + version} task={task} />
+                      <TaskDetailForm key={task._id + version} task={task} />
                       {!task.parent && <TaskDetailSubtasks task={task} />}
                       <DetailFooter task={task} onClose={onClose} />
                     </Stack>

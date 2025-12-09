@@ -5,6 +5,7 @@ import { Circle } from "@/components/circle";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor";
 import { TaskStatusesContextType } from "@/graphql/enums.graphql";
+import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useLazyQuery, useMutation } from "@apollo/client/react";
@@ -21,7 +22,6 @@ import {
   IconTagsFilled,
 } from "@tabler/icons-react";
 import { FC, Fragment, useEffect } from "react";
-import { TaskFormProps } from "../components/task-form";
 import { TaskTimeline } from "../components/task-timeline";
 import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
 import CREATE_TASK_MUTATION, {
@@ -38,7 +38,13 @@ import { TaskMenuAction } from "../modules/task-menu/task-menu-types";
 import { taskPriorities } from "../task-constants";
 import { DefaultTaskStatusId, TaskPriority } from "../tasks-types";
 
-export const CreateTaskForm: FC<TaskFormProps> = ({ initial }) => {
+export interface CreateTaskFormProps {
+  initial?: Partial<TaskDataFragment>;
+  onCreated?: (id: string) => void;
+  onClose?: () => void;
+}
+
+export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, onClose }) => {
   const { t } = useLingui();
   const taskId = createObjectId();
 
@@ -72,11 +78,32 @@ export const CreateTaskForm: FC<TaskFormProps> = ({ initial }) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      // const { data: newTask } = await createTask({
-      //   variables: {
-      //     input: values,
-      //   },
-      // });
+      const { data: newTask } = await createTask({
+        variables: {
+          input: {
+            name: values.name,
+            order: values.order,
+            parentId: values.parent?._id,
+            description: values.description,
+            priority: values.priority,
+            status: values.status,
+            dueDate: values.dueDate,
+            startDate: values.startDate,
+            assigneeUserIds: values.assigneeUsers?.map((user) => user.userId),
+            customerId: values.customer?._id,
+            estimatedTime: values.estimatedTime,
+            partnerIds: values.partners?.map((partner) => partner._id),
+            tagIds: values.tags?.map((tag) => tag._id),
+            timeTrackings: values.timeTrackings,
+            folderId: values.folder?._id,
+          },
+        },
+      });
+
+      emitInternalEvent(InternalEvent.REFETCH_TASKS);
+      if (!newTask) throw new Error(t`Failed to create task`);
+      onCreated?.(newTask.createTask._id);
+      onClose?.();
     } catch (error) {
       onError(error);
     }
@@ -108,6 +135,7 @@ export const CreateTaskForm: FC<TaskFormProps> = ({ initial }) => {
             placeholder={t`Enter task name`}
             value={form.values.name}
             onChange={(value) => form.setFieldValue("name", value)}
+            onEnter={onSubmit}
           />
 
           <Editor
@@ -231,7 +259,7 @@ export const CreateTaskForm: FC<TaskFormProps> = ({ initial }) => {
             </Button>
           </Group>
 
-          <Button leftIcon={IconPlus}>
+          <Button leftIcon={IconPlus} type="submit" loading={form.submitting}>
             <Trans>Add</Trans>
           </Button>
         </Group>

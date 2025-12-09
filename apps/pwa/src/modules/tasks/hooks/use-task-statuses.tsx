@@ -10,19 +10,19 @@ import { TaskStatus } from "@/graphql/types.graphql";
 export const useTaskStatuses = (task: Pick<TaskDataFragment, "status" | "statuses">) => {
   const color = useColor();
 
-  const taskStatuses = useMemo(() => {
-    return task.statuses
+  const statuses = useMemo(() => {
+    return Array.from(task.statuses)
       .map((status) => ({
         ...status,
         color: color(status.color ?? "transparent"),
         name: status.name ?? defaultTaskStatusIds[status.id as DefaultTaskStatusId]?.label(),
       }))
       .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-  }, [task.statuses, color]);
+  }, [color, task.status, task.statuses]);
 
   const status = useMemo<TaskStatus | null>(() => {
-    return taskStatuses.find((s) => s.id === task.status) ?? taskStatuses[0];
-  }, [task.status, taskStatuses]);
+    return statuses.find((s) => s.id === task.status) ?? statuses[0];
+  }, [task.status, statuses, task.statuses]);
 
-  return { statuses: taskStatuses, status };
+  return { statuses: statuses, status };
 };
