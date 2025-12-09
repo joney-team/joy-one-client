@@ -11,7 +11,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { useLazyQuery, useMutation } from "@apollo/client/react";
 import { createObjectId } from "@joy-one-client/utils/object-id";
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
-import { Divider, Group, Skeleton, Stack } from "@mantine/core";
+import { Center, Divider, Group, Skeleton, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
   IconCalendar,
@@ -150,10 +150,8 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
           />
         </Stack>
 
-        <Divider miw="100%" opacity={0.5} />
-
         <Group px={16}>
-          <Group gap={10} flex={1}>
+          <Group gap={10} flex={1} justify="center" align="center">
             {taskStatuses.status && (
               <Button
                 radius={5}
@@ -258,11 +256,13 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
               )}
             </Button>
           </Group>
+        </Group>
 
+        <Center mt={12}>
           <Button leftIcon={IconPlus} type="submit" loading={form.submitting}>
             <Trans>Add</Trans>
           </Button>
-        </Group>
+        </Center>
       </Stack>
     </form>
   );

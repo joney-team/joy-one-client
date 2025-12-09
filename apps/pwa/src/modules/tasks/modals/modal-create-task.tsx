@@ -91,19 +91,21 @@ export const ModalCreateTask = forwardRef<
           },
         }}
       >
-        <Stack gap={16} pb={16}>
-          <Group gap={0} px={16}>
-            {breadcrumbs.map((breadcrumb, index) => (
-              <Fragment key={index}>
-                {breadcrumb}
-                {index < breadcrumbs.length - 1 && (
-                  <ThemeIcon variant="transparent" color="gray" size="sm">
-                    <IconChevronRight size={14} />
-                  </ThemeIcon>
-                )}
-              </Fragment>
-            ))}
-          </Group>
+        <Stack gap={16} pb={16} px={8}>
+          {breadcrumbs.length > 1 && (
+            <Group gap={0} px={16}>
+              {breadcrumbs.map((breadcrumb, index) => (
+                <Fragment key={index}>
+                  {breadcrumb}
+                  {index < breadcrumbs.length - 1 && (
+                    <ThemeIcon variant="transparent" color="gray" size="sm">
+                      <IconChevronRight size={14} />
+                    </ThemeIcon>
+                  )}
+                </Fragment>
+              ))}
+            </Group>
+          )}
 
           {args && <CreateTaskForm {...args} onClose={() => setArgs(null)} />}
         </Stack>
