@@ -41,7 +41,7 @@ msgstr "<0/> related to {relatedEntity} / {0}"
 msgid "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 msgstr "<0><1/></0> related tasks will be transferred to status <2>{0}</2>"
 
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:295
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:294
 msgid "<0><1/></0> subtask(s) will be archived as well."
 msgstr "<0><1/></0> subtask(s) will be archived as well."
 
@@ -166,6 +166,11 @@ msgstr "ADD"
 msgid "Add asset estimation"
 msgstr "Add asset estimation"
 
+#: src/modules/tasks/components/form-task.tsx:461
+#: src/modules/tasks/views/board/board-task-card.tsx:475
+msgid "Add assignee"
+msgstr "Add assignee"
+
 #: src/modules/plugins/e-invoices/plugin-e-invoice-template-editor.tsx:195
 msgid "Add child field"
 msgstr "Add child field"
@@ -179,6 +184,10 @@ msgstr "Add combo history"
 msgid "Add contact"
 msgstr "Add contact"
 
+#: src/modules/tasks/components/form-task.tsx:563
+msgid "Add customer"
+msgstr "Add customer"
+
 #: src/modules/loans/modals/modal-create-loan.tsx:263
 msgid "Add customer information"
 msgstr "Add customer information"
@@ -187,8 +196,8 @@ msgstr "Add customer information"
 msgid "Add divider"
 msgstr "Add divider"
 
-#: src/modules/tasks/components/form-task.tsx:400
-#: src/modules/tasks/views/board/board-task-card.tsx:402
+#: src/modules/tasks/components/form-task.tsx:514
+#: src/modules/tasks/views/board/board-task-card.tsx:424
 msgid "Add due date"
 msgstr "Add due date"
 
@@ -229,8 +238,8 @@ msgstr "Add note"
 msgid "Add pill"
 msgstr "Add pill"
 
-#: src/modules/tasks/components/form-task.tsx:348
-#: src/modules/tasks/views/board/board-task-card.tsx:454
+#: src/modules/tasks/components/form-task.tsx:491
+#: src/modules/tasks/views/board/board-task-card.tsx:451
 msgid "Add priority"
 msgstr "Add priority"
 
@@ -252,7 +261,7 @@ msgstr "Add receipt"
 msgid "Add rule"
 msgstr "Add rule"
 
-#: src/modules/tasks/views/board/board-tasks.tsx:149
+#: src/modules/tasks/views/board/board-tasks.tsx:152
 msgid "Add status"
 msgstr "Add status"
 
@@ -260,12 +269,12 @@ msgstr "Add status"
 msgid "Add Status"
 msgstr "Add Status"
 
-#: src/modules/tasks/views/board/board-task-card.tsx:365
+#: src/modules/tasks/views/board/board-task-card.tsx:393
 msgid "Add tag"
 msgstr "Add tag"
 
 #: src/modules/tags/components/tags-input.tsx:56
-#: src/modules/tasks/views/list/list-task-row.tsx:441
+#: src/modules/tasks/components/form-task.tsx:604
 msgid "Add tags"
 msgstr "Add tags"
 
@@ -558,7 +567,7 @@ msgstr "Archived {0}"
 msgid "Archived order"
 msgstr "Archived order"
 
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:288
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:287
 msgid "Are you sure you want to archive <0>{taskName}</0>?"
 msgstr "Are you sure you want to archive <0>{taskName}</0>?"
 
@@ -702,9 +711,9 @@ msgstr "Assigned to"
 #: src/modules/customers/components/form-customer.tsx:252
 #: src/modules/message-boxes/message-box/message-box-head.tsx:95
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:170
-#: src/modules/tasks/components/form-task.tsx:293
+#: src/modules/tasks/components/form-task.tsx:443
 #: src/modules/tasks/components/tasks-menu-actions.tsx:182
-#: src/modules/tasks/views/board/board-task-card.tsx:464
+#: src/modules/tasks/views/board/board-task-card.tsx:458
 #: src/modules/tasks/views/list/list-task-row-head.tsx:15
 msgid "Assignee"
 msgstr "Assignee"
@@ -731,7 +740,7 @@ msgstr "Assigning a working branch"
 msgid "At the time of loan signing"
 msgstr "At the time of loan signing"
 
-#: src/modules/tasks/components/form-task.tsx:513
+#: src/modules/tasks/components/form-task.tsx:628
 msgid "Attachments"
 msgstr "Attachments"
 
@@ -1121,10 +1130,6 @@ msgstr "Change name"
 msgid "Change password"
 msgstr "Change password"
 
-#: src/modules/tasks/modules/task-menu/task-menu-dropdown.tsx:69
-msgid "Change priority"
-msgstr "Change priority"
-
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:130
 msgid "Change provider"
 msgstr "Change provider"
@@ -1251,7 +1256,7 @@ msgstr "Clear"
 msgid "Clear filter"
 msgstr "Clear filter"
 
-#: src/modules/tasks/modules/task-menu/task-menu-dropdown.tsx:155
+#: src/modules/tasks/modules/task-menu/task-menu-gantt-timeline.tsx:62
 msgid "Clear time"
 msgstr "Clear time"
 
@@ -1300,7 +1305,7 @@ msgstr "Close all folders"
 
 #: src/modules/message-boxes/message-boxes-contants.tsx:11
 #: src/modules/promotions/promotions-constants.ts:23
-#: src/modules/tasks/task-constants.tsx:39
+#: src/modules/tasks/task-constants.tsx:40
 msgid "Closed"
 msgstr "Closed"
 
@@ -1409,7 +1414,7 @@ msgstr "Company branch"
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:129
 #: src/modules/receipts/modals/modal-partial-payment.tsx:117
 #: src/modules/receipts/modals/modal-receipt-form.tsx:157
-#: src/modules/tasks/components/form-task.tsx:605
+#: src/modules/tasks/components/form-task.tsx:648
 #: src/modules/workspace-sdks/modals/modal-workspace-sdk-form.tsx:77
 #: src/modules/workspaces/workspace-require.tsx:365
 msgid "Complete"
@@ -1596,7 +1601,7 @@ msgstr "Copied"
 msgid "Copy"
 msgstr "Copy"
 
-#: src/modules/tasks/task-detail.tsx:161
+#: src/modules/tasks/task-detail.tsx:165
 msgid "Copy code"
 msgstr "Copy code"
 
@@ -1743,6 +1748,10 @@ msgstr "Create new loan contract"
 msgid "Create new product"
 msgstr "Create new product"
 
+#: src/modules/tasks/modules/task-menu/task-menu-tags.tsx:95
+msgid "Create new tag"
+msgstr "Create new tag"
+
 #: src/layout/navigation/navigation-drawer.tsx:323
 #: src/modules/workspaces/workspace-require.tsx:216
 msgid "Create new workspace"
@@ -1795,8 +1804,8 @@ msgid "Create SDK"
 msgstr "Create SDK"
 
 #: src/modules/tasks/components/quick-create-task-input.tsx:27
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:322
-#: src/modules/tasks/views/list/list-task-row.tsx:397
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:321
+#: src/modules/tasks/views/list/list-task-row.tsx:405
 msgid "Create subtask"
 msgstr "Create subtask"
 
@@ -1804,10 +1813,10 @@ msgstr "Create subtask"
 #: src/modules/events/event-constants.ts:70
 #: src/modules/tasks/components/quick-create-task-input.tsx:27
 #: src/modules/tasks/components/quick-create-task-input.tsx:44
-#: src/modules/tasks/modals/modal-create-task.tsx:101
-#: src/modules/tasks/views/board/board-group-by-statuses.tsx:244
+#: src/modules/tasks/modals/modal-create-task.tsx:100
+#: src/modules/tasks/views/board/board-group-by-statuses.tsx:237
 #: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:164
-#: src/modules/tasks/views/list/list-task-group-by-statuses.tsx:134
+#: src/modules/tasks/views/list/list-task-group-by-statuses.tsx:135
 msgid "Create task"
 msgstr "Create task"
 
@@ -1928,7 +1937,7 @@ msgstr "Custom fulfilled at"
 #: src/modules/product-vouchers/product-voucher-card.tsx:73
 #: src/modules/receipts/modals/modal-receipt-form.tsx:131
 #: src/modules/tags/tags-constants.ts:12
-#: src/modules/tasks/components/form-task.tsx:451
+#: src/modules/tasks/components/form-task.tsx:550
 #: src/modules/tasks/views/list/list-task-row-head.tsx:18
 #: src/widgets/reports/widgets/report-credit.widget.tsx:369
 msgid "Customer"
@@ -2307,10 +2316,10 @@ msgstr "Drop image here"
 msgid "Drop or click to choose file"
 msgstr "Drop or click to choose file"
 
-#: src/components/inputs/due-date-input.tsx:148
+#: src/components/inputs/due-date-input.tsx:151
 #: src/modules/receipts/receipt-card.tsx:245
-#: src/modules/tasks/components/form-task.tsx:359
-#: src/modules/tasks/views/board/board-task-card.tsx:378
+#: src/modules/tasks/components/form-task.tsx:497
+#: src/modules/tasks/views/board/board-task-card.tsx:410
 #: src/modules/tasks/views/calendar/index.tsx:267
 #: src/modules/tasks/views/list/list-task-row-head.tsx:21
 msgid "Due date"
@@ -2375,7 +2384,7 @@ msgstr "Edit note"
 msgid "Edit promotion"
 msgstr "Edit promotion"
 
-#: src/modules/tasks/views/list/list-task-row.tsx:415
+#: src/modules/tasks/views/list/list-task-row.tsx:424
 msgid "Edit task name"
 msgstr "Edit task name"
 
@@ -2512,7 +2521,7 @@ msgstr "Enter product supplies"
 msgid "Enter reject reason"
 msgstr "Enter reject reason"
 
-#: src/modules/tasks/components/form-task.tsx:194
+#: src/modules/tasks/components/form-task.tsx:351
 #: src/modules/tasks/components/quick-create-task-input.tsx:36
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:207
 msgid "Enter task name"
@@ -2560,8 +2569,8 @@ msgid "Estimate price"
 msgstr "Estimate price"
 
 #: src/components/inputs/estimate-time-input.tsx:131
-#: src/modules/tasks/components/form-task.tsx:437
-#: src/modules/tasks/components/form-task.tsx:445
+#: src/modules/tasks/components/form-task.tsx:534
+#: src/modules/tasks/components/form-task.tsx:542
 msgid "Estimate time"
 msgstr "Estimate time"
 
@@ -2689,7 +2698,7 @@ msgstr "Failed to acquire geolocation, please try again in a few minutes."
 msgid "Failed to connect with Meta."
 msgstr "Failed to connect with Meta."
 
-#: src/modules/tasks/components/form-task.tsx:159
+#: src/modules/tasks/components/form-task.tsx:297
 msgid "Failed to create task"
 msgstr "Failed to create task"
 
@@ -2926,7 +2935,7 @@ msgstr "Hide closed"
 msgid "Hide estimate time"
 msgstr "Hide estimate time"
 
-#: src/modules/tasks/task-constants.tsx:21
+#: src/modules/tasks/task-constants.tsx:22
 msgid "High"
 msgstr "High"
 
@@ -3730,7 +3739,7 @@ msgstr "Logout"
 msgid "Longitude"
 msgstr "Longitude"
 
-#: src/modules/tasks/task-constants.tsx:13
+#: src/modules/tasks/task-constants.tsx:14
 msgid "Low"
 msgstr "Low"
 
@@ -3915,7 +3924,7 @@ msgstr "Medical history"
 
 #: src/components/printer/printer-settings-bar.tsx:17
 #: src/modals/modal-printer.tsx:69
-#: src/modules/tasks/task-constants.tsx:17
+#: src/modules/tasks/task-constants.tsx:18
 msgid "Medium"
 msgstr "Medium"
 
@@ -4389,11 +4398,11 @@ msgstr "Next customer"
 msgid "Next payment deadline"
 msgstr "Next payment deadline"
 
-#: src/modules/tasks/components/form-task.tsx:245
+#: src/modules/tasks/components/form-task.tsx:397
 msgid "Next status"
 msgstr "Next status"
 
-#: src/components/inputs/due-date-input.tsx:237
+#: src/components/inputs/due-date-input.tsx:243
 msgid "Next weekend"
 msgstr "Next weekend"
 
@@ -4413,6 +4422,10 @@ msgstr "No activity"
 msgid "No asset estimation"
 msgstr "No asset estimation"
 
+#: src/modules/tasks/modules/task-menu/task-menu-assignee.tsx:242
+msgid "No assignees found"
+msgstr "No assignees found"
+
 #: src/modules/users/modals/modal-user-information.tsx:281
 msgid "No bookings"
 msgstr "No bookings"
@@ -4424,6 +4437,10 @@ msgstr "No comments"
 #: src/modules/receipts/modals/modal-disburesement-receipt.tsx:63
 msgid "No content"
 msgstr "No content"
+
+#: src/modules/tasks/modules/task-menu/task-menu-customer.tsx:201
+msgid "No customers found"
+msgstr "No customers found"
 
 #: src/components/empty.tsx:45
 msgid "No data"
@@ -4458,6 +4475,10 @@ msgstr "No Images"
 msgid "No messages"
 msgstr "No messages"
 
+#: src/modules/tasks/modules/task-menu/task-menu-priority.tsx:67
+msgid "No priority"
+msgstr "No priority"
+
 #: src/components/selector.tsx:347
 msgid "No results"
 msgstr "No results"
@@ -4466,7 +4487,7 @@ msgstr "No results"
 msgid "No search results"
 msgstr "No search results"
 
-#: src/modules/tasks/task-detail-subtasks.tsx:99
+#: src/modules/tasks/task-detail-subtasks.tsx:98
 msgid "No subtasks"
 msgstr "No subtasks"
 
@@ -4734,7 +4755,7 @@ msgstr "Partial payment"
 #: src/constant.ts:9
 #: src/modules/partners/partner-list.tsx:33
 #: src/modules/search/search-engine.tsx:258
-#: src/modules/tasks/components/form-task.tsx:465
+#: src/modules/tasks/components/form-task.tsx:567
 #: src/modules/tasks/components/tasks-menu-actions.tsx:287
 #: src/modules/workspace-roles/workspace-roles-config.ts:222
 #: src/modules/workspaces/workspace-modules.tsx:193
@@ -5155,10 +5176,10 @@ msgid "Printed at"
 msgstr "Printed at"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:246
-#: src/modules/tasks/components/form-task.tsx:310
+#: src/modules/tasks/components/form-task.tsx:474
 #: src/modules/tasks/components/tasks-menu-actions.tsx:401
 #: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:294
-#: src/modules/tasks/views/board/board-task-card.tsx:429
+#: src/modules/tasks/views/board/board-task-card.tsx:432
 #: src/modules/tasks/views/list/list-task-row-head.tsx:24
 msgid "Priority"
 msgstr "Priority"
@@ -5394,9 +5415,9 @@ msgstr "Range price"
 #. placeholder {0}: 2
 #. placeholder {0}: 4
 #. placeholder {0}: 8
-#: src/components/inputs/due-date-input.tsx:254
-#: src/components/inputs/due-date-input.tsx:274
-#: src/components/inputs/due-date-input.tsx:294
+#: src/components/inputs/due-date-input.tsx:260
+#: src/components/inputs/due-date-input.tsx:280
+#: src/components/inputs/due-date-input.tsx:300
 msgid "Range week <0>{0}</0>"
 msgstr "Range week <0>{0}</0>"
 
@@ -5890,7 +5911,7 @@ msgstr "Save prescription template"
 msgid "Scan QR code"
 msgstr "Scan QR code"
 
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:347
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:346
 msgid "Scroll to task"
 msgstr "Scroll to task"
 
@@ -5903,6 +5924,8 @@ msgstr "Scroll to today"
 #: src/layout/header/workspace-header.tsx:188
 #: src/modules/search/search-engine.tsx:382
 #: src/modules/tasks/components/task-status-options.tsx:49
+#: src/modules/tasks/modules/task-menu/task-menu-assignee.tsx:149
+#: src/modules/tasks/modules/task-menu/task-menu-customer.tsx:143
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:256
 #: src/widgets/components/manage-widgets.tsx:35
 msgid "Search"
@@ -6335,9 +6358,9 @@ msgstr "Start time must be before end time"
 #: src/modules/promotions/promostion-list.tsx:117
 #: src/modules/receipts/receipt-list.tsx:102
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:154
-#: src/modules/tasks/components/form-task.tsx:201
+#: src/modules/tasks/components/form-task.tsx:360
 #: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:203
-#: src/modules/tasks/views/board/board-task-card.tsx:325
+#: src/modules/tasks/views/board/board-task-card.tsx:351
 msgid "Status"
 msgstr "Status"
 
@@ -6397,13 +6420,13 @@ msgstr "Subscription / billings"
 msgid "Subscription updated"
 msgstr "Subscription updated"
 
-#: src/modules/tasks/views/board/board-task-card.tsx:489
+#: src/modules/tasks/views/board/board-task-card.tsx:490
 msgid "subtasks"
 msgstr "subtasks"
 
-#: src/modules/tasks/task-detail-subtasks.tsx:55
-#: src/modules/tasks/task-detail-subtasks.tsx:82
-#: src/modules/tasks/views/board/board-task-card.tsx:477
+#: src/modules/tasks/task-detail-subtasks.tsx:54
+#: src/modules/tasks/task-detail-subtasks.tsx:81
+#: src/modules/tasks/views/board/board-task-card.tsx:483
 msgid "Subtasks"
 msgstr "Subtasks"
 
@@ -6473,10 +6496,10 @@ msgstr "Tag"
 
 #: src/constant.ts:18
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:200
-#: src/modules/tasks/components/form-task.tsx:479
+#: src/modules/tasks/components/form-task.tsx:583
 #: src/modules/tasks/components/tasks-menu-actions.tsx:343
 #: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:248
-#: src/modules/tasks/views/board/board-task-card.tsx:348
+#: src/modules/tasks/views/board/board-task-card.tsx:368
 msgid "Tags"
 msgstr "Tags"
 
@@ -6503,7 +6526,7 @@ msgstr "Take photo again"
 #: src/modules/customers/components/customer-detail.tsx:93
 #: src/modules/tags/tags-constants.ts:19
 #: src/modules/tasks/components/detail-footer.tsx:41
-#: src/modules/tasks/modals/modal-create-task.tsx:101
+#: src/modules/tasks/modals/modal-create-task.tsx:100
 msgid "Task"
 msgstr "Task"
 
@@ -6516,15 +6539,15 @@ msgstr "Task assigned"
 msgid "Task closed"
 msgstr "Task closed"
 
-#: src/modules/tasks/components/form-task.tsx:267
+#: src/modules/tasks/components/form-task.tsx:419
 msgid "Task complete"
 msgstr "Task complete"
 
-#: src/modules/tasks/components/form-task.tsx:498
+#: src/modules/tasks/components/form-task.tsx:613
 msgid "Task description"
 msgstr "Task description"
 
-#: src/modules/tasks/components/form-task.tsx:133
+#: src/modules/tasks/components/form-task.tsx:271
 msgid "Task name is required"
 msgstr "Task name is required"
 
@@ -6690,7 +6713,7 @@ msgstr "This month"
 msgid "This week"
 msgstr "This week"
 
-#: src/components/inputs/due-date-input.tsx:226
+#: src/components/inputs/due-date-input.tsx:232
 msgid "This weekend"
 msgstr "This weekend"
 
@@ -6757,7 +6780,7 @@ msgid "Time settings for your profile"
 msgstr "Time settings for your profile"
 
 #: src/components/inputs/time-trackings-input.tsx:172
-#: src/modules/tasks/components/form-task.tsx:421
+#: src/modules/tasks/components/form-task.tsx:518
 #: src/modules/tasks/views/task-views.tsx:73
 #: src/widgets/reports/widgets/report-time-trackings.widget.tsx:111
 msgid "Time trackings"
@@ -6825,7 +6848,7 @@ msgid "To not miss important information"
 msgstr "To not miss important information"
 
 #: src/components/calendar.tsx:112
-#: src/components/inputs/due-date-input.tsx:199
+#: src/components/inputs/due-date-input.tsx:205
 #: src/configs/calendar.config.tsx:65
 #: src/modules/bookings/booking-list.tsx:424
 msgid "Today"
@@ -6847,7 +6870,7 @@ msgstr "Today receipts"
 msgid "Today revenue"
 msgstr "Today revenue"
 
-#: src/modules/tasks/task-constants.tsx:35
+#: src/modules/tasks/task-constants.tsx:36
 msgid "Todo"
 msgstr "Todo"
 
@@ -6855,7 +6878,7 @@ msgstr "Todo"
 msgid "Todo tasks"
 msgstr "Todo tasks"
 
-#: src/components/inputs/due-date-input.tsx:210
+#: src/components/inputs/due-date-input.tsx:216
 msgid "Tomorrow"
 msgstr "Tomorrow"
 
@@ -7178,7 +7201,7 @@ msgid "Update task priority"
 msgstr "Update task priority"
 
 #: src/modules/events/event-constants.ts:147
-#: src/modules/tasks/views/board/board-group-by-statuses.tsx:175
+#: src/modules/tasks/views/board/board-group-by-statuses.tsx:168
 msgid "Update task status"
 msgstr "Update task status"
 
@@ -7219,7 +7242,7 @@ msgstr "Upload"
 msgid "Upload avatar"
 msgstr "Upload avatar"
 
-#: src/modules/tasks/task-constants.tsx:25
+#: src/modules/tasks/task-constants.tsx:26
 msgid "Urgent"
 msgstr "Urgent"
 
@@ -7338,7 +7361,7 @@ msgstr "View customer phone number and contact"
 msgid "View customers"
 msgstr "View customers"
 
-#: src/modules/tasks/modules/task-menu/task-menu-dropdown.tsx:146
+#: src/modules/tasks/modules/task-menu/task-menu-gantt-timeline.tsx:53
 msgid "View detail"
 msgstr "View detail"
 
@@ -7619,6 +7642,10 @@ msgstr "Yes/No"
 msgid "Yesterday"
 msgstr "Yesterday"
 
+#: src/modules/tasks/modules/task-menu/task-menu-assignee.tsx:66
+msgid "You"
+msgstr "You"
+
 #: src/modules/bookings/components/form-booking.tsx:393
 #: src/modules/bookings/modals/modal-booking.tsx:318
 msgid "You are booking in the past"
@@ -7671,7 +7698,7 @@ msgstr "You need advice! Start chatting with us now."
 msgid "You need to create a DNS Record with domain <0>{0}</0>"
 msgstr "You need to create a DNS Record with domain <0>{0}</0>"
 
-#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:349
+#: src/modules/tasks/views/gantt/gantt-task/gantt-task.tsx:348
 msgid "You need to set the start date before"
 msgstr "You need to set the start date before"
 
