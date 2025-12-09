@@ -220,7 +220,6 @@ export const TaskMenuDropdown: FC = ({}) => {
 
       rootRef.current?.addEventListener("scroll", onClose);
       window.addEventListener("scroll", onClose);
-      window.document.body.style.setProperty("overflow", "hidden");
 
       document.addEventListener("mousedown", onMouseDown);
       window.addEventListener("keydown", onWindowKeyDown);
@@ -234,7 +233,6 @@ export const TaskMenuDropdown: FC = ({}) => {
 
         rootRef.current?.removeEventListener("scroll", onClose);
         window.removeEventListener("scroll", onClose);
-        window.document.body.style.removeProperty("overflow");
 
         document.removeEventListener("mousedown", onMouseDown);
         window.removeEventListener("keydown", onWindowKeyDown);
