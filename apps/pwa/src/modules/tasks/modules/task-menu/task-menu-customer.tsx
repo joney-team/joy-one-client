@@ -73,7 +73,7 @@ const MenuItem = ({
   );
 };
 
-export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables }) => {
+export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [selected, setSelected] = useState<TaskDataFragment["customer"]>(task.customer);
@@ -134,8 +134,6 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables }) =>
     onGetMembers(textSearch);
   }, [textSearch, getCustomers]);
 
-  const { updateTasks } = useUpdateTasks();
-
   return (
     <Card p={0} shadow="md" style={{ overflow: "hidden" }} withBorder>
       <AutoFocus as={Group} p={8} pb={0} enabled={!!data && data.customers.count > 0}>
@@ -165,7 +163,7 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables }) =>
                 onClick={() => {
                   setSelected(null);
 
-                  updateTasks({
+                  updateTask({
                     _id: task._id,
                     customer: null,
                     context: { fromGroupVariables: groupVariables },
@@ -187,7 +185,7 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables }) =>
                   isSelected={isSelected}
                   onClick={() => {
                     setSelected(customer);
-                    updateTasks({
+                    updateTask({
                       _id: task._id,
                       customer,
                       context: { fromGroupVariables: groupVariables },

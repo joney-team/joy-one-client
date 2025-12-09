@@ -31,6 +31,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
     getTasks: getSubtasks,
     tasks: subTasks,
     loading,
+    isHasData,
   } = useTasksQuery({
     variables: groupVariables,
     isSkipLoadCount: task.childCount === 0,
@@ -40,8 +41,6 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
     if (task.parentId) return;
     getSubtasks();
   }, [getSubtasks]);
-
-  if (task.parent) return null;
 
   return (
     <Stack gap={5}>
@@ -85,7 +84,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
         </ModalCreateTask>
       </Group>
 
-      {!loading && (
+      {isHasData && (
         <Stack gap={5} mt={8}>
           <Card withBorder shadow="none" p={0}>
             <Stack gap={0}>

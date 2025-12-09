@@ -152,6 +152,7 @@ export const useTasksQuery = ({
     loadMore: handleLoadMore,
     isCanLoadMore,
     isLoadingMore,
+    isHasData: !!data,
     error,
   };
 };

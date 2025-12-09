@@ -10,8 +10,12 @@ import { TaskStatusIcon } from "../../components/task-status-options";
 import { DefaultTaskStatusId } from "../../tasks-types";
 import styles from "./task-menu.module.css";
 
-export const TaskMenuStatus: TaskMenuComponent = ({ task, onClose, groupVariables }) => {
-  const { updateTasks } = useUpdateTasks();
+export const TaskMenuStatus: TaskMenuComponent = ({
+  task,
+  onClose,
+  groupVariables,
+  updateTask,
+}) => {
   const { statuses } = useTaskStatuses(task);
 
   return (
@@ -34,7 +38,7 @@ export const TaskMenuStatus: TaskMenuComponent = ({ task, onClose, groupVariable
                   align="center"
                   onClick={() => {
                     onClose();
-                    updateTasks({
+                    updateTask({
                       _id: task._id,
                       status: status.id,
                       context: { fromGroupVariables: groupVariables },

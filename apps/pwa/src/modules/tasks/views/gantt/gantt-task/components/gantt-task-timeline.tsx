@@ -28,7 +28,7 @@ export const GanttTaskTimeline: FC = () => {
   const { updateTasks } = useUpdateTasks();
   const { timeline, task, subTasksGroupVariables, ganttTaskAreaRef, groupVariables } =
     useGanttTaskRow();
-  const taskMenu = useTaskMenu(task, groupVariables);
+  const taskMenu = useTaskMenu({ task, groupVariables });
 
   const timelineRef = useRef<HTMLDivElement>(null);
 

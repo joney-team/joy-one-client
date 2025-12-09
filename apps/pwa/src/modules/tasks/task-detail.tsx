@@ -33,6 +33,7 @@ import QUERY_TASK_BY_CODE, {
   type TaskByCodeQueryVariables,
 } from "./graphql/queryTaskByCode.graphql";
 import { TaskDetailSubtasks } from "./task-detail-subtasks";
+import { useTaskMenu } from "./modules/task-menu/task-menu";
 
 export const TaskDetail: FC = () => {
   const router = useRouter();
@@ -66,11 +67,14 @@ export const TaskDetail: FC = () => {
   const contentHeight = height - headerHeight;
   const task = data?.taskByCode;
 
+  const taskMenu = useTaskMenu({ task, groupVariables: null });
+
   return (
     <Modal
       opened={!!taskCode}
       onClose={onClose}
       withCloseButton={false}
+      closeOnEscape={!taskMenu.isOpened}
       size={1600}
       yOffset={viewPadding}
       fullScreen={viewport.view !== "desktop"}
@@ -98,7 +102,7 @@ export const TaskDetail: FC = () => {
 
               <Stack px={16} pb={16}>
                 <TaskCodeButton key={task._id + "code"} task={task} />
-                <TaskForm key={task._id + version} task={task} />
+                <TaskForm key={task._id} task={task} />
                 <DetailFooter task={task} onClose={onClose} />
               </Stack>
             </Stack>
@@ -125,7 +129,7 @@ export const TaskDetail: FC = () => {
 
                       <Stack gap={30}>
                         <TaskForm key={task._id + version} task={task} />
-                        <TaskDetailSubtasks task={task} />
+                        {!task.parent && <TaskDetailSubtasks task={task} />}
                         <DetailFooter task={task} onClose={onClose} />
                       </Stack>
                     </Container>

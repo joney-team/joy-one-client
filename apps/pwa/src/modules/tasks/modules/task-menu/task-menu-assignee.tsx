@@ -22,7 +22,6 @@ import { useDebouncedState } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import styles from "./task-menu.module.css";
 
 const MenuItem = ({
@@ -78,7 +77,7 @@ const MenuItem = ({
   );
 };
 
-export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) => {
+export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
   const { userWorkspaceMember } = useUserWorkspaceMember();
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -140,8 +139,6 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
     onGetMembers(textSearch);
   }, [textSearch, getMembers]);
 
-  const { updateTasks } = useUpdateTasks();
-
   return (
     <Card p={0} shadow="md" style={{ overflow: "hidden" }} withBorder>
       <AutoFocus as={Group} p={8} pb={0}>
@@ -179,7 +176,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
                       : [...selected, userWorkspaceMember];
 
                     setSelected(data);
-                    updateTasks({
+                    updateTask({
                       _id: task._id,
                       assigneeUsers: data,
                       context: { fromGroupVariables: groupVariables },
@@ -189,9 +186,11 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
               )}
 
               {selected.map((member) => {
+                const isSelf = member.userId === userWorkspaceMember?.userId;
+                if (isSelf) return null;
+
                 return (
                   <MenuItem
-                    isSelf={member.userId === userWorkspaceMember?.userId}
                     key={member._id}
                     member={member}
                     isSelected
@@ -199,7 +198,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
                       const data = selected.filter((t) => t._id !== member._id);
                       setSelected(data);
 
-                      updateTasks({
+                      updateTask({
                         _id: task._id,
                         assigneeUsers: data,
                         context: { fromGroupVariables: groupVariables },
@@ -228,7 +227,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) =>
                       : [...selected, member];
 
                     setSelected(data);
-                    updateTasks({
+                    updateTask({
                       _id: task._id,
                       assigneeUsers: data,
                       context: { fromGroupVariables: groupVariables },

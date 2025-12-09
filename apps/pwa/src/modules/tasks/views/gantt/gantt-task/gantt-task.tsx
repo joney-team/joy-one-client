@@ -67,7 +67,7 @@ const GanttTaskContent: FC = () => {
   const { task, nextTask, groupVariables } = useGanttTaskRow();
   const gantt = useGantt();
   const router = useRouter();
-  const taskMenu = useTaskMenu(task, groupVariables);
+  const taskMenu = useTaskMenu({ task, groupVariables });
   const ganttRefs = useGanttRefs();
 
   const { rootRef, ganttTaskAreaRef, timeline, taskStatus } = useGanttTaskRow();

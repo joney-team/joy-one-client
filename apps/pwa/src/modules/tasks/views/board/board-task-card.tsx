@@ -172,7 +172,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
 }) => {
   const tasks = useTasks();
   const { updateTasks } = useUpdateTasks();
-  const taskMenu = useTaskMenu(task, groupVariables);
+  const taskMenu = useTaskMenu({ task, groupVariables });
 
   const droppableRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef<HTMLDivElement | null>(null);
@@ -399,10 +399,10 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                 icon={IconCalendar}
                 onRemove={() => updateTasks([{ ...task, dueDate: null, startDate: null }])}
                 canRemove={!!task.dueDate || !!task.startDate}
-                isActivated={taskMenu.activatedAction === TaskMenuAction.CHANGE_ESTIMATED_TIME}
+                isActivated={taskMenu.activatedAction === TaskMenuAction.CHANGE_TIMELINE}
                 onClick={(e) => {
                   taskMenu.open({
-                    action: TaskMenuAction.CHANGE_ESTIMATED_TIME,
+                    action: TaskMenuAction.CHANGE_TIMELINE,
                     target: e.currentTarget,
                     offset: { x: 10 },
                   });

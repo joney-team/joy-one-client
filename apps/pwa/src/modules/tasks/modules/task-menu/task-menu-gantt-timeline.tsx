@@ -1,16 +1,15 @@
 "use client";
 
-import { Card, Group, MantineColor, Stack, Text } from "@mantine/core";
-import { TaskMenuComponent } from "./task-menu-types";
 import { useColor } from "@/modules/theme/use-color";
+import { Card, Group, MantineColor, Stack, Text } from "@mantine/core";
 import { Icon, IconClockHour3, IconMaximize, ReactNode } from "@tabler/icons-react";
 import { FC } from "react";
+import { TaskMenuComponent } from "./task-menu-types";
 
-import styles from "./task-menu.module.css";
 import { Trans } from "@lingui/react/macro";
 import { useRouter } from "next/navigation";
 import { updateTaskPath } from "../../tasks-route-helpers";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
+import styles from "./task-menu.module.css";
 
 const MenuItem: FC<{
   icon: Icon;
@@ -38,9 +37,13 @@ const MenuItem: FC<{
   );
 };
 
-export const TaskMenuGanttTimeline: TaskMenuComponent = ({ task, onClose, groupVariables }) => {
+export const TaskMenuGanttTimeline: TaskMenuComponent = ({
+  task,
+  onClose,
+  groupVariables,
+  updateTask,
+}) => {
   const router = useRouter();
-  const { updateTasks } = useUpdateTasks();
 
   return (
     <Card p={0} shadow="md" withBorder>
@@ -59,7 +62,7 @@ export const TaskMenuGanttTimeline: TaskMenuComponent = ({ task, onClose, groupV
           label={<Trans>Clear time</Trans>}
           onClick={() => {
             onClose();
-            updateTasks({
+            updateTask({
               _id: task._id,
               startDate: null,
               dueDate: null,

@@ -6,14 +6,17 @@ import { Card, Group, Stack, Text } from "@mantine/core";
 import { taskPriorities } from "../../task-constants";
 import { TaskMenuComponent } from "./task-menu-types";
 
-import { IconFlagFilled, IconFlagOff } from "@tabler/icons-react";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
-import styles from "./task-menu.module.css";
 import { Trans } from "@lingui/react/macro";
+import { IconFlagFilled, IconFlagOff } from "@tabler/icons-react";
+import styles from "./task-menu.module.css";
 
-export const TaskMenuPriority: TaskMenuComponent = ({ task, onClose, groupVariables }) => {
+export const TaskMenuPriority: TaskMenuComponent = ({
+  task,
+  onClose,
+  groupVariables,
+  updateTask,
+}) => {
   const color = useColor();
-  const { updateTasks } = useUpdateTasks();
 
   return (
     <Card p={0} shadow="md" withBorder>
@@ -30,7 +33,7 @@ export const TaskMenuPriority: TaskMenuComponent = ({ task, onClose, groupVariab
               align="center"
               onClick={async () => {
                 onClose();
-                await updateTasks({
+                await updateTask({
                   _id: task._id,
                   priority: priority as TaskPriority,
                   context: { fromGroupVariables: groupVariables },
@@ -52,7 +55,7 @@ export const TaskMenuPriority: TaskMenuComponent = ({ task, onClose, groupVariab
           align="center"
           onClick={async () => {
             onClose();
-            await updateTasks({
+            await updateTask({
               _id: task._id,
               priority: null,
               context: { fromGroupVariables: groupVariables },

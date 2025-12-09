@@ -17,10 +17,9 @@ import { Trans } from "@lingui/react/macro";
 import { IconTagPlus } from "@tabler/icons-react";
 import { useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import styles from "./task-menu.module.css";
 
-export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables }) => {
+export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
   const color = useColor();
   const [selected, setSelected] = useState<TaskDataFragment["tags"]>(task.tags);
   const { data } = useQuery<TagsQuery, TagsQueryVariables>(QUERY_TAGS, {
@@ -28,8 +27,6 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables }) => {
       type: TagType.Task,
     },
   });
-
-  const { updateTasks } = useUpdateTasks();
 
   return (
     <ModalTagForm>
@@ -53,7 +50,7 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables }) => {
                       : [...selected, tag];
 
                     setSelected(tags);
-                    updateTasks({
+                    updateTask({
                       _id: task._id,
                       tags,
                       context: { fromGroupVariables: groupVariables },
@@ -86,7 +83,7 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables }) => {
                   type: TagType.Task,
                   onCreated: (tag) => {
                     setSelected([...selected, tag]);
-                    updateTasks({
+                    updateTask({
                       _id: task._id,
                       tags: [...selected, tag],
                       context: { fromGroupVariables: groupVariables },

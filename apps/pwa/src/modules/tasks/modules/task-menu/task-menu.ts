@@ -1,3 +1,5 @@
+"use client";
+
 import {
   addInternalEventsListener,
   emitInternalEvent,
@@ -8,15 +10,18 @@ import { useEffect, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { TaskMenu, TaskMenuAction, TaskMenuContextType } from "./task-menu-types";
 import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { UpdateTask } from "../../hooks/use-update-tasks";
 
 export function setTaskMenuRoot(root: HTMLElement | null) {
   emitInternalEvent(InternalEvent.TASK_MENU_SET_ROOT, { root });
 }
 
-export const useTaskMenu: (
-  task: TaskDataFragment,
-  groupVariables: TasksQueryVariables | null
-) => TaskMenuContextType = (task, groupVariables) => {
+export const useTaskMenu: (args: {
+  task?: TaskDataFragment;
+  groupVariables: TasksQueryVariables | null;
+  updateTask?: (task: UpdateTask) => Promise<void>;
+  zIndex?: number;
+}) => TaskMenuContextType = ({ task, groupVariables, zIndex, updateTask }) => {
   const [activatedAction, setActivatedAction] = useState<TaskMenuAction | null>(null);
 
   useEffect(() => {
@@ -31,7 +36,7 @@ export const useTaskMenu: (
     } else {
       const onOpened = (event: unknown) => {
         const { menu } = event as { menu: TaskMenu };
-        if (menu.task._id === task._id) {
+        if (menu.task._id === task?._id) {
           setActivatedAction(menu.action);
         }
       };
@@ -42,11 +47,15 @@ export const useTaskMenu: (
         removeInternalEventsListner(InternalEvent.TASK_MENU_OPEN, onOpened);
       };
     }
-  }, [activatedAction, task._id]);
+  }, [activatedAction, task?._id]);
 
   return {
     open(menu) {
-      emitInternalEvent(InternalEvent.TASK_MENU_OPEN, { menu: { ...menu, task, groupVariables } });
+      if (!task) return;
+
+      emitInternalEvent(InternalEvent.TASK_MENU_OPEN, {
+        menu: { ...menu, task, groupVariables, zIndex, updateTask },
+      });
     },
     close() {
       emitInternalEvent(InternalEvent.TASK_MENU_CLOSE);

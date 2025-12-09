@@ -100,7 +100,7 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
   return (
     <InputWrapper {..._props}>
       <Stack gap={0}>
-        <Group miw={400} pb={16}>
+        <Group miw={400} pb={12}>
           <Group align="end" gap={5}>
             <TextInput
               flex={1}

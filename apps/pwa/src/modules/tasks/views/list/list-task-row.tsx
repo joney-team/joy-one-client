@@ -88,7 +88,7 @@ export const ListTaskRow: FC<{
   droppableOptions = {},
 }) => {
   const color = useColor();
-  const taskMenu = useTaskMenu(task, groupVariables);
+  const taskMenu = useTaskMenu({ task, groupVariables });
   const droppableRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef<HTMLDivElement | null>(null);
   const draggingRefContainer = useRef<HTMLElement | null>(null);
@@ -508,7 +508,7 @@ export const ListTaskRow: FC<{
                 e.stopPropagation();
                 taskMenu.open({
                   target: e.currentTarget,
-                  action: TaskMenuAction.CHANGE_ESTIMATED_TIME,
+                  action: TaskMenuAction.CHANGE_TIMELINE,
                 });
               }}
             >

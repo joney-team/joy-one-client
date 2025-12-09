@@ -1,36 +1,33 @@
 "use client";
 
+import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor";
-import { DateFormat } from "@/components/format/date-format";
 import { Hovered } from "@/components/hovered";
-import { DueDateInput } from "@/components/inputs/due-date-input";
 import { EstimateTimeInput } from "@/components/inputs/estimate-time-input";
 import { TimeTrackingsInput } from "@/components/inputs/time-trackings-input";
 import { Renderer } from "@/components/renderer";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { PartnersInput } from "@/modules/partners/components/partners-input";
-import { TagsInput } from "@/modules/tags/components/tags-input";
-import { TagType } from "@/modules/tags/tags-types";
-import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
-import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
 import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskPriority } from "@/modules/tasks/tasks-types";
-import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
+  Badge,
   Center,
   em,
   Group,
-  Menu,
+  GroupProps,
   SimpleGrid,
   Stack,
   Text,
@@ -49,6 +46,7 @@ import {
   IconFlagFilled,
   IconHourglassHigh,
   IconPlaystationCircle,
+  IconPlus,
   IconStopwatch,
   IconTags,
   IconTopologyStar3,
@@ -56,16 +54,18 @@ import {
   IconUserSquareRounded,
   IconX,
 } from "@tabler/icons-react";
-import { FC, PropsWithChildren, ReactNode, useState } from "react";
-import { CustomerInput } from "../../customers/components/customer-input";
+import { FC, PropsWithChildren, ReactNode, useMemo, useRef, useState } from "react";
 import { FilesBox } from "../../files/files-box";
-import { useUpdateTasks } from "../hooks/use-update-tasks";
 import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
 import CREATE_TASK_MUTATION, {
   type CreateTaskMutation,
   type CreateTaskMutationVariables,
 } from "../graphql/mutationCreateTask.graphql";
+import { useUpdateTasks } from "../hooks/use-update-tasks";
+import { useTaskMenu } from "../modules/task-menu/task-menu";
+import { TaskMenuAction } from "../modules/task-menu/task-menu-types";
 import { taskPriorities } from "../task-constants";
+import { TaskTimeline } from "./task-timeline";
 
 export interface TaskFormProps {
   task?: TaskDataFragment;
@@ -74,7 +74,135 @@ export interface TaskFormProps {
   onClose?: () => void;
 }
 
+const FormFieldWrapper: FC<
+  PropsWithChildren<
+    {
+      label: ReactNode;
+      icon: Icon;
+      iconColor?: string;
+      onClick?: (contentRef: HTMLDivElement) => void;
+    } & Omit<GroupProps, "onClick">
+  >
+> = ({ icon: Icon, label, children, onClick, iconColor, ...props }) => {
+  const color = useColor();
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <Group
+      flex={1}
+      w="100%"
+      gap={0}
+      className="clickable"
+      {...props}
+      onClick={() => {
+        if (!contentRef.current) return;
+        onClick?.(contentRef.current);
+      }}
+    >
+      <Group gap={5} w={140}>
+        <ThemeIcon variant="transparent" color={color(iconColor || "gray")} size="sm">
+          <Icon strokeWidth={1.5} />
+        </ThemeIcon>
+        <Text c="var(--mantine-color-text)" fz={em(13)}>
+          {label}
+        </Text>
+      </Group>
+
+      <Group flex={1} p={0} ref={contentRef}>
+        {children}
+      </Group>
+    </Group>
+  );
+};
+
 const formFieldHeight = 36;
+
+const FormField: FC<
+  PropsWithChildren<
+    {
+      onClick?: () => void;
+      onRemove?: () => void;
+      canRemove?: boolean;
+      isNestedClickable?: boolean;
+      placeholder?: ReactNode;
+      value?: ReactNode;
+    } & GroupProps
+  >
+> = ({
+  onClick,
+  isNestedClickable = true,
+  onRemove,
+  canRemove,
+  children,
+  placeholder,
+  value,
+  ...props
+}) => {
+  const hover = useHover();
+  const color = useColor();
+
+  const content = useMemo(() => {
+    if (value) {
+      return (
+        <Group px={8} gap={5} align="center">
+          {value}
+        </Group>
+      );
+    }
+
+    if (placeholder) {
+      return (
+        <Group px={8} gap={5} align="center">
+          <IconPlus size={13} color={color("gray")} />
+
+          <Text c="gray" fz={13}>
+            {placeholder}
+          </Text>
+        </Group>
+      );
+    }
+
+    return children;
+  }, [value, children, placeholder]);
+
+  return (
+    <Group
+      flex={1}
+      gap={5}
+      w="100%"
+      ref={hover.ref}
+      className="unselectable"
+      bg={hover.hovered ? "var(--mantine-color-default-hover)" : "transparent"}
+      mih={formFieldHeight}
+      style={{
+        borderRadius: 10,
+        cursor: onClick || isNestedClickable ? "pointer" : "default",
+      }}
+      onClick={onClick}
+    >
+      <Group flex={1} miw={0} gap={5} {...props}>
+        {content}
+      </Group>
+
+      {!!onRemove && canRemove && (
+        <Group px={8} opacity={hover.hovered ? 1 : 0} align="center">
+          <ActionIcon
+            variant="subtle"
+            color="gray.5"
+            size="sm"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onRemove?.();
+            }}
+          >
+            <IconX size={16} strokeWidth={1.5} />
+          </ActionIcon>
+        </Group>
+      )}
+    </Group>
+  );
+};
 
 export const TaskForm: FC<TaskFormProps> = (props) => {
   const { t } = useLingui();
@@ -110,13 +238,23 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
     emitInternalEvent(InternalEvent.REFETCH_TASKS);
   }, 500);
 
-  const initialTask: Partial<TaskDataFragment> = {
-    status: DefaultTaskStatusId.TODO,
-    ...props.initial,
-  };
+  const initialTask: TaskDataFragment = useMemo(() => {
+    return Object.assign(
+      {
+        _id: props.task?._id ?? "creation",
+        status: DefaultTaskStatusId.TODO,
+        assigneeUsers: [],
+        tags: [],
+        partners: [],
+        timeTrackings: [],
+        ...props.initial,
+      },
+      props.task
+    );
+  }, [props.task, props.initial]);
 
   const form = useForm({
-    initialValues: Object.assign(initialTask, props.task),
+    initialValues: initialTask,
     onValuesChange: (values) => {
       if (props.task) onUpdate(values);
     },
@@ -183,6 +321,25 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
   const currentStatusIndex = statuses.findIndex((v) => v.id === props.task?.status);
   const nextStatus = statuses[currentStatusIndex + 1];
 
+  const statusStyled = renderTaskStatusStyle(
+    form.values.status ?? DefaultTaskStatusId.TODO,
+    workspace.settings.taskStatuses
+  );
+
+  const closedStatusStyled = renderTaskStatusStyle(
+    DefaultTaskStatusId.CLOSED,
+    workspace.settings.taskStatuses
+  );
+
+  const taskMenu = useTaskMenu({
+    task: form.values,
+    groupVariables: null,
+    zIndex: zIndexes.commonModals + 100,
+    updateTask: async (task) => {
+      form.setValues({ ...form.getValues(), ...task });
+    },
+  });
+
   return (
     <form onSubmit={onCreate}>
       <Stack pt={10} gap={30}>
@@ -198,224 +355,164 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
           />
 
           <SimpleGrid cols={{ md: 2 }} spacing={3} maw="100%" w={900}>
-            <FormFieldWrapper icon={IconPlaystationCircle} label={<Trans>Status</Trans>}>
-              <TaskStatusSelector
-                inputProps={{ flex: 1 }}
-                onSelect={(status) => form.setFieldValue("status", status.id)}
-                render={(ctx) => {
-                  const statusStyled = renderTaskStatusStyle(
-                    form.values.status,
-                    workspace.settings.taskStatuses
-                  );
-                  const closedStatusStyled = renderTaskStatusStyle(
-                    DefaultTaskStatusId.CLOSED,
-                    workspace.settings.taskStatuses
-                  );
+            <FormFieldWrapper
+              icon={IconPlaystationCircle}
+              label={<Trans>Status</Trans>}
+              onClick={(e) =>
+                taskMenu.open({
+                  action: TaskMenuAction.CHANGE_STATUS,
+                  target: e,
+                  offset: { x: 10 },
+                })
+              }
+            >
+              <FormField gap={5} px={8} wrap="nowrap">
+                <Group
+                  gap={0}
+                  bg={statusStyled.color}
+                  wrap="nowrap"
+                  component="button"
+                  style={{
+                    padding: 0,
+                    cursor: "pointer",
+                    outline: "none",
+                    border: "none",
+                    borderRadius: 5,
+                  }}
+                >
+                  <Group
+                    px={8}
+                    align="center"
+                    justify="center"
+                    style={{
+                      borderRight: `1px solid #00000020`,
+                    }}
+                  >
+                    <Text c="white" fz={13} fw={500}>
+                      {statusStyled.name}
+                    </Text>
+                  </Group>
 
-                  return (
-                    <FormField onClick={ctx.toggle}>
-                      <Group gap={5} px={8} wrap="nowrap">
-                        <Group
-                          gap={0}
-                          bg={statusStyled.color}
-                          wrap="nowrap"
-                          component="button"
-                          style={{
-                            padding: 0,
-                            cursor: "pointer",
-                            outline: "none",
-                            border: "none",
-                            borderRadius: 5,
+                  {nextStatus && (
+                    <Tooltip label={`${t`Next status`} ${nextStatus.name}`}>
+                      <ActionIcon
+                        size={24}
+                        radius={5}
+                        component="div"
+                        color="white"
+                        variant="transparent"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          form.setFieldValue("status", nextStatus.id);
+                        }}
+                      >
+                        <IconCaretRightFilled size={16} />
+                      </ActionIcon>
+                    </Tooltip>
+                  )}
+                </Group>
+
+                {props.task && form.values.status !== DefaultTaskStatusId.CLOSED && (
+                  <Hovered>
+                    {({ hovered, ref }) => (
+                      <Tooltip label={t`Task complete`}>
+                        <ActionIcon
+                          ref={ref}
+                          size={24}
+                          radius={5}
+                          color={hovered ? closedStatusStyled.color : "gray"}
+                          variant={hovered ? "filled" : "light"}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            form.setFieldValue("status", DefaultTaskStatusId.CLOSED);
                           }}
                         >
-                          <Group
-                            px={8}
-                            align="center"
-                            justify="center"
-                            style={{
-                              borderRight: `1px solid #00000020`,
-                            }}
-                          >
-                            <Text c="white" fz={13} fw={500}>
-                              {statusStyled.name}
-                            </Text>
-                          </Group>
+                          <closedStatusStyled.icon size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                    )}
+                  </Hovered>
+                )}
+              </FormField>
+            </FormFieldWrapper>
 
-                          {nextStatus && (
-                            <Tooltip label={`${t`Next status`} ${nextStatus.name}`}>
-                              <ActionIcon
-                                size={24}
-                                radius={5}
-                                component="div"
-                                color="white"
-                                variant="transparent"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  e.preventDefault();
-                                  form.setFieldValue("status", nextStatus.id);
-                                }}
-                              >
-                                <IconCaretRightFilled size={16} />
-                              </ActionIcon>
-                            </Tooltip>
-                          )}
-                        </Group>
-
-                        {props.task && form.values.status !== DefaultTaskStatusId.CLOSED && (
-                          <Hovered>
-                            {({ hovered, ref }) => (
-                              <Tooltip label={t`Task complete`}>
-                                <ActionIcon
-                                  ref={ref}
-                                  size={24}
-                                  radius={5}
-                                  color={hovered ? closedStatusStyled.color : "gray"}
-                                  variant={hovered ? "filled" : "light"}
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    form.setFieldValue("status", DefaultTaskStatusId.CLOSED);
-                                  }}
-                                >
-                                  <closedStatusStyled.icon size={16} />
-                                </ActionIcon>
-                              </Tooltip>
-                            )}
-                          </Hovered>
-                        )}
-                      </Group>
-                    </FormField>
-                  );
-                }}
+            <FormFieldWrapper
+              icon={IconUser}
+              label={<Trans>Assignee</Trans>}
+              onClick={(e) =>
+                taskMenu.open({
+                  action: TaskMenuAction.CHANGE_ASSIGNEE,
+                  target: e,
+                  offset: { x: 10 },
+                })
+              }
+            >
+              <FormField
+                gap={3}
+                value={
+                  form.values.assigneeUsers.length > 0
+                    ? form.values.assigneeUsers?.map((member) => (
+                        <Avatar key={member._id} size={26} user={member} hideOnlineStatus />
+                      ))
+                    : null
+                }
+                placeholder={<Trans>Add assignee</Trans>}
+                canRemove={(form.values.assigneeUsers?.length ?? 0) > 0}
+                onRemove={() => form.setFieldValue("assigneeUsers", [])}
               />
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconUser} label={<Trans>Assignee</Trans>}>
-              <FormField
-                canRemove={(form.values.assigneeUsers?.length || 0) > 0}
-                onRemove={() => form.setFieldValue("assigneeUsers", [])}
-              >
-                <WorkspaceMembersInput
-                  w="100%"
-                  collapsed
-                  flex={1}
-                  p={5}
-                  value={form.values.assigneeUsers}
-                  onChange={(users) => form.setFieldValue("assigneeUsers", users as any)}
-                  style={{ cursor: "pointer" }}
-                />
-              </FormField>
-            </FormFieldWrapper>
-
-            <FormFieldWrapper icon={IconFlag} label={<Trans>Priority</Trans>}>
+            <FormFieldWrapper
+              icon={form.values.priority ? IconFlagFilled : IconFlag}
+              iconColor={
+                form.values.priority
+                  ? taskPriorities[form.values.priority as TaskPriority]?.color
+                  : "gray"
+              }
+              label={<Trans>Priority</Trans>}
+              onClick={(e) =>
+                taskMenu.open({
+                  action: TaskMenuAction.CHANGE_PRIORITY,
+                  target: e,
+                  offset: { x: 10 },
+                })
+              }
+            >
               <FormField
                 canRemove={!!form.values.priority}
                 onRemove={() => form.setFieldValue("priority", null)}
-              >
-                <TaskPrioritySelector
-                  inputProps={{ flex: 1 }}
-                  onSelect={(priority) => form.setFieldValue("priority", priority)}
-                  render={(ctx) => {
-                    return (
-                      <Group
-                        style={{ cursor: "pointer" }}
-                        flex={1}
-                        h={formFieldHeight}
-                        p={5}
-                        onClick={ctx.toggle}
-                      >
-                        {(function () {
-                          if (form.values.priority) {
-                            return (
-                              <Group gap={1}>
-                                <ThemeIcon
-                                  color={
-                                    taskPriorities[form.values.priority as TaskPriority]?.color
-                                  }
-                                  variant="transparent"
-                                >
-                                  <IconFlagFilled size={20} />
-                                </ThemeIcon>
-                                <Text>
-                                  {taskPriorities[form.values.priority as TaskPriority]?.label()}
-                                </Text>
-                              </Group>
-                            );
-                          }
-
-                          return (
-                            <Text c="gray" fz={em(13)} px={3}>
-                              <Trans>Add priority</Trans>
-                            </Text>
-                          );
-                        })()}
-                      </Group>
-                    );
-                  }}
-                />
-              </FormField>
+                value={
+                  form.values.priority
+                    ? taskPriorities[form.values.priority as TaskPriority]?.label()
+                    : undefined
+                }
+                placeholder={<Trans>Add priority</Trans>}
+              />
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconCalendar} label={<Trans>Due date</Trans>}>
+            <FormFieldWrapper
+              icon={IconCalendar}
+              label={<Trans>Due date</Trans>}
+              onClick={(e) =>
+                taskMenu.open({
+                  action: TaskMenuAction.CHANGE_TIMELINE,
+                  target: e,
+                  offset: { x: 10 },
+                })
+              }
+            >
               <FormField
                 onRemove={() => form.setValues({ ...form.values, dueDate: null, startDate: null })}
                 canRemove={!!form.values.dueDate || !!form.values.startDate}
-              >
-                <Menu>
-                  <Menu.Target>
-                    <Group style={{ cursor: "pointer", flex: 1 }} mih={formFieldHeight} p={5}>
-                      {(function () {
-                        if (form.values.dueDate && form.values.startDate) {
-                          if (DateTime.isSame(form.values.dueDate, form.values.startDate, "day")) {
-                            return (
-                              <Group c={isOutdated ? "red" : "var(--mantine-color-text)"} gap={5}>
-                                <Text>
-                                  <DateFormat value={form.values.startDate} type="time" />
-                                  {" - "}
-                                  <DateFormat value={form.values.dueDate} type="date-time" />
-                                </Text>
-                              </Group>
-                            );
-                          }
-
-                          return (
-                            <Text c={isOutdated ? "red" : "var(--mantine-color-text)"}>
-                              <DateFormat value={form.values.startDate} type="date-time" />
-                              {" - "}
-                              <DateFormat value={form.values.dueDate} type="date-time" />
-                            </Text>
-                          );
-                        }
-
-                        if (form.values.dueDate) {
-                          return (
-                            <Text c={isOutdated ? "red" : "var(--mantine-color-text)"}>
-                              <DateFormat value={form.values.dueDate} type="date-time" />
-                            </Text>
-                          );
-                        }
-
-                        return (
-                          <Text c="gray" fz={em(13)} px={3}>
-                            <Trans>Add due date</Trans>
-                          </Text>
-                        );
-                      })()}
-                    </Group>
-                  </Menu.Target>
-
-                  <Menu.Dropdown>
-                    <DueDateInput
-                      p={5}
-                      startDate={form.values.startDate}
-                      dueDate={form.values.dueDate}
-                      onChange={(e) => {
-                        form.setValues({ ...form.values, ...e });
-                      }}
-                    />
-                  </Menu.Dropdown>
-                </Menu>
-              </FormField>
+                value={
+                  form.values.dueDate || form.values.startDate ? (
+                    <TaskTimeline task={form.values} />
+                  ) : null
+                }
+                placeholder={<Trans>Add due date</Trans>}
+              />
             </FormFieldWrapper>
 
             <FormFieldWrapper icon={IconStopwatch} label={<Trans>Time trackings</Trans>}>
@@ -448,18 +545,23 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconUserSquareRounded} label={<Trans>Customer</Trans>}>
+            <FormFieldWrapper
+              icon={IconUserSquareRounded}
+              label={<Trans>Customer</Trans>}
+              onClick={(e) =>
+                taskMenu.open({
+                  action: TaskMenuAction.CHANGE_CUSTOMER,
+                  target: e,
+                  offset: { x: 10 },
+                })
+              }
+            >
               <FormField
                 canRemove={!!form.values.customer}
                 onRemove={() => form.setFieldValue("customer", null)}
-              >
-                <CustomerInput
-                  flex={1}
-                  p={5}
-                  value={form.values.customer as any}
-                  onSelect={(customer) => form.setFieldValue("customer", customer as any)}
-                />
-              </FormField>
+                value={form.values.customer ? form.values.customer.name : null}
+                placeholder={<Trans>Add customer</Trans>}
+              />
             </FormFieldWrapper>
 
             <FormFieldWrapper icon={IconTopologyStar3} label={<Trans>Partners</Trans>}>
@@ -476,18 +578,31 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
               </FormField>
             </FormFieldWrapper>
 
-            <FormFieldWrapper icon={IconTags} label={<Trans>Tags</Trans>}>
+            <FormFieldWrapper
+              icon={IconTags}
+              label={<Trans>Tags</Trans>}
+              onClick={(e) =>
+                taskMenu.open({
+                  action: TaskMenuAction.CHANGE_TAGS,
+                  target: e,
+                  offset: { x: 10 },
+                })
+              }
+            >
               <FormField
                 canRemove={!!form.values.tags?.length}
                 onRemove={() => form.setFieldValue("tags", [])}
-              >
-                <TagsInput
-                  flex={1}
-                  type={TagType.TASK}
-                  value={form.values.tags as any}
-                  onChange={(tags) => form.setFieldValue("tags", tags as any)}
-                />
-              </FormField>
+                value={
+                  form.values.tags && form.values.tags.length > 0
+                    ? form.values.tags?.map((tag) => (
+                        <Badge key={tag._id} color={tag.color || "gray"} size="sm" variant="light">
+                          {tag.name}
+                        </Badge>
+                      ))
+                    : null
+                }
+                placeholder={<Trans>Add tags</Trans>}
+              />
             </FormFieldWrapper>
           </SimpleGrid>
 
@@ -521,78 +636,6 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
           )}
         </Stack>
 
-        {/* {!!props.task && !props.task.parentId && (
-          <Stack gap={5}>
-            <Group justify="start">
-              <Group gap={8}>
-                <ThemeIcon variant="light" color="dark">
-                  <IconSubtask strokeWidth={1.5} size={20} />
-                </ThemeIcon>
-
-                <Text fw={500}>
-                  <Trans>Subtasks</Trans>
-                </Text>
-              </Group>
-
-              <Group gap={5}>
-                <Text fz={15}>
-                  <NumberFormat value={progress.percent} suffix="%" />
-                </Text>
-                <Progress value={progress.percent} w={70} color={progress.status.color || "dark"} />
-              </Group>
-
-              <ModalCreateTask>
-                {(open) => (
-                  <Button
-                    size="compact-xs"
-                    color="gray.5"
-                    variant="outline"
-                    radius={100}
-                    leftIcon={IconPlus}
-                    onClick={() =>
-                      open({
-                        initial: {
-                          parent: props.task,
-                        },
-                      })
-                    }
-                  >
-                    <Trans>Subtasks</Trans>
-                  </Button>
-                )}
-              </ModalCreateTask>
-            </Group>
-
-            {subTasks.length > 0 && (
-              <TasksDndProvider>
-                <Stack gap={5} mt={8}>
-                  <Card withBorder shadow="none" p={0}>
-                    <Stack gap={0}>
-                      <Stack py={5}>
-                        <ListTaskRowHead />
-                      </Stack>
-
-                      <Divider />
-
-                      {subTasks.map((task, index) => {
-                        return (
-                          <ListTaskRow
-                            key={task._id}
-                            id={task._id}
-                            showDivider={index < subTasks.length - 1}
-                            limitName={20}
-                            allowEditName={false}
-                          />
-                        );
-                      })}
-                    </Stack>
-                  </Card>
-                </Stack>
-              </TasksDndProvider>
-            )}
-          </Stack>
-        )} */}
-
         <Renderer visible={!!!props.task}>
           <Center>
             <Button
@@ -608,73 +651,5 @@ export const TaskForm: FC<TaskFormProps> = (props) => {
         </Renderer>
       </Stack>
     </form>
-  );
-};
-
-const FormFieldWrapper: FC<
-  PropsWithChildren<{
-    label: ReactNode;
-    icon: Icon;
-  }>
-> = (props) => {
-  return (
-    <Group flex={1} w="100%" gap={0} className="CtaWrapper">
-      <Group gap={5} w={140}>
-        <ThemeIcon variant="transparent" color="var(--mantine-color-text)" size="sm">
-          <props.icon strokeWidth={1.5} />
-        </ThemeIcon>
-        <Text c="var(--mantine-color-text)" fz={em(13)}>
-          {props.label}
-        </Text>
-      </Group>
-
-      <Group flex={1} p={0}>
-        {props.children}
-      </Group>
-    </Group>
-  );
-};
-
-const FormField: FC<
-  PropsWithChildren<{
-    onClick?: () => void;
-    onRemove?: () => void;
-    canRemove?: boolean;
-  }>
-> = (props) => {
-  const hover = useHover();
-
-  return (
-    <Group
-      flex={1}
-      w="100%"
-      ref={hover.ref}
-      className="unselectable"
-      bg={hover.hovered ? "var(--mantine-color-default-hover)" : "transparent"}
-      mih={formFieldHeight}
-      style={{
-        borderRadius: 10,
-        cursor: props.onClick ? "pointer" : "default",
-      }}
-      onClick={props.onClick}
-    >
-      {props.children}
-
-      <Renderer visible={!!props.onRemove && props.canRemove}>
-        <Group px={8} opacity={hover.hovered ? 1 : 0}>
-          <ActionIcon
-            variant="subtle"
-            color="gray.5"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              props.onRemove?.();
-            }}
-          >
-            <IconX size={16} strokeWidth={1.5} />
-          </ActionIcon>
-        </Group>
-      </Renderer>
-    </Group>
   );
 };

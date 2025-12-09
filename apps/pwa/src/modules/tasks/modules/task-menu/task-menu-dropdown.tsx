@@ -15,6 +15,7 @@ import { zIndexes } from "@joy-one-client/config/layout";
 import dynamic from "next/dynamic";
 import styles from "./task-menu.module.css";
 import { TaskMenuCustomer } from "./task-menu-customer";
+import { useUpdateTasks } from "../../hooks/use-update-tasks";
 
 const TaskMenuPriority = dynamic(
   () => import("./task-menu-priority").then((mod) => mod.TaskMenuPriority),
@@ -63,7 +64,7 @@ const TaskMenuAssignee = dynamic(
 
 const menuComponents: Partial<Record<TaskMenuAction, ComponentType<TaskMenuComponentProps>>> = {
   [TaskMenuAction.CHANGE_PRIORITY]: TaskMenuPriority,
-  [TaskMenuAction.CHANGE_ESTIMATED_TIME]: TaskMenuTimeline,
+  [TaskMenuAction.CHANGE_TIMELINE]: TaskMenuTimeline,
   [TaskMenuAction.GANTT_TIMELINE]: TaskMenuGanttTimeline,
   [TaskMenuAction.CHANGE_STATUS]: TaskMenuStatus,
   [TaskMenuAction.CHANGE_TAGS]: TaskMenuTags,
@@ -73,6 +74,7 @@ const menuComponents: Partial<Record<TaskMenuAction, ComponentType<TaskMenuCompo
 
 export const TaskMenuDropdown: FC = ({}) => {
   const [taskMenu, setTaskMenu] = useState<TaskMenu>();
+  const { updateTasks } = useUpdateTasks();
 
   const menuRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLElement>(null);
@@ -192,6 +194,7 @@ export const TaskMenuDropdown: FC = ({}) => {
       const onWindowKeyDown = (e: KeyboardEvent) => {
         if (e.key === "Escape") {
           onClose();
+          e.preventDefault();
         }
       };
 
@@ -255,10 +258,25 @@ export const TaskMenuDropdown: FC = ({}) => {
       <div
         ref={menuRef}
         className={classNames(styles.TaskMenu, styles.TaskMenuDropdown)}
-        style={{ display: "none", position: "fixed", zIndex: zIndexes.taskMenu }}
+        style={{
+          display: "none",
+          position: "fixed",
+          zIndex: taskMenu?.zIndex ?? zIndexes.taskMenu,
+        }}
       >
         {taskMenu && DropdownMenu ? (
-          <DropdownMenu key={taskMenu.task._id} {...taskMenu} onClose={onClose} />
+          <DropdownMenu
+            key={taskMenu.task._id}
+            {...taskMenu}
+            onClose={onClose}
+            updateTask={(task) => {
+              if (taskMenu.updateTask) {
+                return taskMenu.updateTask(task);
+              }
+
+              return updateTasks(task);
+            }}
+          />
         ) : null}
       </div>
     </Portal>
