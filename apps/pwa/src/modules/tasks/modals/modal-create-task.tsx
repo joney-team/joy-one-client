@@ -17,7 +17,7 @@ const CreateTaskForm = dynamic(
     ssr: false,
     loading: () => (
       <Stack px={16}>
-        <Skeleton height={200} />
+        <Skeleton height={220} />
       </Stack>
     ),
   }
@@ -50,17 +50,17 @@ export const ModalCreateTask = forwardRef<
     return [
       args?.initial?.folder && (
         <Group color={args?.initial?.folder?.color ?? "dark"} gap={5}>
-          <IconFolder size={16} color={color(args?.initial?.folder?.color ?? "dark")} />
+          <IconFolder size={18} color={color(args?.initial?.folder?.color ?? "dark")} />
           <Text fz={13} fw={400}>
             {args?.initial?.folder.name}
           </Text>
         </Group>
       ),
       args?.initial?.parent && (
-        <Group color={args?.initial?.folder?.color ?? "dark"} gap={5}>
-          <IconStack2 size={16} color={color(args?.initial?.folder?.color ?? "dark")} />
+        <Group gap={5}>
+          <IconStack2 size={18} color={color("dark")} />
           <Text fz={13} fw={400}>
-            {args?.initial?.folder?.name}
+            {args?.initial?.parent?.name}
           </Text>
         </Group>
       ),
@@ -91,7 +91,7 @@ export const ModalCreateTask = forwardRef<
           },
         }}
       >
-        <Stack gap={16} pb={16} px={8}>
+        <Stack gap={16} pb={16}>
           {breadcrumbs.length > 1 && (
             <Group gap={0} px={16}>
               {breadcrumbs.map((breadcrumb, index) => (

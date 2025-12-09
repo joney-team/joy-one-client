@@ -64,20 +64,23 @@ import { TaskMenuAction } from "../../modules/task-menu/task-menu-types";
 import { TaskSelectionBox } from "../../modules/task-selections/task-selection-box";
 import styles from "./list-tasks.module.css";
 import { DefaultTaskStatusId } from "../../tasks-types";
+import { ListTaskRowHeadProps } from "./list-task-row-head";
 
-export const ListTaskRow: FC<{
-  task: TaskDataFragment;
-  prevTask?: TaskDataFragment | null;
-  nextTask?: TaskDataFragment | null;
-  href: string;
-  allowEditName?: boolean;
-  lastRow?: boolean;
-  groupVariables: TasksQueryVariables | null;
-  isMarkAsChild?: boolean;
-  droppableOptions?: {
-    inherits?: (keyof TaskDataFragment)[];
-  };
-}> = ({
+export const ListTaskRow: FC<
+  {
+    task: TaskDataFragment;
+    prevTask?: TaskDataFragment | null;
+    nextTask?: TaskDataFragment | null;
+    href: string;
+    allowEditName?: boolean;
+    lastRow?: boolean;
+    groupVariables: TasksQueryVariables | null;
+    isMarkAsChild?: boolean;
+    droppableOptions?: {
+      inherits?: (keyof TaskDataFragment)[];
+    };
+  } & ListTaskRowHeadProps
+> = ({
   task,
   allowEditName = true,
   href,
@@ -87,6 +90,7 @@ export const ListTaskRow: FC<{
   nextTask,
   isMarkAsChild = false,
   droppableOptions = {},
+  hidden = [],
 }) => {
   const color = useColor();
   const taskMenu = useTaskMenu({ task, groupVariables });
@@ -456,100 +460,108 @@ export const ListTaskRow: FC<{
               </Group>
             </Group>
 
-            <Group
-              w={150}
-              px={6}
-              gap={3}
-              className={styles.TaskCell}
-              onClick={(e) => {
-                e.stopPropagation();
-                taskMenu.open({
-                  target: e.currentTarget,
-                  action: TaskMenuAction.CHANGE_ASSIGNEE,
-                });
-              }}
-            >
-              {task.assigneeUsers.length > 0 ? (
-                task.assigneeUsers.map((member) => {
-                  return <Avatar key={member._id} size={22} user={member} hideOnlineStatus />;
-                })
-              ) : (
-                <Group px={2}>
-                  <IconUsers size={16} color={color("gray.4")} />
-                </Group>
-              )}
-            </Group>
-
-            <Group
-              w={200}
-              px={8}
-              miw={0}
-              className={styles.TaskCell}
-              gap={3}
-              onClick={(e) => {
-                e.stopPropagation();
-                taskMenu.open({
-                  target: e.currentTarget,
-                  action: TaskMenuAction.CHANGE_CUSTOMER,
-                });
-              }}
-            >
-              <IconUser size={16} color={color(task.customer ? "primary.3" : "gray.4")} />
-              {task.customer && (
-                <Text fz={12} fw={500} c="gray" truncate>
-                  {task.customer.name}
-                </Text>
-              )}
-            </Group>
-
-            <Group
-              w={150}
-              px={8}
-              className={styles.TaskCell}
-              gap={3}
-              onClick={(e) => {
-                e.stopPropagation();
-                taskMenu.open({
-                  target: e.currentTarget,
-                  action: TaskMenuAction.CHANGE_TIMELINE,
-                });
-              }}
-            >
-              <IconCalendar
-                size={16}
-                color={color(
-                  task.dueDate
-                    ? task.dueDate < DateTime.getNowInSeconds() &&
-                      task.status !== DefaultTaskStatusId.CLOSED
-                      ? "red"
-                      : "primary.3"
-                    : "gray.4"
+            {!hidden.includes("assigneeUsers") && (
+              <Group
+                w={150}
+                px={6}
+                gap={3}
+                className={styles.TaskCell}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  taskMenu.open({
+                    target: e.currentTarget,
+                    action: TaskMenuAction.CHANGE_ASSIGNEE,
+                  });
+                }}
+              >
+                {task.assigneeUsers.length > 0 ? (
+                  task.assigneeUsers.map((member) => {
+                    return <Avatar key={member._id} size={22} user={member} hideOnlineStatus />;
+                  })
+                ) : (
+                  <Group px={2}>
+                    <IconUsers size={16} color={color("gray.4")} />
+                  </Group>
                 )}
-              />
-              {task.dueDate && (
-                <Text fz={12} fw={500} c="gray">
-                  <DateFormat value={task.dueDate} type="date" />
-                </Text>
-              )}
-            </Group>
+              </Group>
+            )}
 
-            <Group
-              w={70}
-              px={8}
-              className={styles.TaskCell}
-              onClick={(e) => {
-                taskMenu.open({
-                  target: e.currentTarget,
-                  action: TaskMenuAction.CHANGE_PRIORITY,
-                });
-              }}
-            >
-              {task.priority ? (
-                <IconFlagFilled size={16} color={color(taskPriorities[task.priority].color)} />
-              ) : (
-                <IconFlag size={16} color={color("gray.4")} />
-              )}
-            </Group>
+            {!hidden.includes("customer") && (
+              <Group
+                w={200}
+                px={8}
+                miw={0}
+                className={styles.TaskCell}
+                gap={3}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  taskMenu.open({
+                    target: e.currentTarget,
+                    action: TaskMenuAction.CHANGE_CUSTOMER,
+                  });
+                }}
+              >
+                <IconUser size={16} color={color(task.customer ? "primary.3" : "gray.4")} />
+                {task.customer && (
+                  <Text fz={12} fw={500} c="gray" truncate>
+                    {task.customer.name}
+                  </Text>
+                )}
+              </Group>
+            )}
+
+            {!hidden.includes("dueDate") && (
+              <Group
+                w={150}
+                px={8}
+                className={styles.TaskCell}
+                gap={3}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  taskMenu.open({
+                    target: e.currentTarget,
+                    action: TaskMenuAction.CHANGE_TIMELINE,
+                  });
+                }}
+              >
+                <IconCalendar
+                  size={16}
+                  color={color(
+                    task.dueDate
+                      ? task.dueDate < DateTime.getNowInSeconds() &&
+                        task.status !== DefaultTaskStatusId.CLOSED
+                        ? "red"
+                        : "primary.3"
+                      : "gray.4"
+                  )}
+                />
+                {task.dueDate && (
+                  <Text fz={12} fw={500} c="gray">
+                    <DateFormat value={task.dueDate} type="date" />
+                  </Text>
+                )}
+              </Group>
+            )}
+
+            {!hidden.includes("priority") && (
+              <Group
+                w={70}
+                px={8}
+                className={styles.TaskCell}
+                onClick={(e) => {
+                  taskMenu.open({
+                    target: e.currentTarget,
+                    action: TaskMenuAction.CHANGE_PRIORITY,
+                  });
+                }}
+              >
+                {task.priority ? (
+                  <IconFlagFilled size={16} color={color(taskPriorities[task.priority].color)} />
+                ) : (
+                  <IconFlag size={16} color={color("gray.4")} />
+                )}
+              </Group>
+            )}
           </Group>
         </Group>
 

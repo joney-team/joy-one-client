@@ -191,8 +191,6 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
   const nextStatus = statuses[currentStatusIndex + 1];
   const completedStatus = statuses.find((v) => v.id === DefaultTaskStatusId.CLOSED);
 
-  console.log("completedStatus", completedStatus);
-
   const taskMenu = useTaskMenu({
     task,
     groupVariables: null,
@@ -273,7 +271,7 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
                 {task.status !== completedStatus?.id && (
                   <Hovered>
                     {({ hovered, ref }) => (
-                      <Tooltip label={t`Task complete`}>
+                      <Tooltip label={<Trans>Task complete</Trans>}>
                         <ActionIcon
                           ref={ref}
                           size={24}

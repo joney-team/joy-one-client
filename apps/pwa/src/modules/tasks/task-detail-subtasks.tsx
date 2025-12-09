@@ -86,7 +86,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
           <Card withBorder shadow="none" p={0}>
             <Stack gap={0}>
               <Stack py={5}>
-                <ListTaskRowHead />
+                <ListTaskRowHead hidden={["customer", "priority"]} />
               </Stack>
 
               <Divider />
@@ -104,6 +104,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
                     nextTask={subTasks[index + 1]}
                     href={updateTaskPath({ code: task.code })}
                     groupVariables={groupVariables}
+                    hidden={["customer", "priority"]}
                   />
                 ))}
             </Stack>
