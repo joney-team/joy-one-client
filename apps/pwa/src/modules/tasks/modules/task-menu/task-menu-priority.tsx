@@ -16,7 +16,7 @@ export const TaskMenuPriority: TaskMenuComponent = ({ task, onClose, groupVariab
   const { updateTasks } = useUpdateTasks();
 
   return (
-    <Card p={0} shadow="md">
+    <Card p={0} shadow="md" withBorder>
       <Stack gap={3} py={6} px={4}>
         {Object.entries(taskPriorities).map(([priority, priorityConstant]) => {
           return (

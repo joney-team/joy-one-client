@@ -64,7 +64,7 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables }) => {
               >
                 <Circle color={tag.color || "gray"} size={12} />
               </Group>
-              <Text>{tag.name}</Text>
+              <Text fz={14}>{tag.name}</Text>
             </Group>
           );
         })}

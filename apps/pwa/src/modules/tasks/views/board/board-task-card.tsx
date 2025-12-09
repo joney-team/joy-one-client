@@ -302,7 +302,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
         <Card shadow="xs" p={10} className={styles.BoardCard}>
           <Stack gap={5} ref={draggingRef}>
             <Stack
-              gap={2}
+              gap={5}
               style={{ cursor: "grab", color: "unset", textDecoration: "none" }}
               onClick={(e) => {
                 const openNewTab = e.altKey || e.ctrlKey || e.metaKey;

@@ -43,7 +43,7 @@ export const TaskMenuGanttTimeline: TaskMenuComponent = ({ task, onClose, groupV
   const { updateTasks } = useUpdateTasks();
 
   return (
-    <Card p={0} shadow="md">
+    <Card p={0} shadow="md" withBorder>
       <Stack gap={0} p={5}>
         <MenuItem
           icon={IconMaximize}

@@ -15,7 +15,7 @@ export const TaskMenuStatus: TaskMenuComponent = ({ task, onClose, groupVariable
   const { statuses } = useTaskStatuses(task);
 
   return (
-    <Card p={0} shadow="md">
+    <Card p={0} shadow="md" withBorder>
       <Stack gap={3} py={4}>
         {statuses.map((status) => {
           return (

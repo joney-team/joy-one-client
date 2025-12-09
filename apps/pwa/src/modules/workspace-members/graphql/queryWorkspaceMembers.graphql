@@ -1,7 +1,7 @@
 #import "./fragmentWorkspaceMember.graphql"
 
-query WorkspaceMembers($ignoreSelf: Boolean) {
-  workspaceMembers(ignoreSelf: $ignoreSelf) {
+query WorkspaceMembers($ignoreSelf: Boolean, $ids: [String!]) {
+  workspaceMembers(ignoreSelf: $ignoreSelf, ids: $ids) {
     data {
       ...WorkspaceMemberData
     }

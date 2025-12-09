@@ -1,7 +1,7 @@
 "use client";
 
-import { useQuery } from "@apollo/client/react";
-import { Card, Group, ScrollArea, Stack, Text, TextInput } from "@mantine/core";
+import { useLazyQuery, useQuery } from "@apollo/client/react";
+import { Card, Group, Loader, ScrollArea, Stack, Text, TextInput } from "@mantine/core";
 import { TaskMenuComponent } from "./task-menu-types";
 
 import { Avatar } from "@/components/avatar";
@@ -13,13 +13,16 @@ import QUERY_WORKSPACE_MEMBERS, {
 import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { t } from "@lingui/core/macro";
 import { IconSearch } from "@tabler/icons-react";
-import { useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import styles from "./task-menu.module.css";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
 import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
+import { searchEntity } from "@/modules/search/search-service";
+import { AppEntity } from "@/types";
+import { useDebouncedCallback, useDebouncedState, useThrottledCallback } from "@mantine/hooks";
 
 const MenuAssignee = ({
   member,
@@ -75,54 +78,111 @@ const MenuAssignee = ({
 };
 
 export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables }) => {
-  const [selected, setSelected] = useState<TaskDataFragment["assigneeUsers"]>(task.assigneeUsers);
-
   const { userWorkspaceMember } = useUserWorkspaceMember();
 
-  const { data } = useQuery<WorkspaceMembersQuery, WorkspaceMembersQueryVariables>(
-    QUERY_WORKSPACE_MEMBERS,
-    {
-      variables: {
-        ignoreSelf: true,
-      },
-    }
+  const [selected, setSelected] = useState<TaskDataFragment["assigneeUsers"]>(task.assigneeUsers);
+  const [textSearch, setTextSearch] = useDebouncedState("", 300);
+
+  const [getMembers, { data, loading }] = useLazyQuery<
+    WorkspaceMembersQuery,
+    WorkspaceMembersQueryVariables
+  >(QUERY_WORKSPACE_MEMBERS, { fetchPolicy: "network-only" });
+
+  const onGetMembers = useCallback(
+    async (q: string) => {
+      if (q.length > 0) {
+        const searchResult = await searchEntity(AppEntity.WORKSPACE_MEMBERS, q);
+        if (searchResult.length === 0) return;
+
+        await getMembers({
+          variables: { ignoreSelf: true, ids: searchResult.map((result) => result._id) },
+        });
+        return;
+      }
+
+      await getMembers({ variables: { ignoreSelf: true } });
+    },
+    [getMembers]
   );
+
+  useEffect(() => {
+    onGetMembers(textSearch);
+  }, [textSearch, getMembers]);
 
   const { updateTasks } = useUpdateTasks();
 
   return (
     <Card p={0} shadow="md" style={{ overflow: "hidden" }} withBorder>
       <Group p={8} pb={0}>
-        <TextInput leftSection={<IconSearch size={16} />} placeholder={t`Search`} />
+        <TextInput
+          radius={50}
+          leftSection={<IconSearch size={16} />}
+          placeholder={t`Search`}
+          onChange={(e) => setTextSearch(e.target.value)}
+          rightSection={loading ? <Loader size="xs" type="dots" color="gray" /> : undefined}
+          styles={{
+            input: {
+              backgroundColor: "var(--mantine-color-default-hover)",
+              border: "none",
+            },
+          }}
+        />
       </Group>
-      <ScrollArea.Autosize mah={300} offsetScrollbars scrollbarSize={6}>
+      <ScrollArea.Autosize mah={220} offsetScrollbars scrollbarSize={6}>
         <Stack py={5} px={5} gap={0}>
-          {userWorkspaceMember && (
-            <MenuAssignee
-              isSelf
-              member={userWorkspaceMember}
-              isSelected={selected.some((u) => u._id === userWorkspaceMember._id)}
-              onClick={() => {
-                const isSelected = selected.some((u) => u._id === userWorkspaceMember._id);
-                const data = isSelected
-                  ? selected.filter((t) => t._id !== userWorkspaceMember._id)
-                  : [...selected, userWorkspaceMember];
+          {textSearch.length === 0 && (
+            <Fragment>
+              {userWorkspaceMember && (
+                <MenuAssignee
+                  isSelf
+                  member={userWorkspaceMember}
+                  isSelected={selected.some((u) => u._id === userWorkspaceMember._id)}
+                  onClick={() => {
+                    const isSelected = selected.some((u) => u._id === userWorkspaceMember._id);
+                    const data = isSelected
+                      ? selected.filter((t) => t._id !== userWorkspaceMember._id)
+                      : [...selected, userWorkspaceMember];
 
-                setSelected(data);
-                updateTasks({
-                  _id: task._id,
-                  assigneeUsers: data,
-                  context: { fromGroupVariables: groupVariables },
-                });
-              }}
-            />
+                    setSelected(data);
+                    updateTasks({
+                      _id: task._id,
+                      assigneeUsers: data,
+                      context: { fromGroupVariables: groupVariables },
+                    });
+                  }}
+                />
+              )}
+
+              {selected.map((member) => {
+                return (
+                  <MenuAssignee
+                    isSelf={member.userId === userWorkspaceMember?.userId}
+                    key={member._id}
+                    member={member}
+                    isSelected
+                    onClick={() => {
+                      const data = selected.filter((t) => t._id !== member._id);
+                      setSelected(data);
+
+                      updateTasks({
+                        _id: task._id,
+                        assigneeUsers: data,
+                        context: { fromGroupVariables: groupVariables },
+                      });
+                    }}
+                  />
+                );
+              })}
+            </Fragment>
           )}
 
           {data?.workspaceMembers.data.map((member) => {
             const isSelected = selected.some((u) => u._id === member._id);
+            if (textSearch.length === 0 && isSelected) return null;
 
             return (
               <MenuAssignee
+                isSelf={member.userId === userWorkspaceMember?.userId}
                 key={member._id}
                 member={member}
                 isSelected={isSelected}
