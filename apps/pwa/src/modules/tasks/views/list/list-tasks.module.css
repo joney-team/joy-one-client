@@ -12,6 +12,7 @@
 
     & .HoverToActive {
       opacity: 0;
+      display: none;
     }
 
     &:hover,
@@ -20,6 +21,7 @@
 
       & .HoverToActive {
         opacity: 1;
+        display: flex;
       }
     }
 

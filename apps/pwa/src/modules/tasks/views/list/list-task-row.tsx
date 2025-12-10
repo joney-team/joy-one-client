@@ -15,6 +15,7 @@ import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
+  Box,
   Card,
   Group,
   Portal,
@@ -331,8 +332,9 @@ export const ListTaskRow: FC<
               }}
               wrap="nowrap"
               miw={0}
+              align="stretch"
             >
-              <Group flex={1} gap={5} wrap="nowrap" style={{ overflow: "hidden" }}>
+              <Group flex={1} gap={5} wrap="nowrap" align="stretch">
                 {isEditName ? (
                   <ContentEditable
                     fz={14}
@@ -407,9 +409,11 @@ export const ListTaskRow: FC<
                     )}
                   </Group>
                 )}
+
+                <Box bg="transparent" component={Link} href={href} flex={1} h="100%" mih={0} />
               </Group>
 
-              <Group gap={2} wrap="nowrap" pl={35} className={styles.HoverToActive}>
+              <Group gap={2} wrap="nowrap" className={styles.HoverToActive}>
                 {!task.parentId && (
                   <ModalCreateTask>
                     {(modalCreateTask) => (

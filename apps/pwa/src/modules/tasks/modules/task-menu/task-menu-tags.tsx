@@ -40,7 +40,7 @@ export const TaskMenuTags: TaskMenuComponent = ({
   const [getTags, { data, fetchMore, loading }] = useLazyQuery<TagsQuery, TagsQueryVariables>(
     QUERY_TAGS,
     {
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-and-network",
     }
   );
 
@@ -113,7 +113,7 @@ export const TaskMenuTags: TaskMenuComponent = ({
                 placeholder={t`Search`}
                 onChange={(e) => setTextSearch(e.target.value)}
                 rightSection={
-                  !data && loading ? <Loader size="xs" type="dots" color="gray" /> : undefined
+                  loading && !data ? <Loader size="xs" type="dots" color="gray" /> : undefined
                 }
                 styles={{
                   input: {

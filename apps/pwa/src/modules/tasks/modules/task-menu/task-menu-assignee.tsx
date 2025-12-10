@@ -90,7 +90,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
   const [getMembers, { data, loading, fetchMore }] = useLazyQuery<
     WorkspaceMembersQuery,
     WorkspaceMembersQueryVariables
-  >(QUERY_WORKSPACE_MEMBERS, { fetchPolicy: "network-only" });
+  >(QUERY_WORKSPACE_MEMBERS, { fetchPolicy: "cache-and-network" });
 
   const onGetMembers = useCallback(
     async (q: string) => {
@@ -152,7 +152,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
             placeholder={t`Search`}
             onChange={(e) => setTextSearch(e.target.value)}
             rightSection={
-              !data && loading ? <Loader size="xs" type="dots" color="gray" /> : undefined
+              loading && !data ? <Loader size="xs" type="dots" color="gray" /> : undefined
             }
             styles={{
               input: {

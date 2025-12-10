@@ -81,7 +81,7 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
   const [getCustomers, { data, loading, fetchMore }] = useLazyQuery<
     TaskCustomersQuery,
     TaskCustomersQueryVariables
-  >(QUERY_TASK_CUSTOMERS, { fetchPolicy: "network-only" });
+  >(QUERY_TASK_CUSTOMERS, { fetchPolicy: "cache-and-network" });
 
   const onGetMembers = useCallback(
     async (q: string) => {
@@ -141,7 +141,9 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
             leftSection={<IconSearch size={16} />}
             placeholder={t`Search`}
             onChange={(e) => setTextSearch(e.target.value)}
-            rightSection={loading ? <Loader size="xs" type="dots" color="gray" /> : undefined}
+            rightSection={
+              loading && !data ? <Loader size="xs" type="dots" color="gray" /> : undefined
+            }
             styles={{
               input: {
                 backgroundColor: "var(--mantine-color-default-hover)",
