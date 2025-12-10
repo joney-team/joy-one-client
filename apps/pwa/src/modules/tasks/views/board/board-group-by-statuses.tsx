@@ -103,9 +103,9 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
 
   return (
     <ModalCreateTask>
-      {(openCreateTask) => {
+      {(modalCreateTask) => {
         const handleCreateTask = () => {
-          openCreateTask({
+          modalCreateTask.open({
             initial: {
               status: props.status.id,
               folder: activatedFolder,

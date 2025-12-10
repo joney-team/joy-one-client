@@ -2,13 +2,13 @@
 
 import { Button } from "@/components/buttons/button";
 import { Form } from "@/components/form";
-import { ModalTitle } from "@/components/modal-title";
+import { Modal } from "@/components/modal/modal";
 import { configs } from "@/configs/layout.config";
 import { TagType } from "@/graphql/enums.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ActionIcon, ColorInput, Modal, Stack, TextInput } from "@mantine/core";
+import { ActionIcon, ColorInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useState } from "react";
@@ -142,15 +142,11 @@ export const ModalTagForm = forwardRef<
         : null}
 
       <Modal
+        id="tag-form"
+        name={initalTag ? <Trans>Update {entity}</Trans> : <Trans>Create {entity}</Trans>}
+        icon={TagIcon}
         opened={!!args}
         onClose={onClose}
-        title={
-          <ModalTitle
-            title={initalTag ? <Trans>Update {entity}</Trans> : <Trans>Create {entity}</Trans>}
-            icon={TagIcon}
-            titleProps={{ tt: "capitalizes" }}
-          />
-        }
       >
         {!!args && (
           <Form onSubmit={onSubmit}>

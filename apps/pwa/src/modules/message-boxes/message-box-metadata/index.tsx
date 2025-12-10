@@ -5,11 +5,14 @@ import { Button } from "@/components/buttons/button";
 import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { TechIllustration } from "@/components/illustrations/tech";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
-import { ModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
+import {
+  ModalCreateBooking,
+  ModalCreateBookingRef,
+} from "@/modules/bookings/modals/modal-create-booking";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
-import { ModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
+import { ModalCreateLoan, ModalCreateLoanRef } from "@/modules/loans/modals/modal-create-loan";
 import { setCustomerToMessageBox } from "@/modules/message-boxes/message-boxes-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
@@ -29,7 +32,7 @@ import {
 } from "@mantine/core";
 import { IconLinkOff, IconLinkPlus, IconMail, IconPhoneCall, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { useMessageBoxes } from "../message-boxes-context";
 import { MessageBoxMetadataBookings } from "./message-box-metadata-bookings";
 import { MessageBoxMetadataLoans } from "./message-box-metadata-loans";
@@ -59,6 +62,8 @@ export const MetadataMessageBox: FC = () => {
   const messageBoxes = useMessageBoxes();
   const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
+  const modalCreateBookingRef = useRef<ModalCreateBookingRef>(null);
+  const modalCreateLoanRef = useRef<ModalCreateLoanRef>(null);
   const { getAvailableModule } = useAvailableWorkspaceModules();
   const { messageBox } = messageBoxes;
 
@@ -155,38 +160,35 @@ export const MetadataMessageBox: FC = () => {
                               <Text>{workspaceModule.name}</Text>
 
                               {item.onCreate && (
-                                <ModalCreateBooking>
-                                  {(createBooking) => (
-                                    <ModalCreateLoan>
-                                      {(createLoan) => (
-                                        <ActionIcon
-                                          variant="light"
-                                          color="gray"
-                                          size="sm"
-                                          component="div"
-                                          onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            const customerData = customer.data;
-                                            if (!customerData) return;
+                                <ActionIcon
+                                  variant="light"
+                                  color="gray"
+                                  size="sm"
+                                  component="div"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    const customerData = customer.data;
+                                    if (!customerData) return;
 
-                                            item.onCreate?.(customerData, {
-                                              actions: {
-                                                createLoan: () =>
-                                                  createLoan({ customer: customerData }),
-
-                                                createBooking: () =>
-                                                  createBooking({ customer: customerData }),
-                                              },
-                                            });
-                                          }}
-                                        >
-                                          <IconPlus size={14} />
-                                        </ActionIcon>
-                                      )}
-                                    </ModalCreateLoan>
-                                  )}
-                                </ModalCreateBooking>
+                                    item.onCreate?.(customerData, {
+                                      actions: {
+                                        createLoan: () => {
+                                          modalCreateLoanRef.current?.open({
+                                            customer: customerData,
+                                          });
+                                        },
+                                        createBooking: () => {
+                                          modalCreateBookingRef.current?.open({
+                                            customer: customerData,
+                                          });
+                                        },
+                                      },
+                                    });
+                                  }}
+                                >
+                                  <IconPlus size={14} />
+                                </ActionIcon>
                               )}
                             </Group>
                           </Accordion.Control>
@@ -202,6 +204,9 @@ export const MetadataMessageBox: FC = () => {
             );
           }}
         </FlexSizeLegacy>
+
+        <ModalCreateBooking ref={modalCreateBookingRef} />
+        <ModalCreateLoan ref={modalCreateLoanRef} />
       </Stack>
     );
 

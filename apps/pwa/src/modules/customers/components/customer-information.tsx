@@ -11,7 +11,7 @@ import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
-import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { TagType } from "@/modules/tags/tags-types";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -424,11 +424,11 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
             {workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO) && (
               <Group justify="flex-end">
                 <ModalCustomer>
-                  {(open) => (
+                  {(modalCustomer) => (
                     <ActionIcon
                       variant="transparent"
                       color="gray"
-                      onClick={() => open({ customer: customer, onDone: () => {} })}
+                      onClick={() => modalCustomer.open({ customer: customer, onDone: () => {} })}
                       style={{ marginRight: -5, marginTop: -3 }}
                     >
                       <IconPencil size={22} strokeWidth={1.5} />

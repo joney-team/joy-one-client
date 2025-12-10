@@ -1,4 +1,6 @@
-import { ModalTitle } from "@/components/modal-title";
+"use client";
+
+import { ModalHead } from "@/components/modal/modal-head";
 import { ReceiptDetail } from "@/modules/receipts/receipt-detail";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { t } from "@lingui/core/macro";
@@ -20,8 +22,8 @@ export const OnReceiptDetailModal = (props: ModalPromptProps) => {
     modalId: "ReceiptDetailModal",
     zIndex: zIndexes.commonModals,
     title: (
-      <ModalTitle
-        title={t`Receipt`}
+      <ModalHead
+        name={t`Receipt`}
         icon={IconCashRegister}
         rightSection={
           <Group>

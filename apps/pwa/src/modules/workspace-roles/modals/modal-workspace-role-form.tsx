@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { permissionGroups } from "@/modules/workspace-roles/workspace-roles-config";
 import {
   createWorkspaceRole,
@@ -254,8 +254,8 @@ export const OnModalRoleForm = (props?: ModalWorkspaceRoleFormProps) => {
   return modals.open({
     modalId: "ModalRoleForm",
     title: (
-      <ModalTitle
-        title={`${props?.roleId ? t`Update role` : t`Create role`}`}
+      <ModalHead
+        name={`${props?.roleId ? t`Update role` : t`Create role`}`}
         icon={IconAccessible}
       />
     ),

@@ -3,7 +3,7 @@
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Form } from "@/components/form";
 import { FormSession } from "@/components/form-session";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos";
 import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity";
 import {
@@ -125,7 +125,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
         setSecretKey(_app.secretKey);
         modals.updateModal({
           modalId: "ModalWorkspaceApiApp",
-          title: <ModalTitle title={t`Update ${entity}`} icon={IconApiApp} />,
+          title: <ModalHead name={t`Update ${entity}`} icon={IconApiApp} />,
         });
         setApp(_app);
       }
@@ -257,8 +257,8 @@ export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => {
   return modals.open({
     modalId: "ModalWorkspaceApiApp",
     title: (
-      <ModalTitle
-        title={app ? <Trans>Update {entity}</Trans> : <Trans>Create new {entity}</Trans>}
+      <ModalHead
+        name={app ? <Trans>Update {entity}</Trans> : <Trans>Create new {entity}</Trans>}
         icon={IconApiApp}
       />
     ),

@@ -1,11 +1,11 @@
 "use client";
 
-import { ModalTitle } from "@/components/modal-title";
+import { Modal } from "@/components/modal/modal";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans } from "@lingui/react/macro";
-import { Group, Modal, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconChevronRight, IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useState } from "react";
@@ -25,12 +25,13 @@ const CreateTaskForm = dynamic(
 
 export interface ModalCreateTaskRef {
   open: (args?: CreateTaskFormProps) => void;
+  close: () => void;
 }
 
 export const ModalCreateTask = forwardRef<
   ModalCreateTaskRef,
   {
-    children?: (open: (args?: CreateTaskFormProps) => void) => ReactNode;
+    children?: (ref: ModalCreateTaskRef) => ReactNode;
   }
 >((props, ref) => {
   const color = useColor();
@@ -73,16 +74,23 @@ export const ModalCreateTask = forwardRef<
   return (
     <Fragment>
       {typeof props.children === "function"
-        ? props.children((a) => {
-            setArgs(a ?? null);
+        ? props.children({
+            open: (a) => {
+              setArgs(a ?? {});
+            },
+            close: () => {
+              setArgs(null);
+            },
           })
         : null}
 
       <Modal
+        id="modal-create-task"
         opened={!!args}
         onClose={() => setArgs(null)}
-        title={<ModalTitle title={<Trans>Create task</Trans>} icon={IconStackPush} />}
-        fullScreen={layout.view === "mobile"}
+        name={<Trans>Create task</Trans>}
+        icon={IconStackPush}
+        isFullscreenOnMobile
         size={600}
         zIndex={zIndexes.commonModals + 1}
         styles={{

@@ -69,11 +69,11 @@ export const CustomerDetail = () => {
           <Fragment>
             {workspace.hasPermission(WorkspacePermission.BOOKING_MANAGER) && (
               <ModalCreateBooking>
-                {(open) => (
+                {(modalCreateBooking) => (
                   <Button
                     leftIcon={IconCalendarPlus}
                     variant="outline"
-                    onClick={() => open({ customer })}
+                    onClick={() => modalCreateBooking.open({ customer })}
                     size="xs"
                   >
                     <Trans>Booking</Trans>
@@ -83,11 +83,11 @@ export const CustomerDetail = () => {
             )}
 
             <ModalCreateTask>
-              {(open) => (
+              {(modalCreateTask) => (
                 <Button
                   leftIcon={IconStackPush}
                   variant="outline"
-                  onClick={() => open({ initial: { customer: customer as any } })}
+                  onClick={() => modalCreateTask.open({ initial: { customer: customer as any } })}
                   size="xs"
                 >
                   <Trans>Task</Trans>

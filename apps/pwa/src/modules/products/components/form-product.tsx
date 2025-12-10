@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
-import { Editor } from "@/components/editor";
+import { Editor } from "@/components/editor/editor";
 import { ImageInput } from "@/components/inputs/image-input";
 import { LaunchingSoon } from "@/components/launching-soon";
 import { Renderer } from "@/components/renderer";

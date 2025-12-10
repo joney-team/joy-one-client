@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { ContentEditable } from "@/components/content-editable/content-editable";
-import { Editor } from "@/components/editor";
+import { Editor } from "@/components/editor/editor";
 import { TaskStatusesContextType } from "@/graphql/enums.graphql";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { AppEntity } from "@/types";
@@ -11,7 +11,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { useLazyQuery, useMutation } from "@apollo/client/react";
 import { createObjectId } from "@joy-one-client/utils/object-id";
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
-import { Center, Divider, Group, Skeleton, Stack } from "@mantine/core";
+import { Center, Group, Skeleton, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
   IconCalendar,
@@ -81,6 +81,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
       const { data: newTask } = await createTask({
         variables: {
           input: {
+            _id: taskId,
             name: values.name,
             order: values.order,
             parentId: values.parent?._id,

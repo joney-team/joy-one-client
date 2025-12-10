@@ -412,7 +412,7 @@ export const ListTaskRow: FC<
               <Group gap={2} wrap="nowrap" pl={35} className={styles.HoverToActive}>
                 {!task.parentId && (
                   <ModalCreateTask>
-                    {(onCreateTask) => (
+                    {(modalCreateTask) => (
                       <Tooltip label={<Trans>Create subtask</Trans>}>
                         <ActionIcon
                           variant="subtle"
@@ -421,7 +421,7 @@ export const ListTaskRow: FC<
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            onCreateTask({ initial: { parent: task } });
+                            modalCreateTask.open({ initial: { parent: task } });
                           }}
                         >
                           <IconPlus size={16} />

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { api } from "@/modules/apis";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { useLang } from "@/modules/lang/lang-context";
@@ -201,7 +201,7 @@ export const ExportButton: FC = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle title={t`Export data`} icon={IconFileExport} />}
+        title={<ModalHead name={t`Export data`} icon={IconFileExport} />}
       >
         <Stack>
           <Select

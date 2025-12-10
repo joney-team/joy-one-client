@@ -8,7 +8,7 @@ import { ActionIcon, Card, Group, Stack, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
-import { Editor } from "../../components/editor";
+import { Editor } from "../../components/editor/editor";
 
 interface WorkspaceSettingTermsPoliciesEditorProps {
   doc: `terms-of-service` | `privacy-policy`;

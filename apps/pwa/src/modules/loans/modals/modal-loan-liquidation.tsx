@@ -6,7 +6,7 @@ import { Errored } from "@/components/errored";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { getClientLocale } from "@/modules/lang/lang-service";
@@ -244,11 +244,7 @@ export const OnModalLoanLiquidation = (loan: LoanEntity) => {
     size: "xl",
     modalId: "ModalLoanLiquidation",
     title: (
-      <ModalTitle
-        title={<Trans>Loan liquidation</Trans>}
-        color="orange"
-        icon={IconBrandSpeedtest}
-      />
+      <ModalHead name={<Trans>Loan liquidation</Trans>} color="orange" icon={IconBrandSpeedtest} />
     ),
     children: <ModalLoanLiquidation {...loan} />,
   });

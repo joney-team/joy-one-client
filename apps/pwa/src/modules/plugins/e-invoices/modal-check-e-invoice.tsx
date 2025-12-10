@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { api } from "@/modules/apis";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { onError } from "@/utils/exceptions.utils";
@@ -55,7 +55,7 @@ const ModalCheckEInvoice: FC = () => {
 export const OnModalCheckEInvoice = () => {
   modals.open({
     modalId: "OnModalCheckEInvoice",
-    title: <ModalTitle title={t`Check invoice`} icon={IconFileInvoice} />,
+    title: <ModalHead name={t`Check invoice`} icon={IconFileInvoice} />,
     children: <ModalCheckEInvoice />,
   });
 };

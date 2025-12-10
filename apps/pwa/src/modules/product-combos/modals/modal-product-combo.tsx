@@ -5,7 +5,7 @@ import { EntityImage } from "@/components/entity-image";
 import { Errored } from "@/components/errored";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { EventType } from "@/graphql/enums.graphql";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { ProductComboHistoryEntity } from "@/modules/product-combos/product-combos-entity";
@@ -75,7 +75,7 @@ export const ModalProductCombo: FC<{
             <Modal
               opened={opened}
               onClose={close}
-              title={<ModalTitle title={t`Combo`} icon={IconPackage} />}
+              title={<ModalHead name={t`Combo`} icon={IconPackage} />}
               size="xl"
             >
               {(function () {

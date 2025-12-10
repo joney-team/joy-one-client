@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { onError } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { em, Group, MantineColor, Stack, Textarea } from "@mantine/core";
@@ -93,7 +93,7 @@ export const ModalPrompt: FC<ModalPromptProps> = (props) => {
 export const OnModalPrompt = (props: ModalPromptProps) => {
   return modals.open({
     modalId: "ModalPrompt",
-    title: <ModalTitle title={props.title} icon={props.icon} color={props.color} />,
+    title: <ModalHead name={props.title} icon={props.icon} color={props.color} />,
     children: <ModalPrompt {...props} />,
   });
 };

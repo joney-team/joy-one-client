@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useAuth } from "@/modules/auth/auth-context";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
@@ -53,6 +53,6 @@ export const ModalTransferWorkspaceOwner: FC = () => {
 export const OnModalTransferOwner = () =>
   modals.open({
     modalId: "ModalWorkspaceMember",
-    title: <ModalTitle title={<Trans>Transfer ownership</Trans>} icon={IconUser} />,
+    title: <ModalHead name={<Trans>Transfer ownership</Trans>} icon={IconUser} />,
     children: <ModalTransferWorkspaceOwner />,
   });

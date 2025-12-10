@@ -2,7 +2,7 @@
 
 import { WorkSlot } from "@/types";
 import { WorkSlotsSettingsInput } from "@/components/inputs/work-slot-settings-input";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { getView } from "@/layout/layout-service";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -55,7 +55,7 @@ export const ModalWorkspaceSettingsWorkSlots: FC = () => {
 export const OnModalWorkspaceSettingsWorkSlots = () => {
   return modals.open({
     modalId: "ModalWorkspaceSettingsWorkSlots",
-    title: <ModalTitle title={t`Work schedule`} icon={IconCalendarWeek} />,
+    title: <ModalHead name={t`Work schedule`} icon={IconCalendarWeek} />,
     children: <ModalWorkspaceSettingsWorkSlots />,
     size: "xl",
     fullScreen: getView() === "mobile",

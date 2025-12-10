@@ -4,153 +4,27 @@ import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { CommentBox } from "@/modules/comments/comment-box";
-import { TaskDetailForm } from "@/modules/tasks/components/task-detail-form";
+import { TaskDetailForm } from "@/modules/tasks/modules/task-detail/task-detail-form";
 import { useColor } from "@/modules/theme/use-color";
 import { useLazyQuery } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
-import {
-  Card,
-  Container,
-  CopyButton,
-  Group,
-  Modal,
-  Skeleton,
-  Stack,
-  Text,
-  Tooltip,
-} from "@mantine/core";
+import { Card, Container, CopyButton, Group, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
 import { FC, Fragment, useEffect, useState } from "react";
-import { DetailFooter } from "./components/detail-footer";
+import { TaskDetailFooter } from "./task-detail-footer";
 
-import { TaskDetailHead } from "./components/task-detail-head";
-import { TaskDataFragment } from "./graphql/fragmentTask.graphql";
+import { Modal } from "@/components/modal/modal";
+import { Trans } from "@lingui/react/macro";
+import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import QUERY_TASK_BY_CODE, {
   type TaskByCodeQuery,
   type TaskByCodeQueryVariables,
-} from "./graphql/queryTaskByCode.graphql";
-import { useTaskMenu } from "./modules/task-menu/task-menu";
-import { TaskDetailSubtasks } from "./task-detail-subtasks";
-import { updateTaskPath } from "./tasks-route-helpers";
-
-export const TaskDetail: FC = () => {
-  const router = useRouter();
-  const viewport = useLayout();
-  const workspaceLayout = useWorkspaceLayout();
-  const { code: taskCode } = useParams<{ code: string }>();
-  const [version, setVersion] = useState(0);
-
-  const [getTask, { data, loading }] = useLazyQuery<TaskByCodeQuery, TaskByCodeQueryVariables>(
-    QUERY_TASK_BY_CODE,
-    {
-      fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "network-only",
-    }
-  );
-
-  useEffect(() => {
-    if (taskCode) {
-      getTask({ variables: { code: taskCode } });
-    }
-  }, [taskCode]);
-
-  const onClose = () => {
-    setVersion((v) => v + 1);
-    router.push(updateTaskPath({ code: undefined }), { scroll: false });
-  };
-
-  const viewPadding = 25;
-  const height = viewport.height - viewPadding * 4;
-  const headerHeight = 50;
-  const contentHeight = height - headerHeight;
-  const task = data?.taskByCode;
-
-  const taskMenu = useTaskMenu({ task, groupVariables: null });
-
-  return (
-    <Modal
-      opened={!!taskCode}
-      onClose={onClose}
-      withCloseButton={false}
-      closeOnEscape={!taskMenu.isOpened}
-      removeScrollProps={taskCode ? { enabled: !taskMenu.isOpened } : undefined}
-      size={1600}
-      yOffset={viewPadding}
-      fullScreen={viewport.view !== "desktop"}
-      styles={{
-        body: {
-          padding: 0,
-        },
-      }}
-    >
-      {loading && !task && <Skeleton h={300} w="100%" />}
-
-      {!!task && (
-        <Fragment>
-          <Renderer views={["mobile", "tablet"]}>
-            <Stack>
-              <Stack
-                h={headerHeight}
-                w="100%"
-                style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
-                py={8}
-                px={8}
-              >
-                <TaskDetailHead key={task._id + "head"} task={task} close={onClose} />
-              </Stack>
-
-              <Stack>
-                <TaskCodeButton key={task._id + "code"} task={task} />
-                <TaskDetailForm key={task._id} task={task} />
-                <DetailFooter task={task} onClose={onClose} />
-              </Stack>
-            </Stack>
-          </Renderer>
-
-          <Renderer views={["desktop"]}>
-            <Stack h={height} gap={0}>
-              <Stack
-                h={headerHeight}
-                w="100%"
-                style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
-                py={8}
-                pl={16}
-                pr={8}
-              >
-                <TaskDetailHead key={task._id + "head"} task={task} close={onClose} />
-              </Stack>
-
-              <Group h={contentHeight} w="100%" gap={0} wrap="nowrap">
-                <Stack flex={1} h={contentHeight} style={{ overflow: "auto" }}>
-                  <Container pt={10} pb={16} px={32}>
-                    <TaskCodeButton key={task._id + "code"} task={task} />
-
-                    <Stack gap={30}>
-                      <TaskDetailForm key={task._id + version} task={task} />
-                      {!task.parent && <TaskDetailSubtasks task={task} />}
-                      <DetailFooter task={task} onClose={onClose} />
-                    </Stack>
-                  </Container>
-                </Stack>
-
-                <Stack
-                  w={450}
-                  h={contentHeight}
-                  style={{ borderLeft: `1px solid ${workspaceLayout.dividerColor}` }}
-                  gap={0}
-                >
-                  <CommentBox key={task._id} ref={task._id + "comment"} />
-                </Stack>
-              </Group>
-            </Stack>
-          </Renderer>
-        </Fragment>
-      )}
-    </Modal>
-  );
-};
+} from "../../graphql/queryTaskByCode.graphql";
+import { TaskDetailSubtasks } from "../../task-detail-subtasks";
+import { updateTaskPath } from "../../tasks-route-helpers";
+import { useTaskMenu } from "../task-menu/task-menu";
+import { TaskDetailHead } from "./task-detail-head";
 
 const TaskCodeButton: FC<{ task: TaskDataFragment }> = (props) => {
   const { task } = props;
@@ -161,7 +35,7 @@ const TaskCodeButton: FC<{ task: TaskDataFragment }> = (props) => {
     <Group style={{ position: "relative" }}>
       <CopyButton value={task.code}>
         {({ copied, copy }) => (
-          <Tooltip label={t`Copy code`}>
+          <Tooltip label={<Trans>Copy code</Trans>}>
             <Group>
               <Card
                 withBorder
@@ -192,5 +66,125 @@ const TaskCodeButton: FC<{ task: TaskDataFragment }> = (props) => {
         )}
       </CopyButton>
     </Group>
+  );
+};
+
+export const TaskDetail: FC = () => {
+  const router = useRouter();
+  const viewport = useLayout();
+  const workspaceLayout = useWorkspaceLayout();
+
+  const { code: taskCode } = useParams<{ code: string }>();
+  const [version, setVersion] = useState(0);
+
+  const [getTask, { data, loading }] = useLazyQuery<TaskByCodeQuery, TaskByCodeQueryVariables>(
+    QUERY_TASK_BY_CODE,
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+
+  useEffect(() => {
+    if (taskCode) {
+      getTask({ variables: { code: taskCode } }).then(() => setVersion((v) => v + 1));
+    }
+  }, [taskCode]);
+
+  const onClose = () => {
+    setVersion((v) => v + 1);
+    router.push(updateTaskPath({ code: undefined }), { scroll: false });
+  };
+
+  const viewPadding = 25;
+  const height = viewport.height - viewPadding * 4;
+  const headerHeight = 50;
+  const contentHeight = height - headerHeight;
+  const task = data?.taskByCode;
+
+  const taskMenu = useTaskMenu({ task, groupVariables: null });
+  const modalId = `task-detail-${taskCode}-${version}`;
+
+  return (
+    <Modal
+      id={modalId}
+      opened={!!taskCode}
+      onClose={onClose}
+      withCloseButton={false}
+      closeOnEscape={!taskMenu.isOpened}
+      size={1600}
+      yOffset={viewPadding}
+      isFullscreenOnMobile
+      styles={{
+        body: {
+          padding: 0,
+        },
+      }}
+    >
+      {loading && !task && <Skeleton h={300} w="100%" />}
+
+      {!!task && (
+        <Fragment>
+          <Renderer views={["mobile", "tablet"]}>
+            <Stack>
+              <Stack
+                h={headerHeight}
+                w="100%"
+                style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+                py={8}
+                px={8}
+              >
+                <TaskDetailHead key={modalId + "head"} task={task} close={onClose} />
+              </Stack>
+
+              <Stack>
+                <TaskCodeButton key={modalId + "code"} task={task} />
+                <TaskDetailForm key={modalId + "form"} task={task} />
+                <TaskDetailFooter key={modalId + "footer"} task={task} onClose={onClose} />
+              </Stack>
+            </Stack>
+          </Renderer>
+
+          <Renderer views={["desktop"]}>
+            <Stack h={height} gap={0}>
+              <Stack
+                h={headerHeight}
+                w="100%"
+                style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+                py={8}
+                pl={16}
+                pr={8}
+              >
+                <TaskDetailHead key={modalId + "head"} task={task} close={onClose} />
+              </Stack>
+
+              <Group h={contentHeight} w="100%" gap={0} wrap="nowrap">
+                <Stack flex={1} h={contentHeight} style={{ overflow: "auto" }}>
+                  <Container pt={10} pb={16} px={32}>
+                    <TaskCodeButton key={modalId + "code"} task={task} />
+
+                    <Stack gap={30}>
+                      <TaskDetailForm key={modalId + "form"} task={task} />
+                      {!task.parent && (
+                        <TaskDetailSubtasks key={modalId + "subtasks"} task={task} />
+                      )}
+                      <TaskDetailFooter key={modalId + "footer"} task={task} onClose={onClose} />
+                    </Stack>
+                  </Container>
+                </Stack>
+
+                <Stack
+                  w={450}
+                  h={contentHeight}
+                  style={{ borderLeft: `1px solid ${workspaceLayout.dividerColor}` }}
+                  gap={0}
+                >
+                  <CommentBox key={modalId + "comment"} ref={task._id} />
+                </Stack>
+              </Group>
+            </Stack>
+          </Renderer>
+        </Fragment>
+      )}
+    </Modal>
   );
 };

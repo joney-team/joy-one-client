@@ -4,6 +4,7 @@ import { Portal, Skeleton } from "@mantine/core";
 import { ComponentType, useEffect, useMemo, useRef, useState, type FC } from "react";
 import { TaskMenuAction, TaskMenuComponentProps, type TaskMenu } from "./task-menu-types";
 
+import { useEscape } from "@/hooks/use-escape";
 import {
   addInternalEventsListener,
   emitInternalEvent,
@@ -13,8 +14,8 @@ import {
 import { classNames } from "@/utils/ui.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import dynamic from "next/dynamic";
-import styles from "./task-menu.module.css";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
+import styles from "./task-menu.module.css";
 
 const TaskMenuEstimateTime = dynamic(
   () => import("./task-menu-estimate-time").then((mod) => mod.TaskMenuEstimateTime),
@@ -108,6 +109,12 @@ export const TaskMenuDropdown: FC = ({}) => {
     setTaskMenu(undefined);
     emitInternalEvent(InternalEvent.TASK_MENU_CLOSE);
   };
+
+  useEscape({
+    id: taskMenu ? `task-menu-dropdown-${taskMenu.action}-${taskMenu.task._id}` : "none",
+    onEscape: onClose,
+    active: !!taskMenu,
+  });
 
   useEffect(() => {
     if (taskMenu && menuRef.current) {
@@ -208,21 +215,12 @@ export const TaskMenuDropdown: FC = ({}) => {
         }
       };
 
-      // Escape key to close
-      const onWindowKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
-          onClose();
-          e.preventDefault();
-        }
-      };
-
       window.addEventListener("resize", placeMenu);
 
       rootRef.current?.addEventListener("scroll", onClose);
       window.addEventListener("scroll", onClose);
 
       document.addEventListener("mousedown", onMouseDown);
-      window.addEventListener("keydown", onWindowKeyDown);
 
       const observer = new ResizeObserver(placeMenu);
       observer.observe(menuRef.current);
@@ -235,7 +233,6 @@ export const TaskMenuDropdown: FC = ({}) => {
         window.removeEventListener("scroll", onClose);
 
         document.removeEventListener("mousedown", onMouseDown);
-        window.removeEventListener("keydown", onWindowKeyDown);
 
         observer.disconnect();
       };

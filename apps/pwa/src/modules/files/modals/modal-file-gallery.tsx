@@ -15,17 +15,7 @@ import { zIndexes } from "@joy-one-client/config/layout";
 import { formatBytes } from "@joy-one-client/utils/files";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import {
-  ActionIcon,
-  Anchor,
-  em,
-  Group,
-  Loader,
-  Modal,
-  SimpleGrid,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Anchor, em, Group, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconBrowser,
@@ -41,6 +31,7 @@ import QUERY_FILE_INFO, {
   type GetFileInfoQuery,
   type GetFileInfoQueryVariables,
 } from "./queryFileInfo.graphql";
+import { Modal } from "@/components/modal/modal";
 
 interface ModalFileGalleryProps {
   files: FileEntity[] | { _id?: string; url: string; fileName?: string; type?: FileType }[];

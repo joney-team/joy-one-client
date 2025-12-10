@@ -1,27 +1,25 @@
 "use client";
 
-import { useLayout } from "@/layout/layout-context";
 import { useOrderFeatureName } from "@/modules/orders/order-hooks";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { Anchor, Card, Group, Modal, Skeleton, Stack } from "@mantine/core";
+import { Anchor, Card, Group, Skeleton, Stack } from "@mantine/core";
 import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import { IconPrinter } from "@tabler/icons-react";
 import { Fragment, useEffect, useMemo, useRef, useState, type FC } from "react";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "../buttons/button";
-import { ModalTitle } from "../modal-title";
 import { PrinterHeader } from "./printer-header";
 import { PrinterComponentProps, PrinterProps, PrinterSettings, PrintSize } from "./printer-types";
 
 import { classNames } from "@/utils/ui.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
+import { Modal } from "../modal/modal";
 import { PrinterBody } from "./printer-body";
 import { PrinterSettingsBar, printerSizeClasses } from "./printer-settings-bar";
 import styles from "./printer.module.css";
 
 export const Printer: FC<PrinterProps> = (props) => {
-  const layout = useLayout();
   const orderFeatureName = useOrderFeatureName();
   const { t } = useLingui();
 
@@ -43,7 +41,7 @@ export const Printer: FC<PrinterProps> = (props) => {
     },
   });
 
-  const printTitle = useMemo(() => {
+  const printTitle = useMemo<string>(() => {
     const entity = "props.receipt" in props ? t`Receipt` : t`Order`;
     return t`Print ${entity}`;
   }, [props, orderFeatureName, t]);
@@ -86,6 +84,10 @@ export const Printer: FC<PrinterProps> = (props) => {
     initialize();
   }, [props]);
 
+  const modalId = useMemo(() => {
+    return `printer-modal-${printTitle}`;
+  }, [printTitle]);
+
   return (
     <Fragment>
       <Group justify="center" align="center" onClick={open}>
@@ -93,10 +95,13 @@ export const Printer: FC<PrinterProps> = (props) => {
       </Group>
 
       <Modal
+        id={modalId}
+        key={modalId}
         opened={opened}
         onClose={close}
-        title={<ModalTitle title={printTitle} icon={IconPrinter} />}
-        fullScreen={layout.view === "mobile"}
+        name={printTitle}
+        icon={IconPrinter}
+        isFullscreenOnMobile
         size="xl"
       >
         {(function () {

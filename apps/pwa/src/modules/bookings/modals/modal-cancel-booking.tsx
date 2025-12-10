@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { cancelBooking } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { onError } from "@/utils/exceptions.utils";
@@ -58,9 +58,7 @@ export const ModalCancelBooking: FC<ModalCancelBookingProps> = (props) => {
 export const OnModalCancelBooking = (props: ModalCancelBookingProps) => {
   return modals.open({
     modalId: "cancel-booking",
-    title: (
-      <ModalTitle color="red" title={<Trans>Cancel booking</Trans>} icon={IconCalendarMinus} />
-    ),
+    title: <ModalHead color="red" name={<Trans>Cancel booking</Trans>} icon={IconCalendarMinus} />,
     children: <ModalCancelBooking {...props} />,
     zIndex: zIndexes.commonModals,
   });

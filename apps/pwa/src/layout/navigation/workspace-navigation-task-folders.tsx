@@ -72,7 +72,7 @@ const TaskFolderNavigationItem: FC<{
   const onRemoveTag = () => {
     modalConfirmRef.current?.open({
       color: "red",
-      children: (
+      content: (
         <Text>
           <Trans>
             Are you sure you want to remove <strong>{tag.name}</strong> folder?

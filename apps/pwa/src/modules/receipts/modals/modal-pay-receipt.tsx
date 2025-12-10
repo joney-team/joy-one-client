@@ -44,7 +44,6 @@ import {
   Center,
   em,
   Group,
-  Modal,
   NumberInput,
   Skeleton,
   Stack,
@@ -60,6 +59,7 @@ import { FC, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from "r
 import { PrintButton } from "../../../modals/modal-printer";
 import { receiptPaymentMethods } from "../receipt-constants";
 import { OnReceiptDetailModal } from "./modal-receipt-detail";
+import { Modal } from "@/components/modal/modal";
 
 export interface ModalPayReceiptProps {
   receipt: Pick<ReceiptEntity, "id">;

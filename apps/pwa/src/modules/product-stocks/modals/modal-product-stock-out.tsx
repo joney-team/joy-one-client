@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { ProductStockEntity } from "@/modules/product-stocks/product-stocks-entity";
 import {
   productStockOut,
@@ -76,8 +76,8 @@ export const ModalProductStockOut: FC<{
 
       <Modal
         title={
-          <ModalTitle
-            title={<Trans>Stock out</Trans>}
+          <ModalHead
+            name={<Trans>Stock out</Trans>}
             icon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].icon}
             color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].color)}
           />

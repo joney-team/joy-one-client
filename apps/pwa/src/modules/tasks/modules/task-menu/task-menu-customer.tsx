@@ -1,10 +1,9 @@
 "use client";
 
 import { useLazyQuery } from "@apollo/client/react";
-import { Card, Group, Loader, ScrollArea, Stack, Text, TextInput } from "@mantine/core";
+import { Card, FocusTrap, Group, Loader, ScrollArea, Stack, Text, TextInput } from "@mantine/core";
 import { TaskMenuComponent } from "./task-menu-types";
 
-import { AutoFocus } from "@/components/auto-focus";
 import { Avatar } from "@/components/avatar";
 import { WayPoint } from "@/components/way-point";
 import { searchEntity } from "@/modules/search/search-service";
@@ -134,22 +133,24 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
 
   return (
     <Card p={0} shadow="md" style={{ overflow: "hidden" }} withBorder>
-      <AutoFocus as={Group} p={6} enabled={!!data && data.customers.count > 0}>
-        <TextInput
-          radius={4}
-          size="xs"
-          leftSection={<IconSearch size={16} />}
-          placeholder={t`Search`}
-          onChange={(e) => setTextSearch(e.target.value)}
-          rightSection={loading ? <Loader size="xs" type="dots" color="gray" /> : undefined}
-          styles={{
-            input: {
-              backgroundColor: "var(--mantine-color-default-hover)",
-              border: "none",
-            },
-          }}
-        />
-      </AutoFocus>
+      <FocusTrap active={!!data && data.customers.count > 0}>
+        <Group p={6}>
+          <TextInput
+            radius={4}
+            size="xs"
+            leftSection={<IconSearch size={16} />}
+            placeholder={t`Search`}
+            onChange={(e) => setTextSearch(e.target.value)}
+            rightSection={loading ? <Loader size="xs" type="dots" color="gray" /> : undefined}
+            styles={{
+              input: {
+                backgroundColor: "var(--mantine-color-default-hover)",
+                border: "none",
+              },
+            }}
+          />
+        </Group>
+      </FocusTrap>
 
       <ScrollArea.Autosize mah={220} offsetScrollbars scrollbarSize={6} viewportRef={scrollRef}>
         <Stack px={5} gap={0}>

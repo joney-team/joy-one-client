@@ -29,9 +29,9 @@ export const ButtonArchive: FC<ButtonArchiveProps> = (props) => {
   return (
     <Center mt={props.mt}>
       <Button
-        size="xs"
+        size="compact-xs"
         color="gray"
-        variant="light"
+        variant="subtle"
         leftIcon={IconArchive}
         onClick={() => {
           if (props.onClick) return props.onClick();

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Form } from "@/components/form";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { FormBankAccount } from "@/modules/plugins/banks/form-bank-account";
 import {
   createWorkspaceBranch,
@@ -96,8 +96,8 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
 export const OnWorkspaceBranchModal = (branch?: WorkspaceBranchEntity) => {
   return modals.open({
     title: (
-      <ModalTitle
-        title={branch ? t`Edit workspace branch` : t`Create new workspace branch`}
+      <ModalHead
+        name={branch ? t`Edit workspace branch` : t`Create new workspace branch`}
         icon={IconBuilding}
       />
     ),

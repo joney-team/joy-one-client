@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { NumberFormat, numberFormat } from "@/components/format/number-format";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useColor } from "@/modules/theme/use-color";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -77,7 +77,7 @@ export const OrderSaleCombos: FC = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle title={t`Combos`} icon={IconPackage} />}
+        title={<ModalHead name={t`Combos`} icon={IconPackage} />}
       >
         <Stack>
           {combos.map((combo) => {

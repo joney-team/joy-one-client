@@ -3,7 +3,7 @@
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { onReconnected } from "@/modules/events/event-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { getLoanPaymentPlan, renderLoanPeriod } from "@/modules/loans/loans-service";
@@ -128,7 +128,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
       {children(open)}
 
       <Modal
-        title={<ModalTitle title={t`Loan package calculator`} icon={IconCalculator} />}
+        title={<ModalHead name={t`Loan package calculator`} icon={IconCalculator} />}
         onClose={onClose}
         opened={opened}
         size={1000}

@@ -2,20 +2,19 @@
 
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { EventList } from "@/components/event-list";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconTimelineEvent } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
-import { useUpdateTasks } from "../hooks/use-update-tasks";
-import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
+import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { useUpdateTasks } from "../../hooks/use-update-tasks";
 
-interface DetailFooterProps {
+interface TaskDetailFooterProps {
   task: TaskDataFragment;
   onClose: () => void;
 }
 
-export const DetailFooter: FC<DetailFooterProps> = (props) => {
+export const TaskDetailFooter: FC<TaskDetailFooterProps> = (props) => {
   const { task, onClose } = props;
   const { updateTasks } = useUpdateTasks();
 

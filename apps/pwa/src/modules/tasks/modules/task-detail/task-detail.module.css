@@ -1,0 +1,17 @@
+.TaskBreadcrumbs {
+  min-width: 0;
+
+  & .TaskBreadcrumb {
+    cursor: pointer;
+    font-size: 0.875rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0 0.3rem;
+    border-radius: var(--mantine-radius-default);
+
+    &:hover:not([data-current="true"]) {
+      background-color: var(--mantine-color-default-hover);
+    }
+  }
+}

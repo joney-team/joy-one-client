@@ -71,6 +71,7 @@ type Coordinates {
 }
 
 input CreateTaskInput {
+  _id: String
   assigneeUserIds: [String!]
   customerId: String
   description: String

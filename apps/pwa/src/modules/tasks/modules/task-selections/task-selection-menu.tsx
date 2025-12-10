@@ -42,7 +42,7 @@ export const TaskSelectionMenu: FC = () => {
 
   const removeAll = () => {
     modalConfirmRef.current?.open({
-      children: <Trans>Are you sure you want to remove all selected tasks?</Trans>,
+      content: <Trans>Are you sure you want to remove all selected tasks?</Trans>,
       onConfirm: async () => {
         await updateTasks(selections.selected.map((task) => ({ _id: task._id, isArchived: true })));
         selections.unselect(...selections.selected.map((v) => v._id));

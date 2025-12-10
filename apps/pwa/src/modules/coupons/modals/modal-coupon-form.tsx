@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { SearchSelectInput } from "@/components/inputs/search-select-input";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useFormSubmit } from "@/hooks/use-form";
 import { createCoupon, getCouponRules } from "@/modules/coupons/coupon-service";
 import { CouponDto, CouponEntity } from "@/modules/coupons/coupon-types";
@@ -86,8 +86,8 @@ export const ModalCouponForm: FC<{
 
       <Modal
         title={
-          <ModalTitle
-            title={`${props?.coupon ? t`Update coupon` : t`Create coupon`}`}
+          <ModalHead
+            name={`${props?.coupon ? t`Update coupon` : t`Create coupon`}`}
             icon={IconNotes}
           />
         }

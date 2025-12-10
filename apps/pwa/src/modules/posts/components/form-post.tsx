@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
-import { Editor } from "@/components/editor";
+import { Editor } from "@/components/editor/editor";
 import { ImageInput } from "@/components/inputs/image-input";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
 import { CategoryEntity } from "@/modules/categories/category-types";
 import { CategoryInput } from "@/modules/categories/components/category-input";
@@ -112,7 +112,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onPreview = () => {
     modals.open({
-      title: <ModalTitle title={t`Preview`} icon={IconEye} />,
+      title: <ModalHead name={t`Preview`} icon={IconEye} />,
       fullScreen: true,
       children: (
         <Group>

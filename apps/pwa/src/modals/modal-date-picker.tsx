@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { Period } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
@@ -273,8 +273,8 @@ export const OnModalDatePicker = (props: ModalDatePickerProps) => {
   return modals.open({
     modalId: "date-picker",
     title: (
-      <ModalTitle
-        title={
+      <ModalHead
+        name={
           props.period === Period.MONTH ? (
             <Trans>Select month</Trans>
           ) : props.period === Period.WEEK ? (

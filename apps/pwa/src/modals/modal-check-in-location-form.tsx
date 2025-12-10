@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { ActionIcon, Group, Modal, NumberInput, Stack, TextInput, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheck, IconGps, IconMapPin } from "@tabler/icons-react";
@@ -62,7 +62,7 @@ export const ModalCheckInLocationForm: FC<{
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle title={t`Check location`} icon={IconMapPin} />}
+        title={<ModalHead name={t`Check location`} icon={IconMapPin} />}
         yOffset={16}
         zIndex={zIndexes.commonModals}
       >

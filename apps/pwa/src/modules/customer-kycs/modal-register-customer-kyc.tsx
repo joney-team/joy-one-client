@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { WithCamera } from "@/components/camera";
 import { EntityImage } from "@/components/entity-image";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { genders } from "@/constant";
 import { useFormSubmit } from "@/hooks/use-form";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
@@ -165,7 +165,7 @@ export const WithModalRegisterCustomerKyc: FC<{
         return (
           <Fragment>
             <Modal
-              title={<ModalTitle title={<Trans>Customer KYC</Trans>} icon={IconUserScan} />}
+              title={<ModalHead name={<Trans>Customer KYC</Trans>} icon={IconUserScan} />}
               onClose={onClose}
               opened={opened}
               yOffset={20}

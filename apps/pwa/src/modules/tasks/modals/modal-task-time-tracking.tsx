@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
 import { calendarDayJsLocalizer } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
@@ -421,7 +421,7 @@ export const ModalTaskTimeTracking: FC = () => {
       opened={opened}
       onClose={close}
       title={
-        <ModalTitle title={t`Add time trackings`} icon={IconStopwatch} color={tagFolder?.color} />
+        <ModalHead name={t`Add time trackings`} icon={IconStopwatch} color={tagFolder?.color} />
       }
       size={460}
     >

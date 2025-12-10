@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
 import { useFormSubmit } from "@/hooks/use-form";
 import { useRouter } from "@/hooks/use-router";
@@ -42,7 +42,6 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useDisclosure } from "@mantine/hooks";
 import {
   Icon,
   IconArrowsExchange,
@@ -54,31 +53,67 @@ import {
   IconUser,
   IconUserScan,
 } from "@tabler/icons-react";
-import { FC, Fragment, PropsWithChildren, ReactNode, useState } from "react";
+import {
+  FC,
+  forwardRef,
+  Fragment,
+  PropsWithChildren,
+  ReactNode,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { loanAssetTypes } from "../loans-constants";
 
 interface ModalCreateLoanProps {
   customer?: CustomerShortInfo;
 }
 
-export type OpenModalCreateLoan = (props?: ModalCreateLoanProps) => void;
+export interface ModalCreateLoanRef {
+  open: (props?: ModalCreateLoanProps) => void;
+  close: () => void;
+}
 
-export const ModalCreateLoan: FC<{
-  children: (open: OpenModalCreateLoan) => ReactNode;
-}> = ({ children }) => {
+export const ModalCreateLoan = forwardRef<
+  ModalCreateLoanRef,
+  { children?: (ref: ModalCreateLoanRef) => ReactNode }
+>((props, ref) => {
+  const { children } = props;
+  const [args, setArgs] = useState<ModalCreateLoanProps | null>(null);
+
+  const onClose = () => setArgs(null);
+
+  const onOpen = (p?: ModalCreateLoanProps) => {
+    setArgs(p ?? {});
+    setIsInitialized(false);
+    setCustomer(p?.customer);
+    form.reset();
+    initialize(p)
+      .then(() => setIsInitialized(true))
+      .catch((error) => {
+        onError(error);
+        setArgs(null);
+      });
+  };
+
+  useImperativeHandle(ref, () => ({
+    open: (p) => {
+      onOpen(p);
+    },
+    close: () => {
+      onClose();
+    },
+  }));
+
   const banks = useBanks();
   const router = useRouter();
   const workspace = useWorkspace();
   const uploadFile = useUploadFile();
 
-  const [opened, { open, close }] = useDisclosure(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [isFetchingCustomerKyc, setIsFetchingCustomerKyc] = useState(false);
 
   const [customer, setCustomer] = useState<CustomerShortInfo>();
   const [customerKyc, setCustomerKyc] = useState<CustomerKycEntity>();
-
-  const onClose = async () => close();
 
   const form = useForm({
     initialValues: {
@@ -191,30 +226,28 @@ export const ModalCreateLoan: FC<{
       // Submit
       const loan = await createLoan(dto, uploadFile);
       await router.push(`/loans/${loan.code}`);
-      close();
+      onClose();
     },
     onError,
   });
 
   return (
     <Fragment>
-      {children((p) => {
-        setIsInitialized(false);
-        setCustomer(p?.customer);
-        form.reset();
-        open();
+      {typeof children === "function"
+        ? children({
+            open: (p) => {
+              onOpen(p);
+            },
+            close: () => {
+              onClose();
+            },
+          })
+        : null}
 
-        initialize(p)
-          .then(() => setIsInitialized(true))
-          .catch((error) => {
-            onError(error);
-            close();
-          });
-      })}
       <Modal
-        title={<ModalTitle title={t`Create loan`} icon={IconCreditCardPay} />}
+        title={<ModalHead name={t`Create loan`} icon={IconCreditCardPay} />}
         onClose={onClose}
-        opened={opened}
+        opened={!!args}
         size={1000}
         closeOnEscape={false}
       >
@@ -426,7 +459,7 @@ export const ModalCreateLoan: FC<{
       </Modal>
     </Fragment>
   );
-};
+});
 
 const Session: FC<PropsWithChildren<{ name: string; icon: Icon; isWithoutCard?: boolean }>> = (
   props

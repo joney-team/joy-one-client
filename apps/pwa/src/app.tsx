@@ -31,6 +31,7 @@ const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
 const ModuleProviders = dynamic(() => import("@/app.module-providers"));
 const AuthProvider = dynamic(() => import("@/modules/auth/auth-provider"));
 const WorkspaceProvider = dynamic(() => import("@/modules/workspaces/workspace-provider"));
+const EscapeHandler = dynamic(() => import("@/hooks/use-escape").then((mod) => mod.EscapeHandler));
 
 export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => {
   const global = getGlobal();
@@ -140,6 +141,8 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
                 <WorkspaceProvider>
                   <ModuleProviders>
                     {props.children}
+
+                    <EscapeHandler />
                     <AppLoading />
                     <GeneralAnalytics />
                   </ModuleProviders>

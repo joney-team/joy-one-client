@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { numberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { WayPoint } from "@/components/way-point";
 import { configs } from "@/configs/layout.config";
 import { FileType } from "@/graphql/types.graphql";
@@ -93,7 +93,7 @@ export const ModalFiles: FC<{
             zIndex={300}
             opened={opened}
             onClose={close}
-            title={<ModalTitle title={t`Files`} icon={IconPhotoSquareRounded} />}
+            title={<ModalHead name={t`Files`} icon={IconPhotoSquareRounded} />}
             fullScreen={viewport.view === "mobile"}
           >
             <Stack>

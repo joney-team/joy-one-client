@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { DateInput } from "@/components/inputs/date-input";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
@@ -166,7 +166,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
 export const OnModalReceiptForm = (props?: ModalReceiptFormProps) => {
   return modals.open({
     modalId: "ModalReceiptForm",
-    title: <ModalTitle title={t`Create receipt`} icon={IconCashRegister} />,
+    title: <ModalHead name={t`Create receipt`} icon={IconCashRegister} />,
     children: <ModalReceiptForm {...props} />,
   });
 };

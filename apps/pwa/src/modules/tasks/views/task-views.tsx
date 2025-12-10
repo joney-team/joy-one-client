@@ -18,10 +18,13 @@ import { BulkTasksActions } from "../components/bulk-tasks-actions";
 import { parseTaskPath, updateTaskPath } from "../tasks-route-helpers";
 import { TaskView } from "./types";
 
-const TaskDetail = dynamic(() => import("../task-detail").then((mod) => mod.TaskDetail), {
-  ssr: false,
-  loading: nonLoading,
-});
+const TaskDetail = dynamic(
+  () => import("../modules/task-detail/task-detail").then((mod) => mod.TaskDetail),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const NavigationTabs = dynamic(
   () => import("@/components/navigation-tabs").then((mod) => mod.NavigationTabs),

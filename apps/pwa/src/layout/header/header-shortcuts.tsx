@@ -2,11 +2,11 @@
 
 import { type AppRouter, useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { ModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
-import { ModalCustomer } from "@/modules/customers/customer-modal";
-import { ModalCreateLoan } from "@/modules/loans/modals/modal-create-loan";
+import { type ModalCreateBookingRef } from "@/modules/bookings/modals/modal-create-booking";
+import { type ModalCustomerRef } from "@/modules/customers/customer-modal";
+import { type ModalCreateLoanRef } from "@/modules/loans/modals/modal-create-loan";
 import { ModalLoanCalculator } from "@/modules/loans/modals/modal-loan-calculator";
-import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { type ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -29,9 +29,43 @@ import {
   IconUserPlus,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { type FC, Fragment } from "react";
+import { type FC, Fragment, useRef } from "react";
 import { Button } from "../../components/buttons/button";
+import dynamic from "next/dynamic";
+import { nonLoading } from "@/utils/non-loading";
 
+const ModalCustomer = dynamic(
+  () => import("@/modules/customers/customer-modal").then((mod) => mod.ModalCustomer),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ModalCreateBooking = dynamic(
+  () =>
+    import("@/modules/bookings/modals/modal-create-booking").then((mod) => mod.ModalCreateBooking),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ModalCreateLoan = dynamic(
+  () => import("@/modules/loans/modals/modal-create-loan").then((mod) => mod.ModalCreateLoan),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ModalCreateTask = dynamic(
+  () => import("@/modules/tasks/modals/modal-create-task").then((mod) => mod.ModalCreateTask),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 type ShortcutModals = {
   createLoan: () => void;
   createBooking: () => void;
@@ -213,30 +247,26 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
 };
 
 export const WorkspaceHeaderShortcuts: FC = () => {
+  const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
+  const modalCreateLoanRef = useRef<ModalCreateLoanRef>(null);
+  const modalCreateBookingRef = useRef<ModalCreateBookingRef>(null);
+  const modalCustomerRef = useRef<ModalCustomerRef>(null);
+
   return (
-    <ModalCreateBooking>
-      {(openModalCreateBooking) => (
-        <ModalCreateTask>
-          {(openModalCreateTask) => (
-            <ModalCreateLoan>
-              {(openModalCreateLoan) => (
-                <ModalCustomer>
-                  {(openModalCustomer) => (
-                    <WorkspaceHeaderShortcutsContent
-                      modals={{
-                        createLoan: () => openModalCreateLoan(),
-                        createBooking: () => openModalCreateBooking(),
-                        createTask: () => openModalCreateTask(),
-                        createCustomer: () => openModalCustomer(),
-                      }}
-                    />
-                  )}
-                </ModalCustomer>
-              )}
-            </ModalCreateLoan>
-          )}
-        </ModalCreateTask>
-      )}
-    </ModalCreateBooking>
+    <Fragment>
+      <WorkspaceHeaderShortcutsContent
+        modals={{
+          createLoan: () => modalCreateLoanRef.current?.open(),
+          createBooking: () => modalCreateBookingRef.current?.open(),
+          createTask: () => modalCreateTaskRef.current?.open(),
+          createCustomer: () => modalCustomerRef.current?.open(),
+        }}
+      />
+
+      <ModalCustomer ref={modalCustomerRef} />
+      <ModalCreateBooking ref={modalCreateBookingRef} />
+      <ModalCreateLoan ref={modalCreateLoanRef} />
+      <ModalCreateTask ref={modalCreateTaskRef} />
+    </Fragment>
   );
 };

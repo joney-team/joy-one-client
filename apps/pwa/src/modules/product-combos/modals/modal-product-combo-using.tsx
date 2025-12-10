@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { useProductCombo } from "@/modules/product-combos/product-combos-service";
 import { UseProductComboDto } from "@/modules/product-combos/product-combos-types";
@@ -67,7 +67,7 @@ export const ModalProductComboUsing: FC<{
         key={propsRef.current?.combo.id}
         opened={opened}
         onClose={close}
-        title={<ModalTitle title={<Trans>Add combo history</Trans>} icon={IconPackage} />}
+        title={<ModalHead name={<Trans>Add combo history</Trans>} icon={IconPackage} />}
         size="lg"
         yOffset={80}
       >

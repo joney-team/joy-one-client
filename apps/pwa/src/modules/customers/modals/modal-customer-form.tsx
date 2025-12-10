@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { Errored } from "@/components/errored";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { customerFormStatuses } from "@/modules/customer-forms/customer-form-constants";
 import {
   getCustomerForm,
@@ -76,8 +76,6 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
       onError(error);
     }
   };
-
-  const onCancel = async () => {};
 
   return (
     <Stack>
@@ -162,7 +160,7 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
 export const OnCustomerFormModal: (props: CustomerFormModalProps) => void = (props) => {
   return modals.open({
     modalId: "CustomerFormModal",
-    title: <ModalTitle title={t`Customer forms`} icon={IconMessageUser} />,
+    title: <ModalHead name={t`Customer forms`} icon={IconMessageUser} />,
     children: <CustomerFormModal {...props} />,
   });
 };

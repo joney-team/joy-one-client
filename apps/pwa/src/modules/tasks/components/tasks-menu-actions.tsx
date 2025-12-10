@@ -97,7 +97,9 @@ export const TaskMenuActions: FC = () => {
     <Group justify="space-between" wrap="nowrap" flex={1}>
       <Group gap={10}>
         <ModalCreateTask>
-          {(open) => <ButtonPlus iconSize={16} size={26} onClick={() => open()} />}
+          {(modalCreateTask) => (
+            <ButtonPlus iconSize={16} size={26} onClick={() => modalCreateTask.open()} />
+          )}
         </ModalCreateTask>
 
         {layout.view === "mobile" && (

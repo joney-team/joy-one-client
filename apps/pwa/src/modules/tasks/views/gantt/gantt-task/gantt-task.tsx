@@ -1,7 +1,7 @@
 "use client";
 
 import { ActionIcon, Group, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
-import { FC, Fragment, useEffect, useMemo, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ganttConfig } from "../gantt-tasks-config";
 
@@ -27,7 +27,7 @@ import { useGantt } from "../gantt-tasks-context";
 import { useGanttRefs } from "../gantt-tasks-refs";
 
 import { NumberFormat } from "@/components/format/number-format";
-import { ModalConfirm } from "@/modals/modal-confirm";
+import { ModalConfirm, ModalConfirmRef } from "@/modals/modal-confirm";
 import { useTaskMenu } from "@/modules/tasks/modules/task-menu/task-menu";
 import { TaskMenuAction } from "@/modules/tasks/modules/task-menu/task-menu-types";
 import { onError } from "@/utils/exceptions.utils";
@@ -68,6 +68,7 @@ const GanttTaskContent: FC = () => {
   const gantt = useGantt();
   const router = useRouter();
   const taskMenu = useTaskMenu({ task, groupVariables });
+  const modalConfirmRef = useRef<ModalConfirmRef>(null);
   const ganttRefs = useGanttRefs();
 
   const { rootRef, ganttTaskAreaRef, timeline, taskStatus } = useGanttTaskRow();
@@ -268,56 +269,52 @@ const GanttTaskContent: FC = () => {
                   <IconCopyPlus size={16} />
                 </ActionIcon>
 
-                <ModalConfirm>
-                  {(open) => (
-                    <ActionIcon
-                      variant="subtle"
-                      color="gray"
-                      component="div"
-                      size="sm"
-                      disabled={task.isArchived ?? false}
-                      onClick={() => {
-                        const taskName = limitCharacters(task.name, 30);
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  component="div"
+                  size="sm"
+                  disabled={task.isArchived ?? false}
+                  onClick={() => {
+                    const taskName = limitCharacters(task.name, 30);
 
-                        open({
-                          color: "red",
-                          children: (
-                            <Stack>
-                              <Text>
-                                <Trans>
-                                  Are you sure you want to archive <strong>{taskName}</strong>?
-                                </Trans>
-                              </Text>
+                    modalConfirmRef.current?.open({
+                      color: "red",
+                      content: (
+                        <Stack>
+                          <Text>
+                            <Trans>
+                              Are you sure you want to archive <strong>{taskName}</strong>?
+                            </Trans>
+                          </Text>
 
-                              {task.childCount > 0 && (
-                                <Text>
-                                  <Trans>
-                                    <strong>
-                                      <NumberFormat value={task.childCount} />
-                                    </strong>{" "}
-                                    subtask(s) will be archived as well.
-                                  </Trans>
-                                </Text>
-                              )}
-                            </Stack>
-                          ),
-                          onConfirm: () =>
-                            updateTasks({
-                              _id: task._id,
-                              isArchived: true,
-                              context: { fromGroupVariables: groupVariables },
-                            }),
-                        });
-                      }}
-                    >
-                      <IconTrash size={16} />
-                    </ActionIcon>
-                  )}
-                </ModalConfirm>
+                          {task.childCount > 0 && (
+                            <Text>
+                              <Trans>
+                                <strong>
+                                  <NumberFormat value={task.childCount} />
+                                </strong>{" "}
+                                subtask(s) will be archived as well.
+                              </Trans>
+                            </Text>
+                          )}
+                        </Stack>
+                      ),
+                      onConfirm: () =>
+                        updateTasks({
+                          _id: task._id,
+                          isArchived: true,
+                          context: { fromGroupVariables: groupVariables },
+                        }),
+                    });
+                  }}
+                >
+                  <IconTrash size={16} />
+                </ActionIcon>
 
                 {!task.parent && (
                   <ModalCreateTask>
-                    {(open) => (
+                    {(modalCreateTask) => (
                       <Tooltip.Floating label={<Trans>Create subtask</Trans>} offset={16}>
                         <ActionIcon
                           variant="subtle"
@@ -325,7 +322,7 @@ const GanttTaskContent: FC = () => {
                           component="div"
                           size="sm"
                           onClick={() => {
-                            open({
+                            modalCreateTask.open({
                               initial: { parent: task },
                               onCreated: () => {
                                 setIsShowSubtasks(true);
@@ -405,6 +402,8 @@ const GanttTaskContent: FC = () => {
             groupVariables={subTasksGroupVariables}
           />
         ))}
+
+      <ModalConfirm ref={modalConfirmRef} />
     </Fragment>
   );
 };

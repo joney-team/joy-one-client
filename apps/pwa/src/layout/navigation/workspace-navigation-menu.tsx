@@ -157,7 +157,7 @@ export const WorkspaceNavigationMenu: FC<{
 
   return (
     <ModalCreateTask>
-      {(openCreateTask) => (
+      {(modalCreateTask) => (
         <Fragment>
           <Anchor key={route} component={Link} href={route} td="none">
             <Group
@@ -247,7 +247,7 @@ export const WorkspaceNavigationMenu: FC<{
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   e.preventDefault();
-                                  openCreateTask();
+                                  modalCreateTask.open();
                                 }}
                               >
                                 <Text tt="capitalize" fz={em(14)}>

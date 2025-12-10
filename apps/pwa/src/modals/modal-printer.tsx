@@ -3,7 +3,8 @@
 import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { ModalTitle } from "@/components/modal-title";
+import { Modal } from "@/components/modal/modal";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useLayout } from "@/layout/layout-context";
 import { getCustomer, renderGener } from "@/modules/customers/customer-service";
 import { CustomerEntity, CustomerShortInfo } from "@/modules/customers/customer-types";
@@ -30,7 +31,6 @@ import {
   Center,
   Divider,
   Group,
-  Modal,
   Skeleton,
   Stack,
   Switch,
@@ -192,10 +192,11 @@ export const ModalPrinter: FC<{
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle title={getTitle()} icon={IconPrinter} />}
+        name={getTitle()}
+        icon={IconPrinter}
         zIndex={zIndexes.modalPrinter}
         yOffset={10}
-        fullScreen={viewport.view === "mobile"}
+        isFullscreenOnMobile
         size="xl"
       >
         {(function () {

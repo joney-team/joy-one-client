@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { MembersIllustration } from "@/components/illustrations/members";
 import { Image } from "@/components/image";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { regenerateWorkspaceInviteCode } from "@/modules/workspaces/workspaces-service";
@@ -104,7 +104,7 @@ const CreateMemberInvitationLink: FC = () => {
 export const OnModalWorkspaceInviteMember = () => {
   return modals.open({
     modalId: "ModalWorkspaceInviteMember",
-    title: <ModalTitle title={t`Invite members`} icon={IconUsersPlus} />,
+    title: <ModalHead name={t`Invite members`} icon={IconUsersPlus} />,
     children: <WorkspaceInviteMember />,
     size: "lg",
   });

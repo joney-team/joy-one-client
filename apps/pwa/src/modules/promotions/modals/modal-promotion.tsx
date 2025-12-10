@@ -1,6 +1,6 @@
 "use client";
 
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { modals } from "@mantine/modals";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
 import { FormPromotion, FormPromotionProps } from "../components/form-promotion";
@@ -15,8 +15,8 @@ export const OnPromotionModal = (props?: FormPromotionProps) => {
     modalId: "OnPromotionModal",
     size: "xl",
     title: (
-      <ModalTitle
-        title={`${props?.promotion ? t`Edit promotion` : t`Create promotion`}`}
+      <ModalHead
+        name={`${props?.promotion ? t`Edit promotion` : t`Create promotion`}`}
         icon={props?.promotion ? IconEdit : IconPlus}
       />
     ),

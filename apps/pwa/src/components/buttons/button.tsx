@@ -41,17 +41,17 @@ const defaultIconSizes: Partial<Record<ButtonSize, number>> = {
 
 const defaultIconSpacings: Partial<Record<ButtonSize, number>> = {
   xs: -3,
-  "compact-xs": -8,
+  "compact-xs": -6,
   sm: -5,
   "compact-sm": -5,
   default: -3,
 };
 
 const defaultFontSizes: Partial<Record<ButtonSize, number>> = {
-  xs: 13,
-  "compact-xs": 12,
+  xs: 12,
+  "compact-xs": 11,
   sm: 13,
-  "compact-sm": 13,
+  "compact-sm": 12,
   default: 14,
 };
 
@@ -104,7 +104,7 @@ export const Button: FC<ButtonProps> = (props) => {
   if (visible === false) return null;
 
   const h = props.h;
-  const miw = props.miw || (action || props.type === "submit" ? 180 : props.miw);
+  const miw = props.miw || (action ? 180 : props.miw);
   const radius = props.radius;
 
   const iconSpacing = useMemo(() => {

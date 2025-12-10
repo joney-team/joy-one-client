@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { createWorkspaceSdk } from "@/modules/workspace-sdks/workspace-sdks-service";
 import { WorkspaceSdkEntity } from "@/modules/workspace-sdks/workspace-sdks-types";
 import { onError } from "@/utils/exceptions.utils";
@@ -63,8 +63,8 @@ export const ModalWorkspaceSdkForm: FC<{
         opened={opened}
         onClose={close}
         title={
-          <ModalTitle
-            title={props?.sdk ? <Trans>Update SDK</Trans> : <Trans>Create SDK</Trans>}
+          <ModalHead
+            name={props?.sdk ? <Trans>Update SDK</Trans> : <Trans>Create SDK</Trans>}
             icon={IconPuzzle}
           />
         }

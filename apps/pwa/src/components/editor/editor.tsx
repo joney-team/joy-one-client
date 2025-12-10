@@ -7,6 +7,7 @@ import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
+import TipTapTaskList from "@tiptap/extension-task-list";
 
 import { FileType } from "@/graphql/enums.graphql";
 import { UploadFileOptions } from "@/modules/files/file-types";
@@ -18,12 +19,19 @@ import { Trans } from "@lingui/react/macro";
 import { alpha, Box, Group, Loader, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { RichTextEditor, RichTextEditorProps, useRichTextEditorContext } from "@mantine/tiptap";
+import {
+  RichTextEditor,
+  RichTextEditorProps,
+  useRichTextEditorContext,
+  getTaskListExtension,
+} from "@mantine/tiptap";
 import { IconPhoto, IconUpload } from "@tabler/icons-react";
 import { Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import { ClipboardEventHandler, FC, useState } from "react";
-import { ImageResize } from "./image-resize";
+import { ClipboardEventHandler, FC, useMemo, useState } from "react";
+import { ImageResize } from "./editor-image-resize";
+import { useEscape } from "@/hooks/use-escape";
+import TaskItem from "@tiptap/extension-task-item";
 
 interface EditorProps {
   value?: string | JSONContent | undefined | null;
@@ -35,16 +43,6 @@ interface EditorProps {
   isAlwayShowToolbar?: boolean;
   props?: Partial<RichTextEditorProps>;
 }
-
-const extensions: Extensions = [
-  StarterKit.configure({ link: false }),
-  Link,
-  Superscript,
-  Subscript,
-  Highlight,
-  TextAlign.configure({ types: ["heading", "paragraph"] }),
-  ImageResize,
-];
 
 function InsertImageControl() {
   const { editor } = useRichTextEditorContext();
@@ -88,6 +86,26 @@ export const Editor: FC<EditorProps> = (props) => {
     props.onChangeJSON?.(json);
   }, props.delay || 0);
 
+  const extensions: Extensions = useMemo(
+    () => [
+      StarterKit.configure({ link: false }),
+      Link,
+      Superscript,
+      Subscript,
+      Highlight,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      ImageResize,
+      getTaskListExtension(TipTapTaskList),
+      TaskItem.configure({
+        nested: true,
+        HTMLAttributes: {
+          class: "test-item",
+        },
+      }),
+    ],
+    []
+  );
+
   const editor = useEditor({
     extensions: [
       ...extensions,
@@ -121,6 +139,15 @@ export const Editor: FC<EditorProps> = (props) => {
 
     onDropImage(files);
   };
+
+  useEscape({
+    id: "editor",
+    onEscape: () => {
+      setFocused(false);
+      editor?.commands.blur();
+    },
+    active: !props.isAlwayShowToolbar && focused,
+  });
 
   if (!editor) return <Loader size="xs" />;
 

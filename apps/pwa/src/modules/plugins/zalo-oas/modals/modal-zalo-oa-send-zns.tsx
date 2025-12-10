@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { api } from "@/modules/apis";
 import {
   PluginZaloOaZNSTemplateId,
@@ -119,7 +119,7 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
 export const OnModalZaloOaSendZns = (props: ModalZaloOaSendZnsProps) => {
   return modals.open({
     modalId: "ModalZaloOaSendZns",
-    title: <ModalTitle title={<Trans>Send ZNS</Trans>} icon={IconPuzzle} />,
+    title: <ModalHead name={<Trans>Send ZNS</Trans>} icon={IconPuzzle} />,
     children: <ModalZaloOaSendZns {...props} />,
   });
 };

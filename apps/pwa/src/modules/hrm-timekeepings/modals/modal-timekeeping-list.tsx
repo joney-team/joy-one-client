@@ -6,7 +6,7 @@ import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { HrmTimekeepingCard } from "@/modules/hrm-timekeepings/hrm-timekeeping-card";
@@ -248,7 +248,7 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
 export const OnModalListTimekeepings = (props: ModalTImekeepingListProps) => {
   return modals.open({
     modalId: "ModalListTimekeepings",
-    title: <ModalTitle title={props.title || t`Timekeepings history`} icon={IconClockCheck} />,
+    title: <ModalHead name={props.title || t`Timekeepings history`} icon={IconClockCheck} />,
     children: <ModalTImekeepingList {...props} />,
     size: "lg",
   });

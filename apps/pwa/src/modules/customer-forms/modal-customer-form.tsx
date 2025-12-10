@@ -1,6 +1,6 @@
 "use client";
 
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
@@ -100,7 +100,7 @@ const ModalCustomerForm: FC = () => {
 export const OnModalCustomerForm: () => void = () => {
   return modals.open({
     modalId: "OpenCustomerFormModal",
-    title: <ModalTitle title={t`Customer form link`} icon={IconMessageUser} />,
+    title: <ModalHead name={t`Customer form link`} icon={IconMessageUser} />,
     children: <ModalCustomerForm />,
   });
 };

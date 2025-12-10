@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { DateInput } from "@/components/inputs/date-input";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import {
   multipleProductsStockIn,
   productStockRecordTypeOptions,
@@ -118,7 +118,7 @@ export const ModalProductStockIn: FC<{
       })}
 
       <Modal
-        title={<ModalTitle title={t`Stock in`} icon={IconBuildingWarehouse} />}
+        title={<ModalHead name={t`Stock in`} icon={IconBuildingWarehouse} />}
         onClose={onClose}
         opened={opened}
         size={1000}

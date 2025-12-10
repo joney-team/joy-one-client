@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Checkout } from "@/components/checkout";
 import { NumberFormat } from "@/components/format/number-format";
 import { Loading } from "@/components/loading";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import {
   createBankTransaction,
   getBankTransaction,
@@ -146,7 +146,7 @@ export const ModalWorkspaceBillingDeposit: FC = () => {
 export const OnModalWorkspaceBillingDeposit = () => {
   return modals.open({
     modalId: "ModalWorkspaceBillingDeposit",
-    title: <ModalTitle title={t`Deposit`} icon={IconReportMoney} />,
+    title: <ModalHead name={t`Deposit`} icon={IconReportMoney} />,
     children: <ModalWorkspaceBillingDeposit />,
     size: "md",
   });

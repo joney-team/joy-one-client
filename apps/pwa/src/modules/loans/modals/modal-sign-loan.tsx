@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { SignatureInput } from "@/components/inputs/signature-input";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { signLoan } from "@/modules/loans/loans-service";
 import { LoanEntity } from "@/modules/loans/loans-types";
@@ -49,8 +49,8 @@ export const ModalSignLoan: FC<{
 
       <Modal
         title={
-          <ModalTitle
-            title={t`Sign loan #${renderEntityCode(props?.loan.code)}`}
+          <ModalHead
+            name={t`Sign loan #${renderEntityCode(props?.loan.code)}`}
             icon={IconCreditCardPay}
           />
         }

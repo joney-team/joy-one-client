@@ -27,7 +27,6 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
   const {
     getTasks: getSubtasks,
     tasks: subTasks,
-    loading,
     isHasData,
   } = useTasksQuery({
     variables: groupVariables,
@@ -60,7 +59,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
         </Group>
 
         <ModalCreateTask>
-          {(open) => (
+          {(modalCreateTask) => (
             <Button
               size="compact-xs"
               color="gray.5"
@@ -68,7 +67,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
               radius={100}
               leftIcon={IconPlus}
               onClick={() =>
-                open({
+                modalCreateTask.open({
                   initial: {
                     parent: task,
                   },

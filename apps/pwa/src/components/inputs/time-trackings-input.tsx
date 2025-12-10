@@ -14,7 +14,6 @@ import {
   Group,
   InputWrapper,
   InputWrapperProps,
-  Modal,
   Stack,
   Switch,
   Text,
@@ -45,9 +44,10 @@ import { WorkspaceMemberInput } from "../../modules/workspace-members/components
 import { Avatar } from "../avatar";
 import { Button } from "../buttons/button";
 import { DateFormat } from "../format/date-format";
-import { ModalTitle } from "../modal-title";
+import { ModalHead } from "../modal/modal-head";
 import { Renderer } from "../renderer";
 import { DateInput } from "./date-input";
+import { Modal } from "../modal/modal";
 
 interface TimeTrackingsInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: TaskTimeTracking[];
@@ -166,10 +166,12 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
       </Group>
 
       <Modal
+        id="time-trackings-input"
         opened={opened}
         onClose={close}
         size={500}
-        title={<ModalTitle title={<Trans>Time trackings</Trans>} icon={IconStopwatch} />}
+        name={<Trans>Time trackings</Trans>}
+        icon={IconStopwatch}
       >
         <Stack gap={30}>
           <Stack gap={8}>

@@ -2,7 +2,6 @@
 
 import { Avatar } from "@/components/avatar";
 import { ContentEditable } from "@/components/content-editable/content-editable";
-import { Editor } from "@/components/editor";
 import { Hovered } from "@/components/hovered";
 import { formatDuration } from "@/components/inputs/estimate-time-input/estimate-time-input-utils";
 import { TimeTrackingsInput } from "@/components/inputs/time-trackings-input";
@@ -16,6 +15,7 @@ import {
   Badge,
   Group,
   SimpleGrid,
+  Skeleton,
   Stack,
   Text,
   ThemeIcon,
@@ -40,15 +40,21 @@ import {
   IconUserSquareRounded,
   IconX,
 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { FC, PropsWithChildren, ReactNode, useMemo, useRef } from "react";
-import { FilesBox } from "../../files/files-box";
-import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
-import { useTaskStatuses } from "../hooks/use-task-statuses";
-import { useUpdateTasks } from "../hooks/use-update-tasks";
-import { useTaskMenu } from "../modules/task-menu/task-menu";
-import { TaskMenuAction } from "../modules/task-menu/task-menu-types";
-import { taskPriorities } from "../task-constants";
-import { TaskTimeline } from "./task-timeline";
+import { FilesBox } from "../../../files/files-box";
+import { TaskTimeline } from "../../components/task-timeline";
+import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { useTaskStatuses } from "../../hooks/use-task-statuses";
+import { useUpdateTasks } from "../../hooks/use-update-tasks";
+import { taskPriorities } from "../../task-constants";
+import { useTaskMenu } from "../task-menu/task-menu";
+import { TaskMenuAction } from "../task-menu/task-menu-types";
+
+const Editor = dynamic(() => import("@/components/editor/editor").then((mod) => mod.Editor), {
+  ssr: false,
+  loading: () => <Skeleton miw="100%" h={58.8} />,
+});
 
 export interface TaskDetailFormProps {
   task: TaskDataFragment;

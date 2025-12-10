@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { onError } from "@/utils/exceptions.utils";
 import { Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -70,6 +70,6 @@ export const ModalCustomerPlainCodeForm: FC<ModalCustomerPlainCodeFormProps> = (
 export const OnModalCustomerPlainCodeForm = (props: ModalCustomerPlainCodeFormProps) =>
   modals.open({
     modalId: "ModalCustomerPlainCodeForm",
-    title: <ModalTitle title={<Trans>Enter customer plain code</Trans>} icon={IconId} />,
+    title: <ModalHead name={<Trans>Enter customer plain code</Trans>} icon={IconId} />,
     children: <ModalCustomerPlainCodeForm {...props} />,
   });

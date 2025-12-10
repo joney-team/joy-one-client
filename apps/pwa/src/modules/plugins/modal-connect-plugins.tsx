@@ -1,7 +1,7 @@
 "use client";
 
 import { Image } from "@/components/image";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { usePlugins } from "@/modules/plugins/plugins-context";
@@ -97,6 +97,6 @@ const ModalConnectPlugins: FC = () => {
 export const OnModalConnectPlugins = () =>
   modals.open({
     modalId: "ModalConnectPlugins",
-    title: <ModalTitle title={t`Connect more platforms`} icon={IconPuzzle} />,
+    title: <ModalHead name={t`Connect more platforms`} icon={IconPuzzle} />,
     children: <ModalConnectPlugins />,
   });

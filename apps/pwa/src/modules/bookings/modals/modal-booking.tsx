@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { BookingEntity, BookingStatus, CreateBookingDto } from "@/modules/bookings/booking-types";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -222,8 +222,8 @@ export const ModalBookingContent: FC<ModalBookingArgs> = (props) => {
         opened={!!creatingData}
         onClose={() => setCreatingData(undefined)}
         title={
-          <ModalTitle
-            title={
+          <ModalHead
+            name={
               props.reschedule ? (
                 <Trans>Reschedule booking</Trans>
               ) : (
@@ -364,8 +364,8 @@ export const ModalBooking: FC<{
         size={args?.booking ? undefined : 1200}
         yOffset={15}
         title={
-          <ModalTitle
-            title={
+          <ModalHead
+            name={
               args?.booking ? (
                 <Trans>Update booking</Trans>
               ) : args?.reschedule ? (

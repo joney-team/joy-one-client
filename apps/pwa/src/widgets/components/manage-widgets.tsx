@@ -1,6 +1,6 @@
 "use client";
 
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Modal, Stack, Text, TextInput, Tooltip } from "@mantine/core";
@@ -28,7 +28,7 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
     <Modal
       opened={props.opened}
       onClose={props.onClose}
-      title={<ModalTitle title={<Trans>Manage widgets</Trans>} icon={IconPuzzle} />}
+      title={<ModalHead name={<Trans>Manage widgets</Trans>} icon={IconPuzzle} />}
     >
       <Stack>
         <TextInput

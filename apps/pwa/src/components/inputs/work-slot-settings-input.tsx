@@ -28,7 +28,7 @@ import { v4 as uuid } from "uuid";
 import { Button } from "../buttons/button";
 import { FormSession } from "../form-session";
 import { DateFormat } from "../format/date-format";
-import { ModalTitle } from "../modal-title";
+import { ModalHead } from "../modal/modal-head";
 
 interface WorkSlotsSettingsInputProps {
   slots?: WorkSlot[];
@@ -169,7 +169,7 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
           close();
           setPointedSlot(null);
         }}
-        title={<ModalTitle title={<Trans>Work schedule</Trans>} icon={IconClock} />}
+        title={<ModalHead name={<Trans>Work schedule</Trans>} icon={IconClock} />}
         zIndex={300}
         yOffset={100}
         size="lg"

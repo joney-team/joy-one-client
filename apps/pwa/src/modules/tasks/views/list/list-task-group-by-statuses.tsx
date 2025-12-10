@@ -114,7 +114,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
 
         {!isClosedTasks && (
           <ModalCreateTask>
-            {(open) => (
+            {(modalCreateTask) => (
               <Button
                 variant="subtle"
                 size="compact-xs"
@@ -122,7 +122,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
                 leftIcon={IconPlus}
                 fw={400}
                 onClick={() =>
-                  open({
+                  modalCreateTask.open({
                     initial: {
                       status: props.status.id,
                       folder: activatedFolder,

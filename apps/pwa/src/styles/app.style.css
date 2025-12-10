@@ -552,6 +552,10 @@
 body {
   max-width: 100dvw;
   overflow-x: hidden;
+
+  &[scroll-lock="true"] {
+    overflow: hidden;
+  }
 }
 
 .AppSelectInput {

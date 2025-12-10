@@ -1,6 +1,6 @@
 "use client";
 
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import { IconCategory } from "@tabler/icons-react";
@@ -9,7 +9,7 @@ import { FormCategory, FormCategoryProps } from "../components/form-category";
 export const OnModalCategory = (props?: FormCategoryProps) => {
   return modals.open({
     modalId: "modal-category",
-    title: <ModalTitle title={<Trans>Category</Trans>} icon={IconCategory} />,
+    title: <ModalHead name={<Trans>Category</Trans>} icon={IconCategory} />,
     children: (
       <FormCategory
         {...props}

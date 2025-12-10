@@ -3,7 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { useList } from "@/components/list/use-list";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { EventType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
 import { BookingEntity } from "@/modules/bookings/booking-types";
@@ -159,7 +159,7 @@ export const Comments: FC<CommentsProps> = (props) => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle icon={IconMessage} title={t`Comments`} />}
+        title={<ModalHead icon={IconMessage} name={t`Comments`} />}
         yOffset={10}
         styles={{
           inner: {

@@ -218,14 +218,18 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
 
                 return (
                   <ModalCreateTask>
-                    {(open) => (
+                    {(modalCreateTask) => (
                       <Group>
                         <Tooltip label={t`Add task need to complete`}>
                           <ActionIcon
                             variant="subtle"
                             radius={100}
                             color="gray"
-                            onClick={() => open({ initial: { dueDate: DateTime.toSeconds(date) } })}
+                            onClick={() =>
+                              modalCreateTask.open({
+                                initial: { dueDate: DateTime.toSeconds(date) },
+                              })
+                            }
                             opacity={hovered || layout.view !== "desktop" ? 1 : 0}
                           >
                             <IconCirclePlus size={18} strokeWidth={1.5} />

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useFormSubmit } from "@/hooks/use-form";
 import { useLoans } from "@/modules/loans/loans-context";
 import { LoanAssetType, LoanPackage, LoanPackageType } from "@/modules/loans/loans-types";
@@ -109,7 +109,7 @@ export const ModalLoanPackageForm: FC<{
         open();
       })}
       <Modal
-        title={<ModalTitle title={<Trans>Loan package</Trans>} icon={IconCoins} />}
+        title={<ModalHead name={<Trans>Loan package</Trans>} icon={IconCoins} />}
         onClose={onClose}
         opened={opened}
         size="xl"

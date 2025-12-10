@@ -114,7 +114,7 @@ export const GanttTaskDrawTimeline: FC = () => {
               size: "lg",
             },
             icon: IconClockPlay,
-            children: (
+            content: (
               <Stack>
                 <Text fw={500} fz="md" c="orange">
                   <Trans>Are you sure you want to change the timeline?</Trans>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
 import { getView } from "@/layout/layout-service";
 import { PrintButton } from "@/modals/modal-printer";
@@ -363,7 +363,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 export const OnModalPrescriptionForm = (props: ModalPrescriptionFormProps) => {
   return modals.open({
     modalId: "ModalPrescriptionForm",
-    title: <ModalTitle title={<Trans>Prescription</Trans>} icon={IconPill} />,
+    title: <ModalHead name={<Trans>Prescription</Trans>} icon={IconPill} />,
     children: <ModalPrescriptionForm {...props} />,
     size: "xl",
     fullScreen: getView() === "mobile",

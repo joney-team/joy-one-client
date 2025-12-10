@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { NumberFormat } from "@/components/format/number-format";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
 import { getTasks, renderTaskStatusStyle, updateTasks } from "@/modules/tasks/tasks-service";
@@ -378,6 +378,6 @@ export const ColorInput: FC<
 export const OnTaskSatusesModal = (props?: TaskSatusesModalProps) =>
   modals.open({
     modalId: "TaskSatusesModal",
-    title: <ModalTitle title={t`Task statuses`} icon={IconSettings} />,
+    title: <ModalHead name={t`Task statuses`} icon={IconSettings} />,
     children: <TaskSatusesModal {...props} />,
   });

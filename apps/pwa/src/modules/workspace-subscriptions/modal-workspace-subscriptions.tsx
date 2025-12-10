@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { useList } from "@/components/list/use-list";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { getView } from "@/layout/layout-service";
 import {
   createBankTransaction,
@@ -237,7 +237,7 @@ export const SubscriptionCard: FC<{
 export const OnModalWorkspaceSubscription = () => {
   return modals.open({
     modalId: "ModalWorkspaceSubscription",
-    title: <ModalTitle title={<Trans>Register subscription</Trans>} icon={IconBox} />,
+    title: <ModalHead name={<Trans>Register subscription</Trans>} icon={IconBox} />,
     children: <ModalWorkspaceSubscription />,
     size: "auto",
     fullScreen: getView() === "mobile",

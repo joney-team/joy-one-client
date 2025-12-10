@@ -1,6 +1,6 @@
 "use client";
 
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { t } from "@lingui/core/macro";
 import { modals } from "@mantine/modals";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
@@ -23,7 +23,7 @@ export const OnProductModal = (props: FormProductProps) => {
   return modals.open({
     modalId: "ModalProductForm",
     size: 1000,
-    title: <ModalTitle title={title} icon={product ? IconEdit : IconPlus} />,
+    title: <ModalHead name={title} icon={product ? IconEdit : IconPlus} />,
     children: <ModalContent {...props} />,
   });
 };

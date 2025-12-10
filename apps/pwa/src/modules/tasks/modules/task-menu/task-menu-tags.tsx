@@ -7,10 +7,9 @@ import QUERY_TAGS, {
   type TagsQueryVariables,
 } from "@/modules/tags/graphql/queryTags.graphql";
 import { useLazyQuery } from "@apollo/client/react";
-import { Card, Divider, Group, Loader, Stack, Text, TextInput } from "@mantine/core";
+import { Card, Divider, FocusTrap, Group, Loader, Stack, Text, TextInput } from "@mantine/core";
 import { TaskMenuComponent } from "./task-menu-types";
 
-import { AutoFocus } from "@/components/auto-focus";
 import { WayPoint } from "@/components/way-point";
 import { searchEntity } from "@/modules/search/search-service";
 import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
@@ -104,25 +103,27 @@ export const TaskMenuTags: TaskMenuComponent = ({
           withBorder
           opacity={!modalTagForm.isOpened ? 1 : 0}
         >
-          <AutoFocus as={Group} p={6}>
-            <TextInput
-              radius={4}
-              autoFocus
-              size="xs"
-              leftSection={<IconSearch size={16} />}
-              placeholder={t`Search`}
-              onChange={(e) => setTextSearch(e.target.value)}
-              rightSection={
-                !data && loading ? <Loader size="xs" type="dots" color="gray" /> : undefined
-              }
-              styles={{
-                input: {
-                  backgroundColor: "var(--mantine-color-default-hover)",
-                  border: "none",
-                },
-              }}
-            />
-          </AutoFocus>
+          <Group p={6}>
+            <FocusTrap>
+              <TextInput
+                radius={4}
+                autoFocus
+                size="xs"
+                leftSection={<IconSearch size={16} />}
+                placeholder={t`Search`}
+                onChange={(e) => setTextSearch(e.target.value)}
+                rightSection={
+                  !data && loading ? <Loader size="xs" type="dots" color="gray" /> : undefined
+                }
+                styles={{
+                  input: {
+                    backgroundColor: "var(--mantine-color-default-hover)",
+                    border: "none",
+                  },
+                }}
+              />
+            </FocusTrap>
+          </Group>
 
           <Stack p={4} gap={0} mah={220} style={{ overflow: "auto" }} ref={scrollRef}>
             {!isSearchEmpty &&

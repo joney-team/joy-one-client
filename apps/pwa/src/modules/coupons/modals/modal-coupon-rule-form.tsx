@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { Editor } from "@/components/editor";
-import { ModalTitle } from "@/components/modal-title";
+import { Editor } from "@/components/editor/editor";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useFormSubmit } from "@/hooks/use-form";
 import { createCouponRule, updateCouponRule } from "@/modules/coupons/coupon-service";
 import {
@@ -115,8 +115,8 @@ export const ModalCouponRuleForm: FC<{
       })}
       <Modal
         title={
-          <ModalTitle
-            title={`${props?.rule ? t`Update coupon rule` : t`Create coupon rule`}`}
+          <ModalHead
+            name={`${props?.rule ? t`Update coupon rule` : t`Create coupon rule`}`}
             icon={IconNotes}
           />
         }

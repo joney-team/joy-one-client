@@ -1,36 +1,36 @@
 .ListTaskRows {
   display: flex;
+}
 
-  & .ListTaskRowContainer {
-    & .ListTaskRow {
-      align-items: stretch;
+.ListTaskRowContainer {
+  & .ListTaskRow {
+    align-items: stretch;
 
-      &:not(.isLastRow) {
-        border-bottom: 1px solid var(--mantine-color-gray-light);
-      }
+    &:not(.isLastRow) {
+      border-bottom: 1px solid var(--mantine-color-gray-light);
+    }
+
+    & .HoverToActive {
+      opacity: 0;
+    }
+
+    &:hover,
+    &[data-task-menu-opened="true"] {
+      background: var(--mantine-color-gray-outline-hover);
 
       & .HoverToActive {
-        opacity: 0;
+        opacity: 1;
       }
+    }
 
-      &:hover,
-      &[data-task-menu-opened="true"] {
-        background: var(--mantine-color-gray-outline-hover);
+    & .TaskCell {
+      cursor: pointer;
+      border: 1px solid transparent;
+      height: 100%;
+      border-radius: var(--mantine-radius-default);
 
-        & .HoverToActive {
-          opacity: 1;
-        }
-      }
-
-      & .TaskCell {
-        cursor: pointer;
-        border: 1px solid transparent;
-        height: 100%;
-        border-radius: var(--mantine-radius-default);
-
-        &:hover {
-          border-color: var(--mantine-color-gray-light);
-        }
+      &:hover {
+        border-color: var(--mantine-color-gray-light);
       }
     }
   }

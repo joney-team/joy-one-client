@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useFormSubmit } from "@/hooks/use-form";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { FilesBox } from "@/modules/files/files-box";
@@ -120,7 +120,7 @@ export const ModalLoanAssetEstimationForm: FC<{
           })}
 
           <Modal
-            title={<ModalTitle title={t`Loan asset estimations`} icon={IconCoins} />}
+            title={<ModalHead name={t`Loan asset estimations`} icon={IconCoins} />}
             onClose={onClose}
             opened={opened}
             size="xl"

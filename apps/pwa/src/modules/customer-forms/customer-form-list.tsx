@@ -24,7 +24,7 @@ export const CustomerFormList: FC = () => {
   const { renderVnLocation: renderLocation } = useLocations();
   return (
     <ModalUpdateWorkspaceBranch>
-      {(openUpdateBranch) => (
+      {(modalUpdateWorkspaceBranch) => (
         <Stack p={16}>
           <List<CustomerFormEntity>
             id="cfms"
@@ -78,7 +78,7 @@ export const CustomerFormList: FC = () => {
                 icon: IconBuildingSkyscraper,
                 permission: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
                 handler: (data, ctx) =>
-                  openUpdateBranch({
+                  modalUpdateWorkspaceBranch.open({
                     entity: AppEntity.CUSTOMER_FORMS,
                     ids: data.map((v) => v._id),
                     onComplete: ctx.unSelect,

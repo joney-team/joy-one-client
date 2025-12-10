@@ -1,6 +1,6 @@
 import { Button } from "@/components/buttons/button";
 import { Form } from "@/components/form";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { PluginExternalStorageProvider } from "@/graphql/enums.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
@@ -56,8 +56,8 @@ export const PluginStorageModal = ({
       opened={isOpened}
       onClose={onClose}
       title={
-        <ModalTitle
-          title={storage ? <Trans>Edit Cloud Storage</Trans> : <Trans>Connect Cloud Storage</Trans>}
+        <ModalHead
+          name={storage ? <Trans>Edit Cloud Storage</Trans> : <Trans>Connect Cloud Storage</Trans>}
           icon={IconCloudDataConnection}
         />
       }

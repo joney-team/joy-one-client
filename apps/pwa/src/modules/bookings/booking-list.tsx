@@ -238,7 +238,7 @@ export const BookingList: FC = () => {
 
   return (
     <ModalCreateBooking>
-      {(openCreateBooking) => (
+      {(modalCreateBooking) => (
         <Stack p={16}>
           <Card shadow="xs">
             <Stack ref={ref}>
@@ -435,7 +435,7 @@ export const BookingList: FC = () => {
                       size="compact-sm"
                       h={30}
                       leftIcon={IconPlus}
-                      onClick={() => openCreateBooking()}
+                      onClick={() => modalCreateBooking.open()}
                     >
                       <Trans>Create booking</Trans>
                     </Button>
@@ -586,7 +586,7 @@ export const BookingList: FC = () => {
                   }}
                   selectable
                   onSelectSlot={(slot) =>
-                    openCreateBooking({
+                    modalCreateBooking.open({
                       startTime: slot.start,
                       endTime: slot.end,
                     })

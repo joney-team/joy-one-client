@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { createPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
@@ -79,8 +79,8 @@ export const ModalParnterForm: FC<{
         opened={opened}
         onClose={close}
         title={
-          <ModalTitle
-            title={props?.partner ? t`Update partner` : t`Create partner`}
+          <ModalHead
+            name={props?.partner ? t`Update partner` : t`Create partner`}
             icon={IconTopologyStar3}
           />
         }

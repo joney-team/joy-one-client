@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useLang } from "@/modules/lang/lang-context";
 import { partialPaymentReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
@@ -127,7 +127,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
 export const OnModalPartialPayment = (props: ModalPartialPaymentProps) => {
   return modals.open({
     modalId: "ModalPartialPayment",
-    title: <ModalTitle title={t`Partial payment`} icon={IconCircleHalf2} />,
+    title: <ModalHead name={t`Partial payment`} icon={IconCircleHalf2} />,
     children: <ModalPartialPayment {...props} />,
   });
 };

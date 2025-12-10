@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { api } from "@/modules/apis";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
@@ -11,9 +11,13 @@ import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Blockquote, Center, Modal, Stack } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { IconBuildingSkyscraper } from "@tabler/icons-react";
-import { FC, Fragment, ReactNode, useRef, useState } from "react";
+import { forwardRef, Fragment, ReactNode, useImperativeHandle, useState } from "react";
+
+export interface ModalUpdateWorkspaceBranchRef {
+  open: (p: ModalUpdateWorkspaceBranchProps) => void;
+  close: () => void;
+}
 
 type ModalUpdateWorkspaceBranchProps = {
   entity?: AppEntity;
@@ -30,18 +34,18 @@ export const permissionRequireds: Partial<{
   [AppEntity.CUSTOMER_FORMS]: WorkspacePermission.CUSTOMER_FORMS_MANAGER,
 };
 
-export const ModalUpdateWorkspaceBranch: FC<{
-  children: (open: (p: ModalUpdateWorkspaceBranchProps) => void) => ReactNode;
-}> = ({ children }) => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const props = useRef<ModalUpdateWorkspaceBranchProps | null>(null);
+export const ModalUpdateWorkspaceBranch = forwardRef<
+  ModalUpdateWorkspaceBranchRef,
+  { children?: (ref: ModalUpdateWorkspaceBranchRef) => ReactNode }
+>(({ children }, ref) => {
+  const [args, setArgs] = useState<ModalUpdateWorkspaceBranchProps | null>(null);
   const [branch, setBranch] = useState<Pick<
     WorkspaceBranchEntity,
     "_id" | "name" | "hotline"
   > | null>(null);
 
-  const entity = props.current?.entity;
-  const ids = props.current?.ids ?? [];
+  const entity = args?.entity;
+  const ids = args?.ids ?? [];
 
   const onSubmit = async () => {
     try {
@@ -70,25 +74,41 @@ export const ModalUpdateWorkspaceBranch: FC<{
         throw new Error("Not implemented");
       }
 
-      close();
-      props.current?.onComplete?.();
+      setArgs(null);
+      args?.onComplete?.();
     } catch (error) {
       onError(error);
     }
   };
 
+  useImperativeHandle(ref, () => ({
+    open: (p) => {
+      setArgs(p ?? {});
+      setBranch(p?.workspaceBranch ?? null);
+    },
+    close: () => {
+      setArgs(null);
+    },
+  }));
+
   return (
     <Fragment>
-      {children((p) => {
-        props.current = p;
-        setBranch(p.workspaceBranch || null);
-        open();
-      })}
+      {typeof children === "function"
+        ? children({
+            open: (p) => {
+              setBranch(p.workspaceBranch || null);
+              setArgs(p);
+            },
+            close: () => {
+              setArgs(null);
+            },
+          })
+        : null}
 
       <Modal
-        opened={opened}
-        onClose={close}
-        title={<ModalTitle title={t`Move workspace branch`} icon={IconBuildingSkyscraper} />}
+        opened={!!args}
+        onClose={() => setArgs(null)}
+        title={<ModalHead name={t`Move workspace branch`} icon={IconBuildingSkyscraper} />}
       >
         <Stack align="stretch">
           {entity === AppEntity.LOANS && (
@@ -104,7 +124,7 @@ export const ModalUpdateWorkspaceBranch: FC<{
           <WorkspaceBranchInput value={branch} onChange={(v) => setBranch(v)} />
 
           <Center>
-            <Button action onClick={onSubmit}>
+            <Button action onClick={() => onSubmit()}>
               <Trans>Confirm</Trans>
             </Button>
           </Center>
@@ -112,4 +132,4 @@ export const ModalUpdateWorkspaceBranch: FC<{
       </Modal>
     </Fragment>
   );
-};
+});

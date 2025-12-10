@@ -238,11 +238,11 @@ export const LoanDetail: NextPage = () => {
 
                 {workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO) && (
                   <ModalCustomer>
-                    {(open) => (
+                    {(modalCustomer) => (
                       <Anchor
                         onClick={(e) => {
                           e.stopPropagation();
-                          open({
+                          modalCustomer.open({
                             customer: customer.data,
                             onDone: async () => {},
                           });

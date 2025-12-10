@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { FilesBox } from "@/modules/files/files-box";
 import { disburseReceipt, getPaymentMethodIcon } from "@/modules/receipts/receipts-service";
 import {
@@ -117,8 +117,8 @@ export const OnModalDisburesementReceipt = (props: ModalDisburesementReceiptProp
   return modals.open({
     modalId: "ModalDisburesementReceipt",
     title: (
-      <ModalTitle
-        title={<Trans>Approve Receipt</Trans>}
+      <ModalHead
+        name={<Trans>Approve Receipt</Trans>}
         icon={IconTag}
         color={props.receipt.type === ReceiptType.EXPENSE ? "red" : "primary"}
       />

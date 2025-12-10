@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
 import { CustomerRelationshipContactInput } from "@/modules/customers/components/customer-relationship-contact-input";
 import { CustomerEntity } from "@/modules/customers/customer-types";
@@ -61,7 +61,7 @@ export const OnModalCustomerRelationshipContacts = (
 ) => {
   return modals.open({
     modalId: "ModalCustomerRelationshipContacts",
-    title: <ModalTitle title={t`Contact relatives`} icon={IconAddressBook} />,
+    title: <ModalHead name={t`Contact relatives`} icon={IconAddressBook} />,
     children: <ModalCustomerRelationshipContacts {...props} />,
     size: 800,
   });

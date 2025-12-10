@@ -132,6 +132,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
           activateOnClick={false}
           openRef={openRef}
           {...props.props}
+          style={{ outline: "none" }}
         >
           <Card
             withBorder

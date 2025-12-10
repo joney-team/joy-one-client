@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { api } from "@/modules/apis";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { onError } from "@/utils/exceptions.utils";
@@ -145,8 +145,8 @@ export const OnModalEInvoiceProvider = (props: ModalEInvoiceProviderProps) => {
   modals.open({
     modalId: "OnModalEInvoiceProvider",
     title: (
-      <ModalTitle
-        title={t`${provider ? t`Edit` : t`Add`} E-invoices provider`}
+      <ModalHead
+        name={t`${provider ? t`Edit` : t`Add`} E-invoices provider`}
         icon={IconFileInvoice}
       />
     ),

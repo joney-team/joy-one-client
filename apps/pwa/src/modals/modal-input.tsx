@@ -3,7 +3,8 @@
 import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateInput } from "@/components/inputs/date-input";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
@@ -15,7 +16,6 @@ import {
   Anchor,
   Group,
   InputWrapper,
-  Modal,
   NumberInput,
   Portal,
   Select,
@@ -127,9 +127,9 @@ export const ModalInput: FC<{
       <Portal>
         <Modal
           title={
-            <ModalTitle
+            <ModalHead
               color={props?.color}
-              title={props?.title || t`Enter data`}
+              name={props?.title || t`Enter data`}
               icon={props?.icon || IconCursorText}
             />
           }

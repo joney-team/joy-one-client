@@ -95,6 +95,7 @@ export type Coordinates = {
 };
 
 export type CreateTaskInput = {
+  _id?: InputMaybe<Scalars['String']['input']>;
   assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
   customerId?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;

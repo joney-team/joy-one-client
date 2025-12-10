@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { NumberFormat, numberFormat } from "@/components/format/number-format";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import { PromotionDescription } from "@/modules/promotions/components/promotion-description";
 import { useColor } from "@/modules/theme/use-color";
 import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
@@ -72,7 +72,7 @@ export const OrderSalePromotions: FC = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalTitle title={<Trans>Promotions</Trans>} icon={IconPackage} />}
+        title={<ModalHead name={<Trans>Promotions</Trans>} icon={IconPackage} />}
         size={500}
       >
         <Stack>

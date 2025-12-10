@@ -1,7 +1,7 @@
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Image } from "@/components/image";
-import { ModalTitle } from "@/components/modal-title";
+import { ModalHead } from "@/components/modal/modal-head";
 import {
   createPluginAiAssistant,
   removePluginAiAssistant,
@@ -232,7 +232,7 @@ export const ModalCreatePluginAiAssistant: FC<{
 export const OnModalCreatePluginAiAssistant = (plugin?: PluginAiAssistantEntity) => {
   return modals.open({
     modalId: "PluginAiAssistantModal",
-    title: <ModalTitle title={t`AI assistant`} icon={IconAi} color="violet.9" />,
+    title: <ModalHead name={t`AI assistant`} icon={IconAi} color="violet.9" />,
     children: <ModalCreatePluginAiAssistant plugin={plugin} />,
     size: "600px",
   });
