@@ -20,7 +20,7 @@ import {
 import EventEmitter from "events";
 import { v4 as uuid } from "uuid";
 import { api } from "../apis";
-import { defaultTaskStatusIds } from "./task-constants";
+import { defaultTaskStatus } from "./task-constants";
 import {
   DefaultTaskStatusId,
   TaskDto,
@@ -103,11 +103,10 @@ export function renderTaskStatusStyle(statusId: string, workspaceStatuses: TaskS
       ? TaskIcons[status.icon]
       : TaskIcons[DefaultTaskStatusIcons[statusId]] || TaskIcons["IconCircleFilled"];
 
-  const name: string =
-    status.name || defaultTaskStatusIds[statusId as DefaultTaskStatusId]?.label();
+  const name: string = status.name || defaultTaskStatus[statusId as DefaultTaskStatusId]?.label();
 
   const color =
-    status.color || defaultTaskStatusIds[status.id as DefaultTaskStatusId]?.color || "gray";
+    status.color || defaultTaskStatus[status.id as DefaultTaskStatusId]?.color || "gray";
 
   return {
     icon,

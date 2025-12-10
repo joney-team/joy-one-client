@@ -95,6 +95,8 @@ fragment TaskData on Task {
     name
     color
     order
+    contextId
+    contextType
   }
 
   createdAt

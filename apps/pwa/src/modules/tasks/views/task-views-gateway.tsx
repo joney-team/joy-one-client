@@ -2,8 +2,10 @@
 
 import { Skeleton, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
-import { ComponentType, ReactNode, useMemo, type FC } from "react";
+import { ComponentType, ReactNode, useEffect, useMemo, type FC } from "react";
 import { TaskView } from "./types";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { updateTaskPath } from "../tasks-route-helpers";
 
 const viewLoader = () => (
   <Stack p={16}>
@@ -54,6 +56,27 @@ const allTaskViews: {
 };
 
 export const TaskViewsGateway: FC<{ view: TaskView }> = ({ view }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useParams<{ slug: string; code: string }>();
+
+  // Auto redirect to the correct view
+  useEffect(() => {
+    if (location.pathname === "/tasks") {
+      return router.replace(updateTaskPath({ view }));
+    } else if (view) {
+      if (!Object.values(TaskView).includes(view as TaskView)) {
+        // return router.replace(updateTaskPath({ code: params.code, view: TaskView.LIST, pathname }));
+        console.log("view", view);
+        return;
+      }
+
+      if (params.code && !params.slug) {
+        return router.replace(updateTaskPath({ slug: params.slug, code: params.code, pathname }));
+      }
+    }
+  }, [params, view, router, pathname]);
+
   // Lazy load component only when view is active, with caching
   const ViewComponent = useMemo(() => {
     const viewConfig = allTaskViews[view];

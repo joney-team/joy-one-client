@@ -65,6 +65,12 @@ enum CategoryType {
   PRODUCTS
 }
 
+type ConfigTaskStatuses {
+  count: Float!
+  isCustomized: Boolean!
+  statuses: [TaskStatus!]!
+}
+
 type Coordinates {
   lat: Float!
   lng: Float!
@@ -472,7 +478,7 @@ type Mutation {
   removePluginExternalStorage: Boolean!
   removeTag(id: String!): Boolean!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
-  setTaskStatuses(contextId: String, contextType: TaskStatusesContextType, statuses: [TaskStatusInput!]!): [TaskStatus!]!
+  setTaskStatuses(contextId: String, contextType: TaskStatusesContextType, statuses: [TaskStatusInput!]): [TaskStatus!]!
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
@@ -583,7 +589,7 @@ type Query {
   tags(ids: [String!], limit: Float = 30, offset: Float, type: String): Tags!
   task(_id: String!): Task!
   taskByCode(code: String!): Task!
-  taskStatuses(contextId: String, contextType: TaskStatusesContextType): [TaskStatus!]!
+  taskStatuses(contextId: String, contextType: TaskStatusesContextType): ConfigTaskStatuses!
   tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): TasksPaginated!
   tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): Float!
   userWorkspaceMember: WorkspaceMember!
@@ -712,6 +718,8 @@ enum TaskPriority {
 
 type TaskStatus {
   color: String
+  contextId: String
+  contextType: TaskStatusesContextType
   id: String!
   name: String
   order: Float

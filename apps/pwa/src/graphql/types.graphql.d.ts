@@ -88,6 +88,13 @@ export const CategoryType = {
 } as const;
 
 export type CategoryType = typeof CategoryType[keyof typeof CategoryType];
+export type ConfigTaskStatuses = {
+  __typename?: 'ConfigTaskStatuses';
+  count: Scalars['Float']['output'];
+  isCustomized: Scalars['Boolean']['output'];
+  statuses: Array<TaskStatus>;
+};
+
 export type Coordinates = {
   __typename?: 'Coordinates';
   lat: Scalars['Float']['output'];
@@ -633,7 +640,7 @@ export type MutationSetPluginExternalStorageArgs = {
 export type MutationSetTaskStatusesArgs = {
   contextId?: InputMaybe<Scalars['String']['input']>;
   contextType?: InputMaybe<TaskStatusesContextType>;
-  statuses: Array<TaskStatusInput>;
+  statuses?: InputMaybe<Array<TaskStatusInput>>;
 };
 
 
@@ -768,7 +775,7 @@ export type Query = {
   tags: Tags;
   task: Task;
   taskByCode: Task;
-  taskStatuses: Array<TaskStatus>;
+  taskStatuses: ConfigTaskStatuses;
   tasks: TasksPaginated;
   tasksCount: Scalars['Float']['output'];
   userWorkspaceMember: WorkspaceMember;
@@ -1026,6 +1033,8 @@ export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
 export type TaskStatus = {
   __typename?: 'TaskStatus';
   color: Maybe<Scalars['String']['output']>;
+  contextId: Maybe<Scalars['String']['output']>;
+  contextType: Maybe<TaskStatusesContextType>;
   id: Scalars['String']['output'];
   name: Maybe<Scalars['String']['output']>;
   order: Maybe<Scalars['Float']['output']>;

@@ -28,7 +28,7 @@ export const taskPriorities: Record<
   },
 };
 
-export const defaultTaskStatusIds: Record<
+export const defaultTaskStatus: Record<
   DefaultTaskStatusId,
   { label: () => string; color: MantineColor }
 > = {
@@ -42,28 +42,17 @@ export const defaultTaskStatusIds: Record<
   },
 };
 
-export const combineTaskStatuses = (statuses: TaskStatus[]) => {
-  const customTodoStatus = statuses.find((status) => status.id === DefaultTaskStatusId.TODO);
+export const normalizeTaskStatuses = (statuses: TaskStatus[]) => {
+  return statuses.map((status) => {
+    if (Object.values(DefaultTaskStatusId).includes(status.id as DefaultTaskStatusId)) {
+      const statusId = status.id as DefaultTaskStatusId;
+      return {
+        ...status,
+        name: status.name ?? defaultTaskStatus[statusId].label(),
+        color: status.color ?? defaultTaskStatus[statusId].color,
+      };
+    }
 
-  const todoStatus: TaskStatus = {
-    id: DefaultTaskStatusId.TODO,
-    name: customTodoStatus?.name ?? defaultTaskStatusIds[DefaultTaskStatusId.TODO].label(),
-    color: customTodoStatus?.color ?? defaultTaskStatusIds[DefaultTaskStatusId.TODO].color,
-    order: 0,
-  };
-
-  const customClosedStatus = statuses.find((status) => status.id === DefaultTaskStatusId.CLOSED);
-
-  const closedStatus = {
-    id: DefaultTaskStatusId.CLOSED,
-    name: customClosedStatus?.name ?? defaultTaskStatusIds[DefaultTaskStatusId.CLOSED].label(),
-    color: customClosedStatus?.color ?? defaultTaskStatusIds[DefaultTaskStatusId.CLOSED].color,
-    order: statuses.length + 1,
-  };
-
-  const dynamicStatuses = statuses.filter(
-    (status) => status.id !== DefaultTaskStatusId.TODO && status.id !== DefaultTaskStatusId.CLOSED
-  );
-
-  return [todoStatus, ...dynamicStatuses, closedStatus];
+    return status;
+  });
 };

@@ -20,7 +20,7 @@ import QUERY_TASK_STATUSES, {
   type TaskStatusesQuery,
   type TaskStatusesQueryVariables,
 } from "../../graphql/queryTaskStatuses.graphql";
-import { combineTaskStatuses } from "../../task-constants";
+import { normalizeTaskStatuses } from "../../task-constants";
 
 const BoardGroupByStatuses = dynamic(
   () => import("./board-group-by-statuses").then((mod) => mod.BoardGroupByStatuses),
@@ -79,16 +79,14 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
     }
   );
 
-  const statuses = useMemo(
-    () => combineTaskStatuses(taskStatusesData.data?.taskStatuses ?? []),
-    [taskStatusesData.data]
-  );
+  const statuses = useMemo(() => {
+    const allStatus = normalizeTaskStatuses(taskStatusesData.data?.taskStatuses.statuses ?? []);
 
-  const dynamicTaskStatuses = useMemo(() => {
-    return statuses.filter(
-      (status) => !Object.values(DefaultTaskStatusId).includes(status.id as any)
-    );
-  }, [statuses]);
+    return {
+      inprogress: allStatus.filter((status) => status.id !== DefaultTaskStatusId.CLOSED),
+      closed: allStatus.filter((status) => status.id === DefaultTaskStatusId.CLOSED),
+    };
+  }, [taskStatusesData.data]);
 
   return (
     <Stack id="TasksBoardView" gap={0} mih={0} flex={1} miw={0}>
@@ -122,10 +120,8 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
               mih={0}
               pb={16}
             >
-              <BoardGroupByStatuses key={DefaultTaskStatusId.TODO} status={statuses[0]} />
-
-              {dynamicTaskStatuses.map((status) => (
-                <BoardGroupByStatuses key={status.id} status={status} />
+              {statuses.inprogress.map((status, statusIndex) => (
+                <BoardGroupByStatuses key={status.id + statusIndex} status={status} />
               ))}
 
               {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
@@ -155,12 +151,10 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                 </Card>
               )}
 
-              {tasks.state.showClosed && (
-                <BoardGroupByStatuses
-                  key={DefaultTaskStatusId.CLOSED}
-                  status={statuses[statuses.length - 1]}
-                />
-              )}
+              {tasks.state.showClosed &&
+                statuses.closed.map((status, statusIndex) => (
+                  <BoardGroupByStatuses key={status.id + statusIndex} status={status} />
+                ))}
             </Group>
           </Group>
         </Stack>

@@ -1,28 +1,18 @@
 "use client";
 
-import { useColor } from "@/modules/theme/use-color";
-import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
-import { useMemo } from "react";
-import { defaultTaskStatusIds } from "../task-constants";
-import { DefaultTaskStatusId } from "../tasks-types";
 import { TaskStatus } from "@/graphql/types.graphql";
+import { useMemo } from "react";
+import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
+import { normalizeTaskStatuses } from "../task-constants";
 
 export const useTaskStatuses = (task: Pick<TaskDataFragment, "status" | "statuses">) => {
-  const color = useColor();
+  const statuses = useMemo<TaskStatus[]>(() => {
+    return normalizeTaskStatuses(task.statuses);
+  }, [task.status, task.statuses]);
 
-  const statuses = useMemo(() => {
-    return Array.from(task.statuses)
-      .map((status) => ({
-        ...status,
-        color: color(status.color ?? "transparent"),
-        name: status.name ?? defaultTaskStatusIds[status.id as DefaultTaskStatusId]?.label(),
-      }))
-      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-  }, [color, task.status, task.statuses]);
-
-  const status = useMemo<TaskStatus | null>(() => {
+  const status = useMemo<TaskStatus>(() => {
     return statuses.find((s) => s.id === task.status) ?? statuses[0];
-  }, [task.status, statuses, task.statuses]);
+  }, [task.status, statuses]);
 
-  return { statuses: statuses, status };
+  return { statuses, status };
 };

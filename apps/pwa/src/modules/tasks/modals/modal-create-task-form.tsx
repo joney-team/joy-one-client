@@ -78,7 +78,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
       description: initial?.description ?? "",
       tags: initial?.tags ?? [],
       status: initial?.status ?? DefaultTaskStatusId.TODO,
-      statuses: taskStatusesData?.taskStatuses ?? [],
+      statuses: taskStatusesData?.taskStatuses.statuses ?? [],
       assigneeUsers: initial?.assigneeUsers ?? userWorkspaceMember ? [userWorkspaceMember!] : [],
       ...initial,
     },
@@ -119,7 +119,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
   });
 
   const taskMenu = useTaskMenu({
-    task: { ...form.values, _id: taskId, statuses: taskStatusesData?.taskStatuses ?? [] },
+    task: { ...form.values, _id: taskId, statuses: taskStatusesData?.taskStatuses.statuses ?? [] },
     groupVariables: null,
     updateTask: async (task) => {
       form.setValues({ ...form.values, ...task });
@@ -128,7 +128,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
 
   const taskStatuses = useTaskStatuses({
     status: form.values.status,
-    statuses: taskStatusesData?.taskStatuses ?? [],
+    statuses: taskStatusesData?.taskStatuses.statuses ?? [],
   });
 
   const assignee = useMemo(() => {

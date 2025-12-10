@@ -14,7 +14,7 @@ import QUERY_TASK_STATUSES, {
   type TaskStatusesQueryVariables,
 } from "../../graphql/queryTaskStatuses.graphql";
 import { TaskStatusesContextType } from "@/graphql/enums.graphql";
-import { combineTaskStatuses } from "../../task-constants";
+import { normalizeTaskStatuses } from "../../task-constants";
 
 const ListTaskGroupByStatuses = dynamic(
   () => import("./list-task-group-by-statuses").then((mod) => mod.ListTaskGroupByStatuses),
@@ -39,48 +39,49 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
     }
   );
 
+  const statuses = useMemo(() => {
+    const allStatus = normalizeTaskStatuses(taskStatusesData.data?.taskStatuses.statuses ?? []);
+
+    return {
+      inprogress: allStatus.filter((status) => status.id !== DefaultTaskStatusId.CLOSED),
+      closed: allStatus.filter((status) => status.id === DefaultTaskStatusId.CLOSED),
+    };
+  }, [taskStatusesData.data]);
+
   useEffect(() => {
     return autoScrollWindowForElements();
   });
-
-  const content = useMemo(() => {
-    if (!isReady) return null;
-
-    const statuses = combineTaskStatuses(taskStatusesData.data?.taskStatuses ?? []);
-    const dynamicStatuses = statuses.filter(
-      (status) => !Object.values(DefaultTaskStatusId).includes(status.id as any)
-    );
-
-    return (
-      <Fragment>
-        <ListTaskGroupByStatuses key={activatedFolder?._id} status={statuses[0]} />
-
-        {dynamicStatuses.map((status) => {
-          return (
-            <ListTaskGroupByStatuses
-              key={status.id}
-              status={status}
-              lazyLoadId={DefaultTaskStatusId.TODO}
-            />
-          );
-        })}
-
-        {state.showClosed && (
-          <ListTaskGroupByStatuses
-            key={statuses[statuses.length - 1].id}
-            status={statuses[statuses.length - 1]}
-            lazyLoadId={DefaultTaskStatusId.TODO}
-          />
-        )}
-      </Fragment>
-    );
-  }, [activatedFolder, taskStatusesData.data?.taskStatuses, isReady, state.showClosed]);
 
   return (
     <TaskSelectionsProvider>
       <Stack p={16}>
         <TaskMenuActions />
-        {content}
+
+        {isReady && (
+          <Fragment>
+            {statuses.inprogress.map((status, statusIndex) => {
+              return (
+                <ListTaskGroupByStatuses
+                  key={status.id + statusIndex}
+                  status={status}
+                  lazyLoadId={statuses.inprogress[0].id}
+                />
+              );
+            })}
+
+            {state.showClosed &&
+              statuses.closed.map((status, statusIndex) => {
+                return (
+                  <ListTaskGroupByStatuses
+                    key={status.id + statusIndex}
+                    status={status}
+                    lazyLoadId={statuses.closed[0].id}
+                  />
+                );
+              })}
+          </Fragment>
+        )}
+
         {props.children}
       </Stack>
     </TaskSelectionsProvider>

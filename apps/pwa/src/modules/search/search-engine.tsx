@@ -44,6 +44,7 @@ import { type FC, useMemo, useState } from "react";
 import { loanStatuses } from "../loans/loans-constants";
 import { productTypes } from "../products/products-constants";
 import { useTaskRouter } from "../tasks/hooks/use-task-router";
+import { updateTaskPath } from "../tasks/tasks-route-helpers";
 import {
   useAvailableWorkspaceModules,
   useWorkspaceModules,
@@ -215,7 +216,7 @@ export const SearchEngine: FC = () => {
                 label: `${task.name}`,
                 description: [renderEntityCode(task.code)].filter((v) => !!v).join(" - "),
                 leftSection: <ActionIcon icon={IconStack2} />,
-                onClick: async () => taskRouter.open(task),
+                onClick: async () => router.push(updateTaskPath({ code: task.code })),
               };
             }),
           });

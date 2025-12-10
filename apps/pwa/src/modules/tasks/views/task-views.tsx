@@ -13,7 +13,7 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { FC, Fragment, PropsWithChildren, ReactNode, useEffect, useMemo } from "react";
+import { FC, Fragment, PropsWithChildren, ReactNode, useCallback, useEffect, useMemo } from "react";
 import { BulkTasksActions } from "../components/bulk-tasks-actions";
 import { parseTaskPath, updateTaskPath } from "../tasks-route-helpers";
 import { TaskView } from "./types";
@@ -84,26 +84,14 @@ const allTaskViews: Record<TaskView, { icon: Icon; name: ReactNode }> = {
 const TasksViews: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
   const pathname = usePathname();
-
   const { view } = useMemo(() => parseTaskPath(pathname), [pathname]);
-  const params = useParams<{ slug: string; code: string }>();
 
-  // Auto redirect to the correct view
-  useEffect(() => {
-    if (view) {
-      if (location.pathname === "/tasks") {
-        return router.replace(updateTaskPath({ view }));
-      }
-
-      if (params.code && !params.slug) {
-        return router.replace(updateTaskPath({ slug: params.slug, code: params.code }));
-      }
-    }
-  }, [params, view, router]);
-
-  const setView = (selectedView: string) => {
-    router.replace(updateTaskPath({ view: selectedView as TaskView }));
-  };
+  const setView = useCallback(
+    (selectedView: string) => {
+      router.replace(updateTaskPath({ view: selectedView as TaskView, pathname }));
+    },
+    [router, pathname]
+  );
 
   return (
     <Fragment>
