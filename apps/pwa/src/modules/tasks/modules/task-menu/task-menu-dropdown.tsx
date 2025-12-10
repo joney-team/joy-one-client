@@ -1,6 +1,6 @@
 "use client";
 
-import { Portal, Skeleton } from "@mantine/core";
+import { Portal } from "@mantine/core";
 import { ComponentType, useEffect, useMemo, useRef, useState, type FC } from "react";
 import { TaskMenuAction, TaskMenuComponentProps, type TaskMenu } from "./task-menu-types";
 
@@ -13,70 +13,16 @@ import {
 } from "@/hooks/use-internal-event";
 import { classNames } from "@/utils/ui.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
-import dynamic from "next/dynamic";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
+import { TaskMenuAssignee } from "./task-menu-assignee";
+import { TaskMenuCustomer } from "./task-menu-customer";
+import { TaskMenuEstimateTime } from "./task-menu-estimate-time";
+import { TaskMenuGanttTimeline } from "./task-menu-gantt-timeline";
+import { TaskMenuPriority } from "./task-menu-priority";
+import { TaskMenuStatus } from "./task-menu-status";
+import { TaskMenuTags } from "./task-menu-tags";
+import { TaskMenuTimeline } from "./task-menu-timeline";
 import styles from "./task-menu.module.css";
-
-const TaskMenuEstimateTime = dynamic(
-  () => import("./task-menu-estimate-time").then((mod) => mod.TaskMenuEstimateTime),
-  {
-    ssr: false,
-    loading: () => <Skeleton w={130} h={200} />,
-  }
-);
-
-const TaskMenuCustomer = dynamic(
-  () => import("./task-menu-customer").then((mod) => mod.TaskMenuCustomer),
-  {
-    ssr: false,
-    loading: () => <Skeleton w={130} h={200} />,
-  }
-);
-
-const TaskMenuPriority = dynamic(
-  () => import("./task-menu-priority").then((mod) => mod.TaskMenuPriority),
-  {
-    ssr: false,
-    loading: () => <Skeleton w={130} h={200} />,
-  }
-);
-
-const TaskMenuTimeline = dynamic(
-  () => import("./task-menu-timeline").then((mod) => mod.TaskMenuTimeline),
-  {
-    ssr: false,
-    loading: () => <Skeleton w={480} h={400} />,
-  }
-);
-
-const TaskMenuGanttTimeline = dynamic(
-  () => import("./task-menu-gantt-timeline").then((mod) => mod.TaskMenuGanttTimeline),
-  {
-    ssr: false,
-    loading: () => <Skeleton w={130} h={75} />,
-  }
-);
-
-const TaskMenuStatus = dynamic(
-  () => import("./task-menu-status").then((mod) => mod.TaskMenuStatus),
-  {
-    ssr: false,
-    loading: () => <Skeleton w={170} h={200} />,
-  }
-);
-
-const TaskMenuTags = dynamic(() => import("./task-menu-tags").then((mod) => mod.TaskMenuTags), {
-  ssr: false,
-  loading: () => <Skeleton w={130} h={200} />,
-});
-
-const TaskMenuAssignee = dynamic(
-  () => import("./task-menu-assignee").then((mod) => mod.TaskMenuAssignee),
-  {
-    ssr: false,
-    loading: () => <Skeleton w={130} h={75} />,
-  }
-);
 
 const menuComponents: Partial<Record<TaskMenuAction, ComponentType<TaskMenuComponentProps>>> = {
   [TaskMenuAction.CHANGE_PRIORITY]: TaskMenuPriority,
