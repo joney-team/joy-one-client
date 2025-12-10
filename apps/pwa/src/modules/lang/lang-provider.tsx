@@ -77,6 +77,7 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
 
     startAppLoading("lang");
     await initialize(getClientLocale());
+    window.location.reload();
   };
 
   // Reinitialize when reconnected

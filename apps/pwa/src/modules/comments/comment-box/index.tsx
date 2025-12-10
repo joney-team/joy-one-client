@@ -84,7 +84,14 @@ export const CommentBox: FC<CommentBoxProps> = (props) => {
   const _comments = [...comments.data.sort((a, b) => a.createdAt - b.createdAt)].reverse();
 
   return (
-    <Stack w="100%" h="100%" gap={0} ref={rootSize.ref} bg="var(--mantine-color-default-hover)">
+    <Stack
+      w="100%"
+      h="100%"
+      mih="100%"
+      gap={0}
+      ref={rootSize.ref}
+      bg="var(--mantine-color-default-hover)"
+    >
       <Group
         px={10}
         h={headerHeight}

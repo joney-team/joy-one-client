@@ -24,11 +24,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
     [task._id]
   );
 
-  const {
-    getTasks: getSubtasks,
-    tasks: subTasks,
-    isHasData,
-  } = useTasksQuery({
+  const { getTasks: getSubtasks, tasks: subTasks } = useTasksQuery({
     variables: groupVariables,
     isSkipLoadCount: task.childCount === 0,
   });
@@ -42,11 +38,11 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
     <Stack gap={5}>
       <Group justify="start">
         <Group gap={8}>
-          <ThemeIcon variant="light" color="dark">
+          <ThemeIcon variant="light" color="gray">
             <IconSubtask strokeWidth={1.5} size={20} />
           </ThemeIcon>
 
-          <Text fw={500}>
+          <Text fw={500} fz={14}>
             <Trans>Subtasks</Trans>
           </Text>
         </Group>
@@ -80,7 +76,7 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
         </ModalCreateTask>
       </Group>
 
-      {isHasData && (
+      {task.childCount > 0 && (
         <Stack gap={5} mt={8}>
           <Card withBorder shadow="none" p={0}>
             <Stack gap={0}>

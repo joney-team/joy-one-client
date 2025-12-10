@@ -8,7 +8,7 @@ import { TagType } from "@/graphql/enums.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ActionIcon, ColorInput, Stack, TextInput } from "@mantine/core";
+import { ActionIcon, Center, ColorInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useState } from "react";
@@ -172,14 +172,11 @@ export const ModalTagForm = forwardRef<
                 }
               />
 
-              <Button
-                mt="md"
-                leftIcon={IconCheck}
-                loading={form.submitting}
-                onClick={() => onSubmit()}
-              >
-                <Trans>Save</Trans>
-              </Button>
+              <Center mt="md">
+                <Button leftIcon={IconCheck} loading={form.submitting} onClick={() => onSubmit()}>
+                  <Trans>Save</Trans>
+                </Button>
+              </Center>
             </Stack>
           </Form>
         )}

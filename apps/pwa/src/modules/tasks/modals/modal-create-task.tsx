@@ -99,9 +99,9 @@ export const ModalCreateTask = forwardRef<
           },
         }}
       >
-        <Stack gap={16} pb={16}>
+        <Stack gap={16} pb={20} pt={8}>
           {breadcrumbs.length > 1 && (
-            <Group gap={0} px={16}>
+            <Group gap={0} px={20}>
               {breadcrumbs.map((breadcrumb, index) => (
                 <Fragment key={index}>
                   {breadcrumb}

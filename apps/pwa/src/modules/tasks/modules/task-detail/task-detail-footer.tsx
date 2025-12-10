@@ -22,11 +22,11 @@ export const TaskDetailFooter: FC<TaskDetailFooterProps> = (props) => {
     <Fragment>
       <Stack>
         <Group gap={8}>
-          <ThemeIcon variant="light" color="dark">
+          <ThemeIcon variant="light" color="gray">
             <IconTimelineEvent strokeWidth={1.5} size={20} />
           </ThemeIcon>
 
-          <Text fw={500}>
+          <Text fw={500} fz={14}>
             <Trans>Activities</Trans>
           </Text>
         </Group>

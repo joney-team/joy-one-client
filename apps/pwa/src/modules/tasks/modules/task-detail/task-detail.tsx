@@ -7,9 +7,19 @@ import { CommentBox } from "@/modules/comments/comment-box";
 import { TaskDetailForm } from "@/modules/tasks/modules/task-detail/task-detail-form";
 import { useColor } from "@/modules/theme/use-color";
 import { useLazyQuery } from "@apollo/client/react";
-import { Card, Container, CopyButton, Group, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
+import {
+  Card,
+  Container,
+  CopyButton,
+  Group,
+  Skeleton,
+  Stack,
+  Text,
+  ThemeIcon,
+  Tooltip,
+} from "@mantine/core";
 import { useHover } from "@mantine/hooks";
-import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
+import { IconCopy, IconCopyCheck, IconFiles } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
 import { FC, Fragment, useEffect, useState } from "react";
 import { TaskDetailFooter } from "./task-detail-footer";
@@ -25,6 +35,8 @@ import { TaskDetailSubtasks } from "../../task-detail-subtasks";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { useTaskMenu } from "../task-menu/task-menu";
 import { TaskDetailHead } from "./task-detail-head";
+import { FilesBox } from "@/modules/files/files-box";
+import { AppEntity } from "@/types";
 
 const TaskCodeButton: FC<{ task: TaskDataFragment }> = (props) => {
   const { task } = props;
@@ -139,6 +151,19 @@ export const TaskDetail: FC = () => {
               <Stack>
                 <TaskCodeButton key={modalId + "code"} task={task} />
                 <TaskDetailForm key={modalId + "form"} task={task} />
+                <Stack gap={8}>
+                  <Group gap={8}>
+                    <ThemeIcon variant="light" color="gray">
+                      <IconFiles strokeWidth={1.5} size={20} />
+                    </ThemeIcon>
+
+                    <Text fw={500} fz={14}>
+                      <Trans>Attachments</Trans>
+                    </Text>
+                  </Group>
+
+                  <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
+                </Stack>
                 <TaskDetailFooter key={modalId + "footer"} task={task} onClose={onClose} />
               </Stack>
             </Stack>
@@ -158,7 +183,7 @@ export const TaskDetail: FC = () => {
               </Stack>
 
               <Group h={contentHeight} w="100%" gap={0} wrap="nowrap">
-                <Stack flex={1} h={contentHeight} style={{ overflow: "auto" }}>
+                <Stack flex={1} h={contentHeight} mih={contentHeight} style={{ overflow: "auto" }}>
                   <Container pt={10} pb={16} px={32}>
                     <TaskCodeButton key={modalId + "code"} task={task} />
 
@@ -167,6 +192,20 @@ export const TaskDetail: FC = () => {
                       {!task.parent && (
                         <TaskDetailSubtasks key={modalId + "subtasks"} task={task} />
                       )}
+
+                      <Stack gap={8}>
+                        <Group gap={8}>
+                          <ThemeIcon variant="light" color="gray">
+                            <IconFiles strokeWidth={1.5} size={20} />
+                          </ThemeIcon>
+
+                          <Text fw={500} fz={14}>
+                            <Trans>Attachments</Trans>
+                          </Text>
+                        </Group>
+
+                        <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
+                      </Stack>
                       <TaskDetailFooter key={modalId + "footer"} task={task} onClose={onClose} />
                     </Stack>
                   </Container>
@@ -175,6 +214,7 @@ export const TaskDetail: FC = () => {
                 <Stack
                   w={450}
                   h={contentHeight}
+                  mih={contentHeight}
                   style={{ borderLeft: `1px solid ${workspaceLayout.dividerColor}` }}
                   gap={0}
                 >

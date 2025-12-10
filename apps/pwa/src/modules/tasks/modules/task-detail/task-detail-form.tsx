@@ -477,20 +477,6 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
           }}
         />
       </Stack>
-
-      <Stack gap={8}>
-        <Group gap={8}>
-          <ThemeIcon variant="light" color="dark">
-            <IconFiles strokeWidth={1.5} size={20} />
-          </ThemeIcon>
-
-          <Text fw={500}>
-            <Trans>Attachments</Trans>
-          </Text>
-        </Group>
-
-        <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
-      </Stack>
     </Stack>
   );
 };

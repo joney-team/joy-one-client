@@ -18,10 +18,14 @@ import {
   IconFlag,
   IconFlagFilled,
   IconPlus,
+  IconStackPush,
   IconTags,
   IconTagsFilled,
+  IconUser,
+  IconUserFilled,
+  IconUsers,
 } from "@tabler/icons-react";
-import { FC, Fragment, useEffect } from "react";
+import { FC, Fragment, useEffect, useMemo } from "react";
 import { TaskTimeline } from "../components/task-timeline";
 import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
 import CREATE_TASK_MUTATION, {
@@ -37,6 +41,7 @@ import { useTaskMenu } from "../modules/task-menu/task-menu";
 import { TaskMenuAction } from "../modules/task-menu/task-menu-types";
 import { taskPriorities } from "../task-constants";
 import { DefaultTaskStatusId, TaskPriority } from "../tasks-types";
+import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
 
 export interface CreateTaskFormProps {
   initial?: Partial<TaskDataFragment>;
@@ -47,6 +52,8 @@ export interface CreateTaskFormProps {
 export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, onClose }) => {
   const { t } = useLingui();
   const taskId = createObjectId();
+
+  const { userWorkspaceMember } = useUserWorkspaceMember();
 
   const [getTaskStatuses, { data: taskStatusesData, loading: taskStatusesLoading }] = useLazyQuery<
     TaskStatusesQuery,
@@ -72,6 +79,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
       tags: initial?.tags ?? [],
       status: initial?.status ?? DefaultTaskStatusId.TODO,
       statuses: taskStatusesData?.taskStatuses ?? [],
+      assigneeUsers: initial?.assigneeUsers ?? userWorkspaceMember ? [userWorkspaceMember!] : [],
       ...initial,
     },
   });
@@ -123,14 +131,30 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
     statuses: taskStatusesData?.taskStatuses ?? [],
   });
 
+  const assignee = useMemo(() => {
+    const maxDisplay = 2;
+
+    if (form.values.assigneeUsers && form.values.assigneeUsers.length > 0) {
+      const assignees = form.values.assigneeUsers.slice(0, maxDisplay);
+      if (assignees.length < form.values.assigneeUsers.length) {
+        return `${assignees.map((user) => user.name).join(", ")}, +${
+          form.values.assigneeUsers.length - maxDisplay
+        }`;
+      }
+      return assignees.map((user) => user.name).join(", ");
+    }
+
+    return <Trans>Assignee</Trans>;
+  }, [form.values.assigneeUsers]);
+
   if (taskStatusesLoading) return <Skeleton height={100} miw="100%" />;
 
   return (
     <form onSubmit={onSubmit}>
-      <Stack>
-        <Stack px={16}>
+      <Stack px={20}>
+        <Stack>
           <ContentEditable
-            fz={25}
+            fz={20}
             fw={500}
             autoFocus
             placeholder={t`Enter task name`}
@@ -151,8 +175,8 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
           />
         </Stack>
 
-        <Group px={16}>
-          <Group gap={10} flex={1} justify="center" align="center">
+        <Group>
+          <Group gap={10} flex={1} align="center">
             {taskStatuses.status && (
               <Button
                 radius={5}
@@ -179,6 +203,32 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
                 {taskStatuses.status.name}
               </Button>
             )}
+
+            <Button
+              radius={5}
+              size="compact-sm"
+              variant="outline"
+              fz={11}
+              onClick={(e) =>
+                taskMenu.open({
+                  action: TaskMenuAction.CHANGE_ASSIGNEE,
+                  target: e.currentTarget,
+                  offset: { y: 3 },
+                })
+              }
+              leftIcon={
+                form.values.assigneeUsers && form.values.assigneeUsers.length > 0
+                  ? IconUserFilled
+                  : IconUser
+              }
+              color={
+                form.values.assigneeUsers && form.values.assigneeUsers.length > 0
+                  ? "dark"
+                  : "gray.5"
+              }
+            >
+              {assignee}
+            </Button>
 
             <Button
               radius={5}
@@ -259,9 +309,9 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
           </Group>
         </Group>
 
-        <Center mt={12}>
-          <Button leftIcon={IconPlus} type="submit" loading={form.submitting}>
-            <Trans>Add</Trans>
+        <Center mt={8}>
+          <Button leftIcon={IconStackPush} type="submit" loading={form.submitting}>
+            <Trans>Add task</Trans>
           </Button>
         </Center>
       </Stack>

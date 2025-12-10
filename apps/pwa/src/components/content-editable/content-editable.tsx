@@ -139,7 +139,7 @@ export const ContentEditable: FC<ContentEditableProps> = ({
       {!!placeholder && !inputRef.current?.textContent && !value && (
         <Box
           fz={typeof placeHolderFontSize === "number" ? placeHolderFontSize : fz * 0.9}
-          fw={300}
+          fw={400}
           style={{
             position: "absolute",
             top: "50%",

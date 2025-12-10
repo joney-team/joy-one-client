@@ -88,7 +88,7 @@ export const ModalSharelink = forwardRef<
               </Group>
             </Group>
 
-            <Group justify="space-between" align="end">
+            <Group justify="space-between" align="end" wrap="nowrap">
               <Stack gap={3} flex={1}>
                 <Text fz={em(12)} fw={500}>
                   <Trans>Link</Trans>
