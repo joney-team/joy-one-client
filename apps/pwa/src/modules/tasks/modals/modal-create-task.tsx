@@ -1,7 +1,6 @@
 "use client";
 
 import { Modal } from "@/components/modal/modal";
-import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans } from "@lingui/react/macro";
@@ -35,7 +34,6 @@ export const ModalCreateTask = forwardRef<
   }
 >((props, ref) => {
   const color = useColor();
-  const layout = useLayout();
   const [args, setArgs] = useState<CreateTaskFormProps | null>(null);
 
   useImperativeHandle(ref, () => ({
@@ -86,11 +84,14 @@ export const ModalCreateTask = forwardRef<
 
       <Modal
         id="modal-create-task"
-        opened={!!args}
-        onClose={() => setArgs(null)}
         name={<Trans>Create task</Trans>}
         icon={IconStackPush}
         isFullscreenOnMobile
+        opened={!!args}
+        onClose={() => {
+          console.log("close");
+          setArgs(null);
+        }}
         size={600}
         zIndex={zIndexes.commonModals + 1}
         styles={{

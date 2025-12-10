@@ -1,10 +1,10 @@
 "use client";
 
+import { classNames } from "@/utils/ui.utils";
 import { Box, BoxProps } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { ClipboardEvent, FC, useEffect, useRef } from "react";
 import { placeCaretAtEnd } from "./utils";
-import { classNames } from "@/utils/ui.utils";
 
 import styles from "./content-editable.module.css";
 

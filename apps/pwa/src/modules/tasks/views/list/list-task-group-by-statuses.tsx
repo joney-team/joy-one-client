@@ -4,18 +4,19 @@ import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { WayPoint } from "@/components/way-point";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
-import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import type { ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Loader, Skeleton, Stack, Text } from "@mantine/core";
 import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { ListTaskRowHead } from "./list-task-row-head";
 
 import { TaskStatus } from "@/graphql/types.graphql";
 import { useElementLazyLoad, useWaitElementLazyLoad } from "@/hooks/use-element-lazy-load";
+import { nonLoading } from "@/utils/non-loading";
 import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import styles from "./list-tasks.module.css";
@@ -24,6 +25,14 @@ const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.Li
   ssr: false,
   loading: () => <Skeleton height={22} w="100%" radius={0} />,
 });
+
+const ModalCreateTask = dynamic(
+  () => import("@/modules/tasks/modals/modal-create-task").then((mod) => mod.ModalCreateTask),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 interface ListTaskGroupByStatusesProps {
   status: TaskStatus;
@@ -38,6 +47,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
 }) => {
   const { activatedFolder, href, state } = useTasks();
   const [isReadyToFetch, setIsReadyToFetch] = useState(!lazyLoadId);
+  const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
 
   const [isVisible, setIsVisible] = useState(
     typeof props.defaultVisible === "boolean" ? props.defaultVisible : true
@@ -113,28 +123,24 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
         )}
 
         {!isClosedTasks && (
-          <ModalCreateTask>
-            {(modalCreateTask) => (
-              <Button
-                variant="subtle"
-                size="compact-xs"
-                color="gray"
-                leftIcon={IconPlus}
-                fw={400}
-                onClick={() =>
-                  modalCreateTask.open({
-                    initial: {
-                      status: props.status.id,
-                      folder: activatedFolder,
-                      order: (tasks[0]?.order ?? 1) / 2,
-                    },
-                  })
-                }
-              >
-                <Trans>Create task</Trans>
-              </Button>
-            )}
-          </ModalCreateTask>
+          <Button
+            variant="subtle"
+            size="compact-xs"
+            color="gray"
+            leftIcon={IconPlus}
+            fw={400}
+            onClick={() =>
+              modalCreateTaskRef.current?.open({
+                initial: {
+                  status: props.status.id,
+                  folder: activatedFolder,
+                  order: (tasks[0]?.order ?? 1) / 2,
+                },
+              })
+            }
+          >
+            <Trans>Create task</Trans>
+          </Button>
         )}
       </Group>
 
@@ -170,6 +176,8 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
           </Card>
         </Stack>
       )}
+
+      <ModalCreateTask ref={modalCreateTaskRef} />
     </Stack>
   );
 };

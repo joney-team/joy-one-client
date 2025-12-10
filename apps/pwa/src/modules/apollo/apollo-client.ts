@@ -117,6 +117,9 @@ export const apolloClient = new ApolloClient({
           assigneeUsers: {
             merge: false,
           },
+          tags: {
+            merge: false,
+          },
         },
       },
     },

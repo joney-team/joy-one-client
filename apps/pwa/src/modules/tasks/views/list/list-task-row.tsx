@@ -334,7 +334,7 @@ export const ListTaskRow: FC<
               miw={0}
               align="stretch"
             >
-              <Group flex={1} gap={5} wrap="nowrap" align="stretch">
+              <Group flex={1} gap={5} wrap="nowrap" align="stretch" miw={0}>
                 {isEditName ? (
                   <ContentEditable
                     fz={14}
@@ -346,16 +346,72 @@ export const ListTaskRow: FC<
                     onBlur={() => setIsEditName(false)}
                   />
                 ) : (
-                  <Text
-                    component={Link}
-                    href={href}
-                    fz={14}
-                    fw={500}
-                    truncate
-                    style={{ outline: "none" }}
-                  >
-                    {task.name}
-                  </Text>
+                  <Fragment>
+                    <Text
+                      component={Link}
+                      href={href}
+                      fz={14}
+                      fw={500}
+                      truncate
+                      style={{ outline: "none" }}
+                    >
+                      {task.name}
+                    </Text>
+
+                    <Group gap={0} px={5} wrap="nowrap" className={styles.HoverToActive}>
+                      {allowEditName && (
+                        <Tooltip label={<Trans>Edit task name</Trans>}>
+                          <ActionIcon
+                            variant="subtle"
+                            color="gray.6"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsEditName(true);
+                            }}
+                          >
+                            <IconPencil size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      )}
+
+                      {!task.parentId && (
+                        <ModalCreateTask>
+                          {(modalCreateTask) => (
+                            <Tooltip label={<Trans>Create subtask</Trans>}>
+                              <ActionIcon
+                                variant="subtle"
+                                color="gray.6"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  modalCreateTask.open({ initial: { parent: task } });
+                                }}
+                              >
+                                <IconPlus size={16} />
+                              </ActionIcon>
+                            </Tooltip>
+                          )}
+                        </ModalCreateTask>
+                      )}
+
+                      <ActionIcon
+                        variant="subtle"
+                        color="gray.6"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          taskMenu.open({
+                            target: e.currentTarget,
+                            action: TaskMenuAction.CHANGE_TAGS,
+                          });
+                        }}
+                      >
+                        <IconTagPlus size={16} />
+                      </ActionIcon>
+                    </Group>
+                  </Fragment>
                 )}
 
                 {task.tags.length > 0 && (
@@ -377,7 +433,7 @@ export const ListTaskRow: FC<
                         className="clickable"
                         color={tag.color || "gray"}
                         key={tag._id}
-                        size="xs"
+                        size="sm"
                         variant="light"
                       >
                         {tag.name}
@@ -411,60 +467,6 @@ export const ListTaskRow: FC<
                 )}
 
                 <Box bg="transparent" component={Link} href={href} flex={1} h="100%" mih={0} />
-              </Group>
-
-              <Group gap={2} wrap="nowrap" className={styles.HoverToActive}>
-                {!task.parentId && (
-                  <ModalCreateTask>
-                    {(modalCreateTask) => (
-                      <Tooltip label={<Trans>Create subtask</Trans>}>
-                        <ActionIcon
-                          variant="subtle"
-                          color="gray.6"
-                          size="sm"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            modalCreateTask.open({ initial: { parent: task } });
-                          }}
-                        >
-                          <IconPlus size={16} />
-                        </ActionIcon>
-                      </Tooltip>
-                    )}
-                  </ModalCreateTask>
-                )}
-
-                {allowEditName && (
-                  <Tooltip label={<Trans>Edit task name</Trans>}>
-                    <ActionIcon
-                      variant="subtle"
-                      color="gray.6"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIsEditName(true);
-                      }}
-                    >
-                      <IconPencil size={16} />
-                    </ActionIcon>
-                  </Tooltip>
-                )}
-
-                <ActionIcon
-                  variant="subtle"
-                  color="gray.6"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    taskMenu.open({
-                      target: e.currentTarget,
-                      action: TaskMenuAction.CHANGE_TAGS,
-                    });
-                  }}
-                >
-                  <IconTagPlus size={16} />
-                </ActionIcon>
               </Group>
             </Group>
 
