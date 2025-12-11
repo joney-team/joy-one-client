@@ -27,7 +27,7 @@ export const useTasksQuery = ({
     TasksCountQuery,
     TasksCountQueryVariables
   >(QUERY_TASKS_COUNT, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const useTasksQuery = ({
     TasksQuery,
     TasksQueryVariables
   >(QUERY_TASKS, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
   });
 
   const tasks = useMemo(() => {
@@ -148,7 +148,7 @@ export const useTasksQuery = ({
     getTasks,
     tasks,
     count: data?.tasks?.count ?? dataCount?.tasksCount,
-    loading,
+    loading: loading && !data,
     loadMore: handleLoadMore,
     isCanLoadMore,
     isLoadingMore,

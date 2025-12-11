@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { WayPoint } from "@/components/way-point";
 import { Task, TaskStatus } from "@/graphql/types.graphql";
-import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
+import { TaskStatusIcon } from "@/modules/tasks/components/task-status-icon";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";

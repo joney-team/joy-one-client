@@ -5,7 +5,7 @@ import { Fragment } from "react";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
 import { TaskMenuComponent } from "./task-menu-types";
 
-import { TaskStatusIcon } from "../../components/task-status-options";
+import { TaskStatusIcon } from "../../components/task-status-icon";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { DefaultTaskStatusId } from "../../tasks-types";
 import styles from "./task-menu.module.css";
@@ -54,10 +54,6 @@ export const TaskMenuStatus: TaskMenuComponent = ({
                   </Text>
                 </Group>
               </Stack>
-
-              {status.id === DefaultTaskStatusId.TODO && (
-                <Divider my={2} miw="100%" opacity={0.3} />
-              )}
             </Fragment>
           );
         })}

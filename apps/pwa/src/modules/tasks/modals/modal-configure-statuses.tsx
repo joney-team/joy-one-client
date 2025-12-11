@@ -40,7 +40,7 @@ import {
   useState,
 } from "react";
 import { v4 as uuid } from "uuid";
-import { TaskStatusIcon } from "../components/task-status-options";
+import { TaskStatusIcon } from "../components/task-status-icon";
 import UPDATE_TASK_STATUSES_MUTATION, {
   type UpdateTaskStatusesMutation,
   type UpdateTaskStatusesMutationVariables,

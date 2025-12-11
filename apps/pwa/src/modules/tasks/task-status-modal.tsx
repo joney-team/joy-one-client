@@ -5,7 +5,7 @@ import { ContentEditable } from "@/components/content-editable/content-editable"
 import { NumberFormat } from "@/components/format/number-format";
 import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
-import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
+import { TaskStatusIcon } from "@/modules/tasks/components/task-status-icon";
 import { getTasks, renderTaskStatusStyle, updateTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskStatus } from "@/modules/tasks/tasks-types";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";

@@ -18,6 +18,7 @@ import { type TasksQueryVariables } from "../../../graphql/queryTasks.graphql";
 import { ganttConfig } from "../gantt-tasks-config";
 import { useGantt } from "../gantt-tasks-context";
 import type { GanttTaskProps, GanttTaskTimeline } from "./gantt-task-types";
+import { useColor } from "@/modules/theme/use-color";
 
 type GanttTaskRowRefs = {
   rootRef: RefObject<HTMLDivElement | null>;
@@ -36,6 +37,7 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
   ...props
 }) => {
   const gantt = useGantt();
+  const color = useColor();
   const rootRef = useRef<HTMLDivElement>(null);
   const ganttTaskAreaRef = useRef<HTMLDivElement>(null);
 
@@ -113,8 +115,8 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
   const { status } = useTaskStatuses(task);
 
   useEffect(() => {
-    rootRef.current?.style.setProperty("--task-status-color", status?.color ?? "");
-  }, [status]);
+    rootRef.current?.style.setProperty("--task-status-color", color(status?.color ?? "gray"));
+  }, [status, color]);
 
   return (
     <Context.Provider

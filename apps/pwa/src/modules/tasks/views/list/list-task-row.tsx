@@ -4,7 +4,7 @@ import { ContentEditable } from "@/components/content-editable/content-editable"
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
-import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
+import { TaskStatusIcon } from "@/modules/tasks/components/task-status-icon";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {

@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { WayPoint } from "@/components/way-point";
-import { TaskStatusIcon } from "@/modules/tasks/components/task-status-options";
+import { TaskStatusIcon } from "@/modules/tasks/components/task-status-icon";
 import type { ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";

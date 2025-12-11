@@ -8,7 +8,7 @@ import { ActionIcon, Combobox, em, Group, InputWrapperProps, Stack, Text } from 
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
-import { TaskStatusIcon } from "./task-status-options";
+import { TaskStatusIcon } from "./task-status-icon";
 
 interface TaskStatusSelectorProps {
   render?: (ctx: SelectorContext<TaskStatus>) => ReactNode;
