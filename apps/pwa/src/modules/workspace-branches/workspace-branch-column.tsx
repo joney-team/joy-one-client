@@ -27,8 +27,13 @@ export const workspaceBranchColumn = (): Column => {
       return data.workspaceBranch ? data.workspaceBranch.name : t`Main office`;
     },
     exportToExcel: (_, loan) => {
-      if (!loan.workspaceBranch) return t`Main office`;
-      return loan.workspaceBranch.name;
+      if (!loan.workspaceBranch)
+        return {
+          text: t`Main office`,
+        };
+      return {
+        text: loan.workspaceBranch.name,
+      };
     },
     disabled: !workspace.isShouldEnableBranches,
     filter:
