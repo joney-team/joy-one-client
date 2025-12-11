@@ -42,7 +42,7 @@ export interface ModalTagFormRef {
 export const ModalTagForm = forwardRef<
   ModalTagFormRef,
   {
-    children: (modal: {
+    children?: (modal: {
       isOpened: boolean;
       onClose: () => void;
       open: (args?: ModalTagFormProps) => void;

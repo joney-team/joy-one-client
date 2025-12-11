@@ -41,10 +41,19 @@ export const AppColorInput: FC<AppColorInputProps> = (props) => {
     parseThemeColor({ color: props.color, theme })?.value ?? props.color
   );
 
+  const safeParseThemeColor = (color: string | null | undefined) => {
+    try {
+      return parseThemeColor({ color: color, theme })?.value ?? null;
+    } catch (error) {
+      return null;
+    }
+  };
+
   const onChange = (color: string | null) => {
     try {
-      const parsedColor = parseThemeColor({ color: color, theme });
-      props.onChange(parsedColor.value ?? null);
+      const parsedColor = safeParseThemeColor(color);
+      props.onChange(parsedColor);
+      setColorInputValue(parsedColor ?? "");
     } catch (error) {
       props.onChange(null);
     }
@@ -59,10 +68,12 @@ export const AppColorInput: FC<AppColorInputProps> = (props) => {
   }, [colorInputValue]);
 
   return (
-    <Stack>
+    <Stack gap={8}>
       <SimpleGrid cols={6} spacing={3}>
         {colorOptions.map((option) => {
-          const isSelected = option === "none" ? props.color === null : option === props.color;
+          const isSelected =
+            option === "none" ? props.color === null : props.color === safeParseThemeColor(option);
+
           const optionColor = option === "none" ? color("gray.1") : color(option);
 
           return (
@@ -82,7 +93,7 @@ export const AppColorInput: FC<AppColorInputProps> = (props) => {
               onClick={() => {
                 onChange(option === "none" ? null : option);
               }}
-              p={3}
+              p={2}
             >
               <Group w="100%" h="100%" p={3} bg={optionColor} style={{ borderRadius: "50%" }}>
                 {option === "none" && (

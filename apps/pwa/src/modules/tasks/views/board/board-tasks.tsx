@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { TaskStatusesContextType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
-import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -21,6 +20,18 @@ import QUERY_TASK_STATUSES, {
   type TaskStatusesQueryVariables,
 } from "../../graphql/queryTaskStatuses.graphql";
 import { normalizeTaskStatuses } from "../../task-constants";
+import { nonLoading } from "@/utils/non-loading";
+
+const ModalConfigureStatuses = dynamic(
+  () =>
+    import("@/modules/tasks/modals/modal-configure-statuses").then(
+      (mod) => mod.ModalConfigureStatuses
+    ),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const BoardGroupByStatuses = dynamic(
   () => import("./board-group-by-statuses").then((mod) => mod.BoardGroupByStatuses),
@@ -80,7 +91,11 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
   );
 
   const statuses = useMemo(() => {
-    const allStatus = normalizeTaskStatuses(taskStatusesData.data?.taskStatuses.statuses ?? []);
+    const selectStatuses = taskStatusesData.data?.taskStatuses.isInherited
+      ? taskStatusesData.data?.taskStatuses.workspaceStatuses
+      : taskStatusesData.data?.taskStatuses.statuses;
+
+    const allStatus = normalizeTaskStatuses(selectStatuses ?? []);
 
     return {
       inprogress: allStatus.filter((status) => status.id !== DefaultTaskStatusId.CLOSED),
@@ -125,30 +140,42 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
               ))}
 
               {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-                <Card
-                  withBorder
-                  shadow="none"
-                  p={10}
-                  w={300}
-                  style={{
-                    background: "transparent",
-                    border: "1px dashed rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  <Group>
-                    <Button
-                      variant="light"
-                      color="gray"
-                      size="xs"
-                      leftIcon={IconPlus}
-                      iconSize={16}
-                      fz={12}
-                      onClick={() => OnTaskSatusesModal()}
+                <ModalConfigureStatuses>
+                  {(modal) => (
+                    <Card
+                      withBorder
+                      shadow="none"
+                      p={10}
+                      w={300}
+                      style={{
+                        background: "transparent",
+                        border: "1px dashed rgba(0, 0, 0, 0.1)",
+                      }}
                     >
-                      <Trans>Add status</Trans>
-                    </Button>
-                  </Group>
-                </Card>
+                      <Group>
+                        <Button
+                          variant="light"
+                          color="gray"
+                          size="xs"
+                          leftIcon={IconPlus}
+                          iconSize={16}
+                          fz={12}
+                          onClick={() =>
+                            modal.open({
+                              contextType: tasks.activatedFolder
+                                ? TaskStatusesContextType.Folder
+                                : null,
+                              contextId: tasks.activatedFolder?._id ?? null,
+                              autoCreation: true,
+                            })
+                          }
+                        >
+                          <Trans>Add status</Trans>
+                        </Button>
+                      </Group>
+                    </Card>
+                  )}
+                </ModalConfigureStatuses>
               )}
 
               {tasks.state.showClosed &&

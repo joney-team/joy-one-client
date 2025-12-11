@@ -33,7 +33,7 @@ export const Modal: FC<ModalProps> = ({ id, icon, name, isFullscreenOnMobile, ..
   useEscape({
     id: modalId,
     onEscape: () => props.onClose?.(),
-    active: props.opened,
+    active: props.opened && props.closeOnEscape !== false,
   });
 
   useEffect(() => {

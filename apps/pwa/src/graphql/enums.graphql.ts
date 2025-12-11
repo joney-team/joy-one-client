@@ -250,6 +250,13 @@ export const Gender = {
 } as const;
 
 export type Gender = typeof Gender[keyof typeof Gender];
+/** Available task statuses modes */
+export const GetTaskStatusesMode = {
+  Edit: 'EDIT',
+  View: 'VIEW'
+} as const;
+
+export type GetTaskStatusesMode = typeof GetTaskStatusesMode[keyof typeof GetTaskStatusesMode];
 /** Available external storage providers */
 export const PluginExternalStorageProvider = {
   AwsS3: 'AWS_S3'

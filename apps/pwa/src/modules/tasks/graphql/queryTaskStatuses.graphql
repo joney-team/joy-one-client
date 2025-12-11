@@ -1,7 +1,19 @@
-query TaskStatuses($contextType: TaskStatusesContextType, $contextId: String) {
-  taskStatuses(contextType: $contextType, contextId: $contextId) {
-    isCustomized
+query TaskStatuses(
+  $contextType: TaskStatusesContextType
+  $contextId: String
+  $mode: GetTaskStatusesMode
+) {
+  taskStatuses(contextType: $contextType, contextId: $contextId, mode: $mode) {
+    isInherited
     statuses {
+      id
+      name
+      color
+      order
+      contextId
+      contextType
+    }
+    workspaceStatuses {
       id
       name
       color

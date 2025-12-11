@@ -1,0 +1,20 @@
+mutation UpdateTaskStatuses(
+  $statuses: [TaskStatusInput!]!
+  $contextType: TaskStatusesContextType
+  $contextId: String
+  $isInherited: Boolean
+) {
+  updateTaskStatuses(
+    statuses: $statuses
+    contextType: $contextType
+    contextId: $contextId
+    isInherited: $isInherited
+  ) {
+    id
+    name
+    color
+    order
+    contextId
+    contextType
+  }
+}

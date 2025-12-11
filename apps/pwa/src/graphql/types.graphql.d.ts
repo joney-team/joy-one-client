@@ -90,9 +90,9 @@ export const CategoryType = {
 export type CategoryType = typeof CategoryType[keyof typeof CategoryType];
 export type ConfigTaskStatuses = {
   __typename?: 'ConfigTaskStatuses';
-  count: Scalars['Float']['output'];
-  isCustomized: Scalars['Boolean']['output'];
+  isInherited: Scalars['Boolean']['output'];
   statuses: Array<TaskStatus>;
+  workspaceStatuses: Array<TaskStatus>;
 };
 
 export type Coordinates = {
@@ -487,6 +487,13 @@ export const Gender = {
 } as const;
 
 export type Gender = typeof Gender[keyof typeof Gender];
+/** Available task statuses modes */
+export const GetTaskStatusesMode = {
+  Edit: 'EDIT',
+  View: 'VIEW'
+} as const;
+
+export type GetTaskStatusesMode = typeof GetTaskStatusesMode[keyof typeof GetTaskStatusesMode];
 export type LocationEntity = {
   __typename?: 'LocationEntity';
   address: Maybe<Scalars['String']['output']>;
@@ -515,10 +522,10 @@ export type Mutation = {
   removePluginExternalStorage: Scalars['Boolean']['output'];
   removeTag: Scalars['Boolean']['output'];
   setPluginExternalStorage: PluginExternalStorage;
-  setTaskStatuses: Array<TaskStatus>;
   syncTask: SyncTaskResult;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateCategory: Category;
+  updateTaskStatuses: Array<TaskStatus>;
 };
 
 
@@ -637,13 +644,6 @@ export type MutationSetPluginExternalStorageArgs = {
 };
 
 
-export type MutationSetTaskStatusesArgs = {
-  contextId?: InputMaybe<Scalars['String']['input']>;
-  contextType?: InputMaybe<TaskStatusesContextType>;
-  statuses?: InputMaybe<Array<TaskStatusInput>>;
-};
-
-
 export type MutationSyncTaskArgs = {
   _id: Scalars['String']['input'];
 };
@@ -660,6 +660,14 @@ export type MutationUpdateCategoryArgs = {
   slug?: InputMaybe<Scalars['String']['input']>;
   thumbnail?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<CategoryType>;
+};
+
+
+export type MutationUpdateTaskStatusesArgs = {
+  contextId?: InputMaybe<Scalars['String']['input']>;
+  contextType?: InputMaybe<TaskStatusesContextType>;
+  isInherited?: InputMaybe<Scalars['Boolean']['input']>;
+  statuses: Array<TaskStatusInput>;
 };
 
 export type PartnerEntity = {
@@ -858,6 +866,7 @@ export type QueryTaskByCodeArgs = {
 export type QueryTaskStatusesArgs = {
   contextId?: InputMaybe<Scalars['String']['input']>;
   contextType?: InputMaybe<TaskStatusesContextType>;
+  mode?: InputMaybe<GetTaskStatusesMode>;
 };
 
 
@@ -1037,12 +1046,11 @@ export type TaskStatus = {
   contextType: Maybe<TaskStatusesContextType>;
   id: Scalars['String']['output'];
   name: Maybe<Scalars['String']['output']>;
-  order: Maybe<Scalars['Float']['output']>;
+  order: Scalars['Float']['output'];
 };
 
 export type TaskStatusInput = {
   color?: InputMaybe<Scalars['String']['input']>;
-  icon?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   order?: InputMaybe<Scalars['Float']['input']>;

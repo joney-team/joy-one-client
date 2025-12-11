@@ -38,21 +38,23 @@ export const defaultTaskStatus: Record<
   },
   CLOSED: {
     label: () => t`Closed`,
-    color: "green",
+    color: "teal",
   },
 };
 
 export const normalizeTaskStatuses = (statuses: TaskStatus[]) => {
-  return statuses.map((status) => {
-    if (Object.values(DefaultTaskStatusId).includes(status.id as DefaultTaskStatusId)) {
-      const statusId = status.id as DefaultTaskStatusId;
-      return {
-        ...status,
-        name: status.name ?? defaultTaskStatus[statusId].label(),
-        color: status.color ?? defaultTaskStatus[statusId].color,
-      };
-    }
+  return statuses
+    .map((status) => {
+      if (Object.values(DefaultTaskStatusId).includes(status.id as DefaultTaskStatusId)) {
+        const statusId = status.id as DefaultTaskStatusId;
+        return {
+          ...status,
+          name: status.name ?? defaultTaskStatus[statusId].label().toUpperCase(),
+          color: status.color ?? defaultTaskStatus[statusId].color,
+        };
+      }
 
-    return status;
-  });
+      return status;
+    })
+    .sort((a, b) => a.order - b.order);
 };

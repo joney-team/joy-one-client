@@ -24,20 +24,35 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Divider, Group, Menu, Stack, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
-  IconColorPicker,
   IconDots,
   IconDroplet,
   IconFolder,
   IconFolderOpen,
   IconPencil,
+  IconTarget,
   IconTrash,
+  IconX,
 } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 
-import styles from "./workspace-navigation-task-folders.module.css";
-import { ColorInput } from "@/modules/tasks/task-status-modal";
 import { AppColorInput, useParsedAppColor } from "@/components/inputs/app-color-input";
+import { TaskStatusesContextType } from "@/graphql/enums.graphql";
+import { type ModalConfigureStatusesRef } from "@/modules/tasks/modals/modal-configure-statuses";
+import { nonLoading } from "@/utils/non-loading";
+import dynamic from "next/dynamic";
+import styles from "./workspace-navigation-task-folders.module.css";
+
+const ModalConfigureStatuses = dynamic(
+  () =>
+    import("@/modules/tasks/modals/modal-configure-statuses").then(
+      (mod) => mod.ModalConfigureStatuses
+    ),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const TaskFolderNavigationItem: FC<{
   tag: TagDataFragment;
@@ -49,6 +64,8 @@ const TaskFolderNavigationItem: FC<{
   const isActive = params.slug === tag.slug;
   const activeColor = useParsedAppColor(tag.color);
   const modalConfirmRef = useRef<ModalConfirmRef>(null);
+  const modalConfigureStatusesRef = useRef<ModalConfigureStatusesRef>(null);
+
   const { bulkUpdateTags } = useTaskFolders();
 
   const [isRenaming, setIsRenaming] = useState(false);
@@ -71,13 +88,20 @@ const TaskFolderNavigationItem: FC<{
 
   const onRemoveTag = () => {
     modalConfirmRef.current?.open({
+      icon: IconTrash,
       color: "red",
       content: (
-        <Text>
-          <Trans>
-            Are you sure you want to remove <strong>{tag.name}</strong> folder?
-          </Trans>
-        </Text>
+        <Stack gap={5}>
+          <Text>
+            <Trans>
+              Remove <strong>{tag.name}</strong> folder
+            </Trans>
+          </Text>
+
+          <Text fz={14} c="dimmed">
+            <Trans>All tasks in this folder will be archived.</Trans>
+          </Text>
+        </Stack>
       ),
       onConfirm: async () => {
         await removeTag({ variables: { id: tag._id } });
@@ -105,7 +129,19 @@ const TaskFolderNavigationItem: FC<{
     if (isColorPickerOpen) {
       return (
         <Stack p={8} gap={8}>
-          <Divider label={<Trans>Select color</Trans>} />
+          <Group gap={5} miw={0}>
+            <Text fz={12} flex={1} truncate>
+              <Trans>Select color</Trans>
+            </Text>
+            <ActionIcon
+              onClick={() => setIsColorPickerOpen(false)}
+              variant="subtle"
+              size="sm"
+              color="gray"
+            >
+              <IconX size={16} strokeWidth={1.5} />
+            </ActionIcon>
+          </Group>
           <AppColorInput
             color={tag.color}
             onChange={(color) => {
@@ -148,10 +184,29 @@ const TaskFolderNavigationItem: FC<{
         <Menu.Item
           fz={14}
           pl={6}
-          leftSection={<IconTrash color={color("red")} strokeWidth={1.5} size={16} />}
+          leftSection={<IconTarget strokeWidth={1.5} size={16} />}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            modalConfigureStatusesRef.current?.open({
+              contextType: TaskStatusesContextType.Folder,
+              contextId: tag._id,
+            });
+            setIsMenuOpen(false);
+          }}
+        >
+          <Trans>Task statuses</Trans>
+        </Menu.Item>
+
+        <Menu.Item
+          fz={14}
+          pl={6}
+          c="gray"
+          leftSection={<IconTrash color={color("gray")} strokeWidth={1.5} size={16} />}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsMenuOpen(false);
             onRemoveTag();
           }}
         >
@@ -213,7 +268,6 @@ const TaskFolderNavigationItem: FC<{
             <Menu.Target>
               <ActionIcon
                 className={styles.ActionsMenu}
-                component="div"
                 variant="subtle"
                 color="dark"
                 size="xs"
@@ -233,6 +287,7 @@ const TaskFolderNavigationItem: FC<{
       </Group>
 
       <ModalConfirm ref={modalConfirmRef} />
+      <ModalConfigureStatuses ref={modalConfigureStatusesRef} />
     </Fragment>
   );
 };

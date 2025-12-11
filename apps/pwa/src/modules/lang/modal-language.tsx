@@ -5,6 +5,7 @@ import { useLang } from "@/modules/lang/lang-context";
 import { localeNames } from "@/modules/lang/lang-service";
 import { AppLocale } from "@/modules/lang/lang-types";
 import { useColor } from "@/modules/theme/use-color";
+import { onActionLoad } from "@/utils/actions";
 import { Trans } from "@lingui/react/macro";
 import { Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -19,8 +20,13 @@ export const ModalLang: FC<{
   const lang = useLang();
 
   const onSelect = async (locale: AppLocale | "default") => {
-    lang.changeLocale(locale);
     close();
+    onActionLoad({
+      name: <Trans>Changing language</Trans>,
+      process: async () => {
+        await lang.changeLocale(locale);
+      },
+    });
   };
 
   return (

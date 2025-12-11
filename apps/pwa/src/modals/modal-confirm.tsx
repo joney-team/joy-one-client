@@ -73,7 +73,6 @@ export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((prop
         withCloseButton={false}
         closeOnEscape={false}
         closeOnClickOutside={false}
-        centered
         styles={{
           body: {
             padding: 0,
@@ -83,18 +82,20 @@ export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((prop
       >
         {args && (
           <Stack align="stretch" gap={0}>
-            <Group p="md" wrap="nowrap" align="start">
-              <ThemeIcon color={modalColor} variant="light" size="xl">
-                <IconComponent />
-              </ThemeIcon>
+            <Group p={26} wrap="nowrap" align="start">
+              <Group style={{ border: `1px solid ${modalColor}`, borderRadius: 14 }} p={3}>
+                <ThemeIcon color={modalColor} variant="light" size="xl" radius={10}>
+                  <IconComponent />
+                </ThemeIcon>
+              </Group>
               <Stack>{args.content}</Stack>
             </Group>
             <Divider miw="100%" opacity={0.5} />
-            <Group justify="end" p="sm" gap="sm">
-              <Button color="gray" variant="outline" onClick={onCancel} component="div">
+            <Group justify="end" p="md" gap="sm" bg="var(--mantine-color-dark-outline-hover)">
+              <Button flex={1} color="gray" variant="outline" onClick={onCancel} component="div">
                 <Trans>Cancel</Trans>
               </Button>
-              <Button color={modalColor} onClick={onConfirm}>
+              <Button flex={1} color={modalColor} onClick={onConfirm}>
                 {args.confirmLabel ?? <Trans>Confirm</Trans>}
               </Button>
             </Group>

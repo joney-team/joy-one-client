@@ -66,9 +66,9 @@ enum CategoryType {
 }
 
 type ConfigTaskStatuses {
-  count: Float!
-  isCustomized: Boolean!
+  isInherited: Boolean!
   statuses: [TaskStatus!]!
+  workspaceStatuses: [TaskStatus!]!
 }
 
 type Coordinates {
@@ -447,6 +447,12 @@ enum Gender {
   OTHER
 }
 
+"""Available task statuses modes"""
+enum GetTaskStatusesMode {
+  EDIT
+  VIEW
+}
+
 """
 The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -478,10 +484,10 @@ type Mutation {
   removePluginExternalStorage: Boolean!
   removeTag(id: String!): Boolean!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
-  setTaskStatuses(contextId: String, contextType: TaskStatusesContextType, statuses: [TaskStatusInput!]): [TaskStatus!]!
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
+  updateTaskStatuses(contextId: String, contextType: TaskStatusesContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
 }
 
 type PartnerEntity {
@@ -589,7 +595,7 @@ type Query {
   tags(ids: [String!], limit: Float = 30, offset: Float, type: String): Tags!
   task(_id: String!): Task!
   taskByCode(code: String!): Task!
-  taskStatuses(contextId: String, contextType: TaskStatusesContextType): ConfigTaskStatuses!
+  taskStatuses(contextId: String, contextType: TaskStatusesContextType, mode: GetTaskStatusesMode): ConfigTaskStatuses!
   tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): TasksPaginated!
   tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): Float!
   userWorkspaceMember: WorkspaceMember!
@@ -722,12 +728,11 @@ type TaskStatus {
   contextType: TaskStatusesContextType
   id: String!
   name: String
-  order: Float
+  order: Float!
 }
 
 input TaskStatusInput {
   color: String
-  icon: String
   id: String!
   name: String
   order: Float

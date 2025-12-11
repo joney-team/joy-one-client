@@ -8,19 +8,21 @@ import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { PartnerSelector } from "@/modules/partners/components/partner-selector";
 import { TagSelector } from "@/modules/tags/components/tag-selector";
+import QUERY_TAGS, {
+  type TagsQuery,
+  type TagsQueryVariables,
+} from "@/modules/tags/graphql/queryTags.graphql";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 import { useTaskHistories } from "@/modules/tasks/task-history-context";
-import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { getTaskPriorityColor } from "@/modules/tasks/tasks-service";
 import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Loader, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
@@ -34,7 +36,6 @@ import {
   IconFolderOpen,
   IconMinus,
   IconPlus,
-  IconSettings,
   IconTags,
   IconUsers,
   IconX,
@@ -42,15 +43,9 @@ import {
 import { type FC } from "react";
 import { useTaskFolders } from "../hooks/use-task-folders";
 import { taskPriorities } from "../task-constants";
-import { useQuery } from "@apollo/client/react";
-import QUERY_TAGS, {
-  type TagsQuery,
-  type TagsQueryVariables,
-} from "@/modules/tags/graphql/queryTags.graphql";
 
 export const TaskMenuActions: FC = () => {
   const color = useColor();
-  const workspace = useWorkspace();
   const tasks = useTasks();
   const taskHistories = useTaskHistories();
   const { folders, exitFolder } = useTaskFolders();
@@ -116,14 +111,6 @@ export const TaskMenuActions: FC = () => {
             }))}
             onChange={(value) => tasks.openFolder(folders.find((v) => v._id === value)!)}
             onClear={exitFolder}
-          />
-        )}
-
-        {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-          <ButtonSelect
-            icon={IconSettings}
-            label={<Trans>Settings</Trans>}
-            onClick={() => OnTaskSatusesModal()}
           />
         )}
 

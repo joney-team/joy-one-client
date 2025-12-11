@@ -75,9 +75,7 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
       setCookie(StorageKey.LOCALE, locale, { maxAge: 60 * 60 * 24 * 400 });
     }
 
-    startAppLoading("lang");
     await initialize(getClientLocale());
-    window.location.reload();
   };
 
   // Reinitialize when reconnected
@@ -87,6 +85,7 @@ const LangProvider: FC<PropsWithChildren> = (props) => {
 
   // Initialize when component is mounted
   useEffect(() => {
+    startAppLoading("lang");
     initialize(getClientLocale());
   }, []);
 

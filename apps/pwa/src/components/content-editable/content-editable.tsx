@@ -87,6 +87,8 @@ export const ContentEditable: FC<ContentEditableProps> = ({
       e.currentTarget.blur();
       onEscape?.();
     }
+
+    forceUpdate();
   };
 
   const handleOnBlur = () => {
@@ -125,8 +127,7 @@ export const ContentEditable: FC<ContentEditableProps> = ({
 
   return (
     <Box
-      className={classNames({
-        [styles.ContentEditable]: true,
+      className={classNames(styles.ContentEditable, {
         [styles.isActive]: !disabled,
         [styles.isDoubleClickable]: !!onDoubleClick,
       })}

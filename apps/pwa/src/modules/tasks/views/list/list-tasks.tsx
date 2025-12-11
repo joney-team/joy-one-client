@@ -40,7 +40,11 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
   );
 
   const statuses = useMemo(() => {
-    const allStatus = normalizeTaskStatuses(taskStatusesData.data?.taskStatuses.statuses ?? []);
+    const selectStatuses = taskStatusesData.data?.taskStatuses.isInherited
+      ? taskStatusesData.data?.taskStatuses.workspaceStatuses
+      : taskStatusesData.data?.taskStatuses.statuses;
+
+    const allStatus = normalizeTaskStatuses(selectStatuses ?? []);
 
     return {
       inprogress: allStatus.filter((status) => status.id !== DefaultTaskStatusId.CLOSED),
