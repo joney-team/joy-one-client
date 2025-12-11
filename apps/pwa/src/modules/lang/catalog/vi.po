@@ -271,7 +271,7 @@ msgstr "Thêm hoá đơn"
 msgid "Add rule"
 msgstr "Thêm quy tắc"
 
-#: src/modules/tasks/views/board/board-tasks.tsx:152
+#: src/modules/tasks/views/board/board-tasks.tsx:173
 msgid "Add status"
 msgstr "Thêm trạng thái"
 
@@ -402,6 +402,10 @@ msgstr "Các hoá đơn của các kỳ thanh toán cũng sẽ được chuyển
 msgid "All tasks"
 msgstr "Tất cả công việc"
 
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:102
+msgid "All tasks in this folder will be archived."
+msgstr "Tất cả các công việc trong thư mục sẽ bị mất."
+
 #: src/components/inputs/time-trackings-input.tsx:203
 msgid "All time trackings"
 msgstr "Tất cả thời gian"
@@ -488,6 +492,10 @@ msgstr "Áp dụng"
 #: src/modules/products/components/product-card.tsx:229
 msgid "Apply all products"
 msgstr "Áp dụng tất cả sản phẩm"
+
+#: src/modules/tasks/modals/modal-configure-statuses.tsx:400
+msgid "Apply changes"
+msgstr "Áp dụng thay đổi"
 
 #: src/modules/hrm-timekeepings/hrm-timekeeping-list.tsx:245
 #: src/modules/hrm-timekeepings/hrm-timekeeping-list.tsx:253
@@ -635,11 +643,6 @@ msgstr "Bạn có chắc chắn muốn đánh dấu là đã xử lí xong?"
 msgid "Are you sure you want to reject the expense? This action cannot be undone. The receipt will be deleted."
 msgstr "Bạn có chắc chắn muốn từ chối chi phí không? Thao tác này không thể hoàn tác. Hoá đơn sẽ bị xoá."
 
-#. placeholder {0}: tag.name
-#: src/layout/navigation/workspace-navigation-task-folders.tsx:77
-msgid "Are you sure you want to remove <0>{0}</0> folder?"
-msgstr "Bạn có chắc chắn muốn xoá thư mục <0>{0}</0>?"
-
 #: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:45
 msgid "Are you sure you want to remove all selected tasks?"
 msgstr "Bạn có chắc muốn xoá toàn bộ các công việc đã chọn?"
@@ -725,7 +728,7 @@ msgstr "Giao việc cho"
 #: src/modules/customers/components/form-customer.tsx:252
 #: src/modules/message-boxes/message-box/message-box-head.tsx:95
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:170
-#: src/modules/tasks/components/tasks-menu-actions.tsx:184
+#: src/modules/tasks/components/tasks-menu-actions.tsx:171
 #: src/modules/tasks/modals/modal-create-task-form.tsx:147
 #: src/modules/tasks/modules/task-detail/task-detail-form.tsx:308
 #: src/modules/tasks/views/board/board-task-card.tsx:458
@@ -1000,7 +1003,7 @@ msgstr "Có thể để trống 1 trong 2 thời gian check-in hoặc check-out 
 
 #: src/hooks/use-confirm-modal.tsx:104
 #: src/hooks/use-confirm-modal.tsx:110
-#: src/modals/modal-confirm.tsx:95
+#: src/modals/modal-confirm.tsx:96
 #: src/modules/bookings/components/form-booking.tsx:410
 #: src/modules/customers/modals/modal-customer-form.tsx:122
 #: src/modules/receipts/receipt-e-invoices.tsx:120
@@ -1173,6 +1176,10 @@ msgstr "Thay đổi thành"
 msgid "Change your language settings"
 msgstr "Thay đổi cài đặt ngôn ngữ"
 
+#: src/modules/lang/modal-language.tsx:25
+msgid "Changing language"
+msgstr "Đang thay đổi ngôn ngữ"
+
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:221
 msgid "Chat icon"
 msgstr "Biểu tượng Chat"
@@ -1321,6 +1328,7 @@ msgstr "Đóng tất cả thư mục"
 
 #: src/modules/message-boxes/message-boxes-contants.tsx:11
 #: src/modules/promotions/promotions-constants.ts:23
+#: src/modules/tasks/modals/modal-configure-statuses.tsx:382
 #: src/modules/tasks/task-constants.tsx:40
 msgid "Closed"
 msgstr "Đã đóng"
@@ -1342,7 +1350,7 @@ msgstr "Mã"
 msgid "Collapse"
 msgstr "Thu gọn"
 
-#: src/layout/navigation/workspace-navigation-task-folders.tsx:145
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:181
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:291
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:238
 #: src/modules/tags/modals/modal-tag-form.tsx:157
@@ -1459,9 +1467,13 @@ msgstr "Nhóm trạng thái hoàn thành"
 msgid "Configuration"
 msgstr "Cấu hình"
 
+#: src/modules/tasks/modals/modal-configure-statuses.tsx:440
+msgid "Configure statuses"
+msgstr "Thiết lập trạng thái công việc"
+
 #: src/hooks/use-confirm-modal.tsx:100
 #: src/hooks/use-confirm-modal.tsx:113
-#: src/modals/modal-confirm.tsx:98
+#: src/modals/modal-confirm.tsx:99
 #: src/modules/bookings/components/form-booking.tsx:416
 #: src/modules/dashboard/dashboard-suggestions.tsx:183
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:161
@@ -1726,7 +1738,7 @@ msgstr "Điều kiện tạo HĐĐT"
 msgid "Create file"
 msgstr "Tạo tệp tin"
 
-#: src/layout/navigation/workspace-navigation-menu.tsx:271
+#: src/layout/navigation/workspace-navigation-menu.tsx:302
 #: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:150
 msgid "Create folder"
 msgstr "Tạo thư mục"
@@ -1820,7 +1832,7 @@ msgstr "Tạo SDK"
 msgid "Create subtask"
 msgstr "Tạo công việc con"
 
-#: src/layout/navigation/workspace-navigation-menu.tsx:254
+#: src/layout/navigation/workspace-navigation-menu.tsx:284
 #: src/modules/events/event-constants.ts:70
 #: src/modules/tasks/components/quick-create-task-input.tsx:27
 #: src/modules/tasks/components/quick-create-task-input.tsx:44
@@ -1923,6 +1935,10 @@ msgstr "Trường tùy chỉnh"
 #: src/modules/loans/components/loan-disbursement.tsx:269
 msgid "Custom fulfilled at"
 msgstr "Tùy chỉnh thời gian giải ngân"
+
+#: src/modules/tasks/modals/modal-configure-statuses.tsx:320
+msgid "Custom statuses"
+msgstr "Tuỳ chỉnh trạng thái"
 
 #: src/components/printer/printer-body.tsx:160
 #: src/components/printer/printer-settings-bar.tsx:66
@@ -2030,7 +2046,7 @@ msgstr "Cập nhật khách hàng"
 
 #: src/constant.ts:7
 #: src/modules/customers/customer-list.tsx:49
-#: src/modules/search/search-engine.tsx:135
+#: src/modules/search/search-engine.tsx:136
 #: src/modules/workspace-roles/workspace-roles-config.ts:55
 #: src/modules/workspaces/workspace-modules.tsx:135
 msgid "Customers"
@@ -2544,6 +2560,10 @@ msgstr "Nhập nguồn cung cấp sản phẩm"
 msgid "Enter reject reason"
 msgstr "Nhập lý do từ chối"
 
+#: src/modules/tasks/modals/modal-configure-statuses.tsx:160
+msgid "Enter status name"
+msgstr "Nhập tên trạng thái"
+
 #: src/modules/tasks/components/quick-create-task-input.tsx:36
 #: src/modules/tasks/modals/modal-create-task-form.tsx:160
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:207
@@ -2776,7 +2796,7 @@ msgstr "Vốn cố định"
 
 #: src/modules/tags/tags-constants.ts:18
 #: src/modules/tags/tags-service.tsx:52
-#: src/modules/tasks/components/tasks-menu-actions.tsx:108
+#: src/modules/tasks/components/tasks-menu-actions.tsx:103
 #: src/widgets/reports/widgets/report-time-trackings.widget.tsx:64
 msgid "Folder"
 msgstr "Thư mục"
@@ -2879,7 +2899,7 @@ msgstr "Gantt"
 msgid "Gender"
 msgstr "Giới tính"
 
-#: src/layout/navigation/workspace-navigation.tsx:148
+#: src/layout/navigation/workspace-navigation.tsx:155
 #: src/modules/categories/category-constants.ts:6
 msgid "General"
 msgstr "Tổng quan"
@@ -2950,7 +2970,7 @@ msgstr "Xin chào!"
 msgid "Hidden in receipt when no price"
 msgstr "Ẩn trong hóa đơn khi không có giá"
 
-#: src/modules/tasks/components/tasks-menu-actions.tsx:427
+#: src/modules/tasks/components/tasks-menu-actions.tsx:414
 msgid "Hide closed"
 msgstr "Ẩn đã đóng"
 
@@ -3040,6 +3060,7 @@ msgstr "Nhập dữ liệu hồ sơ vay"
 
 #: src/modules/bookings/booking-constants.tsx:7
 #: src/modules/message-boxes/message-boxes-contants.tsx:10
+#: src/modules/tasks/modals/modal-configure-statuses.tsx:327
 msgid "In progress"
 msgstr "Đang xử lí"
 
@@ -3096,6 +3117,10 @@ msgstr "Thông tin không khớp với hình ảnh"
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:56
 msgid "Information"
 msgstr "Thông tin"
+
+#: src/modules/tasks/modals/modal-configure-statuses.tsx:308
+msgid "Inherit from workspace"
+msgstr "Kế thừa workspace"
 
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:434
 msgid "Input"
@@ -3667,7 +3692,7 @@ msgstr "Hoàn tác từ chối"
 
 #: src/constant.ts:17
 #: src/modules/loans/loan-list.tsx:92
-#: src/modules/search/search-engine.tsx:228
+#: src/modules/search/search-engine.tsx:229
 #: src/modules/workspace-roles/workspace-roles-config.ts:7
 #: src/modules/workspaces/workspace-modules.tsx:232
 #: src/widgets/reports/modules.ts:238
@@ -3997,7 +4022,7 @@ msgstr "Đã cập nhật thành viên"
 #: src/modules/hrm-timekeepings/hrm-timekeeping-list.tsx:188
 #: src/modules/hrm-timekeepings/hrm-timekeepings-summary.tsx:104
 #: src/modules/plugins/zalo-oas/components/zalo-oa-gmf-groups.tsx:43
-#: src/modules/search/search-engine.tsx:275
+#: src/modules/search/search-engine.tsx:276
 #: src/modules/tasks/views/calendar/index.tsx:148
 #: src/modules/tasks/views/time-trackings/index.tsx:165
 #: src/modules/workspace-members/workspace-member-list.tsx:48
@@ -4034,7 +4059,7 @@ msgid "Message box waiting"
 msgstr "Hộp tin nhắn đang chờ"
 
 #: src/modules/message-boxes/message-box/message-box-head.tsx:60
-#: src/modules/search/search-engine.tsx:98
+#: src/modules/search/search-engine.tsx:99
 msgid "Message boxes"
 msgstr "Hộp tin nhắn"
 
@@ -4136,7 +4161,7 @@ msgid "Model name"
 msgstr "Tên mẫu"
 
 #: src/layout/navigation/navigation-drawer.tsx:188
-#: src/modules/search/search-engine.tsx:332
+#: src/modules/search/search-engine.tsx:333
 #: src/modules/users/user-profile.tsx:129
 #: src/modules/workspaces/workspace-modules.tsx:266
 msgid "Modules"
@@ -4510,7 +4535,7 @@ msgstr "Không ưu tiên"
 msgid "No results"
 msgstr "Không có kết quả"
 
-#: src/modules/search/search-engine.tsx:394
+#: src/modules/search/search-engine.tsx:395
 msgid "No search results"
 msgstr "Không có kết quả tìm kiếm"
 
@@ -4700,8 +4725,8 @@ msgstr "Đơn hàng đã được đồng bộ"
 
 #: src/constant.ts:20
 #: src/modules/orders/order-hooks.tsx:25
-#: src/modules/search/search-engine.tsx:295
-#: src/modules/search/search-engine.tsx:300
+#: src/modules/search/search-engine.tsx:296
+#: src/modules/search/search-engine.tsx:301
 #: src/modules/workspace-roles/workspace-roles-config.ts:157
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:130
 #: src/modules/workspaces/workspace-modules.tsx:212
@@ -4785,8 +4810,8 @@ msgstr "Thanh toán một phần"
 
 #: src/constant.ts:9
 #: src/modules/partners/partner-list.tsx:33
-#: src/modules/search/search-engine.tsx:258
-#: src/modules/tasks/components/tasks-menu-actions.tsx:289
+#: src/modules/search/search-engine.tsx:259
+#: src/modules/tasks/components/tasks-menu-actions.tsx:276
 #: src/modules/workspace-roles/workspace-roles-config.ts:222
 #: src/modules/workspaces/workspace-modules.tsx:193
 msgid "Partners"
@@ -5096,7 +5121,7 @@ msgstr "Bài viết đã cập nhật"
 #: src/constant.ts:27
 #: src/modules/categories/category-constants.ts:8
 #: src/modules/posts/posts-list.tsx:28
-#: src/modules/search/search-engine.tsx:115
+#: src/modules/search/search-engine.tsx:116
 #: src/modules/workspace-roles/workspace-roles-config.ts:243
 #: src/modules/workspaces/workspace-modules.tsx:97
 msgid "Posts"
@@ -5129,7 +5154,7 @@ msgid "Prescription updated"
 msgstr "Đã cập nhật đơn thuốc"
 
 #: src/constant.ts:16
-#: src/modules/search/search-engine.tsx:314
+#: src/modules/search/search-engine.tsx:315
 #: src/modules/workspace-roles/workspace-roles-config.ts:217
 #: src/modules/workspaces/workspace-modules.tsx:199
 msgid "Prescriptions"
@@ -5206,7 +5231,7 @@ msgid "Printed at"
 msgstr "In lúc"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:246
-#: src/modules/tasks/components/tasks-menu-actions.tsx:403
+#: src/modules/tasks/components/tasks-menu-actions.tsx:390
 #: src/modules/tasks/modals/modal-create-task-form.tsx:282
 #: src/modules/tasks/modules/task-detail/task-detail-form.tsx:333
 #: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:294
@@ -5475,7 +5500,7 @@ msgstr "Lý do hủy bỏ"
 #: src/modules/receipts/modals/modal-receipt-detail.tsx:26
 #: src/modules/receipts/receipt-card.tsx:283
 #: src/modules/receipts/receipt-detail.tsx:142
-#: src/modules/search/search-engine.tsx:197
+#: src/modules/search/search-engine.tsx:198
 #: src/widgets/reports/widgets/report-credit.widget.tsx:406
 #: src/widgets/reports/widgets/report-products.widget.tsx:298
 msgid "Receipt"
@@ -5510,7 +5535,7 @@ msgstr "Hoá đơn đã khôi phục"
 #: src/constant.ts:13
 #: src/modules/loans/components/loan-payments.tsx:153
 #: src/modules/receipts/receipt-list.tsx:56
-#: src/modules/search/search-engine.tsx:192
+#: src/modules/search/search-engine.tsx:193
 #: src/modules/workspace-roles/workspace-roles-config.ts:119
 #: src/modules/workspaces/workspace-modules.tsx:218
 #: src/widgets/reports/widgets/report-products.widget.tsx:256
@@ -5536,7 +5561,7 @@ msgstr "Gần đây"
 msgid "Reconnect"
 msgstr "Kết nối lại"
 
-#: src/modules/tasks/components/tasks-menu-actions.tsx:463
+#: src/modules/tasks/components/tasks-menu-actions.tsx:450
 msgid "Redo"
 msgstr "Làm lại"
 
@@ -5639,7 +5664,7 @@ msgstr "Thời gian nhắc nhở"
 
 #: src/components/inputs/work-slot-settings-input.tsx:296
 #: src/components/list/components/bulk-actions.tsx:109
-#: src/layout/navigation/workspace-navigation-task-folders.tsx:158
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:213
 #: src/modals/modal-date-picker.tsx:89
 #: src/modals/modal-date-picker.tsx:142
 #: src/modals/modal-date-picker.tsx:194
@@ -5655,6 +5680,11 @@ msgstr "Xoá"
 #: src/utils/actions.tsx:88
 msgid "Remove {0}"
 msgstr "Xoá {0}"
+
+#. placeholder {0}: tag.name
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:96
+msgid "Remove <0>{0}</0> folder"
+msgstr "Xoá thư mục <0>{0}</0>"
 
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:289
 #: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:337
@@ -5687,7 +5717,7 @@ msgstr "Xóa widget"
 msgid "Removed timekeeping"
 msgstr "Đã xóa chấm công"
 
-#: src/layout/navigation/workspace-navigation-task-folders.tsx:132
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:168
 msgid "Rename"
 msgstr "Đổi tên"
 
@@ -5953,7 +5983,7 @@ msgstr "Di chuyển đến ngày hôm nay"
 #: src/components/selector.tsx:301
 #: src/layout/header/workspace-header.tsx:102
 #: src/layout/header/workspace-header.tsx:188
-#: src/modules/search/search-engine.tsx:382
+#: src/modules/search/search-engine.tsx:383
 #: src/modules/tasks/components/task-status-options.tsx:49
 #: src/modules/tasks/modules/task-menu/task-menu-assignee.tsx:152
 #: src/modules/tasks/modules/task-menu/task-menu-customer.tsx:142
@@ -6045,8 +6075,9 @@ msgstr "Chọn thương hiệu"
 msgid "Select category"
 msgstr "Chọn danh mục"
 
-#: src/layout/navigation/workspace-navigation-task-folders.tsx:108
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:134
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:292
+#: src/modules/tasks/modals/modal-configure-statuses.tsx:131
 #: src/modules/tasks/task-status-modal.tsx:335
 msgid "Select color"
 msgstr "Chọn màu"
@@ -6061,7 +6092,7 @@ msgid "Select folder"
 msgstr "Chọn thư mục"
 
 #: src/components/buttons/button-language.tsx:43
-#: src/modules/lang/modal-language.tsx:37
+#: src/modules/lang/modal-language.tsx:43
 msgid "Select language"
 msgstr "Chọn ngôn ngữ"
 
@@ -6220,7 +6251,6 @@ msgstr "Đặt thẻ"
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:138
 #: src/modules/products/components/form-product.tsx:222
 #: src/modules/products/components/form-product.tsx:318
-#: src/modules/tasks/components/tasks-menu-actions.tsx:125
 #: src/modules/users/user-profile.tsx:125
 msgid "Settings"
 msgstr "Cài đặt"
@@ -6254,7 +6284,7 @@ msgstr "Sự thay đổi"
 msgid "Should not be empty"
 msgstr "Không nên để trống"
 
-#: src/modules/tasks/components/tasks-menu-actions.tsx:427
+#: src/modules/tasks/components/tasks-menu-actions.tsx:414
 msgid "Show closed"
 msgstr "Hiển thị đã đóng"
 
@@ -6528,7 +6558,7 @@ msgstr "Thẻ"
 
 #: src/constant.ts:18
 #: src/modules/tasks/components/bulk-tasks-actions.tsx:200
-#: src/modules/tasks/components/tasks-menu-actions.tsx:345
+#: src/modules/tasks/components/tasks-menu-actions.tsx:332
 #: src/modules/tasks/modals/modal-create-task-form.tsx:306
 #: src/modules/tasks/modules/task-detail/task-detail-form.tsx:440
 #: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:248
@@ -6584,6 +6614,8 @@ msgstr "Mô tả công việc"
 msgid "Task status"
 msgstr "Trạng thái công việc"
 
+#: src/layout/navigation/workspace-navigation-menu.tsx:271
+#: src/layout/navigation/workspace-navigation-task-folders.tsx:198
 #: src/modules/tasks/task-status-modal.tsx:381
 msgid "Task statuses"
 msgstr "Trạng thái công việc"
@@ -6594,7 +6626,7 @@ msgstr "Đã đồng bộ hóa công việc"
 
 #: src/constant.ts:10
 #: src/modules/customers/customer-tasks.tsx:65
-#: src/modules/search/search-engine.tsx:211
+#: src/modules/search/search-engine.tsx:212
 #: src/modules/workspaces/workspace-modules.tsx:206
 #: src/widgets/reports/modules.ts:138
 msgid "Tasks"
@@ -7012,7 +7044,7 @@ msgid "Type and press [enter]"
 msgstr "Nhập và nhấn [enter]"
 
 #: src/components/selector.tsx:345
-#: src/modules/search/search-engine.tsx:396
+#: src/modules/search/search-engine.tsx:397
 msgid "Type something to search"
 msgstr "Nhập nội dung nào đó để tìm kiếm"
 
@@ -7024,7 +7056,7 @@ msgstr "Bỏ chỉ định người dùng"
 msgid "Unassigned from"
 msgstr "Đã bỏ chỉ định từ"
 
-#: src/modules/tasks/components/tasks-menu-actions.tsx:449
+#: src/modules/tasks/components/tasks-menu-actions.tsx:436
 #: src/modules/tasks/task-history-provider.tsx:54
 msgid "Undo"
 msgstr "Hoàn tác"
@@ -7291,7 +7323,7 @@ msgid "Use default mail"
 msgstr "Sử dụng thư mặc định"
 
 #: src/components/buttons/button-language.tsx:73
-#: src/modules/lang/modal-language.tsx:78
+#: src/modules/lang/modal-language.tsx:84
 msgid "Use device language"
 msgstr "Sử dụng ngôn ngữ thiết bị"
 
