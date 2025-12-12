@@ -35,10 +35,16 @@
     tbody {
       tr {
         &:last-child {
-          border-bottom: none;
-
           td {
             border-bottom: none;
+
+            &:first-child {
+              border-bottom-left-radius: var(--paper-radius);
+            }
+
+            &:last-child {
+              border-bottom-right-radius: var(--paper-radius);
+            }
           }
         }
 

@@ -7,6 +7,7 @@ import { useLang } from "@/modules/lang/lang-context";
 import { partialPaymentReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { onError } from "@/utils/exceptions.utils";
+import { nonLoading } from "@/utils/non-loading";
 import { round } from "@/utils/number.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
@@ -16,8 +17,16 @@ import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconCircleHalf2 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { FC, useState } from "react";
-import { ModalPayReceipt } from "./modal-pay-receipt";
+
+const ModalPayReceipt = dynamic(
+  () => import("./modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 interface ModalPartialPaymentProps {
   onDone?: (receipts: ReceiptEntity[]) => void | Promise<void>;
@@ -50,13 +59,13 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
 
   return (
     <ModalPayReceipt>
-      {(openPayReceipt) => {
+      {(modalPayReceipt) => {
         const onSubmit = form.onSubmit(async (values) => {
           setIsSubmitting(true);
           try {
             const { receipts } = await partialPaymentReceipt(props.receipt.id, values);
             modals.close("ModalPartialPayment");
-            openPayReceipt({ receipt: receipts[0] });
+            modalPayReceipt.open({ receipt: receipts[0] });
           } catch (error) {
             onError(error);
           }

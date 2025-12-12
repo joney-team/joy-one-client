@@ -5,23 +5,32 @@ import { codeColumn } from "@/components/list/columns/code-column";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { numberColumn } from "@/components/list/columns/number-column";
 import { statusColumn } from "@/components/list/columns/status-column";
+import { EventType } from "@/graphql/enums.graphql";
 import { customerColumn } from "@/modules/customers/components/customer-column";
 import { OrderCard } from "@/modules/orders/order-card";
 import { OrderPaymentStatus } from "@/modules/orders/orders-types";
 import { userColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { nonLoading } from "@/utils/non-loading";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { ActionIcon, Stack, Tooltip } from "@mantine/core";
 import { IconCalendarDown, IconCashRegister, IconEdit } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { type FC } from "react";
-import { ModalPayReceipt } from "../receipts/modals/modal-pay-receipt";
 import { useAvailableWorkspaceModules } from "../workspaces/workspace-modules";
 import { OrderEntity } from "./order-entity";
 import { OrderItemsColumn } from "./order-items-columns";
 import { orderPaymentStatuses } from "./orders-constants";
 import { payOrder } from "./orders-service";
-import { EventType } from "@/graphql/enums.graphql";
+
+const ModalPayReceipt = dynamic(
+  () => import("../receipts/modals/modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const OrderList: FC = () => {
   const { getAvailableModule } = useAvailableWorkspaceModules();
@@ -66,12 +75,12 @@ export const OrderList: FC = () => {
               if (order.paymentStatus === OrderPaymentStatus.PROCESSING) {
                 return (
                   <ModalPayReceipt>
-                    {(onPayReceipt) => {
+                    {(modalPayReceipt) => {
                       const onPayOrder = async () => {
                         const receipt = await payOrder(order.id, {
                           amount: order.totalAmount - order.paidAmount,
                         });
-                        onPayReceipt({ receipt });
+                        modalPayReceipt.open({ receipt });
                       };
 
                       return (

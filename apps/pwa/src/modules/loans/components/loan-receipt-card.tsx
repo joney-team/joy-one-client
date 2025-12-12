@@ -12,11 +12,12 @@ import { useInspectLoanReceipt } from "@/modules/loans/hooks/use-inspect-loan-re
 import { LoanEntity } from "@/modules/loans/loans-types";
 import { OnModalPartialPayment } from "@/modules/receipts/modals/modal-partial-payment";
 import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
-import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
+import { type ModalReceiptDetailRef } from "@/modules/receipts/modals/modal-receipt-detail";
 import { updateReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { nonLoading } from "@/utils/non-loading";
 import { String } from "@/utils/string.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -27,7 +28,17 @@ import {
   IconFileTypePdf,
   IconInfoCircle,
 } from "@tabler/icons-react";
-import { FC, Fragment } from "react";
+import dynamic from "next/dynamic";
+import { FC, Fragment, useRef } from "react";
+
+const ModalReceiptDetail = dynamic(
+  () =>
+    import("@/modules/receipts/modals/modal-receipt-detail").then((mod) => mod.ModalReceiptDetail),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const LoanReceiptCard: FC<{
   receipt: ReceiptEntity;
@@ -36,6 +47,7 @@ export const LoanReceiptCard: FC<{
   refetch: () => Promise<any>;
 }> = (props) => {
   const workspace = useWorkspace();
+  const modalReceiptDetailRef = useRef<ModalReceiptDetailRef | null>(null);
   const { receipt, loan, receipts } = props;
   const { isLiquidation, fee, capital, period, isExpired, data, isPartialPayment } =
     useInspectLoanReceipt(receipt, loan);
@@ -68,7 +80,7 @@ export const LoanReceiptCard: FC<{
     <Card key={receipt.id} shadow="none" withBorder p={10}>
       <Stack>
         <Group justify="space-between">
-          <Anchor fz={16} fw={600} onClick={() => OnReceiptDetailModal({ id: receipt.id })}>
+          <Anchor fz={16} fw={600} onClick={() => modalReceiptDetailRef.current?.open(receipt.id)}>
             {receipt.code}
           </Anchor>
 
@@ -328,9 +340,9 @@ export const LoanReceiptCard: FC<{
 
                 <Group justify="center">
                   <ModalPayReceipt>
-                    {(open) => (
+                    {(modal) => (
                       <Button
-                        onClick={() => open({ receipt })}
+                        onClick={() => modal.open({ receipt })}
                         leftIcon={IconCashRegister}
                         disabled={!isAbleToPay}
                       >
@@ -370,6 +382,8 @@ export const LoanReceiptCard: FC<{
           }
         })()}
       </Stack>
+
+      <ModalReceiptDetail ref={modalReceiptDetailRef} />
     </Card>
   );
 };

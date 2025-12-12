@@ -30,6 +30,7 @@ import {
   useWorkDaySlots,
 } from "@/modules/workspace-settings/workspace-settings-service";
 import { CalendarView } from "@/types";
+import { nonLoading } from "@/utils/non-loading";
 import { ObjectUtils } from "@/utils/object.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -56,12 +57,21 @@ import {
   IconRefresh,
   IconUsers,
 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { type FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { Calendar } from "react-big-calendar";
+import { type CalendarProps } from "react-big-calendar";
 import { useAuth } from "../auth/auth-context";
 import { bookingStatuses } from "./booking-constants";
 import { BookingEntity, BookingStatus } from "./booking-types";
 import { ModalCreateBooking } from "./modals/modal-create-booking";
+
+const Calendar = dynamic<CalendarProps<any, any>>(
+  () => import("react-big-calendar").then((mod) => mod.Calendar),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const normalizeQuery = (query: any) => {
   const date = query.date ? DateTime.normalizeDate(+query.date) : new Date();

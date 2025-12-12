@@ -1,9 +1,9 @@
 "use client";
 
+import { EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/graphql/enums.graphql";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
 import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
@@ -203,7 +203,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
 
   return (
     <ModalPayReceipt>
-      {(onPayReceipt) => {
+      {(modalPayReceipt) => {
         const handlePayOrder = async () => {
           if (!activeOrder || totalAmount === 0) return;
           if (!activeOrder.isSaved || activeOrder.isDirty) await saveOrder();
@@ -214,7 +214,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
             amount: order.totalAmount - order.paidAmount,
           });
 
-          onPayReceipt({ receipt, onPaid: () => fetchOrder(activeOrder.id) });
+          modalPayReceipt.open({ receipt, onPaid: () => fetchOrder(activeOrder.id) });
         };
 
         const context: OrdersManagementContext = {

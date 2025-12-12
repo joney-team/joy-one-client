@@ -4,12 +4,13 @@ import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { Image } from "@/components/image";
+import { Modal } from "@/components/modal/modal";
 import { Renderer } from "@/components/renderer";
 import { Timer } from "@/components/timer";
+import { EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventEntity } from "@/modules/events/event-types";
-import { EventType } from "@/graphql/enums.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { getLoan } from "@/modules/loans/loans-service";
@@ -31,6 +32,7 @@ import { getWorkspaceBranchById } from "@/modules/workspace-branches/workspace-b
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
+import { nonLoading } from "@/utils/non-loading";
 import { round } from "@/utils/number.utils";
 import { removeAccents } from "@/utils/string.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
@@ -52,22 +54,44 @@ import {
   ThemeIcon,
   useMantineTheme,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck, IconClipboardCheck, IconRefresh } from "@tabler/icons-react";
-import { FC, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import {
+  FC,
+  forwardRef,
+  Fragment,
+  ReactNode,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { PrintButton } from "../../../modals/modal-printer";
 import { receiptPaymentMethods } from "../receipt-constants";
-import { OnReceiptDetailModal } from "./modal-receipt-detail";
-import { Modal } from "@/components/modal/modal";
+import { type ModalReceiptDetailRef } from "./modal-receipt-detail";
 
-export interface ModalPayReceiptProps {
+const ModalReceiptDetail = dynamic(
+  () => import("./modal-receipt-detail").then((mod) => mod.ModalReceiptDetail),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+export interface ModalPayReceiptArgs {
   receipt: Pick<ReceiptEntity, "id">;
   onPaid?: () => void;
   onClosed?: () => void;
 }
 
-const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
+export interface ModalPayReceiptRef {
+  open: (props: ModalPayReceiptArgs) => void;
+  close: () => void;
+}
+
+const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   const workspace = useWorkspace();
   const theme = useMantineTheme();
   const banks = useBanks();
@@ -77,6 +101,8 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
   const [receiptFiles, setReceiptFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(true);
   const uploadFile = useUploadFile();
+
+  const modalReceiptDetailRef = useRef<ModalReceiptDetailRef | null>(null);
 
   const [paymentMethod, setPaymentMethod] = useState(
     workspace.settings.receiptPaymentMethodDefault || ReceiptPaymentMethod.CASH
@@ -173,7 +199,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
 
       if (_receipt.status === ReceiptStatus.PAID) {
         onClose();
-        OnReceiptDetailModal({ id: _receipt.id });
+        modalReceiptDetailRef.current?.open(_receipt.id);
       }
 
       setTransactionDesc(await getDefaultTransactionDesc(_receipt));
@@ -508,42 +534,58 @@ const ModalPayReceiptContent: FC<ModalPayReceiptProps> = (props) => {
           </Fragment>
         );
       })()}
+
+      <ModalReceiptDetail ref={modalReceiptDetailRef} />
     </Stack>
   );
 };
 
-export const ModalPayReceipt: FC<{
-  children: (open: (props: ModalPayReceiptProps) => void) => ReactNode;
-}> = ({ children }) => {
-  const props = useRef<ModalPayReceiptProps | null>(null);
+export const ModalPayReceipt = forwardRef<
+  ModalPayReceiptRef,
+  { children?: (ref: ModalPayReceiptRef) => ReactNode }
+>((props, ref) => {
+  const [args, setArgs] = useState<ModalPayReceiptArgs | null>(null);
   const layout = useLayout();
-  const [opened, { open, close }] = useDisclosure(false);
+
+  const onClose = () => {
+    args?.onClosed?.();
+    setArgs(null);
+  };
+
+  useImperativeHandle(ref, () => ({
+    open: (p) => {
+      setArgs(p);
+    },
+    close: onClose,
+  }));
 
   return (
     <Fragment>
-      {children((p) => {
-        props.current = p || null;
-        open();
-      })}
+      {typeof props.children === "function" &&
+        props.children({
+          open: (p) => {
+            setArgs(p);
+          },
+          close: () => {
+            onClose();
+          },
+        })}
 
       <Modal
         withCloseButton={false}
         zIndex={zIndexes.commonModals + 1}
-        opened={opened}
-        onClose={close}
+        opened={!!args}
+        onClose={onClose}
         size={550}
         yOffset={layout.view === "mobile" ? 10 : undefined}
       >
-        {props.current && (
+        {args && (
           <ModalPayReceiptContent
-            key={props.current.receipt.id}
-            {...props.current}
-            onClosed={() => {
-              props.current?.onClosed?.();
-              close();
-            }}
+            key={args.receipt.id}
+            {...args}
+            onClosed={onClose}
             onPaid={() => {
-              props.current?.onPaid?.();
+              args?.onPaid?.();
               close();
             }}
           />
@@ -551,4 +593,4 @@ export const ModalPayReceipt: FC<{
       </Modal>
     </Fragment>
   );
-};
+});

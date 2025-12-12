@@ -92,10 +92,10 @@ export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((prop
             </Group>
             <Divider miw="100%" opacity={0.5} />
             <Group justify="end" p="md" gap="sm" bg="var(--mantine-color-dark-outline-hover)">
-              <Button flex={1} color="gray" variant="outline" onClick={onCancel} component="div">
+              <Button miw={100} color="gray" variant="outline" onClick={onCancel} component="div">
                 <Trans>Cancel</Trans>
               </Button>
-              <Button flex={1} color={modalColor} onClick={onConfirm}>
+              <Button miw={100} color={modalColor} onClick={onConfirm}>
                 {args.confirmLabel ?? <Trans>Confirm</Trans>}
               </Button>
             </Group>

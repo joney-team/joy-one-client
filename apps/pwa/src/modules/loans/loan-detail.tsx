@@ -4,27 +4,29 @@ import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { EntityImage } from "@/components/entity-image";
 import { Errored } from "@/components/errored";
-import { EventList } from "@/components/event-list";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
 import { genders } from "@/constant";
+import { EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
-import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";
+import {
+  type CustomerKycEntity,
+  CustomerKycStatus,
+} from "@/modules/customer-kycs/customer-kycs-types";
 import { getCustomer } from "@/modules/customers/customer-service";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/graphql/enums.graphql";
 import { useLoans } from "@/modules/loans/loans-context";
 import { archiveLoan, getLoanByCode, updateLoanAssetData } from "@/modules/loans/loans-service";
-import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
-import { ModalSignLoan } from "@/modules/loans/modals/modal-sign-loan";
+import { type LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
+import { nonLoading } from "@/utils/non-loading";
 import { formatPhoneNumber } from "@/utils/phone.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
@@ -57,18 +59,67 @@ import {
   IconUserScan,
 } from "@tabler/icons-react";
 import { NextPage } from "next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
-import { ModalCustomer } from "../customers/customer-modal";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
-import { LoanCustomerKyc } from "./components/loan-customer-kyc";
-import { LoanDisburesement } from "./components/loan-disbursement";
-import { LoanDocuments } from "./components/loan-documents";
-import { LoanPayments } from "./components/loan-payments";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
+
+const ModalCustomer = dynamic(
+  () => import("../customers/customer-modal").then((mod) => mod.ModalCustomer),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const LoanCustomerKyc = dynamic(
+  () => import("./components/loan-customer-kyc").then((mod) => mod.LoanCustomerKyc),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const LoanDisburesement = dynamic(
+  () => import("./components/loan-disbursement").then((mod) => mod.LoanDisburesement),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const LoanPayments = dynamic(
+  () => import("./components/loan-payments").then((mod) => mod.LoanPayments),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const LoanDocuments = dynamic(
+  () => import("./components/loan-documents").then((mod) => mod.LoanDocuments),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ModalSignLoan = dynamic(
+  () => import("./modals/modal-sign-loan").then((mod) => mod.ModalSignLoan),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const EventList = dynamic(() => import("@/components/event-list").then((mod) => mod.EventList), {
+  ssr: false,
+  loading: nonLoading,
+});
 
 export const LoanDetail: NextPage = () => {
   const params = useParams();

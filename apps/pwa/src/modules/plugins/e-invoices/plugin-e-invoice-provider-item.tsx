@@ -30,7 +30,7 @@ import {
   IconRefresh,
   IconTemplate,
 } from "@tabler/icons-react";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { OnModalCheckEInvoice } from "./modal-check-e-invoice";
 import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
 import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor";
@@ -46,6 +46,17 @@ import {
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
+import { type ModalConfirmRef } from "@/modals/modal-confirm";
+import dynamic from "next/dynamic";
+import { nonLoading } from "@/utils/non-loading";
+
+const ModalConfirm = dynamic(
+  () => import("@/modals/modal-confirm").then((mod) => mod.ModalConfirm),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 interface PluginEInvoiceProviderItemProps {
   provider: PluginEInvoicesProviderEntity;
@@ -60,6 +71,8 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
 
   const status = eInvoicesProviderStatuses[provider.status];
   const [templates, setTemplates] = useState(provider.templates);
+
+  const modalConfirmRef = useRef<ModalConfirmRef>(null);
 
   const { data: variables } = useRestQuery<PluginEInvoiceTemplateVariables>({
     route: "/plugins/e-invoices/templates/variables",
@@ -83,13 +96,14 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
   };
 
   const resetTemplates = async () => {
-    onActionLoad({
-      name: <Trans>Reset templates</Trans>,
+    modalConfirmRef.current?.open({
       icon: IconTemplate,
-      process: async () => {
+      content: <Trans>Are you sure you want to reset the templates?</Trans>,
+      onConfirm: async () => {
         await api.post(`/plugins/e-invoices/providers/${provider._id}/reset-templates`);
         await onRefetch();
       },
+      confirmLabel: <Trans>Reset</Trans>,
     });
   };
 
@@ -271,6 +285,8 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
           );
         })}
       </Stack>
+
+      <ModalConfirm ref={modalConfirmRef} />
     </Stack>
   );
 };

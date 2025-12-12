@@ -4,8 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { Modal } from "@/components/modal/modal";
-import { ModalHead } from "@/components/modal/modal-head";
-import { useLayout } from "@/layout/layout-context";
 import { getCustomer, renderGener } from "@/modules/customers/customer-service";
 import { CustomerEntity, CustomerShortInfo } from "@/modules/customers/customer-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
@@ -30,21 +28,29 @@ import {
   Card,
   Center,
   Divider,
+  em,
   Group,
   Skeleton,
   Stack,
   Switch,
   ThemeIcon,
   Tooltip,
-  em,
   useMantineTheme,
 } from "@mantine/core";
-import { useDisclosure, useForceUpdate } from "@mantine/hooks";
+import { useForceUpdate } from "@mantine/hooks";
 import { IconDimensions, IconPrinter, IconSettings } from "@tabler/icons-react";
-import { type FC, Fragment, ReactNode, useRef, useState } from "react";
+import {
+  type FC,
+  forwardRef,
+  Fragment,
+  ReactNode,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { useReactToPrint } from "react-to-print";
 
-interface PrinterProps {
+interface PrinterArgs {
   label?: string | ReactNode;
   receipt?: ReceiptEntity;
   bankQrCode?: BankQrCode;
@@ -53,7 +59,7 @@ interface PrinterProps {
   order?: OrderEntity;
 }
 
-interface ModalPrinterProps extends PrinterProps {
+interface ModalPrinterArgs extends PrinterArgs {
   force?: boolean;
 }
 
@@ -108,18 +114,22 @@ const setPrintSettings = (settings: PrintSettings) => {
   localStorage.setItem(printSettingsKey, JSON.stringify(settings));
 };
 
-let currentProps: ModalPrinterProps = {};
+let currentProps: ModalPrinterArgs = {};
 
-export const ModalPrinter: FC<{
-  children: (open: (props: ModalPrinterProps) => Promise<void>) => ReactNode;
-}> = ({ children }) => {
+export interface ModalPrinterRef {
+  open: (props: ModalPrinterArgs) => Promise<void>;
+  close: () => void;
+}
+
+export const ModalPrinter = forwardRef<
+  ModalPrinterRef,
+  { children?: (ref: ModalPrinterRef) => ReactNode }
+>((props, ref) => {
   const forceUpdate = useForceUpdate();
   const printSettings = getPrintSettings();
-  const viewport = useLayout();
   const workspace = useWorkspace();
 
-  const [opened, { open, close }] = useDisclosure(false);
-  const [props, setProps] = useState<ModalPrinterProps>();
+  const [args, setArgs] = useState<ModalPrinterArgs | null>(null);
   const [loading, setIsLoading] = useState(true);
   const [relatedOrder, setRelatedOrder] = useState<OrderEntity>();
   const [customer, setCustomer] = useState<CustomerEntity>();
@@ -128,7 +138,7 @@ export const ModalPrinter: FC<{
   const handlePrint = useReactToPrint({
     contentRef,
     onAfterPrint: () => {
-      if (currentProps?.force) close();
+      if (currentProps?.force) setArgs(null);
     },
     onPrintError: (error) => {
       onError(error);
@@ -141,57 +151,76 @@ export const ModalPrinter: FC<{
   };
 
   function getTitle() {
-    if (props?.receipt) return t`Print receipt`;
-    if (props?.order) return t`Print order`;
-    if (props?.prescription) return t`Print prescription`;
+    if (args?.receipt) return t`Print receipt`;
+    if (args?.order) return t`Print order`;
+    if (args?.prescription) return t`Print prescription`;
     return t`Print`;
   }
 
+  const onOpen = async (p: ModalPrinterArgs) => {
+    setIsLoading(true);
+
+    try {
+      let _p = { ...p };
+
+      if (_p.bankQrCode) {
+        _p.bankQrCode.url = _p.bankQrCode.url.replace("compact", "qr_only");
+        loadImage(_p.bankQrCode.url);
+      }
+
+      if (_p.receipt?.relatedOrderId) {
+        const order = await getOrderById(_p.receipt.relatedOrderId);
+        setRelatedOrder(order);
+      }
+
+      const customerId =
+        _p.customer?._id || _p.order?.relatedCustomerId || _p.receipt?.relatedCustomerId;
+      if (customerId) {
+        const customer = await getCustomer(customerId);
+        setCustomer(customer);
+      }
+
+      currentProps = _p;
+      setArgs(_p);
+
+      if (p.force) {
+        setIsLoading(false);
+        await wait(200);
+        handlePrint();
+      }
+    } catch (error) {
+      onError(error);
+      setArgs(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useImperativeHandle(ref, () => ({
+    open: async (a) => {
+      await onOpen(a);
+    },
+    close: () => {
+      setArgs(null);
+    },
+  }));
+
   return (
     <Fragment>
-      {children(async (p) => {
-        setIsLoading(true);
-
-        try {
-          let _p = { ...p };
-
-          if (_p.bankQrCode) {
-            _p.bankQrCode.url = _p.bankQrCode.url.replace("compact", "qr_only");
-            loadImage(_p.bankQrCode.url);
-          }
-
-          if (_p.receipt?.relatedOrderId) {
-            const order = await getOrderById(_p.receipt.relatedOrderId);
-            setRelatedOrder(order);
-          }
-
-          const customerId =
-            _p.customer?._id || _p.order?.relatedCustomerId || _p.receipt?.relatedCustomerId;
-          if (customerId) {
-            const customer = await getCustomer(customerId);
-            setCustomer(customer);
-          }
-
-          currentProps = _p;
-          setProps(_p);
-          open();
-
-          if (p.force) {
-            setIsLoading(false);
-            await wait(200);
-            handlePrint();
-          }
-        } catch (error) {
-          onError(error);
-          close();
-        } finally {
-          setIsLoading(false);
-        }
-      })}
+      {typeof props.children === "function"
+        ? props.children({
+            open: async (a) => {
+              await onOpen(a);
+            },
+            close: () => {
+              setArgs(null);
+            },
+          })
+        : null}
 
       <Modal
-        opened={opened}
-        onClose={close}
+        opened={!!args}
+        onClose={() => setArgs(null)}
         name={getTitle()}
         icon={IconPrinter}
         zIndex={zIndexes.modalPrinter}
@@ -200,7 +229,7 @@ export const ModalPrinter: FC<{
         size="xl"
       >
         {(function () {
-          if (!props) return null;
+          if (!args) return null;
           if (loading) return <Skeleton h={300} />;
 
           return (
@@ -273,8 +302,8 @@ export const ModalPrinter: FC<{
                     </div>
 
                     {(function () {
-                      const { receipt } = props;
-                      const order = props.order || relatedOrder;
+                      const { receipt } = args;
+                      const order = args.order || relatedOrder;
 
                       if (order) {
                         const subTotalPrice = order.items.reduce((a, b) => a + b.price, 0);
@@ -452,10 +481,10 @@ export const ModalPrinter: FC<{
                               )}
                             </div>
 
-                            {props.bankQrCode && printSettings.showBankQrCode && (
+                            {args.bankQrCode && printSettings.showBankQrCode && (
                               <div className="printer-qr-code">
                                 <img
-                                  src={props.bankQrCode.url.replace("compact", "qr_only")}
+                                  src={args.bankQrCode.url.replace("compact", "qr_only")}
                                   alt=""
                                 />
                               </div>
@@ -464,8 +493,8 @@ export const ModalPrinter: FC<{
                         );
                       }
 
-                      if (props.prescription) {
-                        const prescription = props.prescription;
+                      if (args.prescription) {
+                        const prescription = args.prescription;
                         const totalDays = prescription.items.reduce(
                           (a, b) => Math.max(a, b.days),
                           0
@@ -635,7 +664,7 @@ export const ModalPrinter: FC<{
                     }}
                   />
 
-                  {props.bankQrCode && (
+                  {args.bankQrCode && (
                     <Switch
                       label={t`Payment code`}
                       defaultChecked={printSettings.showBankQrCode}
@@ -692,14 +721,14 @@ export const ModalPrinter: FC<{
       </Modal>
     </Fragment>
   );
-};
+});
 
-export const PrintButton: FC<PrinterProps> = (props) => {
+export const PrintButton: FC<PrinterArgs> = (args) => {
   const theme = useMantineTheme();
 
   return (
     <ModalPrinter>
-      {(open) => (
+      {(modal) => (
         <Card
           p={0}
           withBorder
@@ -714,11 +743,11 @@ export const PrintButton: FC<PrinterProps> = (props) => {
                   color="gray"
                   size="sm"
                   variant="transparent"
-                  onClick={() => open({ ...props, force: true })}
+                  onClick={() => modal.open({ ...args, force: true })}
                   leftIcon={IconPrinter}
                   fz={13}
                 >
-                  {props.label || <Trans>Quick print</Trans>}
+                  {args.label || <Trans>Quick print</Trans>}
                 </Button>
               </Center>
             </Tooltip>
@@ -726,7 +755,12 @@ export const PrintButton: FC<PrinterProps> = (props) => {
             <Divider orientation="vertical" />
 
             <Tooltip label={t`Settings and preview`}>
-              <ActionIcon color="gray" w={40} variant="transparent" onClick={() => open(props)}>
+              <ActionIcon
+                color="gray"
+                w={40}
+                variant="transparent"
+                onClick={() => modal.open(args)}
+              >
                 <IconSettings size={18} />
               </ActionIcon>
             </Tooltip>

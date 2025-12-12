@@ -312,6 +312,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
             <ScrollArea.Autosize
               w="100%"
               type="scroll"
+              scrollbars="y"
               mah={Math.min(400, layout.height * 0.4)}
               viewportRef={dropdownRef}
               onScrollPositionChange={onScrollPositionChange}

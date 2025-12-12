@@ -21,7 +21,7 @@ import {
   ThemeIcon,
   Tooltip,
 } from "@mantine/core";
-import { FC } from "react";
+import { FC, useRef } from "react";
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
@@ -36,7 +36,7 @@ import { FilesBox } from "@/modules/files/files-box";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnModalDisburesementReceipt } from "@/modules/receipts/modals/modal-disburesement-receipt";
-import { OnReceiptDetailModal } from "@/modules/receipts/modals/modal-receipt-detail";
+
 import {
   archiveReceipt,
   receiptStatusOptions,
@@ -47,6 +47,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
+import { nonLoading } from "@/utils/non-loading";
 import { String } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -54,9 +55,26 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { ModalPayReceipt } from "./modals/modal-pay-receipt";
+import { type ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
+
+const ModalPayReceipt = dynamic(
+  () => import("./modals/modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ModalReceiptDetail = dynamic(
+  () => import("./modals/modal-receipt-detail").then((mod) => mod.ModalReceiptDetail),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 interface ReceiptCardProps {
   receipt: ReceiptEntity;
@@ -78,6 +96,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
   const bankAccount = workspace.settings.bankAccount;
   const totalAmount = receipt.amount + (receipt.tipAmount || 0);
   const isExpired = receipt.expireAt && receipt.expireAt < DateTime.toSeconds(new Date());
+  const modalReceiptDetailRef = useRef<ModalReceiptDetailRef | null>(null);
 
   const isAbleToPrint =
     !!receipt.relatedOrderId && receipt.type === ReceiptType.INCOME && !receipt.isArchived;
@@ -128,7 +147,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               flex={1}
               gap={8}
               className={isOpenModal ? "clickable" : undefined}
-              onClick={() => isOpenModal && OnReceiptDetailModal({ id: receipt.id })}
+              onClick={() => isOpenModal && modalReceiptDetailRef.current?.open(receipt.id)}
             >
               <Tooltip label={receiptTypes[receipt.type].label()}>
                 <ThemeIcon
@@ -494,11 +513,11 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
 
             {receipt.status !== ReceiptStatus.PAID && (
               <ModalPayReceipt>
-                {(open) => (
+                {(modal) => (
                   <Button
                     size="xs"
                     leftIcon={IconCashRegister}
-                    onClick={() => open({ receipt: receipt })}
+                    onClick={() => modal.open({ receipt: receipt })}
                   >
                     {t`Pay`}
                   </Button>
@@ -508,6 +527,8 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
           </Group>
         )}
       </Stack>
+
+      <ModalReceiptDetail ref={modalReceiptDetailRef} />
     </Card>
   );
 };
