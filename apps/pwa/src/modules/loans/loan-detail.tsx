@@ -80,7 +80,7 @@ const LoanCustomerKyc = dynamic(
   () => import("./components/loan-customer-kyc").then((mod) => mod.LoanCustomerKyc),
   {
     ssr: false,
-    loading: nonLoading,
+    loading: () => <Skeleton height={300} />,
   }
 );
 
@@ -88,7 +88,7 @@ const LoanDisburesement = dynamic(
   () => import("./components/loan-disbursement").then((mod) => mod.LoanDisburesement),
   {
     ssr: false,
-    loading: nonLoading,
+    loading: () => <Skeleton height={300} />,
   }
 );
 
@@ -96,7 +96,7 @@ const LoanPayments = dynamic(
   () => import("./components/loan-payments").then((mod) => mod.LoanPayments),
   {
     ssr: false,
-    loading: nonLoading,
+    loading: () => <Skeleton height={300} />,
   }
 );
 
@@ -104,7 +104,7 @@ const LoanDocuments = dynamic(
   () => import("./components/loan-documents").then((mod) => mod.LoanDocuments),
   {
     ssr: false,
-    loading: nonLoading,
+    loading: () => <Skeleton height={300} />,
   }
 );
 

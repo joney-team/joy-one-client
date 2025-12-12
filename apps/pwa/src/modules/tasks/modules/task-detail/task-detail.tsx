@@ -22,10 +22,12 @@ import { useHover } from "@mantine/hooks";
 import { IconCopy, IconCopyCheck, IconFiles } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
 import { FC, Fragment, useEffect, useState } from "react";
-import { TaskDetailFooter } from "./task-detail-footer";
 
 import { Modal } from "@/components/modal/modal";
+import { AppEntity } from "@/types";
+import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
+import dynamic from "next/dynamic";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import QUERY_TASK_BY_CODE, {
   type TaskByCodeQuery,
@@ -35,8 +37,19 @@ import { TaskDetailSubtasks } from "../../task-detail-subtasks";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { useTaskMenu } from "../task-menu/task-menu";
 import { TaskDetailHead } from "./task-detail-head";
-import { FilesBox } from "@/modules/files/files-box";
-import { AppEntity } from "@/types";
+
+const TaskDetailFooter = dynamic(
+  () => import("./task-detail-footer").then((mod) => mod.TaskDetailFooter),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const FilesBox = dynamic(() => import("@/modules/files/files-box").then((mod) => mod.FilesBox), {
+  ssr: false,
+  loading: nonLoading,
+});
 
 const TaskCodeButton: FC<{ task: TaskDataFragment }> = (props) => {
   const { task } = props;
