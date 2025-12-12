@@ -809,7 +809,7 @@ type WorkspaceMember {
   color: String
   email: String!
   memberDisplayName: String
-  memberId: String!
+  memberId: String
   name: String!
   phone: String
   roles: [WorkspaceMemberRole!]!

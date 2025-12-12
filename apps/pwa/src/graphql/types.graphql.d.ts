@@ -1132,7 +1132,7 @@ export type WorkspaceMember = {
   color: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
   memberDisplayName: Maybe<Scalars['String']['output']>;
-  memberId: Scalars['String']['output'];
+  memberId: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   phone: Maybe<Scalars['String']['output']>;
   roles: Array<WorkspaceMemberRole>;
