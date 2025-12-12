@@ -452,7 +452,6 @@ export type File = {
   updatedAt: Maybe<Scalars['Float']['output']>;
   uploadByUserId: Maybe<Scalars['String']['output']>;
   url: Scalars['String']['output'];
-  workspaceId: Scalars['String']['output'];
 };
 
 /** Available file types */

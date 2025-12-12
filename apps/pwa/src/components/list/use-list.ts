@@ -6,14 +6,13 @@ import { onReconnected, useEventsListener } from "@/modules/events/event-service
 import { EventEntity } from "@/modules/events/event-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceId } from "@/modules/workspaces/workspaces-service";
+import { type BaseData, getId } from "@joy-one-client/utils/base-data";
 import { removeParams, setParams } from "@joy-one-client/utils/location-query";
 import { useLingui } from "@lingui/react/macro";
 import { CanceledError } from "axios";
 import { usePathname, useSearchParams } from "next/navigation";
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
+import { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { isPlural } from "../../utils/string.utils";
-import { getId } from "./list-utils";
-import { BaseData } from "./types";
 
 export interface UseListFetchReponse<T = any> {
   data: T[];
@@ -81,7 +80,7 @@ export interface UseList<T extends BaseData> {
   setParams: UseListSetParams;
   removeParams: UseListRemoveParams;
   removeAllParams: UseListRemoveAllParams;
-  ref: MutableRefObject<UseListData<T>>;
+  ref: RefObject<UseListData<T>>;
   setStatus: UseListSetStatus;
   version: number;
   reset: () => void;

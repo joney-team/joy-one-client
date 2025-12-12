@@ -1,17 +1,8 @@
 "use client";
 
-import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
-import { BaseData, Column, ColumnState, ListProps, ListViewState } from "./types";
 import { ViewportType } from "@/types";
-
-export function getId(obj: BaseData) {
-  if (obj && typeof obj === "object") {
-    if ("id" in obj && typeof obj.id === "string") return obj.id;
-    if ("_id" in obj && typeof obj._id === "string") return obj._id;
-  }
-
-  return "";
-}
+import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
+import { Column, ColumnState, ListProps, ListViewState } from "./types";
 
 export const getIn = (obj: any, path: string) => {
   try {

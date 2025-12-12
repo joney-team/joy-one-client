@@ -5,7 +5,7 @@ import { Trans } from "@lingui/react/macro";
 import { Badge, em } from "@mantine/core";
 import { FC } from "react";
 import { NumberFormat } from "./format/number-format";
-import { BaseData } from "./list/types";
+import type { BaseData } from "@joy-one-client/utils/base-data";
 
 export interface ListQtyProps<T extends BaseData = any> {
   list: UseList<T>;

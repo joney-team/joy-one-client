@@ -59,6 +59,12 @@
             background: var(--mantine-color-default-hover);
           }
         }
+
+        &[data-context-menu-opened="true"] {
+          & td {
+            background: color-mix(in srgb, var(--app-primary-color), transparent 95%) ;
+          }
+        }
       }
     }
   }

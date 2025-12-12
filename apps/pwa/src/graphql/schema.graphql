@@ -415,7 +415,6 @@ type File {
   updatedAt: Float
   uploadByUserId: String
   url: String!
-  workspaceId: String!
 }
 
 """Available file types"""

@@ -12,8 +12,8 @@ import {
   IconStopwatch,
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { FC, Fragment, PropsWithChildren, ReactNode, useCallback, useEffect, useMemo } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { FC, Fragment, PropsWithChildren, ReactNode, useCallback, useMemo } from "react";
 import { BulkTasksActions } from "../components/bulk-tasks-actions";
 import { parseTaskPath, updateTaskPath } from "../tasks-route-helpers";
 import { TaskView } from "./types";
@@ -51,7 +51,7 @@ const TaskViewGateway = dynamic(
 );
 
 const TaskMenuDropdown = dynamic(
-  () => import("../modules/task-menu/task-menu-dropdown").then((mod) => mod.TaskMenuDropdown),
+  () => import("../modules/task-menu/task-menu-dropdown").then((mod) => mod.TaskContextMenu),
   {
     ssr: false,
     loading: nonLoading,

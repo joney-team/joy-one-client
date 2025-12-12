@@ -7,8 +7,7 @@ import type { DynamicSelectorFilterConfig } from "./filters/dynamic-selector-fil
 import type { StaticSelectorFilterConfig } from "./filters/static-selector-filter";
 import type { TextFilterConfig } from "./filters/text-filter";
 import type { TimeRangeFilterConfig } from "./filters/time-range-filter";
-
-export type BaseData = { id: string } | { _id: string };
+import { BaseData } from "@joy-one-client/utils/base-data";
 
 export type ListSort = {
   label: string;

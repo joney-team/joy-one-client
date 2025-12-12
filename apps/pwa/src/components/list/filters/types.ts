@@ -1,4 +1,4 @@
-import { BaseData } from "@/components/list/types";
+import type { BaseData } from "@joy-one-client/utils/base-data";
 import { FC, MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 import { TableColumn } from "../types";
 

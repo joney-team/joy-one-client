@@ -35,7 +35,7 @@ const menuComponents: Partial<Record<TaskMenuAction, ComponentType<TaskMenuCompo
   [TaskMenuAction.CHANGE_ESTIMATE_TIME]: TaskMenuEstimateTime,
 };
 
-export const TaskMenuDropdown: FC = ({}) => {
+export const TaskContextMenu: FC = ({}) => {
   const [taskMenu, setTaskMenu] = useState<TaskMenu>();
   const { updateTasks } = useUpdateTasks();
 

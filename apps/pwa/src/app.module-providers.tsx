@@ -111,6 +111,7 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
                   {props.children}
 
                   {routeRule.workspace && <LayoutWorkspace />}
+
                   <ModalUpgradeVersion />
                   <ModalInstallWebAppTutorial />
                   <ModalNextBooking />

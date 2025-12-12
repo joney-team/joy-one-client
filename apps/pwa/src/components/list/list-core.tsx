@@ -24,18 +24,12 @@ import { Errored } from "../errored";
 import { NumberFormat } from "../format/number-format";
 import { WayPoint } from "../way-point";
 import { Context } from "./list-context";
-import { cleanObject, generateDefaultViewState, getId } from "./list-utils";
-import {
-  BaseData,
-  Column,
-  ColumnState,
-  ListContext,
-  ListProps,
-  ListViewState,
-  TableColumn,
-} from "./types";
-import dynamic from "next/dynamic";
+import { cleanObject, generateDefaultViewState } from "./list-utils";
+
 import { nonLoading } from "@/utils/non-loading";
+import { type BaseData, getId } from "@joy-one-client/utils/base-data";
+import dynamic from "next/dynamic";
+import { Column, ColumnState, ListContext, ListProps, ListViewState, TableColumn } from "./types";
 
 const ListTable = dynamic(() => import("./table/table"), {
   ssr: false,

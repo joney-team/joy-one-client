@@ -8,9 +8,10 @@ import { zIndexes } from "@joy-one-client/config/layout";
 import { Stack } from "@mantine/core";
 import { useHeadroom } from "@mantine/hooks";
 import dynamic from "next/dynamic";
-import { Fragment, type FC } from "react";
+import { Fragment, useEffect, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
+import { useColor } from "@/modules/theme/use-color";
 
 const WorkspaceNavigation = dynamic(
   () => import("./navigation/workspace-navigation").then((m) => m.WorkspaceNavigation),
@@ -38,6 +39,7 @@ const WorkspaceNavigationSplitter = dynamic(
 
 export const LayoutWorkspace: FC = () => {
   const layout = useLayout();
+  const color = useColor();
   const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
 
@@ -52,6 +54,13 @@ export const LayoutWorkspace: FC = () => {
 
   const headPinned =
     layout.view === "mobile" && !layout.isStandalone ? !layout.isBrowerCollapsed : headroom;
+
+  useEffect(() => {
+    window.document.body.style.setProperty("--app-primary-color", color("primary"));
+    return () => {
+      window.document.body.style.removeProperty("--app-primary-color");
+    };
+  }, [color, workspace]);
 
   return (
     <Fragment>
