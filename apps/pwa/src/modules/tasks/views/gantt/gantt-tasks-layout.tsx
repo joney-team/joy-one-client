@@ -27,14 +27,9 @@ import { useGantt } from "./gantt-tasks-context";
 import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 
 export const SidebarHead: FC = () => {
-  const forceUpdate = useForceUpdate();
   const gantt = useGantt();
   const workspaceLayout = useWorkspaceLayout();
   const [isOpenedAllFolder, setIsOpenedAllFolder] = useState(false);
-
-  useEffect(() => {
-    setTimeout(forceUpdate, 100);
-  }, [gantt.state.dividerPosition]);
 
   return (
     <Group
@@ -86,7 +81,7 @@ export const SidebarHead: FC = () => {
 
         <Tooltip
           label={
-            gantt.state.isHideEstimateTime ? (
+            gantt.state.isShowEstimatedTime ? (
               <Trans>Show estimate time</Trans>
             ) : (
               <Trans>Hide estimate time</Trans>
@@ -97,15 +92,15 @@ export const SidebarHead: FC = () => {
             variant="subtle"
             size="sm"
             component="div"
-            color={gantt.state.isHideEstimateTime ? "gray" : "gray"}
+            color={gantt.state.isShowEstimatedTime ? "gray" : "gray"}
             onClick={() => {
               gantt.setState({
                 ...gantt.state,
-                isHideEstimateTime: !gantt.state.isHideEstimateTime,
+                isShowEstimatedTime: !gantt.state.isShowEstimatedTime,
               });
             }}
           >
-            {gantt.state.isHideEstimateTime ? (
+            {gantt.state.isShowEstimatedTime ? (
               <IconHourglassOff size={16} />
             ) : (
               <IconHourglassHigh size={16} />
@@ -118,12 +113,12 @@ export const SidebarHead: FC = () => {
             variant="subtle"
             size="sm"
             component="div"
-            color={gantt.state.displayTaskStatusColor ? "primary" : "gray"}
+            color={gantt.state.isShowTaskstatusColor ? "primary" : "gray"}
             onClick={() => {
-              gantt.toggleSisplayTaskStatusColor();
+              gantt.setState((s) => ({ ...s, isShowTaskstatusColor: !s.isShowTaskstatusColor }));
             }}
           >
-            {gantt.state.displayTaskStatusColor ? (
+            {gantt.state.isShowTaskstatusColor ? (
               <IconDropletFilled size={16} />
             ) : (
               <IconDroplet size={16} />

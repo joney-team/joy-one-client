@@ -10,7 +10,6 @@ import QUERY_TASKS, {
 } from "@/modules/tasks/graphql/queryTasks.graphql";
 import { UpdateTask, useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
 import { useTaskMenu } from "@/modules/tasks/modules/task-menu/task-menu";
-import { TaskMenuAction } from "@/modules/tasks/modules/task-menu/task-menu-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useApolloClient } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -26,8 +25,10 @@ export const GanttTaskTimeline: FC = () => {
   const color = useColor();
   const gantt = useGantt();
   const { updateTasks } = useUpdateTasks();
+
   const { timeline, task, subTasksGroupVariables, ganttTaskAreaRef, groupVariables } =
     useGanttTaskRow();
+
   const taskMenu = useTaskMenu({ task, groupVariables });
 
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -125,25 +126,9 @@ export const GanttTaskTimeline: FC = () => {
       }
     };
 
-    const onContextMenu = (e: MouseEvent) => {
-      if (timelineRef.current) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const mouseX = e.clientX;
-
-        taskMenu.open({
-          action: TaskMenuAction.GANTT_TIMELINE,
-          target: timelineRef.current,
-          offset: { x: Math.abs(timelineRef.current.getBoundingClientRect().x - mouseX), y: 5 },
-        });
-      }
-    };
-
     timelineRef.current?.addEventListener("mousedown", onMouseDown);
     timelineRef.current?.addEventListener("mouseup", onMouseUp);
     timelineRef.current?.addEventListener("mouseleave", resetMove);
-    timelineRef.current?.addEventListener("contextmenu", onContextMenu);
 
     ganttTaskAreaRef.current?.addEventListener("mousemove", onMouseMove);
     ganttTaskAreaRef.current?.addEventListener("mouseleave", resetMove);
@@ -154,7 +139,6 @@ export const GanttTaskTimeline: FC = () => {
       timelineRef.current?.removeEventListener("mousedown", onMouseDown);
       timelineRef.current?.removeEventListener("mouseup", onMouseUp);
       timelineRef.current?.removeEventListener("mouseleave", resetMove);
-      timelineRef.current?.removeEventListener("contextmenu", onContextMenu);
 
       ganttTaskAreaRef.current?.removeEventListener("mousemove", onMouseMove);
       ganttTaskAreaRef.current?.removeEventListener("mouseleave", resetMove);
@@ -185,10 +169,10 @@ export const GanttTaskTimeline: FC = () => {
   }, [timeline]);
 
   const taskColor = useMemo(() => {
-    return gantt.state.displayTaskStatusColor
+    return gantt.state.isShowTaskstatusColor
       ? color(taskStatus.color ?? "gray")
       : color("primary.4");
-  }, [gantt.state.displayTaskStatusColor, taskStatus.color]);
+  }, [gantt.state.isShowTaskstatusColor, taskStatus.color]);
 
   if (!timeline) return null;
 

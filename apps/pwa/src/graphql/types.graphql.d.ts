@@ -1009,8 +1009,6 @@ export type Task = {
   startDate: Maybe<Scalars['Float']['output']>;
   status: Scalars['String']['output'];
   statuses: Array<TaskStatus>;
-  /** @deprecated Use folderId instead */
-  tagFolderId: Maybe<Scalars['String']['output']>;
   tagIds: Array<Scalars['String']['output']>;
   tags: Array<Tag>;
   timeTrackings: Maybe<Array<TaskTimeTracking>>;

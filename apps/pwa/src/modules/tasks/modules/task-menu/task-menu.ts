@@ -1,5 +1,6 @@
 "use client";
 
+import { useContextMenu } from "@/components/context-menu/context-menu";
 import {
   addInternalEventsListener,
   emitInternalEvent,
@@ -8,20 +9,23 @@ import {
 } from "@/hooks/use-internal-event";
 import { useEffect, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
-import { TaskMenu, TaskMenuAction, TaskMenuContextType } from "./task-menu-types";
-import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
-import { UpdateTask } from "../../hooks/use-update-tasks";
+import {
+  TaskMenuAction,
+  TaskMenuContext,
+  TaskMenuContextType,
+  TaskMenuData,
+} from "./task-menu-types";
 
 export function setTaskMenuRoot(root: HTMLElement | null) {
   emitInternalEvent(InternalEvent.TASK_MENU_SET_ROOT, { root });
 }
 
-export const useTaskMenu: (args: {
-  task?: Partial<TaskDataFragment> & { _id: string };
-  groupVariables: TasksQueryVariables | null;
-  updateTask?: (task: UpdateTask) => Promise<void>;
-  zIndex?: number;
-}) => TaskMenuContextType = ({ task, groupVariables, zIndex, updateTask }) => {
+export const useTaskMenu: (
+  args: {
+    task?: TaskMenuData;
+  } & Partial<TaskMenuContext>
+) => TaskMenuContextType = ({ task, ...context }) => {
+  const contextMenu = useContextMenu<Partial<TaskDataFragment> & { _id: string }>();
   const [activatedAction, setActivatedAction] = useState<TaskMenuAction | null>(null);
 
   useEffect(() => {
@@ -35,9 +39,9 @@ export const useTaskMenu: (args: {
       };
     } else {
       const onOpened = (event: unknown) => {
-        const { menu } = event as { menu: TaskMenu };
-        if (menu.task._id === task?._id) {
-          setActivatedAction(menu.action);
+        const { taskId, action } = event as { taskId: string; action: TaskMenuAction };
+        if (taskId === task?._id) {
+          setActivatedAction(action);
         }
       };
 
@@ -51,14 +55,29 @@ export const useTaskMenu: (args: {
 
   return {
     open(menu) {
-      if (!task) return;
+      const pointedTask = menu.task ?? task;
+      if (!pointedTask) return;
+
+      contextMenu.open({
+        data: pointedTask,
+        context: {
+          ...context,
+          ...menu,
+        },
+        onClose: () => {
+          emitInternalEvent(InternalEvent.TASK_MENU_CLOSE);
+        },
+        target: menu.target,
+        offset: menu.offset,
+      });
 
       emitInternalEvent(InternalEvent.TASK_MENU_OPEN, {
-        menu: { ...menu, task, groupVariables, zIndex, updateTask },
+        menu: { taskId: pointedTask._id, action: menu.action },
       });
     },
     close() {
-      emitInternalEvent(InternalEvent.TASK_MENU_CLOSE);
+      if (activatedAction !== null) setActivatedAction(null);
+      contextMenu.close();
     },
     isOpened: !!activatedAction,
     activatedAction,

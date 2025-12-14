@@ -42,6 +42,7 @@ import { TaskMenuAction } from "../modules/task-menu/task-menu-types";
 import { taskPriorities } from "../task-constants";
 import { DefaultTaskStatusId, TaskPriority } from "../tasks-types";
 import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 export interface CreateTaskFormProps {
   initial?: Partial<TaskDataFragment>;

@@ -382,6 +382,18 @@ const GanttTaskContent: FC = () => {
                 zIndex: 1,
               }}
               data-task-menu-opened={taskMenu.isOpened}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                taskMenu.open({
+                  action: TaskMenuAction.GANTT_TIMELINE,
+                  target: e.currentTarget,
+                  offset: {
+                    x: Math.abs(e.currentTarget.getBoundingClientRect().x - e.clientX),
+                    y: -3,
+                  },
+                });
+              }}
             >
               <GanttTaskDrawTimeline key={timeline?.startDate + "drawer"} />
               <GanttTaskTimeline key={timeline?.startDate + "timeline"} />

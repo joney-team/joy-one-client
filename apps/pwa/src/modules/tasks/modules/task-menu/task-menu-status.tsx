@@ -21,12 +21,14 @@ export const TaskMenuStatus: TaskMenuComponent = ({
     statuses: task.statuses ?? [],
   } as Pick<TaskDataFragment, "status" | "statuses">);
 
+  console.log("statuses", task.statuses);
+
   return (
     <Card p={0} shadow="md" withBorder>
       <Stack gap={3} py={4}>
-        {statuses.map((status) => {
+        {statuses.map((status, statusIndex) => {
           return (
-            <Fragment key={status.id}>
+            <Fragment key={status.id + statusIndex}>
               {status.id === DefaultTaskStatusId.CLOSED && (
                 <Divider my={2} miw="100%" opacity={0.3} />
               )}

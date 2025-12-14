@@ -4,7 +4,7 @@ import { useLayout } from "@/layout/layout-context";
 import { wait } from "@/utils/common.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { useLingui } from "@lingui/react/macro";
-import { useForceUpdate, useThrottledCallback } from "@mantine/hooks";
+import { useThrottledCallback } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
 import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { setTaskMenuRoot } from "../../modules/task-menu/task-menu";
@@ -12,13 +12,7 @@ import { parseTaskPath } from "../../tasks-route-helpers";
 import { ganttConfig } from "./gantt-tasks-config";
 import { Context } from "./gantt-tasks-context";
 import { useGanttRefs } from "./gantt-tasks-refs";
-import type {
-  GanttLayout,
-  GanttState,
-  ScrollDirection,
-  ScrollToDateArgs,
-  UseGantt,
-} from "./gantt-tasks-types";
+import type { GanttState, ScrollDirection, ScrollToDateArgs, UseGantt } from "./gantt-tasks-types";
 import { getDateRangeBreakdown } from "./gantt-tasks-utils";
 
 let scrollTop = -1;
@@ -74,21 +68,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     return [];
   }, [ganttState.unit, range]);
 
-  const forceUpdate = useForceUpdate();
-
-  const activeLayout = useRef<GanttLayout | null>(null);
-
   const columnResizing = useRef(false);
-
-  const [sidebarWidth, setSidebarWidth] = useState(200);
-  const [sidebarContentWidth, setSidebarContentWidth] = useState(200);
-  const [sidebarContentScrollPosition, setSidebarContentScrollPosition] = useState(0);
-  const [scrollDirection, setScrollDirection] = useState<ScrollDirection | null>(null);
-
-  const setActiveLayout = (layout?: GanttLayout) => {
-    activeLayout.current = layout || null;
-    forceUpdate();
-  };
 
   const onExtendTimeRange = useThrottledCallback(async () => {
     if (columnResizing.current) return;
@@ -150,16 +130,14 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     setIsInitialized(true);
   };
 
-  const toggleSisplayTaskStatusColor = () => {
-    setGanttState((s) => ({ ...s, displayTaskStatusColor: !s.displayTaskStatusColor }));
-  };
-
   const changeColumnSize = (size: number) => {
     setGanttState((s) => ({ ...s, columnSize: size }));
   };
 
   const scrollToDate: ScrollToDateArgs = useCallback(
     (args) => {
+      if (!refs.bodyContainer.current) return;
+
       const date = typeof args === "number" ? args : (args as { date: Date | number }).date;
 
       const offset =
@@ -220,8 +198,6 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
           if (scrollDirection === "horizontal") {
             onExtendTimeRange();
           }
-
-          setScrollDirection(scrollDirection);
         };
 
         bodyContainer?.addEventListener("scroll", onScroll);
@@ -391,7 +367,10 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
         const x = e.pageX - el.offsetLeft;
         const walkX = x - startX;
+        const y = e.pageY - el.offsetTop;
+        const walkY = y - startY;
         el.scrollLeft = scrollLeft - walkX;
+        el.scrollTop = scrollTop - walkY;
       };
 
       window.addEventListener("mousedown", onMouseDown);
@@ -409,27 +388,10 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
   const contextValue: UseGantt = {
     columns,
     state: ganttState,
-    setState: (s: GanttState) => setGanttState(s),
-    dividerPosition:
-      typeof ganttState.dividerPosition === "number"
-        ? ganttState.dividerPosition
-        : layout.view === "mobile"
-        ? 0.5
-        : 0.3,
-    activeLayout: activeLayout.current,
-    setActiveLayout,
+    setState: setGanttState,
     range,
-    sidebarContentScrollPosition,
-    setSidebarContentScrollPosition,
-    sidebarContentWidth,
-    setSidebarContentWidth,
-    sidebarWidth,
-    setSidebarWidth,
     changeColumnSize,
     scrollToDate,
-    toggleSisplayTaskStatusColor,
-    scrollDirection,
-    isScrolling: scrollDirection !== null,
     isGrabbing: isGrabbingRef.current,
   };
 

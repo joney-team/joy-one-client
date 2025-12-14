@@ -89,7 +89,6 @@ export const ModalCreateTask = forwardRef<
         isFullscreenOnMobile
         opened={!!args}
         onClose={() => {
-          console.log("close");
           setArgs(null);
         }}
         size={600}

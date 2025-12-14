@@ -106,6 +106,7 @@ export const ContextMenuDropdown = ({
     <Dropdown
       key={getId(menuArgsRef.current.data)}
       data={menuArgsRef.current.data}
+      context={menuArgsRef.current.context}
       onClose={close}
       setClickOutsideToClose={(value) => {
         clickOutsideToCloseEnabled.current = value;

@@ -50,6 +50,7 @@ import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import { taskPriorities } from "../../task-constants";
 import { useTaskMenu } from "../task-menu/task-menu";
 import { TaskMenuAction } from "../task-menu/task-menu-types";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 const Editor = dynamic(() => import("@/components/editor/editor").then((mod) => mod.Editor), {
   ssr: false,

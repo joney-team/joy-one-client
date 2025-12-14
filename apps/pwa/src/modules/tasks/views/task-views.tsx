@@ -50,8 +50,22 @@ const TaskViewGateway = dynamic(
   }
 );
 
-const TaskMenuDropdown = dynamic(
-  () => import("../modules/task-menu/task-menu-dropdown").then((mod) => mod.TaskContextMenu),
+const TaskContextMenuDropdown = dynamic(
+  () =>
+    import("../modules/task-menu/task-context-menu-dropdown").then(
+      (mod) => mod.TaskContextMenuDropdown
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton miw={180} mih={220} />,
+  }
+);
+
+const ContextMenuProvider = dynamic(
+  () =>
+    import("@/components/context-menu/context-menu-provider").then(
+      (mod) => mod.ContextMenuProvider
+    ),
   {
     ssr: false,
     loading: nonLoading,
@@ -107,11 +121,12 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
 
       {props.children}
 
-      <TaskViewGateway view={view} />
-      <TasksRealtimeEvents />
-      <TaskDetail />
-      <BulkTasksActions />
-      <TaskMenuDropdown />
+      <ContextMenuProvider dropdown={TaskContextMenuDropdown}>
+        <TaskViewGateway view={view} />
+        <TaskDetail />
+        <TasksRealtimeEvents />
+        <BulkTasksActions />
+      </ContextMenuProvider>
     </Fragment>
   );
 };

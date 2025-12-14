@@ -15,10 +15,13 @@ import {
 import { getId, type BaseData } from "@joy-one-client/utils/base-data";
 import { placeDropdownMenu } from "./context-menu-helpers";
 import styles from "./context-menu.module.css";
+import { zIndexes } from "@joy-one-client/config/layout";
 
-export const ContextMenuProvider = <T extends BaseData>(props: ContextMenuProps<T>) => {
+export const ContextMenuProvider = <T extends BaseData, Context = unknown>(
+  props: ContextMenuProps<T, Context>
+) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const menuArgsRef = useRef<OpenContextMenuArgs | null>(null);
+  const menuArgsRef = useRef<OpenContextMenuArgs<T, Context> | null>(null);
   const targetRef = useRef<HTMLElement | null>(null);
 
   const onClose = () => {
@@ -47,8 +50,12 @@ export const ContextMenuProvider = <T extends BaseData>(props: ContextMenuProps<
       requestAnimationFrame(() => {
         if (!menuRef.current) return;
 
-        menuArgsRef.current = args;
+        menuArgsRef.current = args as OpenContextMenuArgs<T, Context>;
         menuRef.current.setAttribute("data-opened", "true");
+        menuRef.current.style.setProperty(
+          "z-index",
+          args.zIndex?.toString() ?? (zIndexes.commonModals + 2).toString()
+        );
 
         requestAnimationFrame(() => {
           if (!menuRef.current) return;

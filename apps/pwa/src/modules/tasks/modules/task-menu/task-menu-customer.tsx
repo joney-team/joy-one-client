@@ -6,6 +6,10 @@ import { TaskMenuComponent } from "./task-menu-types";
 
 import { Avatar } from "@/components/avatar";
 import { WayPoint } from "@/components/way-point";
+import QUERY_CUSTOMERS, {
+  type CustomersQuery,
+  type CustomersQueryVariables,
+} from "@/modules/customers/graphql/queryCustomers.graphql";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
@@ -15,10 +19,6 @@ import { useDebouncedState } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
-import QUERY_TASK_CUSTOMERS, {
-  type TaskCustomersQuery,
-  type TaskCustomersQueryVariables,
-} from "./queryTaskCustomers.graphql";
 import styles from "./task-menu.module.css";
 
 const MenuItem = ({
@@ -26,7 +26,7 @@ const MenuItem = ({
   isSelected,
   onClick,
 }: {
-  customer: TaskCustomersQuery["customers"]["data"][number];
+  customer: CustomersQuery["customers"]["data"][number];
   isSelected: boolean;
   onClick: () => void;
   isSelf?: boolean;
@@ -79,9 +79,9 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
   const [isSearchEmpty, setIsSearchEmpty] = useState(false);
 
   const [getCustomers, { data, loading, fetchMore }] = useLazyQuery<
-    TaskCustomersQuery,
-    TaskCustomersQueryVariables
-  >(QUERY_TASK_CUSTOMERS, { fetchPolicy: "cache-and-network" });
+    CustomersQuery,
+    CustomersQueryVariables
+  >(QUERY_CUSTOMERS, { fetchPolicy: "cache-and-network" });
 
   const onGetMembers = useCallback(
     async (q: string) => {

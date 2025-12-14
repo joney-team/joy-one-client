@@ -14,6 +14,7 @@ import dynamic from "next/dynamic";
 import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
 import { GanttRefsProvider, useGanttRefs } from "./gantt-tasks-refs";
 import styles from "./gantt-tasks.module.css";
+import { useLayout } from "@/layout/layout-context";
 
 const SidebarHead = dynamic(() => import("./gantt-tasks-layout").then((mod) => mod.SidebarHead), {
   ssr: false,
@@ -63,6 +64,7 @@ const GanttTasksHorizontalScrollbar = dynamic(
 const Content: FC = () => {
   const ganttRefs = useGanttRefs();
   const gantt = useGantt();
+  const layout = useLayout();
   const { activatedFolder, folders } = useTaskFolders();
   const [sized, setSized] = useState({ width: 0, height: 0 });
 
@@ -113,6 +115,14 @@ const Content: FC = () => {
     };
   }, [sized]);
 
+  const dividerPosition = useMemo(() => {
+    return typeof gantt.state.dividerPosition === "number"
+      ? gantt.state.dividerPosition
+      : layout.view === "mobile"
+      ? 0.5
+      : 0.3;
+  }, [gantt.state.dividerPosition]);
+
   return (
     <Stack
       ref={ganttRefs.root}
@@ -128,7 +138,7 @@ const Content: FC = () => {
           <LayoutSplit
             h={contentSized.height}
             w={contentSized.width}
-            value={gantt.dividerPosition}
+            value={dividerPosition}
             onChange={(value) =>
               gantt.setState({
                 ...gantt.state,
@@ -141,8 +151,9 @@ const Content: FC = () => {
               h={contentSized.height}
               style={{
                 borderRight: `1px solid var(--app-divider-color)`,
-                width: `${gantt.dividerPosition * 100}%`,
+                width: `${dividerPosition * 100}%`,
                 overflow: "hidden",
+                transition: "width 0.2s ease-out",
               }}
             >
               <Stack gap={0} bg="var(--mantine-color-body)" id="GantSideBar">
@@ -170,9 +181,10 @@ const Content: FC = () => {
               align="stretch"
               style={{
                 overflow: "hidden",
-                width: `${(1 - gantt.dividerPosition) * 100}%`,
+                width: `${(1 - dividerPosition) * 100}%`,
                 height: contentSized.height,
                 maxHeight: contentSized.height,
+                transition: "width 0.2s ease-out",
               }}
             >
               <BodyHead />

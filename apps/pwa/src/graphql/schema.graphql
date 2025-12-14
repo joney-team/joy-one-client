@@ -696,7 +696,6 @@ type Task {
   startDate: Float
   status: String!
   statuses: [TaskStatus!]!
-  tagFolderId: String @deprecated(reason: "Use folderId instead")
   tagIds: [String!]!
   tags: [Tag!]!
   timeTrackings: [TaskTimeTracking!]
