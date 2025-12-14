@@ -54,7 +54,7 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
       }}
     >
       <ScrollArea.Autosize type="never" scrollbars="x" h={navigationTabsConfig.height} flex={1}>
-        <Group px={16} gap={0} w="max-content" wrap="nowrap" h={navigationTabsConfig.height}>
+        <Group px="md" gap={0} w="max-content" wrap="nowrap" h={navigationTabsConfig.height}>
           {props.tabs.map((tab) => {
             const isActive = props.activeTab
               ? props.activeTab === tab.id
@@ -65,7 +65,7 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
             return (
               <Group
                 key={tab.id}
-                px={3}
+                px={2}
                 gap={0}
                 justify="center"
                 h="100%"
@@ -82,10 +82,10 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
                 {!!props.onChange ? (
                   <Button
                     h={28}
+                    component="div"
                     {...buttonProps}
                     leftIcon={tab.icon}
                     onClick={() => props.onChange?.(tab.id!)}
-                    component="div"
                   >
                     {tab.name}
                     {tab.rightSection}

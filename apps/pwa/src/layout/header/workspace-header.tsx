@@ -134,7 +134,7 @@ export const WorkspaceHeader: FC = memo(() => {
     <Group
       justify="space-between"
       align="center"
-      gap={8}
+      gap={5}
       flex={1}
       wrap="nowrap"
       h="100%"
@@ -204,7 +204,7 @@ export const WorkspaceHeader: FC = memo(() => {
         </Group>
       </Group>
 
-      <Group justify="end" wrap="nowrap" pr={5} gap={10}>
+      <Group justify="end" wrap="nowrap" pr={5} gap={5}>
         <ColorSchemes />
         <HrmTimekeepingButton />
         <UserNotifications />

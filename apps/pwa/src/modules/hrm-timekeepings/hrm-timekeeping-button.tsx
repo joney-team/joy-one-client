@@ -90,11 +90,11 @@ export const HrmTimekeepingButton: FC = () => {
                   style={{
                     rotate: `${new Date().getSeconds() * 6}deg`,
                   }}
-                  size={23}
+                  size={20}
                   strokeWidth={1.5}
                 />
               ) : (
-                <IconClockRecord size={23} strokeWidth={1.5} />
+                <IconClockRecord size={20} strokeWidth={1.5} />
               )}
             </ActionIcon>
           </Indicator>

@@ -3,6 +3,7 @@
 import { ChillIllustration } from "@/components/illustrations/chill";
 import { useList } from "@/components/list/use-list";
 import { WayPoint } from "@/components/way-point";
+import { EventType } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
@@ -19,19 +20,29 @@ import {
 } from "@/modules/notifications/notification-types";
 import { useColor } from "@/modules/theme/use-color";
 import { classNames } from "@/utils/ui.utils";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Drawer, Group, Indicator, Stack, Text, ThemeIcon, em } from "@mantine/core";
+import { ActionIcon, Drawer, Group, Indicator, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconBell, IconBrush } from "@tabler/icons-react";
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { Button } from "../../components/buttons/button";
 import { Errored } from "../../components/errored";
 import { Renderer } from "../../components/renderer";
 import { useLang } from "../lang/lang-context";
 import { NotificationCard } from "./notification-card";
-import { EventType } from "@/graphql/enums.graphql";
+import { type ModalConfirmRef } from "@/modals/modal-confirm";
+import dynamic from "next/dynamic";
+import { nonLoading } from "@/utils/non-loading";
+import { zIndexes } from "@joy-one-client/config/layout";
+
+const ModalConfirm = dynamic(
+  () => import("@/modals/modal-confirm").then((mod) => mod.ModalConfirm),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const EmptyNotification: FC<{ visible: boolean }> = ({ visible }) => {
   if (!visible) return null;
@@ -57,6 +68,7 @@ export const UserNotifications: FC = () => {
   const [stat, setStat] = useState<UserNotificationStat>();
   const layout = useLayout();
   const color = useColor();
+  const modalConfirmRef = useRef<ModalConfirmRef>(null);
 
   const fetchStat = async () => {
     getNotificationStat().then(setStat).catch(console.error);
@@ -81,9 +93,7 @@ export const UserNotifications: FC = () => {
   });
 
   const onClean = () => {
-    onConfirmModal({
-      type: "success",
-      title: <Trans>Clean up notifications</Trans>,
+    modalConfirmRef.current?.open({
       icon: IconBrush,
       content: (
         <Trans>
@@ -125,7 +135,7 @@ export const UserNotifications: FC = () => {
           size={8}
         >
           <IconBell
-            size={em(23)}
+            size={22}
             strokeWidth={1.5}
             className={classNames({
               animTada: !!stat && stat.unListViewed > 0,
@@ -140,6 +150,7 @@ export const UserNotifications: FC = () => {
         offset={layout.view === "mobile" ? 0 : 10}
         radius={layout.view === "mobile" ? 0 : "md"}
         position="right"
+        zIndex={zIndexes.commonModals}
       >
         <Drawer.Overlay />
         <Drawer.Content id="user-notifications-content">
@@ -150,24 +161,21 @@ export const UserNotifications: FC = () => {
                   <IconBell />
                 </ThemeIcon>
                 <Text fw={700} c={color("primary")}>
-                  {t`Notifications`}
+                  <Trans>Notifications</Trans>
                 </Text>
 
                 {notifications.count > 0 && (
-                  <Group ml={16}>
+                  <Group ml="xs">
                     <Button
-                      size="compact-xs"
-                      variant="outline"
-                      leftSection={<IconBrush size={14} style={{ marginRight: -5 }} />}
-                      px={10}
+                      size="compact-sm"
+                      variant="subtle"
+                      leftIcon={IconBrush}
+                      component="div"
                       radius={100}
                       color="gray"
                       onClick={onClean}
-                      style={{ borderWidth: 0.5 }}
                     >
-                      <Text fw={500} fz={em(13)}>
-                        {t`Clean`}
-                      </Text>
+                      <Trans>Clean</Trans>
                     </Button>
                   </Group>
                 )}
@@ -197,6 +205,8 @@ export const UserNotifications: FC = () => {
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>
+
+      <ModalConfirm ref={modalConfirmRef} />
     </Fragment>
   );
 };

@@ -29,7 +29,7 @@ const BoardTaskCard = dynamic(() => import("./board-task-card").then((res) => re
   loading: () => <Skeleton mih={220} height={220} miw="100%" />,
 });
 
-interface BoardGroupByStatusesProps {
+interface BoardTasksGroupProps {
   status: TaskStatus;
 }
 
@@ -37,7 +37,7 @@ const wrapperPadding = 8;
 const wrapperRadius = 8;
 const limit = 5;
 
-export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
+export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
   const workspace = useWorkspace();
   const color = useColor();
   const droppableRef = useRef<HTMLDivElement | null>(null);
@@ -137,19 +137,10 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
                 <Button
                   key={props.status.id}
                   size="compact-xs"
-                  variant={!isTodoStatus ? "filled" : "light"}
+                  variant="light"
                   color={props.status.color ?? "gray"}
-                  leftSection={
-                    <TaskStatusIcon
-                      {...props.status}
-                      white={props.status.id !== DefaultTaskStatusId.TODO}
-                      size={16}
-                      mr={-4}
-                    />
-                  }
+                  leftSection={<TaskStatusIcon {...props.status} size={16} mr={-4} />}
                   tt="uppercase"
-                  fz={10}
-                  fw={800}
                 >
                   {props.status.name}
                 </Button>

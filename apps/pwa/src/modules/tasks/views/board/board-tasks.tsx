@@ -32,7 +32,7 @@ const ModalConfigureStatuses = dynamic(
 );
 
 const BoardGroupByStatuses = dynamic(
-  () => import("./board-group-by-statuses").then((mod) => mod.BoardGroupByStatuses),
+  () => import("./board-tasks-group").then((mod) => mod.BoardTasksGroup),
   {
     ssr: false,
     loading: () => <Skeleton height={500} w={300} />,

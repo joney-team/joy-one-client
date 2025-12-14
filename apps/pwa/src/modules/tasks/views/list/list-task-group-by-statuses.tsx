@@ -94,10 +94,10 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
           </ActionIcon>
 
           <Button
-            size="compact-sm"
+            size="compact-xs"
             variant="light"
             color={props.status.color ?? "gray"}
-            leftSection={<TaskStatusIcon {...props.status} size={16} />}
+            leftSection={<TaskStatusIcon {...props.status} size={16} mr={-4} />}
             tt="uppercase"
           >
             {props.status.name}
