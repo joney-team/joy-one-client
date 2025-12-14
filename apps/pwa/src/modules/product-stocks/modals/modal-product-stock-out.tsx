@@ -120,7 +120,6 @@ export const ModalProductStockOut: FC<{
 
           <Stack align="center" mt={16}>
             <Button
-              action
               rightIcon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].icon}
               color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].color)}
               loading={form.submitting}

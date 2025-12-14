@@ -46,7 +46,7 @@ export const WorkspaceApiAppList: FC = () => {
               </Text>
             </Stack>
 
-            <Button action leftIcon={IconPlus} onClick={() => OnModalWorkspaceApiApp()}>
+            <Button leftIcon={IconPlus} onClick={() => OnModalWorkspaceApiApp()}>
               <Trans>Create new</Trans>
             </Button>
           </Stack>
@@ -65,7 +65,7 @@ export const WorkspaceApiAppList: FC = () => {
       </Grid>
 
       <Center>
-        <Button action leftIcon={IconPlus} onClick={() => OnModalWorkspaceApiApp()}>
+        <Button leftIcon={IconPlus} onClick={() => OnModalWorkspaceApiApp()}>
           <Trans>Create new</Trans>
         </Button>
       </Center>

@@ -104,7 +104,7 @@ export const PluginStorageModal = ({
           />
 
           <Group justify="center">
-            <Button action type="submit" loading={form.submitting}>
+            <Button type="submit" loading={form.submitting}>
               {storage ? <Trans>Save</Trans> : <Trans>Connect</Trans>}
             </Button>
           </Group>

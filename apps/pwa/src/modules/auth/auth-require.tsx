@@ -98,7 +98,7 @@ export const AuthRequire: FC = () => {
                       return (
                         <Group gap={8}>
                           <Renderer views={["desktop", "tablet"]}>
-                            <Text fz={em(14)}>
+                            <Text fz="xs">
                               <Trans>You don't have an account?</Trans>
                             </Text>
                           </Renderer>
@@ -113,7 +113,7 @@ export const AuthRequire: FC = () => {
                       return (
                         <Group gap={8}>
                           <Renderer views={["desktop", "tablet"]}>
-                            <Text fz={em(14)}>
+                            <Text fz="xs">
                               <Trans>You have an account?</Trans>
                             </Text>
                           </Renderer>
@@ -127,7 +127,7 @@ export const AuthRequire: FC = () => {
                     return (
                       <Group gap={8}>
                         <Renderer views={["desktop", "tablet"]}>
-                          <Text fz={em(14)}>
+                          <Text fz="xs">
                             <Trans>Back to login</Trans>
                           </Text>
                         </Renderer>
@@ -200,6 +200,7 @@ export const AuthRequire: FC = () => {
                                 style={{
                                   borderColor: color({ light: "gray.3", dark: "gray.7" }),
                                 }}
+                                fz="sm"
                               >
                                 <Trans>Continue with</Trans> {authProvider.name}
                               </Button>

@@ -1,19 +1,18 @@
 "use client";
 
+import { TaskStatusesContextType } from "@/graphql/enums.graphql";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
+import { useQuery } from "@apollo/client/react";
 import { autoScrollWindowForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { Skeleton, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { FC, Fragment, memo, PropsWithChildren, useEffect, useMemo } from "react";
-import { TaskMenuActions } from "../../components/tasks-menu-actions";
-import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
-import { useQuery } from "@apollo/client/react";
 import QUERY_TASK_STATUSES, {
   type TaskStatusesQuery,
   type TaskStatusesQueryVariables,
 } from "../../graphql/queryTaskStatuses.graphql";
-import { TaskStatusesContextType } from "@/graphql/enums.graphql";
+import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
 import { normalizeTaskStatuses } from "../../task-constants";
 
 const ListTaskGroupByStatuses = dynamic(
@@ -58,9 +57,7 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
 
   return (
     <TaskSelectionsProvider>
-      <Stack p={16}>
-        <TaskMenuActions />
-
+      <Stack p="sm">
         {isReady && (
           <Fragment>
             {statuses.inprogress.map((status, statusIndex) => {

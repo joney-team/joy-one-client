@@ -110,13 +110,9 @@ export const WorkspaceOperationSettings: FC = () => {
         <Group>
           <Button
             radius={100}
-            fw={500}
             size="compact-md"
             miw={100}
             leftIcon={workDaySlots.length > 0 ? IconPencil : IconPlus}
-            iconSpacing={-10}
-            iconSize={16}
-            fz={13}
             variant="outline"
             onClick={() => OnModalWorkspaceSettingsWorkSlots()}
           >

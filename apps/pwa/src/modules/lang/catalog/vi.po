@@ -3584,7 +3584,7 @@ msgstr "Loại tài sản cho vay"
 
 #: src/layout/header/header-shortcuts.tsx:199
 msgid "Loan calculator"
-msgstr "Tính hồ sơ vay"
+msgstr "Tính khoản vay"
 
 #: src/modules/loans/loan-detail.tsx:389
 #: src/modules/loans/loan-detail.tsx:573

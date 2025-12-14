@@ -2,11 +2,11 @@
 
 import { Button } from "@/components/buttons/button";
 import { TaskStatusesContextType } from "@/graphql/enums.graphql";
-import { useLayout } from "@/layout/layout-context";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { Trans } from "@lingui/react/macro";
@@ -14,13 +14,11 @@ import { Card, Group, Skeleton, Stack } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, PropsWithChildren, useEffect, useMemo, useRef } from "react";
-import { TaskMenuActions } from "../../components/tasks-menu-actions";
 import QUERY_TASK_STATUSES, {
   type TaskStatusesQuery,
   type TaskStatusesQueryVariables,
 } from "../../graphql/queryTaskStatuses.graphql";
 import { normalizeTaskStatuses } from "../../task-constants";
-import { nonLoading } from "@/utils/non-loading";
 
 const ModalConfigureStatuses = dynamic(
   () =>
@@ -43,7 +41,6 @@ const BoardGroupByStatuses = dynamic(
 
 export const TasksBoardView: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
-  const layout = useLayout();
   const tasks = useTasks();
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -105,12 +102,6 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
 
   return (
     <Stack id="TasksBoardView" gap={0} mih={0} flex={1} miw={0}>
-      {layout.view !== "mobile" && (
-        <Group p={16}>
-          <TaskMenuActions />
-        </Group>
-      )}
-
       {tasks.isReady ? (
         <Stack gap={0} flex={1} miw={0} style={{ overflow: "hidden" }}>
           <Group
@@ -131,9 +122,9 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
               w="max-content"
               align="stretch"
               flex={1}
-              px={16}
+              p="sm"
+              gap="sm"
               mih={0}
-              pb={16}
             >
               {statuses.inprogress.map((status, statusIndex) => (
                 <BoardGroupByStatuses key={status.id + statusIndex} status={status} />
@@ -145,7 +136,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                     <Card
                       withBorder
                       shadow="none"
-                      p={10}
+                      p="xs"
                       w={300}
                       style={{
                         background: "transparent",
@@ -158,7 +149,6 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                           color="gray"
                           size="xs"
                           leftIcon={IconPlus}
-                          iconSize={16}
                           fz={12}
                           onClick={() =>
                             modal.open({

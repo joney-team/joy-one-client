@@ -387,14 +387,8 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         />
       </Group>
 
-      <Button
-        leftIcon={IconPlus}
-        onClick={onSubmit}
-        action
-        mt={10}
-        color={color(tasks.activatedFolder?.color || "primary")}
-      >
-        {t`Add`}
+      <Button leftIcon={IconPlus} onClick={onSubmit} mt={10}>
+        <Trans>Add</Trans>
       </Button>
     </Stack>
   );
@@ -421,7 +415,11 @@ export const ModalTaskTimeTracking: FC = () => {
       opened={opened}
       onClose={close}
       title={
-        <ModalHead name={t`Add time trackings`} icon={IconStopwatch} color={tagFolder?.color} />
+        <ModalHead
+          name={<Trans>Add time trackings</Trans>}
+          icon={IconStopwatch}
+          color={tagFolder?.color}
+        />
       }
       size={460}
     >

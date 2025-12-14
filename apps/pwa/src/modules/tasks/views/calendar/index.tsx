@@ -35,7 +35,9 @@ import {
 } from "@mantine/core";
 import { useForceUpdate, useHover } from "@mantine/hooks";
 import { IconCirclePlus, IconMinus, IconPlus, IconUsers, IconX } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useEffect } from "react";
+import { updateTaskPath } from "../../tasks-route-helpers";
 
 export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
   const { activatedFolder: tagFolder } = useTasks();
@@ -141,7 +143,6 @@ export const TasksCalendarView: FC<PropsWithChildren> = (props) => {
                     radius={100}
                     fz={12}
                     leftIcon={IconUsers}
-                    iconSize={18}
                   >
                     <Group gap={5}>
                       <Text fz={12} fw={500}>
@@ -311,6 +312,7 @@ const TaskRow: FC<{
   const hover = useHover();
   const forceUpdate = useForceUpdate();
   const tasks = useTasks();
+  const router = useRouter();
 
   const statusStyle = renderTaskStatusStyle(task.status, workspace.settings.taskStatuses);
   const assignee = task.assigneeUsers?.[0];
@@ -362,7 +364,11 @@ const TaskRow: FC<{
         position: "relative",
       }}
     >
-      <Group w="max-content" style={{ cursor: "pointer" }} onClick={() => tasks.open(task)}>
+      <Group
+        w="max-content"
+        style={{ cursor: "pointer" }}
+        onClick={() => router.push(updateTaskPath({ code: task.code }))}
+      >
         <Stack gap={8}>
           <Text fz={14} fw={500}>
             {task.name}

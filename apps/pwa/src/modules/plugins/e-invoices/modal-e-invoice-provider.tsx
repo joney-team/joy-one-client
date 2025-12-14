@@ -130,7 +130,7 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
         {providerAuthForm}
 
         <Center mt={8}>
-          <Button action loading={form.submitting} type="submit">
+          <Button loading={form.submitting} type="submit">
             {provider ? <Trans>Update</Trans> : <Trans>Complete</Trans>}
           </Button>
         </Center>

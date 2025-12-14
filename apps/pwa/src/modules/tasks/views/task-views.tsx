@@ -14,9 +14,16 @@ import {
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, PropsWithChildren, ReactNode, useCallback, useMemo } from "react";
-import { BulkTasksActions } from "../components/bulk-tasks-actions";
 import { parseTaskPath, updateTaskPath } from "../tasks-route-helpers";
 import { TaskView } from "./types";
+
+const TaskTabActions = dynamic(
+  () => import("../components/task-tab-actions").then((mod) => mod.TaskTabActions),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const TaskDetail = dynamic(
   () => import("../modules/task-detail/task-detail").then((mod) => mod.TaskDetail),
@@ -117,6 +124,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
           name: value.name,
         }))}
         onChange={setView}
+        rightSection={TaskTabActions}
       />
 
       {props.children}
@@ -125,7 +133,6 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
         <TaskViewGateway view={view} />
         <TaskDetail />
         <TasksRealtimeEvents />
-        <BulkTasksActions />
       </ContextMenuProvider>
     </Fragment>
   );

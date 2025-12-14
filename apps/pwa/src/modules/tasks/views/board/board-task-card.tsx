@@ -67,6 +67,9 @@ import { taskPriorities } from "../../task-constants";
 
 import { Avatar } from "@/components/avatar";
 import styles from "./board-tasks.module.css";
+import { updateTaskPath } from "../../tasks-route-helpers";
+import { useRouter } from "next/navigation";
+import { useTaskStatuses } from "../../hooks/use-task-statuses";
 
 const CardProperty: FC<
   PropsWithChildren<
@@ -170,9 +173,12 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
   scrollContainerRef,
   groupVariables,
 }) => {
-  const tasks = useTasks();
-  const { updateTasks } = useUpdateTasks();
+  const color = useColor();
+  const router = useRouter();
   const taskMenu = useTaskMenu({ task, groupVariables });
+
+  const { updateTasks } = useUpdateTasks();
+  const { status } = useTaskStatuses(task);
 
   const droppableRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef<HTMLDivElement | null>(null);
@@ -301,8 +307,6 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
 
   if (!task) return null;
 
-  const taskStatusStyle = renderTaskStatusStyle(task.status, tasks.statuses);
-
   return (
     <Fragment>
       <Stack ref={droppableRef} gap={10} opacity={isDragging ? 0.5 : 1} pos="relative">
@@ -315,8 +319,11 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
               style={{ cursor: "grab", color: "unset", textDecoration: "none" }}
               onClick={(e) => {
                 const openNewTab = e.altKey || e.ctrlKey || e.metaKey;
-                if (openNewTab) window.open(tasks.href(task), "_blank");
-                else tasks.open(task);
+                if (openNewTab) {
+                  window.open(updateTaskPath({ code: task.code }), "_blank");
+                } else {
+                  router.push(updateTaskPath({ code: task.code }));
+                }
               }}
             >
               <Group justify="space-between" align="center" wrap="nowrap">
@@ -346,7 +353,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
               {showStatus && (
                 <CardProperty
                   icon={IconPlaystationCircle}
-                  iconColor={taskStatusStyle.color}
+                  iconColor={color(status.color ?? "gray")}
                   isActivated={taskMenu.activatedAction === TaskMenuAction.CHANGE_STATUS}
                   label={t`Status`}
                   onClick={(e) => {
@@ -357,8 +364,8 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                     });
                   }}
                 >
-                  <Text fz={13} fw={500} c={taskStatusStyle.color}>
-                    {taskStatusStyle.name}
+                  <Text fz={13} fw={500} c={color(status.color ?? "gray")}>
+                    {status.name}
                   </Text>
                 </CardProperty>
               )}

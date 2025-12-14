@@ -111,12 +111,12 @@ export const TaskDetail: FC = () => {
 
   useEffect(() => {
     if (taskCode) {
+      setVersion((v) => v + 1);
       getTask({ variables: { code: taskCode } }).then(() => setVersion((v) => v + 1));
     }
   }, [taskCode]);
 
   const onClose = () => {
-    setVersion((v) => v + 1);
     router.push(updateTaskPath({ code: undefined }), { scroll: false });
   };
 

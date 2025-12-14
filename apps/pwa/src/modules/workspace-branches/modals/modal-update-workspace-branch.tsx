@@ -8,7 +8,6 @@ import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-br
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Blockquote, Center, Modal, Stack } from "@mantine/core";
 import { IconBuildingSkyscraper } from "@tabler/icons-react";
@@ -108,7 +107,9 @@ export const ModalUpdateWorkspaceBranch = forwardRef<
       <Modal
         opened={!!args}
         onClose={() => setArgs(null)}
-        title={<ModalHead name={t`Move workspace branch`} icon={IconBuildingSkyscraper} />}
+        title={
+          <ModalHead name={<Trans>Move workspace branch</Trans>} icon={IconBuildingSkyscraper} />
+        }
       >
         <Stack align="stretch">
           {entity === AppEntity.LOANS && (
@@ -124,7 +125,7 @@ export const ModalUpdateWorkspaceBranch = forwardRef<
           <WorkspaceBranchInput value={branch} onChange={(v) => setBranch(v)} />
 
           <Center>
-            <Button action onClick={() => onSubmit()}>
+            <Button onClick={() => onSubmit()}>
               <Trans>Confirm</Trans>
             </Button>
           </Center>

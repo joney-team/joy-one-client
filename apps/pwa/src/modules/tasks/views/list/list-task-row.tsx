@@ -253,6 +253,7 @@ export const ListTaskRow: FC<
     // TODO: Toggle subtasks
     // setIsSubTasksVisible((s) => !s)
   };
+
   const indexSpacing = isMarkAsChild ? 16 : 0;
 
   const { status } = useTaskStatuses(task);

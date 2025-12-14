@@ -19,6 +19,7 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Menu } from "@mantine/core";
 import {
   Icon,
+  IconBolt,
   IconCalculator,
   IconCalendarPlus,
   IconCirclePlus,
@@ -185,13 +186,13 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
   }
 
   return (
-    <Fragment>
+    <Group gap={0}>
       {workspace.type === WorkspaceType.CREDIT && (
         <ModalLoanCalculator>
           {(open) => (
             <Button
               id="create-credit"
-              variant="outline"
+              variant="subtle"
               size="xs"
               onClick={open}
               leftIcon={IconCalculator}
@@ -203,10 +204,10 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
       )}
 
       {availableShortcuts.length > 0 && (
-        <Menu>
+        <Menu trigger="hover">
           <Menu.Target>
             <Group>
-              <Button id="create-credit" size="xs" leftIcon={IconCirclePlus} isGradient>
+              <Button id="create-credit" size="xs" leftIcon={IconBolt} variant="subtle">
                 <Trans>Quick Creation</Trans>
               </Button>
             </Group>
@@ -242,7 +243,7 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
           </Menu.Dropdown>
         </Menu>
       )}
-    </Fragment>
+    </Group>
   );
 };
 

@@ -19,6 +19,7 @@ import { useElementLazyLoad, useWaitElementLazyLoad } from "@/hooks/use-element-
 import { nonLoading } from "@/utils/non-loading";
 import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
+import { updateTaskPath } from "../../tasks-route-helpers";
 import styles from "./list-tasks.module.css";
 
 const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.ListTaskRow), {
@@ -45,7 +46,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
   lazyLoadId,
   ...props
 }) => {
-  const { activatedFolder, href, state } = useTasks();
+  const { activatedFolder, state } = useTasks();
   const [isReadyToFetch, setIsReadyToFetch] = useState(!lazyLoadId);
   const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
 
@@ -94,22 +95,9 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
 
           <Button
             size="compact-sm"
-            variant={
-              isClosedTasks || Object.values(DefaultTaskStatusId).includes(props.status.id as any)
-                ? "filled"
-                : "light"
-            }
+            variant="light"
             color={props.status.color ?? "gray"}
-            leftSection={
-              <TaskStatusIcon
-                {...props.status}
-                white={
-                  isClosedTasks ||
-                  Object.values(DefaultTaskStatusId).includes(props.status.id as any)
-                }
-                size={16}
-              />
-            }
+            leftSection={<TaskStatusIcon {...props.status} size={16} />}
             tt="uppercase"
           >
             {props.status.name}
@@ -128,7 +116,6 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
             size="compact-xs"
             color="gray"
             leftIcon={IconPlus}
-            fw={400}
             onClick={() =>
               modalCreateTaskRef.current?.open({
                 initial: {
@@ -154,7 +141,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
                 <ListTaskRow
                   task={task}
                   key={task._id}
-                  href={href(task)}
+                  href={updateTaskPath({ code: task.code })}
                   groupVariables={groupVariables}
                   lastRow={index === tasks.length - 1}
                   prevTask={tasks[index - 1]}

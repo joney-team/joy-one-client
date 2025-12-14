@@ -75,7 +75,6 @@ export const BulkActions: FC = () => {
                       })
                     }
                     leftIcon={action.icon}
-                    iconSize={18}
                     size="compact-md"
                     h={32}
                     color="gray.5"
@@ -90,7 +89,6 @@ export const BulkActions: FC = () => {
             {availableSelectBulkActions.find((v) => v.type === "archive") && (
               <Button
                 leftIcon={IconTrash}
-                iconSize={18}
                 size="compact-md"
                 h={32}
                 color="red.5"

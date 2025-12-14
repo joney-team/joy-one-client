@@ -7,20 +7,20 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { FilesBox } from "@/modules/files/files-box";
+import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { LoanEntity } from "@/modules/loans/loans-types";
 import { createReceipt, receiptTypeColors } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptType } from "@/modules/receipts/receipts-types";
 import { useColor } from "@/modules/theme/use-color";
+import { AppEntity } from "@/types";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Card, Center, Group, InputWrapper, NumberInput, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { receiptTypes } from "../receipt-constants";
-import { AppEntity } from "@/types";
-import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 
 interface ReceiptFormValues {
   amount: number;
@@ -44,6 +44,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
   const auth = useAuth();
   const color = useColor();
   const uploadFile = useUploadFile();
+  const { t } = useLingui();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [receiptFiles, setReceiptFiles] = useState<File[]>([]);
@@ -149,14 +150,13 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
 
       <Center mt={10}>
         <Button
-          action
           loading={isSubmitting}
           onClick={() => onSubmit()}
           leftIcon={IconCheck}
           disabled={!form.isDirty()}
           color={color(receiptTypeColors[form.values.type])}
         >
-          {t`Complete`}
+          <Trans>Complete</Trans>
         </Button>
       </Center>
     </Stack>
@@ -166,7 +166,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
 export const OnModalReceiptForm = (props?: ModalReceiptFormProps) => {
   return modals.open({
     modalId: "ModalReceiptForm",
-    title: <ModalHead name={t`Create receipt`} icon={IconCashRegister} />,
+    title: <ModalHead name={<Trans>Create receipt</Trans>} icon={IconCashRegister} />,
     children: <ModalReceiptForm {...props} />,
   });
 };

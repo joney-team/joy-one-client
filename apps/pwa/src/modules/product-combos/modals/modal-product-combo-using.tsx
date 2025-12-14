@@ -106,7 +106,7 @@ export const ModalProductComboUsing: FC<{
           <Textarea label={<Trans>Note</Trans>} {...form.getInputProps("note")} />
 
           <Center>
-            <Button action onClick={() => onSubmit()} loading={form.submitting}>
+            <Button onClick={() => onSubmit()} loading={form.submitting}>
               <Trans>Add</Trans>
             </Button>
           </Center>

@@ -73,7 +73,6 @@ export const WorkspaceBranchList: FC = () => {
                   </Stack>
 
                   <Button
-                    action
                     leftIcon={IconPlus}
                     onClick={() => OnWorkspaceBranchModal()}
                     color={color("primary")}

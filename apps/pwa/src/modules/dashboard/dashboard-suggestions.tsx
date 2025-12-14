@@ -173,7 +173,6 @@ export const DashboardSuggestions: FC = () => {
                 </Stack>
 
                 <Button
-                  action
                   mt={15}
                   onClick={async () => {
                     await auth.registerNotification();

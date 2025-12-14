@@ -361,13 +361,7 @@ export const CreateWorkspaceForm: FC<{ onDone: () => void }> = (props) => {
       </Stack>
 
       <Stack align="center" mt={16}>
-        <Button
-          onClick={() => onSubmit()}
-          loading={isSubmitting}
-          action
-          leftIcon={IconCheck}
-          radius={100}
-        >
+        <Button onClick={() => onSubmit()} loading={isSubmitting} leftIcon={IconCheck} radius={100}>
           <Trans>Complete</Trans>
         </Button>
 

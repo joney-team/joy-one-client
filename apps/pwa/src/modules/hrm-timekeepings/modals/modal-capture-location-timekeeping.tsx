@@ -239,13 +239,12 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
                       return (
                         <Center mt={16}>
                           <Button
-                            action
                             type="submit"
                             onClick={onTakePhoto}
                             leftIcon={IconCameraSelfie}
                             color={nextColor}
                           >
-                            {t`Take photo`}
+                            <Trans>Take photo</Trans>
                           </Button>
                         </Center>
                       );

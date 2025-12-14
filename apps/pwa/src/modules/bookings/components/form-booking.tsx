@@ -411,7 +411,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
           </Button>
         )}
 
-        <Button onClick={() => onSubmit()} leftIcon={IconCheck} action loading={form.submitting}>
+        <Button onClick={() => onSubmit()} leftIcon={IconCheck} loading={form.submitting}>
           {type === "CREATE" ? (
             <Trans>Confirm</Trans>
           ) : type === "RESCHEDULE" ? (

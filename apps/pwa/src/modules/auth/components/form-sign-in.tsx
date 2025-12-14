@@ -66,11 +66,11 @@ export const FormSignIn: FC<{ onForgotPassword: () => void }> = (props) => {
           leftSection={<IconLock strokeWidth={1.5} size={18} />}
         />
 
-        <Button mt={16} loading={isSubmitting} type="submit" h={42}>
+        <Button mt="md" loading={isSubmitting} type="submit" size="md">
           <Trans>Login</Trans>
         </Button>
 
-        <Anchor onClick={props.onForgotPassword} ta="center" mt={16} fz={em(14)}>
+        <Anchor onClick={props.onForgotPassword} ta="center" mt="md" fz="sm">
           <Trans>Forgot password</Trans>?
         </Anchor>
       </Stack>

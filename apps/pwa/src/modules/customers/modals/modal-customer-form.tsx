@@ -124,7 +124,7 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
                 )}
               </ModalInput>
 
-              <Button action rightIcon={IconCheck} onClick={onComplete}>
+              <Button rightIcon={IconCheck} onClick={onComplete}>
                 <Trans>Complete</Trans>
               </Button>
             </Group>

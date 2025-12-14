@@ -79,7 +79,7 @@ export const FormRegister: FC = () => {
           {...form.getInputProps("plainPassword")}
         />
 
-        <Button mt={16} loading={isSubmitting} type="submit" h={42}>
+        <Button mt="md" loading={isSubmitting} type="submit">
           <Trans>Register</Trans>
         </Button>
       </Stack>

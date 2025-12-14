@@ -7,7 +7,7 @@ import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { ButtonProps, Group, ScrollArea } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import Link from "next/link";
-import { FC, Fragment, ReactNode } from "react";
+import { ComponentType, FC, Fragment, ReactNode } from "react";
 import { Button } from "./buttons/button";
 
 export const navigationTabsConfig = {
@@ -17,6 +17,7 @@ export const navigationTabsConfig = {
 export interface NavigationTabsProps {
   activeTab?: string;
   onChange?: (tab: string) => void;
+  rightSection?: ComponentType;
   tabs: {
     id: string;
     exact?: boolean;
@@ -37,24 +38,22 @@ const buttonProps: ButtonProps = {
 };
 
 export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
+  const { rightSection: RightSection } = props;
   const router = useRouter();
   const color = useColor();
   const colorScheme = useColorScheme();
   const workspaceLayout = useWorkspaceLayout();
 
   return (
-    <Fragment>
-      <ScrollArea
-        type="never"
-        scrollbars="x"
-        h={navigationTabsConfig.height}
-        style={{
-          borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
-          background: "var(--mantine-color-body)",
-          width: "100%",
-          overflowX: "auto",
-        }}
-      >
+    <Group
+      style={{
+        borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
+        background: "var(--mantine-color-body)",
+        width: "100%",
+        overflowX: "hidden",
+      }}
+    >
+      <ScrollArea.Autosize type="never" scrollbars="x" h={navigationTabsConfig.height} flex={1}>
         <Group px={16} gap={0} w="max-content" wrap="nowrap" h={navigationTabsConfig.height}>
           {props.tabs.map((tab) => {
             const isActive = props.activeTab
@@ -103,7 +102,9 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
             );
           })}
         </Group>
-      </ScrollArea>
-    </Fragment>
+      </ScrollArea.Autosize>
+
+      {RightSection && <RightSection />}
+    </Group>
   );
 };

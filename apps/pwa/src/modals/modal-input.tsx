@@ -3,8 +3,8 @@
 import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateInput } from "@/components/inputs/date-input";
-import { ModalHead } from "@/components/modal/modal-head";
 import { Modal } from "@/components/modal/modal";
+import { ModalHead } from "@/components/modal/modal-head";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
@@ -12,6 +12,7 @@ import { zIndexes } from "@joy-one-client/config/layout";
 import { Currency } from "@joy-one-client/utils/currency";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
   Group,
@@ -273,13 +274,16 @@ export const ModalInput: FC<{
               })()}
 
               <Stack align="center">
-                <Button type="submit" leftIcon={IconCheck} action color={color(props?.color)}>
-                  {props?.doneLabel || t`Complete`}
-                </Button>
+                <Button
+                  type="submit"
+                  leftIcon={IconCheck}
+                  color={color(props?.color)}
+                  label={props?.doneLabel || <Trans>Complete</Trans>}
+                />
 
                 {!!props?.onClear && !!form.values.value && (
                   <Anchor onClick={onClear} c="gray" fz={12}>
-                    {t`Clear`}
+                    <Trans>Clear</Trans>
                   </Anchor>
                 )}
               </Stack>

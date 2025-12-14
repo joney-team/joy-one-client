@@ -29,7 +29,6 @@ export const ProductCombosOnboarding: FC = () => {
 
             <Center>
               <Button
-                action
                 leftIcon={IconPlus}
                 onClick={() => OnProductModal({ type: ProductType.COMBO })}
               >

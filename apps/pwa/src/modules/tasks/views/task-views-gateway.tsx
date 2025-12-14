@@ -6,6 +6,7 @@ import { ComponentType, ReactNode, useEffect, useMemo, type FC } from "react";
 import { TaskView } from "./types";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { updateTaskPath } from "../tasks-route-helpers";
+import { useTasks } from "../tasks-context";
 
 const viewLoader = () => (
   <Stack p={16}>
@@ -58,6 +59,7 @@ const allTaskViews: {
 export const TaskViewsGateway: FC<{ view: TaskView }> = ({ view }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const tasks = useTasks();
   const params = useParams<{ slug: string; code: string }>();
 
   // Auto redirect to the correct view
@@ -88,7 +90,7 @@ export const TaskViewsGateway: FC<{ view: TaskView }> = ({ view }) => {
     return viewConfig.loader();
   }, [view]);
 
-  if (!ViewComponent) {
+  if (!ViewComponent || !tasks.isReady) {
     return null;
   }
 

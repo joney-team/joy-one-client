@@ -2,135 +2,107 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
-import {
-  Button as ButtonMantine,
-  ButtonProps as ButtonPropsMantine,
-  MantineSize,
-} from "@mantine/core";
+import { Button as ButtonMantine, ButtonProps as ButtonPropsMantine } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import { FC, MouseEvent, ReactNode, useMemo, useState } from "react";
 
-type ButtonSize = MantineSize | `compact-${MantineSize}` | (string & {});
+type ButtonSize = NonNullable<ButtonProps["size"]>;
 
 export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
   id?: string;
   children?: ReactNode;
   component?: any;
   href?: string;
-  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => unknown;
   weight?: string | number;
   type?: "button" | "submit" | "reset";
   isGradient?: boolean;
   leftIcon?: Icon;
   rightIcon?: Icon;
-  iconSize?: number;
-  iconSpacing?: number;
-  iconStrokeWidth?: number;
-  action?: boolean;
   visible?: boolean;
   label?: ReactNode;
 }
 
-const defaultIconSizes: Partial<Record<ButtonSize, number>> = {
-  xs: 14,
-  "compact-xs": 14,
-  sm: 18,
-  "compact-sm": 16,
-  default: 20,
+const defaultStyle: Partial<
+  Record<
+    ButtonSize,
+    {
+      iconSize?: number;
+      iconSpacing?: number;
+      iconStrokeWidth?: number;
+      fontSize?: number;
+    }
+  >
+> = {
+  "compact-xs": {
+    iconSize: 12,
+    iconSpacing: -8,
+    iconStrokeWidth: 2.2,
+    fontSize: 11,
+  },
+  xs: {
+    iconSize: 14,
+    iconSpacing: -6,
+    iconStrokeWidth: 2.2,
+    fontSize: 11,
+  },
+  "compact-sm": {
+    iconSize: 16,
+    iconSpacing: -6,
+    iconStrokeWidth: 2.2,
+    fontSize: 12,
+  },
+  sm: {
+    iconSize: 16,
+    iconSpacing: -5,
+    iconStrokeWidth: 2.2,
+    fontSize: 12,
+  },
+  md: {
+    iconSize: 18,
+    iconSpacing: -6,
+    iconStrokeWidth: 2.2,
+    fontSize: 14,
+  },
 };
 
-const defaultIconSpacings: Partial<Record<ButtonSize, number>> = {
-  xs: -3,
-  "compact-xs": -6,
-  sm: -5,
-  "compact-sm": -5,
-  default: -3,
-};
-
-const defaultFontSizes: Partial<Record<ButtonSize, number>> = {
-  xs: 12,
-  "compact-xs": 11,
-  sm: 13,
-  "compact-sm": 12,
-  default: 14,
-};
-
-const defaultSconStrokeWidth: Partial<Record<ButtonSize, number>> = {
-  xs: 2.2,
-  "compact-xs": 2,
-  sm: 1.6,
-  "compact-sm": 1.8,
-  default: 1.6,
-};
-
-export const Button: FC<ButtonProps> = (props) => {
-  const {
-    id,
-    children,
-    component,
-    href,
-    onClick: propsOnClick,
-    weight,
-    isGradient,
-    leftIcon: LeftIcon,
-    rightIcon: RightIcon,
-    iconSize: propsIconSize,
-    iconSpacing: propsIconSpacing,
-    iconStrokeWidth: propsIconStrokeWidth,
-    action,
-    visible,
-    label,
-    ...rest
-  } = props;
-
+export const Button: FC<ButtonProps> = ({
+  id,
+  children,
+  component,
+  href,
+  onClick: propsOnClick,
+  isGradient,
+  leftIcon: LeftIcon,
+  rightIcon: RightIcon,
+  visible,
+  label,
+  ...rest
+}) => {
   const [funcLoading, setFuncLoading] = useState(false);
   const color = useColor();
 
   const onClick = async (e: MouseEvent<HTMLButtonElement>) => {
-    if (!propsOnClick) return;
-    setFuncLoading(true);
+    if (!propsOnClick || isLoading || rest.disabled) return;
 
     try {
+      setFuncLoading(true);
       await propsOnClick(e);
     } catch (error) {
       onError(error);
+    } finally {
+      setFuncLoading(false);
     }
-
-    setFuncLoading(false);
   };
 
-  const isLoading = props.loading || funcLoading;
+  const isLoading = rest.loading || funcLoading;
+
+  const buttonStyle = useMemo(() => {
+    if (!rest.size) return defaultStyle["sm"];
+    return defaultStyle[rest.size];
+  }, [rest.size]);
 
   if (visible === false) return null;
-
-  const h = props.h;
-  const miw = props.miw || (action ? 180 : props.miw);
-  const radius = props.radius;
-
-  const iconSpacing = useMemo(() => {
-    if (typeof propsIconSpacing === "number") return propsIconSpacing;
-    return defaultIconSpacings[props.size || "default"];
-  }, [propsIconSpacing, props.size]);
-
-  const iconSize = useMemo(() => {
-    if (typeof props.iconSize === "number") return props.iconSize;
-    return defaultIconSizes[props.size || "default"];
-  }, [props.iconSize, props.size]);
-
-  const fontSize = useMemo(() => {
-    if (typeof props.fz !== "undefined") return props.fz;
-    return defaultFontSizes[props.size || "default"];
-  }, [props.fz, props.size]);
-
-  const iconStrokeWidth = useMemo(() => {
-    if (typeof propsIconStrokeWidth === "number") return propsIconStrokeWidth;
-    return defaultSconStrokeWidth[props.size || "default"];
-  }, [propsIconStrokeWidth, props.size]);
-
-  const getColor = (c?: string) => {
-    if (c === "joyone") return "primary";
-    return color(c || "primary");
-  };
 
   return (
     <ButtonMantine
@@ -140,30 +112,27 @@ export const Button: FC<ButtonProps> = (props) => {
       leftSection={
         LeftIcon ? (
           <LeftIcon
-            size={iconSize}
-            strokeWidth={iconStrokeWidth}
-            style={{ marginRight: iconSpacing }}
+            size={buttonStyle?.iconSize}
+            strokeWidth={buttonStyle?.iconStrokeWidth}
+            style={{ marginRight: buttonStyle?.iconSpacing }}
           />
         ) : (
-          props.leftSection
+          rest.leftSection
         )
       }
       rightSection={
         RightIcon ? (
           <RightIcon
-            size={iconSize}
-            strokeWidth={iconStrokeWidth}
-            style={{ marginLeft: iconSpacing }}
+            size={buttonStyle?.iconSize}
+            strokeWidth={buttonStyle?.iconStrokeWidth}
+            style={{ marginLeft: buttonStyle?.iconSpacing }}
           />
         ) : (
-          props.rightSection
+          rest.rightSection
         )
       }
-      h={h}
-      miw={miw}
-      radius={radius}
       loading={isLoading}
-      disabled={isLoading || props.disabled}
+      disabled={isLoading || rest.disabled}
       onClick={onClick}
       gradient={
         isGradient
@@ -172,19 +141,17 @@ export const Button: FC<ButtonProps> = (props) => {
               to: color("primary.6"),
               deg: 45,
             }
-          : props.gradient
+          : rest.gradient
       }
-      variant={isGradient ? "gradient" : props.variant}
+      variant={isGradient ? "gradient" : rest.variant}
       styles={{
-        ...props.styles,
         label: {
-          fontSize,
-          ...(props.styles || ({} as any)).label,
+          fontSize: buttonStyle?.fontSize,
         },
       }}
-      color={getColor(props.color)}
+      color={color(rest.color ?? "primary")}
     >
-      {props.label ?? children}
+      {label ?? children}
     </ButtonMantine>
   );
 };

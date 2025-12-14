@@ -117,14 +117,6 @@ export interface TasksContext {
   state: TasksState;
   setState: (val: TasksState | ((prevState: TasksState) => TasksState)) => void;
   activatedFolder: Pick<TagEntity, "_id" | "name" | "slug" | "color" | "__typename"> | null;
-  statuses: TaskStatus[];
-  open: (task: Pick<TaskEntity, "_id" | "code">) => void;
-  openFolder: (folder: Pick<TagEntity, "_id" | "name" | "slug" | "color">) => void;
-  taskCode?: string | null;
-  selectedTaskIds: string[];
-  toggleSelectTask: (taskId: string, isShiftKey?: boolean) => void;
-  removeSelectedTasks: (specificTaskIds?: string[]) => void;
-  href: (task: Pick<TaskEntity, "_id" | "code">) => string;
   isReady: boolean;
 }
 

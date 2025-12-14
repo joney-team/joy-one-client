@@ -13,6 +13,7 @@ import { useState, type FC } from "react";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { onError } from "@/utils/exceptions.utils";
+import { IconPlus } from "@tabler/icons-react";
 
 const UseUploadFilePlayground: FC = () => {
   const uploadFile = useUploadFile();
@@ -57,6 +58,40 @@ export const AdminPlayground: FC = () => {
 
   return (
     <Stack p={30} gap={20}>
+      <Paper withBorder p={20}>
+        <Stack>
+          <SectionTitle name="Buttons" />
+          <Group>
+            <Button size="xs" leftIcon={IconPlus}>
+              xs
+            </Button>
+            <Button size="sm" leftIcon={IconPlus}>
+              sm
+            </Button>
+            <Button size="md" leftIcon={IconPlus}>
+              md
+            </Button>
+            <Button size="lg" leftIcon={IconPlus}>
+              lg
+            </Button>
+          </Group>
+          <Group>
+            <Button size="compact-xs" leftIcon={IconPlus}>
+              compact-xs
+            </Button>
+            <Button size="compact-sm" leftIcon={IconPlus}>
+              compact-sm
+            </Button>
+            <Button size="compact-md" leftIcon={IconPlus}>
+              compact-md
+            </Button>
+            <Button size="compact-lg" leftIcon={IconPlus}>
+              compact-lg
+            </Button>
+          </Group>
+        </Stack>
+      </Paper>
+
       {workspace.userMember && <UseUploadFilePlayground />}
 
       <Paper withBorder p={20}>

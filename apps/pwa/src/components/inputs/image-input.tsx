@@ -179,15 +179,10 @@ export const ImageInput: FC<ImageInputProps> = (props) => {
                           <Button
                             leftIcon={value ? IconPencil : IconUpload}
                             size="xs"
-                            iconSize={16}
                             variant="transparent"
                             color="white"
-                            fw={400}
-                            fz={14}
-                            iconSpacing={-8}
-                          >
-                            {value ? <Trans>Change</Trans> : <Trans>Upload</Trans>}
-                          </Button>
+                            label={value ? <Trans>Change</Trans> : <Trans>Upload</Trans>}
+                          />
                         </Renderer>
                       </Stack>
                     )}

@@ -192,7 +192,6 @@ export const TaskSelectionMenu: FC = () => {
                       <Button
                         onClick={ctx.toggle}
                         leftIcon={IconPlaystationCircle}
-                        iconSize={18}
                         size="compact-md"
                         h={32}
                         color="gray.5"
@@ -213,7 +212,6 @@ export const TaskSelectionMenu: FC = () => {
                   return (
                     <Button
                       leftIcon={IconUsersPlus}
-                      iconSize={18}
                       size="compact-md"
                       h={32}
                       color="gray.5"
@@ -237,7 +235,6 @@ export const TaskSelectionMenu: FC = () => {
                       <Button
                         onClick={ctx.toggle}
                         leftIcon={IconTags}
-                        iconSize={18}
                         size="compact-md"
                         h={32}
                         color="gray.5"
@@ -259,7 +256,6 @@ export const TaskSelectionMenu: FC = () => {
                     <Tooltip label={<Trans>Change folder</Trans>} position="bottom">
                       <Button
                         leftIcon={IconFolder}
-                        iconSize={18}
                         size="compact-md"
                         h={32}
                         color="gray.5"
@@ -282,7 +278,6 @@ export const TaskSelectionMenu: FC = () => {
                     <Tooltip label={<Trans>Set priority</Trans>} position="bottom">
                       <Button
                         leftIcon={IconFlagFilled}
-                        iconSize={18}
                         size="compact-md"
                         h={32}
                         color="gray.5"
@@ -300,7 +295,6 @@ export const TaskSelectionMenu: FC = () => {
 
               <Button
                 leftIcon={IconTrash}
-                iconSize={18}
                 size="compact-md"
                 h={32}
                 color="red.5"

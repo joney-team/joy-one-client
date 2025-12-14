@@ -42,7 +42,6 @@ export const AiAssistantList: FC = () => {
 
             <Button
               mt={10}
-              action
               onClick={() => OnModalCreatePluginAiAssistant()}
               leftIcon={IconLinkPlus}
             >

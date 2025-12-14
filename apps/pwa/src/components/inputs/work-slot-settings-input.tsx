@@ -253,7 +253,6 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
 
             <Center mt={16}>
               <Button
-                action
                 leftIcon={isPointedSlotNew ? IconPlus : IconEdit}
                 onClick={() => {
                   if (isPointedSlotNew) {
@@ -273,9 +272,8 @@ export const WorkSlotsSettingsInput: FC<WorkSlotsSettingsInputProps> = (props) =
                   setPointedSlot(null);
                   close();
                 }}
-              >
-                {isPointedSlotNew ? <Trans>Add</Trans> : <Trans>Save</Trans>}
-              </Button>
+                label={isPointedSlotNew ? <Trans>Add</Trans> : <Trans>Save</Trans>}
+              />
             </Center>
 
             <Anchor

@@ -144,7 +144,6 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                   radius={100}
                   fz={13}
                   leftIcon={Icon}
-                  iconSize={16}
                   px={10}
                   onClick={() => {
                     if (isActive) {

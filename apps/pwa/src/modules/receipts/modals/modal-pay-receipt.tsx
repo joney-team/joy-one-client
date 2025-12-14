@@ -523,7 +523,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
             </Renderer>
 
             <Stack gap={16} mt={10} align="center">
-              <Button leftIcon={IconCheck} onClick={onPayReceipt} action tt="uppercase" h={42}>
+              <Button leftIcon={IconCheck} onClick={onPayReceipt} tt="uppercase" h={42}>
                 <Trans>Confirm paid</Trans>
               </Button>
 

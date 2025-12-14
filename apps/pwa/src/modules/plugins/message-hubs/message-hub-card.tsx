@@ -379,8 +379,6 @@ const WelcomInputs: FC<{
               size="compact-xs"
               variant="subtle"
               leftIcon={IconPlus}
-              iconSize={18}
-              fz={em(14)}
               onClick={addWelcomeInput}
             >
               <Trans>Add input</Trans>

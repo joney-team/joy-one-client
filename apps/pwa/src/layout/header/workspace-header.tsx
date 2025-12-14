@@ -205,10 +205,6 @@ export const WorkspaceHeader: FC = memo(() => {
       </Group>
 
       <Group justify="end" wrap="nowrap" pr={5} gap={10}>
-        <Center ml={5} mr={0}>
-          <Divider orientation="vertical" h={20} />
-        </Center>
-
         <ColorSchemes />
         <HrmTimekeepingButton />
         <UserNotifications />

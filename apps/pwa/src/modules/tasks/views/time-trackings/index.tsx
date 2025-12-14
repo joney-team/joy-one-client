@@ -38,6 +38,8 @@ import {
 import { useForceUpdate, useHover } from "@mantine/hooks";
 import { IconMinus, IconPlus, IconStopwatch, IconUsers, IconX } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { updateTaskPath } from "../../tasks-route-helpers";
 
 export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
   const ctx = useTasks();
@@ -158,7 +160,6 @@ export const TasksTimeTrackings: FC<PropsWithChildren> = (props) => {
                     radius={100}
                     fz={12}
                     leftIcon={IconUsers}
-                    iconSize={18}
                   >
                     <Group gap={5}>
                       <Text fz={12} fw={500}>
@@ -325,6 +326,7 @@ const TaskRow: FC<{
   const forceUpdate = useForceUpdate();
   const tasks = useTasks();
   const color = useColor();
+  const router = useRouter();
 
   const statusStyle = renderTaskStatusStyle(task.status, workspace.settings.taskStatuses);
   const assignee = task.assigneeUsers?.[0];
@@ -370,7 +372,11 @@ const TaskRow: FC<{
         overflow: "hidden",
       }}
     >
-      <Group className="clickable" onClick={() => tasks.open(task)} w="100%">
+      <Group
+        w="100%"
+        className="clickable"
+        onClick={() => router.push(updateTaskPath({ code: task.code }))}
+      >
         <Stack gap={8} w="100%">
           <Tooltip label={task.name}>
             <Text fz={14} fw={500} truncate>

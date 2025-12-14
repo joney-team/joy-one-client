@@ -204,7 +204,6 @@ export const ModalCreatePluginAiAssistant: FC<{
 
       <Stack align="center" justify="center" mt={16}>
         <Button
-          action
           leftIcon={plugin ? IconCheck : IconLinkPlus}
           onClick={() => onSubmit()}
           loading={loading}

@@ -95,7 +95,6 @@ export const OrderSaleCheckout: FC = () => {
 
         <Button
           flex={1}
-          action
           h={42}
           tt="uppercase"
           onClick={orderSale.payOrder}

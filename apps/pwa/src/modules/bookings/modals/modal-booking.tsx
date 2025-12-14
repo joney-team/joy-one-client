@@ -332,7 +332,7 @@ export const ModalBookingContent: FC<ModalBookingArgs> = (props) => {
             </FormSession>
 
             <Group justify="center" mt={16}>
-              <Button onClick={onSubmit} leftIcon={IconCheck} action>
+              <Button onClick={onSubmit} leftIcon={IconCheck}>
                 {props.reschedule ? <Trans>Reschedule booking</Trans> : <Trans>Save</Trans>}
               </Button>
             </Group>

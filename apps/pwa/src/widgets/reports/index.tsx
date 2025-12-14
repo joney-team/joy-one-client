@@ -240,7 +240,6 @@ export const ReportWidgets: FC = () => {
                           radius={100}
                           fz={12}
                           leftIcon={IconUsers}
-                          iconSize={18}
                         >
                           <Group gap={5}>
                             <Text fz={12} fw={500}>
@@ -328,7 +327,6 @@ export const ReportWidgets: FC = () => {
                           radius={100}
                           fz={12}
                           leftIcon={IconBuildingSkyscraper}
-                          iconSize={18}
                         >
                           <Group gap={5}>
                             <Text fz={12} fw={500}>

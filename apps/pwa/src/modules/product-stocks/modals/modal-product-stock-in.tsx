@@ -291,7 +291,6 @@ export const ModalProductStockIn: FC<{
 
           <Stack align="center" mt={16}>
             <Button
-              action
               leftIcon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_IN].icon}
               color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_IN].color)}
               loading={form.submitting}

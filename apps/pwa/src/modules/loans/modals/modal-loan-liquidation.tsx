@@ -228,7 +228,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
       </Text>
 
       <Center>
-        <Button miw={200} action color="orange" onClick={() => onSubmit()} loading={isSubmitting}>
+        <Button miw={200} color="orange" onClick={() => onSubmit()} loading={isSubmitting}>
           <Trans>Liquidation</Trans>
         </Button>
       </Center>

@@ -156,7 +156,6 @@ export const ModalRequestTimekeeping: FC<{ date?: Date }> = (props) => {
           rightSection={<IconCheck size={18} />}
           onClick={() => onSubmit()}
           loading={isSubmitting}
-          action
         >
           <Trans>Confirm</Trans>
         </Button>

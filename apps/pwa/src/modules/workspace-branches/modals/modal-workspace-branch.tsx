@@ -79,7 +79,6 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
 
         <Stack align="center">
           <Button
-            action
             leftIcon={branch ? IconCheck : IconPlus}
             loading={loading}
             onClick={() => onSubmit()}

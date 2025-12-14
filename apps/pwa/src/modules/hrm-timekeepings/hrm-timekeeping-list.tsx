@@ -179,9 +179,7 @@ export const HrmTimekeepingList: FC = () => {
                     color={isHasAssignee ? "primary" : "gray"}
                     variant="outline"
                     radius={100}
-                    fz={12}
                     leftIcon={IconUsers}
-                    iconSize={18}
                   >
                     <Group gap={5}>
                       <Text fz={12} fw={500}>

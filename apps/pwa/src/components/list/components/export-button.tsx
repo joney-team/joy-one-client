@@ -4,7 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
 import { api } from "@/modules/apis";
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { useLang } from "@/modules/lang/lang-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ResponseList } from "@/types";
@@ -19,8 +18,8 @@ import { IconDownload, IconFileExport } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
 import writeXlsxFile, { Row } from "write-excel-file";
 import { useListContext } from "../list-context";
-import { ExportToExcelItem } from "../types";
 import { getColumnName, getIn, getListName, getValuePath } from "../list-utils";
+import { ExportToExcelItem } from "../types";
 import { ActionButton } from "./action-button";
 
 export enum ExportType {
@@ -215,7 +214,7 @@ export const ExportButton: FC = () => {
           />
 
           <Center>
-            <Button action leftIcon={IconDownload} onClick={onExport} label={t`Export`} />
+            <Button leftIcon={IconDownload} onClick={onExport} label={<Trans>Export</Trans>} />
           </Center>
         </Stack>
       </Modal>

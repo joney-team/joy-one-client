@@ -234,7 +234,6 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
           onClick={() => onSubmit()}
           leftIcon={IconCheck}
           disabled={!form.isDirty()}
-          action
         >
           {props.roleId ? <Trans>Update</Trans> : <Trans>Create</Trans>}
         </Button>

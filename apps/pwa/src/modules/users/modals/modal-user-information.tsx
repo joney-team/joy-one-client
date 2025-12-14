@@ -7,11 +7,11 @@ import { Errored } from "@/components/errored";
 import { EventList } from "@/components/event-list";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { UseList, useList } from "@/components/list/use-list";
+import { EventType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
-import { EventType } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
 import { getUserPublicInformation } from "@/modules/users/users-service";
@@ -292,14 +292,7 @@ const UserBookings: FC<{
 
       {bookings.isFetching && <Skeleton height={50} />}
 
-      <ButtonViewMore
-        onClick={() => bookings.fetch()}
-        size="compact-xs"
-        fz={10}
-        iconSpacing={-12}
-        iconSize={12}
-        visible={bookings.isAbleToLoadMore}
-      />
+      <ButtonViewMore onClick={() => bookings.fetch()} visible={bookings.isAbleToLoadMore} />
     </Stack>
   );
 };

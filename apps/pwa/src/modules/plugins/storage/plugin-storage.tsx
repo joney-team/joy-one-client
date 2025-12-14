@@ -121,7 +121,7 @@ export const PluginStorage: FC = () => {
 
               <WithPluginStorageModal>
                 {(open) => (
-                  <Button mt={10} action onClick={() => open()} leftIcon={IconLinkPlus}>
+                  <Button mt={10} onClick={() => open()} leftIcon={IconLinkPlus}>
                     <Trans>Connect</Trans>
                   </Button>
                 )}

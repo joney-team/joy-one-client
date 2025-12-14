@@ -136,7 +136,7 @@ export const BoardGroupByStatuses: FC<BoardGroupByStatusesProps> = (props) => {
               <Group gap={8}>
                 <Button
                   key={props.status.id}
-                  size="compact-sm"
+                  size="compact-xs"
                   variant={!isTodoStatus ? "filled" : "light"}
                   color={props.status.color ?? "gray"}
                   leftSection={

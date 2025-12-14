@@ -154,7 +154,6 @@ export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => 
             variant="light"
             size="compact-sm"
             leftIcon={IconPlus}
-            iconSize={18}
             radius={200}
             fz={em(14)}
             onClick={() => {

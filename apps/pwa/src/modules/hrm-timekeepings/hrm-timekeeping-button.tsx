@@ -138,7 +138,6 @@ export const HrmTimekeepingButton: FC = () => {
 
               <Group justify="center" wrap="nowrap" gap={10}>
                 <Button
-                  action
                   radius={100}
                   color={color(hrmTimekeepingTypes[timekeeping.nextType].color)}
                   leftIcon={hrmTimekeepingTypes[timekeeping.nextType].icon}

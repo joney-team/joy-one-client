@@ -1,16 +1,14 @@
 "use client";
 
 import { useRouter } from "@/hooks/use-router";
-import { getTaskEntites, getTaskEntity } from "@/modules/tasks/tasks-service";
-import { TaskEntity, TaskPriority, TasksContext } from "@/modules/tasks/tasks-types";
+import { TaskPriority, TasksContext } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { StorageKey } from "@/types";
-import { shiftSelect } from "@/utils/array.utils";
 import { NetworkStatus } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 import { useLocalStorage } from "@mantine/hooks";
 import { useParams, usePathname } from "next/navigation";
-import { FC, PropsWithChildren, useMemo, useState } from "react";
+import { FC, PropsWithChildren, useMemo } from "react";
 import QUERY_TAG_BY_SLUG, {
   type TagBySlugQuery,
   type TagBySlugQueryVariables,
@@ -32,6 +30,8 @@ export interface TasksState {
   tagIds?: string[];
 }
 
+const views = Object.values(TaskView);
+
 export const TasksProvider: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
 
@@ -40,13 +40,11 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
     defaultValue: {},
   });
 
-  const [selectedTaskIds, _setSelectedTaskIds] = useState<string[]>([]);
-
   const params = useParams<{ slug: string; code: string }>();
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data: tagFolderData, networkStatus } = useQuery<TagBySlugQuery, TagBySlugQueryVariables>(
+  const { data: folderData, networkStatus } = useQuery<TagBySlugQuery, TagBySlugQueryVariables>(
     QUERY_TAG_BY_SLUG,
     {
       skip: !params.slug || params.slug === "d" || !workspace.isAvailable,
@@ -54,65 +52,16 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
     }
   );
 
-  const activatedFolder = tagFolderData?.tagBySlug ?? null;
+  const activatedFolder = folderData?.tagBySlug ?? null;
 
   const isFolderLoading =
     networkStatus !== NetworkStatus.ready && !!params.slug && params.slug !== "d";
-
-  const views = Object.values(TaskView);
 
   const { view } = useMemo(() => parseTaskPath(pathname), [pathname]);
 
   const setView = (selectedView: TaskView) => {
     setState((s) => ({ ...s, selectedView }));
     router.push(`/tasks/${selectedView}/${activatedFolder?.slug ?? "d"}`);
-  };
-
-  const open = (task: Pick<TaskEntity, "_id" | "code">) => {
-    const url = `/tasks/${view}/${activatedFolder?.slug || "d"}/${task.code}`;
-    router.push(url, {}, { scroll: false });
-  };
-
-  const openFolder: TasksContext["openFolder"] = (folder) => {
-    const url = `/tasks/${view}/${folder.slug}`;
-    router.push(url, {}, { scroll: false });
-  };
-
-  const removeSelectedTasks = (specificTaskIds?: string[]) => {
-    _setSelectedTaskIds(
-      specificTaskIds ? (s) => s.filter((v) => !specificTaskIds.includes(v)) : []
-    );
-  };
-
-  const toggleSelectTask = (taskId: string, isShiftKey?: boolean) => {
-    const pointedTask = getTaskEntity(taskId);
-    if (!pointedTask) return;
-
-    const allTasks = getTaskEntites();
-    const _relatedTaskIds = allTasks
-      .filter(
-        (v) =>
-          v._id === taskId ||
-          (v.parentId === pointedTask.parentId &&
-            v.status === pointedTask.status &&
-            v.folderId === pointedTask.folderId)
-      )
-      .map((v) => v._id);
-    const _selectedTaskIds = _relatedTaskIds.filter((v) => selectedTaskIds.includes(v));
-
-    if (isShiftKey && _relatedTaskIds.some((v) => selectedTaskIds.includes(v))) {
-      const output = shiftSelect(
-        _relatedTaskIds,
-        taskId,
-        _selectedTaskIds,
-        selectedTaskIds[selectedTaskIds.length - 1]
-      );
-      _setSelectedTaskIds((s) => [...new Set([...s, ...output])]);
-    } else {
-      _setSelectedTaskIds((v) =>
-        v.includes(taskId) ? v.filter((v) => v !== taskId) : [...v, taskId]
-      );
-    }
   };
 
   const contextValue = useMemo<TasksContext>(() => {
@@ -123,18 +72,9 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
       state,
       setState,
       activatedFolder,
-      statuses: workspace.settings?.taskStatuses || [],
-      open,
-      openFolder,
-      href: (task: Pick<TaskEntity, "_id" | "code">) =>
-        `/tasks/${view}/${activatedFolder?.slug || "d"}/${task.code}`,
-      taskCode: params.code,
-      selectedTaskIds: selectedTaskIds.filter((v) => !!getTaskEntity(v)),
-      toggleSelectTask,
-      removeSelectedTasks,
       isReady: !isFolderLoading && workspace.isAvailable,
     };
-  }, [view, state, activatedFolder, workspace.settings, open, openFolder, pathname]);
+  }, [view, state, activatedFolder, workspace.settings, workspace.isAvailable, isFolderLoading]);
 
   return <Context.Provider value={contextValue}>{props.children}</Context.Provider>;
 };

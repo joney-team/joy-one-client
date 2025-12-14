@@ -167,9 +167,8 @@ const UserWorkspaceSettingsForm: FC<
             <Button
               variant="subtle"
               color="red"
-              size="xs"
+              size="compact-xs"
               leftIcon={IconArchive}
-              iconStrokeWidth={1.3}
               onClick={() =>
                 onArchive({
                   name: userMember.memberDisplayName ?? userMember.name,
