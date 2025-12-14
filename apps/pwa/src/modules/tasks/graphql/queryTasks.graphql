@@ -12,6 +12,8 @@ query Tasks(
   $tagIds: [String!]
   $priority: TaskPriority
   $all: Boolean
+  $isProgressOnly: Boolean
+  $isClosedOnly: Boolean
 ) {
   tasks(
     folderId: $folderId
@@ -25,6 +27,8 @@ query Tasks(
     tagIds: $tagIds
     priority: $priority
     all: $all
+    isProgressOnly: $isProgressOnly
+    isClosedOnly: $isClosedOnly
   ) {
     count
     data {

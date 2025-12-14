@@ -12,6 +12,8 @@ export type TasksQueryVariables = Types.Exact<{
   tagIds?: Types.InputMaybe<Array<Types.Scalars['String']['input']>>;
   priority?: Types.InputMaybe<Types.TaskPriority>;
   all?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
+  isProgressOnly?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
+  isClosedOnly?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
 }>;
 
 

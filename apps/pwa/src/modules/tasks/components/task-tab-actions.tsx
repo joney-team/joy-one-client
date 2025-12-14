@@ -6,7 +6,10 @@ import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Menu } from "@mantine/core";
 import {
+  IconChecks,
   IconEdit,
+  IconEye,
+  IconEyeCheck,
   IconFilter,
   IconFilterFilled,
   IconFlag,
@@ -85,6 +88,16 @@ export const TaskTabActions: FC = () => {
 
   return (
     <Group justify="end" wrap="nowrap" flex={1} px="md" gap={5}>
+      <Button
+        variant="outline"
+        color={state.showClosed ? "primary" : "gray"}
+        h={28}
+        leftIcon={IconChecks}
+        onClick={() => setState((s) => ({ ...s, showClosed: !Boolean(s.showClosed) }))}
+      >
+        {state.showClosed ? <Trans>Hide closed</Trans> : <Trans>Show closed</Trans>}
+      </Button>
+
       <Menu
         closeOnItemClick={false}
         closeOnClickOutside={!menuTask.isOpened}

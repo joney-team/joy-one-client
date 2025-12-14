@@ -13,6 +13,8 @@ import { Fragment, useEffect, useMemo, useRef, useState, type FC } from "react";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { type ModalCreateTaskRef } from "../../modals/modal-create-task";
 import { useTaskSelections } from "../../modules/task-selections/task-selections-context";
+import { useTasks } from "../../tasks-context";
+import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 
 const GanttTask = dynamic(() => import("./gantt-task/gantt-task").then((mod) => mod.GanttTask), {
   ssr: false,
@@ -38,6 +40,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
   pure,
   isDefaultOpen = false,
 }) => {
+  const { state } = useTasks();
   const [isOpened, setIsOpened] = useState(
     isDefaultOpen || Boolean(localStorage.getItem(`gtg-${folder?._id ?? "d"}`))
   );
@@ -49,12 +52,13 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
 
   const folderColor = folder?.color ?? "gray";
 
-  const groupVariables = useMemo(() => {
+  const groupVariables = useMemo<TasksQueryVariables>(() => {
     return {
       folderId: folder?._id ?? "none",
       parentId: "root",
+      isProgressOnly: state.showClosed ? false : true,
     };
-  }, [folder?._id]);
+  }, [folder?._id, state.showClosed]);
 
   const { getTasks, tasks, loading, count } = useTasksQuery({ variables: groupVariables });
 

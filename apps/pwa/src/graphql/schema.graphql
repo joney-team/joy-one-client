@@ -595,8 +595,8 @@ type Query {
   task(_id: String!): Task!
   taskByCode(code: String!): Task!
   taskStatuses(contextId: String, contextType: TaskStatusesContextType, mode: GetTaskStatusesMode): ConfigTaskStatuses!
-  tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): TasksPaginated!
-  tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): Float!
+  tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): TasksPaginated!
+  tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): Float!
   userWorkspaceMember: WorkspaceMember!
   workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float): WorkspaceMembersPaginated!
 }

@@ -874,6 +874,8 @@ export type QueryTasksArgs = {
   assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
   folderId?: InputMaybe<Scalars['String']['input']>;
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  isClosedOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  isProgressOnly?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   parentId?: InputMaybe<Scalars['String']['input']>;
@@ -889,6 +891,8 @@ export type QueryTasksCountArgs = {
   assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
   folderId?: InputMaybe<Scalars['String']['input']>;
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  isClosedOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  isProgressOnly?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   parentId?: InputMaybe<Scalars['String']['input']>;
