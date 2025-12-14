@@ -315,7 +315,9 @@ export const ListTaskRow: FC<
                   taskMenu.open({
                     action: TaskMenuAction.CHANGE_STATUS,
                     target: e.currentTarget,
-                    offset: { y: 5 },
+                    options: {
+                      offset: { y: 5 },
+                    },
                   })
                 }
               >

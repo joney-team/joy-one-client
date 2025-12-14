@@ -21,45 +21,41 @@ export const TaskMenuStatus: TaskMenuComponent = ({
     statuses: task.statuses ?? [],
   } as Pick<TaskDataFragment, "status" | "statuses">);
 
-  console.log("statuses", task.statuses);
-
   return (
-    <Card p={0} shadow="md" withBorder>
-      <Stack gap={3} py={4}>
-        {statuses.map((status, statusIndex) => {
-          return (
-            <Fragment key={status.id + statusIndex}>
-              {status.id === DefaultTaskStatusId.CLOSED && (
-                <Divider my={2} miw="100%" opacity={0.3} />
-              )}
+    <Stack gap={3} py={4}>
+      {statuses.map((status, statusIndex) => {
+        return (
+          <Fragment key={status.id + statusIndex}>
+            {status.id === DefaultTaskStatusId.CLOSED && (
+              <Divider my={2} miw="100%" opacity={0.3} />
+            )}
 
-              <Stack px={4}>
-                <Group
-                  className={styles.TaskMenuItem}
-                  gap={6}
-                  pr={16}
-                  pl={8}
-                  py={6}
-                  align="center"
-                  onClick={() => {
-                    onClose();
-                    updateTask({
-                      _id: task._id,
-                      status: status.id,
-                      context: { fromGroupVariables: groupVariables },
-                    });
-                  }}
-                >
-                  <TaskStatusIcon size={16} color={status.color} id={status.id} />
-                  <Text tt="uppercase" fz={13}>
-                    {status.name}
-                  </Text>
-                </Group>
-              </Stack>
-            </Fragment>
-          );
-        })}
-      </Stack>
-    </Card>
+            <Stack px={4}>
+              <Group
+                className={styles.TaskMenuItem}
+                gap={6}
+                pr={16}
+                pl={8}
+                py={6}
+                align="center"
+                onClick={() => {
+                  onClose();
+                  updateTask({
+                    _id: task._id,
+                    status: status.id,
+                    context: { fromGroupVariables: groupVariables },
+                  });
+                }}
+              >
+                <TaskStatusIcon size={16} color={status.color} id={status.id} />
+                <Text tt="uppercase" fz={13}>
+                  {status.name}
+                </Text>
+              </Group>
+            </Stack>
+          </Fragment>
+        );
+      })}
+    </Stack>
   );
 };

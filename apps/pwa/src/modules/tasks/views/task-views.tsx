@@ -116,20 +116,19 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
 
   return (
     <Fragment>
-      <NavigationTabs
-        activeTab={view}
-        tabs={Object.entries(allTaskViews).map(([key, value]) => ({
-          id: key,
-          icon: value.icon,
-          name: value.name,
-        }))}
-        onChange={setView}
-        rightSection={TaskTabActions}
-      />
-
       {props.children}
 
       <ContextMenuProvider dropdown={TaskContextMenuDropdown}>
+        <NavigationTabs
+          activeTab={view}
+          tabs={Object.entries(allTaskViews).map(([key, value]) => ({
+            id: key,
+            icon: value.icon,
+            name: value.name,
+          }))}
+          onChange={setView}
+          rightSection={TaskTabActions}
+        />
         <TaskViewGateway view={view} />
         <TaskDetail />
         <TasksRealtimeEvents />

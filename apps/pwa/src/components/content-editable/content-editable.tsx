@@ -136,6 +136,7 @@ export const ContentEditable: FC<ContentEditableProps> = ({
       flex={1}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
+      miw={0}
     >
       {!!placeholder && !inputRef.current?.textContent && !value && (
         <Box
@@ -164,6 +165,7 @@ export const ContentEditable: FC<ContentEditableProps> = ({
         onKeyDown={onKeyDown}
         onBlur={handleOnBlur}
         w="100%"
+        miw={0}
         fz={fz}
         mih={fz}
         fw={props.fw}

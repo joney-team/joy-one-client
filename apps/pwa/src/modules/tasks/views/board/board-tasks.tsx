@@ -19,6 +19,7 @@ import QUERY_TASK_STATUSES, {
   type TaskStatusesQueryVariables,
 } from "../../graphql/queryTaskStatuses.graphql";
 import { normalizeTaskStatuses } from "../../task-constants";
+import { useFolderStatuses } from "../../hooks/use-task-statuses";
 
 const ModalConfigureStatuses = dynamic(
   () =>
@@ -41,7 +42,7 @@ const BoardGroupByStatuses = dynamic(
 
 export const TasksBoardView: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
-  const tasks = useTasks();
+  const { activatedFolder, isReady, state } = useTasks();
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +66,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
         pageLayout.style.removeProperty("height");
       };
     }
-  }, [tasks.isReady]);
+  }, [isReady]);
 
   useEffect(() => {
     if (!scrollAreaRef.current) return;
@@ -75,34 +76,11 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
     });
   }, []);
 
-  const taskStatusesData = useQuery<TaskStatusesQuery, TaskStatusesQueryVariables>(
-    QUERY_TASK_STATUSES,
-    {
-      variables: tasks.activatedFolder
-        ? {
-            contextType: TaskStatusesContextType.Folder,
-            contextId: tasks.activatedFolder?._id,
-          }
-        : {},
-    }
-  );
-
-  const statuses = useMemo(() => {
-    const selectStatuses = taskStatusesData.data?.taskStatuses.isInherited
-      ? taskStatusesData.data?.taskStatuses.workspaceStatuses
-      : taskStatusesData.data?.taskStatuses.statuses;
-
-    const allStatus = normalizeTaskStatuses(selectStatuses ?? []);
-
-    return {
-      inprogress: allStatus.filter((status) => status.id !== DefaultTaskStatusId.CLOSED),
-      closed: allStatus.filter((status) => status.id === DefaultTaskStatusId.CLOSED),
-    };
-  }, [taskStatusesData.data]);
+  const statuses = useFolderStatuses(activatedFolder?._id);
 
   return (
     <Stack id="TasksBoardView" gap={0} mih={0} flex={1} miw={0}>
-      {tasks.isReady ? (
+      {isReady ? (
         <Stack gap={0} flex={1} miw={0} style={{ overflow: "hidden" }}>
           <Group
             id="BoardHorizontalScroll"
@@ -152,10 +130,8 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                           fz={12}
                           onClick={() =>
                             modal.open({
-                              contextType: tasks.activatedFolder
-                                ? TaskStatusesContextType.Folder
-                                : null,
-                              contextId: tasks.activatedFolder?._id ?? null,
+                              contextType: activatedFolder ? TaskStatusesContextType.Folder : null,
+                              contextId: activatedFolder?._id ?? null,
                               autoCreation: true,
                             })
                           }
@@ -168,7 +144,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                 </ModalConfigureStatuses>
               )}
 
-              {tasks.state.showClosed &&
+              {state.showClosed &&
                 statuses.closed.map((status, statusIndex) => (
                   <BoardGroupByStatuses key={status.id + statusIndex} status={status} />
                 ))}

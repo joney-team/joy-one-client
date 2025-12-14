@@ -18,7 +18,7 @@ import { AppEntity } from "@/types";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useDebouncedState } from "@mantine/hooks";
 import { IconSearch, IconTagPlus } from "@tabler/icons-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
 
@@ -94,166 +94,123 @@ export const TaskMenuTags: TaskMenuComponent = ({
   }, [textSearch, getTags]);
 
   return (
-    <ModalTagForm>
-      {(modalTagForm) => (
-        <Card
-          p={0}
-          shadow="md"
-          style={{ overflow: "hidden" }}
-          withBorder
-          opacity={!modalTagForm.isOpened ? 1 : 0}
-        >
-          <Group p={6}>
-            <FocusTrap>
-              <TextInput
-                radius={4}
-                autoFocus
-                size="xs"
-                leftSection={<IconSearch size={16} />}
-                placeholder={t`Search`}
-                onChange={(e) => setTextSearch(e.target.value)}
-                rightSection={
-                  loading && !data ? <Loader size="xs" type="dots" color="gray" /> : undefined
-                }
-                styles={{
-                  input: {
-                    backgroundColor: "var(--mantine-color-default-hover)",
-                    border: "none",
-                  },
+    <Fragment>
+      <Group p={6}>
+        <FocusTrap>
+          <TextInput
+            radius={4}
+            autoFocus
+            size="xs"
+            leftSection={<IconSearch size={16} />}
+            placeholder={t`Search`}
+            onChange={(e) => setTextSearch(e.target.value)}
+            rightSection={
+              loading && !data ? <Loader size="xs" type="dots" color="gray" /> : undefined
+            }
+            styles={{
+              input: {
+                backgroundColor: "var(--mantine-color-default-hover)",
+                border: "none",
+              },
+            }}
+          />
+        </FocusTrap>
+      </Group>
+
+      <Stack p={4} gap={0} mah={220} style={{ overflow: "auto" }} ref={scrollRef}>
+        {!isSearchEmpty &&
+          textSearch.length === 0 &&
+          selected.map((tag) => {
+            const isSelected = selected.some((t) => t._id === tag._id);
+            return (
+              <Group
+                key={tag._id}
+                className={styles.TaskMenuItem}
+                gap={8}
+                pr={12}
+                pl={6}
+                py={5}
+                align="center"
+                onClick={() => {
+                  const tags = isSelected
+                    ? selected.filter((t) => t._id !== tag._id)
+                    : [...selected, tag];
+
+                  setSelected(tags);
+                  updateTask({
+                    _id: task._id,
+                    tags,
+                    context: { fromGroupVariables: groupVariables },
+                  });
                 }}
-              />
-            </FocusTrap>
-          </Group>
+              >
+                <Group
+                  style={{
+                    border: `1px solid transparent`,
+                    borderColor: isSelected ? color(tag.color || "gray") : "transparent",
+                    borderRadius: "50%",
+                    padding: 2,
+                  }}
+                >
+                  <Circle color={tag.color || "gray"} size={12} />
+                </Group>
+                <Text fz={14}>{tag.name}</Text>
+              </Group>
+            );
+          })}
 
-          <Stack p={4} gap={0} mah={220} style={{ overflow: "auto" }} ref={scrollRef}>
-            {!isSearchEmpty &&
-              textSearch.length === 0 &&
-              selected.map((tag) => {
-                const isSelected = selected.some((t) => t._id === tag._id);
-                return (
-                  <Group
-                    key={tag._id}
-                    className={styles.TaskMenuItem}
-                    gap={8}
-                    pr={12}
-                    pl={6}
-                    py={5}
-                    align="center"
-                    onClick={() => {
-                      const tags = isSelected
-                        ? selected.filter((t) => t._id !== tag._id)
-                        : [...selected, tag];
+        {!isSearchEmpty &&
+          data?.tags.data.map((tag) => {
+            const isSelected = selected.some((t) => t._id === tag._id);
+            if (textSearch.length === 0 && isSelected) return null;
 
-                      setSelected(tags);
-                      updateTask({
-                        _id: task._id,
-                        tags,
-                        context: { fromGroupVariables: groupVariables },
-                      });
-                    }}
-                  >
-                    <Group
-                      style={{
-                        border: `1px solid transparent`,
-                        borderColor: isSelected ? color(tag.color || "gray") : "transparent",
-                        borderRadius: "50%",
-                        padding: 2,
-                      }}
-                    >
-                      <Circle color={tag.color || "gray"} size={12} />
-                    </Group>
-                    <Text fz={14}>{tag.name}</Text>
-                  </Group>
-                );
-              })}
+            return (
+              <Group
+                key={tag._id}
+                className={styles.TaskMenuItem}
+                gap={8}
+                pr={12}
+                pl={6}
+                py={5}
+                align="center"
+                onClick={() => {
+                  const tags = isSelected
+                    ? selected.filter((t) => t._id !== tag._id)
+                    : [...selected, tag];
 
-            {!isSearchEmpty &&
-              data?.tags.data.map((tag) => {
-                const isSelected = selected.some((t) => t._id === tag._id);
-                if (textSearch.length === 0 && isSelected) return null;
+                  setSelected(tags);
+                  updateTask({
+                    _id: task._id,
+                    tags,
+                    context: { fromGroupVariables: groupVariables },
+                  });
+                }}
+              >
+                <Group
+                  style={{
+                    border: `1px solid transparent`,
+                    borderColor: isSelected ? color(tag.color || "gray") : "transparent",
+                    borderRadius: "50%",
+                    padding: 2,
+                  }}
+                >
+                  <Circle color={tag.color || "gray"} size={12} />
+                </Group>
+                <Text fz={14}>{tag.name}</Text>
+              </Group>
+            );
+          })}
 
-                return (
-                  <Group
-                    key={tag._id}
-                    className={styles.TaskMenuItem}
-                    gap={8}
-                    pr={12}
-                    pl={6}
-                    py={5}
-                    align="center"
-                    onClick={() => {
-                      const tags = isSelected
-                        ? selected.filter((t) => t._id !== tag._id)
-                        : [...selected, tag];
+        {isSearchEmpty && (
+          <Text fz={12} c="gray" ta="center" py={5}>
+            <Trans>No tags found</Trans>
+          </Text>
+        )}
 
-                      setSelected(tags);
-                      updateTask({
-                        _id: task._id,
-                        tags,
-                        context: { fromGroupVariables: groupVariables },
-                      });
-                    }}
-                  >
-                    <Group
-                      style={{
-                        border: `1px solid transparent`,
-                        borderColor: isSelected ? color(tag.color || "gray") : "transparent",
-                        borderRadius: "50%",
-                        padding: 2,
-                      }}
-                    >
-                      <Circle color={tag.color || "gray"} size={12} />
-                    </Group>
-                    <Text fz={14}>{tag.name}</Text>
-                  </Group>
-                );
-              })}
-
-            {isSearchEmpty && (
-              <Text fz={12} c="gray" ta="center" py={5}>
-                <Trans>No tags found</Trans>
-              </Text>
-            )}
-
-            {isCanFetchMore && (
-              <WayPoint scrollContainerRef={scrollRef.current} onReached={onFetchMore} />
-            )}
-          </Stack>
-
-          <Divider miw="100%" opacity={0.5} my={2} />
-
-          <Stack p={4}>
-            <Group
-              className={styles.TaskMenuItem}
-              gap={8}
-              pr={12}
-              pl={10}
-              py={5}
-              align="center"
-              onClick={() => {
-                setClickOutsideToClose(false);
-                modalTagForm.open({
-                  type: TagType.Task,
-                  onCreated: (tag) => {
-                    setSelected([...selected, tag]);
-                    updateTask({
-                      _id: task._id,
-                      tags: [...selected, tag],
-                      context: { fromGroupVariables: groupVariables },
-                    });
-                  },
-                  onClose: () => setClickOutsideToClose(true),
-                });
-              }}
-            >
-              <IconTagPlus size={13} color={color("gray")} />
-              <Text fz={13} c="gray">
-                <Trans>New tag</Trans>
-              </Text>
-            </Group>
-          </Stack>
-        </Card>
-      )}
-    </ModalTagForm>
+        {isCanFetchMore && (
+          <WayPoint scrollContainerRef={scrollRef.current} onReached={onFetchMore} />
+        )}
+      </Stack>
+    </Fragment>
   );
 };

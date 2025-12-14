@@ -360,7 +360,9 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                     taskMenu.open({
                       action: TaskMenuAction.CHANGE_STATUS,
                       target: e.currentTarget,
-                      offset: { x: 10 },
+                      options: {
+                        offset: { x: 10 },
+                      },
                     });
                   }}
                 >
@@ -378,7 +380,9 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                   taskMenu.open({
                     action: TaskMenuAction.CHANGE_TAGS,
                     target: e.currentTarget,
-                    offset: { x: 10 },
+                    options: {
+                      offset: { x: 10 },
+                    },
                   });
                 }}
               >
@@ -411,7 +415,9 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                   taskMenu.open({
                     action: TaskMenuAction.CHANGE_TIMELINE,
                     target: e.currentTarget,
-                    offset: { x: 10 },
+                    options: {
+                      offset: { x: 10 },
+                    },
                   });
                 }}
                 label={t`Due date`}
@@ -444,7 +450,9 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                   taskMenu.open({
                     action: TaskMenuAction.CHANGE_PRIORITY,
                     target: e.currentTarget,
-                    offset: { x: 10 },
+                    options: {
+                      offset: { x: 10 },
+                    },
                   });
                 }}
               >
@@ -468,7 +476,9 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                   taskMenu.open({
                     action: TaskMenuAction.CHANGE_ASSIGNEE,
                     target: e.currentTarget,
-                    offset: { x: 10 },
+                    options: {
+                      offset: { x: 10 },
+                    },
                   });
                 }}
               >

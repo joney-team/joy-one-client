@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { Card, Group, MantineColor, Stack, Text } from "@mantine/core";
+import { Group, MantineColor, Stack, Text } from "@mantine/core";
 import { Icon, IconClockHour3, IconMaximize, ReactNode } from "@tabler/icons-react";
 import { FC } from "react";
 import { TaskMenuComponent } from "./task-menu-types";
@@ -46,31 +46,29 @@ export const TaskMenuGanttTimeline: TaskMenuComponent = ({
   const router = useRouter();
 
   return (
-    <Card p={0} shadow="md" withBorder>
-      <Stack gap={0} p={5}>
-        <MenuItem
-          icon={IconMaximize}
-          label={<Trans>View detail</Trans>}
-          onClick={() => {
-            router.push(updateTaskPath({ code: task.code }));
-            onClose();
-          }}
-        />
+    <Stack gap={0} p={5}>
+      <MenuItem
+        icon={IconMaximize}
+        label={<Trans>View detail</Trans>}
+        onClick={() => {
+          router.push(updateTaskPath({ code: task.code }));
+          onClose();
+        }}
+      />
 
-        <MenuItem
-          icon={IconClockHour3}
-          label={<Trans>Clear time</Trans>}
-          onClick={() => {
-            onClose();
-            updateTask({
-              _id: task._id,
-              startDate: null,
-              dueDate: null,
-              context: { fromGroupVariables: groupVariables },
-            });
-          }}
-        />
-      </Stack>
-    </Card>
+      <MenuItem
+        icon={IconClockHour3}
+        label={<Trans>Clear time</Trans>}
+        onClick={() => {
+          onClose();
+          updateTask({
+            _id: task._id,
+            startDate: null,
+            dueDate: null,
+            context: { fromGroupVariables: groupVariables },
+          });
+        }}
+      />
+    </Stack>
   );
 };

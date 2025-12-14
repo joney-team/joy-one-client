@@ -1,6 +1,7 @@
 "use client";
 
 import { ContextMenuDropdownComponent } from "@/components/context-menu/context-menu-types";
+import { Card } from "@mantine/core";
 import { useMemo } from "react";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import { TaskMenuAssignee } from "./task-menu-assignee";
@@ -41,21 +42,23 @@ export const TaskContextMenuDropdown: ContextMenuDropdownComponent = (props) => 
   if (!DropdownMenu) throw Error("DropdownMenu not found");
 
   return (
-    <DropdownMenu
-      key={task._id}
-      task={task}
-      onClose={props.onClose}
-      updateTask={(taskData) => {
-        if (context.updateTask) {
-          return context.updateTask(taskData);
-        }
+    <Card p={0} shadow="md" withBorder>
+      <DropdownMenu
+        key={task._id}
+        task={task}
+        onClose={props.onClose}
+        updateTask={(taskData) => {
+          if (context.updateTask) {
+            return context.updateTask(taskData);
+          }
 
-        return updateTasks(taskData);
-      }}
-      setClickOutsideToClose={(enabled) => {
-        props.setClickOutsideToClose(enabled);
-      }}
-      {...context}
-    />
+          return updateTasks(taskData);
+        }}
+        setClickOutsideToClose={(enabled) => {
+          props.setClickOutsideToClose(enabled);
+        }}
+        {...context}
+      />
+    </Card>
   );
 };

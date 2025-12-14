@@ -1,8 +1,12 @@
-import { OpenContextMenuArgs } from "@/components/context-menu/context-menu-types";
+import {
+  ContextMenuProps,
+  OpenContextMenuArgs,
+} from "@/components/context-menu/context-menu-types";
 import { FC } from "react";
 import { type TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { UpdateTask } from "../../hooks/use-update-tasks";
+import { PlaceDropdownMenuOptions } from "@/components/context-menu/context-menu-helpers";
 
 export enum TaskMenuAction {
   CHANGE_STATUS = "CHANGE_STATUS",
@@ -19,18 +23,19 @@ export type TaskMenuData = Partial<TaskDataFragment> & { _id: string };
 
 export type TaskMenuContext = {
   groupVariables: TasksQueryVariables | null;
-  action: TaskMenuAction;
   updateTask?: (task: UpdateTask) => Promise<void>;
+  action: TaskMenuAction;
 };
 
 export interface TaskMenuContextType {
-  open: (
-    menu: { task?: TaskMenuData; action: TaskMenuAction } & Omit<
-      TaskMenuContext,
-      "groupVariables" | "action"
-    > &
-      Pick<OpenContextMenuArgs, "offset" | "target" | "zIndex">
-  ) => void;
+  open: (menu: {
+    target: HTMLElement;
+    action: TaskMenuAction;
+    task?: TaskMenuData;
+    options?: PlaceDropdownMenuOptions;
+    onClose?: () => void;
+    updateTask?: (task: UpdateTask) => Promise<void>;
+  }) => void;
   close: () => void;
   activatedAction: TaskMenuAction | null;
   isOpened: boolean;
@@ -41,6 +46,7 @@ export type TaskMenuComponentProps = Pick<TaskMenuContext, "groupVariables" | "a
   onClose: () => void;
   updateTask: (task: UpdateTask) => Promise<void>;
   setClickOutsideToClose: (enabled: boolean) => void;
+  options?: ContextMenuProps["options"];
 };
 
 export type TaskMenuComponent = FC<TaskMenuComponentProps>;

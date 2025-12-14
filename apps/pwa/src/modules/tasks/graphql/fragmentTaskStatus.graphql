@@ -1,0 +1,8 @@
+fragment TaskStatusData on TaskStatus {
+  id
+  name
+  color
+  order
+  contextId
+  contextType
+}

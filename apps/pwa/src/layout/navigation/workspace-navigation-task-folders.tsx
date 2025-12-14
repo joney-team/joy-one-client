@@ -238,8 +238,8 @@ const TaskFolderNavigationItem: FC<{
           </ActionIcon>
 
           <ContentEditable
-            fz={14}
-            miw={0}
+            fz={12}
+            fw={500}
             autoFocus
             disabled={!isRenaming}
             value={tag.name}

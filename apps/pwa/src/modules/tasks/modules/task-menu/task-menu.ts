@@ -1,6 +1,7 @@
 "use client";
 
 import { useContextMenu } from "@/components/context-menu/context-menu";
+import type { PlaceDropdownMenuOptions } from "@/components/context-menu/context-menu-helpers";
 import {
   addInternalEventsListener,
   emitInternalEvent,
@@ -9,6 +10,8 @@ import {
 } from "@/hooks/use-internal-event";
 import { useEffect, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import type { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import type { UpdateTask } from "../../hooks/use-update-tasks";
 import {
   TaskMenuAction,
   TaskMenuContext,
@@ -22,15 +25,27 @@ export function setTaskMenuRoot(root: HTMLElement | null) {
 
 export const useTaskMenu: (
   args: {
+    groupVariables: TasksQueryVariables | null;
     task?: TaskMenuData;
+    options?: PlaceDropdownMenuOptions;
+    updateTask?: (task: UpdateTask) => Promise<void>;
+    onClose?: () => void;
   } & Partial<TaskMenuContext>
-) => TaskMenuContextType = ({ task, ...context }) => {
+) => TaskMenuContextType = ({
+  task,
+  options: defaultOptions,
+  groupVariables: defaultGroupVariables,
+  updateTask: defaultUpdateTask,
+  onClose: defaultOnClose,
+}) => {
   const contextMenu = useContextMenu<Partial<TaskDataFragment> & { _id: string }>();
   const [activatedAction, setActivatedAction] = useState<TaskMenuAction | null>(null);
 
   useEffect(() => {
     if (activatedAction) {
-      const onClosed = () => setActivatedAction(null);
+      const onClosed = () => {
+        setActivatedAction(null);
+      };
 
       addInternalEventsListener(InternalEvent.TASK_MENU_CLOSE, onClosed);
 
@@ -58,21 +73,30 @@ export const useTaskMenu: (
       const pointedTask = menu.task ?? task;
       if (!pointedTask) return;
 
+      const mainContext: TaskMenuContext = {
+        action: menu.action,
+        groupVariables: defaultGroupVariables,
+        updateTask: menu.updateTask ?? defaultUpdateTask,
+      };
+
       contextMenu.open({
         data: pointedTask,
-        context: {
-          ...context,
-          ...menu,
+        context: mainContext,
+        target: menu.target,
+        options: {
+          ...defaultOptions,
+          ...menu.options,
         },
         onClose: () => {
           emitInternalEvent(InternalEvent.TASK_MENU_CLOSE);
+          defaultOnClose?.();
+          menu.onClose?.();
         },
-        target: menu.target,
-        offset: menu.offset,
       });
 
       emitInternalEvent(InternalEvent.TASK_MENU_OPEN, {
-        menu: { taskId: pointedTask._id, action: menu.action },
+        taskId: pointedTask._id,
+        action: menu.action,
       });
     },
     close() {

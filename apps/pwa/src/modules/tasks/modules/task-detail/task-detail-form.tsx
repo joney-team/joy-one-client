@@ -201,6 +201,9 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
   const taskMenu = useTaskMenu({
     task,
     groupVariables: null,
+    options: {
+      offset: { x: 10 },
+    },
   });
 
   return (
@@ -224,7 +227,6 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
                 taskMenu.open({
                   action: TaskMenuAction.CHANGE_STATUS,
                   target: e,
-                  offset: { x: 10 },
                 })
               }
             >
@@ -319,7 +321,6 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
               taskMenu.open({
                 action: TaskMenuAction.CHANGE_ASSIGNEE,
                 target: e,
-                offset: { x: 10 },
               })
             }
             onRemove={() =>
@@ -350,7 +351,6 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
               taskMenu.open({
                 action: TaskMenuAction.CHANGE_PRIORITY,
                 target: e,
-                offset: { x: 10 },
               })
             }
           />
@@ -371,7 +371,6 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
               taskMenu.open({
                 action: TaskMenuAction.CHANGE_TIMELINE,
                 target: e,
-                offset: { x: 10 },
               })
             }
           />
@@ -412,7 +411,10 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
             }
             value={task.estimatedTime ? formatDuration(task.estimatedTime) : null}
             onClick={(e) => {
-              taskMenu.open({ action: TaskMenuAction.CHANGE_ESTIMATE_TIME, target: e });
+              taskMenu.open({
+                action: TaskMenuAction.CHANGE_ESTIMATE_TIME,
+                target: e,
+              });
             }}
           />
 
@@ -431,7 +433,6 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
               taskMenu.open({
                 action: TaskMenuAction.CHANGE_CUSTOMER,
                 target: e,
-                offset: { x: 10 },
               })
             }
           />
@@ -444,7 +445,6 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
               taskMenu.open({
                 action: TaskMenuAction.CHANGE_TAGS,
                 target: e,
-                offset: { x: 10 },
               })
             }
             onRemove={() =>

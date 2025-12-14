@@ -1,3 +1,5 @@
+#import "./fragmentTaskStatus.graphql"
+
 query TaskStatuses(
   $contextType: TaskStatusesContextType
   $contextId: String
@@ -6,20 +8,10 @@ query TaskStatuses(
   taskStatuses(contextType: $contextType, contextId: $contextId, mode: $mode) {
     isInherited
     statuses {
-      id
-      name
-      color
-      order
-      contextId
-      contextType
+      ...TaskStatusData
     }
     workspaceStatuses {
-      id
-      name
-      color
-      order
-      contextId
-      contextType
+      ...TaskStatusData
     }
   }
 }

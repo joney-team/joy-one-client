@@ -219,7 +219,7 @@ const GanttTaskContent: FC = () => {
                       taskMenu.open({
                         target: e.currentTarget,
                         action: TaskMenuAction.CHANGE_STATUS,
-                        offset: { y: 5 },
+                        options: { offset: { y: 5 } },
                       });
                     }}
                   >
@@ -388,9 +388,11 @@ const GanttTaskContent: FC = () => {
                 taskMenu.open({
                   action: TaskMenuAction.GANTT_TIMELINE,
                   target: e.currentTarget,
-                  offset: {
-                    x: Math.abs(e.currentTarget.getBoundingClientRect().x - e.clientX),
-                    y: -3,
+                  options: {
+                    offset: {
+                      x: Math.abs(e.currentTarget.getBoundingClientRect().x - e.clientX),
+                      y: -3,
+                    },
                   },
                 });
               }}

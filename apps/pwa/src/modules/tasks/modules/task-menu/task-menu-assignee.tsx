@@ -141,7 +141,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
   }, [textSearch, getMembers]);
 
   return (
-    <Card p={0} shadow="md" style={{ overflow: "hidden" }} withBorder>
+    <Fragment>
       <FocusTrap>
         <Group p={6}>
           <TextInput
@@ -252,6 +252,6 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
           )}
         </Stack>
       </ScrollArea.Autosize>
-    </Card>
+    </Fragment>
   );
 };

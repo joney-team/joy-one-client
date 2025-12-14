@@ -79,7 +79,9 @@ export function TableRow({
           onClose: () => {
             target?.removeAttribute("data-context-menu-opened");
           },
-          offset: { y: -5, x: e.clientX - target.getBoundingClientRect().left },
+          options: {
+            offset: { y: -5, x: e.clientX - target.getBoundingClientRect().left },
+          },
         });
       }}
     >

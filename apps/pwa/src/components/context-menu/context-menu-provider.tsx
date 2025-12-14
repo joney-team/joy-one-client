@@ -15,13 +15,12 @@ import {
 import { getId, type BaseData } from "@joy-one-client/utils/base-data";
 import { placeDropdownMenu } from "./context-menu-helpers";
 import styles from "./context-menu.module.css";
-import { zIndexes } from "@joy-one-client/config/layout";
 
 export const ContextMenuProvider = <T extends BaseData, Context = unknown>(
   props: ContextMenuProps<T, Context>
 ) => {
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const menuArgsRef = useRef<OpenContextMenuArgs<T, Context> | null>(null);
+  const menuArgsRef = useRef<OpenContextMenuArgs | null>(null);
   const targetRef = useRef<HTMLElement | null>(null);
 
   const onClose = () => {
@@ -42,25 +41,21 @@ export const ContextMenuProvider = <T extends BaseData, Context = unknown>(
     if (isSameMenu) {
       requestAnimationFrame(() => {
         if (!menuRef.current) return;
-        placeDropdownMenu({ ...args, menu: menuRef.current });
+        menuArgsRef.current = args;
+        menuRef.current.setAttribute("data-key", Date.now().toString());
+        placeDropdownMenu({ target: args.target, menu: menuRef.current }, args.options);
       });
     } else {
       onClose();
 
       requestAnimationFrame(() => {
         if (!menuRef.current) return;
-
-        menuArgsRef.current = args as OpenContextMenuArgs<T, Context>;
+        menuArgsRef.current = args;
         menuRef.current.setAttribute("data-opened", "true");
-        menuRef.current.style.setProperty(
-          "z-index",
-          args.zIndex?.toString() ?? (zIndexes.commonModals + 2).toString()
-        );
-
         requestAnimationFrame(() => {
           if (!menuRef.current) return;
           menuRef.current.classList.add(styles.AnimatedIn);
-          placeDropdownMenu({ ...args, menu: menuRef.current });
+          placeDropdownMenu({ target: args.target, menu: menuRef.current }, args.options);
         });
       });
     }

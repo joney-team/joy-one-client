@@ -132,7 +132,7 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
   }, [textSearch, getCustomers]);
 
   return (
-    <Card p={0} shadow="md" style={{ overflow: "hidden" }} withBorder>
+    <Fragment>
       <FocusTrap active={!!data && data.customers.count > 0}>
         <Group p={6}>
           <TextInput
@@ -209,6 +209,6 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
           )}
         </Stack>
       </ScrollArea.Autosize>
-    </Card>
+    </Fragment>
   );
 };

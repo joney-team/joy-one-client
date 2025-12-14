@@ -2,7 +2,7 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
-import { Button as ButtonMantine, ButtonProps as ButtonPropsMantine } from "@mantine/core";
+import { alpha, Button as ButtonMantine, ButtonProps as ButtonPropsMantine } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import { FC, MouseEvent, ReactNode, useMemo, useState } from "react";
 
@@ -55,13 +55,13 @@ const defaultStyle: Partial<
   sm: {
     iconSize: 16,
     iconSpacing: -5,
-    iconStrokeWidth: 2.2,
+    iconStrokeWidth: 1.8,
     fontSize: 12,
   },
   md: {
     iconSize: 18,
     iconSpacing: -6,
-    iconStrokeWidth: 2.2,
+    iconStrokeWidth: 1.8,
     fontSize: 14,
   },
 };
@@ -101,6 +101,15 @@ export const Button: FC<ButtonProps> = ({
     if (!rest.size) return defaultStyle["sm"];
     return defaultStyle[rest.size];
   }, [rest.size]);
+
+  const overrideStyle = useMemo(() => {
+    if (rest.color === "gray" && rest.variant === "outline") {
+      return {
+        borderColor: alpha(color("gray"), 0.3),
+      };
+    }
+    return {};
+  }, [rest.color]);
 
   if (visible === false) return null;
 
@@ -147,7 +156,13 @@ export const Button: FC<ButtonProps> = ({
       styles={{
         label: {
           fontSize: buttonStyle?.fontSize,
+          ...(rest.styles && "label" in rest.styles ? rest.styles.label : {}),
         },
+        root: {
+          ...overrideStyle,
+          ...(rest.styles && "root" in rest.styles ? rest.styles.root : {}),
+        },
+        ...rest.styles,
       }}
       color={color(rest.color ?? "primary")}
     >

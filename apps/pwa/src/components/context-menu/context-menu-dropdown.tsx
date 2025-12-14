@@ -5,17 +5,23 @@ import { useEffect, useRef, useState } from "react";
 import { useContextMenu } from "./context-menu";
 import { ContextMenuProps } from "./context-menu-types";
 
-import { placeDropdownMenu } from "./context-menu-helpers";
 import { getId } from "@joy-one-client/utils/base-data";
+import { placeDropdownMenu } from "./context-menu-helpers";
 
 export const ContextMenuDropdown = ({
   id,
   dropdown: Dropdown,
   onClose,
   root,
-}: Pick<ContextMenuProps, "dropdown" | "root"> & { onClose: () => void; id: string }) => {
-  const [menuId, setMenuId] = useState<string | null>(null);
+  options,
+}: Pick<ContextMenuProps, "dropdown" | "root" | "options"> & {
+  onClose: () => void;
+  id: string;
+}) => {
   const { menuRef, close, menuArgsRef } = useContextMenu();
+  const [version, setVersion] = useState(0);
+  const [menuId, setMenuId] = useState<string | null>(null);
+
   const clickOutsideToCloseEnabled = useRef(true);
 
   // Close the menu when the escape key is pressed
@@ -41,12 +47,20 @@ export const ContextMenuDropdown = ({
             newValue === "true" && menuArgsRef.current ? getId(menuArgsRef.current?.data) : null
           );
         }
+
+        if (
+          menuRef.current &&
+          mutation.type === "attributes" &&
+          mutation.attributeName === "data-key"
+        ) {
+          setVersion((v) => v + 1);
+        }
       });
     });
 
     observer.observe(menuRef.current, {
       attributes: true,
-      attributeFilter: ["data-opened"],
+      attributeFilter: ["data-opened", "data-key"],
     });
 
     return () => {
@@ -60,7 +74,13 @@ export const ContextMenuDropdown = ({
 
     const placeMenu = () => {
       if (!menuRef.current || !menuArgsRef.current) return;
-      placeDropdownMenu({ ...menuArgsRef.current, menu: menuRef.current });
+      placeDropdownMenu(
+        { target: menuArgsRef.current.target, menu: menuRef.current },
+        {
+          ...options,
+          ...menuArgsRef.current.options,
+        }
+      );
     };
 
     // Use requestAnimationFrame to ensure the display change is applied before animation
@@ -104,7 +124,7 @@ export const ContextMenuDropdown = ({
 
   return (
     <Dropdown
-      key={getId(menuArgsRef.current.data)}
+      key={getId(menuArgsRef.current.data) + version}
       data={menuArgsRef.current.data}
       context={menuArgsRef.current.context}
       onClose={close}

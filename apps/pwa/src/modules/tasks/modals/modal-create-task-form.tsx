@@ -6,6 +6,7 @@ import { ContentEditable } from "@/components/content-editable/content-editable"
 import { Editor } from "@/components/editor/editor";
 import { TaskStatusesContextType } from "@/graphql/enums.graphql";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
+import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useLazyQuery, useMutation } from "@apollo/client/react";
@@ -17,13 +18,11 @@ import {
   IconCalendar,
   IconFlag,
   IconFlagFilled,
-  IconPlus,
   IconStackPush,
   IconTags,
   IconTagsFilled,
   IconUser,
   IconUserFilled,
-  IconUsers,
 } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useMemo } from "react";
 import { TaskTimeline } from "../components/task-timeline";
@@ -41,8 +40,6 @@ import { useTaskMenu } from "../modules/task-menu/task-menu";
 import { TaskMenuAction } from "../modules/task-menu/task-menu-types";
 import { taskPriorities } from "../task-constants";
 import { DefaultTaskStatusId, TaskPriority } from "../tasks-types";
-import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
-import { zIndexes } from "@joy-one-client/config/layout";
 
 export interface CreateTaskFormProps {
   initial?: Partial<TaskDataFragment>;
@@ -125,6 +122,9 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
     updateTask: async (task) => {
       form.setValues({ ...form.values, ...task });
     },
+    options: {
+      offset: { y: 3 },
+    },
   });
 
   const taskStatuses = useTaskStatuses({
@@ -190,7 +190,6 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
                   taskMenu.open({
                     action: TaskMenuAction.CHANGE_STATUS,
                     target: e.currentTarget,
-                    offset: { y: 3 },
                   })
                 }
                 leftSection={
@@ -214,7 +213,6 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
                 taskMenu.open({
                   action: TaskMenuAction.CHANGE_ASSIGNEE,
                   target: e.currentTarget,
-                  offset: { y: 3 },
                 })
               }
               leftIcon={
@@ -241,7 +239,6 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
                 taskMenu.open({
                   action: TaskMenuAction.CHANGE_TIMELINE,
                   target: e.currentTarget,
-                  offset: { y: 3 },
                 })
               }
               leftIcon={IconCalendar}
@@ -267,7 +264,6 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
                 taskMenu.open({
                   action: TaskMenuAction.CHANGE_PRIORITY,
                   target: e.currentTarget,
-                  offset: { y: 3 },
                 })
               }
               leftIcon={form.values.priority ? IconFlagFilled : IconFlag}
@@ -293,7 +289,6 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
                 taskMenu.open({
                   action: TaskMenuAction.CHANGE_TAGS,
                   target: e.currentTarget,
-                  offset: { y: 3 },
                 })
               }
               leftIcon={form.values.priority ? IconTagsFilled : IconTags}

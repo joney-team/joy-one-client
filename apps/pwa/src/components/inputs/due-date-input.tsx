@@ -193,9 +193,9 @@ export const DueDateInput: FC<DueDateInputProps> = (props) => {
         <Group align="start">
           <Stack
             flex={1}
-            gap={10}
+            gap="xs"
             py={10}
-            bg={configs.backgroundColors[colorScheme]}
+            bg="var(--mantine-color-default-hover)"
             mb={-10}
             ml={-10}
             mr={-16}

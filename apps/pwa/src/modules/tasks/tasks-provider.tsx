@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "@/hooks/use-router";
-import { TaskPriority, TasksContext } from "@/modules/tasks/tasks-types";
+import { TasksContext } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { StorageKey } from "@/types";
 import { NetworkStatus } from "@apollo/client";
@@ -22,12 +22,6 @@ export interface TasksState {
   selectedView?: TaskView;
   variables?: TasksQueryVariables;
   showClosed?: boolean;
-
-  // Remove
-  assigneeUserIds?: string[];
-  partnerIds?: string[];
-  priority?: TaskPriority;
-  tagIds?: string[];
 }
 
 const views = Object.values(TaskView);
