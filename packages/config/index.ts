@@ -2,7 +2,6 @@ export default {
   ENV: "development",
   PUBLIC_URL: "http://localhost:3000",
   APP_URL: "http://localhost:3000",
-  API_TOOLS_URL: "http://localhost:4000",
   API_CLIENT_SIDE_URL: "http://localhost:4000",
   API_SERVER_SIDE_URL: "http://localhost:4000",
   SECRET_KEY: "wzsjaledyu",

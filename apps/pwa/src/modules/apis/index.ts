@@ -13,17 +13,7 @@ export const api = new ApiInstance({
   getWorkspaceId: () => getLocalStorage(StorageKey.WORKSPACE_ID),
   getDeviceId: () => getLocalStorage(StorageKey.DEVICE_ID),
   getSessionId: () => getGlobal()._sessionId,
-  getLocale: () => getClientLocale()
+  getLocale: () => getClientLocale(),
 });
-
-export const apiTools = new ApiInstance({
-  baseURL: environment.API_TOOLS_URL,
-  getToken: async () => getAccessToken(),
-  retrieveToken: async () => retrieveAccessToken(),
-  getWorkspaceId: () => getLocalStorage(StorageKey.WORKSPACE_ID),
-  getDeviceId: () => getLocalStorage(StorageKey.DEVICE_ID),
-  getSessionId: () => getGlobal()._sessionId,
-  getLocale: () => getClientLocale()
-})
 
 export const socket = io(environment.API_CLIENT_SIDE_URL.replace("http", "ws"));

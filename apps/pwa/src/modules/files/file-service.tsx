@@ -1,8 +1,8 @@
 "use client";
 
+import { FileType } from "@/graphql/enums.graphql";
 import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   IMAGE_MIME_TYPE,
@@ -18,14 +18,12 @@ import {
   IconPdf,
   IconPhoto,
   IconTrash,
-  IconUpload,
   IconVideo,
 } from "@tabler/icons-react";
 import imageCompression, { Options } from "browser-image-compression";
-import { apiTools } from "../apis";
-import { FileEntity, UploadFile } from "./file-types";
+import { api } from "../apis";
+import { FileEntity } from "./file-types";
 import { parseFile } from "./files-utils";
-import { FileType } from "@/graphql/enums.graphql";
 
 export function getFileExtension(fileName: string | File) {
   return parseFile(typeof fileName === "string" ? fileName : fileName.name).extension;
@@ -49,18 +47,18 @@ export function getMineTypeAccept(fileType: FileType[]) {
 }
 
 export async function getFiles(query?: any) {
-  return apiTools.get<ResponseList<FileEntity>>(`/files`, { params: query });
+  return api.get<ResponseList<FileEntity>>(`/files`, { params: query });
 }
 
 export async function removeFileFromRelativePath(relativePath: string) {
-  return apiTools.delete(`/files/paths/${relativePath}`);
+  return api.delete(`/files/paths/${relativePath}`);
 }
 
 export async function removeFile(fileId: string) {
   return onActionLoad({
     name: <Trans>Remove file</Trans>,
     icon: IconTrash,
-    process: () => apiTools.delete(`/files/${fileId}`),
+    process: () => api.delete(`/files/${fileId}`),
   });
 }
 
@@ -74,7 +72,7 @@ export async function reducePhotoSize(file: File, option: Options) {
 
 export async function getFileInfo(rawUrl: string) {
   const fileName = rawUrl.split("/").pop();
-  return apiTools.get<FileEntity>(`/files/${fileName?.split(".")[0]}/info`);
+  return api.get<FileEntity>(`/files/${fileName?.split(".")[0]}/info`);
 }
 
 export const fileTypeIcons: Record<FileType, Icon> = {
