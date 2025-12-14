@@ -330,8 +330,9 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
   useEffect(() => {
     if (isGrabbingRef.current) {
-      const el = refs.bodyContainer.current;
-      if (!el) return;
+      const bodyContainer = refs.bodyContainer.current;
+      const sidebarContainer = refs.sidebarContainer.current;
+      if (!bodyContainer || !sidebarContainer) return;
 
       let isGrabbingEventEnabled = false;
 
@@ -346,11 +347,11 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
         isGrabbingEventEnabled = true;
         refs.root.current?.setAttribute("gantt-event", "grabbing");
 
-        startX = e.pageX - el.offsetLeft;
-        startY = e.pageY - el.offsetTop;
+        startX = e.pageX - bodyContainer.offsetLeft;
+        startY = e.pageY - bodyContainer.offsetTop;
 
-        scrollLeft = el.scrollLeft;
-        scrollTop = el.scrollTop;
+        scrollLeft = bodyContainer.scrollLeft;
+        scrollTop = bodyContainer.scrollTop;
       };
 
       const onMouseUp = (e: MouseEvent) => {
@@ -365,22 +366,26 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
         e.preventDefault();
 
-        const x = e.pageX - el.offsetLeft;
+        const x = e.pageX - bodyContainer.offsetLeft;
         const walkX = x - startX;
-        const y = e.pageY - el.offsetTop;
+        const y = e.pageY - bodyContainer.offsetTop;
         const walkY = y - startY;
-        el.scrollLeft = scrollLeft - walkX;
-        el.scrollTop = scrollTop - walkY;
+
+        bodyContainer.scrollLeft = scrollLeft - walkX;
+        bodyContainer.scrollTop = scrollTop - walkY;
+
+        sidebarContainer.scrollTop = scrollTop - walkY;
+        sidebarContainer.scrollLeft = scrollLeft - walkX;
       };
 
       window.addEventListener("mousedown", onMouseDown);
       window.addEventListener("mouseup", onMouseUp);
-      el.addEventListener("mousemove", onMouseMove);
+      bodyContainer.addEventListener("mousemove", onMouseMove);
 
       return () => {
         window.removeEventListener("mousedown", onMouseDown);
         window.removeEventListener("mouseup", onMouseUp);
-        el.removeEventListener("mousemove", onMouseMove);
+        bodyContainer.removeEventListener("mousemove", onMouseMove);
       };
     }
   }, [isGrabbingRef.current, version]);
