@@ -2,7 +2,16 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { Group, MantineColor, Stack, Text } from "@mantine/core";
-import { Icon, IconClockHour3, IconMaximize, IconNavigation, ReactNode } from "@tabler/icons-react";
+import {
+  Icon,
+  IconClockHour3,
+  IconMaximize,
+  IconNavigation,
+  IconNavigationFilled,
+  IconSwipeDown,
+  IconSwipeDownFilled,
+  ReactNode,
+} from "@tabler/icons-react";
 import { FC } from "react";
 import { TaskMenuComponent } from "./task-menu-types";
 
@@ -62,7 +71,7 @@ export const TaskMenuGanttTimeline: TaskMenuComponent = ({
       />
 
       <MenuItem
-        icon={IconNavigation}
+        icon={IconSwipeDown}
         label={<Trans>Scroll to start date</Trans>}
         disabled={!task.startDate}
         onClick={() => {
@@ -73,7 +82,7 @@ export const TaskMenuGanttTimeline: TaskMenuComponent = ({
       />
 
       <MenuItem
-        icon={IconNavigation}
+        icon={IconSwipeDownFilled}
         label={<Trans>Scroll to finish date</Trans>}
         disabled={!task.dueDate}
         onClick={() => {
