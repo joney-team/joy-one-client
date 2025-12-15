@@ -598,7 +598,7 @@ type Query {
   tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): TasksPaginated!
   tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!]): Float!
   userWorkspaceMember: WorkspaceMember!
-  workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float): WorkspaceMembersPaginated!
+  workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float, userId: [String!]): WorkspaceMembersPaginated!
 }
 
 input RegisterDeviceDto {

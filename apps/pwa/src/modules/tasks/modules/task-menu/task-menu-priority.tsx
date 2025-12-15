@@ -56,7 +56,7 @@ export const TaskMenuPriority: TaskMenuComponent = ({ task, groupVariables, upda
       >
         <IconFlagOff size={16} color={color("gray.4")} />
         <Text fz={14}>
-          <Trans>No priority</Trans>
+          <Trans>Clear priority</Trans>
         </Text>
       </Group>
     </Stack>

@@ -3,12 +3,14 @@
 query WorkspaceMembers(
   $ignoreSelf: Boolean
   $ids: [String!]
+  $userId: [String!]
   $limit: Float
   $offset: Float
 ) {
   workspaceMembers(
     ignoreSelf: $ignoreSelf
     ids: $ids
+    userId: $userId
     limit: $limit
     offset: $offset
   ) {

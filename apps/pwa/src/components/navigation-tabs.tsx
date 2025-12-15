@@ -4,11 +4,11 @@ import { useRouter } from "@/hooks/use-router";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { ButtonProps, Group, ScrollArea } from "@mantine/core";
+import { Group, ScrollArea } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import Link from "next/link";
-import { ComponentType, FC, Fragment, ReactNode } from "react";
-import { Button } from "./buttons/button";
+import { ComponentType, FC, ReactNode } from "react";
+import { Button, ButtonProps } from "./buttons/button";
 
 export const navigationTabsConfig = {
   height: 44,
@@ -30,11 +30,13 @@ export interface NavigationTabsProps {
 const buttonProps: ButtonProps = {
   variant: "subtle",
   size: "sm",
-  color: "var(--mantine-color-text)",
+  color: "gray",
+  c: "var(--mantine-color-text)",
   radius: 5,
   py: 0,
   px: 8,
   fw: 500,
+  fz: 13,
 };
 
 export const NavigationTabs: FC<NavigationTabsProps> = (props) => {

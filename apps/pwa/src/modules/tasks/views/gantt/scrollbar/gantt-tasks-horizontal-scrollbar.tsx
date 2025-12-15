@@ -180,7 +180,6 @@ export const GanttTasksHorizontalScrollbar: FC = () => {
         style={{
           position: "relative",
           backgroundColor: "var(--mantine-color-disabled)",
-          borderRadius: "4px",
           cursor: shouldShowScrollbar ? "pointer" : "default",
         }}
         onClick={handleTrackClick}

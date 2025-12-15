@@ -1,12 +1,9 @@
-import {
-  ContextMenuProps,
-  OpenContextMenuArgs,
-} from "@/components/context-menu/context-menu-types";
-import { FC } from "react";
-import { type TaskDataFragment } from "../../graphql/fragmentTask.graphql";
-import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
-import { UpdateTask } from "../../hooks/use-update-tasks";
-import { PlaceDropdownMenuOptions } from "@/components/context-menu/context-menu-helpers";
+import type { PlaceDropdownMenuOptions } from "@/components/context-menu/context-menu-helpers";
+import type { ContextMenuProps } from "@/components/context-menu/context-menu-types";
+import type { FC } from "react";
+import type { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import type { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import type { UpdateTask } from "../../hooks/use-update-tasks";
 
 export enum TaskMenuAction {
   CHANGE_STATUS = "CHANGE_STATUS",

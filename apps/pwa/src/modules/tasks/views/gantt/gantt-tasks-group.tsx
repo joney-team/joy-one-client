@@ -54,11 +54,12 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
 
   const groupVariables = useMemo<TasksQueryVariables>(() => {
     return {
+      ...state.variables,
       folderId: folder?._id ?? "none",
       parentId: "root",
       isProgressOnly: state.showClosed ? false : true,
     };
-  }, [folder?._id, state.showClosed]);
+  }, [folder?._id, state.showClosed, state.variables]);
 
   const { getTasks, tasks, loading, count } = useTasksQuery({ variables: groupVariables });
 

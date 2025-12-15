@@ -5,7 +5,7 @@ export const ganttConfig = {
   rangeDates: 30,
   droppableIndicatorHeight: 3,
   scrollbarSize: {
-    horizontal: 20,
-    vertical: 16,
+    horizontal: 12,
+    vertical: 12,
   },
 };

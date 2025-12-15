@@ -4,26 +4,22 @@ import { Button } from "@/components/buttons/button";
 import { type ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Group, Menu } from "@mantine/core";
-import {
-  IconChecks,
-  IconEdit,
-  IconEye,
-  IconEyeCheck,
-  IconFilter,
-  IconFilterFilled,
-  IconFlag,
-  IconRefresh,
-  IconUsers,
-  IconX,
-} from "@tabler/icons-react";
+import { Group } from "@mantine/core";
+import { IconChecks, IconEdit, IconFlag, IconFlagFilled, IconUsers } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useRef, type FC } from "react";
+import { useEffect, useRef, type FC } from "react";
 import { useFolderStatuses } from "../hooks/use-task-statuses";
 import { useTaskMenu } from "../modules/task-menu/task-menu";
 import { TaskMenuAction } from "../modules/task-menu/task-menu-types";
 import { useTasks } from "../tasks-context";
-import { useDisclosure } from "@mantine/hooks";
+import { useQuery } from "@apollo/client/react";
+import QUERY_WORKSPACE_MEMBERS, {
+  type WorkspaceMembersQuery,
+  type WorkspaceMembersQueryVariables,
+} from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
+import { Avatar } from "@/components/avatar";
+import { taskPriorities } from "../task-constants";
+import { WithClearable } from "@/components/with-clearable/with-clearable";
 
 const ModalCreateTask = dynamic(
   () => import("@/modules/tasks/modals/modal-create-task").then((mod) => mod.ModalCreateTask),
@@ -36,30 +32,27 @@ const ModalCreateTask = dynamic(
 export const TaskTabActions: FC = () => {
   const { activatedFolder, setState, state } = useTasks();
   const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
-  const [opened, { open, close }] = useDisclosure(false);
-
   const statuses = useFolderStatuses(activatedFolder?._id);
 
-  const filterKeys = useMemo(() => {
-    return Object.keys(state.variables ?? {}).filter((v) => {
-      if (!state.variables) return false;
-      return (
-        state.variables[v as keyof typeof state.variables] !== undefined &&
-        state.variables[v as keyof typeof state.variables] !== null
-      );
-    });
-  }, [state.variables]);
+  const workspaceMembers = useQuery<WorkspaceMembersQuery, WorkspaceMembersQueryVariables>(
+    QUERY_WORKSPACE_MEMBERS,
+    {
+      skip: !state.variables?.assigneeUserIds || state.variables?.assigneeUserIds.length === 0,
+      variables: {
+        userId: state.variables?.assigneeUserIds ?? [],
+      },
+    }
+  );
 
   const menuTask = useTaskMenu({
     task: {
       _id: "filter-tasks",
       statuses: [...statuses.inprogress, ...statuses.closed],
+      assigneeUsers: workspaceMembers.data?.workspaceMembers?.data,
     },
     options: {
-      position: "left",
       offset: {
-        x: 10,
-        y: -4,
+        y: 5,
       },
     },
     groupVariables: null,
@@ -69,13 +62,22 @@ export const TaskTabActions: FC = () => {
       }
 
       if ("assigneeUsers" in e) {
-        setState((s) => ({
-          ...s,
-          variables: {
-            ...s.variables,
-            assigneeUserIds: e.assigneeUsers?.map((user) => user.userId),
-          },
-        }));
+        setState((s) => {
+          return {
+            ...s,
+            variables: {
+              ...s.variables,
+              assigneeUserIds:
+                e.assigneeUsers && e.assigneeUsers.length > 0
+                  ? e.assigneeUsers?.map((user) => user.userId)
+                  : null,
+            },
+          };
+        });
+      }
+
+      if ("priority" in e) {
+        setState((s) => ({ ...s, variables: { ...s.variables, priority: e.priority } }));
       }
     },
   });
@@ -88,73 +90,69 @@ export const TaskTabActions: FC = () => {
 
   return (
     <Group justify="end" wrap="nowrap" flex={1} px="md" gap={5}>
+      <WithClearable
+        enabled={!!state.variables?.assigneeUserIds && state.variables?.assigneeUserIds.length > 0}
+        onClear={() =>
+          setState((s) => ({ ...s, variables: { ...s.variables, assigneeUserIds: null } }))
+        }
+      >
+        <Button
+          variant="outline"
+          color={(state.variables?.assigneeUserIds ?? []).length > 0 ? "primary" : "gray"}
+          h={28}
+          px={8}
+          leftIcon={IconUsers}
+          onClick={(e) => {
+            menuTask.open({ action: TaskMenuAction.CHANGE_ASSIGNEE, target: e.currentTarget });
+          }}
+        >
+          {workspaceMembers.data?.workspaceMembers &&
+          workspaceMembers.data?.workspaceMembers.data.length > 0 ? (
+            <Group gap={3}>
+              {workspaceMembers.data?.workspaceMembers.data.map((member) => (
+                <Avatar key={member._id} user={member} size={20} />
+              ))}
+            </Group>
+          ) : (
+            <Trans>Assignees</Trans>
+          )}
+        </Button>
+      </WithClearable>
+
+      <WithClearable
+        enabled={!!state.variables?.priority}
+        onClear={() => setState((s) => ({ ...s, variables: { ...s.variables, priority: null } }))}
+      >
+        <Button
+          variant="outline"
+          color={
+            state.variables?.priority ? taskPriorities[state.variables.priority]?.color : "gray"
+          }
+          h={28}
+          px={8}
+          leftIcon={state.variables?.priority ? IconFlagFilled : IconFlag}
+          onClick={(e) => {
+            menuTask.open({ action: TaskMenuAction.CHANGE_PRIORITY, target: e.currentTarget });
+          }}
+        >
+          {state.variables?.priority ? (
+            taskPriorities[state.variables.priority]?.label()
+          ) : (
+            <Trans>Priority</Trans>
+          )}
+        </Button>
+      </WithClearable>
+
       <Button
         variant="outline"
         color={state.showClosed ? "primary" : "gray"}
         h={28}
+        px={8}
         leftIcon={IconChecks}
         onClick={() => setState((s) => ({ ...s, showClosed: !Boolean(s.showClosed) }))}
       >
         {state.showClosed ? <Trans>Hide closed</Trans> : <Trans>Show closed</Trans>}
       </Button>
-
-      <Menu
-        closeOnItemClick={false}
-        closeOnClickOutside={!menuTask.isOpened}
-        onClose={close}
-        opened={opened}
-      >
-        <Menu.Target>
-          <Button
-            h={28}
-            variant="outline"
-            color={filterKeys.length > 0 ? "primary" : "gray"}
-            px={8}
-            leftIcon={filterKeys.length > 0 ? IconFilterFilled : IconFilter}
-            onClick={open}
-          >
-            <Trans>Filter</Trans>
-          </Button>
-        </Menu.Target>
-        <Menu.Dropdown>
-          <Menu.Item
-            onMouseEnter={(e) => {
-              menuTask.open({
-                target: e.currentTarget,
-                action: TaskMenuAction.CHANGE_PRIORITY,
-                onClose: () => close(),
-              });
-            }}
-            leftSection={<IconFlag size={16} />}
-            fz={14}
-          >
-            <Trans>Priority</Trans>
-          </Menu.Item>
-          <Menu.Item
-            onMouseEnter={(e) => {
-              menuTask.open({ target: e.currentTarget, action: TaskMenuAction.CHANGE_ASSIGNEE });
-            }}
-            leftSection={<IconUsers size={16} />}
-            fz={14}
-          >
-            <Trans>Assignees</Trans>
-          </Menu.Item>
-
-          <Menu.Divider />
-
-          <Menu.Item
-            onMouseEnter={() => menuTask.close()}
-            onClick={() => {
-              setState((s) => ({ ...s, variables: undefined }));
-            }}
-            leftSection={<IconRefresh size={16} />}
-            fz={14}
-            disabled={filterKeys.length === 0}
-          >
-            <Trans>Clear filter</Trans>
-          </Menu.Item>
-        </Menu.Dropdown>
-      </Menu>
 
       <Button
         h={28}

@@ -1,0 +1,14 @@
+.WithClearable {
+  & .WithClearableButton {
+    position: absolute;
+    top: -4px;
+    right: 0;
+    display: none;
+  }
+
+  &:hover {
+    & .WithClearableButton {
+      display: block;
+    }
+  }
+}

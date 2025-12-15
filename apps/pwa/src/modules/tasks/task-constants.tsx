@@ -1,7 +1,8 @@
 import { t } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
 import { TaskStatusDataFragment } from "./graphql/fragmentTaskStatus.graphql";
-import { DefaultTaskStatusId, TaskPriority } from "./tasks-types";
+import { DefaultTaskStatusId } from "./tasks-types";
+import { TaskPriority } from "@/graphql/enums.graphql";
 
 export const taskPriorities: Record<
   TaskPriority,
@@ -10,19 +11,19 @@ export const taskPriorities: Record<
     color: MantineColor;
   }
 > = {
-  [TaskPriority.LOW]: {
+  [TaskPriority.Low]: {
     label: () => t`Low`,
     color: "gray",
   },
-  [TaskPriority.MEDIUM]: {
+  [TaskPriority.Medium]: {
     label: () => t`Medium`,
     color: "primary",
   },
-  [TaskPriority.HIGH]: {
+  [TaskPriority.High]: {
     label: () => t`High`,
     color: "orange",
   },
-  [TaskPriority.URGENT]: {
+  [TaskPriority.Urgent]: {
     label: () => t`Urgent`,
     color: "red",
   },

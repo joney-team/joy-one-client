@@ -908,6 +908,7 @@ export type QueryWorkspaceMembersArgs = {
   ignoreSelf?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  userId?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type RegisterDeviceDto = {

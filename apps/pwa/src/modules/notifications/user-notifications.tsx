@@ -135,7 +135,7 @@ export const UserNotifications: FC = () => {
           size={8}
         >
           <IconBell
-            size={22}
+            size={21}
             strokeWidth={1.5}
             className={classNames({
               animTada: !!stat && stat.unListViewed > 0,

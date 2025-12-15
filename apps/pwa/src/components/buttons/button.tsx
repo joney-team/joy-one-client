@@ -6,9 +6,9 @@ import { alpha, Button as ButtonMantine, ButtonProps as ButtonPropsMantine } fro
 import { Icon } from "@tabler/icons-react";
 import { FC, MouseEvent, ReactNode, useMemo, useState } from "react";
 
-type ButtonSize = NonNullable<ButtonProps["size"]>;
+type ButtonSize = NonNullable<ButtonPropsMantine["size"]>;
 
-export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
+export interface ButtonProps extends Omit<ButtonPropsMantine, "fz"> {
   id?: string;
   children?: ReactNode;
   component?: any;
@@ -16,11 +16,11 @@ export interface ButtonProps extends Omit<ButtonPropsMantine, "isGradient"> {
   onClick?: (e: MouseEvent<HTMLButtonElement>) => unknown;
   weight?: string | number;
   type?: "button" | "submit" | "reset";
-  isGradient?: boolean;
   leftIcon?: Icon;
   rightIcon?: Icon;
   visible?: boolean;
   label?: ReactNode;
+  fz?: number;
 }
 
 const defaultStyle: Partial<
@@ -72,7 +72,6 @@ export const Button: FC<ButtonProps> = ({
   component,
   href,
   onClick: propsOnClick,
-  isGradient,
   leftIcon: LeftIcon,
   rightIcon: RightIcon,
   visible,
@@ -143,19 +142,9 @@ export const Button: FC<ButtonProps> = ({
       loading={isLoading}
       disabled={isLoading || rest.disabled}
       onClick={onClick}
-      gradient={
-        isGradient
-          ? {
-              from: color("primary.8"),
-              to: color("primary.6"),
-              deg: 45,
-            }
-          : rest.gradient
-      }
-      variant={isGradient ? "gradient" : rest.variant}
       styles={{
         label: {
-          fontSize: buttonStyle?.fontSize,
+          fontSize: rest.fz || buttonStyle?.fontSize,
           ...(rest.styles && "label" in rest.styles ? rest.styles.label : {}),
         },
         root: {

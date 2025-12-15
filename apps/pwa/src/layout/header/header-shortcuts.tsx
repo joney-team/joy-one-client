@@ -196,7 +196,7 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
               size="xs"
               onClick={open}
               leftIcon={IconCalculator}
-              px="xs"
+              px={5}
             >
               <Trans>Loan calculator</Trans>
             </Button>
@@ -208,7 +208,7 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
         <Menu trigger="hover">
           <Menu.Target>
             <Group>
-              <Button px="xs" id="create-credit" size="xs" leftIcon={IconBolt} variant="subtle">
+              <Button px={5} id="create-credit" size="xs" leftIcon={IconBolt} variant="subtle">
                 <Trans>Quick Creation</Trans>
               </Button>
             </Group>
