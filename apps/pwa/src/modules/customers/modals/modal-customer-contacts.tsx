@@ -155,7 +155,6 @@ export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => 
             size="compact-sm"
             leftIcon={IconPlus}
             radius={200}
-            fz={em(14)}
             onClick={() => {
               handlers.append({ name: "", phones: [] });
             }}

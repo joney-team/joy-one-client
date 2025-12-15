@@ -8,7 +8,7 @@ import {
   WorkspaceModule,
 } from "@/modules/workspaces/workspace-modules";
 import { Trans } from "@lingui/react/macro";
-import { Combobox, em, Group, Text, ThemeIcon } from "@mantine/core";
+import { Combobox, Group, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 
@@ -61,8 +61,6 @@ export const WorkspaceModuleSelector: FC<WorkspaceModuleSelectorProps> = (props)
             variant="light"
             radius={100}
             leftIcon={IconPlus}
-            fz={em(14)}
-            fw={500}
             onClick={toggle}
           >
             <Trans>Select</Trans>

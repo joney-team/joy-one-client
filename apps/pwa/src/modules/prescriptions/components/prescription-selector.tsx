@@ -7,7 +7,7 @@ import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity, ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { Combobox, em, Group, Text } from "@mantine/core";
+import { Combobox, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
@@ -51,7 +51,6 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
             variant="light"
             radius={100}
             leftIcon={IconPlus}
-            fz={em(14)}
             fw={500}
             onClick={toggle}
           >

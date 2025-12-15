@@ -1,32 +1,37 @@
 "use client";
 
-import { ContentEditable } from "@/components/content-editable/content-editable";
 import { useRouter } from "@/hooks/use-router";
-import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
-import { onRemoveTaskTagFolder } from "@/modules/tags/tags-service";
+import { type ModalTagFormRef } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
+import { updateTaskPath } from "@/modules/tasks/tasks-route-helpers";
+import { useColor } from "@/modules/theme/use-color";
+import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, alpha, Card, Group, Menu, Text, Tooltip } from "@mantine/core";
-import { useDebouncedCallback, useHover } from "@mantine/hooks";
-import { IconDots, IconFolder, IconLogout2, IconPencil, IconTrash } from "@tabler/icons-react";
-import { FC } from "react";
+import { useHover } from "@mantine/hooks";
+import { IconDots, IconFolder, IconLogout2, IconPencil } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
+import { FC, useRef } from "react";
+
+const ModalTagForm = dynamic(
+  () => import("@/modules/tags/modals/modal-tag-form").then((mod) => mod.ModalTagForm),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
   const router = useRouter();
-  const tagFolders = useTaskFolders();
+  const color = useColor();
   const hover = useHover();
-
-  const onChangeTaskFolderName = useDebouncedCallback((name: string) => {
-    if (!tagFolders.activatedFolder) return;
-    // TODO:
-    // tags.update(tagFolders.activatedFolder._id, { ...tagFolders.activatedFolder, name });
-  }, 500);
+  const { activatedFolder } = useTaskFolders();
+  const modalTagFormRef = useRef<ModalTagFormRef>(null);
 
   const onExitFolder = () => {
-    // TODO:
-    // tagFolders.exitFolder();
+    router.push(updateTaskPath({ slug: "d" }));
   };
 
   if (!router.pathname.startsWith("/tasks")) return null;
@@ -34,116 +39,78 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
   return (
     <Group gap={8}>
       <TaskTagFolderSelector
-        excludeIds={[tagFolders.activatedFolder?._id || ""]}
+        excludeIds={[activatedFolder?._id || ""]}
         onSelect={(tag) => {
-          // TODO:
-          // if (tag) tagFolders.openFolder(tag);
-          // else tagFolders.exitFolder();
+          if (tag) router.push(updateTaskPath({ slug: tag.slug }));
+          else onExitFolder();
         }}
         render={(ctx) => {
           return (
             <Group gap={0}>
               <Card
-                p={3}
+                px={3}
+                py={1}
                 withBorder={false}
                 shadow="none"
                 ref={hover.ref}
+                className="clickable"
                 bg={
                   hover.hovered
-                    ? tagFolders.activatedFolder
-                      ? alpha(tagFolders.activatedFolder?.color || "dark", 0.1)
+                    ? activatedFolder
+                      ? alpha(activatedFolder?.color || "dark", 0.1)
                       : "gray.1"
                     : undefined
                 }
+                onClick={ctx.toggle}
               >
                 <Group gap={0}>
                   <Tooltip label={<Trans>Select folder</Trans>} position="right">
-                    <ActionIcon
-                      variant="subtle"
-                      color={tagFolders.activatedFolder?.color || "dark"}
-                      onClick={ctx.toggle}
-                      style={{ cursor: "pointer" }}
-                    >
+                    <ActionIcon variant="transparent" color={activatedFolder?.color || "dark"}>
                       <IconFolder size={18} strokeWidth={2} />
                     </ActionIcon>
                   </Tooltip>
 
-                  {!!tagFolders.activatedFolder ? (
-                    <Group pr={8}>
-                      <ContentEditable
-                        fz={13}
-                        fw={500}
-                        value={tagFolders.activatedFolder.name}
-                        onChange={(value) => {
-                          if (!value || typeof value !== "string") return;
-                          onChangeTaskFolderName(value);
-                        }}
-                      />
-                    </Group>
-                  ) : (
-                    <Text fz={13} fw={500} pr={5} style={{ cursor: "default" }}>
-                      <Trans>All tasks</Trans>
-                    </Text>
-                  )}
+                  <Text fz={13} fw={500} pr={5}>
+                    {activatedFolder?.name ?? <Trans>All tasks</Trans>}
+                  </Text>
                 </Group>
               </Card>
 
-              {tagFolders.activatedFolder && (
+              {activatedFolder && (
                 <Menu>
                   <Menu.Target>
-                    <ActionIcon variant="subtle" color="dark">
+                    <ActionIcon variant="subtle" color="gray">
                       <IconDots strokeWidth={1.5} size={16} />
                     </ActionIcon>
                   </Menu.Target>
 
                   <Menu.Dropdown>
                     <Menu.Item
-                      leftSection={<IconLogout2 strokeWidth={2} size={18} />}
+                      leftSection={<IconPencil strokeWidth={2} size={18} />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        modalTagFormRef.current?.open({
+                          tag: activatedFolder,
+                          type: TagType.TASK_FOLDER,
+                        });
+                      }}
+                    >
+                      <Text fz={14}>
+                        <Trans>Edit folder</Trans>
+                      </Text>
+                    </Menu.Item>
+
+                    <Menu.Item
+                      leftSection={<IconLogout2 strokeWidth={2} size={18} color={color("gray")} />}
                       onClick={(e) => {
                         e.stopPropagation();
                         onExitFolder();
                       }}
                     >
-                      <Text fz={14}>
+                      <Text fz={14} c="gray">
                         <Trans>Exit</Trans>
                       </Text>
                     </Menu.Item>
-
-                    <ModalTagForm>
-                      {(modalTagForm) => (
-                        <Menu.Item
-                          leftSection={<IconPencil strokeWidth={2} size={18} />}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (!tagFolders.activatedFolder) return;
-
-                            modalTagForm.open({
-                              tag: tagFolders.activatedFolder,
-                              type: TagType.TASK_FOLDER,
-                            });
-                          }}
-                        >
-                          <Text fz={14}>
-                            <Trans>Edit</Trans>
-                          </Text>
-                        </Menu.Item>
-                      )}
-                    </ModalTagForm>
-
-                    {/* TODO: */}
-                    {/* <Menu.Item
-                      leftSection={<IconTrash strokeWidth={2} size={18} />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRemoveTaskTagFolder(tagFolders.activatedFolder!, () => {
-                          tagFolders.exitFolder();
-                        });
-                      }}
-                    >
-                      <Text fz={14}>
-                        <Trans>Remove</Trans>
-                      </Text>
-                    </Menu.Item> */}
                   </Menu.Dropdown>
                 </Menu>
               )}
@@ -151,6 +118,8 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
           );
         }}
       />
+
+      <ModalTagForm ref={modalTagFormRef} />
     </Group>
   );
 };

@@ -5,12 +5,12 @@ import { searchArray } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceRoleEntity } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { Checkbox, Combobox, em, Group, Text } from "@mantine/core";
+import { Trans } from "@lingui/react/macro";
+import { Checkbox, Combobox, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Circle } from "../../../components/circle";
 import { Selector, SelectorContext } from "../../../components/selector";
-import { Trans } from "@lingui/react/macro";
 
 type WorkspaceRoleOption = Pick<WorkspaceRoleEntity, "_id" | "name" | "color">;
 
@@ -64,8 +64,6 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
             variant="light"
             radius={100}
             leftIcon={IconPlus}
-            fz={em(14)}
-            fw={500}
             onClick={toggle}
           >
             <Trans>Select</Trans>

@@ -6,7 +6,6 @@ import { WayPoint } from "@/components/way-point";
 import { Task, TaskStatus } from "@/graphql/types.graphql";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-icon";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
-import { OnTaskSatusesModal } from "@/modules/tasks/task-status-modal";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
@@ -16,8 +15,8 @@ import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-sc
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Group, Skeleton, Stack, Text, Tooltip, alpha } from "@mantine/core";
-import { IconPencil, IconPlus } from "@tabler/icons-react";
+import { ActionIcon, Group, Skeleton, Stack, Text, alpha } from "@mantine/core";
+import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
@@ -155,20 +154,6 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
               {(workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) ||
                 !isClosedTasks) && (
                 <Group justify="end" gap={0}>
-                  {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-                    <Tooltip label={<Trans>Update task status</Trans>}>
-                      <ActionIcon
-                        variant="subtle"
-                        size="sm"
-                        color="gray"
-                        component="div"
-                        onClick={() => OnTaskSatusesModal()}
-                      >
-                        <IconPencil size={16} strokeWidth={1.6} />
-                      </ActionIcon>
-                    </Tooltip>
-                  )}
-
                   {!isClosedTasks && (
                     <ActionIcon
                       component="div"

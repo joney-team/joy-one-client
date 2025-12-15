@@ -105,7 +105,6 @@ export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInp
               <Button
                 size="compact-xs"
                 variant="light"
-                fz={em(13)}
                 leftIcon={IconPlus}
                 radius={200}
                 onClick={onAdd}

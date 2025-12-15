@@ -200,7 +200,7 @@ export const AuthRequire: FC = () => {
                                 style={{
                                   borderColor: color({ light: "gray.3", dark: "gray.7" }),
                                 }}
-                                fz="sm"
+                                fz={14}
                               >
                                 <Trans>Continue with</Trans> {authProvider.name}
                               </Button>

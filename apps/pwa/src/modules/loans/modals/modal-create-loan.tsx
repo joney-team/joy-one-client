@@ -280,7 +280,6 @@ export const ModalCreateLoan = forwardRef<
                               <Button
                                 size="compact-sm"
                                 color="gray.5"
-                                fz={em(14)}
                                 leftIcon={IconArrowsExchange}
                                 variant="outline"
                                 onClick={ctx.toggle}

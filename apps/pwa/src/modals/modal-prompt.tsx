@@ -64,7 +64,6 @@ export const ModalPrompt: FC<ModalPromptProps> = (props) => {
                 size="compact-xs"
                 color="gray"
                 variant="outline"
-                fz={em(15)}
                 fw={400}
                 onClick={() => form.setFieldValue("content", s)}
               >

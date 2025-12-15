@@ -687,8 +687,6 @@ export const ModalPrinter = forwardRef<
                           variant={_size === printSettings.size ? "filled" : "outline"}
                           color="dark"
                           size="compact-md"
-                          fz={em(15)}
-                          fw={400}
                           onClick={() => {
                             changePrintSettings({ ...printSettings, size: _size });
                           }}

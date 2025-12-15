@@ -149,20 +149,19 @@ export const CheckInLocationsInput: FC<CheckInLocationsInputProps> = (props) => 
 
         {props.onChange && (
           <ModalCheckInLocationForm>
-            {(open) => (
+            {(modalCheckInLocationForm) => (
               <Group>
                 <Button
                   size="compact-xs"
                   variant="outline"
+                  leftIcon={IconPlus}
                   onClick={() =>
-                    open({
+                    modalCheckInLocationForm({
                       onDone: (checkInLocation) => {
                         props.onChange?.([...locations, checkInLocation]);
                       },
                     })
                   }
-                  leftSection={<IconPlus size={16} style={{ marginRight: -8 }} />}
-                  fz={em(13)}
                 >
                   <Trans>Add location</Trans>
                 </Button>

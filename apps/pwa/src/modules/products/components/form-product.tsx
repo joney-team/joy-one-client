@@ -422,10 +422,8 @@ export const FormProduct: FC<
                                 variant="light"
                                 radius={100}
                                 leftIcon={IconPlus}
-                                fz={em(14)}
-                                fw={500}
                               >
-                                {t`Add product supplies`}
+                                <Trans>Add product supplies</Trans>
                               </Button>
                             );
                           }}
@@ -490,11 +488,9 @@ export const FormProduct: FC<
                                 variant="light"
                                 radius={100}
                                 leftIcon={IconPlus}
-                                fz={em(14)}
-                                fw={500}
                                 onClick={ctx.toggle}
                               >
-                                {t`Add`} {`${t`Products`} / ${t`Services`}`}
+                                <Trans>Add</Trans> <Trans>Products/Services</Trans>
                               </Button>
                             );
                           }}

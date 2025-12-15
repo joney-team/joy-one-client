@@ -68,8 +68,6 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
             variant="light"
             radius={100}
             leftIcon={IconPlus}
-            fz={em(14)}
-            fw={500}
             onClick={toggle}
           >
             <Trans>Add</Trans>

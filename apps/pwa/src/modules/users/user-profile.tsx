@@ -140,15 +140,11 @@ export const Profile: FC = () => {
               size="compact-xs"
               h={28}
               variant="light"
-              rightSection={
-                <IconSignRight strokeWidth={1.5} size={18} style={{ marginLeft: -3 }} />
-              }
+              rightIcon={IconSignRight}
               color="gray"
-              fw={400}
-              fz={em(14)}
               onClick={() => workspace.leave()}
             >
-              {t`Switch`} workspace
+              <Trans>Switch</Trans> workspace
             </Button>
           )}
 
@@ -156,13 +152,11 @@ export const Profile: FC = () => {
             size="compact-xs"
             h={28}
             variant="light"
-            rightSection={<IconLogout strokeWidth={1.5} size={18} style={{ marginLeft: -3 }} />}
+            rightIcon={IconLogout}
             color="gray"
-            fw={400}
-            fz={em(14)}
             onClick={auth.signOut}
           >
-            {t`Sign out`}
+            <Trans>Sign out</Trans>
           </Button>
         </Group>
 

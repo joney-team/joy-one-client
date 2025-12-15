@@ -68,7 +68,6 @@ export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
                 variant="light"
                 radius={100}
                 leftIcon={IconPlus}
-                fz={em(14)}
                 fw={500}
                 onClick={toggle}
               >

@@ -47,7 +47,6 @@ export const SignatureInput: FC<SignatureInputProps> = (props) => {
               color="gray"
               variant="subtle"
               size="xs"
-              fz={em(13)}
               leftIcon={IconRefresh}
             >
               Ký lại

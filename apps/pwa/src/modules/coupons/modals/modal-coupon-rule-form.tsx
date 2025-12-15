@@ -24,7 +24,6 @@ import {
   ActionIcon,
   Box,
   Card,
-  em,
   Group,
   InputWrapper,
   Modal,
@@ -180,10 +179,9 @@ export const ModalCouponRuleForm: FC<{
             <Group>
               <Button
                 size="xs"
-                leftSection={<IconPlus size={16} style={{ marginRight: -5 }} />}
+                leftIcon={IconPlus}
                 variant="light"
                 radius={100}
-                fz={em(14)}
                 onClick={() => benefitsHandler.append(initialBenefits[0])}
               >
                 <Trans>Add rule</Trans>

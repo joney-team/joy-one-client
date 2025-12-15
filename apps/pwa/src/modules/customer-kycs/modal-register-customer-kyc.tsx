@@ -15,7 +15,6 @@ import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Card,
-  em,
   Group,
   InputWrapper,
   Modal,
@@ -227,7 +226,6 @@ export const WithModalRegisterCustomerKyc: FC<{
                           })
                         }
                         variant="light"
-                        fz={em(14)}
                       >
                         <Trans>Scan QR code</Trans>
                       </Button>
@@ -252,7 +250,6 @@ export const WithModalRegisterCustomerKyc: FC<{
                               })
                             }
                             variant="light"
-                            fz={em(14)}
                           >
                             <Trans>Enter code</Trans>
                           </Button>
