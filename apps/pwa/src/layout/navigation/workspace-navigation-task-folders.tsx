@@ -21,7 +21,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Divider, Group, Menu, Stack, Text } from "@mantine/core";
+import { ActionIcon, Group, Menu, Stack, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
   IconDots,
@@ -238,7 +238,7 @@ const TaskFolderNavigationItem: FC<{
           </ActionIcon>
 
           <ContentEditable
-            fz={12}
+            fz={13}
             fw={500}
             autoFocus
             disabled={!isRenaming}

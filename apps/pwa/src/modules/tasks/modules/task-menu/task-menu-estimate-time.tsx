@@ -1,6 +1,6 @@
 "use client";
 
-import { FocusTrap } from "@mantine/core";
+import { FocusTrap, Stack } from "@mantine/core";
 import { TaskMenuComponent } from "./task-menu-types";
 
 import { EstimateTimeInput } from "@/components/inputs/estimate-time-input/estimate-time-input";
@@ -18,23 +18,25 @@ export const TaskMenuEstimateTime: TaskMenuComponent = ({
 
   return (
     <FocusTrap>
-      <EstimateTimeInput
-        description={t`Enter number of days, hours, minutes`}
-        placeholder="e.g. 2d 4h 30m"
-        value={estimatedTime}
-        onSubmit={(value) => {
-          console.log("value", value);
+      <Stack p="sm">
+        <EstimateTimeInput
+          description={t`Enter number of days, hours, minutes`}
+          placeholder="e.g. 2d 4h 30m"
+          value={estimatedTime}
+          onSubmit={(value) => {
+            console.log("value", value);
 
-          updateTask({
-            _id: task._id,
-            estimatedTime: value,
-            context: { fromGroupVariables: groupVariables },
-          });
+            updateTask({
+              _id: task._id,
+              estimatedTime: value,
+              context: { fromGroupVariables: groupVariables },
+            });
 
-          setEstimatedTime(value);
-          onClose();
-        }}
-      />
+            setEstimatedTime(value);
+            onClose();
+          }}
+        />
+      </Stack>
     </FocusTrap>
   );
 };

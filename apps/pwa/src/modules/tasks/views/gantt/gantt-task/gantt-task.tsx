@@ -10,7 +10,6 @@ import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
-  IconArrowRight,
   IconCopyPlus,
   IconGripVertical,
   IconMaximize,
@@ -336,32 +335,6 @@ const GanttTaskContent: FC = () => {
                     )}
                   </ModalCreateTask>
                 )}
-
-                <Tooltip.Floating
-                  label={
-                    timeline?.startDate ? (
-                      <Trans>Scroll to task</Trans>
-                    ) : (
-                      <Trans>You need to set the start date before</Trans>
-                    )
-                  }
-                  position="top"
-                  offset={16}
-                >
-                  <ActionIcon
-                    variant="subtle"
-                    color="gray"
-                    component="div"
-                    size="sm"
-                    disabled={!task.startDate}
-                    onClick={() => {
-                      if (!timeline?.startDate) return;
-                      gantt.scrollToDate({ date: timeline?.startDate, behavior: "smooth" });
-                    }}
-                  >
-                    <IconArrowRight size={16} />
-                  </ActionIcon>
-                </Tooltip.Floating>
               </Group>
             </Fragment>
           )}
@@ -388,6 +361,7 @@ const GanttTaskContent: FC = () => {
                 taskMenu.open({
                   action: TaskMenuAction.GANTT_TIMELINE,
                   target: e.currentTarget,
+                  scrollToDate: gantt.scrollToDate,
                   options: {
                     offset: {
                       x: Math.abs(e.currentTarget.getBoundingClientRect().x - e.clientX),

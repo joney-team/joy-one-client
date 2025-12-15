@@ -45,6 +45,7 @@ export const TaskContextMenuDropdown: ContextMenuDropdownComponent = (props) => 
     <Card p={0} shadow="md" withBorder>
       <DropdownMenu
         key={task._id}
+        {...context}
         task={task}
         onClose={props.onClose}
         updateTask={(taskData) => {
@@ -57,7 +58,6 @@ export const TaskContextMenuDropdown: ContextMenuDropdownComponent = (props) => 
         setClickOutsideToClose={(enabled) => {
           props.setClickOutsideToClose(enabled);
         }}
-        {...context}
       />
     </Card>
   );

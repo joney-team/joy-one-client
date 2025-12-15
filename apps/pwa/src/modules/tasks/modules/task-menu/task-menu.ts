@@ -77,6 +77,7 @@ export const useTaskMenu: (
         action: menu.action,
         groupVariables: defaultGroupVariables,
         updateTask: menu.updateTask ?? defaultUpdateTask,
+        scrollToDate: menu.scrollToDate,
       };
 
       contextMenu.open({

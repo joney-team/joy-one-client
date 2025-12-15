@@ -1,9 +1,10 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { Modal } from "@/components/modal/modal";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
-import { Divider, Group, Modal, ModalProps, Stack, ThemeIcon } from "@mantine/core";
+import { Divider, Group, ModalProps, Stack, ThemeIcon } from "@mantine/core";
 import { IconAlertTriangle, type Icon as TablerIcon } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useState } from "react";
 
@@ -71,7 +72,6 @@ export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((prop
         opened={!!args}
         onClose={onCancel}
         withCloseButton={false}
-        closeOnEscape={false}
         closeOnClickOutside={false}
         styles={{
           body: {

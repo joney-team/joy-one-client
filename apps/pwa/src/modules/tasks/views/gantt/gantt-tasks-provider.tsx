@@ -1,6 +1,5 @@
 "use client";
 
-import { useLayout } from "@/layout/layout-context";
 import { wait } from "@/utils/common.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { useLingui } from "@lingui/react/macro";
@@ -12,7 +11,7 @@ import { parseTaskPath } from "../../tasks-route-helpers";
 import { ganttConfig } from "./gantt-tasks-config";
 import { Context } from "./gantt-tasks-context";
 import { useGanttRefs } from "./gantt-tasks-refs";
-import type { GanttState, ScrollDirection, ScrollToDateArgs, UseGantt } from "./gantt-tasks-types";
+import type { GanttState, ScrollDirection, ScrollToDate, UseGantt } from "./gantt-tasks-types";
 import { getDateRangeBreakdown } from "./gantt-tasks-utils";
 
 let scrollTop = -1;
@@ -20,7 +19,6 @@ const oneDate = 24 * 60 * 60 * 1000;
 
 export const GanttProvider: FC<PropsWithChildren> = (props) => {
   const { i18n } = useLingui();
-  const layout = useLayout();
   const refs = useGanttRefs();
   const pathname = usePathname();
   const [version, setVersion] = useState(0);
@@ -134,7 +132,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
     setGanttState((s) => ({ ...s, columnSize: size }));
   };
 
-  const scrollToDate: ScrollToDateArgs = useCallback(
+  const scrollToDate: ScrollToDate = useCallback(
     (args) => {
       if (!refs.bodyContainer.current) return;
 

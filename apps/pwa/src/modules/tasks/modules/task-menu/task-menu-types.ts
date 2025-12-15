@@ -4,6 +4,7 @@ import type { FC } from "react";
 import type { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import type { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import type { UpdateTask } from "../../hooks/use-update-tasks";
+import type { ScrollToDate } from "../../views/gantt/gantt-tasks-types";
 
 export enum TaskMenuAction {
   CHANGE_STATUS = "CHANGE_STATUS",
@@ -21,6 +22,7 @@ export type TaskMenuData = Partial<TaskDataFragment> & { _id: string };
 export type TaskMenuContext = {
   groupVariables: TasksQueryVariables | null;
   updateTask?: (task: UpdateTask) => Promise<void>;
+  scrollToDate?: ScrollToDate;
   action: TaskMenuAction;
 };
 
@@ -32,6 +34,7 @@ export interface TaskMenuContextType {
     options?: PlaceDropdownMenuOptions;
     onClose?: () => void;
     updateTask?: (task: UpdateTask) => Promise<void>;
+    scrollToDate?: ScrollToDate;
   }) => void;
   close: () => void;
   activatedAction: TaskMenuAction | null;
@@ -44,6 +47,7 @@ export type TaskMenuComponentProps = Pick<TaskMenuContext, "groupVariables" | "a
   updateTask: (task: UpdateTask) => Promise<void>;
   setClickOutsideToClose: (enabled: boolean) => void;
   options?: ContextMenuProps["options"];
+  scrollToDate?: ScrollToDate;
 };
 
 export type TaskMenuComponent = FC<TaskMenuComponentProps>;

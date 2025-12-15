@@ -2,7 +2,7 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { Group, MantineColor, Stack, Text } from "@mantine/core";
-import { Icon, IconClockHour3, IconMaximize, ReactNode } from "@tabler/icons-react";
+import { Icon, IconClockHour3, IconMaximize, IconNavigation, ReactNode } from "@tabler/icons-react";
 import { FC } from "react";
 import { TaskMenuComponent } from "./task-menu-types";
 
@@ -16,7 +16,8 @@ const MenuItem: FC<{
   label: ReactNode;
   onClick: () => void;
   iconColor?: MantineColor;
-}> = ({ icon: Icon, iconColor, label, onClick }) => {
+  disabled?: boolean;
+}> = ({ icon: Icon, iconColor, label, onClick, disabled = false }) => {
   const color = useColor();
 
   return (
@@ -27,7 +28,10 @@ const MenuItem: FC<{
       pl={6}
       py={6}
       align="center"
-      onClick={onClick}
+      onClick={() => {
+        if (disabled) return;
+        onClick();
+      }}
     >
       <Icon size={16} color={color(iconColor ?? "gray")} />
       <Text component="div" fz={13}>
@@ -42,6 +46,7 @@ export const TaskMenuGanttTimeline: TaskMenuComponent = ({
   onClose,
   groupVariables,
   updateTask,
+  scrollToDate,
 }) => {
   const router = useRouter();
 
@@ -52,6 +57,28 @@ export const TaskMenuGanttTimeline: TaskMenuComponent = ({
         label={<Trans>View detail</Trans>}
         onClick={() => {
           router.push(updateTaskPath({ code: task.code }));
+          onClose();
+        }}
+      />
+
+      <MenuItem
+        icon={IconNavigation}
+        label={<Trans>Scroll to start date</Trans>}
+        disabled={!task.startDate}
+        onClick={() => {
+          if (!task.startDate) return;
+          scrollToDate?.(task.startDate);
+          onClose();
+        }}
+      />
+
+      <MenuItem
+        icon={IconNavigation}
+        label={<Trans>Scroll to finish date</Trans>}
+        disabled={!task.dueDate}
+        onClick={() => {
+          if (!task.dueDate) return;
+          scrollToDate?.(task.dueDate);
           onClose();
         }}
       />
