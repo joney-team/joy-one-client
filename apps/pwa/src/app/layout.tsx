@@ -12,17 +12,6 @@ import { ScriptsAnalytics } from "@/components/analytics/scripts-analytics";
 import { defaultMetadata } from "@/configs/metadata.config";
 import type { AppMetadata } from "@/types";
 
-import "@mantine/core/styles.css";
-import "@mantine/charts/styles.css";
-import "@mantine/dates/styles.css";
-import "@mantine/notifications/styles.css";
-import "@mantine/spotlight/styles.css";
-import "@mantine/tiptap/styles.css";
-import "@xyflow/react/dist/style.css";
-
-import "../styles/app.style.css";
-import "../styles/react-big-calendar.css";
-
 import { isExtendedApp } from "@/service";
 import { ApolloProvider } from "@/modules/apollo/apollo-provider";
 

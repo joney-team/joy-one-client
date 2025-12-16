@@ -10,7 +10,6 @@ import { useEffect, useMemo, useState, type FC, type PropsWithChildren } from "r
 import { v4 as uuid } from "uuid";
 import packageJson from "../package.json";
 import { AppContext } from "./app.context";
-import { GeneralAnalytics } from "./components/analytics/general-analytics";
 import { getGlobal } from "./global";
 import { getLocalStorage } from "./hooks/use-local-storage";
 import { socket } from "./modules/apis";
@@ -23,15 +22,46 @@ import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
 import { usePageTitle } from "./hooks/use-page-title";
 
+import "@mantine/core/styles.css";
+import "@mantine/charts/styles.css";
+import "@mantine/dates/styles.css";
+import "@mantine/notifications/styles.css";
+import "@mantine/spotlight/styles.css";
+import "@mantine/tiptap/styles.css";
+import "@mantine/nprogress/styles.css";
+import "@xyflow/react/dist/style.css";
+
+import "./styles/app.style.css";
+import "./styles/react-big-calendar.css";
+import { nonLoading } from "./utils/non-loading";
+
 if (config.SENTRY_DSN) {
   Sentry.init({ dsn: config.SENTRY_DSN, release: packageJson.version });
 }
 
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
 const ModuleProviders = dynamic(() => import("@/app.module-providers"));
+
 const AuthProvider = dynamic(() => import("@/modules/auth/auth-provider"));
 const WorkspaceProvider = dynamic(() => import("@/modules/workspaces/workspace-provider"));
-const EscapeHandler = dynamic(() => import("@/hooks/use-escape").then((mod) => mod.EscapeHandler));
+
+const EscapeHandler = dynamic(() => import("@/hooks/use-escape").then((mod) => mod.EscapeHandler), {
+  ssr: false,
+  loading: nonLoading,
+});
+
+const GeneralAnalytics = dynamic(
+  () => import("./components/analytics/general-analytics").then((mod) => mod.GeneralAnalytics),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const NavigationProgress = dynamic(
+  () => import("@mantine/nprogress").then((mod) => mod.NavigationProgress),
+  { ssr: false, loading: nonLoading }
+);
 
 export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => {
   const global = getGlobal();
@@ -142,6 +172,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
                   <ModuleProviders>
                     {props.children}
 
+                    <NavigationProgress />
                     <EscapeHandler />
                     <AppLoading />
                     <GeneralAnalytics />

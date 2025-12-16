@@ -19,6 +19,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { Period } from "@/types";
+import { nonLoading } from "@/utils/non-loading";
 import { ObjectUtils } from "@/utils/object.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
@@ -34,14 +35,15 @@ import {
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { FC } from "react";
-import { Widgets } from "..";
 import { Avatar } from "../../components/avatar";
 import { ButtonSelect } from "../../components/buttons/button-select";
 import { Errored } from "../../components/errored";
 import { Renderer } from "../../components/renderer";
 import { useReportWidgetModules } from "./modules";
-import { ReportWidgetsContext } from "./types";
+import { ReportWidgetsContext, ReportWidgetType } from "./types";
+import { Widgets } from "..";
 
 export const ReportWidgets: FC = () => {
   const workspace = useWorkspace();
@@ -233,12 +235,10 @@ export const ReportWidgets: FC = () => {
                       >
                         <Button
                           onClick={ctx.toggle}
-                          size="compact-md"
-                          h={32}
+                          size="compact-sm"
                           color={query.userId ? "primary" : "var(--mantine-color-dimmed)"}
                           variant="outline"
                           radius={100}
-                          fz={12}
                           leftIcon={IconUsers}
                         >
                           <Group gap={5}>
@@ -316,8 +316,7 @@ export const ReportWidgets: FC = () => {
                       >
                         <Button
                           onClick={ctx.toggle}
-                          size="compact-md"
-                          h={32}
+                          size="compact-sm"
                           color={
                             query.workspaceBranchIds.length > 0
                               ? "primary"
@@ -325,7 +324,6 @@ export const ReportWidgets: FC = () => {
                           }
                           variant="outline"
                           radius={100}
-                          fz={12}
                           leftIcon={IconBuildingSkyscraper}
                         >
                           <Group gap={5}>

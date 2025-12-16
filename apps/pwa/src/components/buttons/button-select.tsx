@@ -129,10 +129,6 @@ export const ButtonSelect: FC<ButtonSelectProps> = (props) => {
                   position: "relative",
                   overflow: "visible",
                 },
-                label: {
-                  fontSize: 12,
-                  fontWeight: "normal",
-                },
               }}
               onClick={_onModal}
             >
