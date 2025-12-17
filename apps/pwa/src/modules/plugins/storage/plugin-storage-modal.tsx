@@ -7,9 +7,8 @@ import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Group, Modal, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useDisclosure } from "@mantine/hooks";
 import { IconCloudDataConnection } from "@tabler/icons-react";
-import React, { useState } from "react";
+import { Fragment, type ReactNode, useState } from "react";
 import SET_PLUGIN_EXTERNAL_STORAGE, {
   type SetPluginExternalStorageMutation,
   type SetPluginExternalStorageMutationVariables,
@@ -19,7 +18,7 @@ import GET_PLUGIN_EXTERNAL_STORAGE, {
   type PluginExternalStorageQuery,
 } from "./queryPluginExternalStorage.graphql";
 
-export const PluginStorageModal = ({
+const PluginStorageModalContent = ({
   isOpened,
   onClose,
   storage,
@@ -114,24 +113,28 @@ export const PluginStorageModal = ({
   );
 };
 
-export const WithPluginStorageModal = ({
+export const PluginStorageModal = ({
   children,
 }: {
   children: (
     open: (storage?: PluginExternalStorageQuery["pluginExternalStorage"]) => void
-  ) => React.ReactNode;
+  ) => ReactNode;
 }) => {
-  const [isOpened, { open, close }] = useDisclosure(false);
   const [storage, setStorage] = useState<
     PluginExternalStorageQuery["pluginExternalStorage"] | null
   >(null);
+
   return (
-    <>
+    <Fragment>
       {children((storage) => {
         setStorage(storage ?? null);
-        open();
       })}
-      <PluginStorageModal isOpened={isOpened} onClose={close} storage={storage} />
-    </>
+
+      <PluginStorageModalContent
+        isOpened={!!storage}
+        storage={storage}
+        onClose={() => setStorage(null)}
+      />
+    </Fragment>
   );
 };

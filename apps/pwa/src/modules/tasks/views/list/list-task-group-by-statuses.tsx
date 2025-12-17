@@ -141,7 +141,6 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
                 <ListTaskRow
                   task={task}
                   key={task._id}
-                  href={updateTaskPath({ code: task.code })}
                   groupVariables={groupVariables}
                   lastRow={index === tasks.length - 1}
                   prevTask={tasks[index - 1]}
@@ -149,6 +148,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
                   droppableOptions={{
                     inherits: ["status", "parentId", "folderId"],
                   }}
+                  nextParentTask={null}
                 />
               ))}
 

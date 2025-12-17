@@ -148,7 +148,12 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
     return <Trans>Assignee</Trans>;
   }, [form.values.assigneeUsers]);
 
-  if (taskStatusesLoading) return <Skeleton height={100} miw="100%" />;
+  if (taskStatusesLoading)
+    return (
+      <Stack p={16}>
+        <Skeleton height={200} miw="100%" />
+      </Stack>
+    );
 
   return (
     <form onSubmit={onSubmit}>

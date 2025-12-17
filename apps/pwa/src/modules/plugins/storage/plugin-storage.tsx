@@ -6,6 +6,7 @@ import { Errored } from "@/components/errored";
 import { useColor } from "@/modules/theme/use-color";
 import { getErrorMessage } from "@/utils/exceptions.utils";
 import { useMutation, useQuery } from "@apollo/client/react";
+import { formatBytes } from "@joy-one-client/utils/files";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -32,8 +33,16 @@ import {
   IconRefresh,
 } from "@tabler/icons-react";
 import { MouseEventHandler, type FC } from "react";
+import FETCH_EXTERNAL_STORAGE_SIZE, {
+  type FetchExternalStorageSizeMutation,
+  type FetchExternalStorageSizeMutationVariables,
+} from "./mutationFetchExternalStorageSize.graphql";
+import TOGGLE_DISABLE_PLUGIN_EXTERNAL_STORAGE, {
+  type ToggleDisablePluginExternalStorageMutation,
+  type ToggleDisablePluginExternalStorageMutationVariables,
+} from "./mutationToggleDisablePluginExternalStorage.graphql";
 import { pluginStorageProviders } from "./plugin-storage-constants";
-import { WithPluginStorageModal } from "./plugin-storage-modal";
+import { PluginStorageModal } from "./plugin-storage-modal";
 import HEALTHCHECK_PLUGIN_EXTERNAL_STORAGE, {
   type HealthcheckPluginExternalStorageMutation,
   type HealthcheckPluginExternalStorageMutationVariables,
@@ -42,10 +51,6 @@ import GET_PLUGIN_EXTERNAL_STORAGE, {
   type PluginExternalStorageQuery,
   type PluginExternalStorageQueryVariables,
 } from "./queryPluginExternalStorage.graphql";
-import TOGGLE_DISABLE_PLUGIN_EXTERNAL_STORAGE, {
-  type ToggleDisablePluginExternalStorageMutation,
-  type ToggleDisablePluginExternalStorageMutationVariables,
-} from "./mutationToggleDisablePluginExternalStorage.graphql";
 
 export const PluginStorage: FC = () => {
   const color = useColor();
@@ -58,7 +63,12 @@ export const PluginStorage: FC = () => {
     HealthcheckPluginExternalStorageMutationVariables
   >(HEALTHCHECK_PLUGIN_EXTERNAL_STORAGE);
 
-  const [toggleDisable, { loading: toggleDisableLoading }] = useMutation<
+  const [fetchExternalStorageSize] = useMutation<
+    FetchExternalStorageSizeMutation,
+    FetchExternalStorageSizeMutationVariables
+  >(FETCH_EXTERNAL_STORAGE_SIZE);
+
+  const [toggleDisable] = useMutation<
     ToggleDisablePluginExternalStorageMutation,
     ToggleDisablePluginExternalStorageMutationVariables
   >(TOGGLE_DISABLE_PLUGIN_EXTERNAL_STORAGE);
@@ -67,6 +77,8 @@ export const PluginStorage: FC = () => {
     try {
       e.stopPropagation();
       await healthCheck();
+      await fetchExternalStorageSize();
+      await storage.refetch();
       notifications.show({
         color: "green",
         title: <Trans>Check connection</Trans>,
@@ -119,13 +131,13 @@ export const PluginStorage: FC = () => {
                 </Text>
               </Stack>
 
-              <WithPluginStorageModal>
+              <PluginStorageModal>
                 {(open) => (
                   <Button mt={10} onClick={() => open()} leftIcon={IconLinkPlus}>
                     <Trans>Connect</Trans>
                   </Button>
                 )}
-              </WithPluginStorageModal>
+              </PluginStorageModal>
             </Stack>
           </Card>
         </Container>
@@ -135,7 +147,7 @@ export const PluginStorage: FC = () => {
 
   return (
     <Stack align="center" py={20}>
-      <WithPluginStorageModal>
+      <PluginStorageModal>
         {(open) => {
           if (!storage.data.pluginExternalStorage) return null;
 
@@ -153,7 +165,7 @@ export const PluginStorage: FC = () => {
           ]);
 
           return (
-            <Container size={700}>
+            <Container size={900}>
               <Stack>
                 <Card>
                   <Group align="start">
@@ -167,9 +179,13 @@ export const PluginStorage: FC = () => {
 
                       <Text>Bucket: {storageData.bucketName}</Text>
                       <Text>Region: {storageData.region}</Text>
+                      <Text>
+                        <Trans>Size</Trans>:{" "}
+                        {storageData.size ? formatBytes(storageData.size) : <Trans>Unknown</Trans>}
+                      </Text>
 
                       <Group mt="sm" gap="xs">
-                        <Tooltip label={<Trans>Check connection</Trans>}>
+                        <Tooltip label={<Trans>Refresh connection</Trans>}>
                           <ActionIcon
                             variant="light"
                             size="md"
@@ -242,7 +258,7 @@ export const PluginStorage: FC = () => {
             </Container>
           );
         }}
-      </WithPluginStorageModal>
+      </PluginStorageModal>
     </Stack>
   );
 };

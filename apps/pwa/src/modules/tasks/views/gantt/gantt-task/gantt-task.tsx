@@ -29,6 +29,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { ModalConfirm, ModalConfirmRef } from "@/modals/modal-confirm";
 import { useTaskMenu } from "@/modules/tasks/modules/task-menu/task-menu";
 import { TaskMenuAction } from "@/modules/tasks/modules/task-menu/task-menu-types";
+import { TaskRowDraggable } from "@/modules/tasks/modules/task-row-draggable/task-row-draggable";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
@@ -42,7 +43,6 @@ import MUTATION_DUPLICATE_TASK, {
 import { useTasksQuery } from "../../../hooks/use-tasks-query";
 import { TaskSelectionBox } from "../../../modules/task-selections/task-selection-box";
 import styles from "../gantt-tasks.module.css";
-import { GanttTaskDraggable } from "./components/gantt-task-draggable";
 import { GanttTaskRowProvider, useGanttTaskRow } from "./gantt-task-provider";
 import { GanttTaskProps } from "./gantt-task-types";
 
@@ -63,14 +63,24 @@ const GanttTaskDrawTimeline = dynamic(
 );
 
 const GanttTaskContent: FC = () => {
-  const { task, nextTask, groupVariables } = useGanttTaskRow();
+  const {
+    task,
+    nextTask,
+    groupVariables,
+    isAllowTopDroppable,
+    prevTask,
+    rootRef,
+    ganttTaskAreaRef,
+    timeline,
+    taskStatus,
+    nextParentTask,
+  } = useGanttTaskRow();
+
   const gantt = useGantt();
   const router = useRouter();
   const taskMenu = useTaskMenu({ task, groupVariables });
   const modalConfirmRef = useRef<ModalConfirmRef>(null);
   const ganttRefs = useGanttRefs();
-
-  const { rootRef, ganttTaskAreaRef, timeline, taskStatus } = useGanttTaskRow();
 
   const { updateTasks } = useUpdateTasks();
 
@@ -183,7 +193,17 @@ const GanttTaskContent: FC = () => {
         py={5}
         data-task-menu-opened={taskMenu.isOpened}
       >
-        <GanttTaskDraggable>
+        <TaskRowDraggable
+          task={task}
+          groupVariables={groupVariables}
+          nextTask={nextTask}
+          prevTask={prevTask}
+          nextParentTask={nextParentTask}
+          subTasksGroupVariables={subTasksGroupVariables}
+          rootRef={rootRef}
+          disabled={gantt.isGrabbing}
+          isAllowTopDroppable={isAllowTopDroppable}
+        >
           {(draggingRef) => (
             <Fragment>
               <Group gap={0}>
@@ -205,7 +225,7 @@ const GanttTaskContent: FC = () => {
               </Group>
 
               {task.parent && (
-                <ThemeIcon color="gray" variant="transparent" ml={10}>
+                <ThemeIcon color="gray.5" variant="transparent">
                   <IconSubtask size={16} strokeWidth={1.5} />
                 </ThemeIcon>
               )}
@@ -338,7 +358,7 @@ const GanttTaskContent: FC = () => {
               </Group>
             </Fragment>
           )}
-        </GanttTaskDraggable>
+        </TaskRowDraggable>
       </Group>
 
       {ganttRefs.body.current &&

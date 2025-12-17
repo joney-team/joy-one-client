@@ -475,6 +475,7 @@ type Mutation {
   deleteCategory(id: String!): Boolean!
   duplicateTask(_id: String!, overwrite: CreateTaskInput): Task!
   externalStorageVerifyDna(dna: String!): File!
+  fetchExternalStorageSize: Float!
   generateCategorySlug(name: String!): String!
   healthcheckPluginExternalStorage: Boolean!
   interactCategory(id: String!): Boolean!
@@ -507,6 +508,7 @@ type PluginExternalStorage {
   isDisabled: Boolean
   provider: PluginExternalStorageProvider!
   region: String
+  size: Float
 }
 
 """Available external storage providers"""

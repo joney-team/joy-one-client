@@ -107,6 +107,17 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
+              api.post(`/scheduling/execFetchExternalStorageSize`, {
+                workspaceId: workspace.userMember.workspaceId,
+              })
+            }
+          >
+            execFetchExternalStorageSize
+          </Button>
+
+          <Button
+            color="cyan"
+            onClick={() =>
               api.post(`/scheduling/execWorkspaceHealthCheckLoans`, {
                 workspaceId: workspace.userMember.workspaceId,
               })

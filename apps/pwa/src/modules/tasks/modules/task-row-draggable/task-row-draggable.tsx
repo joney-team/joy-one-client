@@ -1,12 +1,16 @@
 "use client";
 
-import { Card, Portal, Text } from "@mantine/core";
-import { FC, Fragment, ReactNode, RefObject, useEffect, useRef, useState } from "react";
-import { TaskDataFragment } from "../../../../graphql/fragmentTask.graphql";
-
-import { UpdateTaskContext, useUpdateTasks } from "../../../../hooks/use-update-tasks";
-import { type TasksQueryVariables } from "../../../../graphql/queryTasks.graphql";
-import { useGantt } from "../../gantt-tasks-context";
+import { Card, CardProps, Group, Portal, Text } from "@mantine/core";
+import {
+  FC,
+  Fragment,
+  ReactNode,
+  type Ref,
+  type RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
@@ -17,24 +21,46 @@ import {
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
 
 import { useColor } from "@/modules/theme/use-color";
-import { ganttConfig } from "../../gantt-tasks-config";
-import { useGanttTaskRow } from "../gantt-task-provider";
+import { type TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { type UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 
-export const GanttTaskDraggable: FC<{
-  children: (draggingRef: RefObject<HTMLDivElement | null>) => ReactNode;
-}> = ({ children }) => {
+const config = {
+  droppableIndicatorHeight: 3,
+};
+
+interface OverlayOptions extends CardProps {}
+
+export const TaskRowDraggable: FC<{
+  rootRef: RefObject<HTMLElement | null>;
+  task: TaskDataFragment;
+  groupVariables: TasksQueryVariables | null;
+  nextParentTask: TaskDataFragment | null;
+  isAllowTopDroppable?: boolean;
+  nextTask: TaskDataFragment | null;
+  prevTask: TaskDataFragment | null;
+  subTasksGroupVariables: TasksQueryVariables | null;
+  children: (draggingRef: Ref<HTMLDivElement | null>) => ReactNode;
+  disabled?: boolean;
+  droppableOptions?: {
+    inherits?: (keyof TaskDataFragment)[];
+  };
+  overlayOptions?: OverlayOptions;
+}> = ({
+  children,
+  rootRef,
+  task,
+  groupVariables,
+  nextParentTask,
+  isAllowTopDroppable,
+  nextTask,
+  prevTask,
+  subTasksGroupVariables,
+  disabled,
+  droppableOptions = {},
+  overlayOptions = {},
+}) => {
   const color = useColor();
-  const gantt = useGantt();
-  const {
-    rootRef,
-    task,
-    groupVariables,
-    isAllowTopDroppable,
-    nextTask,
-    prevTask,
-    nextParentTask,
-    subTasksGroupVariables,
-  } = useGanttTaskRow();
 
   const { updateTasks } = useUpdateTasks();
   const isLastChild = Boolean(task.parent) && !nextTask;
@@ -54,6 +80,15 @@ export const GanttTaskDraggable: FC<{
 
   const droppableIndicatorBottomRef = useRef<HTMLDivElement>(null);
   const droppableIndicatorBottomIndentRef = useRef<HTMLDivElement>(null);
+
+  const inherits =
+    droppableOptions.inherits?.reduce<Partial<TaskDataFragment>>(
+      (acc, key) => ({
+        ...acc,
+        [key]: task[key],
+      }),
+      {}
+    ) ?? {};
 
   // Drag drop handlers
   useEffect(() => {
@@ -85,7 +120,7 @@ export const GanttTaskDraggable: FC<{
           });
         },
         canDrag() {
-          return !gantt.isGrabbing;
+          return !disabled;
         },
       }),
       // Sibling Top drop target
@@ -166,7 +201,10 @@ export const GanttTaskDraggable: FC<{
               _id: sourceTask._id,
               parent: null,
               folder: task.parent.folder ?? null,
-              order: (task.parent.order * 2 + task.parent.order) / 2,
+              order: nextParentTask
+                ? (nextParentTask.order * 2 + nextParentTask.order) / 2
+                : (task.parent.order * 2 + task.parent.order) / 2,
+              ...inherits,
               context,
             });
           }
@@ -176,6 +214,7 @@ export const GanttTaskDraggable: FC<{
             parent: null,
             order: ((nextTask?.order ?? task.order * 2) + task.order) / 2,
             folder: task.folder ?? null,
+            ...inherits,
             context,
           });
         },
@@ -217,6 +256,7 @@ export const GanttTaskDraggable: FC<{
             parent: task.parent ?? task,
             folder: task.folder ?? null,
             order: newOrder,
+            ...inherits,
             context,
           });
         },
@@ -240,16 +280,25 @@ export const GanttTaskDraggable: FC<{
         },
       })
     );
-  }, [task, nextTask, nextParentTask, groupVariables, subTasksGroupVariables, gantt.isGrabbing]);
+  }, [
+    task,
+    nextTask,
+    groupVariables,
+    subTasksGroupVariables,
+    disabled,
+    droppableOptions,
+    inherits,
+  ]);
 
   return (
     <Fragment>
       {children(draggingRef)}
+
       <div
         ref={droppableIndicatorTopRef}
         style={{
           position: "absolute",
-          height: ganttConfig.droppableIndicatorHeight,
+          height: config.droppableIndicatorHeight,
           background: color("primary"),
           width: "100%",
           right: 0,
@@ -262,7 +311,7 @@ export const GanttTaskDraggable: FC<{
         ref={droppableIndicatorTopIndentRef}
         style={{
           position: "absolute",
-          height: ganttConfig.droppableIndicatorHeight,
+          height: config.droppableIndicatorHeight,
           background: color("orange"),
           width: "calc(100% - 46px)",
           right: 0,
@@ -275,7 +324,7 @@ export const GanttTaskDraggable: FC<{
         ref={droppableIndicatorBottomRef}
         style={{
           position: "absolute",
-          height: ganttConfig.droppableIndicatorHeight,
+          height: config.droppableIndicatorHeight,
           background: color("primary"),
           width: "100%",
           right: 0,
@@ -289,7 +338,7 @@ export const GanttTaskDraggable: FC<{
         ref={droppableIndicatorBottomIndentRef}
         style={{
           position: "absolute",
-          height: ganttConfig.droppableIndicatorHeight,
+          height: config.droppableIndicatorHeight,
           background: color("orange"),
           width: "calc(100% - 46px)",
           transform: "translateY(100%)",
@@ -342,7 +391,7 @@ export const GanttTaskDraggable: FC<{
         ref={droppableBottomChildrenRef}
         style={{
           position: "absolute",
-          left: "20%",
+          left: 90,
           bottom: 0,
           height: "50%",
           width: "100%",
@@ -355,12 +404,20 @@ export const GanttTaskDraggable: FC<{
         <Portal target={draggingRefContainer.current}>
           <Card
             shadow="xs"
-            px={16}
-            style={{ width: rootRef.current?.getBoundingClientRect().width }}
+            px="sm"
+            py={0}
+            style={{
+              width: rootRef.current?.getBoundingClientRect().width,
+            }}
+            miw={0}
+            h={40}
+            {...overlayOptions}
           >
-            <Text fz="sm" fw={500} truncate>
-              {task.name}
-            </Text>
+            <Group h="100%" align="center">
+              <Text fz="sm" fw={500} truncate>
+                {task.name}
+              </Text>
+            </Group>
           </Card>
         </Portal>
       )}

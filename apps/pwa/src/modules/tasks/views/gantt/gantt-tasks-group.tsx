@@ -165,6 +165,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
             nextTask={tasks[taskIndex + 1]}
             groupVariables={groupVariables}
             isAllowTopDroppable={taskIndex === 0}
+            nextParentTask={null}
           />
         ))}
 

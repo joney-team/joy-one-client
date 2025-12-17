@@ -4,6 +4,7 @@ query PluginExternalStorage {
     region
     bucketName
     endpointUrl
+    size
     isDisabled
   }
 }

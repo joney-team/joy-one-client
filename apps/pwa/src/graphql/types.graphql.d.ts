@@ -513,6 +513,7 @@ export type Mutation = {
   deleteCategory: Scalars['Boolean']['output'];
   duplicateTask: Task;
   externalStorageVerifyDna: File;
+  fetchExternalStorageSize: Scalars['Float']['output'];
   generateCategorySlug: Scalars['String']['output'];
   healthcheckPluginExternalStorage: Scalars['Boolean']['output'];
   interactCategory: Scalars['Boolean']['output'];
@@ -689,6 +690,7 @@ export type PluginExternalStorage = {
   isDisabled: Maybe<Scalars['Boolean']['output']>;
   provider: PluginExternalStorageProvider;
   region: Maybe<Scalars['String']['output']>;
+  size: Maybe<Scalars['Float']['output']>;
 };
 
 /** Available external storage providers */

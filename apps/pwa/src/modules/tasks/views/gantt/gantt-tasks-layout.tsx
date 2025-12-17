@@ -3,13 +3,13 @@
 import { DateFormat } from "@/components/format/date-format";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
+import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useColor } from "@/modules/theme/use-color";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, alpha, Group, rgba, Stack, Text, Tooltip } from "@mantine/core";
-import { useForceUpdate } from "@mantine/hooks";
 import {
   IconCalendarDown,
   IconDroplet,
@@ -24,7 +24,6 @@ import {
 import { FC, Fragment, PropsWithChildren, ReactNode, useEffect, useMemo, useState } from "react";
 import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
-import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 
 export const SidebarHead: FC = () => {
   const gantt = useGantt();
@@ -51,10 +50,6 @@ export const SidebarHead: FC = () => {
         borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
       }}
     >
-      <Text fz={13} truncate>
-        <Trans>Name</Trans>
-      </Text>
-
       <Group gap={5} wrap="nowrap" miw={0}>
         <Tooltip
           label={
@@ -139,7 +134,9 @@ export const SidebarHead: FC = () => {
             <IconCalendarDown size={16} />
           </ActionIcon>
         </Tooltip>
+      </Group>
 
+      <Group gap={5} wrap="nowrap" miw={0}>
         <ModalTagForm>
           {(modalTagForm) => (
             <Tooltip label={<Trans>Create folder</Trans>}>

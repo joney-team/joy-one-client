@@ -3,19 +3,10 @@
 import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
-import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { ModalConfirm, type ModalConfirmRef } from "@/modals/modal-confirm";
-import { TagSelector } from "@/modules/tags/components/tag-selector";
-import { TagEntity, TagType } from "@/modules/tags/tags-types";
-import { TaskPrioritySelector } from "@/modules/tasks/components/task-priority-selector";
-import { TaskStatusSelector } from "@/modules/tasks/components/task-status-selector";
+import type { TagEntity } from "@/modules/tags/tags-types";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
-import { TaskPriority, TaskStatus } from "@/modules/tasks/tasks-types";
-import {
-  WorkspaceMemberSelector,
-  WorkspaceMemberSelectorValue,
-} from "@/modules/workspace-members/components/workspace-member-selector";
-import { useApolloClient } from "@apollo/client/react";
+import { isDiff } from "@joy-one-client/utils/object";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Center, Divider, Group, Menu, Text, Tooltip } from "@mantine/core";
 import {
@@ -29,13 +20,13 @@ import {
   IconUsersPlus,
   IconX,
 } from "@tabler/icons-react";
-import { FC, Fragment, useCallback, useRef } from "react";
+import { FC, Fragment, useMemo, useRef } from "react";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
-import TASK_FRAGMENT, { type TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { useTaskMenu } from "../task-menu/task-menu";
+import { TaskMenuAction } from "../task-menu/task-menu-types";
 import { useTaskSelections } from "./task-selections-context";
 
 export const TaskSelectionMenu: FC = () => {
-  const client = useApolloClient();
   const selections = useTaskSelections();
   const modalConfirmRef = useRef<ModalConfirmRef>(null);
   const { updateTasks } = useUpdateTasks();
@@ -46,113 +37,81 @@ export const TaskSelectionMenu: FC = () => {
       onConfirm: async () => {
         await updateTasks(selections.selected.map((task) => ({ _id: task._id, isArchived: true })));
         selections.unselect(...selections.selected.map((v) => v._id));
-        emitInternalEvent(InternalEvent.REFETCH_TASKS);
       },
     });
   };
 
-  const getCurrentTask = useCallback(
-    (id: string) => {
-      const identifiedId = client.cache.identify({
-        __typename: "Task",
-        _id: id,
-      });
+  const changeFolder = async (folder?: TagEntity) => {
+    if (!folder) return;
+    await updateTasks(selections.selected.map(({ _id }) => ({ _id, folder: folder })));
+  };
 
-      return client.cache.readFragment<TaskDataFragment>({
-        id: identifiedId,
-        fragment: TASK_FRAGMENT,
-      });
+  const statuses = useMemo(() => {
+    if (!selections.selected[0]) return [];
+
+    const firstTaskStatuses = selections.selected[0].statuses;
+
+    const isAllSameStatuses = selections.selected.every(
+      (task) => !isDiff(task.statuses, firstTaskStatuses)
+    );
+
+    if (isAllSameStatuses) return selections.selected[0].statuses;
+    return [];
+  }, []);
+
+  const taskMenu = useTaskMenu({
+    task: {
+      _id: "selection-menu",
+      statuses,
     },
-    [client]
-  );
-
-  const assignMember = async (user?: WorkspaceMemberSelectorValue | null) => {
-    if (!user) return;
-    await updateTasks(
-      selections.selected
-        .map(({ _id }) => {
-          const currentData = getCurrentTask(_id);
-
-          if (!currentData || currentData.assigneeUsers.some((v) => v.userId === user.userId))
-            return null;
-
-          return {
+    groupVariables: null,
+    updateTask: async (task) => {
+      if ("status" in task && task.status) {
+        await updateTasks(
+          selections.selected.map(({ _id }) => ({
             _id,
-            assigneeUsers: [...currentData.assigneeUsers, user as any],
-          };
-        })
-        .filter((v) => v != null)
-    );
-    emitInternalEvent(InternalEvent.REFETCH_TASKS);
-  };
+            status: task.status,
+          }))
+        );
+      }
 
-  const changeStatus = async (status: TaskStatus) => {
-    await updateTasks(
-      selections.selected
-        .map(({ _id }) => {
-          const currentData = getCurrentTask(_id);
-          if (!currentData) return null;
-          return {
+      if ("priority" in task) {
+        await updateTasks(
+          selections.selected.map(({ _id }) => ({
             _id,
-            status: status.id,
-          };
-        })
-        .filter((v) => v != null)
-    );
-    emitInternalEvent(InternalEvent.REFETCH_TASKS);
-  };
+            priority: task.priority,
+          }))
+        );
+      }
 
-  const changeFolder = async (tagFolder?: TagEntity) => {
-    if (!tagFolder) return;
-
-    await updateTasks(
-      selections.selected
-        .map(({ _id }) => {
-          const currentData = getCurrentTask(_id);
-          if (!currentData) return null;
-          return {
+      if ("tags" in task && task.tags) {
+        await updateTasks(
+          selections.selected.map(({ _id }) => ({
             _id,
-            folder: tagFolder,
-          };
-        })
-        .filter((v) => v != null)
-    );
-    emitInternalEvent(InternalEvent.REFETCH_TASKS);
-  };
+            tags: task.tags,
+          }))
+        );
+      }
 
-  const setTag = async (tag?: TagEntity | null) => {
-    if (!tag) return;
-
-    await updateTasks(
-      selections.selected
-        .map(({ _id }) => {
-          const currentData = getCurrentTask(_id);
-          if (!currentData) return null;
-          return {
+      if ("folder" in task && task.folder) {
+        await updateTasks(
+          selections.selected.map(({ _id }) => ({
             _id,
-            tags: [...currentData.tags, tag],
-          };
-        })
-        .filter((v) => v != null)
-    );
-    emitInternalEvent(InternalEvent.REFETCH_TASKS);
-  };
+            folder: task.folder,
+          }))
+        );
+      }
 
-  const changePriority = async (priority: TaskPriority) => {
-    await updateTasks(
-      selections.selected
-        .map(({ _id }) => {
-          const currentData = getCurrentTask(_id);
-          if (!currentData) return null;
-          return {
+      if ("assigneeUsers" in task && task.assigneeUsers) {
+        await updateTasks(
+          selections.selected.map(({ _id }) => ({
             _id,
-            priority: priority,
-          };
-        })
-        .filter((v) => v != null)
-    );
-    emitInternalEvent(InternalEvent.REFETCH_TASKS);
-  };
+            assigneeUsers: task.assigneeUsers,
+          }))
+        );
+      }
+    },
+  });
 
   if (selections.selected.length === 0) return null;
 
@@ -175,7 +134,7 @@ export const TaskSelectionMenu: FC = () => {
                 <NumberFormat value={selections.selected.length} />
               </Text>
               <Text c="white" fz={12} fw={600}>
-                <Trans>Selected</Trans>
+                <Trans>selected</Trans>
               </Text>
             </Group>
 
@@ -184,70 +143,56 @@ export const TaskSelectionMenu: FC = () => {
                 <Divider orientation="vertical" h={18} opacity={0.5} mx={8} />
               </Center>
 
-              <TaskStatusSelector
-                onSelect={changeStatus}
-                render={(ctx) => {
-                  return (
-                    <Tooltip label={<Trans>Change status</Trans>} position="bottom">
-                      <Button
-                        onClick={ctx.toggle}
-                        leftIcon={IconPlaystationCircle}
-                        size="compact-md"
-                        h={32}
-                        color="gray.5"
-                        variant="transparent"
-                        radius={100}
-                        fz={12}
-                      >
-                        <Trans>Status</Trans>
-                      </Button>
-                    </Tooltip>
-                  );
-                }}
-              />
+              {statuses.length > 0 && (
+                <Tooltip label={<Trans>Change status</Trans>} position="bottom">
+                  <Button
+                    onClick={(e) =>
+                      taskMenu.open({
+                        action: TaskMenuAction.CHANGE_STATUS,
+                        target: e.currentTarget,
+                      })
+                    }
+                    leftIcon={IconPlaystationCircle}
+                    color="gray"
+                    variant="transparent"
+                    radius={100}
+                  >
+                    <Trans>Status</Trans>
+                  </Button>
+                </Tooltip>
+              )}
 
-              <WorkspaceMemberSelector
-                onSelect={assignMember}
-                target={(ctx) => {
-                  return (
-                    <Button
-                      leftIcon={IconUsersPlus}
-                      size="compact-md"
-                      h={32}
-                      color="gray.5"
-                      variant="transparent"
-                      radius={100}
-                      fz={12}
-                      onClick={ctx.toggle}
-                    >
-                      <Trans>Assign task</Trans>
-                    </Button>
-                  );
-                }}
-              />
+              <Button
+                leftIcon={IconUsersPlus}
+                color="gray"
+                variant="transparent"
+                radius={100}
+                onClick={(e) =>
+                  taskMenu.open({
+                    action: TaskMenuAction.CHANGE_ASSIGNEE,
+                    target: e.currentTarget,
+                  })
+                }
+              >
+                <Trans>Assign task</Trans>
+              </Button>
 
-              <TagSelector
-                type={TagType.TASK}
-                onSelect={setTag}
-                target={(ctx) => {
-                  return (
-                    <Tooltip label={<Trans>Set tag</Trans>} position="bottom">
-                      <Button
-                        onClick={ctx.toggle}
-                        leftIcon={IconTags}
-                        size="compact-md"
-                        h={32}
-                        color="gray.5"
-                        variant="transparent"
-                        radius={100}
-                        fz={12}
-                      >
-                        <Trans>Tags</Trans>
-                      </Button>
-                    </Tooltip>
-                  );
-                }}
-              />
+              <Tooltip label={<Trans>Set tag</Trans>} position="bottom">
+                <Button
+                  onClick={(e) =>
+                    taskMenu.open({
+                      action: TaskMenuAction.CHANGE_TAGS,
+                      target: e.currentTarget,
+                    })
+                  }
+                  leftIcon={IconTags}
+                  color="gray"
+                  variant="transparent"
+                  radius={100}
+                >
+                  <Trans>Tags</Trans>
+                </Button>
+              </Tooltip>
 
               <TaskTagFolderSelector
                 onSelect={changeFolder}
@@ -256,12 +201,9 @@ export const TaskSelectionMenu: FC = () => {
                     <Tooltip label={<Trans>Change folder</Trans>} position="bottom">
                       <Button
                         leftIcon={IconFolder}
-                        size="compact-md"
-                        h={32}
-                        color="gray.5"
+                        color="gray"
                         variant="transparent"
                         radius={100}
-                        fz={12}
                         onClick={ctx.toggle}
                       >
                         <Trans>Move</Trans>
@@ -271,36 +213,28 @@ export const TaskSelectionMenu: FC = () => {
                 }}
               />
 
-              <TaskPrioritySelector
-                onSelect={changePriority}
-                render={(ctx) => {
-                  return (
-                    <Tooltip label={<Trans>Set priority</Trans>} position="bottom">
-                      <Button
-                        leftIcon={IconFlagFilled}
-                        size="compact-md"
-                        h={32}
-                        color="gray.5"
-                        variant="transparent"
-                        radius={100}
-                        fz={12}
-                        onClick={ctx.toggle}
-                      >
-                        <Trans>Priority</Trans>
-                      </Button>
-                    </Tooltip>
-                  );
-                }}
-              />
+              <Tooltip label={<Trans>Set priority</Trans>} position="bottom">
+                <Button
+                  leftIcon={IconFlagFilled}
+                  color="gray"
+                  variant="transparent"
+                  radius={100}
+                  onClick={(e) =>
+                    taskMenu.open({
+                      action: TaskMenuAction.CHANGE_PRIORITY,
+                      target: e.currentTarget,
+                    })
+                  }
+                >
+                  <Trans>Priority</Trans>
+                </Button>
+              </Tooltip>
 
               <Button
                 leftIcon={IconTrash}
-                size="compact-md"
-                h={32}
-                color="red.5"
+                color="red"
                 variant="transparent"
                 radius={100}
-                fz={12}
                 onClick={removeAll}
               >
                 <Trans>Remove</Trans>
@@ -331,30 +265,29 @@ export const TaskSelectionMenu: FC = () => {
                     <Trans>Remove all</Trans>
                   </Menu.Item>
 
-                  <TaskStatusSelector
-                    onSelect={changeStatus}
-                    render={(ctx) => {
-                      return (
-                        <Menu.Item
-                          leftSection={<IconPlaystationCircle size={18} />}
-                          onClick={ctx.toggle}
-                        >
-                          <Trans>Change status</Trans>
-                        </Menu.Item>
-                      );
-                    }}
-                  />
+                  <Menu.Item
+                    leftSection={<IconPlaystationCircle size={18} />}
+                    onClick={(e) =>
+                      taskMenu.open({
+                        action: TaskMenuAction.CHANGE_STATUS,
+                        target: e.currentTarget,
+                      })
+                    }
+                  >
+                    <Trans>Change status</Trans>
+                  </Menu.Item>
 
-                  <WorkspaceMemberSelector
-                    onSelect={assignMember}
-                    target={(ctx) => {
-                      return (
-                        <Menu.Item leftSection={<IconUsersPlus size={18} />} onClick={ctx.toggle}>
-                          <Trans>Assign task</Trans>
-                        </Menu.Item>
-                      );
-                    }}
-                  />
+                  <Menu.Item
+                    leftSection={<IconUsersPlus size={18} />}
+                    onClick={(e) =>
+                      taskMenu.open({
+                        action: TaskMenuAction.CHANGE_ASSIGNEE,
+                        target: e.currentTarget,
+                      })
+                    }
+                  >
+                    <Trans>Assign task</Trans>
+                  </Menu.Item>
 
                   <TaskTagFolderSelector
                     onSelect={changeFolder}
@@ -367,16 +300,17 @@ export const TaskSelectionMenu: FC = () => {
                     }}
                   />
 
-                  <TaskPrioritySelector
-                    onSelect={changePriority}
-                    render={(ctx) => {
-                      return (
-                        <Menu.Item leftSection={<IconFlagFilled size={18} />} onClick={ctx.toggle}>
-                          <Trans>Set priority</Trans>
-                        </Menu.Item>
-                      );
-                    }}
-                  />
+                  <Menu.Item
+                    leftSection={<IconFlagFilled size={18} />}
+                    onClick={(e) =>
+                      taskMenu.open({
+                        action: TaskMenuAction.CHANGE_PRIORITY,
+                        target: e.currentTarget,
+                      })
+                    }
+                  >
+                    <Trans>Set priority</Trans>
+                  </Menu.Item>
 
                   <Menu.Item
                     leftSection={<IconX size={18} />}
