@@ -11,7 +11,6 @@ import { TaskDataFragment } from "./graphql/fragmentTask.graphql";
 import { type TasksQueryVariables } from "./graphql/queryTasks.graphql";
 import { useTasksQuery } from "./hooks/use-tasks-query";
 import { ModalCreateTask } from "./modals/modal-create-task";
-import { updateTaskPath } from "./tasks-route-helpers";
 import { ListTaskRow } from "./views/list/list-task-row";
 import { ListTaskRowHead } from "./views/list/list-task-row-head";
 
@@ -97,10 +96,10 @@ export const TaskDetailSubtasks: FC<{ task: TaskDataFragment }> = ({ task }) => 
                     task={task}
                     prevTask={subTasks[index - 1]}
                     nextTask={subTasks[index + 1]}
-                    href={updateTaskPath({ code: task.code })}
                     groupVariables={groupVariables}
                     hidden={["customer", "priority"]}
                     hideSelection
+                    nextParentTask={null}
                   />
                 ))}
             </Stack>
