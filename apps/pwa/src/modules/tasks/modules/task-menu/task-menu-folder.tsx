@@ -1,13 +1,12 @@
 "use client";
 
-import { Circle } from "@/components/circle";
 import { TagType } from "@/graphql/enums.graphql";
 import QUERY_TAGS, {
   type TagsQuery,
   type TagsQueryVariables,
 } from "@/modules/tags/graphql/queryTags.graphql";
 import { useLazyQuery } from "@apollo/client/react";
-import { FocusTrap, Group, Loader, Stack, Text, TextInput } from "@mantine/core";
+import { alpha, FocusTrap, Group, Loader, Stack, Text, TextInput } from "@mantine/core";
 import { TaskMenuComponent } from "./task-menu-types";
 
 import { WayPoint } from "@/components/way-point";
@@ -16,52 +15,52 @@ import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useDebouncedState } from "@mantine/hooks";
-import { IconSearch } from "@tabler/icons-react";
+import { IconFolder, IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
 
-export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
+export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
   const { t } = useLingui();
   const color = useColor();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const [selected, setSelected] = useState<TaskDataFragment["tags"]>(task.tags ?? []);
+  const [selected, setSelected] = useState<TaskDataFragment["folder"]>(task.folder ?? null);
   const [textSearch, setTextSearch] = useDebouncedState("", 300);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isSearchEmpty, setIsSearchEmpty] = useState(false);
 
-  const [getTags, { data, fetchMore, loading }] = useLazyQuery<TagsQuery, TagsQueryVariables>(
+  const [getFolders, { data, fetchMore, loading }] = useLazyQuery<TagsQuery, TagsQueryVariables>(
     QUERY_TAGS,
     {
       fetchPolicy: "cache-and-network",
     }
   );
 
-  const onGetTags = useCallback(
+  const onGetFolders = useCallback(
     async (q: string) => {
       if (q.length > 0) {
-        const searchResult = await searchEntity(AppEntity.TAGS, q, { type: TagType.Task });
+        const searchResult = await searchEntity(AppEntity.TAGS, q, { type: TagType.TaskFolder });
         if (searchResult.length === 0) return setIsSearchEmpty(true);
-        await getTags({
-          variables: { type: TagType.Task, ids: searchResult.map((result) => result._id) },
+        await getFolders({
+          variables: { type: TagType.TaskFolder, ids: searchResult.map((result) => result._id) },
         });
         return setIsSearchEmpty(false);
       } else {
-        await getTags({
-          variables: { type: TagType.Task },
+        await getFolders({
+          variables: { type: TagType.TaskFolder },
         });
         return setIsSearchEmpty(false);
       }
     },
-    [getTags]
+    [getFolders]
   );
 
   const onFetchMore = useCallback(async () => {
     if (!data || isFetchingMore) return;
     setIsFetchingMore(true);
     await fetchMore({
-      variables: { type: TagType.Task, offset: data.tags.data.length },
+      variables: { type: TagType.TaskFolder, offset: data.tags.data.length },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
@@ -84,8 +83,8 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
     textSearch.length === 0;
 
   useEffect(() => {
-    onGetTags(textSearch);
-  }, [textSearch, getTags]);
+    onGetFolders(textSearch);
+  }, [textSearch, getFolders]);
 
   return (
     <Fragment>
@@ -113,12 +112,12 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
 
       <Stack p={4} gap={0} mah={220} style={{ overflow: "auto" }} ref={scrollRef}>
         {!isSearchEmpty &&
-          textSearch.length === 0 &&
-          selected.map((tag) => {
-            const isSelected = selected.some((t) => t._id === tag._id);
+          data?.tags.data.map((folder) => {
+            const isSelected = selected?._id === folder._id;
+
             return (
               <Group
-                key={tag._id}
+                key={folder._id}
                 className={styles.TaskMenuItem}
                 gap={8}
                 pr={12}
@@ -126,78 +125,41 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
                 py={5}
                 align="center"
                 onClick={() => {
-                  const tags = isSelected
-                    ? selected.filter((t) => t._id !== tag._id)
-                    : [...selected, tag];
-
-                  setSelected(tags);
-                  updateTask({
-                    _id: task._id,
-                    tags,
-                    context: { fromGroupVariables: groupVariables },
-                  });
+                  setSelected(isSelected ? null : folder);
+                  if (isSelected) {
+                    updateTask({
+                      _id: task._id,
+                      folder: null,
+                      context: { fromGroupVariables: groupVariables },
+                    });
+                  } else {
+                    updateTask({
+                      _id: task._id,
+                      folder,
+                      context: { fromGroupVariables: groupVariables },
+                    });
+                  }
                 }}
               >
                 <Group
                   style={{
-                    border: `1px solid transparent`,
-                    borderColor: isSelected ? color(tag.color || "gray") : "transparent",
-                    borderRadius: "50%",
+                    background: isSelected
+                      ? alpha(color(folder.color || "gray"), 0.1)
+                      : "transparent",
+                    borderRadius: 4,
                     padding: 2,
                   }}
                 >
-                  <Circle color={tag.color || "gray"} size={12} />
+                  <IconFolder color={folder.color || "gray"} size={14} />
                 </Group>
-                <Text fz={14}>{tag.name}</Text>
-              </Group>
-            );
-          })}
-
-        {!isSearchEmpty &&
-          data?.tags.data.map((tag) => {
-            const isSelected = selected.some((t) => t._id === tag._id);
-            if (textSearch.length === 0 && isSelected) return null;
-
-            return (
-              <Group
-                key={tag._id}
-                className={styles.TaskMenuItem}
-                gap={8}
-                pr={12}
-                pl={6}
-                py={5}
-                align="center"
-                onClick={() => {
-                  const tags = isSelected
-                    ? selected.filter((t) => t._id !== tag._id)
-                    : [...selected, tag];
-
-                  setSelected(tags);
-                  updateTask({
-                    _id: task._id,
-                    tags,
-                    context: { fromGroupVariables: groupVariables },
-                  });
-                }}
-              >
-                <Group
-                  style={{
-                    border: `1px solid transparent`,
-                    borderColor: isSelected ? color(tag.color || "gray") : "transparent",
-                    borderRadius: "50%",
-                    padding: 2,
-                  }}
-                >
-                  <Circle color={tag.color || "gray"} size={12} />
-                </Group>
-                <Text fz={14}>{tag.name}</Text>
+                <Text fz={14}>{folder.name}</Text>
               </Group>
             );
           })}
 
         {isSearchEmpty && (
           <Text fz={12} c="gray" ta="center" py={5}>
-            <Trans>No tags found</Trans>
+            <Trans>No folders found</Trans>
           </Text>
         )}
 

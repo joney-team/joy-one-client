@@ -7,6 +7,7 @@ import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import { TaskMenuAssignee } from "./task-menu-assignee";
 import { TaskMenuCustomer } from "./task-menu-customer";
 import { TaskMenuEstimateTime } from "./task-menu-estimate-time";
+import { TaskMenuFolder } from "./task-menu-folder";
 import { TaskMenuGanttTimeline } from "./task-menu-gantt-timeline";
 import { TaskMenuPriority } from "./task-menu-priority";
 import { TaskMenuStatus } from "./task-menu-status";
@@ -28,6 +29,7 @@ const menuComponents: Record<TaskMenuAction, TaskMenuComponent> = {
   [TaskMenuAction.CHANGE_ASSIGNEE]: TaskMenuAssignee,
   [TaskMenuAction.CHANGE_CUSTOMER]: TaskMenuCustomer,
   [TaskMenuAction.CHANGE_ESTIMATE_TIME]: TaskMenuEstimateTime,
+  [TaskMenuAction.CHANGE_FOLDER]: TaskMenuFolder,
 };
 
 export const TaskContextMenuDropdown: ContextMenuDropdownComponent = (props) => {

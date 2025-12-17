@@ -3,6 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
+import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { ModalConfirm, type ModalConfirmRef } from "@/modals/modal-confirm";
 import type { TagEntity } from "@/modules/tags/tags-types";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
@@ -93,13 +94,15 @@ export const TaskSelectionMenu: FC = () => {
         );
       }
 
-      if ("folder" in task && task.folder) {
+      if ("folder" in task) {
         await updateTasks(
           selections.selected.map(({ _id }) => ({
             _id,
-            folder: task.folder,
+            folder: task.folder ?? null,
           }))
         );
+        taskMenu.close();
+        selections.unselect(...selections.selected.map((v) => v._id));
       }
 
       if ("assigneeUsers" in task && task.assigneeUsers) {
@@ -110,6 +113,8 @@ export const TaskSelectionMenu: FC = () => {
           }))
         );
       }
+
+      emitInternalEvent(InternalEvent.REFETCH_TASKS);
     },
   });
 
@@ -127,7 +132,7 @@ export const TaskSelectionMenu: FC = () => {
         }}
       >
         <Card withBorder shadow="none" py={0} pr={8} radius={100} bg={"dark"}>
-          <Group h={45} align="center" justify="space-between" gap={5} wrap="nowrap">
+          <Group h={40} align="center" justify="space-between" gap={5} wrap="nowrap">
             <IconStack2 size={18} strokeWidth={1.5} color="white" />
             <Group gap={3} wrap="nowrap">
               <Text c="white" fz={12} fw={600} miw={10}>
@@ -144,7 +149,11 @@ export const TaskSelectionMenu: FC = () => {
               </Center>
 
               {statuses.length > 0 && (
-                <Tooltip label={<Trans>Change status</Trans>} position="bottom">
+                <Tooltip
+                  label={<Trans>Change status</Trans>}
+                  position="bottom"
+                  disabled={taskMenu.isOpened}
+                >
                   <Button
                     onClick={(e) =>
                       taskMenu.open({
@@ -156,28 +165,36 @@ export const TaskSelectionMenu: FC = () => {
                     color="gray"
                     variant="transparent"
                     radius={100}
+                    px={8}
                   >
                     <Trans>Status</Trans>
                   </Button>
                 </Tooltip>
               )}
 
-              <Button
-                leftIcon={IconUsersPlus}
-                color="gray"
-                variant="transparent"
-                radius={100}
-                onClick={(e) =>
-                  taskMenu.open({
-                    action: TaskMenuAction.CHANGE_ASSIGNEE,
-                    target: e.currentTarget,
-                  })
-                }
-              >
-                <Trans>Assign task</Trans>
-              </Button>
+              <Tooltip label={<Trans>Assign task to members</Trans>} disabled={taskMenu.isOpened}>
+                <Button
+                  leftIcon={IconUsersPlus}
+                  color="gray"
+                  variant="transparent"
+                  radius={100}
+                  px={8}
+                  onClick={(e) =>
+                    taskMenu.open({
+                      action: TaskMenuAction.CHANGE_ASSIGNEE,
+                      target: e.currentTarget,
+                    })
+                  }
+                >
+                  <Trans>Assign task</Trans>
+                </Button>
+              </Tooltip>
 
-              <Tooltip label={<Trans>Set tag</Trans>} position="bottom">
+              <Tooltip
+                label={<Trans>Set tag</Trans>}
+                position="bottom"
+                disabled={taskMenu.isOpened}
+              >
                 <Button
                   onClick={(e) =>
                     taskMenu.open({
@@ -188,36 +205,45 @@ export const TaskSelectionMenu: FC = () => {
                   leftIcon={IconTags}
                   color="gray"
                   variant="transparent"
+                  px={8}
                   radius={100}
                 >
                   <Trans>Tags</Trans>
                 </Button>
               </Tooltip>
 
-              <TaskTagFolderSelector
-                onSelect={changeFolder}
-                render={(ctx) => {
-                  return (
-                    <Tooltip label={<Trans>Change folder</Trans>} position="bottom">
-                      <Button
-                        leftIcon={IconFolder}
-                        color="gray"
-                        variant="transparent"
-                        radius={100}
-                        onClick={ctx.toggle}
-                      >
-                        <Trans>Move</Trans>
-                      </Button>
-                    </Tooltip>
-                  );
-                }}
-              />
+              <Tooltip
+                label={<Trans>Change folder</Trans>}
+                position="bottom"
+                disabled={taskMenu.isOpened}
+              >
+                <Button
+                  onClick={(e) =>
+                    taskMenu.open({
+                      action: TaskMenuAction.CHANGE_FOLDER,
+                      target: e.currentTarget,
+                    })
+                  }
+                  leftIcon={IconFolder}
+                  color="gray"
+                  variant="transparent"
+                  px={8}
+                  radius={100}
+                >
+                  <Trans>Folder</Trans>
+                </Button>
+              </Tooltip>
 
-              <Tooltip label={<Trans>Set priority</Trans>} position="bottom">
+              <Tooltip
+                label={<Trans>Set priority</Trans>}
+                position="bottom"
+                disabled={taskMenu.isOpened}
+              >
                 <Button
                   leftIcon={IconFlagFilled}
                   color="gray"
                   variant="transparent"
+                  px={8}
                   radius={100}
                   onClick={(e) =>
                     taskMenu.open({
@@ -234,6 +260,7 @@ export const TaskSelectionMenu: FC = () => {
                 leftIcon={IconTrash}
                 color="red"
                 variant="transparent"
+                px={8}
                 radius={100}
                 onClick={removeAll}
               >
@@ -247,7 +274,7 @@ export const TaskSelectionMenu: FC = () => {
                   radius={100}
                   onClick={() => selections.unselect(...selections.selected.map((v) => v._id))}
                 >
-                  <IconX size={18} />
+                  <IconX size={14} />
                 </ActionIcon>
               </Tooltip>
             </Renderer>

@@ -7,12 +7,14 @@ import { type FC } from "react";
 import { type TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTaskSelections } from "./task-selections-context";
+import { classNames } from "@/utils/ui.utils";
 
 export const TaskSelectionBox: FC<{
   task: TaskDataFragment;
   groupVariables: TasksQueryVariables | null;
   className?: string;
-}> = ({ task, groupVariables, className }) => {
+  activeClassName?: string;
+}> = ({ task, groupVariables, className, activeClassName }) => {
   const color = useColor();
   const { selected, toggleSelect } = useTaskSelections();
   const isSelected = selected.some((v) => v._id === task._id);
@@ -22,7 +24,7 @@ export const TaskSelectionBox: FC<{
       component="div"
       variant="transparent"
       onClick={(e) => toggleSelect({ task, isShiftKey: e.shiftKey, groupVariables })}
-      className={className}
+      className={classNames(className, isSelected && activeClassName)}
       data-selected={isSelected}
       w={26}
       h={26}

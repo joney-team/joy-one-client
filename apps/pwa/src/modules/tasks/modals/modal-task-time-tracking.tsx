@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { Renderer } from "@/components/renderer";
 import { calendarDayJsLocalizer } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
@@ -21,10 +21,8 @@ import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
-  em,
   Group,
   InputWrapper,
-  Modal,
   ScrollArea,
   Stack,
   Switch,
@@ -32,9 +30,10 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { DateInput, TimeInput } from "@mantine/dates";
-import { useDisclosure, useForceUpdate } from "@mantine/hooks";
+import { useForceUpdate } from "@mantine/hooks";
 import {
   IconChevronDown,
+  IconChevronRight,
   IconClock,
   IconCurrencyDollar,
   IconCurrencyDollarOff,
@@ -43,7 +42,17 @@ import {
   IconPlus,
   IconStopwatch,
 } from "@tabler/icons-react";
-import { FC, useEffect, useRef, useState } from "react";
+import {
+  FC,
+  forwardRef,
+  Fragment,
+  ReactNode,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Calendar } from "react-big-calendar";
 import { v4 as uuId } from "uuid";
 
@@ -78,13 +87,13 @@ export function findNearestTimeSlot(now = new Date()) {
   return formattedTime;
 }
 
-export interface TaskTimeTrackingModalProps {
+export interface TaskTimeTrackingModalArgs {
   date: Date;
   onSubmit?: (task: TaskEntity) => any;
 }
 
-const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () => void }> = (
-  props
+const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () => void }> = (
+  args
 ) => {
   const workspace = useWorkspace();
   const lang = useLang();
@@ -97,7 +106,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
   const [name, setName] = useState("");
   const [user, setUser] = useState<WorkspaceMemberInfo>(workspace.userMember);
   const [billable, setBillable] = useState(true);
-  const [date, setDate] = useState(props.date);
+  const [date, setDate] = useState(args.date);
 
   const viewport = useRef<HTMLDivElement>(null);
   const forceUpdate = useForceUpdate();
@@ -159,8 +168,8 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
         ],
       });
 
-      props.onSubmit?.(result);
-      props.close();
+      args.onSubmit?.(result);
+      args.close();
     } catch (error) {
       onError(error);
     }
@@ -178,31 +187,40 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
     return () => clearInterval(interval);
   }, []);
 
+  const breadcrumbs = useMemo(() => {
+    return [
+      tasks.activatedFolder && (
+        <Group color={tasks.activatedFolder.color ?? "dark"} gap={5}>
+          <IconFolder size={18} color={color(tasks.activatedFolder.color ?? "dark")} />
+          <Text fz={13} fw={400}>
+            {tasks.activatedFolder.name}
+          </Text>
+        </Group>
+      ),
+      <Text fz={13} fw={400} c="gray">
+        <Trans>New Task</Trans>
+      </Text>,
+    ].filter(Boolean);
+  }, [tasks.activatedFolder]);
+
   return (
     <Stack>
-      {tasks.activatedFolder && (
-        <Group gap={2} align="center" wrap="nowrap" ml={-8}>
-          <Button
-            size="compact-sm"
-            variant="subtle"
-            color={color(tasks.activatedFolder.color || "gray")}
-            fz={16}
-            fw={500}
-            leftIcon={IconFolder}
-          >
-            {tasks.activatedFolder.name}
-          </Button>
-
-          <Text>/</Text>
-
-          <Text px={8} fz={em(14)} fw={300}>
-            <Trans>New task</Trans>
-          </Text>
+      {breadcrumbs.length > 1 && (
+        <Group gap={0}>
+          {breadcrumbs.map((breadcrumb, index) => (
+            <Fragment key={index}>
+              {breadcrumb}
+              {index < breadcrumbs.length - 1 && (
+                <ThemeIcon variant="transparent" color="gray" size="sm">
+                  <IconChevronRight size={14} />
+                </ThemeIcon>
+              )}
+            </Fragment>
+          ))}
         </Group>
       )}
 
       <ContentEditable
-        mt={3}
         autoFocus
         placeholder={t`Enter task name`}
         placeHolderFontSize={layout.view === "mobile" ? 12 : 18}
@@ -370,7 +388,6 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
           onLabel={<IconCurrencyDollar size={16} strokeWidth={2} />}
           offLabel={<IconCurrencyDollarOff size={16} strokeWidth={2} />}
           size="md"
-          color={color(tasks.activatedFolder?.color || "primary")}
         />
 
         <WorkspaceMemberInput
@@ -394,36 +411,50 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalProps & { close: () 
   );
 };
 
-export let OnModalTaskTimeTracking: (props: TaskTimeTrackingModalProps) => void = (
-  props: TaskTimeTrackingModalProps
-) => {};
+export interface ModalTaskTimeTrackingRef {
+  open: (args: TaskTimeTrackingModalArgs) => void;
+  close: () => void;
+}
 
-export const ModalTaskTimeTracking: FC = () => {
-  const props = useRef<TaskTimeTrackingModalProps | null>(null);
-  const forceUpdate = useForceUpdate();
-  const [opened, { open, close }] = useDisclosure(false);
-  const { activatedFolder: tagFolder } = useTasks();
+export const ModalTaskTimeTracking = forwardRef<
+  ModalTaskTimeTrackingRef,
+  {
+    children?: (ref: ModalTaskTimeTrackingRef) => ReactNode;
+  }
+>((props, ref) => {
+  const [args, setArgs] = useState<TaskTimeTrackingModalArgs | null>(null);
 
-  OnModalTaskTimeTracking = (p) => {
-    props.current = p || null;
-    forceUpdate();
-    open();
-  };
+  useImperativeHandle(ref, () => ({
+    open: (a) => {
+      setArgs(a ?? {});
+    },
+    close: () => {
+      setArgs(null);
+    },
+  }));
 
   return (
-    <Modal
-      opened={opened}
-      onClose={close}
-      title={
-        <ModalHead
-          name={<Trans>Add time trackings</Trans>}
-          icon={IconStopwatch}
-          color={tagFolder?.color}
-        />
-      }
-      size={460}
-    >
-      {!!props.current && <ModalTaskTimeTrackingContent {...props.current} close={close} />}
-    </Modal>
+    <Fragment>
+      {typeof props.children === "function"
+        ? props.children({
+            open: (a) => {
+              setArgs(a ?? {});
+            },
+            close: () => {
+              setArgs(null);
+            },
+          })
+        : null}
+
+      <Modal
+        opened={!!args}
+        onClose={() => setArgs(null)}
+        name={<Trans>Add time trackings</Trans>}
+        icon={IconStopwatch}
+        size={460}
+      >
+        {!!args && <ModalTaskTimeTrackingContent {...args} close={() => setArgs(null)} />}
+      </Modal>
+    </Fragment>
   );
-};
+});

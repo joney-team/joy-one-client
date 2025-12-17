@@ -33,7 +33,7 @@ import { useForceUpdate } from "@mantine/hooks";
 import { IconAnalyze, IconAnalyzeOff, IconClockPlus } from "@tabler/icons-react";
 import { FC, Fragment, useEffect } from "react";
 import { Avatar } from "../../components/avatar";
-import { Calendar } from "../../components/calendar";
+import { Calendar } from "../../components/calendar/calendar";
 import { Circle } from "../../components/circle";
 
 interface HrmTimekeepingsProps {

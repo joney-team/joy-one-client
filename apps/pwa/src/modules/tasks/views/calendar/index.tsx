@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { Calendar } from "@/components/calendar";
+import { Calendar } from "@/components/calendar/calendar";
 import { useList } from "@/components/list/use-list";
 import { Renderer } from "@/components/renderer";
 import { EventType } from "@/graphql/enums.graphql";

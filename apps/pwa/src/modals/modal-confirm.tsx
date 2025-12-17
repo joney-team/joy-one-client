@@ -83,7 +83,7 @@ export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((prop
         {args && (
           <Stack align="stretch" gap={0}>
             <Group p={26} wrap="nowrap" align="start">
-              <Group style={{ border: `1px solid ${modalColor}`, borderRadius: 14 }} p={3}>
+              <Group style={{ border: `1.5px solid ${modalColor}`, borderRadius: 14 }} p={3}>
                 <ThemeIcon color={modalColor} variant="light" size="xl" radius={10}>
                   <IconComponent />
                 </ThemeIcon>

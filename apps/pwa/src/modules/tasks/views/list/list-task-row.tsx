@@ -180,8 +180,9 @@ export const ListTaskRow: FC<
 
                     {!hideSelection && (
                       <TaskSelectionBox
-                        className={styles.TaskSelectionBox}
                         task={task}
+                        className={styles.TaskSelectionBox}
+                        activeClassName={styles.isActive}
                         groupVariables={groupVariables}
                       />
                     )}
@@ -319,7 +320,7 @@ export const ListTaskRow: FC<
                                       setIsEditName(true);
                                     }}
                                   >
-                                    <IconPencil size={16} />
+                                    <IconPencil size={14} />
                                   </ActionIcon>
                                 </Tooltip>
                               )}
@@ -343,7 +344,7 @@ export const ListTaskRow: FC<
                                           });
                                         }}
                                       >
-                                        <IconPlus size={16} />
+                                        <IconPlus size={14} />
                                       </ActionIcon>
                                     </Tooltip>
                                   )}
@@ -362,7 +363,7 @@ export const ListTaskRow: FC<
                                   });
                                 }}
                               >
-                                <IconTagPlus size={16} />
+                                <IconTagPlus size={14} />
                               </ActionIcon>
                             </Group>
                           </Fragment>

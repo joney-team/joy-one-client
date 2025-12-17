@@ -3,13 +3,7 @@
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { WayPoint } from "@/components/way-point";
-import { TaskTag } from "@/modules/tasks/components/task-tag";
-import { useTasks } from "@/modules/tasks/tasks-context";
-import {
-  getTaskPriorityColor,
-  isTaskOutdated,
-  renderTaskStatusStyle,
-} from "@/modules/tasks/tasks-service";
+import { getTaskPriorityColor, isTaskOutdated } from "@/modules/tasks/tasks-service";
 import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -24,8 +18,7 @@ import {
   dropTargetForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -66,10 +59,10 @@ import { TaskMenuAction } from "../../modules/task-menu/task-menu-types";
 import { taskPriorities } from "../../task-constants";
 
 import { Avatar } from "@/components/avatar";
-import styles from "./board-tasks.module.css";
-import { updateTaskPath } from "../../tasks-route-helpers";
 import { useRouter } from "next/navigation";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
+import { updateTaskPath } from "../../tasks-route-helpers";
+import styles from "./board-tasks.module.css";
 
 const CardProperty: FC<
   PropsWithChildren<
@@ -177,6 +170,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
   const router = useRouter();
   const taskMenu = useTaskMenu({ task, groupVariables });
 
+  const { t } = useLingui();
   const { updateTasks } = useUpdateTasks();
   const { status } = useTaskStatuses(task);
 
@@ -503,8 +497,8 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                   onClick={() => setIsShowSubTasks((s) => !s)}
                 >
                   <Group justify="space-between" gap={8} flex={1}>
-                    <Text fz={14}>
-                      <NumberFormat value={task.childCount} /> <Trans>subtasks</Trans>
+                    <Text fz="sm">
+                      <Plural value={task.childCount} one="# subtask" other="# subtasks" />
                     </Text>
 
                     {task.childProgress && (

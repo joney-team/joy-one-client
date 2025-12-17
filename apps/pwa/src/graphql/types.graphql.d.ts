@@ -875,6 +875,7 @@ export type QueryTasksArgs = {
   all?: InputMaybe<Scalars['Boolean']['input']>;
   assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
   folderId?: InputMaybe<Scalars['String']['input']>;
+  fromTrackingTime?: InputMaybe<Scalars['Float']['input']>;
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   isClosedOnly?: InputMaybe<Scalars['Boolean']['input']>;
   isProgressOnly?: InputMaybe<Scalars['Boolean']['input']>;
@@ -885,6 +886,7 @@ export type QueryTasksArgs = {
   priority?: InputMaybe<TaskPriority>;
   status?: InputMaybe<Scalars['String']['input']>;
   tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  toTrackingTime?: InputMaybe<Scalars['Float']['input']>;
 };
 
 
@@ -892,6 +894,7 @@ export type QueryTasksCountArgs = {
   all?: InputMaybe<Scalars['Boolean']['input']>;
   assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
   folderId?: InputMaybe<Scalars['String']['input']>;
+  fromTrackingTime?: InputMaybe<Scalars['Float']['input']>;
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   isClosedOnly?: InputMaybe<Scalars['Boolean']['input']>;
   isProgressOnly?: InputMaybe<Scalars['Boolean']['input']>;
@@ -902,6 +905,7 @@ export type QueryTasksCountArgs = {
   priority?: InputMaybe<TaskPriority>;
   status?: InputMaybe<Scalars['String']['input']>;
   tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  toTrackingTime?: InputMaybe<Scalars['Float']['input']>;
 };
 
 

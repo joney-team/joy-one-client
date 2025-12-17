@@ -15,6 +15,7 @@ export enum TaskMenuAction {
   CHANGE_CUSTOMER = "CHANGE_CUSTOMER",
   GANTT_TIMELINE = "GANTT_TIMELINE",
   CHANGE_ESTIMATE_TIME = "CHANGE_ESTIMATE_TIME",
+  CHANGE_FOLDER = "CHANGE_FOLDER",
 }
 
 export type TaskMenuData = Partial<TaskDataFragment> & { _id: string };

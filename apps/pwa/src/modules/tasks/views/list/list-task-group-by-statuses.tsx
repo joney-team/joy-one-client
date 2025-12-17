@@ -19,7 +19,6 @@ import { useElementLazyLoad, useWaitElementLazyLoad } from "@/hooks/use-element-
 import { nonLoading } from "@/utils/non-loading";
 import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
-import { updateTaskPath } from "../../tasks-route-helpers";
 import styles from "./list-tasks.module.css";
 
 const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.ListTaskRow), {
@@ -61,7 +60,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
       ...state.variables,
       status: props.status.id,
       folderId: activatedFolder?._id,
-      limit: 15,
+      limit: 30,
       parentId: "root",
     };
   }, [props.status, activatedFolder?._id, state]);

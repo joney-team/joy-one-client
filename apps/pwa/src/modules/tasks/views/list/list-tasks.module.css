@@ -35,5 +35,19 @@
         border-color: var(--mantine-color-gray-light);
       }
     }
+
+    & .TaskSelectionBox {
+      opacity: 0;
+
+      &.isActive {
+        opacity: 1;
+      }
+    }
+
+    &:hover {
+      & .TaskSelectionBox:not(.isActive) {
+        opacity: 1;
+      }
+    }
   }
 }

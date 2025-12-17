@@ -33,10 +33,13 @@ const getGanttTasks = () =>
   });
 
 const getTimeTrackingsTasks = () =>
-  dynamic(() => import("./time-trackings").then((mod) => mod.TasksTimeTrackings), {
-    ssr: false,
-    loading: viewLoader,
-  });
+  dynamic(
+    () => import("./time-trackings/time-tracking-tasks").then((mod) => mod.TimeTrackingTasks),
+    {
+      ssr: false,
+      loading: viewLoader,
+    }
+  );
 
 const getCalendarTasks = () =>
   dynamic(() => import("./calendar").then((mod) => mod.TasksCalendarView), {
