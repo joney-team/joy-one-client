@@ -1032,6 +1032,10 @@ msgstr "Cannot be deleted, cannot be assigned to other members, can only be tran
 msgid "Cannot display file"
 msgstr "Cannot display file"
 
+#: src/modules/plugins/storage/plugin-storage.tsx:186
+msgid "Capacity"
+msgstr "Capacity"
+
 #: src/modules/loans/modals/modal-loan-package-form.tsx:207
 msgid "Capital rate for each period {days} days"
 msgstr "Capital rate for each period {days} days"
@@ -1175,7 +1179,7 @@ msgstr "Chat icon"
 msgid "Check"
 msgstr "Check"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:84
+#: src/modules/plugins/storage/plugin-storage.tsx:87
 msgid "Check connection"
 msgstr "Check connection"
 
@@ -1494,7 +1498,7 @@ msgstr "Congratulations! You cleared your important notifications 🎉"
 #: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:54
 #: src/modules/plugins/meta-pages/plugin-meta-pages.tsx:72
 #: src/modules/plugins/storage/plugin-storage-modal.tsx:107
-#: src/modules/plugins/storage/plugin-storage.tsx:137
+#: src/modules/plugins/storage/plugin-storage.tsx:140
 #: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:29
 #: src/modules/plugins/zalo-oas/components/zalo-oas-onboarding.tsx:39
 #: src/modules/workspace-settings/components/workspace-setting-message-boxes-integrations.tsx:134
@@ -1503,7 +1507,7 @@ msgid "Connect"
 msgstr "Connect"
 
 #: src/modules/plugins/storage/plugin-storage-modal.tsx:59
-#: src/modules/plugins/storage/plugin-storage.tsx:126
+#: src/modules/plugins/storage/plugin-storage.tsx:129
 msgid "Connect Cloud Storage"
 msgstr "Connect Cloud Storage"
 
@@ -1542,11 +1546,11 @@ msgstr "Connect with Social channels"
 msgid "Connecting..."
 msgstr "Connecting..."
 
-#: src/modules/plugins/storage/plugin-storage.tsx:90
+#: src/modules/plugins/storage/plugin-storage.tsx:93
 msgid "Connection failed"
 msgstr "Connection failed"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:85
+#: src/modules/plugins/storage/plugin-storage.tsx:88
 msgid "Connection successful"
 msgstr "Connection successful"
 
@@ -1864,7 +1868,7 @@ msgstr "Credit report"
 msgid "Credit settings"
 msgstr "Credit settings"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:227
+#: src/modules/plugins/storage/plugin-storage.tsx:230
 msgid "Cross-origin resource sharing (CORS)"
 msgstr "Cross-origin resource sharing (CORS)"
 
@@ -2375,7 +2379,7 @@ msgstr "Easy & quick setup"
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:49
 #: src/modules/partners/partner-list.tsx:44
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:149
-#: src/modules/plugins/storage/plugin-storage.tsx:200
+#: src/modules/plugins/storage/plugin-storage.tsx:203
 #: src/modules/product-combos/product-combo-setup.tsx:61
 #: src/modules/products/product-list.tsx:120
 #: src/modules/promotions/promostion-list.tsx:207
@@ -3155,7 +3159,7 @@ msgstr "Integrate Fanpage Facebook, manage Messenger messages."
 msgid "Integrate other services / utilities"
 msgstr "Integrate other services / utilities"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:130
+#: src/modules/plugins/storage/plugin-storage.tsx:133
 #: src/modules/workspaces/workspace-modules.tsx:459
 msgid "Integrate with cloud storage services: S3, ..."
 msgstr "Integrate with cloud storage services: S3, ..."
@@ -5445,7 +5449,7 @@ msgstr "Range price"
 msgid "Range week <0>{0}</0>"
 msgstr "Range week <0>{0}</0>"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:240
+#: src/modules/plugins/storage/plugin-storage.tsx:243
 msgid "Read docs"
 msgstr "Read docs"
 
@@ -5529,7 +5533,7 @@ msgstr "Recently"
 msgid "Reconnect"
 msgstr "Reconnect"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:188
+#: src/modules/plugins/storage/plugin-storage.tsx:191
 msgid "Refresh connection"
 msgstr "Refresh connection"
 
@@ -6297,10 +6301,6 @@ msgstr "Sign out another device"
 msgid "Signature"
 msgstr "Signature"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:183
-msgid "Size"
-msgstr "Size"
-
 #: src/modals/modal-upgrade-version.tsx:59
 #: src/modules/dashboard/dashboard-suggestions.tsx:186
 msgid "Skip"
@@ -6861,7 +6861,7 @@ msgstr "Title"
 msgid "To"
 msgstr "To"
 
-#: src/modules/plugins/storage/plugin-storage.tsx:231
+#: src/modules/plugins/storage/plugin-storage.tsx:234
 msgid "To allow our app to upload files to your storage, you need to configure CORS."
 msgstr "To allow our app to upload files to your storage, you need to configure CORS."
 
@@ -7035,7 +7035,7 @@ msgstr "Unit"
 
 #: src/modules/files/files-constants.ts:22
 #: src/modules/loans/components/loan-card.tsx:96
-#: src/modules/plugins/storage/plugin-storage.tsx:184
+#: src/modules/plugins/storage/plugin-storage.tsx:187
 #: src/modules/promotions/promostion-list.tsx:48
 #: src/modules/promotions/promostion-list.tsx:157
 #: src/modules/promotions/promostion-list.tsx:180
