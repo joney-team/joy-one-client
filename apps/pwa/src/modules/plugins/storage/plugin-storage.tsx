@@ -55,7 +55,10 @@ import GET_PLUGIN_EXTERNAL_STORAGE, {
 export const PluginStorage: FC = () => {
   const color = useColor();
   const storage = useQuery<PluginExternalStorageQuery, PluginExternalStorageQueryVariables>(
-    GET_PLUGIN_EXTERNAL_STORAGE
+    GET_PLUGIN_EXTERNAL_STORAGE,
+    {
+      fetchPolicy: "cache-and-network",
+    }
   );
 
   const [healthCheck, { loading: healthCheckLoading }] = useMutation<
@@ -180,7 +183,7 @@ export const PluginStorage: FC = () => {
                       <Text>Bucket: {storageData.bucketName}</Text>
                       <Text>Region: {storageData.region}</Text>
                       <Text>
-                        <Trans>Size</Trans>:{" "}
+                        <Trans>Capacity</Trans>:{" "}
                         {storageData.size ? formatBytes(storageData.size) : <Trans>Unknown</Trans>}
                       </Text>
 
