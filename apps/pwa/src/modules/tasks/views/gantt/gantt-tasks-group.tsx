@@ -8,8 +8,8 @@ import { TagDataFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { nonLoading } from "@/utils/non-loading";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { Trans } from "@lingui/react/macro";
-import { ActionIcon, alpha, Badge, Box, Group, Loader, Stack, Text } from "@mantine/core";
+import { Trans, useLingui } from "@lingui/react/macro";
+import { ActionIcon, alpha, Badge, Box, Group, Loader, Stack, Text, Tooltip } from "@mantine/core";
 import { IconFolder, IconFolderOpen, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { Fragment, useEffect, useMemo, useRef, useState, type FC } from "react";
@@ -24,6 +24,7 @@ import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
 import { useGanttRefs } from "./gantt-tasks-refs";
 import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
+import { DateFormat } from "@/components/format/date-format";
 
 const GanttTask = dynamic(() => import("./gantt-task/gantt-task").then((mod) => mod.GanttTask), {
   ssr: false,
@@ -49,6 +50,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
   pure,
   isDefaultOpen = false,
 }) => {
+  const { t } = useLingui();
   const gantt = useGantt();
   const ganttRefs = useGanttRefs();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -266,7 +268,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
               }}
               ref={bodyRef}
             >
-              {metric?.estimatedTime && gantt.state.isShowEstimatedTime && (
+              {!!metric?.estimatedTime && !!gantt.state.isShowEstimatedTime && (
                 <Group
                   pos="sticky"
                   style={{
@@ -285,7 +287,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
                 </Group>
               )}
 
-              {timeline && metric?.progress && (
+              {!!timeline && (
                 <Stack
                   pos="absolute"
                   top={0}
@@ -293,12 +295,31 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
                   mih="100%"
                   justify="center"
                 >
-                  <Box
-                    h={8}
-                    w="100%"
-                    bg={alpha(folder?.color ?? "gray", 0.1)}
-                    style={{ borderRadius: 3 }}
-                  />
+                  <Tooltip.Floating
+                    label={
+                      <Fragment>
+                        <Trans>
+                          From <DateFormat value={timeline.startDate} type="date" /> to{" "}
+                          <DateFormat value={timeline.dueDate} type="date" />
+                        </Trans>
+
+                        {metric?.progress && (
+                          <Fragment>
+                            {" | "}
+                            <Trans>Progress</Trans>: {metric.progress}%
+                          </Fragment>
+                        )}
+                      </Fragment>
+                    }
+                    style={{ fontSize: 11 }}
+                  >
+                    <Box
+                      h={8}
+                      w="100%"
+                      bg={alpha(folder?.color ?? "gray", 0.1)}
+                      style={{ borderRadius: 3 }}
+                    />
+                  </Tooltip.Floating>
                 </Stack>
               )}
             </div>

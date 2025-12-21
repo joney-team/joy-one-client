@@ -31,7 +31,7 @@ export const GanttTaskEstimatedTime: FC = () => {
     >
       {task.childEstimatedTime ? (
         <Tooltip.Floating
-          label={<Trans>Self estimated time = {selfEstimatedTime}</Trans>}
+          label={<Trans>Parent task estimated time: {selfEstimatedTime}</Trans>}
           style={{ fontSize: 11 }}
           disabled={!task.estimatedTime}
         >

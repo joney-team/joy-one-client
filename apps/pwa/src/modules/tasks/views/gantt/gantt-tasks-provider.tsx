@@ -195,7 +195,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
           // Extend timeline when scrolling horizontally on body
           if (scrollDirection === "horizontal") {
-            onExtendTimeline();
+            // onExtendTimeline();
           }
         };
 
