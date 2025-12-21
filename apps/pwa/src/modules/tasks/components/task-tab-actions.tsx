@@ -1,8 +1,15 @@
 "use client";
 
+import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
+import { WithClearable } from "@/components/with-clearable/with-clearable";
 import { type ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
+import QUERY_WORKSPACE_MEMBERS, {
+  type WorkspaceMembersQuery,
+  type WorkspaceMembersQueryVariables,
+} from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
 import { nonLoading } from "@/utils/non-loading";
+import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Group } from "@mantine/core";
 import { IconChecks, IconEdit, IconFlag, IconFlagFilled, IconUsers } from "@tabler/icons-react";
@@ -11,15 +18,8 @@ import { useEffect, useRef, type FC } from "react";
 import { useFolderStatuses } from "../hooks/use-task-statuses";
 import { useTaskMenu } from "../modules/task-menu/task-menu";
 import { TaskMenuAction } from "../modules/task-menu/task-menu-types";
-import { useTasks } from "../tasks-context";
-import { useQuery } from "@apollo/client/react";
-import QUERY_WORKSPACE_MEMBERS, {
-  type WorkspaceMembersQuery,
-  type WorkspaceMembersQueryVariables,
-} from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
-import { Avatar } from "@/components/avatar";
 import { taskPriorities } from "../task-constants";
-import { WithClearable } from "@/components/with-clearable/with-clearable";
+import { useTasks } from "../tasks-context";
 
 const ModalCreateTask = dynamic(
   () => import("@/modules/tasks/modals/modal-create-task").then((mod) => mod.ModalCreateTask),
@@ -101,6 +101,7 @@ export const TaskTabActions: FC = () => {
           color={(state.variables?.assigneeUserIds ?? []).length > 0 ? "primary" : "gray"}
           h={28}
           px={8}
+          component="div"
           leftIcon={IconUsers}
           onClick={(e) => {
             menuTask.open({ action: TaskMenuAction.CHANGE_ASSIGNEE, target: e.currentTarget });
@@ -131,6 +132,7 @@ export const TaskTabActions: FC = () => {
           h={28}
           px={8}
           leftIcon={state.variables?.priority ? IconFlagFilled : IconFlag}
+          component="div"
           onClick={(e) => {
             menuTask.open({ action: TaskMenuAction.CHANGE_PRIORITY, target: e.currentTarget });
           }}
@@ -148,6 +150,7 @@ export const TaskTabActions: FC = () => {
         color={state.showClosed ? "primary" : "gray"}
         h={28}
         px={8}
+        component="div"
         leftIcon={IconChecks}
         onClick={() => setState((s) => ({ ...s, showClosed: !Boolean(s.showClosed) }))}
       >
@@ -156,6 +159,7 @@ export const TaskTabActions: FC = () => {
 
       <Button
         h={28}
+        component="div"
         onClick={() => modalCreateTaskRef.current?.open({ initial: { folder: activatedFolder } })}
         leftIcon={IconEdit}
       >
