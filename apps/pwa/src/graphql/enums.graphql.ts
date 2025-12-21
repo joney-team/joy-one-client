@@ -182,6 +182,7 @@ export const EventType = {
   TaskArchived: 'TASK_ARCHIVED',
   TaskAssigned: 'TASK_ASSIGNED',
   TaskDescriptionUpdated: 'TASK_DESCRIPTION_UPDATED',
+  TaskMetricSynced: 'TASK_METRIC_SYNCED',
   TaskNameUpdated: 'TASK_NAME_UPDATED',
   TaskNew: 'TASK_NEW',
   TaskPriorityUpdated: 'TASK_PRIORITY_UPDATED',
@@ -281,6 +282,12 @@ export const TagType = {
 } as const;
 
 export type TagType = typeof TagType[keyof typeof TagType];
+/** Available task statuses context types */
+export const TaskContextType = {
+  Folder: 'FOLDER'
+} as const;
+
+export type TaskContextType = typeof TaskContextType[keyof typeof TaskContextType];
 /** Available task priorities */
 export const TaskPriority = {
   High: 'HIGH',
@@ -290,9 +297,3 @@ export const TaskPriority = {
 } as const;
 
 export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
-/** Available task statuses context types */
-export const TaskStatusesContextType = {
-  Folder: 'FOLDER'
-} as const;
-
-export type TaskStatusesContextType = typeof TaskStatusesContextType[keyof typeof TaskStatusesContextType];

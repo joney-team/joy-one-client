@@ -28,7 +28,6 @@ import {
   IconCalendar,
   IconCaretRightFilled,
   IconCheck,
-  IconFiles,
   IconFlag,
   IconFlagFilled,
   IconHourglassHigh,
@@ -42,7 +41,6 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, PropsWithChildren, ReactNode, useMemo, useRef } from "react";
-import { FilesBox } from "../../../files/files-box";
 import { TaskTimeline } from "../../components/task-timeline";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
@@ -50,7 +48,7 @@ import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import { taskPriorities } from "../../task-constants";
 import { useTaskMenu } from "../task-menu/task-menu";
 import { TaskMenuAction } from "../task-menu/task-menu-types";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { DateFormat } from "@/components/format/date-format";
 
 const Editor = dynamic(() => import("@/components/editor/editor").then((mod) => mod.Editor), {
   ssr: false,
@@ -366,7 +364,7 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
                 startDate: null,
               })
             }
-            value={task.dueDate || task.startDate ? <TaskTimeline task={task} /> : null}
+            value={task.dueDate ? <DateFormat value={task.dueDate} /> : null}
             onClick={(e) =>
               taskMenu.open({
                 action: TaskMenuAction.CHANGE_TIMELINE,

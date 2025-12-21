@@ -6,7 +6,7 @@ import { TagDataFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Group, Loader, Text } from "@mantine/core";
+import { ActionIcon, alpha, Badge, Group, Loader, Progress, Stack, Text } from "@mantine/core";
 import { IconFolder, IconFolderOpen, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { Fragment, useEffect, useMemo, useRef, useState, type FC } from "react";
@@ -15,6 +15,14 @@ import { type ModalCreateTaskRef } from "../../modals/modal-create-task";
 import { useTaskSelections } from "../../modules/task-selections/task-selections-context";
 import { useTasks } from "../../tasks-context";
 import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { useTaskMetrics } from "../../hooks/use-task-metrics";
+import { TaskContextType } from "@/graphql/enums.graphql";
+import { useGanttRefs } from "./gantt-tasks-refs";
+import { createPortal } from "react-dom";
+import { ganttConfig } from "./gantt-tasks-config";
+import { formatDuration } from "@/components/inputs/estimate-time-input/estimate-time-input-utils";
+import { useGantt } from "./gantt-tasks-context";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 const GanttTask = dynamic(() => import("./gantt-task/gantt-task").then((mod) => mod.GanttTask), {
   ssr: false,
@@ -40,6 +48,11 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
   pure,
   isDefaultOpen = false,
 }) => {
+  const gantt = useGantt();
+  const ganttRefs = useGanttRefs();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+
   const { state } = useTasks();
   const [isOpened, setIsOpened] = useState(
     isDefaultOpen || Boolean(localStorage.getItem(`gtg-${folder?._id ?? "d"}`))
@@ -62,6 +75,11 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
   }, [folder?._id, state.showClosed, state.variables]);
 
   const { getTasks, tasks, loading, count } = useTasksQuery({ variables: groupVariables });
+
+  const { metric } = useTaskMetrics({
+    contextType: TaskContextType.Folder,
+    contextId: folder?._id,
+  });
 
   useEffect(() => {
     if (opened) getTasks();
@@ -100,6 +118,78 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
     return onInternalEvent(InternalEvent.GANTT_TASKS_CLOSE_ALL_FOLDER, onClose);
   }, [onClose]);
 
+  // Sync the position of the gantt task area
+  useEffect(() => {
+    if (!bodyRef.current || !rootRef.current) return;
+
+    const syncPosition = async () => {
+      const offsetTop = rootRef.current?.offsetTop ?? 0;
+      const top = offsetTop - ganttConfig.headHeight;
+
+      bodyRef.current?.style.setProperty("top", `${top}px`);
+      bodyRef.current?.style.setProperty("height", `${rootRef.current?.offsetHeight}px`);
+    };
+
+    syncPosition();
+
+    const mutationObserver = new MutationObserver(syncPosition);
+
+    mutationObserver.observe(ganttRefs.sidebarContainer.current, {
+      childList: true,
+      subtree: true,
+    });
+
+    const resizeObserver = new ResizeObserver(syncPosition);
+    resizeObserver.observe(rootRef.current);
+
+    return () => {
+      mutationObserver.disconnect();
+      resizeObserver.disconnect();
+    };
+  }, [folder?._id]);
+
+  const timeline = useMemo<{
+    startIndex: number;
+    endIndex: number;
+    left: number;
+    width: number;
+    startDate: number;
+    dueDate: number;
+  } | null>(() => {
+    if (!metric?.startDate || !metric.dueDate) return null;
+
+    if (metric.startDate && metric.dueDate) {
+      const startDate = metric.startDate;
+      const dueDate = metric.dueDate;
+
+      const startIndexCaptured = gantt.columns.findIndex(
+        (column) =>
+          DateTime.toSeconds(column.start) >= startDate ||
+          DateTime.toSeconds(column.end) >= startDate
+      );
+
+      const startIndex = startIndexCaptured >= 0 ? startIndexCaptured : 0;
+
+      const endIndexCaptured = gantt.columns.findIndex(
+        (column) =>
+          DateTime.toSeconds(column.end) >= dueDate || DateTime.toSeconds(column.start) >= dueDate
+      );
+
+      const endIndex = endIndexCaptured >= 0 ? endIndexCaptured : gantt.columns.length - 1;
+
+      return {
+        startIndex,
+        endIndex,
+        left: startIndex * ganttConfig.columnSize,
+        width: (endIndex - startIndex + 1) * ganttConfig.columnSize,
+        startDate,
+        dueDate,
+      };
+    }
+
+    return null;
+  }, [metric?.startDate, metric?.dueDate, gantt.columns]);
+
   return (
     <Fragment>
       {!pure && (
@@ -110,6 +200,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
           mih={46}
           gap="xs"
           wrap="nowrap"
+          ref={rootRef}
           style={{
             position: "relative",
             borderBottom: `1px solid var(--app-divider-color)`,
@@ -155,6 +246,62 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
           </ActionIcon>
         </Group>
       )}
+
+      {ganttRefs.body.current &&
+        createPortal(
+          <Fragment>
+            <div
+              style={{
+                position: "absolute",
+                height: rootRef.current?.offsetHeight,
+                width: "100%",
+                left: 0,
+                zIndex: 1,
+              }}
+              ref={bodyRef}
+            >
+              {metric?.estimatedTime && gantt.state.isShowEstimatedTime && (
+                <Group
+                  pos="sticky"
+                  style={{
+                    width: "max-content",
+                    top: 0,
+                    left: 0,
+                    height: "100%",
+                    zIndex: 2,
+                  }}
+                  px={3}
+                  align="center"
+                >
+                  <Badge bg={alpha(folder?.color ?? "gray", 0.4)} size="xs" tt="none">
+                    {formatDuration(metric.estimatedTime)}
+                  </Badge>
+                </Group>
+              )}
+
+              {timeline && metric?.progress && (
+                <Stack
+                  pos="absolute"
+                  top={0}
+                  style={{ left: `${timeline.left}px`, width: timeline.width }}
+                  mih="100%"
+                  justify="center"
+                >
+                  <Progress
+                    h={3}
+                    opacity={0.5}
+                    miw="100%"
+                    value={metric.progress}
+                    color={folder?.color ?? "gray"}
+                    radius="sm"
+                  />
+                </Stack>
+              )}
+            </div>
+          </Fragment>,
+          ganttRefs.body.current,
+          folder?._id ?? "root" + "-folder-gantt"
+        )}
 
       {opened &&
         tasks.map((task, taskIndex) => (

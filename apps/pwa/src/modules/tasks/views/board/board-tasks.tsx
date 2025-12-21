@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { TaskStatusesContextType } from "@/graphql/enums.graphql";
+import { TaskContextType } from "@/graphql/enums.graphql";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -130,7 +130,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
                           fz={12}
                           onClick={() =>
                             modal.open({
-                              contextType: activatedFolder ? TaskStatusesContextType.Folder : null,
+                              contextType: activatedFolder ? TaskContextType.Folder : null,
                               contextId: activatedFolder?._id ?? null,
                               autoCreation: true,
                             })

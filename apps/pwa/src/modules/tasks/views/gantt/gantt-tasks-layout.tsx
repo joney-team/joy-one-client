@@ -76,7 +76,7 @@ export const SidebarHead: FC = () => {
 
         <Tooltip
           label={
-            gantt.state.isShowEstimatedTime ? (
+            !gantt.state.isShowEstimatedTime ? (
               <Trans>Show estimate time</Trans>
             ) : (
               <Trans>Hide estimate time</Trans>

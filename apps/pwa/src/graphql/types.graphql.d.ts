@@ -382,6 +382,7 @@ export const EventType = {
   TaskArchived: 'TASK_ARCHIVED',
   TaskAssigned: 'TASK_ASSIGNED',
   TaskDescriptionUpdated: 'TASK_DESCRIPTION_UPDATED',
+  TaskMetricSynced: 'TASK_METRIC_SYNCED',
   TaskNameUpdated: 'TASK_NAME_UPDATED',
   TaskNew: 'TASK_NEW',
   TaskPriorityUpdated: 'TASK_PRIORITY_UPDATED',
@@ -665,7 +666,7 @@ export type MutationUpdateCategoryArgs = {
 
 export type MutationUpdateTaskStatusesArgs = {
   contextId?: InputMaybe<Scalars['String']['input']>;
-  contextType?: InputMaybe<TaskStatusesContextType>;
+  contextType?: InputMaybe<TaskContextType>;
   isInherited?: InputMaybe<Scalars['Boolean']['input']>;
   statuses: Array<TaskStatusInput>;
 };
@@ -784,6 +785,7 @@ export type Query = {
   tags: Tags;
   task: Task;
   taskByCode: Task;
+  taskMetrics: TaskMetrics;
   taskStatuses: ConfigTaskStatuses;
   tasks: TasksPaginated;
   tasksCount: Scalars['Float']['output'];
@@ -864,9 +866,15 @@ export type QueryTaskByCodeArgs = {
 };
 
 
+export type QueryTaskMetricsArgs = {
+  contextId?: InputMaybe<Scalars['String']['input']>;
+  contextType: TaskContextType;
+};
+
+
 export type QueryTaskStatusesArgs = {
   contextId?: InputMaybe<Scalars['String']['input']>;
-  contextType?: InputMaybe<TaskStatusesContextType>;
+  contextType?: InputMaybe<TaskContextType>;
   mode?: InputMaybe<GetTaskStatusesMode>;
 };
 
@@ -990,6 +998,7 @@ export type Task = {
   assigneeUserIds: Array<Scalars['String']['output']>;
   assigneeUsers: Array<WorkspaceMember>;
   childCount: Scalars['Float']['output'];
+  childEstimatedTime: Maybe<Scalars['Float']['output']>;
   childOrder: TaskChildOrder;
   childProgress: Scalars['Float']['output'];
   childTimeline: Maybe<TaskChildTimeline>;
@@ -1038,6 +1047,25 @@ export type TaskChildTimeline = {
   startDate: Maybe<Scalars['Float']['output']>;
 };
 
+/** Available task statuses context types */
+export const TaskContextType = {
+  Folder: 'FOLDER'
+} as const;
+
+export type TaskContextType = typeof TaskContextType[keyof typeof TaskContextType];
+export type TaskMetrics = {
+  __typename?: 'TaskMetrics';
+  contextId: Maybe<Scalars['String']['output']>;
+  contextType: TaskContextType;
+  dueDate: Maybe<Scalars['Float']['output']>;
+  estimatedTime: Maybe<Scalars['Float']['output']>;
+  inProgressTasks: Maybe<Scalars['Float']['output']>;
+  overdueTasks: Maybe<Scalars['Float']['output']>;
+  progress: Maybe<Scalars['Float']['output']>;
+  startDate: Maybe<Scalars['Float']['output']>;
+  totalTasks: Maybe<Scalars['Float']['output']>;
+};
+
 /** Available task priorities */
 export const TaskPriority = {
   High: 'HIGH',
@@ -1051,7 +1079,7 @@ export type TaskStatus = {
   __typename?: 'TaskStatus';
   color: Maybe<Scalars['String']['output']>;
   contextId: Maybe<Scalars['String']['output']>;
-  contextType: Maybe<TaskStatusesContextType>;
+  contextType: Maybe<TaskContextType>;
   id: Scalars['String']['output'];
   name: Maybe<Scalars['String']['output']>;
   order: Scalars['Float']['output'];
@@ -1064,12 +1092,6 @@ export type TaskStatusInput = {
   order?: InputMaybe<Scalars['Float']['input']>;
 };
 
-/** Available task statuses context types */
-export const TaskStatusesContextType = {
-  Folder: 'FOLDER'
-} as const;
-
-export type TaskStatusesContextType = typeof TaskStatusesContextType[keyof typeof TaskStatusesContextType];
 export type TaskTimeTracking = {
   __typename?: 'TaskTimeTracking';
   billable: Maybe<Scalars['Boolean']['output']>;

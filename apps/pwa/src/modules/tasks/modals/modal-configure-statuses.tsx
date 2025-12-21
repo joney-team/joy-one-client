@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { AppColorInput } from "@/components/inputs/app-color-input";
 import { Modal } from "@/components/modal/modal";
-import { GetTaskStatusesMode, TaskStatusesContextType } from "@/graphql/enums.graphql";
+import { GetTaskStatusesMode, TaskContextType } from "@/graphql/enums.graphql";
 import { TaskStatus } from "@/graphql/types.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
@@ -53,7 +53,7 @@ import { normalizeTaskStatuses } from "../task-constants";
 import { DefaultTaskStatusId } from "../tasks-types";
 
 export interface ModalConfigureStatusesArgs {
-  contextType: TaskStatusesContextType | null;
+  contextType: TaskContextType | null;
   contextId: string | null;
   autoCreation?: boolean;
 }

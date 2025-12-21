@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor/editor";
-import { TaskStatusesContextType } from "@/graphql/enums.graphql";
+import { TaskContextType } from "@/graphql/enums.graphql";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
 import { AppEntity } from "@/types";
@@ -61,7 +61,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
   useEffect(() => {
     getTaskStatuses({
       variables: initial?.folder
-        ? { contextType: TaskStatusesContextType.Folder, contextId: initial.folder._id }
+        ? { contextType: TaskContextType.Folder, contextId: initial.folder._id }
         : undefined,
     });
   }, [initial]);

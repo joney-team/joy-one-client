@@ -9,7 +9,7 @@ import QUERY_TASK_STATUSES, {
   type TaskStatusesQuery,
   type TaskStatusesQueryVariables,
 } from "../graphql/queryTaskStatuses.graphql";
-import { TaskStatusesContextType } from "@/graphql/enums.graphql";
+import { TaskContextType } from "@/graphql/enums.graphql";
 import { DefaultTaskStatusId } from "../tasks-types";
 
 export const useTaskStatuses = (task: Pick<TaskDataFragment, "status" | "statuses">) => {
@@ -30,7 +30,7 @@ export const useFolderStatuses = (folderId?: string | null) => {
     {
       variables: folderId
         ? {
-            contextType: TaskStatusesContextType.Folder,
+            contextType: TaskContextType.Folder,
             contextId: folderId,
           }
         : {},

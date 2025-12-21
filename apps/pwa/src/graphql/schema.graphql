@@ -348,6 +348,7 @@ enum EventType {
   TASK_ARCHIVED
   TASK_ASSIGNED
   TASK_DESCRIPTION_UPDATED
+  TASK_METRIC_SYNCED
   TASK_NAME_UPDATED
   TASK_NEW
   TASK_PRIORITY_UPDATED
@@ -487,7 +488,7 @@ type Mutation {
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
-  updateTaskStatuses(contextId: String, contextType: TaskStatusesContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
+  updateTaskStatuses(contextId: String, contextType: TaskContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
 }
 
 type PartnerEntity {
@@ -596,7 +597,8 @@ type Query {
   tags(ids: [String!], limit: Float = 30, offset: Float, type: String): Tags!
   task(_id: String!): Task!
   taskByCode(code: String!): Task!
-  taskStatuses(contextId: String, contextType: TaskStatusesContextType, mode: GetTaskStatusesMode): ConfigTaskStatuses!
+  taskMetrics(contextId: String, contextType: TaskContextType!): TaskMetrics!
+  taskStatuses(contextId: String, contextType: TaskContextType, mode: GetTaskStatusesMode): ConfigTaskStatuses!
   tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!], toTrackingTime: Float): TasksPaginated!
   tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!], toTrackingTime: Float): Float!
   userWorkspaceMember: WorkspaceMember!
@@ -668,6 +670,7 @@ type Task {
   assigneeUserIds: [String!]!
   assigneeUsers: [WorkspaceMember!]!
   childCount: Float!
+  childEstimatedTime: Float
   childOrder: TaskChildOrder!
   childProgress: Float!
   childTimeline: TaskChildTimeline
@@ -714,6 +717,23 @@ type TaskChildTimeline {
   startDate: Float
 }
 
+"""Available task statuses context types"""
+enum TaskContextType {
+  FOLDER
+}
+
+type TaskMetrics {
+  contextId: String
+  contextType: TaskContextType!
+  dueDate: Float
+  estimatedTime: Float
+  inProgressTasks: Float
+  overdueTasks: Float
+  progress: Float
+  startDate: Float
+  totalTasks: Float
+}
+
 """Available task priorities"""
 enum TaskPriority {
   HIGH
@@ -725,7 +745,7 @@ enum TaskPriority {
 type TaskStatus {
   color: String
   contextId: String
-  contextType: TaskStatusesContextType
+  contextType: TaskContextType
   id: String!
   name: String
   order: Float!
@@ -736,11 +756,6 @@ input TaskStatusInput {
   id: String!
   name: String
   order: Float
-}
-
-"""Available task statuses context types"""
-enum TaskStatusesContextType {
-  FOLDER
 }
 
 type TaskTimeTracking {

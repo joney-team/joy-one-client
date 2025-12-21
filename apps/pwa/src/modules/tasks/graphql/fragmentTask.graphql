@@ -21,7 +21,9 @@ fragment TaskData on Task {
 
   startDate
   dueDate
+
   estimatedTime
+  childEstimatedTime
 
   priority
   progress

@@ -6,8 +6,6 @@ import {
   Icon,
   IconClockHour3,
   IconMaximize,
-  IconNavigation,
-  IconNavigationFilled,
   IconSwipeDown,
   IconSwipeDownFilled,
   ReactNode,
@@ -37,6 +35,8 @@ const MenuItem: FC<{
       pl={6}
       py={6}
       align="center"
+      opacity={disabled ? 0.5 : 1}
+      style={{ cursor: disabled ? "not-allowed" : "pointer" }}
       onClick={() => {
         if (disabled) return;
         onClick();
@@ -95,6 +95,7 @@ export const TaskMenuGanttTimeline: TaskMenuComponent = ({
       <MenuItem
         icon={IconClockHour3}
         label={<Trans>Clear time</Trans>}
+        disabled={!task.startDate}
         onClick={() => {
           onClose();
           updateTask({

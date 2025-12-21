@@ -37,7 +37,7 @@ import { useParams, useRouter } from "next/navigation";
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 
 import { AppColorInput, useParsedAppColor } from "@/components/inputs/app-color-input";
-import { TaskStatusesContextType } from "@/graphql/enums.graphql";
+import { TaskContextType } from "@/graphql/enums.graphql";
 import { type ModalConfigureStatusesRef } from "@/modules/tasks/modals/modal-configure-statuses";
 import { nonLoading } from "@/utils/non-loading";
 import dynamic from "next/dynamic";
@@ -189,7 +189,7 @@ const TaskFolderNavigationItem: FC<{
             e.preventDefault();
             e.stopPropagation();
             modalConfigureStatusesRef.current?.open({
-              contextType: TaskStatusesContextType.Folder,
+              contextType: TaskContextType.Folder,
               contextId: tag._id,
             });
             setIsMenuOpen(false);

@@ -1,7 +1,7 @@
 #import "./fragmentTaskStatus.graphql"
 
 query TaskStatuses(
-  $contextType: TaskStatusesContextType
+  $contextType: TaskContextType
   $contextId: String
   $mode: GetTaskStatusesMode
 ) {

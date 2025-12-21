@@ -12,6 +12,7 @@ import { useDebouncedCallback } from "@mantine/hooks";
 import {
   IconCopyPlus,
   IconGripVertical,
+  IconHourglassHigh,
   IconMaximize,
   IconPlus,
   IconSubtask,
@@ -56,6 +57,14 @@ const GanttTaskTimeline = dynamic(
 
 const GanttTaskDrawTimeline = dynamic(
   () => import("./components/gantt-task-draw-timeline").then((mod) => mod.GanttTaskDrawTimeline),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const GanttTaskEstimatedTime = dynamic(
+  () => import("./components/gantt-task-estimated-time").then((mod) => mod.GanttTaskEstimatedTime),
   {
     ssr: false,
     loading: nonLoading,
@@ -278,6 +287,22 @@ const GanttTaskContent: FC = () => {
                   <IconMaximize size={16} />
                 </ActionIcon>
 
+                {gantt.state.isShowEstimatedTime && (
+                  <ActionIcon
+                    variant="subtle"
+                    size="sm"
+                    color="gray"
+                    onClick={(e) =>
+                      taskMenu.open({
+                        action: TaskMenuAction.CHANGE_ESTIMATE_TIME,
+                        target: e.currentTarget,
+                      })
+                    }
+                  >
+                    <IconHourglassHigh size={16} />
+                  </ActionIcon>
+                )}
+
                 <ActionIcon
                   variant="subtle"
                   size="sm"
@@ -391,6 +416,7 @@ const GanttTaskContent: FC = () => {
                 });
               }}
             >
+              <GanttTaskEstimatedTime key={timeline?.startDate + "estimated-time"} />
               <GanttTaskDrawTimeline key={timeline?.startDate + "drawer"} />
               <GanttTaskTimeline key={timeline?.startDate + "timeline"} />
             </div>

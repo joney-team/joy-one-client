@@ -68,7 +68,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
   const columnResizing = useRef(false);
 
-  const onExtendTimeRange = useThrottledCallback(async () => {
+  const onExtendTimeline = useThrottledCallback(async () => {
     if (columnResizing.current) return;
 
     const bodyContainer = refs.bodyContainer.current;
@@ -192,9 +192,9 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
 
           scrollTop = (ev.target as HTMLElement).scrollTop;
 
-          // Extend time range when scrolling horizontally on body
+          // Extend timeline when scrolling horizontally on body
           if (scrollDirection === "horizontal") {
-            onExtendTimeRange();
+            onExtendTimeline();
           }
         };
 

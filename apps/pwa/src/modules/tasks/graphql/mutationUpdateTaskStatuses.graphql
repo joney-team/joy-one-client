@@ -1,6 +1,6 @@
 mutation UpdateTaskStatuses(
   $statuses: [TaskStatusInput!]!
-  $contextType: TaskStatusesContextType
+  $contextType: TaskContextType
   $contextId: String
   $isInherited: Boolean
 ) {

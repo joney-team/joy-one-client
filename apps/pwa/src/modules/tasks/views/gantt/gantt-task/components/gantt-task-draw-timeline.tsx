@@ -12,12 +12,14 @@ import { IconClockPlay } from "@tabler/icons-react";
 import { useUpdateTasks } from "../../../../hooks/use-update-tasks";
 import { ganttConfig } from "../../gantt-tasks-config";
 import { useGantt } from "../../gantt-tasks-context";
+import { useGanttRefs } from "../../gantt-tasks-refs";
 import styles from "../../gantt-tasks.module.css";
 import { useGanttTaskRow } from "../gantt-task-provider";
 
 export const GanttTaskDrawTimeline: FC = () => {
   const color = useColor();
   const gantt = useGantt();
+  const ganttRefs = useGanttRefs();
   const modalConfirmRef = useRef<ModalConfirmRef | null>(null);
 
   const { updateTasks } = useUpdateTasks();
@@ -183,7 +185,14 @@ export const GanttTaskDrawTimeline: FC = () => {
 
     if (ganttTaskAreaRef.current) observer.observe(ganttTaskAreaRef.current, { attributes: true });
 
+    const onBodyContainerScroll = () => {
+      resetDrawTimeline();
+    };
+
+    ganttRefs.bodyContainer.current?.addEventListener("scroll", onBodyContainerScroll);
+
     return () => {
+      ganttRefs.bodyContainer.current?.removeEventListener("scroll", onBodyContainerScroll);
       ganttTaskAreaRef.current?.removeEventListener("mousedown", onGanttTaskAreaMouseDown);
       ganttTaskAreaRef.current?.removeEventListener("mousemove", onGanttTaskAreaMouseMove);
       ganttTaskAreaRef.current?.removeEventListener("mouseup", onGanttTaskAreaMouseUp);
