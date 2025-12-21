@@ -164,39 +164,34 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
     startDate: number;
     dueDate: number;
   } | null>(() => {
-    if (!metric?.startDate || !metric.dueDate) return null;
+    if (!metric || !metric.startDate || !metric.dueDate) return null;
 
-    if (metric.startDate && metric.dueDate) {
-      const startDate = metric.startDate;
-      const dueDate = metric.dueDate;
+    const startDate = metric.startDate;
+    const dueDate = metric.dueDate;
 
-      const startIndexCaptured = gantt.columns.findIndex(
-        (column) =>
-          DateTime.toSeconds(column.start) >= startDate ||
-          DateTime.toSeconds(column.end) >= startDate
-      );
+    const startIndexCaptured = gantt.columns.findIndex(
+      (column) =>
+        DateTime.toSeconds(column.start) >= startDate || DateTime.toSeconds(column.end) >= startDate
+    );
 
-      const startIndex = startIndexCaptured >= 0 ? startIndexCaptured : 0;
+    const startIndex = startIndexCaptured >= 0 ? startIndexCaptured : 0;
 
-      const endIndexCaptured = gantt.columns.findIndex(
-        (column) =>
-          DateTime.toSeconds(column.end) >= dueDate || DateTime.toSeconds(column.start) >= dueDate
-      );
+    const endIndexCaptured = gantt.columns.findIndex(
+      (column) =>
+        DateTime.toSeconds(column.end) >= dueDate || DateTime.toSeconds(column.start) >= dueDate
+    );
 
-      const endIndex = endIndexCaptured >= 0 ? endIndexCaptured : gantt.columns.length - 1;
+    const endIndex = endIndexCaptured >= 0 ? endIndexCaptured : gantt.columns.length - 1;
 
-      return {
-        startIndex,
-        endIndex,
-        left: startIndex * ganttConfig.columnSize,
-        width: (endIndex - startIndex + 1) * ganttConfig.columnSize,
-        startDate,
-        dueDate,
-      };
-    }
-
-    return null;
-  }, [metric?.startDate, metric?.dueDate, gantt.columns]);
+    return {
+      startIndex,
+      endIndex,
+      left: startIndex * ganttConfig.columnSize,
+      width: (endIndex - startIndex + 1) * ganttConfig.columnSize,
+      startDate,
+      dueDate,
+    };
+  }, [metric, gantt.columns]);
 
   return (
     <Fragment>
