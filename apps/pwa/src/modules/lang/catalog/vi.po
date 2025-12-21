@@ -5951,11 +5951,11 @@ msgstr "Quét mã QR"
 
 #: src/modules/tasks/modules/task-menu/task-menu-gantt-timeline.tsx:86
 msgid "Scroll to finish date"
-msgstr "Cuộn đến ngày bắt đầu"
+msgstr "Cuộn đến ngày kết thúc"
 
 #: src/modules/tasks/modules/task-menu/task-menu-gantt-timeline.tsx:75
 msgid "Scroll to start date"
-msgstr "Cuộn đến ngày kết thúc"
+msgstr "Cuộn đến ngày bắt đầu"
 
 #: src/modules/tasks/views/gantt/gantt-tasks-layout.tsx:124
 msgid "Scroll to today"
