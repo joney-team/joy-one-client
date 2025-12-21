@@ -1,5 +1,6 @@
 "use client";
 
+import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
@@ -91,7 +92,7 @@ export const usePageTitle = () => {
     if (previousTitleRef.current) {
       // Use multiple strategies to ensure the title is set
       document.title = previousTitleRef.current;
-      requestAnimationFrame(() => {
+      requestAnimationFrameTimes(() => {
         if (isUrlPath(document.title, pathname) && previousTitleRef.current) {
           document.title = previousTitleRef.current;
         }

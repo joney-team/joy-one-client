@@ -34,7 +34,6 @@ export interface TaskTimeTracking {
   startAt: number;
   endAt?: number;
   note?: string;
-  billable?: boolean;
 }
 
 export interface TaskDto {

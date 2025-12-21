@@ -1,6 +1,6 @@
 import type { BaseMongoEntity, Query } from "@/types";
 import type { MessageAttachment } from "@/modules/message-boxes/message-boxes-types";
-import type { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
+import type { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 
 export interface CommentDto {
   text?: string;
@@ -21,10 +21,10 @@ export interface CommentEntity extends BaseMongoEntity {
   bookingId?: string;
   ticketId?: string;
   replyToCommentId?: string;
-  pinnedByUser?: WorkspaceMember;
+  pinnedByUser?: WorkspaceMemberLegacy;
   isPinned?: boolean;
   createdByUserId: string;
-  createdByUser?: WorkspaceMember;
+  createdByUser?: WorkspaceMemberLegacy;
 }
 
 export interface QueryComments extends Query {

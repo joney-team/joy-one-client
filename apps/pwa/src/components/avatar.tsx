@@ -7,7 +7,7 @@ import { PartnerEntity } from "@/modules/partners/partners-types";
 import { PluginMetaPageEntity } from "@/modules/plugins/meta-pages/meta-pages-types";
 import { PluginZaloOaEntity } from "@/modules/plugins/zalo-oas/zalo-oas-types";
 import { useColor } from "@/modules/theme/use-color";
-import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkspaceEntity } from "@/modules/workspaces/workspaces-types";
 import { getAvatarInitials } from "@/utils/string.utils";
@@ -25,7 +25,7 @@ import { IconFacebook, IconZalo } from "./icons";
 export interface AvatarProps extends MantineAvatarProps {
   onClick?: () => void;
   color?: string;
-  user?: Pick<WorkspaceMember, "name" | "avatar" | "color" | "userId" | "memberId">;
+  user?: Pick<WorkspaceMemberLegacy, "name" | "avatar" | "color" | "userId" | "memberId">;
   workspace?: Pick<WorkspaceEntity, "appColor" | "logo" | "name" | "appName" | "appIcon">;
   customer?: Pick<CustomerShortInfo, "name" | "avatar"> | null | undefined;
   partner?: PartnerEntity;

@@ -34,7 +34,7 @@ interface BoardTasksGroupProps {
 
 const wrapperPadding = 8;
 const wrapperRadius = 8;
-const limit = 5;
+const limit = 9;
 
 export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
   const workspace = useWorkspace();
@@ -47,7 +47,6 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
   const { activatedFolder, state } = useTasks();
 
   const isClosedTasks = props.status.id === DefaultTaskStatusId.CLOSED;
-  const isTodoStatus = props.status.id === DefaultTaskStatusId.TODO;
 
   const groupVariables: TasksQueryVariables = useMemo(() => {
     return {
@@ -151,10 +150,9 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
                 )}
               </Group>
 
-              {(workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) ||
-                !isClosedTasks) && (
-                <Group justify="end" gap={0}>
-                  {!isClosedTasks && (
+              {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) &&
+                !isClosedTasks && (
+                  <Group justify="end" gap={0}>
                     <ActionIcon
                       component="div"
                       variant="subtle"
@@ -164,9 +162,8 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
                     >
                       <IconPlus size={16} strokeWidth={1.6} />
                     </ActionIcon>
-                  )}
-                </Group>
-              )}
+                  </Group>
+                )}
             </Group>
 
             <Stack

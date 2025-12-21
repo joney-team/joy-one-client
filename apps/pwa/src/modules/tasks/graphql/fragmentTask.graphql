@@ -1,5 +1,6 @@
 #import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
 #import "./fragmentTaskStatus.graphql"
+#import "./fragmentTaskTimeTracking.graphql"
 
 fragment TaskData on Task {
   _id
@@ -78,20 +79,7 @@ fragment TaskData on Task {
   }
 
   timeTrackings {
-    id
-    workspaceId
-    userId
-    user {
-      _id
-      userId
-      name
-      color
-      avatar
-    }
-    billable
-    note
-    startAt
-    endAt
+    ...TaskTimeTrackingData
   }
 
   statuses {

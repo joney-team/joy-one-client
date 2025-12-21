@@ -36,7 +36,7 @@ export enum WorkspaceMemberWorkingTimeType {
   FREELANCER = "FREELANCER",
 }
 
-export interface WorkspaceMember {
+export interface WorkspaceMemberLegacy {
   _id: string;
   userId: string;
   memberId?: string | null;
@@ -64,7 +64,7 @@ export interface WorkspaceMemberOnlineStatus {
 }
 
 export type WorkspaceMemberInfo = Pick<
-  WorkspaceMember,
+  WorkspaceMemberLegacy,
   | "_id"
   | "userId"
   | "name"

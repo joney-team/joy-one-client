@@ -3,7 +3,6 @@
 import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { CommentBox } from "@/modules/comments/comment-box";
 import { TaskDetailForm } from "@/modules/tasks/modules/task-detail/task-detail-form";
 import { useColor } from "@/modules/theme/use-color";
 import { useLazyQuery } from "@apollo/client/react";
@@ -105,7 +104,8 @@ export const TaskDetail: FC = () => {
   const [getTask, { data, loading }] = useLazyQuery<TaskByCodeQuery, TaskByCodeQueryVariables>(
     QUERY_TASK_BY_CODE,
     {
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-and-network",
     }
   );
 
@@ -136,7 +136,7 @@ export const TaskDetail: FC = () => {
       onClose={onClose}
       withCloseButton={false}
       closeOnEscape={!taskMenu.isOpened}
-      size={1600}
+      size={1200}
       yOffset={viewPadding}
       isFullscreenOnMobile
       styles={{
@@ -161,7 +161,7 @@ export const TaskDetail: FC = () => {
                 <TaskDetailHead key={modalId + "head"} task={task} close={onClose} />
               </Stack>
 
-              <Stack>
+              <Stack p="sm">
                 <TaskCodeButton key={modalId + "code"} task={task} />
                 <TaskDetailForm key={modalId + "form"} task={task} />
                 <Stack gap={8}>
@@ -195,45 +195,31 @@ export const TaskDetail: FC = () => {
                 <TaskDetailHead key={modalId + "head"} task={task} close={onClose} />
               </Stack>
 
-              <Group h={contentHeight} w="100%" gap={0} wrap="nowrap">
-                <Stack flex={1} h={contentHeight} mih={contentHeight} style={{ overflow: "auto" }}>
-                  <Container pt={10} pb={16} px={32}>
-                    <TaskCodeButton key={modalId + "code"} task={task} />
+              <Stack flex={1} h={contentHeight} mih={contentHeight} style={{ overflow: "auto" }}>
+                <Container pt={10} pb={16} px={32}>
+                  <TaskCodeButton key={modalId + "code"} task={task} />
 
-                    <Stack gap={30}>
-                      <TaskDetailForm key={modalId + "form"} task={task} />
-                      {!task.parent && (
-                        <TaskDetailSubtasks key={modalId + "subtasks"} task={task} />
-                      )}
+                  <Stack gap={30}>
+                    <TaskDetailForm key={modalId + "form"} task={task} />
+                    {!task.parent && <TaskDetailSubtasks key={modalId + "subtasks"} task={task} />}
 
-                      <Stack gap={8}>
-                        <Group gap={8}>
-                          <ThemeIcon variant="light" color="gray">
-                            <IconFiles strokeWidth={1.5} size={20} />
-                          </ThemeIcon>
+                    <Stack gap={8}>
+                      <Group gap={8}>
+                        <ThemeIcon variant="light" color="gray">
+                          <IconFiles strokeWidth={1.5} size={20} />
+                        </ThemeIcon>
 
-                          <Text fw={500} fz={14}>
-                            <Trans>Attachments</Trans>
-                          </Text>
-                        </Group>
+                        <Text fw={500} fz={14}>
+                          <Trans>Attachments</Trans>
+                        </Text>
+                      </Group>
 
-                        <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
-                      </Stack>
-                      <TaskDetailFooter key={modalId + "footer"} task={task} onClose={onClose} />
+                      <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
                     </Stack>
-                  </Container>
-                </Stack>
-
-                <Stack
-                  w={450}
-                  h={contentHeight}
-                  mih={contentHeight}
-                  style={{ borderLeft: `1px solid ${workspaceLayout.dividerColor}` }}
-                  gap={0}
-                >
-                  <CommentBox key={modalId + "comment"} ref={task._id} />
-                </Stack>
-              </Group>
+                    <TaskDetailFooter key={modalId + "footer"} task={task} onClose={onClose} />
+                  </Stack>
+                </Container>
+              </Stack>
             </Stack>
           </Renderer>
         </Fragment>

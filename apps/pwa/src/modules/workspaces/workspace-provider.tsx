@@ -14,7 +14,7 @@ import {
   verifyWorkspaceMemberInvitation,
 } from "@/modules/workspace-members/workspace-members-service";
 import {
-  WorkspaceMember,
+  WorkspaceMemberLegacy,
   WorkspaceMemberOnlineStatus,
 } from "@/modules/workspace-members/workspace-members-types";
 import { getWorkspaceRoles } from "@/modules/workspace-roles/workspace-roles-service";
@@ -36,7 +36,7 @@ import { workspaceInitialize } from "@/modules/workspaces/workspaces-service";
 import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { Currency } from "@joy-one-client/utils/currency";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
@@ -55,6 +55,10 @@ import {
   WorkspaceEntity,
   WorkspaceMemberInvitationState,
 } from "./workspaces-types";
+import QUERY_USER_WORKSPACE_MEMBER, {
+  type UserWorkspaceMemberQuery,
+  type UserWorkspaceMemberQueryVariables,
+} from "../workspace-members/graphql/queryUserWorkspaceMember.graphql";
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const { t } = useLingui();
@@ -67,7 +71,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const state = useRef<{
     roles: WorkspaceRoleEntity[];
     settings?: WorkspaceSettingEntity;
-    workspaceMembers: WorkspaceMember[];
+    workspaceMembers: WorkspaceMemberLegacy[];
   }>({
     roles: [],
     workspaceMembers: [],
@@ -92,6 +96,13 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       EventType.WorkspaceMemberOnline,
       EventType.WorkspaceMemberOffline,
     ],
+  });
+
+  const { data: workspaceMemberData } = useQuery<
+    UserWorkspaceMemberQuery,
+    UserWorkspaceMemberQueryVariables
+  >(QUERY_USER_WORKSPACE_MEMBER, {
+    skip: !workspaceId || !auth.user?._id,
   });
 
   const fetchUserWorkspaceMembers = async () => {
@@ -373,6 +384,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     isInitialized,
     settings: state.current.settings!,
     currency: Currency.get(state.current.settings?.currencyCode) || Currency.get()!,
+    member: workspaceMemberData?.userWorkspaceMember!,
     userMember: userMember!,
     userMembers: state.current.workspaceMembers,
     select,
@@ -402,7 +414,12 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     isShouldEnableBranches,
     isShowBranches: !!userMember && userMember.workspace.branches > 0,
     defaultBranch: userMember?.workspaceBranches[0],
-    isAvailable: isInitialized && !!auth.user && !!userMember && !!state.current.settings,
+    isAvailable:
+      isInitialized &&
+      !!auth.user &&
+      !!userMember &&
+      !!state.current.settings &&
+      !!workspaceMemberData?.userWorkspaceMember,
   };
 
   useEffect(() => {

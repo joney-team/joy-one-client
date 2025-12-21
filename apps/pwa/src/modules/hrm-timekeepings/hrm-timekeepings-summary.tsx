@@ -13,7 +13,7 @@ import {
 import { useColor } from "@/modules/theme/use-color";
 import { UserCard } from "@/modules/users/components/user-card";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkSlot } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -47,7 +47,7 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
       }
 
       return out;
-    }, [] as { userId: string; user: WorkspaceMember; timekeepings: HrmTimekeepingEntity[] }[]);
+    }, [] as { userId: string; user: WorkspaceMemberLegacy; timekeepings: HrmTimekeepingEntity[] }[]);
 
   if (viewport.view === "mobile")
     return (
@@ -188,7 +188,7 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
 const useTimekeepingsSummary = (
   timekeepings: HrmTimekeepingEntity[],
   args: {
-    userInfo: WorkspaceMember;
+    userInfo: WorkspaceMemberLegacy;
     workSlots?: WorkSlot[] | undefined;
     rules?: HrmTimekeepingsRules;
   }

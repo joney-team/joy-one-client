@@ -13,6 +13,7 @@ import {
 } from "./context-menu-types";
 
 import { getId, type BaseData } from "@joy-one-client/utils/base-data";
+import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 import { placeDropdownMenu } from "./context-menu-helpers";
 import styles from "./context-menu.module.css";
 
@@ -39,7 +40,7 @@ export const ContextMenuProvider = <T extends BaseData, Context = unknown>(
     const isSameMenu = oldMenuId === getId(args.data);
 
     if (isSameMenu) {
-      requestAnimationFrame(() => {
+      requestAnimationFrameTimes(() => {
         if (!menuRef.current) return;
         menuArgsRef.current = args;
         menuRef.current.setAttribute("data-key", Date.now().toString());
@@ -48,11 +49,11 @@ export const ContextMenuProvider = <T extends BaseData, Context = unknown>(
     } else {
       onClose();
 
-      requestAnimationFrame(() => {
+      requestAnimationFrameTimes(() => {
         if (!menuRef.current) return;
         menuArgsRef.current = args;
         menuRef.current.setAttribute("data-opened", "true");
-        requestAnimationFrame(() => {
+        requestAnimationFrameTimes(() => {
           if (!menuRef.current) return;
           menuRef.current.classList.add(styles.AnimatedIn);
           placeDropdownMenu({ target: args.target, menu: menuRef.current }, args.options);

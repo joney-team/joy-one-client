@@ -6,7 +6,7 @@ import { ContentEditable } from "@/components/content-editable/content-editable"
 import { Editor } from "@/components/editor/editor";
 import { TaskContextType } from "@/graphql/enums.graphql";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
-import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useLazyQuery, useMutation } from "@apollo/client/react";
@@ -51,7 +51,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
   const { t } = useLingui();
   const taskId = createObjectId();
 
-  const { userWorkspaceMember } = useUserWorkspaceMember();
+  const { member } = useWorkspace();
 
   const [getTaskStatuses, { data: taskStatusesData, loading: taskStatusesLoading }] = useLazyQuery<
     TaskStatusesQuery,
@@ -77,7 +77,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
       tags: initial?.tags ?? [],
       status: initial?.status ?? DefaultTaskStatusId.TODO,
       statuses: taskStatusesData?.taskStatuses.statuses ?? [],
-      assigneeUsers: initial?.assigneeUsers ?? userWorkspaceMember ? [userWorkspaceMember!] : [],
+      assigneeUsers: initial?.assigneeUsers ?? member ? [member!] : [],
       ...initial,
     },
   });

@@ -8,6 +8,7 @@ const codeGenConfig: CodegenConfig = {
       config: {
         useTypeImports: true,
         enumsAsConst: true,
+        nonOptionalTypename: true,
         avoidOptionals: {
           field: true,
           object: false,

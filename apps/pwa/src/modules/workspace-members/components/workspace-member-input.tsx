@@ -10,8 +10,8 @@ import { FC } from "react";
 
 interface WorkspaceMemberInputProps
   extends Omit<WorkspaceMemberSelectorProps, "value" | "onChange" | "target"> {
-  value?: WorkspaceMemberInfo;
-  onChange?: (value?: WorkspaceMemberInfo) => void;
+  value?: WorkspaceMemberInfo | null;
+  onChange?: (value?: WorkspaceMemberInfo | null) => void;
   collapsed?: boolean;
   clearable?: boolean;
   userCardProps?: Omit<UserCardProps, "user">;

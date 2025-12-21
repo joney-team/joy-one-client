@@ -14,7 +14,7 @@ import {
 } from "@/modules/workspace-members/workspace-members-service";
 import {
   UpdateWorkspaceMemberDto,
-  WorkspaceMember,
+  WorkspaceMemberLegacy,
   WorkspaceMemberWorkingTimeType,
 } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
@@ -41,7 +41,7 @@ interface UserWorkspaceSettingsProps {
 }
 
 const UserWorkspaceSettingsForm: FC<
-  UserWorkspaceSettingsProps & { userMember: WorkspaceMember }
+  UserWorkspaceSettingsProps & { userMember: WorkspaceMemberLegacy }
 > = (props) => {
   const workspace = useWorkspace();
   const auth = useAuth();

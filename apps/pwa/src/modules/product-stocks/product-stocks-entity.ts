@@ -1,6 +1,6 @@
 import { BasePostgresEntity } from "@/types";
 import { ProductEntity } from "../products/products-types";
-import { WorkspaceMember } from "../workspace-members/workspace-members-types";
+import { WorkspaceMemberLegacy } from "../workspace-members/workspace-members-types";
 import { ProductStockRecordType } from "./product-stocks-types";
 
 export interface ProductStockEntity extends BasePostgresEntity {
@@ -24,10 +24,10 @@ export interface ProductStockRecordEntity extends BasePostgresEntity {
   productStockId: string;
   productStock: ProductStockEntity;
   stockCode?: string;
-  product: Pick<ProductEntity, '_id' | 'name' | 'image' | 'displayName'>;
-  createdByUser: WorkspaceMember;
-  
+  product: Pick<ProductEntity, "_id" | "name" | "image" | "displayName">;
+  createdByUser: WorkspaceMemberLegacy;
+
   relatedOrderId?: string;
   relatedProductId?: string;
-  relatedProduct?: Pick<ProductEntity, '_id' | 'name' | 'image' | 'displayName'>;
+  relatedProduct?: Pick<ProductEntity, "_id" | "name" | "image" | "displayName">;
 }

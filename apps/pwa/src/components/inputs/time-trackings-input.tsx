@@ -1,8 +1,9 @@
 "use client";
 
-import { useLang } from "@/modules/lang/lang-context";
-import { TaskTimeTracking } from "@/modules/tasks/tasks-types";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
+import { TaskDataFragment } from "@/modules/tasks/graphql/fragmentTask.graphql";
+import { TaskTimeTrackingDataFragment } from "@/modules/tasks/graphql/fragmentTaskTimeTracking.graphql";
+import { useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
+import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -12,10 +13,9 @@ import {
   Divider,
   em,
   Group,
+  GroupProps,
   InputWrapper,
-  InputWrapperProps,
   Stack,
-  Switch,
   Text,
   TextInput,
   ThemeIcon,
@@ -28,8 +28,6 @@ import {
   IconCaretDownFilled,
   IconCaretRightFilled,
   IconClock,
-  IconCurrencyDollar,
-  IconCurrencyDollarOff,
   IconMinus,
   IconNote,
   IconPlayerPlayFilled,
@@ -38,66 +36,67 @@ import {
   IconStopwatch,
   IconTrash,
 } from "@tabler/icons-react";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { WorkspaceMemberInput } from "../../modules/workspace-members/components/workspace-member-input";
 import { Avatar } from "../avatar";
 import { Button } from "../buttons/button";
 import { DateFormat } from "../format/date-format";
-import { ModalHead } from "../modal/modal-head";
+import { Modal } from "../modal/modal";
 import { Renderer } from "../renderer";
 import { DateInput } from "./date-input";
-import { Modal } from "../modal/modal";
 
-interface TimeTrackingsInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
-  value?: TaskTimeTracking[];
-  onChange?: (value: TaskTimeTracking[]) => any;
+interface TimeTrackingsInputProps extends GroupProps {
+  task: TaskDataFragment;
 }
 
-export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
-  const { value, onChange, ...rest } = props;
+export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = ({ task, ...rest }) => {
   const workspace = useWorkspace();
   const [opened, { open, close }] = useDisclosure(false);
-  const timeTrackings = value || [];
+  const { updateTasks } = useUpdateTasks();
+  const timeTrackings = task.timeTrackings ?? [];
 
   const totalTime =
     timeTrackings
       .filter((v) => !!v.endAt)
       .reduce((acc, curr) => acc + (curr.endAt || 0) - (curr.startAt || 0), 0) || 0;
 
-  const groupByUsers = timeTrackings.reduce(
-    (acc, curr) => {
-      if (!curr.endAt) return acc;
-      const user = acc.find((u) => u.user.userId === curr.user.userId);
-      if (user) {
-        user.timeTrackings.push(curr);
-      } else {
-        acc.push({ user: curr.user, timeTrackings: [curr] });
-      }
-      return acc;
-    },
-    [] as {
-      user: WorkspaceMemberInfo;
-      timeTrackings: TaskTimeTracking[];
+  const groupByUsers = timeTrackings.reduce<
+    {
+      user: WorkspaceMemberDataFragment;
+      timeTrackings: TaskTimeTrackingDataFragment[];
     }[]
-  );
+  >((acc, curr) => {
+    if (!curr.endAt || !curr.user) return acc;
+    const user = acc.find((u) => u.user.userId === curr.user?._id);
+    if (user) {
+      user.timeTrackings.push(curr);
+    } else {
+      acc.push({ user: curr.user, timeTrackings: [curr] });
+    }
+    return acc;
+  }, []);
 
   const onRemove = (id: string) => {
-    onChange?.([...(value || []).filter((t) => t.id !== id)]);
+    updateTasks({ _id: task._id, timeTrackings: timeTrackings.filter((t) => t.id !== id) });
   };
 
   const inProgressTracking = timeTrackings.find((v) => !!!v.endAt);
 
-  const onStartTracking = (t?: TaskTimeTracking) => {
-    const tracking = {
+  const onStartTracking = (t?: TaskTimeTrackingDataFragment) => {
+    const timeTracking: TaskTimeTrackingDataFragment = {
+      __typename: "TaskTimeTracking",
       ...t,
       id: uuid(),
-      user: t?.user || workspace.userMember,
+      user: t?.user || workspace.member,
       userId: t?.userId || workspace.userMember.userId,
       startAt: DateTime.toSeconds(new Date()),
+      workspaceId: workspace.userMember.workspaceId,
+      note: null,
+      endAt: null,
     };
 
-    onChange?.([...(value || []), tracking]);
+    updateTasks({ _id: task._id, timeTrackings: [...timeTrackings, timeTracking] });
   };
 
   const onStopTracking = () => {
@@ -111,19 +110,16 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
     if (seconds < minSeconds) {
       onRemove(tracking.id);
     } else {
-      onChange?.([
-        ...(value || []).filter((v) => v.id !== tracking!.id),
-        {
-          ...tracking,
-          endAt: now,
-        },
-      ]);
+      updateTasks({
+        _id: task._id,
+        timeTrackings: timeTrackings.map((t) => (t.id === tracking.id ? { ...t, endAt: now } : t)),
+      });
     }
   };
 
   return (
-    <InputWrapper {...rest}>
-      <Group gap={8} flex={props.flex} onClick={open} style={{ cursor: "pointer" }}>
+    <Fragment>
+      <Group gap={8} flex={rest.flex} onClick={open}>
         <Group>
           <Renderer visible={!!!inProgressTracking}>
             <Text>{DateTime.toHHMM(totalTime)}</Text>
@@ -185,12 +181,18 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
             </Group>
 
             <TimeTrackingForm
+              key={timeTrackings.find((v) => !!!v.endAt)?.id ?? "new-tracking"}
               timeTracking={timeTrackings.find((v) => !!!v.endAt)}
               onSubmit={(t) => {
-                onChange?.([...(value || []), t]);
+                updateTasks({ _id: task._id, timeTrackings: [...timeTrackings, t] });
                 close();
               }}
-              onChange={(t) => onChange?.([...(value || []).map((v) => (v.id === t.id ? t : v))])}
+              onChange={(t) => {
+                updateTasks({
+                  _id: task._id,
+                  timeTrackings: timeTrackings.map((v) => (v.id === t.id ? t : v)),
+                });
+              }}
               onStartTracking={onStartTracking}
               onStopTracking={onStopTracking}
             />
@@ -211,12 +213,12 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = (props) => {
           )}
         </Stack>
       </Modal>
-    </InputWrapper>
+    </Fragment>
   );
 };
 
 const InProgressTimeTrackingTimmer: FC<{
-  timeTracking: TaskTimeTracking;
+  timeTracking: TaskTimeTrackingDataFragment;
 }> = (props) => {
   const forceUpdate = useForceUpdate();
   const now = DateTime.toSeconds(new Date());
@@ -235,11 +237,10 @@ const InProgressTimeTrackingTimmer: FC<{
 };
 
 export const TimeTrackingGroupByUser: FC<{
-  onRemove: (id: string) => any;
-  user: WorkspaceMemberInfo;
-  timeTrackings: TaskTimeTracking[];
+  onRemove: (id: string) => void;
+  user: WorkspaceMemberDataFragment;
+  timeTrackings: TaskTimeTrackingDataFragment[];
 }> = (props) => {
-  const lang = useLang();
   const totalTime =
     props.timeTrackings
       .filter((v) => !!v.endAt)
@@ -275,12 +276,6 @@ export const TimeTrackingGroupByUser: FC<{
                         <Text fz={14} fw={500}>
                           {DateTime.toHHMM(t.endAt! - t.startAt)}
                         </Text>
-
-                        <Renderer visible={t.billable}>
-                          <ThemeIcon variant="filled" size={18} radius={100}>
-                            <IconCurrencyDollar size={14} />
-                          </ThemeIcon>
-                        </Renderer>
                       </Stack>
 
                       <Divider orientation="vertical" mx={10} />
@@ -332,32 +327,35 @@ export const TimeTrackingGroupByUser: FC<{
 };
 
 export const TimeTrackingForm: FC<{
-  timeTracking?: TaskTimeTracking;
-  onSubmit: (timeTracking: TaskTimeTracking) => any;
-  onStartTracking: (t?: TaskTimeTracking) => void;
+  timeTracking?: TaskTimeTrackingDataFragment | null;
+  onSubmit: (timeTracking: TaskTimeTrackingDataFragment) => any;
+  onStartTracking: (t?: TaskTimeTrackingDataFragment) => void;
   onStopTracking: () => void;
-  onChange?: (timeTracking: TaskTimeTracking) => void;
+  onChange?: (timeTracking: TaskTimeTrackingDataFragment) => void;
 }> = (props) => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const startAtRef = useRef<HTMLInputElement>(null);
   const endAtRef = useRef<HTMLInputElement>(null);
   const timeTrackingRef = useRef<HTMLInputElement>(null);
-  const { t } = useLingui();
 
-  const onChange = useDebouncedCallback((values: TaskTimeTracking) => {
-    onChange?.(values);
+  const onChange = useDebouncedCallback((values: TaskTimeTrackingDataFragment) => {
+    props.onChange?.(values);
   }, 500);
 
-  const form = useForm<TaskTimeTracking>({
-    initialValues: props.timeTracking || {
-      id: "",
-      userId: workspace.userMember.userId,
-      user: workspace.userMember,
-      note: "",
-      billable: true,
-      startAt: DateTime.toSeconds(new Date()),
-      endAt: DateTime.toSeconds(new Date()) + 60 * 15,
-    },
+  const form = useForm<TaskTimeTrackingDataFragment>({
+    initialValues: props.timeTracking
+      ? { ...props.timeTracking }
+      : {
+          __typename: "TaskTimeTracking",
+          id: "",
+          workspaceId: workspace.member.workspaceId,
+          userId: workspace.member.userId,
+          user: workspace.member,
+          note: "",
+          startAt: DateTime.toSeconds(new Date()),
+          endAt: DateTime.toSeconds(new Date()) + 60 * 15,
+        },
     onValuesChange: (values) => {
       if (props.timeTracking?.id) {
         onChange(values);
@@ -371,7 +369,10 @@ export const TimeTrackingForm: FC<{
   }, 500);
 
   const onSubmit = form.onSubmit((values) => {
-    props.onSubmit({ ...values, id: uuid() });
+    props.onSubmit({
+      ...values,
+      id: uuid(),
+    });
   });
 
   useEffect(() => {
@@ -381,12 +382,22 @@ export const TimeTrackingForm: FC<{
   }, []);
 
   return (
-    <Card withBorder shadow="none" p="md">
-      <Card.Section withBorder p="sm" bg="gray.0">
+    <Card withBorder shadow="none" p="md" style={{ overflow: "visible" }}>
+      <Card.Section
+        withBorder
+        p="sm"
+        bg="gray.0"
+        style={{
+          borderTopLeftRadius: `var(--paper-radius)`,
+          borderTopRightRadius: `var(--paper-radius)`,
+        }}
+      >
         <WorkspaceMemberInput
           clearable={false}
           value={form.values.user}
-          onChange={(user) => form.setFieldValue("user", user!)}
+          onChange={(user) => {
+            if (user) form.setFieldValue("user", user as any);
+          }}
         />
       </Card.Section>
 
@@ -512,31 +523,29 @@ export const TimeTrackingForm: FC<{
           </Renderer>
 
           <TextInput
-            label={t`Note`}
-            {...form.getInputProps("note")}
-            value={form.values.note || ""}
+            label={<Trans>Note</Trans>}
+            defaultValue={form.values.note || ""}
+            onChange={(e) => form.setFieldValue("note", e.currentTarget.value)}
           />
         </Stack>
       </Card.Section>
 
-      <Card.Section p="sm" bg="gray.0">
-        <Group justify="space-between">
-          <Switch
-            label={t`Mark as billable`}
-            checked={form.values.billable}
-            onChange={(e) => form.setFieldValue("billable", e.target.checked)}
-            onLabel={<IconCurrencyDollar size={16} strokeWidth={2} />}
-            offLabel={<IconCurrencyDollarOff size={16} strokeWidth={2} />}
-            size="md"
-          />
-
-          <Renderer visible={!!!props.timeTracking}>
+      {!props.timeTracking && (
+        <Card.Section
+          p="sm"
+          bg="gray.0"
+          style={{
+            borderBottomLeftRadius: `var(--paper-radius)`,
+            borderBottomRightRadius: `var(--paper-radius)`,
+          }}
+        >
+          <Group justify="center">
             <Button onClick={() => onSubmit()} leftIcon={IconPlus}>
               <Trans>Add</Trans>
             </Button>
-          </Renderer>
-        </Group>
-      </Card.Section>
+          </Group>
+        </Card.Section>
+      )}
     </Card>
   );
 };

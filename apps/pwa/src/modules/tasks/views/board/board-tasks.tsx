@@ -3,22 +3,15 @@
 import { Button } from "@/components/buttons/button";
 import { TaskContextType } from "@/graphql/enums.graphql";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { nonLoading } from "@/utils/non-loading";
-import { useQuery } from "@apollo/client/react";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { FC, PropsWithChildren, useEffect, useMemo, useRef } from "react";
-import QUERY_TASK_STATUSES, {
-  type TaskStatusesQuery,
-  type TaskStatusesQueryVariables,
-} from "../../graphql/queryTaskStatuses.graphql";
-import { normalizeTaskStatuses } from "../../task-constants";
+import { FC, PropsWithChildren, useEffect, useRef } from "react";
 import { useFolderStatuses } from "../../hooks/use-task-statuses";
 
 const ModalConfigureStatuses = dynamic(

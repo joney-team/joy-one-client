@@ -15,7 +15,7 @@ import {
   getWorkspaceMemberRoleLabel,
   updateWorkspaceMember,
 } from "@/modules/workspace-members/workspace-members-service";
-import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import {
   WorkspacePermission,
@@ -42,7 +42,7 @@ export const WorkspaceMemberList: FC = () => {
 
   return (
     <Stack p={16}>
-      <List<WorkspaceMember>
+      <List<WorkspaceMemberLegacy>
         route="/workspace-members"
         id="workspace-members"
         name={t`Members`}
@@ -214,7 +214,7 @@ export const WorkspaceMemberList: FC = () => {
   );
 };
 
-const MemberCard: FC<{ member: WorkspaceMember }> = (props) => {
+const MemberCard: FC<{ member: WorkspaceMemberLegacy }> = (props) => {
   const { member } = props;
 
   return (

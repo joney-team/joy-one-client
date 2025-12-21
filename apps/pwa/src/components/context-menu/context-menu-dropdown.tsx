@@ -7,6 +7,7 @@ import { ContextMenuProps } from "./context-menu-types";
 
 import { getId } from "@joy-one-client/utils/base-data";
 import { placeDropdownMenu } from "./context-menu-helpers";
+import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 
 export const ContextMenuDropdown = ({
   id,
@@ -84,7 +85,7 @@ export const ContextMenuDropdown = ({
     };
 
     // Use requestAnimationFrame to ensure the display change is applied before animation
-    requestAnimationFrame(() => {
+    requestAnimationFrameTimes(() => {
       if (!menuRef.current || !menuArgsRef.current) return;
       placeMenu();
     });

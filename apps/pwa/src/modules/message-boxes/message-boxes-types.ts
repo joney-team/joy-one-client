@@ -1,18 +1,18 @@
 import { BaseMongoEntity } from "@/types";
 import { CustomerEntity } from "../customers/customer-types";
-import { WorkspaceMember } from "../workspace-members/workspace-members-types";
+import { WorkspaceMemberLegacy } from "../workspace-members/workspace-members-types";
 
 export enum MessageBoxPlatformType {
-  ZALO = 'ZALO',
-  META_PAGE = 'META_PAGE',
-  MESSAGE_HUB = 'MESSAGE_HUB',
+  ZALO = "ZALO",
+  META_PAGE = "META_PAGE",
+  MESSAGE_HUB = "MESSAGE_HUB",
 }
 
 export enum MessageBoxStatus {
-  WAITING = 'WAITING',
-  IN_PROGRESS = 'IN_PROGRESS',
-  CLOSED = 'CLOSED',
-  EXPIRED = 'EXPIRED',
+  WAITING = "WAITING",
+  IN_PROGRESS = "IN_PROGRESS",
+  CLOSED = "CLOSED",
+  EXPIRED = "EXPIRED",
 }
 
 export interface MessageBoxEntity extends BaseMongoEntity {
@@ -26,10 +26,10 @@ export interface MessageBoxEntity extends BaseMongoEntity {
   platformType: MessageBoxPlatformType;
   lastInteractionAt?: number;
   status?: MessageBoxStatus;
-  user?: WorkspaceMember;
+  user?: WorkspaceMemberLegacy;
   customer?: CustomerEntity;
   assigneeUserId?: string;
-  assigneeUser?: WorkspaceMember;
+  assigneeUser?: WorkspaceMemberLegacy;
   aiAssistantconversationId?: string;
   aiAssistantDisabled?: boolean;
   latestMessage?: MessageEntity | null;
@@ -42,12 +42,12 @@ export interface MessageAttachment {
 }
 
 export enum MessageAttachmentType {
-  IMAGE = 'IMAGE',
-  VIDEO = 'VIDEO',
-  AUDIO = 'AUDIO',
-  FILE = 'FILE',
-  UNKNOWN = 'UNKNOWN',
-  STICKER = 'STICKER',
+  IMAGE = "IMAGE",
+  VIDEO = "VIDEO",
+  AUDIO = "AUDIO",
+  FILE = "FILE",
+  UNKNOWN = "UNKNOWN",
+  STICKER = "STICKER",
 }
 
 export interface SendMemberTextMessageDto {
@@ -65,32 +65,32 @@ export interface SendMemberFileMessageDto {
 }
 
 export enum MessageType {
-  RECEIVE = 'RECEIVE',
-  SEND = 'SEND',
+  RECEIVE = "RECEIVE",
+  SEND = "SEND",
 }
 
 export enum MessageStatus {
-  PENDING = 'PENDING',
-  SENT = 'SENT',
-  READED = 'READED',
-  SENT_FAILED = 'SENT_FAILED',
+  PENDING = "PENDING",
+  SENT = "SENT",
+  READED = "READED",
+  SENT_FAILED = "SENT_FAILED",
 }
 
 export interface MessageEntity extends BaseMongoEntity {
-  id?: string,
-  resource?: MessageResource,
-  type: MessageType,
+  id?: string;
+  resource?: MessageResource;
+  type: MessageType;
   boxId: string;
   userId?: string;
   senderId?: string;
   text?: string;
   attachments?: MessageAttachment[];
-  user?: WorkspaceMember;
+  user?: WorkspaceMemberLegacy;
   status?: MessageStatus;
 }
 
 export enum MessageResource {
-  WEBHOOK = 'webhook',
-  INTERNAL = 'internal',
-  AI_ASSISTANT = 'ai-assistant',
+  WEBHOOK = "webhook",
+  INTERNAL = "internal",
+  AI_ASSISTANT = "ai-assistant",
 }

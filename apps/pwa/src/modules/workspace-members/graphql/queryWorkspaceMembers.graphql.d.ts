@@ -9,6 +9,6 @@ export type WorkspaceMembersQueryVariables = Types.Exact<{
 }>;
 
 
-export type WorkspaceMembersQuery = { __typename: 'Query', workspaceMembers: { __typename: 'WorkspaceMembersPaginated', count: number, data: Array<{ __typename: 'WorkspaceMember', _id: string, userId: string, name: string, color: string | null, avatar: string | null, memberId: string | null, roles: Array<{ __typename: 'WorkspaceMemberRole', _id: string, name: string, color: string | null }> }> } };
+export type WorkspaceMembersQuery = { __typename: 'Query', workspaceMembers: { __typename: 'WorkspaceMembersPaginated', count: number, data: Array<{ __typename: 'WorkspaceMember', _id: string, userId: string, name: string, color: string | null, avatar: string | null, memberId: string | null, workspaceId: string, roles: Array<{ __typename: 'WorkspaceMemberRole', _id: string, name: string, color: string | null }> }> } };
 
 declare const Document: import("graphql").DocumentNode; export default Document;

@@ -36,7 +36,7 @@ import { api } from "@/modules/apis";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Gender } from "@/types";
 import { t } from "@lingui/core/macro";
@@ -103,7 +103,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
   const onSubmit = form.onSubmit(async (values) => {
     let payload = {
       ...values,
-      assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMember) => user.userId),
+      assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMemberLegacy) => user.userId),
       presenterCustomerId: values.presenterCustomer?._id,
       relatedCustomerIds: values.relatedCustomers?.map((c: CustomerEntity) => c._id),
       workspaceBranchId: values.workspaceBranch?._id,

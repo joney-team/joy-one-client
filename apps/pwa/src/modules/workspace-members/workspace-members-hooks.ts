@@ -1,18 +1,13 @@
-import { useEffect, useMemo, useRef } from "react";
 import { useForceUpdate } from "@mantine/hooks";
+import { useEffect, useMemo, useRef } from "react";
 import { getWorkspaceMemberByIds } from "./workspace-members-service";
-import { WorkspaceMember } from "./workspace-members-types";
-import { useQuery } from "@apollo/client/react";
-import QUERY_USER_WORKSPACE_MEMBER, {
-  type UserWorkspaceMemberQuery,
-  type UserWorkspaceMemberQueryVariables,
-} from "./graphql/queryUserWorkspaceMember.graphql";
+import { WorkspaceMemberLegacy } from "./workspace-members-types";
 
 export const useWorkspaceMembers = (
   userIds?: string[]
-): [WorkspaceMember[], boolean, (user: WorkspaceMember) => void] => {
+): [WorkspaceMemberLegacy[], boolean, (user: WorkspaceMemberLegacy) => void] => {
   const _userIds = userIds || [];
-  const workspaceMembers = useRef<WorkspaceMember[]>([]);
+  const workspaceMembers = useRef<WorkspaceMemberLegacy[]>([]);
   const isInitialized = useRef(false);
   const forceUpdate = useForceUpdate();
 
@@ -48,7 +43,7 @@ export const useWorkspaceMembers = (
   return [
     workspaceMembers.current,
     isInitialized.current,
-    (user: WorkspaceMember) => {
+    (user: WorkspaceMemberLegacy) => {
       workspaceMembers.current = [
         ...workspaceMembers.current.filter((assignee) => assignee.userId !== user.userId),
         user,
@@ -56,14 +51,4 @@ export const useWorkspaceMembers = (
       forceUpdate();
     },
   ];
-};
-
-export const useUserWorkspaceMember = () => {
-  const { data, loading } = useQuery<UserWorkspaceMemberQuery, UserWorkspaceMemberQueryVariables>(
-    QUERY_USER_WORKSPACE_MEMBER
-  );
-  return {
-    userWorkspaceMember: data?.userWorkspaceMember,
-    loading,
-  };
 };

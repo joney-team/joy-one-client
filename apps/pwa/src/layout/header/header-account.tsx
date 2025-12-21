@@ -27,6 +27,8 @@ export const WorkspaceHeaderAccount: FC = () => {
   const lang = useLang();
   const app = useApp();
 
+  if (!app.isInitialized) return null;
+
   return (
     <ModalLang>
       {(openLang) => (

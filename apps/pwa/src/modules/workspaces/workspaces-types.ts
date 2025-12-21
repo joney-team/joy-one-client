@@ -6,7 +6,7 @@ import { LocationEntity } from "../locations/locations-types";
 import { WorkspaceBranchEntity } from "../workspace-branches/workspace-branches-types";
 import {
   VerifyInvitaionTokenResponse,
-  WorkspaceMember,
+  WorkspaceMemberLegacy,
   WorkspaceMemberOnlineStatus,
 } from "../workspace-members/workspace-members-types";
 import { WorkspacePermission, WorkspaceRoleEntity } from "../workspace-roles/workspace-roles-types";
@@ -16,6 +16,7 @@ import {
   WorkspaceView,
 } from "../workspace-settings/workspace-settings-types";
 import { WorkspaceModule, WorkspaceModuleId, workspaceModuleConfigs } from "./workspace-modules";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 export interface PluginMailerAccount {
   user: string;
@@ -71,8 +72,9 @@ export interface WorkspaceContext {
   isInitialized: boolean;
   isAvailable: boolean;
   isHasAccessAllBranches: boolean;
-  userMember: WorkspaceMember;
-  userMembers: WorkspaceMember[];
+  member: WorkspaceMemberDataFragment;
+  userMember: WorkspaceMemberLegacy;
+  userMembers: WorkspaceMemberLegacy[];
   select: (workspaceId: string) => void;
   create: (dto: WorkspaceDto) => Promise<void>;
   update: (dto: WorkspaceDto) => Promise<WorkspaceEntity>;

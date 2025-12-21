@@ -230,7 +230,8 @@ const ModalConfigureStatusesContent: FC<ModalConfigureStatusesArgs & { close: ()
     const closedIndex = taskStatuses.findIndex((v) => v.id === DefaultTaskStatusId.CLOSED);
     if (closedIndex === -1 || closedIndex === 0) return;
 
-    const newStatus = {
+    const newStatus: TaskStatus = {
+      __typename: "TaskStatus",
       id: uuid(),
       name: "",
       color: "",

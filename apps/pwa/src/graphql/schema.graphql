@@ -670,9 +670,11 @@ type Task {
   assigneeUserIds: [String!]!
   assigneeUsers: [WorkspaceMember!]!
   childCount: Float!
+  childDueDate: Float
   childEstimatedTime: Float
   childOrder: TaskChildOrder!
   childProgress: Float!
+  childStartDate: Float
   childTimeline: TaskChildTimeline
   closedAt: Float
   code: String!
@@ -759,7 +761,6 @@ input TaskStatusInput {
 }
 
 type TaskTimeTracking {
-  billable: Boolean
   endAt: Float
   id: String!
   note: String
@@ -770,7 +771,6 @@ type TaskTimeTracking {
 }
 
 input TaskTimeTrackingInput {
-  billable: Boolean
   endAt: Float
   id: String!
   note: String
@@ -829,6 +829,7 @@ type WorkspaceMember {
   phone: String
   roles: [WorkspaceMemberRole!]!
   userId: String!
+  workspaceId: String!
 }
 
 type WorkspaceMemberRole {

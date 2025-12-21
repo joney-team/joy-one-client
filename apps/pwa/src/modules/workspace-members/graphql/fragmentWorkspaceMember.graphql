@@ -5,6 +5,7 @@ fragment WorkspaceMemberData on WorkspaceMember {
   color
   avatar
   memberId
+  workspaceId
   roles {
     _id
     name

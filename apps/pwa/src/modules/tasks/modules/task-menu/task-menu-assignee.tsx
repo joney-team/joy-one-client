@@ -12,7 +12,6 @@ import QUERY_WORKSPACE_MEMBERS, {
   type WorkspaceMembersQuery,
   type WorkspaceMembersQueryVariables,
 } from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
-import { useUserWorkspaceMember } from "@/modules/workspace-members/workspace-members-hooks";
 import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { AppEntity } from "@/types";
 import { t } from "@lingui/core/macro";
@@ -22,6 +21,7 @@ import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 
 const MenuItem = ({
   member,
@@ -77,7 +77,7 @@ const MenuItem = ({
 };
 
 export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
-  const { userWorkspaceMember } = useUserWorkspaceMember();
+  const { member } = useWorkspace();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [selected, setSelected] = useState<TaskDataFragment["assigneeUsers"]>(
@@ -168,16 +168,16 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
         <Stack px={5} gap={0}>
           {textSearch.length === 0 && (
             <Fragment>
-              {userWorkspaceMember && (
+              {member && (
                 <MenuItem
                   isSelf
-                  member={userWorkspaceMember}
-                  isSelected={selected.some((u) => u._id === userWorkspaceMember._id)}
+                  member={member}
+                  isSelected={selected.some((u) => u._id === member._id)}
                   onClick={() => {
-                    const isSelected = selected.some((u) => u._id === userWorkspaceMember._id);
+                    const isSelected = selected.some((u) => u._id === member._id);
                     const data = isSelected
-                      ? selected.filter((t) => t._id !== userWorkspaceMember._id)
-                      : [...selected, userWorkspaceMember];
+                      ? selected.filter((t) => t._id !== member._id)
+                      : [...selected, member];
 
                     setSelected(data);
                     updateTask({
@@ -190,7 +190,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
               )}
 
               {selected.map((member) => {
-                const isSelf = member.userId === userWorkspaceMember?.userId;
+                const isSelf = member.userId === member?.userId;
                 if (isSelf) return null;
 
                 return (
@@ -221,7 +221,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
 
               return (
                 <MenuItem
-                  isSelf={member.userId === userWorkspaceMember?.userId}
+                  isSelf={member.userId === member?.userId}
                   key={member._id}
                   member={member}
                   isSelected={isSelected}

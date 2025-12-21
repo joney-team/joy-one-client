@@ -2,6 +2,7 @@
 
 import { wait } from "@/utils/common.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
+import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 import { useLingui } from "@lingui/react/macro";
 import { useThrottledCallback } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
@@ -259,7 +260,7 @@ export const GanttProvider: FC<PropsWithChildren> = (props) => {
       if (!ticking) {
         ticking = true;
 
-        requestAnimationFrame(() => {
+        requestAnimationFrameTimes(() => {
           if (pendingDeltaX !== 0) {
             bodyContainer.scrollLeft += pendingDeltaX;
           }

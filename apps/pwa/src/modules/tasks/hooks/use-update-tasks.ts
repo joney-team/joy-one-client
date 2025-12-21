@@ -86,6 +86,17 @@ const normalizeTaskForSubmit = (
     input.partnerIds = task.partners?.map((partner) => partner._id) ?? null;
   }
 
+  if ("timeTrackings" in task) {
+    input.timeTrackings =
+      task.timeTrackings?.map((timeTracking) => ({
+        endAt: timeTracking.endAt,
+        id: timeTracking.id,
+        note: timeTracking.note,
+        startAt: timeTracking.startAt,
+        userId: timeTracking.userId,
+      })) ?? [];
+  }
+
   if ("isArchived" in task) {
     input.isArchived = task.isArchived;
   }

@@ -3,14 +3,7 @@
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import { Skeleton } from "@mantine/core";
-import {
-  Icon,
-  IconCalendar,
-  IconLayoutKanban,
-  IconList,
-  IconMist,
-  IconStopwatch,
-} from "@tabler/icons-react";
+import { Icon, IconLayoutKanban, IconList, IconMist, IconStopwatch } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, PropsWithChildren, ReactNode, useCallback, useMemo } from "react";
@@ -95,10 +88,6 @@ const allTaskViews: Record<TaskView, { icon: Icon; name: ReactNode }> = {
   [TaskView.TIME_TRACKINGS]: {
     icon: IconStopwatch,
     name: <Trans>Time trackings</Trans>,
-  },
-  [TaskView.CALENDAR]: {
-    icon: IconCalendar,
-    name: <Trans>Calendar</Trans>,
   },
 };
 

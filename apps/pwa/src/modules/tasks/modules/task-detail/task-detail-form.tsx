@@ -2,6 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { ContentEditable } from "@/components/content-editable/content-editable";
+import { DateFormat } from "@/components/format/date-format";
 import { Hovered } from "@/components/hovered";
 import { formatDuration } from "@/components/inputs/estimate-time-input/estimate-time-input-utils";
 import { TimeTrackingsInput } from "@/components/inputs/time-trackings-input";
@@ -41,14 +42,12 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, PropsWithChildren, ReactNode, useMemo, useRef } from "react";
-import { TaskTimeline } from "../../components/task-timeline";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import { taskPriorities } from "../../task-constants";
 import { useTaskMenu } from "../task-menu/task-menu";
 import { TaskMenuAction } from "../task-menu/task-menu-types";
-import { DateFormat } from "@/components/format/date-format";
 
 const Editor = dynamic(() => import("@/components/editor/editor").then((mod) => mod.Editor), {
   ssr: false,
@@ -65,7 +64,7 @@ const FormField: FC<
     label: ReactNode;
     icon: Icon;
     iconColor?: string;
-    onClick: (contentRef: HTMLDivElement) => void;
+    onClick?: (contentRef: HTMLDivElement) => void;
     onRemove?: () => void;
     placeholder?: ReactNode;
     value?: ReactNode;
@@ -97,7 +96,7 @@ const FormField: FC<
     }
 
     return children;
-  }, [value, placeholder]);
+  }, [value, placeholder, children]);
 
   return (
     <Group
@@ -106,7 +105,7 @@ const FormField: FC<
       gap={0}
       className="clickable"
       onClick={() => {
-        if (!contentRef.current) return;
+        if (!contentRef.current || !onClick) return;
         onClick(contentRef.current);
       }}
     >
@@ -373,28 +372,8 @@ export const TaskDetailForm: FC<TaskDetailFormProps> = ({ task }) => {
             }
           />
 
-          <FormField
-            icon={IconStopwatch}
-            label={<Trans>Time trackings</Trans>}
-            onRemove={() =>
-              updateTasks({
-                _id: task._id,
-                timeTrackings: [],
-              })
-            }
-            onClick={() => {}}
-          >
-            <TimeTrackingsInput
-              p={5}
-              flex={1}
-              value={task.timeTrackings as any}
-              onChange={(timeTrackings) =>
-                updateTasks({
-                  _id: task._id,
-                  timeTrackings: timeTrackings as any,
-                })
-              }
-            />
+          <FormField icon={IconStopwatch} label={<Trans>Time trackings</Trans>}>
+            <TimeTrackingsInput p={5} flex={1} task={task} />
           </FormField>
 
           <FormField

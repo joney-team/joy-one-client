@@ -1,14 +1,12 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
 fragment TaskTimeTrackingData on TaskTimeTracking {
   id
   workspaceId
   userId
   user {
-    _id
-    name
-    color
-    avatar
+    ...WorkspaceMemberData
   }
-  billable
   note
   startAt
   endAt

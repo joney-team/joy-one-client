@@ -1,21 +1,21 @@
 import type { BaseMongoEntity, Coordinates, WorkSlot } from "@/types";
-import type { WorkspaceMember } from "@/modules/workspace-members/workspace-members-types";
+import type { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 
 export enum HrmTimekeepingType {
-  CHECK_IN = 'CHECK_IN',
-  CHECK_OUT = 'CHECK_OUT',
+  CHECK_IN = "CHECK_IN",
+  CHECK_OUT = "CHECK_OUT",
 }
 
 export enum HrmTimekeepingMethod {
-  LOCATION = 'LOCATION',
-  REQUEST = 'REQUEST',
+  LOCATION = "LOCATION",
+  REQUEST = "REQUEST",
 }
 
 export enum HrmTimekeepingStatus {
-  PENDING = 'PENDING',
-  MANUAL_APPROVAL = 'MANUAL_APPROVAL',
-  AUTO_APPROVAL = 'AUTO_APPROVAL',
-  REJECTED = 'REJECTED',
+  PENDING = "PENDING",
+  MANUAL_APPROVAL = "MANUAL_APPROVAL",
+  AUTO_APPROVAL = "AUTO_APPROVAL",
+  REJECTED = "REJECTED",
 }
 
 export interface LocationTimekeepingDto {
@@ -34,7 +34,7 @@ export interface RejectTimekeepingDto {
 
 export interface HrmTimekeepingEntity extends BaseMongoEntity {
   userId: string;
-  user: WorkspaceMember;
+  user: WorkspaceMemberLegacy;
   workspaceId: string;
   time: number;
   coordinates?: Coordinates;
@@ -49,9 +49,9 @@ export interface HrmTimekeepingEntity extends BaseMongoEntity {
 
 // ======================= Calculate Timekeepings =======================
 export interface HrmCalculateTimekeepingsArgs {
-  timekeepings: HrmTimekeepingEntity[],
-  workSlots?: WorkSlot[] | undefined,
-  rules?: HrmTimekeepingsRules,
+  timekeepings: HrmTimekeepingEntity[];
+  workSlots?: WorkSlot[] | undefined;
+  rules?: HrmTimekeepingsRules;
 }
 
 export interface CheckInLocation {
@@ -62,8 +62,8 @@ export interface CheckInLocation {
 }
 
 export interface HrmTimekeepingsRules {
-  acceptLatenessUpToMins?: number,
-  acceptOverTimeAtLeastMins?: number,
-  acceptLocations?: CheckInLocation[],
-  requirePhoto?: boolean,
+  acceptLatenessUpToMins?: number;
+  acceptOverTimeAtLeastMins?: number;
+  acceptLocations?: CheckInLocation[];
+  requirePhoto?: boolean;
 }

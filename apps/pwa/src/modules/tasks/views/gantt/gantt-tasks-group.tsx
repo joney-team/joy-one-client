@@ -1,28 +1,29 @@
 "use client";
 
 import { NumberFormat } from "@/components/format/number-format";
+import { formatDuration } from "@/components/inputs/estimate-time-input/estimate-time-input-utils";
+import { TaskContextType } from "@/graphql/enums.graphql";
 import { InternalEvent, onInternalEvent } from "@/hooks/use-internal-event";
 import { TagDataFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { nonLoading } from "@/utils/non-loading";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, alpha, Badge, Group, Loader, Progress, Stack, Text } from "@mantine/core";
+import { ActionIcon, alpha, Badge, Box, Group, Loader, Stack, Text } from "@mantine/core";
 import { IconFolder, IconFolderOpen, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { Fragment, useEffect, useMemo, useRef, useState, type FC } from "react";
+import { createPortal } from "react-dom";
+import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { useTaskMetrics } from "../../hooks/use-task-metrics";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { type ModalCreateTaskRef } from "../../modals/modal-create-task";
 import { useTaskSelections } from "../../modules/task-selections/task-selections-context";
 import { useTasks } from "../../tasks-context";
-import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
-import { useTaskMetrics } from "../../hooks/use-task-metrics";
-import { TaskContextType } from "@/graphql/enums.graphql";
-import { useGanttRefs } from "./gantt-tasks-refs";
-import { createPortal } from "react-dom";
 import { ganttConfig } from "./gantt-tasks-config";
-import { formatDuration } from "@/components/inputs/estimate-time-input/estimate-time-input-utils";
 import { useGantt } from "./gantt-tasks-context";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { useGanttRefs } from "./gantt-tasks-refs";
+import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 
 const GanttTask = dynamic(() => import("./gantt-task/gantt-task").then((mod) => mod.GanttTask), {
   ssr: false,
@@ -120,14 +121,14 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
 
   // Sync the position of the gantt task area
   useEffect(() => {
-    if (!bodyRef.current || !rootRef.current) return;
-
     const syncPosition = async () => {
       const offsetTop = rootRef.current?.offsetTop ?? 0;
       const top = offsetTop - ganttConfig.headHeight;
 
-      bodyRef.current?.style.setProperty("top", `${top}px`);
-      bodyRef.current?.style.setProperty("height", `${rootRef.current?.offsetHeight}px`);
+      requestAnimationFrameTimes(() => {
+        bodyRef.current?.style.setProperty("top", `${top}px`);
+        bodyRef.current?.style.setProperty("height", `${rootRef.current?.offsetHeight}px`);
+      });
     };
 
     syncPosition();
@@ -139,8 +140,13 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
       subtree: true,
     });
 
+    mutationObserver.observe(ganttRefs.body.current, {
+      childList: true,
+      subtree: true,
+    });
+
     const resizeObserver = new ResizeObserver(syncPosition);
-    resizeObserver.observe(rootRef.current);
+    if (rootRef.current) resizeObserver.observe(rootRef.current);
 
     return () => {
       mutationObserver.disconnect();
@@ -287,13 +293,11 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
                   mih="100%"
                   justify="center"
                 >
-                  <Progress
-                    h={3}
-                    opacity={0.5}
-                    miw="100%"
-                    value={metric.progress}
-                    color={folder?.color ?? "gray"}
-                    radius="sm"
+                  <Box
+                    h={8}
+                    w="100%"
+                    bg={alpha(folder?.color ?? "gray", 0.1)}
+                    style={{ borderRadius: 3 }}
                   />
                 </Stack>
               )}

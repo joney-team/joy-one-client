@@ -3,40 +3,25 @@
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Modal } from "@/components/modal/modal";
-import { Renderer } from "@/components/renderer";
-import { calendarDayJsLocalizer } from "@/configs/calendar.config";
 import { useLayout } from "@/layout/layout-context";
 import { useLang } from "@/modules/lang/lang-context";
 import { useTasks } from "@/modules/tasks/tasks-context";
-import { createTask } from "@/modules/tasks/tasks-service";
-import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
+import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
+import { useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
-import {
-  ActionIcon,
-  Card,
-  Group,
-  InputWrapper,
-  ScrollArea,
-  Stack,
-  Switch,
-  Text,
-  ThemeIcon,
-} from "@mantine/core";
+import { Trans, useLingui } from "@lingui/react/macro";
+import { ActionIcon, Group, InputWrapper, Stack, Text, ThemeIcon } from "@mantine/core";
 import { DateInput, TimeInput } from "@mantine/dates";
 import { useForceUpdate } from "@mantine/hooks";
 import {
   IconChevronDown,
   IconChevronRight,
   IconClock,
-  IconCurrencyDollar,
-  IconCurrencyDollarOff,
   IconFolder,
   IconMinus,
   IconPlus,
@@ -53,8 +38,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { Calendar } from "react-big-calendar";
 import { v4 as uuId } from "uuid";
+import CREATE_TASK_MUTATION, {
+  type CreateTaskMutation,
+  type CreateTaskMutationVariables,
+} from "../graphql/mutationCreateTask.graphql";
 
 export function findNearestTimeSlot(now = new Date()) {
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
@@ -89,7 +77,7 @@ export function findNearestTimeSlot(now = new Date()) {
 
 export interface TaskTimeTrackingModalArgs {
   date: Date;
-  onSubmit?: (task: TaskEntity) => any;
+  onSubmit?: (taskId: string) => any;
 }
 
 const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () => void }> = (
@@ -99,33 +87,22 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
   const lang = useLang();
   const tasks = useTasks();
   const layout = useLayout();
+  const { t } = useLingui();
 
   const startAtRef = useRef<HTMLInputElement>(null);
   const endAtRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState("");
   const [user, setUser] = useState<WorkspaceMemberInfo>(workspace.userMember);
-  const [billable, setBillable] = useState(true);
   const [date, setDate] = useState(args.date);
 
-  const viewport = useRef<HTMLDivElement>(null);
   const forceUpdate = useForceUpdate();
   const [slot, setSlot] = useState<{ startAt: number; endAt: number }>();
   const color = useColor();
 
-  const scrollToSlot = (time = new Date()) => {
-    const offset = 15;
-    const nearestTime = findNearestTimeSlot(new Date(time.getTime() - offset * 60 * 1000));
-    const el = document.getElementsByClassName(`rbc-time-slot ${nearestTime}`);
-    if (el?.[0]) {
-      el?.[0].scrollIntoView({ behavior: "instant" });
-    } else {
-      const indicator = document.getElementsByClassName("rbc-current-time-indicator");
-      if (indicator?.[0]) {
-        indicator?.[0].scrollIntoView({ behavior: "instant" });
-      }
-    }
-  };
+  const [createTask] = useMutation<CreateTaskMutation, CreateTaskMutationVariables>(
+    CREATE_TASK_MUTATION
+  );
 
   const onSubmit = async () => {
     try {
@@ -152,23 +129,27 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
       }
 
       const result = await createTask({
-        name,
-        assigneeUserIds: [user.userId],
-        folderId: tasks.activatedFolder?._id,
-        status: DefaultTaskStatusId.CLOSED,
-        timeTrackings: [
-          {
-            id: uuId(),
-            userId: user.userId,
-            user,
-            startAt: DateTime.toSeconds(startAt),
-            endAt: DateTime.toSeconds(endAt),
-            billable,
+        variables: {
+          input: {
+            name,
+            assigneeUserIds: [user.userId],
+            folderId: tasks.activatedFolder?._id,
+            status: DefaultTaskStatusId.CLOSED,
+            timeTrackings: [
+              {
+                id: uuId(),
+                userId: user.userId,
+                startAt: DateTime.toSeconds(startAt),
+                endAt: DateTime.toSeconds(endAt),
+              },
+            ],
           },
-        ],
+        },
       });
 
-      args.onSubmit?.(result);
+      if (!result.data) throw new Error(t`Failed to create task`);
+
+      args.onSubmit?.(result.data.createTask._id);
       args.close();
     } catch (error) {
       onError(error);
@@ -176,15 +157,10 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
   };
 
   useEffect(() => {
-    setTimeout(() => scrollToSlot(), 100);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      forceUpdate();
-    }, 1000 * 60);
-
-    return () => clearInterval(interval);
+    const interval = setInterval(forceUpdate, 1000 * 60);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const breadcrumbs = useMemo(() => {
@@ -230,78 +206,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
         onChange={(e) => setName(e || "")}
       />
 
-      <Renderer views={["desktop", "tablet"]}>
-        <InputWrapper label={t`Time`}>
-          <Card withBorder shadow="none" p={0}>
-            <ScrollArea h={450} viewportRef={viewport}>
-              <Calendar
-                className="hide-header border-none"
-                localizer={calendarDayJsLocalizer}
-                date={new Date()}
-                view="day"
-                toolbar={false}
-                step={16}
-                selectable
-                events={
-                  slot
-                    ? [
-                        {
-                          start: new Date(slot.startAt * 1000),
-                          end: new Date(slot.endAt * 1000),
-                          title: (
-                            <Group gap={3} ml={-3}>
-                              <IconStopwatch size={16} strokeWidth={1.5} />
-                              <Text fz={13} fw={500}>
-                                {DateTime.toHHMM((slot.endAt * 1000 - slot.startAt * 1000) / 1000)}
-                              </Text>
-                            </Group>
-                          ),
-                        },
-                      ]
-                    : []
-                }
-                onSelectSlot={(slot) => {
-                  setSlot({
-                    startAt: DateTime.toSeconds(slot.start),
-                    endAt: DateTime.toSeconds(slot.end),
-                  });
-                }}
-                formats={{
-                  timeGutterFormat: (date, culture) => {
-                    return calendarDayJsLocalizer.format(date, "HH:mm", culture);
-                  },
-                  selectRangeFormat: ({ start, end }) => {
-                    return DateTime.toHHMM((end.getTime() - start.getTime()) / 1000);
-                  },
-                  eventTimeRangeFormat: ({ start, end }) => {
-                    return `${calendarDayJsLocalizer.format(
-                      start,
-                      "HH:mm"
-                    )} - ${calendarDayJsLocalizer.format(end, "HH:mm")}`;
-                  },
-                }}
-                slotPropGetter={(slot) => {
-                  return {
-                    className: calendarDayJsLocalizer.format(slot, "HH:mm"),
-                  };
-                }}
-                eventPropGetter={() => {
-                  return {
-                    style: {
-                      backgroundColor: color("primary"),
-                      borderRadius: "3px",
-                      borderWidth: "1.5px",
-                      borderColor: color("primary.8"),
-                    },
-                  };
-                }}
-              />
-            </ScrollArea>
-          </Card>
-        </InputWrapper>
-      </Renderer>
-
-      <InputWrapper label={t`Time`}>
+      <InputWrapper label={<Trans>Time</Trans>}>
         <Group gap={10} wrap="nowrap">
           <DateInput
             valueFormat={DateTime.getDateFormatString(lang.locale)}
@@ -322,15 +227,13 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
                   slot
                     ? {
                         startAt: startAt,
-                        endAt: slot.endAt > startAt ? slot.endAt : startAt + 60 * 30,
+                        endAt: slot.endAt > startAt ? slot.endAt : startAt + 60 * 60,
                       }
                     : {
                         startAt: startAt,
-                        endAt: startAt + 60 * 30,
+                        endAt: startAt + 60 * 60,
                       }
                 );
-
-                scrollToSlot(new Date(startAt * 1000));
               }}
               rightSection={
                 <ActionIcon
@@ -361,8 +264,6 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
                   startAt: slot.startAt,
                   endAt,
                 });
-
-                scrollToSlot(new Date(slot.startAt * 1000));
               }}
               onClick={() => endAtRef.current?.showPicker()}
               rightSection={
@@ -381,15 +282,6 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
       </InputWrapper>
 
       <Group justify="space-between">
-        <Switch
-          label={t`Mark as billable`}
-          checked={billable}
-          onChange={(e) => setBillable(e.target.checked)}
-          onLabel={<IconCurrencyDollar size={16} strokeWidth={2} />}
-          offLabel={<IconCurrencyDollarOff size={16} strokeWidth={2} />}
-          size="md"
-        />
-
         <WorkspaceMemberInput
           clearable={false}
           value={user}

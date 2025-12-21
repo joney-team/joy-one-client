@@ -30,7 +30,6 @@ export function placeDropdownMenu(
   // If menu has no dimensions yet, skip positioning
   if (menuWidth === 0 || menuHeight === 0) {
     // Retry on next frame if dimensions aren't ready
-    // requestAnimationFrame(() => placeDropdownMenu(elements, options));
     throw new Error("Menu has no dimensions");
   }
 

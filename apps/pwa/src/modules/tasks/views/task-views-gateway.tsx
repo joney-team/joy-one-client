@@ -2,11 +2,11 @@
 
 import { Skeleton, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
-import { ComponentType, ReactNode, useEffect, useMemo, type FC } from "react";
-import { TaskView } from "./types";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { updateTaskPath } from "../tasks-route-helpers";
+import { ComponentType, ReactNode, useEffect, useMemo, type FC } from "react";
 import { useTasks } from "../tasks-context";
+import { updateTaskPath } from "../tasks-route-helpers";
+import { TaskView } from "./types";
 
 const viewLoader = () => (
   <Stack p={16}>
@@ -41,12 +41,6 @@ const getTimeTrackingsTasks = () =>
     }
   );
 
-const getCalendarTasks = () =>
-  dynamic(() => import("./calendar").then((mod) => mod.TasksCalendarView), {
-    ssr: false,
-    loading: viewLoader,
-  });
-
 const allTaskViews: {
   [key in TaskView]: {
     loader?: () => ComponentType<{ children?: ReactNode | undefined }>;
@@ -56,7 +50,6 @@ const allTaskViews: {
   [TaskView.BOARD]: { loader: getBoardTasks },
   [TaskView.GANTT]: { loader: getGanttTasks },
   [TaskView.TIME_TRACKINGS]: { loader: getTimeTrackingsTasks },
-  [TaskView.CALENDAR]: { loader: getCalendarTasks },
 };
 
 export const TaskViewsGateway: FC<{ view: TaskView }> = ({ view }) => {

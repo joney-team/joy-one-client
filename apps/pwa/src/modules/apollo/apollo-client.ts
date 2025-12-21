@@ -120,6 +120,9 @@ export const apolloClient = new ApolloClient({
           tags: {
             merge: false,
           },
+          timeTrackings: {
+            merge: false,
+          },
         },
       },
     },
