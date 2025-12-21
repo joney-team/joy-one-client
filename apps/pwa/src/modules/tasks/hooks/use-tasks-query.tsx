@@ -28,6 +28,7 @@ export const useTasksQuery = ({
     TasksCountQueryVariables
   >(QUERY_TASKS_COUNT, {
     fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export const useTasksQuery = ({
     TasksQueryVariables
   >(QUERY_TASKS, {
     fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-and-network",
   });
 
   const tasks = useMemo(() => {
