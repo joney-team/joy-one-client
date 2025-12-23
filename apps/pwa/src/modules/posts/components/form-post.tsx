@@ -193,15 +193,13 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               <Editor
                 isShowToolbar
                 placeholder={t`Enter content`}
-                props={{
-                  styles: {
-                    root: {
-                      border: "none",
-                      borderRadius: 0,
-                    },
-                    content: {
-                      minHeight: "60dvh",
-                    },
+                styles={{
+                  root: {
+                    border: "none",
+                    borderRadius: 0,
+                  },
+                  content: {
+                    minHeight: "60dvh",
                   },
                 }}
                 value={form.values.content}
