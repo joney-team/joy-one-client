@@ -18,6 +18,42 @@ export type Scalars = {
   JSONObject: { input: any; output: any; }
 };
 
+export type ActivitiesPaginated = {
+  __typename: 'ActivitiesPaginated';
+  count: Scalars['Float']['output'];
+  data: Array<Activity>;
+};
+
+export type Activity = {
+  __typename: 'Activity';
+  _id: Scalars['String']['output'];
+  childCount: Maybe<Scalars['Float']['output']>;
+  content: Maybe<Scalars['String']['output']>;
+  contextId: Scalars['String']['output'];
+  contextType: ActivityContextType;
+  createdByUser: WorkspaceMember;
+  isPinned: Maybe<Scalars['Boolean']['output']>;
+  parentId: Maybe<Scalars['String']['output']>;
+  pinnedAt: Maybe<Scalars['Float']['output']>;
+  pinnedByUser: WorkspaceMember;
+  pinnedByUserId: Maybe<Scalars['String']['output']>;
+  type: ActivityType;
+};
+
+/** Available activity contexts */
+export const ActivityContextType = {
+  Customer: 'CUSTOMER',
+  Task: 'TASK'
+} as const;
+
+export type ActivityContextType = typeof ActivityContextType[keyof typeof ActivityContextType];
+/** Available activity types */
+export const ActivityType = {
+  Common: 'COMMON',
+  Post: 'POST'
+} as const;
+
+export type ActivityType = typeof ActivityType[keyof typeof ActivityType];
 export type AppConfig = {
   __typename: 'AppConfig';
   UTC: Scalars['String']['output'];
@@ -99,6 +135,17 @@ export type Coordinates = {
   __typename: 'Coordinates';
   lat: Scalars['Float']['output'];
   lng: Scalars['Float']['output'];
+};
+
+export type CountReactionType = {
+  __typename: 'CountReactionType';
+  count: Scalars['Float']['output'];
+  type: ReactionType;
+};
+
+export type CountReactions = {
+  __typename: 'CountReactions';
+  reactions: Array<CountReactionType>;
 };
 
 export type CreateTaskInput = {
@@ -244,6 +291,9 @@ export const EventDataActionType = {
 export type EventDataActionType = typeof EventDataActionType[keyof typeof EventDataActionType];
 /** Available event types */
 export const EventType = {
+  ActivityArchived: 'ACTIVITY_ARCHIVED',
+  ActivityNew: 'ACTIVITY_NEW',
+  ActivityUpdated: 'ACTIVITY_UPDATED',
   BankTransactionCancelled: 'BANK_TRANSACTION_CANCELLED',
   BankTransactionFailed: 'BANK_TRANSACTION_FAILED',
   BankTransactionFulfilled: 'BANK_TRANSACTION_FULFILLED',
@@ -361,6 +411,8 @@ export const EventType = {
   PromotionArchived: 'PROMOTION_ARCHIVED',
   PromotionNew: 'PROMOTION_NEW',
   PromotionUpdated: 'PROMOTION_UPDATED',
+  ReactionAdded: 'REACTION_ADDED',
+  ReactionRemoved: 'REACTION_REMOVED',
   ReceiptArchived: 'RECEIPT_ARCHIVED',
   ReceiptChangeWorkspaceBranch: 'RECEIPT_CHANGE_WORKSPACE_BRANCH',
   ReceiptDisbursement: 'RECEIPT_DISBURSEMENT',
@@ -505,8 +557,10 @@ export type LocationEntity = {
 
 export type Mutation = {
   __typename: 'Mutation';
+  addReaction: Scalars['Boolean']['output'];
   bulkUpdateTags: Array<Tag>;
   bulkUpdateTasks: Array<Task>;
+  createActivity: Activity;
   createCategory: Category;
   createProduct: Product;
   createTag: Tag;
@@ -521,12 +575,21 @@ export type Mutation = {
   pluginExternalStorageSignUploadUrl: SignUploadUrlResponse;
   registerDevice: DeviceEntity;
   removePluginExternalStorage: Scalars['Boolean']['output'];
+  removeReaction: Scalars['Boolean']['output'];
   removeTag: Scalars['Boolean']['output'];
   setPluginExternalStorage: PluginExternalStorage;
   syncTask: SyncTaskResult;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
+  updateActivity: Activity;
   updateCategory: Category;
   updateTaskStatuses: Array<TaskStatus>;
+};
+
+
+export type MutationAddReactionArgs = {
+  entity: Scalars['String']['input'];
+  entityId: Scalars['String']['input'];
+  type: ReactionType;
 };
 
 
@@ -537,6 +600,15 @@ export type MutationBulkUpdateTagsArgs = {
 
 export type MutationBulkUpdateTasksArgs = {
   items: Array<UpdateTaskInput>;
+};
+
+
+export type MutationCreateActivityArgs = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  contextId: Scalars['String']['input'];
+  contextType: ActivityContextType;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  type: ActivityType;
 };
 
 
@@ -630,6 +702,12 @@ export type MutationRegisterDeviceArgs = {
 };
 
 
+export type MutationRemoveReactionArgs = {
+  entity: Scalars['String']['input'];
+  entityId: Scalars['String']['input'];
+};
+
+
 export type MutationRemoveTagArgs = {
   id: Scalars['String']['input'];
 };
@@ -647,6 +725,12 @@ export type MutationSetPluginExternalStorageArgs = {
 
 export type MutationSyncTaskArgs = {
   _id: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateActivityArgs = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
 };
 
 
@@ -770,9 +854,11 @@ export const ProductType = {
 export type ProductType = typeof ProductType[keyof typeof ProductType];
 export type Query = {
   __typename: 'Query';
+  activities: ActivitiesPaginated;
   appConfig: AppConfig;
   categoriesPaginated: CategoriesPaginated;
   category: Category;
+  countReactions: CountReactions;
   customers: CustomersPaginated;
   event: Event;
   getCategoriesByIds: Array<Category>;
@@ -780,6 +866,7 @@ export type Query = {
   getFileInfo: File;
   getProductByIds: Array<Product>;
   pluginExternalStorage: Maybe<PluginExternalStorage>;
+  reactions: ReactionsPaginated;
   siblingTasks: SiblingTasks;
   tagBySlug: Tag;
   tags: Tags;
@@ -794,6 +881,16 @@ export type Query = {
 };
 
 
+export type QueryActivitiesArgs = {
+  contextId: Scalars['String']['input'];
+  contextType: ActivityContextType;
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  type?: InputMaybe<ActivityType>;
+};
+
+
 export type QueryCategoriesPaginatedArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
@@ -803,6 +900,12 @@ export type QueryCategoriesPaginatedArgs = {
 
 export type QueryCategoryArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type QueryCountReactionsArgs = {
+  entity: Scalars['String']['input'];
+  entityId: Scalars['String']['input'];
 };
 
 
@@ -835,6 +938,15 @@ export type QueryGetFileInfoArgs = {
 
 export type QueryGetProductByIdsArgs = {
   ids: Array<Scalars['String']['input']>;
+};
+
+
+export type QueryReactionsArgs = {
+  entity: Scalars['String']['input'];
+  entityId: Scalars['String']['input'];
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
 };
 
 
@@ -923,6 +1035,30 @@ export type QueryWorkspaceMembersArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   userId?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type Reaction = {
+  __typename: 'Reaction';
+  createdAt: Scalars['Float']['output'];
+  type: ReactionType;
+  user: WorkspaceMember;
+  userId: Scalars['String']['output'];
+};
+
+/** Available reaction types */
+export const ReactionType = {
+  Celebrate: 'CELEBRATE',
+  Eyes: 'EYES',
+  Laugh: 'LAUGH',
+  Like: 'LIKE',
+  Love: 'LOVE'
+} as const;
+
+export type ReactionType = typeof ReactionType[keyof typeof ReactionType];
+export type ReactionsPaginated = {
+  __typename: 'ReactionsPaginated';
+  count: Scalars['Float']['output'];
+  data: Array<Reaction>;
 };
 
 export type RegisterDeviceDto = {

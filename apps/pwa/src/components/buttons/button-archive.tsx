@@ -46,9 +46,7 @@ export const ButtonArchive: FC<ButtonArchiveProps> = (props) => {
             });
         }}
       >
-        <Text fz={12} fw={400}>
-          {props.label ?? <Trans>Archive</Trans>}
-        </Text>
+        {props.label ?? <Trans>Archive</Trans>}
       </Button>
     </Center>
   );

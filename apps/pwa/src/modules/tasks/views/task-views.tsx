@@ -9,6 +9,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, PropsWithChildren, ReactNode, useCallback, useMemo } from "react";
 import { parseTaskPath, updateTaskPath } from "../tasks-route-helpers";
 import { TaskView } from "./types";
+import { StorageKey } from "@/types";
+import { useLocalStorage } from "@mantine/hooks";
 
 const TaskTabActions = dynamic(
   () => import("../components/task-tab-actions").then((mod) => mod.TaskTabActions),
@@ -42,7 +44,7 @@ const TasksRealtimeEvents = dynamic(
   }
 );
 
-const TaskViewGateway = dynamic(
+const TaskViewsGateway = dynamic(
   () => import("./task-views-gateway").then((mod) => mod.TaskViewsGateway),
   {
     ssr: false,
@@ -94,10 +96,16 @@ const allTaskViews: Record<TaskView, { icon: Icon; name: ReactNode }> = {
 const TasksViews: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
   const pathname = usePathname();
+
+  const [, setLocalView] = useLocalStorage<TaskView>({
+    key: StorageKey.TASKS_VIEW,
+  });
+
   const { view } = useMemo(() => parseTaskPath(pathname), [pathname]);
 
   const setView = useCallback(
     (selectedView: string) => {
+      setLocalView(selectedView as TaskView);
       router.replace(updateTaskPath({ view: selectedView as TaskView, pathname }));
     },
     [router, pathname]
@@ -118,7 +126,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
           onChange={setView}
           rightSection={TaskTabActions}
         />
-        <TaskViewGateway view={view} />
+        <TaskViewsGateway view={view} />
         <TaskDetail />
         <TasksRealtimeEvents />
       </ContextMenuProvider>

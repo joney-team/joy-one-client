@@ -36,7 +36,7 @@ const defaultStyle: Partial<
 > = {
   "compact-xs": {
     iconSize: 12,
-    iconSpacing: -8,
+    iconSpacing: -7,
     iconStrokeWidth: 2.2,
     fontSize: 11,
   },

@@ -34,6 +34,11 @@ import { usePathname } from "next/navigation";
 import { Fragment, useMemo, useRef, type FC, type ReactNode } from "react";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 import { type ModalConfigureStatusesRef } from "@/modules/tasks/modals/modal-configure-statuses";
+import { useLocalStorage } from "@mantine/hooks";
+import { TaskView } from "@/modules/tasks/views/types";
+import { StorageKey } from "@/types";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 
 const ModalConfigureStatuses = dynamic(
   () =>
@@ -83,6 +88,7 @@ export const WorkspaceNavigationMenu: FC<{
 }> = (props) => {
   const router = useRouter();
   const layout = useLayout();
+  const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
   const pathname = usePathname();
   const colorScheme = useColorScheme();
@@ -90,6 +96,10 @@ export const WorkspaceNavigationMenu: FC<{
   const modalTagFormRef = useRef<ModalTagFormRef>(null);
   const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
   const modalConfigureStatusesRef = useRef<ModalConfigureStatusesRef>(null);
+  const [localTaskView] = useLocalStorage<TaskView>({
+    key: StorageKey.TASKS_VIEW,
+    defaultValue: TaskView.LIST,
+  });
 
   const { folders } = useTaskFolders();
 
@@ -103,12 +113,11 @@ export const WorkspaceNavigationMenu: FC<{
     if (!layout.isInitialized) return "";
 
     if (props.route === "/tasks") {
-      const { view } = parseTaskPath(pathname);
-      return `/tasks/${view}/d`;
+      return `/tasks/${localTaskView}/d`;
     }
 
     return props.route;
-  }, [props.route, layout.isInitialized, pathname]);
+  }, [props.route, layout.isInitialized, pathname, localTaskView]);
 
   if (layout.view === "mobile") {
     return (
@@ -311,9 +320,9 @@ export const WorkspaceNavigationMenu: FC<{
         </Group>
       </Anchor>
 
-      {props.route === "/tasks" && isActive && folders.length > 0 && (
-        <WorkspaceNavigationTaskFolders />
-      )}
+      {props.route === "/tasks" &&
+        (isActive || workspace.type === WorkspaceType.SOFTWARE) &&
+        folders.length > 0 && <WorkspaceNavigationTaskFolders />}
 
       <ModalTagForm ref={modalTagFormRef} />
       <ModalCreateTask ref={modalCreateTaskRef} />

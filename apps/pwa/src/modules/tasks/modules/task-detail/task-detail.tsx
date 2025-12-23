@@ -4,30 +4,17 @@ import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { TaskDetailForm } from "@/modules/tasks/modules/task-detail/task-detail-form";
-import { useColor } from "@/modules/theme/use-color";
 import { useLazyQuery } from "@apollo/client/react";
-import {
-  Card,
-  Container,
-  CopyButton,
-  Group,
-  Skeleton,
-  Stack,
-  Text,
-  ThemeIcon,
-  Tooltip,
-} from "@mantine/core";
-import { useHover } from "@mantine/hooks";
-import { IconCopy, IconCopyCheck, IconFiles } from "@tabler/icons-react";
+import { Container, Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
+import { IconFiles } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect } from "react";
 
 import { Modal } from "@/components/modal/modal";
 import { AppEntity } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import dynamic from "next/dynamic";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import QUERY_TASK_BY_CODE, {
   type TaskByCodeQuery,
   type TaskByCodeQueryVariables,
@@ -36,6 +23,14 @@ import { TaskDetailSubtasks } from "../../task-detail-subtasks";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { useTaskMenu } from "../task-menu/task-menu";
 import { TaskDetailHead } from "./task-detail-head";
+
+const TaskDetailProperties = dynamic(
+  () => import("./task-detail-properties").then((mod) => mod.TaskDetailProperties),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const TaskDetailFooter = dynamic(
   () => import("./task-detail-footer").then((mod) => mod.TaskDetailFooter),
@@ -50,56 +45,12 @@ const FilesBox = dynamic(() => import("@/modules/files/files-box").then((mod) =>
   loading: nonLoading,
 });
 
-const TaskCodeButton: FC<{ task: TaskDataFragment }> = (props) => {
-  const { task } = props;
-  const hover = useHover();
-  const color = useColor();
-
-  return (
-    <Group style={{ position: "relative" }}>
-      <CopyButton value={task.code}>
-        {({ copied, copy }) => (
-          <Tooltip label={<Trans>Copy code</Trans>}>
-            <Group>
-              <Card
-                withBorder
-                shadow="none"
-                h={26}
-                py={0}
-                px={8}
-                onClick={copy}
-                style={{ cursor: "pointer" }}
-                ref={hover.ref}
-              >
-                <Group h="100%" align="center" gap={5}>
-                  <Text fz={13} c="var(--mantine-color-dimmed)" fw={500}>
-                    {task.code}
-                  </Text>
-
-                  <Renderer visible={hover.hovered && !copied}>
-                    <IconCopy size={13} color="var(--mantine-color-dimmed)" />
-                  </Renderer>
-
-                  <Renderer visible={copied}>
-                    <IconCopyCheck size={13} color={color("primary")} />
-                  </Renderer>
-                </Group>
-              </Card>
-            </Group>
-          </Tooltip>
-        )}
-      </CopyButton>
-    </Group>
-  );
-};
-
 export const TaskDetail: FC = () => {
   const router = useRouter();
-  const viewport = useLayout();
+  const layout = useLayout();
   const workspaceLayout = useWorkspaceLayout();
 
   const { code: taskCode } = useParams<{ code: string }>();
-  const [version, setVersion] = useState(0);
 
   const [getTask, { data, loading }] = useLazyQuery<TaskByCodeQuery, TaskByCodeQueryVariables>(
     QUERY_TASK_BY_CODE,
@@ -110,24 +61,22 @@ export const TaskDetail: FC = () => {
   );
 
   useEffect(() => {
-    if (taskCode) {
-      setVersion((v) => v + 1);
-      getTask({ variables: { code: taskCode } }).then(() => setVersion((v) => v + 1));
-    }
+    if (!taskCode) return;
+    getTask({ variables: { code: taskCode } });
   }, [taskCode]);
 
   const onClose = () => {
     router.push(updateTaskPath({ code: undefined }), { scroll: false });
   };
 
-  const viewPadding = 25;
-  const height = viewport.height - viewPadding * 4;
-  const headerHeight = 50;
-  const contentHeight = height - headerHeight;
+  const viewPadding = 22;
+  const containerHeight = layout.height - viewPadding * 2;
+  const headerHeight = 48;
+  const contentHeight = containerHeight - headerHeight;
   const task = data?.taskByCode;
 
   const taskMenu = useTaskMenu({ task, groupVariables: null });
-  const modalId = `task-detail-${taskCode}-${version}`;
+  const modalId = `task-detail-${taskCode}`;
 
   return (
     <Modal
@@ -136,7 +85,7 @@ export const TaskDetail: FC = () => {
       onClose={onClose}
       withCloseButton={false}
       closeOnEscape={!taskMenu.isOpened}
-      size={1200}
+      size={1400}
       yOffset={viewPadding}
       isFullscreenOnMobile
       styles={{
@@ -162,7 +111,6 @@ export const TaskDetail: FC = () => {
               </Stack>
 
               <Stack p="sm">
-                <TaskCodeButton key={modalId + "code"} task={task} />
                 <TaskDetailForm key={modalId + "form"} task={task} />
                 <Stack gap={8}>
                   <Group gap={8}>
@@ -183,43 +131,58 @@ export const TaskDetail: FC = () => {
           </Renderer>
 
           <Renderer views={["desktop"]}>
-            <Stack h={height} gap={0}>
+            <Stack h={containerHeight} gap={0} miw={0} mih={0}>
               <Stack
                 h={headerHeight}
                 w="100%"
                 style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
-                py={8}
-                pl={16}
-                pr={8}
+                px="sm"
               >
                 <TaskDetailHead key={modalId + "head"} task={task} close={onClose} />
               </Stack>
 
-              <Stack flex={1} h={contentHeight} mih={contentHeight} style={{ overflow: "auto" }}>
-                <Container pt={10} pb={16} px={32}>
-                  <TaskCodeButton key={modalId + "code"} task={task} />
+              <Group align="start" flex={1} mih={0} style={{ overflow: "hidden" }}>
+                <Stack py="sm" px="md" flex={1} miw={0} mah="100%" style={{ overflow: "auto" }}>
+                  <Container w={800} maw="100%">
+                    <Stack gap={30} w="100%">
+                      <TaskDetailForm key={modalId + "form"} task={task} />
+                      {!task.parent && (
+                        <TaskDetailSubtasks key={modalId + "subtasks"} task={task} />
+                      )}
 
-                  <Stack gap={30}>
-                    <TaskDetailForm key={modalId + "form"} task={task} />
-                    {!task.parent && <TaskDetailSubtasks key={modalId + "subtasks"} task={task} />}
+                      <Stack gap={8}>
+                        <Group gap={8}>
+                          <ThemeIcon variant="light" color="gray">
+                            <IconFiles strokeWidth={1.5} size={20} />
+                          </ThemeIcon>
 
-                    <Stack gap={8}>
-                      <Group gap={8}>
-                        <ThemeIcon variant="light" color="gray">
-                          <IconFiles strokeWidth={1.5} size={20} />
-                        </ThemeIcon>
+                          <Text fw={500} fz={14}>
+                            <Trans>Attachments</Trans>
+                          </Text>
+                        </Group>
 
-                        <Text fw={500} fz={14}>
-                          <Trans>Attachments</Trans>
-                        </Text>
-                      </Group>
-
-                      <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
+                        <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
+                      </Stack>
+                      <TaskDetailFooter key={modalId + "footer"} task={task} onClose={onClose} />
                     </Stack>
-                    <TaskDetailFooter key={modalId + "footer"} task={task} onClose={onClose} />
-                  </Stack>
-                </Container>
-              </Stack>
+                  </Container>
+                </Stack>
+
+                <Stack
+                  h={contentHeight}
+                  mih={contentHeight}
+                  w={300}
+                  style={{ borderLeft: `1px solid ${workspaceLayout.dividerColor}` }}
+                  gap="sm"
+                >
+                  <Group px="md" pt="sm">
+                    <Text fz="sm" c="gray">
+                      <Trans>Properties</Trans>
+                    </Text>
+                  </Group>
+                  <TaskDetailProperties task={task} onClose={onClose} />
+                </Stack>
+              </Group>
             </Stack>
           </Renderer>
         </Fragment>

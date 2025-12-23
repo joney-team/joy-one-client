@@ -1,9 +1,14 @@
 "use client";
 
+import { useApolloClient } from "@apollo/client/react";
 import { Skeleton, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ComponentType, ReactNode, useEffect, useMemo, type FC } from "react";
+import QUERY_TASK_BY_CODE, {
+  type TaskByCodeQuery,
+  type TaskByCodeQueryVariables,
+} from "../graphql/queryTaskByCode.graphql";
 import { useTasks } from "../tasks-context";
 import { updateTaskPath } from "../tasks-route-helpers";
 import { TaskView } from "./types";
@@ -53,19 +58,36 @@ const allTaskViews: {
 };
 
 export const TaskViewsGateway: FC<{ view: TaskView }> = ({ view }) => {
+  const client = useApolloClient();
   const router = useRouter();
   const pathname = usePathname();
   const tasks = useTasks();
-  const params = useParams<{ slug: string; code: string }>();
+  const params = useParams<{ slug: string; code: string; view: string }>();
 
   // Auto redirect to the correct view
   useEffect(() => {
-    if (location.pathname === "/tasks") {
+    if (pathname === "/tasks") {
       return router.replace(updateTaskPath({ view }));
-    } else if (view) {
-      if (!Object.values(TaskView).includes(view as TaskView)) {
-        // return router.replace(updateTaskPath({ code: params.code, view: TaskView.LIST, pathname }));
-        console.log("view", view);
+    } else if (params.view) {
+      if (!Object.values(TaskView).includes(params.view as TaskView)) {
+        client
+          .query<TaskByCodeQuery, TaskByCodeQueryVariables>({
+            query: QUERY_TASK_BY_CODE,
+            variables: {
+              code: params.view,
+            },
+          })
+          .then(({ data }) => {
+            if (data && data.taskByCode) {
+              router.replace(
+                updateTaskPath({
+                  code: data.taskByCode.code,
+                })
+              );
+            }
+          })
+          .catch(() => false);
+
         return;
       }
 

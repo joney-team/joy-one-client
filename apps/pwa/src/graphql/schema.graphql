@@ -1,3 +1,35 @@
+type ActivitiesPaginated {
+  count: Float!
+  data: [Activity!]!
+}
+
+type Activity {
+  _id: String!
+  childCount: Float
+  content: String
+  contextId: String!
+  contextType: ActivityContextType!
+  createdByUser: WorkspaceMember!
+  isPinned: Boolean
+  parentId: String
+  pinnedAt: Float
+  pinnedByUser: WorkspaceMember!
+  pinnedByUserId: String
+  type: ActivityType!
+}
+
+"""Available activity contexts"""
+enum ActivityContextType {
+  CUSTOMER
+  TASK
+}
+
+"""Available activity types"""
+enum ActivityType {
+  COMMON
+  POST
+}
+
 """The `AnyType` scalar type represents any value without restrictions."""
 scalar AnyType
 
@@ -74,6 +106,15 @@ type ConfigTaskStatuses {
 type Coordinates {
   lat: Float!
   lng: Float!
+}
+
+type CountReactionType {
+  count: Float!
+  type: ReactionType!
+}
+
+type CountReactions {
+  reactions: [CountReactionType!]!
 }
 
 input CreateTaskInput {
@@ -210,6 +251,9 @@ enum EventDataActionType {
 
 """Available event types"""
 enum EventType {
+  ACTIVITY_ARCHIVED
+  ACTIVITY_NEW
+  ACTIVITY_UPDATED
   BANK_TRANSACTION_CANCELLED
   BANK_TRANSACTION_FAILED
   BANK_TRANSACTION_FULFILLED
@@ -327,6 +371,8 @@ enum EventType {
   PROMOTION_ARCHIVED
   PROMOTION_NEW
   PROMOTION_UPDATED
+  REACTION_ADDED
+  REACTION_REMOVED
   RECEIPT_ARCHIVED
   RECEIPT_CHANGE_WORKSPACE_BRANCH
   RECEIPT_DISBURSEMENT
@@ -467,8 +513,10 @@ type LocationEntity {
 }
 
 type Mutation {
+  addReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   bulkUpdateTags(items: [UpdateTagInput!]!): [Tag!]!
   bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
+  createActivity(content: String, contextId: String!, contextType: ActivityContextType!, parentId: String, type: ActivityType!): Activity!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
   createTag(input: TagDto!): Tag!
@@ -483,10 +531,12 @@ type Mutation {
   pluginExternalStorageSignUploadUrl(fileName: String!, refs: [String!]): SignUploadUrlResponse!
   registerDevice(input: RegisterDeviceDto!): DeviceEntity!
   removePluginExternalStorage: Boolean!
+  removeReaction(entity: String!, entityId: String!): Boolean!
   removeTag(id: String!): Boolean!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
+  updateActivity(content: String, id: String!): Activity!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   updateTaskStatuses(contextId: String, contextType: TaskContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
 }
@@ -582,9 +632,11 @@ enum ProductType {
 }
 
 type Query {
+  activities(contextId: String!, contextType: ActivityContextType!, ids: [String!], limit: Float = 30, offset: Float, type: ActivityType): ActivitiesPaginated!
   appConfig: AppConfig!
   categoriesPaginated(limit: Float = 30, offset: Float, query: JSONObject): CategoriesPaginated!
   category(id: String!): Category!
+  countReactions(entity: String!, entityId: String!): CountReactions!
   customers(ids: [String!], limit: Float = 30, offset: Float): CustomersPaginated!
   event(id: String!): Event!
   getCategoriesByIds(ids: [String!]!): [Category!]!
@@ -592,6 +644,7 @@ type Query {
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
   pluginExternalStorage: PluginExternalStorage
+  reactions(entity: String!, entityId: String!, ids: [String!], limit: Float = 30, offset: Float): ReactionsPaginated!
   siblingTasks(_id: String!): SiblingTasks!
   tagBySlug(slug: String!): Tag!
   tags(ids: [String!], limit: Float = 30, offset: Float, type: String): Tags!
@@ -603,6 +656,27 @@ type Query {
   tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!], toTrackingTime: Float): Float!
   userWorkspaceMember: WorkspaceMember!
   workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float, userId: [String!]): WorkspaceMembersPaginated!
+}
+
+type Reaction {
+  createdAt: Float!
+  type: ReactionType!
+  user: WorkspaceMember!
+  userId: String!
+}
+
+"""Available reaction types"""
+enum ReactionType {
+  CELEBRATE
+  EYES
+  LAUGH
+  LIKE
+  LOVE
+}
+
+type ReactionsPaginated {
+  count: Float!
+  data: [Reaction!]!
 }
 
 input RegisterDeviceDto {

@@ -1,3 +1,17 @@
+/** Available activity contexts */
+export const ActivityContextType = {
+  Customer: 'CUSTOMER',
+  Task: 'TASK'
+} as const;
+
+export type ActivityContextType = typeof ActivityContextType[keyof typeof ActivityContextType];
+/** Available activity types */
+export const ActivityType = {
+  Common: 'COMMON',
+  Post: 'POST'
+} as const;
+
+export type ActivityType = typeof ActivityType[keyof typeof ActivityType];
 /** Available locales */
 export const AppLocale = {
   En: 'EN',
@@ -44,6 +58,9 @@ export const EventDataActionType = {
 export type EventDataActionType = typeof EventDataActionType[keyof typeof EventDataActionType];
 /** Available event types */
 export const EventType = {
+  ActivityArchived: 'ACTIVITY_ARCHIVED',
+  ActivityNew: 'ACTIVITY_NEW',
+  ActivityUpdated: 'ACTIVITY_UPDATED',
   BankTransactionCancelled: 'BANK_TRANSACTION_CANCELLED',
   BankTransactionFailed: 'BANK_TRANSACTION_FAILED',
   BankTransactionFulfilled: 'BANK_TRANSACTION_FULFILLED',
@@ -161,6 +178,8 @@ export const EventType = {
   PromotionArchived: 'PROMOTION_ARCHIVED',
   PromotionNew: 'PROMOTION_NEW',
   PromotionUpdated: 'PROMOTION_UPDATED',
+  ReactionAdded: 'REACTION_ADDED',
+  ReactionRemoved: 'REACTION_REMOVED',
   ReceiptArchived: 'RECEIPT_ARCHIVED',
   ReceiptChangeWorkspaceBranch: 'RECEIPT_CHANGE_WORKSPACE_BRANCH',
   ReceiptDisbursement: 'RECEIPT_DISBURSEMENT',
@@ -273,6 +292,16 @@ export const ProductType = {
 } as const;
 
 export type ProductType = typeof ProductType[keyof typeof ProductType];
+/** Available reaction types */
+export const ReactionType = {
+  Celebrate: 'CELEBRATE',
+  Eyes: 'EYES',
+  Laugh: 'LAUGH',
+  Like: 'LIKE',
+  Love: 'LOVE'
+} as const;
+
+export type ReactionType = typeof ReactionType[keyof typeof ReactionType];
 /** Available tag types */
 export const TagType = {
   Customer: 'CUSTOMER',

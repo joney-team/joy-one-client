@@ -69,11 +69,13 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = ({ task, ...rest 
   >((acc, curr) => {
     if (!curr.endAt || !curr.user) return acc;
     const user = acc.find((u) => u.user.userId === curr.user?._id);
+
     if (user) {
       user.timeTrackings.push(curr);
     } else {
       acc.push({ user: curr.user, timeTrackings: [curr] });
     }
+
     return acc;
   }, []);
 
@@ -119,7 +121,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = ({ task, ...rest 
 
   return (
     <Fragment>
-      <Group gap={8} flex={rest.flex} onClick={open}>
+      <Group gap={8} {...rest} onClick={open}>
         <Group>
           <Renderer visible={!!!inProgressTracking}>
             <Text>{DateTime.toHHMM(totalTime)}</Text>
