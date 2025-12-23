@@ -594,7 +594,7 @@ export const FormProduct: FC<
 
           <Tabs.Panel value={FormProductTab.POST} pt={16}>
             <Editor
-              isAlwayShowToolbar
+              isShowToolbar
               placeholder={t`Enter content`}
               value={form.values.content}
               onChangeHTML={(value) => form.setFieldValue("content", value)}

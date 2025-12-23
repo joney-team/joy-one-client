@@ -11,6 +11,7 @@ import styles from "./content-editable.module.css";
 interface ContentEditableProps extends BoxProps {
   placeholder?: string;
   value?: string;
+  defaultValue?: string;
   disabled?: boolean;
   onChange?: (value: string) => void;
   onEnter?: () => void;
@@ -27,6 +28,7 @@ interface ContentEditableProps extends BoxProps {
 export const ContentEditable: FC<ContentEditableProps> = ({
   placeholder,
   value,
+  defaultValue,
   disabled = false,
   onChange,
   onEnter,
@@ -36,10 +38,10 @@ export const ContentEditable: FC<ContentEditableProps> = ({
   autoFocus,
   placeHolderFontSize,
   onDoubleClick,
-  ...props
+  ...rest
 }) => {
   const inputRef = useRef<HTMLDivElement>(null);
-  const fz = props.fz || 16;
+  const fz = rest.fz || 16;
   const forceUpdate = useForceUpdate();
 
   const handleOnChange = () => {
@@ -108,6 +110,12 @@ export const ContentEditable: FC<ContentEditableProps> = ({
     }
   }, [value]);
 
+  useEffect(() => {
+    if (defaultValue && inputRef.current && inputRef.current.textContent !== defaultValue) {
+      inputRef.current.textContent = defaultValue;
+    }
+  }, [defaultValue]);
+
   // Auto focus
   useEffect(() => {
     setTimeout(() => {
@@ -168,12 +176,12 @@ export const ContentEditable: FC<ContentEditableProps> = ({
         miw={0}
         fz={fz}
         mih={fz}
-        fw={props.fw}
+        fw={rest.fw}
         pos="relative"
         style={{
           zIndex: 1,
         }}
-        {...props}
+        {...rest}
       />
     </Box>
   );

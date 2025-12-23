@@ -5,9 +5,9 @@ import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
+import TipTapTaskList from "@tiptap/extension-task-list";
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
-import TipTapTaskList from "@tiptap/extension-task-list";
 
 import { FileType } from "@/graphql/enums.graphql";
 import { UploadFileOptions } from "@/modules/files/file-types";
@@ -20,28 +20,30 @@ import { alpha, Box, Group, Loader, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
+  getTaskListExtension,
   RichTextEditor,
   RichTextEditorProps,
   useRichTextEditorContext,
-  getTaskListExtension,
 } from "@mantine/tiptap";
 import { IconPhoto, IconUpload } from "@tabler/icons-react";
+import TaskItem from "@tiptap/extension-task-item";
 import { Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import { ClipboardEventHandler, FC, useMemo, useState } from "react";
+import { ClipboardEventHandler, FC, useMemo } from "react";
 import { ImageResize } from "./editor-image-resize";
-import { useEscape } from "@/hooks/use-escape";
-import TaskItem from "@tiptap/extension-task-item";
 
-interface EditorProps {
+import styles from "./editor.module.css";
+import { classNames } from "@/utils/ui.utils";
+
+interface EditorProps extends Partial<RichTextEditorProps> {
   value?: string | JSONContent | undefined | null;
   onChangeHTML?: (content?: string) => void;
   onChangeJSON?: (content?: JSONContent) => void;
   delay?: number;
   placeholder?: string;
   uploadFileOptions?: UploadFileOptions;
-  isAlwayShowToolbar?: boolean;
-  props?: Partial<RichTextEditorProps>;
+  isShowToolbar?: boolean;
+  isNonWrapped?: boolean;
 }
 
 function InsertImageControl() {
@@ -76,15 +78,24 @@ function InsertImageControl() {
   );
 }
 
-export const Editor: FC<EditorProps> = (props) => {
+export const Editor: FC<EditorProps> = ({
+  value,
+  onChangeHTML,
+  onChangeJSON,
+  delay,
+  placeholder,
+  uploadFileOptions,
+  isShowToolbar = true,
+  isNonWrapped = false,
+  ...rest
+}) => {
   const color = useColor();
-  const [focused, setFocused] = useState(false);
   const uploadFile = useUploadFile();
 
   const onChange = useDebouncedCallback((html: string, json: JSONContent) => {
-    props.onChangeHTML?.(html);
-    props.onChangeJSON?.(json);
-  }, props.delay || 0);
+    onChangeHTML?.(html);
+    onChangeJSON?.(json);
+  }, delay ?? 0);
 
   const extensions: Extensions = useMemo(
     () => [
@@ -93,15 +104,10 @@ export const Editor: FC<EditorProps> = (props) => {
       Superscript,
       Subscript,
       Highlight,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
       ImageResize,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
       getTaskListExtension(TipTapTaskList),
-      TaskItem.configure({
-        nested: true,
-        HTMLAttributes: {
-          class: "test-item",
-        },
-      }),
+      TaskItem.configure({ nested: true }),
     ],
     []
   );
@@ -110,10 +116,10 @@ export const Editor: FC<EditorProps> = (props) => {
     extensions: [
       ...extensions,
       Placeholder.configure({
-        placeholder: props.placeholder,
+        placeholder,
       }),
     ],
-    content: props.value,
+    content: value,
     onUpdate: (e) => {
       onChange(e.editor.getHTML(), e.editor.getJSON());
     },
@@ -123,7 +129,7 @@ export const Editor: FC<EditorProps> = (props) => {
   const onDropImage = async (files: File[]) => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const _file = await uploadFile(file, props.uploadFileOptions);
+      const _file = await uploadFile(file, uploadFileOptions);
       editor?.commands.setImage({ src: renderFileUrl(_file.path) });
     }
   };
@@ -140,88 +146,68 @@ export const Editor: FC<EditorProps> = (props) => {
     onDropImage(files);
   };
 
-  useEscape({
-    id: "editor",
-    onEscape: () => {
-      setFocused(false);
-      editor?.commands.blur();
-    },
-    active: !props.isAlwayShowToolbar && focused,
-  });
-
   if (!editor) return <Loader size="xs" />;
 
   return (
     <Dropzone onDrop={onDropImage} accept={IMAGE_MIME_TYPE} activateOnClick={false}>
-      <Box style={{ position: "relative", width: "100%" }}>
-        <RichTextEditor
-          editor={editor}
-          flex={1}
-          onPaste={onPaste}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          {...props.props}
-        >
-          <RichTextEditor.Toolbar
-            sticky
-            stickyOffset="var(--docs-header-height)"
-            style={
-              focused || props.isAlwayShowToolbar
-                ? {}
-                : {
-                    display: "none",
-                  }
-            }
-          >
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Bold />
-              <RichTextEditor.Italic />
-              <RichTextEditor.Underline />
-              <RichTextEditor.Strikethrough />
-            </RichTextEditor.ControlsGroup>
+      <Box
+        className={classNames(styles.Editor, {
+          [styles.isNonWrapped]: isNonWrapped,
+        })}
+      >
+        <RichTextEditor {...rest} editor={editor} onPaste={onPaste}>
+          {isShowToolbar && (
+            <RichTextEditor.Toolbar sticky stickyOffset="var(--docs-header-height)">
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Bold />
+                <RichTextEditor.Italic />
+                <RichTextEditor.Underline />
+                <RichTextEditor.Strikethrough />
+              </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.H1 />
-              <RichTextEditor.H2 />
-              <RichTextEditor.H3 />
-              <RichTextEditor.H4 />
-            </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.H1 />
+                <RichTextEditor.H2 />
+                <RichTextEditor.H3 />
+                <RichTextEditor.H4 />
+              </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.AlignLeft />
-              <RichTextEditor.AlignCenter />
-              <RichTextEditor.AlignJustify />
-              <RichTextEditor.AlignRight />
-            </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.AlignLeft />
+                <RichTextEditor.AlignCenter />
+                <RichTextEditor.AlignJustify />
+                <RichTextEditor.AlignRight />
+              </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Blockquote />
-              <RichTextEditor.Hr />
-              <RichTextEditor.BulletList />
-              <RichTextEditor.OrderedList />
-              <RichTextEditor.Subscript />
-              <RichTextEditor.Superscript />
-            </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Blockquote />
+                <RichTextEditor.Hr />
+                <RichTextEditor.BulletList />
+                <RichTextEditor.OrderedList />
+                <RichTextEditor.Subscript />
+                <RichTextEditor.Superscript />
+              </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
-              <InsertImageControl />
-              <RichTextEditor.Link />
-              <RichTextEditor.Unlink />
-            </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <InsertImageControl />
+                <RichTextEditor.Link />
+                <RichTextEditor.Unlink />
+              </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Highlight />
-              <RichTextEditor.Code />
-              <RichTextEditor.ClearFormatting />
-            </RichTextEditor.ControlsGroup>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Highlight />
+                <RichTextEditor.Code />
+                <RichTextEditor.ClearFormatting />
+              </RichTextEditor.ControlsGroup>
 
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Undo />
-              <RichTextEditor.Redo />
-            </RichTextEditor.ControlsGroup>
-          </RichTextEditor.Toolbar>
+              <RichTextEditor.ControlsGroup>
+                <RichTextEditor.Undo />
+                <RichTextEditor.Redo />
+              </RichTextEditor.ControlsGroup>
+            </RichTextEditor.Toolbar>
+          )}
 
-          <BubbleMenu editor={editor}>
+          <BubbleMenu editor={editor} style={{ zIndex: 10, background: color("background") }}>
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.Bold />
               <RichTextEditor.Italic />

@@ -1,0 +1,14 @@
+.Editor {
+  position: relative;
+  width: 100%;
+
+  &.isNonWrapped {
+    & :global(.ProseMirror) {
+      padding: 0;
+    }
+
+    & :global(.mantine-RichTextEditor-root) {
+      border: none;
+    }
+  }
+}

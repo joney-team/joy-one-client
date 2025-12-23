@@ -38,6 +38,10 @@ export const AdminTools: FC = () => {
       <SectionTitle name="Migrations" icon={IconTools} />
       <Card shadow="xs">
         <Stack align="start">
+          <Button onClick={() => api.patch(`/files/move-to-external-storage`)}>
+            Move files to external storage
+          </Button>
+
           <Button onClick={() => api.patch(`/tasks/rebalance-order`)}>Rebalance Task Order</Button>
 
           <Button onClick={() => api.patch(`/tasks/trigger-sync-all-tasks`)}>

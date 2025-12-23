@@ -18,8 +18,7 @@ import {
 import { ProductSelector } from "@/modules/products/components/product-selector";
 import { ProductType } from "@/modules/products/products-types";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Box,
@@ -51,6 +50,7 @@ const initialBenefits: CouponRuleBenefit[] = [{ type: CouponRuleBenefitType.FREE
 export const ModalCouponRuleForm: FC<{
   children: (open: (args?: ModalCouponRuleFormArgs) => void) => ReactNode;
 }> = ({ children }) => {
+  const { t } = useLingui();
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalCouponRuleFormArgs>();
 
@@ -210,6 +210,7 @@ const RuleBenfitForm: FC<{
   onChange: (benefit: CouponRuleBenefit) => void;
   onRemove: () => void;
 }> = (props) => {
+  const { t } = useLingui();
   const { benefit, onChange } = props;
 
   return (

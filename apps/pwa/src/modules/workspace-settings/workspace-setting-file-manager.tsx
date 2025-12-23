@@ -12,6 +12,7 @@ import { type FC } from "react";
 import { FileEntity } from "../files/file-types";
 import { fileTypes } from "../files/files-constants";
 import { ModalFileGallery } from "../files/modals/modal-file-gallery";
+import { Trans } from "@lingui/react/macro";
 
 export const WorkspaceFileManager: FC = () => {
   return (
@@ -21,7 +22,7 @@ export const WorkspaceFileManager: FC = () => {
           <List<FileEntity>
             columns={{
               url: {
-                name: "Preview",
+                name: <Trans>Preview</Trans>,
                 defaultWidth: 100,
                 align: "center",
                 render: ({ data }) => {
@@ -43,8 +44,13 @@ export const WorkspaceFileManager: FC = () => {
                   );
                 },
               },
-              createdAt: dateTimeColumn({ name: "createdAt", sortable: true, isHasFilter: true }),
+              createdAt: dateTimeColumn({
+                name: <Trans>Created at</Trans>,
+                sortable: true,
+                isHasFilter: true,
+              }),
               fileName: {
+                name: <Trans>File name</Trans>,
                 render: ({ value, data }) => {
                   if (!value) return null;
 
@@ -66,6 +72,7 @@ export const WorkspaceFileManager: FC = () => {
                 },
               },
               type: enumColumn<FileType>({
+                name: <Trans>File type</Trans>,
                 defaultWidth: 160,
                 options: Object.values(FileType).map((type) => ({
                   icon: fileTypes[type].icon,
@@ -74,6 +81,7 @@ export const WorkspaceFileManager: FC = () => {
                 })),
               }),
               size: {
+                name: <Trans>Size</Trans>,
                 sortable: true,
                 render: ({ value }) => {
                   return formatBytes(value ?? 0);
