@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
-import { EventType } from "@/graphql/enums.graphql";
+import { ActivityContextType, EventType } from "@/graphql/enums.graphql";
 import { CustomerBookings } from "@/modules/customers/components/customer-booking";
 import { CustomerInformations } from "@/modules/customers/components/customer-information";
 import { CustomerEntity } from "@/modules/customers/customer-types";
@@ -13,6 +13,7 @@ import {
   IconFiles,
   IconPill,
   IconStackPush,
+  IconTimelineEvent,
   IconUserScan,
 } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
@@ -21,7 +22,6 @@ import { archiveCustomer, getCustomerByCode } from "../customer-service";
 
 import { EventList } from "@/components/event-list";
 import { SectionTitle } from "@/components/session-title";
-import { CustomerTasks } from "@/modules/customers/customer-tasks";
 import { FilesBox } from "@/modules/files/files-box";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 
@@ -37,7 +37,17 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 import { AppEntity } from "@/types";
+import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
+import dynamic from "next/dynamic";
+
+const Activities = dynamic(
+  () => import("@/modules/activities/activities").then((mod) => mod.Activities),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const CustomerDetail = () => {
   const workspace = useWorkspace();
@@ -134,10 +144,6 @@ export const CustomerDetail = () => {
           <CustomerBookings customer={customer} />
         </Renderer>
 
-        <Renderer visible={!!getAvailableModule("tasks")}>
-          <CustomerTasks customer={customer} />
-        </Renderer>
-
         <Stack gap={10}>
           <SectionTitle name={<Trans>Images & Documents</Trans>} icon={IconFiles} />
 
@@ -146,6 +152,12 @@ export const CustomerDetail = () => {
             autoUpload
             specificDisabledRelated={["relatedReceiptId"]}
           />
+        </Stack>
+
+        <Stack gap={10}>
+          <SectionTitle name={<Trans>Activities</Trans>} icon={IconTimelineEvent} />
+
+          <Activities contextType={ActivityContextType.Customer} contextId={customer._id} />
         </Stack>
 
         <EventList ref={customer._id} />

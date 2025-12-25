@@ -67,7 +67,7 @@ export const CustomerBookings: FC<CustomerBookingsProps> = (props) => {
 
   return (
     <Stack className="customer-bookings" gap={10}>
-      <SectionTitle name={t`Bookings`} icon={IconCalendar}>
+      <SectionTitle name={<Trans>Bookings</Trans>} icon={IconCalendar}>
         <Renderer visible={total > 1 || (total === 1 && bookings.count === 0)}>
           <Group gap={0} onClick={() => setIsCollapsed((s) => !s)} style={{ cursor: "pointer" }}>
             <ActionIcon variant="transparent" color={isCollapsed ? "gray" : "primary"}>
