@@ -1,16 +1,16 @@
 "use client";
 
+import { SortDirection } from "@/graphql/enums.graphql";
+import { useQuery } from "@apollo/client/react";
 import { Stack } from "@mantine/core";
 import { FC } from "react";
 import { ActivitiesInput } from "./activities-input";
 import { ActivitiesProps } from "./activities-types";
-import { useQuery } from "@apollo/client/react";
+import { ActivityCard } from "./activity-card";
 import QUERY_ACTIVITIES, {
   type ActivitiesQuery,
   type ActivitiesQueryVariables,
 } from "./graphql/queryActivities.graphql";
-import { ActivityCard } from "./activity-card";
-import { SortDirection } from "@/graphql/enums.graphql";
 
 export const Activities: FC<ActivitiesProps> = (props) => {
   const { data } = useQuery<ActivitiesQuery, ActivitiesQueryVariables>(QUERY_ACTIVITIES, {
@@ -19,6 +19,8 @@ export const Activities: FC<ActivitiesProps> = (props) => {
       contextId: props.contextId,
       sortCreatedAt: SortDirection.Asc,
     },
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-and-network",
   });
 
   return (

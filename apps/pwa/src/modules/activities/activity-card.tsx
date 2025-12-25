@@ -28,6 +28,7 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
             </Group>
           )}
         </Group>
+
         <Editor
           key={activity._id}
           defaultValue={parseEditorJSON(activity.content)}
