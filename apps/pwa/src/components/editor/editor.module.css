@@ -2,6 +2,10 @@
   position: relative;
   width: 100%;
 
+  & p {
+    outline: none;
+  }
+
   &.isNonWrapped {
     & :global(.ProseMirror) {
       padding: 0;

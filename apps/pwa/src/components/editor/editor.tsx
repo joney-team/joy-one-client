@@ -32,11 +32,14 @@ import { BubbleMenu } from "@tiptap/react/menus";
 import { ClipboardEventHandler, FC, useMemo } from "react";
 import { ImageResize } from "./editor-image-resize";
 
-import styles from "./editor.module.css";
 import { classNames } from "@/utils/ui.utils";
+import styles from "./editor.module.css";
 
-interface EditorProps extends Partial<RichTextEditorProps> {
+import { UsersMention } from "./editor-mention";
+
+interface EditorProps extends Partial<Omit<RichTextEditorProps, "defaultValue">> {
   value?: string | JSONContent | undefined | null;
+  defaultValue?: string | JSONContent | undefined | null;
   onChangeHTML?: (content?: string) => void;
   onChangeJSON?: (content?: JSONContent) => void;
   delay?: number;
@@ -87,6 +90,7 @@ export const Editor: FC<EditorProps> = ({
   uploadFileOptions,
   isShowToolbar = true,
   isNonWrapped = false,
+  defaultValue,
   ...rest
 }) => {
   const color = useColor();
@@ -97,8 +101,8 @@ export const Editor: FC<EditorProps> = ({
     onChangeJSON?.(json);
   }, delay ?? 0);
 
-  const extensions: Extensions = useMemo(
-    () => [
+  const editorExtensions: Extensions = useMemo(() => {
+    const ext = [
       StarterKit.configure({ link: false }),
       Link,
       Superscript,
@@ -108,18 +112,18 @@ export const Editor: FC<EditorProps> = ({
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       getTaskListExtension(TipTapTaskList),
       TaskItem.configure({ nested: true }),
-    ],
-    []
-  );
-
-  const editor = useEditor({
-    extensions: [
-      ...extensions,
       Placeholder.configure({
         placeholder,
       }),
-    ],
-    content: value,
+      UsersMention,
+    ];
+
+    return ext;
+  }, [placeholder]);
+
+  const editor = useEditor({
+    extensions: editorExtensions,
+    content: defaultValue ?? value,
     onUpdate: (e) => {
       onChange(e.editor.getHTML(), e.editor.getJSON());
     },
@@ -207,11 +211,15 @@ export const Editor: FC<EditorProps> = ({
             </RichTextEditor.Toolbar>
           )}
 
-          <BubbleMenu editor={editor} style={{ zIndex: 10, background: color("background") }}>
+          <BubbleMenu editor={editor}>
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.Bold />
               <RichTextEditor.Italic />
+              <RichTextEditor.Underline />
+              <RichTextEditor.Strikethrough />
+              <InsertImageControl />
               <RichTextEditor.Link />
+              <RichTextEditor.Unlink />
             </RichTextEditor.ControlsGroup>
           </BubbleMenu>
 

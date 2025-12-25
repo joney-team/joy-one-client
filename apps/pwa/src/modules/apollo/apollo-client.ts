@@ -75,14 +75,12 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
         });
       }
     }
-
-    console.log(error.errors[0].extensions);
   } else {
-    console.error("[Network error]:", error);
+    console.warn("[Network error]:", error);
   }
 
   if (error.stack) {
-    console.log("error", error, operation);
+    console.warn("[Apollo Client Error]:", error, operation);
   }
 });
 

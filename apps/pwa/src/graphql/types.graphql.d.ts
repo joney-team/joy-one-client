@@ -32,6 +32,7 @@ export type Activity = {
   contextId: Scalars['String']['output'];
   contextType: ActivityContextType;
   createdByUser: WorkspaceMember;
+  data: Maybe<Scalars['JSONObject']['output']>;
   isPinned: Maybe<Scalars['Boolean']['output']>;
   parentId: Maybe<Scalars['String']['output']>;
   pinnedAt: Maybe<Scalars['Float']['output']>;
@@ -877,6 +878,7 @@ export type Query = {
   tasks: TasksPaginated;
   tasksCount: Scalars['Float']['output'];
   userWorkspaceMember: WorkspaceMember;
+  workspaceMember: WorkspaceMember;
   workspaceMembers: WorkspaceMembersPaginated;
 };
 
@@ -1026,6 +1028,11 @@ export type QueryTasksCountArgs = {
   status?: InputMaybe<Scalars['String']['input']>;
   tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
   toTrackingTime?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
+export type QueryWorkspaceMemberArgs = {
+  userId: Scalars['String']['input'];
 };
 
 

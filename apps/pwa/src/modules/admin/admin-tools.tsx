@@ -180,6 +180,14 @@ export const AdminTools: FC = () => {
           <Button
             color="red"
             variant="outline"
+            onClick={() => api.delete(`/reports/purge-range-reports`).catch(onError)}
+          >
+            Purge Range Reports
+          </Button>
+
+          <Button
+            color="red"
+            variant="outline"
             onClick={() => api.delete(`/reports/purge`).catch(onError)}
           >
             Purge Reports

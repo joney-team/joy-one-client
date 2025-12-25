@@ -1,16 +1,16 @@
 "use client";
 
-import { Renderer } from "@/components/renderer";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { useLazyQuery } from "@apollo/client/react";
 import { Container, Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconFiles } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
-import { FC, Fragment, useEffect } from "react";
+import { FC, useEffect } from "react";
 
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor/editor";
+import { parseEditorJSON } from "@/components/editor/editor-utils";
 import { Modal } from "@/components/modal/modal";
 import { AppEntity } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
@@ -117,141 +117,82 @@ export const TaskDetail: FC = () => {
       {loading && !task && <Skeleton h={300} w="100%" />}
 
       {!!task && (
-        <Fragment>
-          <Renderer views={["mobile", "tablet"]}>
-            <Stack>
-              <Stack
-                h={headerHeight}
-                w="100%"
-                style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
-                py={8}
-                px={8}
-              >
-                <TaskDetailHead key={modalId + "head"} task={task} close={onClose} />
-              </Stack>
+        <Stack h={containerHeight} gap={0} miw={0} mih={0}>
+          <Stack
+            h={headerHeight}
+            w="100%"
+            style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+            px="sm"
+          >
+            <TaskDetailHead key={modalId + "head"} task={task} close={onClose} />
+          </Stack>
 
-              <Stack p="sm">
-                <ContentEditable
-                  fz={25}
-                  fw={500}
-                  placeholder={t`Enter task name`}
-                  defaultValue={task.name}
-                  onChange={(value) => debouncedUpdateTask({ name: value })}
-                />
+          <Group align="start" flex={1} mih={0} style={{ overflow: "hidden" }}>
+            <Stack py="sm" px="md" flex={1} miw={0} mah="100%" style={{ overflow: "auto" }}>
+              <Container w={800} maw="100%">
+                <Stack w="100%" gap="md">
+                  <Stack gap="sm" pb="md">
+                    <ContentEditable
+                      fz={25}
+                      fw={500}
+                      placeholder={t`Enter task name`}
+                      defaultValue={task.name}
+                      onChange={(value) => debouncedUpdateTask({ name: value })}
+                    />
 
-                <Editor
-                  defaultValue={task.description ?? ""}
-                  onChangeHTML={(v) => {
-                    debouncedUpdateTask({ description: v ?? "" });
-                  }}
-                  placeholder={t`Task description`}
-                  uploadFileOptions={{
-                    maxWidthOrHeight: 1500,
-                    refs: [`${AppEntity.TASKS}:${task._id}`],
-                  }}
-                />
+                    <Editor
+                      key={modalId + "editor"}
+                      defaultValue={parseEditorJSON(task.description)}
+                      onChangeJSON={(v) => debouncedUpdateTask({ description: JSON.stringify(v) })}
+                      placeholder={t`Task description`}
+                      uploadFileOptions={{
+                        maxWidthOrHeight: 1500,
+                        refs: [`${AppEntity.TASKS}:${task._id}`],
+                      }}
+                      isShowToolbar={false}
+                      isNonWrapped
+                      style={{ padding: `0 0.25rem`, zIndex: 2 }}
+                    />
+                  </Stack>
 
-                <Stack gap="sm">
-                  <Group gap="sm">
-                    <ThemeIcon variant="light" color="gray">
-                      <IconFiles strokeWidth={1.5} size={20} />
-                    </ThemeIcon>
+                  {!task.parent && <TaskDetailSubtasks key={modalId + "subtasks"} task={task} />}
 
-                    <Text fw={500} fz={14}>
-                      <Trans>Attachments</Trans>
-                    </Text>
-                  </Group>
+                  <Stack gap="sm">
+                    <Group gap="sm">
+                      <ThemeIcon variant="light" color="gray">
+                        <IconFiles strokeWidth={1.5} size={20} />
+                      </ThemeIcon>
 
-                  <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
+                      <Text fw={500} fz={14}>
+                        <Trans>Attachments</Trans>
+                      </Text>
+                    </Group>
+
+                    <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
+                  </Stack>
+
+                  <TaskActivities key={modalId + "footer"} task={task} />
                 </Stack>
-
-                <TaskActivities key={modalId + "footer"} task={task} />
-              </Stack>
+              </Container>
             </Stack>
-          </Renderer>
 
-          <Renderer views={["desktop"]}>
-            <Stack h={containerHeight} gap={0} miw={0} mih={0}>
-              <Stack
-                h={headerHeight}
-                w="100%"
-                style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
-                px="sm"
-              >
-                <TaskDetailHead key={modalId + "head"} task={task} close={onClose} />
-              </Stack>
-
-              <Group align="start" flex={1} mih={0} style={{ overflow: "hidden" }}>
-                <Stack py="sm" px="md" flex={1} miw={0} mah="100%" style={{ overflow: "auto" }}>
-                  <Container w={800} maw="100%">
-                    <Stack w="100%" gap="md">
-                      <Stack gap="sm" pb="md">
-                        <ContentEditable
-                          fz={25}
-                          fw={500}
-                          placeholder={t`Enter task name`}
-                          defaultValue={task.name}
-                          onChange={(value) => debouncedUpdateTask({ name: value })}
-                        />
-
-                        <Editor
-                          defaultValue={task.description ?? ""}
-                          onChangeHTML={(v) => {
-                            debouncedUpdateTask({ description: v ?? "" });
-                          }}
-                          placeholder={t`Task description`}
-                          uploadFileOptions={{
-                            maxWidthOrHeight: 1500,
-                            refs: [`${AppEntity.TASKS}:${task._id}`],
-                          }}
-                          isShowToolbar={false}
-                          isNonWrapped
-                          style={{ padding: `0 0.25rem` }}
-                        />
-                      </Stack>
-
-                      {!task.parent && (
-                        <TaskDetailSubtasks key={modalId + "subtasks"} task={task} />
-                      )}
-
-                      <Stack gap="sm">
-                        <Group gap="sm">
-                          <ThemeIcon variant="light" color="gray">
-                            <IconFiles strokeWidth={1.5} size={20} />
-                          </ThemeIcon>
-
-                          <Text fw={500} fz={14}>
-                            <Trans>Attachments</Trans>
-                          </Text>
-                        </Group>
-
-                        <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
-                      </Stack>
-
-                      <TaskActivities key={modalId + "footer"} task={task} />
-                    </Stack>
-                  </Container>
-                </Stack>
-
-                <Stack
-                  h={contentHeight}
-                  mih={contentHeight}
-                  w={300}
-                  style={{ borderLeft: `1px solid ${workspaceLayout.dividerColor}` }}
-                  gap="sm"
-                >
-                  <Group px="md" pt="sm">
-                    <Text fz="sm" c="gray">
-                      <Trans>Properties</Trans>
-                    </Text>
-                  </Group>
-
-                  <TaskDetailProperties task={task} onClose={onClose} />
-                </Stack>
+            <Stack
+              h={contentHeight}
+              mih={contentHeight}
+              w={300}
+              style={{ borderLeft: `1px solid ${workspaceLayout.dividerColor}` }}
+              gap="sm"
+            >
+              <Group px="md" pt="sm">
+                <Text fz="sm" c="gray">
+                  <Trans>Properties</Trans>
+                </Text>
               </Group>
+
+              <TaskDetailProperties task={task} onClose={onClose} />
             </Stack>
-          </Renderer>
-        </Fragment>
+          </Group>
+        </Stack>
       )}
     </Modal>
   );

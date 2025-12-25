@@ -1,0 +1,19 @@
+.EditorMentionList {
+  & .MentionListItem {
+    border-radius: var(--mantine-radius-default);
+    cursor: pointer;
+
+    &:hover, &.isSelected {
+      background: var(--mantine-color-default-hover);
+    }
+  }
+}
+
+.UserMention {
+  font-size: 80%;
+  background: color-mix(in srgb, var(--app-primary-color), transparent 95%);
+  color: var(--app-primary-color);
+  padding: 0.25rem 0.375rem;
+  border-radius: var(--mantine-radius-default);
+  font-weight: 500;
+}

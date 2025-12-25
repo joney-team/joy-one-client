@@ -10,6 +10,7 @@ type Activity {
   contextId: String!
   contextType: ActivityContextType!
   createdByUser: WorkspaceMember!
+  data: JSONObject
   isPinned: Boolean
   parentId: String
   pinnedAt: Float
@@ -655,6 +656,7 @@ type Query {
   tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!], toTrackingTime: Float): TasksPaginated!
   tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!], toTrackingTime: Float): Float!
   userWorkspaceMember: WorkspaceMember!
+  workspaceMember(userId: String!): WorkspaceMember!
   workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float, userId: [String!]): WorkspaceMembersPaginated!
 }
 
