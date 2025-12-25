@@ -9,6 +9,7 @@ type Activity {
   content: String
   contextId: String!
   contextType: ActivityContextType!
+  createdAt: Float
   createdByUser: WorkspaceMember!
   data: JSONObject
   isPinned: Boolean
@@ -514,10 +515,10 @@ type LocationEntity {
 }
 
 type Mutation {
+  addActivity(content: String, contextId: String!, contextType: ActivityContextType!, parentId: String, type: ActivityType!): Activity!
   addReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   bulkUpdateTags(items: [UpdateTagInput!]!): [Tag!]!
   bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
-  createActivity(content: String, contextId: String!, contextType: ActivityContextType!, parentId: String, type: ActivityType!): Activity!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
   createTag(input: TagDto!): Tag!
@@ -633,31 +634,31 @@ enum ProductType {
 }
 
 type Query {
-  activities(contextId: String!, contextType: ActivityContextType!, ids: [String!], limit: Float = 30, offset: Float, type: ActivityType): ActivitiesPaginated!
+  activities(contextId: String!, contextType: ActivityContextType!, ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, type: ActivityType): ActivitiesPaginated!
   appConfig: AppConfig!
   categoriesPaginated(limit: Float = 30, offset: Float, query: JSONObject): CategoriesPaginated!
   category(id: String!): Category!
   countReactions(entity: String!, entityId: String!): CountReactions!
-  customers(ids: [String!], limit: Float = 30, offset: Float): CustomersPaginated!
+  customers(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): CustomersPaginated!
   event(id: String!): Event!
   getCategoriesByIds(ids: [String!]!): [Category!]!
   getCategoryBySlug(slug: String!): Category!
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
   pluginExternalStorage: PluginExternalStorage
-  reactions(entity: String!, entityId: String!, ids: [String!], limit: Float = 30, offset: Float): ReactionsPaginated!
+  reactions(entity: String!, entityId: String!, ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): ReactionsPaginated!
   siblingTasks(_id: String!): SiblingTasks!
   tagBySlug(slug: String!): Tag!
-  tags(ids: [String!], limit: Float = 30, offset: Float, type: String): Tags!
+  tags(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, type: String): Tags!
   task(_id: String!): Task!
   taskByCode(code: String!): Task!
   taskMetrics(contextId: String, contextType: TaskContextType!): TaskMetrics!
   taskStatuses(contextId: String, contextType: TaskContextType, mode: GetTaskStatusesMode): ConfigTaskStatuses!
-  tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!], toTrackingTime: Float): TasksPaginated!
-  tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, status: String, tagIds: [String!], toTrackingTime: Float): Float!
+  tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, sortCreatedAt: SortDirection, status: String, tagIds: [String!], toTrackingTime: Float): TasksPaginated!
+  tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, sortCreatedAt: SortDirection, status: String, tagIds: [String!], toTrackingTime: Float): Float!
   userWorkspaceMember: WorkspaceMember!
   workspaceMember(userId: String!): WorkspaceMember!
-  workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float, userId: [String!]): WorkspaceMembersPaginated!
+  workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, userId: [String!]): WorkspaceMembersPaginated!
 }
 
 type Reaction {
@@ -701,6 +702,12 @@ type SiblingTasks {
 type SignUploadUrlResponse {
   dna: String!
   signedUrl: String!
+}
+
+"""Available sort directions"""
+enum SortDirection {
+  ASC
+  DESC
 }
 
 type SyncTaskResult {
@@ -765,6 +772,7 @@ type Task {
   folder: Tag
   folderId: String
   isArchived: Boolean
+  mentionedUserIds: [String!]!
   name: String!
   order: Float!
   parent: Task
@@ -827,6 +835,7 @@ type TaskStatus {
   id: String!
   name: String
   order: Float!
+  progress: Float!
 }
 
 input TaskStatusInput {

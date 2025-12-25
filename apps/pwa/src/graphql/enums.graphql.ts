@@ -302,6 +302,13 @@ export const ReactionType = {
 } as const;
 
 export type ReactionType = typeof ReactionType[keyof typeof ReactionType];
+/** Available sort directions */
+export const SortDirection = {
+  Asc: 'ASC',
+  Desc: 'DESC'
+} as const;
+
+export type SortDirection = typeof SortDirection[keyof typeof SortDirection];
 /** Available tag types */
 export const TagType = {
   Customer: 'CUSTOMER',

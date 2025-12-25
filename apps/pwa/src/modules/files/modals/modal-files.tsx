@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { numberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { WayPoint } from "@/components/way-point";
 import { configs } from "@/configs/layout.config";
 import { FileType } from "@/graphql/types.graphql";
@@ -13,9 +13,8 @@ import { FileEntity } from "@/modules/files/file-types";
 import { InternalFileCard } from "@/modules/files/internal-file-card";
 import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { Box, Card, em, Group, Modal, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Box, Card, em, Group, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconPhotoSquareRounded, IconUpload } from "@tabler/icons-react";
@@ -88,13 +87,14 @@ export const ModalFiles: FC<{
           })}
 
           <Modal
-            size={1400}
+            size={1200}
             yOffset={10}
             zIndex={300}
             opened={opened}
             onClose={close}
-            title={<ModalHead name={t`Files`} icon={IconPhotoSquareRounded} />}
-            fullScreen={viewport.view === "mobile"}
+            name={<Trans>Files</Trans>}
+            icon={IconPhotoSquareRounded}
+            isFullscreenOnMobile
           >
             <Stack>
               <Box

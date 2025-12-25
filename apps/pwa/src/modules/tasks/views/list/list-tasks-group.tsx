@@ -8,7 +8,7 @@ import type { ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-tas
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Card, Group, Loader, Skeleton, Stack, Text } from "@mantine/core";
+import { ActionIcon, Card, Center, Group, Loader, Skeleton, Stack, Text } from "@mantine/core";
 import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
@@ -34,36 +34,32 @@ const ModalCreateTask = dynamic(
   }
 );
 
-interface ListTaskGroupByStatusesProps {
+interface ListTasksGroupProps {
   status: TaskStatus;
   defaultVisible?: boolean;
-  showEmptyMsg?: boolean;
   lazyLoadId?: string;
 }
 
-export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
-  lazyLoadId,
-  ...props
-}) => {
+export const ListTasksGroup: FC<ListTasksGroupProps> = ({ lazyLoadId, defaultVisible, status }) => {
   const { activatedFolder, state } = useTasks();
   const [isReadyToFetch, setIsReadyToFetch] = useState(!lazyLoadId);
   const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
 
   const [isVisible, setIsVisible] = useState(
-    typeof props.defaultVisible === "boolean" ? props.defaultVisible : true
+    typeof defaultVisible === "boolean" ? defaultVisible : true
   );
 
-  const isClosedTasks = props.status.id === DefaultTaskStatusId.CLOSED;
+  const isClosedTasks = status.id === DefaultTaskStatusId.CLOSED;
 
   const groupVariables: TasksQueryVariables = useMemo(() => {
     return {
       ...state.variables,
-      status: props.status.id,
+      status: status.id,
       folderId: activatedFolder?._id,
       limit: 30,
       parentId: "root",
     };
-  }, [props.status, activatedFolder?._id, state]);
+  }, [status, activatedFolder?._id, state]);
 
   const { getTasks, tasks, loading, loadMore, isCanLoadMore, isLoadingMore, count } = useTasksQuery(
     { variables: groupVariables }
@@ -79,7 +75,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
   });
 
   const elementLazyLoadId = useElementLazyLoad({
-    id: props.status.id,
+    id: status.id,
     delay: 300,
     isLoaded: !loading,
   });
@@ -95,11 +91,15 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
           <Button
             size="compact-xs"
             variant="light"
-            color={props.status.color ?? "gray"}
-            leftSection={<TaskStatusIcon {...props.status} size={16} mr={-4} />}
+            color={status.color ?? "gray"}
+            leftSection={
+              <Center mr={-4}>
+                <TaskStatusIcon {...status} size={14} />
+              </Center>
+            }
             tt="uppercase"
           >
-            {props.status.name}
+            {status.name}
           </Button>
         </Group>
 
@@ -118,7 +118,7 @@ export const ListTaskGroupByStatuses: FC<ListTaskGroupByStatusesProps> = ({
             onClick={() =>
               modalCreateTaskRef.current?.open({
                 initial: {
-                  status: props.status.id,
+                  status: status.id,
                   folder: activatedFolder,
                   order: (tasks[0]?.order ?? 1) / 2,
                 },

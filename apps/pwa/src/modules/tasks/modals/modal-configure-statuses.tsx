@@ -120,7 +120,11 @@ const StatusCard: FC<{
         <Menu opened={openedColorMenu} onChange={setOpenedColorMenu} offset={{ mainAxis: 10 }}>
           <Menu.Target>
             <Group>
-              <TaskStatusIcon id={props.status.id} color={props.status.color} />
+              <TaskStatusIcon
+                id={props.status.id}
+                color={props.status.color ?? "gray"}
+                progress={props.status.progress ?? 0}
+              />
             </Group>
           </Menu.Target>
 
@@ -235,6 +239,7 @@ const ModalConfigureStatusesContent: FC<ModalConfigureStatusesArgs & { close: ()
       id: uuid(),
       name: "",
       color: "",
+      progress: 0,
       contextId: props.contextId,
       contextType: props.contextType,
       order: (taskStatuses[closedIndex].order + taskStatuses[closedIndex - 1].order) / 2,

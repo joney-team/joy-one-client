@@ -7,6 +7,6 @@ export type TaskStatusesQueryVariables = Types.Exact<{
 }>;
 
 
-export type TaskStatusesQuery = { __typename: 'Query', taskStatuses: { __typename: 'ConfigTaskStatuses', isInherited: boolean, statuses: Array<{ __typename: 'TaskStatus', id: string, name: string | null, color: string | null, order: number, contextId: string | null, contextType: Types.TaskContextType | null }>, workspaceStatuses: Array<{ __typename: 'TaskStatus', id: string, name: string | null, color: string | null, order: number, contextId: string | null, contextType: Types.TaskContextType | null }> } };
+export type TaskStatusesQuery = { __typename: 'Query', taskStatuses: { __typename: 'ConfigTaskStatuses', isInherited: boolean, statuses: Array<{ __typename: 'TaskStatus', id: string, name: string | null, color: string | null, order: number, progress: number, contextId: string | null, contextType: Types.TaskContextType | null }>, workspaceStatuses: Array<{ __typename: 'TaskStatus', id: string, name: string | null, color: string | null, order: number, progress: number, contextId: string | null, contextType: Types.TaskContextType | null }> } };
 
 declare const Document: import("graphql").DocumentNode; export default Document;

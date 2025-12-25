@@ -1,0 +1,17 @@
+mutation AddActivity(
+  $contextType: ActivityContextType!
+  $contextId: String!
+  $type: ActivityType!
+  $content: String
+  $parentId: String
+) {
+  addActivity(
+    contextType: $contextType
+    contextId: $contextId
+    type: $type
+    content: $content
+    parentId: $parentId
+  ) {
+    _id
+  }
+}

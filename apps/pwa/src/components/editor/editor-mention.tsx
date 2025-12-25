@@ -3,13 +3,9 @@
 import { WorkspaceMember } from "@/graphql/types.graphql";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
-import { computePosition, flip, shift } from "@floating-ui/react-dom";
-import { zIndexes } from "@joy-one-client/config/layout";
 import { type MentionOptions } from "@tiptap/extension-mention";
 import {
-  Editor,
   NodeViewWrapper,
-  posToDOMRect,
   ReactNodeViewProps,
   ReactNodeViewRenderer,
   ReactRenderer,
@@ -39,6 +35,7 @@ import { Card, Group, Stack, Text } from "@mantine/core";
 import Mention from "@tiptap/extension-mention";
 import { Avatar } from "../avatar";
 import styles from "./editor-mention.module.css";
+import { updatePosition } from "./editor-utils";
 
 interface MentionListProps {
   items: WorkspaceMember[];
@@ -63,18 +60,22 @@ const MentionList = forwardRef<MentionListRef, MentionListProps>((props, ref) =>
 
   const onGetMembers = useCallback(
     async (q: string) => {
-      if (q.length > 0) {
-        const searchResult = await searchEntity(AppEntity.WORKSPACE_MEMBERS, q);
-        if (searchResult.length === 0) return setIsSearchEmpty(true);
+      try {
+        if (q.length > 0) {
+          const searchResult = await searchEntity(AppEntity.WORKSPACE_MEMBERS, q);
+          if (searchResult.length === 0) return setIsSearchEmpty(true);
 
-        await getMembers({
-          variables: { ignoreSelf: true, ids: searchResult.map((result) => result._id) },
-        });
+          await getMembers({
+            variables: { ignoreSelf: true, ids: searchResult.map((result) => result._id) },
+          });
+          return setIsSearchEmpty(false);
+        }
+
+        await getMembers({ variables: { ignoreSelf: true, limit: 10 } });
         return setIsSearchEmpty(false);
+      } catch (error) {
+        return false;
       }
-
-      await getMembers({ variables: { ignoreSelf: true, limit: 10 } });
-      return setIsSearchEmpty(false);
     },
     [getMembers]
   );
@@ -166,25 +167,6 @@ const MentionList = forwardRef<MentionListRef, MentionListProps>((props, ref) =>
   );
 });
 
-const updatePosition = (editor: Editor, element: HTMLElement) => {
-  const virtualElement = {
-    getBoundingClientRect: () =>
-      posToDOMRect(editor.view, editor.state.selection.from, editor.state.selection.to),
-  };
-
-  computePosition(virtualElement, element, {
-    placement: "bottom-start",
-    strategy: "fixed",
-    middleware: [shift(), flip()],
-  }).then(({ x, y, strategy }) => {
-    element.style.width = "max-content";
-    element.style.position = strategy;
-    element.style.left = `${x}px`;
-    element.style.top = `${y}px`;
-    element.style.zIndex = `${zIndexes.commonModals + 100}`;
-  });
-};
-
 export const suggestion: MentionOptions["suggestion"] = {
   char: "@",
   render: () => {
@@ -202,7 +184,6 @@ export const suggestion: MentionOptions["suggestion"] = {
         });
 
         reactRenderer.element.style.position = "absolute";
-
         document.body.appendChild(reactRenderer.element);
 
         updatePosition(props.editor, reactRenderer.element);
@@ -213,9 +194,7 @@ export const suggestion: MentionOptions["suggestion"] = {
 
         reactRenderer?.updateProps(props);
 
-        if (!props.clientRect) {
-          return;
-        }
+        if (!props.clientRect) return;
         updatePosition(props.editor, reactRenderer.element);
       },
 

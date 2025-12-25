@@ -1,0 +1,26 @@
+#import "./fragmentActivity.graphql"
+
+query Activities(
+  $contextType: ActivityContextType!
+  $contextId: String!
+  $type: ActivityType
+  $offset: Float
+  $limit: Float
+  $ids: [String!]
+  $sortCreatedAt: SortDirection
+) {
+  activities(
+    contextType: $contextType
+    contextId: $contextId
+    type: $type
+    offset: $offset
+    limit: $limit
+    ids: $ids
+    sortCreatedAt: $sortCreatedAt
+  ) {
+    count
+    data {
+      ...ActivityData
+    }
+  }
+}

@@ -31,6 +31,7 @@ export type Activity = {
   content: Maybe<Scalars['String']['output']>;
   contextId: Scalars['String']['output'];
   contextType: ActivityContextType;
+  createdAt: Maybe<Scalars['Float']['output']>;
   createdByUser: WorkspaceMember;
   data: Maybe<Scalars['JSONObject']['output']>;
   isPinned: Maybe<Scalars['Boolean']['output']>;
@@ -558,10 +559,10 @@ export type LocationEntity = {
 
 export type Mutation = {
   __typename: 'Mutation';
+  addActivity: Activity;
   addReaction: Scalars['Boolean']['output'];
   bulkUpdateTags: Array<Tag>;
   bulkUpdateTasks: Array<Task>;
-  createActivity: Activity;
   createCategory: Category;
   createProduct: Product;
   createTag: Tag;
@@ -587,6 +588,15 @@ export type Mutation = {
 };
 
 
+export type MutationAddActivityArgs = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  contextId: Scalars['String']['input'];
+  contextType: ActivityContextType;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  type: ActivityType;
+};
+
+
 export type MutationAddReactionArgs = {
   entity: Scalars['String']['input'];
   entityId: Scalars['String']['input'];
@@ -601,15 +611,6 @@ export type MutationBulkUpdateTagsArgs = {
 
 export type MutationBulkUpdateTasksArgs = {
   items: Array<UpdateTaskInput>;
-};
-
-
-export type MutationCreateActivityArgs = {
-  content?: InputMaybe<Scalars['String']['input']>;
-  contextId: Scalars['String']['input'];
-  contextType: ActivityContextType;
-  parentId?: InputMaybe<Scalars['String']['input']>;
-  type: ActivityType;
 };
 
 
@@ -889,6 +890,7 @@ export type QueryActivitiesArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  sortCreatedAt?: InputMaybe<SortDirection>;
   type?: InputMaybe<ActivityType>;
 };
 
@@ -915,6 +917,7 @@ export type QueryCustomersArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  sortCreatedAt?: InputMaybe<SortDirection>;
 };
 
 
@@ -949,6 +952,7 @@ export type QueryReactionsArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  sortCreatedAt?: InputMaybe<SortDirection>;
 };
 
 
@@ -966,6 +970,7 @@ export type QueryTagsArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  sortCreatedAt?: InputMaybe<SortDirection>;
   type?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1006,6 +1011,7 @@ export type QueryTasksArgs = {
   parentId?: InputMaybe<Scalars['String']['input']>;
   partnerIds?: InputMaybe<Array<Scalars['String']['input']>>;
   priority?: InputMaybe<TaskPriority>;
+  sortCreatedAt?: InputMaybe<SortDirection>;
   status?: InputMaybe<Scalars['String']['input']>;
   tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
   toTrackingTime?: InputMaybe<Scalars['Float']['input']>;
@@ -1025,6 +1031,7 @@ export type QueryTasksCountArgs = {
   parentId?: InputMaybe<Scalars['String']['input']>;
   partnerIds?: InputMaybe<Array<Scalars['String']['input']>>;
   priority?: InputMaybe<TaskPriority>;
+  sortCreatedAt?: InputMaybe<SortDirection>;
   status?: InputMaybe<Scalars['String']['input']>;
   tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
   toTrackingTime?: InputMaybe<Scalars['Float']['input']>;
@@ -1041,6 +1048,7 @@ export type QueryWorkspaceMembersArgs = {
   ignoreSelf?: InputMaybe<Scalars['Boolean']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  sortCreatedAt?: InputMaybe<SortDirection>;
   userId?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
@@ -1093,6 +1101,13 @@ export type SignUploadUrlResponse = {
   signedUrl: Scalars['String']['output'];
 };
 
+/** Available sort directions */
+export const SortDirection = {
+  Asc: 'ASC',
+  Desc: 'DESC'
+} as const;
+
+export type SortDirection = typeof SortDirection[keyof typeof SortDirection];
 export type SyncTaskResult = {
   __typename: 'SyncTaskResult';
   task: Task;
@@ -1160,6 +1175,7 @@ export type Task = {
   folder: Maybe<Tag>;
   folderId: Maybe<Scalars['String']['output']>;
   isArchived: Maybe<Scalars['Boolean']['output']>;
+  mentionedUserIds: Array<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   order: Scalars['Float']['output'];
   parent: Maybe<Task>;
@@ -1228,6 +1244,7 @@ export type TaskStatus = {
   id: Scalars['String']['output'];
   name: Maybe<Scalars['String']['output']>;
   order: Scalars['Float']['output'];
+  progress: Scalars['Float']['output'];
 };
 
 export type TaskStatusInput = {

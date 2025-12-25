@@ -15,7 +15,7 @@ import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-sc
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Group, Skeleton, Stack, Text, alpha } from "@mantine/core";
+import { ActionIcon, Center, Group, Skeleton, Stack, Text, alpha } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
@@ -137,7 +137,11 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
                   size="compact-xs"
                   variant="light"
                   color={props.status.color ?? "gray"}
-                  leftSection={<TaskStatusIcon {...props.status} size={16} mr={-4} />}
+                  leftSection={
+                    <Center mr={-4}>
+                      <TaskStatusIcon {...props.status} size={14} />
+                    </Center>
+                  }
                   tt="uppercase"
                 >
                   {props.status.name}

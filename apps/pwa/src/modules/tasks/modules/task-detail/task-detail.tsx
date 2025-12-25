@@ -4,7 +4,7 @@ import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { useLazyQuery } from "@apollo/client/react";
 import { Container, Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
-import { IconFiles } from "@tabler/icons-react";
+import { IconFiles, IconTimelineEvent } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
 import { FC, useEffect } from "react";
 
@@ -27,6 +27,7 @@ import { TaskDetailSubtasks } from "../../task-detail-subtasks";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { useTaskMenu } from "../task-menu/task-menu";
 import { TaskDetailHead } from "./task-detail-head";
+import { ActivityContextType } from "@/graphql/enums.graphql";
 
 const TaskDetailProperties = dynamic(
   () => import("./task-detail-properties").then((mod) => mod.TaskDetailProperties),
@@ -36,8 +37,8 @@ const TaskDetailProperties = dynamic(
   }
 );
 
-const TaskActivities = dynamic(
-  () => import("./task-detail-footer").then((mod) => mod.TaskActivities),
+const Activities = dynamic(
+  () => import("../../../activities/activities").then((mod) => mod.Activities),
   {
     ssr: false,
     loading: nonLoading,
@@ -143,7 +144,9 @@ export const TaskDetail: FC = () => {
                     <Editor
                       key={modalId + "editor"}
                       defaultValue={parseEditorJSON(task.description)}
-                      onChangeJSON={(v) => debouncedUpdateTask({ description: JSON.stringify(v) })}
+                      onChangeJSON={(v) => {
+                        debouncedUpdateTask({ description: JSON.stringify(v) });
+                      }}
                       placeholder={t`Task description`}
                       uploadFileOptions={{
                         maxWidthOrHeight: 1500,
@@ -171,7 +174,23 @@ export const TaskDetail: FC = () => {
                     <FilesBox autoUpload refs={[`${AppEntity.TASKS}:${task._id}`]} />
                   </Stack>
 
-                  <TaskActivities key={modalId + "footer"} task={task} />
+                  <Stack gap="sm">
+                    <Group gap="sm">
+                      <ThemeIcon variant="light" color="gray">
+                        <IconTimelineEvent strokeWidth={1.5} size={20} />
+                      </ThemeIcon>
+
+                      <Text fw={500} fz={14}>
+                        <Trans>Activities</Trans>
+                      </Text>
+                    </Group>
+
+                    <Activities
+                      key={modalId + "activities"}
+                      contextType={ActivityContextType.Task}
+                      contextId={task._id}
+                    />
+                  </Stack>
                 </Stack>
               </Container>
             </Stack>

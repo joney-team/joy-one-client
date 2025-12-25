@@ -47,7 +47,7 @@ export const TaskMenuStatus: TaskMenuComponent = ({
                   });
                 }}
               >
-                <TaskStatusIcon size={16} color={status.color} id={status.id} />
+                <TaskStatusIcon {...status} />
                 <Text tt="uppercase" fz={13}>
                   {status.name}
                 </Text>

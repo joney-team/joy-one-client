@@ -29,7 +29,7 @@ import { IconPhoto, IconUpload } from "@tabler/icons-react";
 import TaskItem from "@tiptap/extension-task-item";
 import { Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import { ClipboardEventHandler, FC, useMemo } from "react";
+import { ClipboardEventHandler, FC, forwardRef, useImperativeHandle, useMemo } from "react";
 import { ImageResize } from "./editor-image-resize";
 
 import { classNames } from "@/utils/ui.utils";
@@ -47,6 +47,7 @@ interface EditorProps extends Partial<Omit<RichTextEditorProps, "defaultValue">>
   uploadFileOptions?: UploadFileOptions;
   isShowToolbar?: boolean;
   isNonWrapped?: boolean;
+  readonly?: boolean;
 }
 
 function InsertImageControl() {
@@ -81,183 +82,226 @@ function InsertImageControl() {
   );
 }
 
-export const Editor: FC<EditorProps> = ({
-  value,
-  onChangeHTML,
-  onChangeJSON,
-  delay,
-  placeholder,
-  uploadFileOptions,
-  isShowToolbar = true,
-  isNonWrapped = false,
-  defaultValue,
-  ...rest
-}) => {
-  const color = useColor();
-  const uploadFile = useUploadFile();
+export interface EditorRef {
+  getHTML: () => string;
+  getJSON: () => JSONContent;
+  clear: () => void;
+}
 
-  const onChange = useDebouncedCallback((html: string, json: JSONContent) => {
-    onChangeHTML?.(html);
-    onChangeJSON?.(json);
-  }, delay ?? 0);
-
-  const editorExtensions: Extensions = useMemo(() => {
-    const ext = [
-      StarterKit.configure({ link: false }),
-      Link,
-      Superscript,
-      Subscript,
-      Highlight,
-      ImageResize,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-      getTaskListExtension(TipTapTaskList),
-      TaskItem.configure({ nested: true }),
-      Placeholder.configure({
-        placeholder,
-      }),
-      UsersMention,
-    ];
-
-    return ext;
-  }, [placeholder]);
-
-  const editor = useEditor({
-    extensions: editorExtensions,
-    content: defaultValue ?? value,
-    onUpdate: (e) => {
-      onChange(e.editor.getHTML(), e.editor.getJSON());
+export const Editor = forwardRef<EditorRef, EditorProps>(
+  (
+    {
+      value,
+      onChangeHTML,
+      onChangeJSON,
+      delay,
+      placeholder,
+      uploadFileOptions,
+      isShowToolbar = true,
+      isNonWrapped = false,
+      defaultValue,
+      readonly = false,
+      ...rest
     },
-    immediatelyRender: false,
-  });
+    ref
+  ) => {
+    const color = useColor();
+    const uploadFile = useUploadFile();
 
-  const onDropImage = async (files: File[]) => {
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const _file = await uploadFile(file, uploadFileOptions);
-      editor?.commands.setImage({ src: renderFileUrl(_file.path) });
-    }
-  };
+    const onChange = useDebouncedCallback((html: string, json: JSONContent) => {
+      if (readonly) return;
+      onChangeHTML?.(html);
+      onChangeJSON?.(json);
+    }, delay ?? 0);
 
-  const onPaste: ClipboardEventHandler<HTMLDivElement> = (e) => {
-    if (!e.clipboardData) return;
+    const editorExtensions: Extensions = useMemo(() => {
+      const ext = [
+        StarterKit.configure({ link: false }),
+        Link,
+        Superscript,
+        Subscript,
+        Highlight,
+        ImageResize,
+        TextAlign.configure({ types: ["heading", "paragraph"] }),
+        getTaskListExtension(TipTapTaskList),
+        TaskItem.configure({ nested: true }),
+        Placeholder.configure({
+          placeholder,
+        }),
+        UsersMention,
+      ];
 
-    let files: File[] = [];
+      return ext;
+    }, [placeholder]);
 
-    Array.from(e.clipboardData.files).forEach(async (file) => {
-      files.push(file);
-    });
+    const editor = useEditor(
+      {
+        extensions: editorExtensions,
+        content: defaultValue ?? value,
+        onUpdate: readonly
+          ? undefined
+          : (e) => {
+              onChange(e.editor.getHTML(), e.editor.getJSON());
+            },
+        immediatelyRender: false,
+        autofocus: false,
+        editable: !readonly,
+      },
+      []
+    );
 
-    onDropImage(files);
-  };
+    const onDropImage = async (files: File[]) => {
+      if (readonly) return;
 
-  if (!editor) return <Loader size="xs" />;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const _file = await uploadFile(file, uploadFileOptions);
+        editor?.commands.setImage({ src: renderFileUrl(_file.path) });
+      }
+    };
 
-  return (
-    <Dropzone onDrop={onDropImage} accept={IMAGE_MIME_TYPE} activateOnClick={false}>
-      <Box
-        className={classNames(styles.Editor, {
-          [styles.isNonWrapped]: isNonWrapped,
-        })}
+    const onPaste: ClipboardEventHandler<HTMLDivElement> = (e) => {
+      if (!e.clipboardData) return;
+
+      let files: File[] = [];
+
+      Array.from(e.clipboardData.files).forEach(async (file) => {
+        files.push(file);
+      });
+
+      onDropImage(files);
+    };
+
+    useImperativeHandle(ref, () => ({
+      getHTML: () => editor?.getHTML() ?? "",
+      getJSON: () => editor?.getJSON() ?? {},
+      clear: () => editor?.commands.setContent({ type: "doc", content: [] }),
+    }));
+
+    if (!editor) return <Loader size="xs" />;
+
+    return (
+      <Dropzone
+        onDrop={onDropImage}
+        accept={IMAGE_MIME_TYPE}
+        activateOnClick={false}
+        disabled={readonly}
       >
-        <RichTextEditor {...rest} editor={editor} onPaste={onPaste}>
-          {isShowToolbar && (
-            <RichTextEditor.Toolbar sticky stickyOffset="var(--docs-header-height)">
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Bold />
-                <RichTextEditor.Italic />
-                <RichTextEditor.Underline />
-                <RichTextEditor.Strikethrough />
-              </RichTextEditor.ControlsGroup>
+        <Box
+          className={classNames(styles.Editor, {
+            [styles.isNonWrapped]: isNonWrapped,
+            [styles.isReadonly]: readonly,
+          })}
+        >
+          <RichTextEditor {...rest} editor={editor} onPaste={onPaste}>
+            {isShowToolbar && !readonly && (
+              <RichTextEditor.Toolbar sticky stickyOffset="var(--docs-header-height)">
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Bold />
+                  <RichTextEditor.Italic />
+                  <RichTextEditor.Underline />
+                  <RichTextEditor.Strikethrough />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.H1 />
-                <RichTextEditor.H2 />
-                <RichTextEditor.H3 />
-                <RichTextEditor.H4 />
-              </RichTextEditor.ControlsGroup>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.H1 />
+                  <RichTextEditor.H2 />
+                  <RichTextEditor.H3 />
+                  <RichTextEditor.H4 />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.AlignLeft />
-                <RichTextEditor.AlignCenter />
-                <RichTextEditor.AlignJustify />
-                <RichTextEditor.AlignRight />
-              </RichTextEditor.ControlsGroup>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.AlignLeft />
+                  <RichTextEditor.AlignCenter />
+                  <RichTextEditor.AlignJustify />
+                  <RichTextEditor.AlignRight />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Blockquote />
-                <RichTextEditor.Hr />
-                <RichTextEditor.BulletList />
-                <RichTextEditor.OrderedList />
-                <RichTextEditor.Subscript />
-                <RichTextEditor.Superscript />
-              </RichTextEditor.ControlsGroup>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Blockquote />
+                  <RichTextEditor.Hr />
+                  <RichTextEditor.BulletList />
+                  <RichTextEditor.OrderedList />
+                  <RichTextEditor.Subscript />
+                  <RichTextEditor.Superscript />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <InsertImageControl />
-                <RichTextEditor.Link />
-                <RichTextEditor.Unlink />
-              </RichTextEditor.ControlsGroup>
+                <RichTextEditor.ControlsGroup>
+                  <InsertImageControl />
+                  <RichTextEditor.Link />
+                  <RichTextEditor.Unlink />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Highlight />
-                <RichTextEditor.Code />
-                <RichTextEditor.ClearFormatting />
-              </RichTextEditor.ControlsGroup>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Highlight />
+                  <RichTextEditor.Code />
+                  <RichTextEditor.ClearFormatting />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Undo />
-                <RichTextEditor.Redo />
-              </RichTextEditor.ControlsGroup>
-            </RichTextEditor.Toolbar>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Undo />
+                  <RichTextEditor.Redo />
+                </RichTextEditor.ControlsGroup>
+              </RichTextEditor.Toolbar>
+            )}
+
+            {!readonly && (
+              <BubbleMenu editor={editor}>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Bold />
+                  <RichTextEditor.Italic />
+                  <RichTextEditor.Underline />
+                  <RichTextEditor.Strikethrough />
+                  <InsertImageControl />
+                  <RichTextEditor.Link />
+                  <RichTextEditor.Unlink />
+
+                  <RichTextEditor.H1 />
+                  <RichTextEditor.H2 />
+                  <RichTextEditor.H3 />
+                </RichTextEditor.ControlsGroup>
+              </BubbleMenu>
+            )}
+
+            <RichTextEditor.Content
+              onClick={(e) => {
+                if (readonly) return;
+
+                if (!(e.target as HTMLElement).classList.contains("is-empty")) {
+                  editor?.commands.focus();
+                }
+              }}
+            />
+          </RichTextEditor>
+
+          {!readonly && (
+            <Dropzone.Accept>
+              <Group
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  zIndex: 100,
+                  background: alpha(color("primary"), 0.8),
+                  borderRadius: 10,
+                }}
+                justify="center"
+                align="center"
+              >
+                <ThemeIcon color="white" variant="transparent">
+                  <IconUpload />
+                </ThemeIcon>
+
+                <Text c="white">
+                  <Trans>Drop image here</Trans>
+                </Text>
+              </Group>
+            </Dropzone.Accept>
           )}
-
-          <BubbleMenu editor={editor}>
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Bold />
-              <RichTextEditor.Italic />
-              <RichTextEditor.Underline />
-              <RichTextEditor.Strikethrough />
-              <InsertImageControl />
-              <RichTextEditor.Link />
-              <RichTextEditor.Unlink />
-            </RichTextEditor.ControlsGroup>
-          </BubbleMenu>
-
-          <RichTextEditor.Content
-            onClick={(e) => {
-              // If target has class "is-empty" then focus on the editor
-              if (!(e.target as HTMLElement).classList.contains("is-empty")) {
-                editor?.commands.focus();
-              }
-            }}
-          />
-        </RichTextEditor>
-
-        <Dropzone.Accept>
-          <Group
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              zIndex: 100,
-              background: alpha(color("primary"), 0.8),
-              borderRadius: 10,
-            }}
-            justify="center"
-            align="center"
-          >
-            <ThemeIcon color="white" variant="transparent">
-              <IconUpload />
-            </ThemeIcon>
-
-            <Text c="white">
-              <Trans>Drop image here</Trans>
-            </Text>
-          </Group>
-        </Dropzone.Accept>
-      </Box>
-    </Dropzone>
-  );
-};
+        </Box>
+      </Dropzone>
+    );
+  }
+);

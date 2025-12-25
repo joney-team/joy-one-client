@@ -14,6 +14,7 @@ import { useWorkspace } from "../workspaces/workspace-context";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { onError } from "@/utils/exceptions.utils";
 import { IconPlus } from "@tabler/icons-react";
+import { CircularProgress } from "@/components/circular-progress/circular-progress";
 
 const UseUploadFilePlayground: FC = () => {
   const uploadFile = useUploadFile();
@@ -57,9 +58,18 @@ export const AdminPlayground: FC = () => {
   const displayTime = new Date().setHours(15, 0, 0, 0);
 
   return (
-    <Stack p={30} gap={20}>
+    <Stack p="md" gap="md">
       <Paper withBorder p={20}>
         <Stack>
+          <SectionTitle name="Circular Progress" />
+          <Group>
+            <CircularProgress progress={0} borderType="dashed" />
+            <CircularProgress progress={0.25} />
+            <CircularProgress progress={0.5} />
+            <CircularProgress progress={0.75} />
+            <CircularProgress progress={1} />
+          </Group>
+
           <SectionTitle name="Buttons" />
           <Group>
             <Button size="xs" leftIcon={IconPlus}>

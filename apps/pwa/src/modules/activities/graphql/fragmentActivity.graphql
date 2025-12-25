@@ -1,0 +1,17 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+fragment ActivityData on Activity {
+  _id
+  contextType
+  contextId
+  type
+  content
+  data
+  parentId
+  childCount
+  isPinned
+  createdAt
+  createdByUser {
+    ...WorkspaceMemberData
+  }
+}

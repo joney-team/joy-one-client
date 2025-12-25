@@ -3,6 +3,7 @@ fragment TaskStatusData on TaskStatus {
   name
   color
   order
+  progress
   contextId
   contextType
 }

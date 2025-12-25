@@ -9,7 +9,7 @@ import { useFolderStatuses } from "../../hooks/use-task-statuses";
 import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
 
 const ListTaskGroupByStatuses = dynamic(
-  () => import("./list-task-group-by-statuses").then((mod) => mod.ListTaskGroupByStatuses),
+  () => import("./list-tasks-group").then((mod) => mod.ListTasksGroup),
   {
     ssr: false,
     loading: () => <Skeleton height={200} w="100%" />,
