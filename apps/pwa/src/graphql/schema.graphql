@@ -8,7 +8,7 @@ type Activity {
   childCount: Float
   content: String
   contextId: String!
-  contextType: ActivityContextType!
+  contextType: String!
   createdAt: Float
   createdByUser: WorkspaceMember!
   data: JSONObject
@@ -17,19 +17,14 @@ type Activity {
   pinnedAt: Float
   pinnedByUser: WorkspaceMember!
   pinnedByUserId: String
+  reactionsCount: ReactionsCount!
   type: ActivityType!
-}
-
-"""Available activity contexts"""
-enum ActivityContextType {
-  CUSTOMER
-  TASK
 }
 
 """Available activity types"""
 enum ActivityType {
+  COMMENT
   COMMON
-  POST
 }
 
 """The `AnyType` scalar type represents any value without restrictions."""
@@ -108,15 +103,6 @@ type ConfigTaskStatuses {
 type Coordinates {
   lat: Float!
   lng: Float!
-}
-
-type CountReactionType {
-  count: Float!
-  type: ReactionType!
-}
-
-type CountReactions {
-  reactions: [CountReactionType!]!
 }
 
 input CreateTaskInput {
@@ -255,6 +241,7 @@ enum EventDataActionType {
 enum EventType {
   ACTIVITY_ARCHIVED
   ACTIVITY_NEW
+  ACTIVITY_SYNCED
   ACTIVITY_UPDATED
   BANK_TRANSACTION_CANCELLED
   BANK_TRANSACTION_FAILED
@@ -515,8 +502,9 @@ type LocationEntity {
 }
 
 type Mutation {
-  addActivity(content: String, contextId: String!, contextType: ActivityContextType!, parentId: String, type: ActivityType!): Activity!
+  addActivity(content: String, contextId: String!, contextType: String!, parentId: String, type: ActivityType!): Activity!
   addReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
+  archiveActivity(id: String!): Activity!
   bulkUpdateTags(items: [UpdateTagInput!]!): [Tag!]!
   bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
@@ -533,7 +521,7 @@ type Mutation {
   pluginExternalStorageSignUploadUrl(fileName: String!, refs: [String!]): SignUploadUrlResponse!
   registerDevice(input: RegisterDeviceDto!): DeviceEntity!
   removePluginExternalStorage: Boolean!
-  removeReaction(entity: String!, entityId: String!): Boolean!
+  removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   removeTag(id: String!): Boolean!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
   syncTask(_id: String!): SyncTaskResult!
@@ -634,11 +622,11 @@ enum ProductType {
 }
 
 type Query {
-  activities(contextId: String!, contextType: ActivityContextType!, ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, type: ActivityType): ActivitiesPaginated!
+  activities(contextId: String!, contextType: String!, ids: [String!], limit: Float = 30, offset: Float, parentId: String, sortCreatedAt: SortDirection, type: ActivityType): ActivitiesPaginated!
+  activity(id: String!): Activity!
   appConfig: AppConfig!
   categoriesPaginated(limit: Float = 30, offset: Float, query: JSONObject): CategoriesPaginated!
   category(id: String!): Category!
-  countReactions(entity: String!, entityId: String!): CountReactions!
   customers(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): CustomersPaginated!
   event(id: String!): Event!
   getCategoriesByIds(ids: [String!]!): [Category!]!
@@ -647,6 +635,7 @@ type Query {
   getProductByIds(ids: [String!]!): [Product!]!
   pluginExternalStorage: PluginExternalStorage
   reactions(entity: String!, entityId: String!, ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): ReactionsPaginated!
+  reactionsCount(entity: String!, entityId: String!): ReactionsCount!
   siblingTasks(_id: String!): SiblingTasks!
   tagBySlug(slug: String!): Tag!
   tags(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, type: String): Tags!
@@ -668,6 +657,12 @@ type Reaction {
   userId: String!
 }
 
+type ReactionCount {
+  count: Float!
+  type: ReactionType!
+  userIds: [String!]!
+}
+
 """Available reaction types"""
 enum ReactionType {
   CELEBRATE
@@ -675,6 +670,10 @@ enum ReactionType {
   LAUGH
   LIKE
   LOVE
+}
+
+type ReactionsCount {
+  reactions: [ReactionCount!]!
 }
 
 type ReactionsPaginated {

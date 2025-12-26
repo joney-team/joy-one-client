@@ -1,5 +1,5 @@
 mutation AddActivity(
-  $contextType: ActivityContextType!
+  $contextType: String!
   $contextId: String!
   $type: ActivityType!
   $content: String

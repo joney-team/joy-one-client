@@ -1,13 +1,14 @@
 #import "./fragmentActivity.graphql"
 
 query Activities(
-  $contextType: ActivityContextType!
+  $contextType: String!
   $contextId: String!
   $type: ActivityType
   $offset: Float
   $limit: Float
   $ids: [String!]
   $sortCreatedAt: SortDirection
+  $parentId: String
 ) {
   activities(
     contextType: $contextType
@@ -17,6 +18,7 @@ query Activities(
     limit: $limit
     ids: $ids
     sortCreatedAt: $sortCreatedAt
+    parentId: $parentId
   ) {
     count
     data {

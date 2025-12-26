@@ -50,6 +50,9 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: A
       dark: (getColorShape(metadata.appColorShape) - 2) as any,
     },
     defaultRadius: "md",
+    shadows: {
+      xs: "lch(0 0 0 / 0.022) 0px 3px 6px -2px, lch(0 0 0 / 0.044) 0px 1px 1px",
+    },
     components: {
       InputWrapper: InputWrapper.extend({
         styles: {
@@ -91,7 +94,7 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: A
       }),
       Tooltip: Tooltip.extend({
         defaultProps: {
-          openDelay: 500,
+          openDelay: 300,
         },
         styles: {
           tooltip: {

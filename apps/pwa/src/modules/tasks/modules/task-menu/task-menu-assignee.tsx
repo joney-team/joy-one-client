@@ -1,11 +1,12 @@
 "use client";
 
 import { useLazyQuery } from "@apollo/client/react";
-import { Card, FocusTrap, Group, Loader, ScrollArea, Stack, Text, TextInput } from "@mantine/core";
+import { FocusTrap, Group, Loader, ScrollArea, Stack, Text, TextInput } from "@mantine/core";
 import { TaskMenuComponent } from "./task-menu-types";
 
 import { Avatar } from "@/components/avatar";
 import { WayPoint } from "@/components/way-point";
+import { useAuth } from "@/modules/auth/auth-context";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import QUERY_WORKSPACE_MEMBERS, {
@@ -13,6 +14,7 @@ import QUERY_WORKSPACE_MEMBERS, {
   type WorkspaceMembersQueryVariables,
 } from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
 import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -21,19 +23,18 @@ import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 
 const MenuItem = ({
   member,
   isSelected,
   onClick,
-  isSelf,
 }: {
   member: WorkspaceMembersQuery["workspaceMembers"]["data"][number];
   isSelected: boolean;
   onClick: () => void;
-  isSelf?: boolean;
 }) => {
+  const auth = useAuth();
+  const isSelf = member.userId === auth.user?._id;
   const color = useColor();
 
   return (
@@ -141,10 +142,11 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
   }, [textSearch, getMembers]);
 
   return (
-    <Fragment>
+    <Stack gap={0} align="stretch" miw={0}>
       <FocusTrap>
-        <Group p={6}>
+        <Group p={6} w="100%">
           <TextInput
+            w="100%"
             radius={4}
             autoFocus
             size="xs"
@@ -170,7 +172,6 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
             <Fragment>
               {member && (
                 <MenuItem
-                  isSelf
                   member={member}
                   isSelected={selected.some((u) => u._id === member._id)}
                   onClick={() => {
@@ -221,7 +222,6 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
 
               return (
                 <MenuItem
-                  isSelf={member.userId === member?.userId}
                   key={member._id}
                   member={member}
                   isSelected={isSelected}
@@ -252,6 +252,6 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
           )}
         </Stack>
       </ScrollArea.Autosize>
-    </Fragment>
+    </Stack>
   );
 };

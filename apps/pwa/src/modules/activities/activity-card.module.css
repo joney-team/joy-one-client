@@ -1,0 +1,15 @@
+.ActivityCard {
+  & .ActivityCardContent {
+    & .Menu {
+      &:not([aria-expanded="true"]) {
+        opacity: 0;
+      }
+    }
+
+    &:hover {
+      & .Menu {
+        opacity: 1;
+      }
+    }
+  }
+}

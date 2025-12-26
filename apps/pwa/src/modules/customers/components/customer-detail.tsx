@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
-import { ActivityContextType, EventType } from "@/graphql/enums.graphql";
+import { EventType } from "@/graphql/enums.graphql";
 import { CustomerBookings } from "@/modules/customers/components/customer-booking";
 import { CustomerInformations } from "@/modules/customers/components/customer-information";
 import { CustomerEntity } from "@/modules/customers/customer-types";
@@ -157,7 +157,7 @@ export const CustomerDetail = () => {
         <Stack gap={10}>
           <SectionTitle name={<Trans>Activities</Trans>} icon={IconTimelineEvent} />
 
-          <Activities contextType={ActivityContextType.Customer} contextId={customer._id} />
+          <Activities contextType={AppEntity.CUSTOMERS} contextId={customer._id} />
         </Stack>
 
         <EventList ref={customer._id} />

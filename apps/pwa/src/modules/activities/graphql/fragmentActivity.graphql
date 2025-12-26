@@ -11,6 +11,13 @@ fragment ActivityData on Activity {
   childCount
   isPinned
   createdAt
+  reactionsCount {
+    reactions {
+      userIds
+      type
+      count
+    }
+  }
   createdByUser {
     ...WorkspaceMemberData
   }

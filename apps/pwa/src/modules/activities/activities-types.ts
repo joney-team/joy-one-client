@@ -1,6 +1,4 @@
-import { ActivityContextType } from "@/graphql/types.graphql";
-
 export interface ActivitiesProps {
-  contextType: ActivityContextType;
+  contextType: string;
   contextId: string;
 }

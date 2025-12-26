@@ -132,10 +132,11 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
   }, [textSearch, getCustomers]);
 
   return (
-    <Fragment>
+    <Stack miw={0} align="stretch" gap={0}>
       <FocusTrap active={!!data && data.customers.count > 0}>
-        <Group p={6}>
+        <Group p={6} w="100%">
           <TextInput
+            w="100%"
             radius={4}
             size="xs"
             leftSection={<IconSearch size={16} />}
@@ -209,6 +210,6 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
           )}
         </Stack>
       </ScrollArea.Autosize>
-    </Fragment>
+    </Stack>
   );
 };

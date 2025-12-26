@@ -1,0 +1,3 @@
+mutation RemoveReaction($entity: String!, $entityId: String!, $type: ReactionType!) {
+  removeReaction(entity: $entity, entityId: $entityId, type: $type)
+}

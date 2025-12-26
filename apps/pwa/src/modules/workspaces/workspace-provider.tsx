@@ -36,7 +36,7 @@ import { workspaceInitialize } from "@/modules/workspaces/workspaces-service";
 import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useLazyQuery, useQuery } from "@apollo/client/react";
 import { Currency } from "@joy-one-client/utils/currency";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
@@ -98,12 +98,18 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     ],
   });
 
-  const { data: workspaceMemberData } = useQuery<
+  const [fetchWorkspaceMemberData, { data: workspaceMemberData }] = useLazyQuery<
     UserWorkspaceMemberQuery,
     UserWorkspaceMemberQueryVariables
   >(QUERY_USER_WORKSPACE_MEMBER, {
-    skip: !workspaceId || !auth.user?._id,
+    fetchPolicy: "network-only",
   });
+
+  useEffect(() => {
+    if (workspaceId && auth.user?._id && isInitialized) {
+      fetchWorkspaceMemberData();
+    }
+  }, [workspaceId, auth.user?._id, isInitialized]);
 
   const fetchUserWorkspaceMembers = async () => {
     state.current.workspaceMembers = await getMyWorkspaceMembers();

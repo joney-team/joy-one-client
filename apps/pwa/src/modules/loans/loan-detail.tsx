@@ -24,6 +24,7 @@ import { type LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { AppEntity } from "@/types";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
@@ -42,6 +43,7 @@ import {
   Stack,
   Stepper,
   Text,
+  ThemeIcon,
   Title,
 } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -56,6 +58,7 @@ import {
   IconLocation,
   IconPhone,
   IconShieldCheckered,
+  IconTimelineEvent,
   IconUserScan,
 } from "@tabler/icons-react";
 import { NextPage } from "next";
@@ -120,6 +123,14 @@ const EventList = dynamic(() => import("@/components/event-list").then((mod) => 
   ssr: false,
   loading: nonLoading,
 });
+
+const Activities = dynamic(
+  () => import("@/modules/activities/activities").then((mod) => mod.Activities),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const LoanDetail: NextPage = () => {
   const params = useParams();
@@ -550,7 +561,19 @@ export const LoanDetail: NextPage = () => {
               ][pointedStep]
             }
 
-            <Container>
+            <Container mt="md" size={800}>
+              <Stack gap="xs">
+                <Group gap={5}>
+                  <ThemeIcon color="dark" variant="transparent">
+                    <IconTimelineEvent />
+                  </ThemeIcon>
+                  <Text>
+                    <Trans>Activities</Trans>
+                  </Text>
+                </Group>
+                <Activities contextId={loan.data.id} contextType={AppEntity.LOANS} />
+              </Stack>
+
               <EventList ref={loan.data.id} />
             </Container>
 

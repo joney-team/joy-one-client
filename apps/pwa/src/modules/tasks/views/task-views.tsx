@@ -37,7 +37,7 @@ const NavigationTabs = dynamic(
 );
 
 const TasksRealtimeEvents = dynamic(
-  () => import("../tasks-realtime-events").then((mod) => mod.TasksRealtimeEvents),
+  () => import("../tasks-events").then((mod) => mod.TasksEvents),
   {
     ssr: false,
     loading: nonLoading,

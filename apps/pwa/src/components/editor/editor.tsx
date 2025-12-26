@@ -16,7 +16,7 @@ import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { ModalFiles } from "@/modules/files/modals/modal-files";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
-import { alpha, Box, Group, Loader, Text, ThemeIcon } from "@mantine/core";
+import { alpha, Box, BoxProps, Group, Loader, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
@@ -27,9 +27,9 @@ import {
 } from "@mantine/tiptap";
 import { IconPhoto, IconUpload } from "@tabler/icons-react";
 import TaskItem from "@tiptap/extension-task-item";
-import { Extensions, JSONContent, useEditor } from "@tiptap/react";
+import { Editor as EditorType, Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import { ClipboardEventHandler, FC, forwardRef, useImperativeHandle, useMemo } from "react";
+import { ClipboardEventHandler, forwardRef, useImperativeHandle, useMemo } from "react";
 import { ImageResize } from "./editor-image-resize";
 
 import { classNames } from "@/utils/ui.utils";
@@ -48,6 +48,7 @@ interface EditorProps extends Partial<Omit<RichTextEditorProps, "defaultValue">>
   isShowToolbar?: boolean;
   isNonWrapped?: boolean;
   readonly?: boolean;
+  container?: BoxProps;
 }
 
 function InsertImageControl() {
@@ -85,6 +86,7 @@ function InsertImageControl() {
 export interface EditorRef {
   getHTML: () => string;
   getJSON: () => JSONContent;
+  editor: EditorType | null;
   clear: () => void;
 }
 
@@ -101,6 +103,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       isNonWrapped = false,
       defaultValue,
       readonly = false,
+      container,
       ...rest
     },
     ref
@@ -144,7 +147,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
               onChange(e.editor.getHTML(), e.editor.getJSON());
             },
         immediatelyRender: false,
-        autofocus: false,
+        autofocus: rest.autoFocus,
         editable: !readonly,
       },
       []
@@ -176,6 +179,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       getHTML: () => editor?.getHTML() ?? "",
       getJSON: () => editor?.getJSON() ?? {},
       clear: () => editor?.commands.setContent({ type: "doc", content: [] }),
+      editor,
     }));
 
     if (!editor) return <Loader size="xs" />;
@@ -186,6 +190,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
         accept={IMAGE_MIME_TYPE}
         activateOnClick={false}
         disabled={readonly}
+        {...container}
       >
         <Box
           className={classNames(styles.Editor, {
@@ -277,6 +282,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
           {!readonly && (
             <Dropzone.Accept>
               <Group
+                gap={3}
                 style={{
                   position: "absolute",
                   top: 0,
@@ -284,17 +290,17 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
                   width: "100%",
                   height: "100%",
                   zIndex: 100,
-                  background: alpha(color("primary"), 0.8),
-                  borderRadius: 10,
+                  background: alpha(color("primary"), 0.6),
+                  borderRadius: 4,
                 }}
                 justify="center"
                 align="center"
               >
-                <ThemeIcon color="white" variant="transparent">
-                  <IconUpload />
+                <ThemeIcon color="white" variant="transparent" size="xs">
+                  <IconUpload size={14} />
                 </ThemeIcon>
 
-                <Text c="white">
+                <Text c="white" fz="xs">
                   <Trans>Drop image here</Trans>
                 </Text>
               </Group>

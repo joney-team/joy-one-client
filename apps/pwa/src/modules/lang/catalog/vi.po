@@ -14,6 +14,11 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
+#. placeholder {0}: activity.childCount
+#: src/modules/activities/activity-card.tsx:268
+msgid "{0, plural, one {# reply} other {# replies}}"
+msgstr "{0, plural, one {# trả lời} other {# trả lời}}"
+
 #. placeholder {0}: task.childCount
 #: src/modules/tasks/views/board/board-task-card.tsx:501
 msgid "{0, plural, one {# subtask} other {# subtasks}}"
@@ -140,8 +145,9 @@ msgstr "Đang hoạt động"
 msgid "Active at"
 msgstr "Kích hoạt lúc"
 
+#: src/constant.ts:31
 #: src/modules/customers/components/customer-detail.tsx:158
-#: src/modules/tasks/modules/task-detail/task-detail.tsx:184
+#: src/modules/tasks/modules/task-detail/task-detail.tsx:183
 msgid "Activities"
 msgstr "Hoạt động"
 
@@ -743,7 +749,7 @@ msgstr "Chỉ định một nhánh làm việc"
 msgid "At the time of loan signing"
 msgstr "Tại thời điểm ký hồ sơ vay"
 
-#: src/modules/tasks/modules/task-detail/task-detail.tsx:170
+#: src/modules/tasks/modules/task-detail/task-detail.tsx:169
 msgid "Attachments"
 msgstr "Tệp đính kèm"
 
@@ -2084,7 +2090,7 @@ msgid "Date time"
 msgstr "Ngày giờ"
 
 #: src/configs/calendar.config.tsx:68
-#: src/constant.ts:34
+#: src/constant.ts:35
 msgid "Day"
 msgstr "Ngày"
 
@@ -2320,7 +2326,7 @@ msgstr "Thả tập tin để xem trước"
 msgid "Drop files here"
 msgstr "Thả tập tin ở đây"
 
-#: src/components/editor/editor.tsx:298
+#: src/components/editor/editor.tsx:304
 msgid "Drop image here"
 msgstr "Thả hình ảnh ở đây"
 
@@ -2550,7 +2556,7 @@ msgstr "Nhập tên trạng thái"
 #: src/modules/tasks/components/quick-create-task-input.tsx:36
 #: src/modules/tasks/modals/modal-create-task-form.tsx:166
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:201
-#: src/modules/tasks/modules/task-detail/task-detail.tsx:139
+#: src/modules/tasks/modules/task-detail/task-detail.tsx:138
 msgid "Enter task name"
 msgstr "Nhập tên công việc"
 
@@ -2640,7 +2646,7 @@ msgstr "Trích đoạn"
 msgid "Exclude products"
 msgstr "Loại trừ sản phẩm"
 
-#: src/constant.ts:41
+#: src/constant.ts:42
 msgid "Excludes"
 msgstr "Loại trừ"
 
@@ -2734,7 +2740,7 @@ msgstr "Tạo công việc không thành công"
 msgid "Fee"
 msgstr "Phí"
 
-#: src/constant.ts:53
+#: src/constant.ts:54
 msgid "Female"
 msgstr "Nữ"
 
@@ -3082,7 +3088,7 @@ msgstr "Bao gồm các sản phẩm"
 msgid "Include products / services"
 msgstr "Bao gồm sản phẩm/dịch vụ"
 
-#: src/constant.ts:40
+#: src/constant.ts:41
 msgid "Includes"
 msgstr "Bao gồm"
 
@@ -3418,7 +3424,8 @@ msgstr "Vĩ độ"
 msgid "Leave"
 msgstr "Rời khỏi"
 
-#: src/modules/activities/activities-input.tsx:59
+#: src/modules/activities/activities-input.tsx:98
+#: src/modules/activities/activities-input.tsx:116
 msgid "Leave a comment..."
 msgstr "Để lại bình luận..."
 
@@ -3458,6 +3465,10 @@ msgstr "Hãy cùng nhau xây dựng giá trị, tạo cơ hội và phát triể
 #: src/components/color-schemes.tsx:36
 msgid "Light mode"
 msgstr "Chế độ sáng"
+
+#: src/modules/activities/activity-card.tsx:216
+msgid "Like this comment"
+msgstr "Thích bình luận này"
 
 #: src/modules/workspace-settings/workspace-setting-hrm-timekeepings.tsx:59
 msgid "Limit check-in position"
@@ -3817,7 +3828,7 @@ msgstr "Trụ sở chính"
 msgid "Main office, Branch 1, ..."
 msgstr "Trụ sở chính, Chi nhánh 1, ..."
 
-#: src/constant.ts:52
+#: src/constant.ts:53
 msgid "Male"
 msgstr "Nam"
 
@@ -4187,7 +4198,7 @@ msgstr "Tiền đã cho"
 
 #: src/components/list/filters/time-range-filter.tsx:74
 #: src/configs/calendar.config.tsx:66
-#: src/constant.ts:36
+#: src/constant.ts:37
 #: src/modules/workspace-subscriptions/modal-workspace-subscriptions.tsx:175
 #: src/widgets/reports/index.tsx:149
 msgid "Month"
@@ -4470,7 +4481,7 @@ msgstr "Không có bình luận"
 msgid "No content"
 msgstr "Không có nội dung"
 
-#: src/modules/tasks/modules/task-menu/task-menu-customer.tsx:203
+#: src/modules/tasks/modules/task-menu/task-menu-customer.tsx:204
 msgid "No customers found"
 msgstr "Không tìm thấy khách hàng"
 
@@ -4721,7 +4732,7 @@ msgstr "Đơn hàng"
 msgid "Orders today"
 msgstr "Đơn hàng hôm nay"
 
-#: src/constant.ts:54
+#: src/constant.ts:55
 msgid "Other"
 msgstr "Khác"
 
@@ -5372,7 +5383,7 @@ msgstr "Khuyến mãi được cập nhật"
 msgid "Promotions"
 msgstr "Khuyến mãi"
 
-#: src/modules/tasks/modules/task-detail/task-detail.tsx:207
+#: src/modules/tasks/modules/task-detail/task-detail.tsx:206
 msgid "Properties"
 msgstr "Thuộc tính"
 
@@ -5660,6 +5671,7 @@ msgstr "Thời gian nhắc nhở"
 #: src/modals/modal-date-picker.tsx:142
 #: src/modals/modal-date-picker.tsx:194
 #: src/modals/modal-date-picker.tsx:245
+#: src/modules/activities/activity-card.tsx:138
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:301
 #: src/modules/tasks/modules/task-selections/task-selection-menu.tsx:267
 #: src/modules/users/components/user-workspace-settings-form.tsx:183
@@ -5709,6 +5721,10 @@ msgstr "Đã xóa chấm công"
 #: src/layout/navigation/workspace-navigation-task-folders.tsx:168
 msgid "Rename"
 msgstr "Đổi tên"
+
+#: src/modules/activities/activity-card.tsx:270
+msgid "Reply"
+msgstr "Trả lời"
 
 #: src/widgets/reports/widgets/report-credit.widget.tsx:624
 msgid "Report income and expenditure"
@@ -5976,8 +5992,8 @@ msgstr "Di chuyển đến ngày hôm nay"
 #: src/layout/header/workspace-header.tsx:102
 #: src/layout/header/workspace-header.tsx:188
 #: src/modules/search/search-engine.tsx:383
-#: src/modules/tasks/modules/task-menu/task-menu-assignee.tsx:152
-#: src/modules/tasks/modules/task-menu/task-menu-customer.tsx:142
+#: src/modules/tasks/modules/task-menu/task-menu-assignee.tsx:154
+#: src/modules/tasks/modules/task-menu/task-menu-customer.tsx:143
 #: src/modules/tasks/modules/task-menu/task-menu-folder.tsx:98
 #: src/modules/tasks/modules/task-menu/task-menu-tags.tsx:99
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:252
@@ -6028,7 +6044,7 @@ msgstr "Bảo mật"
 #: src/modules/prescriptions/components/prescription-selector.tsx:57
 #: src/modules/tags/components/tag-selector.tsx:58
 #: src/modules/tasks/components/task-tag-folder-selector.tsx:48
-#: src/modules/theme/generate-theme.tsx:164
+#: src/modules/theme/generate-theme.tsx:167
 #: src/modules/workspace-branches/workspace-branch-selector.tsx:81
 #: src/modules/workspace-branches/workspace-branches-selector.tsx:48
 #: src/modules/workspace-roles/components/workspace-roles-selector.tsx:69
@@ -6587,7 +6603,7 @@ msgid "Task complete"
 msgstr "Hoàn thành công việc"
 
 #: src/modules/tasks/modals/modal-create-task-form.tsx:176
-#: src/modules/tasks/modules/task-detail/task-detail.tsx:150
+#: src/modules/tasks/modules/task-detail/task-detail.tsx:149
 msgid "Task description"
 msgstr "Mô tả công việc"
 
@@ -6723,6 +6739,10 @@ msgstr "Màu chủ đề"
 #: src/modules/hrm-timekeepings/modals/modal-timekeeping-list.tsx:212
 msgid "There are <0/> timekeeping requests pending approval"
 msgstr "Có <0/> yêu cầu chấm công đợi phê duyệt"
+
+#: src/modules/activities/activity-card.tsx:153
+msgid "This activity has been archived"
+msgstr "Hoạt động này đã bị xoá"
 
 #: src/modules/users/components/user-device-card.tsx:53
 msgid "This device"
@@ -7522,7 +7542,7 @@ msgid "We couldn't find the page you were looking for."
 msgstr "Chúng tôi không tìm thấy trang bạn đang tìm kiếm."
 
 #: src/configs/calendar.config.tsx:67
-#: src/constant.ts:35
+#: src/constant.ts:36
 msgid "Week"
 msgstr "Tuần"
 
@@ -7676,9 +7696,15 @@ msgstr "Có/Không"
 msgid "Yesterday"
 msgstr "Hôm qua"
 
-#: src/modules/tasks/modules/task-menu/task-menu-assignee.tsx:65
+#: src/modules/activities/activity-card.tsx:194
+#: src/modules/tasks/modules/task-menu/task-menu-assignee.tsx:66
 msgid "You"
 msgstr "Bạn"
+
+#. placeholder {0}: reaction.userIds.length - 1
+#: src/modules/activities/activity-card.tsx:192
+msgid "You and +{0}"
+msgstr "Bạn và +{0}"
 
 #: src/modules/bookings/components/form-booking.tsx:393
 #: src/modules/bookings/modals/modal-booking.tsx:318

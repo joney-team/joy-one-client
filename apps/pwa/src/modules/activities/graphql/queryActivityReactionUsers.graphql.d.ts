@@ -1,0 +1,13 @@
+import type * as Types from '../../../graphql/types.graphql.d';
+
+export type ActivityReactionUsersQueryVariables = Types.Exact<{
+  ignoreSelf?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
+  userIds?: Types.InputMaybe<Array<Types.Scalars['String']['input']>>;
+  limit?: Types.InputMaybe<Types.Scalars['Float']['input']>;
+  offset?: Types.InputMaybe<Types.Scalars['Float']['input']>;
+}>;
+
+
+export type ActivityReactionUsersQuery = { __typename: 'Query', users: { __typename: 'WorkspaceMembersPaginated', count: number, data: Array<{ __typename: 'WorkspaceMember', _id: string, name: string }> } };
+
+declare const Document: import("graphql").DocumentNode; export default Document;

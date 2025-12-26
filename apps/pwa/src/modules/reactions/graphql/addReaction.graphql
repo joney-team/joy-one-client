@@ -1,0 +1,3 @@
+mutation AddReaction($type: ReactionType!, $entity: String!, $entityId: String!) {
+  addReaction(type: $type, entity: $entity, entityId: $entityId)
+}

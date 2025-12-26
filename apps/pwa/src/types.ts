@@ -132,6 +132,7 @@ export enum AppEntity {
   CATEGORIES = "CT",
   PROMOTIONS = "PR",
   HRM_TIMEKEEPINGS = "HTK",
+  ACTIVITIES = "AC",
 }
 
 export interface AppPageMetadata {

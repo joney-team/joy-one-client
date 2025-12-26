@@ -1,14 +1,7 @@
-/** Available activity contexts */
-export const ActivityContextType = {
-  Customer: 'CUSTOMER',
-  Task: 'TASK'
-} as const;
-
-export type ActivityContextType = typeof ActivityContextType[keyof typeof ActivityContextType];
 /** Available activity types */
 export const ActivityType = {
-  Common: 'COMMON',
-  Post: 'POST'
+  Comment: 'COMMENT',
+  Common: 'COMMON'
 } as const;
 
 export type ActivityType = typeof ActivityType[keyof typeof ActivityType];
@@ -60,6 +53,7 @@ export type EventDataActionType = typeof EventDataActionType[keyof typeof EventD
 export const EventType = {
   ActivityArchived: 'ACTIVITY_ARCHIVED',
   ActivityNew: 'ACTIVITY_NEW',
+  ActivitySynced: 'ACTIVITY_SYNCED',
   ActivityUpdated: 'ACTIVITY_UPDATED',
   BankTransactionCancelled: 'BANK_TRANSACTION_CANCELLED',
   BankTransactionFailed: 'BANK_TRANSACTION_FAILED',

@@ -30,7 +30,7 @@ export type Activity = {
   childCount: Maybe<Scalars['Float']['output']>;
   content: Maybe<Scalars['String']['output']>;
   contextId: Scalars['String']['output'];
-  contextType: ActivityContextType;
+  contextType: Scalars['String']['output'];
   createdAt: Maybe<Scalars['Float']['output']>;
   createdByUser: WorkspaceMember;
   data: Maybe<Scalars['JSONObject']['output']>;
@@ -39,20 +39,14 @@ export type Activity = {
   pinnedAt: Maybe<Scalars['Float']['output']>;
   pinnedByUser: WorkspaceMember;
   pinnedByUserId: Maybe<Scalars['String']['output']>;
+  reactionsCount: ReactionsCount;
   type: ActivityType;
 };
 
-/** Available activity contexts */
-export const ActivityContextType = {
-  Customer: 'CUSTOMER',
-  Task: 'TASK'
-} as const;
-
-export type ActivityContextType = typeof ActivityContextType[keyof typeof ActivityContextType];
 /** Available activity types */
 export const ActivityType = {
-  Common: 'COMMON',
-  Post: 'POST'
+  Comment: 'COMMENT',
+  Common: 'COMMON'
 } as const;
 
 export type ActivityType = typeof ActivityType[keyof typeof ActivityType];
@@ -137,17 +131,6 @@ export type Coordinates = {
   __typename: 'Coordinates';
   lat: Scalars['Float']['output'];
   lng: Scalars['Float']['output'];
-};
-
-export type CountReactionType = {
-  __typename: 'CountReactionType';
-  count: Scalars['Float']['output'];
-  type: ReactionType;
-};
-
-export type CountReactions = {
-  __typename: 'CountReactions';
-  reactions: Array<CountReactionType>;
 };
 
 export type CreateTaskInput = {
@@ -295,6 +278,7 @@ export type EventDataActionType = typeof EventDataActionType[keyof typeof EventD
 export const EventType = {
   ActivityArchived: 'ACTIVITY_ARCHIVED',
   ActivityNew: 'ACTIVITY_NEW',
+  ActivitySynced: 'ACTIVITY_SYNCED',
   ActivityUpdated: 'ACTIVITY_UPDATED',
   BankTransactionCancelled: 'BANK_TRANSACTION_CANCELLED',
   BankTransactionFailed: 'BANK_TRANSACTION_FAILED',
@@ -561,6 +545,7 @@ export type Mutation = {
   __typename: 'Mutation';
   addActivity: Activity;
   addReaction: Scalars['Boolean']['output'];
+  archiveActivity: Activity;
   bulkUpdateTags: Array<Tag>;
   bulkUpdateTasks: Array<Task>;
   createCategory: Category;
@@ -591,7 +576,7 @@ export type Mutation = {
 export type MutationAddActivityArgs = {
   content?: InputMaybe<Scalars['String']['input']>;
   contextId: Scalars['String']['input'];
-  contextType: ActivityContextType;
+  contextType: Scalars['String']['input'];
   parentId?: InputMaybe<Scalars['String']['input']>;
   type: ActivityType;
 };
@@ -601,6 +586,11 @@ export type MutationAddReactionArgs = {
   entity: Scalars['String']['input'];
   entityId: Scalars['String']['input'];
   type: ReactionType;
+};
+
+
+export type MutationArchiveActivityArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -707,6 +697,7 @@ export type MutationRegisterDeviceArgs = {
 export type MutationRemoveReactionArgs = {
   entity: Scalars['String']['input'];
   entityId: Scalars['String']['input'];
+  type: ReactionType;
 };
 
 
@@ -857,10 +848,10 @@ export type ProductType = typeof ProductType[keyof typeof ProductType];
 export type Query = {
   __typename: 'Query';
   activities: ActivitiesPaginated;
+  activity: Activity;
   appConfig: AppConfig;
   categoriesPaginated: CategoriesPaginated;
   category: Category;
-  countReactions: CountReactions;
   customers: CustomersPaginated;
   event: Event;
   getCategoriesByIds: Array<Category>;
@@ -869,6 +860,7 @@ export type Query = {
   getProductByIds: Array<Product>;
   pluginExternalStorage: Maybe<PluginExternalStorage>;
   reactions: ReactionsPaginated;
+  reactionsCount: ReactionsCount;
   siblingTasks: SiblingTasks;
   tagBySlug: Tag;
   tags: Tags;
@@ -886,12 +878,18 @@ export type Query = {
 
 export type QueryActivitiesArgs = {
   contextId: Scalars['String']['input'];
-  contextType: ActivityContextType;
+  contextType: Scalars['String']['input'];
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
   sortCreatedAt?: InputMaybe<SortDirection>;
   type?: InputMaybe<ActivityType>;
+};
+
+
+export type QueryActivityArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -904,12 +902,6 @@ export type QueryCategoriesPaginatedArgs = {
 
 export type QueryCategoryArgs = {
   id: Scalars['String']['input'];
-};
-
-
-export type QueryCountReactionsArgs = {
-  entity: Scalars['String']['input'];
-  entityId: Scalars['String']['input'];
 };
 
 
@@ -953,6 +945,12 @@ export type QueryReactionsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   sortCreatedAt?: InputMaybe<SortDirection>;
+};
+
+
+export type QueryReactionsCountArgs = {
+  entity: Scalars['String']['input'];
+  entityId: Scalars['String']['input'];
 };
 
 
@@ -1060,6 +1058,13 @@ export type Reaction = {
   userId: Scalars['String']['output'];
 };
 
+export type ReactionCount = {
+  __typename: 'ReactionCount';
+  count: Scalars['Float']['output'];
+  type: ReactionType;
+  userIds: Array<Scalars['String']['output']>;
+};
+
 /** Available reaction types */
 export const ReactionType = {
   Celebrate: 'CELEBRATE',
@@ -1070,6 +1075,11 @@ export const ReactionType = {
 } as const;
 
 export type ReactionType = typeof ReactionType[keyof typeof ReactionType];
+export type ReactionsCount = {
+  __typename: 'ReactionsCount';
+  reactions: Array<ReactionCount>;
+};
+
 export type ReactionsPaginated = {
   __typename: 'ReactionsPaginated';
   count: Scalars['Float']['output'];

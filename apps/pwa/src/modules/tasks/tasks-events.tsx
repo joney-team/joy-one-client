@@ -13,7 +13,7 @@ import QUERY_TASK_BY_ID, {
   type TaskByIdQueryVariables,
 } from "./graphql/queryTaskById.graphql";
 
-export const TasksRealtimeEvents: FC = () => {
+export const TasksEvents: FC = () => {
   const { state } = useTasks();
   const client = useApolloClient();
 

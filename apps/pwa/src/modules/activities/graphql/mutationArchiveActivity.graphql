@@ -1,0 +1,5 @@
+mutation ArchiveActivity($id: String!) {
+  archiveActivity(id: $id) {
+    _id
+  }
+}

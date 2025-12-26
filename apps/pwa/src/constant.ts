@@ -28,6 +28,7 @@ export const appEntities: Record<AppEntity, { name: () => string }> = {
   [AppEntity.CATEGORIES]: { name: () => t`Categories` },
   [AppEntity.PROMOTIONS]: { name: () => t`Promotions` },
   [AppEntity.HRM_TIMEKEEPINGS]: { name: () => t`Timekeepings` },
+  [AppEntity.ACTIVITIES]: { name: () => t`Activities` },
 };
 
 export const calendarViews: Record<CalendarView, { name: () => string }> = {

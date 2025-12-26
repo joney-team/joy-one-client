@@ -27,7 +27,6 @@ import { TaskDetailSubtasks } from "../../task-detail-subtasks";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { useTaskMenu } from "../task-menu/task-menu";
 import { TaskDetailHead } from "./task-detail-head";
-import { ActivityContextType } from "@/graphql/enums.graphql";
 
 const TaskDetailProperties = dynamic(
   () => import("./task-detail-properties").then((mod) => mod.TaskDetailProperties),
@@ -187,7 +186,7 @@ export const TaskDetail: FC = () => {
 
                     <Activities
                       key={modalId + "activities"}
-                      contextType={ActivityContextType.Task}
+                      contextType={AppEntity.TASKS}
                       contextId={task._id}
                     />
                   </Stack>
