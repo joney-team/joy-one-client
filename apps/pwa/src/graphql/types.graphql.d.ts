@@ -1336,6 +1336,7 @@ export type WorkspaceMember = {
   name: Scalars['String']['output'];
   phone: Maybe<Scalars['String']['output']>;
   roles: Array<WorkspaceMemberRole>;
+  userDisplayName: Maybe<Scalars['String']['output']>;
   userId: Scalars['String']['output'];
   workspaceId: Scalars['String']['output'];
 };

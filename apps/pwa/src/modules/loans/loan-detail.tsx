@@ -70,6 +70,7 @@ import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
+import { SectionTitle } from "@/components/session-title";
 
 const ModalCustomer = dynamic(
   () => import("../customers/customer-modal").then((mod) => mod.ModalCustomer),
@@ -261,166 +262,149 @@ export const LoanDetail: NextPage = () => {
       : undefined;
 
   return (
-    <Stack p={16}>
-      <Card shadow="xs">
-        <Group align="start">
-          <EntityImage src={customer.data.avatar} readonly size={80} radius={10} />
-          <Stack gap={10} flex={1}>
-            <Group justify="space-between" w="100%" align="start">
-              <Title fz={18} fw={600}>
-                {customer.data.name}
-              </Title>
+    <Stack p={0}>
+      <Stack p="sm">
+        <Card shadow="xs">
+          <Group align="start">
+            <EntityImage src={customer.data.avatar} readonly size={80} radius={10} />
+            <Stack gap={10} flex={1}>
+              <Group justify="space-between" w="100%" align="start">
+                <Title fz={18} fw={600}>
+                  {customer.data.name}
+                </Title>
 
-              <Group gap={10}>
-                {customer.data.phone &&
-                  workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
+                <Group gap={10}>
+                  {customer.data.phone &&
+                    workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
+                      <Anchor
+                        href={`tel:${customer.data.phone}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ActionIcon size="lg" radius={100}>
+                          <IconPhone size={18} />
+                        </ActionIcon>
+                      </Anchor>
+                    )}
+
+                  {(customer.data.location || customer.data.secondaryLocation) && (
                     <Anchor
-                      href={`tel:${customer.data.phone}`}
                       onClick={(e) => e.stopPropagation()}
+                      href={getGoogleMapLink(
+                        customer.data.location! || customer.data.secondaryLocation!
+                      )}
+                      target="_blank"
                     >
-                      <ActionIcon size="lg" radius={100}>
-                        <IconPhone size={18} />
+                      <ActionIcon size="lg" radius={100} variant="outline">
+                        <IconLocation size={18} />
                       </ActionIcon>
                     </Anchor>
                   )}
 
-                {(customer.data.location || customer.data.secondaryLocation) && (
-                  <Anchor
-                    onClick={(e) => e.stopPropagation()}
-                    href={getGoogleMapLink(
-                      customer.data.location! || customer.data.secondaryLocation!
-                    )}
-                    target="_blank"
-                  >
-                    <ActionIcon size="lg" radius={100} variant="outline">
-                      <IconLocation size={18} />
-                    </ActionIcon>
-                  </Anchor>
-                )}
-
-                {workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO) && (
-                  <ModalCustomer>
-                    {(modalCustomer) => (
-                      <Anchor
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          modalCustomer.open({
-                            customer: customer.data,
-                            onDone: async () => {},
-                          });
-                        }}
-                      >
-                        <ActionIcon size="lg" radius={100} variant="outline" color="gray.6">
-                          <IconEdit size={18} strokeWidth={1.5} />
-                        </ActionIcon>
-                      </Anchor>
-                    )}
-                  </ModalCustomer>
-                )}
+                  {workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO) && (
+                    <ModalCustomer>
+                      {(modalCustomer) => (
+                        <Anchor
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            modalCustomer.open({
+                              customer: customer.data,
+                              onDone: async () => {},
+                            });
+                          }}
+                        >
+                          <ActionIcon size="lg" radius={100} variant="outline" color="gray.6">
+                            <IconEdit size={18} strokeWidth={1.5} />
+                          </ActionIcon>
+                        </Anchor>
+                      )}
+                    </ModalCustomer>
+                  )}
+                </Group>
               </Group>
-            </Group>
 
-            <SimpleGrid cols={{ md: 4 }}>
-              <InfoCard
-                label={t`Birhtday`}
-                visible={!!customer.data?.birthday}
-                content={
-                  <Text truncate="end" fz={16} fw={500} maw={250}>
-                    {customer.data.birthday ? (
-                      <DateFormat value={customer.data.birthday} type="date" />
-                    ) : (
-                      "--"
-                    )}
-                  </Text>
-                }
-              />
-
-              <InfoCard
-                label={t`Gender`}
-                visible={!!customer.data?.gender}
-                content={
-                  <Text truncate="end" fz={16} fw={500} maw={250}>
-                    {customer.data.gender ? genders[customer.data.gender].name() : "--"}
-                  </Text>
-                }
-              />
-
-              <InfoCard
-                label={t`Phone`}
-                content={
-                  <Text truncate="end" fz={16} fw={500} maw={250}>
-                    {customer.data.phone ? formatPhoneNumber(customer.data.phone) : "--"}
-                  </Text>
-                }
-                href={`tel:${customer.data.phone}`}
-                visible={workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)}
-              />
-
-              <InfoCard
-                label={t`Email`}
-                href={`mailto:${customer.data.email}`}
-                visible={!!customer.data?.email}
-                content={
-                  <Text truncate="end" fz={16} fw={500} maw={250}>
-                    {customer.data.email}
-                  </Text>
-                }
-              />
-
-              <InfoCard
-                label={t`Loan package`}
-                content={
-                  <Text truncate="end" fz={16} fw={500} maw={250}>
-                    {loan.data.package.id} / {loanAssetTypes[loan.data.assetType]?.label()}
-                  </Text>
-                }
-              />
-
-              <InfoCard
-                label={t`Money amount`}
-                content={
-                  <Text truncate="end" fz={16} fw={500} maw={250}>
-                    <CurrencyFormat value={loan.data.amount} />
-                  </Text>
-                }
-              />
-
-              {workspace.isShouldEnableBranches && (
+              <SimpleGrid cols={{ md: 4 }}>
                 <InfoCard
-                  label={t`Workspace branch`}
+                  label={t`Birhtday`}
+                  visible={!!customer.data?.birthday}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
-                      {loan.data.workspaceBranch?.name || t`Main office`}
+                      {customer.data.birthday ? (
+                        <DateFormat value={customer.data.birthday} type="date" />
+                      ) : (
+                        "--"
+                      )}
                     </Text>
                   }
                 />
-              )}
 
-              <InfoCard
-                label={t`Loan contract`}
-                content={
-                  linkContractPdf ? (
-                    <Group gap={4} align="center">
-                      <IconFileTypePdf size={18} />
-                      <Trans>View contract</Trans>
-                    </Group>
-                  ) : (
-                    <Text fz={16} fw={500}>
-                      --
-                    </Text>
-                  )
-                }
-                href={linkContractPdf}
-              />
-
-              {linkLiquidationPdf && (
                 <InfoCard
-                  label={t`Liquidation statement`}
+                  label={t`Gender`}
+                  visible={!!customer.data?.gender}
                   content={
-                    linkLiquidationPdf ? (
+                    <Text truncate="end" fz={16} fw={500} maw={250}>
+                      {customer.data.gender ? genders[customer.data.gender].name() : "--"}
+                    </Text>
+                  }
+                />
+
+                <InfoCard
+                  label={t`Phone`}
+                  content={
+                    <Text truncate="end" fz={16} fw={500} maw={250}>
+                      {customer.data.phone ? formatPhoneNumber(customer.data.phone) : "--"}
+                    </Text>
+                  }
+                  href={`tel:${customer.data.phone}`}
+                  visible={workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)}
+                />
+
+                <InfoCard
+                  label={t`Email`}
+                  href={`mailto:${customer.data.email}`}
+                  visible={!!customer.data?.email}
+                  content={
+                    <Text truncate="end" fz={16} fw={500} maw={250}>
+                      {customer.data.email}
+                    </Text>
+                  }
+                />
+
+                <InfoCard
+                  label={t`Loan package`}
+                  content={
+                    <Text truncate="end" fz={16} fw={500} maw={250}>
+                      {loan.data.package.id} / {loanAssetTypes[loan.data.assetType]?.label()}
+                    </Text>
+                  }
+                />
+
+                <InfoCard
+                  label={t`Money amount`}
+                  content={
+                    <Text truncate="end" fz={16} fw={500} maw={250}>
+                      <CurrencyFormat value={loan.data.amount} />
+                    </Text>
+                  }
+                />
+
+                {workspace.isShouldEnableBranches && (
+                  <InfoCard
+                    label={t`Workspace branch`}
+                    content={
+                      <Text truncate="end" fz={16} fw={500} maw={250}>
+                        {loan.data.workspaceBranch?.name || t`Main office`}
+                      </Text>
+                    }
+                  />
+                )}
+
+                <InfoCard
+                  label={t`Loan contract`}
+                  content={
+                    linkContractPdf ? (
                       <Group gap={4} align="center">
                         <IconFileTypePdf size={18} />
-                        <Trans>View</Trans>
+                        <Trans>View contract</Trans>
                       </Group>
                     ) : (
                       <Text fz={16} fw={500}>
@@ -428,28 +412,47 @@ export const LoanDetail: NextPage = () => {
                       </Text>
                     )
                   }
-                  href={linkLiquidationPdf}
+                  href={linkContractPdf}
                 />
-              )}
 
-              <InfoCard
-                label={t`Status`}
-                content={
-                  <Text
-                    truncate="end"
-                    fz={16}
-                    fw={500}
-                    maw={250}
-                    c={loanStatuses[loan.data.status].color}
-                  >
-                    {loanStatuses[loan.data.status].label()}
-                  </Text>
-                }
-              />
-            </SimpleGrid>
-          </Stack>
-        </Group>
-      </Card>
+                {linkLiquidationPdf && (
+                  <InfoCard
+                    label={t`Liquidation statement`}
+                    content={
+                      linkLiquidationPdf ? (
+                        <Group gap={4} align="center">
+                          <IconFileTypePdf size={18} />
+                          <Trans>View</Trans>
+                        </Group>
+                      ) : (
+                        <Text fz={16} fw={500}>
+                          --
+                        </Text>
+                      )
+                    }
+                    href={linkLiquidationPdf}
+                  />
+                )}
+
+                <InfoCard
+                  label={t`Status`}
+                  content={
+                    <Text
+                      truncate="end"
+                      fz={16}
+                      fw={500}
+                      maw={250}
+                      c={loanStatuses[loan.data.status].color}
+                    >
+                      {loanStatuses[loan.data.status].label()}
+                    </Text>
+                  }
+                />
+              </SimpleGrid>
+            </Stack>
+          </Group>
+        </Card>
+      </Stack>
 
       {(function () {
         if (loan.data.status === LoanStatus.PENDING_SIGN) {
@@ -479,98 +482,96 @@ export const LoanDetail: NextPage = () => {
 
         return (
           <Stack className="LoanDetail">
-            <Stepper
-              active={activeStep}
-              size="xs"
-              onStepClick={(s) => {
-                if (s <= activeStep) {
-                  setPointedStep(s);
-                  isAutoRedirectStep.current = false;
-                }
-              }}
-            >
-              <Stepper.Step
-                label={<Trans>Customer information & KYC</Trans>}
-                icon={<IconUserScan size={18} />}
-                completedIcon={<IconShieldCheckered size={18} />}
-                allowStepSelect={activeStep >= 0}
-                loading={activeStep === 0 && customerKyc?.status === CustomerKycStatus.PENDING}
-                styles={{
-                  stepIcon: {
-                    borderColor: activeStep >= 1 ? color("primary") : undefined,
-                    color: customerKyc?.status === CustomerKycStatus.REJECTED ? "red" : undefined,
-                  },
+            <Stack px="sm">
+              <Stepper
+                active={activeStep}
+                size="xs"
+                onStepClick={(s) => {
+                  if (s <= activeStep) {
+                    setPointedStep(s);
+                    isAutoRedirectStep.current = false;
+                  }
                 }}
-                color={customerKyc?.status === CustomerKycStatus.REJECTED ? "red" : undefined}
-              />
+              >
+                <Stepper.Step
+                  label={<Trans>Customer information & KYC</Trans>}
+                  icon={<IconUserScan size={18} />}
+                  completedIcon={<IconShieldCheckered size={18} />}
+                  allowStepSelect={activeStep >= 0}
+                  loading={activeStep === 0 && customerKyc?.status === CustomerKycStatus.PENDING}
+                  styles={{
+                    stepIcon: {
+                      borderColor: activeStep >= 1 ? color("primary") : undefined,
+                      color: customerKyc?.status === CustomerKycStatus.REJECTED ? "red" : undefined,
+                    },
+                  }}
+                  color={customerKyc?.status === CustomerKycStatus.REJECTED ? "red" : undefined}
+                />
 
-              <Stepper.Step
-                label={<Trans>Loan application</Trans>}
-                icon={<IconClipboardText size={18} />}
-                completedIcon={<IconClipboardCheck size={18} />}
-                disabled={activeStep < 1}
-                allowStepSelect={activeStep >= 1}
-                loading={activeStep === 1 && loan.data.status === LoanStatus.PENDING}
-                styles={{
-                  stepIcon: {
-                    borderColor: activeStep >= 2 ? color("primary") : undefined,
-                    color: loan.data.status === LoanStatus.REJECTED ? "red" : undefined,
-                  },
-                }}
-                color={loan.data.status === LoanStatus.REJECTED ? "red" : undefined}
-              />
+                <Stepper.Step
+                  label={<Trans>Loan application</Trans>}
+                  icon={<IconClipboardText size={18} />}
+                  completedIcon={<IconClipboardCheck size={18} />}
+                  disabled={activeStep < 1}
+                  allowStepSelect={activeStep >= 1}
+                  loading={activeStep === 1 && loan.data.status === LoanStatus.PENDING}
+                  styles={{
+                    stepIcon: {
+                      borderColor: activeStep >= 2 ? color("primary") : undefined,
+                      color: loan.data.status === LoanStatus.REJECTED ? "red" : undefined,
+                    },
+                  }}
+                  color={loan.data.status === LoanStatus.REJECTED ? "red" : undefined}
+                />
 
-              <Stepper.Step
-                label={<Trans>Disbursement</Trans>}
-                icon={<IconCreditCardPay size={18} />}
-                completedIcon={<IconCreditCardPay size={18} />}
-                disabled={activeStep < 2}
-                allowStepSelect={activeStep >= 2}
-                loading={activeStep === 2}
-                styles={{
-                  stepIcon: {
-                    borderColor: activeStep >= 3 ? color("primary") : undefined,
-                  },
-                }}
-              />
+                <Stepper.Step
+                  label={<Trans>Disbursement</Trans>}
+                  icon={<IconCreditCardPay size={18} />}
+                  completedIcon={<IconCreditCardPay size={18} />}
+                  disabled={activeStep < 2}
+                  allowStepSelect={activeStep >= 2}
+                  loading={activeStep === 2}
+                  styles={{
+                    stepIcon: {
+                      borderColor: activeStep >= 3 ? color("primary") : undefined,
+                    },
+                  }}
+                />
 
-              <Stepper.Step
-                label={<Trans>Payment</Trans>}
-                icon={<IconAnalyze size={18} />}
-                completedIcon={<IconAnalyze size={18} />}
-                disabled={activeStep < 3}
-                allowStepSelect={activeStep >= 3}
-                loading={activeStep === 3}
-                styles={{
-                  stepIcon: {
-                    borderColor: activeStep >= 4 ? color("primary") : undefined,
-                  },
-                }}
-              />
-            </Stepper>
+                <Stepper.Step
+                  label={<Trans>Payment</Trans>}
+                  icon={<IconAnalyze size={18} />}
+                  completedIcon={<IconAnalyze size={18} />}
+                  disabled={activeStep < 3}
+                  allowStepSelect={activeStep >= 3}
+                  loading={activeStep === 3}
+                  styles={{
+                    stepIcon: {
+                      borderColor: activeStep >= 4 ? color("primary") : undefined,
+                    },
+                  }}
+                />
+              </Stepper>
+            </Stack>
+
             {
               [
-                <LoanCustomerKyc customer={customer.data} kyc={customerKyc} />,
-                <Container size="md">
-                  <LoanDocuments loan={loan.data} updateAssetData={onUpdateAssetData} />
+                <Container size={900}>
+                  <LoanCustomerKyc customer={customer.data} kyc={customerKyc} />
                 </Container>,
-                <Container size="md">
+                <LoanDocuments loan={loan.data} updateAssetData={onUpdateAssetData} />,
+                <Container size={900}>
                   <LoanDisburesement loan={loan.data} kyc={customerKyc} />
                 </Container>,
-                <LoanPayments loan={loan} />,
+                <Container fluid>
+                  <LoanPayments loan={loan} />
+                </Container>,
               ][pointedStep]
             }
 
-            <Container mt="md" size={800}>
+            <Container mt="xl" size={900}>
               <Stack gap="xs">
-                <Group gap={5}>
-                  <ThemeIcon color="dark" variant="transparent">
-                    <IconTimelineEvent />
-                  </ThemeIcon>
-                  <Text>
-                    <Trans>Activities</Trans>
-                  </Text>
-                </Group>
+                <SectionTitle name={<Trans>Activities</Trans>} icon={IconTimelineEvent} />
                 <Activities contextId={loan.data.id} contextType={AppEntity.LOANS} />
               </Stack>
 

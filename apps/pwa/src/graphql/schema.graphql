@@ -912,6 +912,7 @@ type WorkspaceMember {
   name: String!
   phone: String
   roles: [WorkspaceMemberRole!]!
+  userDisplayName: String
   userId: String!
   workspaceId: String!
 }
