@@ -104,6 +104,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       defaultValue,
       readonly = false,
       container,
+      autoFocus = false,
       ...rest
     },
     ref
@@ -147,7 +148,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
               onChange(e.editor.getHTML(), e.editor.getJSON());
             },
         immediatelyRender: false,
-        autofocus: rest.autoFocus,
+        autofocus: autoFocus,
         editable: !readonly,
       },
       []
