@@ -238,7 +238,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                   <Renderer visible={msg.type === MessageType.SEND}>
                     <Renderer visible={isFirstSession || needToShowDivider}>
                       <ModalUserInformation>
-                        {(open) => (
+                        {(modal) => (
                           <Group gap={3}>
                             <Anchor
                               fz={12}
@@ -246,7 +246,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                               ta="right"
                               onClick={() => {
                                 if (!senderMember?.userId) return;
-                                open(senderMember?.userId || "");
+                                modal.open(senderMember?.userId || "");
                               }}
                             >
                               {msg.resource === MessageResource.AI_ASSISTANT

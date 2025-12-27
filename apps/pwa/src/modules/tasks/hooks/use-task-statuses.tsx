@@ -12,15 +12,17 @@ import QUERY_TASK_STATUSES, {
 import { TaskContextType } from "@/graphql/enums.graphql";
 import { DefaultTaskStatusId } from "../tasks-types";
 
+export function getTaskStatuses(task: Pick<TaskDataFragment, "status" | "statuses">) {
+  const statuses = normalizeTaskStatuses(task.statuses);
+  const status = statuses.find((s) => s.id === task.status) ?? statuses[0];
+  return {
+    statuses,
+    status,
+  };
+}
+
 export const useTaskStatuses = (task: Pick<TaskDataFragment, "status" | "statuses">) => {
-  const statuses = useMemo<TaskStatus[]>(() => {
-    return normalizeTaskStatuses(task.statuses);
-  }, [task.status, task.statuses]);
-
-  const status = useMemo<TaskStatus>(() => {
-    return statuses.find((s) => s.id === task.status) ?? statuses[0];
-  }, [task.status, statuses]);
-
+  const { statuses, status } = useMemo(() => getTaskStatuses(task), [task]);
   return { statuses, status };
 };
 

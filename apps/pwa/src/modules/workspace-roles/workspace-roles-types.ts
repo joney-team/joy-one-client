@@ -99,7 +99,7 @@ export interface WorkspaceRoleDto {
   permissions: WorkspacePermission[];
 }
 
-export enum WorkspaceSpecialRoleId {
+export enum WorkspaceDefaultRoleId {
   OWNER = "OWNER",
   ADMIN = "ADMIN",
   MEMBER = "MEMBER",

@@ -7,6 +7,7 @@ import { ActionIcon, Badge, Group, InputWrapper, InputWrapperProps } from "@mant
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { WorkspaceRolesSelector } from "./workspace-roles-selector";
+import { useNormalizeRoles } from "../hooks/use-normalize-roles";
 
 type WorkspaceRoleOption = Pick<WorkspaceRoleEntity, "_id" | "name" | "color">;
 
@@ -18,13 +19,16 @@ interface WorkspaceRolesInputProps extends Omit<InputWrapperProps, "value" | "on
 }
 
 export const WorkspaceRolesInput: FC<WorkspaceRolesInputProps> = (props) => {
-  const { value, onChange, disabled, autoHide, ...rest } = props;
   const color = useColor();
-  const [roles, setRoles] = useState<WorkspaceRoleOption[]>(value);
+  const { value, onChange, disabled, autoHide, ...rest } = props;
+  const { normalizeRole } = useNormalizeRoles();
+  const [roles, setRoles] = useState<WorkspaceRoleOption[]>(value.map(normalizeRole));
 
   const onAdd = (role: WorkspaceRoleOption) => {
     const isSelected = roles.some((v) => role?._id === v._id);
-    const workspaceRoles = isSelected ? roles.filter((v) => v._id !== role._id) : [...roles, role];
+    const workspaceRoles = isSelected
+      ? roles.filter((v) => v._id !== role._id)
+      : [...roles, normalizeRole(role)];
     setRoles(workspaceRoles);
     props.onChange(workspaceRoles);
   };

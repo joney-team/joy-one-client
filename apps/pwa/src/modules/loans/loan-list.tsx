@@ -27,8 +27,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
 import {
   IconBan,
@@ -79,6 +78,7 @@ interface LoanListProps {
 }
 
 export const LoanList: FC<LoanListProps> = (props) => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const color = useColor();
   const location = useLocations();
@@ -266,7 +266,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             filter: {
               staticSelector: {
                 options: Object.values(LoanStatus).map((s) => ({
-                  label: loanStatuses[s].label(),
+                  label: t(loanStatuses[s].label),
                   value: s,
                   activeColor: loanStatusColors[s],
                   render: () => {
@@ -277,7 +277,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                         <Circle color={color(loanStatusColors[s])} size={8} />
 
                         <Text fz={14} fw={500}>
-                          {loanStatuses[s].label()}
+                          {t(loanStatuses[s].label)}
                         </Text>
                       </Group>
                     );
@@ -310,7 +310,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                     style={{ borderRadius: 100 }}
                     color={loanStatusColors[loan.status]}
                   >
-                    {loanStatuses[loan.status].label()}
+                    {t(loanStatuses[loan.status].label)}
                   </Badge>
 
                   <Renderer

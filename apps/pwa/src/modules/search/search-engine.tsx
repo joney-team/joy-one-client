@@ -244,7 +244,7 @@ export const SearchEngine: FC = () => {
                 },
                 rightSection: (
                   <Badge size="xs" color={loanStatusColors[loan.status]}>
-                    {loanStatuses[loan.status].label()}
+                    {t(loanStatuses[loan.status].label)}
                   </Badge>
                 ),
               };

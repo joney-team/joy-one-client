@@ -9,10 +9,10 @@
   }
 }
 
-.UserMention {
+.UnknownMention {
   font-size: 80%;
-  background: color-mix(in srgb, var(--app-primary-color), transparent 95%);
-  color: var(--app-primary-color);
+  background: color-mix(in srgb, var(--mantine-color-gray-6), transparent 95%);
+  color: var(--mantine-color-gray-6);
   padding: 0.25rem 0.375rem;
   border-radius: var(--mantine-radius-default);
   font-weight: 500;

@@ -1,7 +1,7 @@
 "use client";
 
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
+import { WorkspaceDefaultRoleId } from "@/modules/workspace-roles/workspace-roles-types";
 import { Trans } from "@lingui/react/macro";
 import { Center, em, Stack, Text, Title } from "@mantine/core";
 import { FC } from "react";
@@ -11,7 +11,7 @@ import { useWorkspace } from "../workspace-context";
 
 export const WorkspaceArchived: FC = () => {
   const workspace = useWorkspace();
-  const isOwner = workspace.userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER);
+  const isOwner = workspace.userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER);
   const ownerName = "Owner";
 
   return (

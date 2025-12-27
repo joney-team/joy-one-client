@@ -2,9 +2,12 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
+import { classNames } from "@/utils/ui.utils";
 import { alpha, Button as ButtonMantine, ButtonProps as ButtonPropsMantine } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import { FC, MouseEvent, ReactNode, useMemo, useState } from "react";
+
+import styles from "./button.module.css";
 
 type ButtonSize = NonNullable<ButtonPropsMantine["size"]>;
 
@@ -116,6 +119,9 @@ export const Button: FC<ButtonProps> = ({
     <ButtonMantine
       {...rest}
       component={component}
+      className={classNames(styles.Button, rest.className, {
+        [styles.isLink]: "href" in rest && !!rest.href,
+      })}
       href={href}
       leftSection={
         LeftIcon ? (

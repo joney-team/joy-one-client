@@ -19,7 +19,7 @@ import { Avatar } from "@/components/avatar";
 import { useWorkspace } from "../workspaces/workspace-context";
 import QUERY_ACTIVITIES from "./graphql/queryActivities.graphql";
 
-export const ActivitiesInput: FC<ActivitiesProps & { parentId?: string; autoFocus?: boolean }> = ({
+export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?: boolean }> = ({
   contextType,
   contextId,
   parentId,

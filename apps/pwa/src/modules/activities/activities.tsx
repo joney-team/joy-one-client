@@ -3,7 +3,7 @@
 import { useQuery } from "@apollo/client/react";
 import { Stack } from "@mantine/core";
 import { FC } from "react";
-import { ActivitiesInput } from "./activities-input";
+import { ActivityInput } from "./activity-input";
 import { ActivitiesProps } from "./activities-types";
 import { ActivityCard } from "./activity-card";
 import QUERY_ACTIVITIES, {
@@ -37,7 +37,7 @@ export const Activities: FC<ActivitiesProps> = (props) => {
         <ActivityCard key={activity._id} activity={activity} />
       ))}
 
-      <ActivitiesInput {...props} />
+      <ActivityInput {...props} />
       <ActivitiesEvents />
     </Stack>
   );

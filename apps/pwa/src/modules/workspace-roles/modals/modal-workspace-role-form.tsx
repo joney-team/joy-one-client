@@ -12,7 +12,7 @@ import {
 import {
   WorkspacePermission,
   WorkspaceRoleDto,
-  WorkspaceSpecialRoleId,
+  WorkspaceDefaultRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -47,8 +47,8 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const close = () => modals.close("ModalRoleForm");
-  const isAbleToEdit = ![WorkspaceSpecialRoleId.OWNER, WorkspaceSpecialRoleId.ADMIN].includes(
-    props.roleId as WorkspaceSpecialRoleId
+  const isAbleToEdit = ![WorkspaceDefaultRoleId.OWNER, WorkspaceDefaultRoleId.ADMIN].includes(
+    props.roleId as WorkspaceDefaultRoleId
   );
 
   const getInitialDto = (): WorkspaceRoleDto => {
@@ -61,13 +61,13 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 
     if (!isAbleToEdit)
       return {
-        name: workspaceSpecialRoleIds[props.roleId as WorkspaceSpecialRoleId]?.name(),
+        name: workspaceSpecialRoleIds[props.roleId as WorkspaceDefaultRoleId]?.name(),
         permissions: Object.values(WorkspacePermission),
       };
 
-    if (props.roleId === WorkspaceSpecialRoleId.MEMBER) {
+    if (props.roleId === WorkspaceDefaultRoleId.MEMBER) {
       return {
-        name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.MEMBER]?.name(),
+        name: workspaceSpecialRoleIds[WorkspaceDefaultRoleId.MEMBER]?.name(),
         permissions: workspace.settings.memberPermissions || [],
         description: "",
       };
@@ -92,7 +92,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
 
-    if (props.roleId === WorkspaceSpecialRoleId.MEMBER) {
+    if (props.roleId === WorkspaceDefaultRoleId.MEMBER) {
       await setWorkspaceSettings({
         ...workspace.settings,
         memberPermissions: values.permissions,
@@ -126,11 +126,11 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
       <TextInput
         label={t`Name`}
         withAsterisk
-        disabled={!isAbleToEdit || props.roleId === WorkspaceSpecialRoleId.MEMBER}
+        disabled={!isAbleToEdit || props.roleId === WorkspaceDefaultRoleId.MEMBER}
         {...form.getInputProps("name")}
       />
 
-      {isAbleToEdit && props.roleId !== WorkspaceSpecialRoleId.MEMBER && (
+      {isAbleToEdit && props.roleId !== WorkspaceDefaultRoleId.MEMBER && (
         <Textarea
           label={t`Description`}
           {...form.getInputProps("description")}

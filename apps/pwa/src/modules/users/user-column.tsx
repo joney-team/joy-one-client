@@ -27,8 +27,13 @@ export const userColumn = (args?: UserColumnArgs): Column => {
 
       return (
         <ModalUserInformation>
-          {(open) => (
-            <Group gap={8} className="clickable" onClick={() => open(user.userId)} wrap="nowrap">
+          {(modal) => (
+            <Group
+              gap={8}
+              className="clickable"
+              onClick={() => modal.open(user.userId)}
+              wrap="nowrap"
+            >
               <Avatar user={user} size="sm" />
               <Stack gap={0} flex={1}>
                 <Text fz={16} fw={500} truncate>

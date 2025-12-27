@@ -3,16 +3,18 @@
 import { List } from "@/components/list";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { appEntities } from "@/constant";
+import { EventType } from "@/graphql/enums.graphql";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Badge, Group, Stack } from "@mantine/core";
 import { IconEdit, IconForms } from "@tabler/icons-react";
 import { type FC } from "react";
-import { EventType } from "@/graphql/enums.graphql";
 import { customFieldTypes } from "./custom-field-constants";
 import { CustomFieldEntity, CustomFieldType } from "./custom-field-types";
 import { OnModalCustomField } from "./modals/modal-custom-field";
-import { Trans } from "@lingui/react/macro";
 
 export const CustomFieldList: FC = () => {
+  const { t } = useLingui();
+
   return (
     <Stack p={16}>
       <List<CustomFieldEntity>
@@ -38,7 +40,7 @@ export const CustomFieldList: FC = () => {
                 <Group>
                   {value?.map((entity) => (
                     <Badge variant="light" key={entity} color="gray">
-                      {appEntities[entity].name()}
+                      {t(appEntities[entity].name)}
                     </Badge>
                   ))}
                 </Group>

@@ -20,7 +20,7 @@ import {
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Currency } from "@joy-one-client/utils/currency";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Badge,
   Card,
@@ -43,6 +43,7 @@ import { FC } from "react";
 export const slotGroupColors = ["primary", "orange", "teal"];
 
 export const WorkspaceOperationSettings: FC = () => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const color = useColor();
 
@@ -271,7 +272,7 @@ export const WorkspaceOperationSettings: FC = () => {
                 return (
                   <Switch
                     key={e}
-                    label={appEntities[e].name()}
+                    label={t(appEntities[e].name)}
                     defaultChecked={isAvailable}
                     onChange={toggle}
                   />

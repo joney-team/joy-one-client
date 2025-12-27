@@ -493,6 +493,36 @@ The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](
 """
 scalar JSONObject
 
+type Loan {
+  amount: Float!
+  assetType: LoanAssetType!
+  code: String!
+  customer: Customer!
+  customerId: String!
+  id: String!
+  status: LoanStatus!
+}
+
+"""Available loan asset types"""
+enum LoanAssetType {
+  BUSINESS_PERMIT
+  CAR_REGISTRATION
+  ICLOUD
+  LAND_CERTIFICATE
+  MOTOBIKE_REGISTRATION
+}
+
+"""Available loan statuses"""
+enum LoanStatus {
+  APPROVED
+  COMPLETED
+  FULFILLED
+  OVERDUE
+  PENDING
+  PENDING_SIGN
+  REJECTED
+}
+
 type LocationEntity {
   address: String
   coordinates: Coordinates
@@ -627,15 +657,18 @@ type Query {
   appConfig: AppConfig!
   categoriesPaginated(limit: Float = 30, offset: Float, query: JSONObject): CategoriesPaginated!
   category(id: String!): Category!
+  customer(id: String!): Customer!
   customers(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): CustomersPaginated!
   event(id: String!): Event!
   getCategoriesByIds(ids: [String!]!): [Category!]!
   getCategoryBySlug(slug: String!): Category!
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
+  loan(id: String!): Loan!
   pluginExternalStorage: PluginExternalStorage
   reactions(entity: String!, entityId: String!, ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): ReactionsPaginated!
   reactionsCount(entity: String!, entityId: String!): ReactionsCount!
+  search(entities: [String!]!, limit: Int, query: String!): [SearchResult!]!
   siblingTasks(_id: String!): SiblingTasks!
   tagBySlug(slug: String!): Tag!
   tags(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, type: String): Tags!
@@ -691,6 +724,91 @@ type RelatedEntity {
   entity: String!
   id: String
   index: Boolean
+}
+
+interface SearchResult {
+  entity: String!
+  id: String!
+}
+
+type SearchResultCategory implements SearchResult {
+  entity: String!
+  id: String!
+  name: String!
+}
+
+type SearchResultCustomer implements SearchResult {
+  code: String!
+  entity: String!
+  id: String!
+  name: String!
+  phone: String
+}
+
+type SearchResultLoan implements SearchResult {
+  code: String!
+  customerName: String!
+  customerPhone: String
+  entity: String!
+  id: String!
+}
+
+type SearchResultOrders implements SearchResult {
+  code: String!
+  entity: String!
+  id: String!
+}
+
+type SearchResultPartner implements SearchResult {
+  entity: String!
+  id: String!
+  name: String!
+  phone: String
+}
+
+type SearchResultPrescriptions implements SearchResult {
+  entity: String!
+  id: String!
+  name: String!
+  note: String!
+}
+
+type SearchResultProduct implements SearchResult {
+  entity: String!
+  id: String!
+  name: String!
+}
+
+type SearchResultReceipt implements SearchResult {
+  code: String!
+  entity: String!
+  id: String!
+}
+
+type SearchResultTags implements SearchResult {
+  entity: String!
+  id: String!
+  name: String!
+  type: String!
+}
+
+type SearchResultTask implements SearchResult {
+  code: String!
+  entity: String!
+  id: String!
+  name: String!
+}
+
+type SearchResultWorkspaceMember implements SearchResult {
+  avatar: String
+  color: String
+  email: String!
+  entity: String!
+  id: String!
+  memberId: String
+  name: String!
+  phone: String
+  userId: String!
 }
 
 type SiblingTasks {

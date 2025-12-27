@@ -51,7 +51,7 @@ import {
   IconUser,
   IconX,
 } from "@tabler/icons-react";
-import { FC, Fragment, ReactNode, useRef, useState } from "react";
+import { FC, forwardRef, Fragment, ReactNode, useImperativeHandle, useRef, useState } from "react";
 
 const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> = (props) => {
   const { user } = props;
@@ -334,63 +334,87 @@ const ShortInfoSession: FC<{
   );
 };
 
-export const ModalUserInformation: FC<{
-  children: (open: (userId: string) => void) => ReactNode;
-}> = ({ children }) => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const userId = useRef<string | null>(null);
+export interface ModalUserInformationRef {
+  open: (userId: string) => void;
+  close: () => void;
+}
 
-  const userInformation = useFetch({
-    autoFetch: false,
-    fetch: async () => {
-      if (!userId.current) throw Error("Unaccessable");
-      return getUserPublicInformation(userId.current!).catch((error) => {
-        onError(error);
-        close();
-      });
-    },
-    refetchEvents: {
-      types: [
-        EventType.WorkspaceMemberUpdated,
-        EventType.WorkspaceMemberLeaved,
-        EventType.WorkspaceMemberTransferOwner,
-      ],
-      condition: () => !!userId.current,
-    },
-  });
+export interface ModalUserInformationProps {
+  children?: (ref: ModalUserInformationRef) => ReactNode;
+}
 
-  const onClose = () => {
-    userInformation.reset();
-    close();
-  };
+export const ModalUserInformation = forwardRef<ModalUserInformationRef, ModalUserInformationProps>(
+  (props, ref) => {
+    const { children } = props;
+    const [userId, setUserId] = useState<string | null>(null);
 
-  return (
-    <Fragment>
-      {children((id) => {
-        userId.current = id;
-        userInformation.fetch();
-        open();
-      })}
+    const userInformation = useFetch({
+      autoFetch: false,
+      fetch: async (query: { userId: string }) => {
+        if (!query.userId) throw Error("Unaccessable");
+        return getUserPublicInformation(query.userId).catch((error) => {
+          onError(error);
+          setUserId(null);
+        });
+      },
+      refetchEvents: {
+        types: [
+          EventType.WorkspaceMemberUpdated,
+          EventType.WorkspaceMemberLeaved,
+          EventType.WorkspaceMemberTransferOwner,
+        ],
+        condition: () => !!userId,
+      },
+    });
 
-      <Modal
-        opened={opened}
-        onClose={onClose}
-        withCloseButton={false}
-        size="xl"
-        zIndex={zIndexes.commonModals}
-      >
-        <Stack>
-          {!!userInformation.data && userInformation.data._id === userId.current && (
-            <UserInformation user={userInformation.data} onClose={onClose} />
-          )}
+    useImperativeHandle(ref, () => ({
+      open: (userId) => {
+        setUserId(userId);
+        userInformation.fetch({ query: { userId } });
+      },
+      close: () => {
+        setUserId(null);
+      },
+    }));
 
-          {userInformation.isFetching && (
-            <Stack p={16}>
-              <Skeleton height={200} />
-            </Stack>
-          )}
-        </Stack>
-      </Modal>
-    </Fragment>
-  );
-};
+    const onClose = () => {
+      userInformation.reset();
+      setUserId(null);
+    };
+
+    return (
+      <Fragment>
+        {typeof children === "function" &&
+          children({
+            open: (id) => {
+              setUserId(id);
+              userInformation.fetch({ query: { userId: id } });
+            },
+            close: () => {
+              setUserId(null);
+            },
+          })}
+
+        <Modal
+          opened={!!userId}
+          onClose={onClose}
+          withCloseButton={false}
+          size="xl"
+          zIndex={zIndexes.commonModals}
+        >
+          <Stack>
+            {!!userInformation.data && userInformation.data._id === userId && (
+              <UserInformation user={userInformation.data} onClose={onClose} />
+            )}
+
+            {userInformation.isFetching && (
+              <Stack p={16}>
+                <Skeleton height={200} />
+              </Stack>
+            )}
+          </Stack>
+        </Modal>
+      </Fragment>
+    );
+  }
+);

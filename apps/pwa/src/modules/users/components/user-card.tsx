@@ -30,7 +30,7 @@ export const UserCard: FC<UserCardProps> = (props) => {
 
   return (
     <ModalUserInformation>
-      {(open) => (
+      {(modal) => (
         <Card
           ref={hover.ref}
           key={user.userId}
@@ -54,7 +54,7 @@ export const UserCard: FC<UserCardProps> = (props) => {
               return props.onClick(e);
             }
           }}
-          onDoubleClick={() => open(user.userId)}
+          onDoubleClick={() => modal.open(user.userId)}
         >
           <Group gap={8} wrap="nowrap">
             <Avatar

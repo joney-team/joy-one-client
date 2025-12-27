@@ -18,7 +18,7 @@ import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/worksp
 import {
   WorkspacePermission,
   WorkspaceRoleEntity,
-  WorkspaceSpecialRoleId,
+  WorkspaceDefaultRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
@@ -67,8 +67,8 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
       name: _app?.member.name || "",
       roles: _app?.member.roles || [
         {
-          _id: WorkspaceSpecialRoleId.ADMIN,
-          name: workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name(),
+          _id: WorkspaceDefaultRoleId.ADMIN,
+          name: workspaceSpecialRoleIds[WorkspaceDefaultRoleId.ADMIN].name(),
         },
       ],
       workspaceBranches: _app?.member.workspaceBranches || [],

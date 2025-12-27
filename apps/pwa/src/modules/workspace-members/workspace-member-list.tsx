@@ -8,7 +8,10 @@ import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-s
 import { EventType } from "@/graphql/enums.graphql";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
-import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
+import {
+  ModalUserInformation,
+  type ModalUserInformationRef,
+} from "@/modules/users/modals/modal-user-information";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
 import { getWorkspaceBranchByIds } from "@/modules/workspace-branches/workspace-branches-service";
 import {
@@ -18,20 +21,23 @@ import {
 import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import {
+  WorkspaceDefaultRoleId,
   WorkspacePermission,
-  WorkspaceSpecialRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Badge, Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconBuilding, IconLock, IconMail, IconPhone } from "@tabler/icons-react";
-import { FC } from "react";
-import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants";
+import { FC, Fragment, useRef } from "react";
+import { useNormalizeRoles } from "../workspace-roles/hooks/use-normalize-roles";
 
 export const WorkspaceMemberList: FC = () => {
   const workspace = useWorkspace();
   const color = useColor();
+  const { normalizeRole } = useNormalizeRoles();
+  const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
 
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
     return [
@@ -49,21 +55,22 @@ export const WorkspaceMemberList: FC = () => {
         columns={{
           name: {
             defaultWidth: 300,
-            name: t`Name`,
+            name: <Trans>Name</Trans>,
             render: ({ data }) => (
-              <ModalUserInformation>
-                {(open) => (
-                  <Group gap={5} py={5} className="clickable" onClick={() => open(data.userId)}>
-                    <Avatar user={data} size={30} />
-                    <Clickable>{data.name || t`Unnamed`}</Clickable>
-                  </Group>
-                )}
-              </ModalUserInformation>
+              <Group
+                gap={5}
+                py={5}
+                className="clickable"
+                onClick={() => modalUserInformationRef.current?.open(data.userId)}
+              >
+                <Avatar user={data} size={30} />
+                <Clickable>{data.name || t`Unnamed`}</Clickable>
+              </Group>
             ),
           },
           createdAt: dateTimeColumn({
             valuePath: "joinedAt",
-            name: t`Joined at`,
+            name: <Trans>Joined at</Trans>,
             isShowRelativeTime: true,
             hideTime: true,
             isHasFilter: false,
@@ -72,7 +79,7 @@ export const WorkspaceMemberList: FC = () => {
           }),
           email: {
             icon: IconMail,
-            name: t`Email`,
+            name: <Trans>Email</Trans>,
             defaultWidth: 200,
             render: ({ data }) => {
               if (!data.email) return null;
@@ -88,7 +95,7 @@ export const WorkspaceMemberList: FC = () => {
           },
           phone: {
             icon: IconPhone,
-            name: t`Phone`,
+            name: <Trans>Phone</Trans>,
             defaultWidth: 200,
             render: ({ data }) => {
               if (!data.phone) return null;
@@ -101,22 +108,23 @@ export const WorkspaceMemberList: FC = () => {
             },
           },
           roles: {
-            name: t`Role`,
+            name: <Trans>Role</Trans>,
             icon: IconAccessible,
             render: ({ data }) => {
-              const isOwner = data.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER);
+              const roles = data.roles.map(normalizeRole);
+              const owner = roles.find((v) => v._id === WorkspaceDefaultRoleId.OWNER);
               const isHasPermission = workspace.hasPermission(
                 WorkspacePermission.WORKSPACE_ROLES_MANAGER
               );
 
-              if (isOwner) {
+              if (owner) {
                 return (
                   <Badge
                     variant="light"
                     color={color("primary")}
                     rightSection={<IconLock size={13} style={{ marginLeft: -3 }} />}
                   >
-                    {workspaceSpecialRoleIds[WorkspaceSpecialRoleId.OWNER].name()}
+                    {owner.name}
                   </Badge>
                 );
               }
@@ -145,11 +153,15 @@ export const WorkspaceMemberList: FC = () => {
           },
           workspaceBranchIds: {
             defaultWidth: 300,
-            name: t`Branch`,
+            name: <Trans>Branch</Trans>,
             icon: IconBuilding,
             render: ({ data }) => {
               if (data.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)) {
-                return <Badge variant="light">{t`All branches`}</Badge>;
+                return (
+                  <Badge variant="light">
+                    <Trans>All branches</Trans>
+                  </Badge>
+                );
               }
 
               return (
@@ -210,64 +222,67 @@ export const WorkspaceMemberList: FC = () => {
           EventType.WorkspaceMemberTransferOwner,
         ]}
       />
+
+      <ModalUserInformation ref={modalUserInformationRef} />
     </Stack>
   );
 };
 
 const MemberCard: FC<{ member: WorkspaceMemberLegacy }> = (props) => {
   const { member } = props;
+  const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
 
   return (
-    <ModalUserInformation>
-      {(open) => (
-        <Card
-          key={member.userId}
-          p={10}
-          shadow="xs"
-          style={{ cursor: "pointer" }}
-          onClick={() => open(member.userId)}
-        >
-          <Group align="start" wrap="nowrap" gap={10}>
-            <Avatar user={member} size={40} />
+    <Fragment>
+      <Card
+        key={member.userId}
+        p={10}
+        shadow="xs"
+        style={{ cursor: "pointer" }}
+        onClick={() => open(member.userId)}
+      >
+        <Group align="start" wrap="nowrap" gap={10}>
+          <Avatar user={member} size={40} />
 
-            <Stack gap={5} flex={1}>
-              <Group justify="space-between" w="100%" wrap="nowrap" align="start">
-                <Text fw={500}>{member.name || "Unamed"}</Text>
+          <Stack gap={5} flex={1}>
+            <Group justify="space-between" w="100%" wrap="nowrap" align="start">
+              <Text fw={500}>{member.name || "Unamed"}</Text>
 
-                {member.color && <ColorSwatch color={member.color} size={10} />}
-              </Group>
+              {member.color && <ColorSwatch color={member.color} size={10} />}
+            </Group>
 
-              {member.email && (
-                <Group gap={5} wrap="nowrap">
-                  <ThemeIcon color="dark" size="xs" variant="transparent">
-                    <IconMail strokeWidth={1.5} size={16} />
-                  </ThemeIcon>
-                  <Text fz={12}>{member.email}</Text>
-                </Group>
-              )}
-
-              {member.phone && (
-                <Group gap={5} wrap="nowrap">
-                  <ThemeIcon color="dark" size="xs" variant="transparent">
-                    <IconPhone strokeWidth={1.5} size={16} />
-                  </ThemeIcon>
-                  <Text fz={12}>{member.phone}</Text>
-                </Group>
-              )}
-
+            {member.email && (
               <Group gap={5} wrap="nowrap">
                 <ThemeIcon color="dark" size="xs" variant="transparent">
-                  <IconAccessible strokeWidth={1.5} size={16} />
+                  <IconMail strokeWidth={1.5} size={16} />
                 </ThemeIcon>
-
-                <Text fz={12} fw={500}>
-                  {getWorkspaceMemberRoleLabel(member)}
-                </Text>
+                <Text fz={12}>{member.email}</Text>
               </Group>
-            </Stack>
-          </Group>
-        </Card>
-      )}
-    </ModalUserInformation>
+            )}
+
+            {member.phone && (
+              <Group gap={5} wrap="nowrap">
+                <ThemeIcon color="dark" size="xs" variant="transparent">
+                  <IconPhone strokeWidth={1.5} size={16} />
+                </ThemeIcon>
+                <Text fz={12}>{member.phone}</Text>
+              </Group>
+            )}
+
+            <Group gap={5} wrap="nowrap">
+              <ThemeIcon color="dark" size="xs" variant="transparent">
+                <IconAccessible strokeWidth={1.5} size={16} />
+              </ThemeIcon>
+
+              <Text fz={12} fw={500}>
+                {getWorkspaceMemberRoleLabel(member)}
+              </Text>
+            </Group>
+          </Stack>
+        </Group>
+      </Card>
+
+      <ModalUserInformation ref={modalUserInformationRef} />
+    </Fragment>
   );
 };

@@ -1,0 +1,12 @@
+query LoanMention($loanId: String!) {
+  loan(id: $loanId) {
+    id
+    code
+    status
+    assetType
+    amount
+    customer {
+      name
+    }
+  }
+}

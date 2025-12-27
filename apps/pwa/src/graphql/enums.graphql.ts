@@ -271,6 +271,28 @@ export const GetTaskStatusesMode = {
 } as const;
 
 export type GetTaskStatusesMode = typeof GetTaskStatusesMode[keyof typeof GetTaskStatusesMode];
+/** Available loan asset types */
+export const LoanAssetType = {
+  BusinessPermit: 'BUSINESS_PERMIT',
+  CarRegistration: 'CAR_REGISTRATION',
+  Icloud: 'ICLOUD',
+  LandCertificate: 'LAND_CERTIFICATE',
+  MotobikeRegistration: 'MOTOBIKE_REGISTRATION'
+} as const;
+
+export type LoanAssetType = typeof LoanAssetType[keyof typeof LoanAssetType];
+/** Available loan statuses */
+export const LoanStatus = {
+  Approved: 'APPROVED',
+  Completed: 'COMPLETED',
+  Fulfilled: 'FULFILLED',
+  Overdue: 'OVERDUE',
+  Pending: 'PENDING',
+  PendingSign: 'PENDING_SIGN',
+  Rejected: 'REJECTED'
+} as const;
+
+export type LoanStatus = typeof LoanStatus[keyof typeof LoanStatus];
 /** Available external storage providers */
 export const PluginExternalStorageProvider = {
   AwsS3: 'AWS_S3'

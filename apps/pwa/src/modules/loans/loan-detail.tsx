@@ -7,6 +7,7 @@ import { Errored } from "@/components/errored";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
+import { SectionTitle } from "@/components/session-title";
 import { genders } from "@/constant";
 import { EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
@@ -30,8 +31,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { formatPhoneNumber } from "@/utils/phone.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -43,7 +43,6 @@ import {
   Stack,
   Stepper,
   Text,
-  ThemeIcon,
   Title,
 } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -70,7 +69,6 @@ import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
-import { SectionTitle } from "@/components/session-title";
 
 const ModalCustomer = dynamic(
   () => import("../customers/customer-modal").then((mod) => mod.ModalCustomer),
@@ -134,6 +132,7 @@ const Activities = dynamic(
 );
 
 export const LoanDetail: NextPage = () => {
+  const { t } = useLingui();
   const params = useParams();
   const code = params.code as string;
   const router = useRouter();
@@ -444,7 +443,7 @@ export const LoanDetail: NextPage = () => {
                       maw={250}
                       c={loanStatuses[loan.data.status].color}
                     >
-                      {loanStatuses[loan.data.status].label()}
+                      {t(loanStatuses[loan.data.status].label)}
                     </Text>
                   }
                 />

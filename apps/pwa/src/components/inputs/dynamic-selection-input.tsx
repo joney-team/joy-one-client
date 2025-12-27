@@ -55,7 +55,7 @@ export const DynamicSelectionInput = ({
               data={Object.values(AppEntity).map((entity) => {
                 return {
                   value: entity,
-                  label: appEntities[entity].name(),
+                  label: t(appEntities[entity].name),
                 };
               })}
             />

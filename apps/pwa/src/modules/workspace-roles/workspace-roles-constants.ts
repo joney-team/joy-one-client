@@ -1,19 +1,28 @@
-import { t } from "@lingui/core/macro";
+import { defineMessage, MacroMessageDescriptor, t } from "@lingui/core/macro";
 import {
   WorkspacePermission,
   WorkspaceRoleEntity,
-  WorkspaceSpecialRoleId,
+  WorkspaceDefaultRoleId,
 } from "./workspace-roles-types";
 
-export const workspaceSpecialRoleIds: Record<WorkspaceSpecialRoleId, { name: () => string }> = {
-  [WorkspaceSpecialRoleId.OWNER]: { name: () => t`Owner` },
-  [WorkspaceSpecialRoleId.ADMIN]: { name: () => t`Admin` },
-  [WorkspaceSpecialRoleId.MEMBER]: { name: () => t`Member` },
+export const workspaceDefaultRoles: Record<
+  WorkspaceDefaultRoleId,
+  { name: MacroMessageDescriptor }
+> = {
+  [WorkspaceDefaultRoleId.OWNER]: { name: defineMessage`Owner` },
+  [WorkspaceDefaultRoleId.ADMIN]: { name: defineMessage`Admin` },
+  [WorkspaceDefaultRoleId.MEMBER]: { name: defineMessage`Member` },
+};
+
+export const workspaceSpecialRoleIds: Record<WorkspaceDefaultRoleId, { name: () => string }> = {
+  [WorkspaceDefaultRoleId.OWNER]: { name: () => t`Owner` },
+  [WorkspaceDefaultRoleId.ADMIN]: { name: () => t`Admin` },
+  [WorkspaceDefaultRoleId.MEMBER]: { name: () => t`Member` },
 };
 
 export const getWorkspaceRoleName = (role: Pick<WorkspaceRoleEntity, "name" | "_id">): string => {
-  if (Object.values(WorkspaceSpecialRoleId).includes(role._id as WorkspaceSpecialRoleId)) {
-    return workspaceSpecialRoleIds[role._id as WorkspaceSpecialRoleId].name();
+  if (Object.values(WorkspaceDefaultRoleId).includes(role._id as WorkspaceDefaultRoleId)) {
+    return workspaceSpecialRoleIds[role._id as WorkspaceDefaultRoleId].name();
   }
 
   return role.name;

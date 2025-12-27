@@ -8,8 +8,7 @@ import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Card, CardProps, em, Group, Stack, Text } from "@mantine/core";
 import { IconFileTypePdf } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
@@ -22,6 +21,7 @@ interface LoanCardProps {
 }
 
 export const LoanCard: FC<LoanCardProps> = (props) => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const { data: loan } = props;
   const customer = loan.customer;
@@ -89,7 +89,7 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
         </Group>
 
         <Stack align="end">
-          <Badge color={loanStatusColors[loan.status]}>{loanStatuses[loan.status].label()}</Badge>
+          <Badge color={loanStatusColors[loan.status]}>{t(loanStatuses[loan.status].label)}</Badge>
 
           {loan.status === LoanStatus.REJECTED && (
             <Text fz={em(13)} fw={500} c="red">

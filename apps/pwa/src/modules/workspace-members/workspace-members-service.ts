@@ -5,7 +5,7 @@ import {
   getWorkspaceRoleName,
   workspaceSpecialRoleIds,
 } from "../workspace-roles/workspace-roles-constants";
-import { WorkspaceSpecialRoleId } from "../workspace-roles/workspace-roles-types";
+import { WorkspaceDefaultRoleId } from "../workspace-roles/workspace-roles-types";
 import {
   UpdateWorkspaceMemberDto,
   VerifyInvitaionTokenResponse,
@@ -58,15 +58,15 @@ export function getWorkspaceMemberRoleLabel(
   if (!userMember.memberId) return t`Guest`;
 
   if (userMember.roles.length === 0) {
-    return workspaceSpecialRoleIds[WorkspaceSpecialRoleId.MEMBER].name();
+    return workspaceSpecialRoleIds[WorkspaceDefaultRoleId.MEMBER].name();
   }
 
-  if (userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER)) {
-    return workspaceSpecialRoleIds[WorkspaceSpecialRoleId.OWNER].name();
+  if (userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER)) {
+    return workspaceSpecialRoleIds[WorkspaceDefaultRoleId.OWNER].name();
   }
 
-  if (userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.ADMIN)) {
-    return workspaceSpecialRoleIds[WorkspaceSpecialRoleId.ADMIN].name();
+  if (userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.ADMIN)) {
+    return workspaceSpecialRoleIds[WorkspaceDefaultRoleId.ADMIN].name();
   }
 
   return userMember.roles.map((v) => getWorkspaceRoleName(v)).join(", ");

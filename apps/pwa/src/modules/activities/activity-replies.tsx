@@ -3,7 +3,7 @@
 import { useQuery } from "@apollo/client/react";
 import { Group, Stack } from "@mantine/core";
 import { type FC } from "react";
-import { ActivitiesInput } from "./activities-input";
+import { ActivityInput } from "./activity-input";
 import { ActivitiesProps } from "./activities-types";
 import QUERY_ACTIVITIES, {
   type ActivitiesQuery,
@@ -35,7 +35,7 @@ export const ActivityReplies: FC<ActivitiesProps & { activityId: string; autoFoc
       </Stack>
 
       <Group p="sm">
-        <ActivitiesInput {...context} parentId={activityId} autoFocus={autoFocus} />
+        <ActivityInput {...context} parentId={activityId} autoFocus={autoFocus} />
       </Group>
     </Stack>
   );

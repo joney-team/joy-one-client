@@ -1,4 +1,4 @@
-import { t } from "@lingui/core/macro";
+import { defineMessage, MacroMessageDescriptor, t } from "@lingui/core/macro";
 import { LoanAssetType, LoanPackageType, LoanStatus } from "./loans-types";
 import { MantineColor } from "@mantine/core";
 
@@ -10,14 +10,17 @@ export const loanAssetTypes: Record<LoanAssetType, { label: () => string }> = {
   [LoanAssetType.LAND_CERTIFICATE]: { label: () => t`Land certificate` },
 };
 
-export const loanStatuses: Record<LoanStatus, { label: () => string; color: MantineColor }> = {
-  [LoanStatus.PENDING_SIGN]: { label: () => t`Pending signature`, color: "gray" },
-  [LoanStatus.PENDING]: { label: () => t`Pending`, color: "gray" },
-  [LoanStatus.APPROVED]: { label: () => t`Approved`, color: "violet" },
-  [LoanStatus.FULFILLED]: { label: () => t`Fulfilled`, color: "orange" },
-  [LoanStatus.REJECTED]: { label: () => t`Rejected`, color: "red" },
-  [LoanStatus.OVERDUE]: { label: () => t`Overdue`, color: "red" },
-  [LoanStatus.COMPLETED]: { label: () => t`Completed`, color: "green" },
+export const loanStatuses: Record<
+  LoanStatus,
+  { label: MacroMessageDescriptor; color: MantineColor }
+> = {
+  [LoanStatus.PENDING_SIGN]: { label: defineMessage`Pending signature`, color: "gray" },
+  [LoanStatus.PENDING]: { label: defineMessage`Pending`, color: "gray" },
+  [LoanStatus.APPROVED]: { label: defineMessage`Approved`, color: "violet" },
+  [LoanStatus.FULFILLED]: { label: defineMessage`Fulfilled`, color: "orange" },
+  [LoanStatus.REJECTED]: { label: defineMessage`Rejected`, color: "red" },
+  [LoanStatus.OVERDUE]: { label: defineMessage`Overdue`, color: "red" },
+  [LoanStatus.COMPLETED]: { label: defineMessage`Completed`, color: "green" },
 };
 
 export const loanPackageTypes: Record<

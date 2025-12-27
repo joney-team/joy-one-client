@@ -21,7 +21,7 @@ import { getWorkspaceRoles } from "@/modules/workspace-roles/workspace-roles-ser
 import {
   WorkspacePermission,
   WorkspaceRoleEntity,
-  WorkspaceSpecialRoleId,
+  WorkspaceDefaultRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import {
   getWorkspaceSettings,
@@ -364,8 +364,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const defaultWorkspaceRoles: WorkspaceRoleEntity[] = [
     {
-      _id: WorkspaceSpecialRoleId.ADMIN,
-      name: WorkspaceSpecialRoleId.ADMIN,
+      _id: WorkspaceDefaultRoleId.ADMIN,
+      name: WorkspaceDefaultRoleId.ADMIN,
       color: "primary",
       permissions: Object.values(WorkspacePermission),
       workspaceId: "",

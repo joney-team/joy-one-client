@@ -3,7 +3,7 @@
 import { OnModalRoleForm } from "@/modules/workspace-roles/modals/modal-workspace-role-form";
 import {
   WorkspacePermission,
-  WorkspaceSpecialRoleId,
+  WorkspaceDefaultRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { t } from "@lingui/core/macro";
@@ -18,7 +18,7 @@ interface WorkspaceRoleCardProps {
 
 export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
   const workspace = useWorkspace();
-  const isAbleToEdit = ![WorkspaceSpecialRoleId.OWNER, WorkspaceSpecialRoleId.ADMIN].includes(
+  const isAbleToEdit = ![WorkspaceDefaultRoleId.OWNER, WorkspaceDefaultRoleId.ADMIN].includes(
     props.id
   );
 
@@ -26,7 +26,7 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
   const roleName = getWorkspaceRoleName(role ?? { _id: props.id, name: "" });
 
   const permissions =
-    (props.id === WorkspaceSpecialRoleId.MEMBER
+    (props.id === WorkspaceDefaultRoleId.MEMBER
       ? workspace.settings.memberPermissions
       : role?.permissions) || [];
   const permissionCounts = Object.values(WorkspacePermission).filter((key) =>
@@ -54,7 +54,7 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
           </Group>
 
           {(function () {
-            if (props.id === WorkspaceSpecialRoleId.OWNER) {
+            if (props.id === WorkspaceDefaultRoleId.OWNER) {
               return (
                 <Fragment>
                   <Text fz={em(12)} c="gray">
@@ -68,7 +68,7 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
               );
             }
 
-            if (props.id === WorkspaceSpecialRoleId.ADMIN) {
+            if (props.id === WorkspaceDefaultRoleId.ADMIN) {
               return (
                 <Fragment>
                   <Text fz={em(12)} c="gray">
@@ -81,7 +81,7 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
               );
             }
 
-            if (props.id === WorkspaceSpecialRoleId.MEMBER) {
+            if (props.id === WorkspaceDefaultRoleId.MEMBER) {
               return (
                 <Fragment>
                   <Text fz={em(12)} c="gray">

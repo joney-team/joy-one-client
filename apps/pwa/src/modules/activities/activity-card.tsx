@@ -184,7 +184,7 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                       const reactionType = reactionTypes[reaction.type];
 
                       return (
-                        <Menu trigger="hover">
+                        <Menu trigger="hover" key={reaction.type + "menu"}>
                           <Menu.Target>
                             <Button
                               key={reaction.type}

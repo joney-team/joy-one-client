@@ -3,8 +3,11 @@
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Form } from "@/components/form";
+import { appEntities } from "@/constant";
 import { api } from "@/modules/apis";
+import { AppEntity } from "@/types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Center,
   MultiSelect,
@@ -16,12 +19,8 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, type FC } from "react";
-import { CustomFieldEntity, CustomFieldType } from "../custom-field-types";
-import { AppEntity } from "@/types";
-import { t } from "@lingui/core/macro";
 import { customFieldTypes } from "../custom-field-constants";
-import { appEntities } from "@/constant";
-import { Trans } from "@lingui/react/macro";
+import { CustomFieldEntity, CustomFieldType } from "../custom-field-types";
 
 export interface FormCustomFieldProps {
   customField?: CustomFieldEntity;
@@ -34,6 +33,7 @@ const supportedTypes = [CustomFieldType.TEXT, CustomFieldType.NUMBER, CustomFiel
 
 export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
   const { customField, onSuccess } = props;
+  const { t } = useLingui();
 
   const form = useForm<{
     label: string;
@@ -98,9 +98,9 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
   return (
     <Form onSubmit={onSubmit}>
       <Stack>
-        <TextInput autoFocus label={t`Name`} {...form.getInputProps("label")} />
+        <TextInput autoFocus label={<Trans>Name</Trans>} {...form.getInputProps("label")} />
 
-        <TextInput label={t`Placeholder`} {...form.getInputProps("placeholder")} />
+        <TextInput label={<Trans>Placeholder</Trans>} {...form.getInputProps("placeholder")} />
 
         <TextInput label={`Key (${t`optional`})`} {...form.getInputProps("key")} />
 
@@ -110,7 +110,7 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
         />
 
         <Select
-          label={t`Type`}
+          label={<Trans>Type</Trans>}
           {...form.getInputProps("type")}
           data={supportedTypes.map((type) => ({
             label: customFieldTypes[type].label(),
@@ -119,25 +119,24 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
         />
 
         <MultiSelect
-          label={t`Apply`}
+          label={<Trans>Apply</Trans>}
           {...form.getInputProps("entities")}
           data={[
             AppEntity.PRODUCTS,
             AppEntity.POSTS,
             AppEntity.CATEGORIES,
             AppEntity.PROMOTIONS,
-            // AppEntity.TASKS,
             AppEntity.RECEIPTS,
             AppEntity.CUSTOMERS,
             AppEntity.LOANS,
             AppEntity.ORDERS,
           ].map((entity) => ({
-            label: appEntities[entity].name(),
+            label: t(appEntities[entity].name),
             value: entity,
           }))}
         />
 
-        <NumberInput label={t`Sort order`} {...form.getInputProps("order")} />
+        <NumberInput label={<Trans>Sort order</Trans>} {...form.getInputProps("order")} />
 
         <Center>
           <Button loading={form.submitting} type="submit">

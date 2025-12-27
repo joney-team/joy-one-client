@@ -1,0 +1,10 @@
+.Button {
+  /* Remove blue color when Button has href by attribute selector */
+  &[href] {
+    color: var(--button-color) !important;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

@@ -112,11 +112,11 @@ export const EventItem: FC<{ event: EventEntity }> = (props) => {
         <Group gap={5}>
           {props.event.user && (
             <ModalUserInformation>
-              {(open) => (
+              {(modal) => (
                 <Group
                   gap={5}
                   style={{ cursor: "pointer" }}
-                  onClick={() => open(props.event.user!._id)}
+                  onClick={() => modal.open(props.event.user!._id)}
                 >
                   <Avatar user={props.event.user} size={18} hideOnlineStatus />
 

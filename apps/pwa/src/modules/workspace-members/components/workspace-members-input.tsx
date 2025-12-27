@@ -64,14 +64,14 @@ export const WorkspaceMembersInput: FC<WorkspaceMembersInputProps> = (props) => 
                 return (
                   <Tooltip label={user.name} key={user.userId}>
                     <ModalUserInformation>
-                      {(open) => (
+                      {(modal) => (
                         <Group align="center" justify="center" style={{ position: "relative" }}>
                           <UserCard
                             avatarSize={rest.avatarSize}
                             user={user}
                             collapsed={collapsed}
                             onClick={() => {
-                              open(user.userId);
+                              modal.open(user.userId);
                               ctx.close();
                             }}
                             onRemove={onChange && (() => toogleSelect(user))}

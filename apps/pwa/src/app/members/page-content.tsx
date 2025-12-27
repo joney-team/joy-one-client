@@ -7,7 +7,7 @@ import { OnModalWorkspaceInviteMember } from "@/modules/workspace-members/worksp
 import { WorkspaceMemberList } from "@/modules/workspace-members/workspace-member-list";
 import {
   WorkspacePermission,
-  WorkspaceSpecialRoleId,
+  WorkspaceDefaultRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { OnModalTransferOwner } from "@/modules/workspaces/modals/modal-transfer-workspace-owner";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -52,7 +52,7 @@ const Page: NextPage = () => {
             </Button>
           )}
 
-        {workspace.userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER) && (
+        {workspace.userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER) && (
           <Button
             leftIcon={IconTransfer}
             onClick={() => OnModalTransferOwner()}

@@ -21,7 +21,7 @@ import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/worksp
 import { workspaceSpecialRoleIds } from "@/modules/workspace-roles/workspace-roles-constants";
 import {
   WorkspacePermission,
-  WorkspaceSpecialRoleId,
+  WorkspaceDefaultRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
@@ -55,7 +55,7 @@ const UserWorkspaceSettingsForm: FC<
   const isMainWorkspaceAccessable = userMember.permissions.includes(
     WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
   );
-  const isOwner = userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER);
+  const isOwner = userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER);
 
   const onUpdate = useDebouncedCallback((values: UpdateWorkspaceMemberDto) => {
     if (userMember && isAbleToUpdate) {
@@ -119,7 +119,7 @@ const UserWorkspaceSettingsForm: FC<
             color={color("primary")}
             rightSection={<IconLock size={13} style={{ marginLeft: -3 }} />}
           >
-            {workspaceSpecialRoleIds[WorkspaceSpecialRoleId.OWNER].name()}
+            {workspaceSpecialRoleIds[WorkspaceDefaultRoleId.OWNER].name()}
           </Badge>
         ) : workspace.hasPermission(WorkspacePermission.WORKSPACE_ROLES_MANAGER) ? (
           <WorkspaceRolesInput
@@ -162,7 +162,7 @@ const UserWorkspaceSettingsForm: FC<
       {props.removeable &&
         userMember.memberId &&
         workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER) &&
-        !userMember.roles.some((v) => v._id === WorkspaceSpecialRoleId.OWNER) && (
+        !userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER) && (
           <Center mt={20}>
             <Button
               variant="subtle"

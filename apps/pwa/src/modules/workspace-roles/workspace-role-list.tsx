@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { WorkspaceRoleCard } from "@/modules/workspace-roles/components/workspace-role-card";
 import { OnModalRoleForm } from "@/modules/workspace-roles/modals/modal-workspace-role-form";
-import { WorkspaceSpecialRoleId } from "@/modules/workspace-roles/workspace-roles-types";
+import { WorkspaceDefaultRoleId } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
 import { Group, Stack } from "@mantine/core";
@@ -29,17 +29,17 @@ export const WorkspaceRoleList: FC = () => {
           </Button>
         </Group>
 
-        <WorkspaceRoleCard id={WorkspaceSpecialRoleId.OWNER} />
-        <WorkspaceRoleCard id={WorkspaceSpecialRoleId.ADMIN} />
-        <WorkspaceRoleCard id={WorkspaceSpecialRoleId.MEMBER} />
+        <WorkspaceRoleCard id={WorkspaceDefaultRoleId.OWNER} />
+        <WorkspaceRoleCard id={WorkspaceDefaultRoleId.ADMIN} />
+        <WorkspaceRoleCard id={WorkspaceDefaultRoleId.MEMBER} />
 
         {workspace.roles
           .filter(
             (v) =>
               ![
-                WorkspaceSpecialRoleId.OWNER,
-                WorkspaceSpecialRoleId.ADMIN,
-                WorkspaceSpecialRoleId.MEMBER,
+                WorkspaceDefaultRoleId.OWNER,
+                WorkspaceDefaultRoleId.ADMIN,
+                WorkspaceDefaultRoleId.MEMBER,
               ].includes(v._id as any)
           )
           .map((role) => {

@@ -532,6 +532,39 @@ export const GetTaskStatusesMode = {
 } as const;
 
 export type GetTaskStatusesMode = typeof GetTaskStatusesMode[keyof typeof GetTaskStatusesMode];
+export type Loan = {
+  __typename: 'Loan';
+  amount: Scalars['Float']['output'];
+  assetType: LoanAssetType;
+  code: Scalars['String']['output'];
+  customer: Customer;
+  customerId: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  status: LoanStatus;
+};
+
+/** Available loan asset types */
+export const LoanAssetType = {
+  BusinessPermit: 'BUSINESS_PERMIT',
+  CarRegistration: 'CAR_REGISTRATION',
+  Icloud: 'ICLOUD',
+  LandCertificate: 'LAND_CERTIFICATE',
+  MotobikeRegistration: 'MOTOBIKE_REGISTRATION'
+} as const;
+
+export type LoanAssetType = typeof LoanAssetType[keyof typeof LoanAssetType];
+/** Available loan statuses */
+export const LoanStatus = {
+  Approved: 'APPROVED',
+  Completed: 'COMPLETED',
+  Fulfilled: 'FULFILLED',
+  Overdue: 'OVERDUE',
+  Pending: 'PENDING',
+  PendingSign: 'PENDING_SIGN',
+  Rejected: 'REJECTED'
+} as const;
+
+export type LoanStatus = typeof LoanStatus[keyof typeof LoanStatus];
 export type LocationEntity = {
   __typename: 'LocationEntity';
   address: Maybe<Scalars['String']['output']>;
@@ -852,15 +885,18 @@ export type Query = {
   appConfig: AppConfig;
   categoriesPaginated: CategoriesPaginated;
   category: Category;
+  customer: Customer;
   customers: CustomersPaginated;
   event: Event;
   getCategoriesByIds: Array<Category>;
   getCategoryBySlug: Category;
   getFileInfo: File;
   getProductByIds: Array<Product>;
+  loan: Loan;
   pluginExternalStorage: Maybe<PluginExternalStorage>;
   reactions: ReactionsPaginated;
   reactionsCount: ReactionsCount;
+  search: Array<SearchResult>;
   siblingTasks: SiblingTasks;
   tagBySlug: Tag;
   tags: Tags;
@@ -905,6 +941,11 @@ export type QueryCategoryArgs = {
 };
 
 
+export type QueryCustomerArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryCustomersArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
@@ -938,6 +979,11 @@ export type QueryGetProductByIdsArgs = {
 };
 
 
+export type QueryLoanArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryReactionsArgs = {
   entity: Scalars['String']['input'];
   entityId: Scalars['String']['input'];
@@ -951,6 +997,13 @@ export type QueryReactionsArgs = {
 export type QueryReactionsCountArgs = {
   entity: Scalars['String']['input'];
   entityId: Scalars['String']['input'];
+};
+
+
+export type QuerySearchArgs = {
+  entities: Array<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  query: Scalars['String']['input'];
 };
 
 
@@ -1097,6 +1150,102 @@ export type RelatedEntity = {
   entity: Scalars['String']['output'];
   id: Maybe<Scalars['String']['output']>;
   index: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type SearchResult = {
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+};
+
+export type SearchResultCategory = SearchResult & {
+  __typename: 'SearchResultCategory';
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type SearchResultCustomer = SearchResult & {
+  __typename: 'SearchResultCustomer';
+  code: Scalars['String']['output'];
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  phone: Maybe<Scalars['String']['output']>;
+};
+
+export type SearchResultLoan = SearchResult & {
+  __typename: 'SearchResultLoan';
+  code: Scalars['String']['output'];
+  customerName: Scalars['String']['output'];
+  customerPhone: Maybe<Scalars['String']['output']>;
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+};
+
+export type SearchResultOrders = SearchResult & {
+  __typename: 'SearchResultOrders';
+  code: Scalars['String']['output'];
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+};
+
+export type SearchResultPartner = SearchResult & {
+  __typename: 'SearchResultPartner';
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  phone: Maybe<Scalars['String']['output']>;
+};
+
+export type SearchResultPrescriptions = SearchResult & {
+  __typename: 'SearchResultPrescriptions';
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  note: Scalars['String']['output'];
+};
+
+export type SearchResultProduct = SearchResult & {
+  __typename: 'SearchResultProduct';
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type SearchResultReceipt = SearchResult & {
+  __typename: 'SearchResultReceipt';
+  code: Scalars['String']['output'];
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+};
+
+export type SearchResultTags = SearchResult & {
+  __typename: 'SearchResultTags';
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type SearchResultTask = SearchResult & {
+  __typename: 'SearchResultTask';
+  code: Scalars['String']['output'];
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type SearchResultWorkspaceMember = SearchResult & {
+  __typename: 'SearchResultWorkspaceMember';
+  avatar: Maybe<Scalars['String']['output']>;
+  color: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  memberId: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  phone: Maybe<Scalars['String']['output']>;
+  userId: Scalars['String']['output'];
 };
 
 export type SiblingTasks = {
