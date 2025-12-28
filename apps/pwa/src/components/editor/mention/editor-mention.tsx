@@ -6,7 +6,7 @@ import { ReactNodeViewRenderer, ReactRenderer } from "@tiptap/react";
 import Mention from "@tiptap/extension-mention";
 import { updatePosition } from "../editor-utils";
 import { MentionList, MentionListProps, MentionListRef } from "./editor-mention-list";
-import { MentionRenderer } from "./editor-mention-renderer";
+import { MentionNodeView } from "./editor-mention-node-view";
 
 export const suggestion: MentionOptions["suggestion"] = {
   char: "@",
@@ -58,9 +58,9 @@ export const suggestion: MentionOptions["suggestion"] = {
   },
 };
 
-const UsersMentionExtension = Mention.extend({
+const CustomMention = Mention.extend({
   addNodeView() {
-    return ReactNodeViewRenderer(MentionRenderer);
+    return ReactNodeViewRenderer(MentionNodeView);
   },
   addAttributes() {
     return {
@@ -92,7 +92,7 @@ const UsersMentionExtension = Mention.extend({
   },
 });
 
-export const UsersMention = UsersMentionExtension.configure({
+export const MentionExtension = CustomMention.configure({
   HTMLAttributes: {
     class: "mention",
   },

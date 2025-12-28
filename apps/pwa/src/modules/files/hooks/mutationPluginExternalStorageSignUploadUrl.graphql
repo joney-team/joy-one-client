@@ -1,8 +1,13 @@
 mutation PluginExternalStorageSignUploadUrl(
   $fileName: String!
   $refs: [String!]
+  $id: String
 ) {
-  pluginExternalStorageSignUploadUrl(fileName: $fileName, refs: $refs) {
+  pluginExternalStorageSignUploadUrl(
+    fileName: $fileName
+    refs: $refs
+    id: $id
+  ) {
     dna
     signedUrl
   }

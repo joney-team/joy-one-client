@@ -261,7 +261,7 @@ export const LoanDetail: NextPage = () => {
       : undefined;
 
   return (
-    <Stack p={0}>
+    <Stack p={0} pb="sm">
       <Stack p="sm">
         <Card shadow="xs">
           <Group align="start">

@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { Editor } from "@/components/editor/editor";
+import { Editor, EditorRef } from "@/components/editor/editor";
 import { parseEditorJSON } from "@/components/editor/editor-utils";
 import { RelativeTimeFormat } from "@/components/format/date-format";
 import { Plural, Trans } from "@lingui/react/macro";
@@ -18,12 +18,20 @@ import {
   ThemeIcon,
   Tooltip,
 } from "@mantine/core";
-import { IconDots, IconEyeOff, IconMoodPlus, IconThumbUp, IconTrash } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import {
+  IconCheck,
+  IconDots,
+  IconEyeOff,
+  IconMoodPlus,
+  IconPencil,
+  IconThumbUp,
+  IconTrash,
+} from "@tabler/icons-react";
+import { FC, useRef, useState } from "react";
 import { useColor } from "../theme/use-color";
 import { ActivityDataFragment } from "./graphql/fragmentActivity.graphql";
 
-import { useMutation } from "@apollo/client/react";
+import { useApolloClient, useMutation } from "@apollo/client/react";
 import styles from "./activity-card.module.css";
 
 import { onError } from "@/utils/exceptions.utils";
@@ -42,6 +50,12 @@ import QUERY_ACTIVITIES from "./graphql/queryActivities.graphql";
 import { NumberFormat } from "@/components/format/number-format";
 import { useAuth } from "../auth/auth-context";
 import { ActivityReactionUsers } from "./activity-reaction-users";
+import { wait } from "@/utils/common.utils";
+import UPDATE_ACTIVITY_MUTATION, {
+  type UpdateActivityMutation,
+  type UpdateActivityMutationVariables,
+} from "./graphql/mutationUpdateActivity.graphql";
+import { DateTime } from "@joy-one-client/utils/date-time";
 
 const ActivityReplies = dynamic(
   () => import("./activity-replies").then((mod) => mod.ActivityReplies),
@@ -58,9 +72,14 @@ const ActivityReplies = dynamic(
 export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity }) => {
   const isReply = Boolean(activity.parentId);
   const color = useColor();
+  const editorRef = useRef<EditorRef>(null);
+  const client = useApolloClient();
+
   const { user } = useAuth();
   const [isArchived, setIsArchived] = useState(false);
   const [isShowReply, setIsShowReply] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isShowEdit, setIsShowEdit] = useState(false);
 
   const isSelf = activity.createdByUser._id === user._id;
 
@@ -70,6 +89,7 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
 
   const onArchive = async () => {
     setIsArchived(true);
+    setIsMenuOpen(false);
     try {
       await archive({
         variables: { id: activity._id },
@@ -78,6 +98,45 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
     } catch (error) {
       onError(error);
       setIsArchived(false);
+    }
+  };
+
+  const [update] = useMutation<UpdateActivityMutation, UpdateActivityMutationVariables>(
+    UPDATE_ACTIVITY_MUTATION
+  );
+
+  const onSaveEdit = async () => {
+    if (!activity || !editorRef.current) return;
+    try {
+      const content = JSON.stringify(editorRef.current.getJSON());
+      await update({
+        variables: { id: activity._id, content },
+        update: (cache) => {
+          const identifiedId = client.cache.identify({
+            __typename: "Activity",
+            _id: activity._id,
+          });
+
+          cache.updateFragment(
+            {
+              id: identifiedId,
+              fragment: ACTIVITY_FRAGMENT,
+              fragmentName: "ActivityData",
+            },
+            (prev) => {
+              if (!prev) return prev;
+              return {
+                ...prev,
+                content,
+                contentLastModifiedAt: DateTime.getNowInSeconds(),
+              };
+            }
+          );
+        },
+      });
+      setIsShowEdit(false);
+    } catch (error) {
+      onError(error);
     }
   };
 
@@ -92,6 +151,13 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
     fragmentData: activity,
     fragment: ACTIVITY_FRAGMENT,
   });
+
+  const onEdit = async () => {
+    setIsShowEdit(true);
+    setIsMenuOpen(false);
+    await wait(200);
+    editorRef.current?.focus();
+  };
 
   return (
     <Card
@@ -117,19 +183,53 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                     <RelativeTimeFormat value={activity.createdAt} />
                   </Text>
                 )}
+
+                {!!activity.contentLastModifiedAt && (
+                  <Text fz={10} c="gray">
+                    • <Trans>Edited</Trans>
+                  </Text>
+                )}
               </Group>
             )}
 
             {!isArchived && isSelf && (
               <Group>
-                <Menu closeOnItemClick={false}>
+                <Menu
+                  closeOnItemClick={false}
+                  position="bottom-end"
+                  offset={-2}
+                  opened={isMenuOpen}
+                  onChange={setIsMenuOpen}
+                >
                   <Menu.Target>
-                    <ActionIcon className={styles.Menu} variant="subtle" color="gray" size="sm">
+                    <ActionIcon
+                      className={styles.Menu}
+                      variant="subtle"
+                      color="gray"
+                      size="sm"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsMenuOpen(true);
+                      }}
+                    >
                       <IconDots size={14} />
                     </ActionIcon>
                   </Menu.Target>
 
                   <Menu.Dropdown>
+                    <Menu.Item
+                      leftSection={<IconPencil size={12} style={{ marginRight: -3 }} />}
+                      color="gray"
+                      pl={6}
+                      pr={10}
+                      fz="xs"
+                      style={{ borderRadius: 6 }}
+                      onClick={onEdit}
+                    >
+                      <Trans>Edit</Trans>
+                    </Menu.Item>
+
                     <Menu.Item
                       leftSection={<IconTrash size={12} style={{ marginRight: -3 }} />}
                       color="gray"
@@ -157,10 +257,38 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                   <Trans>This activity has been archived</Trans>
                 </Text>
               </Group>
+            ) : isShowEdit ? (
+              <Stack gap="sm">
+                <Editor
+                  ref={editorRef}
+                  style={{ fontSize: 14 }}
+                  key={activity._id + "edit"}
+                  defaultValue={parseEditorJSON(activity.content)}
+                  isShowToolbar={false}
+                  isNonWrapped
+                />
+
+                <Group gap="xs" justify="end">
+                  <Button
+                    size="compact-xs"
+                    variant="outline"
+                    onClick={() => setIsShowEdit(false)}
+                    component="div"
+                    color="gray"
+                  >
+                    <Trans>Cancel</Trans>
+                  </Button>
+
+                  <Button size="compact-xs" leftIcon={IconCheck} onClick={onSaveEdit}>
+                    <Trans>Save</Trans>
+                  </Button>
+                </Group>
+              </Stack>
             ) : (
               <Editor
+                ref={editorRef}
                 style={{ fontSize: 14 }}
-                key={activity._id}
+                key={activity._id + activity.contentLastModifiedAt}
                 defaultValue={parseEditorJSON(activity.content)}
                 readonly
                 isNonWrapped

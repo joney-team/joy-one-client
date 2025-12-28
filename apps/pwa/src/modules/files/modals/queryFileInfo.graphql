@@ -5,6 +5,7 @@ query GetFileInfo($fileId: String!) {
     size
     fileName
     path
+    url
     externalUrl
   }
 }

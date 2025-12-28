@@ -194,7 +194,7 @@ const TaskMention: FC<{ taskId: string }> = ({ taskId }) => {
   );
 };
 
-export const MentionRenderer: FC<ReactNodeViewProps> = ({ node }) => {
+export const MentionNodeView: FC<ReactNodeViewProps> = ({ node }) => {
   const { id, entity } = (node.attrs ?? {}) as MentionAttributes;
 
   if (id && entity === AppEntity.USERS) {

@@ -7,6 +7,7 @@ type Activity {
   _id: String!
   childCount: Float
   content: String
+  contentLastModifiedAt: Float
   contextId: String!
   contextType: String!
   createdAt: Float
@@ -19,6 +20,7 @@ type Activity {
   pinnedByUserId: String
   reactionsCount: ReactionsCount!
   type: ActivityType!
+  updatedAt: Float
 }
 
 """Available activity types"""
@@ -548,7 +550,7 @@ type Mutation {
   generateCategorySlug(name: String!): String!
   healthcheckPluginExternalStorage: Boolean!
   interactCategory(id: String!): Boolean!
-  pluginExternalStorageSignUploadUrl(fileName: String!, refs: [String!]): SignUploadUrlResponse!
+  pluginExternalStorageSignUploadUrl(fileName: String!, id: String, refs: [String!]): SignUploadUrlResponse!
   registerDevice(input: RegisterDeviceDto!): DeviceEntity!
   removePluginExternalStorage: Boolean!
   removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!

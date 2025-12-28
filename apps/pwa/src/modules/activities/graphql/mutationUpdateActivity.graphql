@@ -1,5 +1,5 @@
-mutation UpdateActivity($updateActivityId: String!, $content: String) {
-  updateActivity(id: $updateActivityId, content: $content) {
+mutation UpdateActivity($id: String!, $content: String) {
+  updateActivity(id: $id, content: $content) {
     _id
   }
 }

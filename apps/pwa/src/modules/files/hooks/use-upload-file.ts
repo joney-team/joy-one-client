@@ -61,12 +61,16 @@ export const useUploadFile = () => {
       formData.append("refs", options.refs.join(","));
     }
 
+    if (options.id) {
+      formData.append("id", options.id);
+    }
+
     return api.formData<FileEntity>("/files/upload", formData);
   };
 
   const uploadToExternalStorage = async (file: File, options: UploadFileOptions = {}) => {
     const signed = await signUploadUrl({
-      variables: { fileName: file.name, refs: options.refs },
+      variables: { fileName: file.name, refs: options.refs, id: options.id },
     });
 
     if (!signed.data?.pluginExternalStorageSignUploadUrl) {

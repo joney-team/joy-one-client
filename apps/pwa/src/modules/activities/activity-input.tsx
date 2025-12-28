@@ -7,8 +7,8 @@ import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
 import { useLingui } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Stack } from "@mantine/core";
-import { IconMicrophone, IconPaperclip, IconSend } from "@tabler/icons-react";
-import { FC, useMemo, useRef, useState } from "react";
+import { IconMicrophone, IconPaperclip, IconPhoto, IconSend } from "@tabler/icons-react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { ActivitiesProps } from "./activities-types";
 import ADD_ACTIVITY_MUTATION, {
   type AddActivityMutation,
@@ -16,8 +16,13 @@ import ADD_ACTIVITY_MUTATION, {
 } from "./graphql/mutationAddActivity.graphql";
 
 import { Avatar } from "@/components/avatar";
+import { createObjectId } from "@joy-one-client/utils/object-id";
+import { useFileDialog } from "@mantine/hooks";
+import { setRefFile } from "../files/file-service";
 import { useWorkspace } from "../workspaces/workspace-context";
 import QUERY_ACTIVITIES from "./graphql/queryActivities.graphql";
+import { useUploadFile } from "../files/hooks/use-upload-file";
+import { renderFileUrl } from "../files/files-utils";
 
 export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?: boolean }> = ({
   contextType,
@@ -28,7 +33,18 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
   const { t } = useLingui();
   const color = useColor();
   const editorRef = useRef<EditorRef>(null);
+  const uploadFile = useUploadFile();
   const workspace = useWorkspace();
+  const attachmentsDialog = useFileDialog({
+    multiple: true,
+    resetOnOpen: true,
+  });
+
+  const photosDialog = useFileDialog({
+    multiple: true,
+    resetOnOpen: true,
+    accept: "image/*",
+  });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addActivity] = useMutation<AddActivityMutation, AddActivityMutationVariables>(
@@ -59,6 +75,51 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
     }
   };
 
+  useEffect(() => {
+    if (attachmentsDialog.files && attachmentsDialog.files.length > 0) {
+      for (let index = 0; index < attachmentsDialog.files.length; index++) {
+        const file = attachmentsDialog.files[index];
+        try {
+          const id = createObjectId();
+          setRefFile(id, file);
+          // Defer the addAttachment call to avoid flushSync warning
+          setTimeout(() => {
+            editorRef.current?.editor?.commands.addAttachment(id);
+          }, 100 + index * 100);
+        } catch (error) {
+          console.trace(error);
+        }
+      }
+    }
+  }, [attachmentsDialog.files]);
+
+  const handleAddPhoto = async (files: FileList) => {
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      try {
+        const fileMetadata = await uploadFile(file, { maxWidthOrHeight: 1024 });
+
+        setTimeout(() => {
+          editorRef.current?.editor?.commands.insertContent({
+            type: "image",
+            attrs: {
+              src: renderFileUrl(fileMetadata.url),
+              style: "width: 500px; height: auto;",
+            },
+          });
+        }, 100 + index * 100);
+      } catch (error) {
+        console.trace(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (photosDialog.files && photosDialog.files.length > 0) {
+      handleAddPhoto(photosDialog.files);
+    }
+  }, [photosDialog.files]);
+
   const editorKey = contextType + contextId + (parentId ?? "root") + "input";
 
   const actions = useMemo(() => {
@@ -68,7 +129,11 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
           <IconMicrophone size={14} />
         </ActionIcon>
 
-        <ActionIcon color="gray" variant="subtle">
+        <ActionIcon color="gray" variant="subtle" onClick={() => photosDialog.open()}>
+          <IconPhoto size={14} />
+        </ActionIcon>
+
+        <ActionIcon color="gray" variant="subtle" onClick={() => attachmentsDialog.open()}>
           <IconPaperclip size={14} />
         </ActionIcon>
 
@@ -85,7 +150,7 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
         </ActionIcon>
       </Group>
     );
-  }, []);
+  }, [attachmentsDialog.files]);
 
   if (parentId) {
     return (

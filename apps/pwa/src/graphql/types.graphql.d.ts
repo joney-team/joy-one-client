@@ -29,6 +29,7 @@ export type Activity = {
   _id: Scalars['String']['output'];
   childCount: Maybe<Scalars['Float']['output']>;
   content: Maybe<Scalars['String']['output']>;
+  contentLastModifiedAt: Maybe<Scalars['Float']['output']>;
   contextId: Scalars['String']['output'];
   contextType: Scalars['String']['output'];
   createdAt: Maybe<Scalars['Float']['output']>;
@@ -41,6 +42,7 @@ export type Activity = {
   pinnedByUserId: Maybe<Scalars['String']['output']>;
   reactionsCount: ReactionsCount;
   type: ActivityType;
+  updatedAt: Maybe<Scalars['Float']['output']>;
 };
 
 /** Available activity types */
@@ -718,6 +720,7 @@ export type MutationInteractCategoryArgs = {
 
 export type MutationPluginExternalStorageSignUploadUrlArgs = {
   fileName: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['String']['input']>;
   refs?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 

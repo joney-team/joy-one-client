@@ -60,7 +60,9 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
     const fileSize = useFileSize(renderFileUrl(activeFile?.url));
     const disabled = args?.disabled || args?.readonly;
 
-    const onClose = () => setArgs(null);
+    const onClose = () => {
+      setArgs(null);
+    };
 
     const onNext = () => {
       if (!args) return;
@@ -130,12 +132,15 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
       open: (p) => {
         setArgs(p);
       },
-      close: onClose,
+      close: () => {
+        onClose();
+      },
     }));
 
     return (
       <Fragment>
-        {typeof props.children === "function" &&
+        {props.children &&
+          typeof props.children === "function" &&
           props.children((p) => {
             setIndex(p.index || 0);
             setArgs(p);
@@ -143,7 +148,7 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
 
         <Modal
           opened={!!args}
-          onClose={() => setArgs(null)}
+          onClose={onClose}
           withCloseButton={false}
           fullScreen={true}
           styles={{
@@ -217,7 +222,7 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
                       component="div"
                       variant="subtle"
                       color="white"
-                      onClick={() => setArgs(null)}
+                      onClick={() => onClose()}
                     >
                       <IconX strokeWidth={1.5} size={30} />
                     </ActionIcon>

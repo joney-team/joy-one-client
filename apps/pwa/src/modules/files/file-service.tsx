@@ -179,3 +179,17 @@ export function detectFileIdFromUrl(url: string): string | null {
 
   return null;
 }
+
+const refFiles = new Map<string, File>();
+
+export function setRefFile(id: string, file: File) {
+  refFiles.set(id, file);
+}
+
+export function getRefFile(id: string): File | undefined {
+  return refFiles.get(id);
+}
+
+export function removeRefFile(id: string) {
+  refFiles.delete(id);
+}

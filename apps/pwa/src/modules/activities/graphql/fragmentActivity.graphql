@@ -6,11 +6,13 @@ fragment ActivityData on Activity {
   contextId
   type
   content
+  contentLastModifiedAt
   data
   parentId
   childCount
   isPinned
   createdAt
+  updatedAt
   reactionsCount {
     reactions {
       userIds

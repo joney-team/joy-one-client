@@ -34,14 +34,15 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { ImageResize } from "./editor-image-resize";
+import { ImageResize } from "./image/editor-image-resize";
 
 import { classNames } from "@/utils/ui.utils";
 import styles from "./editor.module.css";
 
 import { nonLoading } from "@/utils/non-loading";
 import dynamic from "next/dynamic";
-import { UsersMention } from "./mention/editor-mention";
+import { AttachmentExtension } from "./attachment/editor-attachment";
+import { MentionExtension } from "./mention/editor-mention";
 
 const ModalFiles = dynamic(
   () => import("@/modules/files/modals/modal-files").then((mod) => mod.ModalFiles),
@@ -104,6 +105,7 @@ export interface EditorRef {
   getJSON: () => JSONContent;
   editor: EditorType | null;
   clear: () => void;
+  focus: () => void;
 }
 
 export const Editor = forwardRef<EditorRef, EditorProps>(
@@ -147,7 +149,8 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
         Placeholder.configure({
           placeholder,
         }),
-        UsersMention,
+        MentionExtension,
+        AttachmentExtension,
       ];
 
       return ext;
@@ -166,7 +169,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
         autofocus: autoFocus,
         editable: !readonly,
       },
-      []
+      [readonly, defaultValue, value]
     );
 
     const onDropImage = async (files: File[]) => {
@@ -193,10 +196,17 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     };
 
     useImperativeHandle(ref, () => ({
+      editor,
       getHTML: () => editor?.getHTML() ?? "",
       getJSON: () => editor?.getJSON() ?? {},
       clear: () => editor?.commands.setContent({ type: "doc", content: [] }),
-      editor,
+      focus: () => {
+        if (editor) {
+          // Focus at the end of document
+          const docSize = editor.state.doc.content.size;
+          editor.commands.focus(docSize);
+        }
+      },
     }));
 
     if (!editor) return <Loader size="xs" />;

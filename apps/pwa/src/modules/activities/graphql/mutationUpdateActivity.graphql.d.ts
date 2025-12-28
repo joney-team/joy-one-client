@@ -1,7 +1,7 @@
 import type * as Types from '../../../graphql/types.graphql.d';
 
 export type UpdateActivityMutationVariables = Types.Exact<{
-  updateActivityId: Types.Scalars['String']['input'];
+  id: Types.Scalars['String']['input'];
   content?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
