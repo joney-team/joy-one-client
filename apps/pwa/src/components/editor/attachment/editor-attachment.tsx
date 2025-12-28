@@ -35,7 +35,6 @@ export const AttachmentExtension = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    console.log("HTMLAttributes", HTMLAttributes);
     return [
       "span",
       {

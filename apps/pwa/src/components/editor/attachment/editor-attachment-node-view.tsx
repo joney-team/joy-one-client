@@ -1,10 +1,22 @@
 "use client";
 
-import { Card, Group, Loader, Skeleton, Text, ThemeIcon } from "@mantine/core";
-import { IconDownload, IconEye, IconPaperclip } from "@tabler/icons-react";
+import { Card, Group, Loader, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
+import {
+  IconDownload,
+  IconEye,
+  IconPaperclip,
+  IconPlayerPause,
+  IconPlayerPlay,
+} from "@tabler/icons-react";
 import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
 
 import { ActionIcon } from "@/components/action-icon/action-icon";
+import {
+  SpectrumVisualizer,
+  SpectrumVisualizerRef,
+  SpectrumVisualizerStatus,
+} from "@/components/spectrum-visualizer";
+import { FileType } from "@/graphql/enums.graphql";
 import {
   detectFileType,
   downloadFileFromURL,
@@ -33,6 +45,10 @@ const ModalFileGallery = dynamic(
 
 const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
   const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+
+  const audioRef = useRef<SpectrumVisualizerRef>(null);
+  const [audioStatus, setAudioStatus] = useState<SpectrumVisualizerStatus>("none");
+
   const file = useQuery<GetFileInfoQuery, GetFileInfoQueryVariables>(GET_FILE_INFO, {
     variables: { fileId },
     fetchPolicy: "cache-first",
@@ -46,29 +62,96 @@ const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
 
   const content = useMemo(() => {
     if (file.loading) {
-      return {
-        icon: IconPaperclip,
-        name: <Skeleton height={28} width={200} />,
-      };
+      return (
+        <Group gap={5} p={5}>
+          <ThemeIcon color="gray" variant="light">
+            <IconPaperclip size={14} />
+          </ThemeIcon>
+
+          <Skeleton mih={26} w={200} />
+        </Group>
+      );
     }
 
     if (!file.data) {
-      return {
-        icon: IconPaperclip,
-        name: (
+      return (
+        <Group gap={5} p={5}>
+          <ThemeIcon color="gray" variant="light">
+            <IconPaperclip size={14} />
+          </ThemeIcon>
+
           <Text fz="xs" fw={500} truncate maw={200} style={{ marginBottom: 0 }}>
             File is unavailable
           </Text>
-        ),
-      };
+        </Group>
+      );
     }
 
-    const fileType = detectFileType(file.data?.getFileInfo?.url);
-    const fileTypeConstant = fileTypes[fileType];
+    const type = detectFileType(file.data?.getFileInfo?.url);
+    const fileType = fileTypes[type];
 
-    return {
-      icon: fileTypeConstant.icon,
-      name: (
+    if (type === FileType.Audio) {
+      return (
+        <Group gap={8} py={5} px={6}>
+          <ThemeIcon color="gray" variant="light" size={40} radius={5}>
+            <fileType.icon size={14} strokeWidth={1.5} />
+          </ThemeIcon>
+
+          <Stack
+            gap={5}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            align="stretch"
+          >
+            <Group gap="xs" w="100%">
+              <Text fz="xs" fw={500} truncate maw={200} style={{ marginBottom: 0 }} flex={1}>
+                {file.data?.getFileInfo?.fileName}
+              </Text>
+
+              <Group gap={3}>
+                <ActionIcon
+                  variant="subtle"
+                  color={audioStatus === "playing" ? undefined : "gray.6"}
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (audioStatus === "playing") {
+                      return audioRef.current?.pause();
+                    }
+                    return audioRef.current?.play();
+                  }}
+                >
+                  {audioStatus === "playing" ? (
+                    <IconPlayerPause size={14} />
+                  ) : (
+                    <IconPlayerPlay size={14} />
+                  )}
+                </ActionIcon>
+
+                <ActionIcon size="sm" variant="subtle" color="gray.6" onClick={onDownload}>
+                  <IconDownload size={14} />
+                </ActionIcon>
+              </Group>
+            </Group>
+
+            <SpectrumVisualizer
+              maxWave={30}
+              audioUrl={file.data.getFileInfo?.url}
+              ref={audioRef}
+              onChangeStatus={setAudioStatus}
+            />
+          </Stack>
+        </Group>
+      );
+    }
+
+    return (
+      <Group gap={5} p={5}>
+        <ThemeIcon color="gray" variant="light">
+          <fileType.icon size={14} />
+        </ThemeIcon>
+
         <Group gap="xs">
           <Text fz="xs" fw={500} truncate maw={200} style={{ marginBottom: 0 }}>
             {file.data?.getFileInfo?.fileName}
@@ -84,18 +167,19 @@ const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
             </ActionIcon>
           </Group>
         </Group>
-      ),
-    };
-  }, [file]);
+      </Group>
+    );
+  }, [file, audioRef, audioStatus]);
 
   return (
     <Fragment>
       <Card
         withBorder
-        p={5}
+        p={0}
         component="span"
         w="max-content"
         className="clickable"
+        shadow="none"
         onClick={() => {
           if (!file.data) return;
           modalFileGalleryRef.current?.open({
@@ -103,13 +187,7 @@ const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
           });
         }}
       >
-        <Group gap={5}>
-          <ThemeIcon color="gray" variant="light">
-            <content.icon size={14} />
-          </ThemeIcon>
-
-          {content.name}
-        </Group>
+        {content}
       </Card>
       <ModalFileGallery ref={modalFileGalleryRef} />
     </Fragment>

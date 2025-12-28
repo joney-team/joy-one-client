@@ -40,22 +40,22 @@ import ARCHIVE_ACTIVITY_MUTATION, {
   type ArchiveActivityMutationVariables,
 } from "./graphql/mutationArchiveActivity.graphql";
 
+import { NumberFormat } from "@/components/format/number-format";
 import { ReactionType } from "@/graphql/enums.graphql";
 import { AppEntity } from "@/types";
+import { wait } from "@/utils/common.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import dynamic from "next/dynamic";
+import { useAuth } from "../auth/auth-context";
 import { reactionTypes } from "../reactions/reactions-constants";
 import { useReactions } from "../reactions/use-reactions";
-import ACTIVITY_FRAGMENT from "./graphql/fragmentActivity.graphql";
-import QUERY_ACTIVITIES from "./graphql/queryActivities.graphql";
-import { NumberFormat } from "@/components/format/number-format";
-import { useAuth } from "../auth/auth-context";
 import { ActivityReactionUsers } from "./activity-reaction-users";
-import { wait } from "@/utils/common.utils";
+import ACTIVITY_FRAGMENT from "./graphql/fragmentActivity.graphql";
 import UPDATE_ACTIVITY_MUTATION, {
   type UpdateActivityMutation,
   type UpdateActivityMutationVariables,
 } from "./graphql/mutationUpdateActivity.graphql";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import QUERY_ACTIVITIES from "./graphql/queryActivities.graphql";
 
 const ActivityReplies = dynamic(
   () => import("./activity-replies").then((mod) => mod.ActivityReplies),
@@ -220,7 +220,6 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                   <Menu.Dropdown>
                     <Menu.Item
                       leftSection={<IconPencil size={12} style={{ marginRight: -3 }} />}
-                      color="gray"
                       pl={6}
                       pr={10}
                       fz="xs"
@@ -232,7 +231,6 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
 
                     <Menu.Item
                       leftSection={<IconTrash size={12} style={{ marginRight: -3 }} />}
-                      color="gray"
                       pl={6}
                       pr={10}
                       fz="xs"
@@ -268,7 +266,7 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                   isNonWrapped
                 />
 
-                <Group gap="xs" justify="end">
+                <Group gap={5} justify="end">
                   <Button
                     size="compact-xs"
                     variant="outline"

@@ -23,6 +23,7 @@ import { useWorkspace } from "../workspaces/workspace-context";
 import QUERY_ACTIVITIES from "./graphql/queryActivities.graphql";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { renderFileUrl } from "../files/files-utils";
+import { VoiceInput } from "@/components/inputs/voice-input/voice-input";
 
 export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?: boolean }> = ({
   contextType,
@@ -125,9 +126,15 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
   const actions = useMemo(() => {
     return (
       <Group justify="end" gap={0} mih={28}>
-        <ActionIcon color="gray" variant="subtle">
-          <IconMicrophone size={14} />
-        </ActionIcon>
+        <VoiceInput
+          onComplete={(file) => {
+            editorRef.current?.editor?.commands.addAttachment(file._id);
+          }}
+        >
+          <ActionIcon color="gray" variant="subtle">
+            <IconMicrophone size={14} />
+          </ActionIcon>
+        </VoiceInput>
 
         <ActionIcon color="gray" variant="subtle" onClick={() => photosDialog.open()}>
           <IconPhoto size={14} />

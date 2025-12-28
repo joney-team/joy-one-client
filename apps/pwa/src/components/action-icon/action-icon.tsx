@@ -11,10 +11,11 @@ interface ActionIconProps extends Omit<ActionIconPropsMantine, "onClick"> {
 
 export const ActionIcon: FC<ActionIconProps> = ({ onClick, ...rest }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const loading = rest.loading ?? isLoading;
 
   const handleOnClick = async (event: MouseEvent<HTMLElement>) => {
     try {
-      if (!onClick) return;
+      if (!onClick || loading) return;
       setIsLoading(true);
       await onClick(event);
     } catch (error) {
@@ -24,7 +25,5 @@ export const ActionIcon: FC<ActionIconProps> = ({ onClick, ...rest }) => {
     }
   };
 
-  return (
-    <ActionIconMantine {...rest} onClick={handleOnClick} loading={rest.loading ?? isLoading} />
-  );
+  return <ActionIconMantine {...rest} onClick={handleOnClick} loading={loading} />;
 };
