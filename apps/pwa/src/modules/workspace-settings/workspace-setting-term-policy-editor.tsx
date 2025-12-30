@@ -58,7 +58,7 @@ export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPolici
           </Group>
 
           <Editor
-            value={value}
+            defaultValue={value}
             onChangeHTML={setValue}
             placeholder={t`Enter content`}
             delay={300}

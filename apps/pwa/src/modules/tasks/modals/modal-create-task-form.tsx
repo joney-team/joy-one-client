@@ -170,13 +170,20 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
           />
 
           <Editor
-            value={form.values.description}
+            defaultValue={form.values.description}
             onChangeHTML={(v) => form.setFieldValue("description", v ?? "")}
             delay={300}
             placeholder={t`Task description`}
+            isShowToolbar={false}
+            isNonWrapped
             uploadFileOptions={{
               maxWidthOrHeight: 1500,
               refs: [`${AppEntity.TASKS}:${form.values._id}`],
+            }}
+            styles={{
+              content: {
+                minHeight: 42,
+              },
             }}
           />
         </Stack>

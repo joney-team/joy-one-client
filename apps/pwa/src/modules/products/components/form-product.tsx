@@ -596,7 +596,7 @@ export const FormProduct: FC<
             <Editor
               isShowToolbar
               placeholder={t`Enter content`}
-              value={form.values.content}
+              defaultValue={form.values.content}
               onChangeHTML={(value) => form.setFieldValue("content", value)}
             />
           </Tabs.Panel>

@@ -53,7 +53,6 @@ const ModalFiles = dynamic(
 );
 
 interface EditorProps extends Partial<Omit<RichTextEditorProps, "defaultValue">> {
-  value?: string | JSONContent | undefined | null;
   defaultValue?: string | JSONContent | undefined | null;
   onChangeHTML?: (content?: string) => void;
   onChangeJSON?: (content?: JSONContent) => void;
@@ -111,7 +110,6 @@ export interface EditorRef {
 export const Editor = forwardRef<EditorRef, EditorProps>(
   (
     {
-      value,
       onChangeHTML,
       onChangeJSON,
       delay,
@@ -159,7 +157,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     const editor = useEditor(
       {
         extensions: editorExtensions,
-        content: defaultValue ?? value,
+        content: defaultValue,
         onUpdate: readonly
           ? undefined
           : (e) => {
@@ -169,7 +167,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
         autofocus: autoFocus,
         editable: !readonly,
       },
-      [readonly, defaultValue, value]
+      [readonly, editorExtensions]
     );
 
     const onDropImage = async (files: File[]) => {
