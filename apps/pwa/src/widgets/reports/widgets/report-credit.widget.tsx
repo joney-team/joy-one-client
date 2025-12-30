@@ -351,6 +351,10 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
                 ...generalStyle,
               },
               {
+                value: receipt.workspaceBranch?.name ?? t`Main office`,
+                ...generalStyle,
+              },
+              {
                 value: customer?.name || "--",
                 ...generalStyle,
               },
@@ -414,6 +418,11 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
                 ...headStyle,
               },
               {
+                value: t`Branch`,
+                rowSpan: 2,
+                ...headStyle,
+              },
+              {
                 value: t`Customer`,
                 rowSpan: 2,
                 ...headStyle,
@@ -461,6 +470,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
               null,
               null,
               null,
+              null,
               ...packageTypes.map((type) => {
                 return {
                   value: loanPackageTypes[type].label(),
@@ -494,6 +504,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
               span: 3,
               ...headStyle,
             },
+            null,
             null,
             null,
             ...packageTypes.map((type) => {
@@ -572,7 +583,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
 
           const buffer = await writeXlsxFile([...headers, ...data, totalRow], {
             stickyRowsCount: 2,
-            stickyColumnsCount: 2,
+            stickyColumnsCount: 3,
             columns: [
               { width: 12 },
               { width: 22 },
