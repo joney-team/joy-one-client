@@ -202,7 +202,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
                     minHeight: "60dvh",
                   },
                 }}
-                value={form.values.content}
+                defaultValue={form.values.content}
                 onChangeHTML={(value) => form.setFieldValue("contentHtml", value)}
               />
             </Stack>
