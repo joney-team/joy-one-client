@@ -2,7 +2,6 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { UserCard } from "@/modules/users/components/user-card";
-import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import {
   WorkspaceMemberSelector,
   WorkspaceMemberSelectorProps,
@@ -63,39 +62,34 @@ export const WorkspaceMembersInput: FC<WorkspaceMembersInputProps> = (props) => 
               users.map((user, i) => {
                 return (
                   <Tooltip label={user.name} key={user.userId}>
-                    <ModalUserInformation>
-                      {(modal) => (
-                        <Group align="center" justify="center" style={{ position: "relative" }}>
-                          <UserCard
-                            avatarSize={rest.avatarSize}
-                            user={user}
-                            collapsed={collapsed}
-                            onClick={() => {
-                              modal.open(user.userId);
-                              ctx.close();
-                            }}
-                            onRemove={onChange && (() => toogleSelect(user))}
-                            disabled={disabled}
-                          />
+                    <Group align="center" justify="center" style={{ position: "relative" }}>
+                      <UserCard
+                        avatarSize={rest.avatarSize}
+                        user={user}
+                        collapsed={collapsed}
+                        onClick={() => {
+                          ctx.close();
+                        }}
+                        onRemove={onChange && (() => toogleSelect(user))}
+                        disabled={disabled}
+                      />
 
-                          {showMainResponsible && i === 0 && (
-                            <ThemeIcon
-                              variant="transparent"
-                              color={color("yellow")}
-                              style={{
-                                position: "absolute",
-                                top: -8,
-                                left: -8,
-                                filter: `drop-shadow(0 1px 0px var(--mantine-color-body)) drop-shadow(0 1px 0px var(--mantine-color-body)) drop-shadow(0 0px 2px var(--mantine-color-body))`,
-                                transform: "rotate(-25deg)",
-                              }}
-                            >
-                              <IconFlagFilled size={16} />
-                            </ThemeIcon>
-                          )}
-                        </Group>
+                      {showMainResponsible && i === 0 && (
+                        <ThemeIcon
+                          variant="transparent"
+                          color={color("yellow")}
+                          style={{
+                            position: "absolute",
+                            top: -8,
+                            left: -8,
+                            filter: `drop-shadow(0 1px 0px var(--mantine-color-body)) drop-shadow(0 1px 0px var(--mantine-color-body)) drop-shadow(0 0px 2px var(--mantine-color-body))`,
+                            transform: "rotate(-25deg)",
+                          }}
+                        >
+                          <IconFlagFilled size={16} />
+                        </ThemeIcon>
                       )}
-                    </ModalUserInformation>
+                    </Group>
                   </Tooltip>
                 );
               })}

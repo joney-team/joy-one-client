@@ -9,6 +9,8 @@ import { FC, Fragment, useRef } from "react";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { loanStatuses } from "@/modules/loans/loans-constants";
+import { getTaskStatuses } from "@/modules/tasks/hooks/use-task-statuses";
+import { useColor } from "@/modules/theme/use-color";
 import { type ModalUserInformationRef } from "@/modules/users/modals/modal-user-information";
 import { AppEntity } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
@@ -31,8 +33,6 @@ import QUERY_TASK_MENTION, {
   type TaskMentionQuery,
   type TaskMentionQueryVariables,
 } from "./queryTaskMention.graphql";
-import { getTaskStatuses, useTaskStatuses } from "@/modules/tasks/hooks/use-task-statuses";
-import { useColor } from "@/modules/theme/use-color";
 
 const ModalUserInformation = dynamic(
   () =>
