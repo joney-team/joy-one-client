@@ -310,11 +310,14 @@ export const ProductType = {
 export type ProductType = typeof ProductType[keyof typeof ProductType];
 /** Available reaction types */
 export const ReactionType = {
-  Celebrate: 'CELEBRATE',
+  Angry: 'ANGRY',
+  Dislike: 'DISLIKE',
   Eyes: 'EYES',
   Laugh: 'LAUGH',
   Like: 'LIKE',
-  Love: 'LOVE'
+  Love: 'LOVE',
+  Sad: 'SAD',
+  Surprise: 'SURPRISE'
 } as const;
 
 export type ReactionType = typeof ReactionType[keyof typeof ReactionType];

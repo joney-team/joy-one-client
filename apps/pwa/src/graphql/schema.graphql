@@ -700,11 +700,14 @@ type ReactionCount {
 
 """Available reaction types"""
 enum ReactionType {
-  CELEBRATE
+  ANGRY
+  DISLIKE
   EYES
   LAUGH
   LIKE
   LOVE
+  SAD
+  SURPRISE
 }
 
 type ReactionsCount {

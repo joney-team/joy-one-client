@@ -56,6 +56,7 @@ import UPDATE_ACTIVITY_MUTATION, {
   type UpdateActivityMutationVariables,
 } from "./graphql/mutationUpdateActivity.graphql";
 import QUERY_ACTIVITIES from "./graphql/queryActivities.graphql";
+import Image from "next/image";
 
 const ActivityReplies = dynamic(
   () => import("./activity-replies").then((mod) => mod.ActivityReplies),
@@ -262,7 +263,7 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                   style={{ fontSize: 14 }}
                   key={activity._id + "edit"}
                   defaultValue={parseEditorJSON(activity.content)}
-                  isShowToolbar={false}
+                  isEnableToolbar={false}
                   isNonWrapped
                 />
 
@@ -318,7 +319,20 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                               variant="light"
                               onClick={() => handleRemoveReaction(reaction.type)}
                               color={reactionType.color}
-                              leftIcon={reactionType.icon}
+                              styles={{
+                                section: {
+                                  marginRight: 5,
+                                },
+                              }}
+                              leftSection={
+                                <Image
+                                  src={reactionType.iconSrc}
+                                  alt=""
+                                  fill={false}
+                                  width={14}
+                                  height={14}
+                                />
+                              }
                             >
                               {reaction.userIds.length > 1 ? (
                                 <Trans>You and +{reaction.userIds.length - 1}</Trans>
@@ -349,15 +363,34 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                 {otherReactions.map((reaction) => {
                   const reactionType = reactionTypes[reaction.type];
                   return (
-                    <Button
-                      key={reaction.type + "other"}
-                      size="compact-xs"
-                      variant="light"
-                      color={reactionType.color}
-                      leftIcon={reactionType.icon}
-                    >
-                      <NumberFormat value={reaction.userIds.length} />
-                    </Button>
+                    <Menu trigger="click-hover">
+                      <Menu.Target>
+                        <Button
+                          key={reaction.type + "other"}
+                          size="compact-xs"
+                          variant="light"
+                          color={reactionType.color}
+                          styles={{
+                            section: {
+                              marginRight: 5,
+                            },
+                          }}
+                          leftSection={
+                            <Image
+                              src={reactionType.iconSrc}
+                              alt=""
+                              fill={false}
+                              width={14}
+                              height={14}
+                            />
+                          }
+                        >
+                          <NumberFormat value={reaction.userIds.length} />
+                        </Button>
+                      </Menu.Target>
+
+                      <ActivityReactionUsers userIds={reaction.userIds} />
+                    </Menu>
                   );
                 })}
 
@@ -369,7 +402,7 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                       </ActionIcon>
                     </Popover.Target>
 
-                    <Popover.Dropdown p={3}>
+                    <Popover.Dropdown p={5}>
                       <Group gap={0}>
                         {availableReactions.map((type) => {
                           const reactionType = reactionTypes[type];
@@ -378,10 +411,16 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                               key={type}
                               variant="subtle"
                               color={reactionType.color}
-                              size="lg"
+                              size="xl"
                               onClick={() => handleAddReaction(type)}
                             >
-                              <reactionType.icon size={16} />
+                              <Image
+                                src={reactionType.iconSrc}
+                                alt=""
+                                fill={false}
+                                width={25}
+                                height={25}
+                              />
                             </ActionIcon>
                           );
                         })}

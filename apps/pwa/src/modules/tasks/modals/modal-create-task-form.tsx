@@ -174,7 +174,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
             onChangeHTML={(v) => form.setFieldValue("description", v ?? "")}
             delay={300}
             placeholder={t`Task description`}
-            isShowToolbar={false}
+            isEnableToolbar={false}
             isNonWrapped
             uploadFileOptions={{
               maxWidthOrHeight: 1500,

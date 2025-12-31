@@ -59,7 +59,8 @@ interface EditorProps extends Partial<Omit<RichTextEditorProps, "defaultValue">>
   delay?: number;
   placeholder?: string;
   uploadFileOptions?: UploadFileOptions;
-  isShowToolbar?: boolean;
+  isEnableToolbar?: boolean;
+  isEnableBubbleMenu?: boolean;
   isNonWrapped?: boolean;
   readonly?: boolean;
   container?: BoxProps;
@@ -115,7 +116,8 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       delay,
       placeholder,
       uploadFileOptions,
-      isShowToolbar = true,
+      isEnableToolbar = true,
+      isEnableBubbleMenu = true,
       isNonWrapped = false,
       defaultValue,
       readonly = false,
@@ -218,7 +220,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
         {...container}
       >
         <RichTextEditor {...rest} editor={editor} onPaste={onPaste}>
-          {isShowToolbar && !readonly && (
+          {isEnableToolbar && !readonly && (
             <RichTextEditor.Toolbar sticky stickyOffset="var(--docs-header-height)">
               <RichTextEditor.ControlsGroup>
                 <RichTextEditor.Bold />
@@ -269,7 +271,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
             </RichTextEditor.Toolbar>
           )}
 
-          {!readonly && (
+          {!readonly && isEnableBubbleMenu && (
             <BubbleMenu editor={editor}>
               <RichTextEditor.ControlsGroup>
                 <RichTextEditor.Bold />

@@ -151,7 +151,7 @@ export const TaskDetail: FC = () => {
                         maxWidthOrHeight: 1500,
                         refs: [`${AppEntity.TASKS}:${task._id}`],
                       }}
-                      isShowToolbar={false}
+                      isEnableToolbar={false}
                       isNonWrapped
                       style={{ padding: `0 0.25rem`, zIndex: 2 }}
                     />

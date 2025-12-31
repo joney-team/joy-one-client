@@ -171,7 +171,8 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
           ref={editorRef}
           placeholder={t`Leave a comment...`}
           isNonWrapped
-          isShowToolbar={false}
+          isEnableToolbar={false}
+          isEnableBubbleMenu={false}
           style={{ fontSize: 14 }}
           container={{ flex: 1, pt: 4 }}
           autoFocus={autoFocus}
@@ -190,7 +191,8 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
           ref={editorRef}
           placeholder={t`Leave a comment...`}
           isNonWrapped
-          isShowToolbar={false}
+          isEnableToolbar={false}
+          isEnableBubbleMenu={false}
           autoFocus={autoFocus}
           style={{ fontSize: 14 }}
         />

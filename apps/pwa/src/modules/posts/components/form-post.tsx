@@ -191,7 +191,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               </Stack>
 
               <Editor
-                isShowToolbar
+                isEnableToolbar
                 placeholder={t`Enter content`}
                 styles={{
                   root: {
