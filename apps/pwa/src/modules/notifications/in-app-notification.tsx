@@ -17,6 +17,7 @@ export const InAppNotification: FC = () => {
   const router = useRouter();
   const lang = useLang();
   const { device } = useAuth();
+  const { user } = useAuth();
   const theme = useMantineTheme();
 
   const listenNotification = async () => {
@@ -33,20 +34,22 @@ export const InAppNotification: FC = () => {
   };
 
   useEffect(() => {
-    if (!!device?.notificationToken && "Notification" in window) {
-      listenNotification();
-    } else {
-      const onNewNotification = (ev: EventEntity) => {
-        showInAppNotification(ev.data, router, theme);
-      };
+    if (user?._id) {
+      if (!!device?.notificationToken && "Notification" in window) {
+        listenNotification();
+      } else {
+        const onNewNotification = (ev: EventEntity) => {
+          showInAppNotification(ev.data, router, theme);
+        };
 
-      addEventsListener(EventType.NotificationNew, onNewNotification);
+        addEventsListener(EventType.NotificationNew, onNewNotification);
 
-      return () => {
-        removeEventsListner(EventType.NotificationNew, onNewNotification);
-      };
+        return () => {
+          removeEventsListner(EventType.NotificationNew, onNewNotification);
+        };
+      }
     }
-  }, [device?.notificationToken, device?.locale, lang.locale]);
+  }, [device?.notificationToken, device?.locale, lang.locale, user?._id]);
 
   return null;
 };
