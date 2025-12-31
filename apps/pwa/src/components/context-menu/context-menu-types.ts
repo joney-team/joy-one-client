@@ -1,16 +1,15 @@
 import type { BaseData } from "@joy-one-client/utils/base-data";
-import type { ComponentType, FC, ReactNode, RefObject } from "react";
+import type { ComponentType, FC, MouseEvent, ReactNode, RefObject } from "react";
 import type { PlaceDropdownMenuOptions } from "./context-menu-helpers";
 
 export type OpenContextMenuArgs<T extends BaseData = BaseData, Context = unknown> = {
-  target: HTMLElement;
   data: T;
   context?: Context;
   onClose?: () => void;
   options?: PlaceDropdownMenuOptions;
-};
+} & ({ target: HTMLElement } | { event: MouseEvent });
 
-export type ContextMenuDropdownComponentProps<T = BaseData, Context = unknown> = {
+export type ContextMenuDropdownComponentProps<T extends BaseData = BaseData, Context = unknown> = {
   data: T | null;
   context: Context | null;
   setClickOutsideToClose: (enabled: boolean) => void;

@@ -2,7 +2,7 @@
 
 import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { useColor } from "@/modules/theme/use-color";
-import type { WidgetComponent, WidgetLayoutConfig } from "@/widgets/types";
+import type { WidgetComponent, WidgetLayoutConfig } from "@/widgets/widgets-types";
 import { Trans } from "@lingui/react/macro";
 import { Card, em, Group, LoadingOverlay, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
@@ -78,6 +78,7 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
                       value: v.label,
                     }))}
                     curveType="monotone"
+                    style={{ outline: "none" }}
                     unit={unit?.short ? unit.short : undefined}
                     tooltipAnimationDuration={200}
                     referenceLines={

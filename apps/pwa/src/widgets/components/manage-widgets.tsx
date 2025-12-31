@@ -7,7 +7,7 @@ import { ActionIcon, Card, Group, Modal, Stack, Text, TextInput, Tooltip } from 
 import { IconBox, IconMinus, IconPlus, IconPuzzle, IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Widget, WidgetModule, WidgetModules } from "../types";
+import { Widget, WidgetModule, WidgetModules } from "../widgets-types";
 
 interface ManageWidgetsProps<WidgetContextType = any, WidgetType = string> {
   widgets: Widget<WidgetType>[];

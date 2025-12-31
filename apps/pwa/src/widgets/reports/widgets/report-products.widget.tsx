@@ -16,7 +16,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WidgetProps } from "@/widgets/types";
+import { WidgetProps } from "@/widgets/widgets-types";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,

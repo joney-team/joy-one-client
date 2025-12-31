@@ -5,7 +5,7 @@ import {
 import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Period } from "@/types";
 import { numberWidget, numberWidgetlayoutConfig } from "@/widgets/common/number.widget";
-import { EWidgetModules } from "@/widgets/types";
+import { EWidgetModules } from "@/widgets/widgets-types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { useLingui } from "@lingui/react/macro";
 import {

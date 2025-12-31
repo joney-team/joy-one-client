@@ -16,7 +16,7 @@ import { useFetch } from "@/utils/use-fetch.util";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Stack } from "@mantine/core";
 import { FC } from "react";
-import { Widgets } from "..";
+import { Widgets } from "../widgets";
 import { dashboardWidgetModules } from "./modules";
 import { DashboardWidgetsContext, RangeReports } from "./types";
 

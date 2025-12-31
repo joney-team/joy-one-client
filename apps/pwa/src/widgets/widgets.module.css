@@ -1,0 +1,19 @@
+.Widgets {
+  & :global(.react-grid-layout) {
+    & :global(.react-resizable-handle) {
+      /* opacity: 0; */
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    & :global(.react-grid-placeholder) {
+      opacity: 0;
+    }
+  }
+
+  & * {
+    outline: none;
+  }
+}

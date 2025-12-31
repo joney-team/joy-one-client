@@ -16,7 +16,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
-import { WidgetProps } from "@/widgets/types";
+import { WidgetProps } from "@/widgets/widgets-types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Card, Group, parseThemeColor, Stack, useMantineTheme } from "@mantine/core";

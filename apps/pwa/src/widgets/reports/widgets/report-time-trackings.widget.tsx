@@ -13,7 +13,7 @@ import { TagType } from "@/modules/tags/tags-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
-import { WidgetProps } from "@/widgets/types";
+import { WidgetProps } from "@/widgets/widgets-types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Table, Text, ThemeIcon } from "@mantine/core";

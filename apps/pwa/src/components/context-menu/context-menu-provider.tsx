@@ -14,7 +14,7 @@ import {
 
 import { getId, type BaseData } from "@joy-one-client/utils/base-data";
 import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
-import { placeDropdownMenu } from "./context-menu-helpers";
+import { placeDropdownMenuByMouseEvent, placeDropdownMenuByTarget } from "./context-menu-helpers";
 import styles from "./context-menu.module.css";
 
 export const ContextMenuProvider = <T extends BaseData, Context = unknown>(
@@ -26,25 +26,49 @@ export const ContextMenuProvider = <T extends BaseData, Context = unknown>(
 
   const onClose = () => {
     if (!menuRef.current) return;
+    const targetMenuId = menuArgsRef.current?.data ? getId(menuArgsRef.current.data) : null;
+
     menuArgsRef.current?.onClose?.();
     menuArgsRef.current = null;
 
     menuRef.current.setAttribute("data-opened", "false");
     menuRef.current.classList.remove(styles.AnimatedIn);
+
+    if (targetMenuId) {
+      document.getElementById(targetMenuId)?.removeAttribute("data-context-menu-opened");
+    }
   };
 
   const onOpen = (args: OpenContextMenuArgs) => {
     if (!menuRef.current) return;
 
     const oldMenuId = menuArgsRef.current?.data ? getId(menuArgsRef.current.data) : null;
-    const isSameMenu = oldMenuId === getId(args.data);
+    const newMenuId = args.data ? getId(args.data) : null;
+    const isSameMenu = oldMenuId === newMenuId;
 
     if (isSameMenu) {
       requestAnimationFrameTimes(() => {
         if (!menuRef.current) return;
+
         menuArgsRef.current = args;
         menuRef.current.setAttribute("data-key", Date.now().toString());
-        placeDropdownMenu({ target: args.target, menu: menuRef.current }, args.options);
+
+        const event = "event" in args ? args.event : null;
+        const target = "target" in args ? args.target : null;
+
+        if (event) {
+          placeDropdownMenuByMouseEvent({
+            event,
+            menu: menuRef.current,
+            options: args.options,
+          });
+        } else if (target) {
+          placeDropdownMenuByTarget({ target, menu: menuRef.current, options: args.options });
+        }
+
+        if (newMenuId) {
+          document.getElementById(newMenuId)?.setAttribute("data-context-menu-opened", "true");
+        }
       });
     } else {
       onClose();
@@ -53,10 +77,27 @@ export const ContextMenuProvider = <T extends BaseData, Context = unknown>(
         if (!menuRef.current) return;
         menuArgsRef.current = args;
         menuRef.current.setAttribute("data-opened", "true");
+
         requestAnimationFrameTimes(() => {
           if (!menuRef.current) return;
           menuRef.current.classList.add(styles.AnimatedIn);
-          placeDropdownMenu({ target: args.target, menu: menuRef.current }, args.options);
+
+          const event = "event" in args ? args.event : null;
+          const target = "target" in args ? args.target : null;
+
+          if (event) {
+            placeDropdownMenuByMouseEvent({
+              menu: menuRef.current,
+              event,
+              options: args.options,
+            });
+          } else if (target) {
+            placeDropdownMenuByTarget({ target, menu: menuRef.current, options: args.options });
+          }
+
+          if (newMenuId) {
+            document.getElementById(newMenuId)?.setAttribute("data-context-menu-opened", "true");
+          }
         });
       });
     }

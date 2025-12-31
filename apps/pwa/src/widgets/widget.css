@@ -1,9 +1,0 @@
-.react-grid-layout {
-  .react-resizable-handle {
-    opacity: 0;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-}

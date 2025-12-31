@@ -6,7 +6,7 @@ import { Renderer } from "@/components/renderer";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { resizeArrayForSparkline } from "@/utils/chart.utils";
-import { WidgetComponent, WidgetLayoutConfig } from "@/widgets/types";
+import { WidgetComponent, WidgetLayoutConfig } from "@/widgets/widgets-types";
 import {
   ActionIcon,
   Box,

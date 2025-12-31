@@ -2,7 +2,7 @@ import type { WorkspacePermission } from "@/modules/workspace-roles/workspace-ro
 import type { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import type { Icon } from "@tabler/icons-react";
 import type { FC } from "react";
-import type { Layout } from "react-grid-layout";
+import type { LayoutItem } from "react-grid-layout";
 
 export interface WidgetLayoutConfig {
   initH?: number;
@@ -75,6 +75,5 @@ export interface WidgetsContext<ContextType = any, WidgetType = string> {
 }
 
 export interface WidgetStorage {
-  version: string;
-  layout?: Layout[] | null;
+  layout?: LayoutItem[] | null;
 }

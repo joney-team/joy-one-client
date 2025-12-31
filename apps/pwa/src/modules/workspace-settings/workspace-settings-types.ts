@@ -9,7 +9,7 @@ import { PluginMailerAccount } from "@/modules/workspaces/workspaces-types";
 import { AppEntity, BaseMongoEntity, WorkSlot } from "@/types";
 import { DashboardWidgetType } from "@/widgets/dashboard/types";
 import { ReportWidgetType } from "@/widgets/reports/types";
-import { Widget } from "@/widgets/types";
+import { Widget } from "@/widgets/widgets-types";
 import { ZaloOaGmfGroupSettings } from "../plugins/zalo-oas/zalo-oas-types";
 export interface WorkspaceViewComponent {
   id: string;

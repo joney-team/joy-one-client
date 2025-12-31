@@ -2,91 +2,59 @@
 
 import { Stack } from "@mantine/core";
 import { WidgetItem } from "./components/widget-item";
-import type { Widget, WidgetsContext, WidgetsProps, WidgetStorage } from "./types";
+import type { Widget, WidgetsContext, WidgetsProps, WidgetStorage } from "./widgets-types";
 
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
-import "./widget.css";
+import styles from "./widgets.module.css";
 
-import { ContextMenu } from "@/components/context-menu";
+import {
+  ContextMenuDropdown,
+  ContextMenuItem,
+} from "@/components/context-menu/context-menu-components";
+import { ContextMenuProvider } from "@/components/context-menu/context-menu-provider";
+import { ContextMenuDropdownComponentProps } from "@/components/context-menu/context-menu-types";
 import { Empty } from "@/components/empty";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
 import { isDiff } from "@/utils/object.utils";
+import { getId } from "@joy-one-client/utils/base-data";
 import { Trans } from "@lingui/react/macro";
+import { useClickOutside, useLocalStorage } from "@mantine/hooks";
 import { IconPencil, IconPlusMinus, IconRefresh, IconTrash } from "@tabler/icons-react";
 import { Fragment, useMemo, useState } from "react";
-import GridLayout, { Layout } from "react-grid-layout";
+import ReactGridLayout, { type LayoutItem } from "react-grid-layout";
 import { ManageWidgets } from "./components/manage-widgets";
 
 const gridLayoutConfig = {
-  storageVersion: "1.0",
   cols: 12,
   rowHeight: 12,
-};
-
-function findWidgetIdElement(element: HTMLElement | null, maxDepth: number = 100): string | null {
-  let depth = 0;
-
-  while (element && depth < maxDepth) {
-    const widgetId = element.getAttribute("widget-id");
-    if (widgetId) {
-      return widgetId;
-    }
-    element = element.parentElement;
-    depth++;
-  }
-
-  return null;
-}
-
-const getWidgetStorageKey = (id: string) => `wids:${id}`;
-
-const defaultStorage: WidgetStorage = {
-  version: gridLayoutConfig.storageVersion,
-};
-
-const getWidgetStorage = (id: string): WidgetStorage => {
-  try {
-    const widgetStorageId = getWidgetStorageKey(id);
-    const cached = localStorage.getItem(widgetStorageId);
-    const parsed = cached ? JSON.parse(cached) : null;
-    if (!parsed || parsed.version !== gridLayoutConfig.storageVersion) {
-      return defaultStorage;
-    }
-    return parsed;
-  } catch {
-    return defaultStorage;
-  }
-};
-
-const setWidgetStorage = (id: string, func: (storage: WidgetStorage) => WidgetStorage) => {
-  const storage = getWidgetStorage(id);
-  localStorage.setItem(getWidgetStorageKey(id), JSON.stringify(func(storage)));
 };
 
 export function Widgets<ContextType = object, WidgetType = string>(
   props: WidgetsProps<ContextType, WidgetType>
 ) {
-  const { id } = props;
+  const [state, setState] = useLocalStorage<WidgetStorage>({
+    key: `wids:v1:${props.id}`,
+    defaultValue: {},
+  });
+
   const layout = useLayout();
   const workspaceLayout = useWorkspaceLayout();
   const readonly = props.readonly || !props.onChange;
 
-  const color = useColor();
-  const [version, setVersion] = useState(0);
   const [isManageWidgetsOpened, setIsManageWidgetsOpened] = useState(false);
-  const [pointedWidgetId, setPointedWidgetId] = useState<string | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const isChangeLayoutAble = layout.view === "desktop" && !props.readonly && isEditMode;
+  const ref = useClickOutside(() => setIsEditMode(false));
 
   const widgets = useMemo(() => {
     return props.widgets ?? props.defaultWidgets ?? [];
   }, [props.widgets, props.defaultWidgets]);
 
-  const normalizeGridLayout = (layout: Layout[]): Layout[] => {
+  const normalizeGridLayout = (layout: LayoutItem[]): LayoutItem[] => {
     return layout
       .map((v) => ({
         i: v.i,
@@ -101,7 +69,7 @@ export function Widgets<ContextType = object, WidgetType = string>(
   };
 
   const autoGridLayout = (widgets: Widget<WidgetType>[]) => {
-    const gridLayout: Layout[] = [];
+    const gridLayout: LayoutItem[] = [];
 
     for (let i = 0; i < widgets.length; i++) {
       let x = 0,
@@ -152,24 +120,15 @@ export function Widgets<ContextType = object, WidgetType = string>(
     return gridLayout;
   };
 
-  const gridLayout: Layout[] = useMemo(() => {
-    let layout: Layout[] = autoGridLayout(widgets);
+  const gridLayout: LayoutItem[] = useMemo(() => {
+    const stateLayoutItems: LayoutItem[] = state.layout ?? autoGridLayout(widgets);
+    return normalizeGridLayout(stateLayoutItems);
+  }, [props.id, widgets, autoGridLayout]);
 
-    try {
-      const storage = getWidgetStorage(id);
-      if (storage.layout) layout = storage.layout;
-    } catch {}
-
-    return normalizeGridLayout(layout);
-  }, [props.id, widgets, autoGridLayout, version]);
-
-  const onChangeLayout = (layout: Layout[]) => {
+  const onChangeLayout = (layout: LayoutItem[]) => {
     const diff = isDiff(normalizeGridLayout(layout), normalizeGridLayout(gridLayout));
     if (!isChangeLayoutAble || !diff) return;
-    setWidgetStorage(id, (storage) => ({
-      ...storage,
-      layout: normalizeGridLayout(layout),
-    }));
+    setState((state) => ({ ...state, layout: normalizeGridLayout(layout) }));
   };
 
   const onRemove = (id: string) => {
@@ -194,8 +153,7 @@ export function Widgets<ContextType = object, WidgetType = string>(
 
   const resetDefault = () => {
     props.onChange?.(null);
-    setWidgetStorage(id, () => defaultStorage);
-    setVersion(version + 1);
+    setState({});
   };
 
   const widgetsContext: WidgetsContext<ContextType, WidgetType> = {
@@ -206,56 +164,116 @@ export function Widgets<ContextType = object, WidgetType = string>(
     updateState,
   };
 
-  const width =
-    layout.view === "mobile"
+  const width = useMemo(() => {
+    return layout.view === "mobile"
       ? layout.width - 16 * 2
       : layout.width - workspaceLayout.navigationWidth - 16 * 2;
+  }, [layout.view, layout.width, workspaceLayout.navigationWidth]);
+
+  const layoutItems = useMemo(() => {
+    return layout.view === "mobile" ? gridLayout.map((v) => ({ ...v, w: 12 })) : gridLayout;
+  }, [layout.view, gridLayout]);
 
   return (
     <Fragment>
-      <ContextMenu
-        disabled={readonly}
-        position="bottom-start"
-        onOpen={(e) => {
-          if (readonly) return;
-          const widgetId = findWidgetIdElement(e.target as HTMLElement);
-          const widget = widgets.find((v) => v.id === widgetId);
-          setPointedWidgetId(widget?.id ?? null);
-        }}
-        onClose={() => setPointedWidgetId(null)}
-      >
-        <ContextMenu.Target>
-          <Stack mih={300} style={{ width: "100%" }}>
-            {widgets.length > 0 ? (
-              <GridLayout
-                key={version}
-                width={width}
-                layout={
-                  layout.view === "mobile" ? gridLayout.map((v) => ({ ...v, w: 12 })) : gridLayout
+      <ContextMenuProvider
+        dropdown={(contextMenu: ContextMenuDropdownComponentProps) => {
+          const menuId = contextMenu.data ? getId(contextMenu.data) : null;
+
+          return (
+            <ContextMenuDropdown onClickOutside={contextMenu.onClose}>
+              <ContextMenuItem
+                icon={IconPencil}
+                label={
+                  isEditMode ? (
+                    <Trans>Turn off editing layout</Trans>
+                  ) : (
+                    <Trans>Resize widget layout</Trans>
+                  )
                 }
-                rowHeight={gridLayoutConfig.rowHeight}
-                cols={gridLayoutConfig.cols}
-                containerPadding={[0, 0]}
-                margin={[16, 16]}
-                onLayoutChange={onChangeLayout}
-                isDraggable={isChangeLayoutAble}
-                isResizable={isChangeLayoutAble}
-                resizeHandles={["s", "w", "e", "n", "sw", "nw", "se", "ne"]}
+                onClick={() => {
+                  contextMenu.onClose();
+                  setIsEditMode(!isEditMode);
+                }}
+              />
+              <ContextMenuItem
+                icon={IconPlusMinus}
+                label={<Trans>Plus or remove widgets</Trans>}
+                onClick={() => {
+                  contextMenu.onClose();
+                  setIsManageWidgetsOpened(true);
+                }}
+              />
+              <ContextMenuItem
+                icon={IconRefresh}
+                label={<Trans>Reset default</Trans>}
+                onClick={() => {
+                  contextMenu.onClose();
+                  resetDefault();
+                }}
+              />
+
+              {menuId && menuId !== "board" && (
+                <ContextMenuItem
+                  icon={IconTrash}
+                  label={<Trans>Remove widget</Trans>}
+                  onClick={() => {
+                    contextMenu.onClose();
+                    onRemove(menuId);
+                  }}
+                />
+              )}
+            </ContextMenuDropdown>
+          );
+        }}
+      >
+        {(context) => (
+          <Stack
+            ref={ref}
+            id="Widgets"
+            mih={300}
+            w="100%"
+            className={styles.Widgets}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              context.open({ event: e, data: { id: "board" } });
+            }}
+          >
+            {widgets.length > 0 ? (
+              <ReactGridLayout
+                key={props.id}
+                width={width}
+                layout={layoutItems}
+                gridConfig={{
+                  rowHeight: gridLayoutConfig.rowHeight,
+                  cols: gridLayoutConfig.cols,
+                  containerPadding: [0, 0],
+                  margin: [16, 16],
+                }}
+                onLayoutChange={(layoutChanged) => onChangeLayout([...layoutChanged])}
+                dragConfig={{ enabled: isChangeLayoutAble }}
+                dropConfig={{ enabled: isChangeLayoutAble }}
+                resizeConfig={{
+                  enabled: isChangeLayoutAble,
+                  handles: ["s", "w", "e", "n", "sw", "nw", "se", "ne"],
+                }}
               >
                 {widgets.map((w) => {
-                  const isPointed = pointedWidgetId === w.id;
-                  const mod = (props.modules as any)[w.type];
+                  const mod = props.modules[w.type as keyof typeof props.modules];
                   if (!mod) return null;
 
                   return (
-                    <Stack
+                    <div
                       key={w.id}
                       style={{
                         width: "100%",
                         height: "100%",
                         overflow: "visible",
-                        borderRadius: "var(--mantine-radius-md)",
-                        border: `1px solid ${isPointed ? color("primary.4") : "transparent"}`,
+                      }}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        context.open({ event: e, data: w });
                       }}
                     >
                       <WidgetItem
@@ -264,12 +282,12 @@ export function Widgets<ContextType = object, WidgetType = string>(
                         ctx={props.context || ({} as any)}
                         config={mod.config}
                         component={mod.component}
-                        widgetsContext={widgetsContext}
+                        widgetsContext={widgetsContext as WidgetsContext<ContextType, string>}
                       />
-                    </Stack>
+                    </div>
                   );
                 })}
-              </GridLayout>
+              </ReactGridLayout>
             ) : (
               <Empty
                 hideBorder
@@ -284,41 +302,8 @@ export function Widgets<ContextType = object, WidgetType = string>(
               />
             )}
           </Stack>
-        </ContextMenu.Target>
-
-        <ContextMenu.Dropdown>
-          <ContextMenu.Item
-            fz={14}
-            leftSection={<IconPencil size={16} />}
-            onClick={() => setIsEditMode(!isEditMode)}
-          >
-            {isEditMode ? <Trans>Disable</Trans> : <Trans>Resize widget layout</Trans>}
-          </ContextMenu.Item>
-
-          <ContextMenu.Item
-            fz={14}
-            leftSection={<IconPlusMinus size={16} />}
-            onClick={() => setIsManageWidgetsOpened(true)}
-          >
-            <Trans>Plus or remove widgets</Trans>
-          </ContextMenu.Item>
-
-          <ContextMenu.Item fz={14} leftSection={<IconRefresh size={16} />} onClick={resetDefault}>
-            <Trans>Reset default</Trans>
-          </ContextMenu.Item>
-
-          {pointedWidgetId && (
-            <ContextMenu.Item
-              color="red"
-              fz={14}
-              leftSection={<IconTrash size={16} />}
-              onClick={() => onRemove(pointedWidgetId)}
-            >
-              <Trans>Remove widget</Trans>
-            </ContextMenu.Item>
-          )}
-        </ContextMenu.Dropdown>
-      </ContextMenu>
+        )}
+      </ContextMenuProvider>
 
       {!readonly && (
         <ManageWidgets

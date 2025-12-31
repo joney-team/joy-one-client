@@ -6,7 +6,7 @@ import { useContextMenu } from "./context-menu";
 import { ContextMenuProps } from "./context-menu-types";
 
 import { getId } from "@joy-one-client/utils/base-data";
-import { placeDropdownMenu } from "./context-menu-helpers";
+import { placeDropdownMenuByMouseEvent, placeDropdownMenuByTarget } from "./context-menu-helpers";
 import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 
 export const ContextMenuDropdown = ({
@@ -75,29 +75,47 @@ export const ContextMenuDropdown = ({
 
     const placeMenu = () => {
       if (!menuRef.current || !menuArgsRef.current) return;
-      placeDropdownMenu(
-        { target: menuArgsRef.current.target, menu: menuRef.current },
-        {
+
+      const target = "target" in menuArgsRef.current ? menuArgsRef.current.target : null;
+      const event = "event" in menuArgsRef.current ? menuArgsRef.current.event : null;
+
+      if (target) {
+        return placeDropdownMenuByTarget({
+          target,
+          menu: menuRef.current,
           ...options,
           ...menuArgsRef.current.options,
-        }
-      );
-    };
+        });
+      }
 
-    // Use requestAnimationFrame to ensure the display change is applied before animation
-    requestAnimationFrameTimes(() => {
-      if (!menuRef.current || !menuArgsRef.current) return;
-      placeMenu();
-    });
+      if (event) {
+        return placeDropdownMenuByMouseEvent({
+          event,
+          menu: menuRef.current,
+          options: {
+            ...options,
+            ...menuArgsRef.current.options,
+          },
+        });
+      }
+    };
 
     // Click outside of menu to close
     const onMouseDown = (e: MouseEvent) => {
       if (!menuArgsRef.current || !menuRef.current) return;
+      const eventTarget: HTMLElement | null =
+        "target" in menuArgsRef.current
+          ? menuArgsRef.current.target
+          : "event" in menuArgsRef.current
+          ? (menuArgsRef.current.event.currentTarget as HTMLElement)
+          : null;
+
       if (
         clickOutsideToCloseEnabled.current &&
         e.target &&
         !menuRef.current.contains(e.target as Node) &&
-        !menuArgsRef.current.target.contains(e.target as Node)
+        eventTarget &&
+        !eventTarget.contains(e.target as Node)
       ) {
         onClose();
       }

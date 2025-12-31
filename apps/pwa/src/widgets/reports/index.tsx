@@ -19,7 +19,6 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { Period } from "@/types";
-import { nonLoading } from "@/utils/non-loading";
 import { ObjectUtils } from "@/utils/object.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
@@ -35,15 +34,14 @@ import {
   IconUsers,
   IconX,
 } from "@tabler/icons-react";
-import dynamic from "next/dynamic";
 import { FC } from "react";
 import { Avatar } from "../../components/avatar";
 import { ButtonSelect } from "../../components/buttons/button-select";
 import { Errored } from "../../components/errored";
 import { Renderer } from "../../components/renderer";
+import { Widgets } from "../widgets";
 import { useReportWidgetModules } from "./modules";
-import { ReportWidgetsContext, ReportWidgetType } from "./types";
-import { Widgets } from "..";
+import { ReportWidgetsContext } from "./types";
 
 export const ReportWidgets: FC = () => {
   const workspace = useWorkspace();

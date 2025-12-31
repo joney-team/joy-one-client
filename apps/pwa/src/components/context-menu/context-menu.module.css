@@ -16,3 +16,15 @@
     pointer-events: auto;
   }
 }
+
+.ContextMenuItem {
+  padding: 0.4rem 0.5rem;
+  padding-right: 0.8rem;
+
+  &:hover {
+    background: var(--mantine-color-default-hover);
+    cursor: pointer;
+    user-select: none;
+    border-radius: 3px;
+  }
+}

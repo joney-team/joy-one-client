@@ -18,7 +18,7 @@ import {
 } from "@tabler/icons-react";
 import { chartWidget, chartWidgetlayoutConfig } from "../common/chart.widget";
 import { numberWidget } from "../common/number.widget";
-import { EWidgetModules } from "../types";
+import { EWidgetModules } from "../widgets-types";
 import { DashboardWidgetsContext, DashboardWidgetType } from "./types";
 import { t } from "@lingui/core/macro";
 import { DateTime } from "@joy-one-client/utils/date-time";
