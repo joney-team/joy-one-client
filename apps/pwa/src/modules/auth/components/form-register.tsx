@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { useAuth } from "@/modules/auth/auth-context";
-import { onFormError, onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { onFormError } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { PasswordInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
