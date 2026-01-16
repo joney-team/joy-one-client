@@ -20,7 +20,7 @@ export const Fullscreen: FC<FullscreenProps> = (props) => {
       bottom={0}
       style={{
         zIndex: typeof props.zIndex === "number" ? props.zIndex : 10,
-        overflowY: "scroll",
+        overflowY: "auto",
         overflowX: "hidden",
       }}
     >

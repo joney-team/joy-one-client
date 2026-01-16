@@ -25,7 +25,7 @@ export const onError = (
 ) => {
   let message: string = t`Internal server error`;
 
-  if (error instanceof AxiosError) {
+  if (error instanceof AxiosError || (typeof error === "object" && "response" in error)) {
     message = error.response?.data?.message || error.message;
   } else if (typeof error === "string") {
     message = error;

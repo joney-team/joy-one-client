@@ -5,11 +5,13 @@ import { useLang } from "@/modules/lang/lang-context";
 import { AppLocale } from "@/modules/lang/lang-types";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
-import { Anchor, Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import { Anchor, Card, em, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLanguage, IconWorld } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { Image } from "../image";
+import { Modal } from "../modal/modal";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 export const ButtonLanguage: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -17,13 +19,13 @@ export const ButtonLanguage: FC = () => {
   const color = useColor();
 
   const onSelect = async (locale?: AppLocale) => {
-    close();
     lang.changeLocale(locale ?? "default");
+    close();
   };
 
   return (
     <Fragment>
-      <Anchor fz={em(13)} ta="center" c="gray" onClick={open}>
+      <Anchor fz="xs" ta="center" c="gray" onClick={open}>
         <Group align="center" gap={0}>
           <ThemeIcon variant="transparent" color="gray">
             <IconWorld size={16} strokeWidth={1.5} />
@@ -32,7 +34,12 @@ export const ButtonLanguage: FC = () => {
         </Group>
       </Anchor>
 
-      <Modal opened={opened} onClose={close} withCloseButton={false}>
+      <Modal
+        opened={opened}
+        onClose={close}
+        withCloseButton={false}
+        zIndex={zIndexes.requireAuth + 1}
+      >
         <Stack p={8}>
           <Group justify="center" gap={5} mb={10}>
             <ThemeIcon variant="transparent">

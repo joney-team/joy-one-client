@@ -165,13 +165,12 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
     if (!receipt) return;
 
     const data = await getReceipt(receipt.id);
+
     if (data.status === ReceiptStatus.PAID) {
       props.onPaid?.();
     } else {
       props.onClosed?.();
     }
-
-    modals.close("ModalPayReceipt");
   };
 
   const onPayReceipt = async () => {
@@ -586,7 +585,7 @@ export const ModalPayReceipt = forwardRef<
             onClosed={onClose}
             onPaid={() => {
               args?.onPaid?.();
-              close();
+              onClose();
             }}
           />
         )}

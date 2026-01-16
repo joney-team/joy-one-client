@@ -214,7 +214,13 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
             amount: order.totalAmount - order.paidAmount,
           });
 
-          modalPayReceipt.open({ receipt, onPaid: () => fetchOrder(activeOrder.id) });
+          modalPayReceipt.open({
+            receipt,
+            onPaid: () => {
+              fetchOrder(activeOrder.id);
+              closeOrder(activeOrder.id);
+            },
+          });
         };
 
         const context: OrdersManagementContext = {

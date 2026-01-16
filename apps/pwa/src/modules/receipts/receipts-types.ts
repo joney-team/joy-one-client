@@ -5,19 +5,19 @@ import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-membe
 import { LoanReceiptReport } from "../loans/loans-types";
 
 export enum ReceiptType {
-  INCOME = 'INCOME',
-  EXPENSE = 'EXPENSE',
+  INCOME = "INCOME",
+  EXPENSE = "EXPENSE",
 }
 
 export enum ReceiptPaymentMethod {
-  CASH = 'CASH',
-  BANK_TRANSFER = 'BANK_TRANSFER',
-  BANK_CARD = 'BANK_CARD',
+  CASH = "CASH",
+  BANK_TRANSFER = "BANK_TRANSFER",
+  BANK_CARD = "BANK_CARD",
 }
 
 export enum ReceiptStatus {
-  PENDING = 'PENDING',
-  PAID = 'PAID',
+  PENDING = "PENDING",
+  PAID = "PAID",
 }
 
 export interface CreateReceiptDto {
@@ -112,8 +112,8 @@ export interface ReceiptReportItem {
   time: number;
   userId?: string;
   relatedEntities: {
-    type: 'PRODUCT' | 'TICKET' | 'RECEIPT' | 'LOAN' | 'CUSTOMER' | 'ORDER',
-    data: any,
+    type: "PRODUCT" | "TICKET" | "RECEIPT" | "LOAN" | "CUSTOMER" | "ORDER";
+    data: any;
   }[];
   revenue: number;
   profit: number;
@@ -121,14 +121,14 @@ export interface ReceiptReportItem {
 }
 
 export interface ReceiptsRangeReport {
-  revenue: number,
-  totalRevenue: number,
-  totalProfit: number,
-  totalReceipts: number,
-  items: ReceiptReportItem[],
-  loanCapital?: number | null,
-  loanFee?: number | null,
-  loanExpense?: number | null,
+  revenue: number;
+  totalRevenue: number;
+  totalProfit: number;
+  totalReceipts: number;
+  items: ReceiptReportItem[];
+  loanCapital?: number | null;
+  loanFee?: number | null;
+  loanExpense?: number | null;
 }
 
 export interface PartialPaymentDto {

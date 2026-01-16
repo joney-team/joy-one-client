@@ -3,6 +3,7 @@
 import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
 import { useApp } from "@/app.context";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
+import { EventType } from "@/graphql/enums.graphql";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useRouter } from "@/hooks/use-router";
 import {
@@ -39,7 +40,6 @@ import {
   serverSignInWithEmailPassword,
   serverSignInWithFacebook,
   serverSignInWithFirebase,
-  serverSignUpWithEmailPassword,
 } from "./auth-server";
 import {
   clearTokens,
@@ -54,9 +54,9 @@ import type {
   AuthContext,
   AuthSignInWithEmailPasswordDto,
   AuthSignUpWithEmailPasswordDto,
+  AuthTokenResult,
   UserAuthResult,
 } from "./auth-types";
-import { EventType } from "@/graphql/enums.graphql";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const client = useApolloClient();
@@ -219,7 +219,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const signUpWithEmailPassword = async (dto: AuthSignUpWithEmailPasswordDto) => {
-    const tokens = await serverSignUpWithEmailPassword(dto);
+    const tokens = await api.post<AuthTokenResult>("/auth/sign-up/email-password", dto);
     await saveTokens(tokens);
     await initialize("auth");
   };

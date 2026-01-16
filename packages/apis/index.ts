@@ -56,7 +56,7 @@ export class ApiInstance {
             originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
             return this.instance(originalRequest);
           } catch (error) {
-            return Promise.reject(error);
+            throw error;
           }
         }
 
@@ -65,7 +65,7 @@ export class ApiInstance {
           return this.instance(originalRequest);
         }
 
-        return Promise.reject(error);
+        throw error;
       }
     );
 

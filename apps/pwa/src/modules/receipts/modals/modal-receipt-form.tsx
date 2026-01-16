@@ -99,7 +99,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
   return (
     <Stack>
       {!props.type && (
-        <InputWrapper label={t`Type`}>
+        <InputWrapper label={<Trans>Type</Trans>}>
           <Group pt={5} gap={10}>
             {Object.entries(receiptTypes).map(([type, config]) => {
               return (
@@ -118,12 +118,17 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
         </InputWrapper>
       )}
 
-      <NumberInput label={t`Amount`} withAsterisk hideControls {...form.getInputProps("amount")} />
+      <NumberInput
+        label={<Trans>Money amount</Trans>}
+        withAsterisk
+        hideControls
+        {...form.getInputProps("amount")}
+      />
 
-      <Textarea label={t`Note`} {...form.getInputProps("note")} />
+      <Textarea label={<Trans>Note</Trans>} {...form.getInputProps("note")} />
 
       <DateInput
-        label={t`Payment deadline`}
+        label={<Trans>Payment deadline</Trans>}
         value={form.values.expireAt}
         onChange={(date) => {
           form.setFieldValue("expireAt", date);
@@ -131,13 +136,13 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
       />
 
       <CustomerInput
-        label={t`Customer`}
+        label={<Trans>Customer</Trans>}
         value={form.values.relatedCustomer}
         onSelect={(value) => form.setFieldValue("relatedCustomer", value as any)}
         disabled={!!props.relatedCustomer}
       />
 
-      <InputWrapper label={t`Files`}>
+      <InputWrapper label={<Trans>Files</Trans>}>
         <Card p={10} withBorder mt={5}>
           <FilesBox
             onChangeRawFiles={(_files) => setReceiptFiles(_files)}

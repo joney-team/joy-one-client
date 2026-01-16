@@ -112,7 +112,7 @@ export const LoanReceiptCard: FC<{
             {linkReceiptPdf && (
               <Table.Tr>
                 <Table.Td>
-                  <Trans>Receipt file</Trans>
+                  <Trans>Receipt</Trans>
                 </Table.Td>
 
                 <Table.Td ta="right" c={isExpired ? "red" : "gray"}>

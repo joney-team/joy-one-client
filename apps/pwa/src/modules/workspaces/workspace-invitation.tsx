@@ -33,7 +33,7 @@ import {
 import { IconHeartHandshake } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, Fragment, useEffect } from "react";
-import { Pattern } from "../../components/pattern";
+import { Pattern } from "../../components/pattern/pattern";
 import { workspaceTypes } from "./workspace-constants";
 
 export interface WorkspaceInvitationProps {
@@ -94,7 +94,7 @@ const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
 
         {inviteInformation.data && (
           <Fragment>
-            <Pattern color={color(inviteInformation.data?.appColor || "primary")} />
+            <Pattern color={color(inviteInformation.data?.appColor)} />
             <Content invite={inviteInformation.data} {...props} />
           </Fragment>
         )}

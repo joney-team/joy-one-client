@@ -4878,7 +4878,7 @@ msgstr "Thanh toán vay"
 #: src/modules/events/event-constants.ts:75
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:294
 msgid "Pay receipt"
-msgstr "Hoá đơn thanh toán"
+msgstr "Thanh toán hoá đơn"
 
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:275
 #: src/modules/workspace-billings/modals/modal-workspace-billing-deposit.tsx:84

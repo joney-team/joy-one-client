@@ -171,7 +171,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
 
           <Editor
             defaultValue={form.values.description}
-            onChangeHTML={(v) => form.setFieldValue("description", v ?? "")}
+            onChangeJSON={(v) => form.setFieldValue("description", JSON.stringify(v))}
             delay={300}
             placeholder={t`Task description`}
             isEnableToolbar={false}

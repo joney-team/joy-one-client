@@ -5,7 +5,7 @@ import { Button } from "@/components/buttons/button";
 import { ButtonLanguage } from "@/components/buttons/button-language";
 import { ColorSchemes } from "@/components/color-schemes";
 import { Image } from "@/components/image";
-import { Pattern } from "@/components/pattern";
+import { Pattern } from "@/components/pattern/pattern";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
@@ -67,7 +67,7 @@ export const AuthRequire: FC = () => {
           style={{ position: "relative", overflow: "hidden" }}
           bg="var(--mantine-color-body)"
         >
-          <Pattern color={color("primary")} />
+          <Pattern />
 
           <ScrollArea.Autosize w={layout.width} mah={layout.height} scrollbars="y">
             <Stack mih={layout.height} w={layout.width} p={16}>
