@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { useRouter } from "@/hooks/use-router";
 import { workspaceLayoutConfig } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Group, Stack, Title } from "@mantine/core";
 import { IconList, IconPlus } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -31,7 +31,7 @@ export const OrdersSaleContent = () => {
         ) : (
           <Stack flex={1} h="100%" justify="center" align="center">
             <Title fw={400} ta="center">
-              {t`Order sale`}
+              <Trans>Order</Trans>
             </Title>
             <Group justify="center" align="center">
               <Button
@@ -40,10 +40,10 @@ export const OrdersSaleContent = () => {
                 onClick={() => router.push("/orders")}
                 leftIcon={IconList}
               >
-                {t`List`}
+                <Trans>List</Trans>
               </Button>
               <Button onClick={() => addOrder()} leftIcon={IconPlus}>
-                {t`Create order`}
+                <Trans>Create order</Trans>
               </Button>
             </Group>
           </Stack>
@@ -82,7 +82,7 @@ export const OrdersSaleContent = () => {
       ) : (
         <Stack flex={1} h="100%" justify="center" align="center">
           <Title fw={400} ta="center">
-            {t`Order sale`}
+            <Trans>Order sale</Trans>
           </Title>
           <Group justify="center" align="center">
             <Button
@@ -91,10 +91,10 @@ export const OrdersSaleContent = () => {
               onClick={() => router.push("/orders")}
               leftIcon={IconList}
             >
-              {t`List`}
+              <Trans>List</Trans>
             </Button>
             <Button onClick={() => addOrder()} leftIcon={IconPlus}>
-              {t`Create order`}
+              <Trans>Create order</Trans>
             </Button>
           </Group>
         </Stack>

@@ -102,10 +102,10 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
 
         <TextInput label={<Trans>Placeholder</Trans>} {...form.getInputProps("placeholder")} />
 
-        <TextInput label={`Key (${t`optional`})`} {...form.getInputProps("key")} />
+        <TextInput label={`Key (${t`Optional`.toLowerCase()})`} {...form.getInputProps("key")} />
 
         <Textarea
-          label={`${t`Description`} (${t`optional`})`}
+          label={`${t`Description`} (${t`Optional`.toLowerCase()})`}
           {...form.getInputProps("description")}
         />
 

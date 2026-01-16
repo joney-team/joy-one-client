@@ -417,7 +417,6 @@ msgstr "Allow tip"
 #: src/modules/coupons/coupon-constants.ts:12
 #: src/modules/products/components/form-product.tsx:384
 #: src/modules/receipts/modals/modal-partial-payment.tsx:78
-#: src/modules/receipts/modals/modal-receipt-form.tsx:121
 msgid "Amount"
 msgstr "Amount"
 
@@ -832,13 +831,13 @@ msgstr "Bank"
 
 #: src/modules/loans/components/loan-disbursement.tsx:226
 #: src/modules/loans/modals/modal-create-loan.tsx:411
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:405
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:404
 msgid "Bank account name"
 msgstr "Bank account name"
 
 #: src/modules/loans/components/loan-disbursement.tsx:231
 #: src/modules/loans/modals/modal-create-loan.tsx:406
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:420
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:419
 msgid "Bank account number"
 msgstr "Bank account number"
 
@@ -939,7 +938,7 @@ msgstr "Bookings chart"
 #: src/modules/customer-forms/modal-customer-form.tsx:42
 #: src/modules/customers/components/form-customer.tsx:156
 #: src/modules/loans/modals/modal-create-loan.tsx:435
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:306
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:305
 #: src/modules/workspace-branches/workspace-branch-column.tsx:25
 #: src/modules/workspace-members/workspace-member-list.tsx:156
 #: src/widgets/reports/index.tsx:329
@@ -1430,7 +1429,7 @@ msgstr "Company branch"
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:299
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:128
 #: src/modules/receipts/modals/modal-partial-payment.tsx:126
-#: src/modules/receipts/modals/modal-receipt-form.tsx:159
+#: src/modules/receipts/modals/modal-receipt-form.tsx:164
 #: src/modules/workspace-sdks/modals/modal-workspace-sdk-form.tsx:83
 #: src/modules/workspaces/workspace-require.tsx:365
 msgid "Complete"
@@ -1479,7 +1478,7 @@ msgstr "Confirm and apply"
 msgid "Confirm cancellation"
 msgstr "Confirm cancellation"
 
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:527
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:526
 msgid "Confirm paid"
 msgstr "Confirm paid"
 
@@ -1581,7 +1580,7 @@ msgstr "Contacts"
 #: src/modules/bookings/modals/modal-booking.tsx:159
 #: src/modules/bookings/modals/modal-booking.tsx:326
 #: src/modules/receipts/modals/modal-disburesement-receipt.tsx:54
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:369
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:368
 #: src/modules/receipts/receipt-card.tsx:274
 msgid "Content"
 msgstr "Content"
@@ -1806,7 +1805,7 @@ msgid "Create promotion"
 msgstr "Create promotion"
 
 #: src/modules/events/event-constants.ts:74
-#: src/modules/receipts/modals/modal-receipt-form.tsx:169
+#: src/modules/receipts/modals/modal-receipt-form.tsx:174
 #: src/modules/workspace-roles/workspace-roles-constants.ts:81
 msgid "Create receipt"
 msgstr "Create receipt"
@@ -1954,7 +1953,7 @@ msgstr "Custom statuses"
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:139
 #: src/modules/product-combos/product-combo-list.tsx:35
 #: src/modules/product-vouchers/product-voucher-card.tsx:73
-#: src/modules/receipts/modals/modal-receipt-form.tsx:134
+#: src/modules/receipts/modals/modal-receipt-form.tsx:139
 #: src/modules/tags/tags-constants.ts:12
 #: src/modules/tasks/modules/task-detail/task-detail-properties.tsx:329
 #: src/modules/tasks/views/list/list-task-row-head.tsx:27
@@ -2662,8 +2661,8 @@ msgstr "Excludes customers"
 #: src/components/printer/printer.tsx:143
 #: src/layout/header/header-tasks-breadcrumbs.tsx:111
 #: src/modals/modal-printer.tsx:714
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:281
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:531
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:280
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:530
 #: src/modules/workspaces/components/workspace-archived.tsx:46
 #: src/modules/workspaces/workspace-require.tsx:369
 msgid "Exit"
@@ -2782,7 +2781,7 @@ msgid "File type"
 msgstr "File type"
 
 #: src/modules/files/modals/modal-files.tsx:103
-#: src/modules/receipts/modals/modal-receipt-form.tsx:140
+#: src/modules/receipts/modals/modal-receipt-form.tsx:145
 msgid "Files"
 msgstr "Files"
 
@@ -4188,9 +4187,10 @@ msgstr "Monday"
 #: src/modules/loans/loan-detail.tsx:381
 #: src/modules/loans/loan-list.tsx:157
 #: src/modules/orders/order-list.tsx:61
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:358
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:438
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:483
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:357
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:437
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:482
+#: src/modules/receipts/modals/modal-receipt-form.tsx:122
 #: src/modules/receipts/receipt-card.tsx:427
 #: src/modules/receipts/receipt-card.tsx:436
 #: src/modules/receipts/receipt-list.tsx:149
@@ -4198,12 +4198,12 @@ msgstr "Monday"
 msgid "Money amount"
 msgstr "Money amount"
 
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:466
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:465
 msgid "Money change"
 msgstr "Money change"
 
 #: src/modals/modal-printer.tsx:458
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:449
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:448
 msgid "Money given"
 msgstr "Money given"
 
@@ -4594,7 +4594,7 @@ msgstr "Not receiving notification token. Please try again."
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:144
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:118
 #: src/modules/product-stocks/product-stock-list.tsx:72
-#: src/modules/receipts/modals/modal-receipt-form.tsx:123
+#: src/modules/receipts/modals/modal-receipt-form.tsx:128
 msgid "Note"
 msgstr "Note"
 
@@ -4696,9 +4696,6 @@ msgstr "Operation settings"
 
 #: src/modules/custom-fields/components/form-custom-field.tsx:105
 #: src/modules/custom-fields/components/form-custom-field.tsx:108
-msgid "optional"
-msgstr "optional"
-
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:123
 msgid "Optional"
 msgstr "Optional"
@@ -4714,13 +4711,13 @@ msgstr "Or"
 #: src/modules/orders/order-hooks.tsx:24
 #: src/modules/orders/orders-management/orders-management-provider.tsx:149
 #: src/modules/orders/orders-management/orders-management-provider.tsx:149
+#: src/modules/orders/orders-sale/orders-sale.tsx:34
 #: src/modules/product-combos/modals/modal-product-combo.tsx:126
 #: src/modules/products/product-detail.tsx:173
 #: src/modules/receipts/receipt-card.tsx:239
 msgid "Order"
 msgstr "Order"
 
-#: src/modules/orders/orders-sale/orders-sale.tsx:34
 #: src/modules/orders/orders-sale/orders-sale.tsx:85
 msgid "Order sale"
 msgstr "Order sale"
@@ -4875,11 +4872,11 @@ msgid "Pay loan"
 msgstr "Pay loan"
 
 #: src/modules/events/event-constants.ts:75
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:294
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:293
 msgid "Pay receipt"
 msgstr "Pay receipt"
 
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:275
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:274
 #: src/modules/workspace-billings/modals/modal-workspace-billing-deposit.tsx:84
 msgid "Pay successful"
 msgstr "Pay successful"
@@ -4910,16 +4907,16 @@ msgstr "Payment created"
 msgid "Payment date"
 msgstr "Payment date"
 
-#: src/modules/receipts/modals/modal-receipt-form.tsx:126
+#: src/modules/receipts/modals/modal-receipt-form.tsx:131
 msgid "Payment deadline"
 msgstr "Payment deadline"
 
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:341
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:340
 msgid "Payment info"
 msgstr "Payment info"
 
 #: src/modules/loans/components/loan-disbursement.tsx:153
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:317
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:316
 #: src/modules/receipts/receipt-card.tsx:369
 #: src/modules/receipts/receipt-card.tsx:377
 msgid "Payment method"
@@ -5224,7 +5221,7 @@ msgid "Print prescription"
 msgstr "Print prescription"
 
 #: src/modals/modal-printer.tsx:154
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:520
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:519
 msgid "Print receipt"
 msgstr "Print receipt"
 
@@ -5511,6 +5508,7 @@ msgstr "Reason for cancellation"
 
 #: src/components/printer/printer.tsx:45
 #: src/modals/modal-printer.tsx:318
+#: src/modules/loans/components/loan-receipt-card.tsx:115
 #: src/modules/receipts/modals/modal-receipt-detail.tsx:64
 #: src/modules/receipts/receipt-card.tsx:302
 #: src/modules/receipts/receipt-detail.tsx:142
@@ -5525,11 +5523,7 @@ msgstr "Receipt"
 msgid "Receipt code"
 msgstr "Receipt code"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:115
-msgid "Receipt file"
-msgstr "Receipt file"
-
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:182
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:181
 #: src/modules/workspace-settings/components/workspace-setting-operation.tsx:179
 msgid "Receipt images required"
 msgstr "Receipt images required"
@@ -5557,7 +5551,7 @@ msgid "Receipts"
 msgstr "Receipts"
 
 #: src/modules/loans/components/loan-disbursement.tsx:253
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:497
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:496
 msgid "Receipts images"
 msgstr "Receipts images"
 
@@ -6111,7 +6105,7 @@ msgstr "Select date"
 msgid "Select folder"
 msgstr "Select folder"
 
-#: src/components/buttons/button-language.tsx:43
+#: src/components/buttons/button-language.tsx:50
 #: src/modules/lang/modal-language.tsx:43
 msgid "Select language"
 msgstr "Select language"
@@ -7336,7 +7330,7 @@ msgstr "Use another account"
 msgid "Use default mail"
 msgstr "Use default mail"
 
-#: src/components/buttons/button-language.tsx:73
+#: src/components/buttons/button-language.tsx:80
 #: src/modules/lang/modal-language.tsx:84
 msgid "Use device language"
 msgstr "Use device language"
