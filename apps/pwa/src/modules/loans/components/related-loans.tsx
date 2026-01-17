@@ -120,16 +120,16 @@ export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }
               </Stack>
 
               <Stack gap={3} align="end">
-                <Group>
-                  <Badge variant="light" color={loanStatus.color}>
-                    {t(loanStatus.label)}
-                  </Badge>
-
+                <Group gap="xs">
                   {loan.isHasLateInterestReceipt && (
                     <Badge variant="light" color="red">
                       <Trans>Has late interest</Trans>
                     </Badge>
                   )}
+
+                  <Badge variant="light" color={loanStatus.color}>
+                    {t(loanStatus.label)}
+                  </Badge>
                 </Group>
 
                 {loan.rejectReason && loan.status === LoanStatus.Rejected && (
