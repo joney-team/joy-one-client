@@ -1,14 +1,26 @@
 import { defineMessage, MacroMessageDescriptor, t } from "@lingui/core/macro";
 import { LoanAssetType, LoanPackageType, LoanStatus } from "./loans-types";
 import { MantineColor } from "@mantine/core";
+import {
+  Icon,
+  IconBuilding,
+  IconCar,
+  IconDevices,
+  IconHome2,
+  IconMotorbike,
+} from "@tabler/icons-react";
 
-export const loanAssetTypes: Record<LoanAssetType, { label: () => string }> = {
-  [LoanAssetType.ICLOUD]: { label: () => "iCloud" },
-  [LoanAssetType.MOTOBIKE_REGISTRATION]: { label: () => t`Moto registration` },
-  [LoanAssetType.CAR_REGISTRATION]: { label: () => t`Car registration` },
-  [LoanAssetType.BUSINESS_PERMIT]: { label: () => t`Business permit` },
-  [LoanAssetType.LAND_CERTIFICATE]: { label: () => t`Land certificate` },
-};
+export const loanAssetTypes: Record<LoanAssetType, { label: MacroMessageDescriptor; icon: Icon }> =
+  {
+    [LoanAssetType.ICLOUD]: { label: defineMessage`iCloud`, icon: IconDevices },
+    [LoanAssetType.MOTOBIKE_REGISTRATION]: {
+      label: defineMessage`Moto registration`,
+      icon: IconMotorbike,
+    },
+    [LoanAssetType.CAR_REGISTRATION]: { label: defineMessage`Car registration`, icon: IconCar },
+    [LoanAssetType.BUSINESS_PERMIT]: { label: defineMessage`Business permit`, icon: IconBuilding },
+    [LoanAssetType.LAND_CERTIFICATE]: { label: defineMessage`Land certificate`, icon: IconHome2 },
+  };
 
 export const loanStatuses: Record<
   LoanStatus,

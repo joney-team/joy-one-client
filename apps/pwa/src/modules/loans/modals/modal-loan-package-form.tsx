@@ -7,8 +7,7 @@ import { useLoans } from "@/modules/loans/loans-context";
 import { LoanAssetType, LoanPackage, LoanPackageType } from "@/modules/loans/loans-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Currency } from "@joy-one-client/utils/currency";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -42,6 +41,8 @@ export const ModalLoanPackageForm: FC<{
   const [opened, { open, close }] = useDisclosure(false);
   const loans = useLoans();
   const workspace = useWorkspace();
+  const { t } = useLingui();
+
   const [props, setProps] = useState<ModalLoanPackageFormArgs>();
 
   const form = useForm<LoanPackage>({
@@ -162,7 +163,7 @@ export const ModalLoanPackageForm: FC<{
             value={form.values.assetTypes}
             data={Object.values(LoanAssetType).map((type) => ({
               value: type,
-              label: loanAssetTypes[type].label(),
+              label: t(loanAssetTypes[type].label),
             }))}
             {...form.getInputProps("assetTypes")}
           />

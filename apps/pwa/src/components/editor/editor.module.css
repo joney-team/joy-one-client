@@ -15,4 +15,8 @@
       border: none;
     }
   }
+
+  & :global(.mantine-RichTextEditor-content) {
+    background: transparent;
+  }
 }

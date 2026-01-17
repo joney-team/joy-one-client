@@ -131,24 +131,32 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
             editorRef.current?.editor?.commands.addAttachment(file._id);
           }}
         >
-          <ActionIcon color="gray" variant="subtle">
+          <ActionIcon color={color({ dark: "gray.6", light: "gray" })} variant="subtle">
             <IconMicrophone size={14} />
           </ActionIcon>
         </VoiceInput>
 
-        <ActionIcon color="gray" variant="subtle" onClick={() => photosDialog.open()}>
+        <ActionIcon
+          color={color({ dark: "gray.6", light: "gray" })}
+          variant="subtle"
+          onClick={() => photosDialog.open()}
+        >
           <IconPhoto size={14} />
         </ActionIcon>
 
-        <ActionIcon color="gray" variant="subtle" onClick={() => attachmentsDialog.open()}>
+        <ActionIcon
+          color={color({ dark: "gray.6", light: "gray" })}
+          variant="subtle"
+          onClick={() => attachmentsDialog.open()}
+        >
           <IconPaperclip size={14} />
         </ActionIcon>
 
         <ActionIcon
           ml="xs"
-          color="gray"
+          color={color({ dark: "gray.5", light: "gray" })}
           variant="outline"
-          style={{ borderColor: color("gray.4") }}
+          style={{ borderColor: color({ light: "gray.4", dark: "dark" }) }}
           loading={isSubmitting}
           onClick={onSubmit}
           component="button"
@@ -184,7 +192,12 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
   }
 
   return (
-    <Card withBorder p="sm" shadow="xs" style={{ borderColor: color("gray.1") }}>
+    <Card
+      withBorder
+      p="sm"
+      shadow="xs"
+      style={{ borderColor: color({ light: "gray.1", dark: "dark" }) }}
+    >
       <Stack gap="sm">
         <Editor
           key={editorKey}

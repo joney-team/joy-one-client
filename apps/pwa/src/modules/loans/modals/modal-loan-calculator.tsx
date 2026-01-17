@@ -10,8 +10,7 @@ import { getLoanPaymentPlan, renderLoanPeriod } from "@/modules/loans/loans-serv
 import { LoanAssetType, LoanPaymentPlanResult } from "@/modules/loans/loans-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
   Badge,
@@ -39,6 +38,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
 }) => {
   const workspace = useWorkspace();
   const loans = useLoans();
+  const { t } = useLingui();
 
   const [opened, { open, close }] = useDisclosure(false);
   const [paymentPlanResult, setPaymentPlanResult] = useState<LoanPaymentPlanResult>();
@@ -128,7 +128,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
       {children(open)}
 
       <Modal
-        title={<ModalHead name={t`Loan package calculator`} icon={IconCalculator} />}
+        title={<ModalHead name={<Trans>Loan package calculator</Trans>} icon={IconCalculator} />}
         onClose={onClose}
         opened={opened}
         size={1000}
@@ -137,7 +137,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
           <Group>
             <NumberInput
               flex={1}
-              label={t`Loan amount`}
+              label={<Trans>Loan amount</Trans>}
               placeholder={t`Enter loan amount`}
               hideControls
               value={amount}
@@ -146,7 +146,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
 
             <DateTimePicker
               flex={1}
-              label={t`Fulfill at`}
+              label={<Trans>Fulfill at</Trans>}
               value={startTime ? new Date(startTime * 1000) : null}
               onChange={(d) => {
                 if (!d) return;
@@ -157,10 +157,10 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
 
           <SimpleGrid cols={{ md: 3 }}>
             <Select
-              label={t`Asset type`}
+              label={<Trans>Asset type</Trans>}
               data={assetTypeOptions.map((type) => ({
                 value: type,
-                label: loanAssetTypes[type].label(),
+                label: t(loanAssetTypes[type].label),
               }))}
               value={assetType}
               onChange={(e) => {
@@ -171,7 +171,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
             />
 
             <Select
-              label={t`Loan period`}
+              label={<Trans>Loan period</Trans>}
               data={packageDaysOptions.map((d) => ({
                 value: d.toString(),
                 label: renderLoanPeriod(d),
@@ -184,7 +184,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
             />
 
             <Select
-              label={t`Payment period`}
+              label={<Trans>Payment period</Trans>}
               data={loanPackage?.periodDaysOptions.map((d) => ({
                 value: d.toString(),
                 label: renderLoanPeriod(d),
@@ -199,16 +199,28 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
           {calculating && <Skeleton height={200} />}
 
           {paymentPeriods.length > 0 && (
-            <InputWrapper label={t`Payment periods`}>
+            <InputWrapper label={<Trans>Payment periods</Trans>}>
               <Table withTableBorder striped withColumnBorders withRowBorders>
                 <Table.Thead>
                   <Table.Tr>
-                    <Table.Th>{t`Period`}</Table.Th>
-                    <Table.Th>{t`Time`}</Table.Th>
-                    <Table.Th>{t`Principal amount`}</Table.Th>
-                    <Table.Th>{t`Remaining principal`}</Table.Th>
-                    <Table.Th>{t`Interest`}</Table.Th>
-                    <Table.Th ta="right">{t`Payment amount`}</Table.Th>
+                    <Table.Th>
+                      <Trans>Period</Trans>
+                    </Table.Th>
+                    <Table.Th>
+                      <Trans>Time</Trans>
+                    </Table.Th>
+                    <Table.Th>
+                      <Trans>Principal amount</Trans>
+                    </Table.Th>
+                    <Table.Th>
+                      <Trans>Remaining principal</Trans>
+                    </Table.Th>
+                    <Table.Th>
+                      <Trans>Interest</Trans>
+                    </Table.Th>
+                    <Table.Th ta="right">
+                      <Trans>Payment amount</Trans>
+                    </Table.Th>
                   </Table.Tr>
                 </Table.Thead>
 
@@ -253,7 +265,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
 
                   <Table.Tr>
                     <Table.Td colSpan={5} ta="left">
-                      {t`Total`}
+                      <Trans>Total</Trans>
                     </Table.Td>
                     <Table.Td fw={700} ta="right">
                       <CurrencyFormat
@@ -273,12 +285,12 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
                   <Anchor fw={600}>{loanPackage.id}</Anchor>
 
                   <RowInfo
-                    label={t`Asset types`}
-                    value={loanPackage.assetTypes.map((v) => loanAssetTypes[v].label()).join(", ")}
+                    label={<Trans>Asset types</Trans>}
+                    value={loanPackage.assetTypes.map((v) => t(loanAssetTypes[v].label)).join(", ")}
                   />
 
                   <RowInfo
-                    label={t`Loan package type`}
+                    label={<Trans>Loan package type</Trans>}
                     value={
                       <Badge color={loanPackageTypes[loanPackage.type].color}>
                         {loanPackageTypes[loanPackage.type].label()}
@@ -287,7 +299,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
                   />
 
                   <RowInfo
-                    label={t`Loan period`}
+                    label={<Trans>Loan period</Trans>}
                     value={
                       <Text ta="right">
                         <NumberFormat value={loanPackage.days / 30} /> <Trans>months</Trans>
@@ -295,7 +307,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
                     }
                   />
                   <RowInfo
-                    label={t`Contract fee`}
+                    label={<Trans>Contract fee</Trans>}
                     value={
                       <Text ta="right">
                         <CurrencyFormat value={loanPackage.contractFee} />
@@ -313,7 +325,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
 };
 
 const RowInfo: FC<{
-  label: string;
+  label: ReactNode;
   value: string | ReactNode;
   valueProps?: TextProps;
 }> = (props) => {

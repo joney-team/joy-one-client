@@ -24,11 +24,9 @@ import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-bra
 import { renderBankSelectOption } from "@/modules/workspaces/components/workspace-bank-information";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Card,
-  em,
   Group,
   InputWrapper,
   Modal,
@@ -77,6 +75,7 @@ export const ModalCreateLoan = forwardRef<
   ModalCreateLoanRef,
   { children?: (ref: ModalCreateLoanRef) => ReactNode }
 >((props, ref) => {
+  const { t } = useLingui();
   const { children } = props;
   const [args, setArgs] = useState<ModalCreateLoanProps | null>(null);
 
@@ -349,7 +348,7 @@ export const ModalCreateLoan = forwardRef<
                               label={t`Asset type`}
                               data={assetTypeOptions.map((type) => ({
                                 value: type,
-                                label: loanAssetTypes[type].label(),
+                                label: t(loanAssetTypes[type].label),
                               }))}
                               {...form.getInputProps("assetType")}
                             />

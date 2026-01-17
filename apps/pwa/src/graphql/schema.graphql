@@ -499,9 +499,13 @@ type Loan {
   amount: Float!
   assetType: LoanAssetType!
   code: String!
+  createdAt: Float
   customer: Customer!
+  customerCidNumber: String
   customerId: String!
   id: String!
+  isHasLateInterestReceipt: Boolean
+  rejectReason: String
   status: LoanStatus!
 }
 
@@ -523,6 +527,11 @@ enum LoanStatus {
   PENDING
   PENDING_SIGN
   REJECTED
+}
+
+type LoansPaginated {
+  count: Float!
+  data: [Loan!]!
 }
 
 type LocationEntity {
@@ -667,6 +676,7 @@ type Query {
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
   loan(id: String!): Loan!
+  loans(customerCidNumber: String, customerId: String, limit: Float = 30, offset: Float, query: JSONObject, sortCreatedAt: SortDirection, status: [LoanStatus!]): LoansPaginated!
   pluginExternalStorage: PluginExternalStorage
   reactions(entity: String!, entityId: String!, ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): ReactionsPaginated!
   reactionsCount(entity: String!, entityId: String!): ReactionsCount!

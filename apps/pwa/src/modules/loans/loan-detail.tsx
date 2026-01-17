@@ -70,6 +70,14 @@ import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
 
+const RelatedLoans = dynamic(
+  () => import("./components/related-loans").then((mod) => mod.RelatedLoans),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
 const ModalCustomer = dynamic(
   () => import("../customers/customer-modal").then((mod) => mod.ModalCustomer),
   {
@@ -372,7 +380,7 @@ export const LoanDetail: NextPage = () => {
                   label={t`Loan package`}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
-                      {loan.data.package.id} / {loanAssetTypes[loan.data.assetType]?.label()}
+                      {loan.data.package.id} / {t(loanAssetTypes[loan.data.assetType].label)}
                     </Text>
                   }
                 />
@@ -557,8 +565,23 @@ export const LoanDetail: NextPage = () => {
               [
                 <Container size={900}>
                   <LoanCustomerKyc customer={customer.data} kyc={customerKyc} />
+                  <RelatedLoans
+                    customerCidNumber={
+                      customerKyc.versions[customerKyc.versions.length - 1].cidNumber
+                    }
+                    ignoreCode={loan.data.code}
+                  />
                 </Container>,
-                <LoanDocuments loan={loan.data} updateAssetData={onUpdateAssetData} />,
+                <Container size={900}>
+                  <LoanDocuments loan={loan.data} updateAssetData={onUpdateAssetData}>
+                    <RelatedLoans
+                      customerCidNumber={
+                        customerKyc.versions[customerKyc.versions.length - 1].cidNumber
+                      }
+                      ignoreCode={loan.data.code}
+                    />
+                  </LoanDocuments>
+                </Container>,
                 <Container size={900}>
                   <LoanDisburesement loan={loan.data} kyc={customerKyc} />
                 </Container>,
@@ -624,7 +647,7 @@ const getStepActive = (loan: LoanEntity, kyc?: CustomerKycEntity): number => {
 };
 
 const InfoCard: FC<{
-  label: string;
+  label: ReactNode;
   content?: ReactNode;
   href?: string;
   visible?: boolean;

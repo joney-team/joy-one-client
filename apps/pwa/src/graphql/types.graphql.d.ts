@@ -539,9 +539,13 @@ export type Loan = {
   amount: Scalars['Float']['output'];
   assetType: LoanAssetType;
   code: Scalars['String']['output'];
+  createdAt: Maybe<Scalars['Float']['output']>;
   customer: Customer;
+  customerCidNumber: Maybe<Scalars['String']['output']>;
   customerId: Scalars['String']['output'];
   id: Scalars['String']['output'];
+  isHasLateInterestReceipt: Maybe<Scalars['Boolean']['output']>;
+  rejectReason: Maybe<Scalars['String']['output']>;
   status: LoanStatus;
 };
 
@@ -567,6 +571,12 @@ export const LoanStatus = {
 } as const;
 
 export type LoanStatus = typeof LoanStatus[keyof typeof LoanStatus];
+export type LoansPaginated = {
+  __typename: 'LoansPaginated';
+  count: Scalars['Float']['output'];
+  data: Array<Loan>;
+};
+
 export type LocationEntity = {
   __typename: 'LocationEntity';
   address: Maybe<Scalars['String']['output']>;
@@ -896,6 +906,7 @@ export type Query = {
   getFileInfo: File;
   getProductByIds: Array<Product>;
   loan: Loan;
+  loans: LoansPaginated;
   pluginExternalStorage: Maybe<PluginExternalStorage>;
   reactions: ReactionsPaginated;
   reactionsCount: ReactionsCount;
@@ -984,6 +995,17 @@ export type QueryGetProductByIdsArgs = {
 
 export type QueryLoanArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type QueryLoansArgs = {
+  customerCidNumber?: InputMaybe<Scalars['String']['input']>;
+  customerId?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
+  sortCreatedAt?: InputMaybe<SortDirection>;
+  status?: InputMaybe<Array<LoanStatus>>;
 };
 
 

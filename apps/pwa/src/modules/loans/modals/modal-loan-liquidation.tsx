@@ -21,7 +21,7 @@ import { type ModalPayReceiptRef } from "@/modules/receipts/modals/modal-pay-rec
 import { onActionLoad } from "@/utils/actions";
 import { useFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Box, Card, Center, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconBrandSpeedtest } from "@tabler/icons-react";
@@ -41,6 +41,8 @@ const ModalPayReceipt = dynamic(
 export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const modalPayReceiptRef = useRef<ModalPayReceiptRef | null>(null);
+
+  const { t } = useLingui();
 
   const state = useFetch({
     fetch: async () => {
@@ -106,7 +108,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
 
           <LoanRowInfo
             label={<Trans>Loan asset type</Trans>}
-            value={loanAssetTypes[loan.assetType].label()}
+            value={t(loanAssetTypes[loan.assetType].label)}
           />
 
           <LoanRowInfo

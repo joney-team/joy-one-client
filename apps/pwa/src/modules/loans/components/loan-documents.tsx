@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { Container } from "@/components/container";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { Image } from "@/components/image";
@@ -24,7 +25,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
   Badge,
@@ -46,19 +47,21 @@ import {
   IconClipboardText,
   IconNotes,
 } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { loanAssetTypes } from "../loans-constants";
 import { LoanRowInfo } from "./loan-row-info";
-import { Container } from "@/components/container";
 
 interface LoanDocumentsProps {
   loan: LoanEntity;
   updateAssetData: (assetData: any) => void;
+  children?: ReactNode;
 }
 
 export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
+  const { t } = useLingui();
   const { loan } = props;
   const workspace = useWorkspace();
+
   const ableToUpdate =
     loan.status === LoanStatus.PENDING &&
     workspace.hasPermission(WorkspacePermission.LOANS_CREATOR);
@@ -102,115 +105,115 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
   };
 
   return (
-    <Container size={900}>
-      <Stack gap={30} w="100%">
-        <SectionTitle mb={-20} name={<Trans>Loan</Trans>} icon={IconNotes} />
+    <Stack gap={30} w="100%">
+      <SectionTitle mb={-20} name={<Trans>Loan</Trans>} icon={IconNotes} />
 
-        <Card className="LoanDetailDoc" shadow="xs">
-          <Stack>
-            <LoanRowInfo label={<Trans>Loan package</Trans>} value={loan.package.id} />
+      <Card className="LoanDetailDoc" shadow="xs">
+        <Stack>
+          <LoanRowInfo label={<Trans>Loan package</Trans>} value={loan.package.id} />
 
-            <LoanRowInfo
-              label={<Trans>Loan asset type</Trans>}
-              value={loanAssetTypes[loan.assetType].label()}
-            />
-
-            <LoanRowInfo
-              label={<Trans>Loan period</Trans>}
-              value={renderLoanPeriod(loan.package.days)}
-            />
-
-            <LoanRowInfo
-              label={<Trans>Loan amount</Trans>}
-              value={loan.amount}
-              renderValue={() =>
-                ableToUpdate ? (
-                  <NumberInput
-                    hideControls
-                    defaultValue={loan.amount}
-                    onChange={(v) => onUpdateAmount(+v)}
-                  />
-                ) : (
-                  <CurrencyFormat value={loan.amount} />
-                )
-              }
-            />
-
-            <LoanRowInfo
-              label={<Trans>Loan payment periods</Trans>}
-              value={loan.packagePeriodDays}
-              renderValue={() =>
-                ableToUpdate ? (
-                  <Select
-                    data={loan.package.periodDaysOptions.map((value) => ({
-                      value: value.toString(),
-                      label: renderLoanPeriod(value),
-                    }))}
-                    value={loan.packagePeriodDays.toString()}
-                    onChange={(v) => onUpdatePackagePeriodDays(v)}
-                  />
-                ) : (
-                  <NumberFormat value={loan.packagePeriodDays} />
-                )
-              }
-            />
-
-            <LoanRowInfo
-              label={<Trans>Signature</Trans>}
-              value={loan.signature}
-              renderValue={(value) => <SignareCard url={value} />}
-            />
-
-            <LoanRowInfo
-              label={<Trans>Customer location</Trans>}
-              description={t`At the time of loan signing`}
-              value={loan.coord}
-              renderValue={(value) => (
-                <Anchor href={value ? getGoogleMapLinkCoord(value) : undefined} target="_blank">
-                  {<Trans>View on Google Map</Trans>}
-                </Anchor>
-              )}
-            />
-
-            {loan.status === LoanStatus.REJECTED && (
-              <Stack align="center" gap={5} mt={16}>
-                <Badge color="red">{<Trans>Rejected</Trans>}</Badge>
-
-                {loan.rejectReason && <Text c="red">{loan.rejectReason}</Text>}
-              </Stack>
-            )}
-          </Stack>
-        </Card>
-
-        <SectionTitle mb={-20} name={<Trans>Asset data</Trans>} icon={IconClipboardText} />
-        <Card shadow="xs">
-          <LoanAssetDataInput
-            loanId={loan.id}
-            assetType={loan.assetType}
-            value={loan.assetData}
-            disabled={!ableToUpdate}
-            onChange={props.updateAssetData}
+          <LoanRowInfo
+            label={<Trans>Loan asset type</Trans>}
+            value={t(loanAssetTypes[loan.assetType].label)}
           />
-        </Card>
 
-        <Renderer
-          visible={
-            loan.status === LoanStatus.PENDING &&
-            workspace.hasPermission(WorkspacePermission.LOANS_APPROVE)
-          }
-        >
-          <Group justify="center">
-            <Button onClick={onApprove} leftIcon={IconCheck}>
-              {<Trans>Approve</Trans>}
-            </Button>
+          <LoanRowInfo
+            label={<Trans>Loan period</Trans>}
+            value={renderLoanPeriod(loan.package.days)}
+          />
 
-            <Button variant="outline" color="gray" onClick={onReject}>
-              {<Trans>Reject</Trans>}
-            </Button>
-          </Group>
-        </Renderer>
-      </Stack>
-    </Container>
+          <LoanRowInfo
+            label={<Trans>Loan amount</Trans>}
+            value={loan.amount}
+            renderValue={() =>
+              ableToUpdate ? (
+                <NumberInput
+                  hideControls
+                  defaultValue={loan.amount}
+                  onChange={(v) => onUpdateAmount(+v)}
+                />
+              ) : (
+                <CurrencyFormat value={loan.amount} />
+              )
+            }
+          />
+
+          <LoanRowInfo
+            label={<Trans>Loan payment periods</Trans>}
+            value={loan.packagePeriodDays}
+            renderValue={() =>
+              ableToUpdate ? (
+                <Select
+                  data={loan.package.periodDaysOptions.map((value) => ({
+                    value: value.toString(),
+                    label: renderLoanPeriod(value),
+                  }))}
+                  value={loan.packagePeriodDays.toString()}
+                  onChange={(v) => onUpdatePackagePeriodDays(v)}
+                />
+              ) : (
+                <NumberFormat value={loan.packagePeriodDays} />
+              )
+            }
+          />
+
+          <LoanRowInfo
+            label={<Trans>Signature</Trans>}
+            value={loan.signature}
+            renderValue={(value) => <SignareCard url={value} />}
+          />
+
+          <LoanRowInfo
+            label={<Trans>Customer location</Trans>}
+            description={t`At the time of loan signing`}
+            value={loan.coord}
+            renderValue={(value) => (
+              <Anchor href={value ? getGoogleMapLinkCoord(value) : undefined} target="_blank">
+                {<Trans>View on Google Map</Trans>}
+              </Anchor>
+            )}
+          />
+
+          {loan.status === LoanStatus.REJECTED && (
+            <Stack align="center" gap={5} mt={16}>
+              <Badge color="red">{<Trans>Rejected</Trans>}</Badge>
+
+              {loan.rejectReason && <Text c="red">{loan.rejectReason}</Text>}
+            </Stack>
+          )}
+        </Stack>
+      </Card>
+
+      <SectionTitle mb={-20} name={<Trans>Asset data</Trans>} icon={IconClipboardText} />
+      <Card shadow="xs">
+        <LoanAssetDataInput
+          loanId={loan.id}
+          assetType={loan.assetType}
+          value={loan.assetData}
+          disabled={!ableToUpdate}
+          onChange={props.updateAssetData}
+        />
+      </Card>
+
+      {props.children}
+
+      <Renderer
+        visible={
+          loan.status === LoanStatus.PENDING &&
+          workspace.hasPermission(WorkspacePermission.LOANS_APPROVE)
+        }
+      >
+        <Group justify="center">
+          <Button onClick={onApprove} leftIcon={IconCheck}>
+            {<Trans>Approve</Trans>}
+          </Button>
+
+          <Button variant="outline" color="gray" onClick={onReject}>
+            {<Trans>Reject</Trans>}
+          </Button>
+        </Group>
+      </Renderer>
+    </Stack>
   );
 };
 

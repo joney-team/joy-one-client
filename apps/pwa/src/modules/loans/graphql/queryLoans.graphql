@@ -1,0 +1,30 @@
+query Loans(
+  $customerCidNumber: String
+  $status: [LoanStatus!]
+  $limit: Float
+  $offset: Float
+  $query: JSONObject
+  $sortCreatedAt: SortDirection
+) {
+  loans(
+    customerCidNumber: $customerCidNumber
+    status: $status
+    limit: $limit
+    offset: $offset
+    query: $query
+    sortCreatedAt: $sortCreatedAt
+  ) {
+    data {
+      id
+      code
+      status
+      amount
+      customerCidNumber
+      assetType
+      rejectReason
+      createdAt
+      isHasLateInterestReceipt
+    }
+    count
+  }
+}

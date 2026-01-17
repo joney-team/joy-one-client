@@ -172,7 +172,9 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
                         truncate="end"
                         maw={layout.view === "mobile" ? "30dvw" : "40dvw"}
                       >
-                        {fileInfo.data?.getFileInfo?.fileName ?? renderFile.name}
+                        {activeFile?.fileName ??
+                          fileInfo.data?.getFileInfo?.fileName ??
+                          renderFile.name}
                       </Text>
 
                       {fileSize.size && (

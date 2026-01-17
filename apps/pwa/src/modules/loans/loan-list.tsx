@@ -137,7 +137,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 <Stack gap={3} w="100%">
                   <Group justify="space-between">
                     <Group gap={5}>
-                      <Text fw={500}>{loanAssetTypes[loan.assetType].label()}</Text>
+                      <Text fw={500}>{t(loanAssetTypes[loan.assetType].label)}</Text>
                       <Badge
                         size="sm"
                         variant="light"
@@ -212,7 +212,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 { col: t`Loan package`, text: loan.package.id, width: 20 },
                 {
                   col: t`Loan asset type`,
-                  text: loanAssetTypes[loan.assetType].label(),
+                  text: t(loanAssetTypes[loan.assetType].label),
                   width: 20,
                 },
                 { col: t`Loan amount`, money: loan.amount, width: 30 },

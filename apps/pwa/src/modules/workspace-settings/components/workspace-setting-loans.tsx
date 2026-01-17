@@ -7,14 +7,14 @@ import { loanAssetTypes, loanPackageTypes } from "@/modules/loans/loans-constant
 import { loanPackageTypeColors, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { ModalLoanPackageForm } from "@/modules/loans/modals/modal-loan-package-form";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Card, Group, SimpleGrid, Stack, Text, TextProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 
 export const WorkspacetSettingLoans: FC = () => {
   const workspace = useWorkspace();
+  const { t } = useLingui();
 
   return (
     <ModalLoanPackageForm>
@@ -38,7 +38,7 @@ export const WorkspacetSettingLoans: FC = () => {
 
                       <RowInfo
                         label={t`Asset types`}
-                        value={pkg.assetTypes.map((v) => loanAssetTypes[v].label()).join(", ")}
+                        value={pkg.assetTypes.map((v) => t(loanAssetTypes[v].label)).join(", ")}
                       />
 
                       <RowInfo

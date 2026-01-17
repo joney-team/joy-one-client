@@ -75,7 +75,7 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
             <Trans>Loan asset type</Trans>
           </Text>
           <Text fz={em(15)} fw={500}>
-            {loanAssetTypes[loan.assetType].label()}
+            {t(loanAssetTypes[loan.assetType].label)}
           </Text>
         </Group>
 

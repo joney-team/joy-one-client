@@ -14,7 +14,7 @@ import {
   LoanAssetType,
 } from "@/modules/loans/loans-types";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Group,
@@ -32,7 +32,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCoins, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
 import { loanAssetTypes } from "../loans-constants";
-import { Trans } from "@lingui/react/macro";
 
 interface ModalLoanAssetEstimationFormProps {
   estimation?: LoanAssetEstimation;
@@ -53,6 +52,8 @@ const initialValues: LoanAssetEstimation = {
 export const ModalLoanAssetEstimationForm: FC<{
   children: (open: (props?: ModalLoanAssetEstimationFormProps) => void) => ReactNode;
 }> = ({ children }) => {
+  const { t } = useLingui();
+
   const [opened, { open, close }] = useDisclosure(false);
   const loans = useLoans();
   const [props, setProps] = useState<ModalLoanAssetEstimationFormProps>();
@@ -133,7 +134,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                   data={[LoanAssetType.MOTOBIKE_REGISTRATION, LoanAssetType.CAR_REGISTRATION].map(
                     (type) => ({
                       value: type,
-                      label: loanAssetTypes[type].label(),
+                      label: t(loanAssetTypes[type].label),
                     })
                   )}
                   {...form.getInputProps("assetType")}

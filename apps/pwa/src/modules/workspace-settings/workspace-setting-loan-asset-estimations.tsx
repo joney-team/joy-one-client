@@ -20,8 +20,7 @@ import { convertExcelToJson } from "@/modules/tools/tools-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Card, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import {
@@ -42,6 +41,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
   const router = useRouter();
   const workspace = useWorkspace();
   const searchs = useSearchParams();
+  const { t } = useLingui();
 
   const [importing, setImporting] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -186,7 +186,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
               value={searchs.get("assetType")}
               options={[LoanAssetType.CAR_REGISTRATION, LoanAssetType.MOTOBIKE_REGISTRATION].map(
                 (v) => ({
-                  label: loanAssetTypes[v].label(),
+                  label: t(loanAssetTypes[v].label),
                   value: v,
                 })
               )}
@@ -260,7 +260,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                       return (
                         <Table.Tr key={estimation.id}>
                           <Table.Td>{index + 1}</Table.Td>
-                          <Table.Td>{loanAssetTypes[estimation.assetType].label()}</Table.Td>
+                          <Table.Td>{t(loanAssetTypes[estimation.assetType].label)}</Table.Td>
                           <Table.Td>
                             {
                               loans.assetEstimations.brands.find(
