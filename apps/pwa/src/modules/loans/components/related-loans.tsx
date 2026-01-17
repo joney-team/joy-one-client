@@ -14,7 +14,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { loanAssetTypes, loanStatuses } from "../loans-constants";
 import Link from "next/link";
 import { LoanStatus, SortDirection } from "@/graphql/enums.graphql";
-import { DateFormat } from "@/components/format/date-format";
+import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { WayPoint } from "@/components/way-point";
 import { useColor } from "@/modules/theme/use-color";
 import { CurrencyFormat } from "@/components/format/currency-format";
@@ -107,6 +107,9 @@ export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }
                   {loan.createdAt && (
                     <Text fz={10} c="gray">
                       <DateFormat value={loan.createdAt} />
+                      {" ("}
+                      <RelativeTimeFormat value={loan.createdAt} />
+                      {")"}
                     </Text>
                   )}
                 </Group>
