@@ -137,12 +137,7 @@ export const useUpdateTasks = () => {
           });
 
           // Change status
-          if (
-            updatedTask.status &&
-            updatedTask.context?.fromGroupVariables?.status &&
-            updatedTask.context?.fromGroupVariables &&
-            updatedTask.context?.toGroupVariables
-          ) {
+          if (updatedTask.status && updatedTask.context?.fromGroupVariables?.status) {
             // Remove from current status group
             client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
               {
@@ -156,6 +151,7 @@ export const useUpdateTasks = () => {
                   ...prev,
                   tasks: {
                     ...prev.tasks,
+                    count: prev.tasks.count - 1,
                     data: [...prev.tasks.data.filter((t) => t._id !== currentData._id)],
                   },
                 };
@@ -166,7 +162,10 @@ export const useUpdateTasks = () => {
             client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
               {
                 query: QUERY_TASKS,
-                variables: updatedTask.context.toGroupVariables,
+                variables: {
+                  ...updatedTask.context.fromGroupVariables,
+                  status: updatedData.status,
+                },
                 overwrite: true,
               },
               (prev) => {
@@ -175,6 +174,7 @@ export const useUpdateTasks = () => {
                   ...prev,
                   tasks: {
                     ...prev.tasks,
+                    count: prev.tasks.count + 1,
                     data: [
                       ...prev.tasks.data.filter((t) => t._id !== updatedData._id),
                       updatedData,
@@ -246,6 +246,7 @@ export const useUpdateTasks = () => {
                   ...prev,
                   tasks: {
                     ...prev.tasks,
+                    count: prev.tasks.count - 1,
                     data: [...prev.tasks.data.filter((t) => t._id !== updatedTask._id)],
                   },
                 };

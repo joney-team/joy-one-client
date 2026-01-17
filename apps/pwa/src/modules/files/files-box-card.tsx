@@ -78,8 +78,9 @@ export const FileBoxCard: FC<{
       shadow="none"
       w={150}
       p={5}
-      style={{ position: "relative", overflow: "visible", cursor: "pointer" }}
+      pos="relative"
       ref={hover.ref}
+      onClick={(e) => e.stopPropagation()}
       {...props.cardProps}
     >
       <Stack w="100%" mih="100%" gap={5}>
@@ -91,6 +92,7 @@ export const FileBoxCard: FC<{
               justify="center"
               align="center"
               pos="absolute"
+              className="clickable"
               w="100%"
               h="100%"
               style={{
@@ -122,8 +124,9 @@ export const FileBoxCard: FC<{
         <ActionIcon
           color="dark.3"
           size="xs"
+          pos="absolute"
+          className="clickable"
           style={{
-            position: "absolute",
             top: 10,
             right: 10,
           }}
