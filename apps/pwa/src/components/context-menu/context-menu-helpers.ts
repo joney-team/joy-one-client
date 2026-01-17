@@ -46,8 +46,6 @@ export function placeDropdownMenuByTarget(
   const offsetX = offset?.x ?? 0;
   const offsetY = offset?.y ?? 0;
 
-  console.log("offsetX", offsetX);
-
   let placeX: number;
   let placeY: number;
 

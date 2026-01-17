@@ -6,6 +6,7 @@ import { Hovered } from "./hovered";
 import Link from "next/link";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useColor } from "@/modules/theme/use-color";
 
 interface ClickableProps extends AnchorProps {
   blank?: boolean;
@@ -19,6 +20,7 @@ interface ClickableProps extends AnchorProps {
 export const Clickable: FC<PropsWithChildren<ClickableProps>> = (props) => {
   const { blank, href, onClick, disabled, ...rest } = props;
   const workspace = useWorkspace();
+  const color = useColor();
   const isHasPermission = props.permission ? workspace.hasPermission(props.permission) : true;
 
   if (disabled || !isHasPermission) {
@@ -65,7 +67,7 @@ export const Clickable: FC<PropsWithChildren<ClickableProps>> = (props) => {
             style={{
               cursor: "pointer",
               borderRadius: 5,
-              background: hover.hovered ? "var(--mantine-color-gray-2)" : "transparent",
+              background: hover.hovered ? color({ light: "gray.2", dark: "dark" }) : "transparent",
             }}
             onClick={onClick}
           >

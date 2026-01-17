@@ -48,13 +48,7 @@
           }
         }
 
-        &:nth-child(odd) {
-          & td {
-            background: var(--mantine-color-body);
-          }
-        }
-
-        &:nth-child(even) {
+        &:hover {
           & td {
             background: var(--mantine-color-default-hover);
           }
@@ -62,7 +56,11 @@
 
         &[data-context-menu-opened="true"] {
           & td {
-            background: color-mix(in srgb, var(--app-primary-color), transparent 95%) ;
+            background: color-mix(
+              in srgb,
+              var(--app-primary-color),
+              transparent 95%
+            );
           }
         }
       }
