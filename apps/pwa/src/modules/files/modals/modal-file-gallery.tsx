@@ -130,6 +130,7 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
 
     useImperativeHandle(ref, () => ({
       open: (p) => {
+        if (p.index) setIndex(p.index);
         setArgs(p);
       },
       close: () => {
@@ -188,21 +189,22 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
                   <Group justify="center" wrap="nowrap" w="100%">
                     <ActionIcon
                       component="div"
-                      color={index === 0 ? "gray.8" : "white"}
-                      variant="transparent"
+                      color={index === 0 ? "dark.3" : "white"}
+                      variant="subtle"
                       onClick={onPrev}
                     >
                       <IconChevronLeft />
                     </ActionIcon>
-                    <Text c="white">
+
+                    <Text c="white" ta="center" miw={60} fz="sm">
                       <NumberFormat value={index + 1} />/
                       {<NumberFormat value={args.files.length} />}
                     </Text>
 
                     <ActionIcon
                       component="div"
-                      color={index + 1 >= args.files.length ? "gray.8" : "white"}
-                      variant="transparent"
+                      color={index + 1 >= args.files.length ? "dark.3" : "white"}
+                      variant="subtle"
                       onClick={onNext}
                     >
                       <IconChevronRight />
@@ -211,22 +213,17 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
 
                   <Group justify="end" wrap="nowrap" w="100%">
                     <ActionIcon component="div" variant="subtle" color="white" onClick={onDownload}>
-                      <IconDownload strokeWidth={1.5} />
+                      <IconDownload strokeWidth={1.5} size={20} />
                     </ActionIcon>
 
                     {!disabled && (
                       <ActionIcon component="div" variant="subtle" color="white" onClick={onRemove}>
-                        <IconTrash strokeWidth={1.5} />
+                        <IconTrash strokeWidth={1.5} size={20} />
                       </ActionIcon>
                     )}
 
-                    <ActionIcon
-                      component="div"
-                      variant="subtle"
-                      color="white"
-                      onClick={() => onClose()}
-                    >
-                      <IconX strokeWidth={1.5} size={30} />
+                    <ActionIcon component="div" variant="subtle" color="white" onClick={onClose}>
+                      <IconX strokeWidth={1.5} size={22} />
                     </ActionIcon>
                   </Group>
                 </SimpleGrid>
@@ -239,10 +236,9 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
                 style={{ overflow: "hidden" }}
                 align="center"
                 justify="center"
-                p={16}
               >
                 {(function () {
-                  if (renderFile.type === FileType.Photo)
+                  if (renderFile.type === FileType.Photo) {
                     return (
                       <Image
                         src={renderFileUrl(activeFile.url)}
@@ -260,6 +256,18 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
                         }}
                       />
                     );
+                  }
+
+                  if (renderFile.type === FileType.Video) {
+                    return (
+                      <video
+                        src={renderFileUrl(activeFile.url)}
+                        style={{ width: "100%", height: "100%", background: "black" }}
+                        controls
+                        autoPlay={false}
+                      />
+                    );
+                  }
 
                   return (
                     <Stack justify="center" align="center">

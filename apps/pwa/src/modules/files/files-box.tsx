@@ -1,21 +1,18 @@
 "use client";
 
 import { useList } from "@/components/list/use-list";
-import { FileType } from "@/graphql/enums.graphql";
-import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/graphql/enums.graphql";
+import { useEventsListener } from "@/modules/events/event-service";
 import { detectFileType, getFiles, removeFile } from "@/modules/files/file-service";
 import { FileEntity } from "@/modules/files/file-types";
-import { renderFileUrl } from "@/modules/files/files-utils";
-import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
+import { nonLoading } from "@/utils/non-loading";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import {
-  ActionIcon,
   BoxProps,
   Card,
   CardProps,
-  Center,
   em,
   Group,
   Stack,
@@ -24,12 +21,20 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
-import { useHover } from "@mantine/hooks";
-import { IconArrowsDiagonal, IconFile, IconUpload, IconVideo, IconX } from "@tabler/icons-react";
-import { FC, forwardRef, Fragment, useImperativeHandle, useRef, useState } from "react";
-import { Image } from "../../components/image";
+import { IconUpload } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { Renderer } from "../../components/renderer";
+import { FileBoxCard } from "./files-box-card";
 import { useUploadFile } from "./hooks/use-upload-file";
+
+const ModalFileGallery = dynamic(
+  () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 interface FilesBoxProps {
   refs?: string[];
@@ -55,9 +60,12 @@ export interface FilesBoxRef {
 
 export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
   const openRef = useRef<() => void>(null);
+  const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+
   const [_rawFiles, setRawFiles] = useState<File[]>([]);
   const rawFiles = props.rawFiles || _rawFiles;
   const uploadFile = useUploadFile();
+  const disabled = props.disabled || props.readonly;
 
   const onChangeRawFiles = (files: File[]) => {
     if (props.rawFiles) return props.onChangeRawFiles?.(files);
@@ -121,269 +129,118 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
     })
   );
 
-  const disabled = props.disabled || props.readonly;
-
   return (
-    <ModalFileGallery>
-      {(openGallery) => (
-        <Dropzone
-          onDrop={(_files) => addFile(_files)}
-          disabled={disabled}
-          activateOnClick={false}
-          openRef={openRef}
-          {...props.props}
-          style={{ outline: "none" }}
+    <Dropzone
+      onDrop={(_files) => addFile(_files)}
+      disabled={disabled}
+      activateOnClick={false}
+      openRef={openRef}
+      {...props.props}
+      style={{ outline: "none" }}
+    >
+      <Card
+        withBorder
+        shadow="none"
+        p={0}
+        onClick={() => openRef.current?.()}
+        bg={length > 0 ? "var(--mantine-color-gray-outline-hover)" : "transparent"}
+        style={{
+          position: "relative",
+          cursor: "pointer",
+          borderStyle: length > 0 ? "solid" : "dashed",
+          ...props.wrapperStyle,
+        }}
+      >
+        <Stack
+          p={8}
+          gap={8}
+          style={{ borderRadius: 8, position: "relative" }}
+          {...props.filesWrapperProps}
         >
-          <Card
-            withBorder
-            shadow="none"
-            p={0}
-            onClick={() => openRef.current?.()}
-            bg={length > 0 ? "var(--mantine-color-gray-outline-hover)" : "transparent"}
-            style={{
-              position: "relative",
-              cursor: "pointer",
-              borderStyle: length > 0 ? "solid" : "dashed",
-              ...props.wrapperStyle,
-            }}
-          >
-            <Stack
-              p={8}
-              gap={8}
-              style={{ borderRadius: 8, position: "relative" }}
-              {...props.filesWrapperProps}
-            >
-              <Renderer visible={length > 0}>
-                <Group gap={10}>
-                  {uploadedFiles.data.map((file, index) => {
-                    const specificDisabled = props.specificDisabledRelated?.find(
-                      (v) => !!(file as any)[v]
-                    );
-
-                    return (
-                      <FileBoxCard
-                        key={file._id}
-                        file={file}
-                        disabled={disabled || !!specificDisabled}
-                        onRemove={() => onRemove(file)}
-                        onGallery={() =>
-                          openGallery({
-                            files: uploadedFiles.data,
-                            index,
-                            disabled: props.disabled,
-                          })
-                        }
-                        cardProps={props.itemCardProps}
-                      />
-                    );
-                  })}
-
-                  {rawFiles.map((file, index) => {
-                    return (
-                      <FileBoxCard
-                        disabled={disabled}
-                        key={index}
-                        file={file}
-                        onRemove={() => onRemove(file)}
-                        cardProps={props.itemCardProps}
-                      />
-                    );
-                  })}
-                </Group>
-              </Renderer>
-
-              <Renderer visible={length === 0 && !!props.empty}>{props.empty}</Renderer>
-
-              <Renderer visible={!disabled}>
-                <Dropzone.Accept>
-                  <Group gap={5} justify="center" py={5} pb={length > 0 ? 0 : 5}>
-                    <ThemeIcon variant="transparent" color="gray.5">
-                      <IconUpload strokeWidth={1.5} size={18} />
-                    </ThemeIcon>
-                    <Text c="gray.5" fz={em(13)} fw={300}>
-                      {props.placeholder ?? <Trans>Drop files here</Trans>}
-                    </Text>
-                  </Group>
-                </Dropzone.Accept>
-
-                <Dropzone.Idle>
-                  <Group gap={5} justify="center" py={5} pb={length > 0 ? 0 : 5}>
-                    <ThemeIcon variant="transparent" color="gray.5">
-                      <IconUpload strokeWidth={1.5} size={18} />
-                    </ThemeIcon>
-                    <Text c="gray.5" fz={em(13)} fw={300}>
-                      {props.placeholder ?? <Trans>Drop or click to choose file</Trans>}
-                    </Text>
-                  </Group>
-                </Dropzone.Idle>
-              </Renderer>
-            </Stack>
-          </Card>
-        </Dropzone>
-      )}
-    </ModalFileGallery>
-  );
-});
-
-export const FileBoxCard: FC<{
-  file: File | FileEntity;
-  onRemove?: () => void;
-  disabled?: boolean;
-  onGallery?: () => void;
-  cardProps?: CardProps;
-}> = (props) => {
-  const { file } = props;
-  const fileType = detectFileType(file instanceof File ? file.name : file.fileName);
-  const fileName = file instanceof File ? file.name : file.fileName;
-  const hover = useHover();
-  const radius = 5;
-
-  return (
-    <ModalFileGallery>
-      {(openGallery) => (
-        <Card
-          withBorder
-          shadow="none"
-          w={150}
-          p={5}
-          style={{ position: "relative", overflow: "visible", cursor: "pointer" }}
-          ref={hover.ref}
-          {...props.cardProps}
-        >
-          <Stack w="100%" mih="100%" gap={5}>
-            <Stack mih="100%" style={{ position: "relative" }}>
-              {(function () {
-                const url =
-                  file instanceof File ? URL.createObjectURL(file) : renderFileUrl(file.url);
-
-                if (fileType === FileType.Photo)
-                  return (
-                    <Image
-                      src={url}
-                      w="100%"
-                      h={100}
-                      mih={100}
-                      mah={100}
-                      fit="contain"
-                      bg="gray.1"
-                      style={{ borderTopRightRadius: radius, borderTopLeftRadius: radius }}
-                    />
-                  );
-
-                if (fileType === FileType.Video)
-                  return (
-                    <Fragment>
-                      <video
-                        src={url}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          backgroundColor: "#f1f1f1",
-                        }}
-                        autoPlay={false}
-                      />
-
-                      <Center
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          zIndex: 2,
-                          width: "100%",
-                          height: 100,
-                          backgroundColor: "#f1f1f1",
-                        }}
-                      >
-                        <ThemeIcon color="gray" variant="transparent" size="lg">
-                          <IconVideo strokeWidth={1.2} />
-                        </ThemeIcon>
-                      </Center>
-                    </Fragment>
-                  );
+          <Renderer visible={length > 0}>
+            <Group gap={10}>
+              {uploadedFiles.data.map((file, index) => {
+                const specificDisabled = props.specificDisabledRelated?.find(
+                  (v) => !!(file as any)[v]
+                );
 
                 return (
-                  <Center
-                    style={{
-                      height: 100,
-                      backgroundColor: "#f1f1f1",
-                    }}
-                  >
-                    <ThemeIcon color="gray" variant="transparent" size="lg">
-                      <IconFile strokeWidth={1.2} />
-                    </ThemeIcon>
-                  </Center>
+                  <FileBoxCard
+                    key={file._id}
+                    file={file}
+                    disabled={disabled || !!specificDisabled}
+                    onRemove={() => onRemove(file)}
+                    onGallery={() =>
+                      modalFileGalleryRef.current?.open({
+                        files: uploadedFiles.data,
+                        index,
+                        disabled: props.disabled,
+                      })
+                    }
+                    cardProps={props.itemCardProps}
+                  />
                 );
-              })()}
+              })}
 
-              {hover.hovered && (
-                <Stack
-                  justify="center"
-                  align="center"
-                  style={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "rgba(0, 0, 0, 0.3)",
-                    top: 0,
-                    left: 0,
-                    borderTopRightRadius: radius,
-                    borderTopLeftRadius: radius,
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    if (props.onGallery) return props.onGallery();
-
-                    if (file instanceof File) {
-                      const _file: FileEntity = {
+              {rawFiles.map((file, index) => {
+                return (
+                  <FileBoxCard
+                    disabled={disabled}
+                    key={index}
+                    file={file}
+                    onRemove={() => onRemove(file)}
+                    cardProps={props.itemCardProps}
+                    onGallery={() => {
+                      const rawFileEntity: FileEntity = {
+                        _id: "",
                         fileName: file.name,
                         type: detectFileType(file.name),
                         url: URL.createObjectURL(file),
-                        _id: "",
-                        createdAt: DateTime.toSeconds(new Date()),
+                        createdAt: DateTime.getNowInSeconds(),
                         relativePath: "",
                         size: file.size,
                         path: "",
                       };
-                      openGallery({ files: [_file], disabled: props.disabled });
-                    } else {
-                      openGallery({ files: [file], disabled: props.disabled });
-                    }
-                  }}
-                >
-                  <ThemeIcon color="white" variant="transparent" size="sm">
-                    <IconArrowsDiagonal />
-                  </ThemeIcon>
-                </Stack>
-              )}
-            </Stack>
 
-            <Text ta="center" truncate="end" fz={em(10)} fw={500}>
-              {fileName}
-            </Text>
-          </Stack>
-
-          <Renderer visible={!props.disabled && hover.hovered}>
-            <ActionIcon
-              color="dark.3"
-              size="xs"
-              style={{
-                position: "absolute",
-                top: 10,
-                right: 10,
-              }}
-              radius={100}
-              onClick={(e) => {
-                e.stopPropagation();
-                props.onRemove?.();
-              }}
-            >
-              <IconX strokeWidth={2} size={12} />
-            </ActionIcon>
+                      modalFileGalleryRef.current?.open({
+                        files: [rawFileEntity],
+                        disabled: props.disabled,
+                      });
+                    }}
+                  />
+                );
+              })}
+            </Group>
           </Renderer>
-        </Card>
-      )}
-    </ModalFileGallery>
+
+          <Renderer visible={length === 0 && !!props.empty}>{props.empty}</Renderer>
+
+          <Renderer visible={!disabled}>
+            <Dropzone.Accept>
+              <Group gap={5} justify="center" py={5} pb={length > 0 ? 0 : 5}>
+                <ThemeIcon variant="transparent" color="gray.5">
+                  <IconUpload strokeWidth={1.5} size={18} />
+                </ThemeIcon>
+                <Text c="gray.5" fz={em(13)} fw={300}>
+                  {props.placeholder ?? <Trans>Drop files here</Trans>}
+                </Text>
+              </Group>
+            </Dropzone.Accept>
+
+            <Dropzone.Idle>
+              <Group gap={5} justify="center" py={5} pb={length > 0 ? 0 : 5}>
+                <ThemeIcon variant="transparent" color="gray.5">
+                  <IconUpload strokeWidth={1.5} size={18} />
+                </ThemeIcon>
+                <Text c="gray.5" fz={em(13)} fw={300}>
+                  {props.placeholder ?? <Trans>Drop or click to choose file</Trans>}
+                </Text>
+              </Group>
+            </Dropzone.Idle>
+          </Renderer>
+        </Stack>
+      </Card>
+      <ModalFileGallery ref={modalFileGalleryRef} />
+    </Dropzone>
   );
-};
+});
