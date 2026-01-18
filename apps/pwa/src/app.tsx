@@ -50,6 +50,14 @@ const EscapeHandler = dynamic(() => import("@/hooks/use-escape").then((mod) => m
   loading: nonLoading,
 });
 
+const EventsHandler = dynamic(
+  () => import("./modules/events/events-handler").then((mod) => mod.EventsHandler),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
 const GeneralAnalytics = dynamic(
   () => import("./components/analytics/general-analytics").then((mod) => mod.GeneralAnalytics),
   {
@@ -174,6 +182,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
 
                     <NavigationProgress />
                     <EscapeHandler />
+                    <EventsHandler />
                     <AppLoading />
                     <GeneralAnalytics />
                   </ModuleProviders>

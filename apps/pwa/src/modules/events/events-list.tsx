@@ -1,10 +1,7 @@
 "use client";
 
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useCallback, useMemo } from "react";
 
-import { useList } from "@/components/list/use-list";
-import { getEvents } from "@/modules/events/event-service";
-import { EventEntity, EventVariant } from "@/modules/events/event-types";
 import { Badge, Group, Stack, StackProps, Text, ThemeIcon, Timeline, Tooltip } from "@mantine/core";
 import {
   IconArrowRight,
@@ -15,6 +12,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 
+import { EventType, EventVariant } from "@/graphql/enums.graphql";
 import { eventTypes, eventVariants } from "@/modules/events/event-constants";
 import { taskPriorities } from "@/modules/tasks/task-constants";
 import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
@@ -24,24 +22,30 @@ import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Avatar } from "./avatar";
-import { ButtonViewMore } from "./buttons/button-view-more";
-import { Errored } from "./errored";
-import { DateFormat, RelativeTimeFormat } from "./format/date-format";
-import { EventType } from "@/graphql/enums.graphql";
+import { Avatar } from "../../components/avatar";
+import { ButtonViewMore } from "../../components/buttons/button-view-more";
+import { Errored } from "../../components/errored";
+import { DateFormat, RelativeTimeFormat } from "../../components/format/date-format";
+import EVENTS_QUERY, {
+  type EventsQuery,
+  type EventsQueryVariables,
+} from "./graphql/queryEvents.graphql";
 
 interface EventListProps extends StackProps {
   ref?: string;
   userId?: string;
-  type?: EventType | EventType[];
+  type?: EventType;
   showTitle?: boolean;
   empty?: ReactNode;
   fetching?: ReactNode;
 }
 
-export const EventList: FC<EventListProps> = ({
+type Event = EventsQuery["events"]["data"][number];
+
+export const EventsList: FC<EventListProps> = ({
   ref,
   userId,
   type,
@@ -50,25 +54,49 @@ export const EventList: FC<EventListProps> = ({
   fetching,
   ...rest
 }) => {
-  const id = rest.id || `list-event-${JSON.stringify({ ref: ref, userId: userId, type: type })}`;
+  const variables = useMemo<EventsQueryVariables>(() => {
+    return {
+      offset: 0,
+      ref,
+      userId,
+      type,
+      limit: 100,
+    };
+  }, [ref, userId]);
 
-  const events = useList<EventEntity>({
-    id: id,
-    limit: 5,
-    fetch: async (query) => getEvents({ ...query, ref: ref, userId: userId, type: type }),
-    isIgnoreEventActionType: true,
-    events: {
-      types: Object.values(EventType),
-      condition: (event) => {
-        return event.ref === ref || (event.relatedEntities || []).some((v) => v.id === ref);
+  const { data, loading, error, fetchMore } = useQuery<EventsQuery, EventsQueryVariables>(
+    EVENTS_QUERY,
+    {
+      variables,
+      fetchPolicy: "cache-and-network",
+    }
+  );
+
+  const isAbleToFetchMore = useMemo(() => {
+    return data && data.events.count > 0 && data.events.data.length < data.events.count;
+  }, [data]);
+
+  const onFetchMore = useCallback(async () => {
+    if (!isAbleToFetchMore) return;
+    await fetchMore({
+      variables: {
+        ...variables,
+        offset: data?.events.data.length || 0,
       },
-    },
-  });
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          ...prev,
+          events: { ...prev.events, data: [...prev.events.data, ...fetchMoreResult.events.data] },
+        };
+      },
+    });
+  }, [fetchMore, isAbleToFetchMore, variables, data]);
 
   const my = typeof rest.my === "number" ? rest.my : 30;
 
-  if (fetching && !events.isInitialized) return fetching;
-  if (events.isEmpty) return empty || null;
+  if (fetching && loading && !error && !data) return fetching;
+  if (!data || data.events.count === 0) return empty || null;
 
   return (
     <Stack my={my} {...rest}>
@@ -78,31 +106,31 @@ export const EventList: FC<EventListProps> = ({
         </Text>
       )}
 
-      <Errored error={events.error} visible={events.isHasError} />
+      {error && <Errored error={error} />}
 
-      {events.data.length > 0 && (
+      {data.events.data.length > 0 && (
         <Timeline
           active={1}
           bulletSize={25}
           lineWidth={1.5}
           styles={{ itemBullet: { padding: 0, border: 0 } }}
         >
-          {events.data.map((event) => {
+          {data.events.data.map((event) => {
             return <EventItem key={event._id} event={event} />;
           })}
         </Timeline>
       )}
 
-      {events.isAbleToLoadMore && (
+      {isAbleToFetchMore && (
         <Group justify="start" pl={45}>
-          <ButtonViewMore onClick={events.loadMore} />
+          <ButtonViewMore onClick={onFetchMore} />
         </Group>
       )}
     </Stack>
   );
 };
 
-export const EventItem: FC<{ event: EventEntity }> = (props) => {
+export const EventItem: FC<{ event: Event }> = (props) => {
   const { event } = props;
   const isToday = DateTime.isSame(event.time, new Date(), "day");
 
@@ -141,7 +169,7 @@ export const EventItem: FC<{ event: EventEntity }> = (props) => {
   );
 };
 
-function renderBullet(ev: EventEntity) {
+function renderBullet(ev: Event) {
   const color = useColor();
   const colorScheme = useColorScheme();
 
@@ -169,7 +197,7 @@ function renderBullet(ev: EventEntity) {
     );
   }
 
-  const eventVariant = eventVariants[ev.variant || EventVariant.INFO];
+  const eventVariant = eventVariants[ev.variant ?? EventVariant.Info];
 
   return (
     <Group
@@ -186,7 +214,7 @@ function renderBullet(ev: EventEntity) {
   );
 }
 
-function EventItemTitle(props: { event: EventEntity }) {
+function EventItemTitle(props: { event: Event }) {
   const { t } = useLingui();
   const { event } = props;
   const workspace = useWorkspace();

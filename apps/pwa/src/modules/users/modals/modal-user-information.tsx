@@ -4,7 +4,6 @@ import { Avatar } from "@/components/avatar";
 import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
-import { EventList } from "@/components/event-list";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { UseList, useList } from "@/components/list/use-list";
 import { EventType } from "@/graphql/enums.graphql";
@@ -16,10 +15,12 @@ import { useColor } from "@/modules/theme/use-color";
 import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
 import { getUserPublicInformation } from "@/modules/users/users-service";
 import { UserPublicInformation } from "@/modules/users/users-types";
+import { useIsOnline } from "@/modules/workspace-members/hooks/use-is-member-online";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
+import { nonLoading } from "@/utils/non-loading";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { useFetch } from "@/utils/use-fetch.util";
 import { zIndexes } from "@joy-one-client/config/layout";
@@ -39,7 +40,6 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import {
   Icon,
   IconAccessible,
@@ -51,7 +51,16 @@ import {
   IconUser,
   IconX,
 } from "@tabler/icons-react";
-import { FC, forwardRef, Fragment, ReactNode, useImperativeHandle, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { FC, forwardRef, Fragment, ReactNode, useImperativeHandle, useState } from "react";
+
+const EventsList = dynamic(
+  () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> = (props) => {
   const { user } = props;
@@ -62,7 +71,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
   const mutualWorkspace = user.mutualWorkspaces.find(
     (w) => w._id === workspace.userMember.workspaceId
   );
-  const isOnline = workspace.isUserOnline(user._id);
+  const isOnline = useIsOnline(user._id);
   const isMe = auth.user?._id === user._id;
 
   const [userMemberInfos] = useWorkspaceMembers([user._id]);
@@ -256,7 +265,7 @@ const UserActivity: FC<{ user: UserPublicInformation }> = (props) => {
 
   return (
     <Stack>
-      <EventList
+      <EventsList
         my={10}
         userId={user._id}
         empty={<Empty hideBorder message={<Trans>No activity</Trans>} />}

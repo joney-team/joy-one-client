@@ -4,37 +4,35 @@ import { ChillIllustration } from "@/components/illustrations/chill";
 import { useList } from "@/components/list/use-list";
 import { WayPoint } from "@/components/way-point";
 import { EventType } from "@/graphql/enums.graphql";
-import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useLayout } from "@/layout/layout-context";
+import { type ModalConfirmRef } from "@/modals/modal-confirm";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import {
   cleanNotifications,
   getNotificationStat,
   getNotifications,
-  onListViewed,
 } from "@/modules/notifications/notification-service";
 import {
   NotificationEntity,
   UserNotificationStat,
 } from "@/modules/notifications/notification-types";
 import { useColor } from "@/modules/theme/use-color";
+import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Drawer, Group, Indicator, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconBell, IconBrush } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { Button } from "../../components/buttons/button";
 import { Errored } from "../../components/errored";
 import { Renderer } from "../../components/renderer";
 import { useLang } from "../lang/lang-context";
 import { NotificationCard } from "./notification-card";
-import { type ModalConfirmRef } from "@/modals/modal-confirm";
-import dynamic from "next/dynamic";
-import { nonLoading } from "@/utils/non-loading";
-import { zIndexes } from "@joy-one-client/config/layout";
 
 const ModalConfirm = dynamic(
   () => import("@/modals/modal-confirm").then((mod) => mod.ModalConfirm),
@@ -76,11 +74,6 @@ export const UserNotifications: FC = () => {
 
   const onOpen = async () => {
     open();
-
-    if (stat && stat.unListViewed > 0) {
-      await onListViewed().catch(console.error);
-      await fetchStat().catch(console.error);
-    }
   };
 
   useEffect(() => {
@@ -187,9 +180,9 @@ export const UserNotifications: FC = () => {
             <Stack>
               <Renderer visible={notifications.count > 0}>
                 <Stack onClick={close}>
-                  {notifications.data.map((noti) => {
-                    return <NotificationCard notification={noti} key={noti._id} />;
-                  })}
+                  {notifications.data.map((noti) => (
+                    <NotificationCard notification={noti} key={noti._id} />
+                  ))}
                 </Stack>
               </Renderer>
 

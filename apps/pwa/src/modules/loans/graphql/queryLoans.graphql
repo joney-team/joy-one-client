@@ -3,7 +3,6 @@ query Loans(
   $status: [LoanStatus!]
   $limit: Float
   $offset: Float
-  $query: JSONObject
   $sortCreatedAt: SortDirection
 ) {
   loans(
@@ -11,7 +10,6 @@ query Loans(
     status: $status
     limit: $limit
     offset: $offset
-    query: $query
     sortCreatedAt: $sortCreatedAt
   ) {
     data {

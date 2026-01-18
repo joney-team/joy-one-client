@@ -7,8 +7,7 @@ import { PartnerEntity } from "@/modules/partners/partners-types";
 import { PluginMetaPageEntity } from "@/modules/plugins/meta-pages/meta-pages-types";
 import { PluginZaloOaEntity } from "@/modules/plugins/zalo-oas/zalo-oas-types";
 import { useColor } from "@/modules/theme/use-color";
-import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useIsOnline } from "@/modules/workspace-members/hooks/use-is-member-online";
 import { WorkspaceEntity } from "@/modules/workspaces/workspaces-types";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { primaryColors } from "@joy-one-client/config/colors";
@@ -22,10 +21,18 @@ import { Icon, IconUserSquareRounded } from "@tabler/icons-react";
 import { FC } from "react";
 import { IconFacebook, IconZalo } from "./icons";
 
+type AvatarUser = {
+  name?: string | null;
+  avatar?: string | null;
+  color?: string | null;
+  userId?: string | null;
+  memberId?: string | null;
+};
+
 export interface AvatarProps extends MantineAvatarProps {
   onClick?: () => void;
   color?: string;
-  user?: Pick<WorkspaceMemberLegacy, "name" | "avatar" | "color" | "userId" | "memberId">;
+  user?: AvatarUser;
   workspace?: Pick<WorkspaceEntity, "appColor" | "logo" | "name" | "appName" | "appIcon">;
   customer?: Pick<CustomerShortInfo, "name" | "avatar"> | null | undefined;
   partner?: PartnerEntity;
@@ -57,8 +64,8 @@ export const Avatar: FC<AvatarProps> = (props) => {
   } = props;
 
   const userId = user?.userId || "";
-  const workspace = useWorkspace();
-  const isOnline = userId && !!workspace.onlineStatus[userId];
+  const isOnline = useIsOnline(userId);
+
   const color = useColor();
 
   const getColor = () => {
@@ -100,7 +107,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
     if (props.partner) return getAvatarInitials(props.partner.name);
     if (props.messageBox && props.messageBox.senderName)
       return getAvatarInitials(props.messageBox.senderName);
-    if (props.user) return getAvatarInitials(props.user.name);
+    if (props.user && props.user.name) return getAvatarInitials(props.user.name);
     return "";
   };
 

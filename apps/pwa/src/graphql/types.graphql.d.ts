@@ -246,16 +246,11 @@ export type Event = {
   _id: Scalars['String']['output'];
   actionType: Maybe<EventDataActionType>;
   channel: EventChannel;
-  createdAt: Maybe<Scalars['Float']['output']>;
-  customFieldValues: Maybe<Array<CustomFieldValue>>;
   data: Maybe<Scalars['JSONObject']['output']>;
   persist: Maybe<Scalars['Boolean']['output']>;
-  ref: Maybe<Scalars['String']['output']>;
-  refs: Maybe<Array<Scalars['String']['output']>>;
-  sessionId: Maybe<Scalars['String']['output']>;
   time: Scalars['Float']['output'];
   type: EventType;
-  updatedAt: Maybe<Scalars['Float']['output']>;
+  user: WorkspaceMember;
   userId: Maybe<Scalars['String']['output']>;
   variant: Maybe<EventVariant>;
 };
@@ -470,6 +465,12 @@ export const EventVariant = {
 } as const;
 
 export type EventVariant = typeof EventVariant[keyof typeof EventVariant];
+export type EventsPaginated = {
+  __typename: 'EventsPaginated';
+  count: Scalars['Float']['output'];
+  data: Array<Event>;
+};
+
 export type File = {
   __typename: 'File';
   _id: Scalars['String']['output'];
@@ -508,6 +509,12 @@ export const FileType = {
 } as const;
 
 export type FileType = typeof FileType[keyof typeof FileType];
+export type FilesPaginated = {
+  __typename: 'FilesPaginated';
+  count: Scalars['Float']['output'];
+  data: Array<File>;
+};
+
 export type FirebaseClientConfig = {
   __typename: 'FirebaseClientConfig';
   apiKey: Scalars['String']['output'];
@@ -901,6 +908,8 @@ export type Query = {
   customer: Customer;
   customers: CustomersPaginated;
   event: Event;
+  events: EventsPaginated;
+  files: FilesPaginated;
   getCategoriesByIds: Array<Category>;
   getCategoryBySlug: Category;
   getFileInfo: File;
@@ -923,6 +932,7 @@ export type Query = {
   userWorkspaceMember: WorkspaceMember;
   workspaceMember: WorkspaceMember;
   workspaceMembers: WorkspaceMembersPaginated;
+  workspaceMembersOnlineStatus: Array<WorkspaceMemberOnlineStatus>;
 };
 
 
@@ -973,6 +983,22 @@ export type QueryEventArgs = {
 };
 
 
+export type QueryEventsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  ref?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<EventType>;
+  userId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryFilesArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  refs?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
 export type QueryGetCategoriesByIdsArgs = {
   ids: Array<Scalars['String']['input']>;
 };
@@ -1003,7 +1029,6 @@ export type QueryLoansArgs = {
   customerId?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
-  query?: InputMaybe<Scalars['JSONObject']['input']>;
   sortCreatedAt?: InputMaybe<SortDirection>;
   status?: InputMaybe<Array<LoanStatus>>;
 };
@@ -1516,6 +1541,12 @@ export type WorkspaceMember = {
   userDisplayName: Maybe<Scalars['String']['output']>;
   userId: Scalars['String']['output'];
   workspaceId: Scalars['String']['output'];
+};
+
+export type WorkspaceMemberOnlineStatus = {
+  __typename: 'WorkspaceMemberOnlineStatus';
+  isOnline: Scalars['Boolean']['output'];
+  userId: Scalars['String']['output'];
 };
 
 export type WorkspaceMemberRole = {

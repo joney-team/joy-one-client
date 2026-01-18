@@ -13,15 +13,12 @@ import {
   joinWorkspaceMember,
   verifyWorkspaceMemberInvitation,
 } from "@/modules/workspace-members/workspace-members-service";
-import {
-  WorkspaceMemberLegacy,
-  WorkspaceMemberOnlineStatus,
-} from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 import { getWorkspaceRoles } from "@/modules/workspace-roles/workspace-roles-service";
 import {
+  WorkspaceDefaultRoleId,
   WorkspacePermission,
   WorkspaceRoleEntity,
-  WorkspaceDefaultRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import {
   getWorkspaceSettings,
@@ -36,7 +33,7 @@ import { workspaceInitialize } from "@/modules/workspaces/workspaces-service";
 import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { useApolloClient, useLazyQuery, useQuery } from "@apollo/client/react";
+import { useApolloClient, useLazyQuery } from "@apollo/client/react";
 import { Currency } from "@joy-one-client/utils/currency";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
@@ -46,7 +43,10 @@ import * as Sentry from "@sentry/react";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { api } from "../apis";
-import { useRestQuery } from "../apis/use-rest-query";
+import QUERY_USER_WORKSPACE_MEMBER, {
+  type UserWorkspaceMemberQuery,
+  type UserWorkspaceMemberQueryVariables,
+} from "../workspace-members/graphql/queryUserWorkspaceMember.graphql";
 import { Context } from "./workspace-context";
 import { getDefaultWorkspaceView } from "./workspace-view";
 import {
@@ -55,10 +55,6 @@ import {
   WorkspaceEntity,
   WorkspaceMemberInvitationState,
 } from "./workspaces-types";
-import QUERY_USER_WORKSPACE_MEMBER, {
-  type UserWorkspaceMemberQuery,
-  type UserWorkspaceMemberQueryVariables,
-} from "../workspace-members/graphql/queryUserWorkspaceMember.graphql";
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const { t } = useLingui();
@@ -86,17 +82,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     : undefined;
 
   const workspaceView: WorkspaceView = state.current.settings?.view || {};
-
-  const onlineStatus = useRestQuery<WorkspaceMemberOnlineStatus>({
-    isSkip: !userMember,
-    route: "/workspace-members/online-status",
-    refetchEvents: [
-      EventType.WorkspaceMemberLeaved,
-      EventType.WorkspaceMemberJoined,
-      EventType.WorkspaceMemberOnline,
-      EventType.WorkspaceMemberOffline,
-    ],
-  });
 
   const [fetchWorkspaceMemberData, { data: workspaceMemberData }] = useLazyQuery<
     UserWorkspaceMemberQuery,
@@ -282,10 +267,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     return { ...output };
   };
 
-  const isUserOnline = (userId: string) => {
-    return !!onlineStatus.data?.[userId] || false;
-  };
-
   const setView = async (_view: WorkspaceView) => {
     state.current.settings = { ...state.current.settings!, view: { ..._view } };
     forceUpdate();
@@ -380,7 +361,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS));
 
   const contextValue: WorkspaceContext = {
-    onlineStatus: onlineStatus.data || {},
     type: userMember?.workspace?.type!,
     updateSettings,
     permissions: userMember?.permissions!,
@@ -396,7 +376,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     select,
     create,
     update,
-    isUserOnline,
     leave,
     invitationState,
     leaveInvitation,

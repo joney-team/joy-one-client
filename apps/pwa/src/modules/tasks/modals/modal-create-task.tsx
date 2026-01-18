@@ -4,23 +4,10 @@ import { Modal } from "@/components/modal/modal";
 import { useColor } from "@/modules/theme/use-color";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans } from "@lingui/react/macro";
-import { Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconChevronRight, IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";
-import dynamic from "next/dynamic";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useState } from "react";
-import type { CreateTaskFormProps } from "./modal-create-task-form";
-
-const CreateTaskForm = dynamic(
-  () => import("./modal-create-task-form").then((mod) => mod.CreateTaskForm),
-  {
-    ssr: false,
-    loading: () => (
-      <Stack px={16}>
-        <Skeleton height={220} />
-      </Stack>
-    ),
-  }
-);
+import { CreateTaskForm, type CreateTaskFormProps } from "./modal-create-task-form";
 
 export interface ModalCreateTaskRef {
   open: (args?: CreateTaskFormProps) => void;

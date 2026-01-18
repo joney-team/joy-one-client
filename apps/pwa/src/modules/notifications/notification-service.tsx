@@ -19,7 +19,7 @@ export async function getNotifications(q?: any) {
   return api.get("/notifications", { params: q });
 }
 
-export async function onReaded(notificationId: string) {
+export async function markNotificationAsReaded(notificationId: string) {
   return api.post(`/notifications/${notificationId}/readed`);
 }
 
@@ -27,8 +27,8 @@ export async function getNotificationStat() {
   return api.get("/notifications/stat");
 }
 
-export async function onListViewed() {
-  return api.post("/notifications/list-viewed");
+export async function markAllNotificationsAsReaded() {
+  return api.post("/notifications/readed");
 }
 
 export async function cleanNotifications() {
@@ -83,7 +83,7 @@ export async function showInAppNotification(
     icon: <Icon strokeWidth={1.5} size={18} />,
     style: { cursor: "pointer" },
     onClick: () => {
-      onReaded(notification._id).catch(console.error);
+      markNotificationAsReaded(notification._id).catch(console.error);
       notifications.hide(notification._id);
 
       if (notification.route) {

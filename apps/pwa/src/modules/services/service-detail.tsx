@@ -1,7 +1,6 @@
 "use client";
 
 import { Errored } from "@/components/errored";
-import { EventList } from "@/components/event-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { archiveProduct, getProduct } from "@/modules/products/products-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -17,8 +16,18 @@ import { useLayout } from "@/layout/layout-context";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { onArchive } from "@/utils/actions";
+import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
+
+const EventsList = dynamic(
+  () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const ServiceDetail: FC = () => {
   const workspace = useWorkspace();
@@ -50,7 +59,7 @@ export const ServiceDetail: FC = () => {
         {product.data && (
           <Fragment>
             <ProductCard product={product.data} />
-            <EventList ref={serviceId} />
+            <EventsList ref={serviceId} />
 
             {workspace.hasPermission(WorkspacePermission.PRODUCTS_SERVICES_WRITE) && (
               <Center>

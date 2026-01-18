@@ -1,0 +1,33 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+query Events(
+  $limit: Float
+  $offset: Float
+  $ref: String
+  $userId: String
+  $type: EventType
+) {
+  events(
+    limit: $limit
+    offset: $offset
+    ref: $ref
+    userId: $userId
+    type: $type
+  ) {
+    count
+    data {
+      _id
+      time
+      type
+      channel
+      userId
+      actionType
+      data
+      persist
+      variant
+      user {
+        ...WorkspaceMemberData
+      }
+    }
+  }
+}

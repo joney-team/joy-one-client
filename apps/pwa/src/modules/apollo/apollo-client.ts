@@ -123,6 +123,13 @@ export const apolloClient = new ApolloClient({
           },
         },
       },
+      Query: {
+        fields: {
+          workspaceMembersOnlineStatus: {
+            merge: false,
+          },
+        },
+      },
     },
   }),
 });

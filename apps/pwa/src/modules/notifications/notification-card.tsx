@@ -2,7 +2,7 @@
 
 import { RelativeTimeFormat } from "@/components/format/date-format";
 import {
-  onReaded,
+  markNotificationAsReaded,
   renderNotificationColor,
   renderNotificationIcon,
 } from "@/modules/notifications/notification-service";
@@ -29,7 +29,7 @@ export const NotificationCard: FC<{
       href={notification.route || "/"}
       onClick={() => {
         setReaded(true);
-        onReaded(notification._id).catch(console.error);
+        markNotificationAsReaded(notification._id).catch(console.error);
       }}
       td="none"
     >

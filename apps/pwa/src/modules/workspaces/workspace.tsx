@@ -2,7 +2,6 @@
 
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Container } from "@/components/container";
-import { EventList } from "@/components/event-list";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
 import { EventType } from "@/graphql/enums.graphql";
@@ -25,6 +24,16 @@ import {
 } from "@tabler/icons-react";
 import { FC } from "react";
 import { WorkspaceInformation } from "./components/workspace-information";
+import dynamic from "next/dynamic";
+import { nonLoading } from "@/utils/non-loading";
+
+const EventsList = dynamic(
+  () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const Workspace: FC = () => {
   const workspace = useWorkspace();
@@ -64,7 +73,7 @@ export const Workspace: FC = () => {
             <WorkspaceTermsAndPolicies />
           </Card>
 
-          <EventList type={EventType.WorkspaceSettingUpdated} />
+          <EventsList type={EventType.WorkspaceSettingUpdated} />
 
           <ButtonArchive
             mt={16}

@@ -4,10 +4,10 @@ import { Dispatch, SetStateAction } from "react";
 import { AppLocale } from "../lang/lang-types";
 import { LocationEntity } from "../locations/locations-types";
 import { WorkspaceBranchEntity } from "../workspace-branches/workspace-branches-types";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import {
   VerifyInvitaionTokenResponse,
   WorkspaceMemberLegacy,
-  WorkspaceMemberOnlineStatus,
 } from "../workspace-members/workspace-members-types";
 import { WorkspacePermission, WorkspaceRoleEntity } from "../workspace-roles/workspace-roles-types";
 import {
@@ -15,8 +15,6 @@ import {
   WorkspaceSettingEntity,
   WorkspaceView,
 } from "../workspace-settings/workspace-settings-types";
-import { WorkspaceModule, WorkspaceModuleId, workspaceModuleConfigs } from "./workspace-modules";
-import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 export interface PluginMailerAccount {
   user: string;
@@ -78,7 +76,6 @@ export interface WorkspaceContext {
   select: (workspaceId: string) => void;
   create: (dto: WorkspaceDto) => Promise<void>;
   update: (dto: WorkspaceDto) => Promise<WorkspaceEntity>;
-  isUserOnline: (userId: string) => boolean;
   leave: () => void;
   invitationState: WorkspaceMemberInvitationState | undefined;
   leaveInvitation: () => void;
@@ -98,7 +95,6 @@ export interface WorkspaceContext {
   archive: () => Promise<void>;
   join: (code: string) => Promise<void>;
   ref: string;
-  onlineStatus: WorkspaceMemberOnlineStatus;
   defaultBranch?: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline" | "settings"> | null;
   isShouldEnableBranches: boolean;
   isShowBranches: boolean;

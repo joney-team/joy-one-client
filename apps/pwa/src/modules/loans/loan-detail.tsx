@@ -126,10 +126,13 @@ const ModalSignLoan = dynamic(
   }
 );
 
-const EventList = dynamic(() => import("@/components/event-list").then((mod) => mod.EventList), {
-  ssr: false,
-  loading: nonLoading,
-});
+const EventList = dynamic(
+  () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const Activities = dynamic(
   () => import("@/modules/activities/activities").then((mod) => mod.Activities),

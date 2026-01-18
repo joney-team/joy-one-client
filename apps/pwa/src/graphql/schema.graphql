@@ -211,16 +211,11 @@ type Event {
   _id: String!
   actionType: EventDataActionType
   channel: EventChannel!
-  createdAt: Float
-  customFieldValues: [CustomFieldValue!]
   data: JSONObject
   persist: Boolean
-  ref: String
-  refs: [String!]
-  sessionId: String
   time: Float!
   type: EventType!
-  updatedAt: Float
+  user: WorkspaceMember!
   userId: String
   variant: EventVariant
 }
@@ -431,6 +426,11 @@ enum EventVariant {
   WARNING
 }
 
+type EventsPaginated {
+  count: Float!
+  data: [Event!]!
+}
+
 type File {
   _id: String!
   createdAt: Float
@@ -465,6 +465,11 @@ enum FileType {
   PHOTO
   UNKNOWN
   VIDEO
+}
+
+type FilesPaginated {
+  count: Float!
+  data: [File!]!
 }
 
 type FirebaseClientConfig {
@@ -671,12 +676,14 @@ type Query {
   customer(id: String!): Customer!
   customers(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): CustomersPaginated!
   event(id: String!): Event!
+  events(limit: Float = 30, offset: Float, ref: String, type: EventType, userId: String): EventsPaginated!
+  files(limit: Float = 30, offset: Float, refs: [String!]): FilesPaginated!
   getCategoriesByIds(ids: [String!]!): [Category!]!
   getCategoryBySlug(slug: String!): Category!
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
   loan(id: String!): Loan!
-  loans(customerCidNumber: String, customerId: String, limit: Float = 30, offset: Float, query: JSONObject, sortCreatedAt: SortDirection, status: [LoanStatus!]): LoansPaginated!
+  loans(customerCidNumber: String, customerId: String, limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, status: [LoanStatus!]): LoansPaginated!
   pluginExternalStorage: PluginExternalStorage
   reactions(entity: String!, entityId: String!, ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): ReactionsPaginated!
   reactionsCount(entity: String!, entityId: String!): ReactionsCount!
@@ -693,6 +700,7 @@ type Query {
   userWorkspaceMember: WorkspaceMember!
   workspaceMember(userId: String!): WorkspaceMember!
   workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, userId: [String!]): WorkspaceMembersPaginated!
+  workspaceMembersOnlineStatus: [WorkspaceMemberOnlineStatus!]!
 }
 
 type Reaction {
@@ -1048,6 +1056,11 @@ type WorkspaceMember {
   userDisplayName: String
   userId: String!
   workspaceId: String!
+}
+
+type WorkspaceMemberOnlineStatus {
+  isOnline: Boolean!
+  userId: String!
 }
 
 type WorkspaceMemberRole {

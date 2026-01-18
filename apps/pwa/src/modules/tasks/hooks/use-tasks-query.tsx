@@ -12,6 +12,9 @@ import QUERY_TASKS_COUNT, {
   type TasksCountQuery,
   type TasksCountQueryVariables,
 } from "../graphql/queryTasksCount.graphql";
+import { useEventListener } from "@mantine/hooks";
+import { useEventsListener } from "@/modules/events/event-service";
+import { EventType } from "@/graphql/enums.graphql";
 
 export const useTasksQuery = ({
   variables,
@@ -144,6 +147,44 @@ export const useTasksQuery = ({
 
     return onInternalEvent(InternalEvent.REFETCH_TASKS, onRefetchTasks);
   }, [data]);
+
+  useEventsListener(
+    [EventType.TaskArchived],
+    (e) => {
+      const task = data?.tasks.data.find((t) => t._id === e.ref);
+      if (!task) return;
+
+      client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
+        {
+          query: QUERY_TASKS,
+          variables,
+        },
+        (prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            tasks: {
+              ...prev.tasks,
+              count: prev.tasks.count - 1,
+              data: [...prev.tasks.data.filter((t) => t._id !== task._id)],
+            },
+          };
+        }
+      );
+
+      client.cache.updateQuery<TasksCountQuery, TasksCountQueryVariables>(
+        {
+          query: QUERY_TASKS_COUNT,
+          variables,
+        },
+        (prev) => {
+          if (!prev) return prev;
+          return { ...prev, tasksCount: prev.tasksCount - 1 };
+        }
+      );
+    },
+    [data, dataCount, client]
+  );
 
   return {
     variables,

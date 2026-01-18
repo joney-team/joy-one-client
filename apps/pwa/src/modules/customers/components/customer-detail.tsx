@@ -20,7 +20,6 @@ import { useParams } from "next/navigation";
 import { Fragment, useEffect } from "react";
 import { archiveCustomer, getCustomerByCode } from "../customer-service";
 
-import { EventList } from "@/components/event-list";
 import { SectionTitle } from "@/components/session-title";
 import { FilesBox } from "@/modules/files/files-box";
 import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
@@ -43,6 +42,14 @@ import dynamic from "next/dynamic";
 
 const Activities = dynamic(
   () => import("@/modules/activities/activities").then((mod) => mod.Activities),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const EventsList = dynamic(
+  () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
   {
     ssr: false,
     loading: nonLoading,
@@ -160,7 +167,7 @@ export const CustomerDetail = () => {
           <Activities contextType={AppEntity.CUSTOMERS} contextId={customer._id} />
         </Stack>
 
-        <EventList ref={customer._id} />
+        <EventsList ref={customer._id} />
 
         <ButtonArchive
           name={<Trans>Customer</Trans>}

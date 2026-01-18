@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
-import { EventList } from "@/components/event-list";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { EventType } from "@/graphql/enums.graphql";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
@@ -21,6 +20,16 @@ import { IconArchive, IconEdit, IconRefresh, IconReload } from "@tabler/icons-re
 import { FC } from "react";
 import { api } from "../apis";
 import { ReceiptEInvoices } from "./receipt-e-invoices";
+import dynamic from "next/dynamic";
+import { nonLoading } from "@/utils/non-loading";
+
+const EventsList = dynamic(
+  () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const ReceiptDetail: FC<{
   receiptId: string;
@@ -115,7 +124,7 @@ export const ReceiptDetail: FC<{
         <ReceiptEInvoices receipt={receipt} />
       </Stack>
 
-      <EventList ref={receipt.id} />
+      <EventsList ref={receipt.id} />
 
       <Group justify="center" gap={8}>
         {receipt.status === ReceiptStatus.PAID &&
