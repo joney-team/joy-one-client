@@ -1,6 +1,8 @@
 "use client";
 
+import { EventType } from "@/graphql/enums.graphql";
 import { InternalEvent, onInternalEvent } from "@/hooks/use-internal-event";
+import { useEventsListener } from "@/modules/events/event-service";
 import { wait } from "@/utils/common.utils";
 import { useApolloClient, useLazyQuery } from "@apollo/client/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -12,9 +14,6 @@ import QUERY_TASKS_COUNT, {
   type TasksCountQuery,
   type TasksCountQueryVariables,
 } from "../graphql/queryTasksCount.graphql";
-import { useEventListener } from "@mantine/hooks";
-import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/graphql/enums.graphql";
 
 export const useTasksQuery = ({
   variables,
@@ -37,7 +36,7 @@ export const useTasksQuery = ({
   useEffect(() => {
     if (isSkipLoadCount) return;
     fetchTasksCount({ variables });
-  }, [fetchTasksCount, variables, isSkipLoadCount]);
+  }, [variables, isSkipLoadCount]);
 
   const [fetchTasks, { data, loading, fetchMore, error }] = useLazyQuery<
     TasksQuery,
@@ -54,7 +53,6 @@ export const useTasksQuery = ({
   const getTasks = useCallback(async () => {
     try {
       const result = await fetchTasks({ variables });
-
       if (result.data?.tasks.count !== dataCount?.tasksCount) {
         client.cache.updateQuery<TasksCountQuery, TasksCountQueryVariables>(
           {

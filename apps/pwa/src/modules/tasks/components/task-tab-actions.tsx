@@ -32,7 +32,7 @@ const ModalCreateTask = dynamic(
 export const TaskTabActions: FC = () => {
   const { activatedFolder, setState, state } = useTasks();
   const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
-  const statuses = useFolderStatuses(activatedFolder?._id);
+  const { statuses } = useFolderStatuses(activatedFolder?._id);
 
   const workspaceMembers = useQuery<WorkspaceMembersQuery, WorkspaceMembersQueryVariables>(
     QUERY_WORKSPACE_MEMBERS,

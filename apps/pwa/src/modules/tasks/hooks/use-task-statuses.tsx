@@ -52,5 +52,5 @@ export const useFolderStatuses = (folderId?: string | null) => {
     };
   }, [taskStatusesData.data]);
 
-  return statuses;
+  return { statuses, loading: taskStatusesData.loading };
 };

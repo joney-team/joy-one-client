@@ -1,5 +1,6 @@
 "use client";
 
+import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { formatDuration } from "@/components/inputs/estimate-time-input/estimate-time-input-utils";
 import { TaskContextType } from "@/graphql/enums.graphql";
@@ -8,7 +9,8 @@ import { TagDataFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { nonLoading } from "@/utils/non-loading";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { Trans, useLingui } from "@lingui/react/macro";
+import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, alpha, Badge, Box, Group, Loader, Stack, Text, Tooltip } from "@mantine/core";
 import { IconFolder, IconFolderOpen, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
@@ -23,8 +25,6 @@ import { useTasks } from "../../tasks-context";
 import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
 import { useGanttRefs } from "./gantt-tasks-refs";
-import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
-import { DateFormat } from "@/components/format/date-format";
 
 const GanttTask = dynamic(() => import("./gantt-task/gantt-task").then((mod) => mod.GanttTask), {
   ssr: false,
@@ -50,7 +50,6 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
   pure,
   isDefaultOpen = false,
 }) => {
-  const { t } = useLingui();
   const gantt = useGantt();
   const ganttRefs = useGanttRefs();
   const rootRef = useRef<HTMLDivElement>(null);
