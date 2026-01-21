@@ -117,13 +117,13 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
       (m) => m.userId === auth.user?._id && m.workspaceId === invite.workspaceId
     );
 
-    if (workspace.userMember?.userId === props.invite.workspaceId) {
+    if (workspace.member?.userId === props.invite.workspaceId) {
       router.replace("/");
     } else if (member?.workspaceId) {
       workspace.select(member.workspaceId);
       router.replace("/");
     }
-  }, [workspace.userMember?.userId]);
+  }, [workspace.member?.userId]);
 
   return (
     <ScrollArea h={layout.height} w={layout.width}>

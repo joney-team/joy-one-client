@@ -5,16 +5,14 @@ import { AppLocale } from "../lang/lang-types";
 import { LocationEntity } from "../locations/locations-types";
 import { WorkspaceBranchEntity } from "../workspace-branches/workspace-branches-types";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import {
-  VerifyInvitaionTokenResponse,
-  WorkspaceMemberLegacy,
-} from "../workspace-members/workspace-members-types";
+import { VerifyInvitaionTokenResponse } from "../workspace-members/workspace-members-types";
 import { WorkspacePermission, WorkspaceRoleEntity } from "../workspace-roles/workspace-roles-types";
 import {
   SetWorkspaceSettingsDto,
   WorkspaceSettingEntity,
   WorkspaceView,
 } from "../workspace-settings/workspace-settings-types";
+import { WorkspaceType } from "@/graphql/types.graphql";
 
 export interface PluginMailerAccount {
   user: string;
@@ -25,30 +23,19 @@ export interface WorkspaceEntity extends BaseMongoEntity {
   code: string;
   name: string;
   type: WorkspaceType;
-  logo?: string;
-  location?: LocationEntity;
-  hotline?: string;
-  phone?: string;
-  appIcon?: string;
-  appDomain?: string;
-  appName?: string;
-  appColor?: string;
+  logo?: string | null;
+  location?: LocationEntity | null;
+  hotline?: string | null;
+  phone?: string | null;
+  appIcon?: string | null;
+  appDomain?: string | null;
+  appName?: string | null;
+  appColor?: string | null;
   appColorShape?: number;
   locale?: AppLocale;
   inviteCode: string;
   cover?: string;
   branches: number;
-}
-
-export enum WorkspaceType {
-  SOFTWARE = "SOFTWARE",
-  BUSINESS = "BUSINESS",
-  HOSPITAL = "HOSPITAL",
-  CLINIC = "CLINIC",
-  DENTAL = "DENTAL",
-  SPA = "SPA",
-  BEAUTY_SALON = "BEAUTY_SALON",
-  CREDIT = "CREDIT",
 }
 
 export interface WorkspaceDto {
@@ -63,7 +50,7 @@ export interface WorkspaceDto {
   appName?: string;
   appColor?: string;
   appColorShape?: number;
-  locale?: AppLocale;
+  locale?: string;
 }
 
 export interface WorkspaceContext {
@@ -71,8 +58,7 @@ export interface WorkspaceContext {
   isAvailable: boolean;
   isHasAccessAllBranches: boolean;
   member: WorkspaceMemberDataFragment;
-  userMember: WorkspaceMemberLegacy;
-  userMembers: WorkspaceMemberLegacy[];
+  userMembers: WorkspaceMemberDataFragment[];
   select: (workspaceId: string) => void;
   create: (dto: WorkspaceDto) => Promise<void>;
   update: (dto: WorkspaceDto) => Promise<WorkspaceEntity>;
@@ -82,7 +68,6 @@ export interface WorkspaceContext {
   settings: WorkspaceSettingEntity;
   isHrmTimekeepingAvailable: boolean;
   roles: WorkspaceRoleEntity[];
-  permissions: WorkspacePermission[];
   hasPermission: (permission: WorkspacePermission) => boolean;
   updateSettings: (settings: WorkspaceSettingEntity) => Promise<void>;
   setSettings: (dto: Partial<SetWorkspaceSettingsDto>, exec?: boolean) => void | Promise<void>;

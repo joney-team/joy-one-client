@@ -14,26 +14,22 @@ export const PrinterHeader: FC<PrinterComponentProps> = ({ settings }) => {
 
   return (
     <div className={styles.PrinterHeader}>
-      {settings.showLogo && !!workspace.userMember.workspace.logo && (
-        <img
-          className={styles.Logo}
-          src={renderFileUrl(workspace.userMember.workspace.logo)}
-          alt=""
-        />
+      {settings.showLogo && !!workspace.member.workspace.logo && (
+        <img className={styles.Logo} src={renderFileUrl(workspace.member.workspace.logo)} alt="" />
       )}
 
       <div className={styles.PrinterHeaderMetadata}>
-        <div className={styles.WorkspaceName}>{workspace.userMember.workspace.name}</div>
+        <div className={styles.WorkspaceName}>{workspace.member.workspace.name}</div>
         <div className={styles.WorkspaceInformation}>
-          {!!workspace.userMember.workspace.location?.address && settings.showAddress && (
+          {!!workspace.member.workspace.location?.address && settings.showAddress && (
             <div>
-              {t`ADD`}: {workspace.userMember.workspace.location?.address}
+              {t`ADD`}: {workspace.member.workspace.location?.address}
             </div>
           )}
 
-          {workspace.userMember.workspace.hotline && (
+          {workspace.member.workspace.hotline && (
             <div>
-              {t`Hotline`}: {workspace.userMember.workspace.hotline}
+              {t`Hotline`}: {workspace.member.workspace.hotline}
             </div>
           )}
         </div>

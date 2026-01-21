@@ -91,9 +91,9 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = ({ task, ...rest 
       ...t,
       id: uuid(),
       user: t?.user || workspace.member,
-      userId: t?.userId || workspace.userMember.userId,
+      userId: t?.userId || workspace.member.userId,
       startAt: DateTime.toSeconds(new Date()),
-      workspaceId: workspace.userMember.workspaceId,
+      workspaceId: workspace.member.workspaceId,
       note: null,
       endAt: null,
     };

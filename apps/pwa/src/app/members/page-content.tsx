@@ -6,8 +6,8 @@ import { useRouter } from "@/hooks/use-router";
 import { OnModalWorkspaceInviteMember } from "@/modules/workspace-members/workspace-invite-member";
 import { WorkspaceMemberList } from "@/modules/workspace-members/workspace-member-list";
 import {
-  WorkspacePermission,
   WorkspaceDefaultRoleId,
+  WorkspacePermission,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { OnModalTransferOwner } from "@/modules/workspaces/modals/modal-transfer-workspace-owner";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -52,7 +52,7 @@ const Page: NextPage = () => {
             </Button>
           )}
 
-        {workspace.userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER) && (
+        {workspace.member.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER) && (
           <Button
             leftIcon={IconTransfer}
             onClick={() => OnModalTransferOwner()}

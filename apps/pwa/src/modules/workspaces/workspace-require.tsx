@@ -9,7 +9,6 @@ import { useLang } from "@/modules/lang/lang-context";
 import { LocationEntity } from "@/modules/locations/locations-types";
 import { WorkspaceTypeItem } from "@/modules/workspaces/components/workpsace-type-item";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -35,8 +34,9 @@ import { IconCheck, IconInfoCircle, IconLocation, IconPlus, IconUser } from "@ta
 import { ChangeEventHandler, FC, useEffect, useState } from "react";
 import { useApp } from "../../app.context";
 import { api } from "../apis";
-import { getWorkspaceMemberRoleLabel } from "../workspace-members/workspace-members-service";
+import { getMemberRoleLabel } from "../workspace-members/workspace-members-service";
 import { workspaceTypes } from "./workspace-constants";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 export const WorkspaceRequire: FC = () => {
   const workspace = useWorkspace();
@@ -73,7 +73,6 @@ export const WorkspaceRequire: FC = () => {
               workspace={{
                 name: app.metadata.appName || app.metadata.title,
                 logo: app.metadata.isExtended ? app.metadata.appIcon ?? "" : "/brandname.png",
-                appName: app.metadata.appName ?? "",
                 appColor: app.metadata.appColor ?? "",
               }}
               radius={10}
@@ -166,12 +165,12 @@ export const WorkspaceRequire: FC = () => {
 
               return (
                 <Card
+                  key={userMember.workspaceId}
                   withBorder
                   shadow="none"
                   p={12}
                   maw="80dvw"
                   w={450}
-                  key={userMember.workspaceId}
                   onClick={() => {
                     if (!userMember.workspaceId) return;
                     workspace.select(userMember.workspaceId);
@@ -187,7 +186,7 @@ export const WorkspaceRequire: FC = () => {
                         <ThemeIcon size="xs" variant="transparent" color="dark">
                           <IconUser strokeWidth={1.2} />
                         </ThemeIcon>
-                        <Text fz="xs">{getWorkspaceMemberRoleLabel(userMember)}</Text>
+                        <Text fz="xs">{getMemberRoleLabel(userMember)}</Text>
                       </Group>
 
                       {!!userMember.workspace.location?.address && (

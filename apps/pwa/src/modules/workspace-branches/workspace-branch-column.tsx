@@ -37,7 +37,7 @@ export const workspaceBranchColumn = (): Column => {
     },
     disabled: !workspace.isShouldEnableBranches,
     filter:
-      workspace.userMember.workspace.branches > 0 &&
+      workspace.member.workspaceBranches.length > 0 &&
       workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)
         ? {
             dynamicSelector: {
@@ -53,10 +53,10 @@ export const workspaceBranchColumn = (): Column => {
               listRoute: "/workspace-branches",
             },
           }
-        : workspace.userMember.workspaceBranches.length > 1
+        : workspace.member.workspaceBranches.length > 1
         ? {
             staticSelector: {
-              options: workspace.userMember.workspaceBranches.map((v) => ({
+              options: workspace.member.workspaceBranches.map((v) => ({
                 label: v.name,
                 value: v._id,
               })),

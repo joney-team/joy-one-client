@@ -50,7 +50,7 @@ export const Profile: FC = () => {
       <Stack>
         <Group justify="space-between" style={{ cursor: "pointer" }}>
           <Group gap={10} onClick={() => router.push("/profile/settings")}>
-            <Avatar user={workspace.userMember} size={40} hideOnlineStatus />
+            <Avatar user={workspace.member} size={40} hideOnlineStatus />
 
             <Stack gap={0}>
               <Group gap={3}>
@@ -94,14 +94,14 @@ export const Profile: FC = () => {
 
         <Group justify="space-between">
           <Group
-            align={workspace.userMember.workspace.location ? "start" : "center"}
+            align={workspace.member.workspace.location ? "start" : "center"}
             wrap="nowrap"
             gap={10}
             style={{ cursor: "pointer" }}
             onClick={() => router.push(`/workspace`)}
           >
             <Avatar
-              workspace={workspace.userMember.workspace}
+              workspace={workspace.member.workspace}
               size={40}
               hideOnlineStatus
               bg="var(--mantine-color-body)"
@@ -109,11 +109,11 @@ export const Profile: FC = () => {
 
             <Stack gap={3} mt={-3}>
               <Text fz={rem(15)} fw={700}>
-                {workspace.userMember.workspace.name}
+                {workspace.member.workspace.name}
               </Text>
-              {workspace.userMember.workspace.location && (
+              {workspace.member.workspace.location && (
                 <Text fz={em(13)} fw={400}>
-                  {workspace.userMember.workspace.location?.address}
+                  {workspace.member.workspace.location?.address}
                 </Text>
               )}
             </Stack>

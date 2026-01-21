@@ -1,11 +1,11 @@
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import { t } from "@lingui/core/macro";
-import { WorkspaceType } from "../workspaces/workspaces-types";
 import { PermissionGroup, PermissionGroupKey, WorkspacePermission } from "./workspace-roles-types";
 
 export const permissionGroups: Record<PermissionGroupKey, PermissionGroup> = {
   [PermissionGroupKey.LOANS]: {
     name: () => t`Loans`,
-    workspaceTypes: [WorkspaceType.CREDIT],
+    workspaceTypes: [WorkspaceType.Credit],
     permissions: [
       { value: WorkspacePermission.LOANS_VIEW },
       {
@@ -215,7 +215,7 @@ export const permissionGroups: Record<PermissionGroupKey, PermissionGroup> = {
   },
   [PermissionGroupKey.PRESCRIPTIONS]: {
     name: () => t`Prescriptions`,
-    workspaceTypes: [WorkspaceType.CLINIC, WorkspaceType.DENTAL, WorkspaceType.HOSPITAL],
+    workspaceTypes: [WorkspaceType.Clinic, WorkspaceType.Dental, WorkspaceType.Hospital],
     permissions: [{ value: WorkspacePermission.PRESCRIPTIONS_WRITE }],
   },
   [PermissionGroupKey.PARTNERS]: {

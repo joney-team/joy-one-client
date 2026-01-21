@@ -2,8 +2,10 @@
 
 import { Fullscreen } from "@/components/fullscreen";
 import { StorageKey } from "@/types";
+import { nonLoading } from "@/utils/non-loading";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { AxiosError } from "axios";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { Fragment, useEffect, useMemo, type FC } from "react";
 import { useAuth } from "../auth/auth-context";
@@ -11,8 +13,6 @@ import { getPluginMetaPagesInfo } from "../plugins/meta-pages/meta-pages-service
 import type { OnModalConnectMetaPages } from "../plugins/meta-pages/modal-connect-meta-pages";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "./workspace-context";
-import dynamic from "next/dynamic";
-import { nonLoading } from "@/utils/non-loading";
 
 const WorkspaceInvitation = dynamic(() => import("./workspace-invitation"), {
   ssr: false,
@@ -56,7 +56,7 @@ const ModalConnectMetaPages = dynamic(
 );
 
 const TriggerConnectMetaPage: FC<{ open: OnModalConnectMetaPages }> = (props) => {
-  const { userMember } = useWorkspace();
+  const { member } = useWorkspace();
 
   const onConnectMetaPages = async (accessToken: string) => {
     try {
@@ -74,33 +74,33 @@ const TriggerConnectMetaPage: FC<{ open: OnModalConnectMetaPages }> = (props) =>
   };
 
   useEffect(() => {
-    if (userMember && userMember.permissions.includes(WorkspacePermission.WORKSPACE_SETTINGS)) {
+    if (member && member.permissions.includes(WorkspacePermission.WORKSPACE_SETTINGS)) {
       const accessToken = localStorage.getItem(StorageKey.META_ACCESS_TOKEN);
       if (accessToken) onConnectMetaPages(accessToken);
     }
-  }, [userMember?.workspaceId, userMember]);
+  }, [member?.workspaceId, member]);
 
   return null;
 };
 
 export const WorkspaceAuthorization: FC = () => {
   const auth = useAuth();
-  const { isInitialized, userMember } = useWorkspace();
+  const { isInitialized, member } = useWorkspace();
   const params = useParams<{ inviteCode: string }>();
 
   const isRequireBranches =
-    userMember &&
-    userMember?.workspace.branches > 0 &&
-    !userMember.workspaceBranches.length &&
-    !userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS);
+    member &&
+    member?.workspace.branches > 0 &&
+    !member.workspaceBranches.length &&
+    !member.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS);
 
   const Component = useMemo(() => {
     if (!isInitialized || !auth.user) return null;
     if (params.inviteCode) return <WorkspaceInvitation inviteCode={params.inviteCode} />;
-    if (!userMember) return <WorkspaceRequire />;
+    if (!member) return <WorkspaceRequire />;
     if (isRequireBranches) return <WorkspaceRequireBranches />;
-    if (userMember.workspace.isArchived) return <WorkspaceArchived />;
-  }, [isInitialized, params.inviteCode, userMember, isRequireBranches, auth.user]);
+    if (member.workspace.isArchived) return <WorkspaceArchived />;
+  }, [isInitialized, params.inviteCode, member, isRequireBranches, auth.user]);
 
   return (
     <Fragment>

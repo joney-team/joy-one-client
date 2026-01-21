@@ -59,7 +59,7 @@ export const ModalBookingContent: FC<ModalBookingArgs> = (props) => {
     let assigneeUsers: WorkspaceMemberInfo[] = [];
 
     if (props.booking) assigneeUsers = props.booking.assigneeUsers || [];
-    if (assigneeUsers.length === 0) assigneeUsers = [workspace.userMember];
+    if (assigneeUsers.length === 0) assigneeUsers = [workspace.member];
 
     return assigneeUsers;
   };

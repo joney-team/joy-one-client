@@ -1,18 +1,14 @@
 import { t } from "@lingui/core/macro";
 import { useWorkspace } from "../workspaces/workspace-context";
-import { WorkspaceType } from "../workspaces/workspaces-types";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 export const useOrderFeatureName = () => {
   const workspace = useWorkspace();
 
   if (
-    [
-      WorkspaceType.CLINIC,
-      WorkspaceType.BEAUTY_SALON,
-      WorkspaceType.SPA,
-      WorkspaceType.HOSPITAL,
-      WorkspaceType,
-    ].includes(workspace.type)
+    [WorkspaceType.Clinic, WorkspaceType.BeautySalon, WorkspaceType.Spa, WorkspaceType.Hospital]
+      .map((t) => t.toString())
+      .includes(workspace.member.workspace.type)
   ) {
     return {
       singular: t`Ticket`,

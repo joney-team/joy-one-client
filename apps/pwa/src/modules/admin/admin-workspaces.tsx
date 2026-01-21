@@ -3,12 +3,12 @@
 import { Avatar } from "@/components/avatar";
 import { List } from "@/components/list";
 import { enumColumn } from "@/components/list/columns/enum-column";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import { formatBytes } from "@joy-one-client/utils/files";
 import { Group, Stack, Text } from "@mantine/core";
 import { type FC } from "react";
 import { WorkspaceStatsEntity } from "../workspace-stats/workspace-stats.types";
 import { workspaceTypes } from "../workspaces/workspace-constants";
-import { WorkspaceType } from "../workspaces/workspaces-types";
 
 export const AdminWorkspaces: FC = () => {
   return (

@@ -81,7 +81,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
       customer: props.booking?.customer ?? props.reschedule?.customer ?? props.customer,
       assigneeUsers: props.booking?.assigneeUsers ??
         props.reschedule?.assigneeUsers ??
-        props.assigneeUsers ?? [workspace.userMember],
+        props.assigneeUsers ?? [workspace.member],
       startTime: props.booking?.startTime
         ? DateTime.normalizeDate(props.booking.startTime)
         : props.startTime,

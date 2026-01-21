@@ -109,15 +109,15 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
             {timekeeping.type === HrmTimekeepingType.CHECK_IN ? (
               <Text ta="center" c="dark">
                 <Trans>
-                  Thank you <strong>{workspace.userMember.name}</strong>! <br /> Wish you a
-                  successful work.
+                  Thank you <strong>{workspace.member.name}</strong>! <br /> Wish you a successful
+                  work.
                 </Trans>
               </Text>
             ) : (
               <Text ta="center" c="dark">
                 <Trans>
-                  Thank you for the effort of <strong>{workspace.userMember.name}</strong>. Please
-                  take some time to rest. Wish you a lot of health!
+                  Thank you for the effort of <strong>{workspace.member.name}</strong>. Please take
+                  some time to rest. Wish you a lot of health!
                 </Trans>
               </Text>
             )}

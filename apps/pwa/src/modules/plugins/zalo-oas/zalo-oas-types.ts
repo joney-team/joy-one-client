@@ -1,5 +1,5 @@
+import { WorkspaceType } from "@/graphql/types.graphql";
 import { BaseMongoEntity } from "@/types";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 
 export enum PluginZaloOaStatus {
   ACTIVE = "ACTIVE",

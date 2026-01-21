@@ -24,9 +24,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
   ...props
 }) => {
   const workspace = useWorkspace();
-  const isFullAccess = workspace.userMember.permissions.includes(
-    WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
-  );
+  const isFullAccess = workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS);
 
   const listRoute = isFullAccess ? "/workspace-branches" : undefined;
   const rootOption = {
@@ -43,15 +41,11 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
           return searchEntity(AppEntity.WORKSPACE_BRANCHES, q);
         }
 
-        return searchArray(workspace.userMember.workspaceBranches, ["name"], q);
+        return searchArray(workspace.member.workspaceBranches, ["name"], q);
       }}
       listRoute={listRoute}
       pinnedOptions={
-        isFullAccess
-          ? isShowRoot
-            ? [rootOption]
-            : undefined
-          : workspace.userMember.workspaceBranches
+        isFullAccess ? (isShowRoot ? [rootOption] : undefined) : workspace.member.workspaceBranches
       }
       renderOption={(item) => {
         return (

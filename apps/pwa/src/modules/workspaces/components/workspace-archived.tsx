@@ -11,18 +11,18 @@ import { useWorkspace } from "../workspace-context";
 
 export const WorkspaceArchived: FC = () => {
   const workspace = useWorkspace();
-  const isOwner = workspace.userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER);
+  const isOwner = workspace.member.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER);
   const ownerName = "Owner";
 
   return (
     <Stack h="100dvh" justify="center">
       <Image
         src={
-          workspace.userMember.workspace.logo
-            ? renderFileUrl(workspace.userMember.workspace.logo)
+          workspace.member.workspace.logo
+            ? renderFileUrl(workspace.member.workspace.logo)
             : "/symbol.png"
         }
-        w={workspace.userMember.workspace.logo ? 130 : 50}
+        w={workspace.member.workspace.logo ? 130 : 50}
         radius={5}
       />
 

@@ -38,7 +38,7 @@ import { useLocalStorage } from "@mantine/hooks";
 import { TaskView } from "@/modules/tasks/views/types";
 import { StorageKey } from "@/types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 const ModalConfigureStatuses = dynamic(
   () =>
@@ -321,7 +321,7 @@ export const WorkspaceNavigationMenu: FC<{
       </Anchor>
 
       {props.route === "/tasks" &&
-        (isActive || workspace.type === WorkspaceType.SOFTWARE) &&
+        (isActive || workspace.type === WorkspaceType.Software) &&
         folders.length > 0 && <WorkspaceNavigationTaskFolders />}
 
       <ModalTagForm ref={modalTagFormRef} />

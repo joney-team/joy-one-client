@@ -245,7 +245,7 @@ export type Event = {
   __typename: 'Event';
   _id: Scalars['String']['output'];
   actionType: Maybe<EventDataActionType>;
-  channel: EventChannel;
+  channel: Maybe<EventChannel>;
   data: Maybe<Scalars['JSONObject']['output']>;
   persist: Maybe<Scalars['Boolean']['output']>;
   time: Scalars['Float']['output'];
@@ -443,6 +443,7 @@ export const EventType = {
   WorkspaceMemberLeaved: 'WORKSPACE_MEMBER_LEAVED',
   WorkspaceMemberOffline: 'WORKSPACE_MEMBER_OFFLINE',
   WorkspaceMemberOnline: 'WORKSPACE_MEMBER_ONLINE',
+  WorkspaceMemberSynced: 'WORKSPACE_MEMBER_SYNCED',
   WorkspaceMemberTransferOwner: 'WORKSPACE_MEMBER_TRANSFER_OWNER',
   WorkspaceMemberUpdated: 'WORKSPACE_MEMBER_UPDATED',
   WorkspaceNew: 'WORKSPACE_NEW',
@@ -930,6 +931,7 @@ export type Query = {
   tasks: TasksPaginated;
   tasksCount: Scalars['Float']['output'];
   userWorkspaceMember: WorkspaceMember;
+  userWorkspaceMembers: Array<WorkspaceMember>;
   workspaceMember: WorkspaceMember;
   workspaceMembers: WorkspaceMembersPaginated;
   workspaceMembersOnlineStatus: Array<WorkspaceMemberOnlineStatus>;
@@ -1536,10 +1538,13 @@ export type WorkspaceMember = {
   memberDisplayName: Maybe<Scalars['String']['output']>;
   memberId: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
+  permissions: Array<Scalars['String']['output']>;
   phone: Maybe<Scalars['String']['output']>;
   roles: Array<WorkspaceMemberRole>;
   userDisplayName: Maybe<Scalars['String']['output']>;
   userId: Scalars['String']['output'];
+  workspace: WorkspaceMemberWorkspaceInfo;
+  workspaceBranches: Array<WorkspaceMemberWorkspaceBranchInfo>;
   workspaceId: Scalars['String']['output'];
 };
 
@@ -1556,8 +1561,47 @@ export type WorkspaceMemberRole = {
   name: Scalars['String']['output'];
 };
 
+export type WorkspaceMemberWorkspaceBranchInfo = {
+  __typename: 'WorkspaceMemberWorkspaceBranchInfo';
+  _id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type WorkspaceMemberWorkspaceInfo = {
+  __typename: 'WorkspaceMemberWorkspaceInfo';
+  _id: Scalars['String']['output'];
+  appColor: Maybe<Scalars['String']['output']>;
+  appColorShape: Maybe<Scalars['Float']['output']>;
+  appIcon: Maybe<Scalars['String']['output']>;
+  appName: Maybe<Scalars['String']['output']>;
+  branches: Scalars['Float']['output'];
+  code: Scalars['String']['output'];
+  hotline: Maybe<Scalars['String']['output']>;
+  inviteCode: Maybe<Scalars['String']['output']>;
+  isArchived: Scalars['Boolean']['output'];
+  locale: Maybe<Scalars['String']['output']>;
+  location: Maybe<LocationEntity>;
+  logo: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  type: WorkspaceType;
+};
+
 export type WorkspaceMembersPaginated = {
   __typename: 'WorkspaceMembersPaginated';
   count: Scalars['Float']['output'];
   data: Array<WorkspaceMember>;
 };
+
+/** Available workspace types */
+export const WorkspaceType = {
+  BeautySalon: 'BEAUTY_SALON',
+  Business: 'BUSINESS',
+  Clinic: 'CLINIC',
+  Credit: 'CREDIT',
+  Dental: 'DENTAL',
+  Hospital: 'HOSPITAL',
+  Software: 'SOFTWARE',
+  Spa: 'SPA'
+} as const;
+
+export type WorkspaceType = typeof WorkspaceType[keyof typeof WorkspaceType];

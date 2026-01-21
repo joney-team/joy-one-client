@@ -1,0 +1,7 @@
+#import "./fragmentWorkspaceMember.graphql"
+
+query UserWorkspaceMembers {
+  userWorkspaceMembers {
+    ...WorkspaceMemberData
+  }
+}

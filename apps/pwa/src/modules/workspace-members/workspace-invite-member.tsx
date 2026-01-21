@@ -1,10 +1,8 @@
 "use client";
 
-import { Button } from "@/components/buttons/button";
 import { MembersIllustration } from "@/components/illustrations/members";
 import { Image } from "@/components/image";
 import { ModalHead } from "@/components/modal/modal-head";
-import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { regenerateWorkspaceInviteCode } from "@/modules/workspaces/workspaces-service";
 import config from "@joy-one-client/config";
@@ -24,10 +22,8 @@ import {
 import { modals } from "@mantine/modals";
 import { IconCheck, IconCopy, IconRefresh, IconUsersPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { OnModalWorkspaceSubscription } from "../workspace-subscriptions/modal-workspace-subscriptions";
 
 export const WorkspaceInviteMember: FC = () => {
-  const workspace = useWorkspace();
   const isReachMemberLimit = false;
 
   if (isReachMemberLimit) {
@@ -40,19 +36,6 @@ export const WorkspaceInviteMember: FC = () => {
         <Text ta="center" fz={em(15)}>
           <Trans>Member limit</Trans>
         </Text>
-
-        {workspace.hasPermission(WorkspacePermission.WORKSPACE_BILLINGS_MANAGER) && (
-          <Button
-            type="submit"
-            radius={100}
-            onClick={() => {
-              modals.close("ModalWorkspaceInviteMember");
-              OnModalWorkspaceSubscription();
-            }}
-          >
-            <Trans>Upgrade now</Trans>!
-          </Button>
-        )}
       </Stack>
     );
   }
@@ -62,7 +45,7 @@ export const WorkspaceInviteMember: FC = () => {
 
 const CreateMemberInvitationLink: FC = () => {
   const workspace = useWorkspace();
-  const invitationLink = `${config.APP_URL}/join/${workspace.userMember.workspace.inviteCode}`;
+  const invitationLink = `${config.APP_URL}/join/${workspace.member.workspace.inviteCode}`;
 
   return (
     <Stack align="center" p={30}>

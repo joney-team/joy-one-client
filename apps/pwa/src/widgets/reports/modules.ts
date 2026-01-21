@@ -2,7 +2,6 @@ import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
 } from "@/modules/reports/reports-utils";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Period } from "@/types";
 import { numberWidget, numberWidgetlayoutConfig } from "@/widgets/common/number.widget";
 import { EWidgetModules } from "@/widgets/widgets-types";
@@ -27,6 +26,7 @@ import { ReportWidgetsContext, ReportWidgetType } from "./types";
 import { ReportCreditWidget } from "./widgets/report-credit.widget";
 import { ReportProductsWidget } from "./widgets/report-products.widget";
 import { ReportTimeTrackingsWidget } from "./widgets/report-time-trackings.widget";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 export const useReportWidgetModules = (): {
   reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgetsContext>;
@@ -197,7 +197,7 @@ export const useReportWidgetModules = (): {
       },
       [ReportWidgetType.LOANS_RECEIPTS]: {
         config: {
-          workspaceTypes: [WorkspaceType.CREDIT],
+          workspaceTypes: [WorkspaceType.Credit],
           name: () => t`Credit report`,
           icon: IconReport,
           layout: {
@@ -211,7 +211,7 @@ export const useReportWidgetModules = (): {
       },
       [ReportWidgetType.LOANS_NEW_CHART]: {
         config: {
-          workspaceTypes: [WorkspaceType.CREDIT],
+          workspaceTypes: [WorkspaceType.Credit],
           name: () => t`Loans new and fulfilled chart`,
           icon: IconChartLine,
           layout: chartWidgetlayoutConfig,
@@ -240,7 +240,7 @@ export const useReportWidgetModules = (): {
       },
       [ReportWidgetType.LOANS_FULFILLED_AMOUNT_CHART]: {
         config: {
-          workspaceTypes: [WorkspaceType.CREDIT],
+          workspaceTypes: [WorkspaceType.Credit],
           name: () => t`Loans fulfilled amount chart`,
           icon: IconChartLine,
           layout: chartWidgetlayoutConfig,
@@ -268,7 +268,7 @@ export const useReportWidgetModules = (): {
       },
       [ReportWidgetType.LOANS_FULFILLED]: {
         config: {
-          workspaceTypes: [WorkspaceType.CREDIT],
+          workspaceTypes: [WorkspaceType.Credit],
           name: () => t`Loans fulfilled`,
           icon: IconCreditCardPay,
           layout: numberWidgetlayoutConfig,
@@ -282,7 +282,7 @@ export const useReportWidgetModules = (): {
       },
       [ReportWidgetType.LOANS_FEE]: {
         config: {
-          workspaceTypes: [WorkspaceType.CREDIT],
+          workspaceTypes: [WorkspaceType.Credit],
           name: () => t`Report loans fee`,
           icon: IconBusinessplan,
           layout: numberWidgetlayoutConfig,
@@ -296,7 +296,7 @@ export const useReportWidgetModules = (): {
       },
       [ReportWidgetType.LOANS_CAPITAL]: {
         config: {
-          workspaceTypes: [WorkspaceType.CREDIT],
+          workspaceTypes: [WorkspaceType.Credit],
           name: () => t`Report loans capital`,
           icon: IconCreativeCommonsSa,
           layout: numberWidgetlayoutConfig,
@@ -310,7 +310,7 @@ export const useReportWidgetModules = (): {
       },
       [ReportWidgetType.LOANS_EXPENSE]: {
         config: {
-          workspaceTypes: [WorkspaceType.CREDIT],
+          workspaceTypes: [WorkspaceType.Credit],
           name: () => t`Report loans expense`,
           icon: IconReportMoney,
           layout: numberWidgetlayoutConfig,
@@ -324,7 +324,7 @@ export const useReportWidgetModules = (): {
       },
       [ReportWidgetType.LOANS_NEW_CUSTOMERS_AND_FULFILLED]: {
         config: {
-          workspaceTypes: [WorkspaceType.CREDIT],
+          workspaceTypes: [WorkspaceType.Credit],
           name: () => t`New customers and fulfilled`,
           icon: IconUsersPlus,
           layout: numberWidgetlayoutConfig,
@@ -342,7 +342,7 @@ export const useReportWidgetModules = (): {
       },
       [ReportWidgetType.LOANS_FULFILLED_NEW]: {
         config: {
-          workspaceTypes: [WorkspaceType.CREDIT],
+          workspaceTypes: [WorkspaceType.Credit],
           name: () => t`Loans fulfilled new`,
           icon: IconUsersPlus,
           layout: numberWidgetlayoutConfig,

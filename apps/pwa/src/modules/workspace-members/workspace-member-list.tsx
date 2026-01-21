@@ -15,7 +15,7 @@ import {
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
 import { getWorkspaceBranchByIds } from "@/modules/workspace-branches/workspace-branches-service";
 import {
-  getWorkspaceMemberRoleLabel,
+  getMemberRoleLabel,
   updateWorkspaceMember,
 } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
@@ -147,7 +147,7 @@ export const WorkspaceMemberList: FC = () => {
             },
             exportToExcel: (_, data) => {
               return {
-                text: getWorkspaceMemberRoleLabel(data),
+                text: getMemberRoleLabel(data),
               };
             },
           },
@@ -182,7 +182,7 @@ export const WorkspaceMemberList: FC = () => {
             },
             disabled: !workspace.isShouldEnableBranches,
             filter:
-              workspace.userMember.workspace.branches > 0 &&
+              workspace.member.workspaceBranches.length > 0 &&
               workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)
                 ? {
                     dynamicSelector: {
@@ -203,10 +203,10 @@ export const WorkspaceMemberList: FC = () => {
                       listRoute: "/workspace-branches",
                     },
                   }
-                : workspace.userMember.workspaceBranches.length > 1
+                : workspace.member.workspaceBranches.length > 1
                 ? {
                     staticSelector: {
-                      options: workspace.userMember.workspaceBranches.map((v) => ({
+                      options: workspace.member.workspaceBranches.map((v) => ({
                         label: v.name,
                         value: v._id,
                       })),
@@ -275,7 +275,7 @@ const MemberCard: FC<{ member: WorkspaceMemberLegacy }> = (props) => {
               </ThemeIcon>
 
               <Text fz={12} fw={500}>
-                {getWorkspaceMemberRoleLabel(member)}
+                {getMemberRoleLabel(member)}
               </Text>
             </Group>
           </Stack>

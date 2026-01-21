@@ -16,8 +16,10 @@ export const ButtonPlus: FC<ButtonPlusProps> = (props) => {
   if (typeof props.enabled === "boolean" && !props.enabled) return null;
 
   if (props.permission) {
-    const requiredPermissions = Array.isArray(props.permission) ? props.permission : [props.permission];
-    if (!requiredPermissions.every((v) => workspace.permissions.includes(v))) return null;
+    const requiredPermissions = Array.isArray(props.permission)
+      ? props.permission
+      : [props.permission];
+    if (!requiredPermissions.every((v) => workspace.member.permissions.includes(v))) return null;
   }
 
   const _props = { ...props };

@@ -70,9 +70,9 @@ export async function getWorkspaceMetadata(args: { host?: string; workspaceId?: 
       siteName: workspace.appName || "JoyOne",
       favicon: renderFileUrl(workspace.appIcon) || "/favicon.ico",
       webURL: `https://${workspace.appDomain}`,
-      appColor: workspace.appColor,
+      appColor: workspace.appColor ?? "",
       appColorShape: workspace.appColorShape,
-      appName: workspace.appName,
+      appName: workspace.appName ?? "",
       workspaceId: workspace._id,
       isExtended: true,
       thumbnailURL: renderFileUrl(

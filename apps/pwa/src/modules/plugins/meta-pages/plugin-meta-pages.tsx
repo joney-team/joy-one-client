@@ -43,7 +43,7 @@ export const PluginMetaPages: FC = () => {
     return (
       <Stack align="center" py={20}>
         <Group gap={30} mb={20}>
-          <Avatar workspace={workspace.userMember.workspace} size={55} />
+          <Avatar workspace={workspace.member.workspace} size={55} />
           <ThemeIcon variant="transparent" size="lg" color="dark">
             <IconCirclesRelation size={50} />
           </ThemeIcon>

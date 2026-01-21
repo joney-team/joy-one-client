@@ -93,7 +93,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
   const endAtRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState("");
-  const [user, setUser] = useState<WorkspaceMemberInfo>(workspace.userMember);
+  const [user, setUser] = useState<WorkspaceMemberInfo>(workspace.member);
   const [date, setDate] = useState(args.date);
 
   const forceUpdate = useForceUpdate();

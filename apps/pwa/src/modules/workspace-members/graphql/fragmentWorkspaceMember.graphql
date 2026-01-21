@@ -2,13 +2,38 @@ fragment WorkspaceMemberData on WorkspaceMember {
   _id
   userId
   name
+  email
   color
   avatar
   memberId
   workspaceId
+  workspace {
+    _id
+    code
+    type
+    inviteCode
+    name
+    logo
+    hotline
+    locale
+    location {
+      address
+    }
+    appIcon
+    appColor
+    appName
+    appColorShape
+    branches
+    isArchived
+  }
+  workspaceBranches {
+    _id
+    name
+  }
   roles {
     _id
     name
     color
   }
+  permissions
 }

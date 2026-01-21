@@ -221,6 +221,7 @@ export const EventType = {
   WorkspaceMemberLeaved: 'WORKSPACE_MEMBER_LEAVED',
   WorkspaceMemberOffline: 'WORKSPACE_MEMBER_OFFLINE',
   WorkspaceMemberOnline: 'WORKSPACE_MEMBER_ONLINE',
+  WorkspaceMemberSynced: 'WORKSPACE_MEMBER_SYNCED',
   WorkspaceMemberTransferOwner: 'WORKSPACE_MEMBER_TRANSFER_OWNER',
   WorkspaceMemberUpdated: 'WORKSPACE_MEMBER_UPDATED',
   WorkspaceNew: 'WORKSPACE_NEW',
@@ -352,3 +353,16 @@ export const TaskPriority = {
 } as const;
 
 export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
+/** Available workspace types */
+export const WorkspaceType = {
+  BeautySalon: 'BEAUTY_SALON',
+  Business: 'BUSINESS',
+  Clinic: 'CLINIC',
+  Credit: 'CREDIT',
+  Dental: 'DENTAL',
+  Hospital: 'HOSPITAL',
+  Software: 'SOFTWARE',
+  Spa: 'SPA'
+} as const;
+
+export type WorkspaceType = typeof WorkspaceType[keyof typeof WorkspaceType];

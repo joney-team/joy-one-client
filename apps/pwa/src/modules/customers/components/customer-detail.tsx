@@ -115,7 +115,7 @@ export const CustomerDetail = () => {
         ),
       });
     }
-  }, [customer, workspace.permissions]);
+  }, [customer, workspace.member.permissions]);
 
   if (detail.isFetching)
     return (

@@ -4,7 +4,7 @@ import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Container } from "@/components/container";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, WorkspaceType } from "@/graphql/enums.graphql";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { WorkspaceAppSettings } from "@/modules/workspace-settings/components/workspace-setting-app";
 import { WorkspaceSettingCreditOperation } from "@/modules/workspace-settings/components/workspace-setting-credit-operation";
@@ -12,7 +12,6 @@ import { WorkspacetSettingLoans } from "@/modules/workspace-settings/components/
 import { WorkspaceOperationSettings } from "@/modules/workspace-settings/components/workspace-setting-operation";
 import { WorkspaceTermsAndPolicies } from "@/modules/workspace-settings/components/workspace-setting-terms-and-policies";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Trans } from "@lingui/react/macro";
 import { Card, Stack } from "@mantine/core";
 import {
@@ -46,7 +45,7 @@ export const Workspace: FC = () => {
         </Card>
 
         <Renderer visible={workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}>
-          <Renderer visible={workspace.type === WorkspaceType.CREDIT}>
+          <Renderer visible={workspace.type === WorkspaceType.Credit}>
             <SectionTitle mb={-20} name={<Trans>Credit</Trans>} icon={IconReportMoney} />
             <Card shadow="xs">
               <WorkspaceSettingCreditOperation />

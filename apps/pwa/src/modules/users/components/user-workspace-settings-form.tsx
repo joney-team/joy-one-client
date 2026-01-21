@@ -8,7 +8,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import {
-  getWorkspaceMemberRoleLabel,
+  getMemberRoleLabel,
   removeWorkspaceMember,
   updateWorkspaceMember,
 } from "@/modules/workspace-members/workspace-members-service";
@@ -132,7 +132,7 @@ const UserWorkspaceSettingsForm: FC<
             }
           />
         ) : (
-          getWorkspaceMemberRoleLabel(userMember)
+          getMemberRoleLabel(userMember)
         )}
       </FormSession>
 

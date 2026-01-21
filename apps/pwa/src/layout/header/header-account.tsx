@@ -7,7 +7,7 @@ import { Renderer } from "@/components/renderer";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useLang } from "@/modules/lang/lang-context";
 import { ModalLang } from "@/modules/lang/modal-language";
-import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, em, Group, Menu, Stack, Text } from "@mantine/core";
@@ -36,15 +36,15 @@ export const WorkspaceHeaderAccount: FC = () => {
           <Menu.Target>
             <Group gap={8} style={{ cursor: "pointer" }}>
               <Group gap={8} className="unselectable">
-                <Avatar user={workspace.userMember} size={em(30)} />
+                <Avatar user={workspace.member} size={em(30)} />
 
                 <Renderer views={["desktop", "tablet"]}>
                   <Stack gap={0}>
-                    <Text fz={em(14)} fw={500}>
-                      {workspace.userMember.name}
+                    <Text maw={120} truncate fz="sm" fw={500}>
+                      {workspace.member.name}
                     </Text>
-                    <Text maw={120} truncate="end" fz={em(9)} mt={-3} fw={600} c="gray">
-                      {getWorkspaceMemberRoleLabel(workspace.userMember)}
+                    <Text maw={120} truncate fz={10} lh="100%" fw={600} c="gray">
+                      {getMemberRoleLabel(workspace.member)}
                     </Text>
                   </Stack>
                 </Renderer>

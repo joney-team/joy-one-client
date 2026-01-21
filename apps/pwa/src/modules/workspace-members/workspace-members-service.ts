@@ -13,10 +13,6 @@ import {
   WorkspaceMemberOnlineStatus,
 } from "./workspace-members-types";
 
-export async function getMyWorkspaceMembers() {
-  return api.get<WorkspaceMemberLegacy[]>(`/workspace-members/me`);
-}
-
 export async function removeWorkspaceMember(memberId: string) {
   return api.delete(`/workspace-members/${memberId}`);
 }
@@ -52,22 +48,20 @@ export async function getWorkspaceMemberOnlineStatus() {
   return api.get<WorkspaceMemberOnlineStatus>(`/workspace-members/online-status`);
 }
 
-export function getWorkspaceMemberRoleLabel(
-  userMember: Pick<WorkspaceMemberLegacy, "memberId" | "roles">
-) {
-  if (!userMember.memberId) return t`Guest`;
+export function getMemberRoleLabel(member: Pick<WorkspaceMemberLegacy, "memberId" | "roles">) {
+  if (!member.memberId) return t`Guest`;
 
-  if (userMember.roles.length === 0) {
+  if (member.roles.length === 0) {
     return workspaceSpecialRoleIds[WorkspaceDefaultRoleId.MEMBER].name();
   }
 
-  if (userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER)) {
+  if (member.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER)) {
     return workspaceSpecialRoleIds[WorkspaceDefaultRoleId.OWNER].name();
   }
 
-  if (userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.ADMIN)) {
+  if (member.roles.some((v) => v._id === WorkspaceDefaultRoleId.ADMIN)) {
     return workspaceSpecialRoleIds[WorkspaceDefaultRoleId.ADMIN].name();
   }
 
-  return userMember.roles.map((v) => getWorkspaceRoleName(v)).join(", ");
+  return member.roles.map((v) => getWorkspaceRoleName(v)).join(", ");
 }

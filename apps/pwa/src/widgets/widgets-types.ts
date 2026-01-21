@@ -1,5 +1,5 @@
+import { WorkspaceType } from "@/graphql/types.graphql";
 import type { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import type { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import type { Icon } from "@tabler/icons-react";
 import type { FC } from "react";
 import type { LayoutItem } from "react-grid-layout";

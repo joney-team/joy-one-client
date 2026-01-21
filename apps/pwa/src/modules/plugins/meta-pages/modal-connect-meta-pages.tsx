@@ -155,7 +155,7 @@ export const ModalConnectMetaPages: FC<{
 
               {status === "CONNECTING" && (
                 <Group gap={30}>
-                  <Avatar workspace={workspace.userMember.workspace} size={55} />
+                  <Avatar workspace={workspace.member.workspace} size={55} />
 
                   <ThemeIcon variant="transparent" size="lg" color="dark">
                     <IconCirclesRelation size={50} className="animPulse" />
@@ -355,7 +355,7 @@ export const WithConnectMetaPagesModal: FC<{
 
               {status === "CONNECTING" && (
                 <Group gap={30}>
-                  <Avatar workspace={workspace.userMember.workspace} size={55} />
+                  <Avatar workspace={workspace.member.workspace} size={55} />
 
                   <ThemeIcon variant="transparent" size="lg" color="dark">
                     <IconCirclesRelation size={50} className="animPulse" />

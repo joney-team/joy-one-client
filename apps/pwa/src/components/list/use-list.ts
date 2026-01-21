@@ -259,13 +259,7 @@ export const useList = <T extends BaseData>({
     if (autoFetch && isReadyToFetch) {
       fetch(true, { isSilient: true });
     }
-  }, [
-    JSON.stringify(params),
-    autoFetch,
-    listKey,
-    isReadyToFetch,
-    workspace.userMember?.workspaceId,
-  ]);
+  }, [JSON.stringify(params), autoFetch, listKey, isReadyToFetch, workspace.member?.workspaceId]);
 
   // Auto fetch when server reconnected
   onReconnected(() => {

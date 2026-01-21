@@ -26,7 +26,7 @@ export const WorkspaceCapacity: FC = () => {
 
   useEffect(() => {
     fetchCapacity();
-  }, [workspace.userMember.workspaceId]);
+  }, [workspace.member.workspaceId]);
 
   if (!capacity) return null;
 

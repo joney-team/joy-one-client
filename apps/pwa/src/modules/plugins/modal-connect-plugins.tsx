@@ -76,7 +76,7 @@ const ModalConnectPlugins: FC = () => {
                 type: InputModalType.TEXT,
                 title: <Trans>Enter name</Trans>,
                 icon: IconMessage,
-                value: workspace.userMember.name,
+                value: workspace.member.name,
                 onDone: async (name) => {
                   await plugins.onCreateMessageHub(name);
                 },

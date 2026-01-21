@@ -37,7 +37,6 @@ import { getClientLocale } from "@/modules/lang/lang-service";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Gender } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -45,6 +44,7 @@ import { LocationForm } from "../../../components/location-form";
 import { Renderer } from "../../../components/renderer";
 import { CustomerRelationshipContactInput } from "./customer-relationship-contact-input";
 import { AppLocale } from "@/modules/lang/lang-types";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 export interface CustomerFormProps {
   onDone?: (customer: CustomerEntity) => void | Promise<void>;
@@ -81,14 +81,16 @@ export const medicalHistoryOptions: { [key in AppLocale]: string[] } = {
 export const CustomerForm: FC<CustomerFormProps> = (props) => {
   const workspace = useWorkspace();
   const router = useRouter();
-  const isShowSecondaryLocation = [WorkspaceType.CREDIT].includes(workspace.type);
+  const isShowSecondaryLocation = [WorkspaceType.Credit]
+    .map((t) => t.toString())
+    .includes(workspace.type);
 
   const form = useForm({
     initialValues: {
       name: props.customer?.name || "",
       ...(props.customer ||
         ({
-          assigneeUsers: [workspace.userMember],
+          assigneeUsers: [workspace.member],
         } as any)),
       vnLocation: props.customer?.vnLocation || {},
       vnSecondaryLocation: props.customer?.vnSecondaryLocation || {},
@@ -141,7 +143,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
     form.setValues({
       ...(props.customer ||
         ({
-          assigneeUsers: [workspace.userMember],
+          assigneeUsers: [workspace.member],
         } as any)),
       name: props.customer?.name || "",
       location: props.customer?.location || {},
@@ -172,7 +174,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
           leftSection={<IconMail strokeWidth={1.2} size={18} />}
         />
 
-        <Renderer visible={workspace.type === WorkspaceType.CREDIT}>
+        <Renderer visible={workspace.type === WorkspaceType.Credit}>
           <NumberInput
             label={t`Salary amount`}
             {...form.getInputProps("salaryAmount")}
@@ -231,9 +233,9 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
         </Renderer>
 
         <Renderer
-          visible={[WorkspaceType.HOSPITAL, WorkspaceType.CLINIC, WorkspaceType.DENTAL].includes(
-            workspace.type
-          )}
+          visible={[WorkspaceType.Hospital, WorkspaceType.Clinic, WorkspaceType.Dental]
+            .map((t) => t.toString())
+            .includes(workspace.type)}
         >
           <TagsInput
             label={t`Medical history`}
@@ -244,7 +246,9 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
           />
         </Renderer>
 
-        <Renderer visible={[WorkspaceType.CREDIT].includes(workspace.type)}>
+        <Renderer
+          visible={[WorkspaceType.Credit].map((t) => t.toString()).includes(workspace.type)}
+        >
           <CustomerRelationshipContactInput {...form.getInputProps("relationshipContacts")} />
         </Renderer>
 

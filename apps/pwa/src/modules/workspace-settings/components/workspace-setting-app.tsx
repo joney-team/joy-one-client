@@ -6,7 +6,7 @@ import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Renderer } from "@/components/renderer";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { getColorShape } from "@/modules/theme/generate-theme";
+import { getClientLocale } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
@@ -42,10 +42,10 @@ export const WorkspaceAppSettings: FC = () => {
 
   const form = useForm({
     initialValues: {
-      appDomain: workspace.userMember.workspace.appDomain || "",
-      appName: workspace.userMember.workspace.appName || "",
-      appColor: workspace.userMember.workspace.appColor || "primary",
-      appColorShape: getColorShape(workspace.userMember.workspace.appColorShape || 0),
+      appDomain: "",
+      appName: "",
+      appColor: workspace.member.workspace.appColor || "primary",
+      appColorShape: 6,
     } as any,
     validate: {
       appDomain: (value: string) => {
@@ -59,7 +59,7 @@ export const WorkspaceAppSettings: FC = () => {
     setIsSubmitting(true);
 
     try {
-      let appIcon = workspace.userMember.workspace.appIcon;
+      let appIcon = workspace.member.workspace.appIcon ?? "";
 
       if (values.iconFile) {
         const uploadedLogo = await uploadFile(values.iconFile, { maxWidthOrHeight: 512 });
@@ -67,12 +67,20 @@ export const WorkspaceAppSettings: FC = () => {
       }
 
       await workspace.update({
-        ...workspace.userMember.workspace,
+        name: workspace.member.workspace.name ?? "",
         appIcon,
         appDomain: values.appDomain?.trim(),
-        appName: values.appName,
-        appColor: values.appColor,
+        appName: values.appName ?? "",
+        appColor: values.appColor ?? "",
         appColorShape: values.appColorShape,
+        hotline: workspace.member.workspace.hotline ?? "",
+        locale: workspace.member.workspace.locale ?? getClientLocale(),
+        location: workspace.member.workspace.location
+          ? {
+              address: workspace.member.workspace.location.address ?? "",
+            }
+          : undefined,
+        logo: workspace.member.workspace.logo ?? undefined,
       });
     } catch (error) {
       onError(error);
@@ -98,12 +106,12 @@ export const WorkspaceAppSettings: FC = () => {
                 src={
                   form.values.iconFile
                     ? URL.createObjectURL(form.values.iconFile)
-                    : workspace.userMember.workspace.appIcon
+                    : workspace.member.workspace.appIcon
                 }
                 size={50}
                 radius={10}
               >
-                {workspace.userMember?.workspace?.code?.slice(0, 2)}
+                {workspace.member?.workspace?.code?.slice(0, 2)}
               </Avatar>
 
               <Group gap={5}>

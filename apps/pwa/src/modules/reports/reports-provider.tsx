@@ -13,11 +13,11 @@ export const ReportsProvider: FC<PropsWithChildren> = (props) => {
 
   const realtimeReport = useFetch(
     {
-      skip: !workspace.userMember,
-      id: `realtime-report-${workspace.userMember?.userId}-${workspace.userMember?.workspaceId}`,
+      skip: !workspace.member,
+      id: `realtime-report-${workspace.member?.userId}-${workspace.member?.workspaceId}`,
       fetch: () => getRealtimeReport(),
     },
-    [workspace.userMember?.workspaceId]
+    [workspace.member?.workspaceId]
   );
 
   useEventsListener(
@@ -25,13 +25,13 @@ export const ReportsProvider: FC<PropsWithChildren> = (props) => {
     (e) => {
       if (
         e.data &&
-        e.data.userId === workspace.userMember.userId &&
-        e.workspaceId === workspace.userMember.workspaceId
+        e.data.userId === workspace.member.userId &&
+        e.workspaceId === workspace.member.workspaceId
       ) {
         realtimeReport.setData(e.data);
       }
     },
-    [workspace.userMember?.workspaceId, workspace.userMember?.userId]
+    [workspace.member?.workspaceId, workspace.member?.userId]
   );
 
   return <Context.Provider value={{ realtimeReport }}>{props.children}</Context.Provider>;

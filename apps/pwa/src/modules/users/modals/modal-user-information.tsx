@@ -17,7 +17,7 @@ import { getUserPublicInformation } from "@/modules/users/users-service";
 import { UserPublicInformation } from "@/modules/users/users-types";
 import { useIsOnline } from "@/modules/workspace-members/hooks/use-is-member-online";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
@@ -68,9 +68,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
   const workspace = useWorkspace();
   const auth = useAuth();
-  const mutualWorkspace = user.mutualWorkspaces.find(
-    (w) => w._id === workspace.userMember.workspaceId
-  );
+  const mutualWorkspace = user.mutualWorkspaces.find((w) => w._id === workspace.member.workspaceId);
   const isOnline = useIsOnline(user._id);
   const isMe = auth.user?._id === user._id;
 
@@ -139,7 +137,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
             {!!mutualWorkspace && member && (
               <ShortInfoSession
                 label={t`Member role`}
-                value={getWorkspaceMemberRoleLabel(member)}
+                value={getMemberRoleLabel(member)}
                 icon={IconAccessible}
               />
             )}
@@ -249,7 +247,7 @@ const UserMutualWorkspaces: FC<{ user: UserPublicInformation }> = (props) => {
               <Stack gap={0}>
                 <Text fz={16}>{data.name}</Text>
                 <Text fz={12} c="gray">
-                  {getWorkspaceMemberRoleLabel(data)}
+                  {getMemberRoleLabel(data)}
                 </Text>
               </Stack>
             </Group>

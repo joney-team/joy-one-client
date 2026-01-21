@@ -139,9 +139,9 @@ export const WorkspaceNavigation: FC = () => {
                   mobileDrawer[1].close();
                 }}
               >
-                <Avatar workspace={workspace.userMember.workspace} size={30} />
+                <Avatar workspace={workspace.member.workspace} size={30} />
                 <Text fw={600}>
-                  {String.limitCharacters(workspace.userMember.workspace.name || "", 12)}
+                  {String.limitCharacters(workspace.member.workspace.name || "", 12)}
                 </Text>
               </Group>
             }

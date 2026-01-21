@@ -269,7 +269,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
   const workspace = useWorkspace();
   const theme = useMantineTheme();
   const parsedPrimaryColor = parseThemeColor({
-    color: workspace.userMember.workspace.appColor || "primary",
+    color: workspace.member.workspace.appColor || "primary",
     theme,
   });
   const parsedRedColor = parseThemeColor({ color: "red", theme });

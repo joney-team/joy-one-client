@@ -34,7 +34,7 @@ export const WorkspaceSettingMessageHubs: FC = () => {
         <Card shadow="xs">
           <Stack align="center" py={20}>
             <Group gap={30} mb={20}>
-              <Avatar workspace={workspace.userMember.workspace} size={55} />
+              <Avatar workspace={workspace.member.workspace} size={55} />
               <ThemeIcon variant="transparent" size="lg" color="dark">
                 <IconCirclesRelation size={50} />
               </ThemeIcon>
@@ -61,7 +61,7 @@ export const WorkspaceSettingMessageHubs: FC = () => {
                       type: InputModalType.TEXT,
                       title: <Trans>Enter name</Trans>,
                       icon: IconMessage,
-                      value: workspace.userMember.name,
+                      value: workspace.member.name,
                       onDone: async (name) => {
                         await plugins.onCreateMessageHub(name);
                       },
@@ -92,7 +92,7 @@ export const WorkspaceSettingMessageHubs: FC = () => {
                     type: InputModalType.TEXT,
                     title: <Trans>Enter name</Trans>,
                     icon: IconMessage,
-                    value: workspace.userMember.name,
+                    value: workspace.member.name,
                     onDone: async (name) => {
                       await plugins.onCreateMessageHub(name);
                     },

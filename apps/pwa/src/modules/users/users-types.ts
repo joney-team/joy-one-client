@@ -1,7 +1,7 @@
 import { BaseMongoEntity, Query } from "@/types";
 import { AppLocale } from "../lang/lang-types";
-import { WorkspaceType } from "../workspaces/workspaces-types";
 import { WorkspaceRoleEntity } from "../workspace-roles/workspace-roles-types";
+import { WorkspaceType } from "@/graphql/types.graphql";
 
 export enum UserRole {
   ADMIN = "ADMIN",

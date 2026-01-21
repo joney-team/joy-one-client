@@ -102,7 +102,7 @@ export const AdminPlayground: FC = () => {
         </Stack>
       </Paper>
 
-      {workspace.userMember && <UseUploadFilePlayground />}
+      {workspace.member && <UseUploadFilePlayground />}
 
       <Paper withBorder p={20}>
         <Stack>

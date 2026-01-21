@@ -16,7 +16,6 @@ import { WorkspaceMembersInput } from "@/modules/workspace-members/components/wo
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
@@ -56,6 +55,7 @@ import { Renderer } from "../../../components/renderer";
 import { ModalCustomer } from "../customer-modal";
 import { assignCustomer, renderGener, renderGenerIcon, updateCustomer } from "../customer-service";
 import { CustomerLocations } from "./customer-locations";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 interface CustomerInformationsProps {
   customer: CustomerEntity;
@@ -198,7 +198,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
 
                     <Renderer
                       visible={
-                        workspace.type === WorkspaceType.CREDIT &&
+                        workspace.type === WorkspaceType.Credit &&
                         workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)
                       }
                     >

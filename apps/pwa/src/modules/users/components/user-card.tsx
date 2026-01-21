@@ -3,7 +3,7 @@
 import { Avatar, AvatarProps } from "@/components/avatar";
 import { useLayout } from "@/layout/layout-context";
 import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
-import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { ActionIcon, Card, Group, Stack, Text, em, useMantineTheme } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
@@ -79,7 +79,7 @@ export const UserCard: FC<UserCardProps> = (props) => {
                   {user.name}
                 </Text>
                 <Text fz={em(8)} fw={500} mt={-2}>
-                  {getWorkspaceMemberRoleLabel(user)}
+                  {getMemberRoleLabel(user)}
                 </Text>
               </Stack>
             )}

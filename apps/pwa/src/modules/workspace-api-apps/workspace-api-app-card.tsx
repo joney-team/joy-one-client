@@ -2,7 +2,7 @@
 
 import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity";
 import { updateWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-service";
-import { getWorkspaceMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
 import { onActionLoad } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -66,7 +66,7 @@ export const WorkspaceApiAppCard: FC<WorkspaceApiAppCardProps> = ({ app }) => {
                 <IconAccessible size={14} />
               </ThemeIcon>
               <Text fz={12} c="gray">
-                {t`Role`}: {getWorkspaceMemberRoleLabel(app.member)}
+                {t`Role`}: {getMemberRoleLabel(app.member)}
               </Text>
             </Group>
           </Stack>

@@ -1,4 +1,4 @@
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
+import { WorkspaceType } from "@/graphql/types.graphql";
 
 export enum PluginEInvoicesProviderType {
   MATBAO = "MATBAO",

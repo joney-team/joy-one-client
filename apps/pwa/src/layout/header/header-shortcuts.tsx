@@ -14,7 +14,6 @@ import {
   useAvailableWorkspaceModules,
   WorkspaceModuleId,
 } from "@/modules/workspaces/workspace-modules";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Menu } from "@mantine/core";
 import {
@@ -34,6 +33,7 @@ import { type FC, Fragment, useRef } from "react";
 import { Button } from "../../components/buttons/button";
 import dynamic from "next/dynamic";
 import { nonLoading } from "@/utils/non-loading";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 const ModalCustomer = dynamic(
   () => import("@/modules/customers/customer-modal").then((mod) => mod.ModalCustomer),
@@ -90,7 +90,7 @@ const shortcuts: Shortcut[] = [
   {
     icon: IconCreditCardPay,
     moduleId: "loans",
-    workspaceType: WorkspaceType.CREDIT,
+    workspaceType: WorkspaceType.Credit,
     permission: WorkspacePermission.LOANS_CREATOR,
     onClick: (context) => {
       context.modals.createLoan();
@@ -187,7 +187,7 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
 
   return (
     <Group gap={0}>
-      {workspace.type === WorkspaceType.CREDIT && (
+      {workspace.type === WorkspaceType.Credit && (
         <ModalLoanCalculator>
           {(open) => (
             <Button

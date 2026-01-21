@@ -10,19 +10,9 @@ import { HrmTimekeepingButton } from "@/modules/hrm-timekeepings/hrm-timekeeping
 import { UserNotifications } from "@/modules/notifications/user-notifications";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
-import {
-  ActionIcon,
-  Card,
-  Center,
-  Divider,
-  Group,
-  Kbd,
-  Text,
-  ThemeIcon,
-  rem,
-  rgba,
-} from "@mantine/core";
+import { ActionIcon, Card, Group, Kbd, Text, ThemeIcon, rem, rgba } from "@mantine/core";
 import { spotlight } from "@mantine/spotlight";
 import {
   IconChevronLeft,
@@ -30,10 +20,9 @@ import {
   IconLayoutSidebarLeftExpand,
   IconSearch,
 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { FC, memo } from "react";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
-import dynamic from "next/dynamic";
-import { nonLoading } from "@/utils/non-loading";
 
 const WorkspaceHeaderShortcuts = dynamic(
   () => import("./header-shortcuts").then((mod) => mod.WorkspaceHeaderShortcuts),

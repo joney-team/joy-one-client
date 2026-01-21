@@ -1,5 +1,5 @@
 import type * as Types from '../../../graphql/types.graphql.d';
 
-export type WorkspaceMemberDataFragment = { __typename: 'WorkspaceMember', _id: string, userId: string, name: string, color: string | null, avatar: string | null, memberId: string | null, workspaceId: string, roles: Array<{ __typename: 'WorkspaceMemberRole', _id: string, name: string, color: string | null }> };
+export type WorkspaceMemberDataFragment = { __typename: 'WorkspaceMember', _id: string, userId: string, name: string, email: string, color: string | null, avatar: string | null, memberId: string | null, workspaceId: string, permissions: Array<string>, workspace: { __typename: 'WorkspaceMemberWorkspaceInfo', _id: string, code: string, type: Types.WorkspaceType, inviteCode: string | null, name: string, logo: string | null, hotline: string | null, locale: string | null, appIcon: string | null, appColor: string | null, appName: string | null, appColorShape: number | null, branches: number, isArchived: boolean, location: { __typename: 'LocationEntity', address: string | null } | null }, workspaceBranches: Array<{ __typename: 'WorkspaceMemberWorkspaceBranchInfo', _id: string, name: string }>, roles: Array<{ __typename: 'WorkspaceMemberRole', _id: string, name: string, color: string | null }> };
 
 declare const Document: import("graphql").DocumentNode; export default Document;

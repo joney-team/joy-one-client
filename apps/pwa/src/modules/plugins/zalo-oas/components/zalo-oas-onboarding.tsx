@@ -2,7 +2,6 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { Container } from "@/components/container";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
@@ -18,7 +17,7 @@ export const ZaloOasOnboarding: FC = () => {
   return (
     <Stack align="center" py={20}>
       <Group gap={30} mb={20}>
-        <Avatar workspace={workspace.userMember.workspace} size={55} />
+        <Avatar workspace={workspace.member.workspace} size={55} />
         <ThemeIcon variant="transparent" size="lg" color="dark">
           <IconCirclesRelation size={50} />
         </ThemeIcon>

@@ -5,7 +5,6 @@ import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
 } from "@/modules/reports/reports-utils";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { round } from "@/utils/number.utils";
 import {
   IconBusinessplan,
@@ -23,6 +22,7 @@ import { DashboardWidgetsContext, DashboardWidgetType } from "./types";
 import { t } from "@lingui/core/macro";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { getClientLocale } from "@/modules/lang/lang-service";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, DashboardWidgetsContext> =
   {
@@ -167,7 +167,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
       config: {
         name: () => t`Loans activated contracts`,
         icon: IconNotes,
-        workspaceTypes: [WorkspaceType.CREDIT],
+        workspaceTypes: [WorkspaceType.Credit],
       },
       component: numberWidget({
         isLoading: (ctx) => ctx.realtimeReport.isFetching,
@@ -188,7 +188,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
       config: {
         name: () => t`Loans overdue contracts`,
         icon: IconNotes,
-        workspaceTypes: [WorkspaceType.CREDIT],
+        workspaceTypes: [WorkspaceType.Credit],
         defaultState: { color: "red" },
       },
       component: numberWidget({
@@ -210,7 +210,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
       config: {
         name: () => t`Loans pending contracts`,
         icon: IconNotes,
-        workspaceTypes: [WorkspaceType.CREDIT],
+        workspaceTypes: [WorkspaceType.Credit],
         defaultState: { color: "blue" },
       },
       component: numberWidget({
@@ -232,7 +232,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
       config: {
         name: () => t`Loans debt total`,
         icon: IconBusinessplan,
-        workspaceTypes: [WorkspaceType.CREDIT],
+        workspaceTypes: [WorkspaceType.Credit],
       },
       component: numberWidget({
         isLoading: (ctx) => ctx.realtimeReport.isFetching,
@@ -250,7 +250,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
       config: {
         name: () => t`Loans debt not due yet`,
         icon: IconBusinessplan,
-        workspaceTypes: [WorkspaceType.CREDIT],
+        workspaceTypes: [WorkspaceType.Credit],
         defaultState: { color: "blue" },
       },
       component: numberWidget({
@@ -269,7 +269,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
       config: {
         name: () => t`Loans debt overdue`,
         icon: IconBusinessplan,
-        workspaceTypes: [WorkspaceType.CREDIT],
+        workspaceTypes: [WorkspaceType.Credit],
         defaultState: { color: "red" },
       },
       component: numberWidget({
@@ -292,7 +292,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
       config: {
         name: () => t`Loans new contracts chart`,
         icon: IconChartLine,
-        workspaceTypes: [WorkspaceType.CREDIT],
+        workspaceTypes: [WorkspaceType.Credit],
         layout: chartWidgetlayoutConfig,
       },
       component: chartWidget({
@@ -316,7 +316,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
       config: {
         name: () => t`Loans fulfilled amount chart`,
         icon: IconChartLine,
-        workspaceTypes: [WorkspaceType.CREDIT],
+        workspaceTypes: [WorkspaceType.Credit],
         layout: chartWidgetlayoutConfig,
       },
       component: chartWidget({

@@ -73,7 +73,7 @@ export const DashboardWidgets: FC = () => {
         return output;
       },
     },
-    [workspace.userMember.workspaceId]
+    [workspace.member.workspaceId]
   );
 
   useEventsListener(

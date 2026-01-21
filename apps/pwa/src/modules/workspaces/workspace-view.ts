@@ -5,7 +5,7 @@ import type {
   WorkspaceViewComponent,
 } from "../workspace-settings/workspace-settings-types";
 import type { WorkspaceModule } from "./workspace-modules";
-import { WorkspaceType } from "./workspaces-types";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 const defaultWorkspaceView: WorkspaceView = {
   dashboardWidgets: [
@@ -53,7 +53,7 @@ const defaultWorkspaceView: WorkspaceView = {
 };
 
 const workspaceDefaultViews: { [key in WorkspaceType]?: WorkspaceView } = {
-  [WorkspaceType.SOFTWARE]: {
+  [WorkspaceType.Software]: {
     dashboardWidgets: [
       { id: "", type: DashboardWidgetType.TASKS_TODO },
       { id: "", type: DashboardWidgetType.TASKS_PROCESSING },
@@ -84,7 +84,7 @@ const workspaceDefaultViews: { [key in WorkspaceType]?: WorkspaceView } = {
       { id: "", type: ReportWidgetType.TASK_TIME_TRACKINGS },
     ],
   },
-  [WorkspaceType.CREDIT]: {
+  [WorkspaceType.Credit]: {
     dashboardWidgets: [
       { id: "", type: DashboardWidgetType.TODAY_REVENUE },
       { id: "", type: DashboardWidgetType.TODAY_NEW_CUSTOMERS },
@@ -145,7 +145,7 @@ const workspaceDefaultViews: { [key in WorkspaceType]?: WorkspaceView } = {
 };
 
 export const getDefaultWorkspaceView = (type?: WorkspaceType): WorkspaceView => {
-  const view = workspaceDefaultViews[type ?? WorkspaceType.BUSINESS] ?? defaultWorkspaceView;
+  const view = workspaceDefaultViews[type ?? WorkspaceType.Business] ?? defaultWorkspaceView;
 
   return {
     ...view,

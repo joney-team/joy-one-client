@@ -25,7 +25,7 @@ export const Account: FC<AppAccountProps> = (props) => {
       wrap="nowrap"
     >
       <Avatar
-        user={workspace.userMember}
+        user={workspace.member}
         style={{ cursor: "pointer" }}
         size={layout.view === "mobile" ? 30 : 38}
         hideOnlineStatus
@@ -34,10 +34,10 @@ export const Account: FC<AppAccountProps> = (props) => {
       {!props.onlyAvatar && (
         <Stack gap={0}>
           <Text fz={em(14)} fw={500}>
-            {workspace.userMember.name}
+            {workspace.member.name}
           </Text>
           <Text fz={em(8)} fw={500} c="gray">
-            {workspace.userMember.email}
+            {workspace.member.email}
           </Text>
         </Stack>
       )}

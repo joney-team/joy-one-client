@@ -43,8 +43,8 @@ const LoansProvider: FC<PropsWithChildren> = (props) => {
   };
 
   useEffect(() => {
-    if (workspace.userMember?.workspaceId) initialize();
-  }, [workspace.userMember?.workspaceId]);
+    if (workspace.member?.workspaceId) initialize();
+  }, [workspace.member?.workspaceId]);
 
   return (
     <Context.Provider

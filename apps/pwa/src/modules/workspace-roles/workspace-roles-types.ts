@@ -1,5 +1,5 @@
+import { WorkspaceType } from "@/graphql/types.graphql";
 import type { BaseMongoEntity } from "@/types";
-import { WorkspaceType } from "../workspaces/workspaces-types";
 
 export enum WorkspacePermission {
   CUSTOM_FIELDS_MANAGER = "CFSM",

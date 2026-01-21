@@ -47,7 +47,7 @@ export const ModalNextBooking: FC = () => {
       }).then((r) =>
         r.data.filter(
           (b) =>
-            b.assigneeUserIds?.includes(workspace.userMember.userId) &&
+            b.assigneeUserIds?.includes(workspace.member.userId) &&
             b.status === BookingStatus.IN_PROGRESS &&
             !readedBookings.includes(b._id)
         )

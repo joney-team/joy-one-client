@@ -33,7 +33,7 @@ export interface AvatarProps extends MantineAvatarProps {
   onClick?: () => void;
   color?: string;
   user?: AvatarUser;
-  workspace?: Pick<WorkspaceEntity, "appColor" | "logo" | "name" | "appName" | "appIcon">;
+  workspace?: Pick<WorkspaceEntity, "appColor" | "logo" | "name" | "appIcon">;
   customer?: Pick<CustomerShortInfo, "name" | "avatar"> | null | undefined;
   partner?: PartnerEntity;
   pluginMetaPage?: PluginMetaPageEntity;

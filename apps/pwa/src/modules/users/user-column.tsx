@@ -8,7 +8,7 @@ import { IconUser } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
 import {
   getWorkspaceMemberByIds,
-  getWorkspaceMemberRoleLabel,
+  getMemberRoleLabel,
 } from "../workspace-members/workspace-members-service";
 import { WorkspaceMemberInfo } from "../workspace-members/workspace-members-types";
 import { ModalUserInformation } from "./modals/modal-user-information";
@@ -40,7 +40,7 @@ export const userColumn = (args?: UserColumnArgs): Column => {
                   {user.name}
                 </Text>
                 <Text fz={10} c="gray" truncate>
-                  {getWorkspaceMemberRoleLabel(user)}
+                  {getMemberRoleLabel(user)}
                 </Text>
               </Stack>
             </Group>
@@ -80,7 +80,7 @@ export const userColumn = (args?: UserColumnArgs): Column => {
                   {user.name}
                 </Text>
                 <Text fz={10} c="gray">
-                  {getWorkspaceMemberRoleLabel(user)}
+                  {getMemberRoleLabel(user)}
                 </Text>
               </Stack>
             </Group>

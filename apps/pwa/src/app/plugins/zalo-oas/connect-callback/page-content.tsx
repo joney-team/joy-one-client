@@ -70,7 +70,7 @@ const Page: NextPage = () => {
       align="center"
     >
       <Group gap={30} mb={20}>
-        <Avatar workspace={workspace.userMember.workspace} size={100} />
+        <Avatar workspace={workspace.member.workspace} size={100} />
         <ThemeIcon variant="transparent" size="lg" color="dark">
           <IconCirclesRelation size={50} />
         </ThemeIcon>

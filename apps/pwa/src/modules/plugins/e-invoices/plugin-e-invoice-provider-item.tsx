@@ -3,12 +3,14 @@
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { SectionTitle } from "@/components/session-title";
+import { WorkspaceType } from "@/graphql/enums.graphql";
+import { type ModalConfirmRef } from "@/modals/modal-confirm";
 import { api } from "@/modules/apis";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
+import { nonLoading } from "@/utils/non-loading";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -30,6 +32,7 @@ import {
   IconRefresh,
   IconTemplate,
 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { FC, useEffect, useRef, useState } from "react";
 import { OnModalCheckEInvoice } from "./modal-check-e-invoice";
 import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
@@ -46,9 +49,6 @@ import {
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
-import { type ModalConfirmRef } from "@/modals/modal-confirm";
-import dynamic from "next/dynamic";
-import { nonLoading } from "@/utils/non-loading";
 
 const ModalConfirm = dynamic(
   () => import("@/modals/modal-confirm").then((mod) => mod.ModalConfirm),
@@ -211,7 +211,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
         {Object.values(PluginEInvoiceTemplateType).map((type) => {
           if (
             (type === PluginEInvoiceTemplateType.LOAN_INCOME_RECEIPT &&
-              workspace.type !== WorkspaceType.CREDIT) ||
+              workspace.type !== WorkspaceType.Credit) ||
             !variables
           )
             return null;

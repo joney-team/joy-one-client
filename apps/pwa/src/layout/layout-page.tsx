@@ -35,7 +35,7 @@ export function Layout<P>({
   const componentProps = props.props as any;
   const isRequireAuth = routeRule.auth !== "public";
 
-  if (!workspace.userMember && routeRule.auth === "workspace") return props.children;
+  if (!workspace.member && routeRule.auth === "workspace") return props.children;
   if (!auth.user && isRequireAuth) return props.children;
 
   if (routeRule.auth === "admin") {

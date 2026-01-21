@@ -26,7 +26,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
   const theme = useMantineTheme();
   const router = useRouter();
   const parsedPrimaryColor = parseThemeColor({
-    color: workspace.userMember?.workspace.appColor || "primary",
+    color: workspace.member?.workspace.appColor || "primary",
     theme,
   });
 
@@ -85,11 +85,11 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
       name,
       widgetSettings: {
         color: parsedPrimaryColor.value,
-        brandName: workspace.userMember.workspace.name,
-        brandLogo: workspace.userMember.workspace.logo,
-        locale: workspace.userMember.workspace.locale || getClientLocale(),
+        brandName: workspace.member.workspace.name,
+        brandLogo: workspace.member.workspace.logo ?? "",
+        locale: getClientLocale(),
         position: "right",
-        welcomMessage: t`Welcome to ${workspace.userMember.workspace.name}`,
+        welcomMessage: t`Welcome to ${workspace.member.workspace.name}`,
         welcomSubMessage: t`You need advice! Start chatting with us now.`,
         welcomeInputs: [
           {
@@ -104,38 +104,6 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
     });
 
     router.push(`/workspace-settings/plugins/message-hubs`);
-
-    // OnModalInput({
-    //   type: InputModalType.TEXT,
-    //   title: t`Enter name`,
-    //   icon: IconMessage,
-    //   value: workspace.userMember.name,
-    //   onDone: async (name) => {
-    //     if (!name || name.length === 0) return;
-    //     await createPluginMessageHub({
-    //       name,
-    //       widgetSettings: {
-    //         color: parsedPrimaryColor.value,
-    //         brandName: workspace.userMember.workspace.name,
-    //         brandLogo: workspace.userMember.workspace.logo,
-    //         locale: workspace.userMember.workspace.locale || getClientLocale(),
-    //         position: "right",
-    //         welcomMessage: t`Welcome to ${workspace.userMember.workspace.name}`,
-    //         welcomSubMessage: t`You need advice! Start chatting with us now.`,
-    //         welcomeInputs: [
-    //           {
-    //             id: uuid(),
-    //             type: "name",
-    //             label: t`Your name`,
-    //             description: `Let us call you by your most affectionate name!`,
-    //             isRequired: true,
-    //           },
-    //         ],
-    //       },
-    //     });
-    //     router.push(`/workspace-settings/plugins/message-hubs`);
-    //   },
-    // });
   };
 
   useEventsListener(
@@ -145,7 +113,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
       EventType.PluginMessageHubsRemoved,
     ],
     () => fetchMessageHubs(),
-    [workspace.userMember?.workspaceId]
+    [workspace.member?.workspaceId]
   );
 
   useEventsListener(
@@ -155,7 +123,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
       EventType.PluginAiAssistantsRemoved,
     ],
     () => fetchAiAssistants(),
-    [workspace.userMember?.workspaceId]
+    [workspace.member?.workspaceId]
   );
 
   useEventsListener(
@@ -167,18 +135,18 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
       EventType.PluginZaloOaDisabled,
     ],
     () => fetchZaloOas(),
-    [workspace.userMember?.workspaceId]
+    [workspace.member?.workspaceId]
   );
 
   useEventsListener(
     [EventType.PluginMetaPagesUpdated, EventType.PluginMetaPagesDisconnected],
     () => fetchMetaPages(),
-    [workspace.userMember?.workspaceId]
+    [workspace.member?.workspaceId]
   );
 
   useEffect(() => {
-    if (workspace.userMember?.workspaceId) fetch();
-  }, [workspace.userMember?.workspaceId]);
+    if (workspace.member?.workspaceId) fetch();
+  }, [workspace.member?.workspaceId]);
 
   const isHasPlugin = messageHubs.length > 0 || zaloOas.length > 0 || metaPages.length > 0;
   const plugins: Plugin[] = [

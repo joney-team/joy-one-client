@@ -112,7 +112,7 @@ export const AdminTools: FC = () => {
             color="cyan"
             onClick={() =>
               api.post(`/scheduling/execFetchExternalStorageSize`, {
-                workspaceId: workspace.userMember.workspaceId,
+                workspaceId: workspace.member.workspaceId,
               })
             }
           >
@@ -123,7 +123,7 @@ export const AdminTools: FC = () => {
             color="cyan"
             onClick={() =>
               api.post(`/scheduling/execWorkspaceHealthCheckLoans`, {
-                workspaceId: workspace.userMember.workspaceId,
+                workspaceId: workspace.member.workspaceId,
               })
             }
           >
@@ -134,7 +134,7 @@ export const AdminTools: FC = () => {
             color="cyan"
             onClick={() =>
               api.post(`/scheduling/execSendReportToAdmin`, {
-                workspaceId: workspace.userMember.workspaceId,
+                workspaceId: workspace.member.workspaceId,
               })
             }
           >
@@ -145,7 +145,7 @@ export const AdminTools: FC = () => {
             color="cyan"
             onClick={() =>
               api.post(`/scheduling/execRejectPendingLoans`, {
-                workspaceId: workspace.userMember.workspaceId,
+                workspaceId: workspace.member.workspaceId,
               })
             }
           >
@@ -156,7 +156,7 @@ export const AdminTools: FC = () => {
             color="cyan"
             onClick={() =>
               api.post(`/scheduling/heathcheckSocialConnections`, {
-                workspaceId: workspace.userMember.workspaceId,
+                workspaceId: workspace.member.workspaceId,
               })
             }
           >

@@ -254,47 +254,42 @@ export const ModalPrinter = forwardRef<
                 >
                   <div className="printer-wrapper">
                     <div className="printer-head">
-                      {printSettings.showLogo && !!workspace.userMember.workspace.logo && (
+                      {printSettings.showLogo && !!workspace.member.workspace.logo && (
                         <img
                           className="logo"
-                          src={renderFileUrl(workspace.userMember.workspace.logo)}
+                          src={renderFileUrl(workspace.member.workspace.logo)}
                           alt=""
                         />
                       )}
 
                       <div className="printer-head-metadata">
-                        <h3>{workspace.userMember.workspace.name}</h3>
+                        <h3>{workspace.member.workspace.name}</h3>
                         <div
                           className={`flex ${
                             printSettings.size === PrintSize.LARGE ? "" : "column"
                           }`}
                         >
                           {(function () {
-                            if (
-                              !printSettings.showAddress ||
-                              !workspace.userMember.workspace.location
-                            )
+                            if (!printSettings.showAddress || !workspace.member.workspace.location)
                               return null;
 
                             if (printSettings.size === PrintSize.SMALL)
                               return (
                                 <p>
-                                  <Trans>ADD</Trans>:{" "}
-                                  {workspace.userMember.workspace.location?.address}
+                                  <Trans>ADD</Trans>: {workspace.member.workspace.location?.address}
                                 </p>
                               );
 
                             return (
                               <p>
-                                <Trans>ADD</Trans>:{" "}
-                                {workspace.userMember.workspace.location?.address}
+                                <Trans>ADD</Trans>: {workspace.member.workspace.location?.address}
                               </p>
                             );
                           })()}
 
-                          {workspace.userMember.workspace.hotline && (
+                          {workspace.member.workspace.hotline && (
                             <p>
-                              <Trans>Hotline</Trans>: {workspace.userMember.workspace.hotline}
+                              <Trans>Hotline</Trans>: {workspace.member.workspace.hotline}
                             </p>
                           )}
                         </div>

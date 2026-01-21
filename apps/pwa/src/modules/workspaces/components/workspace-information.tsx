@@ -4,7 +4,6 @@ import { Avatar } from "@/components/avatar";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { onError } from "@/utils/exceptions.utils";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -24,6 +23,7 @@ import { IconUpload } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { workspaceTypes } from "../workspace-constants";
 import { WorkspaceTypeItem } from "./workpsace-type-item";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 let timeout: NodeJS.Timeout;
 export const WorkspaceInformation: FC = () => {
@@ -33,18 +33,18 @@ export const WorkspaceInformation: FC = () => {
 
   const form = useForm({
     initialValues: {
-      ...workspace.userMember.workspace,
-      name: workspace.userMember?.workspace?.name || "",
-      phone: workspace.userMember?.workspace?.phone || "",
-      hotline: workspace.userMember?.workspace?.hotline || "",
-      location: workspace.userMember?.workspace?.location || {
+      ...workspace.member.workspace,
+      name: workspace.member?.workspace?.name || "",
+      // phone: workspace.member?.workspace?.phone || "",
+      hotline: workspace.member?.workspace?.hotline || "",
+      location: workspace.member?.workspace?.location || {
         address: "",
       },
     },
     onValuesChange: (values) => {
       if (timeout) clearTimeout(timeout);
       timeout = setTimeout(() => {
-        workspace.update(values).catch(onError);
+        // workspace.update(values).catch(onError);
       }, 300);
     },
   });
@@ -52,8 +52,9 @@ export const WorkspaceInformation: FC = () => {
   const handleUploadLogo = async (file: File) => {
     setAvatarUploading(true);
     try {
-      const uploadedLogo = await uploadFile(file, { maxWidthOrHeight: 300 });
-      await workspace.update({ ...workspace.userMember.workspace, logo: uploadedLogo.path });
+      // TODO:
+      // const uploadedLogo = await uploadFile(file, { maxWidthOrHeight: 300 });
+      // await workspace.update({ ...workspace.member.workspace, logo: uploadedLogo.path });
     } catch (error) {
       onError(error);
     }
@@ -73,8 +74,8 @@ export const WorkspaceInformation: FC = () => {
         >
           <Group style={{ position: "relative" }} wrap="nowrap">
             <LoadingOverlay visible={avatarUploading} loaderProps={{ size: "xs" }} />
-            <Avatar src={workspace.userMember?.workspace?.logo} size={80}>
-              {workspace.userMember?.name?.slice(0, 2)}
+            <Avatar src={workspace.member?.workspace?.logo} size={80}>
+              {workspace.member?.name?.slice(0, 2)}
             </Avatar>
 
             <Group gap={5}>
@@ -128,21 +129,21 @@ export const WorkspaceInformation: FC = () => {
       <Group wrap="nowrap">
         <Group style={{ position: "relative" }}>
           <LoadingOverlay visible={avatarUploading} loaderProps={{ size: "xs" }} />
-          <Avatar src={workspace.userMember?.workspace?.logo} size={60}>
-            {workspace.userMember?.name?.slice(0, 2)}
+          <Avatar src={workspace.member?.workspace?.logo} size={60}>
+            {workspace.member?.name?.slice(0, 2)}
           </Avatar>
         </Group>
 
         <Stack gap={5}>
-          <Text fw={500}>{workspace.userMember?.name}</Text>
-          {workspace.userMember?.workspace?.hotline && (
-            <Anchor href={`tel:${workspace.userMember?.workspace.hotline}`} c="dark">
-              <Text fz={12}>Hotline: {workspace.userMember?.workspace.hotline}</Text>
+          <Text fw={500}>{workspace.member?.name}</Text>
+          {workspace.member?.workspace?.hotline && (
+            <Anchor href={`tel:${workspace.member?.workspace.hotline}`} c="dark">
+              <Text fz={12}>Hotline: {workspace.member?.workspace.hotline}</Text>
             </Anchor>
           )}
-          {workspace.userMember?.workspace?.location && (
+          {workspace.member?.workspace?.location && (
             <Text fz={12}>
-              <Trans>Address</Trans>: {workspace.userMember.workspace.location?.address}
+              <Trans>Address</Trans>: {workspace.member.workspace.location?.address}
             </Text>
           )}
         </Stack>

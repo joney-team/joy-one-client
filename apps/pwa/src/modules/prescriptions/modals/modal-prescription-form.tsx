@@ -293,7 +293,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
             items,
             _id: props.prescription?._id || "",
             createdAt: DateTime.toSeconds(new Date()),
-            workspaceId: workspace.userMember.workspaceId,
+            workspaceId: workspace.member.workspaceId,
           }}
         />
 

@@ -76,10 +76,10 @@ export const WorkspaceBillingList: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (workspace.userMember.workspaceId) {
-      fetchSubscriptionCalculated(workspace.userMember.workspaceId);
+    if (workspace.member.workspaceId) {
+      fetchSubscriptionCalculated(workspace.member.workspaceId);
     }
-  }, [workspace.userMember.workspaceId]);
+  }, [workspace.member.workspaceId]);
 
   useEventsListener(
     [
@@ -97,7 +97,7 @@ export const WorkspaceBillingList: FC = () => {
     () => {
       billings.fetch(true, { isSilient: true });
     },
-    [workspace.userMember.workspaceId]
+    [workspace.member.workspaceId]
   );
 
   return (

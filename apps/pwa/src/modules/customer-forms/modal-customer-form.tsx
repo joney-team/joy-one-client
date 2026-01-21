@@ -19,7 +19,7 @@ const ModalCustomerForm: FC = () => {
     WorkspaceBranchEntity,
     "_id" | "name"
   > | null>(null);
-  const link = `${config.APP_URL}/customer-forms/new/${workspace.userMember.workspaceId}/${
+  const link = `${config.APP_URL}/customer-forms/new/${workspace.member.workspaceId}/${
     workspaceBranch?._id || "main"
   }`;
 

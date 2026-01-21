@@ -16,7 +16,6 @@ import { ModalCreateLoan, ModalCreateLoanRef } from "@/modules/loans/modals/moda
 import { setCustomerToMessageBox } from "@/modules/message-boxes/message-boxes-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
-import { WorkspaceType } from "@/modules/workspaces/workspaces-types";
 import { useFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -38,13 +37,14 @@ import { MessageBoxMetadataBookings } from "./message-box-metadata-bookings";
 import { MessageBoxMetadataLoans } from "./message-box-metadata-loans";
 import { AccordionItem } from "./message-box-metadata-types";
 import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 
 const accordionItems: AccordionItem[] = [
   {
     moduleId: "loans",
     component: MessageBoxMetadataLoans,
     onCreate: (_, context) => context.actions.createLoan(),
-    workspaceTypes: [WorkspaceType.CREDIT],
+    workspaceTypes: [WorkspaceType.Credit],
   },
   {
     moduleId: "bookings",

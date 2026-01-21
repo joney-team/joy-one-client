@@ -71,7 +71,7 @@ export const ExportButton: FC = () => {
           .replace(/:/g, "-")
           .replace(/\//g, "-");
 
-        const filename = `[${workspace.userMember.workspace.code}] ${getListName()} ${time}`;
+        const filename = `[${workspace.member.workspace.code}] ${getListName()} ${time}`;
 
         if (exportType === ExportType.JSON) {
           return downloadJSON(data, `${filename}.json`);
@@ -141,7 +141,7 @@ export const ExportButton: FC = () => {
           );
 
           const primaryColor = parseThemeColor({
-            color: workspace.userMember.workspace.appColor || "primary",
+            color: workspace.member.workspace.appColor || "primary",
             theme,
           }).value;
 

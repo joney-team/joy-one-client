@@ -63,14 +63,14 @@ const RootNode = () => {
           h={cardRootSize.height}
           wrap="nowrap"
         >
-          <Avatar workspace={workspace.userMember.workspace} radius={8} size={70} />
+          <Avatar workspace={workspace.member.workspace} radius={8} size={70} />
           <Stack gap={0}>
             <Tooltip
-              label={workspace.userMember.workspace.name}
-              disabled={workspace.userMember.workspace.name.length < 10}
+              label={workspace.member.workspace.name}
+              disabled={workspace.member.workspace.name.length < 10}
             >
               <Text fz={25} fw={500} truncate="end" maw={160}>
-                {workspace.userMember.workspace.name}
+                {workspace.member.workspace.name}
               </Text>
             </Tooltip>
             <Text fz={12} c="gray.6" truncate="end">

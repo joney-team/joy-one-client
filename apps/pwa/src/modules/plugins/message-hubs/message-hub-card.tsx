@@ -246,7 +246,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
           <TextInput
             label={t`Welcome message`}
             value={widgetSettings.welcomMessage}
-            placeholder={`${t`Welcome to`} ${workspace.userMember.workspace.name}`}
+            placeholder={`${t`Welcome to`} ${workspace.member.workspace.name}`}
             onChange={(e) =>
               setWidgetSettings({ ...widgetSettings, welcomMessage: e.target.value })
             }

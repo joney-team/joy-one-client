@@ -46,12 +46,12 @@ import {
 import { useMemo } from "react";
 
 import { IconFacebook, IconZalo } from "@/components/icons";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react/macro";
 import { MantineColor } from "@mantine/core";
 import { usePathname } from "next/navigation";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
-import { WorkspaceType } from "./workspaces-types";
 import { useWorkspace } from "./workspace-context";
 
 export interface WorkspaceModuleConfig {
@@ -144,7 +144,7 @@ export const workspaceModuleConfigs = {
     href: "/customer-kycs",
     icon: IconUserScan,
     permissions: WorkspacePermission.CUSTOMER_KYCS_MANAGER,
-    workspaceTypes: [WorkspaceType.CREDIT],
+    workspaceTypes: [WorkspaceType.Credit],
     name: defineMessage`KYCs`,
   }),
   bookings: combineModule({
@@ -195,7 +195,7 @@ export const workspaceModuleConfigs = {
   prescriptions: combineModule({
     href: "/prescriptions",
     icon: IconPill,
-    workspaceTypes: [WorkspaceType.DENTAL, WorkspaceType.CLINIC, WorkspaceType.HOSPITAL],
+    workspaceTypes: [WorkspaceType.Dental, WorkspaceType.Clinic, WorkspaceType.Hospital],
     name: defineMessage`Prescriptions`,
   }),
 
@@ -306,7 +306,7 @@ export const workspaceModuleConfigs = {
     href: "/workspace-settings/credit",
     icon: IconCreditCardPay,
     permissions: WorkspacePermission.WORKSPACE_SETTINGS,
-    workspaceTypes: [WorkspaceType.CREDIT],
+    workspaceTypes: [WorkspaceType.Credit],
     restrictDisplay: ["spotlight"],
     color: "yellow",
     name: defineMessage`Credit settings`,
@@ -502,12 +502,12 @@ export const useWorkspaceModules = () => {
 };
 
 export const useAvailableWorkspaceModules = () => {
-  const { userMember } = useWorkspace();
+  const { member } = useWorkspace();
   const { workspaceModules, ...rest } = useWorkspaceModules();
 
   const availableModules = useMemo(() => {
     return workspaceModules.filter((m) => {
-      const userMemberPermissions = userMember?.permissions || [];
+      const userMemberPermissions = member?.permissions || [];
 
       const isAbleToAccess =
         !m.permissions ||
@@ -518,11 +518,11 @@ export const useAvailableWorkspaceModules = () => {
 
       const isAvailableType =
         !m.workspaceTypes ||
-        m.workspaceTypes.includes(userMember?.workspace?.type || WorkspaceType.BUSINESS);
+        m.workspaceTypes.includes(member?.workspace?.type || WorkspaceType.Business);
 
       return isAbleToAccess && isAvailableType;
     });
-  }, [userMember?.permissions, userMember?.workspace?.type]);
+  }, [member?.permissions, member?.workspace?.type]);
 
   return {
     availableModules,

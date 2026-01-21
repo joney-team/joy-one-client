@@ -113,7 +113,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
         onClick={open}
       >
         <Avatar
-          workspace={workspace.userMember.workspace}
+          workspace={workspace.member.workspace}
           size={30}
           bg="var(--mantine-color-body)"
           radius={5}
@@ -122,7 +122,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
         <Renderer visible={!workspaceLayout.isNavbarCollapsed}>
           <Stack gap={0} flex={1} ref={contentSize.ref}>
             <Text fz={rem(14)} fw={600} truncate="end" maw={contentSize.width}>
-              {workspace.userMember.workspace.name}
+              {workspace.member.workspace.name}
             </Text>
           </Stack>
         </Renderer>
@@ -145,7 +145,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
           <Group gap={10} align="start" wrap="nowrap" w="100%">
             <Avatar
               mt={3}
-              workspace={workspace.userMember.workspace}
+              workspace={workspace.member.workspace}
               size={45}
               radius={5}
               bg="var(--mantine-color-body)"
@@ -154,7 +154,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
             <Group flex={1} justify="space-between" wrap="nowrap" gap={2} align="start">
               <Stack gap={0} w="100%">
                 <Text fz={rem(18)} fw={600}>
-                  {workspace.userMember.workspace.name}
+                  {workspace.member.workspace.name}
                 </Text>
                 <Text fz={rem(12)}>Workspace</Text>
               </Stack>
@@ -256,7 +256,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
           <Renderer
             visible={
               !workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS) &&
-              workspace.userMember.workspaceBranches.length > 0
+              workspace.member.workspaceBranches.length > 0
             }
           >
             <Divider my={16} opacity={0.5} />
@@ -265,7 +265,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
               <Trans>Branches</Trans>
             </Label>
 
-            {workspace.userMember.workspaceBranches.map((branch) => {
+            {workspace.member.workspaceBranches.map((branch) => {
               return (
                 <NavigationItem
                   key={branch._id}
@@ -287,7 +287,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
             </Label>
 
             {workspace.userMembers
-              .filter((userMember) => userMember.workspace._id !== workspace.userMember.workspaceId)
+              .filter((userMember) => userMember.workspace._id !== workspace.member.workspaceId)
               .map((userMember) => {
                 if (!userMember.workspaceId) return null;
 

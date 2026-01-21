@@ -9,11 +9,9 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { getWorkspaceAuthSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import {
-  getMyWorkspaceMembers,
   joinWorkspaceMember,
   verifyWorkspaceMemberInvitation,
 } from "@/modules/workspace-members/workspace-members-service";
-import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 import { getWorkspaceRoles } from "@/modules/workspace-roles/workspace-roles-service";
 import {
   WorkspaceDefaultRoleId,
@@ -33,7 +31,7 @@ import { workspaceInitialize } from "@/modules/workspaces/workspaces-service";
 import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { useApolloClient, useLazyQuery } from "@apollo/client/react";
+import { useApolloClient } from "@apollo/client/react";
 import { Currency } from "@joy-one-client/utils/currency";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
@@ -43,10 +41,10 @@ import * as Sentry from "@sentry/react";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { api } from "../apis";
-import QUERY_USER_WORKSPACE_MEMBER, {
-  type UserWorkspaceMemberQuery,
-  type UserWorkspaceMemberQueryVariables,
-} from "../workspace-members/graphql/queryUserWorkspaceMember.graphql";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import QUERY_USER_WORKSPACE_MEMBERS, {
+  type UserWorkspaceMembersQuery,
+} from "../workspace-members/graphql/queryUserWorkspaceMembers.graphql";
 import { Context } from "./workspace-context";
 import { getDefaultWorkspaceView } from "./workspace-view";
 import {
@@ -67,7 +65,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const state = useRef<{
     roles: WorkspaceRoleEntity[];
     settings?: WorkspaceSettingEntity;
-    workspaceMembers: WorkspaceMemberLegacy[];
+    workspaceMembers: WorkspaceMemberDataFragment[];
   }>({
     roles: [],
     workspaceMembers: [],
@@ -77,27 +75,28 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const [isCreateNew, setIsCreateNew] = useState(false);
   const [invitationState, _setInvitationState] = useState<WorkspaceMemberInvitationState>();
   const [workspaceId, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
-  const userMember = auth.user
+  const member = auth.user
     ? state.current.workspaceMembers.find((w) => w.workspaceId === workspaceId)
     : undefined;
 
   const workspaceView: WorkspaceView = state.current.settings?.view || {};
 
-  const [fetchWorkspaceMemberData, { data: workspaceMemberData }] = useLazyQuery<
-    UserWorkspaceMemberQuery,
-    UserWorkspaceMemberQueryVariables
-  >(QUERY_USER_WORKSPACE_MEMBER, {
-    fetchPolicy: "network-only",
-  });
-
-  useEffect(() => {
-    if (workspaceId && auth.user?._id && isInitialized) {
-      fetchWorkspaceMemberData();
-    }
-  }, [workspaceId, auth.user?._id, isInitialized]);
+  useEventsListener(
+    [EventType.WorkspaceMemberSynced],
+    (e) => {
+      if (e.userId === member?.userId) {
+        fetchUserWorkspaceMembers();
+      }
+    },
+    [member?.userId]
+  );
 
   const fetchUserWorkspaceMembers = async () => {
-    state.current.workspaceMembers = await getMyWorkspaceMembers();
+    const result = await client.query<UserWorkspaceMembersQuery>({
+      query: QUERY_USER_WORKSPACE_MEMBERS,
+      fetchPolicy: "network-only",
+    });
+    state.current.workspaceMembers = result.data?.userWorkspaceMembers ?? [];
     forceUpdate();
   };
 
@@ -258,7 +257,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const getWorkspaceDisplayView = (_view?: WorkspaceView) => {
     let output: WorkspaceView = _view || { ...(state.current.settings?.view || {}) };
-    const _default = getDefaultWorkspaceView(userMember?.workspace?.type);
+    const _default = getDefaultWorkspaceView(member?.workspace?.type);
 
     Object.keys(_default).forEach((key) => {
       if (!(output as any)[key]) (output as any)[key] = (_default as any)[key];
@@ -314,22 +313,22 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   );
 
   useEffect(() => {
-    if (userMember) {
-      app.joinWorkspaceRoom(userMember.workspaceId);
+    if (member) {
+      app.joinWorkspaceRoom(member.workspaceId);
     }
-  }, [userMember]);
+  }, [member]);
 
   useEffect(() => {
-    if (userMember && !isExtendedApp()) {
+    if (member && !isExtendedApp()) {
       setMetadata({
         ...getMetadata(),
-        appColor: userMember.workspace.appColor || defaultMetadata.appColor,
-        appName: userMember.workspace.appName || defaultMetadata.appName,
-        appIcon: userMember.workspace.appIcon || defaultMetadata.appIcon,
-        appColorShape: userMember.workspace.appColorShape || defaultMetadata.appColorShape,
+        appColor: member.workspace.appColor || defaultMetadata.appColor,
+        appName: member.workspace.appName || defaultMetadata.appName,
+        appIcon: member.workspace.appIcon || defaultMetadata.appIcon,
+        appColorShape: member.workspace.appColorShape || defaultMetadata.appColorShape,
       });
     }
-  }, [userMember]);
+  }, [member]);
 
   useEffect(() => {
     if (auth.isInitialized) {
@@ -355,23 +354,21 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   ];
 
   const isShouldEnableBranches =
-    !!userMember &&
-    userMember.workspace.branches > 0 &&
-    (userMember.workspaceBranches.length > 1 ||
-      userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS));
+    !!member &&
+    member.workspace.branches > 0 &&
+    (member.workspaceBranches.length > 1 ||
+      member.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS));
 
   const contextValue: WorkspaceContext = {
-    type: userMember?.workspace?.type!,
+    type: member?.workspace?.type!,
     updateSettings,
-    permissions: userMember?.permissions!,
     hasPermission: (permission: WorkspacePermission) =>
-      userMember?.permissions.includes(permission) || false,
+      member?.permissions.includes(permission) ?? false,
     roles: [...state.current.roles, ...defaultWorkspaceRoles],
     isInitialized,
     settings: state.current.settings!,
     currency: Currency.get(state.current.settings?.currencyCode) || Currency.get()!,
-    member: workspaceMemberData?.userWorkspaceMember!,
-    userMember: userMember!,
+    member: member!,
     userMembers: state.current.workspaceMembers,
     select,
     create,
@@ -392,19 +389,13 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     setIsCreateNew,
     archive,
     join,
-    ref: `${userMember?.workspaceId || "WS"}`,
+    ref: `${member?.workspaceId || "WS"}`,
     isHasAccessAllBranches:
-      !!userMember &&
-      userMember.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS),
+      !!member && member.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS),
     isShouldEnableBranches,
-    isShowBranches: !!userMember && userMember.workspace.branches > 0,
-    defaultBranch: userMember?.workspaceBranches[0],
-    isAvailable:
-      isInitialized &&
-      !!auth.user &&
-      !!userMember &&
-      !!state.current.settings &&
-      !!workspaceMemberData?.userWorkspaceMember,
+    isShowBranches: !!member && member.workspace.branches > 0,
+    defaultBranch: member?.workspaceBranches[0],
+    isAvailable: isInitialized && !!auth.user && !!member && !!state.current.settings,
   };
 
   useEffect(() => {
@@ -421,13 +412,13 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   }, [isInitialized, contextValue.userMembers]);
 
   useEffect(() => {
-    if (contextValue.userMember) {
+    if (contextValue.member) {
       Sentry.setExtra("Workspace", {
-        code: contextValue.userMember.workspace.code,
-        name: contextValue.userMember.workspace.name,
+        code: contextValue.member.workspace.code,
+        name: contextValue.member.workspace.name,
       });
     }
-  }, [contextValue.userMember]);
+  }, [contextValue.member]);
 
   return <Context.Provider value={contextValue}>{props.children}</Context.Provider>;
 };
