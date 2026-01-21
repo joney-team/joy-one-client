@@ -13,13 +13,13 @@ import {
 import { useColor } from "@/modules/theme/use-color";
 import { UserCard } from "@/modules/users/components/user-card";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkSlot } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Card, Group, SimpleGrid, Stack, Table, Text } from "@mantine/core";
 import { FC } from "react";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 interface HrmTimekeepingsSummaryProps {
   timekeepings: HrmTimekeepingEntity[];
@@ -47,7 +47,7 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
       }
 
       return out;
-    }, [] as { userId: string; user: WorkspaceMemberLegacy; timekeepings: HrmTimekeepingEntity[] }[]);
+    }, [] as { userId: string; user: WorkspaceMemberDataFragment; timekeepings: HrmTimekeepingEntity[] }[]);
 
   if (viewport.view === "mobile")
     return (
@@ -188,7 +188,7 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
 const useTimekeepingsSummary = (
   timekeepings: HrmTimekeepingEntity[],
   args: {
-    userInfo: WorkspaceMemberLegacy;
+    userInfo: WorkspaceMemberDataFragment;
     workSlots?: WorkSlot[] | undefined;
     rules?: HrmTimekeepingsRules;
   }

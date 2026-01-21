@@ -31,17 +31,10 @@ import dynamic from "next/dynamic";
 import { FC, Fragment, useMemo } from "react";
 import { Renderer } from "../../components/renderer";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+import { WorkspaceNavigationMenu } from "./workspace-navigation-menu";
 
 const WorkspaceNavigationDrawer = dynamic(
   () => import("./navigation-drawer").then((mod) => mod.WorkspaceNavigationDrawer),
-  {
-    ssr: false,
-    loading: nonLoading,
-  }
-);
-
-const WorkspaceNavigationMenu = dynamic(
-  () => import("./workspace-navigation-menu").then((mod) => mod.WorkspaceNavigationMenu),
   {
     ssr: false,
     loading: nonLoading,
@@ -229,7 +222,6 @@ export const WorkspaceNavigation: FC = () => {
         }}
       >
         <Stack
-          // w="100%"
           miw={0}
           id="app-navigation"
           gap={workspaceLayout.isNavbarCollapsed ? 5 : 0}

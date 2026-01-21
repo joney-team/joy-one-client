@@ -7,4 +7,7 @@ export type SiblingTasksQueryVariables = Types.Exact<{
 
 export type SiblingTasksQuery = { __typename: 'Query', siblingTasks: { __typename: 'SiblingTasks', previous: { __typename: 'Task', _id: string, code: string, name: string } | null, next: { __typename: 'Task', _id: string, code: string, name: string } | null } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const SiblingTasksDocument = (import("graphql").DocumentNode) as TypedDocumentNode<SiblingTasksQuery, SiblingTasksQueryVariables>;
+export default SiblingTasksDocument 

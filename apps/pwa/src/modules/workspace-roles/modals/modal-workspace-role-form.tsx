@@ -10,14 +10,16 @@ import {
   updateWorkspaceRole,
 } from "@/modules/workspace-roles/workspace-roles-service";
 import {
+  WorkspaceDefaultRoleId,
   WorkspacePermission,
   WorkspaceRoleDto,
-  WorkspaceDefaultRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError, onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { stringable } from "@joy-one-client/utils/string";
 import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Card,
   Divider,
@@ -34,8 +36,11 @@ import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconAccessible, IconCheck, IconLock } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { workspacePermissions, workspaceSpecialRoleIds } from "../workspace-roles-constants";
-import { Trans } from "@lingui/react/macro";
+import {
+  workspaceDefaultRoles,
+  workspacePermissions,
+  workspaceSpecialRoleIds,
+} from "../workspace-roles-constants";
 
 interface ModalWorkspaceRoleFormProps {
   roleId?: string;
@@ -43,13 +48,17 @@ interface ModalWorkspaceRoleFormProps {
 
 export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) => {
   const workspace = useWorkspace();
+  const { t } = useLingui();
   const dynamicRole = workspace.roles.find((role) => role._id === props.roleId);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const close = () => modals.close("ModalRoleForm");
-  const isAbleToEdit = ![WorkspaceDefaultRoleId.OWNER, WorkspaceDefaultRoleId.ADMIN].includes(
-    props.roleId as WorkspaceDefaultRoleId
-  );
+
+  const isAbleToEdit =
+    props.roleId &&
+    ![WorkspaceDefaultRoleId.OWNER, WorkspaceDefaultRoleId.ADMIN]
+      .map(stringable)
+      .includes(props.roleId);
 
   const getInitialDto = (): WorkspaceRoleDto => {
     if (dynamicRole)
@@ -67,7 +76,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 
     if (props.roleId === WorkspaceDefaultRoleId.MEMBER) {
       return {
-        name: workspaceSpecialRoleIds[WorkspaceDefaultRoleId.MEMBER]?.name(),
+        name: t(workspaceDefaultRoles[WorkspaceDefaultRoleId.MEMBER].name),
         permissions: workspace.settings.memberPermissions || [],
         description: "",
       };

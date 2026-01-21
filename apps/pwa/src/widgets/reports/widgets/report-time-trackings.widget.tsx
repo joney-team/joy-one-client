@@ -12,7 +12,7 @@ import { useTags } from "@/modules/tags/tags-context";
 import { TagType } from "@/modules/tags/tags-types";
 import { getTasks } from "@/modules/tasks/tasks-service";
 import { DefaultTaskStatusId, TaskEntity } from "@/modules/tasks/tasks-types";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { WidgetProps } from "@/widgets/widgets-types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
@@ -38,7 +38,7 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
       }),
   });
 
-  const users = tasks.data.reduce((acc, task) => {
+  const users = tasks.data.reduce<WorkspaceMemberDataFragment[]>((acc, task) => {
     task.assigneeUsers?.map((user) => {
       if (!acc.some((u) => u.userId === user.userId)) {
         acc.push(user);
@@ -52,7 +52,7 @@ export const ReportTimeTrackingsWidget: FC<WidgetProps<ReportWidgetsContext>> = 
     });
 
     return acc;
-  }, [] as WorkspaceMemberInfo[]);
+  }, []);
 
   return (
     <Card shadow="xs" p={16} w="100%">

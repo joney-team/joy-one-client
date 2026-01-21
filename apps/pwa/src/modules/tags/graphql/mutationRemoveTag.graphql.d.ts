@@ -7,4 +7,7 @@ export type RemoveTagMutationVariables = Types.Exact<{
 
 export type RemoveTagMutation = { __typename: 'Mutation', removeTag: boolean };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const RemoveTagDocument = (import("graphql").DocumentNode) as TypedDocumentNode<RemoveTagMutation, RemoveTagMutationVariables>;
+export default RemoveTagDocument 

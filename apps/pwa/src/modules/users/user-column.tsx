@@ -6,11 +6,11 @@ import { AppEntity } from "@/types";
 import { Group, Stack, Text } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import {
-  getWorkspaceMemberByIds,
   getMemberRoleLabel,
+  getWorkspaceMemberByIds,
 } from "../workspace-members/workspace-members-service";
-import { WorkspaceMemberInfo } from "../workspace-members/workspace-members-types";
 import { ModalUserInformation } from "./modals/modal-user-information";
 
 export interface UserColumnArgs extends Omit<Column, "render"> {
@@ -23,7 +23,7 @@ export const userColumn = (args?: UserColumnArgs): Column => {
     defaultWidth: 200,
     render: ({ value }) => {
       if (!value) return null;
-      const user = value as WorkspaceMemberInfo;
+      const user = value as WorkspaceMemberDataFragment;
 
       return (
         <ModalUserInformation>

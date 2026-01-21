@@ -5,4 +5,7 @@ export type WorkspaceMembersOnlineStatusQueryVariables = Types.Exact<{ [key: str
 
 export type WorkspaceMembersOnlineStatusQuery = { __typename: 'Query', workspaceMembersOnlineStatus: Array<{ __typename: 'WorkspaceMemberOnlineStatus', userId: string, isOnline: boolean }> };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const WorkspaceMembersOnlineStatusDocument = (import("graphql").DocumentNode) as TypedDocumentNode<WorkspaceMembersOnlineStatusQuery, WorkspaceMembersOnlineStatusQueryVariables>;
+export default WorkspaceMembersOnlineStatusDocument 

@@ -9,4 +9,7 @@ export type PluginExternalStorageSignUploadUrlMutationVariables = Types.Exact<{
 
 export type PluginExternalStorageSignUploadUrlMutation = { __typename: 'Mutation', pluginExternalStorageSignUploadUrl: { __typename: 'SignUploadUrlResponse', dna: string, signedUrl: string } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const PluginExternalStorageSignUploadUrlDocument = (import("graphql").DocumentNode) as TypedDocumentNode<PluginExternalStorageSignUploadUrlMutation, PluginExternalStorageSignUploadUrlMutationVariables>;
+export default PluginExternalStorageSignUploadUrlDocument 

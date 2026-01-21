@@ -1,6 +1,6 @@
 import { BaseMongoEntity } from "@/types";
 import { CustomerEntity } from "../customers/customer-types";
-import { WorkspaceMemberLegacy } from "../workspace-members/workspace-members-types";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 export enum MessageBoxPlatformType {
   ZALO = "ZALO",
@@ -26,10 +26,10 @@ export interface MessageBoxEntity extends BaseMongoEntity {
   platformType: MessageBoxPlatformType;
   lastInteractionAt?: number;
   status?: MessageBoxStatus;
-  user?: WorkspaceMemberLegacy;
+  user?: WorkspaceMemberDataFragment;
   customer?: CustomerEntity;
   assigneeUserId?: string;
-  assigneeUser?: WorkspaceMemberLegacy;
+  assigneeUser?: WorkspaceMemberDataFragment;
   aiAssistantconversationId?: string;
   aiAssistantDisabled?: boolean;
   latestMessage?: MessageEntity | null;
@@ -85,7 +85,7 @@ export interface MessageEntity extends BaseMongoEntity {
   senderId?: string;
   text?: string;
   attachments?: MessageAttachment[];
-  user?: WorkspaceMemberLegacy;
+  user?: WorkspaceMemberDataFragment;
   status?: MessageStatus;
 }
 

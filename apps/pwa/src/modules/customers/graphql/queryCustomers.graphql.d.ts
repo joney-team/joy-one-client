@@ -9,4 +9,7 @@ export type CustomersQueryVariables = Types.Exact<{
 
 export type CustomersQuery = { __typename: 'Query', customers: { __typename: 'CustomersPaginated', count: number, data: Array<{ __typename: 'Customer', _id: string, code: string, name: string, avatar: string | null, phone: string | null }> } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const CustomersDocument = (import("graphql").DocumentNode) as TypedDocumentNode<CustomersQuery, CustomersQueryVariables>;
+export default CustomersDocument 

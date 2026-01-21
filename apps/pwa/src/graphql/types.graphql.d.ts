@@ -135,6 +135,11 @@ export type Coordinates = {
   lng: Scalars['Float']['output'];
 };
 
+export type CoordinatesInput = {
+  lat: Scalars['Float']['input'];
+  lng: Scalars['Float']['input'];
+};
+
 export type CreateTaskInput = {
   _id?: InputMaybe<Scalars['String']['input']>;
   assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -594,6 +599,14 @@ export type LocationEntity = {
   wardId: Maybe<Scalars['String']['output']>;
 };
 
+export type LocationInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  coordinates?: InputMaybe<CoordinatesInput>;
+  districtId?: InputMaybe<Scalars['String']['input']>;
+  provinceId?: InputMaybe<Scalars['String']['input']>;
+  wardId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Mutation = {
   __typename: 'Mutation';
   addActivity: Activity;
@@ -623,6 +636,7 @@ export type Mutation = {
   updateActivity: Activity;
   updateCategory: Category;
   updateTaskStatuses: Array<TaskStatus>;
+  updateWorkspace: Workspace;
 };
 
 
@@ -802,6 +816,22 @@ export type MutationUpdateTaskStatusesArgs = {
   statuses: Array<TaskStatusInput>;
 };
 
+
+export type MutationUpdateWorkspaceArgs = {
+  appColor?: InputMaybe<Scalars['String']['input']>;
+  appColorShape?: InputMaybe<Scalars['Float']['input']>;
+  appDomain?: InputMaybe<Scalars['String']['input']>;
+  appIcon?: InputMaybe<Scalars['String']['input']>;
+  appName?: InputMaybe<Scalars['String']['input']>;
+  hotline?: InputMaybe<Scalars['String']['input']>;
+  locale?: InputMaybe<AppLocale>;
+  location?: InputMaybe<LocationInput>;
+  logo?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
+  type: WorkspaceType;
+};
+
 export type PartnerEntity = {
   __typename: 'PartnerEntity';
   _id: Scalars['String']['output'];
@@ -932,8 +962,10 @@ export type Query = {
   tasksCount: Scalars['Float']['output'];
   userWorkspaceMember: WorkspaceMember;
   userWorkspaceMembers: Array<WorkspaceMember>;
+  workspace: Workspace;
   workspaceMember: WorkspaceMember;
   workspaceMembers: WorkspaceMembersPaginated;
+  workspaceMembersByIds: Array<WorkspaceMember>;
   workspaceMembersOnlineStatus: Array<WorkspaceMemberOnlineStatus>;
 };
 
@@ -1153,6 +1185,11 @@ export type QueryWorkspaceMembersArgs = {
   offset?: InputMaybe<Scalars['Float']['input']>;
   sortCreatedAt?: InputMaybe<SortDirection>;
   userId?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
+export type QueryWorkspaceMembersByIdsArgs = {
+  ids: Array<Scalars['String']['input']>;
 };
 
 export type Reaction = {
@@ -1529,6 +1566,27 @@ export type UserAuthProvider = {
   username: Scalars['String']['output'];
 };
 
+export type Workspace = {
+  __typename: 'Workspace';
+  _id: Scalars['String']['output'];
+  appColor: Maybe<Scalars['String']['output']>;
+  appColorShape: Maybe<Scalars['Float']['output']>;
+  appDomain: Maybe<Scalars['String']['output']>;
+  appIcon: Maybe<Scalars['String']['output']>;
+  appName: Maybe<Scalars['String']['output']>;
+  branches: Scalars['Float']['output'];
+  code: Scalars['String']['output'];
+  hotline: Maybe<Scalars['String']['output']>;
+  inviteCode: Maybe<Scalars['String']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
+  locale: Maybe<AppLocale>;
+  location: Maybe<LocationEntity>;
+  logo: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  phone: Maybe<Scalars['String']['output']>;
+  type: WorkspaceType;
+};
+
 export type WorkspaceMember = {
   __typename: 'WorkspaceMember';
   _id: Scalars['String']['output'];
@@ -1543,7 +1601,8 @@ export type WorkspaceMember = {
   roles: Array<WorkspaceMemberRole>;
   userDisplayName: Maybe<Scalars['String']['output']>;
   userId: Scalars['String']['output'];
-  workspace: WorkspaceMemberWorkspaceInfo;
+  workingTimeType: Maybe<WorkspaceMemberWorkingTimeType>;
+  workspace: Workspace;
   workspaceBranches: Array<WorkspaceMemberWorkspaceBranchInfo>;
   workspaceId: Scalars['String']['output'];
 };
@@ -1561,29 +1620,17 @@ export type WorkspaceMemberRole = {
   name: Scalars['String']['output'];
 };
 
+/** The working time type of the workspace member */
+export const WorkspaceMemberWorkingTimeType = {
+  Freelancer: 'FREELANCER',
+  Fulltime: 'FULLTIME'
+} as const;
+
+export type WorkspaceMemberWorkingTimeType = typeof WorkspaceMemberWorkingTimeType[keyof typeof WorkspaceMemberWorkingTimeType];
 export type WorkspaceMemberWorkspaceBranchInfo = {
   __typename: 'WorkspaceMemberWorkspaceBranchInfo';
   _id: Scalars['String']['output'];
   name: Scalars['String']['output'];
-};
-
-export type WorkspaceMemberWorkspaceInfo = {
-  __typename: 'WorkspaceMemberWorkspaceInfo';
-  _id: Scalars['String']['output'];
-  appColor: Maybe<Scalars['String']['output']>;
-  appColorShape: Maybe<Scalars['Float']['output']>;
-  appIcon: Maybe<Scalars['String']['output']>;
-  appName: Maybe<Scalars['String']['output']>;
-  branches: Scalars['Float']['output'];
-  code: Scalars['String']['output'];
-  hotline: Maybe<Scalars['String']['output']>;
-  inviteCode: Maybe<Scalars['String']['output']>;
-  isArchived: Scalars['Boolean']['output'];
-  locale: Maybe<Scalars['String']['output']>;
-  location: Maybe<LocationEntity>;
-  logo: Maybe<Scalars['String']['output']>;
-  name: Scalars['String']['output'];
-  type: WorkspaceType;
 };
 
 export type WorkspaceMembersPaginated = {

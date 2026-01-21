@@ -15,7 +15,7 @@ import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { useLang } from "@/modules/lang/lang-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import {
   isInWorkSlot,
   useWorkDaySlots,
@@ -56,7 +56,7 @@ export interface BookingFormProps {
   startTime?: Date;
   endTime?: Date;
   customer?: CustomerShortInfo;
-  assigneeUsers?: WorkspaceMemberInfo[];
+  assigneeUsers?: WorkspaceMemberDataFragment[];
   reschedule?: BookingEntity;
   booking?: BookingEntity;
 

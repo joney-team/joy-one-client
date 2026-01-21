@@ -11,7 +11,6 @@ import { OnModalCaptureTimekeeping } from "@/modules/hrm-timekeepings/modals/mod
 import { OnModalListTimekeepings } from "@/modules/hrm-timekeepings/modals/modal-timekeeping-list";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
@@ -35,6 +34,7 @@ import { FC, Fragment, useEffect } from "react";
 import { Avatar } from "../../components/avatar";
 import { Calendar } from "../../components/calendar/calendar";
 import { Circle } from "../../components/circle";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 interface HrmTimekeepingsProps {
   initialDate?: Date;
@@ -103,7 +103,7 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
               }
 
               return out;
-            }, [] as { userId: string; user: WorkspaceMemberLegacy; timekeepings: HrmTimekeepingEntity[] }[]);
+            }, [] as { userId: string; user: WorkspaceMemberDataFragment; timekeepings: HrmTimekeepingEntity[] }[]);
 
           return (
             <Group gap={5} align="start">

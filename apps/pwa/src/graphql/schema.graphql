@@ -107,6 +107,11 @@ type Coordinates {
   lng: Float!
 }
 
+input CoordinatesInput {
+  lat: Float!
+  lng: Float!
+}
+
 input CreateTaskInput {
   _id: String
   assigneeUserIds: [String!]
@@ -548,6 +553,14 @@ type LocationEntity {
   wardId: String
 }
 
+input LocationInput {
+  address: String
+  coordinates: CoordinatesInput
+  districtId: String
+  provinceId: String
+  wardId: String
+}
+
 type Mutation {
   addActivity(content: String, contextId: String!, contextType: String!, parentId: String, type: ActivityType!): Activity!
   addReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
@@ -576,6 +589,7 @@ type Mutation {
   updateActivity(content: String, id: String!): Activity!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   updateTaskStatuses(contextId: String, contextType: TaskContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
+  updateWorkspace(appColor: String, appColorShape: Float, appDomain: String, appIcon: String, appName: String, hotline: String, locale: AppLocale, location: LocationInput, logo: String, name: String!, phone: String, type: WorkspaceType!): Workspace!
 }
 
 type PartnerEntity {
@@ -700,8 +714,10 @@ type Query {
   tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, sortCreatedAt: SortDirection, status: String, tagIds: [String!], toTrackingTime: Float): Float!
   userWorkspaceMember: WorkspaceMember!
   userWorkspaceMembers: [WorkspaceMember!]!
+  workspace: Workspace!
   workspaceMember(userId: String!): WorkspaceMember!
   workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, userId: [String!]): WorkspaceMembersPaginated!
+  workspaceMembersByIds(ids: [String!]!): [WorkspaceMember!]!
   workspaceMembersOnlineStatus: [WorkspaceMemberOnlineStatus!]!
 }
 
@@ -1045,6 +1061,26 @@ type UserAuthProvider {
   username: String!
 }
 
+type Workspace {
+  _id: String!
+  appColor: String
+  appColorShape: Float
+  appDomain: String
+  appIcon: String
+  appName: String
+  branches: Float!
+  code: String!
+  hotline: String
+  inviteCode: String
+  isArchived: Boolean
+  locale: AppLocale
+  location: LocationEntity
+  logo: String
+  name: String!
+  phone: String
+  type: WorkspaceType!
+}
+
 type WorkspaceMember {
   _id: String!
   avatar: String
@@ -1058,7 +1094,8 @@ type WorkspaceMember {
   roles: [WorkspaceMemberRole!]!
   userDisplayName: String
   userId: String!
-  workspace: WorkspaceMemberWorkspaceInfo!
+  workingTimeType: WorkspaceMemberWorkingTimeType
+  workspace: Workspace!
   workspaceBranches: [WorkspaceMemberWorkspaceBranchInfo!]!
   workspaceId: String!
 }
@@ -1074,27 +1111,15 @@ type WorkspaceMemberRole {
   name: String!
 }
 
+"""The working time type of the workspace member"""
+enum WorkspaceMemberWorkingTimeType {
+  FREELANCER
+  FULLTIME
+}
+
 type WorkspaceMemberWorkspaceBranchInfo {
   _id: String!
   name: String!
-}
-
-type WorkspaceMemberWorkspaceInfo {
-  _id: String!
-  appColor: String
-  appColorShape: Float
-  appIcon: String
-  appName: String
-  branches: Float!
-  code: String!
-  hotline: String
-  inviteCode: String
-  isArchived: Boolean!
-  locale: String
-  location: LocationEntity
-  logo: String
-  name: String!
-  type: WorkspaceType!
 }
 
 type WorkspaceMembersPaginated {

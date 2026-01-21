@@ -9,4 +9,7 @@ export type RemoveReactionMutationVariables = Types.Exact<{
 
 export type RemoveReactionMutation = { __typename: 'Mutation', removeReaction: boolean };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const RemoveReactionDocument = (import("graphql").DocumentNode) as TypedDocumentNode<RemoveReactionMutation, RemoveReactionMutationVariables>;
+export default RemoveReactionDocument 

@@ -1,5 +1,5 @@
 import type { BaseMongoEntity } from "@/types";
-import type { WorkspaceMemberLegacy } from "../workspace-members/workspace-members-types";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 export interface WorkspaceApiAppEntity extends BaseMongoEntity {
   workspaceId: string;
@@ -11,5 +11,5 @@ export interface WorkspaceApiAppEntity extends BaseMongoEntity {
 }
 
 export interface IWorkspaceApiApp extends WorkspaceApiAppEntity {
-  member: WorkspaceMemberLegacy;
+  member: WorkspaceMemberDataFragment;
 }

@@ -1,12 +1,12 @@
 import { UseRestQuery } from "@/modules/apis/use-rest-query";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { ProductEntity } from "@/modules/products/products-types";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
-import { OrderDiscount, OrderEntityCalculated, OrderPaymentStatus } from "../orders-types";
-import { OrderEntity } from "../order-entity";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
+import { ProductEntity } from "@/modules/products/products-types";
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
+import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { ResponseList } from "@/types";
+import { OrderEntity } from "../order-entity";
+import { OrderDiscount, OrderEntityCalculated, OrderPaymentStatus } from "../orders-types";
 
 export type OrderProduct = Pick<
   ProductEntity,
@@ -27,7 +27,7 @@ export interface OrderItem {
   product: OrderProduct;
   quantity: number;
   price: number;
-  assigneeUsers: WorkspaceMemberInfo[];
+  assigneeUsers: WorkspaceMemberDataFragment[];
   note?: string;
 }
 
@@ -40,7 +40,7 @@ export interface Order {
   relatedCustomer?: CustomerShortInfo | null;
   directDiscount?: number;
   note?: string;
-  assigneeUsers: WorkspaceMemberInfo[];
+  assigneeUsers: WorkspaceMemberDataFragment[];
   createdAt: number;
   paymentStatus?: OrderPaymentStatus;
   paidAmount?: number;

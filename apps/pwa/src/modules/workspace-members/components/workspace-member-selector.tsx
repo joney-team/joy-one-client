@@ -3,17 +3,14 @@
 import { Avatar } from "@/components/avatar";
 import { searchEntity } from "@/modules/search/search-service";
 import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { AppEntity } from "@/types";
 import { ActionIcon, Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
+import { WorkspaceMemberDataFragment } from "../graphql/fragmentWorkspaceMember.graphql";
 
-export type WorkspaceMemberSelectorValue = Pick<
-  WorkspaceMemberInfo,
-  "_id" | "userId" | "name" | "roles" | "avatar" | "color"
->;
+export type WorkspaceMemberSelectorValue = WorkspaceMemberDataFragment;
 
 export interface WorkspaceMemberSelectorProps
   extends Omit<

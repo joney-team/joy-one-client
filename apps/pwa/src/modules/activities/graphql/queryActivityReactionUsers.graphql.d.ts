@@ -10,4 +10,7 @@ export type ActivityReactionUsersQueryVariables = Types.Exact<{
 
 export type ActivityReactionUsersQuery = { __typename: 'Query', users: { __typename: 'WorkspaceMembersPaginated', count: number, data: Array<{ __typename: 'WorkspaceMember', _id: string, name: string }> } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const ActivityReactionUsersDocument = (import("graphql").DocumentNode) as TypedDocumentNode<ActivityReactionUsersQuery, ActivityReactionUsersQueryVariables>;
+export default ActivityReactionUsersDocument 

@@ -22,6 +22,7 @@ import { IconArrowDown, IconCalendar, IconCalendarTime, IconCheck } from "@table
 import { FormSession } from "@/components/form-session";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { WorkSlotCreateEventDto, WorkSlotsInput } from "@/components/inputs/work-slots-input";
+import { EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import {
   createBooking,
@@ -32,10 +33,9 @@ import {
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -56,7 +56,7 @@ export const ModalBookingContent: FC<ModalBookingArgs> = (props) => {
   const color = useColor();
 
   const getInitAssigneeUsers = () => {
-    let assigneeUsers: WorkspaceMemberInfo[] = [];
+    let assigneeUsers: WorkspaceMemberDataFragment[] = [];
 
     if (props.booking) assigneeUsers = props.booking.assigneeUsers || [];
     if (assigneeUsers.length === 0) assigneeUsers = [workspace.member];
@@ -68,7 +68,9 @@ export const ModalBookingContent: FC<ModalBookingArgs> = (props) => {
     props.creatingData
   );
   const [note, setNote] = useState<string>(props.booking?.note || props.reschedule?.note || "");
-  const [assigneeUsers, setAssigneeUsers] = useState<WorkspaceMemberInfo[]>(getInitAssigneeUsers());
+  const [assigneeUsers, setAssigneeUsers] = useState<WorkspaceMemberDataFragment[]>(
+    getInitAssigneeUsers()
+  );
 
   const [customer, setCustomer] = useState<CustomerShortInfo | undefined>(props.customer);
 

@@ -10,8 +10,8 @@ import { getLoanByCode } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanPackageType, LoanReceiptData } from "@/modules/loans/loans-types";
 import { getReceipts, isPartialPayment } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptStatus } from "@/modules/receipts/receipts-types";
+import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { getWorkspaceMemberByIds } from "@/modules/workspace-members/workspace-members-service";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
@@ -29,7 +29,7 @@ interface CreditReportItem {
   time: number;
   type: LoanPackageType;
   loan: LoanEntity;
-  cashier?: WorkspaceMemberInfo;
+  cashier?: WorkspaceMemberDataFragment;
   customer?: CustomerEntity;
   receipt: ReceiptEntity;
   fee: {

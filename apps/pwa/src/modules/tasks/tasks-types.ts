@@ -1,8 +1,8 @@
 import type { CustomerShortInfo } from "@/modules/customers/customer-types";
 import type { PartnerEntity } from "@/modules/partners/partners-types";
 import type { TagEntity } from "@/modules/tags/tags-types";
-import type { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import type { BaseMongoEntity } from "@/types";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import type { TasksState } from "./tasks-provider";
 import type { TaskView } from "./views/types";
 
@@ -30,7 +30,7 @@ export enum TaskPriority {
 export interface TaskTimeTracking {
   id: string;
   userId: string;
-  user: WorkspaceMemberInfo;
+  user: WorkspaceMemberDataFragment;
   startAt: number;
   endAt?: number;
   note?: string;

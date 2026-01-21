@@ -6,6 +6,7 @@ import { WorkspaceRoleCard } from "@/modules/workspace-roles/components/workspac
 import { OnModalRoleForm } from "@/modules/workspace-roles/modals/modal-workspace-role-form";
 import { WorkspaceDefaultRoleId } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { stringable } from "@joy-one-client/utils/string";
 import { Trans } from "@lingui/react/macro";
 import { Group, Stack } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
@@ -40,7 +41,9 @@ export const WorkspaceRoleList: FC = () => {
                 WorkspaceDefaultRoleId.OWNER,
                 WorkspaceDefaultRoleId.ADMIN,
                 WorkspaceDefaultRoleId.MEMBER,
-              ].includes(v._id as any)
+              ]
+                .map(stringable)
+                .includes(v._id)
           )
           .map((role) => {
             return <WorkspaceRoleCard key={role._id} id={role._id} />;

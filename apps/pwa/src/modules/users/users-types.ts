@@ -81,7 +81,7 @@ export interface UserMutualWorkspace {
   displayName?: string;
   memberId: string;
   memberColor?: string;
-  roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[];
+  roles: { __typename: "WorkspaceMemberRole"; _id: string; name: string; color: string }[];
 }
 
 export interface UserPublicInformation {

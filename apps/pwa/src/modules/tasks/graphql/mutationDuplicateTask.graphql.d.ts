@@ -8,4 +8,7 @@ export type DuplicateTaskMutationVariables = Types.Exact<{
 
 export type DuplicateTaskMutation = { __typename: 'Mutation', duplicateTask: { __typename: 'Task', _id: string } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const DuplicateTaskDocument = (import("graphql").DocumentNode) as TypedDocumentNode<DuplicateTaskMutation, DuplicateTaskMutationVariables>;
+export default DuplicateTaskDocument 

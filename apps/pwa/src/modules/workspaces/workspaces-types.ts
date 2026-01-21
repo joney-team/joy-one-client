@@ -61,7 +61,7 @@ export interface WorkspaceContext {
   userMembers: WorkspaceMemberDataFragment[];
   select: (workspaceId: string) => void;
   create: (dto: WorkspaceDto) => Promise<void>;
-  update: (dto: WorkspaceDto) => Promise<WorkspaceEntity>;
+  // update: (dto: WorkspaceDto) => Promise<WorkspaceEntity>;
   leave: () => void;
   invitationState: WorkspaceMemberInvitationState | undefined;
   leaveInvitation: () => void;

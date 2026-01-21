@@ -21,4 +21,7 @@ export type SearchQuery = { __typename: 'Query', search: Array<
     | { __typename: 'SearchResultWorkspaceMember', name: string, email: string, avatar: string | null, phone: string | null, color: string | null, userId: string, memberId: string | null, id: string, entity: string }
   > };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const SearchDocument = (import("graphql").DocumentNode) as TypedDocumentNode<SearchQuery, SearchQueryVariables>;
+export default SearchDocument 

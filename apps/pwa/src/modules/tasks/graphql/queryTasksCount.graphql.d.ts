@@ -17,4 +17,7 @@ export type TasksCountQueryVariables = Types.Exact<{
 
 export type TasksCountQuery = { __typename: 'Query', tasksCount: number };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const TasksCountDocument = (import("graphql").DocumentNode) as TypedDocumentNode<TasksCountQuery, TasksCountQueryVariables>;
+export default TasksCountDocument 

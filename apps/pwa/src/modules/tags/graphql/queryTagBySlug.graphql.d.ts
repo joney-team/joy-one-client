@@ -7,4 +7,7 @@ export type TagBySlugQueryVariables = Types.Exact<{
 
 export type TagBySlugQuery = { __typename: 'Query', tagBySlug: { __typename: 'Tag', _id: string, name: string, color: string | null, type: Types.TagType, slug: string, order: number } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const TagBySlugDocument = (import("graphql").DocumentNode) as TypedDocumentNode<TagBySlugQuery, TagBySlugQueryVariables>;
+export default TagBySlugDocument 

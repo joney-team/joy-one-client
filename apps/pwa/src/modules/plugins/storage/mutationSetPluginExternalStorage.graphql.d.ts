@@ -12,4 +12,7 @@ export type SetPluginExternalStorageMutationVariables = Types.Exact<{
 
 export type SetPluginExternalStorageMutation = { __typename: 'Mutation', setPluginExternalStorage: { __typename: 'PluginExternalStorage', provider: Types.PluginExternalStorageProvider, region: string | null, bucketName: string | null, endpointUrl: string | null } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const SetPluginExternalStorageDocument = (import("graphql").DocumentNode) as TypedDocumentNode<SetPluginExternalStorageMutation, SetPluginExternalStorageMutationVariables>;
+export default SetPluginExternalStorageDocument 

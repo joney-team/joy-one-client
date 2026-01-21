@@ -16,15 +16,14 @@ import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-b
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import {
+  WorkspaceDefaultRoleId,
   WorkspacePermission,
   WorkspaceRoleEntity,
-  WorkspaceDefaultRoleId,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onFormError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -49,7 +48,7 @@ import {
   IconRefresh,
 } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
-import { workspaceSpecialRoleIds } from "../workspace-roles/workspace-roles-constants";
+import { workspaceDefaultRoles } from "../workspace-roles/workspace-roles-constants";
 
 interface ModalWorkspaceApiAppProps {
   app?: IWorkspaceApiApp;
@@ -57,6 +56,7 @@ interface ModalWorkspaceApiAppProps {
 
 const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
   const workspace = useWorkspace();
+  const { t } = useLingui();
 
   const secretKeyVisible = useDisclosure(false);
   const [app, setApp] = useState<IWorkspaceApiApp | null>(props.app || null);
@@ -68,7 +68,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
       roles: _app?.member.roles || [
         {
           _id: WorkspaceDefaultRoleId.ADMIN,
-          name: workspaceSpecialRoleIds[WorkspaceDefaultRoleId.ADMIN].name(),
+          name: t(workspaceDefaultRoles[WorkspaceDefaultRoleId.ADMIN].name),
         },
       ],
       workspaceBranches: _app?.member.workspaceBranches || [],

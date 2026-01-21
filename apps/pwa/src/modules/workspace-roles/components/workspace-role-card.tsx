@@ -2,10 +2,11 @@
 
 import { OnModalRoleForm } from "@/modules/workspace-roles/modals/modal-workspace-role-form";
 import {
-  WorkspacePermission,
   WorkspaceDefaultRoleId,
+  WorkspacePermission,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { stringable } from "@joy-one-client/utils/string";
 import { t } from "@lingui/core/macro";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconPencil } from "@tabler/icons-react";
@@ -13,14 +14,14 @@ import { FC, Fragment } from "react";
 import { getWorkspaceRoleName } from "../workspace-roles-constants";
 
 interface WorkspaceRoleCardProps {
-  id: any;
+  id: string;
 }
 
 export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = (props) => {
   const workspace = useWorkspace();
-  const isAbleToEdit = ![WorkspaceDefaultRoleId.OWNER, WorkspaceDefaultRoleId.ADMIN].includes(
-    props.id
-  );
+  const isAbleToEdit = ![WorkspaceDefaultRoleId.OWNER, WorkspaceDefaultRoleId.ADMIN]
+    .map(stringable)
+    .includes(props.id);
 
   const role = workspace.roles.find((role) => role._id === props.id);
   const roleName = getWorkspaceRoleName(role ?? { _id: props.id, name: "" });

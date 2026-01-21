@@ -353,6 +353,13 @@ export const TaskPriority = {
 } as const;
 
 export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
+/** The working time type of the workspace member */
+export const WorkspaceMemberWorkingTimeType = {
+  Freelancer: 'FREELANCER',
+  Fulltime: 'FULLTIME'
+} as const;
+
+export type WorkspaceMemberWorkingTimeType = typeof WorkspaceMemberWorkingTimeType[keyof typeof WorkspaceMemberWorkingTimeType];
 /** Available workspace types */
 export const WorkspaceType = {
   BeautySalon: 'BEAUTY_SALON',

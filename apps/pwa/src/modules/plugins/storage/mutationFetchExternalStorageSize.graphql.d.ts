@@ -5,4 +5,7 @@ export type FetchExternalStorageSizeMutationVariables = Types.Exact<{ [key: stri
 
 export type FetchExternalStorageSizeMutation = { __typename: 'Mutation', fetchExternalStorageSize: number };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const FetchExternalStorageSizeDocument = (import("graphql").DocumentNode) as TypedDocumentNode<FetchExternalStorageSizeMutation, FetchExternalStorageSizeMutationVariables>;
+export default FetchExternalStorageSizeDocument 

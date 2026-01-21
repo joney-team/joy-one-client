@@ -18,7 +18,6 @@ import {
   getMemberRoleLabel,
   updateWorkspaceMember,
 } from "@/modules/workspace-members/workspace-members-service";
-import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import {
   WorkspaceDefaultRoleId,
@@ -32,6 +31,7 @@ import { Badge, Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantin
 import { IconAccessible, IconBuilding, IconLock, IconMail, IconPhone } from "@tabler/icons-react";
 import { FC, Fragment, useRef } from "react";
 import { useNormalizeRoles } from "../workspace-roles/hooks/use-normalize-roles";
+import { WorkspaceMemberDataFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 
 export const WorkspaceMemberList: FC = () => {
   const workspace = useWorkspace();
@@ -48,7 +48,7 @@ export const WorkspaceMemberList: FC = () => {
 
   return (
     <Stack p={16}>
-      <List<WorkspaceMemberLegacy>
+      <List<any>
         route="/workspace-members"
         id="workspace-members"
         name={t`Members`}
@@ -112,7 +112,7 @@ export const WorkspaceMemberList: FC = () => {
             icon: IconAccessible,
             render: ({ data }) => {
               const roles = data.roles.map(normalizeRole);
-              const owner = roles.find((v) => v._id === WorkspaceDefaultRoleId.OWNER);
+              const owner = roles.find((v: any) => v._id === WorkspaceDefaultRoleId.OWNER);
               const isHasPermission = workspace.hasPermission(
                 WorkspacePermission.WORKSPACE_ROLES_MANAGER
               );
@@ -228,7 +228,7 @@ export const WorkspaceMemberList: FC = () => {
   );
 };
 
-const MemberCard: FC<{ member: WorkspaceMemberLegacy }> = (props) => {
+const MemberCard: FC<{ member: WorkspaceMemberDataFragment }> = (props) => {
   const { member } = props;
   const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
 

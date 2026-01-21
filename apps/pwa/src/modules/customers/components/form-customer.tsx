@@ -31,20 +31,20 @@ import { createCustomer, updateCustomer } from "../customer-service";
 import { Form } from "@/components/form";
 import { DateInput } from "@/components/inputs/date-input";
 import { genders } from "@/constant";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { api } from "@/modules/apis";
 import { getClientLocale } from "@/modules/lang/lang-service";
+import { AppLocale } from "@/modules/lang/lang-types";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { Gender } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { LocationForm } from "../../../components/location-form";
 import { Renderer } from "../../../components/renderer";
 import { CustomerRelationshipContactInput } from "./customer-relationship-contact-input";
-import { AppLocale } from "@/modules/lang/lang-types";
-import { WorkspaceType } from "@/graphql/enums.graphql";
 
 export interface CustomerFormProps {
   onDone?: (customer: CustomerEntity) => void | Promise<void>;
@@ -85,13 +85,14 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
     .map((t) => t.toString())
     .includes(workspace.type);
 
-  const form = useForm({
+  const form = useForm<any>({
     initialValues: {
       name: props.customer?.name || "",
-      ...(props.customer ||
-        ({
-          assigneeUsers: [workspace.member],
-        } as any)),
+      ...(props.customer
+        ? {
+            assigneeUsers: [workspace.member],
+          }
+        : { assigneeUsers: [] }),
       vnLocation: props.customer?.vnLocation || {},
       vnSecondaryLocation: props.customer?.vnSecondaryLocation || {},
     },
@@ -105,7 +106,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
   const onSubmit = form.onSubmit(async (values) => {
     let payload = {
       ...values,
-      assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMemberLegacy) => user.userId),
+      assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMemberDataFragment) => user.userId),
       presenterCustomerId: values.presenterCustomer?._id,
       relatedCustomerIds: values.relatedCustomers?.map((c: CustomerEntity) => c._id),
       workspaceBranchId: values.workspaceBranch?._id,

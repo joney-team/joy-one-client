@@ -7,4 +7,7 @@ export type ArchiveActivityMutationVariables = Types.Exact<{
 
 export type ArchiveActivityMutation = { __typename: 'Mutation', archiveActivity: { __typename: 'Activity', _id: string } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const ArchiveActivityDocument = (import("graphql").DocumentNode) as TypedDocumentNode<ArchiveActivityMutation, ArchiveActivityMutationVariables>;
+export default ArchiveActivityDocument 

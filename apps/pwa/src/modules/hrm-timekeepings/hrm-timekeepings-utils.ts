@@ -1,4 +1,4 @@
-import { WorkspaceMemberWorkingTimeType } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberWorkingTimeType } from "@/graphql/types.graphql";
 import { WorkSlot } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { sortWorkSlots } from "../workspace-settings/workspace-settings-service";
@@ -101,7 +101,7 @@ function rangeSlice(time: { start: number; end: number }, slice: { start: number
 export function calculateTimekeepings(
   args: HrmCalculateTimekeepingsArgs
 ): HrmCalculateTimekeepingsResult {
-  const workTimeType = args.workTimeType || WorkspaceMemberWorkingTimeType.FULLTIME;
+  const workTimeType = args.workTimeType || WorkspaceMemberWorkingTimeType.Fulltime;
   const timekeepings = [...args.timekeepings].sort((a, b) => a.time - b.time);
   const workSlots = args.workSlots || [];
 
@@ -127,7 +127,7 @@ export function calculateTimekeepings(
   const isAbleToCalculate = groupTimekeepings.length >= 1;
 
   if (isAbleToCalculate) {
-    if (workTimeType === WorkspaceMemberWorkingTimeType.FULLTIME && workSlots.length > 0) {
+    if (workTimeType === WorkspaceMemberWorkingTimeType.Fulltime && workSlots.length > 0) {
       // const date = DateTime.normalizeDate(timekeepings[0].time)
       //   .hour(0)
       //   .minute(0)
@@ -299,7 +299,7 @@ export function calculateTimekeepings(
       }
     }
 
-    if (workTimeType === WorkspaceMemberWorkingTimeType.FREELANCER) {
+    if (workTimeType === WorkspaceMemberWorkingTimeType.Freelancer) {
       groupTimekeepings.map((timekeepings) => {
         const start = timekeepings[0].time;
         const end = timekeepings[1].time;

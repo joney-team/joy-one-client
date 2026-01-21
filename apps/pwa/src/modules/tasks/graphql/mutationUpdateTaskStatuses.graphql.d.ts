@@ -10,4 +10,7 @@ export type UpdateTaskStatusesMutationVariables = Types.Exact<{
 
 export type UpdateTaskStatusesMutation = { __typename: 'Mutation', updateTaskStatuses: Array<{ __typename: 'TaskStatus', id: string, name: string | null, color: string | null, order: number, contextId: string | null, contextType: Types.TaskContextType | null }> };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const UpdateTaskStatusesDocument = (import("graphql").DocumentNode) as TypedDocumentNode<UpdateTaskStatusesMutation, UpdateTaskStatusesMutationVariables>;
+export default UpdateTaskStatusesDocument 

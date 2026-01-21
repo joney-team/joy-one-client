@@ -1,30 +1,17 @@
+#import "../../workspaces/graphql/fragmentWorkspace.graphql"
+
 fragment WorkspaceMemberData on WorkspaceMember {
   _id
   userId
   name
   email
+  phone
   color
   avatar
   memberId
   workspaceId
   workspace {
-    _id
-    code
-    type
-    inviteCode
-    name
-    logo
-    hotline
-    locale
-    location {
-      address
-    }
-    appIcon
-    appColor
-    appName
-    appColorShape
-    branches
-    isArchived
+    ...WorkspaceData
   }
   workspaceBranches {
     _id
@@ -36,4 +23,6 @@ fragment WorkspaceMemberData on WorkspaceMember {
     color
   }
   permissions
+  workingTimeType
+  memberDisplayName
 }

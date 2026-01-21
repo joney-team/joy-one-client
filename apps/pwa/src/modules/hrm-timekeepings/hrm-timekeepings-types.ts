@@ -1,5 +1,5 @@
 import type { BaseMongoEntity, Coordinates, WorkSlot } from "@/types";
-import type { WorkspaceMemberLegacy } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 export enum HrmTimekeepingType {
   CHECK_IN = "CHECK_IN",
@@ -34,7 +34,7 @@ export interface RejectTimekeepingDto {
 
 export interface HrmTimekeepingEntity extends BaseMongoEntity {
   userId: string;
-  user: WorkspaceMemberLegacy;
+  user: WorkspaceMemberDataFragment;
   workspaceId: string;
   time: number;
   coordinates?: Coordinates;

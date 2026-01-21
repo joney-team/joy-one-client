@@ -1,6 +1,6 @@
-import { BaseMongoEntity, Query } from "@/types";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { EventType } from "@/graphql/enums.graphql";
+import { BaseMongoEntity, Query } from "@/types";
+import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 export enum EventVariant {
   INFO = "INFO",
@@ -30,7 +30,7 @@ export interface EventEntity extends BaseMongoEntity {
   workspaceId?: string;
   variant?: EventVariant;
   userId?: string;
-  user?: WorkspaceMemberInfo;
+  user?: WorkspaceMemberDataFragment;
   data?: any;
   sessionId?: string;
 }

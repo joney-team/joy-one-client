@@ -3,31 +3,29 @@
 import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
 import { configs } from "@/configs/layout.config";
+import { WorkspaceMemberWorkingTimeType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
+import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import {
   getMemberRoleLabel,
   removeWorkspaceMember,
   updateWorkspaceMember,
 } from "@/modules/workspace-members/workspace-members-service";
-import {
-  UpdateWorkspaceMemberDto,
-  WorkspaceMemberLegacy,
-  WorkspaceMemberWorkingTimeType,
-} from "@/modules/workspace-members/workspace-members-types";
+import { UpdateWorkspaceMemberDto } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
-import { workspaceSpecialRoleIds } from "@/modules/workspace-roles/workspace-roles-constants";
+import { workspaceDefaultRoles } from "@/modules/workspace-roles/workspace-roles-constants";
 import {
-  WorkspacePermission,
   WorkspaceDefaultRoleId,
+  WorkspacePermission,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Badge, Center, ColorInput, Select, Skeleton, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -41,11 +39,12 @@ interface UserWorkspaceSettingsProps {
 }
 
 const UserWorkspaceSettingsForm: FC<
-  UserWorkspaceSettingsProps & { userMember: WorkspaceMemberLegacy }
+  UserWorkspaceSettingsProps & { userMember: WorkspaceMemberDataFragment }
 > = (props) => {
   const workspace = useWorkspace();
   const auth = useAuth();
   const color = useColor();
+  const { t } = useLingui();
   const { userMember } = props;
 
   const isMe = auth.user?._id === props.userId;
@@ -69,7 +68,7 @@ const UserWorkspaceSettingsForm: FC<
       roleIds: userMember.roles.map((v) => v._id) || [],
       displayName: userMember?.memberDisplayName || "",
       color: userMember?.color || "",
-      workingTimeType: userMember?.workingTimeType || WorkspaceMemberWorkingTimeType.FULLTIME,
+      workingTimeType: userMember?.workingTimeType ?? WorkspaceMemberWorkingTimeType.Fulltime,
     },
     onValuesChange: (values) => {
       onUpdate(values);
@@ -119,7 +118,7 @@ const UserWorkspaceSettingsForm: FC<
             color={color("primary")}
             rightSection={<IconLock size={13} style={{ marginLeft: -3 }} />}
           >
-            {workspaceSpecialRoleIds[WorkspaceDefaultRoleId.OWNER].name()}
+            {t(workspaceDefaultRoles[WorkspaceDefaultRoleId.OWNER].name)}
           </Badge>
         ) : workspace.hasPermission(WorkspacePermission.WORKSPACE_ROLES_MANAGER) ? (
           <WorkspaceRolesInput

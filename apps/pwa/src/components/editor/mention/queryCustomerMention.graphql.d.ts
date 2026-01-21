@@ -7,4 +7,7 @@ export type CustomerMentionQueryVariables = Types.Exact<{
 
 export type CustomerMentionQuery = { __typename: 'Query', customer: { __typename: 'Customer', _id: string, code: string, name: string } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const CustomerMentionDocument = (import("graphql").DocumentNode) as TypedDocumentNode<CustomerMentionQuery, CustomerMentionQueryVariables>;
+export default CustomerMentionDocument 

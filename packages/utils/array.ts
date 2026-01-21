@@ -14,7 +14,7 @@ export function changeIndex<T = any>(array: T[], currentIndex: number, index: nu
   }
   arr.splice(index, 0, arr.splice(currentIndex, 1)[0]);
   return arr; // for testing purposes
-};
+}
 
 export function exchangeIndex<T = any>(arr: T[], from: number, to: number): T[] {
   const newArr = [...arr];
@@ -22,7 +22,6 @@ export function exchangeIndex<T = any>(arr: T[], from: number, to: number): T[] 
   newArr[from] = newArr[to];
   newArr[to] = temp;
   return newArr;
-
 }
 
 export function addItemToIndex<T = any>(arr: T[], item: T, index: number): T[] {

@@ -2,22 +2,26 @@
 
 import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { type ModalTagFormRef } from "@/modules/tags/modals/modal-tag-form";
 import { TagType } from "@/modules/tags/tags-types";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
+import { type ModalConfigureStatusesRef } from "@/modules/tasks/modals/modal-configure-statuses";
 import { type ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
-import { parseTaskPath, updateTaskPath } from "@/modules/tasks/tasks-route-helpers";
+import { updateTaskPath } from "@/modules/tasks/tasks-route-helpers";
+import { TaskView } from "@/modules/tasks/views/types";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { StorageKey } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
   Badge,
-  em,
   Group,
   Indicator,
   Menu,
@@ -27,18 +31,13 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
 import { Icon, IconDots, IconFolderPlus, IconPlus, IconTarget } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, useMemo, useRef, type FC, type ReactNode } from "react";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
-import { type ModalConfigureStatusesRef } from "@/modules/tasks/modals/modal-configure-statuses";
-import { useLocalStorage } from "@mantine/hooks";
-import { TaskView } from "@/modules/tasks/views/types";
-import { StorageKey } from "@/types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { WorkspaceType } from "@/graphql/enums.graphql";
 
 const ModalConfigureStatuses = dynamic(
   () =>

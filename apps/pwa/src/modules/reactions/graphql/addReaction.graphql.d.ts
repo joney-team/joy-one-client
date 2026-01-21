@@ -9,4 +9,7 @@ export type AddReactionMutationVariables = Types.Exact<{
 
 export type AddReactionMutation = { __typename: 'Mutation', addReaction: boolean };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const AddReactionDocument = (import("graphql").DocumentNode) as TypedDocumentNode<AddReactionMutation, AddReactionMutationVariables>;
+export default AddReactionDocument 

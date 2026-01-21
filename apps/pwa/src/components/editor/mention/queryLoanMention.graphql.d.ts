@@ -7,4 +7,7 @@ export type LoanMentionQueryVariables = Types.Exact<{
 
 export type LoanMentionQuery = { __typename: 'Query', loan: { __typename: 'Loan', id: string, code: string, status: Types.LoanStatus, assetType: Types.LoanAssetType, amount: number, customer: { __typename: 'Customer', name: string } } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const LoanMentionDocument = (import("graphql").DocumentNode) as TypedDocumentNode<LoanMentionQuery, LoanMentionQueryVariables>;
+export default LoanMentionDocument 

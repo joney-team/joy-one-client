@@ -5,4 +5,7 @@ export type ToggleDisablePluginExternalStorageMutationVariables = Types.Exact<{ 
 
 export type ToggleDisablePluginExternalStorageMutation = { __typename: 'Mutation', toggleDisablePluginExternalStorage: boolean };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const ToggleDisablePluginExternalStorageDocument = (import("graphql").DocumentNode) as TypedDocumentNode<ToggleDisablePluginExternalStorageMutation, ToggleDisablePluginExternalStorageMutationVariables>;
+export default ToggleDisablePluginExternalStorageDocument 

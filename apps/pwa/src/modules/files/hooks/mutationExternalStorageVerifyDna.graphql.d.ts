@@ -7,4 +7,7 @@ export type ExternalStorageVerifyDnaMutationVariables = Types.Exact<{
 
 export type ExternalStorageVerifyDnaMutation = { __typename: 'Mutation', externalStorageVerifyDna: { __typename: 'File', _id: string, url: string, fileName: string, externalUrl: string | null, path: string, refs: Array<string> | null, type: Types.FileType } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const ExternalStorageVerifyDnaDocument = (import("graphql").DocumentNode) as TypedDocumentNode<ExternalStorageVerifyDnaMutation, ExternalStorageVerifyDnaMutationVariables>;
+export default ExternalStorageVerifyDnaDocument 

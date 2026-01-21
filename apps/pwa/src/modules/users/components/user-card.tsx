@@ -3,15 +3,18 @@
 import { Avatar, AvatarProps } from "@/components/avatar";
 import { useLayout } from "@/layout/layout-context";
 import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
+import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { ActionIcon, Card, Group, Stack, Text, em, useMantineTheme } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconX } from "@tabler/icons-react";
 import { FC, MouseEventHandler, ReactNode } from "react";
 
 export interface UserCardProps {
-  user: WorkspaceMemberInfo;
+  user: Pick<
+    WorkspaceMemberDataFragment,
+    "_id" | "userId" | "color" | "memberId" | "name" | "roles"
+  >;
   collapsed?: boolean;
   onRemove?: () => void;
   onClick?: MouseEventHandler<HTMLDivElement>;

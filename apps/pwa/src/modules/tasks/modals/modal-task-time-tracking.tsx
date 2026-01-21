@@ -9,7 +9,7 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
@@ -93,7 +93,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
   const endAtRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState("");
-  const [user, setUser] = useState<WorkspaceMemberInfo>(workspace.member);
+  const [user, setUser] = useState<WorkspaceMemberDataFragment>(workspace.member);
   const [date, setDate] = useState(args.date);
 
   const forceUpdate = useForceUpdate();

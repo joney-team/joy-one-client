@@ -1,0 +1,21 @@
+fragment WorkspaceData on Workspace {
+  _id
+  code
+  type
+  inviteCode
+  name
+  logo
+  hotline
+  phone
+  locale
+  location {
+    address
+  }
+  appIcon
+  appColor
+  appName
+  appDomain
+  appColorShape
+  branches
+  isArchived
+}

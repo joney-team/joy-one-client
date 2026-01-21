@@ -8,10 +8,7 @@ import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getWorkspaceAuthSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
-import {
-  joinWorkspaceMember,
-  verifyWorkspaceMemberInvitation,
-} from "@/modules/workspace-members/workspace-members-service";
+import { joinWorkspaceMember } from "@/modules/workspace-members/workspace-members-service";
 import { getWorkspaceRoles } from "@/modules/workspace-roles/workspace-roles-service";
 import {
   WorkspaceDefaultRoleId,
@@ -31,7 +28,7 @@ import { workspaceInitialize } from "@/modules/workspaces/workspaces-service";
 import { isExtendedApp } from "@/service";
 import { StorageKey } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient, useLazyQuery } from "@apollo/client/react";
 import { Currency } from "@joy-one-client/utils/currency";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
@@ -41,10 +38,7 @@ import * as Sentry from "@sentry/react";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { api } from "../apis";
-import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import QUERY_USER_WORKSPACE_MEMBERS, {
-  type UserWorkspaceMembersQuery,
-} from "../workspace-members/graphql/queryUserWorkspaceMembers.graphql";
+import QUERY_USER_WORKSPACE_MEMBERS from "../workspace-members/graphql/queryUserWorkspaceMembers.graphql";
 import { Context } from "./workspace-context";
 import { getDefaultWorkspaceView } from "./workspace-view";
 import {
@@ -65,40 +59,38 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const state = useRef<{
     roles: WorkspaceRoleEntity[];
     settings?: WorkspaceSettingEntity;
-    workspaceMembers: WorkspaceMemberDataFragment[];
   }>({
     roles: [],
-    workspaceMembers: [],
   });
 
   const [isInitialized, _setIsInitialized] = useState(false);
   const [isCreateNew, setIsCreateNew] = useState(false);
   const [invitationState, _setInvitationState] = useState<WorkspaceMemberInvitationState>();
   const [workspaceId, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
-  const member = auth.user
-    ? state.current.workspaceMembers.find((w) => w.workspaceId === workspaceId)
-    : undefined;
 
   const workspaceView: WorkspaceView = state.current.settings?.view || {};
+
+  const [getWorkspaceMembers, { data: workspaceMembersData }] = useLazyQuery(
+    QUERY_USER_WORKSPACE_MEMBERS,
+    {
+      fetchPolicy: "network-only",
+      nextFetchPolicy: "network-only",
+    }
+  );
+
+  const member = auth.user
+    ? workspaceMembersData?.userWorkspaceMembers.find((w) => w.workspaceId === workspaceId)
+    : undefined;
 
   useEventsListener(
     [EventType.WorkspaceMemberSynced],
     (e) => {
       if (e.userId === member?.userId) {
-        fetchUserWorkspaceMembers();
+        getWorkspaceMembers();
       }
     },
     [member?.userId]
   );
-
-  const fetchUserWorkspaceMembers = async () => {
-    const result = await client.query<UserWorkspaceMembersQuery>({
-      query: QUERY_USER_WORKSPACE_MEMBERS,
-      fetchPolicy: "network-only",
-    });
-    state.current.workspaceMembers = result.data?.userWorkspaceMembers ?? [];
-    forceUpdate();
-  };
 
   const fetchRoles = async () => {
     const result = await getWorkspaceRoles();
@@ -129,19 +121,13 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const create = async (dto: WorkspaceDto) => {
     const workspace = await api.post<WorkspaceEntity>("/workspaces", dto);
-    await fetchUserWorkspaceMembers();
+    const result = await getWorkspaceMembers();
 
-    const userWorkspace = state.current.workspaceMembers.find(
+    const userWorkspace = result.data?.userWorkspaceMembers.find(
       (userWorkspace) => userWorkspace.workspaceId === workspace._id
     );
 
     if (userWorkspace) select(userWorkspace.workspaceId);
-  };
-
-  const update = async (dto: WorkspaceDto) => {
-    const workspace = await api.put(`/workspaces`, dto);
-    await fetchUserWorkspaceMembers();
-    return workspace;
   };
 
   const leave = () => {
@@ -151,7 +137,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const archive = async () => {
     await api.delete(`/workspaces`);
-    await fetchUserWorkspaceMembers();
+    await getWorkspaceMembers();
     leave();
   };
 
@@ -174,31 +160,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     }
   };
 
-  const verifyInvitation = async () => {
-    const search = new URLSearchParams(window.location.search);
-    const invitationToken = search.get("invitation");
-    if (invitationToken) {
-      await verifyWorkspaceMemberInvitation(invitationToken)
-        .then(async (res) => {
-          // Check if the workspace is already in the list
-          await fetchUserWorkspaceMembers();
-          const isAlreadyJoined = state.current.workspaceMembers.find(
-            (v) => v.userId === res.workspace._id
-          );
-          if (isAlreadyJoined) {
-            setWorkspaceId(isAlreadyJoined.userId);
-          } else {
-            // If not, set the invitation state
-            _setInvitationState({ invitation: res });
-          }
-        })
-        .catch((error) => {
-          const message = error.response?.data?.message || t`Invalid invitation`;
-          _setInvitationState({ error: message });
-        });
-    }
-  };
-
   const join = async (code: string) => {
     const result = await joinWorkspaceMember(code);
     if (result.workspaceId) setWorkspaceId(result.workspaceId);
@@ -218,10 +179,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
           setWorkspaceId(app.metadata.workspaceId);
         }
 
-        await fetchUserWorkspaceMembers();
-        await verifyInvitation();
-
-        const workspaceMember = state.current.workspaceMembers.find(
+        const result = await getWorkspaceMembers();
+        const workspaceMember = result.data?.userWorkspaceMembers.find(
           (member) => member.workspaceId === workspaceId
         );
 
@@ -295,7 +254,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     ],
     () => {
       fetchRoles();
-      fetchUserWorkspaceMembers();
+      getWorkspaceMembers();
     }
   );
 
@@ -335,7 +294,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       if (auth.user?._id) {
         initialize();
       } else {
-        state.current.workspaceMembers = [];
         setWorkspaceId(undefined);
         _setIsInitialized(false);
       }
@@ -369,10 +327,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     settings: state.current.settings!,
     currency: Currency.get(state.current.settings?.currencyCode) || Currency.get()!,
     member: member!,
-    userMembers: state.current.workspaceMembers,
+    userMembers: workspaceMembersData?.userWorkspaceMembers ?? [],
     select,
     create,
-    update,
     leave,
     invitationState,
     leaveInvitation,

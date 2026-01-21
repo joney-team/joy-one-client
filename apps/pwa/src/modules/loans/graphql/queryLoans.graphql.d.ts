@@ -11,4 +11,7 @@ export type LoansQueryVariables = Types.Exact<{
 
 export type LoansQuery = { __typename: 'Query', loans: { __typename: 'LoansPaginated', count: number, data: Array<{ __typename: 'Loan', id: string, code: string, status: Types.LoanStatus, amount: number, customerCidNumber: string | null, assetType: Types.LoanAssetType, rejectReason: string | null, createdAt: number | null, isHasLateInterestReceipt: boolean | null }> } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const LoansDocument = (import("graphql").DocumentNode) as TypedDocumentNode<LoansQuery, LoansQueryVariables>;
+export default LoansDocument 

@@ -1,10 +1,12 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
+import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
@@ -23,28 +25,50 @@ import { IconUpload } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { workspaceTypes } from "../workspace-constants";
 import { WorkspaceTypeItem } from "./workpsace-type-item";
-import { WorkspaceType } from "@/graphql/enums.graphql";
+
+import WORKSPACE_DATE_FRAGMENT from "../graphql/fragmentWorkspace.graphql";
+import UPDATE_WORKSPACE_MUTATION, {
+  type UpdateWorkspaceMutation,
+  type UpdateWorkspaceMutationVariables,
+} from "../graphql/mutationUpdateWorkspace.graphql";
+import { normalizeWorkspaceInput } from "../workspaces-service";
 
 let timeout: NodeJS.Timeout;
+
 export const WorkspaceInformation: FC = () => {
   const workspace = useWorkspace();
   const uploadFile = useUploadFile();
   const [avatarUploading, setAvatarUploading] = useState(false);
+  const [updateWorkspace] = useMutation<UpdateWorkspaceMutation, UpdateWorkspaceMutationVariables>(
+    UPDATE_WORKSPACE_MUTATION,
+    {
+      update: (cache, result) => {
+        if (!result.data) return;
+        cache.updateFragment(
+          {
+            id: `Workspace:${result.data.updateWorkspace._id}`,
+            fragment: WORKSPACE_DATE_FRAGMENT,
+            fragmentName: "WorkspaceData",
+          },
+          (data) => {
+            if (!data) return data;
+
+            return {
+              ...data,
+              ...result.data?.updateWorkspace,
+            };
+          }
+        );
+      },
+    }
+  );
 
   const form = useForm({
-    initialValues: {
-      ...workspace.member.workspace,
-      name: workspace.member?.workspace?.name || "",
-      // phone: workspace.member?.workspace?.phone || "",
-      hotline: workspace.member?.workspace?.hotline || "",
-      location: workspace.member?.workspace?.location || {
-        address: "",
-      },
-    },
+    initialValues: normalizeWorkspaceInput(workspace.member.workspace),
     onValuesChange: (values) => {
       if (timeout) clearTimeout(timeout);
       timeout = setTimeout(() => {
-        // workspace.update(values).catch(onError);
+        updateWorkspace({ variables: values }).catch(onError);
       }, 300);
     },
   });
@@ -52,9 +76,8 @@ export const WorkspaceInformation: FC = () => {
   const handleUploadLogo = async (file: File) => {
     setAvatarUploading(true);
     try {
-      // TODO:
-      // const uploadedLogo = await uploadFile(file, { maxWidthOrHeight: 300 });
-      // await workspace.update({ ...workspace.member.workspace, logo: uploadedLogo.path });
+      const uploadedLogo = await uploadFile(file, { maxWidthOrHeight: 300 });
+      await updateWorkspace({ variables: { ...form.values, logo: uploadedLogo.path } });
     } catch (error) {
       onError(error);
     }

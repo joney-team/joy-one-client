@@ -5,4 +5,7 @@ export type HealthcheckPluginExternalStorageMutationVariables = Types.Exact<{ [k
 
 export type HealthcheckPluginExternalStorageMutation = { __typename: 'Mutation', healthcheckPluginExternalStorage: boolean };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const HealthcheckPluginExternalStorageDocument = (import("graphql").DocumentNode) as TypedDocumentNode<HealthcheckPluginExternalStorageMutation, HealthcheckPluginExternalStorageMutationVariables>;
+export default HealthcheckPluginExternalStorageDocument 

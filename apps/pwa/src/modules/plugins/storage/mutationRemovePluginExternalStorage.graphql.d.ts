@@ -5,4 +5,7 @@ export type RemovePluginExternalStorageMutationVariables = Types.Exact<{ [key: s
 
 export type RemovePluginExternalStorageMutation = { __typename: 'Mutation', removePluginExternalStorage: boolean };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const RemovePluginExternalStorageDocument = (import("graphql").DocumentNode) as TypedDocumentNode<RemovePluginExternalStorageMutation, RemovePluginExternalStorageMutationVariables>;
+export default RemovePluginExternalStorageDocument 

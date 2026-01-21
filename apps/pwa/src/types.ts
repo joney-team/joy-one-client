@@ -1,6 +1,6 @@
 import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { CustomField } from "./modules/custom-fields/custom-field-types";
+import { WorkspaceMemberDataFragment } from "./modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 export interface RelatedEntity {
   entity: AppEntity;
@@ -13,10 +13,10 @@ export interface BaseEntity {
   workspaceId?: string;
   lastInteractionAt?: number;
   isArchived?: boolean;
-  createdByUser?: WorkspaceMemberInfo;
+  createdByUser?: WorkspaceMemberDataFragment;
   createdByUserId?: string;
   assigneeUserIds?: string[];
-  assigneeUsers?: WorkspaceMemberInfo[];
+  assigneeUsers?: WorkspaceMemberDataFragment[];
   workspaceBranchId?: string;
   workspaceBranch?: Pick<WorkspaceBranchEntity, "_id" | "name">;
   relatedEntities?: RelatedEntity[];

@@ -1,13 +1,15 @@
+"use client";
+
 import { useForceUpdate } from "@mantine/hooks";
 import { useEffect, useMemo, useRef } from "react";
+import { WorkspaceMemberDataFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 import { getWorkspaceMemberByIds } from "./workspace-members-service";
-import { WorkspaceMemberLegacy } from "./workspace-members-types";
 
 export const useWorkspaceMembers = (
   userIds?: string[]
-): [WorkspaceMemberLegacy[], boolean, (user: WorkspaceMemberLegacy) => void] => {
+): [WorkspaceMemberDataFragment[], boolean, (user: WorkspaceMemberDataFragment) => void] => {
   const _userIds = userIds || [];
-  const workspaceMembers = useRef<WorkspaceMemberLegacy[]>([]);
+  const workspaceMembers = useRef<WorkspaceMemberDataFragment[]>([]);
   const isInitialized = useRef(false);
   const forceUpdate = useForceUpdate();
 
@@ -43,7 +45,7 @@ export const useWorkspaceMembers = (
   return [
     workspaceMembers.current,
     isInitialized.current,
-    (user: WorkspaceMemberLegacy) => {
+    (user: WorkspaceMemberDataFragment) => {
       workspaceMembers.current = [
         ...workspaceMembers.current.filter((assignee) => assignee.userId !== user.userId),
         user,

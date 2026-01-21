@@ -7,4 +7,7 @@ export type GetFileInfoQueryVariables = Types.Exact<{
 
 export type GetFileInfoQuery = { __typename: 'Query', getFileInfo: { __typename: 'File', _id: string, refs: Array<string> | null, size: number | null, fileName: string, path: string, url: string, externalUrl: string | null } };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const GetFileInfoDocument = (import("graphql").DocumentNode) as TypedDocumentNode<GetFileInfoQuery, GetFileInfoQueryVariables>;
+export default GetFileInfoDocument 

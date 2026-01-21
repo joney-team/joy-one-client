@@ -3,15 +3,15 @@ import {
   WorkspaceMemberSelector,
   WorkspaceMemberSelectorProps,
 } from "@/modules/workspace-members/components/workspace-member-selector";
-import { WorkspaceMemberInfo } from "@/modules/workspace-members/workspace-members-types";
 import { ActionIcon, em } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC } from "react";
+import { WorkspaceMemberDataFragment } from "../graphql/fragmentWorkspaceMember.graphql";
 
 interface WorkspaceMemberInputProps
   extends Omit<WorkspaceMemberSelectorProps, "value" | "onChange" | "target"> {
-  value?: WorkspaceMemberInfo | null;
-  onChange?: (value?: WorkspaceMemberInfo | null) => void;
+  value?: WorkspaceMemberDataFragment | null;
+  onChange?: (value?: WorkspaceMemberDataFragment | null) => void;
   collapsed?: boolean;
   clearable?: boolean;
   userCardProps?: Omit<UserCardProps, "user">;

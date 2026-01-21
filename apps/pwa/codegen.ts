@@ -31,16 +31,7 @@ const codeGenConfig: CodegenConfig = {
         baseTypesPath: "graphql/types.graphql.d.ts",
       },
       documents: ["src/**/*.graphql"],
-      plugins: [
-        "typescript-operations",
-        {
-          add: {
-            placement: "append",
-            content:
-              'declare const Document: import("graphql").DocumentNode; export default Document;',
-          },
-        },
-      ],
+      plugins: ["typescript-operations", "./codegen-default-export.js"],
       config: {
         avoidOptionals: {
           field: true,

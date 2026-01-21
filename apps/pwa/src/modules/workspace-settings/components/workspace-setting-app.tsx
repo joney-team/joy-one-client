@@ -6,11 +6,12 @@ import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Renderer } from "@/components/renderer";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { getClientLocale } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import WORKSPACE_DATE_FRAGMENT from "@/modules/workspaces/graphql/fragmentWorkspace.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { getDnsRecordName, getMainDomain, isDomain } from "@/utils/string.utils";
+import { useMutation } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -31,6 +32,9 @@ import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { IconCheck, IconExternalLink, IconUpload } from "@tabler/icons-react";
 import { FC, useState } from "react";
+
+import UPDATE_WORKSPACE_MUTATION from "@/modules/workspaces/graphql/mutationUpdateWorkspace.graphql";
+import { normalizeWorkspaceInput } from "@/modules/workspaces/workspaces-service";
 
 export const WorkspaceAppSettings: FC = () => {
   const workspace = useWorkspace();
@@ -55,6 +59,27 @@ export const WorkspaceAppSettings: FC = () => {
     },
   });
 
+  const [updateWorkspace] = useMutation(UPDATE_WORKSPACE_MUTATION, {
+    update: (cache, result) => {
+      if (!result.data) return;
+      cache.updateFragment(
+        {
+          id: `Workspace:${result.data.updateWorkspace._id}`,
+          fragment: WORKSPACE_DATE_FRAGMENT,
+          fragmentName: "WorkspaceData",
+        },
+        (data) => {
+          if (!data) return data;
+
+          return {
+            ...data,
+            ...result.data?.updateWorkspace,
+          };
+        }
+      );
+    },
+  });
+
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
 
@@ -66,21 +91,15 @@ export const WorkspaceAppSettings: FC = () => {
         appIcon = uploadedLogo.path;
       }
 
-      await workspace.update({
-        name: workspace.member.workspace.name ?? "",
-        appIcon,
-        appDomain: values.appDomain?.trim(),
-        appName: values.appName ?? "",
-        appColor: values.appColor ?? "",
-        appColorShape: values.appColorShape,
-        hotline: workspace.member.workspace.hotline ?? "",
-        locale: workspace.member.workspace.locale ?? getClientLocale(),
-        location: workspace.member.workspace.location
-          ? {
-              address: workspace.member.workspace.location.address ?? "",
-            }
-          : undefined,
-        logo: workspace.member.workspace.logo ?? undefined,
+      await updateWorkspace({
+        variables: {
+          ...normalizeWorkspaceInput(workspace.member.workspace),
+          appIcon,
+          appDomain: values.appDomain?.trim(),
+          appName: values.appName ?? "",
+          appColor: values.appColor ?? "",
+          appColorShape: values.appColorShape,
+        },
       });
     } catch (error) {
       onError(error);

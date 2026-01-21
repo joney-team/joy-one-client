@@ -7,4 +7,7 @@ export type BulkUpdateTasksMutationVariables = Types.Exact<{
 
 export type BulkUpdateTasksMutation = { __typename: 'Mutation', bulkUpdateTasks: Array<{ __typename: 'Task', _id: string }> };
 
-declare const Document: import("graphql").DocumentNode; export default Document;
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const BulkUpdateTasksDocument = (import("graphql").DocumentNode) as TypedDocumentNode<BulkUpdateTasksMutation, BulkUpdateTasksMutationVariables>;
+export default BulkUpdateTasksDocument 

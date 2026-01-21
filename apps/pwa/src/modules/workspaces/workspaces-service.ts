@@ -15,6 +15,8 @@ import {
 import { api } from "../apis";
 import { WorkspaceEntity, WorkspaceInviteInformation } from "./workspaces-types";
 import { WorkspaceType } from "@/graphql/enums.graphql";
+import { UpdateWorkspaceMutationVariables } from "./graphql/mutationUpdateWorkspace.graphql";
+import { WorkspaceDataFragment } from "./graphql/fragmentWorkspace.graphql";
 
 export const getWorkspaceId = () => {
   if (isServer()) return;
@@ -54,4 +56,26 @@ export async function regenerateWorkspaceInviteCode() {
 
 export async function getWorkspaceById(id: string) {
   return api.get<WorkspaceEntity>(`/workspaces/ids/${id}`);
+}
+
+export function normalizeWorkspaceInput(
+  workspace: WorkspaceDataFragment
+): UpdateWorkspaceMutationVariables {
+  return {
+    name: workspace?.name ?? "",
+    phone: workspace?.phone ?? "",
+    hotline: workspace?.hotline ?? "",
+    location: workspace?.location
+      ? {
+          address: workspace?.location?.address ?? "",
+        }
+      : {},
+    logo: workspace?.logo ?? "",
+    appIcon: workspace?.appIcon ?? "",
+    appColor: workspace?.appColor ?? "",
+    appName: workspace?.appName ?? "",
+    appColorShape: workspace?.appColorShape || 6,
+    type: workspace.type,
+    appDomain: workspace?.appDomain ?? "",
+  };
 }

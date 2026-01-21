@@ -6,10 +6,10 @@ import {
   workspaceSpecialRoleIds,
 } from "../workspace-roles/workspace-roles-constants";
 import { WorkspaceDefaultRoleId } from "../workspace-roles/workspace-roles-types";
+import { WorkspaceMemberDataFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 import {
   UpdateWorkspaceMemberDto,
   VerifyInvitaionTokenResponse,
-  WorkspaceMemberLegacy,
   WorkspaceMemberOnlineStatus,
 } from "./workspace-members-types";
 
@@ -26,7 +26,7 @@ export async function createWorkspaceMemberInvitation(): Promise<string> {
 }
 
 export async function joinWorkspaceMember(inviteCode: string) {
-  return api.post<WorkspaceMemberLegacy>(`/workspace-members/join`, { inviteCode });
+  return api.post<WorkspaceMemberDataFragment>(`/workspace-members/join`, { inviteCode });
 }
 
 export async function verifyWorkspaceMemberInvitation(token: string) {
@@ -35,20 +35,24 @@ export async function verifyWorkspaceMemberInvitation(token: string) {
 
 export async function getWorkspaceMemberByIds(userIds: string[]) {
   if (!userIds || userIds.length === 0) return [];
-  return api.get<WorkspaceMemberLegacy[]>(`/workspace-members/ids`, {
+  return api.get<WorkspaceMemberDataFragment[]>(`/workspace-members/ids`, {
     params: { ids: [...new Set(userIds.toString().split(","))] },
   });
 }
 
 export async function getWorkspaceMemberList(query?: any) {
-  return api.get<ResponseList<WorkspaceMemberLegacy>>(`/workspace-members`, { params: query });
+  return api.get<ResponseList<WorkspaceMemberDataFragment>>(`/workspace-members`, {
+    params: query,
+  });
 }
 
 export async function getWorkspaceMemberOnlineStatus() {
   return api.get<WorkspaceMemberOnlineStatus>(`/workspace-members/online-status`);
 }
 
-export function getMemberRoleLabel(member: Pick<WorkspaceMemberLegacy, "memberId" | "roles">) {
+export function getMemberRoleLabel(
+  member: Pick<WorkspaceMemberDataFragment, "memberId" | "roles">
+) {
   if (!member.memberId) return t`Guest`;
 
   if (member.roles.length === 0) {
